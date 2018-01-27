@@ -102,50 +102,32 @@
 
         });
 
-        //执行保存.
-        function Save() {
-
-            alert('ss');
-            var data = $("#tree").getChecked();
-            alert(data);
-            return;
-
-         
-
-            //删除当前数据库的数据.
-            en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal());
-
-            var kvs = "001,002,003";
-
-            for (var i = 0; i < kvs.length; i++) {
-                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                en[GetQueryString("AttrOfMInMM")] = data.nodeId;
-                en.Insert();
-            }
-        }
-
         function findChildren(jsonArray, parentNo) {
 
             var appendToTree = function (treeToAppend, child) {
 
                 $.each(treeToAppend, function (i, o) {
                     if (o.id == child.ParentNo) {
-                        var checked = false;
-                        var selectedNodes = window.selectedNodes;
 
+                        var checked = false;
+
+                        var selectedNodes = window.selectedNodes;
+                       // alert(JSON.stringify(selectedNodes)+'='+child.No);
                         var sel = $.grep(selectedNodes, function (obj) {
+                            //  alert(child.No  +'  '+ obj.No);
                             return child.No == obj.No;
                         });
 
                         if (sel.length > 0) {
                             checked = true;
                         }
+
                         //@代国强， 估计这里出问题了，装载以后，没有把已经装
                         o.nodes.push({
                             "id": child.No,
                             "text": child.Name,
                             "nodes": [],
-                            "state": { checked: checked, disabled: checked }
+                            "state": { checked: checked, disabled: false }
                         });
                     } else {
                         appendToTree(o.nodes, child);
@@ -154,30 +136,31 @@
             };
 
             var jsonTree = [];
-           
-                $.each(jsonArray, function (i, o) {
 
-                    if (o.ParentNo == parentNo) {
-                        var checked = false;
-                        var selectedNodes = window.selectedNodes;
-                        var sel = $.grep(selectedNodes, function (obj) {
-                            return o.No == obj.No;
-                        });
+            $.each(jsonArray, function (i, o) {
 
-                        if (sel.length > 0) {
-                            checked = true;
-                        }
+                if (o.ParentNo == parentNo) {
+                    var checked = false;
 
-                        jsonTree.push({
-                            "id": o.No,
-                            "text": o.Name,
-                            "nodes": [],
-                            "state": { checked: checked, disabled: checked }
-                        });
-                    } else {
-                        appendToTree(jsonTree, o);
+                    var selectedNodes = window.selectedNodes;
+                    var sel = $.grep(selectedNodes, function (obj) {
+                        return o.No == obj.No;
+                    });
+
+                    if (sel.length > 0) {
+                        checked = true;
                     }
-                });
+
+                    jsonTree.push({
+                        "id": o.No,
+                        "text": o.Name,
+                        "nodes": [],
+                        "state": { checked: checked, disabled: false }
+                    });
+                } else {
+                    appendToTree(jsonTree, o);
+                }
+            });
              
 
             function _(treeArray) {
@@ -213,27 +196,23 @@
                 multiSelect: false,    //多选
                 onNodeChecked: function (event, data) {
 
+                  //  alert(JSON.stringify(data));
+                   // alert(JSON.stringify(data.id));
+
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                    en[GetQueryString("AttrOfMInMM")] = data.nodeId;
+                    en[GetQueryString("AttrOfMInMM")] = data.id;
 
-              //      alert(en);
-                //    en.Delete();
                     en.Insert();
                 },
                 onNodeUnchecked: function (event, node) {
 
-                   // alert('sss');
-                    //alert("开始删除:" + node.nodeId);
-
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                    en[GetQueryString("AttrOfMInMM")] = node.nodeId;
+                    en[GetQueryString("AttrOfMInMM")] = node.id;
                     en.Delete();
 
-                    alert("删除成功:" + node.nodeId);
-
-                    //  alert("sss");
+                   // alert("删除成功:" + node.nodeId);
                     //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
                 },
                 onNodeSelected: function (event, node) {
@@ -371,10 +350,17 @@
             return nodeIds;
         }
         function CheckAll() {
-            $('#tree').is(':checked');
+            alert("尚未实现.");
         }
         function UnCheckAll() {
-            $('#tree').is(':checked');
+            alert("尚未实现.");
+        }
+
+        function Search() {
+            alert("尚未实现.");
+        }
+        function Close() {
+            alert("尚未实现.");
         }
     </script>
 </head>

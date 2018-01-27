@@ -621,7 +621,10 @@
                                         <asp:RadioButton ID="RB_ByBindEmp" Text="按节点绑定的人员计算" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptEmpModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeEmps&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
+                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeEmps&Dot2DotEnName=BP.WF.Template.NodeEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&NodeID=<%=nd.NodeID %>&PKVal=<%=nd.NodeID %>')">
+
+                                       <%-- <a href="javascript:WinOpen('/WF/Comm/RefFunc/BranchesAndLeaf.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeEmps&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">--%>
+
                                             设置/更改处理人(<%=nEmps.Count %>)</a></div>
                                 </th>
                             </tr>

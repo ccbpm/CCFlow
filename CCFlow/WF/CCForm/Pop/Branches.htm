@@ -107,7 +107,7 @@
                 emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
                 onNodeChecked: function (event, data) {
-                    //alert(data.nodeId);
+                    //alert(data.id);
                 },
                 nodeUnchecked: function (event, node) {
                 },
@@ -287,7 +287,7 @@
         function GetCheckNodes() {
             var nodeIds = [];
             var gridPanel = $("#viewGrid_Panel");
-            if (gridPanel.is(':hidden')) {//如果列表是隐藏的则获取树控件值
+            if (gridPanel.is(':hidden')) { //如果列表是隐藏的则获取树控件值
                 var checkedNodes = [];
                 if (mapExt.ShowCheckBox == true) {
                     checkedNodes = $('#tree').treeview("getChecked");

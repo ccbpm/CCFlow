@@ -48,6 +48,9 @@
 		        var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
 		        hander.AddUrlData();
 		        var data = hander.DoMethodReturnJSON("BranchesAndLeaf_Init");
+
+
+
 		        var dbTrees = data["DBTrees"]; //左边的树.
 		        selectedRows = data["DBMMs"]; //选择的数据.
 
@@ -78,26 +81,26 @@
 		        }];
 
 		        //显示列的中文名称.
-		            var tag = "No=编号,Name=名称";
-		            $.each(tag.split(","), function (i, o) {
-		                var exp = o.split("=");
-		                var field;
-		                var title;
-		                if (exp.length == 1) {
-		                    field = title = exp[0];
-		                } else if (exp.length == 2) {
-		                    field = exp[0];
-		                    title = exp[1];
-		                }
-		                if (!isLegalName(field)) {
-		                    return true;
-		                }
-		                searchTableColumns.push({
-		                    field: field,
-		                    title: title
-		                });
+		        var tag = "No=编号,Name=名称";
+		        $.each(tag.split(","), function (i, o) {
+		            var exp = o.split("=");
+		            var field;
+		            var title;
+		            if (exp.length == 1) {
+		                field = title = exp[0];
+		            } else if (exp.length == 2) {
+		                field = exp[0];
+		                title = exp[1];
+		            }
+		            if (!isLegalName(field)) {
+		                return true;
+		            }
+		            searchTableColumns.push({
+		                field: field,
+		                title: title
 		            });
-		         
+		        });
+
 
 		        // search
 		        $("#TB_Key").on("keyup", function () {
@@ -237,6 +240,8 @@
 		        hander.AddUrlData();
 		        hander.AddPara("Key", nodeID);
 		        var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByNodeID");
+
+
 		        //alert(json);
 		        loadSelectGrid(json);
 		    }
@@ -330,11 +335,11 @@
 		            emptyIcon: '',    //没有子节点的节点图标
 		            multiSelect: false,    //多选
 		            onNodeChecked: function (event, data) {
-		                //alert(data.nodeId);
+		                //alert(data.id);
 		            },
 		            onNodeSelected: function (event, data) {
 
-		                loadSelectGridByNodeID(data.nodeId); //, selectedRows);
+		                loadSelectGridByNodeID(data.id); //, selectedRows);
 
 		            }
 		        });

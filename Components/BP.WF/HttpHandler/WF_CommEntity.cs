@@ -388,6 +388,16 @@ namespace BP.WF.HttpHandler
                     string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
                     DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                     dtEnum.TableName = "Sys_Enum";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    {
+                        dtEnum.Columns["MYPK"].ColumnName = "MyPK";
+                        dtEnum.Columns["LAB"].ColumnName = "Lab";
+                        dtEnum.Columns["ENUMKEY"].ColumnName = "EnumKey";
+                        dtEnum.Columns["INTKEY"].ColumnName = "IntKey";
+                        dtEnum.Columns["LANG"].ColumnName = "Lang";
+                    }
+
                     ds.Tables.Add(dtEnum);
                 }
 

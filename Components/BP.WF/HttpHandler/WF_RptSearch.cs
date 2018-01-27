@@ -128,36 +128,15 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string KeySearch_Query()
         {
-            string type = this.GetRequestVal("type");
-            if (DataType.IsNullOrEmpty(type))
-                type = "ByTitle";
+            string keywords = this.GetRequestVal("TB_KeyWords");
 
-            string keywords = this.GetValFromFrmByKey("TB_KeyWords");
-            if (DataType.IsNullOrEmpty(keywords)==true)
-                keywords = this.GetRequestVal("TB_Key");
-
-            int myselft = this.GetRequestValInt("CHK_Myself");
             string sql = "";
-
-            switch (type)
-            {
-                case "ByWorkID":
-                    if (myselft == 1)
-                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps,IsCanDo FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'";
-                    else
-                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps,IsCanDo FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
-                    break;
-                case "ByTitle":
-                    sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.Starter,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState ";
-                    sql += " FROM WF_GenerWorkFlow A ";
-                    sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
-                    sql += " AND A.Title LIKE '%" + keywords + "%' ";
-                    sql += " AND A.Emps LIKE '@%" + WebUser.No + "%' ";
-                    // sql += " AND ( A.Emps LIKE '@%" + WebUser.No + "%' OR B.FK_Emp='" + WebUser.No + "') ";
-                  //  sql += " AND A.WorkID=B.WorkID ";
-                    sql += " AND A.WFState!=0 ";
-                    break;
-            }
+            sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState ";
+            sql += " FROM WF_GenerWorkFlow A ";
+            sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
+            sql += " AND A.Title LIKE '%" + keywords + "%' ";
+            sql += " AND A.Emps LIKE '@%" + WebUser.No + "%' ";
+            sql += " AND A.WFState!=0 ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_GenerWorkFlow";
@@ -170,36 +149,13 @@ namespace BP.WF.HttpHandler
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["TITLE"].ColumnName = "Title";
-                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
-
                 dt.Columns["EMPS"].ColumnName = "Emps";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人.
                 dt.Columns["WFSTATE"].ColumnName = "WFState"; //处理人.
-
-                //  dt.Columns["ISCANDO"].ColumnName = "IsCanDo"; //是否可以处理？
             }
-
-            #region 加入当前用户信息.
-            DataTable mydt = new DataTable();
-            mydt.Columns.Add("No");
-            mydt.Columns.Add("Name");
-            mydt.Columns.Add("FK_Dept");
-
-            DataRow dr = mydt.NewRow();
-            dr["No"] = WebUser.No;
-            dr["Name"] = WebUser.Name;
-            dr["FK_Dept"] = WebUser.FK_Dept;
-            mydt.Rows.Add(dr);
-            mydt.TableName = "WebUser";
-            #endregion 加入当前用户信息.
-
-
-            DataSet ds = new DataSet();
-            ds.Tables.Add(mydt);
-            ds.Tables.Add(dt);
-
-            return BP.Tools.Json.ToJson(ds);
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 判断是否可以执行当前工作？

@@ -622,10 +622,18 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
-        /// 执行查询.
+        /// 执行查询 - 初始化查找数据
         /// </summary>
         /// <returns></returns>
         public string Search_SearchIt()
+        {
+            return BP.Tools.Json.ToJson(Search_Search());
+        }
+        /// <summary>
+        /// 执行查询.这个方法也会被导出调用.
+        /// </summary>
+        /// <returns></returns>
+        public DataSet Search_Search()
         {
             //获得.
             Entities ens = ClassFactory.GetEns(this.EnsName);
@@ -715,7 +723,6 @@ namespace BP.WF.HttpHandler
                 qo.AddHD();
             }
             #endregion
-
 
             if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty( ur.DTFrom) ==false)
             {
@@ -840,7 +847,8 @@ namespace BP.WF.HttpHandler
 
             ds.Tables.Add(mydt); //把数据加入里面.
 
-            return BP.Tools.Json.ToJson(ds);
+            return ds;
+
         }
         public string Search_GenerPageIdx()
         {
@@ -850,30 +858,31 @@ namespace BP.WF.HttpHandler
             ur.RetrieveFromDBSources();
 
             string url = "?EnsName="+this.EnsName;
-            int pageSpan = 20;
+            int pageSpan = 10;
             int recNum = ur.GetParaInt("RecCount"); //获得查询数量.
             int pageSize = 12;
             if (recNum <= pageSize)
                 return "1";
 
             string html = "";
-            html += "<div style='text-align:center;'>";
+            html += "<ul class='pagination'>";
 
             string appPath = ""; // this.Request.ApplicationPath;
             int myidx = 0;
             if (PageIdx <= 1)
             {
-                //this.Add("《- 《-");
-                html += "<img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/>";
+                html += "<li><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/></li>";
             }
             else
             {
                 myidx = PageIdx - 1;
                 //this.Add("<a href='" + url + "&PageIdx=1' >《-</a> <a href='" + url + "&PageIdx=" + myidx + "'>《-</a>");
-                html += "<a href='" + url + "&PageIdx=1' ><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/></a><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/></a>";
+                html += "<li><a href='" + url + "&PageIdx=1' ><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/></a><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/></a></li>";
             }
 
-            /*int pageNum = 0;
+            
+            //分页采用java默认方式分页，采用bigdecimal分页报错
+            int pageNum = 0;
             decimal pageCountD = decimal.Parse(recNum.ToString()) / decimal.Parse(pageSize.ToString()); // 页面个数。
             string[] strs = pageCountD.ToString("0.0000").Split('.');
             if (int.Parse(strs[1]) > 0)
@@ -883,52 +892,53 @@ namespace BP.WF.HttpHandler
 
             int from = 0;
             int to = 0;
-
             decimal spanTemp = decimal.Parse(PageIdx.ToString()) / decimal.Parse(pageSpan.ToString()); // 页面个数。
 
             strs = spanTemp.ToString("0.0000").Split('.');
             from = int.Parse(strs[0]) * pageSpan;
-            to = from + pageSpan;*/
-            //分页采用java默认方式分页，采用bigdecimal分页报错
-            int pageNum = (recNum + pageSize - 1) / pageSize;// 页面个数。
-
-            int from = PageIdx < 1 ? 0 : (PageIdx - 1) * pageSize + 1;//从
-
-            int to = PageIdx < 1 ? pageSize : PageIdx * pageSize;//到
-
+            to = from + pageSpan;
             for (int i = 1; i <= pageNum; i++)
             {
-                if (i >= from && i < to)
+                if (i >= from && i <= to)
                 {
+                    if (PageIdx == i)
+                        html += "<li class='active' ><a href='#'><b>" + i + "</b></a></li>";
+                    else
+                        html += "<li><a href='" + url + "&PageIdx=" + i + "'>" + i + "</a></li>";
                 }
-                else
-                {
-                    continue;
-                }
-
-                if (PageIdx == i)
-                    html += "&nbsp;<font style='font-weight:bloder;color:#f00'>" + i + "</font>&nbsp;";
-                else
-                    html += "&nbsp;<a href='" + url + "&PageIdx=" + i + "'>" + i + "</a>";
             }
 
             if (PageIdx != pageNum)
             {
                 myidx = PageIdx + 1;
-                //this.Add("&nbsp;<a href='" + url + "&PageIdx=" + myidx + "'>-》</a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'>-》</a>&nbsp;&nbsp;Page:" + PageIdx + "/" + pageNum + " Total:" + recNum + ".");
-                html += "&nbsp;<a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Right.png' border=0/></a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/RightEnd.png' border=0/></a>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
+                html += "<li><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Right.png' border=0/></a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/RightEnd.png' border=0/></a> &nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum + "</li>";
             }
             else
             {
-                //this.Add("&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'> -》》</a>&nbsp;&nbsp;Page:" + PageIdx + "/" + pageNum + " Totlal:" + recNum + ".");
-                html += "&nbsp;<img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Right.png' border=0/>&nbsp;&nbsp;";
-                html += "&nbsp;<img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/RightEnd.png' border=0/>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
-                //this.Add("<img src='/WF/Img/Page_Down.gif' border=1 />");
+                html += "<li><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Right.png' border=0/></li>";
+                html += "<li><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/RightEnd.png' border=0/>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum + "</li>";
             }
-            html += "</div>";
+            html += "</ul>";
             return html;
         }
+        /// <summary>
+        /// 执行导出
+        /// </summary>
+        /// <returns></returns>
+        public string Search_Exp()
+        {
 
+            DataSet ds = Search_Search();
+            DataTable dt = ds.Tables["DT"];
+
+           string  name = "导出";
+            string filename = SystemConfig.PathOfTemp  + name + "_" + DateTime.Today.ToString("yyyy年MM月dd日") + ".xls";
+
+            //CCFlow.WF.Comm.Utilities.NpoiFuncs.DataTableToExcel(myDT, filename, name,
+            //                                                    BP.Web.WebUser.Name, true, true, true);
+
+            return "";
+        }
         #endregion 查询.
 
         #region Refmethod.htm 相关功能.

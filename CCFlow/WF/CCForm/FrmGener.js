@@ -561,12 +561,9 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     if (mapAttr.LGType == 1) {
         var enums = frmData.Sys_Enum;
 
-        alert(JSON.stringify(enums));
-
         enums = $.grep(enums, function (value) {
             return value.EnumKey == mapAttr.UIBindKey;
         });
-
 
         $.each(enums, function (i, obj) {
             operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";

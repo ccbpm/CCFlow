@@ -1327,7 +1327,7 @@ var DBAccess = (function () {
             async: false,
             url: dynamicHandler + "?DoType=DBAccess_RunSQL&t=" + new Date().getTime(),
             dataType: 'html',
-			data : "SQL=" + sql,
+            data: "SQL=" + sql,
             success: function (data) {
                 count = parseInt(data);
                 if (isNaN(count)) {
@@ -1402,7 +1402,8 @@ var DBAccess = (function () {
                 return eval(funcName);
 
         } catch (e) {
-            alert("执行方法[" + funcName + "]错误:" + e.message);
+            if (e.Message.indexOf('not defined') != -1)
+                alert("执行方法[" + funcName + "]错误:" + e.message);
         }
     };
 
@@ -1418,7 +1419,7 @@ var DBAccess = (function () {
             async: false,
             url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable" + "&t=" + new Date().getTime(),
             dataType: 'html',
-			data : "SQL=" + sql,
+            data: "SQL=" + sql,
             success: function (data) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);

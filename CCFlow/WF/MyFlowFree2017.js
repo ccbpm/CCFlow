@@ -466,7 +466,7 @@ function figure_Template_ImageAth(frmImageAth) {
 function figure_Template_Attachment(frmAttachment) {
     var eleHtml = '';
     var ath = frmAttachment;
-    if (ath.UploadType == 0) {//单附件上传 L4204
+    if (ath.UploadType == 0) { //单附件上传 L4204
         return $('');
     }
     var src = "";

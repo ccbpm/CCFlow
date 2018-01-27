@@ -57,6 +57,11 @@
 
                         document.getElementById("Msg").innerHTML = data;
 
+                        if (data.indexOf('管理员') != -1) {
+                            alert(data);
+                            return;
+                        }
+
                         if (window.confirm(data) == true) {
                             window.location.href = './AttrNode/NodeAccepterRole.htm?FK_Node=' + fk_flow + '01';
                             return;

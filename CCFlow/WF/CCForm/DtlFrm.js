@@ -96,7 +96,7 @@ function SetHegiht() {
 }
 
 
-//从表在新建或者在打开行的时候，如果 rowShowModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
+//从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
 function DtlFrm(ensName, refPKVal, pkVal, frmType) {
     // model=1 自由表单, model=2傻瓜表单.
     var url = 'DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;

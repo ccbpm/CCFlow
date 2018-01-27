@@ -8,7 +8,7 @@ DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta'; 
 DELETE FROM Sys_Enum WHERE EnumKey ='EventDoType'; 
-DELETE FROM Sys_Enum WHERE EnumKey ='RowShowModel';  
+DELETE FROM Sys_Enum WHERE EnumKey ='EditModel';  
 
 
 -- 更新枚举值;

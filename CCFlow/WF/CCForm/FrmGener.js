@@ -134,7 +134,7 @@ function SetHegiht() {
     }
 }
 
-//从表在新建或者在打开行的时候，如果 rowShowModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
+//从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
 function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     // model=1 自由表单, model=2傻瓜表单.
     var pathName = document.location.pathname;
@@ -561,6 +561,9 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     //枚举类型.
     if (mapAttr.LGType == 1) {
         var enums = frmData.Sys_Enum;
+
+        alert(JSON.stringify(enums));
+
         enums = $.grep(enums, function (value) {
             return value.EnumKey == mapAttr.UIBindKey;
         });

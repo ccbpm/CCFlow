@@ -17,15 +17,15 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.nav.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
-
+    <link href="En2018.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
     <link rel="stylesheet" href="../../Scripts/bootstrap/css/css.css" type="text/css" media="all" />
 
-    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. 
-    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />-->
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
     <!--UEditor-->
     <link href="../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet" />
@@ -34,11 +34,6 @@
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
     <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
 
-	<style type="text/css">
-		.row-margin-top {
-			margin-top: 20px;
-		}
-	</style>
     <!--杨玉慧 -->
     <script type="text/javascript">
 
@@ -61,8 +56,8 @@
                 httpHandler.AddPara("PKVal", pkVal);
             }
 
-           //httpHandler.AddPara("EnName", "BP.WF.Template.NodeExt");
-           //httpHandler.AddPara("NodeID", "102");
+            //httpHandler.AddPara("EnName", "BP.WF.Template.NodeExt");
+            //httpHandler.AddPara("NodeID", "102");
 
             var data = httpHandler.DoMethodReturnString("Entity_Init");
             if (data.indexOf('err@') == 0) {
@@ -115,18 +110,34 @@
                 var defValue = ConvertDefVal(mapAttr);
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == null || defValue == "null")
+                        continue;
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
+
+
+                    // alert(mapAttr.KeyOfEn + " " + defValue);
+
                     // 判断下拉框是否有对应option, 若没有则追加
                     if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+
                         var mainTable = frmData.MainTable[0];
                         var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-                        $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+
+                        if (selectText == null || selectText == "")
+                            selectText = defValue;
+
+                        if (defValue == null || defValue == "") {
+
+                        } else {
+                            $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                        }
+                    } else {
+                        //设置选择的值
+                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
                     }
-                    //
-                    $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
                 if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
@@ -146,7 +157,7 @@
 
         function RefMethod() {
 
-            if (dtM.length ==0 )
+            if (dtM.length == 0)
                 return;
 
             //求出所有的分组名称.
@@ -159,24 +170,23 @@
                     groupName += "@" + en.GroupName;
             }
 
-
             var gNames = groupName.split('@');
 
             //生成菜单.
-			/*
-            var html = "<table>";
+            var html = "<div class='accordion' id='accordion'>";
+            html += "";
             for (var i = 0; i < gNames.length; i++) {
                 var gName = gNames[i];
 
-                html += "<tr>";
-                html += "<th>" + gName + "</td>";
-                html += "</tr>";
+                if (gName == "")
+                    continue;
 
-                html += "<tr><td>";
-                html += "<ul>";
 
+                html += "<li>";
+                html += "<div class='link'><i class='fa fa-paint-brush'></i>" + gName + "<i class='fa fa-chevron-down'></i></div>";
 
                 //填入菜单内容.
+                html += "<ul class='submenu' >";
                 for (var idx = 0; idx < dtM.length; idx++) {
 
                     var en = dtM[idx];
@@ -190,54 +200,23 @@
                     if (en.RefAttrKey != null || en.IsCanBatch == "1" || en.Visable == 0)
                         continue;
 
-                    html += "<li>"+GenerRM(en)+"</li>";
+                    html += "<li>" + GenerRM(en) + "</li>";
                 }
-
-                html += "</ul>";
-                html += "</td>";
-                html += "</tr>";
-
+                html += "</ul>";   //end填入菜单内容.
+                html += "</li>";
             }
-            html += "</table>";
-			*/
-			
-			var html = "";
-            for (var i = 0; i < gNames.length; i++) {
-                var gName = gNames[i];
-				if (gName == "") {
-					continue;
-				}
-				html += '<div class="panel panel-default">';
-				html += '	<div class="panel-heading">';
-				html += '		<h4 class="panel-title">';
-				html += '			<a data-toggle="collapse" data-parent="#Left" href="#collapse' + i + '">' + gName + '</a>';
-				html += '		</h4>';
-				html += '	</div>';
-				html += '	<div id="collapse' + i + '" class="panel-collapse collapse in">';
-                //填入菜单内容.
-                for (var idx = 0; idx < dtM.length; idx++) {
-
-                    var en = dtM[idx];
-                    var myName = en.GroupName;
-                    if (myName == null || myName == "")
-                        myName = "基本信息";
-
-                    if (gName != myName)
-                        continue;
-
-                    if (en.RefAttrKey != null || en.IsCanBatch == "1" || en.Visable == 0)
-                        continue;
-
-                    html += '<div class="panel-body">' + GenerRM(en) + "</div>";
-                }
-				html += "	</div>";
-				html += "</div>";
-            }
+            html += "</div>";
 
             $("#Left").append(html);
         }
         function OpenIt(url, title, w, h) {
-            window.open(url);
+
+           // var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
+                //location = location;
+            });
+
+           // window.open(url);
         }
         //设置按钮
         function InitToolbar() {
@@ -245,18 +224,18 @@
 
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
-                html += "<input type='button' value='新建' id='Btn_New' onclick='New()' class='btn btn-default' />";
+                html += "<input type='button' value='新建' id='Btn_New' onclick='New()' />";
             }
             if (mapData.GetPara("IsUpdate") == 1) {
-                html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' class='btn btn-default' />";
+                html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' />";
             }
             if (mapData.GetPara("IsDelete") == 1) {
                 var pkVal = GetPKVal();
                 if (pkVal != null)
-                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' class='btn btn-default' />";
+                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' />";
             }
 
-            html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' class='btn btn-default' />";
+            html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' />";
 
             $("#Btns").append(html);
         }
@@ -268,32 +247,45 @@
             var mapAtrrs = frmData.Sys_MapAttr;
 
             var tableWidth = 800; //  w - 40;
-            //var html = "<table style='width:" + tableWidth + "px;' >";
-			var html = '<div class="form-inline">';
+            var html =  "<ul id='myTab' class='nav nav-tabs'>";
+
             //遍历循环生成 listview
+            for (var i = 0; i < Sys_GroupFields.length; i++) {
+            
+                var gf = Sys_GroupFields[i];
+                if (i==0)
+                    html += "<li class='active'>";
+                else
+                    html += "<li>";
+
+                var lab = gf.Lab;
+                if (lab.indexOf(',') != -1) {
+                    lab = lab.substring(0, lab.indexOf(','));
+                }
+
+                html += " <a href='#" + gf.OID + "' data-toggle='tab'>" + lab + "</a>";
+                html += "</li>";
+            }
+            html += "</ul>";
+
+
+
+            html += "<div id='myTabContent' class='tab-content'>";
+
             for (var i = 0; i < Sys_GroupFields.length; i++) {
 
                 var gf = Sys_GroupFields[i];
-                //字段类的控件.
-                if (gf.CtrlType == '' || gf.CtrlType == null) {
-                    //html += "<tr>";
-                    //html += "  <th colspan=4>" + gf.Lab + "</th>";
-                    //html += "</tr>";
-					html += '<div class="row row-margin-top">';
-					html +=		'<div class="col-md-12">';
-					html += 		"<fieldset>";
-					html += 			"<legend>" + gf.Lab + "</legend>";
-					//html += 				'<div class="row">';
-                    html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
-					//html +=					'</div>';
-					html += 		"</fieldset>";
-					html += 	'</div>';
-					html += '</div>';
-                    continue;
-                }
+
+                if (i == 0)
+                    html += "<div class='tab-pane fade in active' id='" + gf.OID + "'>";
+                else
+                    html += "<div class='tab-pane fade' id='" + gf.OID + "'>";
+
+                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
+                html += "</div>";
             }
-            //html += "</table>";
-			html += "</div>";
+
+            html += "</div>";
 
             //加入隐藏控件.
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -327,13 +319,13 @@
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID) {
 
-            var html = "";
+            var html = "<table border='0' style='width:880px;' >";
             var isDropTR = true;
 
             for (var i = 0; i < Sys_MapAttr.length; i++) {
 
                 var attr = Sys_MapAttr[i];
-                if (attr.GroupID != groupID || attr.UIVisible == 0)
+                if (attr.GroupID != groupID || attr.UIVisible == 0 || attr.KeyOfEn=="MyNum" )
                     continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
@@ -363,172 +355,92 @@
                 }
 
                 //线性展示并且colspan=3
-                //if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
-                //    isDropTR = true;
-                //    html += "<tr>";
-                //    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-                //    html += "<td colspan=3>";
-                //    html += InitMapAttrOfCtrl(attr);
-                //    html += "</td>";
-                //    html += "</tr>";
-                //
-                //    if (rm != null) {
-                //        html += "<tr>";
-                //        html += "<td class='FDesc' style='width:120px;'></td>";
-                //        html += "<td colspan=3>";
-                //        html += GenerRM(rm);
-                //        html += "</td>";
-                //        html += "</tr>";
-                //        isDropTR = true;
-                //    }
-                //    continue;
-                //}
+                if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
+                    isDropTR = true;
+                    html += "<tr>";
+                    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td colspan=3>";
+                    html += InitMapAttrOfCtrl(attr);
+                    html += "</td>";
+                    html += "</tr>";
+
+                    if (rm != null) {
+                        html += "<tr>";
+                        html += "<td class='FDesc' style='width:120px;'></td>";
+                        html += "<td colspan=3>";
+                        html += GenerRM(rm);
+                        html += "</td>";
+                        html += "</tr>";
+                        isDropTR = true;
+                    }
+                    continue;
+                }
 
                 //线性展示并且colspan=4
-                //if (attr.ColSpan == 4) {
-                //    isDropTR = true;
-                //    html += "<tr>";
-                //    html += "<td colspan='4'>" + lab + "</br>";
-                //    html += InitMapAttrOfCtrl(attr);
-                //    html += "</td>";
-                //    html += "</tr>";
-                //
-                //
-                //    if (rm != null) {
-                //        html += "<tr>";
-                //        html += "<td class='FDesc' style='width:120px;'></td>";
-                //        html += "<td colspan=3>";
-                //        html += GenerRM(rm);
-                //        html += "</td>";
-                //        html += "</tr>";
-                //        isDropTR = true;
-                //    }
-                //    continue;
-                //}
-
-                //if (isDropTR == true) {
-                //    html += "<tr>";
-                //    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                //    html += "<td class='FContext'  >";
-                //    html += InitMapAttrOfCtrl(attr);
-                //    html += "</td>";
-                //    isDropTR = !isDropTR;
-                //
-                //    if (rm != null) {
-                //        html += "<td colspan=2>";
-                //        html += GenerRM(rm);
-                //        html += "</td>";
-                //        html += "</tr>";
-                //        isDropTR = true;
-                //    }
-                //    continue;
-                //}
-
-				//if (isDropTR == false) {
-                //    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                //    html += "<td class='FContext'>";
-                //    html += InitMapAttrOfCtrl(attr);
-                //    html += "</td>";
-                //    html += "</tr>";
-                //    isDropTR = !isDropTR;
-                //    if (rm != null) {
-                //        html += "<tr>";
-                //        html += "<td class='FDesc' style='width:120px;'></td>";
-                //        html += "<td colspan=3>";
-                //        html += GenerRM(rm);
-                //        html += "</td>";
-                //        html += "</tr>";
-                //        isDropTR = true;
-                //    }
-                //    continue;
-                //}
-				
-				if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
+                if (attr.ColSpan == 4) {
                     isDropTR = true;
-					html += '<div class="row row-margin-top">';
-					html += '	<div class="col-md-2 col-sm-2">';
-					html += 		lab;
-					html += '	</div>';
-					html += '	<div class="col-md-8 col-sm-8">';
-					html += 		InitMapAttrOfCtrl(attr);
-					html += '	</div>';
-					html += '</div>';
+                    html += "<tr>";
+                    html += "<td colspan='4'>" + lab + "</br>";
+                    html += InitMapAttrOfCtrl(attr);
+                    html += "</td>";
+                    html += "</tr>";
+
+
                     if (rm != null) {
-						html += '<div class="row row-margin-top">';
-                        html += '	<div class="col-md-2 col-sm-2"></div>';
-						html += '	<div class="col-md-8 col-sm-8">';
-						html += 		GenerRM(rm);
-						html += '	</div>';
-						html += '</div>';
+                        html += "<tr>";
+                        html += "<td class='FDesc' style='width:120px;'></td>";
+                        html += "<td colspan=3>";
+                        html += GenerRM(rm);
+                        html += "</td>";
+                        html += "</tr>";
                         isDropTR = true;
                     }
                     continue;
                 }
 
-				if (attr.ColSpan == 4) {
-                    isDropTR = true;
-					html += '<div class="row row-margin-top">';
-					html += '	<div class="col-md-2 col-sm-2">';
-					html += 		lab;
-					html += '	</div>';
-					html += '	<div class="col-md-8 col-sm-8">';
-					html += 		InitMapAttrOfCtrl(attr);
-					html += '	</div>';
-					html += '</div>';
-                    if (rm != null) {
-						html += '<div class="row row-margin-top">';
-						html += '	<div class="col-md-2 col-sm-2"></div>';
-						html += '	<div class="col-md-8 col-sm-8">';
-						html += 		GenerRM(rm);
-						html += '	</div>';
-						html += '</div>';
-                        isDropTR = true;
-                    }
-                    continue;
-                }
-				if (isDropTR == true) {
-					html += '<div class="row row-margin-top">';
-					html += '	<div class="col-md-2 col-sm-2">';
-					html += 		lab;
-					html += '	</div>';
-					html += '	<div class="col-md-4 col-sm-4">';
-					html += 		InitMapAttrOfCtrl(attr);
-					html += '	</div>';
-
+                if (isDropTR == true) {
+                    html += "<tr>";
+                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td class='FContext'  >";
+                    html += InitMapAttrOfCtrl(attr);
+                    html += "</td>";
                     isDropTR = !isDropTR;
 
                     if (rm != null) {
-                        html += '	<div class="col-md-6 col-sm-6">';
-                        html += 		GenerRM(rm);
-						html += '	</div>';
-						html += '</div>';
+                        html += "<td colspan=2>";
+                        html += GenerRM(rm);
+                        html += "</td>";
+                        html += "</tr>";
                         isDropTR = true;
                     }
                     continue;
                 }
-				if (isDropTR == false) {
-					html += '	<div class="col-md-2 col-sm-2">';
-					html += 		lab;
-					html += '	</div>';
-					html += '	<div class="col-md-4 col-sm-4">';
-					html += 		InitMapAttrOfCtrl(attr);
-					html += '	</div>';
-					html += '</div>';
+
+                if (isDropTR == false) {
+
+                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td class='FContext'>";
+                    html += InitMapAttrOfCtrl(attr);
+                    html += "</td>";
+                    html += "</tr>";
                     isDropTR = !isDropTR;
+
                     if (rm != null) {
-						html += '<div class="row row-margin-top">';
-                        html += '	<div class="col-md-6 col-sm-6">';
-                        html += 		GenerRM(rm);
-                        html += '	</div>';
-						html += '</div>';
+                        html += "<tr>";
+                        html += "<td class='FDesc' style='width:120px;'></td>";
+                        html += "<td colspan=3>";
+                        html += GenerRM(rm);
+                        html += "</td>";
+                        html += "</tr>";
                         isDropTR = true;
                     }
 
                     continue;
                 }
-
-                
             }
+
+            html += "</table>";
+
             return html;
         }
 
@@ -542,11 +454,9 @@
             if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
                 icon = "../" + rm.Icon;
             }
-
-
-
             // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
-            var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
+            //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
+            var html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
             return html;
         }
 
@@ -567,7 +477,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -579,7 +489,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外部数据类型.
@@ -591,7 +501,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //添加文本框 ，日期控件等
@@ -604,11 +514,11 @@
                     if (mapAttr.UIIsEnable == 0)
                         enableAttr = "disabled='disabled'";
 
-                    return "<input class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
+                    return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
                 }
 
                 //普通的大块文本.
-                return "<textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
             }
 
             //日期类型.
@@ -619,7 +529,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input class='form-control' " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
+                return "<input " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
             }
 
             //时期时间类型.
@@ -631,7 +541,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input class='form-control' type='text'  style='width:120px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+                return "<input  type='text'  style='width:120px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
             }
 
             // boolen 类型.
@@ -650,7 +560,7 @@
 
                 checkedStr = "";  
 
-                return "<input class='form-control' " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+                return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
 
             //枚举类型.
@@ -660,7 +570,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             // AppDouble  AppFloat
@@ -671,19 +581,15 @@
                     enableAttr = "disabled='disabled'";
 
                 // alert(mapAttr.KeyOfEn);
-                return "<input class='form-control' style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
                 var enableAttr = '';
-
-                //alert(mapAttr.KeyOfEn + " - " + mapAttr.UIIsEnable);
-
                 if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn=="NodeID" ) {
                     enableAttr = "disabled='disabled'";
                 }
-
-                return "<input class='form-control' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             //AppMoney  AppRate
@@ -694,7 +600,7 @@
                 } else {
                     enableAttr = "disabled='disabled'";
                 }
-                return "<input class='form-control' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             alert(mapAttr.Name + "的类型没有判断.");
@@ -722,8 +628,42 @@
         function InitDDLOperation(flowData, mapAttr, defVal) {
 
             var operations = '';
-            //外键类型
-            //外部数据源类型 FrmGener.js.InitDDLOperation
+            //外键类型.
+            if (mapAttr.LGType == 2) {
+
+                var data = frmData[mapAttr.KeyOfEn];
+                if (data == undefined)
+                    data = frmData[mapAttr.UIBindKey];
+
+                if (data == undefined) {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    return;
+                }
+                
+              //  alert(defVal);
+
+
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+            }
+
+
+            //枚举类型.
+            if (mapAttr.LGType == 1) {
+
+                var enums = frmData.Sys_Enum;
+                enums = $.grep(enums, function (value) {
+                    return value.EnumKey == mapAttr.UIBindKey;
+                });
+
+                $.each(enums, function (i, obj) {
+                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                });
+            }
+
+
+            //外部数据源类型 MyFlowGener.js.InitDDLOperation
             if (mapAttr.LGType == 0) {
                 var fn;
                 try {
@@ -741,33 +681,9 @@
                         GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
                     })
                 } else {
-
-                    //   alert('没有获得约定的数据源.');
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-
+                    //alert('没有获得约定的数据源.');
                 }
-            } else if (mapAttr.LGType == 2) {
-                if (flowData[mapAttr.KeyOfEn] != undefined) {
-                    $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
-                }
-                else if (flowData[mapAttr.UIBindKey] != undefined) {
-                    $.each(flowData[mapAttr.UIBindKey], function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
-                }
-            } else {
-
-                var enums = flowData.Sys_Enum;
-                enums = $.grep(enums, function (value) {
-                    return value.EnumKey == mapAttr.UIBindKey;
-                });
-
-
-                $.each(enums, function (i, obj) {
-                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-                });
             }
             return operations;
         }
@@ -795,13 +711,19 @@
                 }
             } else {
                 en.pkval = pkval;
-                 en.RetrieveFromDBSources();
+                var i = en.RetrieveFromDBSources();
                 en.CopyForm();
                 en.pkval = pkval;
-                var i = en.Update();
-                if (info != 1) {
-                    alert('更新错误:' + info);
-                    return;
+                if (i == 0) {
+                    var info = en.Insert();
+                    if (info != 1) {
+                        alert('插入成功:' + info);
+                    }
+                } else {
+                    var info = en.Update();
+                    if (info != 1) {
+                        alert('更新错误:' + info);
+                    }
                 }
             }
 
@@ -832,42 +754,68 @@
                 window.close();
             }
         }
+
+        $(function () {
+            var Accordion = function (el, multiple) {
+                this.el = el || {};
+                this.multiple = multiple || false;
+
+                // Variables privadas
+                var links = this.el.find('.link');
+                // Evento
+                links.on('click', { el: this.el, multiple: this.multiple }, this.dropdown)
+            }
+
+            Accordion.prototype.dropdown = function (e) {
+                var $el = e.data.el;
+                $this = $(this),
+			$next = $this.next();
+
+                $next.slideToggle();
+                $this.parent().toggleClass('open');
+
+                if (!e.data.multiple) {
+                    $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+                };
+            }
+
+            var accordion = new Accordion($('#accordion'), false);
+        });
     </script>
 </head>
 <body>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12 col-sm-12">
 
-     <div id="Btns" class="form-inline">
+     <div id="Btns"  >
      </div>
-
-		</div>
-	</div>
+       
                 <form id="divCCForm"  method="post">
+                    
+                    <table>
+                    <tr>
+                    <td  valign=top style="width:200px;" > 
+                    <!-- 左边的菜单 -->
+                    
+                    <div id="Left"></div>
 
-	<div class="row">
-		<div class="col-md-12">
-			<div class="row">
-				<div class="col-md-4 col-sm-4">
-					<div id="Left" class="panel-group"></div>
-				</div>
-				<div class="col-md-8 col-sm-8">
-					<div class="row">
-						<div class="col-md-12">
-							<div id="CCForm" style="">
-								<br />
-								<img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-								<br />
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                     </td>
+
+                    <!-- 右边的内容 -->
+                    <td valign=top>
+                    
+                     <div id="CCForm" style="">
+                        <br />
+                        <img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+                        <br />
+                    </div>
+                    
+                     </td>
+                    </tr>
+                   
+
+                    </table>
 
                 </form>
-</div>
+     
 </body>
+
 </html>

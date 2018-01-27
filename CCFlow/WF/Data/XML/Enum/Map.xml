@@ -39,7 +39,7 @@ RU="" />
  RU="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney"
 />
   
-  <Item Key="RowShowModel"
+  <Item Key="EditModel"
     CH="@0=表格@1=卡片(自由模式)@2=卡片(傻瓜模式)"
     EN=""
     JP=""

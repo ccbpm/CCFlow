@@ -341,21 +341,21 @@
             return statisticsRow;
         }
         //插入行.
-        function insertRow(rowShowModel) {
+        function insertRow(EditModel) {
             //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
-            if (rowShowModel != 0 && window.parent) {
+            if (EditModel != 0 && window.parent) {
                 var ensName = GetQueryString("EnsName");
                 var refPKVal = GetQueryString("RefPKVal");
-                window.parent.DtlFrm(ensName, refPKVal, '0', rowShowModel, InitMainTable);
+                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitMainTable);
                 return;
             }
         }
         //编辑行
-        function updateRow(OID, RowShowModel) {
+        function updateRow(OID, EditModel) {
             if (window.parent) {
                 var ensName = GetQueryString("EnsName");
                 var refPKVal = GetQueryString("RefPKVal");
-                window.parent.DtlFrm(ensName, refPKVal, OID, RowShowModel, InitMainTable);
+                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitMainTable);
             }
         }
 

@@ -102,6 +102,28 @@
 
         });
 
+        //执行保存.
+        function Save() {
+
+            alert('ss');
+            var data = $("#tree").getChecked();
+            alert(data);
+            return;
+
+         
+
+            //删除当前数据库的数据.
+            en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal());
+
+            var kvs = "001,002,003";
+
+            for (var i = 0; i < kvs.length; i++) {
+                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                en[GetQueryString("AttrOfMInMM")] = data.nodeId;
+                en.Insert();
+            }
+        }
+
         function findChildren(jsonArray, parentNo) {
 
             var appendToTree = function (treeToAppend, child) {
@@ -184,7 +206,7 @@
             $('#tree').treeview({
                 data: jsonTree,         // 数据源
                 showCheckbox: true,   //是否显示复选框
-                highlightSelected: true,    //是否高亮选中
+                highlightSelected: false,    //是否高亮选中
                 //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
                 nodeIcon: 'glyphicon',
                 emptyIcon: '',    //没有子节点的节点图标
@@ -192,21 +214,27 @@
                 onNodeChecked: function (event, data) {
 
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
-
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
                     en[GetQueryString("AttrOfMInMM")] = data.nodeId;
+
+              //      alert(en);
+                //    en.Delete();
                     en.Insert();
-
                 },
-                nodeUnchecked: function (event, node) {
+                onNodeUnchecked: function (event, node) {
 
-                    alert("nodeUnchecked");
+                   // alert('sss');
+                    //alert("开始删除:" + node.nodeId);
 
-                    //  var en = new Entity(GetQueryString("Dot2DotEnName"));
-                    //  en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                    //  en[GetQueryString("AttrOfMInMM")] = data.nodeId;
-                    //  en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), data.nodeId);
+                    var en = new Entity(GetQueryString("Dot2DotEnName"));
+                    en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                    en[GetQueryString("AttrOfMInMM")] = node.nodeId;
+                    en.Delete();
 
+                    alert("删除成功:" + node.nodeId);
+
+                    //  alert("sss");
+                    //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
                 },
                 onNodeSelected: function (event, node) {
 
@@ -342,28 +370,28 @@
             }
             return nodeIds;
         }
+        function CheckAll() {
+            $('#tree').is(':checked');
+        }
+        function UnCheckAll() {
+            $('#tree').is(':checked');
+        }
     </script>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-9 col-sm-9">
-                        <div class="pull-center search search-margin">
-                            <input class="form-control" type="text" placeholder="" id="TB_Key">
+    <div class="container-fluid" style=" width:100%;">
+        <div class="pull-center search search-margin">
+                            <input  type="text" placeholder="请输入关键字." id="TB_Key"/>
+<input type="button" value="查询" id="Search" onclick="Search()"  />
+<div style=" float:right">
+<input type="button" value="全选" id="Save" onclick="CheckAll()"  />
+<input type="button" value="全不选" id="Button1" onclick="UnCheckAll()"  />
+<input type="button" value="关闭" id="Cancel" onclick="Close()"  />
+</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div class="row row-margin-top">
-            <div class="col-md-4 col-sm-4" id="tree_Panel">
                 <div id="tree"></div>
-            </div>
-            <div class="col-md-4 col-sm-4" id="viewGrid_Panel">
-                <table id="viewGrid"></table>
-            </div>
         </div>
     </div>
 </body>

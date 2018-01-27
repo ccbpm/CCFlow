@@ -64,6 +64,7 @@
 
             //获得map基本信息.
             mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
+
             // $("#Title").html(mapBase.EnDesc); 
             document.title = mapBase.EnDesc;
 
@@ -99,21 +100,32 @@
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
 
+            $("#toolbar").html(html); //设置基础信息.
             for (var i = 0; i < attrs.length; i++) {
+
                 var attr = attrs[i];
-				html += '<div class="form-group">';
-                html += 	"&nbsp;<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
-				html += '</div>';
+                var str = "";
+                str += '<div class="form-group">';
+                str += "&nbsp;<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                str += '</div>';
+                str = $(str);
+                $("#toolbar").append(str); //设置基础信息.
             }
 
             //绑定数据
-            html += "<input type='button' value='查询' onclick='Search();' class='btn btn-default' />";
+            var ele = $("<input type='button' value='查询' onclick='Search();' class='btn btn-default' />");
+            $("#toolbar").append(ele); 
 
-            $("#toolbar").html(html); //设置基础信息.
+            ele = $("<input type='button' value='导出' onclick='Exp();' class='btn btn-default' />");
+            $("#toolbar").append(ele); //设置基础信息.
 
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 var selectVal = json[attr.Field];
+
+                if (selectVal == undefined || selectVal == "")
+                    selectVal = "all";
+
                 $("#DDL_" + attr.Field).val(selectVal);
             }
         }
@@ -122,10 +134,12 @@
         function InitDDLOperation(frmData, mapAttr, defVal) {
 
             var operations = "";
-            operations += "<option value='all' selected='selected' >全部</option>";
+
+            operations += "<option value='all' >全部</option>";
 
             var ens = frmData[mapAttr.Field];
             for (var i = 0; i < ens.length; i++) {
+
                 var en = ens[i];
 
                 if (en.No == undefined )
@@ -172,6 +186,19 @@
             ur.FK_MapData = ensName;
             var i = ur.Save();
             window.location.href = "?EnsName=" + ensName + "&PageIdx=1";
+        }
+
+        function Exp() {
+
+            var url = "";
+            if (plant == "CCFlow") {
+                url = "Do.aspx?EnsName=" + GetQueryString("EnsName") + "&DoType=SearchExp";
+                window.open(url);
+                return;
+            }
+
+            alert("尚未实现");
+            window.location.href = data;
         }
 
         //生成查询页面..
@@ -284,26 +311,17 @@
 
         function OpenEn(pk) {
 
-           // var url = "En.htm?EnsName=" + GetQueryString("EnsName") + "&PK=" + pk;
             var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
-
-//            OpenEasyUiDialog(url, "eudlgframe", this.document.title+' : 详细', 1000, 550, "icon-property", true, null, null, null, function () {
-//                window.location.href = window.location.href;
-//            });
-
             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
                 location = location;
             });
-
         }
 
         function GenerPageIdx() {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
-
-            var pageIdx = this.GetQueryString("PageIdx");
-            handler.AddPara("PageIdx", pageIdx);
+            handler.AddPara("PageIdx", this.GetQueryString("PageIdx"));
 
             var html= handler.DoMethodReturnString("Search_GenerPageIdx");
             $("#end").html(html);

@@ -735,17 +735,21 @@ var Entity = (function () {
             });
         },
 
-		SetValByKey : function (key, value) {
-			this[key] = value;
-		},
+        SetValByKey: function (key, value) {
+            this[key] = value;
+        },
 
-		GetValByKey : function (key) {
-			return this[key];
-		},
+        GetValByKey: function (key) {
+            return this[key];
+        },
 
         Insert: function () {
             var self = this;
             var params = getParams(self);
+
+            if (params.length == 0)
+                params = getParams1(self);
+
             var result;
             $.ajax({
                 type: 'post',
@@ -834,6 +838,7 @@ var Entity = (function () {
             var self = this;
             //var params = getParams(self);
             var params = getParams1(this);
+
             var result;
             $.ajax({
                 type: 'post',

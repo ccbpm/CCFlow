@@ -75,7 +75,7 @@
         //公共方法
         function AjaxServiceGener(param, callback, scope) {
 			// 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
-			if (param.DoType != "Dtl_DeleteRow" && (window.RowShowModel == 1 || window.RowShowModel == 2)) {
+			if (param.DoType != "Dtl_DeleteRow" && (window.EditModel == 1 || window.EditModel == 2)) {
 				return;
 			}
             $.ajax({
@@ -188,14 +188,14 @@
         }
 
         //插入行.
-        function insertRow( rowShowModel ) {
+        function insertRow( EditModel ) {
 
           //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
-          if ( rowShowModel!=0 &&  window.parent )
+          if ( EditModel!=0 &&  window.parent )
           {
              var ensName = GetQueryString("EnsName");
              var refPKVal = GetQueryString("RefPKVal");
-             window.parent.DtlFrm(ensName,refPKVal,'0',rowShowModel, InitPage);
+             window.parent.DtlFrm(ensName,refPKVal,'0',EditModel, InitPage);
              return;
            }
 
@@ -397,10 +397,10 @@
 
                        //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
                        // ==1,==2 是打开父窗口出现卡片.
-                       var RowShowModel= sys_MapDtl.RowShowModel;
-					   window.RowShowModel = RowShowModel;
+                       var EditModel= sys_MapDtl.EditModel;
+					   window.EditModel = EditModel;
 
-                        var snTh= $('<th data-coltype="SN" style="width:16px;"><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow('+RowShowModel+')" /></th>');
+                        var snTh= $('<th data-coltype="SN" style="width:16px;"><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow('+EditModel+')" /></th>');
 
                         threadTr.append(snTh);
                         $.each(sys_mapAttr, function (i, mapAttrObj) {
@@ -451,10 +451,10 @@
                                 customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
                                 coltype: 'Operation1'
                             };
-                            if (sys_MapDtl.RowShowModel != 0) {
+                            if (sys_MapDtl.EditModel != 0) {
                                 delThData.customcontent = 2;
                                 delThData.customcontent2 = delThData.customcontent1;
-                                delThData.customcontent1 = 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.RowShowModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@';
+                                delThData.customcontent1 = 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.EditModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@';
                             }
                         } 
 
@@ -517,7 +517,7 @@
                                         var o = $(threadThObj);
                                         var tmplate = figure_MapAttr_Template(o.data());
 										// 1=自由表单模式 2=傻瓜表单模式
-										if (sys_MapDtl.RowShowModel != 0) {
+										if (sys_MapDtl.EditModel != 0) {
 											tmplate.attr("disabled", "disabled");
 										}
                                         tmplate.data({ KeyOfEn: o.data().KeyOfEn });
@@ -594,9 +594,9 @@
                                 $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
-                            } else if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") && sys_MapDtl.RowShowModel != 0) {
+                            } else if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") && sys_MapDtl.EditModel != 0) {
                                 tbodyTrs.on("dblclick", function () {
-                                    updateRow($(this).data().data.OID, lsys_MapDtl.RowShowModel);
+                                    updateRow($(this).data().data.OID, lsys_MapDtl.EditModel);
                                 });
                             }
 
@@ -1189,7 +1189,7 @@
         //从表全部数据保存 还有问题 需要调整
         function SaveAll(obj) {
 			// 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
-			if (window.RowShowModel == 1 || window.RowShowModel == 2) {
+			if (window.EditModel == 1 || window.EditModel == 2) {
 				return;
 			}
 			/**
@@ -1334,11 +1334,11 @@
         </div>
     </form>
 	<script type="text/javascript">
-	    function updateRow(OID, RowShowModel) {
+	    function updateRow(OID, EditModel) {
 	        if (window.parent) {
 	            var ensName = GetQueryString("EnsName");
 	            var refPKVal = GetQueryString("RefPKVal");
-	            window.parent.DtlFrm(ensName, refPKVal, OID, RowShowModel, InitPage);
+	            window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitPage);
 	        }
 	    }
 	    function deleteRow(index) {

@@ -284,7 +284,7 @@ namespace CCFlow.WF.CCForm
                 return;
             }
 
-            if (mdtl.HisRowShowModel == RowShowModel.Card)
+            if (mdtl.HisEditModel == EditModel.FoolModel)
             {
                 this.Response.Redirect("DtlCard.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&IsWap=" + this.IsWap + "&FK_Node=" + this.FK_Node + "&MainEnsName=" + this.MainEnsName, true);
                 return;

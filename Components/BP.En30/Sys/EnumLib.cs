@@ -8,16 +8,20 @@ namespace BP.Sys
     /// <summary>
     /// 从表显示方式
     /// </summary>
-    public enum RowShowModel
+    public enum EditModel
     {
         /// <summary>
-        /// 表格方式
+        /// 表格模式
         /// </summary>
-        Table,
+        TableModel,
         /// <summary>
-        /// 卡片方式
+        /// 傻瓜表单模式
         /// </summary>
-        Card
+        FoolModel,
+        /// <summary>
+        /// 自由表单模式
+        /// </summary>
+        FreeModel
     }
     /// <summary>
     /// 明细表存盘方式

@@ -91,7 +91,17 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
-                en.PKVal = this.PKVal;
+                if (en.PKCount != 1)
+                {
+                    /*多个主键的情况. 遍历属性，循环赋值.*/
+                    foreach (Attr attr in en.EnMap.Attrs)
+                        en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
+                }
+                else
+                {
+                    en.PKVal = this.PKVal;
+                }
+
                 int i = en.RetrieveFromDBSources(); //查询出来再删除.
                 return en.Delete().ToString(); //返回影响行数.
             }
@@ -252,7 +262,9 @@ namespace BP.WF.HttpHandler
 
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
-                    en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+                {
+                    en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
+                }
 
                 //插入数据库.
                 int i = en.Insert();

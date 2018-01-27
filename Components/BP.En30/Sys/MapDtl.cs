@@ -93,7 +93,7 @@ namespace BP.Sys
         /// <summary>
         /// 行数据显示格式
         /// </summary>
-        public const string RowShowModel = "RowShowModel";
+        public const string EditModel = "EditModel";
         /// <summary>
         /// 过滤的SQL 表达式.
         /// </summary>
@@ -786,11 +786,11 @@ namespace BP.Sys
 
         #region 属性
         public GEDtls HisGEDtls_temp = null;
-        public RowShowModel HisRowShowModel
+        public EditModel HisEditModel
         {
             get
             {
-                return (RowShowModel)this.GetValIntByKey(MapDtlAttr.ListShowModel);
+                return (EditModel)this.GetValIntByKey(MapDtlAttr.ListShowModel);
             }
             set
             {
@@ -1323,7 +1323,7 @@ namespace BP.Sys
                 map.AddTBInt(MapDtlAttr.DtlOpenType, 1, "数据开放类型", false, false);
 
                 map.AddTBInt(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, false);
-                map.AddTBInt(MapDtlAttr.RowShowModel, 0, "行数据显示格式", false, false);
+                map.AddTBInt(MapDtlAttr.EditModel, 0, "行数据显示格式", false, false);
 
 
                 map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);

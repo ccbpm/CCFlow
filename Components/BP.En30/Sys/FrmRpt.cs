@@ -81,7 +81,7 @@ namespace BP.Sys
         /// <summary>
         /// 显示格式
         /// </summary>
-        public const string RowShowModel = "RowShowModel";
+        public const string EditModel = "EditModel";
         /// <summary>
         /// 是否可见
         /// </summary>
@@ -422,15 +422,15 @@ namespace BP.Sys
             }
         }
         public GEDtls HisGEDtls_temp = null;
-        public RowShowModel HisRowShowModel
+        public EditModel HisEditModel
         {
             get
             {
-                return (RowShowModel)this.GetValIntByKey(FrmRptAttr.RowShowModel);
+                return (EditModel)this.GetValIntByKey(FrmRptAttr.EditModel);
             }
             set
             {
-                this.SetValByKey(FrmRptAttr.RowShowModel, (int)value);
+                this.SetValByKey(FrmRptAttr.EditModel, (int)value);
             }
         }
         /// <summary>
@@ -908,8 +908,8 @@ namespace BP.Sys
                 map.AddDDLSysEnum(FrmRptAttr.DtlOpenType, 1, "数据开放类型", true, true,
                     FrmRptAttr.DtlOpenType, "@0=操作员@1=工作ID@2=流程ID");
 
-                map.AddDDLSysEnum(FrmRptAttr.RowShowModel, 0, "显示格式", true, true,
-               FrmRptAttr.RowShowModel, "@0=表格@1=卡片");
+                map.AddDDLSysEnum(FrmRptAttr.EditModel, 0, "显示格式", true, true,
+               FrmRptAttr.EditModel, "@0=表格@1=卡片");
 
                 map.AddTBFloat(FrmRptAttr.X, 5, "X", true, false);
                 map.AddTBFloat(FrmRptAttr.Y, 5, "Y", false, false);

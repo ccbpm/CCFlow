@@ -1193,10 +1193,8 @@ function GenerWorkNode() {
             //单表单加载后执行.
             CCFormLoaded();
 
-
             //装载表单数据与修改表单元素风格.
             LoadFrmDataAndChangeEleStyle(flowData);
-
 
             //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
             if (node.FormType == 11) {

@@ -34,6 +34,7 @@
 
     <script type="text/javascript">
 
+        var newRowIdx = -1;
         var frmData;
         var mapData;
         var mainData;
@@ -64,64 +65,20 @@
 
             //绑定数据.
             BindDtls(mapData, mainData, frmData);
-            return;
-
-            var dtls = frmData["Dtls"];
-
-            //设置默认值
-            for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
-
-                var mapAttr = frmData.Sys_MapAttr[j];
-
-                //添加 label
-                //如果是整行的需要添加  style='clear:both'.
-                var defValue = ConvertDefVal(mapAttr);
-
-                if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-                    if (defValue == null || defValue == "null")
-                        continue;
-                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-                }
-
-                if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-
-                    // alert(mapAttr.KeyOfEn + " " + defValue);
-
-                    // 判断下拉框是否有对应option, 若没有则追加
-                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-
-                        var mainTable = dtl;
-                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-
-                        if (selectText == null || selectText == "")
-                            selectText = defValue;
-
-                        if (defValue == null || defValue == "") {
-
-                        } else {
-                            $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
-                        }
-                    } else {
-                        //设置选择的值
-                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
-                    }
-                }
-
-                if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
-                    if (defValue == "1")
-                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
-                    else
-                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
-                }
-
-                if (mapAttr.UIIsEnable == "0") {
-                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
-                }
-            }
+ 
         })
 
+        function OpenEn(pkVal) {
+
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
+
+            var url = "En2018.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
+
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
+                //location = location;
+            });
+        }
         
         function OpenIt(url, title, w, h) {
 
@@ -136,14 +93,14 @@
         function InitToolbar() {
 
             var html = "";
-
+        
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
                 html += "<input type='button' value='新建' id='Btn_New' onclick='New()' />";
             }
 
             if (mapData.GetPara("IsUpdate") == 1) {
-                html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' />";
+                html += "<input type='button' value='保存' id='Btn_Save' onclick='Save()' />";
             }
 
             if (mapData.GetPara("IsDelete") == 1) {
@@ -165,9 +122,11 @@
             var mapAtrrs = frmData.Sys_MapAttr;
             var dtls = frmData.Dtls;
 
-            var html = "<table border=0>";
+            var html = "<table border=0 id='Table1' >";
             html += "<tr>";
             html += "<th>序</th>";
+            html += "<th>....</th>";
+            
             for (var i = 0; i < mapAtrrs.length; i++) {
                 var mapAttr = mapAtrrs[i];
                 mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
@@ -175,7 +134,11 @@
                     continue;
                 html += "<th>" + mapAttr.Name + "</th>";
             }
+            html += "<th></th>";
             html += "</tr>";
+
+
+            var hidden="";
 
             //生成内容.
             for (var i = 0; i < dtls.length; i++) {
@@ -185,86 +148,35 @@
                 var pkval = dtl.OID;
                 html += "<tr>";
                 html += "<td class='Idx'>" + (i + 1) + "</td>";
-
+                html += "<td ><a href=\"javascript:OpenEn('"+pkval+"')\">详细</a></td>";                
+ 
                 for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
                     var mapAttr = mapAtrrs[attrIdx];
                     mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
                     if (mapAttr.UIVisible == "0")
+                    {
+                        hidden += "<input type='hidden' id='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' name='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
                         continue;
+                    }
 
                     html += "<td>" + InitMapAttrOfCtrl(mapAttr,dtl, pkval) + "</td>";
                 }
+                if (mapData.GetPara("IsDelete")=="1")
+                 html += "<td><a href=\"javascript:Delete('"+pkval+"')\"><img src='../../Img/Btn/Delete.png' /></a></td>";
+                else
+                  html += "<td></td>";
+
                 html += "</tr>";
             }
             html += "</table>";
 
             var html = $(html);
-            $('#Table1').html("").append(html);
-
-
-            //设置行数据.
-            for (var i = 0; i < dtls.length; i++) {
-                var dtl = dtls[i]; ;
-                SetRowData(dtl, dtl.OID);
-            }
+            $('#mytable').html("").append(html);
+            $('#mytable').append(hidden);
+            
+          
         }
-
-        function SetRowData(dtl, pkval) {
-
-            var sys_MapAttrs = frmData.Sys_MapAttr;
-
-            //给从表赋值.
-            for (var j = 0; j < sys_MapAttrs.length; j++) {
-
-                var mapAttr = sys_MapAttrs[j];
-
-                //添加 label
-                //如果是整行的需要添加  style='clear:both'.
-                var defValue = ConvertDefVal(mapAttr, dtl);
-//                if (defValue == null || defValue == "null")
-                //                    continue;
-
-                defValue = "sss";
-                var id = '#TB_' + pkval + '_' + mapAttr.KeyOfEn;
-                if ($(id).length == 1) {
-                    $('#TB_' + pkval + '_' + mapAttr.KeyOfEn).val(defValue);
-                }
-                continue;
-
-                if ($('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).length == 1) {
-                    // 判断下拉框是否有对应option, 若没有则追加
-                    if ($("option[value='" + defValue + "']", '#DDL_' + pkval + '_' + mapAttr.KeyOfEn).length == 0) {
-
-                        var selectText = dtl[mapAttr.KeyOfEn + "Text"];
-
-                        if (selectText == null || selectText == "")
-                            selectText = defValue;
-
-                        if (defValue == null || defValue == "") {
-
-                        } else {
-                            $('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
-                        }
-                    } else {
-                        //设置选择的值
-                        $('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).val(defValue);
-                    }
-                }
-
-                if ($('#CB_' + pkval + '_' + mapAttr.KeyOfEn).length == 1) {
-                    if (defValue == "1")
-                        $('#CB_' + pkval + '_' + mapAttr.KeyOfEn).attr("checked", true);
-                    else
-                        $('#CB_' + pkval + '_' + mapAttr.KeyOfEn).attr("checked", false);
-                }
-
-                if (mapAttr.UIIsEnable == "0") {
-                    $('#TB_' + pkval + '_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#CB_' + pkval + '_' + mapAttr.KeyOfEn).attr('disabled', true);
-                }
-            }
-        }
+         
 
         function InitMapAttrOfCtrl(mapAttr,dtl, pkval) {
 
@@ -283,7 +195,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -295,7 +207,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select id='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "'  name='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外部数据类型.
@@ -307,23 +219,27 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select id='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //添加文本框 ，日期控件等
             //AppString
             if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
 
+                //  alert(mapAttr.UIWidth);
+
+
                 if (mapAttr.UIHeight <= 40) //普通的文本框.
                 {
                     var enableAttr = '';
                     if (mapAttr.UIIsEnable == 0)
-                        enableAttr = "disabled='disabled'";
-                    return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:23px;' type='text'  " + enableAttr + " />";
+                        enableAttr = "disabled='disabled'"; 
+
+                    return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:23px;' type='text'  " + enableAttr + " />";
                 }
 
                 //普通的大块文本.
-                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:"+mapAtt.UIWidth+"px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
             }
 
             //日期类型.
@@ -495,62 +411,71 @@
 
         //新建.
         function New() {
-            var enName = GetQueryString("EnsName");
-            var url = "../../CCForm/DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefVal") + "&FrmType=0&OID=0";
-            window.open(url);
 
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
+            var dtl = new Entity(enName);
+            newRowIdx++;
+            dtl.OID = newRowIdx;
+
+            var mapAtrrs = frmData.Sys_MapAttr;
+
+            var html = "";
+            html += "<tr>";
+            html += "<td class='Idx'><font color=red>"+(newRowIdx+1)+"</font></td>";
+            html += "<td >....</td>";
+            
+            var hidden="";
+
+            for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
+                var mapAttr = mapAtrrs[attrIdx];
+                mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
+                if (mapAttr.UIVisible == "0") {
+                    hidden += "<input type='hidden' id='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' name='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
+                    continue;
+                }
+                html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, newRowIdx) + "</td>";
+            }
+            html += "<td></td>";
+            html += "</tr>";
+
+            $("#Table1 tr:last").after(html);
+            $("#Table1 tr:last").after(hidden);
         }
 
         //更新.
-        function Update() {
+        function Save() { 
+ 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            handler.AddUrlData();  //增加参数属性.
+            handler.AddFormData();
 
-            var enName = GetQueryString("EnName");
-            var en = new Entity(enName);
-            var pkval = GetPKVal();
-            //  alert(pkval);
-            if (pkval == null) {
-                en.CopyForm();
-                var info = en.Insert();
-                if (info != 1) {
-                    alert('插入错误:' + info);
-                    return;
-                }
-            } else {
-                en.pkval = pkval;
-                var i = en.RetrieveFromDBSources();
-                en.CopyForm();
-                en.pkval = pkval;
-                if (i == 0) {
-                    var info = en.Insert();
-                    if (info != 1) {
-                        alert('插入成功:' + info);
-                    }
-                } else {
-                    var info = en.Update();
-                    if (info != 1) {
-                        alert('更新错误:' + info);
-                    }
-                }
+            var data=handler.DoMethodReturnString("Dtl_Save");
+            if (data.indexOf("err@")==0)
+            {    
+              alert(data);
+              return;
             }
 
-            var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval;
-            window.location.href = url; //刷新.
+           // var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval;
+            window.location.href = window.location.href; //刷新.
         }
 
-        function Delete() {
+        function Delete(pkval) {
 
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            var enName = GetQueryString("EnName");
+            var ensName = GetQueryString("EnsName");
+            var enName=ensName.substring(0,ensName.length-1 );
+
+            //执行删除.
             var en = new Entity(enName);
-            en.pkval = GetPKVal();
+            en.pkval = pkval;
             en.RetrieveFromDBSources();
             en.Delete();
 
-            $("#Btns").html("");
-            $("#Left").html("");
-            $("#CCForm").html("删除成功..");
+            window.location.href=window.location.href;
         }
 
         function CloseIt() {
@@ -569,8 +494,7 @@
      <div id="Msg"></div>
        
                 <form id="divCCForm"  method="post">
-                    
-                   <div id="Table1"> </div>
+                   <div id="mytable"> </div>
                 </form>
      
 </body>

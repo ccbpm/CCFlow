@@ -268,10 +268,7 @@
             }
             html += "</ul>";
 
-
-
             html += "<div id='myTabContent' class='tab-content'>";
-
             for (var i = 0; i < Sys_GroupFields.length; i++) {
 
                 var gf = Sys_GroupFields[i];
@@ -296,8 +293,8 @@
                 }
             }
 
-
             $('#CCForm').html("").append(html);
+
 
 //            //设置为只读的字段.
 //            for (var i = 0; i < mapAtrrs.length; i++) {
@@ -691,7 +688,8 @@
         //新建.
         function New() {
             var enName = GetQueryString("EnName");
-            var url = "?EnName=" + GetQueryString("EnName") + "&t=" + Math.random();
+            var url = "?EnName=" + GetQueryString("EnName") + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal") + "&t=" + Math.random();
+           
             window.location.href = url; //刷新.
         }
 
@@ -703,7 +701,14 @@
             var pkval = GetPKVal();
             //  alert(pkval);
             if (pkval == null) {
+
                 en.CopyForm();
+
+                if (GetQueryString("RefKey") == "" || GetQueryString("RefKey") == undefined) {
+                } else {
+                    en[GetQueryString("RefKey")] = GetQueryString("RefVal")
+                }
+
                 var info = en.Insert();
                 if (info != 1) {
                     alert('插入错误:' + info);
@@ -714,6 +719,12 @@
                 var i = en.RetrieveFromDBSources();
                 en.CopyForm();
                 en.pkval = pkval;
+
+                if (GetQueryString("RefKey") == "" || GetQueryString("RefKey") == undefined) {
+                } else {
+                    en[GetQueryString("RefKey")] = GetQueryString("RefVal")
+                }
+
                 if (i == 0) {
                     var info = en.Insert();
                     if (info != 1) {
@@ -727,7 +738,7 @@
                 }
             }
 
-            var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval;
+            var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
             window.location.href = url; //刷新.
         }
 

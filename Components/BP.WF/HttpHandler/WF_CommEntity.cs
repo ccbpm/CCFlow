@@ -48,24 +48,38 @@ namespace BP.WF.HttpHandler
                         if (attr.IsRefAttr == true)
                             continue;
 
-                        if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                        if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
                         {
-                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key);
+                            if (attr.UIIsReadonly == false)
+                                continue;
+
+                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key, null);
                             item.SetValByKey(attr.Key, val);
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly==true)
+
+                        if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                        {
+                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key, null);
+                            item.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
                         {
                             string val = this.GetValFromFrmByKey("DDL_" + pkval + "_" + attr.Key);
                             item.SetValByKey(attr.Key, val);
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
+                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
                         {
-                            string val = this.GetValFromFrmByKey("CB_" + pkval + "_" + attr.Key);
-                            item.SetValByKey(attr.Key, val);
+                            string val = this.GetValFromFrmByKey("CB_" + pkval + "_" + attr.Key, "-1");
+                            if (val == "-1")
+                                item.SetValByKey(attr.Key, 0);
+                            else
+                                item.SetValByKey(attr.Key, 1);
                             continue;
                         }
                     }
@@ -84,6 +98,17 @@ namespace BP.WF.HttpHandler
 
                     foreach (Attr attr in map.Attrs)
                     {
+
+                        if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+                        {
+                            if (attr.UIIsReadonly == false)
+                                continue;
+
+                            val = this.GetValFromFrmByKey("TB_" + i + "_" + attr.Key, null);
+                            dtl.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
                         if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
                         {
                             val = this.GetValFromFrmByKey("TB_" + i + "_" + attr.Key);
@@ -98,10 +123,13 @@ namespace BP.WF.HttpHandler
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
+                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
                         {
-                            val = this.GetValFromFrmByKey("CB_" + i + "_" + attr.Key);
-                            dtl.SetValByKey(attr.Key, val);
+                            val = this.GetValFromFrmByKey("CB_" + i + "_" + attr.Key, "-1");
+                            if (val == "-1")
+                                dtl.SetValByKey(attr.Key, 0);
+                            else
+                                dtl.SetValByKey(attr.Key, 1);
                             continue;
                         }
                     }

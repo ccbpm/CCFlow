@@ -141,9 +141,11 @@
             if (mapData.GetPara("IsInsert") == 1) {
                 html += "<input type='button' value='新建' id='Btn_New' onclick='New()' />";
             }
+
             if (mapData.GetPara("IsUpdate") == 1) {
                 html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' />";
             }
+
             if (mapData.GetPara("IsDelete") == 1) {
                 var pkVal = GetPKVal();
                 if (pkVal != null)
@@ -493,9 +495,10 @@
 
         //新建.
         function New() {
-            var enName = GetQueryString("EnName");
-            var url = "?EnName=" + GetQueryString("EnName") + "&t=" + Math.random();
-            window.location.href = url; //刷新.
+            var enName = GetQueryString("EnsName");
+            var url = "../../CCForm/DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefVal") + "&FrmType=0&OID=0";
+            window.open(url);
+
         }
 
         //更新.

@@ -396,7 +396,7 @@ function NodeProperty_Funs(item) {
     //根据事件名称进行执行
     switch (item.name) {
         case "NodeProperty": //节点属性.
-            url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&PK=" + FK_Node + "&Lang=CH";
+            url = "../../Comm/En.htm?EnName=BP.WF.Template.NodeExt&PKVal=" + FK_Node + "&Lang=CH";
             // alert(url);
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "PO", "节点属性" + FK_Node, url, item.iconCls);

@@ -6,15 +6,16 @@
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript">
         function load() {
+
             var url = window.location.href;
             var idx = url.indexOf('.htm?');
             var paras = url.substring(idx + 4);
-
+             
             if (plant == "CCFlow") {
-                window.location.href = '/WF/Comm/RefFunc/UIEn.aspx' + paras;
+               // window.location.href = '/WF/Comm/RefFunc/UIEn.aspx' + paras;
+                window.location.href = '/WF/Comm/RefFunc/En2018.htm' + paras;
                 return;
             }
-
             window.location.href = './RefFunc/UIEn.jsp' + paras;
         }
 

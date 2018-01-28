@@ -46,7 +46,6 @@
             httpHandler.AddUrlData();  //增加参数属性.
 
             var data = httpHandler.DoMethodReturnString("Dtl_Init");
-            // alert(data);
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html(data);
                 return;
@@ -60,7 +59,7 @@
             // mainData = frmData["MainData"];
             document.title = mapData.Name;
             var isReadonly = GetQueryString("IsReadonly");
-
+            
             InitToolbar(); //初始工具栏.
 
             //绑定数据.
@@ -281,7 +280,7 @@
 
                 checkedStr = "";
 
-                return "<input " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+                return "<input " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_"+pkval+"_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_"+pkval+"_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
 
             //枚举类型.

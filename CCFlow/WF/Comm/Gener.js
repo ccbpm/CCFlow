@@ -900,12 +900,12 @@ var Entity = (function () {
 
         RetrieveFromDBSources: function () {
             var self = this;
-            var params = getParams1(this);
+           // var params = getParams1(this); //查询的时候不需要把参数传入里面去.
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&" + params,
+                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval ,
                 dataType: 'html',
                 success: function (data) {
                     result = data;
@@ -926,6 +926,10 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                    alert(JSON.stringify(XMLHttpRequest));
+
+
                     result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     alert(result);
                 }

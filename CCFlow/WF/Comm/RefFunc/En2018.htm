@@ -45,9 +45,6 @@
         $(function () {
 
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            //            httpHandler.AddPara("EnName", "BP.Port.Emp");
-            //            httpHandler.AddPara("No", "zhoupeng");
-
             var enName = GetQueryString("EnName");
             var pkVal = GetPKVal();
             httpHandler.AddPara("EnName", enName);
@@ -55,9 +52,6 @@
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);
             }
-
-            //httpHandler.AddPara("EnName", "BP.WF.Template.NodeExt");
-            //httpHandler.AddPara("NodeID", "102");
 
             var data = httpHandler.DoMethodReturnString("Entity_Init");
             if (data.indexOf('err@') == 0) {
@@ -74,13 +68,13 @@
             dtM = frmData["dtM"];
 
             document.title = mapData.Name;
+
             InitToolbar(); //初始工具栏.
 
             RefMethod(); //初始化菜单.
 
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
-
 
             //   $.parser.parse("#CCForm");
             var isReadonly = GetQueryString("IsReadonly");
@@ -116,7 +110,6 @@
                 }
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-
 
                     // alert(mapAttr.KeyOfEn + " " + defValue);
 
@@ -177,10 +170,8 @@
             html += "";
             for (var i = 0; i < gNames.length; i++) {
                 var gName = gNames[i];
-
                 if (gName == "")
                     continue;
-
 
                 html += "<li>";
                 html += "<div class='link'><i class='fa fa-paint-brush'></i>" + gName + "<i class='fa fa-chevron-down'></i></div>";
@@ -699,31 +690,22 @@
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
             var pkval = GetPKVal();
-            //  alert(pkval);
             if (pkval == null) {
 
                 en.CopyForm();
-
-                if (GetQueryString("RefKey") == "" || GetQueryString("RefKey") == undefined) {
-                } else {
-                    en[GetQueryString("RefKey")] = GetQueryString("RefVal")
-                }
 
                 var info = en.Insert();
                 if (info != 1) {
                     alert('插入错误:' + info);
                     return;
                 }
+
             } else {
+
                 en.pkval = pkval;
                 var i = en.RetrieveFromDBSources();
                 en.CopyForm();
                 en.pkval = pkval;
-
-                if (GetQueryString("RefKey") == "" || GetQueryString("RefKey") == undefined) {
-                } else {
-                    en[GetQueryString("RefKey")] = GetQueryString("RefVal")
-                }
 
                 if (i == 0) {
                     var info = en.Insert();

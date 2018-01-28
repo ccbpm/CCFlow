@@ -94,11 +94,7 @@ namespace CCFlow.WF.Comm.RefFunc
         protected void Page_Load(object sender, EventArgs e)
         {
             this.ToolBar1.AddLinkBtn(NamesOfBtn.Save);
-
-            //    this.ToolBar1.AddLinkBtn(NamesOfBtn.SaveAndClose);
-            
             this.ToolBar1.AddLinkBtn(NamesOfBtn.Delete);
-            //    this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "导出Excel");
 
             if (this.ToolBar1.IsExit(NamesOfBtn.Save))
                 this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Save).Click += new EventHandler(ToolBar1_ButtonClick);
@@ -120,7 +116,6 @@ namespace CCFlow.WF.Comm.RefFunc
             #region 生成标题
             Entity en = this.HisEn;
             en.SetValByKey(this.RefKey, this.RefVal);
-
 
             Map map = this.HisEn.EnMap;
             Attrs attrs = map.Attrs;

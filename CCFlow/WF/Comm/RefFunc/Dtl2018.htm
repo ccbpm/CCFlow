@@ -1,0 +1,575 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>ccform正在加载请稍候...</title>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Gener.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.nav.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
+    <link rel="stylesheet" href="../../Scripts/bootstrap/css/css.css" type="text/css" media="all" />
+
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
+    <!--UEditor-->
+    <link href="../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
+    <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
+
+    <script type="text/javascript">
+
+        var frmData;
+        var mapData;
+        var mainData;
+        var dtM; //方法集合.
+
+        $(function () {
+
+            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            httpHandler.AddUrlData();  //增加参数属性.
+
+            var data = httpHandler.DoMethodReturnString("Dtl_Init");
+            // alert(data);
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html(data);
+                return;
+            }
+
+            //解析json.
+            frmData = JSON.parse(data);
+
+            mapData = frmData["Sys_MapData"][0];
+            mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
+            // mainData = frmData["MainData"];
+            document.title = mapData.Name;
+            var isReadonly = GetQueryString("IsReadonly");
+
+            InitToolbar(); //初始工具栏.
+
+            //绑定数据.
+            BindDtls(mapData, mainData, frmData);
+            return;
+
+            var dtls = frmData["Dtls"];
+
+            //设置默认值
+            for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
+
+                var mapAttr = frmData.Sys_MapAttr[j];
+
+                //添加 label
+                //如果是整行的需要添加  style='clear:both'.
+                var defValue = ConvertDefVal(mapAttr);
+
+                if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == null || defValue == "null")
+                        continue;
+                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+                }
+
+                if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
+
+                    // alert(mapAttr.KeyOfEn + " " + defValue);
+
+                    // 判断下拉框是否有对应option, 若没有则追加
+                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+
+                        var mainTable = dtl;
+                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+
+                        if (selectText == null || selectText == "")
+                            selectText = defValue;
+
+                        if (defValue == null || defValue == "") {
+
+                        } else {
+                            $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                        }
+                    } else {
+                        //设置选择的值
+                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+                    }
+                }
+
+                if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == "1")
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
+                    else
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+                }
+
+                if (mapAttr.UIIsEnable == "0") {
+                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                }
+            }
+        })
+
+        
+        function OpenIt(url, title, w, h) {
+
+           // var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
+                //location = location;
+            });
+
+           // window.open(url);
+        }
+        //设置按钮
+        function InitToolbar() {
+
+            var html = "";
+
+            //权限控制.
+            if (mapData.GetPara("IsInsert") == 1) {
+                html += "<input type='button' value='新建' id='Btn_New' onclick='New()' />";
+            }
+            if (mapData.GetPara("IsUpdate") == 1) {
+                html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' />";
+            }
+            if (mapData.GetPara("IsDelete") == 1) {
+                var pkVal = GetPKVal();
+                if (pkVal != null)
+                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' />";
+            }
+
+            html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' />";
+
+            $("#Btns").append(html);
+        }
+
+        //绑定明细.
+        function BindDtls(mapData, mainData, frmData) {
+
+            frmData = frmData;
+            var Sys_GroupFields = frmData.Sys_GroupField;
+            var mapAtrrs = frmData.Sys_MapAttr;
+            var dtls = frmData.Dtls;
+
+            var html = "<table border=0>";
+            html += "<tr>";
+            html += "<th>序</th>";
+            for (var i = 0; i < mapAtrrs.length; i++) {
+                var mapAttr = mapAtrrs[i];
+                mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
+                if (mapAttr.UIVisible == "0")
+                    continue;
+                html += "<th>" + mapAttr.Name + "</th>";
+            }
+            html += "</tr>";
+
+            //生成内容.
+            for (var i = 0; i < dtls.length; i++) {
+
+                var dtl = dtls[i];
+                dtl = new Entity("BP.Sys.GEDtl", dtl);
+                var pkval = dtl.OID;
+                html += "<tr>";
+                html += "<td class='Idx'>" + (i + 1) + "</td>";
+
+                for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
+                    var mapAttr = mapAtrrs[attrIdx];
+                    mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
+                    if (mapAttr.UIVisible == "0")
+                        continue;
+
+                    html += "<td>" + InitMapAttrOfCtrl(mapAttr,dtl, pkval) + "</td>";
+                }
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            var html = $(html);
+            $('#Table1').html("").append(html);
+
+
+            //设置行数据.
+            for (var i = 0; i < dtls.length; i++) {
+                var dtl = dtls[i]; ;
+                SetRowData(dtl, dtl.OID);
+            }
+        }
+
+        function SetRowData(dtl, pkval) {
+
+            var sys_MapAttrs = frmData.Sys_MapAttr;
+
+            //给从表赋值.
+            for (var j = 0; j < sys_MapAttrs.length; j++) {
+
+                var mapAttr = sys_MapAttrs[j];
+
+                //添加 label
+                //如果是整行的需要添加  style='clear:both'.
+                var defValue = ConvertDefVal(mapAttr, dtl);
+//                if (defValue == null || defValue == "null")
+                //                    continue;
+
+                defValue = "sss";
+                var id = '#TB_' + pkval + '_' + mapAttr.KeyOfEn;
+                if ($(id).length == 1) {
+                    $('#TB_' + pkval + '_' + mapAttr.KeyOfEn).val(defValue);
+                }
+                continue;
+
+                if ($('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).length == 1) {
+                    // 判断下拉框是否有对应option, 若没有则追加
+                    if ($("option[value='" + defValue + "']", '#DDL_' + pkval + '_' + mapAttr.KeyOfEn).length == 0) {
+
+                        var selectText = dtl[mapAttr.KeyOfEn + "Text"];
+
+                        if (selectText == null || selectText == "")
+                            selectText = defValue;
+
+                        if (defValue == null || defValue == "") {
+
+                        } else {
+                            $('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                        }
+                    } else {
+                        //设置选择的值
+                        $('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).val(defValue);
+                    }
+                }
+
+                if ($('#CB_' + pkval + '_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == "1")
+                        $('#CB_' + pkval + '_' + mapAttr.KeyOfEn).attr("checked", true);
+                    else
+                        $('#CB_' + pkval + '_' + mapAttr.KeyOfEn).attr("checked", false);
+                }
+
+                if (mapAttr.UIIsEnable == "0") {
+                    $('#TB_' + pkval + '_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#DDL_' + pkval + '_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#CB_' + pkval + '_' + mapAttr.KeyOfEn).attr('disabled', true);
+                }
+            }
+        }
+
+        function InitMapAttrOfCtrl(mapAttr,dtl, pkval) {
+
+            var str = '';
+            var defValue =  ConvertDefVal(mapAttr, dtl);
+            var isInOneRow = false; //是否占一整行
+            var islabelIsInEle = false; //
+            var eleHtml = '';
+
+            //外部数据源类型.
+            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+
+                //枚举类型.
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            //外键类型.
+            if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+
+                //枚举类型.
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select name='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            //外部数据类型.
+            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
+
+                //枚举类型.
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            //添加文本框 ，日期控件等
+            //AppString
+            if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
+
+                if (mapAttr.UIHeight <= 40) //普通的文本框.
+                {
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 0)
+                        enableAttr = "disabled='disabled'";
+                    return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:23px;' type='text'  " + enableAttr + " />";
+                }
+
+                //普通的大块文本.
+                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+            }
+
+            //日期类型.
+            if (mapAttr.MyDataType == 6) {
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<input " + enableAttr + " value='" + defValue + "' style='width:80px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text' />";
+            }
+
+            //时期时间类型.
+            if (mapAttr.MyDataType == 7) {
+
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<input  type='text' value='" + defValue + "' style='width:120px;' " + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' />";
+            }
+
+            // boolen 类型.
+            if (mapAttr.MyDataType == 4) {  // AppBoolean = 7
+
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                //CHECKBOX 默认值
+                var checkedStr = '';
+                if (checkedStr != "true" && checkedStr != '1') {
+                    checkedStr = ' checked="checked" ';
+                }
+
+                checkedStr = "";
+
+                return "<input " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+            }
+
+            //枚举类型.
+            if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            // AppDouble  AppFloat
+            if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
+
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable != 1)
+                    enableAttr = "disabled='disabled'";
+
+                // alert(mapAttr.KeyOfEn);
+                return "<input style='text-align:right;width:80px;' value='" + defValue + "'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+            }
+
+            if ((mapAttr.MyDataType == 2)) { //AppInt
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn=="NodeID" ) {
+                    enableAttr = "disabled='disabled'";
+                }
+                return "<input style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+            }
+
+            //AppMoney  AppRate
+            if (mapAttr.MyDataType == 8) {
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 1) {
+
+                } else {
+                    enableAttr = "disabled='disabled'";
+                }
+                return "<input style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+            }
+
+            alert(mapAttr.Name + "的类型没有判断.");
+            return;
+        }
+
+        //填充默认数据
+        function ConvertDefVal(attr, dtl) {
+
+            //通过MAINTABLE返回的参数
+            for (var ele in dtl) {
+                if (attr.KeyOfEn == ele && dtl != '') {
+                    result = dtl[ele];
+                    break;
+                }
+            }
+
+            if (result != undefined && typeof (result) == 'string') {
+                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+            }
+            return result = unescape(result);
+        }
+
+        //初始化下拉列表框的OPERATION
+        function InitDDLOperation(flowData, mapAttr, defVal) {
+
+            var operations = '';
+            //外键类型.
+            if (mapAttr.LGType == 2) {
+
+                var data = frmData[mapAttr.KeyOfEn];
+                if (data == undefined)
+                    data = frmData[mapAttr.UIBindKey];
+
+                if (data == undefined) {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    return;
+                }
+                
+              //  alert(defVal);
+
+
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+            }
+
+
+            //枚举类型.
+            if (mapAttr.LGType == 1) {
+
+                var enums = frmData.Sys_Enum;
+                enums = $.grep(enums, function (value) {
+                    return value.EnumKey == mapAttr.UIBindKey;
+                });
+
+                $.each(enums, function (i, obj) {
+                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                });
+            }
+
+
+            //外部数据源类型 MyFlowGener.js.InitDDLOperation
+            if (mapAttr.LGType == 0) {
+                var fn;
+                try {
+                    if (mapAttr.UIBindKey) {
+                        fn = eval(mapAttr.UIBindKey);
+                    }
+                } catch (e) {
+                }
+                if (typeof fn == "function") {
+                    $.each(fn.call(), function (i, obj) {
+                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                    });
+                } else if (typeof CommonHandler == "function") {
+                    CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+                        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+                    })
+                } else {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    //alert('没有获得约定的数据源.');
+                }
+            }
+            return operations;
+        }
+
+        //新建.
+        function New() {
+            var enName = GetQueryString("EnName");
+            var url = "?EnName=" + GetQueryString("EnName") + "&t=" + Math.random();
+            window.location.href = url; //刷新.
+        }
+
+        //更新.
+        function Update() {
+
+            var enName = GetQueryString("EnName");
+            var en = new Entity(enName);
+            var pkval = GetPKVal();
+            //  alert(pkval);
+            if (pkval == null) {
+                en.CopyForm();
+                var info = en.Insert();
+                if (info != 1) {
+                    alert('插入错误:' + info);
+                    return;
+                }
+            } else {
+                en.pkval = pkval;
+                var i = en.RetrieveFromDBSources();
+                en.CopyForm();
+                en.pkval = pkval;
+                if (i == 0) {
+                    var info = en.Insert();
+                    if (info != 1) {
+                        alert('插入成功:' + info);
+                    }
+                } else {
+                    var info = en.Update();
+                    if (info != 1) {
+                        alert('更新错误:' + info);
+                    }
+                }
+            }
+
+            var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval;
+            window.location.href = url; //刷新.
+        }
+
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var enName = GetQueryString("EnName");
+            var en = new Entity(enName);
+            en.pkval = GetPKVal();
+            en.RetrieveFromDBSources();
+            en.Delete();
+
+            $("#Btns").html("");
+            $("#Left").html("");
+            $("#CCForm").html("删除成功..");
+        }
+
+        function CloseIt() {
+            if (window.parent && window.parent.CloseBootstrapDialog) {
+                window.parent.CloseBootstrapDialog("取消");
+            } else {
+                window.close();
+            }
+        }
+ 
+    </script>
+</head>
+<body>
+
+     <div id="Btns"></div>
+     <div id="Msg"></div>
+       
+                <form id="divCCForm"  method="post">
+                    
+                   <div id="Table1"> </div>
+                </form>
+     
+</body>
+
+</html>

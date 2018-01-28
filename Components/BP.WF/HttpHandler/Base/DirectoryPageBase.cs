@@ -32,21 +32,14 @@ namespace BP.WF.HttpHandler
         public string GetValFromFrmByKey(string key, string isNullAsVal = null)
         {
             string val = context.Request.Form[key];
-
             if (val == null && key.Contains("DDL_") == false)
-            {
                 val = context.Request.Form["DDL_" + key];
-            }
 
             if (val == null && key.Contains("TB_") == false)
-            {
                 val = context.Request.Form["TB_" + key];
-            }
 
             if (val == null && key.Contains("CB_") == false)
-            {
                 val = context.Request.Form["CB_" + key];
-            }
 
             if (val == null)
             {

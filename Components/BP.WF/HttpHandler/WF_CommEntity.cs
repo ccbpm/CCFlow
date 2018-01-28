@@ -26,6 +26,202 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        #region 从表.
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Dtl_Save()
+        {
+            try
+            {
+                #region  查询出来从表数据.
+                Entities dtls = ClassFactory.GetEns(this.EnsName);
+                Entity dtl = dtls.GetNewEntity;
+                dtls.Retrieve(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
+                Map map = dtl.EnMap;
+                foreach (Entity item in dtls)
+                {
+                    string pkval = item.GetValStringByKey(dtl.PK);
+                    foreach (Attr attr in map.Attrs)
+                    {
+                        if (attr.IsRefAttr == true)
+                            continue;
+
+                        if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                        {
+                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key);
+                            item.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly==true)
+                        {
+                            string val = this.GetValFromFrmByKey("DDL_" + pkval + "_" + attr.Key);
+                            item.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
+                        {
+                            string val = this.GetValFromFrmByKey("CB_" + pkval + "_" + attr.Key);
+                            item.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+                    }
+
+                    item.Update(); //执行更新.
+                }
+                #endregion  查询出来从表数据.
+
+                #region 保存新加行.
+                for (int i = 0; i < 50; i++)
+                {
+                    string pkval = "TB_"+i+"_"+dtl.PK;
+                    var val=this.GetValFromFrmByKey(pkval, "");
+                    if (val.Equals(""))
+                        continue;
+
+                    foreach (Attr attr in map.Attrs)
+                    {
+                        if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                        {
+                            val = this.GetValFromFrmByKey("TB_" + i + "_" + attr.Key);
+                            dtl.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                        {
+                            val = this.GetValFromFrmByKey("DDL_" + i + "_" + attr.Key);
+                            dtl.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
+                        {
+                            val = this.GetValFromFrmByKey("CB_" + i + "_" + attr.Key);
+                            dtl.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+                    }
+                    dtl.SetValByKey(pkval, 0);
+                    dtl.SetValByKey(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
+                    dtl.PKVal = "0";
+                    dtl.Insert();
+                }
+                #endregion 保存新加行.
+
+                return "保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string Dtl_Init()
+        {
+            //定义容器.
+            DataSet ds = new DataSet();
+
+            //查询出来从表数据.
+            Entities dtls = ClassFactory.GetEns(this.EnsName);
+            dtls.Retrieve(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
+            ds.Tables.Add(dtls.ToDataTableField("Dtls"));
+
+            //实体.
+            Entity dtl = dtls.GetNewEntity;
+            //定义Sys_MapData.
+            MapData md = new MapData();
+            md.No = this.EnName;
+            md.Name = dtl.EnDesc;
+
+            #region 加入权限信息.
+            //把权限加入参数里面.
+            if (dtl.HisUAC.IsInsert)
+                md.SetPara("IsInsert", "1");
+            if (dtl.HisUAC.IsUpdate)
+                md.SetPara("IsUpdate", "1");
+            if (dtl.HisUAC.IsDelete)
+                md.SetPara("IsDelete", "1");
+            #endregion 加入权限信息.
+
+            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
+
+            #region 字段属性.
+            MapAttrs attrs = dtl.EnMap.Attrs.ToMapAttrs;
+            DataTable sys_MapAttrs = attrs.ToDataTableField("Sys_MapAttr");
+            ds.Tables.Add(sys_MapAttrs);
+            #endregion 字段属性.
+
+            #region 把外键与枚举放入里面去.
+            foreach (DataRow dr in sys_MapAttrs.Rows)
+            {
+                string uiBindKey = dr["UIBindKey"].ToString();
+                string lgType = dr["LGType"].ToString();
+                if (lgType != "2")
+                    continue;
+
+                string UIIsEnable = dr["UIVisible"].ToString();
+                if (UIIsEnable == "0")
+                    continue;
+
+                if (string.IsNullOrEmpty(uiBindKey) == true)
+                {
+                    string myPK = dr["MyPK"].ToString();
+                    /*如果是空的*/
+                    //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                }
+
+                // 检查是否有下拉框自动填充。
+                string keyOfEn = dr["KeyOfEn"].ToString();
+                string fk_mapData = dr["FK_MapData"].ToString();
+
+
+                // 判断是否存在.
+                if (ds.Tables.Contains(uiBindKey) == true)
+                    continue;
+
+                ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+            }
+
+            string enumKeys = "";
+            foreach (Attr attr in dtl.EnMap.Attrs)
+            {
+                if (attr.MyFieldType == FieldType.Enum)
+                {
+                    enumKeys += "'" + attr.UIBindKey + "',";
+                }
+            }
+
+            if (enumKeys.Length > 2)
+            {
+                enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
+                // Sys_Enum
+                string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                dtEnum.TableName = "Sys_Enum";
+
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    dtEnum.Columns["MYPK"].ColumnName = "MyPK";
+                    dtEnum.Columns["LAB"].ColumnName = "Lab";
+                    dtEnum.Columns["ENUMKEY"].ColumnName = "EnumKey";
+                    dtEnum.Columns["INTKEY"].ColumnName = "IntKey";
+                    dtEnum.Columns["LANG"].ColumnName = "Lang";
+                }
+                ds.Tables.Add(dtEnum);
+            }
+            #endregion 把外键与枚举放入里面去.
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 从表.
+
 
         #region 实体的操作.
         public string Entity_Init()
@@ -242,7 +438,8 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     DataRow dr = dtM.NewRow();
-                    string url = "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() ;
+                    //string url = "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() ;
+                    string url = "Dtl2018.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() ;
                     try
                     {
                         i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "='" + en.PKVal + "'");
@@ -317,7 +514,6 @@ namespace BP.WF.HttpHandler
                 DataTable sys_MapAttrs = attrs.ToDataTableField("Sys_MapAttr");
                 sys_MapAttrs.Columns.Remove(MapAttrAttr.GroupID);
                 sys_MapAttrs.Columns.Add("GroupID");
-
                 //sys_MapAttrs.Columns[MapAttrAttr.GroupID].DataType = typeof(string); //改变列类型.
 
                 //给字段增加分组.
@@ -411,6 +607,7 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 实体的操作.
+
         public string BranchesAndLeaf_SearchByNodeID()
         {
             string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
@@ -422,6 +619,8 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(ensMen); //集合.
             qo.AddWhere(defaultGroupAttrKey, key);
             qo.DoQuery();
+
+
             return ensMen.ToJson();
         }
         public string BranchesAndLeaf_SearchByKey()
@@ -473,12 +672,12 @@ namespace BP.WF.HttpHandler
 
             //找到映射.
             AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
-            AttrOfOneVSM vsM=null;
+            AttrOfOneVSM vsM = null;
             foreach (AttrOfOneVSM item in oneVsM)
             {
-                if ( item.Dot2DotModel== Dot2DotModel.TreeDeptEmp 
+                if (item.Dot2DotModel == Dot2DotModel.TreeDeptEmp
                     && item.EnsOfMM.ToString().Equals(dot2DotEnsName)
-                    && item.DefaultGroupAttrKey.Equals(defaultGroupAttrKey ))
+                    && item.DefaultGroupAttrKey.Equals(defaultGroupAttrKey))
                 {
                     vsM = item;
                     break;
@@ -495,17 +694,17 @@ namespace BP.WF.HttpHandler
 
             #region 生成树目录.
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
-          Entities ensMen=ClassFactory.GetEns(ensOfM);
-            Entity enMen=ensMen.GetNewEntity;
+            Entities ensMen = ClassFactory.GetEns(ensOfM);
+            Entity enMen = ensMen.GetNewEntity;
 
-            Attr attr =enMen.EnMap.GetAttrByKey(defaultGroupAttrKey);
+            Attr attr = enMen.EnMap.GetAttrByKey(defaultGroupAttrKey);
             if (attr == null)
                 return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不存在，请确认是否删除了该属性?";
 
             if (attr.MyFieldType == FieldType.Normal)
                 return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不能是普通字段，必须是外键或者枚举.";
 
-            Entities trees = attr.HisFKEns; 
+            Entities trees = attr.HisFKEns;
             trees.RetrieveAll();
 
             DataTable dt = trees.ToDataTableField("DBTrees");
@@ -527,16 +726,15 @@ namespace BP.WF.HttpHandler
 
             string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
             string AttrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
-            
+
             dtSelected.Columns[attrOfMInMM].ColumnName = "No";
-            dtSelected.Columns[attrOfMInMM+"Text"].ColumnName = "Name";
+            dtSelected.Columns[attrOfMInMM + "Text"].ColumnName = "Name";
             dtSelected.Columns.Remove(AttrOfOneInMM);
             ds.Tables.Add(dtSelected); //已经选择的数据.
             #endregion 生成选择的数据.
 
             return BP.Tools.Json.ToJson(ds);
         }
-
         /// <summary>
         /// 执行保存
         /// </summary>

@@ -168,13 +168,14 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
                 map.AddTBString(NodeToolbarAttr.Url, null, "连接", true, false, 0, 500, 300, true);
                 // 显示位置.
-                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
+                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", true,true, NodeToolbarAttr.ShowWhere,
                     "@0=树形表单@1=工具栏");
+
+                map.AddDDLEntities("FK_Dept", null, "部门", new BP.Port.Depts(), false);
 
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);
                 map.AddMyFile("图标");
-
 
                 this._enMap = map;
                 return this._enMap;

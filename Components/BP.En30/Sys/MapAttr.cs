@@ -1000,6 +1000,10 @@ namespace BP.Sys
             {
                 return (int)this.UIWidth;
             }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIWidth, value);
+            }
         }
         /// <summary>
         /// 宽度

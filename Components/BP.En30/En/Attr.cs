@@ -1593,6 +1593,10 @@ namespace BP.En
                     mattr.UIContralType = item.UIContralType;
                     mattr.UIBindKey = item.UIBindKey;
 
+                    //@于庆海，这里需要翻译.
+                    mattr.UIWidthInt = item.UIWidthInt;
+                    mattr.UIHeightInt = item.UIHeight;
+
                     mattr.MaxLen = item.MaxLength;
                     mattr.MinLen = item.MinLength;
                     mattr.UIVisible = item.UIVisible;

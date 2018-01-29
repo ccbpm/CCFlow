@@ -311,7 +311,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
                 if (mapExt.Doc == undefined || mapExt.Doc == '')
                     continue;
-
+                calculator(mapExt);
                 break;
             case "DDLFullCtrl": // 自动填充其他的控件..  先不做
 
@@ -396,4 +396,73 @@ function DynamicBind(mapExt,ctrlType) {
     $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {
         DBAccess.RunFunctionReturnStr(mapExt.Doc);
     });
+}
+
+/**
+* 表单计算(包括普通表单以及从表弹出页表单)
+*/
+function calculator(o) {
+    if (!testExpression(o.Doc)) {
+        console.log("MyPk: " + o.MyPK + ", 表达式: '" + o.Doc + "'格式错误");
+        return false;
+    }
+    var targets = [];
+    var index = -1;
+    for (var i = 0; i < o.Doc.length; i++) {	// 对于复杂表达式需要重点测试
+        var c = o.Doc.charAt(i);
+        if (c == "(") {
+            index++;
+        } else if (c == ")") {
+            targets.push(o.Doc.substring(index + 1, i));
+            i++;
+            index = i;
+        } else if (/[\+\-|*\/]/.test(c)) {
+            targets.push(o.Doc.substring(index + 1, i));
+            index = i;
+        }
+    }
+    if (index + 1 < o.Doc.length) {
+        targets.push(o.Doc.substring(index + 1, o.Doc.length));
+    }
+    //
+    var expression = {
+        "judgement": [],
+        "execute_judgement": [],
+        "calculate": o.Doc
+    };
+    $.each(targets, function (i, o) {
+        var target = o.replace("@", "");
+        var element = "$(':input[name=TB_" + target + "]')";
+        expression.judgement.push(element + ".length == 0");
+        expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val()))");
+        expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val())");
+    });
+    (function (targets, expression, resultTarget, pk, expDefined) {
+        $.each(targets, function (i, o) {
+            var target = o.replace("@", "");
+            $(":input[name=TB_" + target + "]").bind("change", function () {
+                var evalExpression = " var result = ''; ";
+                if (expression.judgement.length > 0) {
+                    evalExpression += " if ( " + expression.judgement.join(" || ") + " ) { ";
+                    evalExpression += " 	console.log(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
+                    evalExpression += " } ";
+                }
+                if (expression.execute_judgement.length > 0) {
+                    evalExpression += " else if ( " + expression.execute_judgement.join(" && ") + " ) { ";
+                }
+                if (expression.calculate.length > 0) {
+                    evalExpression += " 	result = " + expression.calculate + "; ";
+                }
+                if (expression.execute_judgement.length > 0) {
+                    evalExpression += " } ";
+                }
+                eval(evalExpression);
+                $(":input[name=TB_" + resultTarget + "]").val(typeof result == "undefined" ? "" : result);
+            });
+            if (i == 0) {
+                $(":input[name=TB_" + target + "]").trigger("change");
+            }
+        });
+    })(targets, expression, o.AttrOfOper, o.MyPK, o.Doc);
+    $(":input[name=TB_" + o.AttrOfOper + "]").attr("disabled", true);
 }

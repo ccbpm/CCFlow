@@ -905,7 +905,7 @@ var Entity = (function () {
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval ,
+                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MyPK=" + self.MyPK + "&OID=" + self.OID,
                 dataType: 'html',
                 success: function (data) {
                     result = data;

@@ -580,6 +580,9 @@ namespace BP.WF.HttpHandler
                 urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true";
             urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" + WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
 
+            urlExt = urlExt.Replace("PFlowNo=null", "");
+            urlExt = urlExt.Replace("PWorkID=null", "");
+
             if (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm)
             {
                 //added by liuxc,2016-01-25

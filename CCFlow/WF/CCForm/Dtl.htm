@@ -380,7 +380,7 @@
                     $('#dtlDiv div table tbody').html('');//清空表格数据
 
 					if (sys_MapDtl.ShowCols) {
-						var ShowCols = sys_MapDtl.ShowCols.split("@");
+						var ShowCols = sys_MapDtl.ShowCols.split(",");
 						$.each(sys_mapAttr, function (i, o) {
 							if (o.UIVisible == 1 && ShowCols.indexOf(o.KeyOfEn) == -1) {
 								o.UIVisible = 0;

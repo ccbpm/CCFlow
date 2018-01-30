@@ -35,7 +35,7 @@
             InitPage();
 
         });
-        
+
         //初始化数据.
         function InitPage() {
             // 设置标签
@@ -47,7 +47,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=PushMsgEntity_Init&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&MyPK=" + GetQueryString("MyPK")||"" + "&m=" + Math.random(),
+                url: Handler + "?DoType=PushMsgEntity_Init&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&MyPK=" + GetQueryString("MyPK") || "" + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -115,30 +115,31 @@
         function _GetText(EventListOfNode) {
 
             var ret = { "WorkArrive": "发送给当前节点的所有处理人",
-                        "SendSuccess": "发送给下一个节点的所有接受人",
-                        "ReturnAfter": "发送给被退回的节点处理人",
-                        "UndoneAfter": "撤销工作后通知的节点接受人",
-                        "FlowOverAfter": "流程结束通知的所有流程的参与人",
-                        "AfterFlowDel": "流程删除后通知所有流程的参与人"
+                "SendSuccess": "发送给下一个节点的所有接受人",
+                "ReturnAfter": "发送给被退回的节点处理人",
+                "UndoneAfter": "撤销工作后通知的节点接受人",
+                "FlowOverAfter": "流程结束通知的所有流程的参与人",
+                "AfterFlowDel": "流程删除后通知所有流程的参与人"
             };
             return ret[EventListOfNode];
         }
 
         function Save() {
-            var para = "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&m=" + Math.random();
+            var para = "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&t=" + Math.random(); //
             if (GetQueryString("MyPK") != null) {
                 para += "&MyPK=" + GetQueryString("MyPK");
             }
-            
-            var formData = new FormData($("#cc")[0]);
+
+            var formData = $('#cc').serialize(); //new FormData($("#cc")[0]);
             $.ajax({
                 url: Handler + "?DoType=PushMsg_Save" + para,
                 type: 'POST',
                 data: formData,
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
+                //async: false,
+                //cache: false,
+                dataType: 'html',
+                //contentType: false,
+                //processData: false,
                 success: function (data) {
                     if (data.indexOf('err@') >= 0) {
                         alert(data);
@@ -154,10 +155,10 @@
         function Back() {
 
             var url = '';
-            if (window.confirm('您想使用新版本的设置吗？') == true)
-                url = 'PushMessage.aspx?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
-            else
-                url = 'PushMessage.htm?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
+            /* if (window.confirm('您想使用新版本的设置吗？') == true)
+            url = 'PushMessage.aspx?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
+            else */
+            url = 'PushMessage.htm?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
 
             window.location.href = url;
         }

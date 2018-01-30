@@ -26,75 +26,62 @@
         //初始化数据.
         function InitPage() {
 
-            var pk = GetQueryString("No");
-            if (pk == null || pk == undefined)
-                pk = GetQueryString("MyPK");
-            if (pk == null || pk == undefined)
-                pk = GetQueryString("OID");
-            if (pk == null || pk == undefined)
-                pk = GetQueryString("WorkID");
-            if (pk == null || pk == undefined)
-                pk = GetQueryString("NodeID");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("Index", GetQueryString("Index"));
+            handler.AddPara("PKVal", GetPKVal());
+            handler.AddPara("PK", GetPKVal());
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
 
-            //初始化数据.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Refmethod_Init&Index=" + GetQueryString("Index") + "&PKVal=" + pk + "&PK="+pk+"&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var data = handler.DoMethodReturnString("Refmethod_Init");
+            console.log(data);
 
-                    console.log(data);
+            //如果错误,就提示.
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                $('#CCForm').html('');
+                $('#CCForm').html(data);
+                return;
+            }
 
-                    //如果错误,就提示.
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        $('#CCForm').html('');
-                        $('#CCForm').html(data);
-                        return;
-                    }
+            //转到Url..
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                window.location.href = data;
+                return;
+            }
 
-                    //转到Url..
-                    if (data.indexOf('url@') == 0) {
-                        data = data.replace('url@', '');
-                        window.location.href = data;
-                        return;
-                    }
+            //弹出信息并关闭.
+            if (data == "close@info") {
 
-                    //弹出信息并关闭.
-                    if (data == "close@info") {
+                window.close();
+                return;
+            }
 
-                        window.close();
-                        return;
-                    }
+            //关闭.
+            if (data.indexOf('close@') == 0) {
+                //alert(data);
+                $('#CCForm').html('');
+                $('#CCForm').html(data);
+                //window.close();
+                return;
+            }
 
-                    //关闭.
-                    if (data.indexOf('close@') == 0) {
-                        //alert(data);
-                        $('#CCForm').html('');
-                        $('#CCForm').html(data);
-                        //window.close();
-                        return;
-                    }
+            //提示信息.
+            if (data == "info@") {
+                data = data.replace('info@', '');
+                alert(data);
+                return;
+            }
 
-                    //提示信息.
-                    if (data == "info@") {
-                        data = data.replace('info@', '');
-                        alert(data);
-                        return;
-                    }
+            //转化成json.
+            data = JSON.parse(data);
 
-                    //转化成json.
-                    data = JSON.parse(data);
+            var rm = data["RM"][0];
+            warning = rm.Warning;
+            document.getElementById("Btn_Done").value = rm.Title;
 
-                    var rm = data["RM"][0];
-                    warning = rm.Warning;
-                    document.getElementById("Btn_Done").value = rm.Title;
-
-                    // GenerFoolFrm(data);
-                    GenerFoolFrm(data);
-                }
-            });
+            // GenerFoolFrm(data);
+            GenerFoolFrm(data);
         }
 
         function GenerFoolFrmSimple(json) {
@@ -108,12 +95,11 @@
             //  html += "<td colspan=2 ></td>";
             html += "</tr>";
 
-           // html += InitMapAttr(attrs, json);
+            //html += InitMapAttr(attrs, json);
 
             html += "</table>";
 
             $('#CCForm').html(html);
-
         }
 
         var warning = "";
@@ -248,7 +234,7 @@
             //日期类型.
             if (mapAttr.MyDataType == 6) {
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable == 1)
+                if (mapAttr.UIIsEnable == 0)
                     enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
                 else
                     enableAttr = "disabled='disabled'";
@@ -260,7 +246,7 @@
             if (mapAttr.MyDataType == 7) {
 
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable == 1)
+                if (mapAttr.UIIsEnable == 0)
                     enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
                 else
                     enableAttr = "disabled='disabled'";

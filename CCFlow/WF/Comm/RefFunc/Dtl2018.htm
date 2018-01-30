@@ -74,20 +74,11 @@
 
             var url = "En2018.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
-            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 800, 450, "icon-edit", false, function () { }, null, function () {
                 //location = location;
             });
         }
-        
-        function OpenIt(url, title, w, h) {
-
-           // var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
-            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
-                //location = location;
-            });
-
-           // window.open(url);
-        }
+         
         //设置按钮
         function InitToolbar() {
 
@@ -102,11 +93,11 @@
                 html += "<input type='button' value='保存' id='Btn_Save' onclick='Save()' />";
             }
 
-            if (mapData.GetPara("IsDelete") == 1) {
-                var pkVal = GetPKVal();
-                if (pkVal != null)
-                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' />";
-            }
+//            if (mapData.GetPara("IsDelete") == 1) {
+//                var pkVal = GetPKVal();
+//                if (pkVal != null)
+//                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' />";
+//            }
 
             html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' />";
 

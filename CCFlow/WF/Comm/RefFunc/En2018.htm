@@ -684,12 +684,17 @@
             window.location.href = url; //刷新.
         }
 
+        function Save() {
+            this.Update();
+        }
+
         //更新.
         function Update() {
 
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
             var pkval = GetPKVal();
+
             if (pkval == null) {
 
                 en.CopyForm();
@@ -703,6 +708,7 @@
             } else {
 
                 en.pkval = pkval;
+
                 var i = en.RetrieveFromDBSources();
                 en.CopyForm();
                 en.pkval = pkval;
@@ -785,7 +791,7 @@
                     
                     <table>
                     <tr>
-                    <td  valign=top style="width:200px;" > 
+                    <td  valign="top" style="width:200px;" > 
                     <!-- 左边的菜单 -->
                     
                     <div id="Left"></div>
@@ -793,7 +799,7 @@
                      </td>
 
                     <!-- 右边的内容 -->
-                    <td valign=top>
+                    <td valign="top" >
                     
                      <div id="CCForm" style="">
                         <br />

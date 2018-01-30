@@ -26,7 +26,9 @@ function AtParaToJson(json) {
 
 
 function GetPKVal() {
-    var val = GetQueryString("OID");         
+
+    var val = this.GetQueryString("OID"); 
+
     if (val==undefined || val=="")
         val = GetQueryString("No");
 
@@ -897,15 +899,44 @@ var Entity = (function () {
             });
             return result;
         },
+        SetPKVal: function (pkVal) {
+            self.pkval = pkVal;
+            this["MyPK"] = pkval;
+            this["OID"] = pkval;
+            this["WorkID"] = pkval;
+            this["NodeID"] = pkval;
+            this["No"] = pkval;
+        },
+        GetPKVal: function () {
 
+            var val = this["MyPK"];
+            if (val == undefined || val == "")
+                var val = this["OID"];
+            if (val == undefined || val == "")
+                var val = this["WorkID"];
+            if (val == undefined || val == "")
+                var val = this["NodeID"];
+            if (val == undefined || val == "")
+                var val = this["No"];
+            if (val == undefined || val == "")
+                var val = this.pkval;
+
+            return val;
+        },
         RetrieveFromDBSources: function () {
             var self = this;
-           // var params = getParams1(this); //查询的时候不需要把参数传入里面去.
+            // var params = getParams1(this); //查询的时候不需要把参数传入里面去.
+
+            var pkavl = this.GetPKVal();
+
+
+            //  alert(self.GetPKVal()); 
+
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MyPK=" + self.MyPK + "&OID=" + self.OID,
+                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + pkavl,
                 dataType: 'html',
                 success: function (data) {
                     result = data;
@@ -920,6 +951,7 @@ var Entity = (function () {
                         jsonString = JSON.parse(data);
                         setData(self);
                         result = jsonString.RetrieveFromDBSources;
+
                     } catch (e) {
                         result = "err@解析错误: " + data;
                         alert(result);
@@ -928,8 +960,6 @@ var Entity = (function () {
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
 
                     alert(JSON.stringify(XMLHttpRequest));
-
-
                     result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     alert(result);
                 }

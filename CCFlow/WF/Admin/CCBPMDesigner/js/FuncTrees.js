@@ -706,6 +706,7 @@ function IndexInArray(oVal, aSortArray) {
 }
 
 function LoadServiceSubNode(aServiceNodes, oNode, oParentNode, oServiceNode, oFuncTree) {
+
     /// <summary>加载节点定义对象的子级对象</summary>
     /// <param name="aServiceNodes" type="Array">WebService返回的节点定义对象集合</param>
     /// <param name="oNode" type="Object">节点定义对象</param>
@@ -778,11 +779,7 @@ function LoadServiceSubNode(aServiceNodes, oNode, oParentNode, oServiceNode, oFu
 }
 
 function LoadTreeNode(oNode, oParentNode, oFuncTree) {
-    /// <summary>加载树节点</summary>
-    /// <param name="oNode" type="Object">节点定义对象</param>
-    /// <param name="oParentNode" type="Object">节点定义对象的父级对象</param>
-    /// <param name="oFuncTree" type="Object">树定义对象</param>
-    //生成附加属性
+
     if (oNode.Type == "Service") {
         return;
     }
@@ -796,7 +793,8 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
                     exp += "'" + ReplaceParams(this, oNode, oFuncTree) + "',";
                 }
                 else {
-                    exp += this.value + ",";
+                    exp += "'" + this.value + "',";
+                    //   exp +=  this.value + ",";
                 }
             });
 
@@ -818,6 +816,9 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
 
         exp += ",'" + oFuncTree.Id + "'";
         exp += ");";
+
+       // alert(exp);
+
         CalculateJS(exp);
         return;
     }

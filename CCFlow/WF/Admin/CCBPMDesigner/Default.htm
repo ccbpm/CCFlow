@@ -1513,7 +1513,6 @@ function GenerStructureTree(parentrootid, pnodeid, treeid) {
   //  alert(data);
 
     data = $.parseJSON(data);
-
     var roottarget;
 
     if (pnodeid) {
@@ -1556,7 +1555,7 @@ function ShowSubDepts(node, treeid) {
 
         ajaxService({ action: "GetEmpsByStationTable", DeptNo: deptNo, StationNo: stationNo }, function (re) {
             data = $.parseJSON(re);
-
+            debugger
             var children = $("#" + treeid).tree('getChildren', node.target);
             if (children && children.length >= 1) {
                 if (children[0].text == "加载中...") {
@@ -1631,7 +1630,12 @@ function ShowSubDepts(node, treeid) {
                     data: [n]
                 });
             });
-
+            //再次绑定
+            $("#" + treeid).tree({
+                onExpand: function (node) {
+                    ShowSubDepts(node, treeid);
+                }
+            });
             node.attributes.IsLoad = true;
         });
     }

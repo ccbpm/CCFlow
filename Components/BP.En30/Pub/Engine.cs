@@ -777,7 +777,7 @@ namespace BP.Pub
                             decimal md= Math.Round( decimal.Parse(val) ,2);
                             return md.ToString();
                         case "RMBDX":
-                            return DA.DataType.ParseFloatToCash(float.Parse(val));
+                            return this.GetCode(DA.DataType.ParseFloatToCash(float.Parse(val)));
                         case "Siganture":
                             string path = BP.Sys.SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
                             //获取要插入的图片
@@ -1031,9 +1031,9 @@ namespace BP.Pub
                             str = str.Replace("<" + para + ">", this.GetValueBPPaintStrs(para));
                         else if (para.Contains(".M2M"))
                             str = str.Replace("<" + para + ">", this.GetValueM2MStrs(para));
-                        else if (para.Contains(".RMB"))
-                            str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains(".RMBDX"))
+                            str = str.Replace("<" + para + ">", this.GetValueByKey(para));
+                        else if (para.Contains(".RMB"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains(".Boolen"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));

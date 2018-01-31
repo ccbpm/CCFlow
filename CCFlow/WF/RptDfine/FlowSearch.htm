@@ -147,12 +147,14 @@
                 });
             }
 
+			/*
             $("#btn_reset").after('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
             $("#btn_more").linkbutton();
             $(".more").click(function () {
                 $(this).closest(".conditions").siblings().toggleClass("hide");
                 $("#dg").datagrid("resize");
             });
+			*/
 
             //filters
             var ctrl;
@@ -192,7 +194,8 @@
                         break;
                     case "combo":
                         fcId = "DDL_" + c.Id;
-                        ctrl += '<select id="' + fcId + '" style="width:150px;">';
+                        //ctrl += '<select id="' + fcId + '" style="width:150px;">';
+						ctrl += '<select id="' + fcId + '">';
 
                         $.each(d[c.Id], function (idx1, item) {
                             ctrl += '<option value="' + item[c.ValueField] + '">' + item[c.TextField] + '</option>';
@@ -510,8 +513,8 @@
                
                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-excel" id="btn_export" style="display:none;">导出</a>
         </div>
-        <div class="conditions hide" id="filters">
-        </div>
+        <!-- <div class="conditions hide" id="filters"></div> -->
+		<div class="conditions" id="filters"></div>
     </div>
 	<div id="Msg" style="width: 100%; height: 100%; position: absolute; z-index: 999; text-align: center; text-align: center; vertical-align: middle; display: block;">
 		<h1><img src='../Img/loading.gif' /> 正在加载请稍候. </h1>

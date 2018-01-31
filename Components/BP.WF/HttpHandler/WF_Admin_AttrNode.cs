@@ -238,6 +238,7 @@ namespace BP.WF.HttpHandler
 
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
             BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
+            msg.FK_Flow = nd.FK_Flow;
 
             #region 求出来选择的节点.
             string nodesOfSMS = "";

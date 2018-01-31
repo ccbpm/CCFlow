@@ -20,6 +20,7 @@
             var tb = $('#TB_' + mapAttr.KeyOfEn);
             $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#RB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
         }
     }

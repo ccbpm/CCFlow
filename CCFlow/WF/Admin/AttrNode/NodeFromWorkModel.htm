@@ -120,7 +120,12 @@
             //绑定表单类别.
             var frmTrees = new Entities("BP.Sys.FrmTrees");
             frmTrees.RetrieveAll();
-            GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
+            if (node.FormType = RefOneFrmTree) {
+                GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.RefOneFrmTreeType);
+                //GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FK_Frm);
+            } else {
+                GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
+            }
 
             //绑定表单.
             var frms = new Entities("BP.Sys.MapDatas");
@@ -259,13 +264,14 @@
                 var i = node.RetrieveFromDBSources();
 
                 //alert("RetrieveFromDBSources=" + i + " NodeID:" + node.NodeID);
-               
+
                 //设置表单类型.
                 node.FormType = RefOneFrmTree;
                 node.NodeFrmID = selectFrm; //选择的表单
-               
-               var update=  node.Update(); //执行更新.
-              // alert("update" + update);
+                node.RefOneFrmTreeType = $("#DDL_FrmTree").val();
+
+                var update = node.Update(); //执行更新.
+                // alert("update" + update);
 
                 //alert(node.FormType);
 

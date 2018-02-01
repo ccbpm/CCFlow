@@ -2585,6 +2585,8 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.FocusField, null, "焦点字段", false, false, 0, 30, 10);
                 map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 200, 10, true);
 
+                map.AddTBString(NodeAttr.RefOneFrmTreeType, "", "独立表单类型", false, false, 0, 200, 10);//RefOneFrmTree
+
                 //按钮控制部分.
                 // map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);
                 map.AddTBAtParas(500);

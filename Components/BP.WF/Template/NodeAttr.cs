@@ -432,6 +432,8 @@ namespace BP.WF.Template
         /// 是否接受未来处理人的消息提醒.
         /// </summary>
         public const string IsFullSAAlert = "IsFullSAAlert";
+
+        public const string RefOneFrmTreeType = "RefOneFrmTreeType";
         #endregion 未来处理人.
 
     }

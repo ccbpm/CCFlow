@@ -1087,7 +1087,6 @@ namespace BP.WF
                         #endregion 排除正在审批的人员.
 
 
-
                         html += "<tr>";
                         html += " <td valign=middle >" + dr["NDFromT"] + "</td>";
 
@@ -1121,7 +1120,7 @@ namespace BP.WF
 
                             if (singType == "1")
                             {
-                                empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" />";
+                                empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" /> " + dr["EmpFromT"];
                             }
 
                         }

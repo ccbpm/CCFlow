@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自定义URL</title>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            var webUser = new WebUser();
+
+
+            //集团岗位类别
+            var staTypesOfGroup = new Entities("BP.GPM.StationTypes");
+            staTypesOfGroup.Retrieve("OrgNo", "0");
+
+            //集团岗位.
+            var stasOfGroup = new Entities("BP.GPM.Stations");
+            stasOfGroup.Retrieve("OrgNo", "0");
+
+
+            //本组织的岗位类别
+            var staTypesOfOrg = new Entities("BP.GPM.StationTypes");
+            staTypesOfOrg.Retrieve("OrgNo", webUser.FK_Dept);
+
+            //本组织的岗位.
+            var stasOfOrg = new Entities("BP.GPM.Stations");
+            stasOfOrg.Retrieve("OrgNo", webUser.FK_Dept);
+
+
+            //已经选择的岗位.
+            var ndStas = new Entities("BP.WF.Template.NodeStations");
+            ndStas.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            //绑定标签页.
+
+            //绑定选择的信息.
+             
+        });
+
+        function Save() {
+
+            //删除原来选择的数据..
+            var ndStas = new Entities("BP.WF.Template.NodeStations");
+            ndStas.Delete("FK_Node", GetQueryString("FK_Node"));
+
+            //获取到当前选择的数据.
+
+
+            //循环并插入到数据库.
+            for (var i = 0; i < length; i++) {
+                var ns = new Entity("BP.WF.Template.NodeStation");
+                ns.FK_Node = GetQueryString("FK_Node");
+                ns.FK_Station = "xxx";
+                ns.Insert();
+            }
+
+            //重新加载.
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body  >
+
+<form id="cc">
+
+<table id="Table1" style="width:99%;">
+<caption>自定义URL</caption>
+
+<tr>
+<th colspan="2" >基本信息</th>
+</tr>
+
+<tr>
+<td> <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')"> 标题</a></td>
+<td><input type="text" id="TBPara_Title" name="TBPara_Title" style="width:99%;" /> 
+</td>
+</tr>
+
+<tr>
+<td>弹窗属性</td>
+<td >高度:<input type="text"  id="TB_H" name="TB_H" style="width:80px; text-align:right"  /> 宽度:<input type="text"  id="TB_W" name="TB_W" style="width:80px; text-align:right"  /> </td>
+</tr>
+
+<tr>
+<th colspan="2">
+<a href="javascript:ShowHidden('divTag')">自定义的URL</a>
+ <div id="divTag" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/PopSelectVal.htm </li>
+ </ul>
+ </div>
+
+</th>
+</tr>
+
+<tr>
+<td colspan="2">
+<input id="TB_Tag" name="TB_Tag" style="width:100%;" />
+</td>
+</tr>
+
+<tr>
+<td colspan="2"><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />
+<input type="button" value="删除"  id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
+</td>
+</tr>
+
+</table>
+
+ 
+
+</form>
+
+</body>
+</html>

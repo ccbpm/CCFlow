@@ -750,8 +750,10 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyStartFlowAttr.TSpan);
 
 
+                //我发起的流程.
                 AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",
                     MyStartFlowAttr.Starter, "=", BP.Web.WebUser.No, 0, true);
+
                 map.AttrsOfSearch.Add(search);
 
                 search = new AttrOfSearch(MyStartFlowAttr.WFState, "流程状态",

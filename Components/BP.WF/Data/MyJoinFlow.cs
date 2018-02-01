@@ -750,7 +750,7 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyFlowAttr.TSpan);
 
 
-                //增加隐藏的查询条件.
+                //增加隐藏的查询条件. 我参与的流程.
                 AttrOfSearch search = new AttrOfSearch(MyFlowAttr.Emps, "人员",
                     MyFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%", 0, true);
                 map.AttrsOfSearch.Add(search);

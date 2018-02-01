@@ -467,7 +467,7 @@ namespace BP.Sys
             FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
-            conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.ReadOnly);
+            conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.Archive);
 
             return tempFile;
         }

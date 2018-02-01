@@ -5191,6 +5191,13 @@ namespace BP.WF
                         return false; /*只有一个待办,说明自己就是最后的一个人.*/
                     }
 
+                    if (SystemConfig.CustomerNo == "LIMS")
+                    {
+                        this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                        this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
+                        return false; /*不处理，未完成的会签人，没有执行会签的人，忽略.*/
+                    }
+
                     this.addMsg(SendReturnMsgFlag.CondInfo, "@当前工作未处理的会签人有: " + todoEmps + ",您不能执行发送.", null, SendReturnMsgType.Info);
                     return true;
                 }

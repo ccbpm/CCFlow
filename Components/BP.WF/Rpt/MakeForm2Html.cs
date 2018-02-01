@@ -822,9 +822,9 @@ namespace BP.WF
                 frmName = "";
             sb.Append("\t\n <table style='width:950px;height:auto;' >");
             sb.Append("\t\n <tr style='border-style:none;border-width:0px;' >");
-            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:left' ><img src='icon.png' style='height:60px;'  /></td>");
+            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:left' valign=middle ><img src='icon.png' style='height:100px;' /></td>");
             sb.Append("\t\n <td colspan=2 style='border-style:none;border-width:0px;' ><div  style='padding-left:10px;' ><br><h2><b>" + frmName + "</b></h2></div></td>");
-            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:right' ><img src='QR.png' style='height:60px;'  /></td>");
+            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:right' ><img src='QR.png' style='height:100px;'  /></td>");
             sb.Append("\t\n </tr>");
 
             GroupFields gfs = new GroupFields(frmID);
@@ -894,13 +894,11 @@ namespace BP.WF
                         // text = text.Replace("font-family: 隶书", "font-family: 宋体");
                         //text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
                         // text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.GetEncoding("gb2312"));
-
-
                         //  System.Text.UTF8Encoding utf = new System.Text.UTF8Encoding();
                         // utf.GetChars(
 
                         //线性展示并且colspan=3
-                        if (attr.ColSpan == 3)
+                        if (attr.ColSpan == 3 || (attr.ColSpan==4 && attr.UIHeightInt < 30))
                         {
                             isDropTR = true;
                             html += "\t\n <tr>";
@@ -1163,10 +1161,7 @@ namespace BP.WF
 
                     path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\" + workid;
                     if (System.IO.Directory.Exists(path) == false)
-                    {
                         System.IO.Directory.CreateDirectory(path);
-                    }
-
 
                     //把模版文件copy过去.
                     string templateFilePath = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
@@ -1275,7 +1270,6 @@ namespace BP.WF
                 #endregion 替换模版文件..
 
                 #region 处理正确的文件名.
-
                 if (fileNameFormat == null)
                 {
                     if (flowNo != null)

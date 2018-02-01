@@ -2376,7 +2376,10 @@ namespace BP.WF.HttpHandler
             enDel.Delete();
             return "删除成功";
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string PushMessage_ShowHidden()
         {
             BP.WF.XML.EventLists xmls = new BP.WF.XML.EventLists();
@@ -2385,7 +2388,6 @@ namespace BP.WF.HttpHandler
             {
                 if (item.IsHaveMsg == false)
                     continue;
-
             }
             return BP.Tools.Json.ToJson(xmls);
         }
@@ -2410,9 +2412,6 @@ namespace BP.WF.HttpHandler
             msg.RetrieveFromDBSources();
             msg.FK_Event = this.FK_Event;
             msg.FK_Node = this.FK_Node;
-
-
-
 
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
             BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
@@ -2440,9 +2439,7 @@ namespace BP.WF.HttpHandler
             #endregion 求出来选择的节点.
 
             #region 短信保存.
-
             msg.SMSPushWay = this.GetRequestValInt("RB_SMS");
-
 
             //短信手机字段.
             msg.SMSField = this.GetRequestVal("DDL_SMS_Fields");

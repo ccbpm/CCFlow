@@ -21,7 +21,7 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.IsView = true;
                 uac.IsInsert = false;
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin==true)
                 {
                     uac.IsUpdate = true;
                     uac.IsDelete = true;

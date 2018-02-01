@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20180115;
+        public static int Ver = 20180116;
         /// <summary>
         /// 执行升级
         /// </summary>

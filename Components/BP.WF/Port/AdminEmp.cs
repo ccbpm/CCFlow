@@ -290,7 +290,7 @@ namespace BP.WF.Port
                 rm.Title = "测试";
                 rm.HisAttrs.AddTBString("wenben", null, "文本", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBInt("shuzi", 0, "数字", true, false);
-                rm.HisAttrs.AddTBDate("riqi", null, "日期", true, false);
+                rm.HisAttrs.AddTBDate("riqi", null, "日期", true,false);
                 rm.HisAttrs.AddTBDate("riqishijian", null, "日期时间", true, false);
                 rm.HisAttrs.AddBoolen("boolen", false, "Boolen");
                 rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);

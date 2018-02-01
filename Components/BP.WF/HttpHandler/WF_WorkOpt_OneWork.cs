@@ -299,11 +299,10 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CustomerNo == "TianYe")
             {
                 bool isAdmin = false;
-                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
+                if (BP.Web.WebUser.No == "admin" )
                     isAdmin = true;
 
                  //  if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
-
 
                 // 判断是否可以打印.
                 //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";

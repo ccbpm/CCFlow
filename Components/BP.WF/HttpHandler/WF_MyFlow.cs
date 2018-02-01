@@ -648,6 +648,9 @@ namespace BP.WF.HttpHandler
             try
             {
                 #region 是否是会签？.
+                if (isAskForOrHuiQian == true && SystemConfig.CustomerNo == "LIMS")
+                    return "";
+
                 if (isAskForOrHuiQian == true)
                 {
                     toolbar += "<input name='Send' type=button value='执行会签' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(); \" />";

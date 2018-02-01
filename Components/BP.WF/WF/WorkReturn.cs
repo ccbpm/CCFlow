@@ -971,9 +971,7 @@ namespace BP.WF
             }
 
 
-
             //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
-
             // string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
 
             // 把消息

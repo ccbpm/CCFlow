@@ -432,7 +432,7 @@ namespace BP.WF
             this.JumpToEmps = null;
             this.JumpToNodeID = 0;
             this.SysPara = null;
-
+            this.IsStopFlow = false;
 
             #region 处理参数.
             Row r = en.Row;

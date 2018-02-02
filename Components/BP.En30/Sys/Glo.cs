@@ -291,6 +291,80 @@ namespace BP.Sys
         }
         #endregion 写入用户日志.
 
+
+        /// <summary>
+        /// 初始化附件信息
+        /// 如果手工的上传的附件，就要把附加的信息映射出来.
+        /// </summary>
+        /// <param name="en"></param>
+        public static void InitEntityAthInfo(BP.En.Entity en)
+        {
+            //求出保存路径.
+            string path = en.EnMap.FJSavePath;
+            if (path == "" || path == null || path == string.Empty)
+                path = BP.Sys.SystemConfig.PathOfDataUser + en.ToString() + "\\";
+
+            if (System.IO.Directory.Exists(path) == false)
+                System.IO.Directory.CreateDirectory(path);
+
+            //获得该目录下所有的文件.
+            string[] strs = System.IO.Directory.GetFiles(path);
+            string pkval = en.PKVal.ToString();
+            string myfileName = null;
+            foreach (string str in strs)
+            {
+                if (str.Contains(pkval + ".") == false)
+                    continue;
+
+                myfileName = str;
+                break;
+            }
+
+            if (myfileName == null)
+                return;
+
+            /* 如果包含这二个字段。*/
+            string fileName = myfileName;
+            fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+
+            en.SetValByKey("MyFilePath", path);
+
+            string ext = "";
+            if (fileName.IndexOf(".") != -1)
+                ext = fileName.Substring(fileName.LastIndexOf(".") + 1);
+
+            string reldir = path;
+            if (reldir.Length > SystemConfig.PathOfDataUser.Length)
+                reldir =
+                    reldir.Substring(reldir.ToLower().IndexOf(@"\datauser\") + @"\datauser\".Length).Replace(
+                        @"\", "/");
+            else
+                reldir = "";
+
+            if (reldir.Length > 0 && Equals(reldir[0], '/') == true)
+                reldir = reldir.Substring(1);
+
+            if (reldir.Length > 0 && Equals(reldir[reldir.Length - 1], '/') == false)
+                reldir += "/";
+
+            en.SetValByKey("MyFileExt", ext);
+            en.SetValByKey("MyFileName", fileName);
+            en.SetValByKey("WebPath", "/DataUser/" + reldir + en.PKVal + "." + ext);
+
+            string fullFile = path + @"\" + en.PKVal + "." + ext;
+
+            System.IO.FileInfo info = new System.IO.FileInfo(fullFile);
+            en.SetValByKey("MyFileSize", BP.DA.DataType.PraseToMB(info.Length));
+            if (DataType.IsImgExt(ext))
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(fullFile);
+                en.SetValByKey("MyFileH", img.Height);
+                en.SetValByKey("MyFileW", img.Width);
+                img.Dispose();
+            }
+            en.Update();
+        }
+
         /// <summary>
         /// 获得对象.
         /// </summary>
@@ -312,8 +386,6 @@ namespace BP.Sys
         /// <param name="sendToEmpNo">接受人</param>
         public static void SendMessageToCCIM(string fromEmpNo, string sendToEmpNo, string msg, string now)
         {
-
-
             //暂停对ccim消息提醒的支持.
             return;
 
@@ -373,6 +445,18 @@ namespace BP.Sys
             ps.Add("MsgId", messgeID);
             ps.Add("ReceiveID", sendToEmpNo);
             BP.DA.DBAccess.RunSQL(ps);
+        }
+
+
+        /// <summary>
+        /// 处理生成提示信息,不友好的提示.
+        /// </summary>
+        /// <param name="alertInfo">从系统里抛出的错误信息.</param>
+        /// <returns>返回的友好提示信息.</returns>
+        public static string GenerFriendlyAlertHtmlInfo(string alertInfo)
+        {
+            // 格式为: err@错误中文提示信息. tech@info 数据库错误,查询sqL为.
+            return alertInfo;
         }
     }
 }

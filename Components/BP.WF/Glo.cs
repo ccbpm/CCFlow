@@ -4524,6 +4524,7 @@ namespace BP.WF
         #endregion 与考核相关.
 
         #region 其他方法。
+      
         /// <summary>
         /// 删除临时文件
         /// </summary>

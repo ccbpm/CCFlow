@@ -218,9 +218,13 @@
     <Compile Include="HttpHandler\WF_Admin_Sln.cs" />
     <Compile Include="HttpHandler\WF_Admin_Cond.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
-    <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />
-    <Compile Include="Port\Inc.cs" />
+    <Compile Include="Port\Dept.cs" />
+    <Compile Include="Port\Station.cs" />
+    <Compile Include="Port\StationType.cs" />
+    <Compile Include="Port\SubInc\StationType.cs" />
+    <Compile Include="Port\SubInc\AdminEmp.cs" />
+    <Compile Include="Port\SubInc\Inc.cs" />
     <Compile Include="Rpt\db\MapRpt.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -375,12 +379,12 @@
     <Compile Include="WF\Node.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\Dept.cs" />
+    <Compile Include="Port\SubInc\Dept.cs" />
     <Compile Include="Port\Emp.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Port\EmpStation.cs" />
-    <Compile Include="Port\Station.cs" />
+    <Compile Include="Port\SubInc\Station.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="SMS.cs" />
     <Compile Include="EnumLib.cs" />

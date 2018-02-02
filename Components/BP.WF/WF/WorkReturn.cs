@@ -848,11 +848,11 @@ namespace BP.WF
 
 
             // 计算出来 退回到节点的应完成时间. 
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             DateTime dtOfShould;
             if (fl.HisTimelineRole == Template.TimelineRole.ByFlow)
             {
                 /*如果整体流程是按流程设置计算 */
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 dtOfShould = DataType.ParseSysDateTime2DateTime(gwf.SDTOfFlow);
             }
             else
@@ -864,11 +864,23 @@ namespace BP.WF
             // 应完成日期.
             string sdt = dtOfShould.ToString(DataType.SysDataFormat);
 
-
             // 改变当前待办工作节点
+            gwf.WFState = WFState.ReturnSta;
+            gwf.FK_Node = this.ReturnToNode.NodeID;
+            gwf.NodeName = this.ReturnToNode.Name;
+            gwf.SDTOfNode = sdt;
+            gwf.Sender = WebUser.No+","+WebUser.Name;
+            gwf.HuiQianTaskSta = HuiQianTaskSta.None;
+            gwf.HuiQianZhuChiRen = "";
+            gwf.HuiQianZhuChiRenName = "";
+            gwf.Update();
+
+
+
+
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr
-                + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode,Sender=" + dbStr + "Sender WHERE  WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr
+                + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode,Sender=" + dbStr + "Sender WHERE WorkID=" + dbStr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
             ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
             ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);

@@ -3,7 +3,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 
-namespace BP.WF.Port
+namespace BP.WF.Port.SubInc
 {
     /// <summary>
     /// 岗位类型
@@ -48,6 +48,11 @@ namespace BP.WF.Port
 
                 map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 2, 2, 2);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
+                map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, false, 0, 60, 250);
+
+                //增加隐藏查询条件.
+                map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.FK_Dept);
+
                 this._enMap = map;
                 return this._enMap;
             }

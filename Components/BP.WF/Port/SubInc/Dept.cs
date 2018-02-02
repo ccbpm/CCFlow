@@ -4,7 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Web;
 
-namespace BP.WF.Port
+namespace BP.WF.Port.SubInc
 {
 	/// <summary>
 	/// 部门属性

@@ -446,8 +446,6 @@ namespace BP.Sys
             ps.Add("ReceiveID", sendToEmpNo);
             BP.DA.DBAccess.RunSQL(ps);
         }
-
-
         /// <summary>
         /// 处理生成提示信息,不友好的提示.
         /// </summary>

@@ -1537,7 +1537,7 @@ namespace BP.WF.HttpHandler
                     return "err@" + ex.Message.Replace("@@", "@").Replace("@", "<BR>@");
                 }
 
-                return "err@发送工作出现错误:" + ex.Message;
+                return "err@发送工作出现错误" + ex.Message;
             }
         }
         /// <summary>

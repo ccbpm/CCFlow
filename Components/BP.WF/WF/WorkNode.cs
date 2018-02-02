@@ -6639,10 +6639,11 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-
                 this.WhenTranscactionRollbackError(ex);
                 DBAccess.DoTransactionRollback();
-                throw new Exception("Message:" + ex.Message + " StackTrace:" + ex.StackTrace);
+                throw new Exception(ex.Message );
+              //  throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
+
             }
         }
         

@@ -635,7 +635,7 @@ namespace BP.WF.Template
                     return dt;
                 }
 
-                throw new Exception("@系统管理员没有为您配置路由");
+                throw new Exception("@接收人规则是按照人员路由表设置的，但是系统管理员没有为您配置路由,当前节点;"+town.HisNode.Name);
             }
             #endregion
 

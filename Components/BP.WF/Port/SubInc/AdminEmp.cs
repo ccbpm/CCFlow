@@ -11,7 +11,7 @@ using System.Drawing;
 using System.Text;
 using System.IO;
 
-namespace BP.WF.Port
+namespace BP.WF.Port.SubInc
 {
 	/// <summary>
 	/// 管理员
@@ -269,44 +269,13 @@ namespace BP.WF.Port
 
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "增加管理员";
-                //  rm.GroupName = "高级设置";
-                rm.HisAttrs.AddTBString("FrmID", null, "管理员编号ID", true, false, 0, 100, 100);
-
-                rm.ClassMethodName = this.ToString() + ".DoAddAdminer";
-                rm.Icon = "../../WF/Img/Btn/Copy.GIF";
-                map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "设置加密密码";
                 rm.HisAttrs.AddTBString("FrmID", null, "输入密码", true, false, 0, 100, 100);
                 rm.Warning = "您确定要执行设置改密码吗？";
                 rm.ClassMethodName = this.ToString() + ".DoSetPassword";
-               // rm.Icon = "../../WF/Img/Btn/Copy.GIF";
                 map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "测试";
-                rm.HisAttrs.AddTBString("wenben", null, "文本", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBInt("shuzi", 0, "数字", true, false);
-                rm.HisAttrs.AddTBDate("riqi", null, "日期", true,false);
-                rm.HisAttrs.AddTBDate("riqishijian", null, "日期时间", true, false);
-                rm.HisAttrs.AddBoolen("boolen", false, "Boolen");
-                rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
-                rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
-                rm.ClassMethodName = this.ToString() + ".DoTest";
-                map.AddRefMethod(rm);
-
-
-
-                rm = new RefMethod();
-                rm.Title = "测试Boolen";
-                rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
-
-              //  rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
-           //     rm.HisAttrs.AddBoolen("boolenField", false, "Boolen字段测试");
-             //   rm.HisAttrs.AddTBInt("intType", 0, "数字", true, false);
+                   
 
                 rm.ClassMethodName = this.ToString() + ".DoTestBoolen";
                 map.AddRefMethod(rm);

@@ -795,7 +795,7 @@ namespace BP.WF.Template
 
                     gwl.FK_Node = ndFrom;
                     gwl.FK_NodeText = ndFromT;
-
+                    gwl.IsPass = true;
                     if (gwl.FK_Node == backToNodeID)
                     {
                         gwl.IsPass = false;

@@ -876,8 +876,6 @@ namespace BP.WF
             gwf.Update();
 
 
-
-
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr
                 + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode,Sender=" + dbStr + "Sender WHERE WorkID=" + dbStr + "WorkID";

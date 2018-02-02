@@ -990,15 +990,12 @@ namespace BP.WF
             atPara += "@SendToEmpIDs=" + gwl.FK_Emp;
 
             string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt, atPara);
-
-
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
 
             // 返回退回信息.
             if (this.ReturnToNode.IsGuestNode)
             {
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 return "工作已经被您退回到(" + this.ReturnToNode.Name + "),退回给(" + gwf.GuestNo + "," + gwf.GuestName + ").\n\r" + text;
             }
             else

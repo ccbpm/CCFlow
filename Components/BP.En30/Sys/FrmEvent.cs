@@ -790,12 +790,15 @@ namespace BP.Sys
 
                 map.AddTBInt(FrmEventAttr.DoType, 0, "事件类型", true, true);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
+
                 map.AddTBString(FrmEventAttr.MsgOK, null, "成功执行提示", true, true, 0, 400, 10);
                 map.AddTBString(FrmEventAttr.MsgError, null, "异常信息提示", true, true, 0, 400, 10);
 
                 #region 消息设置. 如下属性放入了节点参数信息了.
                 map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,
                     "@0=不发送@1=按设置的下一步接受人自动发送（默认）@2=由本节点表单系统字段(IsSendEmail,IsSendSMS)来决定@3=由SDK开发者参数(IsSendEmail,IsSendSMS)来决定", true);
+
+
 
                 map.AddBoolean(FrmEventAttr.MailEnable, true, "是否启用邮件发送？(如果启用就要设置邮件模版，支持ccflow表达式。)", true, true, true);
                 map.AddTBString(FrmEventAttr.MailTitle, null, "邮件标题模版", true, false, 0, 200, 20, true);
@@ -898,7 +901,7 @@ namespace BP.Sys
             foreach (Attr attr in attrs)
             {
                 if (doc.Contains("@" + attr.Key) == false)
-                    continue;
+                    break;
                 if (attr.MyDataType == DataType.AppString
                     || attr.MyDataType == DataType.AppDateTime
                     || attr.MyDataType == DataType.AppDate)
@@ -918,22 +921,25 @@ namespace BP.Sys
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上. 
             doc = doc.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
 
-            if (System.Web.HttpContext.Current != null)
+            if (doc.Contains("@") == true)
             {
-                /*如果是 bs 系统, 有可能参数来自于url ,就用url的参数替换它们 .*/
-                string url = BP.Sys.Glo.Request.RawUrl;
-                if (url.IndexOf('?') != -1)
-                    url = url.Substring(url.IndexOf('?')).TrimStart('?');
-
-                string[] paras = url.Split('&');
-                foreach (string s in paras)
+                if (System.Web.HttpContext.Current != null)
                 {
-                    string[] mys = s.Split('=');
-                    
-                    if (doc.Contains("@" + mys[0]) == false)
-                        continue;
+                    /*如果是 bs 系统, 有可能参数来自于url ,就用url的参数替换它们 .*/
+                    string url = BP.Sys.Glo.Request.RawUrl;
+                    if (url.IndexOf('?') != -1)
+                        url = url.Substring(url.IndexOf('?')).TrimStart('?');
 
-                    doc = doc.Replace("@" + mys[0], mys[1]);
+                    string[] paras = url.Split('&');
+                    foreach (string s in paras)
+                    {
+                        string[] mys = s.Split('=');
+
+                        if (doc.Contains("@" + mys[0]) == false)
+                            continue;
+
+                        doc = doc.Replace("@" + mys[0], mys[1]);
+                    }
                 }
             }
 

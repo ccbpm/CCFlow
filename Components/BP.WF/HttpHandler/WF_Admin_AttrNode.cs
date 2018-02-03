@@ -12,7 +12,6 @@ using BP.WF.Template;
 using BP.WF.XML;
 using System.IO;
 
-
 namespace BP.WF.HttpHandler
 {
     public class WF_Admin_AttrNode : BP.WF.HttpHandler.DirectoryPageBase
@@ -85,8 +84,13 @@ namespace BP.WF.HttpHandler
             FrmEvents ndevs = new FrmEvents();
             string fk_Event = this.GetRequestVal("FK_Event"); //发送成功，失败标记.
 
-            ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_Node, this.FK_Node);
-            DataTable dt=ndevs.ToDataTableField("FrmEvents");
+            if (this.FK_Node == 0)
+                ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_MapData, this.FK_MapData);
+            else
+                ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_Node, this.FK_Node);
+
+
+            DataTable dt = ndevs.ToDataTableField("FrmEvents");
             ds.Tables.Add(dt);
 
             //业务单元集合.

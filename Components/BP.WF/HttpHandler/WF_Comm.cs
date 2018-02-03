@@ -230,7 +230,9 @@ namespace BP.WF.HttpHandler
 
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
+                {
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+                }
 
                 //保存参数属性.
                 string frmParas = this.GetValFromFrmByKey("frmParas","");

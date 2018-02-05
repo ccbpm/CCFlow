@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>流程查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+
+    <link href="../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script type="text/javascript" src="Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="Scripts/config.js"></script>
+    <script type="text/javascript" src="Comm/Gener.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            var url = "";
+            var tSpan = GetQueryString("TSpan");
+            if (tSpan == null)
+                tSpan = "";
+
+            var flowNo = GetQueryString("FK_Flow");
+            if (flowNo == null)
+                flowNo = "";
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+            handler.AddPara("TSpan", tSpan);
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnString("Search_Init");
+
+            var webUser = new WebUser();
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html(data);
+                return;
+            }
+
+            var data = JSON.parse(data);
+
+            var _tspan = GetQueryString("TSpan");
+            var _flowNo = GetQueryString("FK_Flow");
+
+            //时间段列表. 
+            var tSpans = data['TSpan'];
+            if (_tspan == null || _tspan == "")
+                html = "<span onclick=\"TSpan('');\" style='background-color:green;color:White;' >全部</span>";
+            else
+                html = "<span onclick=\"TSpan('');\"  >全部</span>";
+
+            for (var i = 0; i < tSpans.length; i++) {
+
+                var tSpan = tSpans[i];
+
+                if (_tspan == tSpan.IntKey)
+                    html += "<span onclick=\"TSpan('" + tSpan.IntKey + "');\" style='background-color:green;color:White' >" + tSpan.Lab + "</span>";
+                else
+                    html += "<span onclick=\"TSpan('" + tSpan.IntKey + "');\" >" + tSpan.Lab + "</span>";
+            }
+
+            $("#TSpan").html(html);
+
+            //流程名称列表.
+            var flows = data['Flows'];
+            if (_flowNo == null || _flowNo == "")
+                html = "<span onclick=\"Flows('');\" style='background-color:green;color:White' >全部</span>";
+            else
+                html = "<span onclick=\"Flows('');\"  >全部</span>";
+
+            for (var i = 0; i < flows.length; i++) {
+                var en = flows[i];
+
+                if (_flowNo == en.No)
+                    html += "<span onclick=\"Flows('" + en.No + "');\"  style='background-color:green;color:White' >" + en.Name + "（" + en.Num + "）</span>";
+                else
+                    html += "<span onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</span>";
+            }
+            $("#Flows").html(html);
+
+            // 流程实例列表.
+            var ens = data['WF_GenerWorkFlow'],
+                        _Html = "";
+
+            //当前登录人员的编号.
+            var userNo = webUser.No;
+            var todoEmpsName = "";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                var fk_flow = en.FK_Flow,
+                            fk_node = en.FK_Node,
+                            workid = en.WorkID,
+                            fid = en.FID,
+                            isRead = en.IsRead,
+                            paras = en.AtPara;
+
+                if (paras == null || paras == "") {
+                    paras = "";
+                }
+                else {
+                    if (paras.indexOf("IsCC=1") > -1) {
+                        paras = "IsCC=1";
+                    } else {
+                        paras = "";
+                    }
+                }
+
+
+                var href = "";
+                if (en.TodoEmps.indexOf(userNo + ',') < 0)
+                    href = "FrmView.htm?FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&From=RptSearch&t=" + Math.random();
+                else
+                    href = "MyFlow.htm?FK_Flow=" + fk_flow + "&From=RptSearch&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid + "&IsRead=" + isRead + "&Paras=" + paras + "&T=" + Math.random();
+
+                todoEmpsName = en.TodoEmps;
+                todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
+
+                var icon = "";
+                if (en.WFState == 3)
+                    icon = "./Img/WFState/Complete.png";  //已经完成.
+                else if (en.WFState == 2)
+                    icon = "./Img/WFState/Runing.png"; //运行中. 
+                else if (en.WFState == 5)
+                    icon = "./Img/WFState/ReturnSta.png"; //退回.
+                else
+                    icon = "./Img/WFState/Etc.png"; //其他.
+
+                html = "<tr>";
+                html += "<td class=Idx>" + (i + 1) + "</td>";
+
+                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','"+en.FK_Flow+"','"+en.FK_Node+"')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
+                    
+                html += "<td>" + en.StarterName + "</td>";
+
+                html += "<td>" + en.RDT.substring(5) + "</td>";
+                html += "<td>" + en.WFState + "</td>";
+
+                html += "<td>" + en.NodeName + "</td>";
+                html += "<td>" + todoEmpsName + "</td>";
+
+                html += "<td>" + en.RDT.substring(5) + "</td>";
+                html += "<td>" + en.Emps + "</td>";
+                html += "</tr>";
+
+                $("#Table1 tr:last").after(html);
+            }
+
+            $("#List").append(_Html);
+            //$("#LV_Search").listview('refresh');
+        });
+
+
+        function OpenIt(wfState, workid, flowNo, nodeID) {
+
+            var url = "";
+
+            if (wfState == 3) {
+                url = "WFRpt.htm?WorkID=" + workid + "&FK_Flow=" + flowNo;
+            }
+
+            if (wfState != 3) {
+                url = "MyFlow.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+
+            }
+
+            WinOpen(url);
+
+        }
+
+        function TSpan(tspan) {
+
+            var flowNo = GetQueryString("FK_Flow");
+            if (flowNo == null) {
+                if (tspan == '')
+                    window.location.href = '?1=1';
+                else
+                    window.location.href = '?TSpan=' + tspan;
+            }
+            else {
+                if (tspan == '')
+                    window.location.href = '?FK_Flow=' + flowNo;
+                else
+                    window.location.href = '?FK_Flow=' + flowNo + '&TSpan=' + tspan;
+            }
+        }
+
+        function Flows(flowNo) {
+            var tspan = GetQueryString("TSpan");
+
+            if (tspan == null) {
+                if (flowNo == "")
+                    window.location.href = '?1=1';
+                else
+                    window.location.href = '?FK_Flow=' + flowNo;
+            }
+            else {
+
+                if (flowNo == "")
+                    window.location.href = '?TSpan=' + GetQueryString("TSpan");
+                else
+                    window.location.href = '?FK_Flow=' + flowNo + '&TSpan=' + GetQueryString("TSpan");
+            }
+        }
+         
+        function ToUrl(pageID) {
+            var url = pageID + ".htm?m=" + Math.random();
+            window.location.href = url;
+        }
+
+        function SearchKey() {
+            window.location.href = 'SearchKey.htm?s=' + Math.random();
+        }
+    </script>
+      <style type="text/css">
+        span
+        {
+            display: inline-block;
+            padding: 3px 5px;
+            margin: 4px 5px;
+            border: 1px dotted red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<table style="width:100%;">
+<tr>
+<td> 时间范围</td>
+<td><div id="TSpan"></div> </td>
+</tr>
+
+<tr>
+<td> 流程范围</td>
+<td><div id="Flows"></div>  </td>
+</tr>
+
+<tr>
+<td colspan="2" >
+
+<table id="Table1" style="width:100%;"> 
+<tr>
+<th>序</th>
+<th>标题</th>
+<th>发起人</th>
+<th>发起日期</th>
+<th>状态</th>
+<th>停留节点</th>
+<th>审批人</th>
+<th>到达日期</th>
+<th>参与人</th>
+</tr>
+</table>
+
+</td>
+
+</tr>
+
+</table>
+     
+                
+        <div id="Msg">
+        </div>
+<!--
+        <span onclick="javascript:SearchKey();" >关键字</span>|<span onclick="javascript:ToUrl('Runing');">在途</span>-->
+</body>
+</html>

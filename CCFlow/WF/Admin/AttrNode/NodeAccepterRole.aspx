@@ -703,8 +703,13 @@
                                     <div style="float: left">
                                         <asp:RadioButton ID="RB_ByStationOnly" Text="仅按绑定的岗位计算" GroupName="xxx" runat="server" />
                                     </div>
-                                    <div style="float: right">
+                                     <div style="float: right">
                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+                                            设置/更改岗位-旧版(<%=nss.Count %>)</a>
+                                    </div>
+
+                                    <div style="float: right">
+                                        <a href="javascript:WinOpen('NodeAccepterRoleStation.htmFK_Node=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置/更改岗位(<%=nss.Count %>)</a>
                                     </div>
                                 </th>

@@ -8,6 +8,8 @@
 
   <!-- 表单事件 -->
   <Item111 No="PageLoadFull"  CH="装载填充数据" EN="When the node before saving" EventType="Frm" EventDesc="在载入前，您可以为表单预先执行一些数据初始化。" />
+  
+  
   <Item No="FrmLoadBefore"  CH="节点表单载入前" EN="When the node before saving" EventType="Frm" EventDesc="在载入前，您可以为表单预先执行一些数据初始化。" />
   <Item No="FrmLoadAfter"   CH="节点表单载入后" EN="When the node saved" EventType="Frm"    EventDesc="在载入后，执行安全处理。" />
   <Item No="SaveBefore"  CH="当表单保存前" EN="When the node before saving"  EventType="Frm"      EventDesc="可以执行一些数据完整性检查。" />

@@ -29,14 +29,17 @@
             var flowNo = GetQueryString("FK_Flow");
 
             GenerBindEnumKey("DDL_EventDoType", "EventDoType", "0");
-			$("#DDL_EventDoType").trigger("change");
+            $("#DDL_EventDoType").trigger("change");
 
             var fk_Event = GetQueryString("FK_Event");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+
 
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=ActionDtl_Init&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&FK_Event=" + fk_Event + "&m=" + Math.random(),
+                url: Handler + "?DoType=ActionDtl_Init&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&FK_MapData="+GetQueryString("FK_MapData")+"&FK_Event=" + fk_Event + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -47,11 +50,11 @@
 
                     data = JSON.parse(data);
 
-					// 业务单元
+                    // 业务单元
                     var buess = data["BuessUnits"];
                     GenerBindDDL("DDL_Doc", buess, "No", "Name", "");
 
-					var ens = data["FrmEvents"];
+                    var ens = data["FrmEvents"];
 
                     for (var i = 0; i < ens.length; i++) {
 

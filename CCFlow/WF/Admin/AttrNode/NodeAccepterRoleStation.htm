@@ -16,7 +16,6 @@
 
             var webUser = new WebUser();
 
-
             //集团岗位类别
             var staTypesOfGroup = new Entities("BP.GPM.StationTypes");
             staTypesOfGroup.Retrieve("OrgNo", "0");
@@ -53,7 +52,6 @@
 
             //获取到当前选择的数据.
 
-
             //循环并插入到数据库.
             for (var i = 0; i < length; i++) {
                 var ns = new Entity("BP.WF.Template.NodeStation");
@@ -65,58 +63,32 @@
             //重新加载.
             window.location.href = window.location.href;
         }
+
+        //新增岗位类型.
+        function NewStationType() {
+
+            var val = window.prompt('请输入岗位类别名称', '');
+            if (val == null || val == undefined)
+                return;
+
+            var webUser = new WebUser();
+
+            var en = new Entity("BP.WF.Port.StationType");
+            en.Name = val;
+            en.OrgNo = webUser.FK_Dept;
+            en.Insert();
+
+            window.location.href = window.location.href;
+        }
     </script>
 </head>
 <body  >
 
 <form id="cc">
 
-<table id="Table1" style="width:99%;">
-<caption>自定义URL</caption>
+<a href="javascript:NewStationType()" >新建岗位类型</a> | <a href="javascript:NewStation()" >新建岗位</a> 
 
-<tr>
-<th colspan="2" >基本信息</th>
-</tr>
-
-<tr>
-<td> <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')"> 标题</a></td>
-<td><input type="text" id="TBPara_Title" name="TBPara_Title" style="width:99%;" /> 
-</td>
-</tr>
-
-<tr>
-<td>弹窗属性</td>
-<td >高度:<input type="text"  id="TB_H" name="TB_H" style="width:80px; text-align:right"  /> 宽度:<input type="text"  id="TB_W" name="TB_W" style="width:80px; text-align:right"  /> </td>
-</tr>
-
-<tr>
-<th colspan="2">
-<a href="javascript:ShowHidden('divTag')">自定义的URL</a>
- <div id="divTag" style="color:Gray; display:none">
- <ul>
- <li>您选择了使用外部的URL. </li>
- <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
- <li>该demo的位置 /SDKFlowDemo/PopSelectVal.htm </li>
- </ul>
- </div>
-
-</th>
-</tr>
-
-<tr>
-<td colspan="2">
-<input id="TB_Tag" name="TB_Tag" style="width:100%;" />
-</td>
-</tr>
-
-<tr>
-<td colspan="2"><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />
-<input type="button" value="删除"  id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
-</td>
-</tr>
-
-</table>
-
+ 集团岗位 | 本组织岗位
  
 
 </form>

@@ -841,11 +841,14 @@ var Entity = (function () {
             //var params = getParams(self);
             var params = getParams1(this);
 
+          //  alert(params);
+
+
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&" + params + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + this.GetPKVal() + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
                 success: function (data) {
@@ -1297,7 +1300,49 @@ var Entities = (function () {
             this.Paras = getParameters(args);
             this.loadData();
         },
+        DoMethodReturnString: function (methodName) {
+            var params = [];
+            $.each(arguments, function (i, o) {
+                if (i > 0)
+                    params.push(o);
+            });
 
+            var self = this;
+            var string;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params.join(",") + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                success: function (data) {
+                    string = data;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    string = "Entities_DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    alert(string);
+                }
+            });
+
+            return string;
+
+        },
+
+        DoMethodReturnJSON: function (methodName, params) {
+            var jsonString = this.DoMethodReturnString(methodName, params);
+
+            if (jsonString.indexOf("err@") != -1) {
+                alert(jsonString);
+                return jsonString;
+            }
+
+            try {
+                jsonString = JSON.parse(jsonString);
+            } catch (e) {
+                jsonString = "err@json解析错误: " + jsonString;
+                alert(jsonString);
+            }
+            return jsonString;
+        },
         RetrieveAll: function () {
             var pathRe = "";
             if (plant == "JFlow" && (basePath == null || basePath == '')) {

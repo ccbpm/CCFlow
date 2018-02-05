@@ -1656,50 +1656,6 @@ namespace CCFlow.Web.Comm.UC
                     this.AddTREnd();
                 }
 
-
-                #region 查看是否包含 MyFile字段如果有就认为是附件。
-                //if (en.EnMap.Attrs.Contains("MyFileName"))
-                //{
-                //    /* 如果包含这二个字段。*/
-                //    string fileName = en.GetValStringByKey("MyFileName");
-                //    string filePath = en.GetValStringByKey("MyFilePath");
-                //    string fileExt = en.GetValStringByKey("MyFileExt");
-                //    string url = "";
-                //    if (fileExt != "")
-                //    {
-                //        // 系统物理路径。
-                //        string path = this.Request.PhysicalApplicationPath.ToLower();
-                //        string path1 = filePath.ToLower();
-                //        path1 = path1.Replace(path, "");
-                //        // url = "&nbsp;&nbsp;<a href='" + cf.FJWebPath + "/" + en.PKVal + "." + fileExt + "' target=_blank ><img src='"+this.Request.ApplicationPath+"Images/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
-                //        url = "&nbsp;&nbsp;<a href='../Do.aspx?DoType=DownFile&EnName=" + enName + "&PK=" + en.PKVal + "' target=_blank ><img src='./../../Img/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
-                //    }
-
-                //    this.AddTR();
-                //    this.AddTD("nowrap=true class='FDesc' ", en.EnMap.GetAttrByKey("MyFileName").Desc);
-
-                //    HtmlInputFile file = new HtmlInputFile();
-                //    file.ID = "file";
-                //    this.AddTD(file);
-
-                //    this.AddTDBegin("colspan=2");
-                //    this.Add(url);
-                //    if (fileExt != "")
-                //    {
-                //        System.Web.UI.WebControls.ImageButton btn1 = new System.Web.UI.WebControls.ImageButton();
-                //        btn1.ImageUrl = "./../../Img/Btn/Delete.gif";
-
-                //        //  btn1.Text = "移除";
-                //        btn1.Attributes.Add("class", "Btn1");
-                //        btn1.ID = "Btn_DelFile";
-                //        btn1.Attributes["onclick"] += " return confirm('此操作要执行移除附件，是否继续？');";
-                //        this.Add(btn1);
-                //    }
-                //    this.AddTDEnd();
-                //    this.AddTREnd();
-                //} //结束字段内的分组循环.
-                #endregion
-
                 this.AddTableEnd();
                 this.AddDivEnd();
             } // 结束分组循环.
@@ -1717,6 +1673,14 @@ namespace CCFlow.Web.Comm.UC
                     string fileExt = en.GetValStringByKey("MyFileExt");
                     string url = "";
 
+                    if (fileExt == "")
+                    {
+                        /*检查是否有手工上传的附件*/
+                        BP.Sys.Glo.InitEntityAthInfo(en);
+                        fileExt = en.GetValStringByKey("MyFileExt");
+                    }
+
+
                     if (fileExt != "")
                     {
                         // 系统物理路径。
@@ -1726,6 +1690,7 @@ namespace CCFlow.Web.Comm.UC
                         // url = "&nbsp;&nbsp;<a href='" + cf.FJWebPath + "/" + en.PKVal + "." + fileExt + "' target=_blank ><img src='"+this.Request.ApplicationPath+"Images/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
                         url = "&nbsp;&nbsp;<a href='../Do.aspx?DoType=DownFile&EnName=" + enName + "&PK=" + en.PKVal + "' target=_blank ><img src='./../../Img/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
                     }
+                   
 
                     this.AddTR();
                     this.AddTD("nowrap=true class='FDesc' ", en.EnMap.GetAttrByKey("MyFileName").Desc);
@@ -2365,6 +2330,13 @@ namespace CCFlow.Web.Comm.UC
                 string filePath = en.GetValStringByKey("MyFilePath");
                 string fileExt = en.GetValStringByKey("MyFileExt");
                 string url = "";
+                if (fileExt == "")
+                {
+                    /*检查是否有手工上传的附件*/
+                    BP.Sys.Glo.InitEntityAthInfo(en);
+                    fileExt = en.GetValStringByKey("MyFileExt");
+                }
+
                 if (fileExt != "")
                 {
                     // 系统物理路径。

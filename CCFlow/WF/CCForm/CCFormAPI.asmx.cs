@@ -33,6 +33,14 @@ namespace CCFlow.WF.CCForm
 		[WebMethod]
 		public bool GenerExcelFile(string userNo, string sid, string frmID, string pkValue, ref byte[] bytes)
 		{
+
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                userNo = BP.Web.WebUser.No;
+
+            if (DataType.IsNullOrEmpty(userNo))
+                userNo = "admin";
+
+
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
 			//如果是一个实体类.

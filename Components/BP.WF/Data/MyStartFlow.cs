@@ -745,7 +745,7 @@ namespace BP.WF.Data
                 map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
 
-                map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
+              //  map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
                 map.AddSearchAttr(MyStartFlowAttr.TSpan);
 

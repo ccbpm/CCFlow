@@ -278,6 +278,13 @@ namespace BP.WF
                 if (string.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
 
+                // 执行FEE事件.
+                string msgOfLoad = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
+                    wk, null);
+                if (msgOfLoad != null)
+                    wk.RetrieveFromDBSources();
+
+
                 //执行装载填充.
                 MapExt me = new MapExt();
                 if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, wk.NodeFrmID) == 1)

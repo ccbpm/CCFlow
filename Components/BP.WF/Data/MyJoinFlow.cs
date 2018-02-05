@@ -745,10 +745,9 @@ namespace BP.WF.Data
 
                 map.AddTBMyNum();
 
-                map.AddSearchAttr(MyFlowAttr.FK_Flow);
+             //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyFlowAttr.WFSta);
                 map.AddSearchAttr(MyFlowAttr.TSpan);
-
 
                 //增加隐藏的查询条件. 我参与的流程.
                 AttrOfSearch search = new AttrOfSearch(MyFlowAttr.Emps, "人员",

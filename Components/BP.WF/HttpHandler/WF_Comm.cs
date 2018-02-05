@@ -307,8 +307,6 @@ namespace BP.WF.HttpHandler
             string result = mp.Invoke(en, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
         }
-
-
         #endregion 
        
         #region Entities 公共类库.
@@ -383,6 +381,33 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
+        }
+        /// <summary>
+        /// 执行方法
+        /// </summary>
+        /// <returns></returns>
+        public string Entities_DoMethodReturnString()
+        {
+            //创建类实体.
+            BP.En.Entities ens = ClassFactory.GetEns(this.EnsName); // Activator.CreateInstance(System.Type.GetType("BP.En.Entity")) as BP.En.Entity;
+
+            string methodName = this.GetRequestVal("MethodName");
+
+            Type tp = ens.GetType();
+            System.Reflection.MethodInfo mp = tp.GetMethod(methodName);
+            if (mp == null)
+                return "err@没有找到类[" + this.EnsName + "]方法[" + methodName + "].";
+
+            string paras = this.GetRequestVal("paras");
+
+            //执行该方法.
+            object[] myparas = new object[0];
+
+            if (DataType.IsNullOrEmpty(paras) == false)
+                myparas = paras.Split(',');
+
+            string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+            return result;
         }
         #endregion 
 

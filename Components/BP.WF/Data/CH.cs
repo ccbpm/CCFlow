@@ -15,21 +15,13 @@ namespace BP.WF.Data
     public enum CHSta
     {
         /// <summary>
-        /// 及时完成
-        /// </summary>
-        JiShi,
-        /// <summary>
         /// 按期完成
         /// </summary>
-        AnQi,
+        AnQi=0,
         /// <summary>
         /// 预期完成
         /// </summary>
-        YuQi,
-        /// <summary>
-        /// 超期完成
-        /// </summary>
-        ChaoQi
+        YuQi=1
     }
 	/// <summary>
 	/// 时效考核属性

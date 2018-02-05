@@ -6135,7 +6135,7 @@ namespace BP.WF
                     return HisMsgObjs;
                 }
 
-                 //@增加发送到子流程的判断.
+                //@增加发送到子流程的判断.
                 if (jumpToNode != null && this.HisNode.FK_Flow != jumpToNode.FK_Flow)
                 {
                     /*判断是否是延续子流程. */
@@ -6144,35 +6144,35 @@ namespace BP.WF
 
                 #region 第二步: 进入核心的流程运转计算区域. 5*5 的方式处理不同的发送情况.
 
-                    // 执行节点向下发送的25种情况的判断.
-                    this.NodeSend_Send_5_5();
+                // 执行节点向下发送的25种情况的判断.
+                this.NodeSend_Send_5_5();
 
-                    //通过 55 之后要判断是否要结束流程，如果结束流程就执行相关的更新。
-                    if (this.IsStopFlow)
+                //通过 55 之后要判断是否要结束流程，如果结束流程就执行相关的更新。
+                if (this.IsStopFlow)
+                {
+                    this.rptGe.WFState = WFState.Complete;
+                    this.Func_DoSetThisWorkOver();
+                    this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
+                }
+                else
+                {
+                    //如果是退回状态，就把是否原路返回的轨迹去掉.
+                    if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta)
+                        BP.DA.DBAccess.RunSQL("UPDATE WF_ReturnWork SET IsBackTracking=0 WHERE WorkID=" + this.WorkID);
+
+                    this.Func_DoSetThisWorkOver();
+                    if (town != null && town.HisNode.HisBatchRole == BatchRole.Group)
                     {
-                        this.rptGe.WFState = WFState.Complete;
-                        this.Func_DoSetThisWorkOver();
-                        this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
+                        this.HisGenerWorkFlow.WFState = WFState.Batch;
+                        this.HisGenerWorkFlow.Update();
                     }
-                    else
-                    {
-                        //如果是退回状态，就把是否原路返回的轨迹去掉.
-                        if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta)
-                            BP.DA.DBAccess.RunSQL("UPDATE WF_ReturnWork SET IsBackTracking=0 WHERE WorkID=" + this.WorkID);
+                }
 
-                        this.Func_DoSetThisWorkOver();
-                        if (town != null && town.HisNode.HisBatchRole == BatchRole.Group)
-                        {
-                            this.HisGenerWorkFlow.WFState = WFState.Batch;
-                            this.HisGenerWorkFlow.Update();
-                        }
-                    }
-
-                    //计算从发送到现在的天数.
-                    this.rptGe.FlowDaySpan = DataType.GeTimeLimits(this.HisGenerWorkFlow.RDT);
-                    Int64 fid = this.rptGe.FID;
-                    this.rptGe.Update();
-                    #endregion 第二步: 5*5 的方式处理不同的发送情况.
+                //计算从发送到现在的天数.
+                this.rptGe.FlowDaySpan = DataType.GeTimeLimits(this.HisGenerWorkFlow.RDT);
+                Int64 fid = this.rptGe.FID;
+                this.rptGe.Update();
+                #endregion 第二步: 5*5 的方式处理不同的发送情况.
 
                 #region 第三步: 处理发送之后的业务逻辑.
                 //把当前节点表单数据copy的流程数据表里.
@@ -6428,7 +6428,7 @@ namespace BP.WF
                         && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                     {
                         string url = "MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
-                     //   htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
+                        //   htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                         textInfo = "@下一步工作您仍然可以处理。";
                         this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, null);
                     }
@@ -6516,7 +6516,7 @@ namespace BP.WF
 
                         //写入track, 调用了父流程.
                         Node pND = new Node(rptGe.PNodeID);
-                          fid = 0;
+                        fid = 0;
                         if (pND.HisNodeWorkType == NodeWorkType.SubThreadWork)
                         {
                             GenerWorkFlow gwf = new GenerWorkFlow(this.rptGe.PWorkID);
@@ -6545,7 +6545,7 @@ namespace BP.WF
 
                             //写入track, 调用了父流程.
                             Node pND = new Node(pNodeID);
-                              fid = 0;
+                            fid = 0;
                             if (pND.HisNodeWorkType == NodeWorkType.SubThreadWork)
                             {
                                 GenerWorkFlow gwf = new GenerWorkFlow(Int64.Parse(pWorkID));
@@ -6623,13 +6623,12 @@ namespace BP.WF
                     && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                 {
                     string url = "MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
-                //    string htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
+                    //    string htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                     string textInfo = "@下一步工作您仍然可以处理。";
 
-                   // this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, null);
+                    // this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, null);
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
-
 
                 //处理事件.
                 this.Deal_Event();
@@ -6641,9 +6640,9 @@ namespace BP.WF
             {
                 this.WhenTranscactionRollbackError(ex);
                 DBAccess.DoTransactionRollback();
-                throw new Exception(ex.Message );
-              //  throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
 
+                throw new Exception(ex.Message);
+                //  throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
             }
         }
         

@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20180116;
+        public static int Ver = 20180205;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -171,7 +171,15 @@ namespace BP.WF
             string msg = "";
             try
             {
-                 
+                #region 修复丢失的发起人.
+                Flows fls = new Flows();
+                fls.RetrieveAll();
+                foreach (Flow  item in fls)
+                {
+                    DBAccess.RunSQL(" UPDATE "+item.PTable+" SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE "+item.PTable+".Oid=WF_GENERWORKFLOW.WORKID)");
+                }
+                #endregion 修复丢失的发起人.
+
 
                 #region 给city 设置拼音.
                 if (DBAccess.IsExitsObject("CN_City") == true)

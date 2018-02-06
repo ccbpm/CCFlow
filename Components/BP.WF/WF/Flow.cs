@@ -726,9 +726,11 @@ namespace BP.WF
 
                         rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
                         rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
+
                         rpt.FK_Dept = emp.FK_Dept;
                         rpt.FlowEnder = emp.No;
                         rpt.FlowEndNode = this.StartNodeID;
+                        rpt.FlowStarter = emp.No;
                         rpt.WFState = WFState.Blank;
                         rpt.FID = 0;
                         rpt.DirectUpdate();
@@ -760,6 +762,7 @@ namespace BP.WF
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         rpt.FK_Dept = emp.FK_Dept;
                         rpt.FlowEnder = emp.No;
+                        rpt.FlowStarter = emp.No;
                         rpt.InsertAsOID(wk.OID);
                     }
 

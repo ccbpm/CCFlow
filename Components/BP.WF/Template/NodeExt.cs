@@ -292,7 +292,7 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Node", "节点");
                 //map 的基 础信息.
-                map.Java_SetDepositaryOfEntity(  Depositary.None);
+                map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
 
                 #region  基础属性
@@ -302,6 +302,7 @@ namespace BP.WF.Template
                 map.SetHelperUrl(NodeAttr.Step, "http://ccbpm.mydoc.io/?v=5404&t=17902");
                 //map.SetHelperAlert(NodeAttr.Step, "它用于节点的排序，正确的设置步骤可以让流程容易读写."); //使用alert的方式显示帮助信息.
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 3, 3, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17023");
+
                 map.AddTBString(NodeAttr.Name, null, "名称", true, true, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
 

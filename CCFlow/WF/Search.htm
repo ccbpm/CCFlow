@@ -139,7 +139,7 @@
                 html = "<tr>";
                 html += "<td class=Idx>" + (i + 1) + "</td>";
 
-                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
+                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
 
                 html += "<td>" + en.StarterName + "</td>";
 
@@ -160,19 +160,16 @@
         });
 
 
-        function OpenIt(wfState, workid, flowNo, nodeID, emps) {
+        function OpenIt(wfState, workid, flowNo, nodeID, emps, userNo) {
+
             var url = "";
-            if (wfState == 3) {
+
+            if (wfState != 3 && emps.indexOf(userNo) != 0) {
+                url = "MyFlow.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+            } else {
                 url = "WFRpt.htm?WorkID=" + workid + "&FK_Flow=" + flowNo;
             }
-
-            if (wfState != 3) {
-                url = "MyFlow.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-
-            }
-
             WinOpen(url);
-
         }
 
         function TSpan(tspan) {
@@ -241,46 +238,62 @@
                 return;
             }
 
-
-            var tableHtml = "<table class='Table'>",
-                            statusArr = ["未完成", "已完成", "其他"],
-                            tr = "";
-
+            var statusArr = ["未完成", "已完成", "其他"];
+            var tableHtml = "<table class='Table'>";
             tableHtml += "<tr>";
             tableHtml += "<th>Idx</th>";
+            tableHtml += "<th>标题</th>";
+            tableHtml += "<th>发起人</th>";
             tableHtml += "<th>流程</th>";
             tableHtml += "<th>停留节点</th>";
             tableHtml += "<th>处理人</th>";
-            tableHtml += "<th>标题</th>";
-            // tableHtml += "<th>轨迹图</th>";
-            tableHtml += "<th>发起人</th>";
             tableHtml += "<th>发起日期</th>";
             tableHtml += "<th>状态</th>";
             tableHtml += "<th>参与人</th>";
             tableHtml += "</tr>";
 
-            data.forEach(function (item, index) {
+            var user = new WebUser();
+            var userNo = user.No;
 
-                tr = "";
-                tr += "<td class=Idx >" + (index + 1) + "</td>";
-                tr += "<td>" + item.FlowName + "</td>";
-                tr += "<td>" + item.NodeName + "</td>";
-                tr += "<td>" + item.TodoEmps + "</td>";
-                tr += "<td><a href=\"javascript:OpenIt('" + item.WFState + "','" + item.WorkID + "','" + item.FK_Flow + "','" + item.FK_Node + "','"+item.Todoemps+"');\" >" + item.Title + "</a></td>";
-                //  tr += "<td><a href=\"javascript:OpenIt('" + item.FK_Flow + "','" + item.FK_Node + "','" + item.WorkID + "');\" >轨迹</a></td>";
-                tr += "<td>" + item.StarterName + "</td>";
-                tr += "<td>" + item.RDT + "</td>";
+            data.forEach(function (en, index) {
+
+               var tr = "";
+              
+                //是否可以执行当前工作?
+                var isCanDo = false;
+                if (en.TodoEmps.indexOf(webUser.No) != -1)
+                    isCanDo = true;
+
+                var icon = "";
+                if (en.WFState == 3)
+                    icon = "./Img/WFState/Complete.png";  //已经完成.
+                else if (en.WFState == 2)
+                    icon = "./Img/WFState/Runing.png"; //运行中. 
+                else if (en.WFState == 5)
+                    icon = "./Img/WFState/ReturnSta.png"; //退回.
+                else
+                    icon = "./Img/WFState/Etc.png"; //其他.
+                if (isCanDo == true)
+                    icon = "./Img/WFState/Todo.png"; //其他.
+
+
+                tr = "<tr>";
+                tr += "<td class=Idx>" + (i + 1) + "</td>";
+
+                tr += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
+                tr += "<td>" + en.StarterName + "</td>";
+                tr += "<td>" + en.FlowName + "</td>";
+                tr += "<td>" + en.NodeName + "</td>";
+                tr += "<td>" + en.TodoEmps + "</td>";
+                tr += "<td>" + en.RDT + "</td>";
                 tr += "<td>" + statusArr[item.WFSta] + "</td>";
-                tr += "\n<td class='BigDoc' valign=top>" + item.Emps + "</td>";
+                tr += "\n<td class='BigDoc' valign=top>" + en.Emps + "</td>";
                 tr += "</tr>";
                 tableHtml += tr;
             });
+
             tableHtml += "</table>";
-
-            //document.getElementById("Table1").innerHTML=""; 
             document.getElementById("Table1").innerHTML = tableHtml;
-
-            // window.location.href = 'SearchKey.htm?s=' + Math.random();
         }
     </script>
       <style type="text/css">
@@ -307,10 +320,6 @@
 
  </td>
 </tr>
-
-<!--
-        <span onclick="javascript:SearchKey();" >关键字</span>|<span onclick="javascript:ToUrl('Runing');">在途</span>-->
-
 
 <tr>
 <td colspan="2" >

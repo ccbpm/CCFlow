@@ -27,37 +27,24 @@
             //  var url = Handler + "MyFlow.ashx?DoType=MyFlow_Init&" + str + "&m=" + Math.random();
             var url = MyFlow + "?DoType=MyFlow_Init&" + str + "&m=" + Math.random();
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyFlow_Init");
 
-                    //  alert(data);
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<br>" + data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        //$("#Msg").html("<font color=red>" + data + "</font>");
-                        //alert(data);
-                        while (data.indexOf('\t\n') == -1) {
-                            data = data.replace('\t\n', '<br>');
-                        }
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+                window.location.href = data;
+                return;
+            }
 
-                        $("#Msg").html("<br>" + data);
-                        //window.close();
-                        return;
-                    }
+            $("#Msg").html(data);
 
-                    if (data.indexOf('url@') == 0) {
-                        data = data.replace('url@', ''); //如果返回url，就直接转向.
-                        window.location.href = data;
-                        return;
-                    }
-
-                    $("#Msg").html(data);
-                    return;
-                }
-            });
+            return;
         });
     </script>
 </head>

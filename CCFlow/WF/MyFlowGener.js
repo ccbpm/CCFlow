@@ -11,6 +11,7 @@ var isLoadOk = false;
 
 $(function () {
 
+
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax

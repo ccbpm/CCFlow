@@ -41,7 +41,7 @@
             var data = JSON.parse(data);
             var _tspan = GetQueryString("TSpan");
             var _flowNo = GetQueryString("FK_Flow");
- 
+
             //时间段列表. 
             var tSpans = data['TSpan'];
             if (_tspan == null || _tspan == "")
@@ -58,6 +58,8 @@
                 else
                     html += "<span onclick=\"TSpan('" + tSpan.IntKey + "');\" >" + tSpan.Lab + "</span>";
             }
+
+            html += "&nbsp;&nbsp;<a href='#' onclick=\"javascript:SearchKey();\" ><img src='./Img/Search.png' border=0 style='width:16px;' />关键字查询</a>";
 
             $("#TSpan").html(html);
 
@@ -140,7 +142,7 @@
                 html += "<td>" + todoEmpsName + "</td>";
 
                 html += "<td>" + en.RDT.substring(5) + "</td>";
-//                html += "<td>" + en.Emps + "</td>";
+                //                html += "<td>" + en.Emps + "</td>";
                 html += "</tr>";
 
                 $("#Table1 tr:last").after(html);
@@ -210,7 +212,69 @@
         }
 
         function SearchKey() {
-            window.location.href = 'SearchKey.htm?s=' + Math.random();
+
+            var val = window.prompt("请输入关键字，单据编号，文件名称发起人名称:", "");
+            if (val == null || val == undefined || val == "")
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
+            handler.AddPara("TB_KeyWords", val);
+            var data = handler.DoMethodReturnString("KeySearch_Query");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //转化成json.
+            data = JSON.parse(data);
+            if (data.length <= 0) {
+                alert('未查询出来数据');
+                SearchKey();
+                //document.getElementById("result").innerHTML = "<h3>&nbsp;&nbsp;竟然没有查出任何东西，真不思议。</h3>";
+                return;
+            }
+
+
+            var tableHtml = "<table class='Table'>",
+                            statusArr = ["未完成", "已完成", "其他"],
+                            tr = "";
+
+            tableHtml += "<tr>";
+            tableHtml += "<th>Idx</th>";
+            tableHtml += "<th>流程</th>";
+            tableHtml += "<th>停留节点</th>";
+            tableHtml += "<th>处理人</th>";
+            tableHtml += "<th>标题</th>";
+            // tableHtml += "<th>轨迹图</th>";
+            tableHtml += "<th>发起人</th>";
+            tableHtml += "<th>发起日期</th>";
+            tableHtml += "<th>状态</th>";
+            tableHtml += "<th>参与人</th>";
+            tableHtml += "</tr>";
+
+
+            data.forEach(function (item, index) {
+
+                tr = "";
+                tr += "<td class=Idx >" + (index + 1) + "</td>";
+                tr += "<td>" + item.FlowName + "</td>";
+                tr += "<td>" + item.NodeName + "</td>";
+                tr += "<td>" + item.TodoEmps + "</td>";
+                tr += "<td><a href=\"javascript:OpenIt('" + item.WFState + "','" + item.WorkID + "','" + item.FK_Flow + "','" + item.FK_Node + "');\" >" + item.Title + "</a></td>";
+                //  tr += "<td><a href=\"javascript:OpenIt('" + item.FK_Flow + "','" + item.FK_Node + "','" + item.WorkID + "');\" >轨迹</a></td>";
+                tr += "<td>" + item.StarterName + "</td>";
+                tr += "<td>" + item.RDT + "</td>";
+                tr += "<td>" + statusArr[item.WFSta] + "</td>";
+                tr += "\n<td class='BigDoc' valign=top>" + item.Emps + "</td>";
+                tr += "</tr>";
+                tableHtml += tr;
+            });
+            tableHtml += "</table>";
+
+            //document.getElementById("Table1").innerHTML=""; 
+            document.getElementById("Table1").innerHTML = tableHtml;
+
+            // window.location.href = 'SearchKey.htm?s=' + Math.random();
         }
     </script>
       <style type="text/css">
@@ -228,8 +292,19 @@
 
 <table style="width:100%;">
 <tr>
-<td colspan=2 ><div id="TSpan"></div> <div id="Stas"></div> <div id="Flows"></div> </td>
+<td colspan=2 >
+<div style="float:left">
+<div id="TSpan"></div> <div id="Stas"></div> <div id="Flows"></div>
+</div>
+
+<div style="float:right"> </div>
+
+ </td>
 </tr>
+
+<!--
+        <span onclick="javascript:SearchKey();" >关键字</span>|<span onclick="javascript:ToUrl('Runing');">在途</span>-->
+
 
 <tr>
 <td colspan="2" >
@@ -255,7 +330,5 @@
                 
         <div id="Msg">
         </div>
-<!--
-        <span onclick="javascript:SearchKey();" >关键字</span>|<span onclick="javascript:ToUrl('Runing');">在途</span>-->
 </body>
 </html>

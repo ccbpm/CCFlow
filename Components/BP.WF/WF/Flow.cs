@@ -771,6 +771,8 @@ namespace BP.WF
                 if (wk.OID != 0)
                 {
                     rpt.OID = wk.OID;
+                    rpt.RetrieveFromDBSources();
+
                     rpt.FID = 0;
                     rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
                     rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;

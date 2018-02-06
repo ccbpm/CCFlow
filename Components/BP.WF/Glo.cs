@@ -176,6 +176,9 @@ namespace BP.WF
                 fls.RetrieveAll();
                 foreach (Flow  item in fls)
                 {
+                    if (DBAccess.IsExitsObject(item.PTable) == false)
+                        continue;
+
                     DBAccess.RunSQL(" UPDATE "+item.PTable+" SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE "+item.PTable+".Oid=WF_GENERWORKFLOW.WORKID)");
                 }
                 #endregion 修复丢失的发起人.

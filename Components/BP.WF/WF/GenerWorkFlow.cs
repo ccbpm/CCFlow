@@ -1207,7 +1207,6 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.WeekNum, 0, "周次", true, true);
                 map.AddTBInt(GenerWorkFlowAttr.TSpan, 0, "时间间隔", true, true);
 
-
                 //待办状态(0=待办中,1=预警中,2=逾期中,3=按期完成,4=逾期完成) 
                 map.AddTBInt(GenerWorkFlowAttr.TodoSta, 0, "待办状态", true, true);
 

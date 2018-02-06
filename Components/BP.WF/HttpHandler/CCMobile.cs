@@ -308,7 +308,12 @@ namespace BP.WF.HttpHandler
             #region 3、处理流程实例列表.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             BP.En.QueryObject qo = new QueryObject(gwfs);
+
+            qo.addLeftBracket();
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
+            qo.addOr();
+            qo.AddWhere(GenerWorkFlowAttr.Starter,   BP.Web.WebUser.No);
+            qo.addRightBracket();
 
             if (tSpan != null)
             {

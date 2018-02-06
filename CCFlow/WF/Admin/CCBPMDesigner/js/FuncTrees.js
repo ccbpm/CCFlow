@@ -791,7 +791,7 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
             $.each(oNode.MethodParams, function () {
                 var type = typeof this.value;
                 if (type == "String" || type == "string") {
-                    exp += "'" + ReplaceParams(this, oNode, oFuncTree) + "',";
+                    exp += "'" + ReplaceParams(this.value, oNode, oFuncTree) + "',";
                 }
                 else {
                     exp += "'" + this.value + "',";

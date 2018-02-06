@@ -2466,6 +2466,7 @@ namespace BP.WF.HttpHandler
 
                     if (athDesc.AthSaveWay == AthSaveWay.DB)
                     {
+                        dbUpload.Insert();
                         //把文件保存到指定的字段里.
                         dbUpload.SaveFileToDB("FileDB", temp);
                     }
@@ -2496,9 +2497,8 @@ namespace BP.WF.HttpHandler
 
                         //设置路径.
                         dbUpload.FileFullName = ny + "//" + athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
+                        dbUpload.Insert();
                     }
-
-                    dbUpload.Insert();
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
@@ -2874,11 +2874,31 @@ namespace BP.WF.HttpHandler
 
             if (dbAtt.AthSaveWay == AthSaveWay.DB)
             {
-                PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
-            }
+                return "fromdb";
 
+                //PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
+            }
             return "正在下载.";
         }
+
+        public void AttachmentDownFromByte()
+        {
+            FrmAttachmentDB downDB = new FrmAttachmentDB();
+            downDB.MyPK = this.MyPK;
+            downDB.Retrieve();
+            downDB.FileName = HttpUtility.UrlEncode(downDB.FileName);
+            byte[] byteList = downDB.GetFileFromDB("FileDB", null);
+            if (byteList != null)
+            {
+                HttpContext.Current.Response.Charset = "GB2312";
+                HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=" + downDB.FileName);
+                HttpContext.Current.Response.ContentType = "application/octet-stream;charset=gb2312";
+                HttpContext.Current.Response.BinaryWrite(byteList);
+                HttpContext.Current.Response.End();
+                HttpContext.Current.Response.Close();
+            }
+        }
+
         public string FK_FrmAttachment
         {
             get

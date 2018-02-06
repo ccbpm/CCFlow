@@ -2342,8 +2342,7 @@ namespace BP.En
 		/// <returns>返回文件流</returns>
 		public byte[] GetFileFromDB(string saveToField, string filefullName)
 		{
-			BP.DA.DBAccess.GetFileFromDB(filefullName, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
-			return null;
+            return BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
 		}
 		/// <summary>
 		/// 从表的字段里读取string

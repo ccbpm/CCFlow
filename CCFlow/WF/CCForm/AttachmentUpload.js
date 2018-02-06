@@ -1,6 +1,4 @@
-﻿
-
-//点击右边的下载标签.
+﻿//点击右边的下载标签.
 function Down(fk_ath, pkVal, delPKVal) {
     window.location.href = 'AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
 }
@@ -35,7 +33,11 @@ function Down2017(mypk) {
                 window.open(str, "_blank", "width=800, height=600,toolbar=yes");
                 return;
             }
-            alert(data);
+            if (data.indexOf("fromdb") > -1) {
+                url = Handler + "?DoType=AttachmentDownFromByte&MyPK=" + mypk + "&m=" + Math.random();
+                $('<form action="' + url + '" method="post"></form>').appendTo('body').submit().remove();
+            }
+            //alert(data);
             return;
         }
     });
@@ -54,18 +56,18 @@ function Down3(str) {
 }
 
 function Down2(imgURL) {
-    
+
     var oPop = window.open(imgURL, "", "width=1, height=1, top=5000, left=5000");
 
     for (; oPop.document.readyState != "complete"; ) {
-        if (oPop.document.readyState == "complete") 
-        break;
+        if (oPop.document.readyState == "complete")
+            break;
     }
 
     oPop.document.execCommand("SaveAs");
     oPop.close();
 
-} 
+}
 
 function Down(url) {
 

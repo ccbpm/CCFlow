@@ -666,7 +666,8 @@
                                     <div style="float: right">
                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置与更改岗位(<%=nss.Count %>)</a> |<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
-                                                设置与更改部门(<%=ndepts.Count %>)</a>
+                                                设置与更改部门(<%=ndepts.Count %>)</a>|<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">设置/更改部门(<%=ndepts.Count %>)(旧版本)</a>
+                                       
                                     </div>
                                 </th>
                             </tr>
@@ -939,7 +940,8 @@
                                     <div style="float: right">
                                        
                                          <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
-                                                设置与更改部门(<%=ndepts.Count %>)</a>
+                                                设置与更改部门(<%=ndepts.Count %>)</a>|<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">设置/更改部门(<%=ndepts.Count %>)(旧版本)</a>
+                                       
                                     </div>
                                 </th>
                             </tr>

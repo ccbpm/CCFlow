@@ -88,6 +88,7 @@
             var userNo = webUser.No;
             var todoEmpsName = "";
 
+
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
@@ -109,7 +110,6 @@
                     }
                 }
 
-
                 var href = "";
                 if (en.TodoEmps.indexOf(userNo + ',') < 0)
                     href = "FrmView.htm?FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&From=RptSearch&t=" + Math.random();
@@ -118,6 +118,11 @@
 
                 todoEmpsName = en.TodoEmps;
                 todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
+
+                //是否可以执行当前工作?
+                var isCanDo = false;
+                if (en.TodoEmps.indexOf(webUser.No) != -1)
+                    isCanDo = true;
 
                 var icon = "";
                 if (en.WFState == 3)
@@ -128,11 +133,13 @@
                     icon = "./Img/WFState/ReturnSta.png"; //退回.
                 else
                     icon = "./Img/WFState/Etc.png"; //其他.
+                if (isCanDo == true)
+                    icon = "./Img/WFState/Todo.png"; //其他.
 
                 html = "<tr>";
                 html += "<td class=Idx>" + (i + 1) + "</td>";
 
-                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
+                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
 
                 html += "<td>" + en.StarterName + "</td>";
 
@@ -153,7 +160,9 @@
         });
 
 
-        function OpenIt(wfState, workid, flowNo, nodeID) {
+        function OpenIt(wfState, workid, flowNo, nodeID, emps) {
+
+            alert(emps);
 
             var url = "";
 
@@ -171,6 +180,8 @@
         }
 
         function TSpan(tspan) {
+
+
 
             var flowNo = GetQueryString("FK_Flow");
             if (flowNo == null) {
@@ -252,7 +263,6 @@
             tableHtml += "<th>参与人</th>";
             tableHtml += "</tr>";
 
-
             data.forEach(function (item, index) {
 
                 tr = "";
@@ -260,7 +270,7 @@
                 tr += "<td>" + item.FlowName + "</td>";
                 tr += "<td>" + item.NodeName + "</td>";
                 tr += "<td>" + item.TodoEmps + "</td>";
-                tr += "<td><a href=\"javascript:OpenIt('" + item.WFState + "','" + item.WorkID + "','" + item.FK_Flow + "','" + item.FK_Node + "');\" >" + item.Title + "</a></td>";
+                tr += "<td><a href=\"javascript:OpenIt('" + item.WFState + "','" + item.WorkID + "','" + item.FK_Flow + "','" + item.FK_Node + "','"+item.Todoemps+"');\" >" + item.Title + "</a></td>";
                 //  tr += "<td><a href=\"javascript:OpenIt('" + item.FK_Flow + "','" + item.FK_Node + "','" + item.WorkID + "');\" >轨迹</a></td>";
                 tr += "<td>" + item.StarterName + "</td>";
                 tr += "<td>" + item.RDT + "</td>";

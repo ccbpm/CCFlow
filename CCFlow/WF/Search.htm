@@ -39,10 +39,9 @@
             }
 
             var data = JSON.parse(data);
-
             var _tspan = GetQueryString("TSpan");
             var _flowNo = GetQueryString("FK_Flow");
-
+ 
             //时间段列表. 
             var tSpans = data['TSpan'];
             if (_tspan == null || _tspan == "")
@@ -131,18 +130,17 @@
                 html = "<tr>";
                 html += "<td class=Idx>" + (i + 1) + "</td>";
 
-                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','"+en.FK_Flow+"','"+en.FK_Node+"')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
-                    
+                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
+
                 html += "<td>" + en.StarterName + "</td>";
 
                 html += "<td>" + en.RDT.substring(5) + "</td>";
-                html += "<td>" + en.WFState + "</td>";
 
                 html += "<td>" + en.NodeName + "</td>";
                 html += "<td>" + todoEmpsName + "</td>";
 
                 html += "<td>" + en.RDT.substring(5) + "</td>";
-                html += "<td>" + en.Emps + "</td>";
+//                html += "<td>" + en.Emps + "</td>";
                 html += "</tr>";
 
                 $("#Table1 tr:last").after(html);
@@ -186,6 +184,7 @@
                     window.location.href = '?FK_Flow=' + flowNo + '&TSpan=' + tspan;
             }
         }
+        
 
         function Flows(flowNo) {
             var tspan = GetQueryString("TSpan");
@@ -229,13 +228,7 @@
 
 <table style="width:100%;">
 <tr>
-<td> 时间范围</td>
-<td><div id="TSpan"></div> </td>
-</tr>
-
-<tr>
-<td> 流程范围</td>
-<td><div id="Flows"></div>  </td>
+<td colspan=2 ><div id="TSpan"></div> <div id="Stas"></div> <div id="Flows"></div> </td>
 </tr>
 
 <tr>
@@ -247,11 +240,9 @@
 <th>标题</th>
 <th>发起人</th>
 <th>发起日期</th>
-<th>状态</th>
 <th>停留节点</th>
 <th>审批人</th>
 <th>到达日期</th>
-<th>参与人</th>
 </tr>
 </table>
 

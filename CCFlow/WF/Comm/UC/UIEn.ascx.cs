@@ -570,6 +570,9 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                 obj = this.Request.QueryString["MyPK"];
             if(obj == null)
                 obj = this.Request.QueryString[this.CurrEn.PK];
+            if (obj == null)
+                obj = this.Request.QueryString["NodeID"];
+
             return obj;
         }
         set

@@ -212,6 +212,8 @@
 			$.parser.parse("#Left");
         }
         function OpenIt(url, title, w, h) {
+            window.open(url);
+            return;
 
            // var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {

@@ -57,6 +57,9 @@
            }
        }
        function WinOpenIt(url) {
+           window.location.href = url;
+           return;
+
            //窗口最大化e
            var scrWidth = screen.availWidth;
            var scrHeight = screen.availHeight;
@@ -99,6 +102,10 @@
         //发起时打开窗口
         function WinOpenStartFlow(flowNo) {
             var url = "MyFlow.htm?FK_Flow=" + flowNo;
+
+            window.location.href = url;
+            return;
+
             var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             newWindow.focus();
             return;

@@ -15,31 +15,25 @@
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在为登做准备.</font>");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Login_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var data= handler.DoMethodReturnString("Login_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    data = JSON.parse(data);
+            data = JSON.parse(data);
 
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
 
-                    var userNo = document.getElementById("TB_UserNo").value;
-                    if (userNo == "")
-                        document.getElementById("TB_Pass").value = "";
+            var userNo = document.getElementById("TB_UserNo").value;
+            if (userNo == "")
+                document.getElementById("TB_Pass").value = "";
 
-                    $("#Msg").html("<font color=blue>ccbpm 欢迎登录...</font>");
-                    return;
-                }
-            });
+            $("#Msg").html("<font color=blue>ccbpm 欢迎登录...</font>");
+            return;
         });
 
         function Login_Submit() {
@@ -54,20 +48,16 @@
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在登录请稍候....</font>");
 
-            //执行登录..
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Login_Submit&TB_UserNo=" + encodeURIComponent(userNo) + "&TB_Pass=" + userPass + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>"+data+"</font>");
-                        return;
-                    }
-                    window.location.href = 'Home.htm';
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            handler.AddPara("TB_UserNo", encodeURIComponent(userNo));
+            handler.AddPara("TB_Pass", userPass);
+            var data = handler.DoMethodReturnString("Login_Submit");
+
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+            window.location.href = 'Home.htm';
         }
 
         function KeyDownUserNo(event) {

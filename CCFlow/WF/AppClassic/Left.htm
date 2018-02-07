@@ -21,27 +21,22 @@
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=Green>ccbpm 正在为登做准备.</font>");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Home_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var data = handler.DoMethodReturnString("Home_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    data = JSON.parse(data);
+            data = JSON.parse(data);
 
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
 
-                    $("#Msg").html("<font color=blue>ccbpm 欢迎登录...</font>");
-                    return;
-                }
-            });
+            $("#Msg").html("<font color=blue>ccbpm 欢迎登录...</font>");
+            return;
+
         });
         //左侧目录js
 

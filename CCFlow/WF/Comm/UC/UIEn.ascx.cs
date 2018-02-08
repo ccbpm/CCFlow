@@ -678,7 +678,6 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     if (path == "" || path == null || path == string.Empty)
                         path= BP.Sys.SystemConfig.PathOfDataUser +en.ToString() + "\\";
 
-
                     if (System.IO.Directory.Exists(path) == false)
                         System.IO.Directory.CreateDirectory(path);
 

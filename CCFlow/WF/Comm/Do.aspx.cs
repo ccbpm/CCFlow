@@ -48,11 +48,16 @@ namespace CCFlow.Web.Comm
 					string pPath = enF.GetValStringByKey("MyFilePath") + "\\" + enF.PKVal + "." + enF.GetValStringByKey("MyFileExt");
 
 					//判断文件是否存在
-					if (!System.IO.File.Exists(pPath))
+					if (System.IO.File.Exists(pPath)==false)
 					{
-						Response.Write("<script>alert('文件不存在！');</script>");
-						this.WinClose();
-						return;
+                        pPath = enF.EnMap.FJSavePath + "\\" + enF.PKVal + "." + enF.GetValStringByKey("MyFileExt");
+                        if (System.IO.File.Exists(pPath) == false)
+                        {
+
+                            Response.Write("<script>alert('文件不存在！');</script>");
+                            this.WinClose();
+                            return;
+                        }
 					}
 
 					BP.Sys.PubClass.DownloadFile(pPath,

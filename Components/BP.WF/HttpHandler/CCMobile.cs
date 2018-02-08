@@ -267,9 +267,9 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtTSpan);
 
             if (this.FK_Flow == null)
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND WFState > 1 GROUP BY TSpan";
             else
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY TSpan";
 
             DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
@@ -287,12 +287,10 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 2、处理流程类别列表.
-
             if (tSpan == null)
-                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "'  AND WFState > 1 GROUP BY FK_Flow, FlowName";
             else
-                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
-
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -312,7 +310,7 @@ namespace BP.WF.HttpHandler
             qo.addLeftBracket();
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
             qo.addOr();
-            qo.AddWhere(GenerWorkFlowAttr.Starter,   BP.Web.WebUser.No);
+            qo.AddWhere(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
             qo.addRightBracket();
 
             if (tSpan != null)
@@ -326,7 +324,10 @@ namespace BP.WF.HttpHandler
                 qo.addAnd();
                 qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.FK_Flow);
             }
-            qo.addOrderBy("WFSta");
+
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.WFState, " > ", 1);
+
             qo.addOrderByDesc("RDT");
             qo.Top = 50;
 

@@ -170,6 +170,10 @@ namespace BP.WF
 				Entities dtls = item.Ens;
 
 				QueryObject qo = qo = new QueryObject(dtls);
+
+                if (dtls.ToString().Contains("CYSheBeiUse") == true)
+                    qo.addOrderBy("RDT"); //按照日期进行排序，不用也可以.
+
 				qo.AddWhere(item.RefKey, pkval);
 				DataTable dtDtl = qo.DoQueryToTable();
 
@@ -300,6 +304,9 @@ namespace BP.WF
 			if (wk.RetrieveFromDBSources() == 0)
 				wk.Insert();
 
+            //加载事件.
+            md.DoEvent(FrmEventList.FrmLoadBefore, wk, null);
+
 			//把参数放入到 En 的 Row 里面。
 			if (string.IsNullOrEmpty(atParas) == false)
 			{
@@ -317,6 +324,9 @@ namespace BP.WF
 			MapExt me = null;
 			DataTable dtMapAttr = null;
 			MapExts mes = null;
+            
+          
+
 
 			#region 表单模版信息.（含主、从表的，以及从表的枚举/外键相关数据）.
 			//增加表单字段描述.

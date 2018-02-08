@@ -61,6 +61,12 @@ namespace BP.Web
                     if (para == "1=1")
                         continue;
 
+                    if (para == "1=1")
+                        continue;
+
+                    if (para.Contains("=null") == true)
+                        continue;
+
                     urlExt += "&" + para;
                 }
                 return urlExt;

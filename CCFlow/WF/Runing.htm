@@ -84,6 +84,7 @@
             if (window.confirm('您确定要撤销本次发送吗？') == false)
                 return;
 
+
             //执行撤销.
             $.ajax({
                 type: 'post',
@@ -159,6 +160,7 @@
                 url: Handler + "?DoType=Runing_OpenFrm&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -166,9 +168,11 @@
 
                     if (data.indexOf('url@') == 0) {
                         data = data.replace('url@', '');
-                        window.open(data);
+                        window.location.href = data;
+                        //window.open(data);
                         return;
                     }
+
                     alert(data);
                 }
             });

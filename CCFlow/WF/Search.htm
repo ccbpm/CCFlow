@@ -59,7 +59,7 @@
                     html += "<span onclick=\"TSpan('" + tSpan.IntKey + "');\" >" + tSpan.Lab + "</span>";
             }
 
-            html += "&nbsp;&nbsp;<a href='#' onclick=\"javascript:SearchKey();\" ><img src='./Img/Search.png' border=0 style='width:16px;' />关键字查询</a>";
+            html += "&nbsp;&nbsp;<img src='./Img/Search.png' border=0 style='width:16px;' />关键字:<input type=text id='TB_Key' style='width:90px;height:18px;' /><a href='#' onclick=\"javascript:SearchKey();\" > <b>查询</b> </a>";
 
             $("#TSpan").html(html);
 
@@ -109,13 +109,7 @@
                         paras = "";
                     }
                 }
-
-                var href = "";
-                if (en.TodoEmps.indexOf(userNo + ',') < 0)
-                    href = "FrmView.htm?FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&From=RptSearch&t=" + Math.random();
-                else
-                    href = "MyFlow.htm?FK_Flow=" + fk_flow + "&From=RptSearch&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid + "&IsRead=" + isRead + "&Paras=" + paras + "&T=" + Math.random();
-
+ 
                 todoEmpsName = en.TodoEmps;
                 todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
 
@@ -164,11 +158,12 @@
 
             var url = "";
 
-            if (wfState != 3 && emps.indexOf(userNo) != 0) {
+            if (wfState != 3 && emps.indexOf(userNo) >= 0) {
                 url = "MyFlow.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
             } else {
                 url = "WFRpt.htm?WorkID=" + workid + "&FK_Flow=" + flowNo;
             }
+            //window.location.href = url;
             WinOpen(url);
         }
 
@@ -217,12 +212,15 @@
 
         function SearchKey() {
 
-            var val = window.prompt("请输入关键字，单据编号，文件名称发起人名称:", "");
-            if (val == null || val == undefined || val == "")
+            var val = $("#TB_Key").val();
+            if (val == null || val == undefined || val == "") {
+                alert("请输入关键字,单据编号，标题。。。");
                 return;
+            }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
             handler.AddPara("TB_KeyWords", val);
+
             var data = handler.DoMethodReturnString("KeySearch_Query");
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -233,8 +231,6 @@
             data = JSON.parse(data);
             if (data.length <= 0) {
                 alert('未查询出来数据');
-                SearchKey();
-                //document.getElementById("result").innerHTML = "<h3>&nbsp;&nbsp;竟然没有查出任何东西，真不思议。</h3>";
                 return;
             }
 
@@ -257,8 +253,8 @@
 
             data.forEach(function (en, index) {
 
-               var tr = "";
-              
+                var tr = "";
+
                 //是否可以执行当前工作?
                 var isCanDo = false;
                 if (en.TodoEmps.indexOf(webUser.No) != -1)
@@ -275,7 +271,6 @@
                     icon = "./Img/WFState/Etc.png"; //其他.
                 if (isCanDo == true)
                     icon = "./Img/WFState/Todo.png"; //其他.
-
 
                 tr = "<tr>";
                 tr += "<td class=Idx>" + (i + 1) + "</td>";

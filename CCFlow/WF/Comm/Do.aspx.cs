@@ -53,7 +53,6 @@ namespace CCFlow.Web.Comm
                         pPath = enF.EnMap.FJSavePath + "\\" + enF.PKVal + "." + enF.GetValStringByKey("MyFileExt");
                         if (System.IO.File.Exists(pPath) == false)
                         {
-
                             Response.Write("<script>alert('文件不存在！');</script>");
                             this.WinClose();
                             return;

@@ -371,9 +371,7 @@ function Ele_FrmCheck(wf_node) {
     //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
     var sta = wf_node.FWCSta;
 
-    var h = wf_node.FWC_H + 1000;
-
-
+    var h = wf_node.FWC_H + 1300;
     var src = "./WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
     var paras = '';

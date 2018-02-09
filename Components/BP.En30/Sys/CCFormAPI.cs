@@ -233,9 +233,9 @@ namespace BP.Sys
             {
                 case SrcType.CreateTable:
                 case SrcType.TableOrView:
-                    attr.LGType = FieldTypeS.FK;
-                    break;
                 case SrcType.BPClass:
+                    attr.LGType = FieldTypeS.FK;
+                    break;             
                 default:
                     attr.LGType = FieldTypeS.Normal;
                     break;

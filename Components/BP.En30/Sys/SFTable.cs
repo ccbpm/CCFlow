@@ -871,11 +871,14 @@ namespace BP.Sys
             }
             #endregion 如果是本地类.
 
+            #region 本地类，物理表..
             if (this.SrcType == Sys.SrcType.CreateTable)
             {
-                /*
-                 * 要创建表。
-                 */
+                if (DBAccess.IsExitsObject(this.No) == true)
+                {
+                    return base.beforeInsert();
+                    //throw new Exception("err@表名[" + this.No + "]已经存在，请使用其他的表名.");
+                }
 
                 string sql = "";
                 if (this.CodeStruct == Sys.CodeStruct.NoName || this.CodeStruct == Sys.CodeStruct.GradeNoName)
@@ -884,7 +887,6 @@ namespace BP.Sys
                     sql += "No varchar(30) NOT NULL,";
                     sql += "Name varchar(3900) NULL,";
                     sql += "GUID varchar(36)  NULL";
-
                     sql += ")";
                 }
 
@@ -902,6 +904,7 @@ namespace BP.Sys
                 //初始化数据.
                 this.InitDataTable();
             }
+            #endregion 如果是本地类.
 
             return base.beforeInsert();
         }

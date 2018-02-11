@@ -7,5 +7,9 @@ function ParseStringToPinYin(parseString, parseModel, prix ) {
     handler.AddPara("name", parseString);
     handler.AddPara("flag", parseModel);
     var data = handler.DoMethodReturnString("ParseStringToPinyin");
-    document.getElementById("TB_No").value = prix + "_" + data;
+
+    if (prix=="")
+        document.getElementById("TB_No").value =  data;
+    else
+        document.getElementById("TB_No").value = prix + "_" + data;
 } 

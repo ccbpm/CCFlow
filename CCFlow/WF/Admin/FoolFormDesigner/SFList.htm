@@ -145,38 +145,35 @@
             if (str == null)
                 return;
 
-//            if (GetQueryString('From') == 'FreeFrm') {
-//                alert(window.localhost.contentWindow.title);
-//                return;
-//            }
+            //            if (GetQueryString('From') == 'FreeFrm') {
+            //                alert(window.localhost.contentWindow.title);
+            //                return;
+            //            }
 
             var groupID = GetQueryString("GroupField");
-            if (groupID == null || groupID=="null" )
+            if (groupID == null || groupID == "null")
                 groupID = "0";
 
-            url = Handler + "?DoType=SFList_SaveSFField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapData + "&GroupField=" + groupID + "&SFTable=" + sfTable + "&m=" + Math.random(),
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("KeyOfEn", str);
+            handler.AddPara("FK_MapData", fk_mapData);
+            handler.AddPara("GroupField", groupID);
+            handler.AddPara("SFTable", sfTable);
+            var data = handler.DoMethodReturnString("SFList_SaveSFField");
 
-                    if (data.indexOf("err@") >= 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf("err@") >= 0) {
+                alert(data);
+                return;
+            }
 
-                  //  url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + data;
-                    window.location.href = data;
-                }
-            });
-
-
-            var url = 'EditTable.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupField=' + groupID;
-            window.location.href = url;
+            //  url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + data;
+            window.location.href = data;
             return;
+
+            //  var url = 'EditTable.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupField=' + groupID;
+            //window.location.href = url;
+            //return;
 
         }
         function AddSFSQL(mypk, idx, key) {

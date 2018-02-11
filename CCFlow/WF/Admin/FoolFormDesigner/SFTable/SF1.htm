@@ -31,18 +31,20 @@
                 }
 
                 if (val == "ziduanquanpin") {
-                    ParseStringToPinYin(tb, true, "Handler");
+                    ParseStringToPinYin(tb, true, "");
                 }
                 else {
-                    ParseStringToPinYin(tb, false, "Handler");
+                    ParseStringToPinYin(tb, false, "");
                 }
 
             });
+
             //点击全拼
             $('input[id=RB_QP]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
                 ParseStringToPinYin(TB_Name, true, "Table");
             });
+
             //点击简拼
             $('input[id=RB_JP]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
@@ -55,23 +57,21 @@
 
         //装载  模版.
         function Save() {
+
             var en = new Entity("BP.Sys.SFTable");
             en.CopyForm();
 
-            var val = en.IsExits();
-
             if (en.IsExits() == true) {
-                alert("编号已经存在[" + en.No+"]请使用其他的编号.");
+                alert("编号已经存在[" + en.No + "]请使用其他的编号.");
                 return;
             }
 
             en.SrcType = 1; //自定义数据表.
             en.Insert();
+
             alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
             window.location.href = "Default.htm";
-
         }
-         
     </script>
 </head>
 <body>

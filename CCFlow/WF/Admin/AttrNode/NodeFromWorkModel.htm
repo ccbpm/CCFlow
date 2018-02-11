@@ -13,8 +13,6 @@
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
-     
-
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
 
@@ -105,6 +103,7 @@
             node.NodeID = GetQueryString("FK_Node");
             node.RetrieveFromDBSources();
 
+
             var mybtn = data["WF_BtnLabExtWebOffice"][0]; //nodeOffice
             var btn = data["WF_BtnLab"][0]; //nodeOffice.
 
@@ -114,15 +113,17 @@
             if (frmIDSelected == "" || frmIDSelected == null)
                 frmIDSelected = "ND" + nodeID;
 
+
             var seledtNodeID = frmIDSelected.replace('ND', '');
             GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
 
             //绑定表单类别.
             var frmTrees = new Entities("BP.Sys.FrmTrees");
             frmTrees.RetrieveAll();
-            if (node.FormType = RefOneFrmTree) {
+
+
+            if (node.FormType == RefOneFrmTree) {
                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.RefOneFrmTreeType);
-                //GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FK_Frm);
             } else {
                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
             }
@@ -136,6 +137,7 @@
             var frm = $.grep(frms, function (item) {
                 return item.FK_FormTree == sortNo;
             });
+
             //绑定表单
             GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", node.NodeFrmID);
             nodeFrmID = node.NodeFrmID;

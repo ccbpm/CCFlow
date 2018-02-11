@@ -115,7 +115,10 @@ namespace BP.WF.HttpHandler
             }
             #endregion 增加本部门发起流程的查询.
 
-            if (BP.Web.WebUser.IsAdmin)
+            //if ( BP.Web.WebUser.IsAdmin)
+            //    ht.Add("Adminer", "高级查询");
+
+            if (BP.Web.WebUser.No=="admin")
                 ht.Add("Adminer", "高级查询");
 
             Flow fl = new Flow(this.FK_Flow);

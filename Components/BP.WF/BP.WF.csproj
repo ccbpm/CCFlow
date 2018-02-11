@@ -177,6 +177,7 @@
     <Compile Include="DTS\DTS_DealDeferredWork.cs" />
     <Compile Include="DTS\DTS_GenerWorkFlowTodoSta.cs" />
     <Compile Include="DTS\ToImplement\RelFlowTemplateToSubInc.cs" />
+    <Compile Include="DTS\DeletTempFiles.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

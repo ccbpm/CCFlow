@@ -1681,13 +1681,11 @@ namespace BP.Sys
             try
             {
                 if (isQuanPin == true)
-                {
                     s = BP.DA.DataType.ParseStringToPinyin(name);
-                }
                 else
-                {
                     s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
-                }
+
+
                 //如果全拼长度超过maxLen，则取前maxLen长度的字符
                 if (maxLen > 0 && s.Length > maxLen)
                     s = s.Substring(0, maxLen);
@@ -1707,7 +1705,6 @@ namespace BP.Sys
                 throw new Exception(ex.Message);
             }
         }
-
         /// <summary>
         /// 多音字转拼音
         /// </summary>

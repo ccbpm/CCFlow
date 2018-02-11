@@ -50,11 +50,18 @@ namespace BP.WF
             Node nd = new Node(fk_node);
             try
             {
-
                 MapData md = new MapData();
                 md.No = nd.NodeFrmID;
                 if (md.RetrieveFromDBSources() == 0)
                     throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
+
+                Work wk = nd.HisWork;
+                wk.OID = workID;
+                wk.RetrieveFromDBSources();
+
+                // 第1.2: 调用,处理用户定义的业务逻辑.
+                string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
+                    wk, null);
 
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
@@ -63,7 +70,6 @@ namespace BP.WF
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = workID;
                 gwf.RetrieveFromDBSources();
-
 
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
@@ -246,9 +252,6 @@ namespace BP.WF
 
                 #region 把主从表数据放入里面.
                 //.工作数据放里面去, 放进去前执行一次装载前填充事件.
-                BP.WF.Work wk = nd.HisWork;
-                wk.OID = workID;
-                wk.RetrieveFromDBSources();
 
                 //重设默认值.
                 wk.ResetDefaultVal();
@@ -604,6 +607,8 @@ namespace BP.WF
                 md.No = "ND" + fk_node;
                 if (md.RetrieveFromDBSources() == 0)
                     throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
+
+             
 
                 //表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);

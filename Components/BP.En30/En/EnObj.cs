@@ -638,7 +638,14 @@ namespace BP.En
         /// <returns></returns>
         public DateTime GetValDateTime(string attrKey)
         {
-            return DataType.ParseSysDateTime2DateTime(this.GetValStringByKey(attrKey));
+            try
+            {
+                return DataType.ParseSysDateTime2DateTime(this.GetValStringByKey(attrKey));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("字段[" + this.EnMap.GetAttrByKey(attrKey).Desc + "],值[" + this.GetValStringByKey(attrKey) + "]，不是一个有效的时间格式.");
+            }
         }
         /// <summary>
         /// 在确定  attrKey 存在 map 的情况下才能使用它

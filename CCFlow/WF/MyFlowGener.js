@@ -140,12 +140,27 @@ function SetBottomTooBar() {
     if (toolBar) {
         document.getElementById("bottomToolBar").style.display = "";
     }
+
 }
 
 window.onload = function () {
     //  ResizeWindow();
     SetBottomTooBar();
+
+   
+
 };
+
+$(function () {
+    $('#MessageDiv').on('hide.bs.modal', function () {
+        alert('嘿，我听说您喜欢模态框...');
+    })
+});
+
+function CloseOKBtn() {
+    alert('嘿，我听说您喜欢模态框...');
+}
+
 
 //然浏览器最大化.
 function ResizeWindow() {
@@ -405,10 +420,11 @@ function returnWorkWindowClose(data) {
     if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
         $('#Message').html(data);
         $('#MessageDiv').modal().show();
+        return;
     }
-    else {
-        OptSuc(data);
-    }
+
+
+    OptSuc(data);
 }
 
 
@@ -736,6 +752,7 @@ function Send(isHuiQian) {
         }
     }
 
+
     //执行发送.
     execSend(toNode);
 }
@@ -753,7 +770,7 @@ function execSend(toNode) {
         dataType: 'html',
         success: function (data) {
 
-            if (data.indexOf('err@') == 0) {//发送时发生错误
+            if (data.indexOf('err@') == 0) { //发送时发生错误
                 $('#Message').html(data.substring(4, data.length));
                 $('#MessageDiv').modal().show();
                 setToobarEnable();
@@ -775,8 +792,10 @@ function execSend(toNode) {
 
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
+
     // window.location.href = "/WF/MyFlowInfo.aspx";
     // $('#MessageDiv').modal().hide();
+
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
     }
@@ -787,6 +806,7 @@ function OptSuc(msg) {
     var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
     trackA.remove();
     trackImg.remove();
+
     $("#msgModal").modal().show();
 }
 

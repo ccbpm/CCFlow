@@ -16,7 +16,13 @@
     <script type="text/javascript" src="Comm/Gener.js"></script>
     <script type="text/javascript">
 
+        var webUser = null;
+
         $(function () {
+
+              webUser = new WebUser();
+            if (webUser.No == null)
+                return;
 
             var url = "";
             var tSpan = GetQueryString("TSpan");
@@ -32,7 +38,6 @@
             handler.AddPara("FK_Flow", flowNo);
             var data = handler.DoMethodReturnString("Search_Init");
 
-            var webUser = new WebUser();
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html(data);
                 return;
@@ -109,7 +114,7 @@
                         paras = "";
                     }
                 }
- 
+
                 todoEmpsName = en.TodoEmps;
                 todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
 
@@ -273,7 +278,7 @@
                     icon = "./Img/WFState/Todo.png"; //其他.
 
                 tr = "<tr>";
-                tr += "<td class=Idx>" + (i + 1) + "</td>";
+                tr += "<td class=Idx>" + (index + 1) + "</td>";
 
                 tr += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
                 tr += "<td>" + en.StarterName + "</td>";
@@ -281,7 +286,7 @@
                 tr += "<td>" + en.NodeName + "</td>";
                 tr += "<td>" + en.TodoEmps + "</td>";
                 tr += "<td>" + en.RDT + "</td>";
-                tr += "<td>" + statusArr[item.WFSta] + "</td>";
+                tr += "<td>" + statusArr[en.WFSta] + "</td>";
                 tr += "\n<td class='BigDoc' valign=top>" + en.Emps + "</td>";
                 tr += "</tr>";
                 tableHtml += tr;

@@ -410,13 +410,22 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
         en.RetrieveFromDBSources();
 
         string file = en.GetValStringByKey("MyFilePath") + "//" + en.PKVal + "." + en.GetValStringByKey("MyFileExt");
-        try
+        //判断文件是否存在
+        if (System.IO.File.Exists(file) == false)
         {
-            System.IO.File.Delete(file);
+            file = en.EnMap.FJSavePath + "\\" + en.PKVal + "." + en.GetValStringByKey("MyFileExt");
+            if (System.IO.File.Exists(file) == false)
+            {
+                en.SetValByKey("MyFileExt", "");
+                en.SetValByKey("MyFileName", "");
+                en.SetValByKey("MyFilePath", "");
+                en.Update();
+                this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&PK=" + this.PKVal + "&inlayer=" + this.InLayer, true);
+                return;
+            }
         }
-        catch
-        {
-        }
+        System.IO.File.Delete(file);
+
         en.SetValByKey("MyFileExt", "");
         en.SetValByKey("MyFileName", "");
         en.SetValByKey("MyFilePath", "");

@@ -752,7 +752,7 @@ var Entity = (function () {
             if (params.length == 0)
                 params = getParams1(self);
 
-            var result;
+            var result = "";
             $.ajax({
                 type: 'post',
                 async: false,
@@ -760,18 +760,25 @@ var Entity = (function () {
                 dataType: 'html',
                 data: params,
                 success: function (data) {
+
                     result = data;
                     if (data.indexOf("err@") != -1) {
                         alert(data);
-                        return;
+                        return 0; //插入失败.
                     }
+
+                    data = JSON.parse(data);
+                    result = data;
+
                     var self = this;
-                    $.each(params, function (n, o) {
+                    $.each(data, function (n, o) {
                         if (typeof self[n] !== "function") {
+
                             jsonString[n] = o;
                             self[n] = o;
                         }
                     });
+
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
@@ -841,7 +848,7 @@ var Entity = (function () {
             //var params = getParams(self);
             var params = getParams1(this);
 
-          //  alert(params);
+            //  alert(params);
 
 
             var result;
@@ -1716,10 +1723,16 @@ var WebUser = function () {
         url: dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime(),
         dataType: 'html',
         success: function (data) {
+
             if (data.indexOf("err@") != -1) {
-                alert(data);
+                if (data.indexOf('登陆信息丢失') != -1) {
+                    alert("登录信息丢失，请重新登录。");
+                } else {
+                    alert(data);
+                }
                 return;
             }
+
             try {
                 jsonString = JSON.parse(data);
             } catch (e) {

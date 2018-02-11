@@ -253,7 +253,6 @@
             var httphandler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             httphandler.AddUrlData();
 
-
             $("#Btn_Send").attr("disabled", "disabled");
             $("#Btn_Send").val("正在发送请稍候...");
             $("#Btn_Close").attr("disabled", "disabled");
@@ -398,34 +397,29 @@
                     //return;
                     $("#SelectEmp").hide().html("");
                     return;
-                } else {
-                    //回去输入内容，查询数据库
-                    $.ajax({
-                        type: 'post',
-                        async: true,
-                        data: null,
-                        url: Handler + "?DoType=AccepterOfGener_SelectEmps&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random() + "&TB_Emps=" + $("#TB_Emps").val(),
-                        dataType: 'html',
-                        success: function (data) {
-
-                            if (data.indexOf('err@') == 0) {
-                                alert(data);
-                                return;
-                            }
-                            //SelectEmp
-                            //jQuery("#select_id").append("<option value='Value'>Text</option>");  
-                            data = JSON.parse(data);
-                            //$("#SelectEmp").hide().html("");
-                            var html = "";
-                            for (var i = 0; i < data.length; i++) {
-                                //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
-                                html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
-                            }
-                            $("#SelectEmp").show().html(html);
-                        }
-                    });
                 }
-                //}
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+                handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+                handler.AddPara("WorkID", GetQueryString("WorkID"));
+                handler.AddPara("TB_Emps", $("#TB_Emps").val());
+                var data = handler.DoMethodReturnString("AccepterOfGener_SelectEmps");
+
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+                //SelectEmp
+                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
+                data = JSON.parse(data);
+                //$("#SelectEmp").hide().html("");
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                }
+                $("#SelectEmp").show().html(html);
+
             });
         });
 

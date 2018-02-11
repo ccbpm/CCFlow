@@ -6,6 +6,7 @@
     <script src="Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
     <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" /> 
      <style type="text/css">    
@@ -101,8 +102,8 @@
         }
         //发起时打开窗口
         function WinOpenStartFlow(flowNo) {
-            var url = "MyFlow.htm?FK_Flow=" + flowNo;
 
+            var url = "MyFlow.htm?FK_Flow=" + flowNo;
             window.location.href = url;
             return;
 
@@ -162,91 +163,84 @@
         //初始化数据.
         function InitPage() {
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Start_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var data = handler.DoMethodReturnString("Start_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            data = JSON.parse(data);
 
-                    data = JSON.parse(data);
+            //取出来两个结果集.
+            var dtSort = data["Sort"]; //类别.
+            var dtStart = data["Start"]; //发起的流程.
 
-                    var dtSort = data["Sort"]; //类别.
-                    var dtStart = data["Start"]; //发起的流程.
+            var myNum = 0;
+            var is1 = false;
+            for (var i = 0; i < dtSort.length; i++) {
 
-                    var myNum = 0;
-                    var is1 = false;
-                    for (var i = 0; i < dtSort.length; i++) {
+                var sortNo = dtSort[i].No;
+                var sortName = dtSort[i].Name;
 
-                        var sortNo = dtSort[i].No;
-                        var sortName = dtSort[i].Name;
+                //检查该类别下是否有流程，没有流程就continue ;.
+                var isHaveFlow = false;
+                for (var idx = 0; idx < dtStart.length; idx++) {
 
-                        //检查该类别下是否有流程，没有流程就continue ;.
-                        var isHaveFlow = false;
-                        for (var idx = 0; idx < dtStart.length; idx++) {
-
-                            var flow = dtStart[idx];
-                            if (sortNo == flow.FK_FlowSort) {
-                                isHaveFlow = true;
-                                break;
-                            }
-                        }
-
-                        if (isHaveFlow == false)
-                            continue;
-
-                        if (sortName == "" || sortName == null)
-                            continue;
-
-                        var grouStr = "<tr  onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=6 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + sortName + "'   border=0 /> " + sortName + "</th> </tr>";
-                        $("#Table1 tr:last").after(grouStr);
-
-                        //增加处理.
-                        for (var idx = 0; idx < dtStart.length; idx++) {
-
-                            var flow = dtStart[idx];
-                            var flowSort = flow.FK_FlowSort;
-                            if (sortNo != flowSort)
-                                continue;
-
-                            myNum++;
-                            var newRow = "";
-                            if (is1 == true) {
-                                newRow += "<tr bgcolor=AliceBlue id='" + sortName + myNum + "' >";
-                                is1 = false;
-                            }
-                            else {
-                                newRow += "<tr bgcolor=white id='" + sortName + myNum + "' >";
-                                is1 = true;
-                            }
-
-                            newRow += "<td class=Idx >" + myNum + "</td>";
-                            newRow += "<td width='300px'> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
-
-                            var extHtml = "";
-                            if (flow.IsBatchStart == "1")
-                                extHtml = " - <a href=\"javascript:WinOpenBatch('" + flow.No + "');\" >批量发起</a>";
-
-                            newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" >发起申请</a>" + extHtml + "</td>";
-
-                            newRow += "<td> <a href=\"javascript:WinOpenStart('" + flow.No + "');\" ><img src='./Img/Start.png' style='width:15px;' />我发起的流程</a></td>";
-                            newRow += "<td> <a href=\"javascript:WinOpenJoin('" + flow.No + "');\" ><img src='./Img/check.png' style='width:15px;' />我审批的流程</a></td>";
-
-                            newRow += "<td> <a href=\"javascript:WinOpenSearch('" + flow.No + "');\" ><img src='./Img/Home.gif' style='width:15px;' />查询主页</a></td>";
-
-                            newRow += "</tr>";
-
-                            $("#Table1 tr:last").after(newRow);
-                        }
+                    var flow = dtStart[idx];
+                    if (sortNo == flow.FK_FlowSort) {
+                        isHaveFlow = true;
+                        break;
                     }
                 }
-            });
+
+                if (isHaveFlow == false)
+                    continue;
+
+                if (sortName == "" || sortName == null)
+                    continue;
+
+                var grouStr = "<tr  onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=6 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + sortName + "'   border=0 /> " + sortName + "</th> </tr>";
+                $("#Table1 tr:last").after(grouStr);
+
+                //增加处理.
+                for (var idx = 0; idx < dtStart.length; idx++) {
+
+                    var flow = dtStart[idx];
+                    var flowSort = flow.FK_FlowSort;
+                    if (sortNo != flowSort)
+                        continue;
+
+                    myNum++;
+                    var newRow = "";
+                    if (is1 == true) {
+                        newRow += "<tr bgcolor=AliceBlue id='" + sortName + myNum + "' >";
+                        is1 = false;
+                    }
+                    else {
+                        newRow += "<tr bgcolor=white id='" + sortName + myNum + "' >";
+                        is1 = true;
+                    }
+
+                    newRow += "<td class=Idx >" + myNum + "</td>";
+                    newRow += "<td width='300px'> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
+
+                    var extHtml = "";
+                    if (flow.IsBatchStart == "1")
+                        extHtml = " - <a href=\"javascript:WinOpenBatch('" + flow.No + "');\" >批量发起</a>";
+
+                    newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" >发起申请</a>" + extHtml + "</td>";
+
+                    newRow += "<td> <a href=\"javascript:WinOpenStart('" + flow.No + "');\" ><img src='./Img/Start.png' style='width:15px;' />我发起的流程</a></td>";
+                    newRow += "<td> <a href=\"javascript:WinOpenJoin('" + flow.No + "');\" ><img src='./Img/check.png' style='width:15px;' />我审批的流程</a></td>";
+
+                    newRow += "<td> <a href=\"javascript:WinOpenSearch('" + flow.No + "');\" ><img src='./Img/Home.gif' style='width:15px;' />查询主页</a></td>";
+
+                    newRow += "</tr>";
+
+                    $("#Table1 tr:last").after(newRow);
+                }
+            }
         }
 
         function Ref() {

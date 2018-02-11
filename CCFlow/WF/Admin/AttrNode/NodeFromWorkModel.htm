@@ -121,7 +121,6 @@
             var frmTrees = new Entities("BP.Sys.FrmTrees");
             frmTrees.RetrieveAll();
 
-
             if (node.FormType == RefOneFrmTree) {
                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.RefOneFrmTreeType);
             } else {

@@ -481,6 +481,43 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         return eleHtml;
     }
 
+<<<<<<< .mine
+						                //设置编辑器的默认样式
+						                var styleText = "text-align:left;font-size:12px;";
+						                styleText += "width:100%;";
+						                styleText += "height:" + mapAttr.UIHeight + "px;";
+						                //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
+						                eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+						            }
+						        } else {
+						            eleHtml +=
+                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
+						        }
+						    }
+                    }
+                } //AppDate
+                else if (mapAttr.MyDataType == 6) {//AppDate
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 1) {
+                        enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                }
+                else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 1) {
+                        enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+                        //enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+                }
+                else if (mapAttr.MyDataType == 4) { // AppBoolean = 7
+                    if (mapAttr.UIIsEnable == 1) {
+=======
     /***************** 作为附件展示的控件. *****************************/
     if (mapAttr.UIContralType == 6) {
         var atParamObj = AtParaToJson(mapAttr.AtPara);
@@ -496,6 +533,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         }
         return eleHtml;
     }
+>>>>>>> .r4999
 
     /***************** 其他类型的控件. *****************************/
 

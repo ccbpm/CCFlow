@@ -862,7 +862,7 @@ namespace BP.WF
                     this.ReturnToNode.TSpanMinues, this.ReturnToNode.TWay);
             }
             // 应完成日期.
-            string sdt = dtOfShould.ToString(DataType.SysDataFormat);
+            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
 
             // 改变当前待办工作节点
             gwf.WFState = WFState.ReturnSta;

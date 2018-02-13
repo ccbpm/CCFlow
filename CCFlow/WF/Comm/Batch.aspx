@@ -15,15 +15,17 @@ Inherits="CCFlow.WF.Comm.Comm_Batch" Title="批处理" Codebehind="Batch.aspx.cs
         <script src="./JS/Calendar/WdatePicker.js" type="text/javascript"></script>
         <link href="./JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
         <link href='./Style/Table0.css' rel='stylesheet' type='text/css' />
+        <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
-		<script language="JavaScript" src="JScript.js"></script>
+    <script language="JavaScript" src="JScript.js"></script>
     <script language="javascript">
-      function ShowEn(url, wName, h, w )
-        {
-           var s = "dialogWidth=" + parseInt(w) + "px;dialogHeight=" + parseInt(h) + "px;resizable:yes";
-           var  val=window.showModalDialog( url,null,s);
-           window.location.href=window.location.href;
-       }
+        function ShowEn(url, wName, h, w) {
+
+            OpenEasyUiDialog(url, "eudlgframe", "详细", 900, 550, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
 
         function selectAll() {
             var arrObj = document.all;

@@ -82,6 +82,18 @@ namespace BP.WF.Template
     {
         #region 基本属性
         /// <summary>
+        /// UI界面上的访问控制
+        /// </summary>
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenAll();
+                return uac;
+            }
+        }
+        /// <summary>
         ///工作ID
         /// </summary>
         public Int64 WorkID

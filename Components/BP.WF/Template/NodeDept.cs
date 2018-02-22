@@ -57,6 +57,15 @@ namespace BP.WF.Template
 				this.SetValByKey(NodeDeptAttr.FK_Dept,value);
 			}
 		}
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenAll();
+                return base.HisUAC;
+            }
+        }
 		#endregion 
 
 		#region 构造方法

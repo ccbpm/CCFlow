@@ -602,6 +602,9 @@
                                     <div style="float:right">
 
 
+                                    <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
+                                            设置/更改部门(<%=ndepts.Count %>)(旧版本)</a> |
+
                                            <a href="javascript:WinOpen('../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&NodeID=<%=nd.NodeID %>&PKVal=<%=nd.NodeID %>')">
                                             设置/更改部门(<%=ndepts.Count %>)</a>
 
@@ -647,9 +650,14 @@
                                     <div style="float: right">
                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置与更改岗位(<%=nss.Count%>)</a>
+
+
                                              |
                                               <a href="javascript:WinOpen('../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&NodeID=<%=nd.NodeID %>&PKVal=<%=nd.NodeID %>')">
-                                            设置/更改部门(<%=ndepts.Count %>)</a>
+                                            设置/更改部门(<%=ndepts.Count %>)</a>|
+
+                                             <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
+                                            设置/更改部门(<%=ndepts.Count %>)(旧版本)</a> |
                                              
                                              <%--<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=1005101248&ShowWay=FK_StationType')">
                                                 设置与更改部门(<%=ndepts.Count%>)</a> | 
@@ -679,7 +687,11 @@
                                             
                                             
                                              <a href="javascript:WinOpen('../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&NodeID=<%=nd.NodeID %>&PKVal=<%=nd.NodeID %>')">
-                                            设置/更改部门(<%=ndepts.Count %>)</a>
+                                            设置/更改部门(<%=ndepts.Count %>)
+                                            |
+                                              <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
+                                            设置/更改部门(<%=ndepts.Count %>)(旧版本)</a> |
+                                            </a>
 
                                        
                                     </div>

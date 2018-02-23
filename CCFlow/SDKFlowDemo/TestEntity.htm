@@ -11,15 +11,15 @@
         window.onload =
 
 		function Test() {
-		    return;
+
 		    var frm = new Entity("ND101Dtl1");
 		    frm.RefPK = 100;
 		    frm.FYLX = 1;
 		    frm.XiaoJi = 100.01;
 		    frm.BeiZhu = 'sss';
-		    var i = frm.Insert();
-		    //alert(i);
-		    //alert(JSON.stringify(frm));
+		    var data = frm.Insert();
+
+		    alert(JSON.stringify(frm));
 		    return;
 		    // Test_FrmEntity();
 
@@ -122,17 +122,15 @@
 		    //删除部门编号为 0012的员工.
 		    var delNum = emp.Delete("FK_Dept", "0012");
 		    alert('共有:' + delNum + "数据被删除.");
-
-		 
 		}
 
         function TestEns() {
 
-            var emps = Entities("BP.Port.Emps", "FK_Dept", "1");
+            var emps = new  Entities("BP.Port.Emps", "FK_Dept", "1");
             alert("BP.Port.Emps查询到:" + emps.length);
-          
+
             //获得性别为女的学生.
-            var students1 = Entities("BP.Demo.BPFramework.Students", "XB", "0");
+            var students1 = new Entities("BP.Demo.BPFramework.Students", "XB", "0");
             alert("Students XB=0 查询到:" + students1.length);
 
             for (var i = 0; i < students1.length; i++) {
@@ -154,7 +152,7 @@
 
 
             //获得性别为女的学生并且按年龄排序.
-            var students2 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
+            var students2 =new  Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
             alert("Students XB=0 查询到:" + students2.length);
 
 
@@ -170,10 +168,8 @@
         function TestEns_Adv() {
 
             var emps = new Entities("BP.Port.Emps");
-
             var num = emps.RetrieveAll(); //调用查询全部，返回num个数量.
             alert("BP.Port.Emps查询到:" + emps.length);
-
 
             //获得性别为女的学生.
             var students = new Entities("BP.Demo.BPFramework.Students");
@@ -195,6 +191,18 @@
             //查询全部.
             students.RetrieveAll();
             alert("Students 全部数据,查询到:" + students.length);
+        }
+
+        //执行方法.
+        function TestEns_Method() {
+
+            var ens = new Entities("BP.Demo.BPFramework.Students");
+
+            var data = ens.DoMethodReturnString("EnsMothed");
+            alert('ens执行方法的结果为:' + data);
+
+            var data = ens.DoMethodReturnString("EnsMothedParas", "abc", "123");
+            alert('ens执行方法的结果为:' + data);
         }
 
         function ExecHttpHandlerMonthod() {

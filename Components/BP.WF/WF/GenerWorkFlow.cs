@@ -37,7 +37,7 @@ namespace BP.WF
         /// </summary>
         NextWeek,
         /// <summary>
-        /// 两周以前
+        /// 上上周
         /// </summary>
         TowWeekAgo,
         /// <summary>

@@ -156,7 +156,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             //attrAdd.DefVal = "0";
             //attrAdd.UIIsEnable = true;
             //attrAdd.Insert();
-            ///  http://localhost:41466/WF/Admin/FoolFormDesigner/EditEnum.aspx?DoType=Edit&FK_MapData=ND17501&EnumKey=CeShiMoShi&IDX=
+            //// http://localhost:41466/WF/Admin/FoolFormDesigner/EditEnum.aspx?DoType=Edit&FK_MapData=ND17501&EnumKey=CeShiMoShi&IDX=
+            
             this.Response.Redirect("EditEnum.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&EnumKey=" + this.EnumKey, true);
             // this.WinClose();
             return;

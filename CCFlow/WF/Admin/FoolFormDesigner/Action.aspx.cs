@@ -88,7 +88,6 @@ namespace CCFlow.WF.MapDef
             if (myEnentXml == null)
             {
                 this.Pub2.AddFieldSet("帮助");
-
                 
                 this.Pub2.AddH2("关于驰骋工作流引擎的事件描述.");
                 this.Pub2.AddUL();
@@ -97,7 +96,6 @@ namespace CCFlow.WF.MapDef
                 this.Pub2.AddLi("ccbpm为我们提供了两种类型的事件，一种是代码结构的，一种是配置模式的，该模式属于第二种，如何使用代码模式实现与ccbpm的交互请参考FEE，或者百度ccbpm 消息与事件。");
                 this.Pub2.AddLi("如果您使用了代码结构的模式，该模式就会失效。");
                 this.Pub2.AddULEnd();
-
 
                 this.Pub2.AddFieldSetEnd();
                 return;

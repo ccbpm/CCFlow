@@ -62,6 +62,7 @@ namespace CCFlow.WF.MapDef
             //this.Left.AddUL();
             string url = "EleBatch.aspx?EleType=" + this.EleType + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" +
                          this.KeyOfEn + "&DoType=";
+
             this.Left.AddUL("class='navlist'");
 
             if (this.DoType == "Copy")

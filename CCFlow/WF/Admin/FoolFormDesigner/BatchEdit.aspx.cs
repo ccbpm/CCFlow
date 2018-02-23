@@ -126,7 +126,7 @@ namespace CCFlow.WF.MapDef
             string info = "";
             foreach (MapAttr attr in attrs)
             {
-                if (attr.IsPK || attr.KeyOfEn=="Title")
+                if (attr.IsPK || attr.KeyOfEn == "Title")
                     continue;
 
                 try
@@ -140,8 +140,8 @@ namespace CCFlow.WF.MapDef
                     int minLen = int.Parse(this.Pub1.GetTextBoxByID("TB_MinLen_" + attr.KeyOfEn).Text);
                     int maxLen = int.Parse(this.Pub1.GetTextBoxByID("TB_MaxLen_" + attr.KeyOfEn).Text);
                     idx = int.Parse(this.Pub1.GetTextBoxByID("TB_IDX_" + attr.KeyOfEn).Text);
-                    
-                    int groupID  =this.Pub1.GetDDLByID("DDL_Group_" + attr.KeyOfEn).SelectedItemIntVal;
+
+                    int groupID = this.Pub1.GetDDLByID("DDL_Group_" + attr.KeyOfEn).SelectedItemIntVal;
 
                     //是否可编辑.
                     bool isEnable = this.Pub1.GetCBByID("CB_IsEdit_" + attr.KeyOfEn).Checked;
@@ -184,7 +184,7 @@ namespace CCFlow.WF.MapDef
 
                     if (attr.GroupID != groupID)
                         isChange = true;
-                    
+
                     if (isChange == false)
                         continue;
 
@@ -192,7 +192,7 @@ namespace CCFlow.WF.MapDef
                     attr.MaxLen = maxLen;
                     attr.MinLen = minLen;
                     attr.Name = name;
-                    attr.UIIsEnable = isEnable; 
+                    attr.UIIsEnable = isEnable;
 
                     //add by myflow-大连 2014-08-01
                     attr.Idx = idx;
@@ -211,7 +211,6 @@ namespace CCFlow.WF.MapDef
 
             //if (string.IsNullOrEmpty(info) == false)
             //    this.Pub2.AddFieldSet("保存成功信息", info);
-
             //if (string.IsNullOrEmpty(err) == false)
             //    this.Pub2.AddFieldSet("保存失败信息", err);
             return;

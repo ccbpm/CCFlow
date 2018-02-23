@@ -8,14 +8,11 @@
         // 在应用程序启动时运行的代码.
         try
         {
-            //删除目录.
-            string temp =  BP.Sys.SystemConfig.PathOfTemp;
-            System.IO.Directory.Delete(temp);
-            //创建目录.
-            System.IO.Directory.CreateDirectory(temp);
+            BP.WF.Glo.DeleteTempFiles();
         }
-        catch
+        catch(Exception ex)
         {
+            BP.DA.Log.DebugWriteWarning("删除临时文件错误@"+ex.Message);
         }
     }
     void Application_End(object sender, EventArgs e)

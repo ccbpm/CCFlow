@@ -147,18 +147,16 @@ window.onload = function () {
     //  ResizeWindow();
     SetBottomTooBar();
 
-   
-
 };
 
 $(function () {
     $('#MessageDiv').on('hide.bs.modal', function () {
-        alert('嘿，我听说您喜欢模态框...');
+       // alert('嘿，我听说您喜欢模态框...');
     })
 });
 
 function CloseOKBtn() {
-    alert('嘿，我听说您喜欢模态框...');
+ //   alert('嘿，我听说您喜欢模态框...');
 }
 
 

@@ -58,12 +58,14 @@
            }
        }
        function WinOpenIt(url) {
+
 //           window.location.href = url;
 //           return;
 
            //窗口最大化e
            var scrWidth = screen.availWidth;
            var scrHeight = screen.availHeight;
+
            var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
            self.moveTo(0, 0);
            self.resizeTo(scrWidth, scrHeight);
@@ -94,19 +96,10 @@
     </style>
     <script language="javascript" type="text/javascript" >
 
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
         //发起时打开窗口
         function WinOpenStartFlow(flowNo) {
 
-            //            var url = "MyFlow.htm?FK_Flow=" + flowNo;
-            //            window.location.href = url;
-            //            return;s
-
+            var url = "MyFlow.htm?FK_Flow=" + flowNo;
             var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             newWindow.focus();
             return;

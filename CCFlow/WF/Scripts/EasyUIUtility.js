@@ -140,14 +140,7 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
     }
     else {
         dlg.dialog({
-            buttons: null,
-            onClose: function () {
-                dlg.find("iframe").attr('src', '');
-
-                if (dlgClosedFunc) {
-                    dlgClosedFunc();
-                }
-            }
+            buttons: null
         });
     }
 

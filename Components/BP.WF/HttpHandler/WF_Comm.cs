@@ -1024,6 +1024,9 @@ namespace BP.WF.HttpHandler
                 }
 
                 string info = obj.ToString();
+                if (info.IndexOf("url@") != -1)
+                    return info;
+
                 info = info.Replace("@", "\t\n");
                 return "close@" + info;
             }

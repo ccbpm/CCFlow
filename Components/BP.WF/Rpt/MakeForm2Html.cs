@@ -955,55 +955,57 @@ namespace BP.WF
                     /* 如果是从表 */
                     MapAttrs attrsOfDtls = new MapAttrs(gf.CtrlID);
 
+
                     #region 输出标题.
                     sb.Append("\t\n<tr><td valign=top colspan=4 >");
-                    sb.Append("<table style='wdith:100%' >");
-                    sb.Append("<tr>");
+
+                    sb.Append("\t\n<table style='wdith:100%' >");
+                    sb.Append("\t\n<tr>");
                     foreach (MapAttr item in attrsOfDtls)
                     {
                         if (item.KeyOfEn == "OID")
                             continue;
-                        if (item.UIIsEnable == false)
+                        if (item.UIVisible == false)
                             continue;
 
-                        sb.Append("<th>" + item.Name + "</th>");
+                        sb.Append("\t\n<th>" + item.Name + "</th>");
                     }
-                    sb.Append("</tr>");
+                    sb.Append("\t\n</tr>");
                     #endregion 输出标题.
 
 
-                    #region 输出标题.
+                    #region 输出数据.
                     GEDtls dtls = new GEDtls(gf.CtrlID);
                     dtls.Retrieve(GEDtlAttr.RefPK, workid);
                     foreach (GEDtl dtl in dtls)
                     {
-                        sb.Append("<tr>");
+                        sb.Append("\t\n<tr>");
 
                         foreach (MapAttr item in attrsOfDtls)
                         {
-                            if (item.KeyOfEn == "OID" || item.UIIsEnable == false)
+                            if (item.KeyOfEn == "OID" || item.UIVisible == false)
                                 continue;
 
                             if (item.UIContralType == UIContralType.DDL)
                             {
-                                sb.Append("<td>" + dtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
+                                sb.Append("\t\n<td>" + dtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
                                 continue;
                             }
 
                             if (item.IsNum)
                             {
-                                sb.Append("<td style='text-align:right' >" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                                sb.Append("\t\n<td style='text-align:right' >" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
                                 continue;
                             }
 
                             sb.Append("<td>" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
                         }
-                        sb.Append("</tr>");
+                        sb.Append("\t\n</tr>");
                     }
-                    #endregion 输出标题.
+                    #endregion 输出数据.
 
 
-                    sb.Append("</table>");
+                    sb.Append("\t\n</table>");
 
                     sb.Append("\t\n </td>");
                     sb.Append("\t\n </tr>");

@@ -1159,16 +1159,12 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx" />
-    <Content Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFieldGuide.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditSQL.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditSQL.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EleBatch.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\GroupField.htm" />
@@ -6370,7 +6366,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
-    <Content Include="WF\AppClassic\Handler.ashx" />
     <Content Include="WF\Admin\Port\Handler.ashx" />
     <Content Include="WF\Admin\Sln\Handler.ashx" />
     <Content Include="WF\Admin\Cond\Handler.ashx" />
@@ -7174,13 +7169,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.designer.cs">
       <DependentUpon>Action.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Attachment.aspx.cs">
-      <DependentUpon>Attachment.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Attachment.aspx.designer.cs">
-      <DependentUpon>Attachment.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx.cs">
       <DependentUpon>BatchEdit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7192,26 +7180,12 @@
       <DependentUpon>CCForm.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx.cs">
-      <DependentUpon>CopyFieldFromNode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx.designer.cs">
-      <DependentUpon>CopyFieldFromNode.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditSQL.aspx.cs">
-      <DependentUpon>EditSQL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditSQL.aspx.designer.cs">
-      <DependentUpon>EditSQL.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\EleBatch.aspx.cs">
       <DependentUpon>EleBatch.aspx</DependentUpon>
@@ -7447,9 +7421,6 @@
     </Compile>
     <Compile Include="WF\Admin\XAP\WSDesigner.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WF\AppClassic\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\AutoTodolist.aspx.cs">
       <DependentUpon>AutoTodolist.aspx</DependentUpon>

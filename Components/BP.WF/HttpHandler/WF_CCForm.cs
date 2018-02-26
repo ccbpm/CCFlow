@@ -1222,7 +1222,7 @@ namespace BP.WF.HttpHandler
             mdtl.No = this.EnsName;
             mdtl.RetrieveFromDBSources();
 
-            if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp" && this.EnsName.Contains("ND" + this.FK_Node) == false)
+            if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp" && this.EnsName.Contains("ND" + this.FK_Node) == false && this.FK_Node != 999999)
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
                 /*如果
@@ -1299,8 +1299,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Dtl_SaveRow()
         {
-            if (this.RefPKVal == "0" || this.RefPKVal == "")
-                return "err@从表保存[Dtl_SaveRow],失败没有接收到refpk的值";
+            //if (this.RefPKVal == "0" || this.RefPKVal == "")
+            //    return "err@从表保存[Dtl_SaveRow],失败没有接收到refpk的值";
 
             //从表.
             MapDtl mdtl = new MapDtl(this.FK_MapDtl);

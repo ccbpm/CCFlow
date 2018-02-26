@@ -709,7 +709,6 @@ namespace BP.WF.HttpHandler
             return true;
         }
 
-
         public new string RefPK
         {
             get

@@ -451,19 +451,24 @@ namespace BP.WF
             //    dtOfWarning = DataType.AddDays(dtOfWarning, i - town.HisNode.WarningHour);
             // edit at 2008-01-22 , 处理预警日期的问题。
 
-            DateTime dtOfShould;
+            DateTime dtOfShould=DateTime.Now;
             if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByFlow)
             {
                 /*如果整体流程是按流程设置计算。*/
                 dtOfShould = DataType.ParseSysDateTime2DateTime(this.HisGenerWorkFlow.SDTOfFlow);
             }
-            else
+
+            //如果按照节点设置.
+            if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByNodeSet)
             {
-                int day = 0;
-                int hh = 0;
-                //增加天数. 考虑到了节假日.                
-                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,
-                    this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);
+                if (town.HisNode.HisCHWay == CHWay.ByTime)
+                {
+                    int day = 0;
+                    int hh = 0;
+                    //增加天数. 考虑到了节假日.                
+                    dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,
+                        this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);
+                }
             }
 
             //求警告日期.

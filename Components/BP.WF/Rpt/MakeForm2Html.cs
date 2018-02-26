@@ -948,7 +948,68 @@ namespace BP.WF
                     continue;
                 }
                 #endregion 输出字段.
+                
+                #region 如果是从表.
+                if (gf.CtrlType == "Dtl")
+                {
+                    /* 如果是从表 */
+                    MapAttrs attrsOfDtls = new MapAttrs(gf.CtrlID);
 
+                    #region 输出标题.
+                    sb.Append("\t\n<tr><td valign=top colspan=4 >");
+                    sb.Append("<table style='wdith:100%' >");
+                    sb.Append("<tr>");
+                    foreach (MapAttr item in attrsOfDtls)
+                    {
+                        if (item.KeyOfEn == "OID")
+                            continue;
+                        if (item.UIIsEnable == false)
+                            continue;
+
+                        sb.Append("<th>" + item.Name + "</th>");
+                    }
+                    sb.Append("</tr>");
+                    #endregion 输出标题.
+
+
+                    #region 输出标题.
+                    GEDtls dtls = new GEDtls(gf.CtrlID);
+                    dtls.Retrieve(GEDtlAttr.RefPK, workid);
+                    foreach (GEDtl dtl in dtls)
+                    {
+                        sb.Append("<tr>");
+
+                        foreach (MapAttr item in attrsOfDtls)
+                        {
+                            if (item.KeyOfEn == "OID" || item.UIIsEnable == false)
+                                continue;
+
+                            if (item.UIContralType == UIContralType.DDL)
+                            {
+                                sb.Append("<td>" + dtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
+                                continue;
+                            }
+
+                            if (item.IsNum)
+                            {
+                                sb.Append("<td style='text-align:right' >" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                                continue;
+                            }
+
+                            sb.Append("<td>" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                        }
+                        sb.Append("</tr>");
+                    }
+                    #endregion 输出标题.
+
+
+                    sb.Append("</table>");
+
+                    sb.Append("\t\n </td>");
+                    sb.Append("\t\n </tr>");
+                }
+                #endregion 如果是从表.
+                
                 #region 如果是附件.
                 if (gf.CtrlType == "Ath")
                 {

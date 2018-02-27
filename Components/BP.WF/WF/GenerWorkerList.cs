@@ -438,6 +438,10 @@ namespace BP.WF
             {
                 return this.GetValStringByKey(GenerWorkerListAttr.RDT);
             }
+            set
+            {
+                this.SetValByKey(GenerWorkerListAttr.RDT, value);
+            }
         }
         /// <summary>
         /// 完成时间

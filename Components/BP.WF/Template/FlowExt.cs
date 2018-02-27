@@ -701,6 +701,19 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("beizhu", null, "删除备注", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
+
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.GroupName = "流程维护";
+                rm.Title = "强制设置接收人";
+                rm.HisAttrs.AddTBInt("WorkID", 0, "输入工作ID", true, false);
+                rm.HisAttrs.AddTBInt("NodeID", 0, "节点ID", true, false);
+                rm.HisAttrs.AddTBString("Worker", null, "接受人编号", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoSetTodoEmps";
+                map.AddRefMethod(rm);
+
+
+
                 //带有参数的方法.
                 rm = new RefMethod();
                 rm.GroupName = "流程维护";
@@ -855,20 +868,7 @@ namespace BP.WF.Template
             return "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
 
-        //public string DoDataManger_InstanceGrowOneFlow()
-        //{
-        //    return "../../Admin/FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
-        //}
-
-        //public string DoDataManger_InstanceWarning()
-        //{
-        //    return "../../Admin/FlowDB/InstanceWarning.aspx?anaTime=mouth&FK_Flow=" + this.No;
-        //}
-
-        //public string DoDataManger_InstanceOverTimeOneFlow()
-        //{
-        //    return "../../Admin/FlowDB/InstanceOverTimeOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
-        //}
+       
         public string DoDataManger_DeleteLog()
         {
             return "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=" + this.No + "&WFSta=all";
@@ -1376,6 +1376,61 @@ namespace BP.WF.Template
             fl.No = this.No;
             fl.RetrieveFromDBSources();
             return fl.DoAutoStartIt();
+        }
+      
+        /// <summary>
+        /// 强制设置接受人
+        /// </summary>
+        /// <param name="workid">工作人员ID</param>
+        /// <param name="nodeID">节点ID</param>
+        /// <param name="worker">工作人员</param>
+        /// <returns>执行结果.</returns>
+        public string DoSetTodoEmps(int workid, int nodeID, string worker)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workid;
+            if (gwf.RetrieveFromDBSources()==0)
+                return "workid="+workid+"不正确.";
+
+            BP.Port.Emp emp = new Emp();
+            emp.No = worker;
+            if (emp.RetrieveFromDBSources()==0)
+                return "人员编号不正确" + worker + ".";
+
+            BP.WF.Node nd = new Node();
+            nd.NodeID = nodeID;
+            if (nd.RetrieveFromDBSources() == 0)
+                return "err@节点编号["+nodeID+"]不正确.";
+
+            gwf.FK_Node = nodeID;
+            gwf.NodeName = nd.Name;
+            gwf.TodoEmps = emp.No;
+            gwf.TodoEmpsNum = 1;
+            gwf.HuiQianTaskSta = HuiQianTaskSta.None;
+            gwf.Update();
+
+            DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=1 WHERE WorkID="+workid);
+
+            GenerWorkerList gwl = new GenerWorkerList();
+            gwl.FK_Node = nodeID;
+            gwl.WorkID = workid;
+            gwl.FK_Emp = emp.No;
+            if (gwl.RetrieveFromDBSources() == 0)
+            {
+                DateTime dt = DateTime.Now;
+                gwl.FK_EmpText = emp.Name;
+                gwl.SDT = dt.AddDays(3).ToString("yyyy-MM-dd");
+                gwl.RDT = dt.ToString("yyyy-MM-dd");
+                gwl.IsRead = false;
+                gwl.Insert();
+            }
+            else
+            {
+                gwl.IsRead = false;
+                gwl.IsPassInt = 0;
+                gwl.Update();
+            }
+            return "执行成功.";
         }
         /// <summary>
         /// 删除流程

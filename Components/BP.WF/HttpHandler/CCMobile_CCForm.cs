@@ -47,6 +47,11 @@ namespace BP.WF.HttpHandler
             WF_CCForm ccform = new WF_CCForm(this.context);
             return ccform.Frm_Init();
         }
-      
+
+        public string Dtl_Init()
+        {
+            WF_CCForm ccform = new WF_CCForm(this.context);
+            return ccform.Dtl_Init();
+        }
     }
 }

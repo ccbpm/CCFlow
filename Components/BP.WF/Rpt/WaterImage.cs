@@ -430,13 +430,10 @@ namespace BP.WF.Rpt
             //定义需要印的文字居中对齐
             StrFormat.Alignment = StringAlignment.Center;
 
-
             //SolidBrush:定义单色画笔。画笔用于填充图形形状，如矩形、椭圆、扇形、多边形和封闭路径。
-            //这个画笔为描绘阴影的画笔，呈灰色
-            
+            //这个画笔为描绘阴影的画笔，呈灰色            
             int m_alpha = Convert.ToInt32(256 * alpha);
             SolidBrush semiTransBrush2 = new SolidBrush(Color.FromArgb(m_alpha, 0, 0, 0));
-
 
             //描绘文字信息，这个图层向右和向下偏移一个像素，表示阴影效果
             //DrawString 在指定矩形并且用指定的 Brush 和 Font 对象绘制指定的文本字符串。
@@ -445,7 +442,6 @@ namespace BP.WF.Rpt
                           semiTransBrush2,              //Brush
                           new PointF(xPosOfWm + 1, yPosOfWm + 1), //Position
                           StrFormat);
-
 
             //从四个 ARGB 分量（alpha、红色、绿色和蓝色）值创建 Color 结构，这里设置透明度为153
             //这个画笔为描绘正式文字的笔刷，呈白色

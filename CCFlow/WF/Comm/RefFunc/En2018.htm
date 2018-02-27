@@ -21,20 +21,9 @@
 	<script type="text/javascript" src="../../Scripts/Cookie.js"></script>
 	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
 
-	<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css">
-	<link href="./../Style/Table0.css" rel="stylesheet" type="text/css">
+	<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
 
-	<!--
-	<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.nav.js"></script>
-    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
-    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
-    <link rel="stylesheet" href="../../Scripts/bootstrap/css/css.css" type="text/css" media="all" />
-	-->
-
+ 
 	<link href="En2018.css" rel="stylesheet" type="text/css" />
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -251,60 +240,22 @@
             var mapAtrrs = frmData.Sys_MapAttr;
 
             var tableWidth = 800; //  w - 40;
-			/*
-            var html =  "<ul id='myTab' class='nav nav-tabs'>";
-
-            //遍历循环生成 listview
+            var html = "<div class='easyui-tabs'>";
             for (var i = 0; i < Sys_GroupFields.length; i++) {
-            
                 var gf = Sys_GroupFields[i];
-                if (i==0)
-                    html += "<li class='active'>";
-                else
-                    html += "<li>";
-
                 var lab = gf.Lab;
                 if (lab.indexOf(',') != -1) {
                     lab = lab.substring(0, lab.indexOf(','));
                 }
-
-                html += " <a href='#" + gf.OID + "' data-toggle='tab'>" + lab + "</a>";
-                html += "</li>";
-            }
-            html += "</ul>";
-
-            html += "<div id='myTabContent' class='tab-content'>";
-            for (var i = 0; i < Sys_GroupFields.length; i++) {
-
-                var gf = Sys_GroupFields[i];
-
-                if (i == 0)
-                    html += "<div class='tab-pane fade in active' id='" + gf.OID + "'>";
-                else
-                    html += "<div class='tab-pane fade' id='" + gf.OID + "'>";
-
+                if (i == 0) {
+                    html += "<div title='" + lab + "' id='" + gf.OID + "'>";
+                } else {
+                    html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
+                }
                 html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
                 html += "</div>";
             }
-
             html += "</div>";
-			*/
-			var html = "<div class='easyui-tabs'>";
-			for (var i = 0; i < Sys_GroupFields.length; i++) {
-				var gf = Sys_GroupFields[i];
-				var lab = gf.Lab;
-                if (lab.indexOf(',') != -1) {
-                    lab = lab.substring(0, lab.indexOf(','));
-                }
-				if (i == 0) {
-					html += "<div title='" + lab + "' id='" + gf.OID + "'>";
-				} else {
-					html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
-				}
-				html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
-				html += "</div>";
-			}
-			html += "</div>";
 
             //加入隐藏控件.
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -317,24 +268,9 @@
 
             $('#CCForm').html("").append(html);
 
-			$.parser.parse("#CCForm");
-
-//            //设置为只读的字段.
-//            for (var i = 0; i < mapAtrrs.length; i++) {
-
-//                var mapAttr = mapAtrrs[i];
-//                //设置文本框只读.
-//                if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 1 || 1 == 1) {
-
-//                    //   alert(mapAttr.KeyOfEn);
-//                    // alert(mapAttr.KeyOfEn);
-
-//                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', "disabled");
-//                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', "disabled");
-//                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', "disabled");
-//                }
-//            }
+            $.parser.parse("#CCForm");
         }
+
 
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID) {
@@ -404,7 +340,6 @@
                     html += InitMapAttrOfCtrl(attr);
                     html += "</td>";
                     html += "</tr>";
-
 
                     if (rm != null) {
                         html += "<tr>";

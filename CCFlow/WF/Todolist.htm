@@ -258,10 +258,12 @@
                     var entStr = nodeID.toString().substr(len - 2);
 
                     //判断流程是否逾期
-                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01")
+                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT ) {
                         newRow += "<td><img src='./Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
-                    else
+                    }
+                    else {
                         newRow += "<td><img src='./Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
+                    }
 
                     newRow += "<td>" + GetState(work.WFState) + "</td>";
 

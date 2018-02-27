@@ -191,13 +191,12 @@
         function insertRow( EditModel ) {
 
           //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
-          if ( EditModel!=0 &&  window.parent )
-          {
-             var ensName = GetQueryString("EnsName");
-             var refPKVal = GetQueryString("RefPKVal");
-             window.parent.DtlFrm(ensName,refPKVal,'0',EditModel, InitPage);
-             return;
-           }
+            if (EditModel != 0 && window.parent) {
+                var ensName = GetQueryString("EnsName");
+                var refPKVal = GetQueryString("RefPKVal");
+                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitPage);
+                return;
+            }
 
             if ($('#dtlDiv div table tbody tr').length == 1) {
                 var firstTr = $('#dtlDiv div table tbody tr')[0];

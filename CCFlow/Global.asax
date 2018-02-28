@@ -12,7 +12,7 @@
         }
         catch(Exception ex)
         {
-            BP.DA.Log.DebugWriteWarning("删除临时文件错误@"+ex.Message);
+          //  BP.DA.Log.DebugWriteWarning("删除临时文件错误@"+ex.Message);
         }
     }
     void Application_End(object sender, EventArgs e)

@@ -219,6 +219,7 @@
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_DtlSetting.cs" />
     <Compile Include="HttpHandler\WF_Admin_Sln.cs" />
     <Compile Include="HttpHandler\WF_Admin_Cond.cs" />
+    <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\AdminEmp.cs" />
     <Compile Include="Port\Dept.cs" />

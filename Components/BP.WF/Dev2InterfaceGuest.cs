@@ -208,7 +208,7 @@ namespace BP.WF
             gwl.FK_Dept = WebUser.FK_Dept;
             gwl.FK_DeptT = WebUser.FK_DeptName;
 
-            gwl.SDT = DataType.CurrentDataTime;
+            gwl.SDT = "无";
             gwl.DTOfWarning = DataType.CurrentDataTime;
             gwl.IsEnable = true;
             gwl.IsPass = false;

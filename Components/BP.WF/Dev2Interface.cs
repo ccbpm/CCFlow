@@ -5760,7 +5760,7 @@ namespace BP.WF
             gwl.FK_Dept = empStarter.FK_Dept;
             gwl.FK_DeptT = empStarter.FK_DeptText;
 
-            gwl.SDT = DataType.CurrentDataTime;
+            gwl.SDT ="无";
             gwl.DTOfWarning = DataType.CurrentDataTime;
             gwl.IsEnable = true;
             gwl.IsPass = false;
@@ -5948,7 +5948,7 @@ namespace BP.WF
                 gwl.FK_DeptT = emp.FK_DeptText;
 
 
-                gwl.SDT = DataType.CurrentDataTime;
+                gwl.SDT ="无";
                 gwl.DTOfWarning = DataType.CurrentDataTime;
                 gwl.IsEnable = true;
 
@@ -7162,7 +7162,7 @@ namespace BP.WF
                         gwl.FK_Dept = WebUser.FK_Dept;
                         gwl.FK_DeptT = WebUser.FK_DeptName;
 
-                        gwl.SDT = DataType.CurrentDataTime;
+                        gwl.SDT = "无";
                         gwl.DTOfWarning = DataType.CurrentDataTime;
                         gwl.IsEnable = true;
 

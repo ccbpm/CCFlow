@@ -451,7 +451,7 @@ namespace BP.WF
             //    dtOfWarning = DataType.AddDays(dtOfWarning, i - town.HisNode.WarningHour);
             // edit at 2008-01-22 , 处理预警日期的问题。
 
-            DateTime dtOfShould=DateTime.Now;
+            DateTime dtOfShould = DateTime.Now;
             if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByFlow)
             {
                 /*如果整体流程是按流程设置计算。*/
@@ -470,6 +470,7 @@ namespace BP.WF
                         this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);
                 }
             }
+
 
             //求警告日期.
             DateTime dtOfWarning = DateTime.Now;
@@ -548,7 +549,16 @@ namespace BP.WF
                 wl.FK_DeptT = emp.FK_DeptText;
 
                 //应完成日期.
-                wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                if (town.HisNode.HisCHWay == CHWay.None)
+                {
+                    wl.SDT = "无";
+                }
+                else
+                {
+                    wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                }
+
+
                 //警告日期.
                 wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
 
@@ -627,7 +637,7 @@ namespace BP.WF
                     //wl.GuestName = wl.GuestName;
                 }
 
-                
+
                 wl.Insert();
                 this.HisWorkerLists.AddEntity(wl);
 
@@ -727,7 +737,11 @@ namespace BP.WF
                     wl.FK_EmpText = emp.Name;
                     wl.FK_Dept = emp.FK_Dept;
                     //wl.WarningHour = town.HisNode.WarningHour;
-                    wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                    if (town.HisNode.HisCHWay == CHWay.None)
+                        wl.SDT = "无";
+                    else
+                        wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+
                     wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
 
                     wl.FK_Flow = town.HisNode.FK_Flow;
@@ -1808,7 +1822,11 @@ namespace BP.WF
             #endregion
 
             //更新日期，为了考核. 
-            gwl.SDT = sdt;
+            if (this.HisNode.HisCHWay== CHWay.None)
+            gwl.SDT = "无";
+            else
+                gwl.SDT = sdt;
+
             //  gwl.RDT = DataType.CurrentDataTime;
 
             gwl.IsPass = false;
@@ -5043,7 +5061,10 @@ namespace BP.WF
                 dtNow= dtNow.AddHours(myLeftTS.TotalHours);
 
                 //设置应该按成的日期.
-                gwl.SDT = dtNow.ToString( DataType.SysDataTimeFormat);
+                if (this.HisNode.HisCHWay == CHWay.None)
+                    gwl.SDT = "无";
+                else
+                    gwl.SDT = dtNow.ToString(DataType.SysDataTimeFormat);
 
                 //设置预警日期, 为了方便提前1天预警.
                 dtNow = dtNow.AddDays(-1);
@@ -7064,7 +7085,7 @@ namespace BP.WF
             wl.FK_Flow = this.HisNode.FK_Flow;
             wl.FK_Dept = this.ExecerDeptNo;
             // wl.WarningHour = this.HisNode.WarningHour;
-            wl.SDT = DataType.CurrentDataTime;
+            wl.SDT = "无";
             wl.DTOfWarning = DataType.CurrentDataTime;
 
             try

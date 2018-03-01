@@ -1419,7 +1419,12 @@ namespace BP.WF.Template
             {
                 DateTime dt = DateTime.Now;
                 gwl.FK_EmpText = emp.Name;
-                gwl.SDT = dt.AddDays(3).ToString("yyyy-MM-dd");
+
+                if (nd.HisCHWay == CHWay.None)
+                    gwl.SDT = "无";
+                else
+                    gwl.SDT = dt.AddDays(3).ToString("yyyy-MM-dd");
+
                 gwl.RDT = dt.ToString("yyyy-MM-dd");
                 gwl.IsRead = false;
                 gwl.Insert();

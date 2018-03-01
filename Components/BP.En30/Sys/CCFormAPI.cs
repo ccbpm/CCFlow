@@ -234,6 +234,7 @@ namespace BP.Sys
                 case SrcType.CreateTable:
                 case SrcType.TableOrView:
                 case SrcType.BPClass:
+                case SrcType.SQL:
                     attr.LGType = FieldTypeS.FK;
                     break;             
                 default:

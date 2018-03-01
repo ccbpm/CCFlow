@@ -488,18 +488,24 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.IsRead = false;
 
                 #region 计算会签时间.
-                //给会签人设置应该完成日期. 考虑到了节假日.                
-                DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
-                     nd.TSpanMinues, nd.TWay);
-
-                //应完成日期.
-                gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                if (nd.HisCHWay == CHWay.None)
+                {
+                    gwlOfMe.SDT = "无"; 
+                }
+                else
+                {
+                    //给会签人设置应该完成日期. 考虑到了节假日.                
+                    DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
+                         nd.TSpanMinues, nd.TWay);
+                    //应完成日期.
+                    gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                }
 
                 //求警告日期.
                 DateTime dtOfWarning = DateTime.Now;
                 if (nd.WarningDay == 0)
                 {
-                    dtOfWarning = dtOfShould;
+                  //  dtOfWarning = "无";
                 }
                 else
                 {

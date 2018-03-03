@@ -629,6 +629,16 @@ function Run_Flow() {
     });
 }
 
+//运行流程
+function Beta() {
+
+    var url = "Designer2018.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&Lang=CH";
+
+     window.location.href=url;
+
+    
+}
+
 //检查流程
 function Check_Flow() {
     var url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&DoType11=FlowCheck&Lang=CH";

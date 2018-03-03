@@ -36,9 +36,14 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <div class="pull-right">
-                    <button class="btn btn-info" type="button" id="leipi_save">保存设计</button>
-                    <button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>
+                <div class="pull-left">
+                    <button class="btn btn-danger" type="button" id="Btn_Save">保存</button>
+                    <button class="btn btn-info" type="button" id="leipi_Imp">定义报表</button>
+                    <button class="btn btn-info" type="button" id="Button2">检查流程</button>
+                    <button class="btn btn-info" type="button" id="Button1">运行测试</button>
+                    <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
+                    <button class="btn btn-info" type="button" id="Button3" >旧版本</button>
+
                 </div>
 
             </div>
@@ -151,9 +156,12 @@
             }
         }
 
+        var flowNo = "002";
         $(function () {
 
-            var flowNo = "002";
+            flowNo = GetQueryString("FK_Flow");
+            if (flowNo == undefined || flowNo == null)
+                flowNo = "002";
 
             var alertModal = $('#alertModal'), attributeModal = $("#attributeModal");
             //消息提示
@@ -197,23 +205,36 @@
                 /*画面右键*/
                               , canvasMenus: {
                                   "cmAdd": function (t) {
-                                      var mLeft = $("#jqContextMenu").css("left"), mTop = $("#jqContextMenu").css("top");
-                                      NewNode(mLeft, mTop);
 
-                                      /*重要提示 start*/
-                                      //alert("这里使用ajax提交，请参考官网示例，可使用Fiddler软件抓包获取返回格式");
-                                      /*重要提示 end */
+                                      var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+                                      var mTop = $("#jqContextMenu").css("top").replace('px', '');
 
-                                      //var url = "/index.php?s=/Flowdesign/add_process.html";
-                                      //$.post(url, { "flow_id": the_flow_id, "left": mLeft, "top": mTop }, function (data) {
+                                      var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                                      hander.AddPara("X", mLeft);
+                                      hander.AddPara("Y", mTop);
+                                      hander.AddPara("FK_Flow", flowNo);
 
-                                      //  if (!data.status) {
-                                      //    mAlert(data.msg);
-                                      // } else if (!_canvas.addProcess(data.info))//添加
-                                      //{
-                                      //   mAlert("添加失败");
-                                      // }
-                                      //}, 'json');
+                                      var data = hander.DoMethodReturnString("CreateNode");
+                                      if (data.indexOf('err@') == 0) {
+                                          alert(data);
+                                          return;
+                                      }
+
+                                      data = JSON.parse(data);
+                                      var strs = "";
+                                      strs += "{'id':'" + data.NodeID + "',";
+                                      strs += "'flow_id':'" + flowNo + "',";
+                                      strs += "'process_name':'" + data.Name + "',";
+                                      strs += "'process_to':0,";
+                                      strs += "'icon':'icon-ok',";
+                                      strs += "'style':'width:121px;height:41px;line-height:41px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
+                                      strs += "}";
+                                      strs = eval("(" + strs + ")");
+                                      if (_canvas.addProcess(strs) == false) //添加
+                                      {
+                                          alert("添加失败");
+                                          return;
+                                      }
 
                                   },
                                   "cmSave": function (t) {
@@ -243,7 +264,6 @@
                                   "cmHelp": function (t) {
                                       mAlert('<ul><li><a href="http://flowdesign.leipi.org/doc.html" target="_blank">流程设计器 开发文档</a></li><li><a href="http://formdesign.leipi.org/doc.html" target="_blank">表单设计器 开发文档</a></li><li><a href="http://formdesign.leipi.org/demo.html" target="_blank">表单设计器 示例DEMO</a></li></ul>', 20000);
                                   }
-
                               }
                 /*步骤右键*/
                               , processMenus: {
@@ -262,28 +282,20 @@
                                       alert("复制成功");
                                   },
                                   "pmDelete": function (t) {
-                                      if (confirm("你确定删除步骤吗？")) {
+
+                                      if (confirm("你确定删除节点吗？如果当前节点有待办或者有数据，系统将拒绝删除。")) {
+
                                           var activeId = _canvas.getActiveId(); //右键当前的ID
 
-                                          /*重要提示 start*/
-                                          alert("这里使用ajax提交，请参考官网示例，可使用Fiddler软件抓包获取返回格式");
-                                          /*重要提示 end */
-
-                                          var url = "/index.php?s=/Flowdesign/delete_process.html";
-                                          $.post(url, { "flow_id": the_flow_id, "process_id": activeId }, function (data) {
-                                              if (data.status == 1) {
-                                                  //清除步骤
-                                                  _canvas.delProcess(activeId);
-                                                  //清除连接   暂时先保存设计 + 刷新 完成
-                                                  var processInfo = _canvas.getProcessInfo(); //连接信息
-                                                  var url = "/index.php?s=/Flowdesign/save_canvas.html";
-                                                  $.post(url, { "flow_id": the_flow_id, "process_info": processInfo }, function (data) {
-                                                      location.reload();
-                                                  }, 'json');
-
-                                              }
-                                              mAlert(data.msg);
-                                          }, 'json');
+                                          //节点.
+                                          var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                                          hander.AddPara("FK_Node", activeId);
+                                          var data = hander.DoMethodReturnString("DeleteNode");
+                                          if (data.indexOf('err@') == 0) {
+                                              alert(data); //删除失败的情况.
+                                              return;
+                                          }
+                                          _canvas.delProcess(activeId);
                                       }
                                   },
                                   "pmAttribute": function (t) {
@@ -359,23 +371,50 @@
                               }
             });
 
-
             /*保存*/
-            $("#leipi_save").bind('click', function () {
-                var processInfo = _canvas.getProcessInfo(); //连接信息
+            $("#Btn_Save").bind('click', function () {
 
-                /*重要提示 start*/
-                alert("这里使用ajax提交，请参考官网示例，可使用Fiddler软件抓包获取返回格式");
-                /*重要提示 end */
+                var nodes = new Entities("BP.WF.Nodes");
+                nodes.Retrieve("FK_Flow", flowNo);
+
+                var processInfo = _canvas.getProcessInfo(); //连接信息.
+
+                alert(processInfo);
+                processInfo = JSON.parse(processInfo);
+                alert(processInfo);
+                console.log(processInfo);
 
 
-                var url = "/index.php?s=/Flowdesign/save_canvas.html";
-                $.post(url, { "flow_id": the_flow_id, "process_info": processInfo }, function (data) {
-                    mAlert(data.msg);
-                }, 'json');
+                $.each(processInfo, function (i, info) {
+
+                    alert(info);
+                    var info = JSON.stringify(info);
+                    alert(info);
+
+                    //保存节点信息.
+                    var nodeID = 101;
+                    for (var idx = 0; idx < nodes.length; idx++) {
+                        var node = nodes[idx];
+                        if (node.NodeID != nodeID)
+                            continue;
+
+                        node = new Entity("BP.WF.Node", node);
+                        node.X = info.X;
+                        node.Y = info.Y;
+                        node.Update();
+                        break;
+                    }
+                });
+
+                //执行流程检查.
+                var flow = new Entity("BP.WF.Flow", flowNo);
+
+                //var info = flow
+
             });
-            /*清除*/
+            /*清除连接线，用不到.*/
             $("#leipi_clear").bind('click', function () {
+                return;
                 if (_canvas.clear()) {
                     //alert("清空连接成功");
                     mAlert("清空连接成功，你可以重新连接");
@@ -402,21 +441,36 @@
             var dirs = new Entities("BP.WF.Template.Directions");
             dirs.Retrieve("FK_Flow", flowNo);
 
-            var json = "{ 'total':" + nodes.length + ",'list': [";
-            var strs = "";
+
+            var strs = "{ 'total':" + nodes.length + ", 'list':[";
             //遍历节点个数，输入节点.
             for (var i = 0; i < nodes.length; i++) {
+
+                var node = nodes[i];
+
+                //获得到达的节点.
+                var toNodes = "";
+                for (var idx = 0; idx < dirs.length; idx++) {
+                    var dir = dirs[idx];
+
+                    if (dir.Node == node.NodeID) {
+                        toNodes += ","+dir.ToNode;
+                    }
+                }
 
                 strs += "{'id':'" + node.NodeID + "',";
                 strs += "'flow_id':'" + flowNo + "',";
                 strs += "'process_name':'" + node.Name + "',";
-                strs += "'process_to':'" + flowNo + "',";
+                strs += "'process_to':'" + toNodes + "',";
                 strs += "'icon':'icon-ok',";
-                strs += "'style':'width:121px;height:41px;line-height:41px;color:#0e76a8;left:" + x + "px" + ";top:" + y + "px;',";
-                strs += "},";
-            }
+                strs += "'style':'width:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 
-            strs += "]";
+                if (i == nodes.length - 1)
+                    strs += "}";
+                else
+                    strs += "},";
+            }
+            strs += "] }";
 
             return eval("(" + strs + ")");
 
@@ -435,32 +489,7 @@
             }
         }
 
-        //创建节点,返回节点名称与节点ID.
-        function NewNode(x, y) {
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
-            hander.AddPara("X", x);
-            hander.AddPara("Y", y);
-            hander.AddPara("FK_Flow", flowNo);
-            var json = hander.DoMethodReturnJSON("CreateNode");
-            var nodeID = json.NodeID;
-            var name = json.Name;
-            return true;
-        }
-
-        //删除节点.
-        function DeleteNode(nodeID) {
-
-            //节点.
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
-            hander.AddPara("FK_Node", nodeID);
-            var data = hander.DoMethodReturnString("DeleteNode");
-            if (data.indexOf('err@') == 0) {
-                alert(data); //删除失败的情况.
-                return;
-            }
-
-            //删除成功.
-        }
+      
 
 
         //保存信息.
@@ -475,7 +504,6 @@
 
                 var nodeJson = nodes[i];
                 var node = new Entity("BP.WF.Node", nodeJson);
-
 
                 //根据节点.
                 node.Name = "sss";

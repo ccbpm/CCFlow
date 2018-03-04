@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8"/>
     <title>自动发起</title>
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -16,6 +15,7 @@
         $(function () {
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
 
             //初始化groupID.
             var fk_flow = GetQueryString("FK_Flow");

@@ -43,7 +43,6 @@
                     <button class="btn btn-info" type="button" id="Button1">运行测试</button>
                     <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
                     <button class="btn btn-info" type="button" id="Button3" >旧版本</button>
-
                 </div>
 
             </div>
@@ -374,6 +373,14 @@
             /*保存*/
             $("#Btn_Save").bind('click', function () {
 
+              
+
+            });
+
+
+            /*保存*/
+            $("#Btn_Save").bind('click', function () {
+
                 var nodes = new Entities("BP.WF.Nodes");
                 nodes.Retrieve("FK_Flow", flowNo);
 
@@ -383,7 +390,6 @@
                 processInfo = JSON.parse(processInfo);
                 alert(processInfo);
                 console.log(processInfo);
-
 
                 $.each(processInfo, function (i, info) {
 

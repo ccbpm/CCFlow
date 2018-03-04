@@ -18,27 +18,21 @@ function FlowProperty() {
 function FlowRpt() {
 
     var flowId = Number(flowNo);
-    
+
     flowId = String(flowId);
 
     url = "../RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
     WinOpen(url);
 
-//    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 990, 500, "icon-property", true, null, null, null, function () {
+    //    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 990, 500, "icon-property", true, null, null, null, function () {
 
-//    });
+    //    });
 }
-
-
 
 //运行流程
 function FlowRun() {
     var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
     WinOpen(url);
-
-//    OpenEasyUiDialog(url, "eudlgframe", '流程测试运行', 900, 500, "icon-property", true, null, null, null, function () {
-//        //window.location.href = window.location.href;
-//    });
 }
 
 //旧版本.
@@ -48,7 +42,18 @@ function OldVer() {
 }
 
 
-/***********************  节点信息. ****************/
+function Help() {
+
+    var msg = "<ul>";
+    msg += "<li>开发者:济南驰骋信息技术有限公司.</li>";
+    msg += "<li>官方网站: <a href='http://www.ccflow.org' target=_blank>http://ccflow.org</a>";
+    msg += "<li>商务联系:0531-82374939, 微信:18660153393 QQ:793719823";
+    msg += "<li>地址:济南是高新区齐鲁软件大厦A座408室.";
+    msg += "</ul>";
+    mAlert(msg, 20000);
+}
+
+/***********************  节点信息. ******************************************/
 
 //节点属性
 function NodeAttr(nodeID) {
@@ -70,13 +75,22 @@ function NodeFrmFool(nodeID) {
     WinOpen(url);
 }
 
-//接受人规则.
-function NodeAccepterRole(nodeID) {
+
+function NodeFrmFree(nodeID) {
 
     //表单方案.
-    var url = "FoolFormDesigner/Designer.htm?FK_MapData=ND203&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    WinOpen(url);
+    var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND"+nodeID+"&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
 
+    ///CCFormDesigner/FormDesigner.htm?FK_Node=9502&FK_MapData=ND9502&FK_Flow=095&UserNo=admin&SID=c3466cb7-edbe-4cdc-92df-674482182d01
+    WinOpen(url);
+}
+
+
+//接受人规则.
+function NodeAccepterRole(nodeID) {
+    //表单方案.
+    var url = "../AttrNode/NodeAccepterRole.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    WinOpen(url);
 }
 
  

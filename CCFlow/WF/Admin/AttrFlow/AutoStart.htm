@@ -16,36 +16,19 @@
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-
             //初始化groupID.
             var fk_flow = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", fk_flow);
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=AutoStart_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            //通用赋值控件.
+            GenerFullAllCtrlsVal(flow);
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            //设置选择按钮选中.
+            if (flow.FlowRunWay == 1)
+                document.getElementById("TB_SpecEmp").value = flow.RunObj;
 
-                    data = JSON.parse(data);
-
-                    GenerFullAllCtrlsVal(data);
-
-                    if (data.FlowRunWay == 1)
-                        document.getElementById("TB_SpecEmp").value = data.RunObj;
-
-                    if (data.FlowRunWay == 2)
-                        document.getElementById("TB_DataModel").value = data.RunObj;
-
-
-                    return;
-                }
-            });
+            if (flow.FlowRunWay == 2)
+                document.getElementById("TB_DataModel").value = flow.RunObj;
 
             $("#Msg").html("");
         });
@@ -55,32 +38,23 @@
             $("#Msg").html("正在保存,请稍后......");
 
             var fk_flow = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", fk_flow);
 
-           // var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            var val = $('input[name="RB_FlowRunWay"]:checked').val();
 
-            // alert(CheckBoxIDs);
-            var frmData = $("#cc").serialize();
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=AutoStart_Save&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            flow.FlowRunWay = val;
+            if (flow.FlowRunWay == "1") {
+                flow.RunObj = $("#TB_SpecEmp").val();
+            }
 
-                    if (data.indexOf('err@') >= 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            if (flow.FlowRunWay == "2" ) {
+                flow.RunObj = $("#TB_DataModel").val();
+            }
+            flow.Update();
 
-                    alert(data);
-                    window.location.href = window.location.href;
-                    //$("#Msg").html("<font color=green>" + data + "</font>");
-                    return;
-                }
-            });
+            window.location.href = window.location.href;
+
         }
-
     </script>
 
 </head>

@@ -208,10 +208,15 @@
     jsPlumb.bind("jsPlumbConnectionDetached", function(info) {
         setConnections(info.connection, true);
     });
+
     //绑定删除确认操作
-    jsPlumb.bind("click", function(c) {
+    jsPlumb.bind("click", function (c) {
+
+
       if(confirm("你确定取消连接吗?"))
-        jsPlumb.detach(c);
+          jsPlumb.detach(c);
+
+
     });
 
     //连接成功回调函数

@@ -84,8 +84,6 @@
             if (window.confirm('您确定要撤销本次发送吗？') == false)
                 return;
 
-
-
             //执行撤销.
             $.ajax({
                 type: 'post',
@@ -169,12 +167,13 @@
 
                     if (data.indexOf('url@') == 0) {
                         data = data.replace('url@', '');
-                        window.location.href = data;
-                        //window.open(data);
+                        //window.location.href = data;
+                        window.open(data);
                         return;
                     }
 
                     alert(data);
+
                 }
             });
         }

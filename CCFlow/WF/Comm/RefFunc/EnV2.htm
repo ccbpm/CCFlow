@@ -77,6 +77,7 @@
                 var en = dtM[i];
                 if (en.GroupName == null)
                     continue;
+
                 if (groupName.indexOf('@' + en.GroupName) == -1)
                     groupName += "@" + en.GroupName;
             }
@@ -89,12 +90,16 @@
                 var gName = gNames[i];
                 if (gName == "")
                     continue;
-
                 html += "<fieldset>";
                 html += "<legend>"+gName+"</legend>";
 
                 //填入菜单内容.
                 html += "<ul >";
+
+                if (gName == "基本信息") {
+                    html += "<li style='float:left;margin:15px;list-style:none' >" + GenerRMBase(en) + "</li>";
+                }
+
                 for (var idx = 0; idx < dtM.length; idx++) {
 
                     var en = dtM[idx];
@@ -118,6 +123,11 @@
 
             $("#docs").append(html);
             $.parser.parse("#docs");
+        }
+
+        function GenerRMBase() {
+
+            var html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
         }
 
         function GenerRM(rm) {

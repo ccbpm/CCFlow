@@ -156,7 +156,7 @@ function InitPage() {
                 if (isHaveNoChecker == true) {
 
                     var rowDay = "<tr>";
-                    rowDay += "<td colspan=3 class=TDDay ><span>等待审批</span><b>" + gwl.FK_NodeText + "</b></td>";
+                    rowDay += "<td colspan=3 class=TDDay ><span>等待审批</span><b>" + gwf.NodeName + "</b></td>";
                     rowDay += "</tr>";
                     $("#Table1 tr:last").after(rowDay);
 
@@ -167,7 +167,6 @@ function InitPage() {
                         var gwl = gwls[i];
                         if (gwl.IsPass == 1)
                             continue;
-
 
                         var doc = "";
                         doc += "<span>审批人</span>";
@@ -213,7 +212,6 @@ function InitPage() {
                         doc += "<br>";
                         doc += "<span>还剩余:</span>";
                         doc += GetSpanTime(timeDot, toTimeDot);
-
 
                         var left = "";
                         left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
@@ -291,6 +289,10 @@ function GetSpanTime(date1, date2) {
         var leave3 = leave2 % (60 * 1000);
         var seconds = Math.floor(leave3 / 1000);
         str += seconds + '秒';
+
+        if (seconds == NaN)
+            return date1 + ","+date2;
+        return str;
     }
 
     return str;

@@ -41,6 +41,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             if (IsPostBack==false)
             {
                 //加载 06.按上一节点表单指定的字段值作为本步骤的接受人

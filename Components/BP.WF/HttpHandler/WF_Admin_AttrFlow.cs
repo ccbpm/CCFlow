@@ -159,41 +159,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 自动发起.
-        /// <summary>
-        /// 执行初始化
-        /// </summary>
-        /// <returns></returns>
-        public string AutoStart_Init()
-        {
-            BP.WF.Flow en = new BP.WF.Flow();
-            en.No = this.FK_Flow;
-            en.RetrieveFromDBSources();
-
-            return en.ToJson();
-        }
-        /// <summary>
-        /// 执行保存
-        /// </summary>
-        /// <returns></returns>
-        public string AutoStart_Save()
-        {
-            //执行保存.
-            BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
-
-            en.SetValByKey(BP.WF.Template.FlowAttr.FlowRunWay, this.GetRequestValInt("RB_FlowRunWay"));
-
-            if (en.HisFlowRunWay == FlowRunWay.SpecEmp)
-                en.RunObj = this.GetRequestVal("TB_SpecEmp");
-
-            if (en.HisFlowRunWay == FlowRunWay.DataModel)
-                en.RunObj = this.GetRequestVal("TB_DataModel");
-
-            en.DirectUpdate();
-            return "保存成功.";
-        }
-        #endregion 自动发起.
-
         #region 节点属性（列表）的操作
         /// <summary>
         /// 初始化节点属性列表.

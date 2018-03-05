@@ -1310,6 +1310,8 @@ namespace BP.WF
                 docs = docs.Replace("@Docs", sb.ToString());
                 docs = docs.Replace("@Width", mapData.FrmW.ToString());
                 docs = docs.Replace("@Height", mapData.FrmH.ToString());
+                docs = docs.Replace("@PrintDT", DateTime.Now.ToString("yyyy年MM月dd日HH时mm分ss秒") );
+
 
                 if (flowNo != null)
                 {

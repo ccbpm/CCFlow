@@ -426,6 +426,19 @@ namespace BP.Port
         }
         #endregion
 
+
+        #region 方法测试代码.
+        public string ResetPass()
+        {
+            return "执行成功.";
+        }
+
+        public string ChangePass(string oldpass,string pass1,string pass2)
+        {
+            return "执行成功.";
+        }
+        #endregion 方法测试代码.
+
     }
     /// <summary>
     /// 操作员

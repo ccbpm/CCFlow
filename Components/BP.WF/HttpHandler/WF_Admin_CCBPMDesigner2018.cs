@@ -54,10 +54,9 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string FK_Flow = this.GetValFromFrmByKey("FK_Flow");
-                string figureName = this.GetValFromFrmByKey("FigureName");
-                string x = this.GetValFromFrmByKey("x");
-                string y = this.GetValFromFrmByKey("y");
+                string FK_Flow = this.GetRequestVal("FK_Flow");
+                string x = this.GetRequestVal("x");
+                string y = this.GetRequestVal("y");
                 int iX = 0;
                 int iY = 0;
                 if (!string.IsNullOrEmpty(x)) iX = (int)double.Parse(x);

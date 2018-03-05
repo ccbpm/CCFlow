@@ -21,17 +21,12 @@
         //定义公共个变量.
         var webUser = new WebUser();
 
-
-
+        var ensName = GetQueryString("EnsName");
 
         //当前用户页面信息.
         var ur = new Entity("BP.Sys.UserRegedit");
-        ur.MyPK = webUser.No + "_" + GetQueryString("EnsName") + "_SearchAttrs";
-        
-         ur.RetrieveFromDBSources();
-
-        var ensName = GetQueryString("EnsName");
-
+        ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+        ur.RetrieveFromDBSources();
 
         var mapBase;
 
@@ -126,6 +121,7 @@
             ele = $("<input type='button' value='导出' onclick='Exp();' class='btn btn-default' />");
             $("#toolbar").append(ele); //设置基础信息.
 
+            //为查询外键赋值.
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 var selectVal = json[attr.Field];
@@ -135,6 +131,13 @@
 
                 $("#DDL_" + attr.Field).val(selectVal);
             }
+
+            //是否可以新建？
+            if (mapBase.IsInsert == "True" ) {
+                var ele2 = $("<input type='button' value='新建' onclick='New();' class='btn btn-default' />");
+                $("#toolbar").append(ele2); //新建.
+            }
+
         }
 
         //初始化下拉列表框的OPERATION
@@ -207,6 +210,8 @@
             alert("尚未实现");
             window.location.href = data;
         }
+
+      
 
         //生成查询页面..
         function BindTable() {
@@ -318,10 +323,19 @@
 
         function OpenEn(pk) {
 
+
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
+
             var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
-            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1100, 600, "icon-edit", false, function () { }, null, function () {
+
+            OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', 1100, 600, "icon-edit", false, function () { }, null, function () {
                 location = location;
             });
+        }
+
+        function New() {
+            OpenEn("");
         }
 
         function GenerPageIdx() {

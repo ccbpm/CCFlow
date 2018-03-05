@@ -214,7 +214,7 @@
 
 
       if(confirm("你确定取消连接吗?"))
-          jsPlumb.detach(c);
+          jsPlumb.detach(c); 
 
 
     });

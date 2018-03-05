@@ -773,7 +773,6 @@ var Entity = (function () {
                     var self = this;
                     $.each(data, function (n, o) {
                         if (typeof self[n] !== "function") {
-
                             jsonString[n] = o;
                             self[n] = o;
                         }
@@ -847,9 +846,6 @@ var Entity = (function () {
             var self = this;
             //var params = getParams(self);
             var params = getParams1(this);
-
-            //  alert(params);
-
 
             var result;
             $.ajax({

@@ -49,8 +49,10 @@
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在登录请稍候....</font>");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            
             handler.AddPara("TB_UserNo", encodeURIComponent(userNo));
             handler.AddPara("TB_Pass", userPass);
+
             var data = handler.DoMethodReturnString("Login_Submit");
 
             if (data.indexOf('err@') == 0) {

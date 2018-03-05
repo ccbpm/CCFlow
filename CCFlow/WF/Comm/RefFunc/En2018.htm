@@ -62,7 +62,6 @@
 
             //解析json.
             frmData = JSON.parse(data);
-
             mapData = frmData["Sys_MapData"][0];
             mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
             mainData = frmData["MainData"];
@@ -77,76 +76,6 @@
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
 
-            //   $.parser.parse("#CCForm");
-            var isReadonly = GetQueryString("IsReadonly");
-
-            //原有的。
-            //为 DISABLED 的 TEXTAREA 加TITLE 
-            var disabledTextAreas = $('#divCCForm textarea:disabled');
-            $.each(disabledTextAreas, function (i, obj) {
-                $(obj).attr('title', $(obj).val());
-            })
-
-            //根据NAME 设置ID的值
-            var inputs = $('[name]');
-            $.each(inputs, function (i, obj) {
-                if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
-                    $(obj).attr("id", $(obj).attr("name"));
-                }
-            })
-
-            //设置默认值
-            for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
-
-                var mapAttr = frmData.Sys_MapAttr[j];
-
-                //添加 label
-                //如果是整行的需要添加  style='clear:both'.
-                var defValue = ConvertDefVal(mapAttr);
-
-                if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-                    if (defValue == null || defValue == "null")
-                        continue;
-                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-                }
-
-                if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-
-                    // alert(mapAttr.KeyOfEn + " " + defValue);
-
-                    // 判断下拉框是否有对应option, 若没有则追加
-                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-
-                        var mainTable = frmData.MainTable[0];
-                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-
-                        if (selectText == null || selectText == "")
-                            selectText = defValue;
-
-                        if (defValue == null || defValue == "") {
-
-                        } else {
-                            $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
-                        }
-                    } else {
-                        //设置选择的值
-                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
-                    }
-                }
-
-                if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
-                    if (defValue == "1")
-                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
-                    else
-                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
-                }
-
-                if (mapAttr.UIIsEnable == "0") {
-                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
-                }
-            }
         })
 
         function RefMethod() {
@@ -269,8 +198,80 @@
             $('#CCForm').html("").append(html);
 
             $.parser.parse("#CCForm");
-        }
 
+
+            //   $.parser.parse("#CCForm");
+            var isReadonly = GetQueryString("IsReadonly");
+
+            //原有的。
+            //为 DISABLED 的 TEXTAREA 加TITLE 
+            var disabledTextAreas = $('#divCCForm textarea:disabled');
+            $.each(disabledTextAreas, function (i, obj) {
+                $(obj).attr('title', $(obj).val());
+            })
+
+            //根据NAME 设置ID的值
+            var inputs = $('[name]');
+            $.each(inputs, function (i, obj) {
+                if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
+                    $(obj).attr("id", $(obj).attr("name"));
+                }
+            })
+
+            //设置默认值
+            for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
+
+                var mapAttr = frmData.Sys_MapAttr[j];
+
+                //添加 label
+                //如果是整行的需要添加  style='clear:both'.
+                var defValue = ConvertDefVal(mapAttr);
+
+                if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == null || defValue == "null")
+                        continue;
+                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+                }
+
+                if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
+
+                    // alert(mapAttr.KeyOfEn + " " + defValue);
+
+                    // 判断下拉框是否有对应option, 若没有则追加
+                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+
+                        var mainTable = frmData.MainTable[0];
+                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+
+                        if (selectText == null || selectText == "")
+                            selectText = defValue;
+
+                        if (defValue == null || defValue == "") {
+
+                        } else {
+                            $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                        }
+                    } else {
+                        //设置选择的值
+                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+                    }
+                }
+
+                if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == "1")
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
+                    else
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+                }
+
+                if (mapAttr.UIIsEnable == "0") {
+                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                }
+            }
+
+        }
 
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID) {
@@ -281,7 +282,7 @@
             for (var i = 0; i < Sys_MapAttr.length; i++) {
 
                 var attr = Sys_MapAttr[i];
-                if (attr.GroupID != groupID || attr.UIVisible == 0 || attr.KeyOfEn=="MyNum" )
+                if (attr.GroupID != groupID || attr.UIVisible == 0 || attr.KeyOfEn == "MyNum")
                     continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
@@ -389,13 +390,11 @@
                         html += "</tr>";
                         isDropTR = true;
                     }
-
                     continue;
                 }
             }
 
             html += "</table>";
-
             return html;
         }
 
@@ -411,7 +410,7 @@
             }
             // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
             //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
-            var html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
+            var html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             return html;
         }
 
@@ -647,7 +646,6 @@
         function New() {
             var enName = GetQueryString("EnName");
             var url = "?EnName=" + GetQueryString("EnName") + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal") + "&t=" + Math.random();
-           
             window.location.href = url; //刷新.
         }
 
@@ -662,35 +660,30 @@
             var en = new Entity(enName);
             var pkval = GetPKVal();
 
-            if (pkval == null) {
+            if (pkval == null || pkval == "") {
 
                 en.CopyForm();
 
-                var info = en.Insert();
-                if (info != 1) {
-                    alert('插入错误:' + info);
+                if (en.Insert() == 0)
                     return;
-                }
 
-            } else {
+                var pkval = en.GetPKVal();
 
-                en.pkval = pkval;
 
-                var i = en.RetrieveFromDBSources();
-                en.CopyForm();
-                en.pkval = pkval;
+                var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
+                window.location.href = url; //刷新.
+                return;
+            }
 
-                if (i == 0) {
-                    var info = en.Insert();
-                    if (info != 1) {
-                        alert('插入成功:' + info);
-                    }
-                } else {
-                    var info = en.Update();
-                    if (info != 1) {
-                        alert('更新错误:' + info);
-                    }
-                }
+            en.pkval = pkval;
+            en.RetrieveFromDBSources();
+
+            en.CopyForm();
+            en.pkval = pkval;
+
+            var info = en.Update();
+            if (info != 1) {
+                alert('更新错误:' + info);
             }
 
             var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
@@ -711,6 +704,10 @@
             $("#Btns").html("");
             $("#Left").html("");
             $("#CCForm").html("删除成功..");
+
+            alert("删除成功.");
+            window.close();
+            CloseIt();
         }
 
         function CloseIt() {

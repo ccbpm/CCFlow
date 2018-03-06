@@ -1,0 +1,86 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+
+    <script  type="text/javascript">
+
+        $(function () {
+            InitBar(6);
+            var html = "";
+
+            var ens = new Entities("BP.WF.Template.NodeStations");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                html += "" + en.FK_StationText;
+            }
+
+            // document.getElementById("stas").innerHTML = html;
+
+            var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", nd.FK_Flow);
+
+            for (var i = 0; i < nodes.length; i++) {
+                var mynd = nodes[i];
+                var nodeID = mynd.NodeID;
+                var nodeName = mynd.Name;
+            }
+
+
+
+
+
+        });
+        function OpenDialog(oldUrl) {
+            var nodeID = GetQueryString("FK_Node");
+            var k = new Date("MMddhhmmss");
+            var url = oldUrl+'&NodeID=' + nodeID + '&r=' + k + '&ShowWay=None';
+                      
+           WinOpen(url);
+        }
+       function Save() {
+           var nodeID = GetQueryString("FK_Node");
+           var node = new Entity("BP.WF.Node", nodeID);
+           node.DeliveryWay = 1;
+           node.Update();
+           alert("保存成功.");
+       }
+    </script>
+</head>
+<body >
+
+<div id="bar"> </div>
+
+按指定节点的人员岗位计算. 
+
+<fieldset>
+    <legend>说明</legend>
+    <ul>
+        <li>ccBPM在处理接受人时，会按指定节点上的人员身份计算。</li>
+    </ul>
+</fieldset>
+
+<fieldset>
+    <legend>请选择要指定的节点</legend>
+    <ul>
+        <li><input id="RB_NodeNo_1" type="radio" name="RB_NodeNo_1" value="2"  /><label for="RB_FlowRunWay_2">数据集按时启动</label></li>
+  
+
+    </ul>
+</fieldset>
+
+</body>
+</html>

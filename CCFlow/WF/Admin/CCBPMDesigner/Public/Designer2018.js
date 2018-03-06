@@ -57,6 +57,11 @@ function Help() {
 
 //节点属性
 function NodeAttr(nodeID) {
+    var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
+    WinOpen(url);
+}
+//节点属性
+function NodeAttrOld(nodeID) {
     var url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&NodeID=" + nodeID + "&Lang=CH";
     WinOpen(url);
 }

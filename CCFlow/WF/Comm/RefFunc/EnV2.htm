@@ -26,6 +26,8 @@
         ur.RetrieveFromDBSources();
 
         var mapBase;
+        var enName = null;
+        var pkVal = null;
 
         //页面启动函数.
         $(function () {
@@ -97,7 +99,7 @@
                 html += "<ul >";
 
                 if (gName == "基本信息") {
-                    html += "<li style='float:left;margin:15px;list-style:none' >" + GenerRMBase(en) + "</li>";
+                    html += "<li style='float:left;margin:15px;list-style:none' >" + GenerRMBase() + "</li>";
                 }
 
                 for (var idx = 0; idx < dtM.length; idx++) {
@@ -127,7 +129,15 @@
 
         function GenerRMBase() {
 
-            var html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            if (enName == null) {
+                enName = "BP.WF.Template.NodeExt";
+                pkVal = "101";
+            }
+
+            var url = "EnOnly.htm?EnName=" + enName + "&PKVal=" + pkVal;
+            var icon = "../../Img/dot.png";
+            var html = "<a href=\"javascript:OpenIt('" + url + "', '基本信息',900,900)\" ><img src='" + icon + "' border=0 style='width:16px;height:16px;' />基本设置</a>";
+            return html;
         }
 
         function GenerRM(rm) {

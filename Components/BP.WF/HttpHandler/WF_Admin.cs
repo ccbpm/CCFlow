@@ -102,7 +102,7 @@ namespace BP.WF.HttpHandler
                     dr["FK_DeptText"] = emp.FK_DeptText;
                     dtEmps.Rows.Add(dr);
                 }
-                return BP.Tools.Json.DataTableToJson(dtEmps, false);
+                return BP.Tools.Json.ToJson(dtEmps);
             }
 
             //fl.DoCheck();
@@ -227,7 +227,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //返回数据源.
-                return BP.Tools.Json.DataTableToJson(dtMyEmps, false);
+                return BP.Tools.Json.ToJson(dtMyEmps);
             }
             catch (Exception ex)
             {

@@ -157,7 +157,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return BP.Tools.Json.DataTableToJson(dt);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         public string GetStructureTreeRootTable()
@@ -233,7 +233,7 @@ namespace BP.WF.HttpHandler
                 dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
             }
 
-            return BP.Tools.Json.DataTableToJson(dt);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return BP.Tools.Json.DataTableToJson(dt);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         #region 主页.
@@ -945,7 +945,7 @@ namespace BP.WF.HttpHandler
                 dt = newDt;
             }
 
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         public void GenerChildRows(DataTable dt, DataTable newDt, DataRow parentRow)
@@ -984,7 +984,7 @@ namespace BP.WF.HttpHandler
             sql.AppendLine("           )");
 
             DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql.ToString(), fk_flow));
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         public string GetFormTreeTable()
@@ -1069,7 +1069,7 @@ namespace BP.WF.HttpHandler
                 GenerChildRows(dtForm, newDt, newRootRow);
                 dtForm = newDt;
             }
-            return BP.Tools.Json.DataTableToJson(dtForm, false);
+            return BP.Tools.Json.ToJson(dtForm);
         }
         public string GetSrcTreeTable()
         {
@@ -1085,7 +1085,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow row in ds.Tables[1].Rows)
                 dt.Rows.Add(row.ItemArray);
 
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         public string GetStructureTreeTable()
@@ -1220,7 +1220,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         /// <summary>
@@ -1253,8 +1253,8 @@ namespace BP.WF.HttpHandler
                 menu.Name = "无权限";
                 menu.Url = "";
                 newMenus.Add(menu);
-            }            
-            return BP.Tools.Json.DataTableToJson(newMenus.ToDataTable(), true);
+            }
+            return BP.Tools.Json.ToJson(newMenus.ToDataTable());
         }
 
         /// <summary>

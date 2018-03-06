@@ -152,7 +152,7 @@ namespace BP.WF.HttpHandler
         {
             string fk_node = this.GetRequestVal("FK_Node");
             DataTable dt = BP.WF.Dev2Interface.DB_Todolist(WebUser.No, this.FK_Node);
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
         public string DB_GenerReturnWorks()
         {

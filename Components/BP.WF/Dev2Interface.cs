@@ -3090,7 +3090,7 @@ namespace BP.WF
             ps.SQL = "SELECT SID, Name FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
             ps.Add("No", userNo);
             DataTable table = BP.DA.DBAccess.RunSQLReturnTable(ps);
-            info = BP.Tools.Json.DataTableToJson(table, false);
+            info = BP.Tools.Json.ToJson(table);
             return info;
         }
         /// <summary>

@@ -284,7 +284,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns[""].ColumnName = "";
             }
 
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
         #endregion 我的关注.
 
@@ -631,7 +631,7 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 删除草稿.
@@ -688,7 +688,7 @@ namespace BP.WF.HttpHandler
             dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(this.No, this.FK_Node);
 
             //转化大写的toJson.
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 初始化
@@ -735,7 +735,7 @@ namespace BP.WF.HttpHandler
             dt = BP.WF.Dev2Interface.DB_GenerHungUpList();
             
             //转化大写的toJson.
-            return BP.Tools.Json.DataTableToJson(dt,false);
+            return BP.Tools.Json.ToJson(dt);
         }
         #endregion 获得列表.
 
@@ -749,7 +749,7 @@ namespace BP.WF.HttpHandler
         {
            DataTable dt = BP.WF.Dev2Interface.DB_TaskPool();
 
-           return BP.Tools.Json.DataTableToJson(dt, false);
+           return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 申请任务.
@@ -771,7 +771,7 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = BP.WF.Dev2Interface.DB_TaskPoolOfMyApply();
 
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
         public string TaskPoolApply_PutOne()
         {
@@ -933,7 +933,7 @@ namespace BP.WF.HttpHandler
             //int allNum = qo.GetCount();
             //qo.DoQuery(BP.WF.SMSAttr.MyPK, pageSize, pageIdx);
 
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         #region 处理page接口.

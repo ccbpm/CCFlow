@@ -1558,7 +1558,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns["NODEID"].ColumnName = "NodeID";
                 dt.Columns["NAME"].ColumnName = "Name";
             }
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 执行跳转

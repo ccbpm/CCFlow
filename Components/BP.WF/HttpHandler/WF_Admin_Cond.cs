@@ -102,7 +102,7 @@ namespace BP.WF.HttpHandler
             dt.Columns[0].ColumnName = "NodeID";
             dt.Columns[1].ColumnName = "Name";
 
-            return BP.Tools.Json.DataTableToJson(dt, false);
+            return BP.Tools.Json.ToJson(dt);
         }
 
 

@@ -4,6 +4,7 @@
 <head>
     <title></title> 
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -12,12 +13,13 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
 
     <script  type="text/javascript">
 
         $(function () {
 
-            InitBar(5);
+            InitBar(DeliveryWay.ByPreviousNodeFormEmpsField);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             var FK_Flow = node.FK_Flow;
@@ -25,18 +27,17 @@
             var FK_MapData = "ND" + parseInt(FK_Flow) + "Rpt";
 
             var mapAttrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", FK_MapData)
-            
+
             var str = "";
             str += "&nbsp;<select id='RB_ByPreviousNodeFormEmpsField'>" + InitDDLOperation(mapAttrs) + "</select>";
 
             document.getElementById("DDL_ByPreviousNodeFormEmpsField").innerHTML = str; //设置基础信息.
 
             //初始话下拉列表值
-            if (node.DeliveryWay == 5) {
+            if (node.DeliveryWay == DeliveryWay.ByPreviousNodeFormEmpsField) {
                 if (paras != null && paras != "")
                     $("#RB_ByPreviousNodeFormEmpsField").val(paras);
             }
-
 
         });
 
@@ -60,7 +61,7 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = 5;
+            node.DeliveryWay = DeliveryWay.ByPreviousNodeFormEmpsField;
             var DeliveryParas = $("#RB_ByPreviousNodeFormEmpsField ").val();
             node.DeliveryParas = DeliveryParas;
             node.Update();

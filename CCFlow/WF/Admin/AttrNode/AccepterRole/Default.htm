@@ -8,6 +8,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -18,68 +19,68 @@
 
             var url = '';
             switch (node.DeliveryWay) {
-                case 0:
+                case DeliveryWay.ByStation:
                     //Bind_1_ByStation();
                     url = "0.ByStation.htm";
                     break;
-                case 1:
+                case DeliveryWay.ByDept:
                     //Bind_1_ByStation();
                     url = "1.ByDept.htm";
                     break;
-                case 2:
+                case DeliveryWay.BySQL:
                     //Bind_1_ByStation();
                     url = "2.BySQL.htm";
                     break;
-                case 3:
-                    roleName = "3.ByBindEmp.htm";
+                case DeliveryWay.ByBindEmp:
+                    url = "3.ByBindEmp.htm";
                     break;
-                case 4:
-                    roleName = "4.BySelected.htm";
+                case DeliveryWay.BySelected:
+                    url = "4.BySelected.htm";
                     break;
-                case 5:
-                    roleName = "5.ByPreviousNodeFormEmpsField.htm";
+                case DeliveryWay.ByPreviousNodeFormEmpsField:
+                    url = "5.ByPreviousNodeFormEmpsField.htm";
                     break;
-                case 6:
-                    roleName = "6.ByPreviousNodeEmp.htm";
+                case DeliveryWay.ByPreviousNodeEmp:
+                    url = "6.ByPreviousNodeEmp.htm";
                     break;
-                case 7:
-                    roleName = "7.ByStarter.htm";
+                case DeliveryWay.ByStarter:
+                    url = "7.ByStarter.htm";
                     break;
-                case 8:
-                    roleName = "8.BySpecNodeEmp.htm";
+                case DeliveryWay.BySpecNodeEmp:
+                    url = "8.BySpecNodeEmp.htm";
                     break;
-                case 9:
-                    roleName = "9.ByDeptAndStation.htm";
+                case DeliveryWay.ByDeptAndStation:
+                    url = "9.ByDeptAndStation.htm";
                     break;
-                case 10:
-                    roleName = "10.ByStationAndEmpDept.htm";
+                case DeliveryWay.ByStationAndEmpDept:
+                    url = "10.ByStationAndEmpDept.htm";
                     break;
-                case 11:
-                    roleName = "11.BySpecNodeEmpStation.htm";
+                case DeliveryWay.BySpecNodeEmpStation:
+                    url = "11.BySpecNodeEmpStation.htm";
                     break;
-                case 12:
-                    roleName = "12.BySQLAsSubThreadEmpsAndData.htm";
+                case DeliveryWay.BySQLAsSubThreadEmpsAndData:
+                    url = "12.BySQLAsSubThreadEmpsAndData.htm";
                     break;
-                case 13:
-                    roleName = "13.ByDtlAsSubThreadEmps.htm";
+                case DeliveryWay.ByDtlAsSubThreadEmps:
+                    url = "13.ByDtlAsSubThreadEmps.htm";
                     break;
-                case 14:
-                    roleName = "14.ByStationOnly.htm";
+                case DeliveryWay.ByStationOnly:
+                    url = "14.ByStationOnly.htm";
                     break;
-                case 15:
-                    roleName = "15.ByFEEp.htm";
+                case DeliveryWay.ByFEE:
+                    url = "15.ByFEEp.htm";
                     break;
-                case 16:
-                    roleName = "16.BySetDeptAsSubthread.htm";
+                case DeliveryWay.BySetDeptAsSubthread:
+                    url = "16.BySetDeptAsSubthread.htm";
                     break;
-                case 17:
-                    roleName = "17.BySQLTemplate.htm";
+                case DeliveryWay.BySQLTemplate:
+                    url = "17.BySQLTemplate.htm";
                     break;
-                case 18:
-                    roleName = "18.ByFromEmpToEmp.htm";
+                case DeliveryWay.ByFromEmpToEmp:
+                    url = "18.ByFromEmpToEmp.htm";
                     break;
-                case 100:
-                    roleName = "100.ByCCFlowBPM.htm";
+                case DeliveryWay.ByCCFlowBPM:
+                    url = "100.ByCCFlowBPM.htm";
                     break;
                 default:
                     url = "0.ByStation.htm";

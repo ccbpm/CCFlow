@@ -4,6 +4,7 @@
 <head>
     <title></title> 
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -12,17 +13,16 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
 
     <script  type="text/javascript">
-
         $(function () {
-            InitBar(7);
+            InitBar(DeliveryWay.ByStarter);
         });
-
        function Save() {
            var nodeID = GetQueryString("FK_Node");
            var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = 7;
+           node.DeliveryWay = DeliveryWay.ByStarter;
            node.Update();
            alert("保存成功.");
        }

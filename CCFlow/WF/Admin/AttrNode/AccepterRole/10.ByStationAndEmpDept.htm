@@ -4,6 +4,7 @@
 <head>
     <title></title> 
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -12,50 +13,52 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
 
     <script  type="text/javascript">
 
         $(function () {
-            InitBar(10);
+            InitBar(DeliveryWay.ByStationAndEmpDept);
             var html = "";
 
+            //获取节点岗位
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 console.log(en);
-                html += "" + en.FK_StationText;
+                html += "&nbsp;&nbsp;&nbsp;" + en.FK_StationText;
             }
-
             document.getElementById("stas").innerHTML = html;
 
+            //获取节点部门
             html = "";
-
             ens = new Entities("BP.WF.Template.NodeDepts");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 console.log(en);
-                html += "" + en.FK_DeptText;
+                html += "&nbsp;&nbsp;&nbsp;" + en.FK_DeptText;
             }
-
             document.getElementById("dept").innerHTML = html;
-
         });
-        function OpenDialog(oldUrl) {
+
+        function OpenDialog(index,oldUrl) {
             var nodeID = GetQueryString("FK_Node");
-            //var node = new Entity("BP.WF.Node", nodeID);
             var k = new Date("MMddhhmmss");
-            var url = oldUrl+'&NodeID=' + nodeID + '&r=' + k + '&ShowWay=None';
-                      
-           WinOpen(url);
-        }
+
+            var url = oldUrl + '&NodeID=' + nodeID + '&r=' + k + '&ShowWay=None';
+            if (index == 2)
+                url = oldUrl + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+            if (index == 3)
+                url = oldUrl + '&NodeID=' + nodeID + '&r=' + k + '&ShowWay=FK_StationType';
+            WinOpen(url);
+       }
+
        function Save() {
            var nodeID = GetQueryString("FK_Node");
            var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = 10;
+           node.DeliveryWay = DeliveryWay.ByStationAndEmpDept;
            node.Update();
            alert("保存成功.");
        }
@@ -80,16 +83,16 @@
 
     <ul>
         <li>
-             <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+             <a href="javascript:OpenDialog(1,'/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
                                                 设置与更改岗位</a>
          </li>
          <li> 
-               <a href="javascript:WinOpen('../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&NodeID=<%=nd.NodeID %>&PKVal=<%=nd.NodeID %>')">
+               <a href="javascript:OpenDialog(2,'../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=')">
                                                 设置/更改部门</a>
          </li>
 
          <li>
-             <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
+             <a href="javascript:OpenDialog(3,'/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts')">
                                             设置/更改部门(旧版本)</a>
          </li>
 

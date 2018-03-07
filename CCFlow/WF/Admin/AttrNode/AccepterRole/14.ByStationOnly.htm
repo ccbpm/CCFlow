@@ -4,6 +4,7 @@
 <head>
     <title></title> 
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -12,20 +13,20 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
 
     <script  type="text/javascript">
 
         $(function () {
-            InitBar(14);
+            InitBar(DeliveryWay.ByStationOnly);
             var html = "";
-
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 console.log(en);
-                html += "" + en.FK_StationText;
+                html += "&nbsp;&nbsp;&nbsp" + en.FK_StationText;
             }
 
             document.getElementById("stas").innerHTML = html;
@@ -34,7 +35,6 @@
         });
         function OpenDialog(index,oldUrl) {
             var nodeID = GetQueryString("FK_Node");
-            //var node = new Entity("BP.WF.Node", nodeID);
             var k = new Date("MMddhhmmss");
             var url;
             if (index == 1) {
@@ -50,7 +50,7 @@
        function Save() {
            var nodeID = GetQueryString("FK_Node");
            var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = 14;
+           node.DeliveryWay = DeliveryWay.ByStationOnly;
            node.Update();
            alert("保存成功.");
        }

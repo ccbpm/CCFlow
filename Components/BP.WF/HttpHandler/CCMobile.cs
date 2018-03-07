@@ -57,8 +57,39 @@ namespace BP.WF.HttpHandler
 
         public string Login_Submit()
         {
-            BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
-            return ace.Login_Submit();
+            string userNo = this.GetRequestVal("TB_UserNo");
+            string pass = this.GetRequestVal("TB_Pass");
+
+            BP.Port.Emp emp = new Emp();
+            emp.No = userNo;
+            if (emp.RetrieveFromDBSources() == 0)
+            {
+                if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
+                {
+                    /*如果包含昵称列,就检查昵称是否存在.*/
+                    string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
+                    string no = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    if (no == null)
+                        return "err@用户名或者密码错误.";
+
+                    emp.No = no;
+                    int i = emp.RetrieveFromDBSources();
+                    if (i == 0)
+                        return "err@用户名或者密码错误.";
+                }
+                else
+                {
+                    return "err@用户名或者密码错误.";
+                }
+            }
+
+            if (emp.CheckPass(pass) == false)
+                return "err@用户名或者密码错误.";
+
+            //调用登录方法.
+            BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
+
+            return "登录成功.";
         }
         /// <summary>
         /// 会签列表

@@ -822,7 +822,14 @@ namespace BP.WF.HttpHandler
 
             //如果是查看状态, 为了屏蔽掉正在审批的节点, 在查看审批意见中.
             bool isShowCurrNodeInfo = true;
-            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            if (this.WorkID != 0)
+            {
+                gwf.WorkID = this.WorkID;
+                gwf.Retrieve();
+            }
+
+
             if (isCanDo == false && isReadonly == true)
             {
                 if (gwf.WFState == WFState.Runing && gwf.FK_Node == this.FK_Node)

@@ -17,7 +17,7 @@
 
         $(function () {
 
-            InitBar(2);
+            InitBar(17);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             var paras = node.DeliveryParas;
@@ -25,8 +25,15 @@
             var sqlTemplates = new Entities("BP.WF.Template.SQLTemplates", "SQLType", 1)
             var str = "";
             str += "&nbsp;<select id='RB_BySQLTemplate'>" + InitDDLOperation(sqlTemplates) + "</select>";
-            console.log(sqlTemplates);
+
             document.getElementById("sqlTemSelect").innerHTML = str; //设置基础信息.
+
+            //初始话下拉列表值
+            if (node.DeliveryWay == 17) {
+                if (paras != null && paras != "")
+                    $("#RB_BySQLTemplate").val(paras);
+            }
+            
 
         });
 
@@ -34,9 +41,6 @@
         function InitDDLOperation(sqlTemplates) {
 
             var operations = "";
-
-      
-
 
             for (var i = 0; i < sqlTemplates.length; i++) {
 
@@ -59,8 +63,8 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = 2;
-            var DeliveryParas = document.getElementById("RB_BySQL").value;
+            node.DeliveryWay = 17;
+            var DeliveryParas = $("#RB_BySQLTemplate ").val();
             node.DeliveryParas = DeliveryParas;
             node.Update();
             alert("保存成功.");

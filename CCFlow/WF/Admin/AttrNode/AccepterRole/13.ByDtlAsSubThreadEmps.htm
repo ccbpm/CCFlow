@@ -16,80 +16,52 @@
     <script  type="text/javascript">
 
         $(function () {
-            InitBar(1);
-            var html = "";
 
-            var ens = new Entities("BP.WF.Template.NodeStations");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+            InitBar(13);
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
 
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                console.log(en);
-                html += "" + en.FK_StationText;
+            if (node.RunModel == 4) {
+                document.getElementById("RB_ByDtlAsSubThreadEmps").disabled = false
+            } else {
+                document.getElementById("RB_ByDtlAsSubThreadEmps").disabled = true
             }
 
-            document.getElementById("stas").innerHTML = html;
-
+            if (node.DeliveryWay == 12) {
+                document.getElementById("RB_ByDtlAsSubThreadEmps").value = none.DeliveryParas;
+            }
 
         });
-        function OpenDialog(oldUrl) {
+
+        function Save() {
             var nodeID = GetQueryString("FK_Node");
-            //var node = new Entity("BP.WF.Node", nodeID);
-            var k = new Date("MMddhhmmss");
-            var url = oldUrl+'&NodeID=' + nodeID + '&r=' + k + '&ShowWay=None';
-                      
-           WinOpen(url);
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = 13;
+            var DeliveryParas = document.getElementById("RB_ByDtlAsSubThreadEmps").value;
+            node.DeliveryParas = DeliveryParas;
+            node.Update();
+            alert("保存成功.");
         }
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = 1;
-           node.Update();
-           alert("保存成功.");
-       }
     </script>
 </head>
 <body >
 
 <div id="bar"> </div>
 
-按岗位智能计算. 
+由上一节点的明细表来决定子线程的接受人. 
 
 <fieldset>
-<legend>说明</legend>
-<ul>
-
-<li>该方式是系统默认的方式，也是常用的方式，系统可以智能的寻找您需要的接受人，点击右上角设置岗位。</li>
-<li>在寻找接受人的时候系统会考虑当前人的部门因素，A发到B，在B节点上绑定N个岗位，系统首先判断当前操作员部门内是否具有该岗位集合之一，如果有就投递给他，没有就把自己的部门提高一个级别，在寻找，依次类推，一直查找到最高级，如果没有就抛出异常。</li>
-  <li> 比如：一个省机关下面有n个县，n个市，n个县. n个所. 一个所员受理人员的业务，只能让自己的所长审批，所长的业务只能投递到本区县的相关业务部分审批，而非其它区县业务部分审批。</li>
-    </ul>
+    <legend>请输入用户编号列.</legend>
+    <textarea id="RB_ByDtlAsSubThreadEmps" rows="" cols="" style="width:100%;height:50px"></textarea>
 </fieldset>
 
 <fieldset>
-<legend>设置</legend>
-
-
-<ul>
-<li><a href="javascript:OpenDialog('/WF/Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
-                                            设置/更改岗位(旧版本)</a>
-                                            </li>
-<li> <a href="javascript:OpenDialog('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
-                                            设置/更改岗位</a></li>
-
-<li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
-                                                </li>
-
-</ul>
+    <legend>说明</legend>
+    <ul>
+        <li>此方法与分合流相关，只有当前节点是子线程才有意义。 </li>
+        <li>当前参数为明细表的字段列，如果不填写，就默认为 UserNo 。</li>
+   </ul>
 </fieldset>
-
-
-<fieldset>
-<legend>已经设置的岗位</legend>
-
-<div id="stas"> </div>
-</fieldset>
-
-
 
 </body>
 </html>

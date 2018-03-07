@@ -287,11 +287,18 @@
                                       }, 'json');
                                   },
                                   //刷新
+                                  //添加标签
                                   "cmNewLabel": function (t) {
-
-                                      alert('未完成.');
-
-                                      //location.reload(); //_canvas.refresh();
+                                      var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+                                      var mTop = $("#jqContextMenu").css("top").replace('px', '');
+                                      var username = document.createElement("input");
+                                      username.type = "text";
+                                      username.style = "width:140px;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;position:absolute"
+                                      username.placeholder = "请输入标签";
+                                      username.id = "";
+                                      //这里需要什么参数自己添加
+                                      document.body.appendChild(username);
+                                      //离开焦点执行保存
                                   },
                                   "cmPaste": function (t) {
                                       var pasteId = _canvas.paste(); //右键当前的ID

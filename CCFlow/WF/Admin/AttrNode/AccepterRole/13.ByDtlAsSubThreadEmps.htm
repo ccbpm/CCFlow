@@ -29,7 +29,8 @@
             }
 
             if (node.DeliveryWay == DeliveryWay.ByDtlAsSubThreadEmps) {
-                document.getElementById("RB_ByDtlAsSubThreadEmps").value = none.DeliveryParas;
+                $("#RB_ByDtlAsSubThreadEmps").val(node.DeliveryParas)
+                
             }
 
         });
@@ -38,7 +39,7 @@
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.DeliveryWay = DeliveryWay.ByDtlAsSubThreadEmps;
-            var DeliveryParas = document.getElementById("RB_ByDtlAsSubThreadEmps").value;
+            var DeliveryParas = $("#RB_ByDtlAsSubThreadEmps").val();
             node.DeliveryParas = DeliveryParas;
             node.Update();
             alert("保存成功.");

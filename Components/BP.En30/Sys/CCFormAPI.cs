@@ -1749,9 +1749,8 @@ namespace BP.Sys
             obj.DoQuery(SysEnumMainAttr.No, pageSize, pageNumber);
 
             //转化成json.
-            return BP.Tools.Json.DataTableToJson(sftables.ToDataTableField(), false);
-
-           // return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(sftables, RowCount);
+            return BP.Tools.Json.ToJson(sftables.ToDataTableField());
+            // return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(sftables, RowCount);
         }
         /// <summary>
         /// 获得隐藏字段集合.

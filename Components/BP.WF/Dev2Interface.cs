@@ -1306,8 +1306,8 @@ namespace BP.WF
         /// <returns>共享工作列表</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0)
         {
-            //执行 todolist 调度.
-            DTS_GenerWorkFlowTodoSta();
+            if (string.IsNullOrEmpty(userNo) == true)
+                throw new Exception("err@登录信息丢失.");
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -1494,9 +1494,6 @@ namespace BP.WF
         /// <returns>共享工作列表</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, string fk_flow = null)
         {
-            //执行 todolist 调度.
-            DTS_GenerWorkFlowTodoSta();
-
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -1737,8 +1734,7 @@ namespace BP.WF
         /// <returns>返回从视图WF_EmpWorks查询出来的数据.</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable()
         {
-            //执行 todolist 调度.
-            DTS_GenerWorkFlowTodoSta();
+            
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;

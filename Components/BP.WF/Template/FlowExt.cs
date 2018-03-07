@@ -381,7 +381,7 @@ namespace BP.WF.Template
 
                 // 数据存储.
                 map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow,
-                    "流程数据存储模式", true, true, FlowAttr.DataStoreModel,
+                    "cc", true, true, FlowAttr.DataStoreModel,
                    "@0=数据轨迹模式@1=数据合并模式");
                 map.SetHelperUrl(FlowAttr.DataStoreModel, "http://ccbpm.mydoc.io/?v=5404&t=17038");
 

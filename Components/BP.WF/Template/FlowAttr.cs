@@ -487,11 +487,11 @@ namespace BP.WF.Template
     public enum DataStoreModel
     {
         /// <summary>
-        /// 存储在CCFlow数据表里
+        /// 轨迹模式
         /// </summary>
         ByCCFlow,
         /// <summary>
-        /// 指定的业务主表
+        /// 数据合并模式
         /// </summary>
         SpecTable
     }

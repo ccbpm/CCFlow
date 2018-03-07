@@ -30,12 +30,63 @@
                     //Bind_1_ByStation();
                     url = "2.BySQL.htm";
                     break;
+                case 3:
+                    roleName = "3.ByBindEmp.htm";
+                    break;
+                case 4:
+                    roleName = "4.BySelected.htm";
+                    break;
+                case 5:
+                    roleName = "5.ByPreviousNodeFormEmpsField.htm";
+                    break;
+                case 6:
+                    roleName = "6.ByPreviousNodeEmp.htm";
+                    break;
+                case 7:
+                    roleName = "7.ByStarter.htm";
+                    break;
+                case 8:
+                    roleName = "8.BySpecNodeEmp.htm";
+                    break;
+                case 9:
+                    roleName = "9.ByDeptAndStation.htm";
+                    break;
+                case 10:
+                    roleName = "10.ByStationAndEmpDept.htm";
+                    break;
+                case 11:
+                    roleName = "11.BySpecNodeEmpStation.htm";
+                    break;
+                case 12:
+                    roleName = "12.BySQLAsSubThreadEmpsAndData.htm";
+                    break;
+                case 13:
+                    roleName = "13.ByDtlAsSubThreadEmps.htm";
+                    break;
+                case 14:
+                    roleName = "14.ByStationOnly.htm";
+                    break;
+                case 15:
+                    roleName = "15.ByFEE.htm";
+                    break;
+                case 16:
+                    roleName = "16.BySetDeptAsSubthread.htm";
+                    break;
+                case 17:
+                    roleName = "17.BySQLTemplate.htm";
+                    break;
+                case 18:
+                    roleName = "18.ByFromEmpToEmp.htm";
+                    break;
+                case 100:
+                    roleName = "100.ByCCFlowBPM.htm";
+                    break;
                 default:
                     url = "0.ByStation.htm";
                     break;
             }
 
-            document.location.href = url;
+            document.location.href = url + "?FK_Node=" + node.NodeID;
         });
 
         function Bind_1_ByStation() {

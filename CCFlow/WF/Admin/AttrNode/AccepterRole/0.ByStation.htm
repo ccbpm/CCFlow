@@ -1,8 +1,14 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-
+    <title></title> 
+    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -11,7 +17,7 @@
     <script  type="text/javascript">
 
         $(function () {
-
+            initBar(0);
             var html = "";
 
             var ens = new Entities("BP.WF.Template.NodeStations");
@@ -19,14 +25,22 @@
 
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                html += "" + en.FK_StationT;
+                console.log(en);
+                html += "" + en.FK_StationText;
             }
 
             document.getElementById("stas").innerHTML = html;
 
 
         });
-
+        function OpenDialog(oldUrl) {
+            var nodeID = GetQueryString("FK_Node");
+            //var node = new Entity("BP.WF.Node", nodeID);
+            var k = new Date("MMddhhmmss");
+            var url = oldUrl+'&NodeID=' + nodeID + '&r=' + k + '&ShowWay=None';
+                      
+           WinOpen(url);
+        }
        function Save() {
            var nodeID = GetQueryString("FK_Node");
            var node = new Entity("BP.WF.Node", nodeID);
@@ -36,7 +50,7 @@
        }
     </script>
 </head>
-<body>
+<body >
 
 <div id="bar"> </div>
 
@@ -57,10 +71,10 @@
 
 
 <ul>
-<li><a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+<li><a href="javascript:OpenDialog('/WF/Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
                                             设置/更改岗位(旧版本)</a>
                                             </li>
-<li> <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+<li> <a href="javascript:OpenDialog('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
                                             设置/更改岗位</a></li>
 
 <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>

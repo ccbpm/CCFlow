@@ -1,5 +1,4 @@
 ﻿//全局变量
-
 function WinOpen(url) {
     window.open(url);
 }
@@ -20,6 +19,15 @@ function FlowRpt() {
     var flowId = Number(flowNo);
     flowId = String(flowId);
     url = "../RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
+    WinOpen(url);
+}
+
+//报表设计.
+function FlowCheck() {
+
+    var flowId = Number(flowNo);
+    flowId = String(flowId);
+    url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
     WinOpen(url);
 }
 
@@ -63,7 +71,7 @@ function NodeAttrOld(nodeID) {
 //节点方案
 function NodeFrmSln(nodeID) {
     //表单方案.
-    var url = "../AttrNode/NodeFromWorkModel.htm?FK_Node=" + nodeID;
+    var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
     WinOpen(url);
 }
 

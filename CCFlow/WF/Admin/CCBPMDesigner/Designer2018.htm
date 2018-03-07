@@ -103,8 +103,8 @@
             <li id="pmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除节点</span></li>
         </ul>
     </div>
-    <div id="processMenu3" style="display:none;">
-        <ul>
+    <div id="processMenu3" style="width: 100px; padding: 5px; position: absolute; background: #fff; display: none;">
+        <ul style="margin:0 0 10px 10px;">
             
             <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
             <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
@@ -138,6 +138,27 @@
     <script type="text/javascript" src="Public/js/jquery.multiselect2side/js/jquery.multiselect2side.js?2025"></script>
     <!--flowdesign-->
     <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
+    <style>
+        li{list-style:none;}
+        #processMenu3 li {
+            padding: 5px 0px 5px 20px;
+        } 
+        #processMenu3 li:hover {
+            background-color: rgb(90,99,119);
+            cursor:pointer;
+        }
+    </style>
+    <script type="text/javascript">
+        
+        $("#pmfun").hover(function () {
+            var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+            var mTop = $("#jqContextMenu").css("top").replace('px', '');
+            $("#processMenu3").css({ "left": parseInt(mLeft) + 150 + "px", "top": parseInt(mTop) + 97 + "px" });
+            $("#processMenu3").show();
+        }, function () {
+            $("#processMenu3").hide();
+        });
+    </script>
     <script type="text/javascript">
         var the_flow_id = '4';
 

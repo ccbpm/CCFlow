@@ -4,18 +4,18 @@ function InitBar(optionKey) {
     var html = "请选择访问规则:";
 
     html += "<select id='changBar' onchange='changeOption()'>";
-    html += "<option value=0 >&nbsp;&nbsp;&nbsp;&nbsp;内置傻瓜表单</option>";
-    html += "<option value=1 >&nbsp;&nbsp;&nbsp;&nbsp;内置自由表单</option>";
-    html += "<option value=2 >&nbsp;&nbsp;&nbsp;&nbsp;嵌入式表单</option>";
-    html += "<option value=3 >&nbsp;&nbsp;&nbsp;&nbsp;SDK表单</option>";
-    html += "<option value=5 >&nbsp;&nbsp;&nbsp;&nbsp;表单树（多表单）</option>";
-    //  html += "<option value=5 >&nbsp;&nbsp;&nbsp;&nbsp;表单树（多表单）</option>";
-    html += "<option value=7 >&nbsp;&nbsp;&nbsp;&nbsp;公文表单</option>";
-  //  html += "<option value=8 >&nbsp;&nbsp;&nbsp;&nbsp;Excel表单</option>";
-   // html += "<option value=9 >&nbsp;&nbsp;&nbsp;&nbsp;Word表单</option>";
-    html += "<option value=10 >&nbsp;&nbsp;&nbsp;&nbsp;软通动力（傻瓜轨迹表单）</option>";
-    html += "<option value=11 >&nbsp;&nbsp;&nbsp;&nbsp;表单库表单</option>";
-  //  html += "<option value=100 >&nbsp;&nbsp;&nbsp;&nbsp;禁用</option>";
+    html += "<option value=0 >内置傻瓜表单</option>";
+    html += "<option value=1 >内置自由表单</option>";
+    html += "<option value=2 >嵌入式表单</option>";
+    html += "<option value=3 >SDK表单</option>";
+    html += "<option value=5 >表单树（多表单）</option>";
+    //  html += "<option value=5 >表单树（多表单）</option>";
+    html += "<option value=7 >公文表单</option>";
+  //  html += "<option value=8 >Excel表单</option>";
+   // html += "<option value=9 >Word表单</option>";
+    html += "<option value=10 >软通动力（傻瓜轨迹表单）</option>";
+    html += "<option value=11 >表单库表单</option>";
+  //  html += "<option value=100 >禁用</option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";

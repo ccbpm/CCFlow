@@ -42,11 +42,11 @@
                     }
                 }
                 if (checkFlag) {
-                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_'" + i + " type='checkbox' name='RB_NodeNo' value=" + nodeID + " checked=checked/>";
+                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " checked=checked/>";
                 } else {
-                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_'" + i + " type='checkbox' name='RB_NodeNo' value=" + nodeID + " />";
+                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " />";
                 }
-                setHtml += "<label for='RB_NodeNo_'" + i + ">" + nodeName + "</label>";
+                setHtml += "<label for='RB_NodeNo_" + i + "' >" + nodeName + "</label>";
             }
 
             document.getElementById("NodeSelect").innerHTML = setHtml;

@@ -98,7 +98,7 @@
             <li id="pmfun"><i class="icon-th"></i>&nbsp;<span class="_label">节点类型</span><i class="icon-chevron-right"></i></li>
             <li id="pmFrmFool"><i class="icon-th"></i>&nbsp;<span class="_label">傻瓜表单</span></li>
             <li id="pmFrmFree"><i class="icon-th"></i>&nbsp;<span class="_label">自由表单</span></li>
-            <li id="pmNodeAccepterRole"><i class=" icon-wrench"></i>&nbsp;<span class="_label">接收人规则</span></li>
+            <li id="pmNodeAccepterRole"><i class="icon-wrench"></i>&nbsp;<span class="_label">接收人规则</span></li>
             <!--<li id="cmNewNodeFromNode"><i class="icon-plus"></i>&nbsp;<span class="_label">添加步骤</span></li>-->
             <li id="pmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除节点</span></li>
         </ul>
@@ -372,8 +372,8 @@
                                   "pmNodeAccepterRole": function (t) {
 
                                       var activeId = _canvas.getActiveId(); //右键当前的ID
-                                      var url = "../AttrNode/NodeAccepterRole.aspx?FK_Node=" + activeId + "&Lang=CH";
                                       NodeAccepterRole(activeId);
+
                                   }
                               }
                               , fnRepeat: function () {

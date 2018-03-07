@@ -29,6 +29,7 @@
             var strList = new Array();
             strList = paras.split(',');
             var setHtml = "";
+
             for (var i = 0; i < nodes.length; i++) {
                 var checkFlag = false;
                 var mynd = nodes[i];
@@ -43,34 +44,35 @@
                     }
                 }
                 if (checkFlag) {
-                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_'" + i + " type='checkbox' name='RB_NodeNo' value=" + nodeID + " checked=checked/>";
-
+                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " checked=checked/>";
                 }
-                else
-                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_'" + i + " type='checkbox' name='RB_NodeNo' value=" + nodeID + " />";
-                setHtml += "<label for='RB_NodeNo_'" + i + ">" + nodeName + "</label>";
+                else {
+                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " />";
+                }
+                setHtml += "<label for='RB_NodeNo_" + i + "' >" + nodeName + "</label>";
             }
 
             document.getElementById("NodeSelect").innerHTML = setHtml;
 
         });
 
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.BySpecNodeEmpStation;
-           var object = document.getElementsByName("RB_NodeNo");
-           var DeliveryParas="";
-           for (var i = 0; i < object.length; i++) {
-               if (object[i].checked) {
-                   DeliveryParas += object[i].value;
-                   if (i < object.length - 1) DeliveryParas += ',';
-               }    
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = DeliveryWay.BySpecNodeEmpStation;
+            var object = document.getElementsByName("RB_NodeNo");
+            var DeliveryParas = "";
+            for (var i = 0; i < object.length; i++) {
+                if (object[i].checked) {
+                    DeliveryParas += object[i].value;
+                    if (i < object.length - 1)
+                        DeliveryParas += ',';
+                }
             }
-           node.DeliveryParas = DeliveryParas;
-           node.Update();
-           alert("保存成功.");
-       }
+            node.DeliveryParas = DeliveryParas;
+            node.Update();
+            alert("保存成功.");
+        }
     </script>
 </head>
 <body >

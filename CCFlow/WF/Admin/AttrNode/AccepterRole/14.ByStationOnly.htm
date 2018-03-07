@@ -33,7 +33,8 @@
 
 
         });
-        function OpenDialog(index,oldUrl) {
+        function OpenDialog(index, oldUrl) {
+
             var nodeID = GetQueryString("FK_Node");
             var k = new Date("MMddhhmmss");
             var url;
@@ -44,16 +45,18 @@
             if (index == 2) {
                 url = oldUrl + '&NodeID=' + nodeID + '&r=' + k + '&ShowWay=None';
             }
-                      
-           WinOpen(url);
+
+            WinOpen(url);
         }
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.ByStationOnly;
-           node.Update();
-           alert("保存成功.");
-       }
+
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = DeliveryWay.ByStationOnly;
+            node.Update();
+            alert("保存成功.");
+        }
+
     </script>
 </head>
 <body >
@@ -76,11 +79,11 @@
 
     <ul>
         <li> 
-            <a href="javascript:OpenDialog(1,'NodeAccepterRoleStation.htmFK_Node')">
+            <a href="javascript:OpenDialog(1,'NodeAccepterRoleStation.htm?FK_Node')">
                                                 设置/更改岗位</a>
         </li>
         <li>
-            <a href="javascript:OpenDialog(2,'/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
+            <a href="javascript:OpenDialog(2,'../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
                                                 设置/更改岗位-旧版</a>
         </li>
         

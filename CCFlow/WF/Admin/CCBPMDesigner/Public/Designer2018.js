@@ -8,10 +8,10 @@ function WinOpen(url) {
 function FlowProperty() {
     url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + flowNo + "&Lang=CH";
     WinOpen(url);
-   
-//    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
-//        //window.location.href = window.location.href;
-//    });
+
+    //    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
+    //        //window.location.href = window.location.href;
+    //    });
 }
 
 //报表设计.
@@ -74,7 +74,6 @@ function NodeFrmFool(nodeID) {
     WinOpen(url);
 }
 
-
 function NodeFrmFree(nodeID) {
 
     //表单方案.
@@ -84,11 +83,10 @@ function NodeFrmFree(nodeID) {
     WinOpen(url);
 }
 
-
 //接受人规则.
 function NodeAccepterRole(nodeID) {
     //表单方案.
-    var url = "../AttrNode/NodeAccepterRole.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    var url = "../AttrNode/AccepterRole/Default.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     WinOpen(url);
 }
 

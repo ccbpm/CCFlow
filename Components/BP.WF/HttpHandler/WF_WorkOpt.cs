@@ -822,9 +822,9 @@ namespace BP.WF.HttpHandler
 
             //如果是查看状态, 为了屏蔽掉正在审批的节点, 在查看审批意见中.
             bool isShowCurrNodeInfo = true;
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (isCanDo == false && isReadonly == true)
             {
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 if (gwf.WFState == WFState.Runing && gwf.FK_Node == this.FK_Node)
                     isShowCurrNodeInfo = false;
             }
@@ -836,7 +836,7 @@ namespace BP.WF.HttpHandler
              * 用于处理在审核列表中屏蔽临时的保存的审核信息.
              * */
             string checkerPassed = ",";
-            if (isCanDo == true)
+            if (gwf.WFState!= WFState.Complete)
             {
                 string sql = "SELECT FK_Emp FROM WF_Generworkerlist where workid=" + this.WorkID + " AND IsPass=1 AND FK_Node=" + this.FK_Node;
                 DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(sql);
@@ -921,9 +921,24 @@ namespace BP.WF.HttpHandler
                         && checkerPassed.Contains("," + tk.EmpFrom + ",") == false)
                         continue;
 
-                    //判断会签, 去掉正在审批的节点.
-                    if (tk.NDFrom == this.FK_Node && isShowCurrNodeInfo == false)
+
+                    if (tk.NDFrom == this.FK_Node && gwf.HuiQianTaskSta != HuiQianTaskSta.None)
+                    {
+                        //判断会签, 去掉正在审批的节点.
+                        if (tk.NDFrom == this.FK_Node && isShowCurrNodeInfo == false)
+                            continue;
+                    }
+
+                    //如果是多人处理，就让其显示已经审核过的意见.
+                    if (tk.NDFrom == this.FK_Node && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0)
+                    {
                         continue;
+                        //如果当前人，没有审核完成,就不显示.
+                        //判断会签, 去掉正在审批的节点.
+                        // if (tk.NDFrom == this.FK_Node)
+                        //   continue;
+                    }
+
 
                     row = tkDt.NewRow();
                     row["NodeID"] = tk.NDFrom;
@@ -1248,15 +1263,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtTrack);
             }
 
-            //加入常用短语.
-            if (isReadonly == false && 1 == 2)
-            {
-                string tTable = "ND" + int.Parse(FK_Flow) + "Track";
-                string sql = "SELECT distinct a.Msg FROM " + tTable + " WHERE ActionType=22 AND EmpFrom='" + BP.Web.WebUser.No + "' ORDER BY RDT DESC";
-                DataTable dtInfos = DBAccess.RunSQLReturnTable(sql);
-                dtInfos.TableName = "CheckItems";
-                ds.Tables.Add(dtInfos);
-            }
+          
 
             return BP.Tools.Json.ToJson(ds);
         }

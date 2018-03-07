@@ -3025,6 +3025,7 @@ namespace BP.WF
                 BP.Port.Emp emp = new BP.Port.Emp();
                 emp.No = userNo;
                 emp.RetrieveFromDBSources();
+
                 WebUser.SignInOfGener(emp);
                 WebUser.IsWap = false;
                 WebUser.Auth = ""; //设置授权人为空.

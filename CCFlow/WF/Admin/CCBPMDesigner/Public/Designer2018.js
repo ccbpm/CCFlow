@@ -18,15 +18,9 @@ function FlowProperty() {
 function FlowRpt() {
 
     var flowId = Number(flowNo);
-
     flowId = String(flowId);
-
     url = "../RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
     WinOpen(url);
-
-    //    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 990, 500, "icon-property", true, null, null, null, function () {
-
-    //    });
 }
 
 //运行流程
@@ -41,14 +35,14 @@ function OldVer() {
     window.location.href = url;
 }
 
-
 function Help() {
 
     var msg = "<ul>";
     msg += "<li>开发者:济南驰骋信息技术有限公司.</li>";
-    msg += "<li>官方网站: <a href='http://www.ccflow.org' target=_blank>http://ccflow.org</a>";
-    msg += "<li>商务联系:0531-82374939, 微信:18660153393 QQ:793719823";
-    msg += "<li>地址:济南是高新区齐鲁软件大厦A座408室.";
+    msg += "<li>官方网站: <a href='http://www.ccflow.org' target=_blank>http://ccflow.org</a></li>";
+    msg += "<li>商务联系:0531-82374939, 微信:18660153393 QQ:793719823</li>";
+    msg += "<li>地址:济南是高新区齐鲁软件大厦A座408室.</li>";
+    msg += "<li>公众帐号<img src='' border=0/></li>";
     msg += "</ul>";
     mAlert(msg, 20000);
 }

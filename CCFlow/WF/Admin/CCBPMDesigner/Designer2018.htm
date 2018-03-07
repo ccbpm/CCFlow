@@ -62,6 +62,20 @@
         </div>
     </div>
 
+    <!-- calertModal -->
+    <div id="alertModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>修改节点名称</h3>
+        </div>
+        <div class="modal-body">
+            <p>提示内容</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal"  aria-hidden="true">保存</button>
+        </div>
+    </div>
+
     <!-- attributeModal -->
     <div id="attributeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:800px;margin-left:-350px">
         <div class="modal-body" style="max-height:500px;"><!-- body --></div>
@@ -76,16 +90,27 @@
             <!--li id="pm_begin"><i class="icon-play"></i>&nbsp;<span class="_label">设为第一步</span></li-->
             <!--li id="pm_addson"><i class="icon-plus"></i>&nbsp;<span class="_label">添加子步骤</span></li-->
             <!--li id="pm_copy"><i class="icon-check"></i>&nbsp;<span class="_label">复制</span></li-->
-            
+
             <li id="pmAttribute"><i class="icon-cog"></i>&nbsp;<span class="_label">节点属性</span></li>
             <li id="pmAttributeOld"><i class="icon-cog"></i>&nbsp;<span class="_label">属性(旧)</span></li>
 
             <li id="pmFrmSln" onclick="NodeFrmSln()" ><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>
+            <li id="pmfun"><i class="icon-th"></i>&nbsp;<span class="_label">节点类型</span><i class="icon-chevron-right"></i></li>
             <li id="pmFrmFool"><i class="icon-th"></i>&nbsp;<span class="_label">傻瓜表单</span></li>
             <li id="pmFrmFree"><i class="icon-th"></i>&nbsp;<span class="_label">自由表单</span></li>
             <li id="pmNodeAccepterRole"><i class=" icon-wrench"></i>&nbsp;<span class="_label">接收人规则</span></li>
             <!--<li id="cmNewNodeFromNode"><i class="icon-plus"></i>&nbsp;<span class="_label">添加步骤</span></li>-->
             <li id="pmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除节点</span></li>
+        </ul>
+    </div>
+    <div id="processMenu3" style="display:none;">
+        <ul>
+            
+            <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
+            <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
+            <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
+            <li id=""><i class="icon-wrench"></i>&nbsp;<span class="_label">分合流</span></li>
+            <li id=""><i class="icon-trash"></i>&nbsp;<span class="_label">子线程</span></li>
         </ul>
     </div>
     <div id="canvasMenu" style="display:none;">
@@ -102,7 +127,7 @@
 
     <div class="container mini-layout" id="flowdesign_canvas">
         <!--div class="process-step btn" style="left: 189px; top: 340px;"><span class="process-num badge badge-inverse"><i class="icon-star icon-white"></i>3</span> 步骤3</div-->
-    </div> 
+    </div>
 
     <script type="text/javascript" src="Public/js/jquery-1.7.2.min.js?2025"></script>
     <script type="text/javascript" src="Public/css/bootstrap/js/bootstrap.min.js?2025"></script>
@@ -168,6 +193,7 @@
                 flowNo = "002";
 
             var alertModal = $('#alertModal'), attributeModal = $("#attributeModal");
+            var alertModal1 = $('#alertModal1'), attributeModal = $("#attributeModal");
             //消息提示
             mAlert = function (messages, s) {
                 if (!messages) messages = "";
@@ -176,7 +202,14 @@
                 alertModal.modal('toggle');
                 setTimeout(function () { alertModal.modal("hide") }, s);
             }
-
+            //消息弹出
+            cAlert = function (messages, s) {
+                if (!messages) messages = "";
+                if (!s) s = 200000;
+                alertModal1.find(".modal-body").html(messages);
+                alertModal1.modal('toggle');
+                setTimeout(function () { alertModal1.modal("hide") }, s);
+            }
             //属性设置
             attributeModal.on("hidden", function () {
                 $(this).removeData("modal"); //移除数据，防止缓存
@@ -204,7 +237,7 @@
             var _canvas = $("#flowdesign_canvas").Flowdesign({
                 "processData": processData
                               , mtAfterDrop: function (params) {
-                                  //  alert("连接：" + params.sourceId + " -> " + params.targetId);
+                                   alert("连接：" + params.sourceId + " -> " + params.targetId);
                               }
                 /*画面右键*/
                               , canvasMenus: {
@@ -349,12 +382,17 @@
 
                               }
                               , fnClick: function () {
+                                  //点击修改名称方法
+                                  var activeId = _canvas.getActiveId(); //右键当前的ID
+                                  var windowtext = $("#window" + activeId).text();
+                                  var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                                  var xiuNodename = '修改名称：<input id="text' + activeId + '" type="text" value="' + windowtext + '">'
+                                  var spanaa = $("#window" + activeId +" span").html();
+                                  cAlert(xiuNodename);
+                                  $('.savetext' + activeId).on('click', function () {
 
-                                  return;  //点击节点，不做任何处理.
 
-                                  //var nodeID = _canvas.getActiveId();
-                                  //  mAlert("查看步骤信息 " + nodeID);
-                                  //NodeAttr(nodeID);
+                                  })
 
                               }
                               , fnDbClick: function () {
@@ -534,7 +572,7 @@
             }
         }
 
-      
+
 
 
         //保存信息.

@@ -34,6 +34,7 @@
         });
 
         function InitPage() {
+
             var param = {
                 DoType: "WorkCheck_Init",
                 FK_Flow: fk_flow,
@@ -42,6 +43,7 @@
                 FID: fid,
                 IsReadonly: isReadonly
             };
+
 
             Handler_AjaxQueryData(param, function (data) {
 
@@ -128,7 +130,7 @@
                         html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
                         html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
                         html += "<option value='不同意'>不同意</option>";
-                        html += "</select><font color=Gray>内容不要超过2000字</font>"; 
+                        html += "</select><font color=Gray>内容不要超过2000字</font>";
                         html += "</div>";
                         html += "</td>";
                     }
@@ -159,7 +161,7 @@
 
                         if (rdt == "") {
                             var dt = new Date();
-                            rdt = dt.getFullYear() + "-" +  (dt.getMonth()+1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
+                            rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
                         }
 
                         //签名，日期.
@@ -190,7 +192,6 @@
                                 continue;
 
                             var rdt = this.RDT.substring(0, 16);
-
 
 
                             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
@@ -244,6 +245,10 @@
                     // GenerSiganture(SignType);
 
                 });
+
+                //如果是只读的,是多人处理模式,就把已经审核过的人员信息输出出来.
+                if (isReadonly == 1) {
+                }
 
                 $("#tbTracks").append(html);
 

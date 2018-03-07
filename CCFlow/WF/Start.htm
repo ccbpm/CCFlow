@@ -156,6 +156,7 @@
         //初始化数据.
         function InitPage() {
 
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             var data = handler.DoMethodReturnString("Start_Init");
             if (data.indexOf('err@') == 0) {

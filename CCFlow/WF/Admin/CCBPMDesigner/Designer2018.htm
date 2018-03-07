@@ -237,7 +237,7 @@
             var _canvas = $("#flowdesign_canvas").Flowdesign({
                 "processData": processData
                               , mtAfterDrop: function (params) {
-                                   alert("连接：" + params.sourceId + " -> " + params.targetId);
+                                  alert("连接：" + params.sourceId + " -> " + params.targetId);
                               }
                 /*画面右键*/
                               , canvasMenus: {
@@ -386,11 +386,22 @@
                                   var activeId = _canvas.getActiveId(); //右键当前的ID
                                   var windowtext = $("#window" + activeId).text();
                                   var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
-                                  var xiuNodename = '修改名称：<input id="text' + activeId + '" type="text" value="' + windowtext + '">'
-                                  var spanaa = $("#window" + activeId +" span").html();
+                                  var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
+                                  var spanaa = $("#window" + activeId + " span").html();
                                   cAlert(xiuNodename);
                                   $('.savetext' + activeId).on('click', function () {
 
+                                      var windowtext = $("#window" + activeId).text(); //旧数据.
+                                      var text = document.getElementById("TB_" + activeId).value; //新修改的值.
+                                      if (windowtext == text)
+                                          return;
+
+                                      var node = new Entity("BP.WF.Node", activeId);
+                                      node.Name = text;
+                                      node.Update();
+
+                                      //设置修改后的值没有设置成功. @Brilliant  
+                                      $("#window" + activeId).val(text); //旧数据.
 
                                   })
 

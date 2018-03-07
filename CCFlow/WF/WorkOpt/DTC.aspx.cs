@@ -32,7 +32,7 @@ namespace CCFlow.WF.WorkOpt
                         sql =
                             "SELECT f.NO,f.NAME,fs.NAME SORT FROM WF_Flow f INNER JOIN WF_FlowSort fs ON fs.No = f.FK_FlowSort ORDER BY fs.Idx";
 
-                        re = BP.Tools.Json.DataTableToJson(DBAccess.RunSQLReturnTable(sql)); 
+                        re = BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(sql)); 
 
                         break;
                     case "startflow":

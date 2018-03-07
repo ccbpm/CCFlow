@@ -142,7 +142,7 @@ namespace CCFlow.WF.WorkOpt
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            return BP.Tools.Json.DataTableToJson(dt); 
+            return BP.Tools.Json.ToJson(dt); 
         }
 
         /// <summary>

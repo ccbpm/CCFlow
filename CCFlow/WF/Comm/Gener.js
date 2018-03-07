@@ -1294,6 +1294,42 @@ var Entities = (function () {
                 }
             });
         },
+        deleteIt: function () {
+
+            var self = this;
+            if (self.ensName == null || self.ensName == "" || self.ensName == "") {
+                alert("在初始化实体期间EnsName没有赋值");
+                return;
+            }
+
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entities_Delete&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+
+                    //                    try {
+                    //                        jsonString = JSON.parse(data);
+                    //                        if ($.isArray(jsonString)) {
+                    //                            self.length = jsonString.length;
+                    //                            $.extend(self, jsonString);
+                    //                        } else {
+                    //                            alert("解析失败, 返回值不是集合");
+                    //                        }
+                    //                    } catch (e) {
+                    //                        alert("json解析错误: " + data);
+                    //                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Entities_Delte err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+        },
 
         Retrieve: function () {
             var args = [""];
@@ -1302,6 +1338,14 @@ var Entities = (function () {
             });
             this.Paras = getParameters(args);
             this.loadData();
+        },
+        Delete: function () {
+            var args = [""];
+            $.each(arguments, function (i, o) {
+                args.push(o);
+            });
+            this.Paras = getParameters(args);
+            this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {
             var params = [];

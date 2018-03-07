@@ -213,8 +213,10 @@
     jsPlumb.bind("click", function (c) {
 
 
-      if(confirm("你确定取消连接吗?"))
-          jsPlumb.detach(c); 
+      if(confirm("你确定取消连接吗?是：取消 否：方向指向")){
+          jsPlumb.detach(c);}else{
+            window.open('');
+          }
 
 
     });

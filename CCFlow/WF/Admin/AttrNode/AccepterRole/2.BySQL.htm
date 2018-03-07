@@ -20,6 +20,7 @@
             InitBar(2);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
+
             if (node.DeliveryWay == 2) {
                 document.getElementById("RB_BySQL").value = node.DeliveryParas;
             }

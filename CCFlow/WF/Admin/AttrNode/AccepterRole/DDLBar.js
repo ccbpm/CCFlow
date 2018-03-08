@@ -35,10 +35,15 @@ function InitBar(optionKey) {
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input type=button onclick='SaveAndClose()' value='保存&关闭' />";
+    html += "<hr/>";
 
     document.getElementById("bar").innerHTML = html;
-    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected"); 
+    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+
+
 }
+
+
 function changeOption() {
     var nodeID = GetQueryString("FK_Node");
     var obj = document.getElementById("changBar");
@@ -120,4 +125,14 @@ function SaveAndClose() {
 
     Save();
     window.close();
+}
+
+//打开.
+function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+        if (isReload == true) {
+            window.location.href = window.location.href;
+        }
+    });
 }

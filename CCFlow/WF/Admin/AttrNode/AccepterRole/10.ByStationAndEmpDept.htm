@@ -14,16 +14,19 @@
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <script  type="text/javascript">
 
         $(function () {
             InitBar(DeliveryWay.ByStationAndEmpDept);
-            var html = "";
 
             //获取节点岗位
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
+
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 console.log(en);
@@ -32,9 +35,11 @@
             document.getElementById("stas").innerHTML = html;
 
             //获取节点部门
-            html = "";
             ens = new Entities("BP.WF.Template.NodeDepts");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
+
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 console.log(en);
@@ -43,17 +48,26 @@
             document.getElementById("dept").innerHTML = html;
         });
 
-        function OpenDialog(index,oldUrl) {
-            var nodeID = GetQueryString("FK_Node");
-            var k = new Date("MMddhhmmss");
 
-            var url = oldUrl + '&NodeID=' + nodeID + '&r=' + k + '&ShowWay=None';
-            if (index == 2)
-                url = oldUrl + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
-            if (index == 3)
-                url = oldUrl + '&NodeID=' + nodeID + '&r=' + k + '&ShowWay=FK_StationType';
-            WinOpen(url);
-       }
+        function OpenStation() {
+            var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+        }
+
+        function OpenNew() {
+            var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
+        }
+        function OpenOld() {
+            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
+        }
 
        function Save() {
            var nodeID = GetQueryString("FK_Node");
@@ -68,38 +82,24 @@
 
 <div id="bar"> </div>
 
-按绑定的岗位计算并且以绑定的部门集合为纬度. 
-
-<fieldset>
-    <legend>说明</legend>
-    <ul>
-        <li>ccBPM会取绑定部门集合下绑定岗位的人员。</li>
-    </ul>
-</fieldset>
-
 <fieldset>
     <legend>设置</legend>
 
-
     <ul>
         <li>
-             <a href="javascript:OpenDialog(1,'/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations')">
-                                                设置与更改岗位</a>
-         </li>
-         <li> 
-               <a href="javascript:OpenDialog(2,'../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=')">
-                                                设置/更改部门</a>
-         </li>
+             <a href="javascript:OpenStation()">
+                                            设置与更改岗位</a> 
+        </li>
+        <li> 
+            <a href="javascript:OpenNew()">
+                                            设置/更改部门</a>
+        </li>
+        <li> 
+            <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
+        </li>
 
-         <li>
-             <a href="javascript:OpenDialog(3,'/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts')">
-                                            设置/更改部门(旧版本)</a>
-         </li>
-
-</ul>
+    </ul>
 </fieldset>
-
-
 <fieldset>
     <legend>已经设置的岗位</legend>
 
@@ -111,6 +111,12 @@
     <div id="dept"> </div>
 </fieldset>
 
+<fieldset>
+    <legend>说明</legend>
+    <ul>
+        <li>ccBPM会取绑定部门集合下绑定岗位的人员。</li>
+    </ul>
+</fieldset>
 
 
 </body>

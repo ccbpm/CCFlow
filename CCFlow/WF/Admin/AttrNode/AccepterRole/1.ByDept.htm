@@ -31,16 +31,21 @@
             document.getElementById("dept").innerHTML = html;
         });
         //弹出新页面
-        function OpenDialog() {
+        function OpenNew() {
 
             var nodeID = GetQueryString("FK_Node");
             var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=";
-            url += '&NodeID=' + nodeID + '&ShowWay=FK_StationType&M=' + Math.random();
+        
             url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
 
             OpenEasyUiDialogExt(url, "绑定部门", 800, 600, true);
         }
-
+        function OpenOld() {
+            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
+        }
         //保存
         function Save() {
  
@@ -59,7 +64,10 @@
         <legend>设置</legend>
         <ul>
             <li>
-                <a href="javascript:OpenDialog()"> 设置/更改部门</a>
+                <a href="javascript:OpenNew()"> 设置/更改部门</a>
+            </li>
+            <li> 
+                <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
             </li>
         </ul>
     </fieldset>

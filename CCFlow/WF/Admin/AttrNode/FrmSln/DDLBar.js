@@ -1,108 +1,94 @@
 ﻿
 function InitBar(optionKey) {
 
-    var html = "请选择访问规则:";
-
+    var html = "请选择表单方案:";
     html += "<select id='changBar' onchange='changeOption()'>";
-    html += "<option value=0 >内置傻瓜表单</option>";
-    html += "<option value=1 >内置自由表单</option>";
-    html += "<option value=2 >嵌入式表单</option>";
-    html += "<option value=3 >SDK表单</option>";
-    html += "<option value=5 >表单树（多表单）</option>";
-    //  html += "<option value=5 >表单树（多表单）</option>";
-    html += "<option value=7 >公文表单</option>";
-  //  html += "<option value=8 >Excel表单</option>";
-   // html += "<option value=9 >Word表单</option>";
-    html += "<option value=10 >软通动力（傻瓜轨迹表单）</option>";
-    html += "<option value=11 >表单库表单</option>";
-  //  html += "<option value=100 >禁用</option>";
+    html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单</option>";
+    html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
+    html += "<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
+    html += "<option value=" + FormType.RefOneFrmTree + " >&nbsp;&nbsp;绑定一个表单库的表单</option>";
+    html += "<option value=" + FormType.SheetTree + " >&nbsp;&nbsp;绑定多表单</option>";
+    html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;软通动力（傻瓜轨迹表单）</option>";
+   
+    html += "<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;使用SDK表单</option>";
+    html += "<option value=" + FormType.WebOffice + " >&nbsp;&nbsp;绑定公文表单</option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input type=button onclick='SaveAndClose()' value='保存&关闭' />";
+    html += "<hr/>";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
+
 function changeOption() {
     var nodeID = GetQueryString("FK_Node");
     var obj = document.getElementById("changBar");
     var sele = obj.options;
     var index = obj.selectedIndex;
-    var optionKey = "1";
-    if (index > 1) {
-        optionKey = sele[index].value
-    }
+    var optionKey = optionKey = sele[index].value;
+    
     var roleName = "";
-    switch (optionKey) {
-        case "0":
-            roleName = "0.ByStation.htm";
+    switch (parseInt(optionKey)) {
+        case FormType.FoolForm:
+            url = "0.FoolForm.htm";
             break;
-        case "1":
-            roleName = "1.ByDept.htm";
+        case FormType.FreeForm:
+            url = "1.FreeForm.htm";
             break;
-        case "2":
-            roleName = "2.BySQL.htm";
+        case FormType.SelfForm:
+            url = "2.SelfForm.htm";
             break;
-        case "3":
-            roleName = "3.ByBindEmp.htm";
+        case FormType.SDKForm:
+            url = "3.SDKForm.htm";
             break;
-        case "4":
-            roleName = "4.BySelected.htm";
+        case FormType.SLForm:
+            url = "4.SLForm.htm";
             break;
-        case "5":
-            roleName = "5.ByPreviousNodeFormEmpsField.htm";
+        case FormType.SheetTree:
+            url = "5.SheetTree.htm";
             break;
-        case "6":
-            roleName = "6.ByPreviousNodeEmp.htm";
+        case FormType.SheetAutoTree:
+            url = "6.SheetAutoTree.htm";
             break;
-        case "7":
-            roleName = "7.ByStarter.htm";
+        case FormType.WebOffice:
+            url = "7.WebOffice.htm";
             break;
-        case "8":
-            roleName = "8.BySpecNodeEmp.htm";
+        case FormType.ExcelForm:
+            url = "8.ExcelForm.htm";
             break;
-        case "9":
-            roleName = "9.ByDeptAndStation.htm";
+        case FormType.WordForm:
+            url = "9.WordForm.htm";
             break;
-        case "10":
-            roleName = "10.ByStationAndEmpDept.htm";
+        case FormType.FoolTruck:
+            url = "10.FoolTruck.htm";
             break;
-        case "11":
-            roleName = "11.BySpecNodeEmpStation.htm";
+        case FormType.RefOneFrmTree:
+            url = "11.RefOneFrmTree.htm";
             break;
-        case "12":
-            roleName = "12.BySQLAsSubThreadEmpsAndData.htm";
-            break;
-        case "13":
-            roleName = "13.ByDtlAsSubThreadEmps.htm";
-            break;
-        case "14":
-            roleName = "14.ByStationOnly.htm";
-            break;
-        case "15":
-            roleName = "15.ByFEE.htm";
-            break;
-        case "16":
-            roleName = "16.BySetDeptAsSubthread.htm";
-            break;
-        case "17":
-            roleName = "17.BySQLTemplate.htm";
-            break;
-        case "18":
-            roleName = "18.ByFromEmpToEmp.htm";
-            break;
-        case "100":
-            roleName = "100.ByCCFlowBPM.htm";
+        case FormType.DisableIt:
+            url = "100.DisableIt.htm";
             break;
         default:
-            roleName = "0.ByStation.htm";
+            url = "0.FoolForm.htm";
             break;
     }
-    window.location.href = roleName + "?FK_Node=" + nodeID;
+    window.location.href = url + "?FK_Node=" + nodeID;
 }
+
+
 function SaveAndClose() {
 
     Save();
     window.close();
+}
+
+//打开窗体.
+function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+        if (isReload == true) {
+            window.location.href = window.location.href;
+        }
+    });
 }

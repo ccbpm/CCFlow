@@ -558,8 +558,10 @@ namespace BP.En
 						sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + this._enMap.PhysicsTable;
 						break;
 					case DBType.Oracle:
+                        sql = "SELECT MAX(" + field + ") +1 AS No FROM " + this._enMap.PhysicsTable;
+						break;
 					case DBType.MySQL:
-						sql = "SELECT MAX(" + field + ") +1 AS No FROM " + this._enMap.PhysicsTable;
+                        sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM " + this._enMap.PhysicsTable;
 						break;
 					case DBType.Informix:
 						sql = "SELECT MAX(" + field + ") +1 AS No FROM " + this._enMap.PhysicsTable;

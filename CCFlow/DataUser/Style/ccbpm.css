@@ -241,7 +241,6 @@ caption
     background-color: #FCFCFC;
     border: lightgrey 1px solid;
     border-top: none;
-    width: 50px;
 }
 
 .FContext
@@ -578,21 +577,11 @@ input[type=text], input[type=password], select
 {
     border-radius: 5px;
     border: thin solid #CCCCCC;
-    margin: 1px 1px;
+    margin: 2px 2px;
     height: 23px;
 }
 
-.FDesc
-{
-    padding: 4px;
-    text-align: left;
-    font-size: 12px;
-    margin: 4px;
-    background-color: #e0ecff;
-    border: lightgrey 1px solid;
-    border-top: none;
-    width: inherit;
-}
+
 
 select {
     height: 29px;

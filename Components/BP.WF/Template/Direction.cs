@@ -143,7 +143,7 @@ namespace BP.WF.Template
                  * MyPK 是一个复合主键 是由 Node+'_'+ToNode+'_'+DirType 组合的. 比如: 101_102_1
                  */
                 map.AddMyPK();
-                map.AddTBString(DirectionAttr.FK_Flow, null, "流程", true, true, 0, 3, 0, false);
+                map.AddTBString(DirectionAttr.FK_Flow, null, "流程", true, true, 0, 10, 0, false);
                 map.AddTBInt(DirectionAttr.Node, 0, "从节点", false, true);
 				map.AddTBInt( DirectionAttr.ToNode,0,"到节点",false,true);
                 map.AddTBInt(DirectionAttr.DirType, 0, "类型0前进1返回", false, true);

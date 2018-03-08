@@ -39,7 +39,7 @@ function FlowRun() {
 
 //旧版本.
 function OldVer() {
-    var url = "Designer.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    var url = "DesignerOld.htm?FK_Flow=" + flowNo + "&Lang=CH";
     window.location.href = url;
 }
 
@@ -60,23 +60,25 @@ function Help() {
 //节点属性
 function NodeAttr(nodeID) {
     var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
-    WinOpen(url);
+
+    OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
 }
 //节点属性
 function NodeAttrOld(nodeID) {
     var url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&NodeID=" + nodeID + "&Lang=CH";
-    WinOpen(url);
+    OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
 }
 
 //节点方案
 function NodeFrmSln(nodeID) {
     //表单方案.
     var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
-    WinOpen(url);
+
+    OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
+
 }
 
 function NodeFrmFool(nodeID) {
-
     //表单方案.
     var url = "../FoolFormDesigner/Designer.htm?FK_MapData=ND203&FK_Flow="+flowNo+"&FK_Node=" + nodeID;
     WinOpen(url);
@@ -95,7 +97,21 @@ function NodeFrmFree(nodeID) {
 function NodeAccepterRole(nodeID) {
     //表单方案.
     var url = "../AttrNode/AccepterRole/Default.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    WinOpen(url);
+
+    OpenEasyUiDialogExt(url, "接受人规则", 800, 500, false);
 }
 
- 
+function Reload() {
+    window.location.href = window.location.href;
+}
+
+
+//打开.
+function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+        if (isReload == true) {
+            window.location.href = window.location.href;
+        }
+    });
+}

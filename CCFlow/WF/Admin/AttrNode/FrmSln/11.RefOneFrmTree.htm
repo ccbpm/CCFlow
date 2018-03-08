@@ -1,9 +1,158 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title></title> 
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <script src="../../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
+    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script  type="text/javascript">
+        var nodeFrmID = "";
+        $(function () {
+            InitBar(FormType.RefOneFrmTree);
+            var html = "";
+            //获取节点属性
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            //绑定表单类别.
+            var frmTrees = new Entities("BP.Sys.FrmTrees");
+            frmTrees.RetrieveAll();
+
+            if (node.FormType == FormType.RefOneFrmTree) {
+                GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.RefOneFrmTreeType);
+            } else {
+                GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
+            }
+
+            //绑定表单.
+            var frms = new Entities("BP.Sys.MapDatas");
+            frms.RetrieveAll();
+
+            //根据表单类别的默认值，初始加载默认的表单
+            var sortNo = $("#DDL_FrmTree").val();
+            var frm = $.grep(frms, function (item) {
+                return item.FK_FormTree == sortNo;
+            });
+
+            //绑定表单
+            GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", node.NodeFrmID);
+            nodeFrmID = node.NodeFrmID;
+
+            //表单库的表单.
+            if (node.FormType == FormType.RefOneFrmTree) {
+                var frmNode = new Entity("BP.WF.Template.FrmNode");
+                frmNode.MyPK = node.NodeFrmID + "_" + node.NodeID + "_" + node.FK_Flow;
+                var i = frmNode.RetrieveFromDBSources();
+
+                if (i == 1) {
+                    var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a>";
+                    $("#Div_RefOneFrmTree").html(html);
+                }
+            }
+
+        });
+
+        function EditFrmNode(mypk) {
+
+            var url = '../../../Comm/En.htm?EnsName=BP.WF.Template.FrmNodeExts&MyPK=' + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        //设置联动
+        function change() {
+            //获取表单库中的所有表单
+            var frms = new Entities("BP.Sys.MapDatas");
+            frms.RetrieveAll();
+
+            //根据表单类别的默认值，初始加载默认的表单
+            var sortNo = $("#DDL_FrmTree").val();
+            //晒选表单
+            var frm = $.grep(frms, function (item) {
+                return item.FK_FormTree == sortNo;
+            });
+            //绑定表单
+            GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", nodeFrmID);
+        }
+
+        function Save() {
+            var selectFrm = $("#DDL_RefOneFrmTree").val(); //选择的表单.
+
+            if (selectFrm == undefined || selectFrm == null) {
+                alert('请选择一个表单');
+                return;
+            }
+
+            var node = new Entity("BP.WF.Node");
+            node.NodeID = GetQueryString("FK_Node");
+            var i = node.RetrieveFromDBSources();
+
+            //更新节点表单类型.
+            node.FormType = FormType.RefOneFrmTree;
+            node.NodeFrmID = selectFrm; //选择的表单
+            node.RefOneFrmTreeType = $("#DDL_FrmTree").val();
+
+            var update = node.Update(); //执行更新.
+
+            //节点表单属性
+            var frmNode = new Entity("BP.WF.Template.FrmNode");
+            frmNode.MyPK = selectFrm + "_" + node.NodeID + "_" + node.FK_Flow;
+            var i = frmNode.RetrieveFromDBSources();
+            frmNode.FK_Node = node.NodeID;
+            frmNode.FK_Flow = node.FK_Flow;
+            frmNode.FK_Frm = selectFrm;
+            frmNode.Save(); //执行保存.
+
+            var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a>";
+            $("#Div_RefOneFrmTree").html(html);
+            alert("独立表单库表单 - 保存成功.");
+            return;
+
+            //更新表单类型.
+            var frmID = "ND" + nodeID;
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+            mapData.FrmType = FormType.RefOneFrmTree;
+            mapData.FK_FormTree = $("#DDL_FrmTree").val();
+            mapData.Update();
+
+            alert("保存成功.");
+        }
+
+    </script>
 </head>
-<body>
+<body >
+
+<div id="bar"> </div>
+<fieldset>
+    <legend>设置</legend>
+
+    表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()" > </select>
+    表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree" > </select>
+    <div id="Div_RefOneFrmTree" ></div>
+</fieldset>
+
+<fieldset>
+    <legend>说明</legend>
+    <ul>
+      <li>表单库里选择一个表单绑定到当前节点上.</li>
+      <li>该表单的工作方式与内置表单工作模式一致.</li>
+    </ul>
+</fieldset>
+
 
 </body>
 </html>

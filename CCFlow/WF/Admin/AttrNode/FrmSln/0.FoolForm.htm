@@ -2,44 +2,87 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title> 
-    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <script src="../../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../../../Scripts/config.js"></script>
-    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
+    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
     <script src="DDLBar.js" type="text/javascript"></script>
-
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script  type="text/javascript">
 
         $(function () {
-
-            initBar(0);
+            InitBar(FormType.FoolForm);
             var html = "";
+            //获取节点属性
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            //获取节点方案的表单引用值 frmIDSelected为空时为 0当前节点表单，1 其他表单
+            var frmIDSelected = node.NodeFrmID;
+            if (frmIDSelected == "" || frmIDSelected == null)
+                frmIDSelected = "ND" + nodeID;
 
-            var nodeID= GetQueryString("FK_Node");
-            var en = new Entity("BP.WF.Node",nodeID);
+            var seledtNodeID = frmIDSelected.replace('ND', '');
+            
 
+            var nodeFrmID = node.NodeFrmID;
             var frmID = "ND" + nodeID;
             var mapData = new Entity("BP.Sys.MapData", frmID);
 
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
+
+            //增加slect的节点值 
+            GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
+
+            //表单引用设置
+            if (node.FormType == FormType.FoolForm) {
+                if (node.NodeFrmID == "" || node.NodeFrmID == null) {
+                    document.getElementById("RB_CurrentForm").checked = true;
+                    SetDDLEnable('DDL_Frm', 'enable')
+                }
+                else {
+                    document.getElementById("RB_OtherForms").checked = true;
+                    SetDDLEnable('DDL_Frm', 'disable')
+                }
+            }
+
         });
-      
+
+        function SetDDLEnable(ctrl, val) {
+            if (val == "enable")
+                $("#" + ctrl).attr("disabled", "disabled");
+            else
+                $("#" + ctrl).removeAttr("disabled");
+        }
+
         function Save() {
             
             //更新节点表单类型.
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.FormType = 0;
+            node.FormType = FormType.FoolForm;
+            var frmValue = $("input[name='RefFrm']:checked").val();
+            if (frmValue == "0") {
+                node.NodeFrmID = "";
+            } else {
+            node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
+               
+            }
             node.Update();
 
             //更新表单类型.
             var frmID = "ND" + nodeID;
             var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = 0;
+            mapData.FrmType = FormType.FoolForm;
             mapData.Update();
 
             alert("保存成功.");
@@ -50,14 +93,14 @@
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             var url = '../../FoolFormDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
-            WinOpen(url);
+            OpenEasyUiDialogExt(url, '傻瓜表单设计器', 800, 500, false);
         }
 
         //节点表单组件属性.
         function ShowFWCAttr() {
             var nodeID = GetQueryString("FK_Node");
-            var url = "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + nodeID;
-            WinOpen(url)
+            var url = "../../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + nodeID;
+            OpenEasyUiDialogExt(url, '节点表单组件', 800, 600, false);
         }
     </script>
 </head>
@@ -65,17 +108,9 @@
 
 <div id="bar"> </div>
 
-傻瓜表单. 
 
 <fieldset>
-<legend>说明</legend>
-<ul>
-  <li>该表单有4个列,设计简单方便.</li>
-</ul>
-</fieldset>
-
-<fieldset>
-<legend><input type="radio"  value="0"   id="RB_CurrentForm" checked="true" onclick="SetDDLEnable('DDL_Frm','enable')" name="RefFrm" />
+<legend><input type="radio"  value="0"   id="RB_CurrentForm" checked="true" onclick="SetDDLEnable('DDL_Frm','enable')"  name="RefFrm" />
  <label  for="RB_CurrentForm" >当前节点表单 </label></legend>
 <ul>
   <li>每个节点都有一个独立表单</li>
@@ -89,7 +124,7 @@
 <legend><input type="radio"  value="1"   id="RB_OtherForms" onclick="SetDDLEnable('DDL_Frm','disable')"  name="RefFrm" />
  <label  for="RB_OtherForms" >其他节点表单 </label></legend>
 
-选择节点: <select id="DDL_Nodes" name="DDL_Nodes"></select>
+选择节点: <select id="DDL_Frm" name="DDL_Frm" > </select>
   <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
 
  <ul>
@@ -103,7 +138,12 @@
 </ul>
 
 </fieldset>
-
+<fieldset>
+<legend>说明</legend>
+<ul>
+  <li>该表单有4个列,设计简单方便.</li>
+</ul>
+</fieldset>
 
 
 

@@ -6,7 +6,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单</option>";
     html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
     html += "<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
-    html += "<option value=" + FormType.RefOneFrmTree + " >&nbsp;&nbsp;绑定一个表单库的表单</option>";
+    html += "<option value=" + FormType.RefOneFrmTree + " >&nbsp;&nbsp;表单库的表单</option>";
     html += "<option value=" + FormType.SheetTree + " >&nbsp;&nbsp;绑定多表单</option>";
     html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;软通动力（傻瓜轨迹表单）</option>";
    

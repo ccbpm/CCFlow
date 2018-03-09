@@ -14,6 +14,10 @@ namespace BP.WF.Port
         /// 岗位类型
         /// </summary>
         public const string FK_StationType = "FK_StationType";
+        /// <summary>
+        /// 隶属组织
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
 	/// <summary>
 	/// 岗位
@@ -66,6 +70,8 @@ namespace BP.WF.Port
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 2, 50, 250);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new StationTypes(), true);
+                
+                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
 
                 //查询条件.
                 map.AddSearchAttr(StationAttr.FK_StationType);

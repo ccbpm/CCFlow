@@ -1409,6 +1409,9 @@ namespace BP.WF
             BP.DA.Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
             try
             {
+                //横向打印.
+                // wkhtmltopdf.exe --orientation Landscape  http://baidu.com afqc.pdf  .
+
                 string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
                 Process p = System.Diagnostics.Process.Start(pdfFileExe, " --disable-external-links " + htmFile + " " + pdf);
                 p.WaitForExit();

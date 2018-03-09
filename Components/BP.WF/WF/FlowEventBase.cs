@@ -499,6 +499,8 @@ namespace BP.WF
                     return this.SaveBefore();
                 case EventListOfNode.SendWhen: // 节点事件 - 发送前。
 
+                    this.IsStopFlow = false;
+
                     string str = this.SendWhen();
 
                     if (this.IsStopFlow == true)

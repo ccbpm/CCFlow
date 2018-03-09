@@ -5726,11 +5726,8 @@ namespace BP.WF
                     toEmpIDs += dr["No"].ToString();
             }
 
-          
-
             if (toEmpIDs == "")
                 throw new Exception("@延续子流程目前仅仅支持选择接受人方式.");
-
 
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(node.FK_Flow, null, null,
                 toEmpIDs, null, this.WorkID, 0, this.HisNode.FK_Flow, this.HisNode.NodeID, BP.Web.WebUser.No, 0, null);

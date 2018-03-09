@@ -152,7 +152,7 @@
     </style>
     <script type="text/javascript">
         
-        $("#pmfun").hover(function () {
+        $("#pmfun,#processMenu3").hover(function () {
             var mLeft = $("#jqContextMenu").css("left").replace('px', '');
             var mTop = $("#jqContextMenu").css("top").replace('px', '');
             $("#processMenu3").css({ "left": parseInt(mLeft) + 150 + "px", "top": parseInt(mTop) + 97 + "px" });
@@ -160,6 +160,7 @@
         }, function () {
             $("#processMenu3").hide();
         });
+        
     </script>
     <script type="text/javascript">
         var the_flow_id = '4';

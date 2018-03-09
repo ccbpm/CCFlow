@@ -1118,8 +1118,15 @@ namespace BP.WF
             {
                 foreach (NodeYGFlow item in ygflows)
                 {
-                    bool isPass = BP.WF.Glo.CondExp(item.CondExp, this.rptGe.Row);
-                    if (isPass == true)
+                    bool isPass = false;
+
+                    if (item.ExpType == ConnDataFrom.Paras) 
+                      isPass = BP.WF.Glo.CondExpPara(item.CondExp, this.rptGe.Row);
+
+                    if (item.ExpType == ConnDataFrom.SQL)
+                        isPass = BP.WF.Glo.CondExpSQL(item.CondExp, this.rptGe.Row);
+
+                    if (isPass==true) 
                          return new Node(int.Parse(item.FK_Flow + "01"));
                 }
             }

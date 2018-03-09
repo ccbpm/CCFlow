@@ -811,12 +811,7 @@ namespace BP.WF.Template
                     if (result <= 0)
                         return false;
 
-                    if (result >= 1)
-                        return true;
-
-                    throw new Exception("@您设置的sql返回值，不符合ccflow的要求，必须是0或大于等于1。");
-
-                    #endregion
+                    return true;
                 }
 
                 if (this.HisDataFrom == ConnDataFrom.SQLTemplate)
@@ -998,7 +993,7 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.Paras)
                 {
                     Hashtable ht = en.Row;
-                    return BP.WF.Glo.CondExp(this.OperatorValueStr, ht);
+                    return BP.WF.Glo.CondExpPara(this.OperatorValueStr, ht);
                 }
 
                 //从节点表单里判断.

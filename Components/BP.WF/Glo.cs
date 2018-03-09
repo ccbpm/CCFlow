@@ -2601,12 +2601,43 @@ namespace BP.WF
             return en;
         }
         /// <summary>
+        /// SQL表达式是否正确
+        /// </summary>
+        /// <param name="sqlExp"></param>
+        /// <param name="ht"></param>
+        /// <returns></returns>
+        public static bool CondExpSQL(string sqlExp, Hashtable ht)
+        {
+            string sql = sqlExp;
+            sql = sql.Replace("~", "'");
+            sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+            sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+            foreach (string key in ht.Keys)
+            {
+                if (key == "OID")
+                {
+                    sql = sql.Replace("@WorkID", ht["OID"].ToString());
+                    sql = sql.Replace("@OID", ht["OID"].ToString());
+                    continue;
+                }
+                sql = sql.Replace("@" + key, ht[key].ToString());
+            }
+
+            int result = DBAccess.RunSQLReturnValInt(sql, -1);
+            if (result <= 0)
+                return false;
+
+            return true;
+        }
+        /// <summary>
         /// 判断表达式是否成立
         /// </summary>
         /// <param name="exp">表达式</param>
         /// <param name="en">变量</param>
         /// <returns>是否成立</returns>
-        public static bool CondExp(string exp, Hashtable ht)
+        public static bool CondExpPara(string exp, Hashtable ht)
         {
             string[] strs = exp.Trim().Split(' ');
 

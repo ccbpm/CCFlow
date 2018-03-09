@@ -33,25 +33,37 @@
 	        var stas = new Entities("BP.WF.Port.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
-            //渲染画面.
+	        for (var i = 0; i < stas.length; i++) {
+
+	            var sta = stas[i];
+	            var name = sta.Name;
+	            var no = sta.No;
+
+	            var typeNo = sta.FK_StationType;
+	            var typeName = sta.FK_StationTypeT;
+	        }
 
 
-//	        //获得要增加的流程集合.
-//	        var dt = DBAccess.RunSQLReturnTable(sql);
-//	        console.log(dt);
+	        //渲染画面.
 
-//	        var html = "";
-//	        for (var i = 0; i < dt.length; i++) {
 
-//	            var en = dt[i];
 
-//	            html += "<tr>";
-//	            html += "<td><input type=check value='" + en.Name + "' />" + en.SortName + "</td>";
-//	            html += "<td>" + en.Name + "</td>";
-//	            html += "</tr>";
-//	        }
+	        //	        //获得要增加的流程集合.
+	        //	        var dt = DBAccess.RunSQLReturnTable(sql);
+	        //	        console.log(dt);
 
-//	        $("#Table1 tr:last").after(html);
+	        //	        var html = "";
+	        //	        for (var i = 0; i < dt.length; i++) {
+
+	        //	            var en = dt[i];
+
+	        //	            html += "<tr>";
+	        //	            html += "<td><input type=check value='" + en.Name + "' />" + en.SortName + "</td>";
+	        //	            html += "<td>" + en.Name + "</td>";
+	        //	            html += "</tr>";
+	        //	        }
+
+	        //	        $("#Table1 tr:last").after(html);
 
 	    });
 
@@ -88,6 +100,7 @@
         </tr>
 		 
 	</table>
-
+    <input type=button value="Save" onclick="Save()" />
+   
 </body>
 </html>

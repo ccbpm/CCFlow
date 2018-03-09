@@ -147,15 +147,16 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
     var json = data;
 
+    // 清空默认值, 写一个循环把数据给值.
+    $("#" + ddlCtrlID).empty();
+    $("#" + ddlCtrlID).append("<option value=''>- 请选择 -</option>");
+
     //如果他的数量==0，就return.
     if (json.length == 0)
         return;
 
     if (data[0].length == 1)
         json = data[0];
-
-    // 清空默认值, 写一个循环把数据给值.
-    $("#" + ddlCtrlID).empty();
 
     if (json[0][noCol] == undefined) {
         alert('@在绑定[' + ddlCtrlID + ']错误，No列名' + noCol + '不存在,无法行程期望的下拉框value . ');
@@ -166,7 +167,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
         alert('@在绑定[' + ddlCtrlID + ']错误，Name列名' + nameCol + '不存在,无法行程期望的下拉框value. ');
         return;
     }
-    $("#" + ddlCtrlID).append("<option value=''>- 请选择 -</option>");
+    
     for (var i = 0; i < json.length; i++) {
         $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
     }

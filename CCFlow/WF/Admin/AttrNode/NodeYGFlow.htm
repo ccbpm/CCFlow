@@ -49,6 +49,8 @@
 
 	        $("#Table1 tr:last").after(html);
 
+	        $("#Msg").html("");
+
 	    });
 
         //查询集团的流程.
@@ -76,8 +78,11 @@
         }
         //编辑.
         function Edit(pk) {
-            var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
+
+            var url = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
+
             OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+
             //window.location.href = url;
 
         }

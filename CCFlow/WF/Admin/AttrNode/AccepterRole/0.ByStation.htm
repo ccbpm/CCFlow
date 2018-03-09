@@ -33,6 +33,7 @@
                 html += "&nbsp;&nbsp;&nbsp;" + en.FK_StationText;
             }
             document.getElementById("stas").innerHTML = html;
+
         });
 
        function OpenOld() {
@@ -62,10 +63,21 @@
 <body >
 <div id="bar"> </div>
 
-<fieldset>
+<fieldset id="SubIncModel">
     <legend>设置</legend>
     <ul>
-        <li><a href="javascript:OpenOld()">设置/更改岗位(旧版本)</a> </li>
+        <li><a href="javascript:OpenOld()">设置/更改岗位(旧版本)</a></li>
+        <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
+        <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
+        </li>
+    </ul>
+</fieldset>
+
+
+<fieldset id="GroupModel">
+    <legend>设置</legend>
+    <ul>
+        <li><a href="javascript:OpenOld()">设置/更改岗位(旧版本)</a></li>
         <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
         <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
         </li>

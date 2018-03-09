@@ -645,7 +645,7 @@ namespace BP.Web
                 string val = GetValFromCookie("GroupNo", null, false);
                 if (val == null)
                 {
-                    if (SystemConfig.CustomerNo != "CZBank")
+                    if (SystemConfig.CustomerNo != "Bank")
                         return "0";
 
                     if (WebUser.No == null)

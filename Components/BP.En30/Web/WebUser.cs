@@ -636,6 +636,38 @@ namespace BP.Web
             }
         }
         /// <summary>
+        /// 所在的集团编号
+        /// </summary>
+        public static string GroupNo
+        {
+            get
+            {
+                string val = GetValFromCookie("GroupNo", null, false);
+                if (val == null)
+                {
+                    if (SystemConfig.CustomerNo != "CZBank")
+                        return "0";
+
+                    if (WebUser.No == null)
+                        throw new Exception("@登录信息丢失，请你确认是否启用了cookie? ");
+
+                    string sql = "SELECT GroupNo FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'";
+                    string groupNo = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+
+                    if (groupNo == null)
+                        throw new Exception("@err-003 FK_Dept，当前登录人员(" + WebUser.No + ")，没有设置部门。");
+
+                    SetSessionByKey("GroupNo", groupNo);
+                    return groupNo;
+                }
+                return val;
+            }
+            set
+            {
+                SetSessionByKey("GroupNo", value);
+            }
+        }
+        /// <summary>
         /// 当前登录人员的父节点编号
         /// </summary>
         public static string DeptParentNo

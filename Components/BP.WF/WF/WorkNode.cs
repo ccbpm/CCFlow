@@ -5656,18 +5656,81 @@ namespace BP.WF
         private SendReturnObjs NodeSendToYGFlow(Node node, string toEmpIDs)
         {
             string sql = "";
-            if ( string.IsNullOrEmpty(toEmpIDs))
+            if (string.IsNullOrEmpty(toEmpIDs))
             {
                 toEmpIDs = "";
 
-                sql = "SELECT FK_Emp No, EmpName Name FROM WF_SelectAccper WHERE FK_Node=" + node.NodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
-                DataTable dt= DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0)
-                    throw new Exception("@延续子流程目前仅仅支持选择接受人方式.");
+                DataTable dt = null;
 
+                #region 按照人员选择
+                if (node.HisDeliveryWay == DeliveryWay.BySelected)
+                {
+                    sql = "SELECT FK_Emp No, EmpName Name FROM WF_SelectAccper WHERE FK_Node=" + node.NodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("@没有为延续子流程设置接受人.");
+                    foreach (DataRow dr in dt.Rows)
+                        toEmpIDs += dr["No"].ToString();
+                }
+                #endregion 按照人员选择.
+
+                #region 按照岗位与部门的交集.
+                if (node.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
+                {
+                    //added by liuxc,2015.6.29.
+                    //区别集成与BPM模式
+                    if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
+                    {
+                        sql = " SELECT a.No,a.Name FROM Port_Emp A, WF_NodeDept B, WF_NodeStation C, Port_EmpStation D ";
+                        sql += " WHERE A.FK_Dept=B.FK_Dept AND A.No=D.FK_Emp AND C.FK_Station=D.FK_Station AND B.FK_Node=C.FK_Node ";
+                        sql += " AND B.FK_Node=" + dbStr + "FK_Node";
+
+                        ps = new Paras();
+                        ps.Add("FK_Node", node.NodeID);
+                        ps.SQL = sql;
+                        dt = DBAccess.RunSQLReturnTable(ps);
+                    }
+                    else
+                    {
+                        sql = "SELECT pdes.FK_Emp AS No"
+                              + " FROM   Port_DeptEmpStation pdes"
+                              + " INNER JOIN WF_NodeDept wnd ON wnd.FK_Dept = pdes.FK_Dept"
+                              + " AND wnd.FK_Node = " + node.NodeID
+                              + " INNER JOIN WF_NodeStation wns ON  wns.FK_Station = pdes.FK_Station"
+                              + " AND wns.FK_Node =" + node.NodeID
+                              + " ORDER BY pdes.FK_Emp";
+
+                        dt = DBAccess.RunSQLReturnTable(sql);
+                    }
+
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("@节点访问规则(" + node.HisDeliveryWay.ToString() + ")错误:节点(" + node.NodeID + "," + node.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
+                }
+                #endregion 按照岗位与部门的交集
+
+                #region 仅按岗位计算
+                if (node.HisDeliveryWay == DeliveryWay.ByStationOnly)
+                {
+                    sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                    ps = new Paras();
+                    ps.Add("FK_Node", node.NodeID);
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("@节点访问规则错误:节点(" + node.NodeID + "," + node.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                }
+                #endregion
+
+                //组装到达的人员.
                 foreach (DataRow dr in dt.Rows)
                     toEmpIDs += dr["No"].ToString();
             }
+
+          
+
+            if (toEmpIDs == "")
+                throw new Exception("@延续子流程目前仅仅支持选择接受人方式.");
+
 
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(node.FK_Flow, null, null,
                 toEmpIDs, null, this.WorkID, 0, this.HisNode.FK_Flow, this.HisNode.NodeID, BP.Web.WebUser.No, 0, null);

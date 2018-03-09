@@ -1105,10 +1105,29 @@ namespace BP.WF
             //如果要是跳转到的节点，自动跳转规则规则就会失效。
             if (this.JumpToNode != null)
                 return this.JumpToNode;
-
+            
             Node mynd = this.HisNode;
             Work mywork = this.HisWork;
             var beforeSkipNodeID = 0;   //added by liuxc,2015-7-13,标识自动跳转之前的节点ID
+
+
+            #region 判断是否有延续流程.
+            NodeYGFlows ygflows = new NodeYGFlows();
+            ygflows.Retrieve(NodeYGFlowAttr.FK_Node, this.HisNode.NodeID);
+            if (ygflows.Count != 0)
+            {
+                foreach (NodeYGFlow item in ygflows)
+                {
+                    bool isPass = BP.WF.Glo.CondExp(item.CondExp, this.rptGe.Row);
+                    if (isPass == true)
+                    {
+                         return new Node(int.Parse(item.FK_Flow + "01"));
+                    }
+                }
+            }
+            #endregion 判断是否有延续流程.
+
+
 
             this.ndFrom = this.HisNode;
             while (true)
@@ -1970,24 +1989,6 @@ namespace BP.WF
             #endregion 如果使用户选择的.
 
 
-            #region 判断是否有延续流程.
-            NodeYGFlows ygflows = new NodeYGFlows();
-            ygflows.Retrieve(NodeYGFlowAttr.FK_Node, this.HisNode.NodeID);
-            if (ygflows.Count != 0)
-            {
-                foreach (NodeYGFlow item in ygflows)
-                {
-                    bool isPass = BP.WF.Glo.CondExp(item.CondExp, this.rptGe.Row);
-                    if (isPass == true)
-                    {
-                        Nodes nds = new Nodes();
-                        Node nd = new Node( int.Parse(item.FK_Flow+"01"));
-                        nds.AddEntity(nd);
-                        return nds;
-                    }
-                }
-            }
-            #endregion 判断是否有延续流程.
 
 
             Nodes toNodes = this.HisNode.HisToNodes;

@@ -32,11 +32,14 @@
 	        sql += " ORDER BY A.Idx, b.Idx ";
 
 	        //获得要增加的流程集合.
-	        var dt = DBAccess.RunUrlReturnJSON(sql);
+	        var dt = DBAccess.RunSQLReturnTable(sql);
+	        alert(dt);
 
 	        var html = "";
 	        for (var i = 0; i < dt.length; i++) {
-	            var en = ens[i];
+
+	            var en = dt[i];
+
 	            html += "<tr>";
 	            html += "<td>" + en.SortName + "</td>";
 	            html += "<td>" + en.Name + "</td>";
@@ -71,7 +74,7 @@
 <body>
 	<table id="Table1" style="width: 100%">
 		
-        <caption>延续子流程 <a href="javascript:AddGroup()">增加集团子流程</a>|<a href="javascript:AddOrg()">增加本组织子流程</a></caption>
+        <caption>请选择一个子流程</caption>
 
         <tr>
         <th>流程类别</th>
@@ -80,20 +83,6 @@
         </tr>
 		 
 	</table>
-    <br />
-
-				<button  id="Btn_Save" onclick="Save()">
-					保存</button>
-
-
-	<div id="Msg">
-	</div>
-
-    <fieldset>
-					<legend>填写帮助</legend>
-					<ul>
-						<li></li>
-					</ul>
-				</fieldset>
+     
 </body>
 </html>

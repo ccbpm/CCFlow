@@ -42,10 +42,6 @@
 
 	    });
 
-	    function Save() {
-
-	    }
-
         //查询集团的流程.
 	    function AddGroup() {
 	        var webUser = new WebUser();
@@ -58,8 +54,6 @@
 	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
 	        OpenEasyUiDialogExt(url, "选择子流程", 500, 600, true);
 	    }
-
-      
 
         //删除成功.
         function Delete(pk) {
@@ -77,7 +71,7 @@
             if (confirm('您确定要删除吗？') == false)
                 return;
 
-            var url = "../../Comm/RefFunc/EnVer.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
+            var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
             OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
 
         }
@@ -91,14 +85,11 @@
         <tr>
         <th>流程名称</th>
         <th>工作方式</th>
-        <th>操作</th>
+        <th>编辑</th>
+        <th>删除</th>
         </tr>
 		 
 	</table>
-    <br />
-
-				<button  id="Btn_Save" onclick="Save()">
-					保存</button>
 
 
 	<div id="Msg">

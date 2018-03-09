@@ -74,7 +74,7 @@ namespace BP.WF
         {
             get
             {
-                if (_execer == null || _execer=="")
+                if (_execer == null || _execer == "")
                     _execer = WebUser.No;
                 return _execer;
             }
@@ -91,7 +91,7 @@ namespace BP.WF
         {
             get
             {
-                if (_execerName == null || _execerName=="")
+                if (_execerName == null || _execerName == "")
                     _execerName = WebUser.Name;
                 return _execerName;
             }
@@ -1105,7 +1105,7 @@ namespace BP.WF
             //如果要是跳转到的节点，自动跳转规则规则就会失效。
             if (this.JumpToNode != null)
                 return this.JumpToNode;
-            
+
             Node mynd = this.HisNode;
             Work mywork = this.HisWork;
             var beforeSkipNodeID = 0;   //added by liuxc,2015-7-13,标识自动跳转之前的节点ID
@@ -1120,14 +1120,14 @@ namespace BP.WF
                 {
                     bool isPass = false;
 
-                    if (item.ExpType == ConnDataFrom.Paras) 
-                      isPass = BP.WF.Glo.CondExpPara(item.CondExp, this.rptGe.Row);
+                    if (item.ExpType == ConnDataFrom.Paras)
+                        isPass = BP.WF.Glo.CondExpPara(item.CondExp, this.rptGe.Row);
 
                     if (item.ExpType == ConnDataFrom.SQL)
                         isPass = BP.WF.Glo.CondExpSQL(item.CondExp, this.rptGe.Row);
 
-                    if (isPass==true) 
-                         return new Node(int.Parse(item.FK_Flow + "01"));
+                    if (isPass == true)
+                        return new Node(int.Parse(item.FK_Flow + "01"));
                 }
             }
             #endregion 判断是否有延续流程.
@@ -1846,8 +1846,8 @@ namespace BP.WF
             #endregion
 
             //更新日期，为了考核. 
-            if (this.HisNode.HisCHWay== CHWay.None)
-            gwl.SDT = "无";
+            if (this.HisNode.HisCHWay == CHWay.None)
+                gwl.SDT = "无";
             else
                 gwl.SDT = sdt;
 
@@ -2585,7 +2585,7 @@ namespace BP.WF
                         gwf.NodeName = nd.Name;
                         gwf.FK_Dept = wl.FK_Dept;
                         gwf.DeptName = wl.FK_DeptT;
-                        gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText+";";
+                        gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText + ";";
                         gwf.DirectInsert();
                     }
 
@@ -5051,7 +5051,7 @@ namespace BP.WF
 
             //设置为未读.
             BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.WorkID);
-             
+
 
             //设置最后处理人.
             this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
@@ -5069,7 +5069,7 @@ namespace BP.WF
                 /*如果是按照时效考核.*/
 
                 //获得最后一次执行会签的时间点.
-                string  sql = "SELECT RDT FROM ND"+int.Parse(this.HisNode.FK_Flow)+"TRACK WHERE WorkID=" + this.WorkID + " AND ActionType=30 ORDER BY RDT";
+                string sql = "SELECT RDT FROM ND" + int.Parse(this.HisNode.FK_Flow) + "TRACK WHERE WorkID=" + this.WorkID + " AND ActionType=30 ORDER BY RDT";
                 string lastDTOfHuiQian = DBAccess.RunSQLReturnStringIsNull(sql, null);
 
                 //取出来下达给主持人的时间点.
@@ -5082,7 +5082,7 @@ namespace BP.WF
                 TimeSpan ts = t_lastDTOfHuiQian - t_dtOfToZhuChiRen;
 
                 //生成该节点设定的 时间范围.
-                int hour= this.HisNode.TimeLimit *24 + int.Parse( this.HisNode.TSpanHour.ToString());
+                int hour = this.HisNode.TimeLimit * 24 + int.Parse(this.HisNode.TSpanHour.ToString());
                 TimeSpan tsLimt = new TimeSpan(hour, 0, 0);
 
                 //获得剩余的时间范围.
@@ -5090,7 +5090,7 @@ namespace BP.WF
 
                 //计算应该完成的日期.
                 DateTime dtNow = DateTime.Now;
-                dtNow= dtNow.AddHours(myLeftTS.TotalHours);
+                dtNow = dtNow.AddHours(myLeftTS.TotalHours);
 
                 //设置应该按成的日期.
                 if (this.HisNode.HisCHWay == CHWay.None)
@@ -5151,7 +5151,7 @@ namespace BP.WF
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
 
-                   
+
                 }
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
@@ -5163,7 +5163,7 @@ namespace BP.WF
                     continue;
 
                 //设置当前不可以用.
-                gwl.IsPassInt = 1;             
+                gwl.IsPassInt = 1;
                 gwl.Update();
 
                 // 检查完成条件。
@@ -5300,12 +5300,12 @@ namespace BP.WF
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title, gwl);
                 else
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
-                
+
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
 
                 //cut 当前的人员.
                 string emps = this.HisGenerWorkFlow.TodoEmps;
-                emps = emps.Replace(WebUser.Name+";" , "");
+                emps = emps.Replace(WebUser.Name + ";", "");
                 this.HisGenerWorkFlow.TodoEmps = emps;
                 this.HisGenerWorkFlow.DirectUpdate();
 
@@ -5711,13 +5711,25 @@ namespace BP.WF
                 #region 仅按岗位计算
                 if (node.HisDeliveryWay == DeliveryWay.ByStationOnly)
                 {
-                    sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                    sql = "SELECT A.FK_Emp No FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                     ps = new Paras();
                     ps.Add("FK_Node", node.NodeID);
                     ps.SQL = sql;
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)
                         throw new Exception("@节点访问规则错误:节点(" + node.NodeID + "," + node.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                }
+                #endregion
+
+                #region 按绑定的人计算
+                if (node.HisDeliveryWay == DeliveryWay.ByBindEmp)
+                {
+                    ps = new Paras();
+                    ps.Add("FK_Node", node.NodeID);
+                    ps.SQL = "SELECT FK_Emp No FROM WF_NodeEmp WHERE FK_Node=" + dbStr + "FK_Node ORDER BY FK_Emp";
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")没有绑定工作人员 . ");
                 }
                 #endregion
 
@@ -6032,7 +6044,7 @@ namespace BP.WF
 
             // 处理自动运行 - 预先设置未来的运行节点.
             this.DealAutoRunEnable();
- 
+
 
             //把数据更新到数据库里.
             this.HisWork.DirectUpdate();
@@ -6096,7 +6108,7 @@ namespace BP.WF
                     if (strs.Contains(",") == true)
                     {
                         string[] nds = strs.Split(',');
-                        int fromNodeID = int.Parse( nds[0]);
+                        int fromNodeID = int.Parse(nds[0]);
                         int toNodeID = int.Parse(nds[1]);
                         if (fromNodeID == this.HisNode.NodeID)
                         {
@@ -6768,7 +6780,7 @@ namespace BP.WF
                 //  throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
             }
         }
-        
+
         /// <summary>
         /// 处理事件
         /// </summary>

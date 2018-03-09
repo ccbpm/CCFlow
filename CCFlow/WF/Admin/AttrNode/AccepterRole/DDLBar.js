@@ -125,19 +125,8 @@ function changeOption() {
     window.location.href =   roleName + "?FK_Node=" + nodeID;
 }
 function SaveAndClose() {
-
     Save();
     window.close();
-}
-
-//打开.
-function OpenEasyUiDialogExt(url, title, w, h, isReload) {
-
-    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
-        if (isReload == true) {
-            window.location.href = window.location.href;
-        }
-    });
 }
 
 //高级设置.

@@ -812,6 +812,8 @@ namespace BP.WF.Template
                         return false;
 
                     return true;
+                    #endregion 按SQL 计算
+
                 }
 
                 if (this.HisDataFrom == ConnDataFrom.SQLTemplate)

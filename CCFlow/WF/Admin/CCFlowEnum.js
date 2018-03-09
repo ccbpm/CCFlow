@@ -76,4 +76,78 @@ if (typeof DeliveryWay == "undefined") {
 
 }
 
+    //表单模式
+ if (typeof FormType == "undefined") {
+     var FormType = {}
+    //傻瓜表单
+     FormType.FoolForm = 0,
+    /// <summary>
+    /// 自由表单.
+    /// </summary>
+     FormType.FreeForm = 1,
+    /// <summary>
+    /// 嵌入式表单.
+    /// </summary>
+     FormType.SelfForm = 2,
+    /// <summary>
+    /// SDKForm
+    /// </summary>
+     FormType.SDKForm = 3,
+    /// <summary>
+    /// SL表单
+    /// </summary>
+     FormType.SLForm = 4,
+    /// <summary>
+    /// 表单树
+    /// </summary>
+     FormType.SheetTree = 5,
+    /// <summary>
+    /// 动态表单树
+    /// </summary>
+     FormType.SheetAutoTree = 6,
+    /// <summary>
+    /// 公文表单
+    /// </summary>
+     FormType.WebOffice = 7,
+    /// <summary>
+    /// Excel表单
+    /// </summary>
+     FormType.ExcelForm = 8,
+    /// <summary>
+    /// Word表单
+    /// </summary>
+     FormType.WordForm = 9,
+    /// <summary>
+    /// 傻瓜轨迹表单
+    /// </summary>
+    FormType.FoolTruck = 10,
+    /// <summary>
+    /// 表单库的表单
+    /// </summary>
+    FormType.RefOneFrmTree = 11,
+    /// <summary>
+    /// 禁用(对多表单流程有效)
+    /// </summary>
+    FormType.DisableIt = 100
+}
+/// 公文工作模式
+ if (typeof WebOfficeWorkModel == "undefined") {
+    var WebOfficeWorkModel ={}
    
+        /// <summary>
+        /// 不启用
+        /// </summary>
+        WebOfficeWorkModel.None = 0,
+        /// <summary>
+        /// 按钮方式启用
+        /// </summary>
+        WebOfficeWorkModel.Button = 1,
+        /// <summary>
+        /// 表单在前
+        /// </summary>
+        WebOfficeWorkModel.FrmFirst = 2,
+        /// <summary>
+        /// 文件在前
+        /// </summary>
+        WebOfficeWorkModel.WordFirst = 3
+}

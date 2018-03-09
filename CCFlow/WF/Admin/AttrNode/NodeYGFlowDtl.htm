@@ -24,17 +24,23 @@
 
 	        //求出来已经设置的延续子流程.
 	        var nodeID = GetQueryString("FK_Node");
-	        var ens = new Entities("BP.WF.Template.NodeYGFlows");
-	        ens.Retrieve("FK_Node", nodeID);
+	        var orgNo = GetQueryString("OrgNo");
+
+	        //查询出来数据.
+	        var sql = "SELECT A.No AS SortNo, A.Name as SortName, b.No, b.Name ";
+	        sql += " FROM WF_FlowSort a, WF_Flow b WHERE (A.OrgNo='" + orgNo + "' OR A.ParentNo='" + orgNo + "') AND A.No=B.FK_FlowSort ";
+	        sql += " ORDER BY A.Idx, b.Idx ";
+
+	        //获得要增加的流程集合.
+	        var dt = DBAccess.RunUrlReturnJSON(sql);
 
 	        var html = "";
-	        for (var i = 0; i < ens.length; i++) {
+	        for (var i = 0; i < dt.length; i++) {
 	            var en = ens[i];
 	            html += "<tr>";
-	            html += "<td>" + en.FK_FlowT + "</td>";
-	            html += "<td>" + en.YGWorkWayT + "</td>";
-	            html += "<td><a href=\"javascript:Edit('" + en.OID + "');\" >编辑</a></td>";
-	            html += "<td><a href=\"javascript:Delete('" + en.OID + "');\" >删除</a></td>";
+	            html += "<td>" + en.SortName + "</td>";
+	            html += "<td>" + en.Name + "</td>";
+	            html += "<td><a href=\"javascript:CheckIt('" + en.No + "');\" >选择</a></td>";
 	            html += "</tr>";
 	        }
 
@@ -42,45 +48,24 @@
 
 	    });
 
-	    function Save() {
 
+	    function CheckIt(flowNo) {
+
+	        var ens = new Entities("BP.WF.Template.NodeYGFlows");
+	        ens.Retrieve("FK_Node", nodeID, "FK_Flow", flowNo);
+	        if (ens.length == 1) {
+	            alert("该流程已经存在");
+	            return;
+	        }
+
+	        var en = new Entity("BP.WF.Template.NodeYGFlow");
+	        en.FK_Flow = flowNo;
+	        en.FK_Node = GetQueryString("FK_Node");
+	        en.Insert();
+
+	        window.close();
 	    }
-
-        //查询集团的流程.
-	    function AddGroup() {
-	        var webUser = new WebUser();
-	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
-	        OpenEasyUiDialogExt(url, "选择子流程", 500, 600, true);
-	    }
-	    //查询集团的流程.
-	    function AddOrg() {
-	        var webUser = new WebUser();
-	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
-	        OpenEasyUiDialogExt(url, "选择子流程", 500, 600, true);
-	    }
-
-      
-
-        //删除成功.
-        function Delete(pk) {
-
-            if (confirm('您确定要删除吗？') == false)
-                return;
-
-            var en = new Entity("BP.WF.Template.NodeYGFlow", pk);
-            en.Delete();
-            window.location.href = window.location.href;
-        }
-        //编辑.
-        function Edit(pk) {
-
-            if (confirm('您确定要删除吗？') == false)
-                return;
-
-            var url = "../../Comm/RefFunc/EnVer.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
-            OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
-
-        }
+         
     </script>
 </head>
 <body>
@@ -89,9 +74,9 @@
         <caption>延续子流程 <a href="javascript:AddGroup()">增加集团子流程</a>|<a href="javascript:AddOrg()">增加本组织子流程</a></caption>
 
         <tr>
-        <th>流程名称</th>
-        <th>工作方式</th>
-        <th>操作</th>
+        <th>流程类别</th>
+        <th>名称</th>
+        <th>选择</th>
         </tr>
 		 
 	</table>

@@ -78,6 +78,20 @@ namespace BP.WF.Template
                 return this.GetValRefTextByKey(NodeYGFlowAttr.FK_Flow);
             }
         }
+        /// <summary>
+        /// 条件表达式.
+        /// </summary>
+        public string CondExp
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeYGFlowAttr.CondExp);
+            }
+            set
+            {
+                SetValByKey(NodeYGFlowAttr.CondExp, value);
+            }
+        }
         #endregion
 
         #region 构造函数

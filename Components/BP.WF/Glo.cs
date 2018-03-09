@@ -2601,6 +2601,102 @@ namespace BP.WF
             return en;
         }
         /// <summary>
+        /// 判断表达式是否成立
+        /// </summary>
+        /// <param name="exp">表达式</param>
+        /// <param name="en">变量</param>
+        /// <returns>是否成立</returns>
+        public static bool CondExp(string exp, Hashtable ht)
+        {
+            string[] strs = exp.Trim().Split(' ');
+
+            string key = strs[0].Trim();
+            string oper = strs[1].Trim();
+            string val = strs[2].Trim();
+            val = val.Replace("'", "");
+            val = val.Replace("%", "");
+            val = val.Replace("~", "");
+
+
+            string valPara = null;
+            if (ht.ContainsKey(key) == false)
+            {
+                try
+                {
+                    /*如果不包含指定的关键的key, 就到公共变量里去找. */
+                    if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
+                        throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
+                    valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
+                }
+                catch
+                {
+                    //有可能是常量. 
+                    valPara = key;
+                }
+            }
+            else
+            {
+                valPara = ht[key].ToString().Trim();
+            }
+
+            #region 开始执行判断.
+            if (oper == "=")
+            {
+                if (valPara == val)
+                    return true;
+                else
+                    return false;
+            }
+
+            if (oper.ToUpper() == "LIKE")
+            {
+                if (valPara.Contains(val))
+                    return true;
+                else
+                    return false;
+            }
+
+            if (oper == ">")
+            {
+                if (float.Parse(valPara) > float.Parse(val))
+                    return true;
+                else
+                    return false;
+            }
+            if (oper == ">=")
+            {
+                if (float.Parse(valPara) >= float.Parse(val))
+                    return true;
+                else
+                    return false;
+            }
+            if (oper == "<")
+            {
+                if (float.Parse(valPara) < float.Parse(val))
+                    return true;
+                else
+                    return false;
+            }
+            if (oper == "<=")
+            {
+                if (float.Parse(valPara) <= float.Parse(val))
+                    return true;
+                else
+                    return false;
+            }
+
+            if (oper == "!=")
+            {
+                if (float.Parse(valPara) != float.Parse(val))
+                    return true;
+                else
+                    return false;
+            }
+            throw new Exception("@参数格式错误:" + exp + " Key=" + key + " oper=" + oper + " Val=" + val);
+            #endregion 开始执行判断.
+
+        }
+        /// <summary>
         /// 处理表达式
         /// </summary>
         /// <param name="exp">表达式</param>

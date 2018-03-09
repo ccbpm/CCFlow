@@ -1949,6 +1949,7 @@ namespace BP.WF
             if (this.HisNode.HisToNodes.Count == 1)
                 return this.HisNode.HisToNodes;
 
+            #region 如果使用户选择的.
             if (this.HisNode.CondModel == CondModel.ByUserSelected)
             {
                 // 获取用户选择的节点.
@@ -1965,13 +1966,31 @@ namespace BP.WF
                     nds.AddEntity(new Node(int.Parse(item)));
                 }
                 return nds;
-
-                //设置他为空,以防止下一次发送出现错误.
-                this.HisGenerWorkFlow.Paras_ToNodes = "";
             }
+            #endregion 如果使用户选择的.
+
+
+            #region 判断是否有延续流程.
+            NodeYGFlows ygflows = new NodeYGFlows();
+            ygflows.Retrieve(NodeYGFlowAttr.FK_Node, this.HisNode.NodeID);
+            if (ygflows.Count != 0)
+            {
+                foreach (NodeYGFlow item in ygflows)
+                {
+                    bool isPass = BP.WF.Glo.CondExp(item.CondExp, this.rptGe.Row);
+                    if (isPass == true)
+                    {
+                        Nodes nds = new Nodes();
+                        Node nd = new Node( int.Parse(item.FK_Flow+"01"));
+                        nds.AddEntity(nd);
+                        return nds;
+                    }
+                }
+            }
+            #endregion 判断是否有延续流程.
+
 
             Nodes toNodes = this.HisNode.HisToNodes;
-
             // 如果只有一个转向节点, 就不用判断条件了,直接转向他.
             if (toNodes.Count == 1)
                 return toNodes;

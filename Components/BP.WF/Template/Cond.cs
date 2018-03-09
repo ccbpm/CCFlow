@@ -861,7 +861,6 @@ namespace BP.WF.Template
                     #endregion
                 }
 
-
                 if (this.HisDataFrom == ConnDataFrom.Url)
                 {
                     #region URL 参数计算
@@ -998,99 +997,8 @@ namespace BP.WF.Template
 
                 if (this.HisDataFrom == ConnDataFrom.Paras)
                 {
-                    #region 按系统参数计算
-                    //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
-                    string exp = this.OperatorValueStr;
-                    string[] strs = exp.Trim().Split(' ');
-
-                    string key = strs[0].Trim();
-                    string oper = strs[1].Trim();
-                    string val = strs[2].Trim();
-                    val = val.Replace("'", "");
-                    val = val.Replace("%", "");
-                    val = val.Replace("~", "");
-
-                    BP.En.Row row = this.en.Row;
-
-                    string valPara = null;
-                    if (row.ContainsKey(key) == false)
-                    {
-                        try
-                        {
-                            /*如果不包含指定的关键的key, 就到公共变量里去找. */
-                            if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
-                                throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
-                            valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
-                        }
-                        catch
-                        {
-                            //有可能是常量. 
-                            valPara = key;
-                        }
-                    }
-                    else
-                    {
-                        valPara = row[key].ToString().Trim();
-                    }
-
-                    #region 开始执行判断.
-                    if (oper == "=")
-                    {
-                        if (valPara == val)
-                            return true;
-                        else
-                            return false;
-                    }
-
-                    if (oper.ToUpper() == "LIKE")
-                    {
-                        if (valPara.Contains(val))
-                            return true;
-                        else
-                            return false;
-                    }
-
-                    if (oper == ">")
-                    {
-                        if (float.Parse(valPara) > float.Parse(val))
-                            return true;
-                        else
-                            return false;
-                    }
-                    if (oper == ">=")
-                    {
-                        if (float.Parse(valPara) >= float.Parse(val))
-                            return true;
-                        else
-                            return false;
-                    }
-                    if (oper == "<")
-                    {
-                        if (float.Parse(valPara) < float.Parse(val))
-                            return true;
-                        else
-                            return false;
-                    }
-                    if (oper == "<=")
-                    {
-                        if (float.Parse(valPara) <= float.Parse(val))
-                            return true;
-                        else
-                            return false;
-                    }
-
-                    if (oper == "!=")
-                    {
-                        if (float.Parse(valPara) != float.Parse(val))
-                            return true;
-                        else
-                            return false;
-                    }
-                    throw new Exception("@参数格式错误:" + exp + " Key=" + key + " oper=" + oper + " Val=" + val);
-                    #endregion 开始执行判断.
-
-                    // throw new Exception("@判断条件时错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val+")");
-                    #endregion
+                    Hashtable ht = en.Row;
+                    return BP.WF.Glo.CondExp(this.OperatorValueStr, ht);
                 }
 
                 //从节点表单里判断.

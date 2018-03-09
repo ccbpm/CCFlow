@@ -293,6 +293,16 @@ function OpenEasyUiDialogForSingleHtml(url, dlgTitle, dlgWidth, dlgHeight, dlgIc
     dlg.dialog('open');
 }
 
+//打开.
+function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+        if (isReload == true) {
+            window.location.href = window.location.href;
+        }
+    });
+}
+
 function OpenEasyUiConfirm(msg, okBtnFunc, okBtnFuncArgs) {
     InitOKCancelText();
 

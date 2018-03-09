@@ -152,11 +152,11 @@ namespace CCFlow.WF.WorkOpt
             Int64 newWorkID = 0;
             try
             {
-#region 单据变量.
-                   Bill bill = new Bill();
+                #region 单据变量.
+                Bill bill = new Bill();
                 bill.MyPK = wk.FID + "_" + wk.OID + "_" + nd.NodeID + "_" + func.No;
-              
-#endregion
+
+                #endregion
 
                 #region 生成单据
                 rtf.HisEns.Clear();
@@ -200,7 +200,7 @@ namespace CCFlow.WF.WorkOpt
 
                     //把数据赋值给wk. 有可能用户还没有执行流程检查，字段没有同步到 NDxxxRpt.
                     if (ndxxRpt.Row.Count > wk.Row.Count)
-                         wk.Row = ndxxRpt.Row;
+                        wk.Row = ndxxRpt.Row;
 
                     rtf.HisGEEntity = wk;
 
@@ -224,6 +224,7 @@ namespace CCFlow.WF.WorkOpt
                     ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                     ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
                     ps.Add(TrackAttr.WorkID, newWorkID);
+
                     rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
                 }
 

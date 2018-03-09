@@ -73,9 +73,19 @@ function NodeAttrOld(nodeID) {
 function NodeFrmSln(nodeID) {
     //表单方案.
     var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
-
     OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
+}
 
+
+//设计表单
+function NodeFrmD(nodeID) {
+
+    var node = new Entity("BP.WF.Node", nodeID);
+
+    if (node.FormType == 0)
+        NodeFrmFree(nodeID);
+    else
+        NodeFrmFool(nodeID);
 }
 
 function NodeFrmFool(nodeID) {

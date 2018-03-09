@@ -32,37 +32,13 @@
 	        var stas = new Entities("BP.WF.Port.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
-	       // var stationTypes = new Entities("BP.WF.Port.StationTypes");
-	        //查询出来数据.
-	        //select * from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo = 0)
-	        var sql = "select * from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ")";
+	        //查询出来数据.	       
+	        var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ") group by No,Name";
 	       
-
 	        //获得要增加的流程集合.
 	        var stationTypes = DBAccess.RunSQLReturnTable(sql);
 	       
 	        BindGroupModel(stationTypes, stas, ens);
-
-	        //渲染画面.
-
-
-
-	        //	        //获得要增加的流程集合.
-	        //	        var dt = DBAccess.RunSQLReturnTable(sql);
-	        //	        console.log(dt);
-
-	        //	        var html = "";
-	        //	        for (var i = 0; i < dt.length; i++) {
-
-	        //	            var en = dt[i];
-
-	        //	            html += "<tr>";
-	        //	            html += "<td><input type=check value='" + en.Name + "' />" + en.SortName + "</td>";
-	        //	            html += "<td>" + en.Name + "</td>";
-	        //	            html += "</tr>";
-	        //	        }
-
-	        //	        $("#Table1 tr:last").after(html);
 
 	    });
 
@@ -210,6 +186,8 @@
     </script>
 </head>
 <body>
+
+
     <div id="Msg"></div>
 </body>
 </html>

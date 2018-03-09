@@ -29,6 +29,21 @@
                 html += "&nbsp;&nbsp;&nbsp;" + en.FK_DeptText;
             }
             document.getElementById("dept").innerHTML = html;
+
+            //根据用户的信息，判断是否启用那个设置工具。
+            var user = new WebUser();
+
+            $("#OrgModel").hide();
+            $("#AdminModel").hide();
+
+            if (user.FK_Dept == 0) {
+                /*调用通用的.*/
+                $("#AdminModel").show();
+
+            } else {
+                /*调用集团模式的.*/
+                $("#OrgModel").show();
+            }
         });
         //弹出新页面
         function OpenNew() {
@@ -46,6 +61,24 @@
             url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
             OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
         }
+
+        //设置本组织岗位.
+        function SetOrgDepts() {
+            var user = new WebUser();
+            OpenNodDeptGroup(user.FK_Dept);
+        }
+
+        //设置集团岗位.
+        function SetGroupDepts() {
+            var user = new WebUser();
+            OpenNodDeptGroup(user.GroupNo);
+        }
+
+        function OpenNodDeptGroup(orgNo) {
+            var url = "NodeDeptGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
+            OpenEasyUiDialogExt(url, "绑定部门", 500, 600, true);
+        }
+
         //保存
         function Save() {
  
@@ -59,18 +92,24 @@
 </head>
 <body >
     <div id="bar"> </div>
-
-    <fieldset>
-        <legend>设置</legend>
-        <ul>
-            <li>
-                <a href="javascript:OpenNew()"> 设置/更改部门</a>
-            </li>
-            <li> 
-                <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
-            </li>
-        </ul>
-    </fieldset>
+    <div id="AdminModel">
+        <fieldset>
+            <legend>设置(超级管理员)</legend>
+            <ul>
+                <li><a href="javascript:OpenNew()"> 设置/更改部门</a></li>
+                <li><a href="javascript:OpenOld()">设置/更改部门(旧版本)</a></li>
+            </ul>
+        </fieldset>
+    </div>
+    <div id="OrgModel">
+        <fieldset>
+            <legend>设置（组织管理员）</legend>
+            <ul>
+                <li><a href="javascript:SetGroupDepts()" >设置集团部门</a> </li>
+                <li><a href="javascript:SetOrgDepts()" >设置本组织部门</a> </li>
+            </ul>
+        </fieldset>
+    </div>
     <fieldset>
         <legend>已经设置的部门</legend>
         <div id="dept"> </div>

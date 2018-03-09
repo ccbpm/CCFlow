@@ -50,6 +50,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
+                uac.IsInsert=false;
                 return uac;
             }
         }
@@ -99,7 +100,7 @@ namespace BP.WF.Template
                 map.AddTBIntPKOID();
                  
                 map.AddTBInt(NodeYGFlowAttr.FK_Node, 0, "节点", false, true);
-                map.AddDDLEntities(NodeYGFlowAttr.FK_Flow, null, "延续子流程", new Flows(), true);
+                map.AddDDLEntities(NodeYGFlowAttr.FK_Flow, null, "延续子流程", new Flows(), false);
                 map.AddDDLSysEnum(NodeYGFlowAttr.YGWorkWay, 1, "工作方式", true, true, NodeYGFlowAttr.YGWorkWay,
                     "@0=停止当前节点等待延续子流程运行完毕后该节点自动向下运行@1=启动延续子流程运行到下一步骤上去");
 

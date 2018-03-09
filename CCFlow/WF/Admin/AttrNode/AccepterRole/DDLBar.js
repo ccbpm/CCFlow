@@ -129,10 +129,20 @@ function SaveAndClose() {
     window.close();
 }
 
+//打开窗体.
+function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+        if (isReload == true) {
+            window.location.href = window.location.href;
+        }
+    });
+}
+
 //高级设置.
 function AdvSetting() {
 
     var nodeID = GetQueryString("FK_Node");
     var url = "AdvSetting.htm?FK_Node=" + nodeID + "&M=" + Math.random();
-    OpenEasyUiDialog(url, "高级设置", 600, 400, false);
+    OpenEasyUiDialogExt(url, "高级设置", 600, 500, false);
 }

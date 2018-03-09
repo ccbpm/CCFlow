@@ -108,11 +108,11 @@
     <div id="processMenu3" style="width: 100px; padding: 5px; position: absolute; background: #fff; display: none;">
         <ul style="margin:0 0 10px 10px;">
             
-            <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
-            <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
-            <li id=""><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
-            <li id=""><i class="icon-wrench"></i>&nbsp;<span class="_label">分合流</span></li>
-            <li id=""><i class="icon-trash"></i>&nbsp;<span class="_label">子线程</span></li>
+            <li id="node_nomal"><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
+            <li id="node_shunt"><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
+            <li id="node_confluence"><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
+            <li id="node_shaddco"><i class="icon-wrench"></i>&nbsp;<span class="_label">分合流</span></li>
+            <li id="node_childthread"><i class="icon-trash"></i>&nbsp;<span class="_label">子线程</span></li>
         </ul>
     </div>
     <div id="canvasMenu" style="display:none;">
@@ -160,7 +160,23 @@
         }, function () {
             $("#processMenu3").hide();
         });
-        
+       
+        //节点类型设置
+        $('#node_nomal').on('click', function () {
+            alert('普通节点');
+        });
+        $('#node_shunt').on('click', function () {
+            alert('分流节点');
+        });
+        $('#node_confluence').on('click', function () {
+            alert('合流节点');
+        });
+        $('#node_shaddco').on('click', function () {
+            alert('分合流节点');
+        });
+        $('#node_childthread').on('click', function () {
+            alert('子线程节点');
+        });
     </script>
     <script type="text/javascript">
         var the_flow_id = '4';

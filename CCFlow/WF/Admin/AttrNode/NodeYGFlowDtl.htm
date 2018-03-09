@@ -19,7 +19,6 @@
 
 	    //页面启动函数.
 	    $(function () {
-
 	        $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
 	        //求出来已经设置的延续子流程.
@@ -33,7 +32,7 @@
 
 	        //获得要增加的流程集合.
 	        var dt = DBAccess.RunSQLReturnTable(sql);
-	        alert(dt);
+	        console.log(dt);
 
 	        var html = "";
 	        for (var i = 0; i < dt.length; i++) {
@@ -47,15 +46,17 @@
 	            html += "</tr>";
 	        }
 
-	        $("#Msg").html("");
+	        $("#Table1 tr:last").after(html);
 
 	    });
 
 
 	    function CheckIt(flowNo) {
+	        var nodeID = GetQueryString("FK_Node");
 
 	        var ens = new Entities("BP.WF.Template.NodeYGFlows");
 	        ens.Retrieve("FK_Node", nodeID, "FK_Flow", flowNo);
+
 	        if (ens.length == 1) {
 	            alert("该流程已经存在");
 	            return;
@@ -65,8 +66,6 @@
 	        en.FK_Flow = flowNo;
 	        en.FK_Node = GetQueryString("FK_Node");
 	        en.Insert();
-
-	        window.close();
 	    }
          
     </script>

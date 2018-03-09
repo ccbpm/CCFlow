@@ -16,6 +16,15 @@
 
 	<base target="_self" />
 	<script type="text/javascript">
+	    //打开窗体.
+	    function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+	        OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+	            if (isReload == true) {
+	                window.location.href = window.location.href;
+	            }
+	        });
+	    }
 
 	    //页面启动函数.
 	    $(function () {
@@ -26,19 +35,19 @@
 	        var nodeID = GetQueryString("FK_Node");
 	        var ens = new Entities("BP.WF.Template.NodeYGFlows");
 	        ens.Retrieve("FK_Node", nodeID);
-
+	        console.log(ens);
 	        var html = "";
 	        for (var i = 0; i < ens.length; i++) {
 	            var en = ens[i];
 	            html += "<tr>";
-	            html += "<td>" + en.FK_FlowT + "</td>";
-	            html += "<td>" + en.YGWorkWayT + "</td>";
+	            html += "<td>" + en.FK_FlowText + "</td>";
+	            html += "<td>" + en.YGWorkWayText + "</td>";
 	            html += "<td><a href=\"javascript:Edit('" + en.OID + "');\" >编辑</a></td>";
 	            html += "<td><a href=\"javascript:Delete('" + en.OID + "');\" >删除</a></td>";
 	            html += "</tr>";
 	        }
 
-	        $("#Msg").html("");
+	        $("#Table1 tr:last").after(html);
 
 	    });
 
@@ -67,12 +76,9 @@
         }
         //编辑.
         function Edit(pk) {
-
-            if (confirm('您确定要删除吗？') == false)
-                return;
-
             var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
-            OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
+            OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+            //window.location.href = url;
 
         }
     </script>

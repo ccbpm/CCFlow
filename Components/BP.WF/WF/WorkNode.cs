@@ -1120,9 +1120,7 @@ namespace BP.WF
                 {
                     bool isPass = BP.WF.Glo.CondExp(item.CondExp, this.rptGe.Row);
                     if (isPass == true)
-                    {
                          return new Node(int.Parse(item.FK_Flow + "01"));
-                    }
                 }
             }
             #endregion 判断是否有延续流程.
@@ -3626,6 +3624,13 @@ namespace BP.WF
                     Node toND = this.NodeSend_GenerNextStepNode();
                     if (this.IsStopFlow)
                         return;
+
+                    if (this.HisNode.FK_Flow != toND.FK_Flow)
+                    {
+                        NodeSendToYGFlow(toND, JumpToEmp);
+                        return;
+                    }
+
                     //写入到达信息.
                     this.addMsg(SendReturnMsgFlag.VarToNodeID, toND.NodeID.ToString(), toND.NodeID.ToString(), SendReturnMsgType.SystemMsg);
                     this.addMsg(SendReturnMsgFlag.VarToNodeName, toND.Name, toND.Name, SendReturnMsgType.SystemMsg);

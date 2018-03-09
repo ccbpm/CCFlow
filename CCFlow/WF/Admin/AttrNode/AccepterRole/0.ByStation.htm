@@ -19,7 +19,7 @@
     <script  type="text/javascript">
         //初始化页面
         $(function () {
-            
+
             InitBar(DeliveryWay.ByStation);
 
             var ens = new Entities("BP.WF.Template.NodeStations");
@@ -34,10 +34,24 @@
             }
             document.getElementById("stas").innerHTML = html;
 
+            //根据用户的信息，判断是否启用那个设置工具。
+            var user = new WebUser();
+
+            document.getElementById("GenerModel").visable = false;
+            document.getElementById("SubIncModel").visable = false;
+
+            if (user.FK_Dept == 0) {
+                /*调用通用的.*/
+                document.getElementById("SubIncModel").visable = false;
+
+            } else {
+                /*调用集团模式的.*/
+            }
+
         });
 
        function OpenOld() {
-           var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
+           var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
            var nodeID = GetQueryString("FK_Node");
            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
@@ -48,6 +62,23 @@
            var nodeID = GetQueryString("FK_Node");
            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+       }
+
+       //设置本组织岗位.
+       function SetOrgStations() {
+           var user = new WebUser();
+           OpenNodStationGroup(user.FK_Dept);
+       }
+
+       //设置集团岗位.
+       function SetGroupStations() {
+           var user = new WebUser();
+           OpenNodStationGroup(user.GroupNo);
+       }
+
+       function OpenNodStationGroup(orgNo) {
+           var url = "NodeStationGroup.htm?OrgNo=" + orgNo;
+           OpenEasyUiDialogExt(url, "绑定岗位", 500, 600, true);
        }
 
         //保存
@@ -62,7 +93,7 @@
 </head>
 <body >
 <div id="bar"> </div>
-
+ 
 <fieldset id="SubIncModel">
     <legend>设置</legend>
     <ul>
@@ -73,12 +104,11 @@
     </ul>
 </fieldset>
 
-
-<fieldset id="GroupModel">
+<fieldset id="GenerModel" >
     <legend>设置</legend>
     <ul>
-        <li><a href="javascript:OpenOld()">设置/更改岗位(旧版本)</a></li>
-        <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
+        <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
+        <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
         <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
         </li>
     </ul>

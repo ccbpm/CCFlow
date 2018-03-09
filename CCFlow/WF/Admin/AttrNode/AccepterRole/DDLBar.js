@@ -35,6 +35,9 @@ function InitBar(optionKey) {
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input type=button onclick='SaveAndClose()' value='保存&关闭' />";
+
+    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
+
     html += "<hr/>";
 
     document.getElementById("bar").innerHTML = html;
@@ -135,4 +138,12 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
             window.location.href = window.location.href;
         }
     });
+}
+
+//高级设置.
+function AdvSetting() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var url = "AdvSetting.htm?FK_Node=" + nodeID + "&M=" + Math.random();
+    OpenEasyUiDialog(url, "高级设置", 600, 400, false);
 }

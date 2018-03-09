@@ -24,7 +24,6 @@
 	        //求出来已经设置的延续子流程.
 	        var nodeID = GetQueryString("FK_Node");
 	        var orgNo = GetQueryString("OrgNo");
-
 	        //已经选择的岗位.
 	        var ens = new Entities("BP.WF.Template.NodeStations");
 	        ens.Retrieve("FK_Node", nodeID);
@@ -33,16 +32,16 @@
 	        var stas = new Entities("BP.WF.Port.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
-	        for (var i = 0; i < stas.length; i++) {
+	       // var stationTypes = new Entities("BP.WF.Port.StationTypes");
+	        //查询出来数据.
+	        //select * from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo = 0)
+	        var sql = "select * from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ")";
+	       
 
-	            var sta = stas[i];
-	            var name = sta.Name;
-	            var no = sta.No;
-
-	            var typeNo = sta.FK_StationType;
-	            var typeName = sta.FK_StationTypeT;
-	        }
-
+	        //获得要增加的流程集合.
+	        var stationTypes = DBAccess.RunSQLReturnTable(sql);
+	       
+	        BindGroupModel(stationTypes, stas, ens);
 
 	        //渲染画面.
 
@@ -67,6 +66,120 @@
 
 	    });
 
+	    function BindGroupModel(groups, entities, selectedEles) {
+	        AttrOfMInMM = "FK_Station";
+	        var html = "<table style='width:100%;' >";
+
+	        html += "<tr>";
+	        html += "<th colspan=3>";
+	        html += "<div style='float:left'>";
+	        html += "<input type=button value='保存' onclick='Save();' id='save' />";
+	        html += "</div>";
+
+	        html += "</th>";
+	        html += "</tr>";
+
+	        for (var i = 0; i < groups.length; i++) {
+
+	            var group = groups[i];
+
+	            html += "<tr>";
+	            html += "<th colspan=3>";
+
+	            html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "'  /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
+
+	            html += "</th>";
+	            html += "</tr>";
+
+
+	            var myNum = -1;
+	            for (var idx = 0; idx < entities.length; idx++) {
+
+	                en = entities[idx];
+
+	                var myidx = 0;
+	                var oOfEn;
+	                for (var obj in en) {
+	                    if (myidx == 2) {
+	                        oOfEn = obj;
+	                        break;
+	                    }
+	                    myidx++;
+	                }
+
+	                myidx = 0;
+	                var oOfGroup;
+	                for (var obj in en) {
+	                    if (myidx == 0) {
+	                        oOfGroup = obj;
+	                        break;
+	                    }
+	                    myidx++;
+	                }
+
+	                if (en[oOfEn] != group[oOfGroup])
+	                    continue;
+
+	                var isHave = false;
+	                for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+
+	                    var ele = selectedEles[iEle];
+	                    if (ele == null || ele == undefined)
+	                        continue;
+
+	                    if (ele[AttrOfMInMM] == en.No) {
+	                        isHave = true;
+	                        break;
+	                    }
+	                }
+
+	                var lab = en.Name;
+	                if (isHave)
+	                    lab = "<font color=green>" + en.Name + "</font>";
+
+	                myNum++;
+	                if (myNum == 0)
+	                    html += "<TR>";
+
+	                if (isHave == true)
+	                    html += "<td><input type='checkbox' checked=true name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+	                else
+	                    html += "<td><input type='checkbox'  name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+
+
+	                if (myNum == 2) {
+	                    html += "</tr>";
+	                    myNum = -1;
+	                }
+	            }
+
+	            if (idx == 1) {
+	                html += "<td colspan=2></td>";
+	                html += "</tr>";
+	            }
+
+	            if (idx == 2) {
+	                html += "<td></td>";
+	                html += "</tr>";
+	            }
+	        }
+
+	        html += "</table>";
+
+	        console.log(html);
+	        $("#Msg").html("");
+	        $("#Msg").html(html);
+	    }
+
+	    //选择与取消选择.
+	    function CheckAll(checked, no) {
+
+	        $("input[name='" + no + "']").each(function () {
+	            this.checked = checked;
+	        });
+
+	    }
+
         //保存.
 	    function Save() {
 
@@ -76,13 +189,19 @@
 	        //删除,该组织下已经保存的岗位.
 	        var sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
 	        DBAccess.RunSQL(sql);
+	        //获得该组织的岗位.
+	        var stas = new Entities("BP.WF.Port.Stations");
+	        stas.Retrieve("OrgNo", orgNo);
 
 	        //遍历checkbox控件，然后执行插入.
-	        for (var i = 0; i < length; i++) {
+	        for (var i = 0; i < stas.length; i++) {
 	            var en = new Entity("BP.WF.Template.NodeStation");
-	            en.FK_Node = nodeID;
-	            en.FK_Station = "sss";
-	            en.Insert();
+
+	            if (document.getElementById("CB_" + stas[i].No).checked) {
+	                en.FK_Node = nodeID;
+	                en.FK_Station = stas[i].No;
+	                en.Insert();
+	            }
 	        }
 
 	        window.close();
@@ -91,16 +210,6 @@
     </script>
 </head>
 <body>
-	<table id="Table1" style="width: 100%">
-        <caption>选择绑定的岗位</caption>
-
-        <tr>
-        <th>岗位类别</th>
-        <th>名称</th>
-        </tr>
-		 
-	</table>
-    <input type=button value="Save" onclick="Save()" />
-   
+    <div id="Msg"></div>
 </body>
 </html>

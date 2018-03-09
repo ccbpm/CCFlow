@@ -37,18 +37,18 @@
             //根据用户的信息，判断是否启用那个设置工具。
             var user = new WebUser();
 
-            document.getElementById("OrgModel").scrollIntoView = false;
-            document.getElementById("AdminModel").visable = false;
+            $("#OrgModel").hide();
+            $("#AdminModel").hide();
 
+            user.FK_Dept = 1;
             if (user.FK_Dept == 0) {
                 /*调用通用的.*/
-                document.getElementById("AdminModel").visable = false;
+                $("#AdminModel").show();
+                
             } else {
                 /*调用集团模式的.*/
-                document.getElementById("OrgModel").visable = false;
+                $("#OrgModel").show();
             }
-
-
 
         });
 
@@ -79,7 +79,7 @@
        }
 
        function OpenNodStationGroup(orgNo) {
-           var url = "NodeStationGroup.htm?OrgNo=" + orgNo+"&FK_Node"+GetQueryString("FK_Node");
+           var url = "NodeStationGroup.htm?OrgNo=" + orgNo+"&FK_Node="+GetQueryString("FK_Node");
            OpenEasyUiDialogExt(url, "绑定岗位", 500, 600, true);
        }
 
@@ -96,26 +96,28 @@
 <body >
 <div id="bar"> </div>
  
-<fieldset id="AdminModel" >
-    <legend>设置(超级管理员)</legend>
-    <ul>
-        <li><a href="javascript:OpenOld()">设置/更改岗位(旧版本)</a></li>
-        <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
-        <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
-        </li>
-    </ul>
-</fieldset>
-
-<fieldset id="OrgModel" >
-    <legend>设置（组织管理员）</legend>
-    <ul>
-        <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
-        <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
-        <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
-        </li>
-    </ul>
-</fieldset>
-
+ <div id="AdminModel">
+    <fieldset >
+        <legend>设置(超级管理员)</legend>
+        <ul>
+            <li><a href="javascript:OpenOld()">设置/更改岗位(旧版本)</a></li>
+            <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
+            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+<div id="OrgModel">
+    <fieldset >
+        <legend>设置（组织管理员）</legend>
+        <ul>
+            <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
+            <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
+            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a>
+            </li>
+        </ul>
+    </fieldset>
+</div>
 <fieldset>
 <legend>已经设置的岗位</legend>
 

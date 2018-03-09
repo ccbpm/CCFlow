@@ -813,6 +813,13 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "延续子流程"; // "调用事件接口";
+                rm.ClassMethodName = this.ToString() + ".DoYGFlows";
+                //  rm.Icon = "../../WF/Img/Event.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 if (BP.WF.Glo.IsEnableZhiDu)
                 {
@@ -1119,8 +1126,14 @@ namespace BP.WF.Template
         }
         #endregion 表单相关.
 
-       
-      
+        /// <summary>
+        /// 延续子流程
+        /// </summary>
+        /// <returns></returns>
+        public string DoYGFlows()
+        {
+            return "../../Admin/AttrNode/NodeYGFlow.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
+        }
         /// <summary>
         /// 集团部门树
         /// </summary>

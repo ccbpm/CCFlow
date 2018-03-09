@@ -1462,6 +1462,11 @@ namespace BP.WF.HttpHandler
             ht.Add("FK_Dept", WebUser.FK_Dept);
             ht.Add("FK_DeptName", WebUser.FK_DeptName);
             ht.Add("FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+
+            ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
+            ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
+            ht.Add("GroupNo", WebUser.GroupNo);
+
             return BP.Tools.Json.ToJson(ht);
         }
     }

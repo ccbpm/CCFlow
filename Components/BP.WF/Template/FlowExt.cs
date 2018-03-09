@@ -484,6 +484,9 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+              
+
                 //rm = new RefMethod();
                 //rm.Title = "与业务表数据同步"; // "抄送规则";
                 //rm.ClassMethodName = this.ToString() + ".DoBTable";
@@ -1003,6 +1006,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/Action.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
+       
         /// <summary>
         /// 节点标签
         /// </summary>

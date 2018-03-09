@@ -104,6 +104,7 @@ namespace BP.WF.Template
                     "@0=停止当前节点等待延续子流程运行完毕后该节点自动向下运行@1=启动延续子流程运行到下一步骤上去");
 
                 map.AddTBString(NodeYGFlowAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
+
                 map.AddTBInt(NodeYGFlowAttr.Idx, 0, "显示顺序", true, false);
 
                 this._enMap = map;

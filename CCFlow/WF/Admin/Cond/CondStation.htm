@@ -5,22 +5,31 @@
     <title>方向条件-按照岗位计算</title>
     <!-- 于庆海 -->
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
+ 
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../CCFlowEnum.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
-   
+    
+        var operatorValue = "";
+      
         //页面启动函数.
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
+            var ifm = document.getElementById("stationFrame");
+            ifm.height = document.documentElement.clientHeight-40;
 
             InitPage();
+           
 
             $("#Msg").html("");
         });
@@ -36,67 +45,36 @@
 
             var cond = new Entity("BP.WF.Template.Cond", mypk);
             // 运算的值
-            var operatorValue = cond.OperatorValue
+            operatorValue = cond.OperatorValue
 
             //获取已指定操作员的岗位条件
-            var CheckStations = operatorValue.split("@");
+            CheckStations= operatorValue.split("@");
 
-            //岗位类型集合
-            var StationTypes;
-            var GStationTypes;
-            var OStationTypes;
+            var ens = new Entities("BP.WF.Template.NodeStations");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            //岗位集合
-            var Stations;
-            var GStations;
-            var OStations;
+            var html = "合计:(<font color=red>" + CheckStations.length + "</font>)条";
+
+            for (var i = 0; i < CheckStations.length; i++) {
+                var en = new Entity("BP.WF.Port.Station", CheckStations[i]);
+                html += "&nbsp;&nbsp;&nbsp;" + en.Name;
+            }
+            document.getElementById("stations").innerHTML = html;
+
 
             ////根据用户的信息，判断是否启用那个设置工具。
             var user = new WebUser();
 
-            /*调用通用的.*/
+            $("#OrgModel").hide();
+            $("#AdminModel").hide();
+
             if (user.FK_Dept == 0) {
+                /*调用通用的.*/
                 $("#AdminModel").show();
-                StationTypes = new Entities("BP.GPM.StationTypes");
-                StationTypes.RetrieveAll();
 
-                Stations = new Entities("BP.GPM.Stations");
-                Stations.RetrieveAll();
-                //初始化岗位Table显示
-                InitStationTable("t1", StationTypes, Stations);
-
-             /*调用集团模式的.*/
             } else {
+                /*调用集团模式的.*/
                 $("#OrgModel").show();
-                //集团模式
-                var groupNo = user.GroupNo;
-                GStations = new Entities("BP.GPM.Stations");
-                GStations.Retrieve("OrgNo", groupNo);
-                //查询出来数据.	       
-                var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + groupNo + ")";
-                //获得要增加的流程集合.
-                GStationTypes = DBAccess.RunSQLReturnTable(sql);
-                //初始化岗位Table显示
-                InitStationTable("t2", GStationTypes, GStations);
-
-                //组织结构模式
-                var orgNo = user.FK_Dept;
-                OStations = new Entities("BP.GPM.Stations");
-                OStations.Retrieve("OrgNo", orgNo);
-                //查询出来数据.	       
-                var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ")";
-                //获得要增加的流程集合.
-                OStationTypes = DBAccess.RunSQLReturnTable(sql);
-                //初始化岗位Table显示
-                InitStationTable("t3", OStationTypes, OStations);
-
-            }
-
-            //获取已指定操作员的岗位条件
-            for (i = 0, len = CheckStations.length; i < len; i++) {
-                if (CheckStations[i] == "") continue;
-                var stationObject = document.getElementById("emp_CB_" + CheckStations[i]);
-                if(stationObject!=null)stationObject.checked = true;
             }
 
             //TODO 条件参数
@@ -121,35 +99,32 @@
             //调用公共类库的方法:执行批量主表赋值
             if (currCondStation != null)
                 GenerFullAllCtrlsVal(currCondStation);
-           
+
+        }
+        //设置本组织岗位.
+        function SetAdminStations() {
+            var user = new WebUser();
+               
+            OpenNodStationGroup("",1);
+        }
+        //设置集团岗位.
+        function SetGroupStations() {
+            var user = new WebUser();
+            OpenNodStationGroup(user.GroupNo, 2);
+        }
+        //设置本组织岗位.
+        function SetOrgStations() {
+            var user = new WebUser();
+            OpenNodStationGroup(user.FK_Dept,3);
         }
 
-        //初始化岗位列表TABLE
-        function InitStationTable(tableId, stationTypes, stations) {
-            for (var i = 0, len = stationTypes.length; i < len; i++) {
-                var typeno = stationTypes[i].No;
+        
 
-                var curstas = [];
-                var ids = "";
-                for (var j = 0, jlen = stations.length; j < jlen; j++) {
-                    if (stations[j].FK_StationType == typeno) {
-                        curstas.push(stations[j]);
-                        ids += "CB_" + stations[j].No + ",";
-                    }
-                }
-
-                var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_" + tableId + "_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label>" + stationTypes[i].Name + "</label></td></tr>";
-                $("#"+tableId).append(title);
-
-                for (var k = 0, klen = curstas.length; k < klen; k++) {
-                    var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><label for='emp_CB_" + curstas[k].No + "'>" + curstas[k].Name + "</label></td>";
-                    if (k % 3 == 0) {
-                        $("#" + tableId).append("<tr></tr>");
-                    }
-                    $("#"+tableId+" tr:last").append(td);
-                }
-            }
-
+        function OpenNodStationGroup(orgNo,selectType) {
+            var url = "SelectStation.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node") + "&Operate_Value=" + operatorValue + "&SelectType=" + selectType;
+            document.getElementById("stationFrame").src = url;
+            $("#win").window("open"); 
+            
         }
 
         function Btn_Delete_Click() {
@@ -175,13 +150,7 @@
 
             //var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             //获取所有选中的checkbox
-            var emps = ",";
-            $("input[type='checkbox']").each(function () {
-
-                if (this.checked && this.name.indexOf("emp_CB_") == 0) {
-                    emps += this.name.replace("emp_CB_","") + ",";
-                }
-            });
+            var emps = document.getElementById("emps").innerHTML;
             var frmData = $("#cc").serialize();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
@@ -217,6 +186,45 @@
             //03.处理标签
             $("#span" + idx).css("display", "inline-block");
             $("#span" + idx).siblings().css("display", "none");
+        }
+
+        function getChidrenValue(data) {
+            $('#win').window('close'); // close a window
+            if (data[3] == "1") {
+                
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + data[2] + "</font>)条" + data[1];
+                document.getElementById("emps").innerHTML = data[0];
+            }
+            if (data[3] == "2") {
+                document.getElementById("groupEmps").innerHTML = data[0];
+                document.getElementById("groupStations").innerHTML = data[1];
+                document.getElementById("groupCount").innerHTML = data[2];
+                var orgCount = document.getElementById("orgCount").innerHTML;
+                var orgStations = document.getElementById("orgStations").innerHTML;
+                var orgEmps = document.getElementById("orgEmps").innerHTML;
+                var count = 0;
+                if (orgCount == null || orgCount == "") orgCount = 0;
+                if (data[2] == null || data[2] == "") data[2] = 0;
+                count = parseInt(orgCount) + parseInt(data[2]);
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + orgStations+data[1];
+                document.getElementById("emps").innerHTML =orgEmps+ data[0];
+            }
+
+            if (data[3] == "3") {
+                document.getElementById("orgEmps").innerHTML = data[0];
+                document.getElementById("orgStations").innerHTML = data[1];
+                document.getElementById("orgCount").innerHTML = data[2];
+                var groupCount = document.getElementById("groupCount").innerHTML;
+                var groupStations = document.getElementById("groupStations").innerHTML;
+                var groupEmps = document.getElementById("groupEmps").innerHTML;
+                var count = 0;
+                if (groupCount == null || groupCount == "") groupCount = 0;
+                if (data[2] == null || data[2] == "") data[2] = 0;
+                count = parseInt(groupCount) + parseInt(data[2]);
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + groupStations + data[1];
+                document.getElementById("emps").innerHTML = groupEmps + data[0];
+            }
+            
         }
     </script>
 
@@ -257,23 +265,38 @@
 <body>
     <form action="/" method="post" id="cc">
     <div>
-        <div id="AdminModel" style="max-height:600px;overflow:auto;">
-            <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%">
-            </table>
-        </div>
-        <div id="OrgModel" style="max-height:600px;overflow:auto;">
-            <fieldset>
-                <legend>集团岗位</legend>
-                 <table id="t2" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 95%;margin:5px">
-            </table>
-            </fieldset>
-           
-            <fieldset>
-                <legend>组织岗位</legend>
-                 <table id="t3" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 95%;margin:5px">
-            </table>
+         <div id="AdminModel">
+            <fieldset >
+                <legend>设置(超级管理员)</legend>
+                <ul>
+                    <li><a href="javascript:OpenOld()">设置/更改岗位</a></li>
+                    </li>
+                </ul>
             </fieldset>
         </div>
+        <div id="OrgModel">
+            <fieldset >
+                <legend>设置（组织管理员）</legend>
+                <ul>
+                    <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
+                    <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
+                    </li>
+                </ul>
+            </fieldset>
+        </div>
+        <fieldset>
+        <legend>已经设置的岗位</legend>
+
+        <div id="stations"></div>
+
+        </fieldset>
+        <label id="emps" style="display:none"></label>
+        <label id="groupCount" style="display:none"></label>
+        <label id="orgCount" style="display:none"></label>
+        <label id="groupStations" style="display:none"></label>
+         <label id="orgStations" style="display:none"></label>
+         <label id="groupEmps" style="display:none"></label>
+         <label id="orgEmps" style="display:none"></label>
         <br />
         
         <div>
@@ -300,6 +323,19 @@
             
         </div>
     </div>
+
+     <!--隐藏的文本框-->    
+    <div id="win" class="easyui-window" title="绑定岗位" style="width:600px;height:400px" closed="true"    
+            data-options="iconCls:'icon-save',modal:true">       
+           
+        <div data-options="region:'north',title:'North Title',split:true" style="height:50px;">    
+            <iframe id="stationFrame" src="#" scrolling="no" frameborder="0" width="90%"></iframe>
+           
+       </div>    
+            
+        
+   </div>    
+
     </form>
 </body>
 </html>

@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>查询</title>
+    <!--<link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="Gener.js" type="text/javascript"></script>
+     <base target="_self" />
+    <script language="javascript" type="text/javascript" >
+
+        //定义公共个变量.
+        var webUser = new WebUser();
+
+        var ensName = GetQueryString("EnsName");
+
+        //当前用户页面信息.
+        var ur = new Entity("BP.Sys.UserRegedit");
+        ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+        ur.RetrieveFromDBSources();
+
+        var mapBase;
+
+        //页面启动函数.
+        $(function () {
+
+            if (webUser.No == undefined) {
+                alert('登录信息丢失，请重新登录。');
+                return;
+            }
+
+            if (ensName == null || ensName == undefined) {
+                $("#Msg").html("必要的参数EnsName没有传入.");
+                return;
+            }
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            //初始化工具栏.
+            InitToolbar();
+
+
+            //执行查询.
+            BindTable();
+
+            //生成翻页.
+            GenerPageIdx();
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitToolbar() {
+
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddUrlData();  //增加参数.
+
+            //获得map基本信息.
+            mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
+
+            // $("#Title").html(mapBase.EnDesc); 
+            document.title = mapBase.EnDesc;
+
+            //获得查询信息，包含了查询数据表.
+            var data = handler.DoMethodReturnJSON("Search_SearchAttrs");
+
+            var html = "";
+            if (mapBase.IsShowSearchKey == "1")
+				html += '<div class="form-group">';
+            html += "<label for='TB_Key'>关键字</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
+				html += '</div>';
+
+            if (mapBase.DTSearchWay != "0") {
+
+                html += mapBase.DTSearchLable;
+
+                if (mapBase.DTSearchWay == "1") {
+					html += '<div class="form-group">';
+                    html += 	"<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
+					html += '</div>';
+                } else {
+					html += '<div class="form-group">';
+                    html += 	"<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' class='form-control' />";
+                    html += 	"到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />";
+					html += '</div>';
+                }
+            }
+
+            //绑定外键枚举查询条件.
+            var attrs = data["Attrs"];
+
+            //格式为: @WFSta=0@FK_Dept=02
+            var json = AtParaToJson(ur.Vals);
+
+            $("#toolbar").html(html); //设置基础信息.
+            for (var i = 0; i < attrs.length; i++) {
+
+                var attr = attrs[i];
+                var str = "";
+                str += '<div class="form-group">';
+                str += "&nbsp;<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                str += '</div>';
+                str = $(str);
+                $("#toolbar").append(str); //设置基础信息.
+            }
+
+            //绑定数据
+            var ele = $("<input type='button' value='查询' onclick='Search();' class='btn btn-default' />");
+            $("#toolbar").append(ele); 
+
+            ele = $("<input type='button' value='导出' onclick='Exp();' class='btn btn-default' />");
+            $("#toolbar").append(ele); //设置基础信息.
+
+            //为查询外键赋值.
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                var selectVal = json[attr.Field];
+
+                if (selectVal == undefined || selectVal == "")
+                    selectVal = "all";
+
+                $("#DDL_" + attr.Field).val(selectVal);
+            }
+
+            //是否可以新建？
+            if (mapBase.IsInsert == "True" ) {
+                var ele2 = $("<input type='button' value='新建' onclick='New();' class='btn btn-default' />");
+                $("#toolbar").append(ele2); //新建.
+            }
+
+        }
+
+        //初始化下拉列表框的OPERATION
+        function InitDDLOperation(frmData, mapAttr, defVal) {
+
+            var operations = "";
+
+            operations += "<option value='all' >全部</option>";
+
+            var ens = frmData[mapAttr.Field];
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                if (en.No == undefined )
+                    operations += "<option value='" + en.IntKey + "'>" + en.Lab + "</option>";
+                else
+                    operations += "<option value='" + en.No + "'>" + en.Name + "</option>";
+            }
+            return operations;
+        }
+
+        //执行查询.
+        function Search() {
+
+            //保存查询条件.
+            var ensName = GetQueryString("EnsName");
+            var ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+            ur.FK_Emp = webUser.No;
+
+            if ($("#TB_Key").length == 1)
+                ur.SearchKey = $("#TB_Key").val();
+
+            if (document.getElementById("TB_Key") != null)
+                ur.SearchKey = document.getElementById("TB_Key").value;
+
+            //设置查询时间.
+            if ($("#TB_DTFrom").length == 1)
+                ur.DTFrom = $("#TB_DTFrom").val();
+
+            if ($("#TB_DTTo").length == 1)
+                ur.DTTo = $("#TB_DTTo").val();
+
+            //获得外键的查询条件,存储里面去.
+            var str = "";
+            $("select[name^='DDL_']").each(function () {
+                var id = $(this).attr("id");
+                id = id.replace("DDL_", "");
+                str += "@" + id + "=" + $(this).val();
+            });
+
+            ur.FK_Emp = webUser.No;
+            ur.CfgKey = "SearchAttrs";
+            ur.Vals = str;
+            ur.FK_MapData = ensName;
+            var i = ur.Save();
+            window.location.href = "?EnsName=" + ensName + "&PageIdx=1";
+        }
+
+        function Exp() {
+
+            var url = "";
+            if (plant == "CCFlow") {
+                url = "Do.aspx?EnsName=" + GetQueryString("EnsName") + "&DoType=SearchExp";
+                window.open(url);
+                return;
+            }
+
+            alert("尚未实现");
+            window.location.href = data;
+        }
+
+      
+
+        //生成查询页面..
+        function BindTable() {
+
+            $("#docs").html();
+
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+
+            //获得查询的基本信息, 实体属性 attrs, 实体数据.
+            var pageIdx = this.GetQueryString("PageIdx");
+
+            if (pageIdx == "" || pageIdx == undefined)
+                pageIdx = "1";
+
+            handler.AddPara("PageIdx", pageIdx);
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+
+            var data = handler.DoMethodReturnString("Search_SearchIt");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+            var attrs = data["Attrs"];
+
+            if (attrs == undefined) {
+                alert('没有取得属性.');
+                return;
+            }
+
+            var html = "<table style='width:100%;' class='table table-hover table-striped' >";
+            html += "<tr>";
+            html += "<th>序</th>";
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+
+                if (attr.UIVisible == 0
+                || attr.KeyOfEn == "OID"
+                || attr.KeyOfEn == "WorkID"
+                || attr.KeyOfEn == "NodeID"
+                || attr.KeyOfEn == "MyNum" 
+                || attr.KeyOfEn == "MyPK")
+                    continue;
+                html += "<th>" + attr.Name + "</th>";
+            }
+            html += "</tr>";
+
+            //生成数据.
+            var dt = data["DT"];
+            var isTr = false;
+            var rowIdx = (pageIdx-1) * 12;
+
+            for (var i = 0; i < dt.length; i++) {
+
+                var en = dt[i];
+
+                //获得主键的值?
+                var pkval = en["No"];
+                if (pkval == undefined)
+                    pkval = en["OID"];
+                if (pkval == undefined)
+                    pkval = en["MyPK"];
+                if (pkval == undefined)
+                    pkval = en["WorkID"];
+                if (pkval == undefined)
+                    pkval = en["NodeID"];
+
+                if (isTr == true)
+                    html += "<tr style='background-color:#F4F4F4;' ondblclick=\"OpenEn('" + pkval + "');\" >";
+                else
+                    html += "<tr ondblclick=\"OpenEn('" + pkval + "');\"  >";
+
+                isTr = !isTr;
+                rowIdx++;
+                html += "<td class='Idx' >" + rowIdx + "</td>";
+
+                for (var idx = 0; idx < attrs.length; idx++) {
+                    var attr = attrs[idx];
+
+                    if (attr.UIVisible == 0 ||
+                     attr.KeyOfEn == "OID" ||
+                     attr.KeyOfEn == "MyNum" ||
+                     attr.KeyOfEn == "NodeID" ||
+                     attr.KeyOfEn == "WorkID" || 
+                     attr.KeyOfEn == "MyPK")
+                        continue;
+
+                   // var str = JSON.stringify(attr);
+                     //                   alert(str);
+                    if (attr.LGType == 0)
+                        html += "<td>" + en[attr.KeyOfEn] + "</td>";
+                    else {
+                        var text = en[attr.KeyOfEn + 'Text'];
+                        if (text == null)
+                            text = "";
+                        html += "<td>" + text + "</td>";
+                    }
+
+                }
+                html += "</tr>";
+            }
+
+            html += "</table>";
+            $("#docs").html(html);
+            // 生成翻页.
+        }
+
+        function OpenEn(pk) {
+
+
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
+
+            var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+
+            OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', 1100, 600, "icon-edit", false, function () { }, null, function () {
+                location = location;
+            });
+        }
+
+        function New() {
+            OpenEn("");
+        }
+
+        function GenerPageIdx() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddPara("PageIdx", this.GetQueryString("PageIdx"));
+
+            var html= handler.DoMethodReturnString("Search_GenerPageIdx");
+            $("#end").html(html);
+        }
+
+    </script>
+</head>
+<body>
+
+<form id="cc">
+ <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<table style="width:100%;" class="table table-hover table-striped">
+						<tr>
+							<td>
+								<div class="row">
+									<div class="col-md-12 col-sm-12">
+										<div id="toolbar" class="form-inline"></div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="row">
+									<div id="docs" class="col-md-12 col-sm-12"></div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="row">
+									<div id="end" class="col-md-12 col-sm-12"></div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="Msg"></div>
+</form>
+
+</body>
+</html>

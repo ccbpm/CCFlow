@@ -20,7 +20,7 @@
 
         $(function () {
 
-              webUser = new WebUser();
+            webUser = new WebUser();
             if (webUser.No == null)
                 return;
 
@@ -32,6 +32,9 @@
             var flowNo = GetQueryString("FK_Flow");
             if (flowNo == null)
                 flowNo = "";
+
+            if (flowNo == "" && tSpan == "")
+                tSpan = "0";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
             handler.AddPara("TSpan", tSpan);
@@ -46,6 +49,10 @@
             var data = JSON.parse(data);
             var _tspan = GetQueryString("TSpan");
             var _flowNo = GetQueryString("FK_Flow");
+
+            if (_flowNo == "" && _tspan == "")
+                _tspan = "0";
+
 
             //时间段列表. 
             var tSpans = data['TSpan'];
@@ -65,7 +72,6 @@
             }
 
             html += "&nbsp;&nbsp;<img src='./Img/Search.png' border=0 style='width:16px;' />关键字:<input type=text id='TB_Key' style='width:90px;height:18px;' /><a href='#' onclick=\"javascript:SearchKey();\" > <b>查询</b> </a>";
-
             $("#TSpan").html(html);
 
             //流程名称列表.
@@ -84,6 +90,7 @@
                     html += "<span onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</span>";
             }
             $("#Flows").html(html);
+
 
             // 流程实例列表.
             var ens = data['WF_GenerWorkFlow'],
@@ -148,16 +155,39 @@
                 html += "<td>" + todoEmpsName + "</td>";
 
                 html += "<td>" + en.RDT.substring(5) + "</td>";
+
+                html += "<td>" + GetWFState(en.WFState, isCanDo) + "</td>";
+
                 //                html += "<td>" + en.Emps + "</td>";
                 html += "</tr>";
-
                 $("#Table1 tr:last").after(html);
             }
 
             $("#List").append(_Html);
+
+            $("#Msg").html("");
+
             //$("#LV_Search").listview('refresh');
         });
 
+        function GetWFState(wfState, isCanDo) {
+
+            if (isCanDo == true)
+                return "<font color=red >待办</font>";
+
+            if (wfState == 5) {
+                return "<font color=yellow >退回</font>";
+            }
+
+            if (wfState == 3) {
+                return "<font color=yellow >已完成</font>";
+            }
+
+            if (wfState == 2)
+                return "<font >运行中</font>";
+
+            return "其他";
+        }
 
         function OpenIt(wfState, workid, flowNo, nodeID, emps, userNo) {
 
@@ -173,8 +203,6 @@
         }
 
         function TSpan(tspan) {
-
-
 
             var flowNo = GetQueryString("FK_Flow");
             if (flowNo == null) {
@@ -240,6 +268,8 @@
             }
 
             var statusArr = ["未完成", "已完成", "其他"];
+
+
             var tableHtml = "<table class='Table'>";
             tableHtml += "<tr>";
             tableHtml += "<th>Idx</th>";
@@ -311,11 +341,16 @@
 </head>
 <body>
 
+<div id="Msg"> 
+ <img src='./Img/loading.gif' alt="正在初始化数据，请耐心等待。。。" />正在初始化数据，请耐心等待。。。
+ </div>
+
+
 <table style="width:100%;">
 <tr>
 <td colspan=2 >
 <div style="float:left">
-<div id="TSpan"></div> <div id="Stas"></div> <div id="Flows"></div>
+<div id="TSpan"></div> <div id="Stas"></div> <div id="Flows"> </div>
 </div>
 
 <div style="float:right"> </div>
@@ -335,6 +370,7 @@
 <th>停留节点</th>
 <th>审批人</th>
 <th>到达日期</th>
+<th>状态</th>
 </tr>
 </table>
 

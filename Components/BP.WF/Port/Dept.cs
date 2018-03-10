@@ -89,7 +89,8 @@ namespace BP.WF.Port
                 map.AddTBString(DeptAttr.Name, null,"名称", true, false, 0, 60, 200);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
                 map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
-              //  map.AddTBString(DeptAttr.FK_Unit, "1", "隶属单位", false, false, 0, 50, 10);
+                
+                //map.AddTBString(DeptAttr.FK_Unit, "1", "隶属单位", false, false, 0, 50, 10);
                 
                 this._enMap = map;
                 return this._enMap;
@@ -132,6 +133,7 @@ namespace BP.WF.Port
         /// </summary>
         public Depts()
         {
+
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

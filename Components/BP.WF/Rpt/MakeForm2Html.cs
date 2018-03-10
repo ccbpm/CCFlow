@@ -27,7 +27,16 @@ namespace BP.WF
 {
     public class MakeForm2Html
     {
-
+        /// <summary>
+        /// 生成
+        /// </summary>
+        /// <param name="mapData"></param>
+        /// <param name="frmID"></param>
+        /// <param name="workid"></param>
+        /// <param name="en"></param>
+        /// <param name="path"></param>
+        /// <param name="flowNo"></param>
+        /// <returns></returns>
         public static StringBuilder GenerHtmlOfFree(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo = null)
         {
             StringBuilder sb = new System.Text.StringBuilder();
@@ -49,7 +58,7 @@ namespace BP.WF
                 {
                     float y = ele.Y;
                     x = ele.X + wtX;
-                    sb.Append("\t\n<DIV id=" + ele.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
+                    sb.Append("<DIV id=" + ele.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
                     switch (ele.EleType)
                     {
                         case FrmEle.HandSiganture:
@@ -820,20 +829,43 @@ namespace BP.WF
             string frmName = mapData.Name;
             if (SystemConfig.AppSettings["CustomerNo"] == "TianYe")
                 frmName = "";
-            sb.Append("\t\n <table style='width:950px;height:auto;' >");
-            sb.Append("\t\n <tr style='border-style:none;border-width:0px;' >");
-            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:left' valign=middle ><img src='icon.png' style='height:100px;' /></td>");
-            sb.Append("\t\n <td colspan=2 style='border-style:none;border-width:0px;' ><div  style='padding-left:10px;' ><br><h2><b>" + frmName + "</b></h2></div></td>");
-            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:right' ><img src='QR.png' style='height:100px;'  /></td>");
-            sb.Append("\t\n </tr>");
+            sb.Append(" <table style='width:950px;height:auto;' >");
+
+            #region 生成头部信息.
+            sb.Append("<tr>");
+
+            sb.Append("<td colspan=4 >");
+
+            sb.Append("<table border=0 style='width:950px;'>");
+
+            sb.Append("<tr  style='border:0px;' >");
+
+            sb.Append("<td>");
+            sb.Append("<img src='icon.png' style='height:100px;border:0px;' />");
+            sb.Append("</td>");
+
+            sb.Append("<td>");
+            sb.Append("<br><h2><b>" + frmName + "</b></h2>");
+            sb.Append("</td>");
+
+            sb.Append("<td>");
+            sb.Append(" <img src='QR.png' style='height:100px;'  />");
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+            sb.Append("</table>");
+
+            sb.Append("</td>");
+            sb.Append("</tr>");
+            #endregion 生成头部信息.
 
             GroupFields gfs = new GroupFields(frmID);
             foreach (GroupField gf in gfs)
             {
                 //输出标题.
-                sb.Append("\t\n <tr>");
-                sb.Append("\t\n  <th colspan=4><b>" + gf.Lab + "</b></th>");
-                sb.Append("\t\n </tr>");
+                sb.Append(" <tr>");
+                sb.Append("  <th colspan=4><b>" + gf.Lab + "</b></th>");
+                sb.Append(" </tr>");
 
                 #region 输出字段.
                 if (gf.CtrlID == "" && gf.CtrlType == "")
@@ -901,12 +933,12 @@ namespace BP.WF
                         if (attr.ColSpan == 3 || (attr.ColSpan==4 && attr.UIHeightInt < 30))
                         {
                             isDropTR = true;
-                            html += "\t\n <tr>";
-                            html += "\t\n <td  class='FDesc'  >" + attr.Name + "</td>";
-                            html += "\t\n <td ColSpan=3>";
+                            html += " <tr>";
+                            html += " <td  class='FDesc'  >" + attr.Name + "</td>";
+                            html += " <td ColSpan=3>";
                             html += text;
-                            html += "\t\n </td>";
-                            html += "\t\n </tr>";
+                            html += " </td>";
+                            html += " </tr>";
                             continue;
                         }
 
@@ -914,32 +946,32 @@ namespace BP.WF
                         if (attr.ColSpan == 4)
                         {
                             isDropTR = true;
-                            html += "\t\n <tr>";
-                            html += "\t\n <td ColSpan=4 style='width:100%' >" + attr.Name + "</br>";
+                            html += " <tr>";
+                            html += " <td ColSpan=4 style='width:100%' >" + attr.Name + "</br>";
                             html += text;
-                            html += "\t\n </td>";
-                            html += "\t\n </tr>";
+                            html += " </td>";
+                            html += " </tr>";
                             continue;
                         }
 
                         if (isDropTR == true)
                         {
-                            html += "\t\n <tr>";
-                            html += "\t\n <td class='FDesc' style='width:80px;' >" + attr.Name + "</td>";
-                            html += "\t\n <td class='FContext'  >";
+                            html += " <tr>";
+                            html += " <td class='FDesc' >" + attr.Name + "</td>";
+                            html += " <td class='FContext'  >";
                             html += text;
-                            html += "\t\n </td>";
+                            html += " </td>";
                             isDropTR = !isDropTR;
                             continue;
                         }
 
                         if (isDropTR == false)
                         {
-                            html += "\t\n <td  class='FDesc'>" + attr.Name + "</td>";
-                            html += "\t\n <td class='FContext'  >";
+                            html += " <td  class='FDesc'>" + attr.Name + "</td>";
+                            html += " <td class='FContext'  >";
                             html += text;
-                            html += "\t\n </td>";
-                            html += "\t\n </tr>";
+                            html += " </td>";
+                            html += " </tr>";
                             isDropTR = !isDropTR;
                             continue;
                         }
@@ -957,10 +989,10 @@ namespace BP.WF
 
 
                     #region 输出标题.
-                    sb.Append("\t\n<tr><td valign=top colspan=4 >");
+                    sb.Append("<tr><td valign=top colspan=4 >");
 
-                    sb.Append("\t\n<table style='wdith:100%' >");
-                    sb.Append("\t\n<tr>");
+                    sb.Append("<table style='wdith:100%' >");
+                    sb.Append("<tr>");
                     foreach (MapAttr item in attrsOfDtls)
                     {
                         if (item.KeyOfEn == "OID")
@@ -968,9 +1000,9 @@ namespace BP.WF
                         if (item.UIVisible == false)
                             continue;
 
-                        sb.Append("\t\n<th>" + item.Name + "</th>");
+                        sb.Append("<th>" + item.Name + "</th>");
                     }
-                    sb.Append("\t\n</tr>");
+                    sb.Append("</tr>");
                     #endregion 输出标题.
 
 
@@ -979,7 +1011,7 @@ namespace BP.WF
                     dtls.Retrieve(GEDtlAttr.RefPK, workid);
                     foreach (GEDtl dtl in dtls)
                     {
-                        sb.Append("\t\n<tr>");
+                        sb.Append("<tr>");
 
                         foreach (MapAttr item in attrsOfDtls)
                         {
@@ -988,27 +1020,27 @@ namespace BP.WF
 
                             if (item.UIContralType == UIContralType.DDL)
                             {
-                                sb.Append("\t\n<td>" + dtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
+                                sb.Append("<td>" + dtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
                                 continue;
                             }
 
                             if (item.IsNum)
                             {
-                                sb.Append("\t\n<td style='text-align:right' >" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                                sb.Append("<td style='text-align:right' >" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
                                 continue;
                             }
 
                             sb.Append("<td>" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
                         }
-                        sb.Append("\t\n</tr>");
+                        sb.Append("</tr>");
                     }
                     #endregion 输出数据.
 
 
-                    sb.Append("\t\n</table>");
+                    sb.Append("</table>");
 
-                    sb.Append("\t\n </td>");
-                    sb.Append("\t\n </tr>");
+                    sb.Append(" </td>");
+                    sb.Append(" </tr>");
                 }
                 #endregion 如果是从表.
                 
@@ -1034,8 +1066,8 @@ namespace BP.WF
 
                         if (ath.UploadType == AttachmentUploadType.Multi)
                         {
-                            sb.Append("\t\n<tr><td valign=top colspan=4 >");
-                            sb.Append("\t\n<ul>");
+                            sb.Append("<tr><td valign=top colspan=4 >");
+                            sb.Append("<ul>");
 
                             //判断是否有这个目录.
                             if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
@@ -1087,8 +1119,8 @@ namespace BP.WF
                                 #endregion 从iis服务器上下载.
 
                             }
-                            sb.Append("\t\n</ul>");
-                            sb.Append("\t\n</td></tr>");
+                            sb.Append("</ul>");
+                            sb.Append("</td></tr>");
                         }
                     }
                 }
@@ -1097,7 +1129,7 @@ namespace BP.WF
                 #region 审核组件
                 if (gf.CtrlType == "FWC" && flowNo != null)
                 {
-                    //sb.Append(" \t\n <tr><td colspan=4 valign=top style='width:100%;valign:middle;height:auto;'  >");
+                    //sb.Append("  <tr><td colspan=4 valign=top style='width:100%;valign:middle;height:auto;'  >");
                     FrmWorkCheck fwc = new FrmWorkCheck(frmID);
 
 
@@ -1191,16 +1223,16 @@ namespace BP.WF
                         msg += "审核人:" + empStrs + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
 
                         html += " <td colspan=3 valign=middle >" + msg + "</td>";
-                        html += "\t\n </tr>";
+                        html += " </tr>";
                     }
                     #endregion 生成审核信息.
 
-                    sb.Append("\t\n " + html);
+                    sb.Append(" " + html);
                 }
                 #endregion 审核组件
             }
 
-            sb.Append("\t\n</table>");
+            sb.Append("</table>");
             return sb;
         }
         /// <summary>

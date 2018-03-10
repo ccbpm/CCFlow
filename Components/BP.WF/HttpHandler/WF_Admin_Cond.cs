@@ -801,7 +801,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string CondByStation_Save()
         {
-
             int FK_MainNode = this.GetRequestValInt("FK_MainNode");
             int ToNodeID = this.GetRequestValInt("ToNodeID");
             CondType HisCondType = CondType.Dir;

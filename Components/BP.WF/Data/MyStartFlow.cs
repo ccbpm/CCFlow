@@ -719,7 +719,7 @@ namespace BP.WF.Data
 
                 map.Java_SetEnType(EnType.View);
 
-                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", false, false);
+                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", true, true);
                 map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 100, 200, true);
 
                 map.AddDDLEntities(MyStartFlowAttr.FK_Flow, null, "流程", new Flows(), false);
@@ -750,15 +750,15 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyStartFlowAttr.TSpan);
 
 
-                //我发起的流程.
-                AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",
-                    MyStartFlowAttr.Starter, "=", BP.Web.WebUser.No, 0, true);
+                ////我发起的流程.
+                ////AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",
+                ////    MyStartFlowAttr.Starter, "=", BP.Web.WebUser.No, 0, true);
 
-                map.AttrsOfSearch.Add(search);
+                //map.AttrsOfSearch.Add(search);
 
-                search = new AttrOfSearch(MyStartFlowAttr.WFState, "流程状态",
-                    MyStartFlowAttr.WFState, "not in", "('0')", 0, true);
-                map.AttrsOfSearch.Add(search);
+                //search = new AttrOfSearch(MyStartFlowAttr.WFState, "流程状态",
+                //    MyStartFlowAttr.WFState, "not in", "('0')", 0, true);
+                //map.AttrsOfSearch.Add(search);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "流程轨迹";

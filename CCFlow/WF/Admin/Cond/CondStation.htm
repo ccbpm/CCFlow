@@ -48,18 +48,21 @@
             operatorValue = cond.OperatorValue
 
             //获取已指定操作员的岗位条件
-            CheckStations= operatorValue.split("@");
+            CheckStations= operatorValue.split("@");         
 
-            var ens = new Entities("BP.WF.Template.NodeStations");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-            var html = "合计:(<font color=red>" + CheckStations.length + "</font>)条";
-
+            var html ="" ;
+            var emps = "";
+            var count = 0;
             for (var i = 0; i < CheckStations.length; i++) {
-                var en = new Entity("BP.WF.Port.Station", CheckStations[i]);
-                html += "&nbsp;&nbsp;&nbsp;" + en.Name;
+                if (CheckStations[i] != "") {
+                    var en = new Entity("BP.WF.Port.Station", parseInt(CheckStations[i]));
+                    html += "&nbsp;&nbsp;&nbsp;" + en.Name;
+                    count++;
+                    emps += CheckStations[i] + ",";
+                }
             }
-            document.getElementById("stations").innerHTML = html;
+            document.getElementById("emps").innerHTML = emps;
+            document.getElementById("stations").innerHTML ="合计:(<font color=red>" + count + "</font>)条"+ html;
 
 
             ////根据用户的信息，判断是否启用那个设置工具。

@@ -4,15 +4,17 @@
     <meta charset="UTF-8" />
     <title>方向条件-按照岗位计算</title>
     <!-- 于庆海 -->
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../../Scripts/config.js"></script>
-    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
+   
         //页面启动函数.
         $(function () {
 
@@ -24,63 +26,81 @@
         });
         //初始化数据.
         function InitPage() {
+            //获取URL参数
+            var nodeID = GetQueryString("FK_Node");
+            var FK_MainNode = GetQueryString("FK_MainNode");
+            var ToNodeID = GetQueryString("ToNodeID");
 
-            var fk_node = GetQueryString("FK_Node");
-            var param = location.href.split("?")[1];
+            //条件属性
+            var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
 
+            var cond = new Entity("BP.WF.Template.Cond", mypk);
+            // 运算的值
+            var operatorValue = cond.OperatorValue
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddPara("FK_Node", fk_node);
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("CondByStation_Init");
+            //获取已指定操作员的岗位条件
+            var CheckStations = operatorValue.split("@");
 
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
+            //岗位类型集合
+            var StationTypes;
+            var GStationTypes;
+            var OStationTypes;
+
+            //岗位集合
+            var Stations;
+            var GStations;
+            var OStations;
+
+            ////根据用户的信息，判断是否启用那个设置工具。
+            var user = new WebUser();
+
+            /*调用通用的.*/
+            if (user.FK_Dept == 0) {
+                $("#AdminModel").show();
+                StationTypes = new Entities("BP.GPM.StationTypes");
+                StationTypes.RetrieveAll();
+
+                Stations = new Entities("BP.GPM.Stations");
+                Stations.RetrieveAll();
+                //初始化岗位Table显示
+                InitStationTable("t1", StationTypes, Stations);
+
+             /*调用集团模式的.*/
+            } else {
+                $("#OrgModel").show();
+                //集团模式
+                var groupNo = user.GroupNo;
+                GStations = new Entities("BP.GPM.Stations");
+                GStations.Retrieve("OrgNo", groupNo);
+                //查询出来数据.	       
+                var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + groupNo + ")";
+                //获得要增加的流程集合.
+                GStationTypes = DBAccess.RunSQLReturnTable(sql);
+                //初始化岗位Table显示
+                InitStationTable("t2", GStationTypes, GStations);
+
+                //组织结构模式
+                var orgNo = user.FK_Dept;
+                OStations = new Entities("BP.GPM.Stations");
+                OStations.Retrieve("OrgNo", orgNo);
+                //查询出来数据.	       
+                var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ")";
+                //获得要增加的流程集合.
+                OStationTypes = DBAccess.RunSQLReturnTable(sql);
+                //初始化岗位Table显示
+                InitStationTable("t3", OStationTypes, OStations);
+
             }
 
-            data = JSON.parse(data);
-
-            var fk_CondStationTemplate = GetQueryString("FK_CondStationTemplate");
-            var currCondStation = null;
-
-            //生成岗位列表.
-            //bgein
-            var types = data.StationTypes;
-
-            var sts = data.Stations;
-            var cond = data.Cond[0].OperatorValue;
-            for (var i = 0, len = types.length; i < len; i++) {
-                var typeno = types[i].No;
-
-                var curstas = [];
-                var ids = "";
-                for (var j = 0, jlen = sts.length; j < jlen; j++) {
-                    if (sts[j].FK_StationType == typeno) {
-                        curstas.push(sts[j]);
-                        ids += "CB_" + sts[j].No + ",";
-                    }
-                }
-
-                var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label>" + types[i].Name + "</label></td></tr>";
-                $("#t1").append(title);
-
-                for (var k = 0, klen = curstas.length; k < klen; k++) {
-                    var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><label for='emp_CB_" + curstas[k].No + "'>" + curstas[k].Name + "</label></td>";
-                    if (k % 3 == 0) {
-                        $("#t1").append("<tr></tr>");
-                    }
-                    $("#t1 tr:last").append(td);
-                }
+            //获取已指定操作员的岗位条件
+            for (i = 0, len = CheckStations.length; i < len; i++) {
+                if (CheckStations[i] == "") continue;
+                var stationObject = document.getElementById("emp_CB_" + CheckStations[i]);
+                if(stationObject!=null)stationObject.checked = true;
             }
 
-            var emps = cond.split("@");
-            for (i = 0, len = emps.length; i < len; i++) {
-                if (emps[i] == "") continue;
-                document.getElementById("emp_CB_" + emps[i]).checked = true;
-            }
             //TODO 条件参数
-            var atpara = data.Cond[0].AtPara;
+            var atpara = cond.AtPara;
             if (atpara != "") {
                 var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
                 document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
@@ -97,42 +117,62 @@
             }
             //条件参数 end
             //end
-
+            var currCondStation = null
             //调用公共类库的方法:执行批量主表赋值
             if (currCondStation != null)
                 GenerFullAllCtrlsVal(currCondStation);
+           
+        }
+
+        //初始化岗位列表TABLE
+        function InitStationTable(tableId, stationTypes, stations) {
+            for (var i = 0, len = stationTypes.length; i < len; i++) {
+                var typeno = stationTypes[i].No;
+
+                var curstas = [];
+                var ids = "";
+                for (var j = 0, jlen = stations.length; j < jlen; j++) {
+                    if (stations[j].FK_StationType == typeno) {
+                        curstas.push(stations[j]);
+                        ids += "CB_" + stations[j].No + ",";
+                    }
+                }
+
+                var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_" + tableId + "_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label>" + stationTypes[i].Name + "</label></td></tr>";
+                $("#"+tableId).append(title);
+
+                for (var k = 0, klen = curstas.length; k < klen; k++) {
+                    var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><label for='emp_CB_" + curstas[k].No + "'>" + curstas[k].Name + "</label></td>";
+                    if (k % 3 == 0) {
+                        $("#" + tableId).append("<tr></tr>");
+                    }
+                    $("#"+tableId+" tr:last").append(td);
+                }
+            }
+
         }
 
         function Btn_Delete_Click() {
 
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-
-            var param = location.href.split("?")[1];
-
-            $.ajax({
-                data:'',
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByStation_Delete&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&" + param,
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("FK_MainNode", GetQueryString("FK_MainNode"));
+            handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
+            handler.AddPara("DirType", GetQueryString("DirType"));
+            handler.AddPara("CondType", GetQueryString("CondType"));
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CondByStation_Delete");
+            window.location.href = window.location.href;
+           
         }
 
         //ajax 提交
         function Btn_Save_Click() {
 
             var param = location.href.split("?")[1];
+
             //var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             //获取所有选中的checkbox
             var emps = ",";
@@ -142,25 +182,19 @@
                     emps += this.name.replace("emp_CB_","") + ",";
                 }
             });
-
             var frmData = $("#cc").serialize();
-            //alert(frmData);
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByStation_Save" + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&emps=" + emps + "&" + param,
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("emps", emps);
+            handler.AddPara("FK_MainNode", GetQueryString("FK_MainNode"));
+            handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
+            handler.AddPara("DirType", GetQueryString("DirType"));
+            handler.AddPara("CondType", GetQueryString("CondType"));
+            handler.AddFormData(frmData)
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CondByStation_Save");
+            window.location.href = window.location.href;
+            
         }
 
         function selChange() {
@@ -223,9 +257,22 @@
 <body>
     <form action="/" method="post" id="cc">
     <div>
-        <div style="max-height:600px;overflow:auto;">
+        <div id="AdminModel" style="max-height:600px;overflow:auto;">
             <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%">
             </table>
+        </div>
+        <div id="OrgModel" style="max-height:600px;overflow:auto;">
+            <fieldset>
+                <legend>集团岗位</legend>
+                 <table id="t2" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 95%;margin:5px">
+            </table>
+            </fieldset>
+           
+            <fieldset>
+                <legend>组织岗位</legend>
+                 <table id="t3" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 95%;margin:5px">
+            </table>
+            </fieldset>
         </div>
         <br />
         

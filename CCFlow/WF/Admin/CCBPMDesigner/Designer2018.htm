@@ -491,8 +491,10 @@
                                       node.Update();
 
                                       //设置修改后的值没有设置成功. @Brilliant  
-                                      $("#window" + activeId).val(text); //旧数据.
-
+                                      var savspan = document.querySelector("#window" + activeId + " span");
+                                      console.log(savspan);
+                                      //$("#window" + activeId).html(savspan).append(text); //旧数据.
+                                      location.reload();
                                   })
 
                               }

@@ -495,8 +495,8 @@
     <Content Include="WF\RptSearch\KeySearch.htm" />
     <Content Include="WF\RptSearch\Left.htm" />
     <Content Include="WF\RptSearch\DistributedOfMy.htm" />
+    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-en.js" />
     <Content Include="WF\StartGuideEntities.htm" />
-    <Content Include="WF\Tools.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
@@ -1926,7 +1926,6 @@
     <Content Include="WF\Comm\Sys\Holiday.htm" />
     <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
-    <Content Include="WF\ErrorPage.aspx" />
     <Content Include="WF\FlowFormTree\Base\FormTreeBase.aspx" />
     <Content Include="WF\FlowFormTree\Default.aspx" />
     <Content Include="WF\FlowFormTree\FlowFormTreeEdit.aspx" />
@@ -2208,10 +2207,7 @@
     <Content Include="WF\Img\yaoshi.jpg" />
     <Content Include="WF\Loading.htm" />
     <Content Include="WF\Login.htm" />
-    <Content Include="WF\MyFlow.aspx" />
     <Content Include="WF\MyFlow.htm" />
-    <Content Include="WF\MyFlowInfo.aspx" />
-    <Content Include="WF\MyFlowView.aspx" />
     <Content Include="WF\PortDemo.htm" />
     <Content Include="WF\PrintSample.aspx" />
     <Content Include="WF\PrintWorkNode.aspx" />
@@ -6232,19 +6228,7 @@
     <Content Include="WF\Style\Tools.xml" />
     <Content Include="WF\Style\Verify.js" />
     <Content Include="WF\Todolist.htm" />
-    <Content Include="WF\Tools.aspx" />
-    <Content Include="WF\ToolsSet.aspx" />
-    <Content Include="WF\UC\ChangeDept.ascx" />
-    <Content Include="WF\UC\Msg.ascx" />
-    <Content Include="WF\UC\MyFlow.ascx" />
-    <Content Include="WF\UC\MyFlowInfo.ascx" />
-    <Content Include="WF\UC\MyFlowInfoWap.ascx" />
-    <Content Include="WF\UC\MyFlowUC.ascx" />
     <Content Include="WF\UC\Pub.ascx" />
-    <Content Include="WF\UC\SMS.ascx" />
-    <Content Include="WF\UC\Tools.ascx" />
-    <Content Include="WF\UC\Tools.js" />
-    <Content Include="WF\UC\ToolsWap.ascx" />
     <Content Include="WF\UC\UCEn.ascx" />
     <Content Include="WF\UC\WFRpt.ascx" />
     <Content Include="WF\WebOffice\AttachOffice.aspx" />
@@ -6326,10 +6310,8 @@
     <Content Include="WF\WorkOpt\WebOffice.aspx" />
     <Content Include="WF\WorkOpt\WinOpen.master" />
     <Content Include="WF\WorkOpt\WorkCheck.htm" />
-    <Content Include="WF\MyFlowFool.htm" />
     <Content Include="WF\WFRpt.htm" />
     <Content Include="WF\StartGuide.htm" />
-    <Content Include="WF\MyFlowWord.htm" />
     <Content Include="WF\WorkOpt\AllotTask.htm" />
     <Content Include="WF\MyFlowFoolTruck.htm" />
     <Content Include="WF\WorkOpt\FlowSkip.htm" />
@@ -8201,13 +8183,6 @@
     <Compile Include="WF\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\ErrorPage.aspx.cs">
-      <DependentUpon>ErrorPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\ErrorPage.aspx.designer.cs">
-      <DependentUpon>ErrorPage.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\FlowFormTree\Base\FormTreeBase.aspx.cs">
       <DependentUpon>FormTreeBase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8251,27 +8226,6 @@
     </Compile>
     <Compile Include="WF\MyFlow.ashx.cs">
       <DependentUpon>MyFlow.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MyFlow.aspx.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MyFlow.aspx.designer.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MyFlowInfo.aspx.cs">
-      <DependentUpon>MyFlowInfo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MyFlowInfo.aspx.designer.cs">
-      <DependentUpon>MyFlowInfo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MyFlowView.aspx.cs">
-      <DependentUpon>MyFlowView.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MyFlowView.aspx.designer.cs">
-      <DependentUpon>MyFlowView.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\PrintSample.aspx.cs">
       <DependentUpon>PrintSample.aspx</DependentUpon>
@@ -8559,89 +8513,12 @@
     <Compile Include="WF\StartGuideEntities.aspx.designer.cs">
       <DependentUpon>StartGuideEntities.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Tools.aspx.cs">
-      <DependentUpon>Tools.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Tools.aspx.designer.cs">
-      <DependentUpon>Tools.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\ToolsSet.aspx.cs">
-      <DependentUpon>ToolsSet.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\ToolsSet.aspx.designer.cs">
-      <DependentUpon>ToolsSet.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\ChangeDept.ascx.cs">
-      <DependentUpon>ChangeDept.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\ChangeDept.ascx.designer.cs">
-      <DependentUpon>ChangeDept.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\Msg.ascx.cs">
-      <DependentUpon>Msg.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\Msg.ascx.designer.cs">
-      <DependentUpon>Msg.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\MyFlow.ascx.cs">
-      <DependentUpon>MyFlow.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\MyFlow.ascx.designer.cs">
-      <DependentUpon>MyFlow.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\MyFlowInfo.ascx.cs">
-      <DependentUpon>MyFlowInfo.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\MyFlowInfo.ascx.designer.cs">
-      <DependentUpon>MyFlowInfo.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\MyFlowInfoWap.ascx.cs">
-      <DependentUpon>MyFlowInfoWap.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\MyFlowInfoWap.ascx.designer.cs">
-      <DependentUpon>MyFlowInfoWap.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\MyFlowUC.ascx.cs">
-      <DependentUpon>MyFlowUC.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\MyFlowUC.ascx.designer.cs">
-      <DependentUpon>MyFlowUC.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\UC\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\UC\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\SMS.ascx.cs">
-      <DependentUpon>SMS.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\SMS.ascx.designer.cs">
-      <DependentUpon>SMS.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\Tools.ascx.cs">
-      <DependentUpon>Tools.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\Tools.ascx.designer.cs">
-      <DependentUpon>Tools.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\ToolsWap.ascx.cs">
-      <DependentUpon>ToolsWap.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\ToolsWap.ascx.designer.cs">
-      <DependentUpon>ToolsWap.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\UC\UCEn.ascx.cs">
       <DependentUpon>UCEn.ascx</DependentUpon>

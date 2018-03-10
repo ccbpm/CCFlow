@@ -15,6 +15,10 @@ namespace BP.WF.Port
         /// 父节点编号
         /// </summary>
         public const string ParentNo = "ParentNo";
+        /// <summary>
+        /// 隶属组织
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
 	/// <summary>
 	/// 部门
@@ -84,6 +88,7 @@ namespace BP.WF.Port
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 30, 40);
                 map.AddTBString(DeptAttr.Name, null,"名称", true, false, 0, 60, 200);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
+                map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
               //  map.AddTBString(DeptAttr.FK_Unit, "1", "隶属单位", false, false, 0, 50, 10);
                 
                 this._enMap = map;

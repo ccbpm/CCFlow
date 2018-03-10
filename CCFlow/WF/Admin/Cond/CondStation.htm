@@ -29,84 +29,78 @@
             var param = location.href.split("?")[1];
 
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByStation_Init&FK_Node=" + fk_node + "&m=" + Math.random() + "&" + param,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("FK_Node", fk_node);
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CondByStation_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            var fk_CondStationTemplate = GetQueryString("FK_CondStationTemplate");
+            var currCondStation = null;
+
+            //生成岗位列表.
+            //bgein
+            var types = data.StationTypes;
+
+            var sts = data.Stations;
+            var cond = data.Cond[0].OperatorValue;
+            for (var i = 0, len = types.length; i < len; i++) {
+                var typeno = types[i].No;
+
+                var curstas = [];
+                var ids = "";
+                for (var j = 0, jlen = sts.length; j < jlen; j++) {
+                    if (sts[j].FK_StationType == typeno) {
+                        curstas.push(sts[j]);
+                        ids += "CB_" + sts[j].No + ",";
                     }
-
-                    data = JSON.parse(data);
-
-                    var fk_CondStationTemplate = GetQueryString("FK_CondStationTemplate");
-                    var currCondStation = null;
-
-                    //生成岗位列表.
-                    //bgein
-                    var types = data.StationTypes;
-
-                    var sts = data.Stations;
-                    var cond = data.Cond[0].OperatorValue;
-                    for (var i = 0, len = types.length; i < len; i++) {
-                        var typeno = types[i].No;
-
-                        var curstas = [];
-                        var ids = "";
-                        for (var j = 0, jlen = sts.length; j < jlen; j++) {
-                            if (sts[j].FK_StationType == typeno) {
-                                curstas.push(sts[j]);
-                                ids += "CB_" + sts[j].No + ",";
-                            }
-                        }
-
-                        var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label>" + types[i].Name + "</label></td></tr>";
-                        $("#t1").append(title);
-
-                        for (var k = 0, klen = curstas.length; k < klen; k++) {
-                            var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><label for='emp_CB_" + curstas[k].No + "'>" + curstas[k].Name + "</label></td>";
-                            if (k % 3 == 0) {
-                                $("#t1").append("<tr></tr>");
-                            }
-                            $("#t1 tr:last").append(td);
-                        }
-                    }
-
-                    var emps = cond.split("@");
-                    for (i = 0, len = emps.length; i < len; i++) {
-                        if (emps[i] == "") continue;
-                        document.getElementById("emp_CB_" + emps[i]).checked = true;
-                    }
-                    //TODO 条件参数
-                    var atpara = data.Cond[0].AtPara;
-                    if (atpara != "") {
-                        var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
-                        document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
-                        document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
-
-                        var initTB_SpecOperPara = atpara.split("@")[2].split("=")[1];
-                        document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
-                        if (initDDL_SpecOperWay != 0) {
-                            document.getElementById("TB_SpecOperPara").disabled = "";
-                        }
-                        document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara; 
-                        $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
-                        $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
-                    }
-                    //条件参数 end
-
-                    //end
-
-                    //调用公共类库的方法:执行批量主表赋值
-                    if (currCondStation != null)
-                        GenerFullAllCtrlsVal(currCondStation);
                 }
-            });
+
+                var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label>" + types[i].Name + "</label></td></tr>";
+                $("#t1").append(title);
+
+                for (var k = 0, klen = curstas.length; k < klen; k++) {
+                    var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><label for='emp_CB_" + curstas[k].No + "'>" + curstas[k].Name + "</label></td>";
+                    if (k % 3 == 0) {
+                        $("#t1").append("<tr></tr>");
+                    }
+                    $("#t1 tr:last").append(td);
+                }
+            }
+
+            var emps = cond.split("@");
+            for (i = 0, len = emps.length; i < len; i++) {
+                if (emps[i] == "") continue;
+                document.getElementById("emp_CB_" + emps[i]).checked = true;
+            }
+            //TODO 条件参数
+            var atpara = data.Cond[0].AtPara;
+            if (atpara != "") {
+                var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
+                document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
+                document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
+
+                var initTB_SpecOperPara = atpara.split("@")[2].split("=")[1];
+                document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
+                if (initDDL_SpecOperWay != 0) {
+                    document.getElementById("TB_SpecOperPara").disabled = "";
+                }
+                document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara;
+                $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
+                $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
+            }
+            //条件参数 end
+            //end
+
+            //调用公共类库的方法:执行批量主表赋值
+            if (currCondStation != null)
+                GenerFullAllCtrlsVal(currCondStation);
         }
 
         function Btn_Delete_Click() {
@@ -115,6 +109,7 @@
                 return;
 
             var param = location.href.split("?")[1];
+
             $.ajax({
                 data:'',
                 type: 'post',

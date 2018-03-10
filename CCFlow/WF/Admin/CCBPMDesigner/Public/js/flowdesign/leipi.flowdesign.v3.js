@@ -212,11 +212,22 @@
     //绑定删除确认操作
     jsPlumb.bind("click", function (c) {
 
-
-      if(confirm("你确定取消连接吗?是：取消 否：方向指向")){
-          jsPlumb.detach(c);}else{
-            window.open('');
-          }
+      fAlert();
+       //线的属性选项
+        $("#lineDel").click(function () {
+               jsPlumb.detach(c);
+        });
+        $("#lineSet").click(function(){
+            alert(111);
+        })
+      // if(confirm("你确定取消连接吗?是：取消 否：方向指向"))
+      // {
+      //     jsPlumb.detach(c);
+      // }
+      // else
+      // {
+      //     window.open('');
+      // }
 
 
     });

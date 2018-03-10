@@ -78,6 +78,20 @@
         </div>
     </div>
 
+    <!-- 点击线的提示 -->
+    <div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>修改方向</h3>
+        </div>
+        <div class="modal-body">
+            <p>提示内容</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal" id="lineDel" aria-hidden="true">删除</button>
+            <button class="btn btn-primary savetext" data-dismiss="modal_fx" id="lineSet" aria-hidden="true">设置方向条件</button>
+        </div>
+    </div>
     <!-- attributeModal -->
     <div id="attributeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:800px;margin-left:-350px">
         <div class="modal-body" style="max-height:500px;"><!-- body --></div>
@@ -153,7 +167,7 @@
     <style>
         li{list-style:none;}
         #processMenu3 li {
-            padding: 5px 0px 5px 20px;
+            padding: 5px 0px 5px 5px;
         } 
         #processMenu3 li:hover {
             background-color: rgb(90,99,119);
@@ -174,19 +188,26 @@
         //节点类型设置
         $('#node_nomal').on('click', function () {
             alert('普通节点');
+            $('#pmfun span').text($(this).text());
         });
         $('#node_shunt').on('click', function () {
             alert('分流节点');
+            $('#pmfun span').text($(this).text());
+
         });
         $('#node_confluence').on('click', function () {
             alert('合流节点');
+            $('#pmfun span').text($(this).text());
         });
         $('#node_shaddco').on('click', function () {
             alert('分合流节点');
+            $('#pmfun span').text($(this).text());
         });
         $('#node_childthread').on('click', function () {
             alert('子线程节点');
+            $('#pmfun span').text($(this).text());
         });
+       
     </script>
     <script type="text/javascript">
         var the_flow_id = '4';
@@ -252,12 +273,20 @@
                 alertModal.modal('toggle');
                 setTimeout(function () { alertModal.modal("hide") }, s);
             }
-            //消息弹出
+            //消息弹出（节点）
             cAlert = function (messages, s) {
                 if (!messages) messages = "";
                 if (!s) s = 200000;
                 alertModal1.find(".modal-body").html(messages);
                 alertModal1.modal('toggle');
+                setTimeout(function () { alertModal1.modal("hide") }, s);
+            }
+            //消息弹出（线）
+            fAlert = function (messages, s) {
+                if (!messages) messages = "请选择您要执行的操作";
+                if (!s) s = 200000;
+                $("#alertModal2").find(".modal-body").html(messages);
+                $("#alertModal2").modal('toggle');
                 setTimeout(function () { alertModal1.modal("hide") }, s);
             }
             //属性设置
@@ -426,7 +455,7 @@
                                   },
                                   "pmFrmFree": function (t) {
                                       var activeId = _canvas.getActiveId(); //右键当前的ID
-                                      NodeFrmFree(activeId);
+                                      NodeFrmFree(activeId); cAlert
                                   },
                                   "pmNodeAccepterRole": function (t) {
 

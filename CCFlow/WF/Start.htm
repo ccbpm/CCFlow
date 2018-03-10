@@ -217,7 +217,11 @@
                     }
 
                     newRow += "<td class=Idx >" + myNum + "</td>";
-                    newRow += "<td width='300px'> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
+                    if (flow.Note =="")
+                        newRow += "<td width='300px'> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name   + "</a></td>";
+                    else
+                        newRow += "<td width='300px'> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "(" + flow.Note + ")" + "</a></td>";
+
 
                     var extHtml = "";
                     if (flow.IsBatchStart == "1")

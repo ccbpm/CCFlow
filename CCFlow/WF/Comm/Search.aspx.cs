@@ -316,6 +316,7 @@ namespace CCFlow.Web.Comm
             QueryObject qo = new QueryObject(ens);
             qo = this.ToolBar1.GetnQueryObject(ens, en);
 
+            #region 导出.
             if (this.DoType == "Exp")
             {
                 if (en.HisUAC.IsExp == false)
@@ -538,6 +539,8 @@ namespace CCFlow.Web.Comm
 
                 return null;
             }
+            #endregion 导出.
+
 
             int maxPageNum = 0;
             try
@@ -561,29 +564,29 @@ namespace CCFlow.Web.Comm
                 maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(), SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName + SortString);
             }
 
-            qo.ClearOrderBy();
+            //qo.ClearOrderBy();
+            //if (!string.IsNullOrWhiteSpace(SortBy))
+            //{
+            //    string[] sortbys = SortBy.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            //    if (SortType == "DESC")
+            //    {
+            //        if (sortbys.Length > 1)
+            //            qo.addOrderByDesc(sortbys[0], sortbys[1]);
+            //        else
+            //            qo.addOrderByDesc(sortbys[0]);
+            //    }
+            //    else
+            //    {
+            //        if (sortbys.Length > 1)
+            //            qo.addOrderBy(sortbys[0], sortbys[1]);
+            //        else
+            //            qo.addOrderBy(SortBy);
+            //    }
+            //}
+            //qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx, string.IsNullOrWhiteSpace(SortBy) ? en.PK : SortBy, SortType == "DESC");
 
-            if (!string.IsNullOrWhiteSpace(SortBy))
-            {
-                string[] sortbys = SortBy.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx);
 
-                if (SortType == "DESC")
-                {
-                    if (sortbys.Length > 1)
-                        qo.addOrderByDesc(sortbys[0], sortbys[1]);
-                    else
-                        qo.addOrderByDesc(sortbys[0]);
-                }
-                else
-                {
-                    if (sortbys.Length > 1)
-                        qo.addOrderBy(sortbys[0], sortbys[1]);
-                    else
-                        qo.addOrderBy(SortBy);
-                }
-            }
-
-            qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx, string.IsNullOrWhiteSpace(SortBy) ? en.PK : SortBy, SortType == "DESC");
 
             if (map.IsShowSearchKey)
             {

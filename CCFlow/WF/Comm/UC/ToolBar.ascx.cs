@@ -348,6 +348,8 @@ namespace CCFlow.WF.Comm.UC
                 qo.addOrderBy("No");
             if (pk == "OID")
                 qo.addOrderByDesc("OID");
+            if (pk == "WorkID")
+                qo.addOrderByDesc("WorkID");
 
             return qo;
         }
@@ -650,6 +652,9 @@ namespace CCFlow.WF.Comm.UC
                     break;
                 case "OID":
                     qo.addOrderByDesc("OID");
+                    break;
+                case "WorkID":
+                    qo.addOrderByDesc("WorkID");
                     break;
                 default:
                     break;

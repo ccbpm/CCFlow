@@ -158,17 +158,48 @@
 
                 html += "<td>" + GetWFState(en.WFState, isCanDo) + "</td>";
 
-                //                html += "<td>" + en.Emps + "</td>";
+                html += "<td>" + GenerOper(en.WorkID, en.WFState,en.FK_Flow,en.FK_Node,en.FID ) + "</td>";
+
+                // html += "<td>" + en.Emps + "</td>";
                 html += "</tr>";
                 $("#Table1 tr:last").after(html);
             }
 
             $("#List").append(_Html);
-
             $("#Msg").html("");
 
             //$("#LV_Search").listview('refresh');
         });
+
+
+        function GenerOper(workID, wfState,flowNo,nodeID,fid) {
+
+            if (wfState == 3)
+                return "<a href=''>轨迹</a>";
+
+            if (wfState == 2)
+                return "<a href=\"javascript:UnSend('"+flowNo+"','"+nodeID+"','"+workID+"','"+fid+"');\" >撤销</a>";
+
+
+            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
+
+            return "<a href=\"javascript:WinOpen('"+url+"');\" >轨迹</a>";
+        }
+
+        function UnSend(flowNo, nodeID, workid, fid) {
+
+            if (confirm("您确定要撤销吗？") == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FID", fid);
+            var data = handler.DoMethodReturnString("OP_UnSend");
+            alert(data);
+            window.location.href = window.location.href;
+        }
 
         function GetWFState(wfState, isCanDo) {
 
@@ -371,6 +402,7 @@
 <th>审批人</th>
 <th>到达日期</th>
 <th>状态</th>
+<th>操作</th>
 </tr>
 </table>
 

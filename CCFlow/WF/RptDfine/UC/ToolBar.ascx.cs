@@ -342,8 +342,8 @@ namespace CCFlow.WF.Rpt.UC
 
         protected void Page_Load(object sender, EventArgs e)
         {
-        }
 
+        }
         public QueryObject GetnQueryObjectOracle(Entities ens, Entity en)
         {
             QueryObject qo = this.InitQueryObjectByEns(ens, en.EnMap.IsShowSearchKey, en.EnMap.DTSearchWay, en.EnMap.DTSearchKey,
@@ -352,7 +352,11 @@ namespace CCFlow.WF.Rpt.UC
             if (pk == "No")
                 qo.addOrderBy("No");
             if (pk == "OID")
-                qo.addOrderByDesc("OID");
+                qo.addOrderBy("OID");
+
+            if (pk == "WorkID")
+                qo.addOrderByDesc("WorkID");
+
             return qo;
         }
         public QueryObject InitQueryObjectByEns(Entities ens, bool IsShowSearchKey, DTSearchWay dw, string dtKey, Attrs attrs, AttrsOfSearch attrsOfSearch, AttrSearchs searchAttrs)
@@ -653,7 +657,7 @@ namespace CCFlow.WF.Rpt.UC
                     qo.addOrderBy("No");
                     break;
                 case "OID":
-                    qo.addOrderByDesc("OID");
+                    qo.addOrderBy("OID");
                     break;
                 default:
                     break;

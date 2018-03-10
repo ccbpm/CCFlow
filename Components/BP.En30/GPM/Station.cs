@@ -22,6 +22,9 @@ namespace BP.GPM
         /// 职责要求
         /// </summary>
         public const string DutyReq = "DutyReq";
+        /// 隶属组织
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 岗位
@@ -88,6 +91,7 @@ namespace BP.GPM
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
                 map.AddTBStringDoc(StationAttr.DutyReq, null, "职责要求", true, false, true);
                 map.AddTBStringDoc(StationAttr.Makings, null, "素质要求", true, false, true);
+                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
                 map.AddSearchAttr(StationAttr.FK_StationType);
                 this._enMap = map;
                 return this._enMap;

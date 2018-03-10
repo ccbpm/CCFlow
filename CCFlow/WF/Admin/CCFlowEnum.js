@@ -150,4 +150,63 @@ if (typeof DeliveryWay == "undefined") {
         /// 文件在前
         /// </summary>
         WebOfficeWorkModel.WordFirst = 3
-}
+    }
+
+    ///条件数据源
+    if (typeof ConnDataFrom == "undefined") {
+        var ConnDataFrom = {}
+        /// <summary>
+        /// 表单数据
+        /// </summary>
+        ConnDataFrom.NodeForm = 0,
+        /// <summary>
+        /// 岗位数据
+        /// </summary>
+        ConnDataFrom.Stas = 1,
+        /// <summary>
+        /// Depts
+        /// </summary>
+        ConnDataFrom.Depts = 2,
+        /// <summary>
+        /// 按sql计算.
+        /// </summary>
+        ConnDataFrom.SQL = 3,
+        /// <summary>
+        /// 按参数
+        /// </summary>
+        ConnDataFrom.Paras = 4,
+        /// <summary>
+        /// 按Url.
+        /// </summary>
+        ConnDataFrom.Url = 5,
+        /// <summary>
+        /// 按sql模版计算.
+        /// </summary>
+        ConnDataFrom.SQLTemplate = 6,
+        /// <summary>
+        /// 独立表单
+        /// </summary>
+        ConnDataFrom.StandAloneFrm = 7
+    }
+     /// <summary>
+    /// 条件类型
+    /// </summary>
+   if (typeof CondType == "undefined") {
+       var CondType = {}
+        /// <summary>
+        /// 节点完成条件
+        /// </summary>
+       CondType.Node = 0,
+        /// <summary>
+        /// 流程条件
+        /// </summary>
+       CondType. Flow=1,
+        /// <summary>
+        /// 方向条件
+        /// </summary>
+        CondType.Dir = 2,
+        /// <summary>
+        /// 启动子流程
+        /// </summary>
+        CondType.SubFlow = 3
+    }

@@ -130,21 +130,10 @@
                 if (en.TodoEmps.indexOf(webUser.No) != -1)
                     isCanDo = true;
 
-                var icon = "";
-                if (en.WFState == 3)
-                    icon = "./Img/WFState/Complete.png";  //已经完成.
-                else if (en.WFState == 2)
-                    icon = "./Img/WFState/Runing.png"; //运行中. 
-                else if (en.WFState == 5)
-                    icon = "./Img/WFState/ReturnSta.png"; //退回.
-                else
-                    icon = "./Img/WFState/Etc.png"; //其他.
+                //获得icon.
+                var icon = GenerICON(isCanDo, en.WFState);
 
-                if (isCanDo == true && en.WFState != 3)
-                    icon = "./Img/WFState/Todo.png"; //其他.
-
-
-                // html = "<tr bgcolor='" + color + "'>";
+                // 获得颜色.
                 var color = GenerColor(en.WFState, isCanDo);
 
                 html = "<tr >";
@@ -152,11 +141,12 @@
 
                 html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
 
-                html += "<td><font color='"+color+"'>" + en.StarterName + "</font></td>";
+                html += "<td><font color='" + color + "'>" + en.StarterName + "</font></td>";
 
                 html += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
 
                 html += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
+
                 html += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
 
                 html += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
@@ -165,7 +155,6 @@
 
                 html += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.WFState, en.FK_Flow, en.FK_Node, en.FID, isCanDo) + "</font></td>";
 
-                // html += "<td>" + en.Emps + "</td>";
                 html += "</tr>";
                 $("#Table1 tr:last").after(html);
             }
@@ -248,6 +237,22 @@
 
             return "其他";
         }
+        function GenerICON(isCanDo, wfState) {
+
+            if (wfState == 3)
+                icon = "./Img/WFState/Complete.png";  //已经完成.
+            else if (wfState == 2)
+                icon = "./Img/WFState/Runing.png"; //运行中. 
+            else if (wfState == 5)
+                icon = "./Img/WFState/ReturnSta.png"; //退回.
+            else
+                icon = "./Img/WFState/Etc.png"; //其他.
+
+            if (isCanDo == true && wfState != 3)
+                icon = "./Img/WFState/Todo.png"; //其他.
+
+            return icon;
+        }
 
         function OpenIt(wfState, workid, flowNo, nodeID, emps, userNo) {
 
@@ -327,20 +332,19 @@
                 return;
             }
 
-            var statusArr = ["未完成", "已完成", "其他"];
-
-
             var tableHtml = "<table class='Table'>";
             tableHtml += "<tr>";
             tableHtml += "<th>Idx</th>";
             tableHtml += "<th>标题</th>";
             tableHtml += "<th>发起人</th>";
+            tableHtml += "<th>发起日期</th>";
             tableHtml += "<th>流程</th>";
             tableHtml += "<th>停留节点</th>";
-            tableHtml += "<th>处理人</th>";
-            tableHtml += "<th>发起日期</th>";
+            tableHtml += "<th>审批人</th>";
+            tableHtml += "<th>到达日期</th>";
             tableHtml += "<th>状态</th>";
-            tableHtml += "<th>参与人</th>";
+            tableHtml += "<th>操作</th>";
+          //  tableHtml += "<th>参与人</th>";
             tableHtml += "</tr>";
 
             var user = new WebUser();
@@ -355,32 +359,41 @@
                 if (en.TodoEmps.indexOf(webUser.No) != -1)
                     isCanDo = true;
 
-                var icon = "";
-                if (en.WFState == 3)
-                    icon = "./Img/WFState/Complete.png";  //已经完成.
-                else if (en.WFState == 2)
-                    icon = "./Img/WFState/Runing.png"; //运行中. 
-                else if (en.WFState == 5)
-                    icon = "./Img/WFState/ReturnSta.png"; //退回.
-                else
-                    icon = "./Img/WFState/Etc.png"; //其他.
-                if (isCanDo == true)
-                    icon = "./Img/WFState/Todo.png"; //其他.
+                //图片.
+                var icon = GenerICON(isCanDo, en.WFState);
 
-                tr = "<tr>";
-                tr += "<td class=Idx>" + (index + 1) + "</td>";
+                // 获得颜色.
+                var color = GenerColor(en.WFState, isCanDo);
 
-                tr += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
-                tr += "<td>" + en.StarterName + "</td>";
-                tr += "<td>" + en.FlowName + "</td>";
-                tr += "<td>" + en.NodeName + "</td>";
-                tr += "<td>" + en.TodoEmps + "</td>";
-                tr += "<td>" + en.RDT + "</td>";
-                tr += "<td>" + statusArr[en.WFSta] + "</td>";
-                tr += "\n<td class='BigDoc' valign=top>" + en.Emps + "</td>";
-                tr += "</tr>";
+                var todoEmpsName = en.TodoEmps;
+                todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
 
-                tableHtml += tr;
+                html = "<tr>";
+                html += "<td class=Idx>" + (index + 1) + "</td>";
+
+                html += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
+
+                html += "<td><font color='" + color + "'>" + en.StarterName + "</font></td>";
+
+                html += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+
+                html += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
+                html += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
+
+
+                html += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
+
+                html += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+
+                html += "<td><font color='" + color + "'>" + GetWFState(en.WFState, isCanDo) + "</font></td>";
+
+                html += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.WFState, en.FK_Flow, en.FK_Node, en.FID, isCanDo) + "</font></td>";
+
+                //  html += "<td><font color='" + color + "'>" + en.Emps + "</font></td>";
+
+                html += "</tr>";
+
+                tableHtml += html;
 
             });
 

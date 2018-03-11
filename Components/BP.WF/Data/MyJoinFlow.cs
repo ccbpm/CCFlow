@@ -754,19 +754,22 @@ namespace BP.WF.Data
                     MyFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%", 0, true);
                 map.AttrsOfSearch.Add(search);
 
+
                 RefMethod rm = new RefMethod();
-                rm.Title = "流程轨迹";
+                rm.Title = "轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "../../WF/Img/Track.png";
+                rm.IsForEns = true;
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "打开表单";
-                //rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
-                //rm.Icon = "../../WF/Img/FileType/doc.gif";
-                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                //map.AddRefMethod(rm);
+                rm = new RefMethod();
+                rm.Title = "表单";
+                rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
+                rm.Icon = "../../WF/Img/Form.png";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.IsForEns = true;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -774,13 +777,34 @@ namespace BP.WF.Data
         }
 		#endregion 
 
-		#region 执行诊断
+        #region 执行诊断
         public string DoTrack()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node;
+            return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
-		#endregion
+        /// <summary>
+        /// 打开最后一个节点表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoOpenLastForm()
+        {
+            Paras pss = new Paras();
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
+            pss.Add("WorkID", this.WorkID);
+            DataTable dt = DBAccess.RunSQLReturnTable(pss);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                string myPk = dt.Rows[0][0].ToString();
+                return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+            }
+
+            Node nd = new Node(this.FK_Node);
+            return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
+        }
+        #endregion
+         
 	}
 	/// <summary>
     /// 我参与的流程s

@@ -759,7 +759,6 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoAccepterRoleNew";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
            
 
                 rm = new RefMethod();
@@ -996,6 +995,26 @@ namespace BP.WF.Template
 
                 #endregion 实验中的功能
 
+                #region 旧版本 .
+                rm = new RefMethod();
+                rm.GroupName = "旧版本";
+                rm.Title = "接受人规则(旧)";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/Sender.png";
+                rm.ClassMethodName = this.ToString() + ".DoAccepterRoleOld";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.GroupName = "旧版本";
+                rm.Title = "表单方案(旧)";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Form.png";
+                rm.ClassMethodName = this.ToString() + ".DoSheetOld";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion 旧版本 .
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -1051,8 +1070,13 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSheet()
         {
+            return "../../Admin/AttrNode/FrmSln/Default.htm?FK_Node=" + this.NodeID;
+        }
+        public string DoSheetOld()
+        {
             return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
         }
+        
         /// <summary>
         /// 父子流程
         /// </summary>
@@ -1066,6 +1090,14 @@ namespace BP.WF.Template
         /// </summary>
         /// <returns></returns>
         public string DoAccepterRoleNew()
+        {
+            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID;
+        }
+        /// <summary>
+        /// 接受人规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoAccepterRoleOld()
         {
             return "../../Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID;
         }
@@ -1187,6 +1219,7 @@ namespace BP.WF.Template
             return "../../Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
             //   return null;
         }
+        
         public string DoTurn()
         {
             return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID;

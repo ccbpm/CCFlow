@@ -719,7 +719,7 @@ namespace BP.WF.Data
 
                 map.Java_SetEnType(EnType.View);
 
-                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", true, true);
+                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", false, false);
                 map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 100, 200, true);
 
                 map.AddDDLEntities(MyStartFlowAttr.FK_Flow, null, "流程", new Flows(), false);
@@ -749,29 +749,30 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
                 map.AddSearchAttr(MyStartFlowAttr.TSpan);
 
+                //我发起的流程.
+                AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",
+                    MyStartFlowAttr.Starter, "=", BP.Web.WebUser.No, 0, true);
 
-                ////我发起的流程.
-                ////AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",
-                ////    MyStartFlowAttr.Starter, "=", BP.Web.WebUser.No, 0, true);
+                map.AttrsOfSearch.Add(search);
 
-                //map.AttrsOfSearch.Add(search);
-
-                //search = new AttrOfSearch(MyStartFlowAttr.WFState, "流程状态",
-                //    MyStartFlowAttr.WFState, "not in", "('0')", 0, true);
-                //map.AttrsOfSearch.Add(search);
+                search = new AttrOfSearch(MyStartFlowAttr.WFState, "流程状态",
+                    MyStartFlowAttr.WFState, "not in", "('0')", 0, true);
+                map.AttrsOfSearch.Add(search);
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "流程轨迹";
+                rm.Title = "轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "../../WF/Img/Track.png";
+                rm.IsForEns = true;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "打开表单";
+                rm.Title = "表单";
                 rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
-                rm.Icon = "../../WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/Form.png";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.IsForEns = true;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -784,7 +785,7 @@ namespace BP.WF.Data
         public string DoTrack()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node;
+            return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node;
         }
         /// <summary>
         /// 打开最后一个节点表单
@@ -800,11 +801,11 @@ namespace BP.WF.Data
             if (dt != null && dt.Rows.Count > 0)
             {
                 string myPk = dt.Rows[0][0].ToString();
-                return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+                return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
 
             Node nd = new Node(this.FK_Node);
-            return "../../CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
+            return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
         }
         #endregion
     }

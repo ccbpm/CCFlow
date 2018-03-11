@@ -670,6 +670,7 @@ namespace BP.WF.Template
                 /* 按指定的节点的人员岗位 */
                 string para = town.HisNode.DeliveryParas;
                 para = para.Replace("@", "");
+                para = para.Replace("@", "");
 
                 if (string.IsNullOrEmpty(para) == false)
                 {
@@ -677,10 +678,13 @@ namespace BP.WF.Template
 
                     foreach (string str in strs)
                     {
+                        if (DataType.IsNullOrEmpty(str) == true)
+                            continue;
+
                         ps = new Paras();
                         ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
                         ps.Add("OID", this.WorkID);
-                        ps.Add("FK_Node", int.Parse(para));
+                        ps.Add("FK_Node", int.Parse(str));
 
                         dt = DBAccess.RunSQLReturnTable(ps);
                         if (dt.Rows.Count != 1)

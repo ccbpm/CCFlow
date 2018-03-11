@@ -1008,7 +1008,9 @@ namespace BP.WF.HttpHandler
                 rm.HisEn = en;
 
                 // 如果是link.
-                if (rm.RefMethodType == RefMethodType.LinkModel)
+                if (rm.RefMethodType == RefMethodType.LinkModel
+                    || rm.RefMethodType == RefMethodType.LinkeWinOpen
+                    || rm.RefMethodType == RefMethodType.RightFrameOpen )
                 {
                     string url = rm.Do(null) as string;
                     if (string.IsNullOrEmpty(url))

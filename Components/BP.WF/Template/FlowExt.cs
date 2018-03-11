@@ -393,7 +393,6 @@ namespace BP.WF.Template
             true, true, FlowAttr.FlowDeleteRole,
             "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
 
-
                 //add 2013-05-22.
                 map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
                 //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");

@@ -812,7 +812,7 @@ namespace BP.WF
             return sb;
         }
 
-        public static StringBuilder GenerHtmlOfFool(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo = null)
+        private static StringBuilder GenerHtmlOfFool(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo = null)
         {
             StringBuilder sb = new System.Text.StringBuilder();
 
@@ -1325,24 +1325,37 @@ namespace BP.WF
 
                 //生成 表单的 html.
                 StringBuilder sb = new System.Text.StringBuilder();
-                if (mapData.HisFrmType == FrmType.FoolForm)
-                    sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo);
-                else
-                    sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo);
 
+              
                 #region 替换模版文件..
 
+                //首先判断是否有约定的文件.
                 string docs = "";
-
-                if (mapData.HisFrmType == FrmType.FoolForm)
-                    docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\indexFool.htm");
+                string tempFile = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\" + mapData.No + ".htm";
+                if (System.IO.File.Exists(tempFile) == true)
+                {
+                   
+                }
                 else
-                    docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\indexFree.htm");
+                {
+                    if (mapData.HisFrmType == FrmType.FoolForm)
+                    {
+                        docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\indexFool.htm");
+                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo);
+                    }
+                    else
+                    {
+                        docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\indexFree.htm");
+                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo);
+                    }
+                }
+
 
                 docs = docs.Replace("@Docs", sb.ToString());
                 docs = docs.Replace("@Width", mapData.FrmW.ToString());
                 docs = docs.Replace("@Height", mapData.FrmH.ToString());
                 docs = docs.Replace("@PrintDT", DateTime.Now.ToString("yyyy年MM月dd日HH时mm分ss秒") );
+
 
                 if (flowNo != null)
                 {

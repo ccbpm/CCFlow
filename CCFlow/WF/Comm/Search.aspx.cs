@@ -564,29 +564,34 @@ namespace CCFlow.Web.Comm
                 maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(), SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName + SortString);
             }
 
-            //qo.ClearOrderBy();
-            //if (!string.IsNullOrWhiteSpace(SortBy))
-            //{
-            //    string[] sortbys = SortBy.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            //    if (SortType == "DESC")
-            //    {
-            //        if (sortbys.Length > 1)
-            //            qo.addOrderByDesc(sortbys[0], sortbys[1]);
-            //        else
-            //            qo.addOrderByDesc(sortbys[0]);
-            //    }
-            //    else
-            //    {
-            //        if (sortbys.Length > 1)
-            //            qo.addOrderBy(sortbys[0], sortbys[1]);
-            //        else
-            //            qo.addOrderBy(SortBy);
-            //    }
-            //}
-            //qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx, string.IsNullOrWhiteSpace(SortBy) ? en.PK : SortBy, SortType == "DESC");
-
-            qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx);
-
+            //处理排序. 
+            if (string.IsNullOrWhiteSpace(SortBy) == false)
+            {
+                //如果已经指定了排序规则.
+                qo.ClearOrderBy();
+                string[] sortbys = SortBy.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                if (SortType == "DESC")
+                {
+                    if (sortbys.Length > 1)
+                        qo.addOrderByDesc(sortbys[0], sortbys[1]);
+                    else
+                        qo.addOrderByDesc(sortbys[0]);
+                }
+                else
+                {
+                    if (sortbys.Length > 1)
+                        qo.addOrderBy(sortbys[0], sortbys[1]);
+                    else
+                        qo.addOrderBy(SortBy);
+                }
+                qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx, string.IsNullOrWhiteSpace(SortBy) ? en.PK : SortBy, SortType == "DESC");
+            }
+            else
+            {
+                //没有指定排序规则.
+                qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx);
+                // qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx, string.IsNullOrWhiteSpace(SortBy) ? en.PK : SortBy, SortType == "DESC");
+            }
 
             if (map.IsShowSearchKey)
             {

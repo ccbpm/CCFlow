@@ -98,9 +98,7 @@
                 //填入菜单内容.
                 html += "<ul >";
 
-                if (gName == "基本信息") {
-                    html += "<li style='float:left;margin:15px;list-style:none' >" + GenerRMBase() + "</li>";
-                }
+              
 
                 for (var idx = 0; idx < dtM.length; idx++) {
 
@@ -115,7 +113,11 @@
                     if (en.RefAttrKey != null || en.IsCanBatch == "1" || en.Visable == 0)
                         continue;
 
-                    html += "<li style='float:left;margin:15px;list-style:none' >" + GenerRM(en) + "</li>";
+                    if (gName == "基本信息" && idx == 0) {
+                        html += "<li style='float:left;margin:5px;list-style:none' >" + GenerRMBase() + "</li>";
+                    }
+
+                    html += "<li style='float:left;margin:5px;list-style:none' >" + GenerRM(en) + "</li>";
                 }
                 html += "</ul>";   //end填入菜单内容.
 

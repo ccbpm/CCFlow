@@ -118,10 +118,14 @@ function changeOption() {
         case DeliveryWay.ByCCFlowBPM:
             roleName = "100.ByCCFlowBPM.htm";
             break;
+        case DeliveryWay.ByCCFlowBPM:
+            roleName = "100.ByCCFlowBPM.htm";
+            break;
         default:
             roleName = "0.ByStation.htm";
             break;
     }
+
     window.location.href =   roleName + "?FK_Node=" + nodeID;
 }
 function SaveAndClose() {

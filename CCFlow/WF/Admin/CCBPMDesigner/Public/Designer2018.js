@@ -39,7 +39,7 @@ function FlowRun() {
 
 //旧版本.
 function OldVer() {
-    var url = "DesignerOld.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    var url = "Designer.htm?FK_Flow=" + flowNo + "&Lang=CH&&Flow_V=1";
     window.location.href = url;
 }
 

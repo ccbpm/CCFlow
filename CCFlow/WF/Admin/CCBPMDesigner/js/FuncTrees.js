@@ -138,7 +138,7 @@ functrees.push({
     Nodes: [{
         Type: "Node", Id: "AdminMenu", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
         Nodes: [{
-            Type: "Service", ServiceMethod: "GetTreeJson_AdminMenu", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", ColUrl: "URL", RootParentId: "AdminMenu"
+            Type: "Service", ServiceMethod: "GetTreeJson_AdminMenu", ColId: "No", ColParentId: "ParentNo", ColName: "Name", ColUrl: "Url", RootParentId: "AdminMenu"
             , Defines: [{
                 IconCls: "icon-accept"
             }]

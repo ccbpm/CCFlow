@@ -824,7 +824,9 @@ namespace BP.WF.HttpHandler
             }
 
             string val = this.GetRequestVal("emps").Replace(",", "@");
+            string valT = this.GetRequestVal("orgEmps").Replace(",", "@");
             cond.OperatorValue = val;
+            cond.OperatorValueT = valT;
             cond.SpecOperWay = (SpecOperWay)this.GetRequestValInt("DDL_SpecOperWay");
             if (cond.SpecOperWay != SpecOperWay.CurrOper)
             {

@@ -29,9 +29,9 @@
             //获取URL参数
             var nodeID = GetQueryString("FK_Node");
             var orgNo = GetQueryString("OrgNo");
-            var operatorValue = GetQueryString("Operate_Value");
+            var emps = GetQueryString("emps");
             selectType = GetQueryString("SelectType");
-            var CheckStations = operatorValue.split("@");
+            var CheckStations = emps.split(",");
             //岗位类型集合
             var StationTypes;
             //岗位集合

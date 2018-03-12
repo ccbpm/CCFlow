@@ -45,24 +45,13 @@
 
             var cond = new Entity("BP.WF.Template.Cond", mypk);
             // 运算的值
-            operatorValue = cond.OperatorValue
+            operatorValue = cond.OperatorValue;
+            operatorValueT = cond.OperatorValueT;
 
             //获取已指定操作员的岗位条件
-            CheckStations= operatorValue.split("@");         
-
-            var html ="" ;
-            var emps = "";
-            var count = 0;
-            for (var i = 0; i < CheckStations.length; i++) {
-                if (CheckStations[i] != "") {
-                    var en = new Entity("BP.WF.Port.Station", parseInt(CheckStations[i]));
-                    html += "&nbsp;&nbsp;&nbsp;" + en.Name;
-                    count++;
-                    emps += CheckStations[i] + ",";
-                }
-            }
-            document.getElementById("emps").innerHTML = emps;
-            document.getElementById("stations").innerHTML ="合计:(<font color=red>" + count + "</font>)条"+ html;
+            operatorValues = operatorValue.split("@");
+            var operatorValueTs = operatorValueT.split("@");   
+            
 
 
             ////根据用户的信息，判断是否启用那个设置工具。
@@ -74,10 +63,27 @@
             if (user.FK_Dept == 0) {
                 /*调用通用的.*/
                 $("#AdminModel").show();
+                var showCondition = InitStation(operatorValues);
+                document.getElementById("emps").innerHTML = showCondition[2];
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + showCondition[0] + "</font>)条" + showCondition[1];
+                
 
             } else {
                 /*调用集团模式的.*/
                 $("#OrgModel").show();
+                var showCondition = InitStation(operatorValues);
+                var showConditionT = InitStation(operatorValueTs);
+                $("#groupCount").html(showCondition[0])
+                $("#groupStations").html(showCondition[1])
+                $("#groupEmps").html(showCondition[2])
+                $("#orgCount").html(showConditionT[0])
+                $("#orgStations").html(showConditionT[1])
+                $("#orgEmps").html(showConditionT[2])
+                var count = showCondition[0] + showConditionT[0];
+                document.getElementById("emps").innerHTML = showCondition[2] + showConditionT[2];
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + showCondition[1] + showConditionT[1];
+
+
             }
 
             //TODO 条件参数
@@ -104,6 +110,27 @@
                 GenerFullAllCtrlsVal(currCondStation);
 
         }
+
+        function InitStation(CheckStations) {
+            var showCondition = new Array();
+            var html = "";
+            var emps = "";
+            var count = 0;
+            for (var i = 0; i < CheckStations.length; i++) {
+                if (CheckStations[i] != "") {
+                    var en = new Entities("BP.GPM.Stations");
+                    en.Retrieve("No", CheckStations[i]);
+                    html += "&nbsp;&nbsp;&nbsp;" + en[0].Name;
+                    count++;
+                    emps += CheckStations[i] + ",";
+                }
+            }
+            showCondition[0] = count;
+            showCondition[1] = html;
+            showCondition[2] = emps;
+            return showCondition;
+
+        }
         //设置本组织岗位.
         function SetAdminStations() {
             var user = new WebUser();
@@ -121,10 +148,11 @@
             OpenNodStationGroup(user.FK_Dept,3);
         }
 
-        
 
-        function OpenNodStationGroup(orgNo,selectType) {
-            var url = "SelectStation.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node") + "&Operate_Value=" + operatorValue + "&SelectType=" + selectType;
+
+        function OpenNodStationGroup(orgNo, selectType) {
+            var emps = $("#emps").html();
+            var url = "SelectStation.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node") + "&emps=" + emps + "&SelectType=" + selectType;
             document.getElementById("stationFrame").src = url;
             $("#win").window("open"); 
             
@@ -154,10 +182,18 @@
             //var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             //获取所有选中的checkbox
             var emps = document.getElementById("emps").innerHTML;
+            var orgEmps = "";
+            var user = new WebUser();
+            if (user.FK_Dept != 0) {
+                emps = document.getElementById("groupEmps").innerHTML;
+                orgEmps = document.getElementById("orgEmps").innerHTML;
+            }
+            
             var frmData = $("#cc").serialize();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             handler.AddPara("emps", emps);
+            handler.AddPara("orgEmps", orgEmps);
             handler.AddPara("FK_MainNode", GetQueryString("FK_MainNode"));
             handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
             handler.AddPara("DirType", GetQueryString("DirType"));
@@ -199,12 +235,12 @@
                 document.getElementById("emps").innerHTML = data[0];
             }
             if (data[3] == "2") {
-                document.getElementById("groupEmps").innerHTML = data[0];
-                document.getElementById("groupStations").innerHTML = data[1];
-                document.getElementById("groupCount").innerHTML = data[2];
-                var orgCount = document.getElementById("orgCount").innerHTML;
-                var orgStations = document.getElementById("orgStations").innerHTML;
-                var orgEmps = document.getElementById("orgEmps").innerHTML;
+                $("#groupEmps").html(data[0]);
+                $("#groupStations").html(data[1]);
+                $("#groupCount").html(data[2]);
+                var orgCount = $("#orgCount").html();
+                var orgStations = $("#orgStations").html();
+                var orgEmps = $("#orgEmps").html();
                 var count = 0;
                 if (orgCount == null || orgCount == "") orgCount = 0;
                 if (data[2] == null || data[2] == "") data[2] = 0;
@@ -214,12 +250,12 @@
             }
 
             if (data[3] == "3") {
-                document.getElementById("orgEmps").innerHTML = data[0];
-                document.getElementById("orgStations").innerHTML = data[1];
-                document.getElementById("orgCount").innerHTML = data[2];
-                var groupCount = document.getElementById("groupCount").innerHTML;
-                var groupStations = document.getElementById("groupStations").innerHTML;
-                var groupEmps = document.getElementById("groupEmps").innerHTML;
+                $("#orgEmps").html(data[0]);
+                $("#orgStations").html(data[1]);
+                $("#orgCount").html(data[2]);
+                var groupCount = $("#groupCount").html();
+                var groupStations = $("#groupStations").html();
+                var groupEmps = $("#groupEmps").html();
                 var count = 0;
                 if (groupCount == null || groupCount == "") groupCount = 0;
                 if (data[2] == null || data[2] == "") data[2] = 0;

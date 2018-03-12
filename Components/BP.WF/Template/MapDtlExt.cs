@@ -1019,7 +1019,7 @@ namespace BP.WF.Template
                 //add 2014-02-21.
                 map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", true, false);
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
-                map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", true, false);
+                map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", true, true);
                 string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='@No' AND  ( (MyDataType =1 and UIVisible=1 ) or (UIContralType=1))";
                 map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
                 map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", true, true);

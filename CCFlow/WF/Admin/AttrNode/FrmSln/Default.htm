@@ -18,7 +18,8 @@
             node.Retrieve();
 
             var url = '';
-            switch (node.FormType) {
+
+            switch (parseInt(node.FormType)) {
                 case FormType.FoolForm:
                     url = "0.FoolForm.htm";
                     break;

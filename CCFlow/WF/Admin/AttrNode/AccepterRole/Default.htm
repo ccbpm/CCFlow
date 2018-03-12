@@ -18,7 +18,7 @@
             node.Retrieve();
 
             var url = '';
-            switch (node.DeliveryWay) {
+            switch (parseInt(node.DeliveryWay)) {
                 case DeliveryWay.ByStation:
                     //Bind_1_ByStation();
                     url = "0.ByStation.htm";

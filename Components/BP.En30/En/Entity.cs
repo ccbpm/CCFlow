@@ -1267,7 +1267,7 @@ namespace BP.En
 			//CheckDatas  ens=new CheckDatas(this.EnMap.PhysicsTable);
 			//foreach(CheckData en in ens)
 			//{
-			//    string sql="DELETE  "+en.RefTBName+"   WHERE  "+en.RefTBFK+" ='"+this.GetValByKey(en.MainTBPK) +"' ";	
+			//    string sql="DELETE  FROM "+en.RefTBName+"   WHERE  "+en.RefTBFK+" ='"+this.GetValByKey(en.MainTBPK) +"' ";	
 			//    DBAccess.RunSQL(sql);
 			//}
 			#endregion

@@ -64,10 +64,6 @@ namespace BP.WF
         /// </summary>
         public const string IsEnable = "IsEnable";
         /// <summary>
-        /// WarningHour
-        /// </summary>
-        public const string WarningHour = "WarningHour";
-        /// <summary>
         /// 是否自动分配
         /// </summary>
         //public const  string IsAutoGener="IsAutoGener";
@@ -403,20 +399,6 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(GenerWorkerListAttr.FID, value);
-            }
-        }
-        /// <summary>
-        /// 警告天
-        /// </summary>
-        public float WarningHour
-        {
-            get
-            {
-                return this.GetValFloatByKey(GenerWorkerListAttr.WarningHour);
-            }
-            set
-            {
-                this.SetValByKey(GenerWorkerListAttr.WarningHour, value);
             }
         }
         /// <summary>

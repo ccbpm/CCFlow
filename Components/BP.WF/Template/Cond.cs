@@ -700,6 +700,8 @@ namespace BP.WF.Template
                 {
                     #region 按岗位控制
                     string strs = this.OperatorValue.ToString();
+                    strs += this.OperatorValueT.ToString();
+
                     string strs1 = "";
                     if (BP.WF.Glo.OSModel == OSModel.OneOne)
                     {
@@ -739,6 +741,7 @@ namespace BP.WF.Template
                 {
                     #region 按部门控制
                     string strs = this.OperatorValue.ToString();
+                    strs += this.OperatorValueT.ToString();
 
                     BP.GPM.DeptEmps sts = new BP.GPM.DeptEmps();
                     if (SystemConfig.OSModel == OSModel.OneMore)

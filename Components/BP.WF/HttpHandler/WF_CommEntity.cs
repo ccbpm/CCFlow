@@ -636,6 +636,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 实体的操作.
 
+        #region 部门人员模式.
         public string BranchesAndLeaf_SearchByNodeID()
         {
             string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
@@ -763,6 +764,8 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
+        #endregion 部门人员模式.
+
         /// <summary>
         /// 执行保存
         /// </summary>

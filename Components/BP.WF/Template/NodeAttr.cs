@@ -131,14 +131,6 @@ namespace BP.WF.Template
         /// 工作量
         /// </summary>
         public const string WorkloadDel = "Workload";
-        /// <summary>
-        /// 公文左边词语
-        /// </summary>
-        public const string DocLeftWord = "DocLeftWord";
-        /// <summary>
-        /// 公文右边词语
-        /// </summary>
-        public const string DocRightWord = "DocRightWord";
         #endregion
 
         #region 基本属性

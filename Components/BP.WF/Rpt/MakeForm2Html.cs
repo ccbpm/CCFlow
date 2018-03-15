@@ -1082,14 +1082,18 @@ namespace BP.WF
                                 {
                                     try
                                     {
-                                        //把文件copy到,
-                                        if (System.IO.File.Exists(fileTo) == false)
+                                        if (System.IO.File.Exists(fileTo) == true)
                                         {
-                                            string file = item.GenerTempFile(ath.AthSaveWay);
 
-
-                                            System.IO.File.Copy(file, fileTo, true);
+                                            System.IO.File.Delete(fileTo);
+                                            //rn "err@删除已经存在的文件错误,请检查iis的权限:" + ex.Message;
+                                            //}
                                         }
+
+                                        //把文件copy到,
+                                      
+                                            string file = item.GenerTempFile(ath.AthSaveWay);
+                                            System.IO.File.Copy(file, fileTo, true);
 
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                                     }

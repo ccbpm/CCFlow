@@ -723,7 +723,7 @@ namespace BP.WF
                         subFormTree.Save();
                     }
                     //表单于表单树进行关联
-                    sql = "UPDATE Sys_MapData SET FK_FormTree=FK_FrmSort WHERE FK_FrmSort <> '' AND FK_FrmSort is not null";
+                    sql = "UPDATE Sys_MapData SET FK_FormTree=FK_FrmSort WHERE FK_FrmSort <> '' AND FK_FrmSort IS not null";
                     DBAccess.RunSQL(sql);
                 }
                 #endregion

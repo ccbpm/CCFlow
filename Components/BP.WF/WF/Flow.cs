@@ -5763,7 +5763,7 @@ namespace BP.WF
             //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
             nd.CondModel = CondModel.ByLineCond; //默认的发送方向.
             nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
-
+            nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
 
             //为创建节点设置默认值 @于庆海. 
             string file= SystemConfig.PathOfDataUser+"\\XML\\DefaultNewNodeAttr.xml";
@@ -5898,6 +5898,7 @@ namespace BP.WF
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
                 nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+                nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
                 nd.Insert();
 
                 nd.CreateMap();
@@ -5927,6 +5928,8 @@ namespace BP.WF
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
                 nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+                nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+
                 //为创建节点设置默认值 @于庆海. 
                 string fileNewNode = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
                 if (System.IO.File.Exists(fileNewNode) == true)

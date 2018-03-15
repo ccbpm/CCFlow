@@ -1558,34 +1558,6 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.HisBillIDs, value);
             }
         }
-        /// <summary>
-        /// 公文左边词语
-        /// </summary>
-        public string DocLeftWord
-        {
-            get
-            {
-                return this.GetValStrByKey(NodeAttr.DocLeftWord);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.DocLeftWord, value);
-            }
-        }
-        /// <summary>
-        /// 公文右边词语
-        /// </summary>
-        public string DocRightWord
-        {
-            get
-            {
-                return this.GetValStrByKey(NodeAttr.DocRightWord);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.DocRightWord, value);
-            }
-        }
         #endregion
 
         #region 扩展属性
@@ -2438,7 +2410,7 @@ namespace BP.WF
                 Map map = new Map("WF_Node", "节点");
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
 
                 #region 基本属性.
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
@@ -2479,8 +2451,8 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
 
                 map.AddTBFloat(NodeAttr.WarningDay, 1, "工作预警(天)", true, false);    // "警告期限(0不警告)"
-              //  map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
-              //  map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
+                //  map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
+                //  map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
 
                 map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.WAlertWay, 0, "预警提醒方式", false, false); //"限期(天)"
@@ -2501,9 +2473,8 @@ namespace BP.WF
 
                 //退回相关.
                 map.AddTBInt(NodeAttr.ReturnRole, 2, "退回规则", true, true);
-                map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 999, 10, true);
-                map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 999, 10, true);
-
+                map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 50, 10, true);
+                map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 50, 10, true);
 
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "访问规则", true, true);
                 map.AddTBInt(NodeAttr.IsExpSender, 1, "本节点接收人不允许包含上一步发送人", true, true);
@@ -2511,7 +2482,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.CancelRole, 0, "撤销规则", true, true);
 
                 map.AddTBInt(NodeAttr.WhenNoWorker, 0, "未找到处理人时", true, true);
-                map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 500, 10);
+                map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 100, 10);
                 map.AddTBString(NodeAttr.NodeFrmID, null, "节点表单ID", true, false, 0, 50, 10);
 
                 map.AddTBInt(NodeAttr.CCRole, 0, "抄送规则", true, true);
@@ -2532,8 +2503,7 @@ namespace BP.WF
 
                 //add.
                 map.AddTBInt(NodeAttr.TeamLeaderConfirmRole, 0, "组长确认规则", true, true);
-                map.AddTBString(NodeAttr.TeamLeaderConfirmDoc, null, "组长确认设置内容", true, false, 0, 200, 10);
-
+                map.AddTBString(NodeAttr.TeamLeaderConfirmDoc, null, "组长确认设置内容", true, false, 0, 100, 10);
 
                 map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 0, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);
@@ -2542,8 +2512,8 @@ namespace BP.WF
                 map.AddTBDecimal(NodeAttr.PassRate, 100, "通过率", true, true);
                 map.AddTBInt(NodeAttr.RunModel, 0, "运行模式(对普通节点有效)", true, true);
                 map.AddTBInt(NodeAttr.BlockModel, 0, "阻塞模式", true, true);
-                map.AddTBString(NodeAttr.BlockExp, null, "阻塞表达式", true, false, 0, 700, 10);
-                map.AddTBString(NodeAttr.BlockAlert, null, "被阻塞提示信息", true, false, 0, 700, 10);
+                map.AddTBString(NodeAttr.BlockExp, null, "阻塞表达式", true, false, 0, 200, 10);
+                map.AddTBString(NodeAttr.BlockAlert, null, "被阻塞提示信息", true, false, 0, 100, 10);
 
                 map.AddTBInt(NodeAttr.WhoExeIt, 0, "谁执行它", true, true);
                 map.AddTBInt(NodeAttr.ReadReceipts, 0, "已读回执", true, true);
@@ -2565,35 +2535,35 @@ namespace BP.WF
 
 
                 //与未来处理人有关系.
-              //  map.AddTBInt(NodeAttr.IsFullSA, 1, "是否计算未来处理人?", false, false);
+                //map.AddTBInt(NodeAttr.IsFullSA, 1, "是否计算未来处理人?", false, false);
                 //map.AddTBInt(NodeAttr.IsFullSATime, 0, "是否计算未来接受与处理时间?", false, false);
                 //map.AddTBInt(NodeAttr.IsFullSAAlert, 0, "是否接受未来工作到达消息提醒?", false, false);
 
                 //表单相关.
                 map.AddTBInt(NodeAttr.FormType, 1, "表单类型", false, false);
-                map.AddTBString(NodeAttr.FormUrl, "http://", "表单URL", true, false, 0, 2000, 10);
+                map.AddTBString(NodeAttr.FormUrl, "http://", "表单URL", true, false, 0, 150, 10);
                 map.AddTBString(NodeAttr.DeliveryParas, null, "接受人SQL", true, false, 0, 300, 10, true);
                 map.AddTBInt(NodeAttr.TurnToDeal, 0, "转向处理", false, false);
-                map.AddTBString(NodeAttr.TurnToDealDoc, null, "发送后提示信息", true, false, 0, 1000, 10, true);
+                map.AddTBString(NodeAttr.TurnToDealDoc, null, "发送后提示信息", true, false, 0, 200, 10, true);
                 map.AddTBInt(NodeAttr.NodePosType, 0, "位置", false, false);
                 map.AddTBInt(NodeAttr.IsCCFlow, 0, "是否有流程完成条件", false, false);
-                map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 4000, 10);
-                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 4000, 10);
-                map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 400, 10);
-                map.AddTBString(NodeAttr.HisBillIDs, null, "单据IDs", false, false, 0, 300, 10);
+                map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 3000, 10);
+                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 3000, 10);
+                map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 50, 10);
+                map.AddTBString(NodeAttr.HisBillIDs, null, "单据IDs", false, false, 0, 50, 10);
                 //  map.AddTBString(NodeAttr.HisEmps, null, "HisEmps", false, false, 0, 3000, 10);
-                map.AddTBString(NodeAttr.HisSubFlows, null, "HisSubFlows", false, false, 0, 50, 10);
+                map.AddTBString(NodeAttr.HisSubFlows, null, "HisSubFlows", false, false, 0, 30, 10);
                 map.AddTBString(NodeAttr.PTable, null, "物理表", false, false, 0, 100, 10);
 
                 map.AddTBString(NodeAttr.ShowSheets, null, "显示的表单", false, false, 0, 100, 10);
-                map.AddTBString(NodeAttr.GroupStaNDs, null, "岗位分组节点", false, false, 0, 200, 10);
+                map.AddTBString(NodeAttr.GroupStaNDs, null, "岗位分组节点", false, false, 0, 100, 10);
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);
 
                 map.AddTBString(NodeAttr.FocusField, null, "焦点字段", false, false, 0, 30, 10);
-                map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 200, 10, true);
+                map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 100, 10, true);
 
-                map.AddTBString(NodeAttr.RefOneFrmTreeType, "", "独立表单类型", false, false, 0, 200, 10);//RefOneFrmTree
+                map.AddTBString(NodeAttr.RefOneFrmTreeType, "", "独立表单类型", false, false, 0, 100, 10);//RefOneFrmTree
 
                 //按钮控制部分.
                 // map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);
@@ -2603,13 +2573,12 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.SubFlowStartWay, 0, "子线程启动方式", true, false);
                 map.AddTBString(NodeAttr.SubFlowStartParas, null, "启动参数", true, false, 0, 100, 10);
 
-                map.AddTBString(NodeAttr.DocLeftWord, null, "公文左边词语(多个用@符合隔开)", true, false, 0, 200, 10);
-                map.AddTBString(NodeAttr.DocRightWord, null, "公文右边词语(多个用@符合隔开)", true, false, 0, 200, 10);
-
+                //   map.AddTBString(NodeAttr.DocLeftWord, null, "公文左边词语(多个用@符合隔开)", true, false, 0, 100, 10);
+                //  map.AddTBString(NodeAttr.DocRightWord, null, "公文右边词语(多个用@符合隔开)", true, false, 0, 200, 10);
 
                 // 启动自动运行. 2013-01-04
                 map.AddTBInt(NodeAttr.AutoRunEnable, 0, "是否启动自动运行？", true, false);
-                map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行参数", true, false, 0, 500, 10);
+                map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行参数", true, false, 0, 100, 10);
 
                 #region 与参数有关系的属性。
                 //map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,
@@ -2638,7 +2607,6 @@ namespace BP.WF
             return false;
         }
         #endregion
-
 
 
         /// <summary>

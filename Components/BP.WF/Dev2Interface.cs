@@ -6669,7 +6669,7 @@ namespace BP.WF
         public static void Node_CC_DoDel(string mypk)
         {
             Paras ps = new Paras();
-            ps.SQL = "DELETE WF_CCList WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK";
+            ps.SQL = "DELETE FROM WF_CCList WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK";
             ps.Add(CCListAttr.MyPK, mypk);
             BP.DA.DBAccess.RunSQL(ps);
         }

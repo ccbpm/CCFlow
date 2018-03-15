@@ -299,7 +299,7 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
-                map.AddTBString(FTCAttr.FTCLab, "流转自定义", "显示标签", true, false, 0, 200, 10, true);
+                map.AddTBString(FTCAttr.FTCLab, "流转自定义", "显示标签", true, false, 0, 50, 10, true);
 
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.

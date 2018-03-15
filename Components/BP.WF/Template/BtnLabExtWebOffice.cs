@@ -839,7 +839,7 @@ namespace BP.WF.Template
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
 
                 map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);
-                map.AddTBString(BtnAttr.Name, null, "节点名称", true, true, 0, 200, 10);
+                map.AddTBString(BtnAttr.Name, null, "节点名称", true, true, 0, 100, 10);
 
 
                 #region 公文按钮
@@ -880,7 +880,7 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.OfficeDownEnable, false, "是否启用", true, true);
 
                 map.AddBoolean(BtnAttr.OfficeIsMarks, true, "是否进入留痕模式", true, true);
-                map.AddTBString(BtnAttr.OfficeTemplate, "", "指定文档模板", true, false, 0, 100, 10);
+                map.AddTBString(BtnAttr.OfficeTemplate, "", "指定文档模板", true, false, 0, 50, 10);
 
                 map.AddBoolean(BtnAttr.OfficeIsParent, true, "是否使用父流程的文档", true, true);
 
@@ -892,7 +892,7 @@ namespace BP.WF.Template
                 }
 
                 map.AddBoolean(BtnAttr.OfficeIsTrueTH, false, "是否自动套红", true, true);
-                map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 200, 10);
+                map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 50, 10);
 
                 map.AddTBString(BtnAttr.WebOfficeLab, "公文", "公文标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "文档启用方式", true, true, BtnAttr.WebOfficeEnable,

@@ -659,7 +659,7 @@ namespace BP.WF.Template
                 map.AddTBFloat(FrmWorkCheckAttr.FWC_W, 400, "宽度", true, false);
                 map.SetHelperAlert(FrmWorkCheckAttr.FWC_W, "如果是自由表单就不要变化该属性,为0，则标识为100%,应用的组件模式."); //增加帮助
 
-                map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式化字段", true, false, 0, 500, 200, true);
+                map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式化字段", true, false, 0, 50, 200, true);
 
                 map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
                 map.AddBoolean(FrmWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);

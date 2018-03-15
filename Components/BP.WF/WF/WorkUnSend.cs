@@ -626,7 +626,7 @@ namespace BP.WF
             }
 
             //首先删除当前节点的，审核意见.
-            string delTrackSQl = "DELETE ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + nd.NodeID + " AND ActionType =22 ";
+            string delTrackSQl = "DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + nd.NodeID + " AND ActionType =22 ";
             DBAccess.RunSQL(delTrackSQl);
 
             if (wn.HisNode.IsEval)

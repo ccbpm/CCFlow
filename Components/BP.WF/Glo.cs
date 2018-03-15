@@ -4719,6 +4719,8 @@ namespace BP.WF
                 qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
                 qo.addAnd();
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment,FK_FrmAttachment);
                 qo.addOrderBy("RDT");
                 qo.DoQuery();
             }

@@ -3082,12 +3082,13 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                while (System.IO.File.Exists(zipFile) == false)
+                while (System.IO.File.Exists(zipFile) == true)
                 {
-                    //执行压缩.
-                    FastZip fz = new FastZip();
-                    fz.CreateZip(zipFile, tempFilePath, true, "");
+                    System.IO.File.Delete(zipFile);
                 }
+                //执行压缩.
+                FastZip fz = new FastZip();
+                fz.CreateZip(zipFile, tempFilePath, true, "");
                 //删除临时文件夹
                 System.IO.Directory.Delete(tempFilePath, true);
             }

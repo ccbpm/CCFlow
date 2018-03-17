@@ -160,6 +160,9 @@
 
         function OpenIt(url) {
 
+            window.location.href = url; //  window.location.href;
+        
+
             OpenEasyUiDialog(url, "eudlgframe", "详细", 800, 600, "icon-edit", true, null, null, null, function () {
                 //  window.location.href = window.location.href;
             });

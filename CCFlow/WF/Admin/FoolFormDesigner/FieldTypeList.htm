@@ -82,17 +82,22 @@
 
         //转拼音，并去除开头为数字的字符
         function ParseStringToPinYin(parseString, parseModel) {
+
             parseString = $.trim(parseString);
-            if (parseString != "") {
-                $.post(Handler, { action: 'ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
-                    if (data != "false") {
-                        document.getElementById("TB_No").value = data;
-                    }
-                });
+            if (parseString == "")
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("name", parseString);
+            handler.AddPara("flag", parseModel);
+
+            var data = handler.DoMethodReturnString("ParseStringToPinyin");
+            if (data != "false") {
+                document.getElementById("TB_No").value = data;
             }
         }
-         
-        function Create( isSaveAndNew ) {
+
+        function Create(isSaveAndNew) {
 
             var name = $("#TB_Name").val();
             if (name == '' || name == null) {
@@ -112,36 +117,27 @@
             }
 
             var fType = $('input[name="RB_FType"]:checked').val();
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FieldTypeSelect_Create&Name=" + encodeURIComponent(name) + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&GroupField=" + groupID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf("err@") >= 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("Name", encodeURIComponent(name));
+            handler.AddPara("FType", fType);
+            handler.AddPara("FK_MapData", fk_mapdata);
+            handler.AddPara("KeyOfEn", no);
+            handler.AddPara("GroupField", groupID);
 
-                    var url = data.replace('url@', '');
-                    if (isSaveAndNew == false) {
-                        window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
-                    } else {
-                        window.location.href = "FieldTypeList.htm?FType=" + fType + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random();
-                    }
-                    return;
+            var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
+            if (data.indexOf("err@") >= 0) {
+                alert(data);
+                return;
+            }
 
-                    if (confirm('创建成功,您还要继续创建吗？') == true) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                    } else {
-
-                        $("#TB_No").val('');
-                        $("#TB_Name").val('');
-                    }
-                }
-            });
+            var url = data.replace('url@', '');
+            if (isSaveAndNew == false) {
+                window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
+            } else {
+                window.location.href = "FieldTypeList.htm?FType=" + fType + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random();
+            }
+            return;
         }
 
         function ContainsChinese(str) {

@@ -19,6 +19,7 @@
     <script  type="text/javascript">
 
         $(function () {
+
             InitBar(DeliveryWay.ByStationAndEmpDept);
 
             //获取节点岗位
@@ -87,12 +88,10 @@
 
     <ul>
         <li>
-             <a href="javascript:OpenStation()">
-                                            设置与更改岗位</a> 
+             <a href="javascript:OpenStation()"> 设置与更改岗位</a> 
         </li>
         <li> 
-            <a href="javascript:OpenNew()">
-                                            设置/更改部门</a>
+            <a href="javascript:OpenNew()"> 设置/更改部门</a>
         </li>
         <li> 
             <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
@@ -102,19 +101,21 @@
 </fieldset>
 <fieldset>
     <legend>已经设置的岗位</legend>
-
     <div id="stas"> </div>
 </fieldset>
 <fieldset>
     <legend>已经设置的部门</legend>
-
     <div id="dept"> </div>
 </fieldset>
 
 <fieldset>
     <legend>说明</legend>
     <ul>
-        <li>ccBPM会取绑定部门集合下绑定岗位的人员。</li>
+        <li>该操作需要设置部门与设置岗位，两个设置。</li>
+        <li>当前节点的处理人员需要求两个集合的交集。</li>
+        <li>比如:在岗位里设置部门经理岗位，在部门里设置财务与人力资源两个部门。</li>
+        <li>系统就会得到两个人员集合，第一个集合是所有具有部门经理岗位的人员，第2个集合就是财务部，人力资源部所有的人员。</li>
+        <li>两个的交集就是一个财务部经理于一个人力资源部经理。</li>
     </ul>
 </fieldset>
 

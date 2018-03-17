@@ -27,7 +27,16 @@
             var paras = nd.DeliveryParas;
             var strList = new Array();
             strList = paras.split(',');
-            var setHtml = "";
+            var setHtml = "<table>";
+            setHtml += "<caption>指定一个节点，当前节点的处理人就是他</caption>";
+            setHtml += "<tr>";
+            setHtml += "<th>序号</th>";
+            setHtml += "<th>名称</th>";
+            setHtml += "<th>节点ID</th>";
+            setHtml += "<th>步骤</th>";
+            setHtml += "</tr>";
+
+            var idx = 0;
             for (var i = 0; i < nodes.length; i++) {
                 var checkFlag = false;
                 var mynd = nodes[i];
@@ -42,13 +51,28 @@
                         }
                     }
                 }
+
+                idx++;
+                setHtml += "<tr>";
+                setHtml += "<td class=Idx >" + idx + "</td>";
+
+                setHtml += "<td>";
                 if (checkFlag) {
                     setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " checked=checked/>";
                 } else {
                     setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " />";
                 }
-                setHtml += "<label for='RB_NodeNo_" + i + "' >" + nodeName + "</label>";
+                setHtml += "<label for='RB_NodeNo_" + i + "' >名称:" + nodeName + "</label>";
+
+                setHtml += "</td>";
+                setHtml += "<td>" + nodeID + "</td>";
+                setHtml += "<td>" + mynd.Step + "</td>";
+
+
+                setHtml += "</tr>";
             }
+
+            setHtml += "</table>";
 
             document.getElementById("NodeSelect").innerHTML = setHtml;
 
@@ -75,13 +99,10 @@
 <body >
 
 <div id="bar"> </div>
-
-<fieldset>
-    <legend>指定一个节点，当前节点的处理人就是他</legend>
+ 
     
     <div id="NodeSelect" style="margin-top:10px;margin-bottom:10px"></div>
     
-</fieldset>
 
 </body>
 </html>

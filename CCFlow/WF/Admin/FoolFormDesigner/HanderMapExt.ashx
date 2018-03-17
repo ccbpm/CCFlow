@@ -191,7 +191,7 @@ namespace CCFlow.WF.MapDef
                                 MapDtl dtl = new MapDtl(fk_dtl);
 
                                 DataTable dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
-                                BP.DA.DBAccess.RunSQL("DELETE " + dtl.PTable + " WHERE RefPK=" + oid);
+                                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
                                 foreach (DataRow dr in dtDtlFull.Rows)
                                 {
                                     BP.Sys.GEDtl mydtl = new GEDtl(fk_dtl);

@@ -22,11 +22,12 @@ function GenerFoolFrm(wn) {
     html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     //  html += "<td colspan=2 ></td>";
     html += "</tr>";
+
+
     //遍历循环生成 listview
     for (var i = 0; i < Sys_GroupFields.length; i++) {
 
         var gf = Sys_GroupFields[i];
-
 
         //从表..
         if (gf.CtrlType == 'Dtl') {
@@ -40,7 +41,6 @@ function GenerFoolFrm(wn) {
             for (var k = 0; k < dtls.length; k++) {
 
                 var dtl = dtls[k];
-
                 if (dtl.No != gf.CtrlID)
                     continue;
 
@@ -63,7 +63,6 @@ function GenerFoolFrm(wn) {
             html += "  <th colspan=4>" + gf.Lab + "</th>";
             html += "</tr>";
 
-
             html += "<tr>";
             html += "  <td colspan='4' >";
 
@@ -74,7 +73,6 @@ function GenerFoolFrm(wn) {
 
             continue;
         }
-
 
         //审核组件..
         if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
@@ -386,6 +384,10 @@ function Ele_FrmCheck(wf_node) {
         src += "&DoType=View";
     }
     src += "&r=q" + paras;
+
+    if (h == 0)
+        h = 400;
+
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "'";
     eleHtml += " frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
     return eleHtml;

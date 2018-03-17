@@ -6,7 +6,10 @@ function WinOpen(url) {
 //流程属性.
 function FlowProperty() {
     url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + flowNo + "&Lang=CH";
-    WinOpen(url);
+
+    OpenEasyUiDialogExt(url, "流程属性", 900, 500, false);
+
+  //  WinOpen(url);
 
     //    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
     //        //window.location.href = window.location.href;
@@ -19,7 +22,8 @@ function FlowRpt() {
     var flowId = Number(flowNo);
     flowId = String(flowId);
     url = "../RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
-    WinOpen(url);
+
+    OpenEasyUiDialogExt(url, "报表设计", 900, 500, false);
 }
 
 //报表设计.
@@ -59,9 +63,13 @@ function Help() {
 
 //节点属性
 function NodeAttr(nodeID) {
-    var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
 
-    OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
+    var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
+    var html = "";
+
+    //var html = "<a href=\"javascript:OpenEasyUiDialogExt('" + url + "','';\" >主页</a> - ";
+
+    OpenEasyUiDialogExt(url, html+"属性", 900, 500, false);
 }
 //节点属性
 function NodeAttrOld(nodeID) {

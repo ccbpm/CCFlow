@@ -3,22 +3,28 @@ function InitBar(optionKey) {
 
     var html = "请选择表单方案:";
     html += "<select id='changBar' onchange='changeOption()'>";
-    html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单</option>";
-    html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
-    html += "<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
-    html += "<option value=" + FormType.RefOneFrmTree + " >&nbsp;&nbsp;表单库的表单</option>";
-    html += "<option value=" + FormType.SheetTree + " >&nbsp;&nbsp;绑定多表单</option>";
-    html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;软通动力（傻瓜轨迹表单）</option>";
+    html += "<option value=" + FormType.FoolForm + ">0.内置傻瓜表单</option>";
+    html += "<option value=" + FormType.FreeForm + ">1.内置自由表单</option>";
+    html += "<option value=" + FormType.SelfForm + " >2.嵌入式表单</option>";
+    html += "<option value=" + FormType.RefOneFrmTree + " >3.绑定表单库的表单</option>";
+    html += "<option value=" + FormType.SheetTree + " >4.绑定多表单(表单树)</option>";
+   // html += "<option value=" + FormType.FoolTruck + " >6.软通动力（傻瓜轨迹表单）</option>";
    
-    html += "<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;使用SDK表单</option>";
-    html += "<option value=" + FormType.WebOffice + " >&nbsp;&nbsp;绑定公文表单</option>";
+    html += "<option value=" + FormType.SDKForm + " >5.使用SDK表单(我自定义的表单)</option>";
+    html += "<option value=" + FormType.WebOffice + " >6.绑定公文表单</option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<hr/>";
+    html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
+    html += "<input  id='Btn_Help' type=button onclick='Help()' value='我需要帮助' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+}
+
+function Help() {
+    var url = "http://ccbpm.mydoc.io";
+    window.open(url);
 }
 
 function changeOption() {

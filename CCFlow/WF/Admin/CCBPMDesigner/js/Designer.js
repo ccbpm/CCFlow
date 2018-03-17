@@ -450,7 +450,9 @@ function NodeProperty_Funs(item) {
             break;
 
         case "NodeAccepterRole": // 工作处理人. NodeFromWorkModel
-            url = "../AttrNode/NodeAccepterRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
+            //url = "../AttrNode/NodeAccepterRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../AttrNode/AccepterRole/Default.htm?FK_Node=" + FK_Node + "&Lang=CH";
+
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "接收人" + FK_Node, url, item.iconCls);
             } else {
@@ -505,7 +507,10 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "NodeFromWorkModel": // 设置表单. NodeFromWorkModel
-            url = "../AttrNode/NodeFromWorkModel.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
+            //url = "../AttrNode/NodeFromWorkModel.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../AttrNode/FrmSln/Default.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
+            //var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
+
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "设置表单" + FK_Node, url, item.iconCls);
             } else {

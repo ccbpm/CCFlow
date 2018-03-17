@@ -1,7 +1,4 @@
-﻿
-
-
-/* Table 特效风格 */
+﻿/* Table 特效风格 */
 function TROver(ctrl) {
     ctrl.style.backgroundColor = 'LightSteelBlue';
 }

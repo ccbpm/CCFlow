@@ -33,37 +33,33 @@
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>驰骋工作流引擎ccbpm , 正在为安装做准备.</font>");
             document.getElementById("Btn_Submit").disabled = 'disabled';
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=DBInstall_Init",
-                dataType: 'html',
-                success: function (data) {
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            var data = handler.DoMethodReturnString("DBInstall_Init"); //执行方法，返回执行结果.
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>安装准备失败：<br>" + data + "</font> .");
-                        return;
-                    }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>安装准备失败：<br>" + data + "</font> .");
+                return;
+            }
 
-                    //转json.
-                    data = JSON.parse(data);
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    //给控件赋值.
-                    GenerFullAllCtrlsVal(data);
+            //转json.
+            data = JSON.parse(data);
 
-                    $("#Msg").html("<font color=green>驰骋工作流引擎安装准备完成，请执行安装...</font>");
+            //给控件赋值.
+            GenerFullAllCtrlsVal(data);
 
-                    document.getElementById("Btn_Submit").disabled = false;
+            $("#Msg").html("<font color=green>驰骋工作流引擎安装准备完成，请执行安装...</font>");
 
-                    // $("#Msg").html("<font color=green>" + data + "</font>");
-                }
-            });
+            document.getElementById("Btn_Submit").disabled = false;
+
+            // $("#Msg").html("<font color=green>" + data + "</font>");
         });
 
         //执行安装.
@@ -85,30 +81,26 @@
             document.getElementById("Btn_Submit").disabled = 'disabled';
             document.getElementById("Btn_Submit").value = '正在执行安装...';
 
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            handler.AddPara("DemoType", valT);
+            var data = handler.DoMethodReturnString("DBInstall_Submit"); //执行方法，返回执行结果.
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                dataType: 'html',
-                url: Handler + "?DoType=DBInstall_Submit&DemoType=" + valT,
-                success: function (data) {
+            //处理执行结果.
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+            document.getElementById("Btn_Submit").value = '安装完成';
 
-                    document.getElementById("Btn_Submit").value = '安装完成';
-
-                    $("#Msg").html("<font color=green>" + data + "</font>");
-                }
-            });
+            $("#Msg").html("<font color=green>" + data + "</font>");
         }
     </script>
 </head>

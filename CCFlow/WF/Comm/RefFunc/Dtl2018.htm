@@ -462,7 +462,7 @@
             //执行删除.
             var en = new Entity(enName);
             en.pkval = pkval;
-            en.RetrieveFromDBSources();
+            en.OID = pkval;
             en.Delete();
 
             window.location.href=window.location.href;

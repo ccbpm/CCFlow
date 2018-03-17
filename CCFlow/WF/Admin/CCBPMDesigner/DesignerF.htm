@@ -21,19 +21,10 @@
             var flowNo = GetQueryString("FK_Flow");
             var nodeID = GetQueryString("FK_Node");
 
-            var url = "./AccepterRole/Default.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo;
+            var url = "Designer2018.htm?FK_Flow=" + flowNo;
             window.location.href = url;
             return;
 
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
         });
     </script>
 </head>

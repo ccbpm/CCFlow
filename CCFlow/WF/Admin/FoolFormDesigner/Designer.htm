@@ -135,7 +135,6 @@
                         html += "<td colspan=4 ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
                         html += "</tr>";
 
-
                         for (var k = 0; k < groupFields.length; k++) {
 
                             var groupObj = groupFields[k];
@@ -156,7 +155,7 @@
                                 if (mapAttr.UIVisible == 0)
                                     continue;
 
-                                if (mapAttr.ColSpan == 1 && mapAttr.UIContralType == "1") { //外键.
+                                if (mapAttr.ColSpan <= 1 && mapAttr.UIContralType == "1") { //外键.
 
                                     if (isDrawTR == true) {
                                         html += "<tr>";
@@ -211,7 +210,7 @@
                                     }
 
 
-                                    if (mapAttr.ColSpan == 1) { // 一列文本框.
+                                    if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) { // 一列文本框.
 
                                         if (isDrawTR == true) {
                                             html += "<tr>";
@@ -228,7 +227,7 @@
                                         continue;
                                     }
 
-                                    alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ' + mapAttr.ColSpan);
+                                    alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ColSpan=' + mapAttr.ColSpan);
                                 }
 
 
@@ -377,6 +376,7 @@
                         }
                         break;
                     case "FWC":
+
                         var nodeID = pageParam.fk_mapdata.replace('ND', '');
                         var wf_node = data.WF_Node[0];
                         var fk_flow = GetQueryString("FK_Flow");
@@ -393,7 +393,10 @@
                         //                            h = "300";
                         //                        alert(h);
 
-                        var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;'  leftMargin='0'  topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
+                        if (h == 0)
+                            h = 400;
+
+                        var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;' leftMargin='0' topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
                         return "<tr><td colspan=4 style='width:100%;height:" + h + "px;' id='FWC' >" + frameUrl + "</td></tr>";
                     case "Dtl":
                         var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupEn.CtrlID });

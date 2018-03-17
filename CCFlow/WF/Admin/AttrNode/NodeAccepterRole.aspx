@@ -581,7 +581,7 @@
                                             设置/更改岗位(<%=nss.Count %>)(旧版本)</a>|
                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置/更改岗位(<%=nss.Count %>)</a> | <a href='http://ccbpm.mydoc.io' target='_blank'>
-                                                <img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a></div>
+                                                <img src='../../Img/Help.png' style="vertical-align: middle" />帮助</a></div>
                                 </th>
                             </tr>
                             <tr id="YC_1">

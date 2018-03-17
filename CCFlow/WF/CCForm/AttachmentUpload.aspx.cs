@@ -615,6 +615,9 @@ namespace CCFlow.WF.CCForm
             catch (Exception ex)
             {
                 BP.Sys.Glo.WriteLineError(ex.ToString());
+
+                this.Response.Write("err@系统错误，请联系管理员:"+ex.Message);
+
             }
         }
         /// <summary>

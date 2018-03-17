@@ -118,3 +118,19 @@ function DownZip() {
     }
     alert(data);
 }
+
+//删除附件.
+function Del(fk_ath, pkVal, delPKVal) {
+
+    if (window.confirm('您确定要删除吗？ ') == false)
+        return;
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    handler.AddPara("DelPKVal", delPKVal);
+    var data = handler.DoMethodReturnString("AttachmentUpload_Del");
+
+    alert(data);
+
+    window.location.href = window.location.href;
+}
+   

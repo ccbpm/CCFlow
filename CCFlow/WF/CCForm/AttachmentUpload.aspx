@@ -11,12 +11,6 @@
     <script src="AttachmentUpload.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
-        function Del(fk_ath, pkVal, delPKVal) {
-            if (window.confirm('您确定要删除吗？ ') == false)
-                return;
-            window.location.href = 'AttachmentUpload.aspx?DoType=Del&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow=<%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>' + (GetQueryString("IsExtend")!=undefined?"&IsExtend="+GetQueryString("IsExtend"):"");
-        }
-   
         function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
             var date = new Date();
             var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
@@ -120,5 +114,5 @@
     <div id="bar" style="display: none;position: fixed;bottom: 0px;right: 0px;">
         <button class="btn btn-info" id="btn_Colse" style="border: 0;background: #2884fa;color: #FFF;font-size: 12px;padding: 6px 10px;border-radius: 15px;margin: 5px;">关闭</button>
      </div>
-    
+      
 </asp:Content>

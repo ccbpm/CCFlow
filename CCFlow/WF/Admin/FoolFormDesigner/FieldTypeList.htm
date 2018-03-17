@@ -119,7 +119,11 @@
             var fType = $('input[name="RB_FType"]:checked').val();
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-            handler.AddPara("Name", encodeURIComponent(name));
+            handler.Clear();
+
+            name = encodeURIComponent(name);
+
+            handler.AddPara("name", name);
             handler.AddPara("FType", fType);
             handler.AddPara("FK_MapData", fk_mapdata);
             handler.AddPara("KeyOfEn", no);
@@ -134,9 +138,10 @@
             var url = data.replace('url@', '');
             if (isSaveAndNew == false) {
                 window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
-            } else {
-                window.location.href = "FieldTypeList.htm?FType=" + fType + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random();
+                return;
             }
+
+            window.location.href = "FieldTypeList.htm?FType=" + fType + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random();
             return;
         }
 

@@ -146,14 +146,7 @@ namespace CCFlow.WF.CCForm
             this.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
 
             #region 功能执行.
-            if (this.DoType == "Del")
-            {
-                FrmAttachmentDB delDB = new FrmAttachmentDB();
-                delDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
-
-                delDB.Delete(); //删除上传的文件.
-            }
-
+          
             if (this.DoType == "Down")
             {
                 FrmAttachmentDB downDB = new FrmAttachmentDB();
@@ -261,7 +254,6 @@ namespace CCFlow.WF.CCForm
                             {
                                 if (db.Rec.Equals(WebUser.No))
                                     this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
-
                             }
                         }
                         this.Pub1.Add("</ul>");
@@ -354,11 +346,6 @@ namespace CCFlow.WF.CCForm
                         dbUpload.RDT = DataType.CurrentDataTime;
                         dbUpload.Rec = BP.Web.WebUser.No;
                         dbUpload.RecName = BP.Web.WebUser.Name;
-
-                        //if (athDesc.IsNote)
-                        //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
-                        //if (athDesc.Sort.Contains(","))
-                        //    dbUpload.Sort = this.Pub1.GetDDLByID("ddl").SelectedItemStringVal;
 
                         dbUpload.Insert();
 
@@ -551,24 +538,12 @@ namespace CCFlow.WF.CCForm
                         {
                             string op = null;
 
-                            #region 附件删除权限
-                            //if (isDel == true)
-                            //{
-                            //    if (athDesc.IsDelete == true)
-                            //        op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
-                            //    else if (athDesc.IsDeleteInt == 2)
-                            //    {
-                            //        if (db.Rec.Equals(WebUser.No))
-                            //            op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
-                            //    }
-                            //}
-                            #endregion
-
                             if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
                             {
                                 op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
                             }
-                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//删除自己上传的
+                            
+                            if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//删除自己上传的
                             {
                                 if (db.Rec.Equals(WebUser.No))
                                     op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
@@ -602,13 +577,7 @@ namespace CCFlow.WF.CCForm
              
                 AddFileUpload(isUpdate, athDesc);
                 this.Pub1.AddTableEnd();
-
-
-                //超链接
-                BP.Web.Controls.BPHyperLink hLink = new BP.Web.Controls.BPHyperLink();
-                hLink.ID = "H_LINK_Btn";
-                hLink.Target = "_blank";
-                this.Pub1.Add(hLink);
+               
 
                 #endregion 生成表头表体.
             }
@@ -726,83 +695,7 @@ namespace CCFlow.WF.CCForm
                 }
                 #endregion 处理权限方案。
             }
-
             return athDesc;
-        }
-        
-        void btn_DownLoad_Zip(object sender, EventArgs e)
-        {
-            try
-            {
-                #region 处理权限控制.
-                BP.Sys.FrmAttachment athDesc = this.GenerAthDesc();
-
-                //查询出来数据实体.
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment);
-                #endregion 处理权限控制.
-
-                if (dbs.Count == 0)
-                {
-                    this.Alert("文件不存在，不需打包下载。");
-                    return;
-                }
-
-                string zipName = this.WorkID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff");
-
-                string basePath = Server.MapPath("//DataUser//Temp");
-                string tempPath = basePath + "//" + WebUser.No;
-                string zipPath = basePath + "//" + WebUser.No;
-                string zipFile = zipPath + "//" + zipName + ".zip";
-
-                //删除临时文件，保证一个用户只能存一份，减少磁盘占用空间
-                if (System.IO.Directory.Exists(tempPath) == true)
-                    System.IO.Directory.Delete(tempPath, true);
-                //根据路径创建文件夹
-                if (System.IO.Directory.Exists(zipPath) == false)
-                    System.IO.Directory.CreateDirectory(zipPath);
-
-                //copy文件临时文件夹
-                tempPath = tempPath + "//" + this.WorkID;
-                if (System.IO.Directory.Exists(tempPath) == false)
-                    System.IO.Directory.CreateDirectory(tempPath);
-
-                foreach (FrmAttachmentDB db in dbs)
-                {
-                    string copyToPath = tempPath;
-
-                    //求出文件路径.
-                    string fileTempPath = db.GenerTempFile(athDesc.AthSaveWay);
-
-                    if (string.IsNullOrEmpty(db.Sort) == false)
-                    {
-                        copyToPath = tempPath + "//" + db.Sort;
-                        if (System.IO.Directory.Exists(copyToPath) == false)
-                            System.IO.Directory.CreateDirectory(copyToPath);
-                    }
-                    //新文件目录
-                    copyToPath = copyToPath + "//" + db.FileName;
-                    File.Copy(fileTempPath, copyToPath, true);
-                }
-
-                //执行压缩
-                (new FastZip()).CreateZip(zipFile, tempPath, true, "");
-
-                //删除临时文件夹
-                System.IO.Directory.Delete(tempPath, true);
-                //显示出下载超链接
-                BP.Web.Controls.BPHyperLink hLink = (BP.Web.Controls.BPHyperLink)this.Pub1.FindControl("H_LINK_Btn");
-                if (hLink != null)
-                {
-                    hLink.Text = "如果没有弹出下载文件，请点击此处进行下载。";
-                    hLink.NavigateUrl = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
-                }
-
-                //BP.PubClass.DownloadFile(zipFile, this.WorkID + ".zip");
-            }
-            catch (Exception ex)
-            {
-                //this.Alert(ex.Message);
-            }
         }
         private void AddFileUpload(bool isUpdate, FrmAttachment athDesc)
         {
@@ -1100,7 +993,7 @@ namespace CCFlow.WF.CCForm
 
                         string guid = BP.DA.DBAccess.GenerGUID();
 
-                        string fileName= fu.FileName.Replace("~", "-").Replace("'", "-").Replace("*", "-");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
+                        string fileName = fu.FileName.Replace("~", "-").Replace("'", "-").Replace("*", "-");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
                         fileName = DataType.PraseStringToFileName(fileName);
 
                         string realSaveTo = savePath + "/" + guid + "." + fileName;
@@ -1143,7 +1036,7 @@ namespace CCFlow.WF.CCForm
                         dbUpload.NodeID = FK_Node.ToString();
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
                         dbUpload.FID = this.FID; //流程id.
-                       // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台读取.
+                        // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台读取.
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                         {
@@ -1191,7 +1084,7 @@ namespace CCFlow.WF.CCForm
                         //执行附件上传后事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
 
-                        if (string.IsNullOrEmpty(msg)==false)
+                        if (string.IsNullOrEmpty(msg) == false)
                             BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到iis服务器.
@@ -1245,7 +1138,7 @@ namespace CCFlow.WF.CCForm
 
                         dbUpload.FK_MapData = athDesc.FK_MapData;
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
-                       // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
+                        // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
                         //dbUpload.FileExts = info.Extension;
                         // dbUpload.FileFullName = saveTo;
 
@@ -1305,7 +1198,7 @@ namespace CCFlow.WF.CCForm
                             ftpconn.Close();
 
                             //设置路径.
-                            dbUpload.FileFullName = ny+"//"+athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
+                            dbUpload.FileFullName = ny + "//" + athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
                         }
 
                         dbUpload.Insert();
@@ -1417,7 +1310,9 @@ namespace CCFlow.WF.CCForm
                     xDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Excel.XlFileFormat.xlHtml);
                 }
             }
-            catch { }
+            catch
+            {
+            }
             finally
             {
                 if (isWord)
@@ -1486,7 +1381,6 @@ namespace CCFlow.WF.CCForm
             catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError(ex.Message);
-
             }
             return false;
         }

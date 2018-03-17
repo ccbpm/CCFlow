@@ -1052,9 +1052,12 @@ namespace BP.En
 							case "MyPK":
 								msg += "[ 主键=MyPK 值=" + this.GetValStrByKey("MyPK") + " ]";
 								break;
-							case "ID":
-								msg += "[ 主键=ID 值=" + this.GetValStrByKey("ID") + " ]";
+							case "NodeID":
+                                msg += "[ 主键=NodeID 值=" + this.GetValStrByKey("NodeID") + " ]";
 								break;
+                            case "WorkID":
+                                msg += "[ 主键=WorkID 值=" + this.GetValStrByKey("WorkID") + " ]";
+                                break;
 							default:
 								Hashtable ht = this.PKVals;
 								foreach (string key in ht.Keys)

@@ -766,6 +766,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 部门人员模式.
 
+        #region 分组数据.
         /// <summary>
         /// 执行保存
         /// </summary>
@@ -854,5 +855,7 @@ namespace BP.WF.HttpHandler
 
             return "err@设置的默认分组[" + key + "]不能是普通字段.";
         }
+        #endregion 分组数据.
+
     }
 }

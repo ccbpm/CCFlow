@@ -4711,20 +4711,43 @@ namespace BP.WF
                     /*共享模式*/
                     dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
                 }
+                return dbs;
             }
-            else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
+
+            if (athDesc.HisCtrlWay == AthCtrlWay.WorkID || athDesc.HisCtrlWay == AthCtrlWay.FID)
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                 qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
                 qo.addAnd();
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
-                qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment,FK_FrmAttachment);
+
+                //qo.addAnd();
+                //qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
+
                 qo.addOrderBy("RDT");
                 qo.DoQuery();
+                return dbs;
             }
-            else
+
+            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+            {
+                /* 继承模式 */
+                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+
+                //qo.addAnd();
+                //qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
+
+                qo.addOrderBy("RDT");
+                qo.DoQuery();
+                return dbs;
+            }
+
+
+            if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {
                 int num = 0;
                 if (FK_FrmAttachment.Contains("AthMDtl"))
@@ -4741,7 +4764,10 @@ namespace BP.WF
                     num = dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment,
                        FrmAttachmentDBAttr.RefPKVal, pkval, "RDT");
                 }
+                return dbs;
             }
+
+            throw new Exception("@没有判断的权限控制模式:" + athDesc.HisCtrlWay);
 
             return dbs;
         }

@@ -178,29 +178,28 @@ namespace BP.En
         {
             Paras paras = new Paras();
             string pk = en.PK;
-            if (pk == "OID")
-            {
-                paras.Add("OID", en.GetValIntByKey("OID"));
-                return paras;
-            }
 
-            if (pk == "No")
+            switch (pk)
             {
-                paras.Add("No", en.GetValStrByKey("No"));
-                return paras;
+                case "OID":
+                    paras.Add("OID", en.GetValIntByKey("OID"));
+                    return paras;
+                case "No":
+                    paras.Add("No", en.GetValStrByKey("No"));
+                    return paras;
+                case "MyPK":
+                    paras.Add("MyPK", en.GetValStrByKey("MyPK"));
+                    return paras;
+                case "NodeID":
+                    paras.Add("NodeID", en.GetValIntByKey("NodeID"));
+                    return paras;
+                case "WorkID":
+                    paras.Add("WorkID", en.GetValIntByKey("WorkID"));
+                    return paras;
+                default:
+                    break;
             }
-
-            if (pk == "MyPK")
-            {
-                paras.Add("MyPK", en.GetValStrByKey("MyPK"));
-                return paras;
-            }
-
-            //if (pk == "ID")
-            //{
-            //    paras.Add("ID", en.GetValStrByKey(EntityTreeAttr.No));
-            //    return paras;
-            //}
+             
 
             foreach (Attr attr in en.EnMap.Attrs)
             {
@@ -238,6 +237,10 @@ namespace BP.En
                     return en.EnMap.PhysicsTable + ".No=" + en.HisDBVarStr + "No";
                 case "MyPK":
                     return en.EnMap.PhysicsTable + ".MyPK=" + en.HisDBVarStr + "MyPK";
+                case "NodeID":
+                    return en.EnMap.PhysicsTable + ".NodeID=" + en.HisDBVarStr + "NodeID";
+                case "WorkID":
+                    return en.EnMap.PhysicsTable + ".WorkID=" + en.HisDBVarStr + "WorkID";
                 default:
                     break;
             }

@@ -289,7 +289,6 @@ namespace BP.WF.HttpHandler
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
         }
         #endregion
-
         
         
 

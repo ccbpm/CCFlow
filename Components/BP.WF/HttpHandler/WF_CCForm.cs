@@ -2837,6 +2837,20 @@ namespace BP.WF.HttpHandler
         #endregion 打印.
 
         #region 附件组件.
+        /// <summary>
+        /// 执行删除
+        /// </summary>
+        /// <returns></returns>
+        public string AttachmentUpload_Del()
+        {
+            //执行删除.
+            string delPK = this.GetRequestVal("DelPKVal");
+
+            FrmAttachmentDB delDB = new FrmAttachmentDB();
+            delDB.MyPK = delPK == null ? this.MyPK : delPK;
+            delDB.Delete(); //删除上传的文件.
+            return "删除成功.";
+        }
         public string AttachmentUpload_DownByStream()
         {
            // return AttachmentUpload_Down(true);
@@ -3047,8 +3061,11 @@ namespace BP.WF.HttpHandler
                 if (System.IO.Directory.Exists(tempUserPath) == false)
                     System.IO.Directory.CreateDirectory(tempUserPath);
 
-                if (System.IO.Directory.Exists(tempFilePath) == false)
-                    System.IO.Directory.CreateDirectory(tempFilePath);
+                //如果有这个临时的目录就把他删除掉.
+                if (System.IO.Directory.Exists(tempFilePath) == true)
+                    System.IO.Directory.Delete(tempFilePath);
+
+                System.IO.Directory.CreateDirectory(tempFilePath);
             }
             catch (Exception ex)
             {

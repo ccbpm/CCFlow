@@ -92,268 +92,259 @@
                 var fk_mapData = GetQueryString("FK_MapData");
                 var isF = GetQueryString("IsFirst"); //是否第一次加载?
 
-                $.ajax({
-                    type: 'get',
-                    //async: true,
-                    url: Handler + "?DoType=Designer_Init&IsFirst=" + isF + "&FK_MapData=" + fk_mapData + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                    dataType: 'html',
-                    success: function (data) {
-                        if (data.indexOf('err@') == 0) {
-                            alert(data);
-                            return;
+                var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                hander.Clear();
+                hander.AddPara("IsFirst", isF);
+                hander.AddPara("FK_MapData", fk_mapData);
+                hander.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+                hander.AddPara("FK_Node", GetQueryString("FK_Node"));
+                var data = hander.DoMethodReturnString("Designer_Init");
+
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                if (data.indexOf('url@') == 0) {
+                    data = data.replace('url@', '');
+                    window.location.href = data;
+                    return;
+                }
+
+                //里面有三个对象. Sys_MapAttr, Sys_GroupField, Sys_MapData
+                data = JSON.parse(data);
+
+                // var mapAttrs = data.Sys_MapAttrs;
+
+                //拼接 TABLE 
+                //按分组拼接
+                var groupFields = data.Sys_GroupField;
+                var tbody = $('<tbody></tbody>');
+
+                var frmName = data.Sys_MapData[0].Name;
+                //alert(frmName);
+
+                var html = "";
+
+                html += "<tr>";
+                html += "<td colspan=4 ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
+                html += "</tr>";
+
+                for (var k = 0; k < groupFields.length; k++) {
+
+                    var groupObj = groupFields[k];
+
+                    //生成工具栏.
+                    html += GenerGroupTR(groupObj);
+
+                    //生成内容.
+                    html += GenerGroupContext(groupObj, data);
+
+                    var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+
+                    var isDrawTR = true; //是否需要话tr ?
+                    for (var j = 0; j < mapAttrs.length; j++) {
+
+                        var mapAttr = mapAttrs[j];
+                        if (mapAttr.UIVisible == 0)
+                            continue;
+
+                        if (mapAttr.ColSpan <= 1 && mapAttr.UIContralType == "1") { //外键.
+
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
+
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=1 ><select id='" + mapAttr.KeyOfEn + "'><option>" + mapAttr.UIBindKey + "</option></select></td>";
+
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
+
+                            isDrawTR = !isDrawTR;
+                            continue;
                         }
 
-                        if (data.indexOf('url@') == 0) {
-                            data = data.replace('url@', '');
-                            window.location.href = data;
-                            return;
+
+                        // 添加文本框 ，日期控件等.
+                        // AppString  
+                        if (mapAttr.MyDataType == "1") { //不是外键
+
+                            if (mapAttr.ColSpan == 3 && mapAttr.UIHeight <= 40) {
+                                //跨三列，并且单行.
+                                html += "<tr>";
+                                html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "</tr>";
+                                isDrawTR = true;
+                                continue;
+                            }
+
+
+                            if (mapAttr.ColSpan == 3 && mapAttr.UIHeight > 23) {
+
+                                //跨三列，并且单行.
+                                html += "<tr>";
+                                html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                                html += "<td ColSpan=3><textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "</tr>";
+                                isDrawTR = true;
+                                continue;
+                            }
+
+                            if (mapAttr.ColSpan == 4) {
+                                //跨4列，并且多行. 是大块文本的情况.
+                                var uiHeight = mapAttr.UIHeight;
+                                html += "<tr>";
+                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:99%;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "</tr>";
+                                isDrawTR = true;
+                                continue;
+                            }
+
+
+                            if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) { // 一列文本框.
+
+                                if (isDrawTR == true) {
+                                    html += "<tr>";
+                                }
+
+                                html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                                html += "<td ColSpan=1 ><input maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
+
+                                if (isDrawTR == false) {
+                                    html += "</tr>";
+                                }
+
+                                isDrawTR = !isDrawTR;
+                                continue;
+                            }
+
+                            alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ColSpan=' + mapAttr.ColSpan);
                         }
 
-                        //里面有三个对象. Sys_MapAttr, Sys_GroupField, Sys_MapData
-                        data = JSON.parse(data);
 
-                        // var mapAttrs = data.Sys_MapAttrs;
+                        if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {  // AppDate
 
-                        //拼接 TABLE 
-                        //按分组拼接
-                        var groupFields = data.Sys_GroupField;
-                        var tbody = $('<tbody></tbody>');
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
 
-                        var frmName = data.Sys_MapData[0].Name;
-                        //alert(frmName);
+                            //生成中间的部分.
+                            var enableAttr = '';
+                            var dateFmt = "yyyy-MM-dd"; //日期格式.
+                            if (mapAttr.MyDataType == 7)
+                                dateFmt = "yyyy-MM-dd HH:mm";
 
-                        var html = "";
+                            if (mapAttr.UIIsEnable == 1) {
+                                enableAttr = 'readonly="readonly"  onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
+                            } else {
+                                enableAttr = "disabled='disabled'";
+                            }
 
-                        //                        html += "<tr>";
-                        //                        html += "<td style='width:15%;height0px;'></td>";
-                        //                        html += "<td style='width:30%;height0px;'></td>";
-                        //                        html += "<td style='width:15%;height0px;'></td>";
-                        //                        html += "<td style='width:30%;height0px;'></td>";
-                        //                        html += "</tr>";
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=1 ><input style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/></td>";
 
-                        html += "<tr>";
-                        html += "<td colspan=4 ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
-                        html += "</tr>";
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
 
-                        for (var k = 0; k < groupFields.length; k++) {
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
 
-                            var groupObj = groupFields[k];
+                        if (mapAttr.MyDataType == 4) {  // AppBoolean = 7
 
-                            //生成工具栏.
-                            html += GenerGroupTR(groupObj);
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
 
-                            //生成内容.
-                            html += GenerGroupContext(groupObj, data);
+                            if (mapAttr.UIIsEnable == 0) {
+                                enableAttr = "disabled='disabled'";
+                            } else {
+                                enableAttr = "";
+                            }
 
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=1 ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' class='align_cb' /><label class='align_cbl' for='CB_" + mapAttr.KeyOfEn + "' >&nbsp;" + mapAttr.Name + "</label></td>";
 
-                            var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
 
-                            var isDrawTR = true; //是否需要话tr ?
-                            for (var j = 0; j < mapAttrs.length; j++) {
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
 
-                                var mapAttr = mapAttrs[j];
-                                if (mapAttr.UIVisible == 0)
-                                    continue;
+                        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
 
-                                if (mapAttr.ColSpan <= 1 && mapAttr.UIContralType == "1") { //外键.
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
 
-                                    if (isDrawTR == true) {
-                                        html += "<tr>";
-                                    }
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=1 ><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
 
-                                    html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                    html += "<td ColSpan=1 ><select id='" + mapAttr.KeyOfEn + "'><option>" + mapAttr.UIBindKey + "</option></select></td>";
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
 
-                                    if (isDrawTR == false) {
-                                        html += "</tr>";
-                                    }
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
 
-                                    isDrawTR = !isDrawTR;
-                                    continue;
-                                }
-
-
-                                // 添加文本框 ，日期控件等.
-                                // AppString  
-                                if (mapAttr.MyDataType == "1") { //不是外键
-
-                                    if (mapAttr.ColSpan == 3 && mapAttr.UIHeight <= 40) {
-                                        //跨三列，并且单行.
-                                        html += "<tr>";
-                                        html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                        html += "<td ColSpan=" + mapAttr.ColSpan + "><input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
-                                        html += "</tr>";
-                                        isDrawTR = true;
-                                        continue;
-                                    }
-
-
-                                    if (mapAttr.ColSpan == 3 && mapAttr.UIHeight > 23) {
-
-                                        //跨三列，并且单行.
-                                        html += "<tr>";
-                                        html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                        html += "<td ColSpan=3><textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
-                                        html += "</tr>";
-                                        isDrawTR = true;
-                                        continue;
-                                    }
-
-                                    if (mapAttr.ColSpan == 4) {
-                                        //跨4列，并且多行. 是大块文本的情况.
-                                        var uiHeight = mapAttr.UIHeight;
-                                        html += "<tr>";
-                                        html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:99%;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
-                                        html += "</tr>";
-                                        isDrawTR = true;
-                                        continue;
-                                    }
-
-
-                                    if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) { // 一列文本框.
-
-                                        if (isDrawTR == true) {
-                                            html += "<tr>";
-                                        }
-
-                                        html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                        html += "<td ColSpan=1 ><input maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
-
-                                        if (isDrawTR == false) {
-                                            html += "</tr>";
-                                        }
-
-                                        isDrawTR = !isDrawTR;
-                                        continue;
-                                    }
-
-                                    alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ColSpan=' + mapAttr.ColSpan);
-                                }
-
-
-                                if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {  // AppDate
-
-                                    if (isDrawTR == true) {
-                                        html += "<tr>";
-                                    }
-
-                                    //生成中间的部分.
-                                    var enableAttr = '';
-                                    var dateFmt = "yyyy-MM-dd"; //日期格式.
-                                    if (mapAttr.MyDataType == 7)
-                                        dateFmt = "yyyy-MM-dd HH:mm";
-
-                                    if (mapAttr.UIIsEnable == 1) {
-                                        enableAttr = 'readonly="readonly"  onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
-                                    } else {
-                                        enableAttr = "disabled='disabled'";
-                                    }
-
-                                    html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                    html += "<td ColSpan=1 ><input style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/></td>";
-
-                                    if (isDrawTR == false) {
-                                        html += "</tr>";
-                                    }
-
-                                    isDrawTR = !isDrawTR;
-                                    continue;
-                                }
-
-                                if (mapAttr.MyDataType == 4) {  // AppBoolean = 7
-
-                                    if (isDrawTR == true) {
-                                        html += "<tr>";
-                                    }
-
-                                    if (mapAttr.UIIsEnable == 0) {
-                                        enableAttr = "disabled='disabled'";
-                                    } else {
-                                        enableAttr = "";
-                                    }
-
-                                    html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                    html += "<td ColSpan=1 ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' class='align_cb' /><label class='align_cbl' for='CB_" + mapAttr.KeyOfEn + "' >&nbsp;" + mapAttr.Name + "</label></td>";
-
-                                    if (isDrawTR == false) {
-                                        html += "</tr>";
-                                    }
-
-                                    isDrawTR = !isDrawTR;
-                                    continue;
-                                }
-
-                                if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
-
-                                    if (isDrawTR == true) {
-                                        html += "<tr>";
-                                    }
-
-                                    html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                    html += "<td ColSpan=1 ><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
-
-                                    if (isDrawTR == false) {
-                                        html += "</tr>";
-                                    }
-
-                                    isDrawTR = !isDrawTR;
-                                    continue;
-                                }
-
-                                // AppDouble  AppFloat AppInt . 数值类型的.
-                                if (mapAttr.MyDataType == 5 ||
+                        // AppDouble  AppFloat AppInt . 数值类型的.
+                        if (mapAttr.MyDataType == 5 ||
                                         mapAttr.MyDataType == 3 ||
                                         mapAttr.MyDataType == 8 ||
                                         (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)
                                     ) {
 
-                                    if (isDrawTR == true)
-                                        html += "<tr>";
+                            if (isDrawTR == true)
+                                html += "<tr>";
 
-                                    html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                    html += "<td ColSpan=1 ><input  style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=1 ><input  style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
 
-                                    if (isDrawTR == false)
-                                        html += "</tr>";
+                            if (isDrawTR == false)
+                                html += "</tr>";
 
-                                    isDrawTR = !isDrawTR;
-                                    continue;
-                                }
-
-                                alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ' + mapAttr.ColSpan);
-                                continue;
-
-                                if (mapAttr.LGType == 2) {
-                                    //先加LABEL
-                                    var tdLabel = $('<a></a>');
-                                    tdLabel.attr('href', 'javascript:EditTable(\'' + mapAttr.KeyOfEn + '\',\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'' + mapAttr.KeyOfEn + '\',' + groupobj.OID + ');');
-                                    tdLabel.text(mapAttr.Name);
-                                    var tdUp = $('<a href="javascript:Up(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-left\',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-left">&nbsp;</span></span></span></a>');
-                                    var tdDown = $('<a href="javascript:Down(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-right\',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a>');
-                                    tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
-
-                                    if (mapAttr.UIContralType == 1) { //DDL
-                                        tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
-                                    }
-                                    continue;
-                                }
-                            }  //结束attrs循环.
+                            isDrawTR = !isDrawTR;
+                            continue;
                         }
 
-                        // alert(html);
-                        tbody.append($(html));
+                        alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ' + mapAttr.ColSpan);
+                        continue;
 
-                        //contentTable
-                        $('#contentTable').children().remove();
-                        $('#contentTable').append(tbody);
+                        if (mapAttr.LGType == 2) {
+                            //先加LABEL
+                            var tdLabel = $('<a></a>');
+                            tdLabel.attr('href', 'javascript:EditTable(\'' + mapAttr.KeyOfEn + '\',\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'' + mapAttr.KeyOfEn + '\',' + groupobj.OID + ');');
+                            tdLabel.text(mapAttr.Name);
+                            var tdUp = $('<a href="javascript:Up(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-left\',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-left">&nbsp;</span></span></span></a>');
+                            var tdDown = $('<a href="javascript:Down(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-right\',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a>');
+                            tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
+                            if (mapAttr.UIContralType == 1) { //DDL
+                                tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
+                            }
+                            continue;
+                        }
+                    }  //结束attrs循环.
+                }
 
-                        return;
-                    }
-                });
+                // alert(html);
+                tbody.append($(html));
+
+                //contentTable
+                $('#contentTable').children().remove();
+                $('#contentTable').append(tbody);
+
 
                 $("#Msg").html("");
                 ResizeWindow();
+
             });
 
             function GenerGroupContext(groupEn, data) {

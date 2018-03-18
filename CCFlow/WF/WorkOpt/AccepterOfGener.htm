@@ -99,30 +99,25 @@
 
             //$("#HelpInfo").hide();
 
-            // 初始化人员.   //开始加载数据.
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=AccepterOfGener_Init&ToNode=" + GetQueryString("ToNode") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("AccepterOfGener_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        window.parent.close();
-                        return;
-                    }
 
-                    if (data.indexOf('url@') == 0) {
-                        window.location.href = data.replace('url@', '');
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                window.parent.close();
+                return;
+            }
 
-                    var sas = JSON.parse(data);
-                    BindTable(sas);
-                }
-            });
+            if (data.indexOf('url@') == 0) {
+                window.location.href = data.replace('url@', '');
+                return;
+            }
+
+            var sas = JSON.parse(data);
+            BindTable(sas);
+
         });
 
 
@@ -132,11 +127,11 @@
                 var sa = sas[i];
                 var row = "";
                 row += "<tr>";
-                row += "<td>" + i + "</td>";
+                row += "<td>" + (i+1) + "</td>";
                 //row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
                 row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
-                row += "<td><a href=\"javascript:DeleteIt("+i+",'" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
+                row += "<td><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
                 row += "</tr>";
 
                 $("#Table1 tbody").append(row);
@@ -160,30 +155,21 @@
             }
         }
 
-        function DeleteIt(row, empNo,empName) {
+        function DeleteIt(empNo, empName) {
 
-//            if (window.confirm('您确定要移除[' + empNo +' , '+ empName + ']') == false)
+            //            if (window.confirm('您确定要移除[' + empNo +' , '+ empName + ']') == false)
             //                return;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=AccepterOfGener_Delete&FK_Emp=" + empNo + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    delRow(row); //清空单个table tbody
-
-                    // 把返回的结果，重新绑定.
-                    var sas = JSON.parse(data);
-                    BindTable(sas);
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("FK_Emp", empNo);
+            var data = handler.DoMethodReturnString("AccepterOfGener_Delete");
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                alert(data);
+                return;
+            }
+            window.location.href = window.location.href;
+            return;
         }
 
         //确定  执行下一步接受人员列表操作
@@ -198,42 +184,38 @@
 
         function AddEmpsExt(isSend, emps) {
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=AccepterOfGener_AddEmps&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode") + "&FID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&AddEmps=" + emps,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("AddEmps", emps);
+            var data = handler.DoMethodReturnString("AccepterOfGener_AddEmps");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        window.location.href = window.location.href;
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                window.location.href = window.location.href;
+                return;
+            }
 
-                    if (data.indexOf('info@') == 0) {
-                        $(".Msg").show();
-                        $(".Msg").html(data);
-                        return;
-                    }
+            if (data.indexOf('info@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+                return;
+            }
 
 
-                    //是否执行发送?
-                    if (isSend == true) {
-                        SendIt();
-                        return;
-                    }
+            //是否执行发送?
+            if (isSend == true) {
+                SendIt();
+                return;
+            }
 
-                    ClearTable();
+            ClearTable();
 
-                    var gwls = JSON.parse(data);
+            var gwls = JSON.parse(data);
 
-                    BindTable(gwls);
+            BindTable(gwls);
 
-                    document.getElementById("TB_Emps").value = "";
-                    return;
-                }
-            });
+            document.getElementById("TB_Emps").value = "";
+            return;
             $(".foot").hide();
         }
 
@@ -355,7 +337,6 @@
 
             // alert(val);
             AddEmpsExt(false, val)
-
             //$('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
     
@@ -380,13 +361,7 @@
                 }
             }
         }
-
-        //删除当前行
-        function delRow(nowTr) {
-            $(nowTr).parents("tr").remove();
-            $("#Table1 tbody tr:eq(" + nowTr + ")").remove();
-        }
-
+ 
         //事件
         $(function () {
             //人员选择

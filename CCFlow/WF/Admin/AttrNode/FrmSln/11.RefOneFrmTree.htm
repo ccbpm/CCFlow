@@ -36,16 +36,13 @@
                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
             }
 
-            //绑定表单.
-            var frms = new Entities("BP.Sys.MapDatas");
-            frms.RetrieveAll();
-
             //根据表单类别的默认值，初始加载默认的表单
             var sortNo = $("#DDL_FrmTree").val();
-            var frm = $.grep(frms, function (item) {
-                return item.FK_FormTree == sortNo;
-            });
 
+            //获取表单库中的所有表单
+            var frms = new Entities("BP.Sys.MapDatas");
+            frms.Retrieve("FK_FormTree", sortNo);
+             
             //绑定表单
             GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", node.NodeFrmID);
             nodeFrmID = node.NodeFrmID;
@@ -75,16 +72,14 @@
 
         //设置联动
         function change() {
-            //获取表单库中的所有表单
-            var frms = new Entities("BP.Sys.MapDatas");
-            frms.RetrieveAll();
-
+          
             //根据表单类别的默认值，初始加载默认的表单
             var sortNo = $("#DDL_FrmTree").val();
-            //晒选表单
-            var frm = $.grep(frms, function (item) {
-                return item.FK_FormTree == sortNo;
-            });
+
+            //获取表单库中的所有表单
+            var frms = new Entities("BP.Sys.MapDatas");
+            frms.Retrieve("FK_FormTree", sortNo);
+             
             //绑定表单
             GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", nodeFrmID);
         }

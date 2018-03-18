@@ -1471,5 +1471,18 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ht);
         }
+        /// <summary>
+        /// 当前登录人员信息
+        /// </summary>
+        /// <returns></returns>
+        public string GuestUser_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("No", GuestUser.No);
+            ht.Add("Name", GuestUser.Name);
+            ht.Add("DeptNo", GuestUser.DeptNo);
+            ht.Add("DeptName", GuestUser.DeptName);
+            return BP.Tools.Json.ToJson(ht);
+        }
     }
 }

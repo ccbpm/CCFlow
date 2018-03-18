@@ -1132,7 +1132,7 @@ namespace BP.WF.HttpHandler
         public string FieldTypeSelect_Create()
         {
             string no = this.GetRequestVal("KeyOfEn");
-            string name = this.GetRequestVal("Name");
+            string name = this.GetRequestVal("name");
             string newNo = DataType.ParseStringForNo(no, 20);
             string newName = DataType.ParseStringForName(name, 20);
             int fType = int.Parse(this.context.Request.QueryString["FType"]);

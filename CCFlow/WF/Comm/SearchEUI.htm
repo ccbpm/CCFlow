@@ -256,6 +256,7 @@
                 || attr.KeyOfEn == "MyNum" 
                 || attr.KeyOfEn == "MyPK")
                     continue;
+
                 var field = attr.KeyOfEn;
                 var title=attr.Name;
                  columns.push({
@@ -277,7 +278,7 @@
                         OpenEn(value);
 	                },
                 onClickRow: function(index,field,value){
-                        OpenEn(value);
+                       // OpenEn(value);
 	                }
 
             });
@@ -285,6 +286,7 @@
         }
 
         function OpenEn(pk) {
+
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
 

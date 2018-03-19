@@ -2151,7 +2151,7 @@ namespace BP.WF
             {
                 /*如果不是当前节点发给当前节点，就更新上一个节点全部完成。 */
                 ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=1 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND FK_Emp=" + dbStr + "FK_Emp ";
+                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=1 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND FK_Emp=" + dbStr + "FK_Emp AND IsPass=0";
                 ps.Add("FK_Node", this.HisNode.NodeID);
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FK_Emp", this.Execer);
@@ -2161,7 +2161,7 @@ namespace BP.WF
             {
                 /*如果不是当前节点发给当前节点，就更新上一个节点全部完成。 */
                 ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=1 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=1 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND IsPass=0";
                 ps.Add("FK_Node", this.HisNode.NodeID);
                 ps.Add("WorkID", this.WorkID);
                 DBAccess.RunSQL(ps);

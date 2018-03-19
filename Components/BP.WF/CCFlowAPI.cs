@@ -133,7 +133,7 @@ namespace BP.WF
                 //增加转向下拉框数据.
                 if (nd.CondModel == CondModel.SendButtonSileSelect)
                 {
-                    if (nd.IsStartNode==true || gwf.TodoEmps.Contains(WebUser.No + ",") == true )
+                    if (nd.IsStartNode == true || gwf.TodoEmps.Contains(WebUser.No + ",") == true)
                     {
                         /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
 
@@ -149,7 +149,7 @@ namespace BP.WF
 
                         #region 增加到达延续子流程节点。
                         NodeYGFlows ygflows = new NodeYGFlows(fk_node.ToString());
-                        if (ygflows.Count > 1 && SystemConfig.CustomerNo.Equals("CZBank")==true)
+                        if (ygflows.Count > 1 && SystemConfig.CustomerNo.Equals("CZBank") == true)
                             dtToNDs.Rows.Clear();  //为浙商银行做的特殊判断，如果配置了延续流程，就不让其走分支节点.
 
                         foreach (NodeYGFlow item in ygflows)
@@ -174,65 +174,62 @@ namespace BP.WF
                         #endregion 增加到达延续子流程节点。
 
                         #region 到达其他节点.
-                        if (ygflows.Count==0)
+
+                        //上一次选择的节点.
+                        int defalutSelectedNodeID = 0;
+                        if (nds.Count > 1)
                         {
-                            //上一次选择的节点.
-                            int defalutSelectedNodeID = 0;
-                            if (nds.Count > 1)
-                            {
-                                string mysql = "";
-                                // 找出来上次发送选择的节点.
-                                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                                    mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
-                                else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                                    mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
-                                else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                                    mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
+                            string mysql = "";
+                            // 找出来上次发送选择的节点.
+                            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                                mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
+                            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                                mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
 
-                                //获得上一次发送到的节点.
-                                defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
-                            }
+                            //获得上一次发送到的节点.
+                            defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
+                        }
 
-                            #region 为天业集团做一个特殊的判断.
-                            if (SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长")==true)
-                            {
-                                /*如果是董事长节点, 如果是下一个节点默认的是备案. */
-                                foreach (Node item in nds)
-                                {
-                                    if (item.Name.Contains("备案") == true && item.Name.Contains("待") == false)
-                                    {
-                                        defalutSelectedNodeID = item.NodeID;
-                                        break;
-                                    }
-                                }
-                            }
-                            #endregion 为天业集团做一个特殊的判断.
-
-
-
+                        #region 为天业集团做一个特殊的判断.
+                        if (SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长") == true)
+                        {
+                            /*如果是董事长节点, 如果是下一个节点默认的是备案. */
                             foreach (Node item in nds)
                             {
-                                DataRow dr = dtToNDs.NewRow();
-                                dr["No"] = item.NodeID;
-                                dr["Name"] = item.Name;
-                                //if (item.hissel
-
-                                if (item.HisDeliveryWay == DeliveryWay.BySelected)
-                                    dr["IsSelectEmps"] = "1";
-                                else
-                                    dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
-
-                                //设置默认选择的节点.
-                                if (defalutSelectedNodeID == item.NodeID)
-                                    dr["IsSelected"] = "1";
-                                else
-                                    dr["IsSelected"] = "0";
-
-                                dtToNDs.Rows.Add(dr);
+                                if (item.Name.Contains("备案") == true && item.Name.Contains("待") == false)
+                                {
+                                    defalutSelectedNodeID = item.NodeID;
+                                    break;
+                                }
                             }
                         }
-                        #endregion 到达其他节点。
+                        #endregion 为天业集团做一个特殊的判断.
 
+
+
+                        foreach (Node item in nds)
+                        {
+                            DataRow dr = dtToNDs.NewRow();
+                            dr["No"] = item.NodeID;
+                            dr["Name"] = item.Name;
+                            //if (item.hissel
+
+                            if (item.HisDeliveryWay == DeliveryWay.BySelected)
+                                dr["IsSelectEmps"] = "1";
+                            else
+                                dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
+
+                            //设置默认选择的节点.
+                            if (defalutSelectedNodeID == item.NodeID)
+                                dr["IsSelected"] = "1";
+                            else
+                                dr["IsSelected"] = "0";
+
+                            dtToNDs.Rows.Add(dr);
+                        }
+                        #endregion 到达其他节点。
 
                         //增加一个下拉框, 对方判断是否有这个数据.
                         myds.Tables.Add(dtToNDs);

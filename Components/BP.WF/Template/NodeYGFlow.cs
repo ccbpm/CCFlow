@@ -37,6 +37,10 @@ namespace BP.WF.Template
         /// 条件表达式
         /// </summary>
         public const string CondExp = "CondExp";
+        /// <summary>
+        /// 越轨子流程退回类型
+        /// </summary>
+        public const string YBFlowReturnRole = "YBFlowReturnRole";
         #endregion
     }
     /// <summary>
@@ -139,8 +143,12 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeYGFlowAttr.ExpType, 3, "表达式类型", true, true, NodeYGFlowAttr.ExpType,
                    "@3=按照SQL计算@4=按照参数计算");
 
-
                 map.AddTBString(NodeYGFlowAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
+
+                //@duo
+                map.AddDDLSysEnum(NodeYGFlowAttr.YBFlowReturnRole, 0, "退回方式", true, true, NodeYGFlowAttr.YBFlowReturnRole,
+                  "@0=不能退回@1=退回到父流程的开始节点@2=退回到父流程的任何节点@3=退回父流程的启动节点");
+
                 map.AddTBInt(NodeYGFlowAttr.Idx, 0, "显示顺序", true, false);
 
                 this._enMap = map;

@@ -5669,8 +5669,6 @@ namespace BP.WF
                     dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
                         throw new Exception("@没有为延续子流程设置接受人.");
-                    foreach (DataRow dr in dt.Rows)
-                        toEmpIDs += dr["No"].ToString();
                 }
                 #endregion 按照人员选择.
 
@@ -5762,7 +5760,6 @@ namespace BP.WF
             this.addMsg("Msg1", "子流程(" + node.FlowName + ")已经启动,发送给{" + toEmpIDs + "}处理人.");
             //this.addMsg(SendReturnMsgFlag.MsgOfText, "需要等待子流程完成后，该流程才能向下运动。");
             this.addMsg("Msg2", "当前您的待办已经消失,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.");
-
 
             //设置当前工作操作员不可见.
             sql = "UPDATE WF_GenerWorkerList SET IsPass=80 WHERE WorkID=" + this.WorkID + " AND IsPass=0";

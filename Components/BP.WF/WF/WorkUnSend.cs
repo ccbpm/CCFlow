@@ -364,6 +364,25 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
+            #region 如果是越轨流程状态 @du.
+            string sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE WorkID="+this.WorkID+" AND IsPass=80";
+            if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
+            {
+                //求出来越轨子流程workid并把它删除掉.
+                GenerWorkFlow gwfSubFlow = new GenerWorkFlow();
+                int i = gwfSubFlow.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
+                if (i == 1)
+                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(gwfSubFlow.FK_Flow, gwfSubFlow.WorkID, true);
+
+                //执行回复当前节点待办..
+                sql = "UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND FK_Node="+gwf.FK_Node+" AND WorkID="+this.WorkID;
+                DBAccess.RunSQL(sql);
+
+                return "撤销延续流程执行成功，撤销到["+gwf.NodeName+"],撤销给["+gwf.TodoEmps+"]";
+            }
+            #endregion 如果是越轨流程状态 .
+
+
             if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwf.FK_Flow, gwf.FK_Node, this.WorkID, WebUser.No) == true)
                 return "err@您有处理当前工作的权限,可能您已经执行了撤销,请使用退回或者发送功能.";
 
@@ -374,12 +393,12 @@ namespace BP.WF
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
                 GenerWorkerList gwl = new GenerWorkerList();
-                int i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
+                int numOfmyGwl = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
                       GenerWorkerListAttr.WorkID, this.WorkID,
                       GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
                 //如果没有找到当前会签人.
-                if (i == 0)
+                if (numOfmyGwl == 0)
                     return "err@当前节点[" + gwf.NodeName + "]是会签状态,[" + gwf.TodoEmps + "]在执行会签,您不能执行撤销.";
 
                 if (gwl.IsHuiQian == true)
@@ -398,7 +417,6 @@ namespace BP.WF
                 if (gwf.HuiQianZhuChiRen == WebUser.No)
                 {
                     gwf.TodoEmps = WebUser.No + "," + BP.Web.WebUser.Name + ";" + gwf.TodoEmps;
-
                 }
                 else
                 {
@@ -406,7 +424,6 @@ namespace BP.WF
                 }
 
                 gwf.Update();
-
 
                 return "会签人撤销成功.";
             }
@@ -431,11 +448,8 @@ namespace BP.WF
                  * 3，现在分流节点的人接收到一个待办，并且需要撤销整个分流节点的发送.
                  * 4, UnSendToNode 这个时间没有值，并且当前干流节点的停留的节点与要撤销到的节点不一致。
                  */
-
                 return DoUnSendInFeiLiuHeiliu(gwf);
             }
-
-
          
             if (nd.HisCancelRole == CancelRole.None)
             {
@@ -488,7 +502,7 @@ namespace BP.WF
                     throw new Exception("@流程设计错误, 您设置了当前节点(" + wn.HisNode.Name + ")可以让指定的节点人员撤销，但是您没有设置指定的节点.");
 
                 /* 查询出来. */
-                string sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + wn.HisWork.OID + " ORDER BY RDT DESC ";
+                sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + wn.HisWork.OID + " ORDER BY RDT DESC ";
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     throw new Exception("@撤销流程错误,您没有权限执行撤销发送.");
@@ -537,7 +551,7 @@ namespace BP.WF
             if (cancelToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                 || cancelToNode.TodolistModel == TodolistModel.Teamup)
             {
-                string sql = "SELECT ActionType FROM ND" + int.Parse(this.FlowNo) + "Track WHERE NDFrom=" + cancelToNodeID + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + this.WorkID;
+                sql = "SELECT ActionType FROM ND" + int.Parse(this.FlowNo) + "Track WHERE NDFrom=" + cancelToNodeID + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + this.WorkID;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -551,7 +565,6 @@ namespace BP.WF
                 }
             }
             #endregion 如果当前是协作组长模式
-
 
             WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
 

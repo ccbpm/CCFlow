@@ -66,6 +66,10 @@
 	        en.FK_Flow = flowNo;
 	        en.FK_Node = GetQueryString("FK_Node");
 	        en.Insert();
+
+	        window.location.href = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=' + en.OID;
+
+	        //alert('当前流程已经加入了延续流程中.');
 	    }
          
     </script>

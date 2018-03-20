@@ -57,13 +57,13 @@
 	    function AddGroup() {
 	        var webUser = new WebUser();
 	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
-	        OpenEasyUiDialogExt(url, "选择子流程", 500, 600, true);
+	        OpenEasyUiDialogExt(url, "选择子流程", 600, 500, true);
 	    }
 	    //查询集团的流程.
 	    function AddOrg() {
 	        var webUser = new WebUser();
 	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
-	        OpenEasyUiDialogExt(url, "选择子流程", 500, 600, true);
+	        OpenEasyUiDialogExt(url, "选择子流程", 600, 500, true);
 	    }
 
         //删除成功.

@@ -16,11 +16,17 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    
+    <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script src="Gener.js" type="text/javascript"></script>
      <base target="_self" />
+     <style type="text/css">
+           .datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber
+            {
+                text-overflow: ellipsis;
+            }
+     </style>
     <script language="javascript" type="text/javascript" >
 
         //定义公共个变量.
@@ -49,7 +55,8 @@
             }
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
+            
+             $("#dialogExpFile").hide();
             //初始化工具栏.
             InitToolbar();
 
@@ -115,12 +122,6 @@
                 $("#toolbar").append(str); //设置基础信息.
             }
 
-            //绑定数据  
-            //var ele = $("<a id='querybtn' href='#' class='easyui-linkbutton' data-options=\"plain:true,iconCls:'icon-search'\" onclick='Search()'>查询</a>");
-           // $("#toolbar").append(ele);
-
-           // ele = $("<a id='setbtn' href='#' style='float: left;' class='easyui-linkbutton' data-options=\"plain:true,iconCls:'icon-set'\" onclick='OpenAttrs()'>设置</a>");
-            //$("#toolbar").append(ele); //设置基础信息.
 
             //为查询外键赋值.
             for (var i = 0; i < attrs.length; i++) {
@@ -135,8 +136,7 @@
 
             //是否可以新建？ 
             if (mapBase.IsInsert == "True" ) {
-               // var ele2 = $("<a id='newWin' href='#' style='float: left;' class='easyui-linkbutton' data-options=\"plain:true,iconCls:'icon-new'\" onclick='New()'>新建</a>");
-               // $("#toolbar").append(ele2); //新建.
+              $("#newWin").show();
             }
 
         }
@@ -170,11 +170,10 @@
             ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
-            if ($("#TB_Key").length == 1)
+            if ($("#TB_Key") != null && $("#TB_Key").val()!="")
                 ur.SearchKey = $("#TB_Key").val();
-
-            if (document.getElementById("TB_Key") != null)
-                ur.SearchKey = document.getElementById("TB_Key").value;
+           else
+              ur.SearchKey = "";
 
             //设置查询时间.
             if ($("#TB_DTFrom").length == 1)
@@ -196,7 +195,8 @@
             ur.Vals = str;
             ur.FK_MapData = ensName;
             var i = ur.Save();
-            window.location.href = "?EnsName=" + ensName + "&PageIdx=1";
+            var pager = $("#dg").datagrid('getPager');  
+            window.location.href = "?EnsName=" + ensName + "&PageIdx="+pager;
         }
 
         function Exp() {
@@ -208,11 +208,33 @@
                 return;
             }
 
-            alert("尚未实现");
-            window.location.href = data;
+           ReDownExpFile();
+            
         }
 
-      
+       
+
+        function ReDownExpFile() {
+            var fileName = $("*[id$=expFileName]").val();
+            document.getElementById("downLoad").href = "../../DataUser/Temp/" + fileName;
+
+            $("#dialogExpFile").show();
+            $("#dialogExpFile").dialog({
+                height: 300,
+                width: 400,
+                showMax: false,
+                isResize: true,
+                modal: true,
+                title: "手动下载文件",
+                slide: false,
+                close: function () {
+                },
+                buttons: [{ text: '关闭', handler: function () {
+                    $('#dialogExpFile').dialog('close');
+                }
+                }]
+            });
+        }
 
         //生成查询页面..
         function BindTable() {
@@ -238,6 +260,7 @@
             }
 
             data = JSON.parse(data);
+
             var attrs = data["Attrs"];
 
             if (attrs == undefined) {
@@ -245,6 +268,15 @@
                 return;
             }
 
+            var keyOfEn="";
+            /**var data1 = handler.DoMethodReturnString("Search_Method");
+            if (data1.indexOf('err@') == 0) {
+                alert(data1);
+                return;
+            }
+            data1 = JSON.parse(data1)
+            var refMethod = data1["RefMethod"];
+            console.log(data1);*/
             var columns = new Array(); ;
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i]; 
@@ -254,38 +286,109 @@
                 || attr.KeyOfEn == "WorkID"
                 || attr.KeyOfEn == "NodeID"
                 || attr.KeyOfEn == "MyNum" 
-                || attr.KeyOfEn == "MyPK")
+                || attr.KeyOfEn == "MyPK"){
+                    keyOfEn=attr.KeyOfEn
                     continue;
-
+                }
                 var field = attr.KeyOfEn;
                 var title=attr.Name;
                  columns.push({
 		                field: field,
 		                title: title,
                         fixed:true,
+                       
                         
 		         });
             }
-            console.log(columns);
-            console.log( data["DT"]);
+            /**columns.push({
+                         field: keyOfEn,
+		                title: "操作",
+                        fixed:true,
+                        width:120,
+                        formatter:function(value,row,index){
+                           var html="";
+                           for(var i=0;i<refMethod.length;i++){
+                          
+                             //
+                             html+="<a href='#' onclick='javaScript:RefMethod1(\'/\',"+index+","+refMethod[i].Target+","+GetQueryString('EnsName')+",xx)'>";
+                             html+="<img src="+refMethod[i].Icon+" border='0'/>";
+                             html+=refMethod[i].Title+"</a>";
+                           }
+                           return html;
+                        } 
+                        
+            });*/
+            
             $('#dg').datagrid({
                 data: data["DT"],
                 columns: [columns],
-                fitColumns:true,
+                fitColumns:false,
+                fit:true,
                 rownumbers:true,
+                striped:true,
+                singleSelect:true,
+                pagination:true,
+                pagePosition:'bottom',
                 toolbar:"#tb",
-                onDblClickRow: function(index,field,value){
-                        OpenEn(value);
-	                },
-                onClickRow: function(index,field,value){
-                       // OpenEn(value);
+                loadFilter: pagerFilter, 
+                onDblClickRow: function(index,rowData){
+                        var pkval = rowData["No"];
+                        if (pkval == undefined)
+                            pkval = rowData["OID"];
+                        if (pkval == undefined)
+                            pkval = rowData["MyPK"];
+                        if (pkval == undefined)
+                            pkval = rowData["WorkID"];
+                        if (pkval == undefined)
+                            pkval = rowData["NodeID"];
+                        OpenEn(pkval);
 	                }
 
             });
+            
+		    
         }
 
-        function OpenEn(pk) {
+         //分页功能      
+            function pagerFilter(data) {  
+                if (typeof data.length == 'number' && typeof data.splice == 'function') {  
+                    data = {  
+                        total: data.length,  
+                        rows: data  
+                    }  
+                }  
+                var dg = $(this);  
+                var opts = dg.datagrid('options');  
+                var pager = dg.datagrid('getPager');  
+                pager.pagination({  
+                    onSelectPage: function (pageNum, pageSize) {  
+                        opts.pageNumber = pageNum;  
+                        opts.pageSize = pageSize;  
+                        pager.pagination('refresh', {  
+                            pageNumber: pageNum,  
+                            pageSize: pageSize  
+                        });  
+                        dg.datagrid('loadData', data);  
+                    }  
+                });  
+                if (!data.originalRows) {  
+                    if(data.rows)  
+                        data.originalRows = (data.rows);  
+                    else if(data.data && data.data.rows)  
+                        data.originalRows = (data.data.rows);  
+                    else  
+                        data.originalRows = [];  
+                }  
+                var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);  
+                var end = start + parseInt(opts.pageSize);  
+                data.rows = (data.originalRows.slice(start, end));  
+                return data;  
+            } 
 
+        function operate(value, row, index) {  
+            return '<a href="#" onclick="editUser('+index+')">查看明细</a>';  
+        }  
+        function OpenEn(pk) {
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
 
@@ -298,12 +401,19 @@
             OpenEn("");
         }
 
-        function set() {
-             var ensName = GetQueryString("EnsName");
-            var enName = ensName.substring(0, ensName.length - 1);
-            var url = './Sys/EnsAppCfg.aspx?EnsName=' + ensName + '&inlayer=1&t=' + Math.random();
-            OpenEasyUiDialogExt(url, "设置", 720, 500, false);
+         function Exp() {
+
+            var url = "";
+            if (plant == "CCFlow") {
+                url = "Do.aspx?EnsName=" + GetQueryString("EnsName") + "&DoType=SearchExp";
+                window.open(url);
+                return;
+            }
+
+            alert("尚未实现");
+            window.location.href = data;
         }
+
 
         function GenerPageIdx() {
 
@@ -321,22 +431,37 @@
 
 <form id="cc">
  <div data-options="region:'center'" style="padding: 0px;" border="false" style="overflow: hidden;">
+        <div class="easyui-panel" style="height:600px">
         <div id="tb" style="padding: 3px;">
             <div id="Div1" style="height: 30px;">
                 <div id="toolbar" style="float: left;"> 
                 </div>
                 <div  style="float: left;"> 
-                    <a id="querybtn" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
-                </div>               
-                <a id="newWin" href="#" style="float: left;" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
-                <a id="editWin" href="#" style="float: left;" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="Set()">设置</a>
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
+                     <a id="newWin" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
+                </div>
+                <div  style="float: left;">     
+                    <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出</a>
+                </div>
+                            
+               
             </div>
         </div>
-        <table id="dg" fit="false" fitcolumns="true"  class="easyui-datagrid" data-options="striped:true,singleSelect:true,pagination:true,pagePosition:'bottom'" >
-        </table>
+        
+        <table id="dg"></table>
+       </div>
     </div>
 <div id="Msg"></div>
 </form>
-
+<div id="dialogExpFile" style="width: 400px; height: 300px;">
+        <div style="margin: 20px; color: Blue;">
+            提示：如果没有正常导出文件，请手动点击下方按钮进行下载。
+            <br />
+            <br />
+            <a id="downLoad" href="" class="easyui-linkbutton" data-options="iconCls:'icon-save'">
+                点击下载</a>
+        </div>
+    </div>
+    <input type="hidden" id="expFileName" runat="server" />
 </body>
 </html>

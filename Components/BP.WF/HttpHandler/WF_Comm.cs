@@ -688,6 +688,8 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             ds.Tables.Add(dtAttrs); //把描述加入.
 
+
+
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
@@ -885,6 +887,60 @@ namespace BP.WF.HttpHandler
             mydt.TableName = "DT";
 
             ds.Tables.Add(mydt); //把数据加入里面.
+
+            #region 获得方法的集合
+            DataTable dtM = new DataTable("dtM");
+            dtM.Columns.Add("No");
+            dtM.Columns.Add("Title");
+            dtM.Columns.Add("Tip");
+            dtM.Columns.Add("Visable");
+
+            dtM.Columns.Add("Url");
+            dtM.Columns.Add("Target");
+            dtM.Columns.Add("Warning");
+            dtM.Columns.Add("RefMethodType");
+            dtM.Columns.Add("GroupName");
+            dtM.Columns.Add("W");
+            dtM.Columns.Add("H");
+            dtM.Columns.Add("Icon");
+            dtM.Columns.Add("IsCanBatch");
+            dtM.Columns.Add("RefAttrKey");
+
+            RefMethods rms = map.HisRefMethods;
+            foreach (RefMethod item in rms)
+            {
+                string myurl = "";
+                if (item.RefMethodType != RefMethodType.Func)
+                {
+                    myurl = item.Do(null) as string;
+                    if (myurl == null)
+                        continue;
+                }
+                else
+                {
+                    myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=" + this.PKVal;
+                }
+
+                DataRow dr = dtM.NewRow();
+
+                dr["No"] = item.Index;
+                dr["Title"] = item.Title;
+                dr["Tip"] = item.ToolTip;
+                dr["Visable"] = item.Visable;
+                dr["Warning"] = item.Warning;
+                dr["RefMethodType"] = (int)item.RefMethodType;
+                dr["RefAttrKey"] = item.RefAttrKey;
+                dr["URL"] = myurl;
+                dr["W"] = item.Width;
+                dr["H"] = item.Height;
+                dr["Icon"] = item.Icon;
+                dr["IsCanBatch"] = item.IsCanBatch;
+                dr["GroupName"] = item.GroupName;
+
+                dtM.Rows.Add(dr); //增加到rows.
+            }
+            ds.Tables.Add(dtM); //把数据加入里面.
+            #endregion
 
             return ds;
 

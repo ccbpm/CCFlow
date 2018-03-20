@@ -912,10 +912,12 @@ namespace BP.WF.HttpHandler
                 if (item.IsForEns == false)
                     continue;
 
+                if (item.Visable == false)
+                    continue;
+
                 string myurl = "";
                 
-                    myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=" + this.PKVal;
-                 
+                    myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=";
 
                 DataRow dr = dtM.NewRow();
 

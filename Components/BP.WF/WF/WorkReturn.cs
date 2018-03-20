@@ -383,7 +383,7 @@ namespace BP.WF
         {
             
             // 增加要退回到父流程上去. by zhoupeng.
-            if (!this.ReturnToNode.FK_Flow.Equals(this.HisNode.FK_Flow))
+            if (this.ReturnToNode.FK_Flow.Equals(this.HisNode.FK_Flow)==false)
             {
                 /*子流程要退回到父流程的情况.*/
                 return ReturnToParentFlow();

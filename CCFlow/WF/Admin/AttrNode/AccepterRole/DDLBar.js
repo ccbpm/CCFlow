@@ -44,12 +44,23 @@ function InitBar(key) {
 
     html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
 
+    html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
+
     html += "<input type=button onclick='Help()' value='我需要帮助' /></div>";
+
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
 
+function OldVer() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var flowNo = GetQueryString("FK_Flow");
+
+    var url = '../NodeAccepterRole.aspx?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
+    window.location.href = url;
+}
 function Help() {
 
     var url = "";

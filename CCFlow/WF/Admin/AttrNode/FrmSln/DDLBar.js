@@ -16,11 +16,23 @@ function InitBar(optionKey) {
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
+
+    html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
+
     html += "<input  id='Btn_Help' type=button onclick='Help()' value='我需要帮助' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
+
+function OldVer() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var flowNo = GetQueryString("FK_Flow");
+    var url = '../NodeFromWorkModel.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
+    window.location.href = url;
+}
+
 
 function Help() {
     var url = "http://ccbpm.mydoc.io";

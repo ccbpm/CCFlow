@@ -1734,7 +1734,7 @@ namespace BP.WF
         /// <returns>返回从视图WF_EmpWorks查询出来的数据.</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable()
         {
-            
+
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string wfSql = "  WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + "  OR WFState=" + (int)WFState.AskForReplay + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + " OR WFState=" + (int)WFState.Fix;
@@ -2258,7 +2258,11 @@ namespace BP.WF
                 /*如果是开始的节点有可能退回到子流程上去.*/
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
                 if (gwf.PWorkID == 0)
-                    throw new Exception("@当前节点是开始节点，您不能执行退回。");
+                    throw new Exception("@当前节点是开始节点并且不是子流程，您不能执行退回。");
+
+                //if (gwf.PWorkID==0)
+                //    throw new Exception("@当前节点是开始节点,开始节点只能退回到父流程上,但是没有找到退回到父流程节点。");
+
 
                 GenerWorkerList gwl = new GenerWorkerList();
                 int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, gwf.PWorkID, GenerWorkerListAttr.IsPass, 80);
@@ -2274,7 +2278,7 @@ namespace BP.WF
                     return dt;
                 }
 
-                throw new Exception("@没有找到退回到父流程节点。");
+                throw new Exception("@系统错误,没有找到退回到父流程节点。");
             }
 
             if (nd.HisRunModel == RunModel.SubThread)
@@ -2354,9 +2358,9 @@ namespace BP.WF
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + ") OR (a.FK_Node=" + fk_node + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
                     else
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " ORDER BY a.RDT DESC";
-//                    sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
+                    //                    sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
 
-                   // BP.DA.Log.DebugWriteWarning(sql);
+                    // BP.DA.Log.DebugWriteWarning(sql);
 
                     dt = DBAccess.RunSQLReturnTable(sql);
 
@@ -4152,10 +4156,10 @@ namespace BP.WF
         /// <param name="WorkID">工作流程ID</param>
         /// <param name="FK_Node">当前节点编号</param>
         /// <returns>上一节点发送记录</returns>
-        public static DataTable Flow_GetPreviousNodeTrack(Int64 WorkID,int FK_Node)
+        public static DataTable Flow_GetPreviousNodeTrack(Int64 WorkID, int FK_Node)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(WorkID);
-            if(gwf.RetrieveFromDBSources() == 0)
+            if (gwf.RetrieveFromDBSources() == 0)
                 throw new Exception("没有查询到相关业务实例");
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
@@ -4518,7 +4522,7 @@ namespace BP.WF
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */
             string str = nodeID.ToString();
-            if (str.EndsWith("01") ==true)
+            if (str.EndsWith("01") == true)
             {
                 //如果是开始节点，如何去判断是否可以处理当前节点的权限.
                 GenerWorkFlow gwf = new GenerWorkFlow();
@@ -5756,7 +5760,7 @@ namespace BP.WF
             gwl.FK_Dept = empStarter.FK_Dept;
             gwl.FK_DeptT = empStarter.FK_DeptText;
 
-            gwl.SDT ="无";
+            gwl.SDT = "无";
             gwl.DTOfWarning = DataType.CurrentDataTime;
             gwl.IsEnable = true;
             gwl.IsPass = false;
@@ -5944,7 +5948,7 @@ namespace BP.WF
                 gwl.FK_DeptT = emp.FK_DeptText;
 
 
-                gwl.SDT ="无";
+                gwl.SDT = "无";
                 gwl.DTOfWarning = DataType.CurrentDataTime;
                 gwl.IsEnable = true;
 
@@ -7785,7 +7789,7 @@ namespace BP.WF
                 try
                 {
                     string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + nodeID + " AND WorkID=" + workID;
-                    int i= BP.DA.DBAccess.RunSQL(sql);
+                    int i = BP.DA.DBAccess.RunSQL(sql);
                 }
                 catch
                 {
@@ -7822,7 +7826,7 @@ namespace BP.WF
                 gwf.Starter = emp.No;
                 gwf.StarterName = emp.Name;
                 gwf.WFState = WFState.Shift;
-                gwf.TodoEmps = toEmp+","+emp.Name+";";
+                gwf.TodoEmps = toEmp + "," + emp.Name + ";";
                 gwf.TodoEmpsNum = 1;
                 gwf.RDT = DataType.CurrentDataTime;
                 gwf.NodeName = "";
@@ -8107,7 +8111,7 @@ namespace BP.WF
             ps.Add("FK_Emp", empNo);
             if (DBAccess.RunSQL(ps) == 0)
             {
-               //throw new Exception("设置的工作不存在，或者当前的登陆人员[" + empNo + "]已经改变，请重新登录。");
+                //throw new Exception("设置的工作不存在，或者当前的登陆人员[" + empNo + "]已经改变，请重新登录。");
             }
 
             // 判断当前节点的已读回执.
@@ -8816,7 +8820,7 @@ namespace BP.WF
                 else
                 {
                     /*如果有数据，就返回，说明已经执行过了。*/
-                    return ;
+                    return;
                 }
             }
 
@@ -8841,7 +8845,7 @@ namespace BP.WF
                 else
                 {
                     /*如果有数据，就返回，说明已经执行过了。*/
-                    return ;
+                    return;
                 }
             }
             #endregion 求出是否可以更新状态.
@@ -8868,7 +8872,7 @@ namespace BP.WF
 
                 BP.WF.DTS.DTS_SendMsgToWarningWorker en = new DTS.DTS_SendMsgToWarningWorker();
                 en.Do();
-                 
+
             }
             #endregion
         }
@@ -8887,7 +8891,7 @@ namespace BP.WF
                 {
                     GloVar var = new GloVar();
                     var.No = timeKey;
-                    var.Name = "设置时间段" + timeKey+"一周执行一次.";
+                    var.Name = "设置时间段" + timeKey + "一周执行一次.";
                     var.GroupKey = "WF";
                     var.Val = timeKey;  //更新时间点.
                     var.Note = "设置时间段PM" + timeKey;

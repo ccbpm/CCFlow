@@ -913,16 +913,9 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 string myurl = "";
-                if (item.RefMethodType != RefMethodType.Func)
-                {
-                    myurl = item.Do(null) as string;
-                    if (myurl == null)
-                        continue;
-                }
-                else
-                {
+                
                     myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=" + this.PKVal;
-                }
+                 
 
                 DataRow dr = dtM.NewRow();
 

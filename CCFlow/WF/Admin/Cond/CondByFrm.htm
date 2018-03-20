@@ -103,19 +103,19 @@
             var OperVal = "";
 
             var tb = document.getElementById("TB_Val");
-            if (tb.style.display == "") {
+            var tbText = document.getElementById("TB_Text");
+            if (tb.style.display == "" || tbText.style.display == "") {
                 OperVal = tb.value;
             } else {
                 OperVal = $("#DDL_Val").val(); //  操作符.
             }
 
-            var tbText = document.getElementById("TB_Text");
-
+            
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("DDL_Fields", DDL_Fields);
             handler.AddPara("DDL_Operator", DDL_Operator);
             handler.AddPara("OperVal", OperVal);
-            handler.AddPara("OperValText", tbText);
+            handler.AddPara("OperValText", encodeURI(tbText.value));
             handler.AddPara("SaveType", saveType);
 
             handler.AddPara("CondType", condType);
@@ -205,7 +205,7 @@
 
             //获得 mapattr.
             var mapattr = data["Sys_MapAttr"][0];
-
+            alert(mapattr.LGType);
             //操作符.
             var opers = data["Opers"];
 
@@ -226,7 +226,7 @@
             }
 
             if (mapattr.LGType == "2") {
-                document.getElementById("TB_Val").style.display = "";
+                document.getElementById("TB_Text").style.display = "";
                 $("#opts").html("<a href=\"javascript:SelectFKData('" + mapattr.MyPK + "');\" >请选择数据</a>");
             }
 
@@ -238,9 +238,13 @@
             GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
         }
         ///选择外部数据.
+        var newWindow = "";
         function SelectFKData(fk_mapAttr) {
-            window.open("CondByFrmSelectFKData.htm?FK_MapAttr=" + fk_mapAttr);
+            newWindow = window.open("CondByFrmSelectFKData.htm?FK_MapAttr=" + fk_mapAttr);
+            newWindow.focus();
+            return;
         }
+        
          
     </script>
 </head>

@@ -44,7 +44,7 @@
                 if (idx == 0)
                     html += "<tr>";
 
-                html += "<td>" + en.No + en.Name + "</td>";
+                html += "<td onclick='checkOnData("+en.No+",\""+en.Name+"\")'>" + en.No + en.Name + "</td>";
 
                 idx++;
                 if (idx == 3)
@@ -59,6 +59,13 @@
             $("#ens").html(html);
 
         });
+
+        function checkOnData(No, Name) {
+            window.opener.document.getElementById("TB_Val").value = No;
+            window.opener.document.getElementById("TB_Text").value = Name;
+            window.opener.focus();
+            window.close();
+        }
          
     </script>
 </head>

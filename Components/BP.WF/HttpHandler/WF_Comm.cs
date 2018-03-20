@@ -909,6 +909,9 @@ namespace BP.WF.HttpHandler
             RefMethods rms = map.HisRefMethods;
             foreach (RefMethod item in rms)
             {
+                if (item.IsForEns == false)
+                    continue;
+
                 string myurl = "";
                 if (item.RefMethodType != RefMethodType.Func)
                 {

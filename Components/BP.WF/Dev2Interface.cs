@@ -2264,21 +2264,34 @@ namespace BP.WF
                 //    throw new Exception("@当前节点是开始节点,开始节点只能退回到父流程上,但是没有找到退回到父流程节点。");
 
 
-                GenerWorkerList gwl = new GenerWorkerList();
-                int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, gwf.PWorkID, GenerWorkerListAttr.IsPass, 80);
-                if (i > 0)
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                int i = gwls.Retrieve(GenerWorkerListAttr.WorkID, gwf.PWorkID);
+
+
+                string nodes = "";
+                foreach (GenerWorkerList gwl in gwls)
                 {
                     DataRow dr = dt.NewRow();
                     dr["No"] = gwl.FK_Node.ToString();
+
+                    if (nodes.Contains(gwl.FK_Node.ToString() + ",") == true)
+                        continue;
+
+                    nodes += gwl.FK_Node.ToString() + ",";
+
                     dr["Name"] = gwl.FK_NodeText;
                     dr["Rec"] = gwl.FK_Emp;
                     dr["RecName"] = gwl.FK_EmpText;
                     dr["IsBackTracking"] = "0";
                     dt.Rows.Add(dr);
-                    return dt;
                 }
 
-                throw new Exception("@系统错误,没有找到退回到父流程节点。");
+                return dt;
+
+
+
+
+               // throw new Exception("@系统错误,没有找到退回到父流程节点。");
             }
 
             if (nd.HisRunModel == RunModel.SubThread)

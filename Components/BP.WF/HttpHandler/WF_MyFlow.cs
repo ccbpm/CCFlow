@@ -693,7 +693,6 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 如果当前节点启用了协作会签
 
-
                 #region 加载流程控制器 - 按钮
                 if (this.currND.HisFormType == NodeFormType.SelfForm)
                 {
@@ -793,7 +792,7 @@ namespace BP.WF.HttpHandler
 
                 if (btnLab.ReturnEnable )
                 {
-                    /*如果没有焦点字段*/
+                    /*退回*/
                     string urlr = "./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input name='Return' type=button  value='" + btnLab.ReturnLab + "' enable=true onclick=\"ReturnWork('" + urlr + "','" + btnLab.ReturnField + "'); \" />";
                 }

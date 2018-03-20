@@ -296,7 +296,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 跳转是否启用
+        /// 退回是否启用
         /// </summary>
         public bool ReturnEnable
         {

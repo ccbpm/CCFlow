@@ -847,9 +847,14 @@ namespace BP.En
             if (string.IsNullOrEmpty(s))
                 s = this.EnMap.GetAttrByKey(key).DefaultVal.ToString();
 
-            if (s.ToUpper() == "FALSE")
+            if (s == "0")
                 return false;
-            if (s.ToUpper() == "TRUE")
+            if (s == "1")
+                return true;
+
+            if (s.ToUpper().Equals("FALSE"))
+                return false;
+            if (s.ToUpper().Equals("TRUE") )
                 return true;
 
             if (string.IsNullOrEmpty(s))
@@ -857,8 +862,8 @@ namespace BP.En
 
             if (int.Parse(s) == 0)
                 return false;
-            else
-                return true;
+
+            return true;
         }
 
         public bool GetValBooleanByKey(string key, bool defval)

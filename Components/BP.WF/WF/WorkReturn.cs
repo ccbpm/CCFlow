@@ -331,24 +331,34 @@ namespace BP.WF
             //设置子流程信息.
             GenerWorkFlow gwfP = new GenerWorkFlow(gwf.PWorkID);
             gwfP.WFState = WFState.ReturnSta;
-            gwfP.Update();
+            gwfP.FK_Node = this.ReturnToNode.NodeID;
+            gwfP.NodeName = this.ReturnToNode.Name;
+
+            //int toNodeID = this.ReturnToNode;
 
             //启用待办.
             GenerWorkerList gwl = new GenerWorkerList();
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwfP.FK_Node, GenerWorkerListAttr.WorkID, gwfP.WorkID);
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, gwfP.WorkID);
+
+            string toEmps = "";
             foreach (GenerWorkerList item in gwls)
             {
                 item.IsPassInt = 0;
                 item.Update();
                 gwl = item;
+
+                toEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
             }
+
+            gwfP.TodoEmps = toEmps;
+            gwfP.Update();
 
             #region 写入退回提示.
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
             rw.WorkID = gwfP.WorkID;
-            rw.ReturnToNode = gwfP.FK_Node;
+            rw.ReturnToNode = this.ReturnToNode.NodeID;
             rw.ReturnNodeName = gwfP.NodeName;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
@@ -373,7 +383,7 @@ namespace BP.WF
             BP.WF.Dev2Interface.Node_SetWorkUnRead(gwfP.WorkID);
 
             //返回退回信息.
-            return "成功的退回到["+gwfP.FlowName+" - "+gwfP.NodeName+"],退回给["+gwfP.TodoEmps+"].";
+            return "成功的退回到[" + gwfP.FlowName + " - " + this.ReturnToNode.Name + "],退回给[" + toEmps + "].";
         }
         /// <summary>
         /// 执行退回.

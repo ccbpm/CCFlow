@@ -43,15 +43,17 @@
             //条件属性
             var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
 
-            var cond = new Entity("BP.WF.Template.Cond", mypk);
+            var cond = new Entity("BP.WF.Template.Cond");
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
             // 运算的值
             operatorValue = cond.OperatorValue;
             operatorValueT = cond.OperatorValueT;
 
             //获取已指定操作员的岗位条件
             operatorValues = operatorValue.split("@");
-            var operatorValueTs = operatorValueT.split("@");   
-            
+            var operatorValueTs = operatorValueT.split("@"); 
 
 
             ////根据用户的信息，判断是否启用那个设置工具。

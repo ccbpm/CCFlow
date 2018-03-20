@@ -328,7 +328,7 @@ function Line_MenusFuns(item, cId) {
                 var tNode = rSecondFigure.CCBPM_OID;
 				var url = "../Cond/ConditionLine.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + fNode + "&FK_Node=" + fNode + "&ToNodeID=" + tNode + "&CondType=2&Lang=CH&t=" + new Date().getTime();
                 //window.parent.addTab(CCBPM_Data_FK_Flow + fNode + "DIRECTION" + tNode, "设置方向条件" + fNode + "->" + tNode, url);
-                OpenEasyUiDialog(url, CCBPM_Data_FK_Flow + fNode + "DIRECTION" + tNode, "设置方向条件" + fNode + "->" + tNode, 990, 500, "icon-property", true, null, null, null, function () {
+                OpenEasyUiDialog(url, CCBPM_Data_FK_Flow + fNode + "DIRECTION" + tNode, "设置方向条件" + fNode + "->" + tNode, 780, 400, "icon-property", true, null, null, null, function () {
 
                 });
             }

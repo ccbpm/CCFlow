@@ -26,6 +26,7 @@
         });
         //初始化数据.
         function InitPage() {
+
             //获取URL参数
             var nodeID = GetQueryString("FK_Node");
             var orgNo = GetQueryString("OrgNo");
@@ -55,17 +56,19 @@
                 var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ")";
                 //获得要增加的流程集合.
                 StationTypes = DBAccess.RunSQLReturnTable(sql);
-
             }
             //初始化岗位Table显示
-            InitStationTable( StationTypes, Stations);
+            InitStationTable(StationTypes, Stations);
+
             //获取已指定操作员的岗位条件
             for (i = 0, len = CheckStations.length; i < len; i++) {
-                if (CheckStations[i] == "") continue;
+                if (CheckStations[i] == "")
+                    continue;
+
                 var stationObject = document.getElementById("emp_CB_" + CheckStations[i]);
-                if(stationObject!=null)stationObject.checked = true;
+                if (stationObject != null)
+                    stationObject.checked = true;
             }
-           
         }
 
         //初始化岗位列表TABLE
@@ -94,11 +97,7 @@
                     $("#t1 tr:last").append(td);
                 }
             }
-
         }
-
-        
-           
 
         function Save() {
             var emps = ",";

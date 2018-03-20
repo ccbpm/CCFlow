@@ -133,11 +133,11 @@
     <div id="processMenu3" style="width: 100px; padding: 5px; position: absolute; background: #fff; display: none;">
         <ul style="margin:0 0 10px 10px;">
             
-            <li id="node_nomal"><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
-            <li id="node_shunt"><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
-            <li id="node_confluence"><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
-            <li id="node_shaddco"><i class="icon-wrench"></i>&nbsp;<span class="_label">分合流</span></li>
-            <li id="node_childthread"><i class="icon-trash"></i>&nbsp;<span class="_label">子线程</span></li>
+            <li id="Node_Ordinary"><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
+            <li id="Node_FL"><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
+            <li id="Node_HL"><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
+            <li id="Node_FHL"><i class="icon-wrench"></i>&nbsp;<span class="_label">分合流</span></li>
+            <li id="Node_SubThread"><i class="icon-trash"></i>&nbsp;<span class="_label">子线程</span></li>
         </ul>
     </div>
     <div id="canvasMenu" style="display:none;">
@@ -206,27 +206,54 @@
         });
        
         //节点类型设置
-        $('#node_nomal').on('click', function () {
-            alert('普通节点');
-            $('#pmfun span').text($(this).text());
-        });
-        $('#node_shunt').on('click', function () {
-            alert('分流节点');
+        $('#Node_Ordinary').on('click', function () {
+
+            //  var activeId = _canvas.getActiveId(); //右键当前的ID
+            //  alert('普通节点');
+
+            SetNodeRunModel(101, 0);
+
+            //设置节点的状态,为正常类型.
             $('#pmfun span').text($(this).text());
 
         });
-        $('#node_confluence').on('click', function () {
+        $('#Node_FL').on('click', function () {
+
+            alert('分流节点');
+
+            SetNodeRunModel(101, 2);
+            
+            $('#pmfun span').text($(this).text());
+
+        });
+        $('#Node_HL').on('click', function () {
             alert('合流节点');
             $('#pmfun span').text($(this).text());
         });
-        $('#node_shaddco').on('click', function () {
+        $('#Node_FHL').on('click', function () {
             alert('分合流节点');
             $('#pmfun span').text($(this).text());
         });
-        $('#node_childthread').on('click', function () {
+        $('#Node_SubThread').on('click', function () {
             alert('子线程节点');
             $('#pmfun span').text($(this).text());
         });
+
+        //设置节点类型。
+        function SetNodeRunModel(nodeID, runModel) {
+            //获得nodeID.
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.RunModel = runModel;
+            node.Update();
+
+            //设置运行模式.
+            SetNodeRunModel(nodeID, runModel);
+        }
+
+        //改变节点风格.
+        function ChangeNodeIcon(nodeID, runModel) {
+
+        }
        
     </script>
     <script type="text/javascript">
@@ -336,9 +363,7 @@
             var _canvas = $("#flowdesign_canvas").Flowdesign({
                 "processData": processData
                               , mtAfterDrop: function (params) {
-                                  
                                   //alert("连接：" + params.sourceId + " -> " + params.targetId);
-
                               }
                 /*画面右键*/
                               , canvasMenus: {
@@ -496,7 +521,7 @@
                                   var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
                                   var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
                                   var spanaa = $("#window" + activeId + " span").html();
-                                  
+
                                   cAlert(xiuNodename);
 
                                   $('.savetext' + activeId).on('click', function () {
@@ -559,7 +584,10 @@
 
 
                 //删除原来的连接线.
+                //var ens = new Entities("BP.WF.Directions");
+                //ens.
                 DBAccess.RunSQL("DELETE FROM WF_Direction WHERE FK_Flow='" + flowNo + "' ");
+
 
                 //创建一个实体.
                 var dir = new Entity("BP.WF.Template.Direction");
@@ -668,6 +696,8 @@
                     /* 如果是其他的情况,就要考虑分合流 */
                 }
 
+             
+
                 strs += "'style':'width:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 
                 if (i == nodes.length - 1)
@@ -693,10 +723,9 @@
                 var y = lab.Y;
 
             }
+
+        
         }
-
-
-
 
         //保存信息.
         function Save() {

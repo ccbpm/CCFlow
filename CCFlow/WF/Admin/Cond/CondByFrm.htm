@@ -175,6 +175,7 @@
 
         //当字段选择的时候.
         function changeCond(c) {
+
             if (c == null || c.value.length == 0)
                 return;
 
@@ -184,55 +185,59 @@
 
             var fk_flow = GetQueryString("FK_Flow");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByFrm_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("KeyOfEn", key);
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            var data = handler.DoMethodReturnString("CondByFrm_InitField");
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    data = JSON.parse(data);
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    //获得 mapattr.
-                    var mapattr = data["Sys_MapAttr"][0];
+            data = JSON.parse(data);
 
-                    //操作符.
-                    var opers = data["Opers"];
+            //获得 mapattr.
+            var mapattr = data["Sys_MapAttr"][0];
 
-                    //两者都隐藏.
-                    document.getElementById("TB_Val").style.display = "none";
-                    document.getElementById("DDL_Val").style.display = "none";
+            //操作符.
+            var opers = data["Opers"];
 
-                    if (mapattr.LGType == "1") {
-                        /*是枚举类型*/
-                        var enums = data["Enums"];
+            //两者都隐藏.
+            document.getElementById("TB_Val").style.display = "none";
+            document.getElementById("DDL_Val").style.display = "none";
 
-                        GenerBindDDL("DDL_Val", enums, "IntKey", "Lab", 0);
+            if (mapattr.LGType == "1") {
+                /*是枚举类型*/
+                var enums = data["Enums"];
+                GenerBindDDL("DDL_Val", enums, "IntKey", "Lab", 0);
 
-                        //显示.
-                        document.getElementById("DDL_Val").style.display = "";
+                //显示.
+                document.getElementById("DDL_Val").style.display = "";
+            }
 
-                    } else {
-                        document.getElementById("TB_Val").style.display = "";
-                    }
+            if (mapattr.LGType == "2") {
+                document.getElementById("TB_Val").style.display = "";
+                $("#opts").html("<a href='javascript:SelectFKData()'>请选择数据</a>");
+            }
 
-                    //绑定操作符.
-                    GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
-                }
-            });
+            if (mapattr.LGType == "0") {
+                document.getElementById("TB_Val").style.display = "";
+            }
 
+            //绑定操作符.
+            GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
+        }
+        ///选择外部数据.
+        function SelectFKData() {
+            window.open("CondByFrmSelectFKData.htm");
         }
          
     </script>
@@ -259,6 +264,8 @@
 <input type="text" value="" style="width:100px;" id="TB_Val" name="TB_Val" />
 <br />
 <select id="DDL_Val" name="DDL_Val" style="width:100px;" >  </select>
+
+<div id="opts"> </div>
  </td>
 </tr>
 

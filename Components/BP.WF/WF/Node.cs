@@ -2541,7 +2541,7 @@ namespace BP.WF
 
                 //表单相关.
                 map.AddTBInt(NodeAttr.FormType, 1, "表单类型", false, false);
-                map.AddTBString(NodeAttr.FormUrl, "http://", "表单URL", true, false, 0, 150, 10);
+                map.AddTBString(NodeAttr.FormUrl, "http://", "表单URL", true, false, 0, 300, 10);
                 map.AddTBString(NodeAttr.DeliveryParas, null, "接受人SQL", true, false, 0, 300, 10, true);
                 map.AddTBInt(NodeAttr.TurnToDeal, 0, "转向处理", false, false);
                 map.AddTBString(NodeAttr.TurnToDealDoc, null, "发送后提示信息", true, false, 0, 200, 10, true);

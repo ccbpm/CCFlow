@@ -2414,7 +2414,7 @@ namespace BP.WF
 
                 #region 基本属性.
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
-                map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 100, 10);
+                map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 150, 10);
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, true, 0, 100, 10, false);
 
                 map.AddTBInt(NodeAttr.Step, (int)NodeWorkType.Work, "流程步骤", true, false);
@@ -2427,7 +2427,7 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.FK_Flow, null, "FK_Flow", false, false, 0, 3, 10);
                 map.AddTBInt(NodeAttr.IsGuestNode, 0, "是否是客户执行节点", false, false);
 
-                map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 100, 10);
+                map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
 
                 //map.AddTBString(NodeAttr.FK_FlowSort, null, "FK_FlowSort", false, true, 0, 4, 10);
                 //map.AddTBString(NodeAttr.FK_FlowSortT, null, "FK_FlowSortT", false, true, 0, 100, 10);
@@ -2532,7 +2532,6 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.BatchListCount, 12, "批处理数量", true, true);
                 map.AddTBString(NodeAttr.BatchParas, null, "参数", true, false, 0, 500, 10);
                 map.AddTBInt(NodeAttr.PrintDocEnable, 0, "打印方式", true, true);
-
 
                 //与未来处理人有关系.
                 //map.AddTBInt(NodeAttr.IsFullSA, 1, "是否计算未来处理人?", false, false);

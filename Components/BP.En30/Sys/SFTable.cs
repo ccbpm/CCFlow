@@ -972,21 +972,27 @@ namespace BP.Sys
         public DataTable GenerData()
         {
             string sql = "";
+            DataTable dt = null;
             if (this.SrcType == Sys.SrcType.CreateTable)
             {
-                sql = "SELECT * FROM " + this.SrcTable;
-                return this.RunSQLReturnTable(sql);
+                sql = "SELECT No,Name FROM " + this.SrcTable;
+                dt = this.RunSQLReturnTable(sql);
             }
 
             if (this.SrcType == Sys.SrcType.TableOrView)
             {
-                sql = "SELECT * FROM " + this.SrcTable;
-                return this.RunSQLReturnTable(sql);
+                sql = "SELECT No,Name FROM " + this.SrcTable;
+                dt = this.RunSQLReturnTable(sql);
             }
 
-            throw new Exception("@没有判断的数据.");
-        }
+            if (dt == null)
+                throw new Exception("@没有判断的数据.");
 
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+
+            return dt;
+        }
         /// <summary>
         /// 返回json.
         /// </summary>

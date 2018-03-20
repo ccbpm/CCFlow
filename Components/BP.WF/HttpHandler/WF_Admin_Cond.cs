@@ -282,6 +282,7 @@ namespace BP.WF.HttpHandler
             cond.FK_Operator = oper;
             cond.OperatorValue = operVal; //操作值.
 
+
             cond.FK_Attr = field; //字段属性.
 
             //  cond.OperatorValueT = ""; // this.GetOperValText;

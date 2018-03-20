@@ -1500,6 +1500,18 @@ namespace BP.Sys
                 attr.Update("Idx",-1);
             }
         }
+
+        /// <summary>
+        /// 生成他的外键字典数据,转化为json.
+        /// </summary>
+        /// <returns></returns>
+        public string GenerHisFKData()
+        {
+            SFTable sf = new SFTable(this.UIBindKey);
+            DataTable dt= sf.GenerData();
+
+            return BP.Tools.Json.ToJson(dt);
+        }
     
         /// <summary>
         /// 下移

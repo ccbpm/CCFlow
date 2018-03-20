@@ -266,6 +266,7 @@ namespace BP.WF.HttpHandler
             string oper = this.GetRequestVal("DDL_Operator");
 
             string operVal = this.GetRequestVal("OperVal");
+            string operValT = this.GetRequestVal("OperValText");
 
             string saveType = this.GetRequestVal("SaveType"); //保存类型.
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
@@ -281,7 +282,7 @@ namespace BP.WF.HttpHandler
             cond.FK_Node = this.FK_Node;
             cond.FK_Operator = oper;
             cond.OperatorValue = operVal; //操作值.
-
+            cond.OperatorValueT = operValT;
 
             cond.FK_Attr = field; //字段属性.
 

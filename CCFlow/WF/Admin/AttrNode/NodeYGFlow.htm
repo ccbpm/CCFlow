@@ -57,13 +57,13 @@
 	    function AddGroup() {
 	        var webUser = new WebUser();
 	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
-	        OpenEasyUiDialogExt(url, "选择子流程", 600, 500, true);
+	        OpenEasyUiDialogExt(url, "选择子流程", 600, 600, true);
 	    }
 	    //查询集团的流程.
 	    function AddOrg() {
 	        var webUser = new WebUser();
 	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
-	        OpenEasyUiDialogExt(url, "选择子流程", 600, 500, true);
+	        OpenEasyUiDialogExt(url, "选择子流程", 600, 600, true);
 	    }
 
         //删除成功.
@@ -81,7 +81,7 @@
 
             var url = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
 
-            OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+            OpenEasyUiDialogExt(url, '编辑', 1000, 500, true);
 
             //window.location.href = url;
 

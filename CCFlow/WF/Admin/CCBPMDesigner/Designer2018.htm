@@ -6,6 +6,8 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
 
     <script src="Public/Designer2018.js" type="text/javascript"></script>
     <!--JL.plus-->
@@ -535,11 +537,13 @@
                                       node.Name = text;
                                       node.Update();
 
+                                      //更新节点名称与显示
+                                      $("#window" + activeId).text(text);
                                       //设置修改后的值没有设置成功. @Brilliant  
                                       var savspan = document.querySelector("#window" + activeId + " span");
                                       console.log(savspan);
-                                      //$("#window" + activeId).html(savspan).append(text); //旧数据.
-                                      location.reload();
+                                      $("#window" + activeId).html(savspan).append(text); //旧数据.
+                                      //location.reload();
                                   })
 
                               }

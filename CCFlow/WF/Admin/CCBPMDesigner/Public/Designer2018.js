@@ -7,7 +7,8 @@ function WinOpen(url) {
 function FlowProperty() {
     url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + flowNo + "&Lang=CH";
 
-    OpenEasyUiDialogExt(url, "流程属性", 900, 500, false);
+    //OpenEasyUiDialogExt(url, "流程属性", 900, 500, false);
+    window.parent.addTab(flowNo, "流程属性" + flowNo, url);
 
   //  WinOpen(url);
 
@@ -23,22 +24,25 @@ function FlowRpt() {
     flowId = String(flowId);
     url = "../RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
 
-    OpenEasyUiDialogExt(url, "报表设计", 900, 500, false);
+    //OpenEasyUiDialogExt(url, "报表设计", 900, 500, false);
+    window.parent.addTab(flowNo+"_BBSJ", "报表设计" + flowNo, url);
 }
 
-//报表设计.
+//检查流程.
 function FlowCheck() {
 
     var flowId = Number(flowNo);
     flowId = String(flowId);
     url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
-    WinOpen(url);
+    // WinOpen(url);
+    window.parent.addTab(flowNo + "_JCLC", "检查流程" + flowNo, url);
 }
 
 //运行流程
 function FlowRun() {
     var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
-    WinOpen(url);
+    //WinOpen(url);
+    window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
 }
 
 //旧版本.
@@ -83,6 +87,7 @@ function NodeAttrOld(nodeID) {
 function NodeFrmSln(nodeID) {
     //表单方案.
     var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
+    //window.parent.addTab(nodeID+"_JDFA", "节点方案" + nodeID, url);
     OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
 }
 

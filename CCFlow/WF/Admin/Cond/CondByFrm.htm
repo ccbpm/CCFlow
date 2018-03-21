@@ -30,6 +30,7 @@
 
         //初始化页面函数.....
         $(function () {
+
             //两者都隐藏.
             document.getElementById("TB_Val").style.display = "none";
             document.getElementById("DDL_Val").style.display = "none";
@@ -40,8 +41,12 @@
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
 
+            //求出来 frmID .
+           // var flow = new Entity("BP.WF.Flow", fk_flow);
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
+
             var data = handler.DoMethodReturnString("CondByFrm_Init");
 
             if (data.indexOf('err@') == 0) {

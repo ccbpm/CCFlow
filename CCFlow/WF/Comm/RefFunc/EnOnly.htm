@@ -360,11 +360,6 @@
             //外部数据源类型.
             if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
 
-                //枚举类型.
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = "";
-                else
-                    enableAttr = "disabled='disabled'";
 
                 return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
@@ -517,24 +512,29 @@
         function InitDDLOperation(flowData, mapAttr, defVal) {
 
             var operations = '';
-            //外键类型.
-            if (mapAttr.LGType == 2) {
 
                 var data = frmData[mapAttr.KeyOfEn];
-                if (data == undefined)
+                 if (data == undefined)
                     data = frmData[mapAttr.UIBindKey];
+
+            //外键类型.
+            if (mapAttr.LGType == 2) {
 
                 if (data == undefined) {
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
                     return;
                 }
-                
-              //  alert(defVal);
-
 
                 $.each(data, function (i, obj) {
                     operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
                 });
+            }
+
+            if (mapAttr.LGType == 0 && data != undefined) {
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+                return operations;
             }
 
 
@@ -560,6 +560,7 @@
                         fn = eval(mapAttr.UIBindKey);
                     }
                 } catch (e) {
+
                 }
                 if (typeof fn == "function") {
                     $.each(fn.call(), function (i, obj) {

@@ -393,6 +393,8 @@ namespace BP.WF.HttpHandler
             dtStart.Columns.Add("FK_FlowSort");
             dtStart.Columns.Add("IsBatchStart");
             dtStart.Columns.Add("IsStartInMobile");
+            dtStart.Columns.Add("Note");
+
 
             //获得所有的流程（包含了所有子公司与集团的可以发起的流程但是没有根据组织结构进行过滤.）
             DataTable dtAllFlows = Dev2Interface.DB_StarFlows(Web.WebUser.No);
@@ -412,6 +414,7 @@ namespace BP.WF.HttpHandler
                     drNew["FK_FlowSort"] = drFlow["FK_FlowSort"];
                     drNew["IsBatchStart"] = drFlow["IsBatchStart"];
                     drNew["IsStartInMobile"] = drFlow["IsStartInMobile"];
+                    drNew["Note"] = drFlow["Note"];
                     dtStart.Rows.Add(drNew); //增加到里里面去.
                 }
             }

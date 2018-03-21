@@ -41,7 +41,7 @@
 	            var en = ens[i];
 	            html += "<tr>";
 	            html += "<td>" + en.FK_FlowText + "</td>";
-	            html += "<td>" + en.YGWorkWayText + "</td>";
+	          //  html += "<td>" + en.YGWorkWayText + "</td>";
 	            html += "<td><a href=\"javascript:Edit('" + en.OID + "');\" >编辑</a></td>";
 	            html += "<td><a href=\"javascript:Delete('" + en.OID + "');\" >删除</a></td>";
 	            html += "</tr>";
@@ -57,13 +57,13 @@
 	    function AddGroup() {
 	        var webUser = new WebUser();
 	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
-	        OpenEasyUiDialogExt(url, "选择子流程", 600, 600, true);
+	        OpenEasyUiDialogExt(url, "选择子流程", 900, 600, true);
 	    }
 	    //查询集团的流程.
 	    function AddOrg() {
 	        var webUser = new WebUser();
 	        var url = "NodeYGFlowDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
-	        OpenEasyUiDialogExt(url, "选择子流程", 600, 600, true);
+	        OpenEasyUiDialogExt(url, "选择子流程", 900, 600, true);
 	    }
 
         //删除成功.
@@ -81,8 +81,7 @@
 
             var url = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeYGFlow&PKVal=" + pk;
 
-            OpenEasyUiDialogExt(url, '编辑', 1000, 500, true);
-
+            OpenEasyUiDialogExt(url, '编辑', 900, 600, true);
             //window.location.href = url;
 
         }
@@ -95,7 +94,6 @@
 
         <tr>
         <th>流程名称</th>
-        <th>工作方式</th>
         <th>编辑</th>
         <th>删除</th>
         </tr>

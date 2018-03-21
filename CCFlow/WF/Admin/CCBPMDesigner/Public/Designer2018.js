@@ -64,17 +64,19 @@ function Help() {
 //节点属性
 function NodeAttr(nodeID) {
 
-    var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
+    //var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
+    var url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&NodeID=" + nodeID + "&Lang=CH";
     var html = "";
 
     //var html = "<a href=\"javascript:OpenEasyUiDialogExt('" + url + "','';\" >主页</a> - ";
-
-    OpenEasyUiDialogExt(url, html+"属性", 900, 500, false);
+    window.parent.addTab(nodeID, "节点属性" + nodeID, url);
+    //OpenEasyUiDialogExt(url, html+"属性", 900, 500, false);
 }
 //节点属性
 function NodeAttrOld(nodeID) {
     var url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&NodeID=" + nodeID + "&Lang=CH";
-    OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
+    window.parent.addTab(nodeID,"节点属性"+nodeID,url);
+    //OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
 }
 
 //节点方案

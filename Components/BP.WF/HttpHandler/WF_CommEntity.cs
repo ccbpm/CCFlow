@@ -566,6 +566,8 @@ namespace BP.WF.HttpHandler
                 #endregion 字段属性.
 
                 #region 把外键与枚举放入里面去.
+
+                //加入外键.
                 foreach (DataRow dr in sys_MapAttrs.Rows)
                 {
                     string uiBindKey = dr["UIBindKey"].ToString();
@@ -589,6 +591,9 @@ namespace BP.WF.HttpHandler
                     string fk_mapData = dr["FK_MapData"].ToString();
 
 
+                  
+
+
                     // 判断是否存在.
                     if (ds.Tables.Contains(uiBindKey) == true)
                         continue;
@@ -596,6 +601,31 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }
 
+                //加入sql模式的外键.
+                foreach (Attr attr in en.EnMap.Attrs)
+                {
+                    if (attr.IsRefAttr == true)
+                        continue;
+
+                    if (DataType.IsNullOrEmpty(attr.UIBindKey) || attr.UIBindKey.Length <= 10)
+                        continue;
+
+                    if (attr.UIIsReadonly == true)
+                        continue;
+
+                    if (attr.UIBindKey.Contains("SELECT") == true || attr.UIBindKey.Contains("select") == true)
+                    {
+                        /*是一个sql*/
+                        string sqlBindKey = attr.UIBindKey.Clone() as string;
+                        sqlBindKey = BP.WF.Glo.DealExp(sqlBindKey, en, null);
+
+                        DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);
+                        dt.TableName = attr.Key;
+                        ds.Tables.Add(dt);
+                    }
+                }
+
+                //加入枚举的外键.
                 string enumKeys = "";
                 foreach (Attr attr in map.Attrs)
                 {

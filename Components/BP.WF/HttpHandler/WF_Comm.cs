@@ -1521,7 +1521,10 @@ namespace BP.WF.HttpHandler
 
             ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
             ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
+
             ht.Add("GroupNo", WebUser.GroupNo);
+
+
 
             return BP.Tools.Json.ToJson(ht);
         }

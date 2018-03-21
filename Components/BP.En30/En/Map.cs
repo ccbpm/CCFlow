@@ -1777,7 +1777,7 @@ namespace BP.En
 
 			attr.UIBindKey = sql;
 			attr.HisFKEns = null;
-			attr.UIIsReadonly = uiIsEnable;
+			attr.UIIsReadonly = !uiIsEnable;
 			this.Attrs.Add(attr);
 
 
@@ -1791,7 +1791,7 @@ namespace BP.En
 			attr.MaxLength = 50;
 			attr.Desc = desc;
 			attr.UIContralType = UIContralType.TB;
-			attr.UIBindKey = sql;
+		//	attr.UIBindKey = sql;
 			attr.UIIsReadonly = true;
 			attr.UIVisible = false;
 			this.Attrs.Add(attr);

@@ -43,7 +43,7 @@
 	        var nodeDepts = new Entities("BP.WF.Template.NodeDepts");
 	        nodeDepts.Retrieve("FK_Node", nodeID);
 
-	        var nodeDept = new Entities("P.WF.Template.NodeDept");
+	        var nodeDept = new Entity("P.WF.Template.NodeDept");
 
 	        $.each(nodeDepts, function (i, o) {
 
@@ -69,7 +69,7 @@
 
 	        var ens = new Entities("BP.WF.Port.Depts");
 	        ens.Retrieve("OrgNo", orgNo);
-	        var jsonTree = findChildren(ens, rootNo);
+	        var jsonTree = createJsonToTree(ens, rootNo);
 
 	        //查询出来数据.
 	        $('#tree').tree({
@@ -91,67 +91,30 @@
 	        }); 
 	    }
 
-	    function findChildren(jsonArray, parentNo) {
-
-	        var appendToTree = function (treeToAppend, child) {
-
-	            $.each(treeToAppend, function (i, o) {
-	                if (o.id == child.ParentNo) {
-
-	                    var checked = false;
-
-	                    var selectedNodes = window.selectedNodes;
-	                    var sel = $.grep(selectedNodes, function (obj) {
-	                        return child.No == obj.No;
-	                    });
-
-	                    if (sel.length > 0) {
-	                        checked = true;
-	                    }
-
-	                    //@代国强， 估计这里出问题了，装载以后，没有把已经装
-	                    o.children.push({
-	                        "id": child.No,
-	                        "text": child.Name,
-	                        "children": [],
-	                        "checked": checked,
-	                        "state": 'closed'
-	                    });
-	                } else {
-	                    appendToTree(o.nodes, child);
-	                }
-	            });
-	        };
-
-	        var jsonTree = [];
-
-	        $.each(jsonArray, function (i, o) {
-
-	            if (o.ParentNo == parentNo) {
+	    //树形结构转换
+	    var treeJson = [];
+	    function createJsonToTree(jsonArray, parentNo) {
+	        for (var i = 0; i < jsonArray.length; i++) {
+	            var data = jsonArray[i];
+	            if (data.ParentNo == parentNo) {
 	                var checked = false;
-
 	                var selectedNodes = window.selectedNodes;
 	                var sel = $.grep(selectedNodes, function (obj) {
-	                    return o.No == obj.No;
+	                    return data.No == obj.No;
 	                });
 
 	                if (sel.length > 0) {
 	                    checked = true;
 	                }
-
-	                jsonTree.push({
-	                    "id": o.No,
-	                    "text": o.Name,
-	                    "children": [],
+	                treeJson.push({
+	                    "id": data.No,
+	                    "text": data.Name,
+	                    "children": creatTreeChildern(jsonArray, data.No),
 	                    "checked": checked,
 	                    "state": 'closed'
 	                });
-	            } else {
-	                appendToTree(jsonTree, o);
 	            }
-	        });
-
-
+	        }
 	        function _(treeArray) {
 	            $.each(treeArray, function (i, o) {
 	                if ($.isArray(o.nodes)) {
@@ -163,8 +126,35 @@
 	                }
 	            });
 	        }
-	        _(jsonTree);
-	        return jsonTree;
+	        _(treeJson);
+	        return treeJson;
+	    }
+
+	    function creatTreeChildern(jsonArray, parentNo) {
+	        var childList = []
+	        for (var i = 0; i < jsonArray.length; i++) {
+	            var data = jsonArray[i];
+	            if (data.ParentNo == parentNo) {
+	                var checked = false;
+	                var selectedNodes = window.selectedNodes;
+	                var sel = $.grep(selectedNodes, function (obj) {
+	                    return data.No == obj.No;
+	                });
+
+	                if (sel.length > 0) {
+	                    checked = true;
+	                }
+	                childList.push({
+	                    "id": data.No,
+	                    "text": data.Name,
+	                    "children": creatTreeChildern(jsonArray, data.No),
+	                    "checked": checked,
+	                    "state": 'closed'
+	                });
+	            }
+	        }
+
+	        return childList;
 	    }
 
 	    

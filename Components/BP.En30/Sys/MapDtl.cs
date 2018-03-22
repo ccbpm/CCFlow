@@ -1681,6 +1681,7 @@ namespace BP.Sys
             if (md.RetrieveFromDBSources() == 1)
             {
                 md.Name = this.Name;
+                md.PTable = this.PTable;
                 md.DirectUpdate();
             }
 

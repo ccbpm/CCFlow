@@ -50,11 +50,11 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
 		dlg.children().remove();
 		dlg.empty();
 		dlg.html("");
-		dlg.append("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
+		dlg.append("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:97%'></iframe>");
     }
 	if (dlg.length == 1 && $('#' + iframeId).length == 0) {
 		console.log("never happend");
-		dlg.html("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
+		dlg.html("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:97%'></iframe>");
     }
 
 	if (typeof window.doCloseDialog != "function") {

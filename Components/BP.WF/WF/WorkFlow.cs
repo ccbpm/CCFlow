@@ -480,6 +480,7 @@ namespace BP.WF
                 }
                 catch
                 {
+
                 }
             }
             #endregion 删除独立表单的数据.
@@ -511,6 +512,9 @@ namespace BP.WF
             {
                 try
                 {
+                    if (DBAccess.IsExitsObject("ND" + nd.NodeID) == false)
+                        continue;
+
                     DBAccess.RunSQL("DELETE FROM ND" + nd.NodeID + " WHERE OID=" + workid + " OR FID=" + workid);
                 }
                 catch (Exception ex)
@@ -518,6 +522,7 @@ namespace BP.WF
                     msg += "@ delete data error " + ex.Message;
                 }
             }
+
             if (msg != "")
             {
                 Log.DebugWriteInfo(msg);

@@ -2260,14 +2260,8 @@ namespace BP.WF
                 if (gwf.PWorkID == 0)
                     throw new Exception("@当前节点是开始节点并且不是子流程，您不能执行退回。");
 
-                //if (gwf.PWorkID==0)
-                //    throw new Exception("@当前节点是开始节点,开始节点只能退回到父流程上,但是没有找到退回到父流程节点。");
-
-
                 GenerWorkerLists gwls = new GenerWorkerLists();
                 int i = gwls.Retrieve(GenerWorkerListAttr.WorkID, gwf.PWorkID);
-
-
                 string nodes = "";
                 foreach (GenerWorkerList gwl in gwls)
                 {
@@ -2285,13 +2279,7 @@ namespace BP.WF
                     dr["IsBackTracking"] = "0";
                     dt.Rows.Add(dr);
                 }
-
                 return dt;
-
-
-
-
-               // throw new Exception("@系统错误,没有找到退回到父流程节点。");
             }
 
             if (nd.HisRunModel == RunModel.SubThread)

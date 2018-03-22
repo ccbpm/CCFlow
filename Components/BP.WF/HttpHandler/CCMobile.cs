@@ -318,7 +318,7 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 2、处理流程类别列表.
-            if (tSpan == null)
+            if (tSpan == "-1")
                 sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "'  AND WFState > 1 GROUP BY FK_Flow, FlowName";
             else
                 sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY FK_Flow, FlowName";
@@ -344,7 +344,7 @@ namespace BP.WF.HttpHandler
             qo.AddWhere(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
             qo.addRightBracket();
 
-            if (tSpan != null)
+            if (tSpan != "-1")
             {
                 qo.addAnd();
                 qo.AddWhere(GenerWorkFlowAttr.TSpan, tSpan);

@@ -1386,7 +1386,7 @@ namespace BP.Web.UC
         }
         public void AddFieldSet(string title, string doc)
         {
-            this.Add("<fieldset id='FieldsetInfo' class='FieldsetInfo' ><legend>&nbsp;" + title + "&nbsp;</legend>");
+            this.Add("<fieldset id='FieldsetInfo'   ><legend>&nbsp;" + title + "&nbsp;</legend>");
 
             this.Add(doc);
 

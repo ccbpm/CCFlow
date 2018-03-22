@@ -1525,7 +1525,6 @@ namespace BP.WF.HttpHandler
             ht.Add("GroupNo", WebUser.GroupNo);
 
 
-
             return BP.Tools.Json.ToJson(ht);
         }
         /// <summary>

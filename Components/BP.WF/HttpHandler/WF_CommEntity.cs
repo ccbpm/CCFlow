@@ -590,10 +590,6 @@ namespace BP.WF.HttpHandler
                     string keyOfEn = dr["KeyOfEn"].ToString();
                     string fk_mapData = dr["FK_MapData"].ToString();
 
-
-                  
-
-
                     // 判断是否存在.
                     if (ds.Tables.Contains(uiBindKey) == true)
                         continue;

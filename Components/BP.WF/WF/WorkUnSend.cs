@@ -372,7 +372,7 @@ namespace BP.WF
                 GenerWorkFlow gwfSubFlow = new GenerWorkFlow();
                 int i = gwfSubFlow.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
                 if (i == 1)
-                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(gwfSubFlow.FK_Flow, gwfSubFlow.WorkID, true);
+                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(gwfSubFlow.FK_Flow, gwfSubFlow.WorkID,true);
 
                 //执行回复当前节点待办..
                 sql = "UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND FK_Node="+gwf.FK_Node+" AND WorkID="+this.WorkID;

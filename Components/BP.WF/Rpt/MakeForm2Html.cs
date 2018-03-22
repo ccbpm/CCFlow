@@ -1394,6 +1394,7 @@ namespace BP.WF
                     fileNameFormat = workid.ToString();
 
                 fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);
+
                 #endregion
 
                 Hashtable ht = new Hashtable();
@@ -1415,13 +1416,13 @@ namespace BP.WF
                 catch (Exception ex)
                 {
                     /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
-                    fileNameFormat = DBAccess.RunSQLReturnStringIsNull("SELECT BillNo FROM WF_GenerWorkFlow WHERE WorkID=" + workid, workid.ToString());
+                    fileNameFormat = DBAccess.GenerGUID();
                     pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
 
                     try
                     {
                         Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
                     }
                     catch
                     {

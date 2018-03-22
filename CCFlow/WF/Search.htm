@@ -123,12 +123,16 @@
                 }
 
                 todoEmpsName = en.TodoEmps;
-                todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
+
+                if (todoEmpsName != null)
+                    todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
 
                 //是否可以执行当前工作?
                 var isCanDo = false;
-                if (en.TodoEmps.indexOf(webUser.No) != -1)
-                    isCanDo = true;
+                if (en.TodoEmps != null) {
+                    if (en.TodoEmps.indexOf(webUser.No) != -1)
+                        isCanDo = true;
+                }
 
                 //获得icon.
                 var icon = GenerICON(isCanDo, en.WFState);

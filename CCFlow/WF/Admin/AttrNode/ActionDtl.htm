@@ -33,55 +33,46 @@
 
             var fk_Event = GetQueryString("FK_Event");
 
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("ActionDtl_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
+            data = JSON.parse(data);
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=ActionDtl_Init&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&FK_MapData="+GetQueryString("FK_MapData")+"&FK_Event=" + fk_Event + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            // 业务单元
+            var buess = data["BuessUnits"];
+            GenerBindDDL("DDL_Doc", buess, "No", "Name", "");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var ens = data["FrmEvents"];
 
-                    data = JSON.parse(data);
+            for (var i = 0; i < ens.length; i++) {
 
-                    // 业务单元
-                    var buess = data["BuessUnits"];
-                    GenerBindDDL("DDL_Doc", buess, "No", "Name", "");
+                var en = ens[i];
 
-                    var ens = data["FrmEvents"];
+                var newRow = "<tr>";
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + GetDoType(en.DoType) + "</td>";
+                newRow += "<td>" + en.DoDoc + "</td>";
+                newRow += "<td>" + en.MsgOK + "</td>";
+                newRow += "<td>" + en.MsgError + "</td>";
+                newRow += "<td>";
+                newRow += "<a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "</td>";
+                newRow += "</tr>";
 
-                    for (var i = 0; i < ens.length; i++) {
+                $("#Table1 tr:last").after(newRow);
+            }
 
-                        var en = ens[i];
+            //  document.getElementById('Table1').caption = "事件类:" + nodeID;
 
-                        var newRow = "<tr>";
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + GetDoType(en.DoType) + "</td>";
-                        newRow += "<td>" + en.DoDoc + "</td>";
-                        newRow += "<td>" + en.MsgOK + "</td>";
-                        newRow += "<td>" + en.MsgError + "</td>";
-                        newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
-                        newRow += "</td>";
-                        newRow += "</tr>";
+            //事件类型.
+            //var eventLists = data["EventLists"];
 
-                        $("#Table1 tr:last").after(newRow);
-                    }
-
-                    //  document.getElementById('Table1').caption = "事件类:" + nodeID;
-
-                    //事件类型.
-                    //var eventLists = data["EventLists"];
-
-
-                }
-            });
         });
 
         function GetDoType(doType) {
@@ -106,26 +97,19 @@
 
         function Save() {
 
-            var frmData = $("#cc").serialize();
 
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=ActionDtl_Save&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event="+GetQueryString("FK_Event")+"&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("ActionDtl_Save");
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
 
-                    alert(data);
-
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            window.location.href = window.location.href;
+            return;
         }
 
         function Delete(mypk) {
@@ -133,25 +117,22 @@
             if (confirm('您确定要删除吗？') == false)
                 return;
 
-            var frmData = $("#cc").serialize();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            handler.AddFormData();
+            handler.AddPara("MyPK", mypk);
 
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=ActionDtl_Delete&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&MyPK=" + mypk + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
+            var data = handler.DoMethodReturnString("ActionDtl_Delete");
 
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
 
+            alert(data);
+
+            window.location.href = window.location.href;
+            return;
         }
 		function doChangeContent(o) {
 			if ($(o).val() == "7") {
@@ -197,17 +178,20 @@
 </tr>
 
 <tr>
-<td colspan=2>
+<td colspan=1>
 执行成功信息提示(可为空)
-<br />
+</td>
+<td colspan=1>
  <input type=text  id="MsgOK" name="MsgOK" />
 </td>
 </tr>
 
 <tr>
-<td colspan=2>
+<td colspan=1>
 执行失败时提示(可为空)
-<br />
+</td>
+
+<td>
  <input type=text  id="MsgError"  name="MsgError" />
 </td>
 </tr>

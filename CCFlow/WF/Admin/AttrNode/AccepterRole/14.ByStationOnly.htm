@@ -3,7 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title> 
-    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -19,8 +18,11 @@
     <script  type="text/javascript">
 
         $(function () {
+
             InitBar(DeliveryWay.ByStationOnly);
 
+
+            //输出已经设置的岗位.
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
@@ -40,10 +42,9 @@
             $("#OrgModel").hide();
             $("#AdminModel").hide();
 
-            if (user.FK_Dept == 0) {
+            if (user.GroupNo == "0") {
                 /*调用通用的.*/
                 $("#AdminModel").show();
-
             } else {
                 /*调用集团模式的.*/
                 $("#OrgModel").show();
@@ -102,7 +103,7 @@
         <ul>
             <li><a href="javascript:OpenOld()">设置/更改岗位(旧版本)</a></li>
             <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
-            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../Img/Help.png' style="vertical-align: middle" />帮助</a>
+            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a>
             </li>
         </ul>
     </fieldset>
@@ -113,7 +114,7 @@
         <ul>
             <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
             <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
-            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../Img/Help.png' style="vertical-align: middle" />帮助</a>
+            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a>
             </li>
         </ul>
     </fieldset>

@@ -360,8 +360,8 @@
             //外部数据源类型.
             if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
 
-
                 return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                 
             }
 
             //外键类型.
@@ -530,7 +530,9 @@
                 });
             }
 
+            //外部数据源类型.
             if (mapAttr.LGType == 0 && data != undefined) {
+                operations = "";
                 $.each(data, function (i, obj) {
                     operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
                 });

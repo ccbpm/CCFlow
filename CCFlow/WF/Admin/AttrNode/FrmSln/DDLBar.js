@@ -1,7 +1,7 @@
 ﻿
 function InitBar(optionKey) {
 
-    var html = "请选择表单方案:";
+    var html = "表单方案:";
     html += "<select id='changBar' onchange='changeOption()'>";
     html += "<option value=" + FormType.FoolForm + ">0.内置傻瓜表单</option>";
     html += "<option value=" + FormType.FreeForm + ">1.内置自由表单</option>";

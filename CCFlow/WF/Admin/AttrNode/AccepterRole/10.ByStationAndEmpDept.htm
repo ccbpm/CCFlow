@@ -3,7 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title> 
-    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -83,13 +82,29 @@
 
 <div id="bar"> </div>
 
+<table style="width:100%; border:0px;">
+<tr>
+
+<td style="width:50%;"> 
+
 <fieldset>
-    <legend>设置</legend>
+    <legend>设置岗位</legend>
 
     <ul>
         <li>
              <a href="javascript:OpenStation()"> 设置与更改岗位</a> 
         </li>
+    </ul>
+</fieldset>
+ </td>
+
+
+ 
+<td style="width:50%;"> 
+<fieldset>
+    <legend>设置部门</legend>
+
+    <ul>
         <li> 
             <a href="javascript:OpenNew()"> 设置/更改部门</a>
         </li>
@@ -99,14 +114,37 @@
 
     </ul>
 </fieldset>
+ </td>
+
+</tr>
+<tr>
+
+
+
+<td>
 <fieldset>
     <legend>已经设置的岗位</legend>
     <div id="stas"> </div>
-</fieldset>
+</fieldset>  </td>
+
+
+<td> 
 <fieldset>
     <legend>已经设置的部门</legend>
     <div id="dept"> </div>
 </fieldset>
+ </td>
+</tr>
+
+
+
+
+</table>
+
+
+
+
+
 
 <fieldset>
     <legend>说明</legend>

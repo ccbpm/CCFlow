@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title> 
-    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
      <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -81,14 +80,35 @@
     <legend>呈现风格</legend>
     <input type="radio"  value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label  for="RB_tree" >表单树 </label>
     <input type="radio"  value="1" id="RB_tab"  name="SheetTreeModel" /> <label  for="RB_tab" >Tab标签页 </label>
-    [<a href="javascript:BindFrms()" >绑定/取消绑定</a> ] [ <a href="javascript:BindAttrs()" >设置表单字段控件权限</a>]
+
+
 </fieldset>
+
+
+<fieldset>
+    <legend>绑定表单</legend>
+    <ul>
+    <li>  <a href="javascript:BindFrms()" >绑定/取消绑定表单</a> </li>
+    </ul>
+</fieldset>
+
+
+<fieldset>
+    <legend>设定每个表单的权限</legend>
+    <ul>
+    <li>  <a href="javascript:BindAttrs()" >设置表单字段控件权限</a></li>
+    </ul>
+</fieldset>
+
+
 <fieldset>
     <legend>说明</legend>
     <font color="gray">
         <ul>
              <li>我们把一个节点需要绑定多个表单的节点称为多表单节点，它有两种展现方式，标签页与表单树。</li>
              <li>对应的流程demo:\\流程树\\表单解决方案\\树形表单与多表单 </li>
+             <li><img src='../Img/Tree.png' border="0px" style="width:70%;"  /> </li>
+
         </ul>
     </font>
 </fieldset>

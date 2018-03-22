@@ -20,7 +20,9 @@
     <script  type="text/javascript">
         var nodeFrmID = "";
         $(function () {
+            
             InitBar(FormType.RefOneFrmTree);
+
             var html = "";
             //获取节点属性
             var nodeID = GetQueryString("FK_Node");
@@ -44,7 +46,7 @@
             frms.Retrieve("FK_FormTree", sortNo);
              
             //绑定表单
-            GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", node.NodeFrmID);
+            GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
             nodeFrmID = node.NodeFrmID;
 
             //表单库的表单.
@@ -81,7 +83,7 @@
             frms.Retrieve("FK_FormTree", sortNo);
              
             //绑定表单
-            GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", nodeFrmID);
+            GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", nodeFrmID);
         }
 
         function Save() {
@@ -133,12 +135,26 @@
 
 <div id="bar"> </div>
 <fieldset>
-    <legend>设置</legend>
-
-    表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()" > </select>
-    表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree" > </select>
-    <div id="Div_RefOneFrmTree" ></div>
+    <legend>选择表单</legend>
+    <ul>
+    <li>表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()" > </select> </li>
+    <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree" > </select> </li>
+    </ul>
+    
 </fieldset>
+
+<fieldset>
+    <legend>设置字段权限</legend>
+
+    <ul>
+    <li>为该表单的元素设置权限</li>
+    <li><div id="Div_RefOneFrmTree" ></div> </li>
+    </ul>
+
+    
+
+</fieldset>
+
 
 <fieldset>
     <legend>说明</legend>

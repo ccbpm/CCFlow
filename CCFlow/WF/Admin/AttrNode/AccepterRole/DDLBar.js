@@ -5,7 +5,7 @@ function InitBar(key) {
     optionKey = key;
 
    // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
-    var html = "<div style='' > 请选择访问规则: ";
+    var html = "<div style='' >访问规则: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 

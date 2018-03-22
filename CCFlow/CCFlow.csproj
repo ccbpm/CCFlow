@@ -504,7 +504,6 @@
     <Content Include="WF\WorkOpt\PrintDocQRGuide.htm" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
-    <Content Include="WF\Admin\AttrNode\ActionEvent.aspx" />
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
     <Content Include="WF\Admin\AttrNode\Img\Doc.png" />
     <Content Include="WF\Admin\AttrNode\Img\FreeFrm.png" />
@@ -514,7 +513,6 @@
     <Content Include="WF\Admin\AttrNode\Img\Tree.png" />
     <Content Include="WF\Admin\AttrNode\NodeAccepterRole.aspx" />
     <Content Include="WF\Admin\AttrNode\NodeCCRole.aspx" />
-    <Content Include="WF\Admin\AttrNode\PushMessageEntity.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
@@ -7056,13 +7054,6 @@
     <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.designer.cs">
       <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrNode\ActionEvent.aspx.cs">
-      <DependentUpon>ActionEvent.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\ActionEvent.aspx.designer.cs">
-      <DependentUpon>ActionEvent.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrNode\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -7079,13 +7070,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\NodeCCRole.aspx.designer.cs">
       <DependentUpon>NodeCCRole.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\PushMessageEntity.aspx.cs">
-      <DependentUpon>PushMessageEntity.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\PushMessageEntity.aspx.designer.cs">
-      <DependentUpon>PushMessageEntity.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx.cs">
       <DependentUpon>SepcFiledsSepcUsers.aspx</DependentUpon>

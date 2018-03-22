@@ -27,14 +27,15 @@
             var url = "";
 
             var _tspan = GetQueryString("TSpan");
-            if (_tspan == undefined || _tspan == null || _tspan == "") {
+            if (_tspan == undefined || _tspan == null || _tspan == "" || _tspan == "null") {
                 _tspan = "-1";
             }
 
             var _flowNo = GetQueryString("FK_Flow");
-            if (_flowNo == undefined || _flowNo == null || _flowNo == "") {
+            if (_flowNo == undefined || _flowNo == null || _flowNo == "" || _flowNo == "null") {
                 _flowNo = "";
             }
+
             if (_flowNo == "" && _tspan == "")
                 _tspan = "-1";
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <NewDataSet>
   <WF_Flow>
     <No>138</No>
@@ -3910,7 +3910,7 @@
     <MTR />
     <GUID />
     <FK_Node>0</FK_Node>
-    <AtPara>@IsFLDtl=1@IsRowLock=0@IsEnableLink=0@LinkUrl=http://ccport.org@SubThreadWorker=FuZeRen@SubThreadGroupMark=BianHao@LinkTarget=_blank@LinkLabel=详细</AtPara>
+    <AtPara></AtPara>
     <IsExp>1</IsExp>
     <IsImp>1</IsImp>
     <IsEnableSelectImp>0</IsEnableSelectImp>

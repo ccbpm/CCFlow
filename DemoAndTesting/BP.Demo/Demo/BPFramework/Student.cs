@@ -118,7 +118,6 @@ namespace BP.Demo.BPFramework
                 this.SetValByKey(StudentAttr.Addr, value);
             }
         }
-
         /// <summary>
         /// 性别
         /// </summary>
@@ -301,7 +300,6 @@ namespace BP.Demo.BPFramework
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
                   StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "学习的科目");
 
-
                 //明细表映射.
                 map.AddDtl(new Resumes(), ResumeAttr.RefPK);
 
@@ -353,6 +351,7 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoJiaoNaBanFei(decimal jine, string note)
         {
+
             return "学号:"+this.No+",姓名:"+this.Name+",缴纳了:"+jine+"元,说明:"+note;
         }
         /// <summary>
@@ -401,6 +400,17 @@ namespace BP.Demo.BPFramework
             }
         }
         #endregion 重写基类方法
+
+        #region 测试方法.
+        public string EnsMothed()
+        {
+            return "EnsMothed@执行成功.";
+        }
+        public string EnsMothedParas(string para1,string para2)
+        {
+            return "EnsMothedParas@执行成功." + para1 + " - " + para2;
+        }
+        #endregion
 
     }
 }

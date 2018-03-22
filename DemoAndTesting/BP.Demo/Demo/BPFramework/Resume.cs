@@ -38,7 +38,7 @@ namespace BP.Demo
     /// <summary>
     /// 简历
     /// </summary>
-    public class Resume : EntityOID
+    public class Resume : BP.En.EntityOID
     {
         #region 属性
         /// <summary>
@@ -145,6 +145,8 @@ namespace BP.Demo
                 map.AddTBString(ResumeAttr.ZhengMingRen, "", "证明人", true, false, 1, 200, 50);
                 map.AddTBString(ResumeAttr.BeiZhu, null, "备注", true, false, 0, 200, 150);
                 map.AddTBString("QT", null, "其他", true, false, 0, 200, 150);
+                map.AddTBString("QT2", null, "其他11", true, false, 0, 200, 150);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -175,7 +177,7 @@ namespace BP.Demo
     /// <summary>
     /// 简历s
     /// </summary>
-    public class Resumes : EntitiesOID
+    public class Resumes : BP.En.EntitiesOID
     {
         #region 方法
         /// <summary>

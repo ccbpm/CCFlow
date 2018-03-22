@@ -59,9 +59,9 @@ namespace BP.Demo.FlowEvent
                     //this.JumpToEmps = "zhangsan,lisi";
                     //this.JumpToNode = new Node(102);
 
-                    this.JumpToNodeID = 103;
-                    this.JumpToEmps = "zhoupeng,liping";
-                    this.ND01_SaveAfter();
+                  //  this.JumpToNodeID = 103;
+                   // this.JumpToEmps = "zhoupeng,liping";
+                   // this.ND01_SaveAfter();
 
                     return "SendWhen事件已经执行成功。";
                 default:
@@ -70,6 +70,19 @@ namespace BP.Demo.FlowEvent
             return null;
         }
         #endregion 发送事件.
+
+        /// <summary>
+        /// 执行装载前的事件.
+        /// </summary>
+        /// <returns>return null 不刷新，任何数据，都会刷新数据.</returns>
+        public override string FrmLoadBefore()
+        {
+
+            //throw new Exception("sssssssssssssss");
+            return "执行成功.";
+
+            //return base.FrmLoadBefore();
+        }
 
         /// <summary>
         /// 保存后执行的事件
@@ -101,6 +114,8 @@ namespace BP.Demo.FlowEvent
 
             if (DBAccess.IsExitsObject("ND101") == false)
                 return;
+
+          //  string val=this.getva
 
             //求出明细表的合计.
             float hj = BP.DA.DBAccess.RunSQLReturnValFloat("SELECT SUM(XiaoJi) as Num FROM ND101Dtl1 WHERE RefPK=" + this.OID, 0);

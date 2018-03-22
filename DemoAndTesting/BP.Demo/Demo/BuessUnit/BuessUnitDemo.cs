@@ -21,7 +21,6 @@ namespace BP.Demo.BuessUnit
                 return "业务单元测试";
             }
         }
-
         public override string DoIt()
         {
            // this.WorkID;

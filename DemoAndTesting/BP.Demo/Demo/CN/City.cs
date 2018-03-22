@@ -6,7 +6,7 @@ using BP.Port;
 namespace BP.CN
 {
 	/// <summary>
-	/// 城市 
+	/// 城市属性
 	/// </summary>
     public class CityAttr : EntityNoNameAttr
     {
@@ -37,12 +37,20 @@ namespace BP.CN
             {
                 return this.GetValStrByKey(CityAttr.FK_PQ);
             }
+            set
+            {
+                this.SetValByKey(CityAttr.FK_PQ, value);
+            }
         }
         public string FK_SF
         {
             get
             {
                 return this.GetValStrByKey(CityAttr.FK_SF);
+            }
+            set
+            {
+                this.SetValByKey(CityAttr.FK_SF, value);
             }
         }
         public string PinYin
@@ -107,6 +115,8 @@ namespace BP.CN
                 map.AddDDLEntities(CityAttr.FK_PQ, null, "片区", new PQs(), true);
                 map.AddTBString(CityAttr.PinYin, null, "搜索拼音", true, false, 0, 200, 200);
 
+                map.AddTBString(CityAttr.PinYin, null, "拼音", true, false, 0, 200, 200);
+                
                 map.AddSearchAttr(CityAttr.FK_SF);
                 #endregion
 
@@ -118,7 +128,7 @@ namespace BP.CN
 
     }
 	/// <summary>
-	/// 城市
+	/// 城市s
 	/// </summary>
 	public class Citys : EntitiesNoName
 	{

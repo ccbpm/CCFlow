@@ -232,16 +232,7 @@ caption
 }
 
 /* 在输入信息字段名称，单元格式的风格 */
-.FDesc
-{
-    padding-left: 4px;
-    text-align: left;
-    font-size: 12px;
-    margin-left: 4px;
-    background-color: #FCFCFC;
-    border: lightgrey 1px solid;
-    border-top: none;
-}
+ 
 
 .FContext
 {
@@ -308,6 +299,9 @@ caption
 /* 内部标签风格 */
 fieldset
 {
+    border-style: 1;
+    border-width: 1px;
+    border-color: #D8D8D8;
     margin: 5px;
     table-layout: auto;
     padding: 2px;
@@ -319,23 +313,10 @@ legend
     color: green;
     font-style: inherit;
     font-weight: bold;
-    margin-bottom:0px;
-    margin-top:0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
-
-.FieldsetInfo
-{
-    border-left: 0px;
-    border-right: 0px;
-    border-bottom: 0px;
-    border-top: 1px outset;
-    border-top-color: #CCCCCC;
-    border-right-color: inherit;
-    border-left-color: inherit;
-    border-width: 1px 0px 0px 0px;
-    border-style: outset none outset none;
-}
-
+ 
 Img
 {
     border: 0px;
@@ -577,11 +558,21 @@ input[type=text], input[type=password], select
 {
     border-radius: 5px;
     border: thin solid #CCCCCC;
-    margin: 2px 2px;
+    margin: 1px 1px;
     height: 23px;
 }
 
-
+.FDesc
+{
+    padding: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin: 4px;
+    background-color: #e0ecff;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: 30%;
+}
 
 select {
     height: 29px;
@@ -660,8 +651,7 @@ display:none;
 .modal-header {
     background: #6975F4;
     color: white;
-    height:36px;
-    padding:5px;
+    height:50px;
 }
 
 
@@ -855,7 +845,7 @@ cursor:pointer;
 
 .modal-title {
     text-align: left;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .input-group-addon {

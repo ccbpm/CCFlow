@@ -25,20 +25,22 @@
                 return;
 
             var url = "";
-            var tSpan = GetQueryString("TSpan");
-            if (tSpan == null)
-                tSpan = "";
 
-            var flowNo = GetQueryString("FK_Flow");
-            if (flowNo == null)
-                flowNo = "";
+            var _tspan = GetQueryString("TSpan");
+            if (_tspan == undefined || _tspan == null || _tspan == "") {
+                _tspan = "-1";
+            }
 
-            if (flowNo == "" && tSpan == "")
-                tSpan = "0";
+            var _flowNo = GetQueryString("FK_Flow");
+            if (_flowNo == undefined || _flowNo == null || _flowNo == "") {
+                _flowNo = "";
+            }
+            if (_flowNo == "" && _tspan == "")
+                _tspan = "-1";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
-            handler.AddPara("TSpan", tSpan);
-            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("TSpan", _tspan);
+            handler.AddPara("FK_Flow", _flowNo);
             var data = handler.DoMethodReturnString("Search_Init");
 
             if (data.indexOf('err@') == 0) {
@@ -47,16 +49,10 @@
             }
 
             var data = JSON.parse(data);
-            var _tspan = GetQueryString("TSpan");
-            var _flowNo = GetQueryString("FK_Flow");
-
-            if (_flowNo == "" && _tspan == "")
-                _tspan = "0";
-
 
             //时间段列表. 
             var tSpans = data['TSpan'];
-            if (_tspan == null || _tspan == "")
+            if (_tspan == "-1")
                 html = "<span onclick=\"TSpan('');\" style='background-color:green;color:White;' >全部</span>";
             else
                 html = "<span onclick=\"TSpan('');\"  >全部</span>";
@@ -72,7 +68,9 @@
             }
 
             html += "&nbsp;&nbsp;<img src='./Img/Search.png' border=0 style='width:16px;' />关键字:<input type=text id='TB_Key' style='width:90px;height:18px;' /><a href='#' onclick=\"javascript:SearchKey();\" > <b>查询</b> </a>";
+
             $("#TSpan").html(html);
+
 
             //流程名称列表.
             var flows = data['Flows'];
@@ -99,8 +97,6 @@
             //当前登录人员的编号.
             var userNo = webUser.No;
             var todoEmpsName = "";
-
-
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 

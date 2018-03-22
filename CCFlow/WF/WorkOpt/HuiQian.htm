@@ -153,7 +153,12 @@
                 row += "<td>" + gwl.FK_EmpText + "</td>";
                 row += "<td  title='" + gwl.FK_DeptT + "' >" + gwl.FK_DeptT + "</td>";
 
-                if (gwl.IsPass == 0 || gwl.IsPass == -1) {
+                if (gwl.IsPass == -1) {
+                    row += "<td>新增</td>";
+                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
+                }
+
+                if (gwl.IsPass == 0 ) {
                     row += "<td>未审批</td>";
                     row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
                 }

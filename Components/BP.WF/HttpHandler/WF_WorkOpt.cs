@@ -1942,12 +1942,12 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = new DataSet();
 
-            string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ";
+            string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx";
             DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dtDept.Rows.Count == 0)
             {
                 fk_dept = BP.Web.WebUser.FK_Dept;
-                sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ";
+                sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx ";
                 dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
             }
 
@@ -1962,7 +1962,7 @@ namespace BP.WF.HttpHandler
             }
 
             if (SystemConfig.CustomerNo == "TianYe")
-                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='00000001' ";
+                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='00000001'  ORDER BY Idx ";
             else
                 sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
 

@@ -4750,9 +4750,12 @@ namespace BP.WF
             //if (this.HisNode.HisFormType != NodeFormType.SheetTree)
             //    return true;
 
+
+
+
             //增加节点表单的必填项判断.
             string err = "";
-            if (this.HisNode.HisFormType == NodeFormType.FreeForm)
+            if (this.HisNode.HisFormType == NodeFormType.FreeForm || this.HisNode.HisFormType == NodeFormType.FoolForm)
             {
                 MapAttrs attrs = this.HisNode.MapData.MapAttrs;
                 Row row = this.HisWork.Row;
@@ -4833,7 +4836,17 @@ namespace BP.WF
                 #endregion 检查图片附件的必填，added by liuxc,2016-11-1
 
                 if (err != "")
-                    throw new Exception("在提交前检查到如下必输字段填写不完整:" + err);
+                    throw new Exception("err@在提交前检查到如下必输字段填写不完整:" + err);
+
+                //检查是否写入了审核意见.
+                if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+                {
+                    /*检查审核意见 */
+                    string sql = "SELECT count(workid) as  Num  FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType="+ActionType.WorkCheck;
+                    int i = DBAccess.RunSQLReturnValInt(sql, 0);
+                    if (i == 0)
+                        throw new Exception("err@请填写审核意见.");
+                }
             }
 
             //查询出来所有的设置。

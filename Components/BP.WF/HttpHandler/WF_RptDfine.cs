@@ -119,7 +119,7 @@ namespace BP.WF.HttpHandler
             //    ht.Add("Adminer", "高级查询");
 
             string advEmps = SystemConfig.AppSettings["AdvEmps"];
-            if (advEmps.Contains( BP.Web.WebUser.No ) ==true)
+            if (advEmps!=null && advEmps.Contains( BP.Web.WebUser.No ) ==true)
                 ht.Add("Adminer", "高级查询");
 
             Flow fl = new Flow(this.FK_Flow);

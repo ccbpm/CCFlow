@@ -4742,6 +4742,23 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 检查是否填写审核意见
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckFrmIsFullCheckNote()
+        {
+            //检查是否写入了审核意见.
+            if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+            {
+                /*检查审核意见 */
+                string sql = "SELECT count(workid) as  Num  FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + ActionType.WorkCheck;
+                int i = DBAccess.RunSQLReturnValInt(sql, 0);
+                if (i == 0)
+                    throw new Exception("err@请填写审核意见.");
+            }
+            return true;
+        }
+        /// <summary>
         /// 检查独立表单上必须填写的项目.
         /// </summary>
         /// <returns></returns>
@@ -4838,15 +4855,8 @@ namespace BP.WF
                 if (err != "")
                     throw new Exception("err@在提交前检查到如下必输字段填写不完整:" + err);
 
-                //检查是否写入了审核意见.
-                if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
-                {
-                    /*检查审核意见 */
-                    string sql = "SELECT count(workid) as  Num  FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType="+ActionType.WorkCheck;
-                    int i = DBAccess.RunSQLReturnValInt(sql, 0);
-                    if (i == 0)
-                        throw new Exception("err@请填写审核意见.");
-                }
+
+                CheckFrmIsFullCheckNote();
             }
 
             //查询出来所有的设置。

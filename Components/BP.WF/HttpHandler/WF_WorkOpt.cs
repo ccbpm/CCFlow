@@ -450,7 +450,6 @@ namespace BP.WF.HttpHandler
                     //查查是否存在队列里？
                     num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, empNo,
                     GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
-
                     if (num == 1)
                     {
                         infos += "\t\n@人员[" + empStr + "]已经在队列里.";

@@ -4751,7 +4751,7 @@ namespace BP.WF
             if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
             {
                 /*检查审核意见 */
-                string sql = "SELECT count(workid) as  Num  FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + ActionType.WorkCheck;
+                string sql = "SELECT count(workid) as  Num  FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.WorkCheck;
                 int i = DBAccess.RunSQLReturnValInt(sql, 0);
                 if (i == 0)
                     throw new Exception("err@请填写审核意见.");

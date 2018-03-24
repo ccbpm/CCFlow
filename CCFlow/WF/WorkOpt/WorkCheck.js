@@ -285,13 +285,9 @@
 		function SaveWorkCheck() {
 
 		    var doc = $("#WorkCheck_Doc").val();
-
+		 
 		    if (isReadonly == true)
 		        return;
-		    if (doc.length >= 300) {
-		        alert('审核意见不能超过300个字符.');
-		        return;
-		    }
 
 		    var param = {
 		        FK_Flow: fk_flow,
@@ -303,6 +299,7 @@
 		    };
 
 		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+		    handler.AddJson(param);
 		    var data = handler.DoMethodReturnString("WorkCheck_Save");
 
 		    if (data.indexOf('err@') != -1) {

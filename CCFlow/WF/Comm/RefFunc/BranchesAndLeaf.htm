@@ -28,6 +28,29 @@
 			.search-margin {
 				margin-top: 15px;
 			}
+			.newBtn
+			{
+			      display: inline-block;
+                  padding: 1px 4px;
+                  margin-bottom: 0;
+                  font-size: 12px;
+                  font-weight: 400;
+                  line-height: 1.42857143;
+                  text-align: center;
+                  white-space: nowrap;
+                  vertical-align: middle;
+                  -ms-touch-action: manipulation;
+                  touch-action: manipulation;
+                  cursor: pointer;
+                  -webkit-user-select: none;
+                  -moz-user-select: none;
+                  -ms-user-select: none;
+                  user-select: none;
+                  background-image: none;
+                  border: 1px solid transparent;
+                  border-radius: 4px;
+                }    
+			
 		</style>
 
 		<script type="text/javascript">
@@ -161,7 +184,7 @@
 		                title: '名称'
 		            }, {
 		                title: '操作', formatter: function (value, row, index) {
-		                    return '<a class="btn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
+		                    return '<a class="newBtn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
 		                }
 		            }]
 		        });

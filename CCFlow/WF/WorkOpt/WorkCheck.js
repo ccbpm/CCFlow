@@ -282,41 +282,38 @@
 			$("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height());
 		}
 
-        function SaveWorkCheck() {
+		function SaveWorkCheck() {
 
-            var doc = $("#WorkCheck_Doc").val();
+		    var doc = $("#WorkCheck_Doc").val();
 
-            if (isReadonly==true)
-                return;
+		    if (isReadonly == true)
+		        return;
+		    if (doc.length >= 300) {
+		        alert('审核意见不能超过300个字符.');
+		        return;
+		    }
 
-//            if (doc.length == 0) {
-//                if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {
-//                    doc = wcDesc.FWCDefInfo;
-//                    $("#WorkCheck_Doc").val(doc);
-//                }
-//            }
+		    var param = {
+		        FK_Flow: fk_flow,
+		        FK_Node: nodeid,
+		        WorkID: workid,
+		        FID: fid,
+		        Doc: doc,
+		        IsCC: GetQueryString("IsCC")
+		    };
 
-            var param = {
-                DoType: "WorkCheck_Save",
-                FK_Flow: fk_flow,
-                FK_Node: nodeid,
-                WorkID: workid,
-                FID: fid,
-                Doc: doc,
-                IsCC: GetQueryString("IsCC")
-            };
+		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+		    var data = handler.DoMethodReturnString("WorkCheck_Save");
 
-            Handler_AjaxQueryData(param, function (data) {
-                if (data.indexOf('err@') != -1) {
-                    alert(data);
-                    return;
-                }
+		    if (data.indexOf('err@') != -1) {
+		        alert(data);
+		        return;
+		    }
 
-                if (data.length > 0) {
-                    $("#rdt").text(data);
-                }
-            }, this);
-        }
+		    if (data.length > 0) {
+		        $("#rdt").text(data);
+		    }
+		}
 
         function DelWorkCheckAth(athPK) {
             isChange = false;

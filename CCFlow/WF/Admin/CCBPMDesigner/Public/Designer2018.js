@@ -10,8 +10,7 @@ function FlowProperty() {
     //OpenEasyUiDialogExt(url, "流程属性", 900, 500, false);
     window.parent.addTab(flowNo, "流程属性", url);
 
-  //  WinOpen(url);
-
+    //  WinOpen(url);
     //    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
     //        //window.location.href = window.location.href;
     //    });
@@ -95,19 +94,18 @@ function NodeFrmSln(nodeID) {
 //设计表单
 function NodeFrmD(nodeID) {
 
-    //var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
-    //window.parent.addTab(nodeID + "_BDSJ", "选择表单类型", url);
     var node = new Entity("BP.WF.Node", nodeID);
+    if (node.FormType == 1) {
+         NodeFrmFree(nodeID);
+        return;
+    }
 
-    if (node.FormType == 0)
-        NodeFrmFree(nodeID);
-    else
-        NodeFrmFool(nodeID);
+    NodeFrmFool(nodeID);
 }
 
 function NodeFrmFool(nodeID) {
     //傻瓜表单.
-    var url = "../FoolFormDesigner/Designer.htm?FK_MapData=ND203&FK_Flow="+flowNo+"&FK_Node=" + nodeID;
+    var url = "../FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     //WinOpen(url);
     window.parent.addTab(nodeID + "_Fool", "设计表单", url);
 }

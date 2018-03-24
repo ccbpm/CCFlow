@@ -21,21 +21,34 @@
             var ens = new Entities("BP.WF.Template.NodeDepts");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
-
+            var html = "<table style='width:100%;' >";
+            html += "<caption >已经设置的部门,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_DeptText;
-            }
-            document.getElementById("dept").innerHTML = html;
 
+                if (idx == 0)
+                    html += "<tr>";
+
+                html += "<td>" + en.FK_DeptText + "</td>";
+
+                idx++;
+                if (idx == 4) {
+                    idx = 0;
+                    html += "</tr>";
+                }
+            }
+
+            html += "</table>";
+            document.getElementById("dept").innerHTML = html;
+             
             //根据用户的信息，判断是否启用那个设置工具。
             var user = new WebUser();
 
             $("#OrgModel").hide();
             $("#AdminModel").hide();
 
-            if (user.FK_Dept == 0) {
+            if (user.No == "admin") {
                 /*调用通用的.*/
                 $("#AdminModel").show();
 
@@ -97,6 +110,7 @@
             <ul>
                 <li><a href="javascript:OpenNew()"> 设置/更改部门</a></li>
                 <li><a href="javascript:OpenOld()">设置/更改部门(旧版本)</a></li>
+               <li >该部门下所有的人员都可以处理该节点的工作。</li>
             </ul>
         </fieldset>
     </div>
@@ -109,18 +123,10 @@
             </ul>
         </fieldset>
     </div>
-    <fieldset>
-        <legend>已经设置的部门</legend>
+   
         <div id="dept"> </div>
-    </fieldset>
+         
 
-
-     <fieldset>
-        <legend>说明</legend>
-        <ul>
-            <li >该部门下所有的人员都可以处理该节点的工作。</li>
-        </ul>
-    </fieldset>
-
+     
 </body>
 </html>

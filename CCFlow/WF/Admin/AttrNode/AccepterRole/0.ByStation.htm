@@ -24,13 +24,25 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
-
+            var html = "<table style='width:100%;' >";
+            html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                console.log(en);
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_StationText;
+
+                if (idx == 0)
+                    html += "<tr>";
+
+                html += "<td>" + en.FK_StationText + "</td>";
+                
+                idx++;
+                if (idx == 4) {
+                    idx = 0;
+                    html += "</tr>";
+                }
             }
+
+            html += "</table>";
             document.getElementById("stas").innerHTML = html;
 
             //根据用户的信息，判断是否启用那个设置工具。
@@ -40,10 +52,9 @@
             $("#AdminModel").hide();
 
             if (user.No == "admin") {
-
                 /*调用通用的.*/
                 $("#AdminModel").show();
-                
+
             } else {
                 /*调用集团模式的.*/
                 $("#OrgModel").show();
@@ -92,7 +103,7 @@
  
  <div id="AdminModel">
     <fieldset >
-        <legend>设置(超级管理员)</legend>
+        <legend>设置岗位</legend>
         <ul>
             <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
             <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
@@ -112,10 +123,7 @@
     </fieldset>
 </div>
 
-<fieldset>
-<legend>已经设置的岗位</legend>
    <div id="stas"></div>
-</fieldset>
 
 
 </body>

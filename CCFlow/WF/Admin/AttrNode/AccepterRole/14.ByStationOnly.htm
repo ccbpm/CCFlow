@@ -26,14 +26,25 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
-
+            var html = "<table style='width:100%;' >";
+            html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                console.log(en);
-                html += "&nbsp;&nbsp;&nbsp" + en.FK_StationText;
+
+                if (idx == 0)
+                    html += "<tr>";
+
+                html += "<td>" + en.FK_StationText + "</td>";
+
+                idx++;
+                if (idx == 4) {
+                    idx = 0;
+                    html += "</tr>";
+                }
             }
 
+            html += "</table>";
             document.getElementById("stas").innerHTML = html;
 
             //根据用户的信息，判断是否启用那个设置工具。
@@ -114,26 +125,21 @@
         <ul>
             <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
             <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
+            
+             <li>按照节点上绑定的岗位来计算接受人，这里去掉了部门维度的过滤。。</li>
+        <li>您设置岗位范围的集合下面有多少人，该节点就有多少人处理。</li>
+
             <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a>
+
+
             </li>
         </ul>
     </fieldset>
 </div>
-
-
-<fieldset>
-<legend>已经设置的岗位</legend>
+ 
 
 <div id="stas"> </div>
-</fieldset>
-
-<fieldset>
-    <legend>说明</legend>
-    <ul>
-        <li>按照节点上绑定的岗位来计算接受人，这里去掉了部门维度的过滤。。</li>
-        <li>您设置岗位范围的集合下面有多少人，该节点就有多少人处理。</li>
-    </ul>
-</fieldset>
+ 
 
 </body>
 </html>

@@ -1631,7 +1631,7 @@ var HttpHandler = (function () {
 
     var parameters = {};
 
-    var formData;   
+    var formData;
 
     function HttpHandler(handlerName) {
         this.handlerName = handlerName;
@@ -1683,6 +1683,19 @@ var HttpHandler = (function () {
             parameters[key] = value;
         },
 
+        AddJson: function (js) {
+
+            for (var attr in json1) {
+
+                alert(attr);
+                console.log(attr);
+            }
+
+            //  for (var i = 0; i < js.length; i++) {
+            //   }
+            //parameters[key] = value;
+        },
+
         Clear: function () {
             parameters = {};
             formData = undefined;
@@ -1701,8 +1714,8 @@ var HttpHandler = (function () {
             var self = this;
             var jsonString;
 
-           // alert(self.getParams());
-           // alert(self.getParams());
+            // alert(self.getParams());
+            // alert(self.getParams());
 
             $.ajax({
                 type: 'post',

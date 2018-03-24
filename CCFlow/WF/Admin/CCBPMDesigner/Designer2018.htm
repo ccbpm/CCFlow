@@ -118,12 +118,11 @@
 
             <li id="pmFrmSln"><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>
 
-            <li id="pmFrmD"  onclick="NodeFrmD()"><i class="icon-th"></i>&nbsp;<span class="_label">设计表单</span></li>
+            <li id="pmFrmD" ><i class="icon-th"></i>&nbsp;<span class="_label">设计表单</span></li>
 
-          <!-- <li id="pmFrmFool"><i class="icon-th"></i>&nbsp;<span class="_label">傻瓜表单</span></li>
-            <li id="pmFrmFree"><i class="icon-th"></i>&nbsp;<span class="_label">自由表单</span></li>
+            <!-- <li id="pmFrmFool"><i class="icon-th"></i>&nbsp;<span class="_label">傻瓜表单</span></li>
+             <li id="pmFrmFree"><i class="icon-th"></i>&nbsp;<span class="_label">自由表单</span></li>
             -->
-
 
             <li id="pmfun"><i class="icon-th"></i>&nbsp;<span class="_label">节点类型</span><i class="icon-chevron-right"></i></li>
          
@@ -492,6 +491,10 @@
                                       //表单方案.
                                       var activeId = _canvas.getActiveId(); //右键当前的ID
                                       NodeFrmSln(activeId); //表单方案.
+                                  },
+                                  "pmFrmD": function (t) {
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeFrmD(activeId);
                                   },
                                   "pmFrmFool": function (t) {
                                       var activeId = _canvas.getActiveId(); //右键当前的ID

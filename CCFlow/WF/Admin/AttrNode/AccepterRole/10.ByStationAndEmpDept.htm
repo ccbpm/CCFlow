@@ -25,27 +25,53 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
-
+            var html = "<table style='width:100%;' >";
+            html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                console.log(en);
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_StationText;
+                if (idx == 0)
+                    html += "<tr>";
+
+                html += "<td>" + en.FK_StationText + "</td>";
+
+                idx++;
+                if (idx == 3) {
+                    idx = 0;
+                    html += "</tr>";
+                }
             }
+
+            html += "</table>";
             document.getElementById("stas").innerHTML = html;
+
+             
 
             //获取节点部门
             ens = new Entities("BP.WF.Template.NodeDepts");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
 
+            var html = "<table style='width:100%;' >";
+            html += "<caption >已经设置的部门,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                console.log(en);
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_DeptText;
+                if (idx == 0)
+                    html += "<tr>";
+
+                html += "<td>" + en.FK_DeptText + "</td>";
+
+                idx++;
+                if (idx == 3) {
+                    idx = 0;
+                    html += "</tr>";
+                }
             }
+
+            html += "</table>";
             document.getElementById("dept").innerHTML = html;
+             
         });
 
 
@@ -120,20 +146,14 @@
 <tr>
 
 
-
-<td>
-<fieldset>
-    <legend>已经设置的岗位</legend>
+<td  valign=top>
     <div id="stas"> </div>
-</fieldset>  </td>
+  </td>
 
-
-<td> 
-<fieldset>
-    <legend>已经设置的部门</legend>
+<td valign=top>   
     <div id="dept"> </div>
-</fieldset>
  </td>
+
 </tr>
 
 

@@ -21,15 +21,29 @@
             var ens = new Entities("BP.WF.Template.NodeEmps");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
 
+            var html = "<table style='width:100%;' >";
+            html += "<caption >已经设置的处理人,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                console.log(en);
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_EmpText;
+
+                if (idx == 0)
+                    html += "<tr>";
+
+                html += "<td>" + en.FK_EmpText + "</td>";
+
+                idx++;
+                if (idx == 4) {
+                    idx = 0;
+                    html += "</tr>";
+                }
             }
 
+            html += "</table>";
             document.getElementById("emp").innerHTML = html;
+
+             
         });
 
         //弹出新窗体
@@ -67,12 +81,9 @@
         </li>                                                      
     </ul>
 </fieldset>
-<fieldset>
-<legend>已经设置的处理人</legend>
+ 
 
 <div id="emp"> </div>
-</fieldset>
-
 
 </body>
 </html>

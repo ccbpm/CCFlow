@@ -1663,7 +1663,10 @@ var HttpHandler = (function () {
         constructor: HttpHandler,
 
         AddUrlData: function () {
+
             var queryString = document.location.search.substr(1);
+
+
             if (queryString.length > 0) {
                 var self = this;
                 $.each(queryString.split("&"), function (i, o) {
@@ -1675,6 +1678,7 @@ var HttpHandler = (function () {
                     }
                 });
             }
+
         },
 
         AddFormData: function () {
@@ -1710,10 +1714,14 @@ var HttpHandler = (function () {
             var self = this;
             var jsonString;
 
+            console.log(parameters);
+
+            //alert(json.stringtfy(parameters));
+
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName  + "&t=" + Math.random(),
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
                 data: parameters,
                 dataType: 'html',
                 success: function (data) {

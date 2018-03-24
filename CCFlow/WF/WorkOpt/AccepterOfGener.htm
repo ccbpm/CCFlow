@@ -123,11 +123,11 @@
 
         function BindTable(sas) {
 
-            var isDel = false;
+            var isDel = true;
             var toNodeID = GetQueryString("ToNode");
             var sa = new Entity("BP.WF.Template.Selector", toNodeID);
             if (sa.IsSimpleSelector == 1)
-                isDel = true;
+                isDel = false;
             
             for (var i = 0; i < sas.length; i++) {
                 var sa = sas[i];
@@ -140,7 +140,7 @@
                 if (isDel==true)
                     row += "<td><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','" + sa.EmpName + "');\" >移除</a></td>";
                 else
-                    row += "<td> <a href=\"alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
+                    row += "<td> <a href=\"javascript:alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
 
                 row += "</tr>";
 
@@ -257,7 +257,6 @@
             if (data.indexOf('err@') == 0) {
                 $(".Msg").show();
                 $(".Msg").html(data);
-
 
                 $("#Btn_Send").attr("disabled", false);
                 $("#Btn_Send").val("执行发送");

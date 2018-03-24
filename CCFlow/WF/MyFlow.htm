@@ -39,12 +39,12 @@
 
                 data = data.replace('url@', ''); //如果返回url，就直接转向.
                 data = data.replace('?DoType=HttpHandler', '?');
-                data = data.replace('&DoType=HttpHandler', ''); 
+                data = data.replace('&DoType=HttpHandler', '');
                 data = data.replace('&DoMethod=MyFlow_Init', '');
                 data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
                 data = data.replace('?&', '?');
 
-                 //如果返回url，就直接转向.
+                //如果返回url，就直接转向.
 
                 window.location.href = data;
                 return;

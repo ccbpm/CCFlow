@@ -133,103 +133,106 @@
             //                $("#btnOk").text('保存');
             //            }
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Accepter_Init&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + GetQueryString("ToNode") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
 
-                    if (data.indexOf('info@') == 0) {
-                        alert(data);
-                        Close();
-                        return;
-                    }
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("ToNode", GetQueryString("ToNode"));
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            var data = handler.DoMethodReturnString("Accepter_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        Close();
-                        return;
-                    }
+            if (data.indexOf('info@') == 0) {
+                alert(data);
+                Close();
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url + "&ToNode=" + GetQueryString("ToNode");
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                Close();
+                return;
+            }
 
-                    try {
-                        data = eval('(' + data + ')');
-                    }
-                    catch (err) {
-                        alert("转换JSON 失败" + err + data);
-                        return;
-                    }
+            if (data.indexOf('url@') == 0) {
 
-                    //获得三个数据源.
-                    var depts = data.Depts;
-                    var emps = data.Emps;
+                var url = data.replace('url@', '');
 
-                  //  alert(JSON.stringify(depts));
-                   // alert(JSON.stringify(emps));
+                if (url.indexOf('ToNode=') > 0)
+                    window.location.href = url;
+                else
+                    window.location.href = url + "&ToNode=" + GetQueryString("ToNode");
 
+                return;
+            }
 
-                    var selected = data.Selected;
+            try {
+                data = eval('(' + data + ')');
+            }
+            catch (err) {
+                alert("转换JSON 失败" + err + data);
+                return;
+            }
 
-                    if (emps.length == 0) {
-                        alert('当前节点设置的接收人范围为空,请联系管理员配置接收人范围.');
-                        return;
-                    }
+            //获得三个数据源.
+            var depts = data.Depts;
+            var emps = data.Emps;
 
-                    //是否是单选？
-                    var isSimplate = data.Selector[0].IsSimpleSelector;
+            //  alert(JSON.stringify(depts));
+            // alert(JSON.stringify(emps));
 
-                    var html = "<table border=0 width='98%' > ";
-                    $.each(depts, function (i, dept) {
+            var selected = data.Selected;
 
-                        html += "<tr><th><b> " + dept.Name + "</b></th></tr>";
-                        html += "<tr><td>";
+            if (emps.length == 0) {
+                alert('当前节点设置的接收人范围为空,请联系管理员配置接收人范围.');
+                return;
+            }
 
-                        $.each(emps, function (i, emp) {
+            //是否是单选？
+            var isSimplate = data.Selector[0].IsSimpleSelector;
 
-                            if (emp.FK_Dept == dept.No) {
+            var html = "<table border=0 width='98%' > ";
+            $.each(depts, function (i, dept) {
 
-                                //检查该人员是否被选择.
-                                var isSele = false;
-                                $.each(selected, function (idx, sele) {
-                                    if (sele.No == emp.No)
-                                        isSele = true;
-                                });
+                html += "<tr><th><b> " + dept.Name + "</b></th></tr>";
+                html += "<tr><td>";
 
-                                //多选.
-                                if (isSimplate == "0") {
-                                    if (isSele == true)
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
-                                    else
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
-                                }
+                $.each(emps, function (i, emp) {
 
-                                //单选.
-                                if (isSimplate == "1") {
-                                    if (isSele == true)
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
-                                    else
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
-                                }
+                    if (emp.FK_Dept == dept.No) {
 
-                            }
+                        //检查该人员是否被选择.
+                        var isSele = false;
+                        $.each(selected, function (idx, sele) {
+                            if (sele.No == emp.No)
+                                isSele = true;
                         });
 
-                        html += " </td></tr>";
+                        //多选.
+                        if (isSimplate == "0") {
+                            if (isSele == true)
+                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                            else
+                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
+                        }
 
-                    });
+                        //单选.
+                        if (isSimplate == "1") {
+                            if (isSele == true)
+                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                            else
+                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
+                        }
+                    }
+                });
 
-                    html += "</table>";
+                html += " </td></tr>";
 
-                    $("#table").append(html);
-                    return;
-                }
             });
+
+            html += "</table>";
+
+            $("#table").append(html);
+            return;
 
         });
 

@@ -292,7 +292,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            if (this.WorkID == 0 && this.currND.IsStartNode && this.context.Request.QueryString["IsCheckGuide"] == null)
+            if (this.WorkID == 0 && this.currND.IsStartNode &&  this.GetRequestVal("IsCheckGuide") == null)
             {
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
                 switch (this.currFlow.StartGuideWay)
@@ -328,8 +328,8 @@ namespace BP.WF.HttpHandler
             #endregion 判断前置导航
 
             #region 前置导航数据拷贝到第一节点
-            if (this.WorkID != 0 && this.context.Request.QueryString["IsCheckGuide"] != null)
-                BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, this.context.Request.QueryString["KeyNo"]);
+            if (this.WorkID != 0 &&  this.GetRequestVal("IsCheckGuide") != null)
+                BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, this.KeyOfEn);
 
             #endregion
 

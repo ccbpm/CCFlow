@@ -168,7 +168,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("NAME", typeof(string));
             dt.Columns.Add("TTYPE", typeof(string));
 
-            string parentrootid = context.Request.QueryString["parentrootid"];
+            string parentrootid = this.GetRequestVal("parentrootid");  // context.Request.QueryString["parentrootid"];
             string newRootId = "";
 
             if (WebUser.No != "admin")
@@ -248,7 +248,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("NAME", typeof(string));
             dt.Columns.Add("TTYPE", typeof(string));
 
-            string rootid = context.Request.QueryString["rootid"];
+            string rootid = this.GetRequestVal("rootid");// context.Request.QueryString["rootid"];
 
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
             {

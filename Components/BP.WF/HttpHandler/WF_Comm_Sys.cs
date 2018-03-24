@@ -324,7 +324,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-            string sfno = context.Request.QueryString["sfno"];
+            string sfno = this.GetRequestVal("sfno") ;
             SFTable sftable = null;
             DataTable dt = null;
             StringBuilder s = null;

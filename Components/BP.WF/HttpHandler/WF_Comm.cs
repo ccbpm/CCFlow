@@ -1364,8 +1364,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SQLList()
         {
-            string sqlKey = context.Request.QueryString["SQLKey"]; //SQL的key.
-            string paras = context.Request.QueryString["Paras"]; //参数. 格式为 @para1=paraVal@para2=val2
+            string sqlKey =this.GetRequestVal("SQLKey"); //SQL的key.
+            string paras = this.GetRequestVal("Paras"); //参数. 格式为 @para1=paraVal@para2=val2
 
             BP.Sys.XML.SQLList sqlXml = new BP.Sys.XML.SQLList(sqlKey);
 

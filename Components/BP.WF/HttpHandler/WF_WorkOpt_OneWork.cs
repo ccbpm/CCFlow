@@ -141,7 +141,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["TB_Msg"];
+                string str = this.GetRequestVal("TB_Msg"); 
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -151,7 +151,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["UserName"];
+                string str = this.GetRequestVal("UserName");  
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -161,7 +161,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["Title"];
+                string str =  this.GetRequestVal("Title");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -174,7 +174,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_SFTable"];
+                string str = this.GetRequestVal("FK_SFTable");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -185,36 +185,14 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["EnumKey"];
+                string str =this.GetRequestVal("EnumKey");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
 
             }
         }
-        public string KeyOfEn
-        {
-            get
-            {
-                string str = context.Request.QueryString["KeyOfEn"];
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        /// <summary>
-        /// 明细表
-        /// </summary>
-        public string FK_MapDtl
-        {
-            get
-            {
-                string str = context.Request.QueryString["FK_MapDtl"];
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
+    
 
         public string Name
         {

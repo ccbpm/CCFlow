@@ -564,7 +564,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapData"];
+                string str = this.GetRequestVal("FK_MapData");  //context.Request.QueryString["FK_MapData"];
                 if (string.IsNullOrEmpty(str))
                     return "abc";
                 return str;
@@ -574,7 +574,8 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                return context.Request.QueryString["FK_SFDBSrc"];
+                return this.GetRequestVal("FK_SFDBSrc"); 
+                //return context.Request.QueryString["FK_SFDBSrc"];
             }
         }
         private string _STable = null;
@@ -584,7 +585,9 @@ namespace BP.WF.HttpHandler
             {
                 if (_STable == null)
                 {
-                    _STable = context.Request.QueryString["STable"];
+                    //return this.GetRequestVal("FK_SFDBSrc");
+
+                    _STable = this.GetRequestVal("FK_SFDBSrc");// context.Request.QueryString["STable"];
                     if (_STable == null || "".Equals(_STable))
                     {
                         BP.En.Entity en = BP.En.ClassFactory.GetEn(this.FK_MapData);
@@ -634,7 +637,7 @@ namespace BP.WF.HttpHandler
                 if (sCols != null)
                     return sCols;
 
-                string cols = context.Request.QueryString["SColumns"] ?? "";
+                string cols = this.GetRequestVal("SColumns") ?? "";
                 string[] arr = cols.Split(',');
                 sCols = new List<string>();
 
@@ -1135,7 +1138,7 @@ namespace BP.WF.HttpHandler
             string name = this.GetRequestVal("name");
             string newNo = DataType.ParseStringForNo(no, 20);
             string newName = DataType.ParseStringForName(name, 20);
-            int fType = int.Parse(this.context.Request.QueryString["FType"]);
+            int fType = int.Parse( this.GetRequestVal("FType"));
 
             MapAttrs attrs = new MapAttrs();
             int i = attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, newNo);
@@ -1648,9 +1651,9 @@ namespace BP.WF.HttpHandler
             try
             {
                 //定义变量.
-                int fType = int.Parse(context.Request.QueryString["FType"]);  //字段数据物理类型
-                FieldTypeS lgType = (FieldTypeS)int.Parse(context.Request.QueryString["LGType"]); //逻辑类型.
-                string uiBindKey = context.Request.QueryString["UIBindKey"];
+                int fType = int.Parse(  this.GetRequestVal("FType"));  //字段数据物理类型
+                FieldTypeS lgType = (FieldTypeS)int.Parse( this.GetRequestVal("LGType") ); //逻辑类型.
+                string uiBindKey = this.GetRequestVal("UIBindKey");// context.Request.QueryString["UIBindKey"];
 
                 //赋值.
                 MapAttr attr = new MapAttr();
@@ -1869,7 +1872,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public void DownTempFrm()
         {
-            string fileFullName = context.Request.PhysicalApplicationPath + "\\Temp\\" + context.Request.QueryString["FK_MapData"] + ".xml";
+            string fileFullName = context.Request.PhysicalApplicationPath + "\\Temp\\" + this.FK_MapData + ".xml";
             FileInfo fileInfo = new FileInfo(fileFullName);
             if (fileInfo.Exists)
             {
@@ -2014,7 +2017,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SFGuide_GetInfo()
         {
-            string sfno = context.Request.QueryString["sfno"];
+            string sfno = this.GetRequestVal("sfno"); //context.Request.QueryString["sfno"];
 
             if (string.IsNullOrWhiteSpace(sfno))
                 return "err@参数不正确";
@@ -2082,7 +2085,7 @@ namespace BP.WF.HttpHandler
         }
         public string SFGuide_Getmtds()
         {
-            string src = context.Request.QueryString["src"];
+            string src = this.GetRequestVal("src"); //context.Request.QueryString["src"];
             if (string.IsNullOrWhiteSpace(src))
                 return "err@系统中没有webservices类型的数据源，该类型的外键表不能创建，请维护数据源.";
 
@@ -2097,8 +2100,8 @@ namespace BP.WF.HttpHandler
         }
         public string SFGuide_GetCols()
         {
-            string src = context.Request.QueryString["src"];
-            string table = context.Request.QueryString["table"];
+            string src = this.GetRequestVal("src"); //context.Request.QueryString["src"];
+            string table = this.GetRequestVal("table"); //context.Request.QueryString["table"];
 
             if (string.IsNullOrWhiteSpace(src))
                 throw new Exception("err@参数不正确");
@@ -2132,7 +2135,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SFGuide_GetTVs()
         {
-            string src = context.Request.QueryString["src"];
+            string src = this.GetRequestVal("src");// context.Request.QueryString["src"];
 
             SFDBSrc sr = new SFDBSrc(src);
             DataTable dt = sr.GetTables();
@@ -2148,8 +2151,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SFGuide_GetClass()
         {
-            string sfno = context.Request.QueryString["sfno"];
-            string stru = context.Request.QueryString["struct"];
+            string sfno = this.GetRequestVal("sfno");// context.Request.QueryString["sfno"];
+            string stru = this.GetRequestVal("struct");  //context.Request.QueryString["struct"];
             int st = 0;
 
             if (string.IsNullOrWhiteSpace(stru) || !int.TryParse(stru, out st))
@@ -2211,7 +2214,7 @@ namespace BP.WF.HttpHandler
         public string SFGuide_GetSrcs()
         {
 
-            string type = context.Request.QueryString["type"];
+            string type = this.GetRequestVal("type");
             int itype;
             bool onlyWS = false;
 

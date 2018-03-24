@@ -837,7 +837,7 @@ namespace BP.WF.HttpHandler
                 me.MyPK = this.FK_MapExt;
                 me.FK_MapData = this.FK_MapData;
                 me.ExtType = "PopVal";
-                me.AttrOfOper = context.Request.QueryString["KeyOfEn"];
+                me.AttrOfOper = this.KeyOfEn;
                 me.RetrieveFromDBSources();
 
                 string valWorkModel = this.GetValFromFrmByKey("Model");

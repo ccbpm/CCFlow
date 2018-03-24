@@ -279,7 +279,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["No"];
+                string str = this.GetRequestVal("No"); // context.Request.QueryString["No"];
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -289,7 +289,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["Name"];
+                string str =this.GetRequestVal("Name");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -517,7 +517,7 @@ namespace BP.WF.HttpHandler
             {
                 return this.GetRequestValInt("FID");
 
-                string str = context.Request.QueryString["FID"];
+                string str = this.GetRequestVal("FID");//  context.Request.QueryString["FID"];
                 if (str == null || str == "" || str == "null")
                     return 0;
                 return int.Parse(str);
@@ -528,11 +528,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 return this.GetRequestValInt("PWorkID");
-
-                string str = context.Request.QueryString["PWorkID"];
-                if (str == null || str == "" || str == "null")
-                    return 0;
-                return int.Parse(str);
+ 
             }
         }
         private Int64 _workID = 0;
@@ -574,7 +570,9 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapFrame"];
+
+
+                string str = this.GetRequestVal("FK_MapFrame");// context.Request.QueryString["FK_MapFrame"];
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -587,7 +585,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["SID"];
+                string str = this.GetRequestVal("SID"); // context.Request.QueryString["SID"];
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -600,10 +598,10 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["RefOID"];
+                string str = this.GetRequestVal("RefOID"); //context.Request.QueryString["RefOID"];
 
                 if (str == null || str == "" || str == "null")
-                    str = context.Request.QueryString["OID"];
+                    str = this.GetRequestVal("OID"); //  context.Request.QueryString["OID"];
 
                 if (str == null || str == "" || str == "null")
                     return 0;
@@ -615,9 +613,9 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["RefOID"];
+                string str = this.GetRequestVal("RefOID"); // context.Request.QueryString["RefOID"];
                 if (str == null || str == "" || str == "null")
-                    str = context.Request.QueryString["OID"];
+                    str = this.GetRequestVal("OID");  //context.Request.QueryString["OID"];
 
                 if (str == null || str == "" || str == "null")
                     return 0;
@@ -632,9 +630,9 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapDtl"];
+                string str = this.GetRequestVal("FK_MapDtl"); //context.Request.QueryString["FK_MapDtl"];
                 if (str == null || str == "" || str == "null")
-                    str = context.Request.QueryString["EnsName"];
+                    str = this.GetRequestVal("EnsName");// context.Request.QueryString["EnsName"];
                 return str;
             }
         }
@@ -663,7 +661,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["Ath"];
+                string str = this.GetRequestVal("Ath");// context.Request.QueryString["Ath"];
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -713,15 +711,17 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = this.context.Request.QueryString["RefPK"];
-                return str;
+                return this.GetRequestVal("RefPK");
+
+                //string str = this.context.Request.QueryString["RefPK"];
+                //return str;
             }
         }
         public string RefPKVal
         {
             get
             {
-                string str = this.context.Request.QueryString["RefPKVal"];
+                string str = this.GetRequestVal("RefPKVal");
                 if (str == null)
                     return "0";
                 return str;

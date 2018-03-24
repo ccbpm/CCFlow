@@ -404,18 +404,13 @@ namespace BP.WF.HttpHandler
         #endregion
 
 
-        public string FK_MapData
-        {
-            get
-            {
-                return context.Request.QueryString["FK_MapData"];
-            }
-        }
+     
         public bool IsClear
         {
             get
             {
-                string isClearStr = context.Request.QueryString["IsClear"];
+                
+                string isClearStr = this.GetRequestVal("IsClear") ;
                 bool isClear = false;
                 if (!string.IsNullOrEmpty(isClearStr) && isClearStr.ToString().ToLower() == "on")
                 {
@@ -429,7 +424,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string isSetReadonlyStr = context.Request.QueryString["IsSetReadonly"];
+                string isSetReadonlyStr =this.GetRequestVal("IsSetReadonly");
                 bool isSetReadonly = false;
                 if (!string.IsNullOrEmpty(isSetReadonlyStr) && isSetReadonlyStr.ToString().ToLower() == "on")
                 {
@@ -443,7 +438,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string fromMapData = context.Request.QueryString["FromMapData"];
+                string fromMapData = this.GetRequestVal("FromMapData") ;
                 return fromMapData;
             }
         }

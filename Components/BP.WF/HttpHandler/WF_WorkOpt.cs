@@ -128,7 +128,6 @@ namespace BP.WF.HttpHandler
                 int toNodeID = this.GetRequestValInt("ToNode");
                 string emps = this.GetRequestVal("AddEmps");
 
-
                 //增加到里面去.s
                 BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
 
@@ -154,9 +153,7 @@ namespace BP.WF.HttpHandler
         {
             //删除指定的人员.
             BP.DA.DBAccess.RunSQL("DELETE FROM WF_SelectAccper WHERE WorkID=" + this.WorkID + " AND FK_Emp='" + this.FK_Emp + "'");
-
             int toNodeID = this.GetRequestValInt("ToNode");
-
             //查询出来,已经选择的人员.
             SelectAccpers sas = new SelectAccpers();
             sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
@@ -1408,7 +1405,7 @@ namespace BP.WF.HttpHandler
             }
 
             //在审核人打开后，申请人撤销，就不不能让其保存.
-            string sql = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID="+this.WorkID;
+            string sql = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID;
             if (DBAccess.RunSQLReturnValInt(sql) != this.FK_Node)
                 return "err@当前工作已经被撤销或者已经移动到下一个节点您不能在执行审核.";
 

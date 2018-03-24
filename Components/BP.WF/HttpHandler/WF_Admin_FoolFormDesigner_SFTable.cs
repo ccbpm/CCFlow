@@ -121,7 +121,7 @@ namespace BP.WF.HttpHandler
 
         public string SF2_GetTVs()
         {
-            string src = context.Request.QueryString["src"];
+            string src = this.GetRequestVal("src");
 
             SFDBSrc sr = new SFDBSrc(src);
             DataTable dt = sr.GetTables();
@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
         public string SF2_GetCols()
         {
             string src = this.GetRequestVal("src");
-            string table = context.Request.QueryString["table"];
+            string table = this.GetRequestVal("table");
 
             if (string.IsNullOrWhiteSpace(src))
                 throw new Exception("err@参数不正确");

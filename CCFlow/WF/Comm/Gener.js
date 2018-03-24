@@ -1005,21 +1005,21 @@ var Entity = (function () {
         },
 
         DoMethodReturnString: function (methodName) {
-            var params = [];
-            $.each(arguments, function (i, o) {
-                if (i > 0)
-                    params.push(o);
-            });
 
-
+//            var params = [];
+//            $.each(arguments, function (i, o) {
+//                if (i > 0)
+//                    params.push(o);
+            //            });
 
             var self = this;
             var string;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&paras=" + params.join(",") + "&t=" + new Date().getTime(),
-                dataType: 'html',
+                data: arguments,
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName  + "&t=" + new Date().getTime(),
+                dataType: 'html',                 
                 success: function (data) {
                     string = data;
                 },
@@ -1034,6 +1034,7 @@ var Entity = (function () {
         },
 
         DoMethodReturnJSON: function (methodName, params) {
+
             var jsonString = this.DoMethodReturnString(methodName, params);
 
             if (jsonString.indexOf("err@") != -1) {
@@ -1349,18 +1350,19 @@ var Entities = (function () {
             this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {
-            var params = [];
-            $.each(arguments, function (i, o) {
-                if (i > 0)
-                    params.push(o);
-            });
+//            var params = [];
+//            $.each(arguments, function (i, o) {
+//                if (i > 0)
+//                    params.push(o);
+//            });
 
             var self = this;
             var string;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params.join(",") + "&t=" + new Date().getTime(),
+                data:arguments,
+                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     string = data;
@@ -1683,17 +1685,11 @@ var HttpHandler = (function () {
             parameters[key] = value;
         },
 
-        AddJson: function (js) {
+        AddJson: function (json) {
 
-            for (var attr in json1) {
-
-                alert(attr);
-                console.log(attr);
+            for (var key in json) {
+                parameters[key] = json[key];
             }
-
-            //  for (var i = 0; i < js.length; i++) {
-            //   }
-            //parameters[key] = value;
         },
 
         Clear: function () {
@@ -1714,14 +1710,11 @@ var HttpHandler = (function () {
             var self = this;
             var jsonString;
 
-            // alert(self.getParams());
-            // alert(self.getParams());
-
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&" + self.getParams() + "&t=" + Math.random(),
-                data: formData,
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName  + "&t=" + Math.random(),
+                data: parameters,
                 dataType: 'html',
                 success: function (data) {
                     jsonString = data;

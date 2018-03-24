@@ -1510,6 +1510,12 @@ function GenerStructureTree(parentrootid, pnodeid, treeid) {
     handler.AddPara("parentrootid", parentrootid);
     var data = handler.DoMethodReturnString("GetStructureTreeRootTable");
 
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+
+
     data = $.parseJSON(data);
     var roottarget;
 

@@ -122,6 +122,12 @@
 
 
         function BindTable(sas) {
+
+            var isDel = false;
+            var toNodeID = GetQueryString("ToNode");
+            var sa = new Entity("BP.WF.Template.Selector", toNodeID);
+            if (sa.IsSimpleSelector == 1)
+                isDel = true;
             
             for (var i = 0; i < sas.length; i++) {
                 var sa = sas[i];
@@ -131,7 +137,11 @@
                 //row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
                 row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
-                row += "<td><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
+                if (isDel==true)
+                    row += "<td><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','" + sa.EmpName + "');\" >移除</a></td>";
+                else
+                    row += "<td> <a href=\"alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
+
                 row += "</tr>";
 
                 $("#Table1 tbody").append(row);
@@ -163,6 +173,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             handler.AddPara("FK_Emp", empNo);
+
             var data = handler.DoMethodReturnString("AccepterOfGener_Delete");
             if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
                 alert(data);

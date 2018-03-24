@@ -562,7 +562,6 @@ namespace BP.WF.HttpHandler
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
             url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
 
-
             if (urlExt.Contains("&NodeID") == false)
                 urlExt += "&NodeID=" + currND.NodeID;
 
@@ -582,6 +581,16 @@ namespace BP.WF.HttpHandler
                 url += "&" + urlExt;
             else
                 url += "?" + urlExt;
+
+            foreach (string str in context.Request.Form.AllKeys)
+            {
+                if (DataType.IsNullOrEmpty(str) == true)
+                    continue;
+                if (url.Contains(str + "=") == true)
+                    continue;
+                url += "&" + str + "=" +this.GetRequestVal(str);
+            }
+
 
             url = url.Replace("?&", "?");
             url = url.Replace("&&", "&");

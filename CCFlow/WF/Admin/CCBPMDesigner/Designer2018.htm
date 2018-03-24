@@ -210,8 +210,8 @@
         //节点类型设置
         $('#Node_Ordinary').on('click', function () {
 
-            //  var activeId = _canvas.getActiveId(); //右键当前的ID
-            //  alert('普通节点');
+            
+            
 
             SetNodeRunModel(101, 0);
 
@@ -247,9 +247,6 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.RunModel = runModel;
             node.Update();
-
-            //设置运行模式.
-            SetNodeRunModel(nodeID, runModel);
         }
 
         //改变节点风格.

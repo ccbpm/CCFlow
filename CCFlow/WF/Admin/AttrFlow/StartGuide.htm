@@ -183,9 +183,9 @@
                     </ul>
                     </div>
 
-                    <input type="text" value="" id="TB_ByHistoryUrl" name="TB_ByHistoryUrl" style="width:98%; height: 24px" />
+                    <!--<input type="text" value="" id="TB_ByHistoryUrl" name="TB_ByHistoryUrl" style="width:98%; height: 24px" />-->
                     
-                    <!--<Textarea id="TB_ByHistoryUrl" runat="server" style="width:98%; height: 24px"></Textarea>-->
+                    <textarea id="TB_ByHistoryUrl" runat="server" style="width:98%; height: 24px"></textarea>
                     <br />
                 </fieldset>
 
@@ -208,8 +208,8 @@
                     </ul>
                    
                     </div>
-                    <input type="text" id="TB_SelfURL" name="TB_SelfURL" runat="server" style="width:98%; height: 24px"/>
-                    <!--<Textarea id="TB_SelfURL" runat="server" style="width:98%; height: 24px"></Textarea>--><br />
+                   <!-- <input type="text" id="TB_SelfURL" name="TB_SelfURL" runat="server" style="width:98%; height: 24px"/>-->
+                    <textarea id="TB_SelfURL" runat="server" style="width:98%; height: 24px"></textarea><br />
                 </fieldset>
 
                 <fieldset>
@@ -227,8 +227,8 @@
                       <li>实例:SELECT a.WorkID as No, a.Title as Name, a.Starter, a.WorkID As PWorkID, '011' as PFlowNo, a.FK_Node as PNodeID FROM WF_GenerWorkflow a, WF_GenerWorkerlist b WHERE A.WorkID=b.WorkID  AND B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.FK_Flow='011' AND a.Title Like '%@Key%'</li>
                     </ul>
                     </div>
-                    <input type="text" id="TB_BySQLOne1" name="TB_BySQLOne1" rows="3"  runat="server" style="width:98%; height: 51px"/>
-                    <!--<Textarea id="TB_BySQLOne1"  rows="3"  runat="server" style="width:98%; height: 51px"></Textarea>--><br />
+                    <!--<input type="text" id="TB_BySQLOne1" name="TB_BySQLOne1" rows="3"  runat="server" style="width:98%; height: 51px"/>-->
+                    <textarea id="TB_BySQLOne1"  rows="3"  runat="server" style="width:98%; height: 51px"></textarea><br />
 
                      <a href="javascript:ShowHidden('ByParas2')">初始化列表参数:</a>
                     <div id="ByParas2" style="display:none;color:gray">
@@ -241,8 +241,8 @@
                     </div>
  
                     </font>
-                    <input type="text" id="TB_BySQLOne2" name="TB_BySQLOne2" rows="3"  runat="server" style="width:98%; height: 51px"/>
-                    <!--<Textarea id="TB_BySQLOne2" rows="3"  runat="server" style="width:98%; height: 51px"></Textarea>--><br />
+                    <!--<input type="text" id="TB_BySQLOne2" name="TB_BySQLOne2" rows="3"  runat="server" style="width:98%; height: 51px"/>-->
+                    <textarea id="TB_BySQLOne2" rows="3"  runat="server" style="width:98%; height: 51px"></textarea><br />
                 </fieldset>
 
                 <fieldset>
@@ -260,7 +260,8 @@
                       <li>实例:SELECT a.WorkID as No, a.Title as Name, a.Starter, a.WorkID As PWorkID, '011' as PFlowNo, a.FK_Node as PNodeID FROM WF_GenerWorkflow a, WF_GenerWorkerlist b WHERE A.WorkID=b.WorkID  AND B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.FK_Flow='011' AND a.Title Like '%@Key%'</li>
                     </ul>
                     </div>
-                    <input type="text" id="TB_BySQLMulti1" name="TB_BySQLMulti1" rows="3"  runat="server" style="width:98%; height: 51px"/>
+                    <!--<input type="text" id="TB_BySQLMulti1" name="TB_BySQLMulti1" rows="3"  runat="server" style="width:98%; height: 51px"/>-->
+                    <textarea id="TB_BySQLMulti1" name="TB_BySQLMulti1" rows="3"  runat="server" style="width:98%; height: 51px"/></textarea>
                     <br />
 
                      <a href="javascript:ShowHidden('ParasMulti2')">初始化列表参数:</a>
@@ -274,7 +275,8 @@
                     </div>
  
                     
-                    <input type="text" id="TB_BySQLMulti2" name="TB_BySQLMulti2" rows="3"  runat="server" style="width:98%; height: 51px"/>
+                    <!--<input type="text" id="TB_BySQLMulti2" name="TB_BySQLMulti2" rows="3"  runat="server" style="width:98%; height: 51px"/>-->
+                    <textarea id="TB_BySQLMulti2" name="TB_BySQLMulti2" rows="3"  runat="server" style="width:98%; height: 51px"></textarea>
                     <br />
                 </fieldset>
 
@@ -296,8 +298,8 @@
                       <li>实例:SELECT a.WorkID as No, a.Title as Name, a.Starter, a.WorkID As PWorkID, '011' as PFlowNo, a.FK_Node as PNodeID FROM WF_GenerWorkflow a, WF_GenerWorkerlist b WHERE A.WorkID=b.WorkID  AND B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.FK_Flow='011' AND a.Title Like '%@Key%'</li>
                     </ul>
                     </div>
-                    <input id="TB_SubFlow1" name="TB_SubFlow1" rows="3" type="text" runat="server" style="width:98%; height: 51px"/>
-                    <!--<Textarea id="TB_SubFlow1"  rows="3"  runat="server" style="width:98%; height: 51px">--></Textarea><br />
+                    <!--<input id="TB_SubFlow1" name="TB_SubFlow1" rows="3" type="text" runat="server" style="width:98%; height: 51px"/>-->
+                    <textarea id="TB_SubFlow1"  rows="3"  runat="server" style="width:98%; height: 51px"></textarea><br />
 
                     <a href="javascript:ShowHidden('subflow2')">初始化列表参数:</a>
                     <div id="subflow2" style="display:none;color:gray">
@@ -310,8 +312,8 @@
                     </div>
  
                     </font>
-                    <input id="TB_SubFlow2" type="text" name="TB_SubFlow2" rows="3"  runat="server" style="width:98%; height: 51px"/>
-                    <!--<Textarea id="TB_SubFlow2" rows="3"  runat="server" style="width:98%; height: 51px"></Textarea>--><br />
+                    <!--<input id="TB_SubFlow2" type="text" name="TB_SubFlow2" rows="3"  runat="server" style="width:98%; height: 51px"/>-->
+                    <textarea id="TB_SubFlow2" rows="3"  runat="server" style="width:98%; height: 51px"></textarea><br />
                 </fieldset>
 
 
@@ -334,15 +336,17 @@
         </tr>
 
 
-         </tr>
+         <tr>
             <td>
         </td>
           <td>
           右侧连接(对按设置的SQL-单条模式有效):
               <br />
-               <input tpye='text'    id="TB_GuideLink" name="TB_GuideLink" Width="564px"></input>
+               <!--<input tpye='text'    id="TB_GuideLink" name="TB_GuideLink" Width="564px"></input>-->
+               <textarea id="TB_GuideLink" name="TB_GuideLink" style="width:98%; height: 51px"></textarea>
               <br />连接标签  <br />
-                <input tpye='text'  class="TextBoxReadonly" id="TB_GuideLab" name="TB_GuideLab"></input>
+                <!--<input tpye='text'  class="TextBoxReadonly" id="TB_GuideLab" name="TB_GuideLab"></input>-->
+                <textarea class="TextBoxReadonly" id="TB_GuideLab" name="TB_GuideLab" style="width:98%; height: 51px"></textarea>
         </td>
  </tr>
 

@@ -591,7 +591,6 @@ namespace BP.WF.HttpHandler
                 url += "&" + str + "=" +this.GetRequestVal(str);
             }
 
-
             url = url.Replace("?&", "?");
             url = url.Replace("&&", "&");
             return url;

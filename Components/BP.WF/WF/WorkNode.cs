@@ -5754,6 +5754,9 @@ namespace BP.WF
                 }
                 #endregion
 
+                if (dt == null)
+                    throw new Exception("err@您启动的子流程或者延续流程开始节点没有明确的设置接受人.");
+
                 //组装到达的人员.
                 foreach (DataRow dr in dt.Rows)
                     toEmpIDs += dr["No"].ToString();

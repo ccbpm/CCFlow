@@ -1596,7 +1596,6 @@ namespace BP.Sys
             //if (this.LGType == FieldTypeS.Normal)
             //    if (this.UIIsEnable == true &&this.DefVal !=null &&  this.DefVal.Contains("@") == true)
             //        throw new Exception("@不能在非只读(不可编辑)的字段设置具有@的默认值. 您设置的默认值为:" + this.DefVal);
-
             //if (this.UIContralType == En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
 
             //added by liuxc,2016-12-2

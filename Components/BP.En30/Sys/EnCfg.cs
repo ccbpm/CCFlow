@@ -215,7 +215,6 @@ namespace BP.Sys
         }
         #endregion UI设置.
 
-
         #region 基本属性
         /// <summary>
         /// 数据分析方式

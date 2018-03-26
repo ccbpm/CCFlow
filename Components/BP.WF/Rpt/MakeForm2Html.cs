@@ -1329,7 +1329,6 @@ namespace BP.WF
 
                 //生成 表单的 html.
                 StringBuilder sb = new System.Text.StringBuilder();
-
               
                 #region 替换模版文件..
 
@@ -1368,6 +1367,15 @@ namespace BP.WF
                     gwf.RetrieveFromDBSources();
 
                     docs = docs.Replace("@Title", gwf.Title);
+
+                    if (gwf.WFState == WFState.Runing)
+                    {
+                        if ( SystemConfig.CustomerNo=="TianYe" && gwf.NodeName.Contains("反馈") == true)
+                        {
+                            //让流程自动结束.
+                            BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, workid, "打印结束");
+                        }
+                    }
 
                     //替换模版尾部的打印说明信息.
                     string pathInfo = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\EndInfo\\" + flowNo + ".txt";
@@ -1446,6 +1454,18 @@ namespace BP.WF
                     ht.Add("zip", "err@生成zip文件遇到权限问题:" + ex.Message + " @Path:" + pdfFile);
                 }
                 #endregion 把所有的文件做成一个zip文件.
+
+
+                #region 判断当前流程是否是最后一个节点，是否是反馈给申请人.
+
+                 
+
+
+              
+
+
+                #endregion 判断当前流程是否是最后一个节点，是否是反馈给申请人.
+
 
                 return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
             }

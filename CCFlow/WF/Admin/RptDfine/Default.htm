@@ -8,6 +8,7 @@
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <link href="../../../DataUser/Style/Table0.css" rel="stylesheet" />
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
         //页面启动函数.
         var initData = {};
@@ -17,118 +18,9 @@
 
         window.location.href='../../Comm/En.htm?EnsName=BP.WF.Rpt.RptDfines&No='+GetQueryString("FK_Flow");
         return;
-
-         //我发起的流程.
-        var myStartFlows=document.getElementById("MyStartFlows");
-        myStartFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En.htm?EnsName=BP.WF.Rpt.MyStartFlows&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
-
-        //部门发起的流程.
-        var myDeptFlows=document.getElementById("MyDeptFlows");
-        myDeptFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En.htm?EnsName=BP.WF.Rpt.MyDeptFlows&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
-        return;
-
-        var myRpt = "ND"+ parseInt(GetQueryString("FK_Flow")) +"MyRpt";
-        window.location.href='../../../Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&No='+myRpt;
-        return;
-
-          //  InitTable();
+         
         });
-
-        function Open()
-        {
-          WinOpen(url);
-        }
-
-        function InitTable() {
-
-            pageData = {
-                FK_Flow: GetQueryString("FK_Flow"),
-            };
-
-        $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=S0_RptList_Init&FK_Flow=" + pageData.FK_Flow+ "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data != undefined && data.indexOf('err@') == 0) {
-                        console.error(data);
-                        return;
-                    }
-
-                    initData = JSON.parse(data);
-
-                    BindRptList(initData);
-                },
-                error: function (xml, textSta, errorThrown) {
-                    alert(xml);
-                    alert(textSta);
-                    alert(errorThrown);
-                }
-            })
-        }
-
-        //打开报表.
-        function OpenRpt(no, name, note) {
-            var flowRptNo = '';
-            var tmpFK_Flow = pageData.FK_Flow;
-            window.location.href = "../../FoolFormDesigner/Rpt/S0_RptList.htm?FK_Flow=" + pageData.FK_Flow + "&FK_MapData=" + flowRptNo + "&RptNo=" + no;
-        }
-
-        function BindRptList(data){
-
-            var tbodyHtml="";
-
-            $.each(data,function(i,obj){
-
-            tbodyHtml+="<tr>";
-            tbodyHtml+="<td>"+obj.No+"</td>";
-            //tbodyHtml+="<td>"+"<a href='#"+obj.Name+"</a>" +"</td>";
-            tbodyHtml+="<td>"+"<a href='#' onclick=OpenRpt('"  +obj.No+ "') >"+obj.Name+"</a>" +"</td>";
-            tbodyHtml+="<td>"+obj.Note+"</td>";
-            tbodyHtml+="<td>"+obj.PTable+"</td>";
-            tbodyHtml+="<td>"+obj.FK_Flow+"</td>";
-             tbodyHtml+="<td>"+"<a href='#' style='margin-right:8px;'  onclick=NewOrEditRpt('"+obj.No+"')>编辑</a>" +"<a href='#'  onclick=DelRpt('"+obj.No+ "')>删除</a>" +"</td>";
-            tbodyHtml+="</tr>"
-            })
-            //为TR赋上  data- 数据
-            $('#Fields tbody') .html(tbodyHtml);
-            $.each(data,function(i,obj){
-                $($('#Fields tbody tr')[i]).data(obj);
-            })
-        }
-        
-        function DelRpt(rptNo){
-            $.ajax({
-                    type: 'post',
-                    async: true,
-                    url: Handler + "?DoType=S0_RptList_Delete&No=" + rptNo+"&FK_Flow="+pageData.FK_Flow+ "&m=" + Math.random(),
-                    dataType: 'html',
-                    success: function (data) {
-                        alert(data)
-                        InitTable();
-                    },
-                    error: function (xml, textSta, errorThrown) {
-                        alert(xml);
-                        alert(textSta);
-                        alert(errorThrown);
-                    }
-                })
-        }
-
-        function NewOrEditRpt(no){
-            WinOpen('S1Edit.htm?FK_Flow='+pageData.FK_Flow+'&No='+escape(no));
-        }
-
-        function SaveAndClose() {
-            Save();
-            window.close();
-        }
-
-        function Close() {
-            window.close();
-        }
+         
     </script>
 </head>
 <body>
@@ -169,7 +61,6 @@
 <li>默认所有人都有权限.</li>
 </ul>
 </fieldset>
-
 
 
 <fieldset>

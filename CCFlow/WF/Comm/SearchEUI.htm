@@ -424,6 +424,14 @@
             $("#end").html(html);
         }
 
+        function Setting()
+        {
+           var user=new WebUser();
+           var url="./Sys/SearchSetting.htm?EnsName="+GetQueryString("EnsName")+"&m="+Math.random();
+            OpenEasyUiDialogExt(url,  ' 设置', 800, 600, true);
+        }
+
+
     </script>
 </head>
 <body>
@@ -439,11 +447,12 @@
                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
                      <a id="newWin" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
                 </div>
-                <div  style="float: left;">     
+
+                <div  style="float: left;">
                     <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出</a>
-                </div>
-                            
-               
+                    <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-setting'" onclick="Setting()">设置</a>
+                </div> 
+
             </div>
         </div>
         

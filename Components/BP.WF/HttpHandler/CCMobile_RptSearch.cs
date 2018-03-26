@@ -46,7 +46,6 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-     
 
         #region 关键字查询.
         /// <summary>
@@ -68,9 +67,6 @@ namespace BP.WF.HttpHandler
             return search.KeySearch_Query();
         }
         #endregion 关键字查询.
-
-        
-
 
     }
 }

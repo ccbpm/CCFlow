@@ -73,7 +73,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-
+        
         #region 功能列表
         /// <summary>
         /// 功能列表
@@ -115,15 +115,23 @@ namespace BP.WF.HttpHandler
             }
             #endregion 增加本部门发起流程的查询.
 
-            //if ( BP.Web.WebUser.IsAdmin)
-            //    ht.Add("Adminer", "高级查询");
-
-            string advEmps = SystemConfig.AppSettings["AdvEmps"];
-            if (advEmps!=null && advEmps.Contains( BP.Web.WebUser.No ) ==true)
-                ht.Add("Adminer", "高级查询");
-
             Flow fl = new Flow(this.FK_Flow);
             ht.Add("FlowName", fl.Name);
+
+            string advEmps = SystemConfig.AppSettings["AdvEmps"];
+            if (advEmps != null && advEmps.Contains(BP.Web.WebUser.No) == true)
+            {
+                ht.Add("Adminer", "高级查询");
+            }
+            else
+            {
+                string data = fl.GetParaString("AdvSearchRight");
+                data=","+data+",";
+                if (data.Contains(BP.Web.WebUser.No + ",") == true)
+                {
+                    ht.Add("Adminer", "高级查询");
+                }
+            }
 
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }

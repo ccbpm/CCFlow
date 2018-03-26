@@ -322,6 +322,15 @@ namespace BP.WF.Rpt
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "查询权限";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
+                rm.ClassMethodName = this.ToString() + ".DoReset_AdminerFlowRight()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "高级查询";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "恢复设置";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Reset.png";
                 rm.Warning = "您确定要执行吗?";
@@ -674,6 +683,11 @@ namespace BP.WF.Rpt
         public string DoSearch_AdminerFlow()
         {
             return "../../RptDfine/FlowSearch.htm?SearchType=Adminer&FK_Flow=" + this.No;
+        }
+
+        public string DoReset_AdminerFlowRight()
+        {
+            return "../../Admin/RptDfine/AdvSearchRight.htm?FK_Flow=" + this.No;
         }
         #endregion 高级查询
 

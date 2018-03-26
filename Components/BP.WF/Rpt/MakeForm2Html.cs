@@ -1359,7 +1359,6 @@ namespace BP.WF
                 docs = docs.Replace("@Height", mapData.FrmH.ToString());
                 docs = docs.Replace("@PrintDT", DateTime.Now.ToString("yyyy年MM月dd日HH时mm分ss秒") );
 
-
                 if (flowNo != null)
                 {
                     GenerWorkFlow gwf = new GenerWorkFlow();
@@ -1372,8 +1371,12 @@ namespace BP.WF
                     {
                         if ( SystemConfig.CustomerNo=="TianYe" && gwf.NodeName.Contains("反馈") == true)
                         {
-                            //让流程自动结束.
-                            BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, workid, "打印结束");
+                            Node nd = new Node(gwf.FK_Node);
+                            if (nd.IsEndNode == true)
+                            {
+                                //让流程自动结束.
+                                BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, workid, "打印并自动结束");
+                            }
                         }
                     }
 

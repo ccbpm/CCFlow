@@ -51,6 +51,7 @@ namespace CCFlow.Web.Comm
 					return true;
 				else
 					return false;
+
 			}
 		}
 		public string ContrastLab

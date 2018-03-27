@@ -275,6 +275,9 @@
             data1 = JSON.parse(data1)
             var refMethod = data1["RefMethod"];
             console.log(data1);*/
+
+            console.log(data);
+
             var columns = new Array(); ;
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i]; 
@@ -288,14 +291,22 @@
                     keyOfEn=attr.KeyOfEn
                     continue;
                 }
+
+               // Text
+                //alert(JSON.stringify(attr));
+
+                
+
                 var field = attr.KeyOfEn;
-                var title=attr.Name;
+                var title = attr.Name;
+
+                if (attr.UIContralType == 1)
+                    field = field + "Text";
+
                  columns.push({
 		                field: field,
 		                title: title,
-                        fixed:true,
-                       
-                        
+                        fixed:false
 		         });
             }
             /**columns.push({

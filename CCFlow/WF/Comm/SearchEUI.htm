@@ -392,28 +392,28 @@
             var cfg=new Entity("BP.Sys.EnCfg",ensName);
 
             var url=cfg.GetPara("WinOpenUrl");
-            if (url=="")
+            if (url=="" || url ==undefined )
             {
               url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
-              }
-              else
-              {
-                 if (url.indexOf('?')==-1)
-                 {
-                    url= url+"?";
-                 }
-                 else if(url.indexOf('?')<(url.length-1)){
-                    url = url+"&";
-                 }
-                 url = url+"EnsName="+ensName+"&enName="+enName+ "&PKVal=" + pk;
-              }
-            var windowW = cfg.GetPara("WinCardW");
-            var windowH = cfg.GetPara("WinCardH");
-            if( windowW!=null &&windowW!="" && windowH !=null && windowH!="")
-            OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', cfg.GetPara("WinCardW"), cfg.GetPara("WinCardH"), true);
+            }
             else
-            OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', 1000, 600, true);
-            
+            {
+                 if (url.indexOf('?')==-1)
+                    url= url+"?1=2";
+                 url = url+"&EnsName="+ensName+"&enName="+enName+ "&PKVal=" + pk;
+            }
+
+            var windowW = cfg.GetPara("WinCardW");
+            if (windowW=="" || windowW==undefined)
+                windowW=800;
+
+            var windowH = cfg.GetPara("WinCardH");
+             if (windowH=="" || windowH==undefined )
+                windowH=500;
+
+             alert(windowW+" - "+windowH);
+
+            OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', windowW, windowH, true);
         }
 
         function New() {
@@ -448,7 +448,7 @@
         {
            var user=new WebUser();
            var url="./Sys/SearchSetting.htm?EnsName="+GetQueryString("EnsName")+"&m="+Math.random();
-            OpenEasyUiDialogExt(url,  ' 设置', 1000, 600, true);
+            OpenEasyUiDialogExt(url,  '设置', 800, 500, true);
         }
 
     </script>

@@ -192,7 +192,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
     $.ajax({
         type: 'post',
-        async: true,
+        async: false,
         url: dynamicHandler + "?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
@@ -363,6 +363,7 @@ function GenerFullAllCtrlsVal(data) {
                 }
                 var kv = o.split("=");
                 if (kv.length == 2) {
+
                     json[kv[0]] = kv[1];
                     var suffix = kv[0];
                     var val = kv[1];
@@ -379,9 +380,22 @@ function GenerFullAllCtrlsVal(data) {
                     //下拉框.
                     ddl = document.getElementById('DDLPara_' + suffix);
                     if (ddl != null) {
+
                         if (ddl.options.length == 0)
                             return true;
-                        $("#DDL_" + suffix).val(val); // 操作权限.
+
+                        console.log(suffix + "_before_" + val);
+
+                        //$("#DDLPara_" + suffix).val(""); // 操作权限.
+
+                        $("#DDLPara_" + suffix).val(val); // 操作权限.
+
+                        //   window.setTimeout(function () { $("#DDLPara_" + suffix).val(row.districtCode); }, 1200); 
+                        //  json[kv[0]] = kv[1];
+                        //   $("#DDLPara_" + suffix).val("2"); // 操作权限.
+
+                        console.log(suffix + "_" + val);
+
                         return true;
                     }
 

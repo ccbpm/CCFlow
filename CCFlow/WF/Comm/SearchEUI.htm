@@ -319,38 +319,47 @@
                         } 
                         
             });*/
-            
+
             $('#dg').datagrid({
                 data: data["DT"],
                 columns: [columns],
-                fitColumns:false,
-                fit:true,
-                rownumbers:true,
-                striped:true,
-                singleSelect:true,
-                pagination:true,
-                pagePosition:'bottom',
-                toolbar:"#tb",
-                loadFilter: pagerFilter, 
-                onDblClickRow: function(index,rowData){
-                        var pkval = rowData["No"];
-                        if (pkval == undefined)
-                            pkval = rowData["OID"];
-                        if (pkval == undefined)
-                            pkval = rowData["MyPK"];
-                        if (pkval == undefined)
-                            pkval = rowData["WorkID"];
-                        if (pkval == undefined)
-                            pkval = rowData["NodeID"];
-                        var paras = "";
-                       for (var i = 0; i < attrs.length; i++) {
-                            var attr = attrs[i];
-                            if(attr.UIContralType == 1)
-                            paras+="&"+attr.KeyOfEn+"="+rowData[attr.KeyOfEn];
-                        }
+                fitColumns: false,
+                fit: true,
+                rownumbers: true,
+                striped: true,
+                singleSelect: true,
+                pagination: true,
+                pagePosition: 'bottom',
+                toolbar: "#tb",
+                loadFilter: pagerFilter,
+                onDblClickRow: function (index, rowData) {
+                    var pkval = rowData["No"];
+                    var objectID = "No";
+                    if (pkval == undefined) {
+                        pkval = rowData["OID"];
+                        objectID = "OID";
+                    }
+                    if (pkval == undefined) {
+                        pkval = rowData["MyPK"];
+                        objectID = "MyPK";
+                    }
+                    if (pkval == undefined) {
+                        pkval = rowData["WorkID"];
+                        objectID = "WorkID";
+                    }
+                    if (pkval == undefined) {
+                        pkval = rowData["NodeID"];
+                        objectID = "NodeID";
+                    }
+                    var paras = "&" + objectID + "=" + pkval;
+                    for (var i = 0; i < attrs.length; i++) {
+                        var attr = attrs[i];
+                        if (attr.UIContralType == 1)
+                            paras += "&" + attr.KeyOfEn + "=" + rowData[attr.KeyOfEn];
+                    }
 
-                        OpenEn(pkval,paras);
-	                }
+                    OpenEn(pkval, paras);
+                }
 
             });
         }
@@ -409,7 +418,7 @@
             else
             {
                  if (url.indexOf('?')==-1)
-                    url= url+"?1=2";
+                    url= url+"?1=1";
                  url = url+"&EnsName="+ensName+"&enName="+enName+ "&PKVal=" + pk+paras;
             }
 

@@ -209,4 +209,25 @@ if (typeof DeliveryWay == "undefined") {
         /// 启动子流程
         /// </summary>
         CondType.SubFlow = 3
-    }
+   }
+
+   //
+   if (typeof RefMethodType == "undefined") {
+       var RefMethodType = {}
+       /// <summary>
+       /// 功能
+       /// </summary>
+       RefMethodType.Func = 0,
+       /// <summary>
+       /// 模态窗口打开
+       /// </summary>
+        RefMethodType.LinkModel = 1,
+       /// <summary>
+       /// 新窗口打开
+       /// </summary>
+        RefMethodType.LinkeWinOpen = 2,
+       /// <summary>
+       /// 右侧窗口打开
+       /// </summary>
+        RefMethodType.RightFrameOpen = 3
+   }

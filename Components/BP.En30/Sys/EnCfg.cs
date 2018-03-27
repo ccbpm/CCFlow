@@ -311,13 +311,13 @@ namespace BP.Sys
         }
         #endregion 参数属性.
 
-
         #region 构造方法
         /// <summary>
         /// 系统实体
         /// </summary>
         public EnCfg()
         {
+
         }
         /// <summary>
         /// 系统实体

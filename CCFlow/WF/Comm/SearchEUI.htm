@@ -194,8 +194,9 @@
             ur.Vals = str;
             ur.FK_MapData = ensName;
             var i = ur.Save();
-            var pager = $("#dg").datagrid('getPager');  
-            window.location.href = "?EnsName=" + ensName + "&PageIdx="+pager;
+            var pager = $("#dg").datagrid('getPager').data("pagination" ).options;  
+            var pageIndex =  pager.pageNumber;
+            window.location.href = "?EnsName=" + ensName + "&PageIdx="+pageIndex;
         }
 
         function Exp() {

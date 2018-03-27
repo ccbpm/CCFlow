@@ -384,7 +384,8 @@
         function operate(value, row, index) {  
             return '<a href="#" onclick="editUser('+index+')">查看明细</a>';  
         }  
-        function OpenEn(pk) {
+
+        function OpenEn(pk,paras) {
 
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
@@ -400,7 +401,7 @@
             {
                  if (url.indexOf('?')==-1)
                     url= url+"?1=2";
-                 url = url+"&EnsName="+ensName+"&enName="+enName+ "&PKVal=" + pk;
+                 url = url+"&EnsName="+ensName+"&enName="+enName+ "&PKVal=" + pk+paras;
             }
 
             var windowW = cfg.GetPara("WinCardW");

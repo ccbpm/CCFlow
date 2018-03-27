@@ -269,9 +269,6 @@
            
             var keyOfEn="";
 
-
-            console.log(data);
-
             var columns = new Array(); ;
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i]; 
@@ -289,15 +286,26 @@
 
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
-
                 if (attr.UIContralType == 1)
                     field = field + "Text";
+                if (attr.UIContralType == 2) 
+                    columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false,
+                        formatter: function (value, row, index) {
+                             if (value == "0") return "否";
+                             if (value == "1") return "是";
 
-                 columns.push({
-		                field: field,
-		                title: title,
-                        fixed:false
-		         });
+                        }
+                     });
+                else
+                    columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false
+                       
+                    });
             }
 
 
@@ -402,9 +410,9 @@
 
         function operate(value, row, index) {  
             return '<a href="#" onclick="editUser('+index+')">查看明细</a>';  
-        }  
+        }
 
-        function OpenEn(pk,paras) {
+        function OpenEn(pk, paras) {
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
 

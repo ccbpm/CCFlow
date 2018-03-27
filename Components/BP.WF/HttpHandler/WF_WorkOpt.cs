@@ -2184,6 +2184,8 @@ namespace BP.WF.HttpHandler
         {
             string[] vals = this.GetRequestVal("ReturnToNode").Split('@');
             int toNodeID = int.Parse(vals[0]);
+
+            string toEmp   =  vals[1];
             string reMesage = this.GetRequestVal("ReturnInfo");
 
             bool isBackBoolen = false;
@@ -2191,7 +2193,7 @@ namespace BP.WF.HttpHandler
             if (isBack == "1")
                 isBackBoolen = true;
 
-            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, isBackBoolen);
+            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID,toEmp, reMesage, isBackBoolen);
         }
         #endregion
 

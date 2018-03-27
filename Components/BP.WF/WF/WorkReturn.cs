@@ -879,32 +879,60 @@ namespace BP.WF
             gwf.FK_Node = this.ReturnToNode.NodeID;
             gwf.NodeName = this.ReturnToNode.Name;
             gwf.SDTOfNode = sdt;
+
             gwf.Sender = WebUser.No+","+WebUser.Name;
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.HuiQianZhuChiRen = "";
             gwf.HuiQianZhuChiRenName = "";
+
+            //ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
+            //ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
+            //ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
+            //ps.Add(GenerWorkFlowAttr.SDTOfNode, sdt);
+            //ps.Add(GenerWorkFlowAttr.Sender, WebUser.No);
+            //ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
+
+
+            //如果已经计算出来要退回到的人了,就删除其他相关的人员.
+            if (DataType.IsNullOrEmpty(this.ReturnToEmp) == false)
+            {
+                string sql = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + this.ReturnToNode.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp!='" + this.ReturnToEmp + "'";
+                DBAccess.RunSQL(sql);
+            }
+
+            GenerWorkerLists gwls = new GenerWorkerLists();
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
+
+            //更新当前待办人员.
+            string toDoEmps = "";
+            foreach (GenerWorkerList item in gwls)
+            {
+                toDoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
+            }
+            gwf.TodoEmps = toDoEmps;
+            gwf.TodoEmpsNum = gwls.Count;
             gwf.Update();
 
+            //Paras ps = new Paras();
+            //ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr
+            //    + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode,Sender=" + dbStr + "Sender WHERE WorkID=" + dbStr + "WorkID";
+            //ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
+            //ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
+            //ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
+            //ps.Add(GenerWorkFlowAttr.SDTOfNode, sdt);
+            //ps.Add(GenerWorkFlowAttr.Sender, WebUser.No);
+            //ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
+            //DBAccess.RunSQL(ps);
 
-            Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr
-                + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode,Sender=" + dbStr + "Sender WHERE WorkID=" + dbStr + "WorkID";
-            ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
-            ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
-            ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
-            ps.Add(GenerWorkFlowAttr.SDTOfNode, sdt);
-            ps.Add(GenerWorkFlowAttr.Sender, WebUser.No);
-            ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
-            DBAccess.RunSQL(ps);
-
-            ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,IsRead=0,SDT=" + dbStr + "SDT, RDT=" + dbStr + "RDT WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
-            ps.Add("SDT", sdt);
-            ps.Add("RDT", DataType.CurrentDataTime); //当前日期.
-            ps.Add("FK_Node", this.ReturnToNode.NodeID);
-            ps.Add("WorkID", this.WorkID);
-            DBAccess.RunSQL(ps);
-
+            //更新待办状态.
+            foreach (GenerWorkerList item in gwls)
+            {
+                item.IsPassInt = 0;
+                item.IsRead = false;
+                item.SDT = sdt;
+                item.RDT = DataType.CurrentDataTime;
+                item.Update();
+            }
 
             //更新流程报表数据.
             ps = new Paras();
@@ -912,7 +940,6 @@ namespace BP.WF
             ps.Add("WFState", (int)WFState.ReturnSta);
             ps.Add("FlowEnder", WebUser.No);
             ps.Add("FlowEndNode", ReturnToNode.NodeID);
-
             ps.Add("OID", this.WorkID);
             DBAccess.RunSQL(ps);
 
@@ -931,10 +958,6 @@ namespace BP.WF
             rw.BeiZhu = Msg;
             //杨玉慧 
             Emp emp = new Emp(rw.ReturnToEmp);
-            //更新待办人员
-            string updateToDoEmpSql = "UPDATE WF_GenerWorkFlow SET TodoEmps='" + emp.No + "," + emp.Name + "',TodoEmpsNum=1 WHERE  WorkID=" + this.WorkID;
-            //更新WF_GenerWorkFlow 的待办人员
-            DBAccess.RunSQL(updateToDoEmpSql);
 
             if (this.HisNode.TodolistModel == TodolistModel.Order
                 || this.HisNode.TodolistModel == TodolistModel.Sharing

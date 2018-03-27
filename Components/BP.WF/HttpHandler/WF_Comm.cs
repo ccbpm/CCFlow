@@ -689,7 +689,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtAttrs); //把描述加入.
 
 
-
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";

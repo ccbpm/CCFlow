@@ -190,7 +190,9 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
 
 /*绑定枚举值.*/
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
+
     $.ajax({
+
         type: 'post',
         async: false,
         url: dynamicHandler + "?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),

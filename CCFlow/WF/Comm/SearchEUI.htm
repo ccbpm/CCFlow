@@ -405,13 +405,11 @@
 
             var windowW = cfg.GetPara("WinCardW");
             if (windowW=="" || windowW==undefined)
-                windowW=800;
+                windowW=700;
 
             var windowH = cfg.GetPara("WinCardH");
              if (windowH=="" || windowH==undefined )
                 windowH=500;
-
-             alert(windowW+" - "+windowH);
 
             OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', windowW, windowH, true);
         }

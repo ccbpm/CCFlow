@@ -4750,10 +4750,14 @@ namespace BP.WF
             if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
             {
                 /*检查审核意见 */
-                string sql = "SELECT count(workid) as Num FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE  EmpFrom='" + WebUser.No + "' AND NDFrom=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.WorkCheck;
-                int i = DBAccess.RunSQLReturnValInt(sql, 0);
-                if (i == 0)
+                string sql = "SELECT Msg,EmpToT FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE  EmpFrom='" + WebUser.No + "' AND NDFrom=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.WorkCheck;
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0)
                     throw new Exception("err@请填写审核意见.");
+
+                if (dt.Rows[0][0].ToString() == "")
+                    throw new Exception("err@审核意见不能为空.");
             }
             return true;
         }

@@ -16,201 +16,50 @@
 
             //全局配置.
             var en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "UIRowStyleGlo";
-            en.RetrieveFromDBSources();
-            GenerBindEnumKey("DDL_UIRowStyleGlo", "UIRowStyleGlo", en.UI);
+            en.No = ensName;
+            if (en.IsExits() == false) {
 
-            //是否启动双击打开(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableDouclickGlo";
-            en.RetrieveFromDBSources();
+                en.SetPara("UIRowStyleGlo", 1); //表格数据行风格(应用全局)
+                en.SetPara("IsEnableDouclickGlo", 1); //是否启动双击打开(应用全局)
+                en.SetPara("IsEnableFocusField", 0); //是否启用焦点字段
+                en.SetPara("FocusField", "无"); //焦点字段(用于显示点击打开的列
+                en.SetPara("IsEnableRefFunc", 1); //是否启用相关功能列
 
-            if (en.UI == "1")
-                $("#CB_IsEnableDouclickGlo").attr("checked", true);
-            else
-                $("#CB_IsEnableDouclickGlo").attr("checked", false);
+                en.SetPara("IsEnableOpenICON", 1); //是否启用打开图标
+                en.SetPara("MoveToShowWay", 0); //移动到显示方式
+                en.SetPara("MoveTo", "无"); //是否启用相关功能列
+                en.SetPara("WinCardW", "900"); //是否启用相关功能列
+                en.SetPara("WinCardH", "600"); //是否启用相关功能列
 
+                en.SetPara("EditerType", 0); //是否启用相关功能列
+                en.SetPara("WinOpenUrl", ""); //是否启用相关功能列
+                en.Insert();
 
-            //是否启用焦点字段(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableFocusField";
-            en.RetrieveFromDBSources();
+                en.Retrieve();
+            } else {
+                en.Retrieve();
+            }
 
-            if (en.UI == "1")
-                $("#CB_IsEnableFocusField").attr("checked", true);
-            else
-                $("#CB_IsEnableFocusField").attr("checked", false);
+            //赋值.
+            GenerBindEnumKey("DDLPara_UIRowStyleGlo", "UIRowStyleGlo");
+            GenerBindEnumKey("DDLPara_MoveToShowWay", "MoveToShowWay");
+            GenerBindEnumKey("DDLPara_EditerType", "EditerType");
 
-            //焦点字段(用于显示点击打开的列)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "FocusField";
-            en.RetrieveFromDBSources();
-
-            $("#TB_FocusField").val(en.UI);
-
-            //是否启用相关功能列(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableRefFunc";
-            en.RetrieveFromDBSources();
-
-            if (en.UI == "1")
-                $("#CB_IsEnableRefFunc").attr("checked", true);
-            else
-                $("#CB_IsEnableRefFunc").attr("checked", false);
-
-            //是否启用打开图标(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableOpenICON";
-            en.RetrieveFromDBSources();
-
-            if (en.UI == "1")
-                $("#CB_IsEnableOpenICON").attr("checked", true);
-            else
-                $("#CB_IsEnableOpenICON").attr("checked", false);
-
-
-            //移动到显示方式(应用全局)
-            var en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "MoveToShowWay";
-            en.RetrieveFromDBSources();
-
-            GenerBindEnumKey("DDL_MoveToShowWay", "MoveToShowWay", en.UI);
-
-            //移动到字段 
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "MoveTo";
-            en.RetrieveFromDBSources();
-            $("#TB_MoveTo").val(en.UI);
-
-            //弹出窗口宽度 
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "WinCardW";
-            en.RetrieveFromDBSources();
-
-            $("#TB_WinCardW").val(en.UI);
-
-            //弹出窗口高度
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "WinCardH";
-            en.RetrieveFromDBSources();
-
-            $("#TB_WinCardH").val(en.UI);
-
-            //大块文本编辑器(应用全局)
-            var en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "EditerType";
-            en.RetrieveFromDBSources();
-
-            GenerBindEnumKey("DDL_EditerType", "EditerType", en.UI);
+            //给页面的控件赋值.
+            GenerFullAllCtrlsVal(en);
 
         });
 
         function Save() {
 
             var ensName = GetQueryString("EnsName");
-
             //全局配置.
-            var en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "UIRowStyleGlo";
-            en.RetrieveFromDBSources();
-            en.GroupTitle = ensName;
-            en.UI = $("#DDL_UIRowStyleGlo").val();
-            en.Save();
-
-            //是否启动双击打开(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableDouclickGlo";
-            en.RetrieveFromDBSources();
-            en.GroupTitle = ensName;
-            en.UI = $("#CB_IsEnableDouclickGlo").val();
-            if (en.UI == "on")
-                en.UI = 1;
-            else
-                en.UI = 0;
-
-            en.Save();
-
-            //是否启用焦点字段(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableFocusField";
-            en.RetrieveFromDBSources();
-            en.GroupTitle = ensName;
-            en.UI = $("#CB_IsEnableFocusField").val();
-            if (en.UI == "on")
-                en.UI = 1;
-            else
-                en.UI = 0;
-
-            en.Save();
-
-            //焦点字段(用于显示点击打开的列)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "FocusField";
-            en.GroupTitle = ensName;
-            en.UI = $("#TB_FocusField").val();
-            en.Save();
-
-            //是否启用相关功能列(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableRefFunc";
-            en.GroupTitle = ensName;
-            en.UI = $("#CB_IsEnableRefFunc").val();
-            if (en.UI == "on")
-                en.UI = 1;
-            else
-                en.UI = 0;
-
-            en.Save();
-
-            //是否启用打开图标(应用全局)
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "IsEnableOpenICON";
-            en.GroupTitle = ensName;
-            en.UI = $("#CB_IsEnableRefFunc").val();
-            if (en.UI == "on")
-                en.UI = 1;
-            else
-                en.UI = 0;
-
-            en.Save();
-
-            //移动到显示方式(应用全局)
-            var en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "MoveToShowWay";
-            en.GroupTitle = ensName;
-            en.UI = $("#DDL_MoveToShowWay").val();
-            en.Save();
-
-            //移动到字段 
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "MoveTo";
-            en.GroupTitle = ensName;
-            en.UI = $("#TB_MoveTo").val();
-            en.Save();
-
-            //弹出窗口宽度 
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "WinCardW";
-            en.GroupTitle = ensName;
-            en.UI = $("#TB_WinCardW").val();
-            en.Save();
-
-            //弹出窗口高度
-            en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "WinCardH";
-            en.GroupTitle = ensName;
-            en.UI = $("#TB_WinCardH").val();
-            en.Save();
-
-            //大块文本编辑器(应用全局)
-            var en = new Entity("BP.Sys.EnCfg");
-            en.No = ensName + "_" + "EditerType";
-            en.GroupTitle = ensName;
-            en.UI = $("#DDL_EditerType").val();
-            en.Save();
+            var en = new Entity("BP.Sys.EnCfg", ensName);
+            en.CopyForm(); //从from里面copy数据.
+            en.No = ensName;
+            en.Update();
 
             window.location.href = window.location.href;
-
         }
 
     </script>
@@ -229,7 +78,7 @@
 <tr bgcolor='white' >
 <td>UIRowStyleGlo</td>
 <td>表格数据行风格(应用全局)</td>
-<td ><select name="DDL_UIRowStyleGlo" id="DDL_UIRowStyleGlo">
+<td ><select name="DDLPara_UIRowStyleGlo" id="DDLPara_UIRowStyleGlo">
 	<option selected="selected" value="0">无风格</option>
 	<option value="1">交替风格</option>
 	<option value="2">鼠标移动</option>
@@ -240,32 +89,34 @@
 <tr bgcolor='AliceBlue' >
 <td>IsEnableDouclickGlo</td>
 <td>是否启动双击打开(应用全局)</td>
-<td ><input id="CB_IsEnableDouclickGlo" type="checkbox" name="CB_IsEnableDouclickGlo" /><label for="CB_IsEnableDouclickGlo">是否启动双击打开(应用全局)</label></td>
+<td ><input id="CBPara_IsEnableDouclickGlo" type="checkbox" name="CBPara_IsEnableDouclickGlo" /><label for="CB_IsEnableDouclickGlo">是否启动双击打开(应用全局)</label></td>
 </tr>
+
 <tr bgcolor='white' >
 <td>IsEnableFocusField</td>
 <td>是否启用焦点字段</td>
-<td ><input id="CB_IsEnableFocusField" type="checkbox" name="CB_IsEnableFocusField"  /><label for="CB_IsEnableFocusField">是否启用焦点字段</label></td>
+<td ><input id="CBPara_IsEnableFocusField" type="checkbox" name="CBPara_IsEnableFocusField"  /><label for="CB_IsEnableFocusField">是否启用焦点字段</label></td>
 </tr>
+
 <tr bgcolor='AliceBlue' >
 <td>FocusField</td>
 <td>焦点字段(用于显示点击打开的列</td>
-<td ><input name="TB_FocusField" type="text" value="&#39;&#39;" id="TB_FocusField" width="100%" /></td>
+<td ><input name="TBPara_FocusField" type="text" value="" id="TBPara_FocusField" style="width:100%;" /></td>
 </tr>
 <tr bgcolor='white' >
 <td>IsEnableRefFunc</td>
 <td>是否启用相关功能列</td>
-<td ><input id="CB_IsEnableRefFunc" type="checkbox" name="CB_IsEnableRefFunc"  /><label for="CB_IsEnableRefFunc">是否启用相关功能列</label></td>
+<td ><input id="CBPara_IsEnableRefFunc" type="checkbox" name="CBPara_IsEnableRefFunc"  /><label for="CBPara_IsEnableRefFunc">是否启用相关功能列</label></td>
 </tr>
 <tr bgcolor='AliceBlue' >
 <td>IsEnableOpenICON</td>
 <td>是否启用打开图标</td>
-<td ><input id="CB_IsEnableOpenICON" type="checkbox" name="CB_IsEnableOpenICON"  /><label for="CB_IsEnableOpenICON">是否启用打开图标</label></td>
+<td ><input id="CBPara_IsEnableOpenICON" type="checkbox" name="CBPara_IsEnableOpenICON"  /><label for="CBPara_IsEnableOpenICON">是否启用打开图标</label></td>
 </tr>
 <tr bgcolor='white' >
 <td>MoveToShowWay</td>
 <td>移动到显示方式</td>
-<td ><select name="DDL_MoveToShowWay" id="DDL_MoveToShowWay">
+<td ><select name="DDLPara_MoveToShowWay" id="DDLPara_MoveToShowWay">
 	<option selected="selected" value="0">不显示</option>
 	<option value="1">下拉列表</option>
 	<option value="2">平铺</option>
@@ -275,33 +126,39 @@
 <tr bgcolor='AliceBlue' >
 <td>MoveTo</td>
 <td>移动到字段</td>
-<td ><input name="TB_MoveTo" type="text" id="TB_MoveTo" width="100%" /></td>
+<td ><input name="TBPara_MoveTo" type="text" id="TBPara_MoveTo" style="width:100%" /></td>
 </tr>
 <tr bgcolor='white' >
 <td>WinCardW</td>
 <td>弹出窗口宽度</td>
-<td ><input name="TB_WinCardW" type="text" value="800" id="TB_WinCardW" width="100%" /></td>
+<td ><input name="TBPara_WinCardW" type="text" value="800" id="TBPara_WinCardW" style="width:100%" /></td>
 </tr>
 <tr bgcolor='AliceBlue' >
 <td>WinCardH</td>
 <td>弹出窗口高度</td>
-<td ><input name="TB_WinCardH" type="text" value="600" id="TB_WinCardH" width="100%" /></td>
+<td ><input name="TBPara_WinCardH" type="text" value="600" id="TBPara_WinCardH" style="width:100%" /></td>
 </tr>
 <tr bgcolor='white' >
 <td>EditerType</td>
 <td>大块文本编辑器</td>
-<td ><select name="DDL_EditerType" id="DDL_EditerType">
+<td ><select name="DDLPara_EditerType" id="DDLPara_EditerType">
 	<option selected="selected" value="0">无</option>
 	<option value="1">sina编辑器</option>
 	<option value="2">FKCEditer</option>
 	<option value="3">KindEditor</option>
 	<option value="4">UEditor</option>
-
 </select></td>
 </tr>
+
+<tr bgcolor='AliceBlue' >
+<td>WinOpenUrl</td>
+<td>双击打开的URL(默认为卡片)</td>
+<td ><input name="TBPara_WinOpenUrl" type="text" value="" id="TBPara_WinOpenUrl" /></td>
+</tr>
+
 </table>
 
-<input type=button value="保存"  onclick="Save()" />
+<input type="button" value="保存"  onclick="Save()" />
 
 
 </body>

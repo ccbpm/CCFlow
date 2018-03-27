@@ -210,7 +210,7 @@
             
         }
 
-       
+   
 
         function ReDownExpFile() {
             var fileName = $("*[id$=expFileName]").val();
@@ -251,6 +251,7 @@
             handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("EnsName", GetQueryString("EnsName"));
 
+            //查询集合
             var data = handler.DoMethodReturnString("Search_SearchIt");
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -260,21 +261,14 @@
             data = JSON.parse(data);
 
             var attrs = data["Attrs"];
-
+                    
             if (attrs == undefined) {
                 alert('没有取得属性.');
                 return;
             }
-
+           
             var keyOfEn="";
-            /**var data1 = handler.DoMethodReturnString("Search_Method");
-            if (data1.indexOf('err@') == 0) {
-                alert(data1);
-                return;
-            }
-            data1 = JSON.parse(data1)
-            var refMethod = data1["RefMethod"];
-            console.log(data1);*/
+
 
             console.log(data);
 
@@ -291,11 +285,7 @@
                     keyOfEn=attr.KeyOfEn
                     continue;
                 }
-
-               // Text
-                //alert(JSON.stringify(attr));
-
-                
+              
 
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
@@ -309,6 +299,8 @@
                         fixed:false
 		         });
             }
+
+
             /**columns.push({
                          field: keyOfEn,
 		                title: "操作",
@@ -350,7 +342,14 @@
                             pkval = rowData["WorkID"];
                         if (pkval == undefined)
                             pkval = rowData["NodeID"];
-                        OpenEn(pkval);
+                        var paras = "";
+                       for (var i = 0; i < attrs.length; i++) {
+                            var attr = attrs[i];
+                            if(attr.UIContralType == 1)
+                            paras+="&"+attr.KeyOfEn+"="+rowData[attr.KeyOfEn];
+                        }
+
+                        OpenEn(pkval,paras);
 	                }
 
             });
@@ -397,7 +396,6 @@
         }  
 
         function OpenEn(pk,paras) {
-
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
 

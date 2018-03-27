@@ -400,11 +400,19 @@
               {
                  if (url.indexOf('?')==-1)
                  {
-                    url= url+"?EnsName=xxx";
+                    url= url+"?";
                  }
+                 else if(url.indexOf('?')<(url.length-1)){
+                    url = url+"&";
+                 }
+                 url = url+"EnsName="+ensName+"&enName="+enName+ "&PKVal=" + pk;
               }
-
-            OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', 1100, 600, true);
+            var windowW = cfg.GetPara("WinCardW");
+            var windowH = cfg.GetPara("WinCardH");
+            if( windowW!=null &&windowW!="" && windowH !=null && windowH!="")
+            OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', cfg.GetPara("WinCardW"), cfg.GetPara("WinCardH"), true);
+            else
+            OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', 1000, 600, true);
             
         }
 
@@ -440,7 +448,7 @@
         {
            var user=new WebUser();
            var url="./Sys/SearchSetting.htm?EnsName="+GetQueryString("EnsName")+"&m="+Math.random();
-            OpenEasyUiDialogExt(url,  ' 设置', 800, 500, true);
+            OpenEasyUiDialogExt(url,  ' 设置', 930, 600, true);
         }
 
     </script>
@@ -461,7 +469,7 @@
 
                 <div  style="float: left;">
                     <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出</a>
-                    <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-setting'" onclick="Setting()">设置</a>
+                    <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="Setting()">设置</a>
                 </div> 
 
             </div>

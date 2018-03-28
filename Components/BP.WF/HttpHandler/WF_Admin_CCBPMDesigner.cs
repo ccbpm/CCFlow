@@ -94,45 +94,6 @@ namespace BP.WF.HttpHandler
             return info;
         }
 
-        /// <summary>
-        /// 流程信息.
-        /// </summary>
-        /// <returns></returns>
-        public string Flows_Init()
-        {
-            DataSet ds = new DataSet();
-
-            FlowSorts sorts = new FlowSorts();
-            sorts.RetrieveAll();
-
-            //把类别数据放入.
-            DataTable dt = sorts.ToDataTableField();
-            dt.TableName = "Sorts";
-            ds.Tables.Add(dt);
-
-            Flows fls = new Flows();
-            fls.RetrieveAll();
-
-            dt = fls.ToDataTableField();
-            dt.TableName = "Flows";
-
-            dt.Columns.Add("NumOfRuning", typeof(int)); // 耗时分析.
-            dt.Columns.Add("NumOfComplete", typeof(int));
-            dt.Columns.Add("NumOfEtc", typeof(int));
-            dt.Columns.Add("NumOfOverTime", typeof(int));
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                string no = dr["No"].ToString();
-                dr["NumOfRuning"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
-                dr["NumOfComplete"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
-                dr["NumOfEtc"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
-                dr["NumOfOverTime"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
-            }
-            ds.Tables.Add(dt);
-            return BP.Tools.Json.ToJson(ds);
-        }
-
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法

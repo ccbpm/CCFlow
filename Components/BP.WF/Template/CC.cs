@@ -411,7 +411,9 @@ namespace BP.WF.Template
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("WF_Node", "抄送规则");
+
                 map.Java_SetEnType(EnType.Admin);
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
@@ -423,12 +425,12 @@ namespace BP.WF.Template
 
                 map.AddBoolean(CCAttr.CCIsDepts, false, "按照部门抄送", true, true, true);
                 map.AddBoolean(CCAttr.CCIsEmps, false, "按照人员抄送", true, true, true);
-                map.AddBoolean(CCAttr.CCIsSQLs, false, "按照SQL抄送", true, true, true);
 
-                map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 100, 10, true);
+                map.AddBoolean(CCAttr.CCIsSQLs, false, "按照SQL抄送", true, true, true);
+                map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 200, 10, true);
+
                 map.AddTBString(CCAttr.CCTitle, null, "抄送标题", true, false, 0, 100, 10, true);
                 map.AddTBStringDoc(CCAttr.CCDoc, null, "抄送内容(标题与内容支持变量)", true, false,true);
-
 
                 // 相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),

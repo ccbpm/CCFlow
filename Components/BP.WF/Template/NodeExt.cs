@@ -986,6 +986,14 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
+                rm.Title = "抄送人规则(旧)";
+                rm.GroupName = "实验中的功能";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/CC.png";
+                rm.ClassMethodName = this.ToString() + ".DoCCer_old";  //要执行的方法名.
+                rm.RefMethodType = RefMethodType.RightFrameOpen; // 功能类型
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "抄送人规则";
                 rm.GroupName = "实验中的功能";
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/CC.png";
@@ -1117,12 +1125,19 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/TurnToDeal.htm?FK_Node=" + this.NodeID;
         }
-        
         /// <summary>
         /// 抄送人规则
         /// </summary>
         /// <returns></returns>
         public string DoCCer()
+        {
+            return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID;
+        }
+        /// <summary>
+        /// 抄送人规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoCCer_old()
         {
             return "../../Admin/AttrNode/NodeCCRole.htm?FK_Node=" + this.NodeID;
         }

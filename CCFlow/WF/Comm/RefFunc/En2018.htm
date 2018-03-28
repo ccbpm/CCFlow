@@ -180,7 +180,7 @@
             var mapAtrrs = frmData.Sys_MapAttr;
 
             var tableWidth = 800; //  w - 40;
-            var html = "<div class='easyui-tabs'>";
+            var html = "<div class='easyui-tabs' >";
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
                 var lab = gf.Lab;
@@ -188,14 +188,15 @@
                     lab = lab.substring(0, lab.indexOf(','));
                 }
                 if (i == 0) {
-                    html += "<div title='" + lab + "' id='" + gf.OID + "' style='width:100%'>";
+                    html += "<div title='" + lab + "' id='" + gf.OID + "' >";
                 } else {
-                    html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "' style='width:100%'>";
+                    html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
                 }
                 html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
                 html += "</div>";
             }
             html += "</div>";
+        
 
             //加入隐藏控件.
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -287,7 +288,7 @@
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID) {
 
-            var html = "<table border='0' style='width:100%;' >";
+            var html = "<table border='0' style='width:99%;' >";
             var isDropTR = true;
 
             for (var i = 0; i < Sys_MapAttr.length; i++) {

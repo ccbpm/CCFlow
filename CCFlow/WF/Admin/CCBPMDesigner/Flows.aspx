@@ -60,47 +60,31 @@
             <th colspan="4">
                 流程实例(状态)统计
             </th>
-            <th colspan="4">
+            <th colspan="3">
                 耗时分析(单位:分钟)
             </th>
-            <th colspan="5">
+            <th colspan="3">
                 考核状态分布（单位:个）
             </th>
-            <th rowspan="2">
-                设计报表
-            </th>
-            <th rowspan="2">
-                设计流程
-            </th>
-            <th rowspan="2">
-                考核分析
-            </th>
-            <th rowspan="2">
-                流程属性
-            </th>
-            <th rowspan="2">
-                节点设置
-            </th>
-            <th colspan="2">
-                流程实例操作
-            </th>
+           
         </tr>
+
         <tr>
             <th> 运行中 </th>
             <th> 已经完成 </th>
             <th>其他 </th>
             <th> 逾期 </th>
+
+
             <th> 最长</th>
             <th> 最短 </th>
             <th> 平均 </th>
-            <th> 系数</th>
-            <th> 及时 </th>
-            <th>按期</th>
-            <th> 逾期</th>
-            <th> 超期 </th>
+
+
+            <th> 按时完成 </th>
+            <th> 逾期完成</th>
             <th> 按期办结率</th>
-            <th> 删除 </th>
-            <th>回滚 </th>
+
         </tr>
         <%
             //类别.
@@ -116,25 +100,16 @@
             System.Data.DataTable dtOverTimeMin
              = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow, SUM(OverMinutes) AS OverMinutes FROM WF_CH WHERE OverMinutes > 0 GROUP BY FK_Flow  ");
 
-            //及时完成
+            //按期完成
             System.Data.DataTable dtInTimeCount
              = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT( distinct WorkID) Num FROM WF_CH WHERE CHSta='" +
                                                (int)BP.WF.Data.CHSta.AnQi + "' GROUP BY FK_Flow ");
-
-            //按期完成
-            System.Data.DataTable dtOnTimeCount
-             = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT( distinct WorkID) Num FROM WF_CH WHERE CHSta='" +
-                                               (int)BP.WF.Data.CHSta.AnQi + "' GROUP BY FK_Flow ");
+         
 
             // 获得逾期的工作数量.
             System.Data.DataTable dtOverTimeCount
              = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT( distinct WorkID) Num FROM WF_CH WHERE CHSta='" +
                                                (int)BP.WF.Data.CHSta.YuQi + "' GROUP BY FK_Flow ");
-
-            // 获得超期的工作数量.
-            System.Data.DataTable dtCqTimeCount
-             = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT( distinct WorkID) Num FROM WF_CH WHERE CHSta='" +
-                                               (int)BP.WF.Data.CHSta.YuQi + "' GROUP BY FK_Flow  ");
 
             // 获得流程状态.
             System.Data.DataTable dt
@@ -249,41 +224,8 @@
             <td class="con">
                 0
             </td>
-            <td class="con">
-                0
-            </td>
-            <td class="con">
-                0
-            </td>
-            <td class="con">
-                0
-            </td>
-            <td class="con">
-                0
-            </td>
-            <td class="con">
-                <a href="javascript:OpenRpt('<%=flow.No %>');">设计报表</a>
-            </td>
-            <td class="con">
-                <a href="javascript:openFlow('<%=flow.DType %>','<%=flow.Name %>','<%=flow.No %>','<%=BP.Web.WebUser.No %>','<%=BP.Web.WebUser.SID %>');">
-                    设计流程</a>
-            </td>
-            <td class="con">
-                <a href="javascript:window.parent.closeTab('考核分析');window.parent.addTab('KHFX', '考核分析', '../../CH/OneFlow.aspx?FK_Flow=<%=flow.No %>&', '');">
-                    考核分析</a>
-            </td>
-            <td class="con">
-                <a href="javascript:FlowAttr('<%=flow.No %>');">流程属性</a>
-            </td>
-            <td class="con">
-                <a href="javascript:NodesAttr('<%=flow.No %>');">节点设置</a>
-            </td>
-            <td class="con">
-                <a href="javascript:OpenDel('<%=flow.No %>');">删除</a>
-            </td>
-            <td class="con">
-                <a href="javascript:OpenRollback('<%=flow.No %>');">回滚</a>
-            </td>
+           
+            
         </tr>
         <% idx += 1;
           }

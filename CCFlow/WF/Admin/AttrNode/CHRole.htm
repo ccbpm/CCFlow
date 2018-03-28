@@ -22,25 +22,21 @@
 
             //调用公共类库的方法.
             GenerBindEnumKey("DDL_TWay", "TWay", "1");
-           
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CHRole_Init&FK_Node=" + nodeID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            //执行.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CHRole_Init");
 
-                    data = JSON.parse(data);
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
-                }
-            });
+            data = JSON.parse(data);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
         });
     </script>
 </head>
@@ -138,7 +134,6 @@
      //   alert(CheckBoxIDs);
 
         var frmData = $("#cc").serialize();
-
        // alert(frmData);
 
         $.ajax({

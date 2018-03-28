@@ -21,6 +21,34 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner : DirectoryPageBase
     {
+        public string Flows_Init()
+        {
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("FlowNo");
+            dt.Columns.Add("FlowName");
+
+            dt.Columns.Add("NumOfRuning"); //运行中的.
+            dt.Columns.Add("NumOfOK"); //已经完成的.
+            dt.Columns.Add("NumOfEtc"); //其他.
+
+            Flows fls = new Flows();
+            fls.RetrieveAll();
+
+            foreach (Flow fl in fls)
+            {
+                DataRow dr = dt.NewRow();
+                dr["FlowNo"] = fl.No;
+                dr["FlowName"] = fl.Name;
+                dr["NumOfRuning"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  WF_GenerWorkFlow WHERE FK_Flow='"+fl.No+"' AND WFState in (2,5)",0);
+                dr["NumOfOK"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  WF_GenerWorkFlow WHERE FK_Flow='" + fl.No + "' AND WFState = 3 ", 0);
+                dr["NumOfEtc"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  WF_GenerWorkFlow WHERE FK_Flow='" + fl.No + "' AND WFState in (4,5,6,7,8) ", 0);
+
+                dt.Rows.Add(dr);
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
         /// <summary>
         /// 初始化函数
         /// </summary>

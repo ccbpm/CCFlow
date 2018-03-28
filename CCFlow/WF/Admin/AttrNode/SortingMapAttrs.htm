@@ -39,7 +39,7 @@
         //编辑明细表
         function EditDtl(mypk, dtlKey) {
             //var url = '../FoolFormDesigner/MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
-            var url = "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
+            var url = "/WF/Comm/En2018.htm?EnName=BP.WF.Template.MapDtlExt&PKVal=" + dtlKey;
 
             OpenDialogAndCloseRefresh(url, "编辑明细表", 720, 550, "icon-edit");
         }

@@ -878,7 +878,7 @@
                                         <asp:RadioButton ID="RB_BySelected" Text="由上一节点发送人通过“人员选择器”选择接受人" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/En.htm?EnName=BP.WF.Template.Selector&PK=<%=nd.NodeID %>')">
+                                        <a href="javascript:WinOpen('/WF/Comm/En.htm?EnName=BP.WF.Template.Selector&PKVal=<%=nd.NodeID %>')">
                                             设置处理人可以选择的范围</a></div>
                                 </th>
                             </tr>

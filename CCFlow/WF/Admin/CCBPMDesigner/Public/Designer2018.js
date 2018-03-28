@@ -5,7 +5,7 @@ function WinOpen(url) {
 
 //流程属性.
 function FlowProperty() {
-    url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + flowNo + "&Lang=CH";
+    url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + flowNo + "&Lang=CH";
 
     //OpenEasyUiDialogExt(url, "流程属性", 900, 500, false);
     window.parent.addTab(flowNo, "流程属性", url);
@@ -77,7 +77,7 @@ function NodeAttr(nodeID) {
 }
 //节点属性
 function NodeAttrOld(nodeID) {
-    var url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&NodeID=" + nodeID + "&Lang=CH";
+    var url = "../../Comm/En2018.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     window.parent.addTab(nodeID,"节点属性",url);
     //OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
 }

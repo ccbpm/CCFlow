@@ -167,7 +167,7 @@
                 return;
             }
 
-            //  url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + data;
+            //  url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PK=" + data;
             window.location.href = data;
             return;
 
@@ -210,14 +210,14 @@
 
             var ensName = '';
             //if (sfType == "0" || sfType==1 ) {
-                ensName = "BP.Sys.FrmUI.SFTables";
+                ensName = "BP.Sys.FrmUI.SFTable";
             //}
 
             if (fk_sftable.indexOf('.') != -1) {
-                ensName = 'BP.Sys.FrmUI.SFTableClasss';
+                ensName = 'BP.Sys.FrmUI.SFTableClass';
             }
 
-            var url = '../../Comm/En.htm?EnsName=' + ensName + '&No=' + fk_sftable;
+            var url = '../../Comm/En2018.htm?EnName=' + ensName + '&No=' + fk_sftable;
             window.location.href = url;
 
             //OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, 900, 495, 'icon-edit');

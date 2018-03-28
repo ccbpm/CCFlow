@@ -426,7 +426,7 @@ function designFrm() {
 
 //新建数据源，added by liuxc,2015-10-7
 function newSrc() {
-    //  var url = "../../Comm/En.htm?EnsName=BP.Sys.SFDBSrcs";
+    //  var url = "../../Comm/En2018.htm?EnName=BP.Sys.SFDBSrc";
     var url = "../../Comm/Sys/SFDBSrcNewGuide.htm?DoType=New";
     //OpenEasyUiDialog(url, "euiframeid", '新建数据源', 800, 495, 'icon-new');
     //todo:增加数据源后，在树上增加新结节的逻辑
@@ -542,7 +542,7 @@ function newDept() {
     if (!node) return;
 
     var pnode = $("#" + ORG_TREE).tree("getParent", node.target);
-    addTab("NewDept", "新建同级部门", "../../Comm/En.htm?EnsName=BP.GPM.Depts&ParentNo=" + node.id, "icon-new");
+    addTab("NewDept", "新建同级部门", "../../Comm/En2018.htm?EnName=BP.GPM.Dept&ParentNo=" + node.id, "icon-new");
 }
 
 function newSubDept() {

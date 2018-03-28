@@ -85,50 +85,50 @@
 
             //普通字段类型.
             if (ftype == "1") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrString&inlayer=1&PKVal=" + mypk;
                 title = '字段String属性';
             }
 
             //数值字段类型.
             if (ftype == "2") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
                 title = '字段Int属性';
             }
 
             //数值字段类型.
             if (ftype == "3") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
                 title = '字段Float属性';
             }
 
             //数值字段类型.
             if (ftype == "5") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
                 title = '字段Double属性';
             }
 
             //数值字段类型.
             if (ftype == "8") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
                 title = '字段Moeny属性';
             }
 
 
             //日期类型date.
             if (ftype == "6") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrDT&inlayer=1&PKVal=" + mypk;
                 title = '字段Date属性';
             }
 
             //日期类型datetime.
             if (ftype == "7") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrDT&inlayer=1&PKVal=" + mypk;
                 title = '字段DateTime属性';
             }
 
             // boolen 类型.
             if (ftype == "4") {
-                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&inlayer=1&PK=" + mypk;
+                url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&inlayer=1&PKVal=" + mypk;
                 title = '字段Boolen属性';
             }
 
@@ -144,14 +144,14 @@
 
         function EditEnum(fk_mapdata, mypk, enumKey) {
 
-            var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&inlayer=1&PK=' + mypk + '&s=' + Math.random();
+            var url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&inlayer=1&PKVal=' + mypk + '&s=' + Math.random();
             OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });
         }
         function EditTable(fk_mapdata, mypk, fk_sfTable ) {
 
-            var url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&inlayer=1&PK=" + mypk;
+            var url = "../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&inlayer=1&PKVal=" + mypk;
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });
@@ -169,7 +169,7 @@
         var isInser = "";
         function EditDtl(fk_mapData, dtlKey) {
 
-            var url = "../../Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
+            var url = "../../Comm/En2018.htm?EnName=BP.WF.Template.MapDtlExt&PKVal=" + dtlKey;
 
             OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -178,7 +178,7 @@
 
         function EditMapDtl(dtlKey) {
 
-            var url = "../../Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&inlayer=1&PK=" + dtlKey;
+            var url = "../../Comm/En2018.htm?EnName=BP.WF.Template.MapDtlExt&inlayer=1&PKVal=" + dtlKey;
 
             OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

@@ -1583,7 +1583,7 @@ namespace CCFlow.WF.Comm.UC
                 }
                 #endregion
 
-                this.Add("<TR  onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "');\" onmouseout='TROut(this)' ondblclick=\" WinOpen('../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\" >");
+                this.Add("<TR  onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "');\" onmouseout='TROut(this)' ondblclick=\" WinOpen('../Comm/En2018.htm?EnName=" + en.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\" >");
                 idx++;
                 this.Add("<TD  class='Idx' nowrap >" + idx + "</TD>");
                 this.Add("<TD  class='No'  nowrap ><a href='" + colUrl + en.GetValStringByKey(urlAttrKey) + "' target='_blank'> " + colName + "</a></TD>");
@@ -1872,7 +1872,7 @@ namespace CCFlow.WF.Comm.UC
                 string url = this.GenerEnUrl(en, attrs);
                 #endregion
 
-                urlExt = "\"javascript:ShowEn('../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "&inlayer=1', 'cd','" + cfg.WinCardH + "','" + cfg.WinCardW + "');\"";
+                urlExt = "\"javascript:ShowEn('../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "&inlayer=1', 'cd','" + cfg.WinCardH + "','" + cfg.WinCardW + "');\"";
                 switch ((UIRowStyleGlo)cfg.UIRowStyleGlo)
                 {
                     case UIRowStyleGlo.None:
@@ -1914,8 +1914,6 @@ namespace CCFlow.WF.Comm.UC
                 if (cfg.IsEnableRefFunc && isRefFunc)
                 {
                     string str = "";
-                    // string str = "<a href=\"javascript:WinOpen('../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "', 'cd')\" >打开</a>";
-                    //<a href=\"javascript:WinOpen('../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "','cd','400','600')\" >打开</A>
 
                     #region 加入他门的方法
                     RefMethods myreffuncs = en.EnMap.HisRefMethods;
@@ -2147,7 +2145,7 @@ namespace CCFlow.WF.Comm.UC
                         string url = this.GenerEnUrl(en, attrs);
                         #endregion
 
-                        this.AddTRTXHand(" ondblclick=\"WinOpen('../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\"   onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" ");
+                        this.AddTRTXHand(" ondblclick=\"WinOpen('../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "')\"   onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" ");
                         foreach (Attr attr in selectedAttrs)
                         {
                             if (attr.UIVisible == false || attr.Key == groupAttr.Key)
@@ -2202,7 +2200,7 @@ namespace CCFlow.WF.Comm.UC
 
                         #endregion
 
-                        this.AddTRTXHand(" ondblclick=\"WinOpen( '../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" ");
+                        this.AddTRTXHand(" ondblclick=\"WinOpen( '../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" ");
                         foreach (Attr attr in selectedAttrs)
                         {
                             if (attr.UIVisible == false || attr.Key == groupAttr.Key)
@@ -2304,7 +2302,7 @@ namespace CCFlow.WF.Comm.UC
 
                                 string style = WebUser.Style;
                                 string url = this.GenerEnUrl(en, attrs);
-                                this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" onmouseover='TROver(this);OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "');' onmouseout='TROut(this)' >");
+                                this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" onmouseover='TROver(this);OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "');' onmouseout='TROut(this)' >");
                                 foreach (Attr attr in attrs)
                                 {
                                     if (attr.UIVisible == false || attr.Key == groupAttr2.Key || attr.Key == groupAttr.Key)
@@ -2358,7 +2356,7 @@ namespace CCFlow.WF.Comm.UC
 
                                 string style = WebUser.Style;
                                 string url = this.GenerEnUrl(en, attrs);
-                                this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\"  onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "');\" onmouseout='TROut(this)' >");
+                                this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "')\"  onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "');\" onmouseout='TROut(this)' >");
                                 foreach (Attr attr in attrs)
                                 {
                                     if (attr.UIVisible == false || attr.Key == groupAttr2.Key || attr.Key == groupAttr.Key)
@@ -2421,7 +2419,7 @@ namespace CCFlow.WF.Comm.UC
 
                             string style = WebUser.Style;
                             string url = this.GenerEnUrl(en, attrs);
-                            this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\"  onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" onmouseout='TROut(this)' >");
+                            this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "')\"  onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" onmouseout='TROut(this)' >");
                             foreach (Attr attr in attrs)
                             {
                                 if (attr.UIVisible == false || attr.Key == groupAttr2.Key || attr.Key == groupAttr.Key)
@@ -2476,7 +2474,7 @@ namespace CCFlow.WF.Comm.UC
 
                         string style = WebUser.Style;
                         string url = this.GenerEnUrl(en, attrs);
-                        this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\" onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" onmouseout='TROut(this)' >");
+                        this.Add("<TR class='TR' ondblclick=\"WinOpen( '../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "')\" onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\" onmouseout='TROut(this)' >");
                         foreach (Attr attr in attrs)
                         {
                             if (attr.UIVisible == false || attr.Key == groupAttr2.Key || attr.Key == groupAttr.Key)
@@ -3147,12 +3145,12 @@ namespace CCFlow.WF.Comm.UC
                 if (i == 3)
                 {
                     i = 0;
-                    this.Add("<TD   valign=top ondblclick=\"WinOpen( '../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\"  >" + img + "&nbsp;<b>" + en.GetValStringByKey(showtext1) + "</b>" + context + "</TD>");
+                    this.Add("<TD   valign=top ondblclick=\"WinOpen( '../Comm/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\"  >" + img + "&nbsp;<b>" + en.GetValStringByKey(showtext1) + "</b>" + context + "</TD>");
                     this.AddTREnd();
                 }
                 else
                 {
-                    this.Add("<TD class='TD' valign=top ondblclick=\"WinOpen( '../Comm/En.htm?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\"  >" + img + "&nbsp;<b>" + en.GetValStringByKey(showtext1) + "</b>" + context + "</TD>");
+                    this.Add("<TD class='TD' valign=top ondblclick=\"WinOpen( '../Comm/En2018.htm?EnName=" + ens.ToString() + "&PKVal=" + en.GetValByKey(pk) + "')\"  onmousedown=\"OnDGMousedown('" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "')\"  >" + img + "&nbsp;<b>" + en.GetValStringByKey(showtext1) + "</b>" + context + "</TD>");
                 }
             }
 

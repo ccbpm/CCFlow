@@ -961,7 +961,7 @@ function FlowProperty() {
     var userNo = GetQueryString("UserNo");
 
     var fk_flow = currFlow.id;
-    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + fk_flow + "&Lang=CH&UserNo=" + WebUser.No;
+    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PKVal=" + fk_flow + "&Lang=CH&UserNo=" + WebUser.No;
     addTab(currFlow + "PO", "流程属性" + fk_flow, url);
     //WinOpen(url);
 }
@@ -1211,7 +1211,7 @@ function CCForm_Attr() {
         alert('请选择表单.');
         return;
     }
-    var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=' + node.id;
+    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
     OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
 }
 
@@ -1317,7 +1317,7 @@ function CopyFrm() {
 
 //新建数据源，added by liuxc,2015-10-7
 function newSrc() {
-    //  var url = "../../Comm/En.htm?EnsName=BP.Sys.SFDBSrcs";
+    //  var url = "../../Comm/En2018.htm?EnsName=BP.Sys.SFDBSrcs";
     var url = "../../Comm/Sys/SFDBSrcNewGuide.htm?DoType=New";
     //OpenEasyUiDialog(url, "euiframeid", '新建数据源', 800, 495, 'icon-new');
     //todo:增加数据源后，在树上增加新结节的逻辑
@@ -1432,7 +1432,7 @@ function newDept() {
     if (!node) return;
 
     var pnode = $("#" + ORG_TREE).tree("getParent", node.target);
-    addTab("NewDept", "新建同级部门", "../../Comm/En.htm?EnsName=BP.GPM.Depts&ParentNo=" + node.id, "icon-new");
+    addTab("NewDept", "新建同级部门", "../../Comm/En2018.htm?EnName=BP.GPM.Dept&ParentNo=" + node.id, "icon-new");
 }
 
 function newSubDept() {

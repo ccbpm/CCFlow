@@ -110,36 +110,36 @@ namespace CCFlow.WF.Admin.XAP
                         case "BP.WF.Flow":
                             Flow fl = new Flow(this.PK);
                             if (fl.FlowAppType == FlowAppType.DocFlow)
-                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowDocs&No=" + this.PK, true);
+                                this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.FlowDoc&No=" + this.PK, true);
                             else
-                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowSheets&No=" + this.PK, true);
+                                this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.FlowSheet&No=" + this.PK, true);
                             return;
                         case "BP.WF.Template.FlowSheet":
                         case "BP.WF.Template.Ext.FlowSheet":
-                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowSheets&No=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.FlowSheet&No=" + this.PK, true);
                             return;
                         case "BP.WF.Template.Ext.NodeExts":
-                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&No=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnsName=BP.WF.Template.NodeExts&No=" + this.PK, true);
                             return;
                         case "BP.WF.Rpt.MapRptExts":
-                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK="+this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnsName=BP.WF.Rpt.MapRptExts&PKVal=" + this.PK, true);
                             return;
                         case "BP.WF.Node":
                             Node nd = new Node(this.PK);
-                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.NodeSheets&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.NodeSheet&PKVal=" + this.PK, true);
                             return;
                         case "BP.WF.Template.FlowExt":
-                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowExts&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + this.PK, true);
                             return;
                         case "BP.WF.Template.NodeExt":
-                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.NodeExt&PKVal=" + this.PK, true);
                             return;
                         case "BP.WF.Template.FlowSort":
-                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowSorts&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.FlowSort&PKVal=" + this.PK, true);
                             return;
                         default:
                             throw new Exception("err");
-                            //this.Response.Redirect("./Comm/En.htm?EnsName=" + this.EnsName + "&No=" + this.PK, true);
+                            //this.Response.Redirect("./Comm/En2018.htm?EnsName=" + this.EnsName + "&No=" + this.PK, true);
                     }
                 case "FrmLib": //"表单库"
                     this.Response.Redirect("../Sln/BindFrms.htm?ShowType=SelectedFrm&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);
@@ -148,7 +148,7 @@ namespace CCFlow.WF.Admin.XAP
                     this.Response.Redirect("../Sln/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);
                     break;
                 case "StaDef": // 节点岗位.
-                    this.Response.Redirect("../../Comm/RefFunc/Dot2Dot.aspx?EnName=BP.WF.Template.NodeSheet&AttrKey=BP.WF.Template.NodeStations&PK=" + this.PK + "&NodeID=" + this.PK + "&RunModel=0&FLRole=0&FJOpen=0&r=" + this.PK, true);
+                    this.Response.Redirect("../../Comm/RefFunc/Dot2Dot.aspx?EnName=BP.WF.Template.NodeSheet&AttrKey=BP.WF.Template.NodeStations&PKVal=" + this.PK + "&NodeID=" + this.PK + "&RunModel=0&FLRole=0&FJOpen=0&r=" + this.PK, true);
                     break;
                 case "StaDefNew": // 新版本.. http://localhost:13432/WF/Comm/RefFunc/Dot2DotSingle.aspx
                     this.Response.Redirect("../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.NodeSheets&EnName=BP.WF.Template.NodeSheet&AttrKey=BP.WF.Template.NodeStations&NodeID=" + this.PK + "&r=0319061642&1=FK_StationType&ShowWay=None" + this.PK, true);
@@ -156,7 +156,7 @@ namespace CCFlow.WF.Admin.XAP
                 case "WFRpt": // 报表设计.r
                     //杨玉慧 点击报表设计改成打开该流程的报表列表
                     //this.Response.Redirect("../../Rpt/OneFlow.htm?FK_MapData=ND" + int.Parse(this.PK) + "Rpt&FK_Flow=" + this.PK, true);
-                    string rptUrl = "../../Comm/En.htm?EnsName=BP.WF.Rpt.RptDfines&No="+this.PK;
+                    string rptUrl = "../../Comm/En2018.htm?EnName=BP.WF.Rpt.RptDfine&No="+this.PK;
                     this.Response.Redirect(rptUrl, true);
                     break;
                 case "MapDef": //表单定义.

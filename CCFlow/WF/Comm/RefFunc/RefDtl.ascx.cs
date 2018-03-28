@@ -174,7 +174,7 @@ namespace CCFlow.WF.Comm.RefFunc
 			this.ucsys2.Clear();
 			try
 			{
-				this.ucsys2.BindPageIdx(qo.GetCount(), this.PageSize, this.PageIdx, "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.RefVal + "&EnsName=" + this.EnsName + "&RefVal=" + this.RefVal + "&RefKey=" + this.RefKey + "&MainEnsName=" + this.MainEnsName);
+				this.ucsys2.BindPageIdx(qo.GetCount(), this.PageSize, this.PageIdx, "Dtl.aspx?EnName=" + this.EnName + "&PKVal=" + this.RefVal + "&EnsName=" + this.EnsName + "&RefVal=" + this.RefVal + "&RefKey=" + this.RefKey + "&MainEnsName=" + this.MainEnsName);
 				qo.DoQuery(en.PK, this.PageSize, this.PageIdx, false);
 			}
 			catch (Exception ex)

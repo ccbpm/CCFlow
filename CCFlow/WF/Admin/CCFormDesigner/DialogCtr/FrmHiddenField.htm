@@ -89,11 +89,11 @@
                 var ftype = dataRow.MyDataType;
                 var ensName = "";
                 if (ftype == "1")
-                    ensName = "BP.Sys.FrmUI.MapAttrStrings";
+                    ensName = "BP.Sys.FrmUI.MapAttrString";
                 else
-                    ensName = "BP.Sys.FrmUI.MapAttrNums";
+                    ensName = "BP.Sys.FrmUI.MapAttrNum";
 
-                var url = '/WF/Comm/En.htm?EnsName=' + ensName + '&MyPK=' + FK_MapData + "_" + dataRow.KeyOfEn;
+                var url = '/WF/Comm/En2018.htm?EnName=' + ensName + '&MyPK=' + FK_MapData + "_" + dataRow.KeyOfEn;
                 window.open(url, '', 'height=430, width=760, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
             }
         }

@@ -710,7 +710,7 @@ namespace CCFlow.WF.UC
                 return;
             }
 
-            string keys = "&PK=" + en.PKVal.ToString();
+            string keys = "&PKVal=" + en.PKVal.ToString();
             foreach (Attr attr in en.EnMap.Attrs)
             {
                 if (attr.MyFieldType == FieldType.Enum ||

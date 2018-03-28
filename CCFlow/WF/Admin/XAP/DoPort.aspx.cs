@@ -72,7 +72,7 @@ namespace CCFlow.WF.Admin.XAP
                 return;
 
             //if (this.Lang == null || this.Lang == "")
-            //    throw new Exception("语言编号错误。");
+              // throw new Exception("语言编号错误。");
 
          //   BP.Sys.SystemConfig.DoClearCash();
             BP.Port.Emp emp = new BP.Port.Emp("admin");

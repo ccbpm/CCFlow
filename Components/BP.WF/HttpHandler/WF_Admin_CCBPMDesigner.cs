@@ -67,11 +67,20 @@ namespace BP.WF.HttpHandler
             Flow flow = new Flow(this.FK_Flow);
             string fileXml = flow.GenerFlowXmlTemplete();
 
-            BP.Sys.PubClass.DownloadFile(fileXml, flow.Name + ".xml");
-            var url = "";
-            string info = "点击请下载" + fileXml;
-            return info;
-            //return "";
+            string docs = DataType.ReadTextFile(fileXml);
+
+           DataTable dt = new DataTable();
+           dt.Columns.Add("FileName");
+           dt.Columns.Add("FileType");
+           dt.Columns.Add("FlieContent");
+           DataRow dr = dt.NewRow();
+           dr["FileName"] = flow.Name+".xml";
+           dr["FileType"]= "xml";
+           dr["FlieContent"] = docs;
+           dt.Rows.Add(dr);
+           return BP.Tools.Json.ToJson(dt);
+
+           // return fileXml;
         }
         public string DownFormTemplete()
         {
@@ -80,18 +89,18 @@ namespace BP.WF.HttpHandler
             BP.Sys.MapData md = new BP.Sys.MapData(FK_MapData);
             string file = BP.Sys.SystemConfig.PathOfTemp + md.No + ".xml";
             ds.WriteXml(file);
-            System.IO.FileInfo f = new System.IO.FileInfo(file);
+            string docs = DataType.ReadTextFile(file);
 
-            //   BP.Sys.PubClass.DownloadFile(f.FullName, md.Name + ".xml");
-
-            string info = "info@";
-
-            info += "下载提示";
-            var url = "../../../Temp/" + md.No + ".xml";
-
-            info += "ccflow 已经完成模板的生成了，正在执行下载如果您的浏览器没有反应请<a href='" + url + "' >点这里进行下载</a>。";
-            info += "如果该xml文件是在ie里直接打开的，请把鼠标放在连接上右键目标另存为，保存该模板。";
-            return info;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("FileName");
+            dt.Columns.Add("FileType");
+            dt.Columns.Add("FlieContent");
+            DataRow dr = dt.NewRow();
+            dr["FileName"] = md.Name+".xml";
+            dr["FileType"] = "xml";
+            dr["FlieContent"] = docs;
+            dt.Rows.Add(dr);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         #region 执行父类的重写方法.

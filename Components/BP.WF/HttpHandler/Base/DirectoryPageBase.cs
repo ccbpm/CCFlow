@@ -344,8 +344,11 @@ namespace BP.WF.HttpHandler
                     str = this.GetRequestVal("FK_MapData");
 
                 if (str == null || str == "" || str == "null")
-                    return null;
-
+                {
+                    if (this.EnName == null)
+                        return null;
+                    return this.EnName + "s";
+                }
                 return str;
             }
         }

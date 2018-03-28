@@ -915,8 +915,8 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 string myurl = "";
-                
-                    myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=";
+
+                myurl = "../RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=";
 
                 DataRow dr = dtM.NewRow();
 
@@ -1055,6 +1055,8 @@ namespace BP.WF.HttpHandler
                 string pk = this.RefEnKey;
                 if (pk == null)
                     pk = this.GetRequestVal(en.PK);
+                if (pk == null)
+                    pk = this.PKVal;
 
                 en.PKVal = pk;
                 en.Retrieve();

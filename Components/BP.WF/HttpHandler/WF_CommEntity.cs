@@ -338,7 +338,7 @@ namespace BP.WF.HttpHandler
                     }
                     else
                     {
-                        myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=" + this.PKVal;
+                        myurl = "../RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=" + this.PKVal;
                     }
 
                     DataRow dr = dtM.NewRow();

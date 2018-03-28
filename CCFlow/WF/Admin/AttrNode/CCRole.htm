@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8"/>
     <title>考核规则</title>
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -19,24 +18,33 @@
 
             //初始化groupID.
             var nodeID = GetQueryString("FK_Node");
- 
 
-            //执行.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("CCRole_Init");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            data = JSON.parse(data);
-
+            var node = new Entity("BP.WF.Template.CC");
+            node.NodeID = nodeID;
+            node.Retrieve();
+              
             //调用公共类库的方法:执行批量主表赋值
-            GenerFullAllCtrlsVal(data);
+            GenerFullAllCtrlsVal(node);
+
+            // ssssdsd
 
         });
+
+        function Save() {
+
+            var nodeID = GetQueryString("FK_Node");
+
+            var node = new Entity("BP.WF.Template.CC");
+            node.SetPKVal( nodeID);
+            node.Retrieve();
+
+            node.CopyForm();
+            node.NodeID = nodeID;
+            node.Update();
+
+            window.location.href = window.location.href;
+
+        }
     </script>
 </head>
 <body>
@@ -47,22 +55,6 @@
             <th colspan="2">
                 基本设置
             </th>
-        </tr>
-        <tr>
-            <td class="style1">
-                抄送规则
-            </td>
-            <td>
-                <select name="DDL_CCRole" id="DDL_CCRole">
-	<option selected="selected" value="0">不能抄送</option>
-	<option value="1">手工抄送</option>
-	<option value="2">自动抄送</option>
-	<option value="3">手工与自动</option>
-	<option value="4">按表单SysCCEmps字段计算</option>
-	<option value="5">在发送前打开抄送窗口</option>
-
-</select>
-            </td>
         </tr>
         <tr>
             <td class="style1">
@@ -78,46 +70,16 @@
             </td>
         </tr>
         <tr>
-            <td class="style1">
-                标题模板
-            </td>
-            <td>
-                <input name="TB_Title" type="text" value="来自@Rec的抄送信息." id="TB_Title" style="width:521px;" />
-                <font color=gray>内容支持ccbpm表达式</font>
-            </td>
-        </tr>
-        <tr>
-            <td class="style1">
-                内容模版
-            </td>
-            <td>
-                <textarea name="TB_CCDoc" rows="2" cols="20" id="TB_CCDoc" style="height:90px;width:521px;">
-来自@Rec的抄送信息.</textarea>
-                <font color=gray>内容支持ccbpm表达式</font>
-
-            </td>
-        </tr>
-        <tr>
             <th colspan="2">
                 自动抄送人范围
             </th>
         </tr>
          <tr>
             <td class="style1">
-                <input id="Checkbox1" type="checkbox" name="CB_Station" /><label for="CB_Attr">按表单字段抄送？</label>
+                <input id="Checkbox1" type="checkbox" name="CB_Attr" /><label for="CB_Attr">按表单字段抄送？</label>
             </td>
             <td>
-                <a href="javascript:WinOpen('../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCStations&NodeID=20701&r=0328105339&ShowWay=None')">
-                    请选择岗位(0)</a>
-                    岗位计算规则:<select name="DDL_CCStaWay" id="Select1">
-	<option selected="selected" value="0">仅按岗位计算</option>
-	<option value="1">按岗位智能计算(当前节点)</option>
-	<option value="2">按岗位智能计算(发送到节点)</option>
-	<option value="3">按岗位与部门的交集</option>
-	<option value="4">按直线上级部门找岗位下的人员(当前节点)</option>
-	<option value="5">按直线上级部门找岗位下的人员(接受节点)</option>
-
-</select>
+                 请选择设置抄送人员字段：<select id="DDL"></select> 
             </td>
         </tr>
 
@@ -162,7 +124,7 @@
                 <input id="CB_SQL" type="checkbox" name="CB_SQL" /><label for="CB_SQL">按照SQL设置范围</label>
             </td>
             <td>
-                <textarea name="TB_SQL" rows="2" cols="20" id="TB_SQL" style="width:421px;">
+                <textarea name="TB_SQL" id="TB_SQL" style="width:638px; height: 113px;">
 </textarea>
                 <br />
                 <font color=gray>您设置了按照SQL抄送，请您设置一个SQL语句，返回No,Name两个列,SQL支持ccbpm表达式。
@@ -173,36 +135,6 @@
     </table>
 
     <input type="submit" name="Btn_Save" value="保存" id="Btn_Save" />
-
-<script type="text/javascript">
-
-    function Save() {
-
-        var nodeID = GetQueryString("FK_Node");
-
-        var frmData = $("#cc").serialize();
-
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=CHRole_Save&FK_Node=" + nodeID + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-
-                if (data.indexOf('err@') >= 0) {
-                    alert(data);
-                    return;
-                }
-
-                alert(data);
-
-                window.location.href = window.location.href;
-                return;
-            }
-        });
-    }
-</script>
 
 </form>
 

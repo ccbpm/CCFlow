@@ -267,19 +267,19 @@
         function Save() {
 
             //获得存储的值.
-            var selectVals = [];
-
             var cbs = $("input[type='checkbox']:checked");
+            var strs = "";
             cbs.each(function () {
                 if (this.id.indexOf('CB_') == -1)
                     return true;
-                selectVals.push(this.value);
+                strs += "," + this.value;
             });
 
             //处理
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             hand.AddUrlData();
-            hand.AddPara("Eles", selectVals);
+            hand.AddPara("Eles", strs);
+
             var data = hand.DoMethodReturnString("Dot2Dot_Save");
             alert(data);
             window.location.href = window.location.href;

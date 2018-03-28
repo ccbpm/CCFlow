@@ -29,6 +29,43 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        /// <summary>
+        /// 下载流程模版
+        /// </summary>
+        /// <returns></returns>
+        public string ExpFlowTemplete()
+        {
+            Flow flow = new Flow(this.FK_Flow);
+            string fileXml = flow.GenerFlowXmlTemplete();
+
+            BP.Sys.PubClass.DownloadFile(fileXml, flow.Name + ".xml");
+            var url = "";
+            string info = "点击请下载" + fileXml;
+            return info;
+            //return "";
+        }
+        public string DownFormTemplete()
+        {
+
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(FK_MapData);
+            BP.Sys.MapData md = new BP.Sys.MapData(FK_MapData);
+            string file = BP.Sys.SystemConfig.PathOfTemp + md.No + ".xml";
+            ds.WriteXml(file);
+            System.IO.FileInfo f = new System.IO.FileInfo(file);
+
+            //   BP.Sys.PubClass.DownloadFile(f.FullName, md.Name + ".xml");
+
+            string info = "info@";
+
+            info += "下载提示";
+            var url = "../../../Temp/" + md.No + ".xml";
+
+            info += "ccflow 已经完成模板的生成了，正在执行下载如果您的浏览器没有反应请<a href='" + url + "' >点这里进行下载</a>。";
+            info += "如果该xml文件是在ie里直接打开的，请把鼠标放在连接上右键目标另存为，保存该模板。";
+            return info;
+        }
+
         /// <summary>
         /// 流程信息.
         /// </summary>

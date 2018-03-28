@@ -348,6 +348,8 @@ namespace BP.WF.HttpHandler
                     dr["Tip"] = item.ToolTip;
                     dr["Visable"] = item.Visable;
                     dr["Warning"] = item.Warning;
+                    
+
                     dr["RefMethodType"] = (int)item.RefMethodType;
                     dr["RefAttrKey"] = item.RefAttrKey;
                     dr["URL"] = myurl;

@@ -578,14 +578,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "模版导入(旧)";
-                rm.Icon = "../../WF/Img/redo.png";
-                rm.ClassMethodName = this.ToString() + ".DoImpOld()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程模版";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
                 rm.Title = "模版导出";
                 rm.Icon = "../../WF/Img/undo.png";
                 rm.ClassMethodName = this.ToString() + ".DoExps()";
@@ -1533,14 +1525,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Imp.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-        /// <summary>
-        /// 导入
-        /// </summary>
-        /// <returns></returns>
-        public string DoImpOld()
-        {
-            return "../../Admin/AttrFlow/Imp_Delay.aspx?FK_Flow=" + this.No + "&Lang=CH";
-        }
+        
         /// <summary>
         /// 导出
         /// </summary>

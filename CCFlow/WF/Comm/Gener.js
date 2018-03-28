@@ -1741,10 +1741,6 @@ var HttpHandler = (function () {
             var self = this;
             var jsonString;
 
-            console.log(parameters);
-
-            //alert(json.stringtfy(parameters));
-
             $.ajax({
                 type: 'post',
                 async: false,

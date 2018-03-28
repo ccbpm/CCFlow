@@ -1699,6 +1699,17 @@ var HttpHandler = (function () {
 
         AddFormData: function () {
             formData = $("form").serialize();
+            if (formData.length > 0) {
+                var self = this;
+                $.each(formData.split("&"), function (i, o) {
+                    var param = o.split("=");
+                    if (param.length == 2 && validate(param[1])) {
+                        (function (key, value) {
+                            self.AddPara(key, value);
+                        })(param[0], param[1]);
+                    }
+                });
+            }
         },
 
         AddPara: function (key, value) {

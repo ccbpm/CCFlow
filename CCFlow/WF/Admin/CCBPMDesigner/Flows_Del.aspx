@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WF/Admin/WinOpen.master" AutoEventWireup="true"
-    CodeBehind="Flows.aspx.cs" Inherits="CCFlow.WF.Admin.CCBPMDesigner.Flows" %>
+    CodeBehind="Flows_Del.aspx.cs" Inherits="CCFlow.WF.Admin.CCBPMDesigner.Flows" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">

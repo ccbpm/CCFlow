@@ -86,51 +86,21 @@
             </th>
         </tr>
         <tr>
-            <th>
-                运行中
-            </th>
-            <th>
-                已经完成
-            </th>
-            <th>
-                其他
-            </th>
-            <th>
-                逾期
-            </th>
-            <th>
-                最长
-            </th>
-            <th>
-                最短
-            </th>
-            <th>
-                平均
-            </th>
-            <th>
-                系数
-            </th>
-            <th>
-                及时
-            </th>
-            <th>
-                按期
-            </th>
-            <th>
-                逾期
-            </th>
-            <th>
-                超期
-            </th>
-            <th>
-                按期办结率
-            </th>
-            <th>
-                删除
-            </th>
-            <th>
-                回滚
-            </th>
+            <th> 运行中 </th>
+            <th> 已经完成 </th>
+            <th>其他 </th>
+            <th> 逾期 </th>
+            <th> 最长</th>
+            <th> 最短 </th>
+            <th> 平均 </th>
+            <th> 系数</th>
+            <th> 及时 </th>
+            <th>按期</th>
+            <th> 逾期</th>
+            <th> 超期 </th>
+            <th> 按期办结率</th>
+            <th> 删除 </th>
+            <th>回滚 </th>
         </tr>
         <%
             //类别.
@@ -149,7 +119,7 @@
             //及时完成
             System.Data.DataTable dtInTimeCount
              = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT( distinct WorkID) Num FROM WF_CH WHERE CHSta='" +
-                                               (int)BP.WF.Data.CHSta.JiShi + "' GROUP BY FK_Flow ");
+                                               (int)BP.WF.Data.CHSta.AnQi + "' GROUP BY FK_Flow ");
 
             //按期完成
             System.Data.DataTable dtOnTimeCount
@@ -164,7 +134,7 @@
             // 获得超期的工作数量.
             System.Data.DataTable dtCqTimeCount
              = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT( distinct WorkID) Num FROM WF_CH WHERE CHSta='" +
-                                               (int)BP.WF.Data.CHSta.ChaoQi + "' GROUP BY FK_Flow  ");
+                                               (int)BP.WF.Data.CHSta.YuQi + "' GROUP BY FK_Flow  ");
 
             // 获得流程状态.
             System.Data.DataTable dt

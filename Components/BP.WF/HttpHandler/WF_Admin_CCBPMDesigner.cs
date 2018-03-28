@@ -512,7 +512,7 @@ namespace BP.WF.HttpHandler
         public string Login_Submit()
         {
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = this.GetValFromFrmByKey("TB_UserNo").Trim();
+            emp.No = this.GetRequestVal("TB_UserNo").Trim();
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
 
@@ -561,7 +561,7 @@ namespace BP.WF.HttpHandler
 
             }
 
-            string pass = this.GetValFromFrmByKey("TB_Pass").Trim();
+            string pass = this.GetRequestVal("TB_Pass").Trim();
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
 

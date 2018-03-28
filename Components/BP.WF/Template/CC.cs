@@ -4,6 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.WF;
 using BP.Port;
+using BP.Sys;
 
 namespace BP.WF.Template
 {
@@ -432,16 +433,43 @@ namespace BP.WF.Template
                 map.AddTBString(CCAttr.CCTitle, null, "抄送标题", true, false, 0, 100, 10, true);
                 map.AddTBStringDoc(CCAttr.CCDoc, null, "抄送内容(标题与内容支持变量)", true, false,true);
 
+
+                #region 对应关系
                 // 相关功能。
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
-                    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
-                    DeptAttr.Name, DeptAttr.No, "抄送岗位");
+                
+                    //平铺模式.
+                    map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
+                        BP.WF.Template.NodeStationAttr.FK_Node,
+                        BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(AddGroupPanelModel)", StationAttr.FK_StationType);
 
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.CCDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
-                DeptAttr.No,  "抄送部门" );
+                    map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
+                      BP.WF.Template.NodeStationAttr.FK_Node,
+                      BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(AddGroupListModel)", StationAttr.FK_StationType);
+               
 
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.CCEmps(), new BP.WF.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
-                    DeptAttr.No, "抄送人员");
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.CCDepts(), new BP.Port.Depts(),
+                   BP.WF.Template.NodeDeptAttr.FK_Node,
+                   BP.WF.Template.NodeDeptAttr.FK_Dept, "抄送部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
+
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.CCEmps(), new BP.Port.Emps(),
+                   BP.WF.Template.NodeEmpAttr.FK_Node,
+                   BP.WF.Template.NodeEmpAttr.FK_Emp, "抄送接受人(AddBranchesAndLeaf)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
+                #endregion 对应关系
+
+                //// 相关功能。
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
+                //    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
+                //    DeptAttr.Name, DeptAttr.No, "抄送岗位");
+
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
+                //DeptAttr.No,  "抄送部门" );
+
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCEmps(), new BP.WF.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
+                //    DeptAttr.No, "抄送人员");
 
                 this._enMap = map;
                 return this._enMap;

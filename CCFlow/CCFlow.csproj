@@ -1104,9 +1104,6 @@
     <Content Include="WF\Admin\CCFormDesigner\TableRef.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Tables.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Welcome.htm" />
-    <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
-    <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
-    <Content Include="WF\Admin\ClientBin\CCFormDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\CEO.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\CFO.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\CIO.png" />
@@ -1223,10 +1220,7 @@
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
     <Content Include="WF\Admin\XAP\DoPort.htm" />
-    <Content Include="WF\Admin\XAP\Designer.aspx" />
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
-    <Content Include="WF\Admin\XAP\WebService.asmx" />
-    <Content Include="WF\Admin\XAP\Designer.htm" />
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.aspx" />
@@ -6342,7 +6336,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\WinOpen.master" />
     <Content Include="WF\Admin\Handler.ashx" />
     <Content Include="WF\Admin\WinOpen.master" />
-    <Content Include="WF\Admin\XAP\WebClientDownloadHandler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
@@ -7371,22 +7364,12 @@
     <Compile Include="WF\Admin\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\XAP\Designer.aspx.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\XAP\Designer.aspx.designer.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\XAP\DoPort.aspx.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\XAP\DoPort.aspx.designer.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\XAP\WSDesigner.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="WF\AutoTodolist.aspx.cs">
       <DependentUpon>AutoTodolist.aspx</DependentUpon>

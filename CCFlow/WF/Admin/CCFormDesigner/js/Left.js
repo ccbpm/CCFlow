@@ -61,15 +61,17 @@ function OpenFlowToCanvas(node, id, text) {
 
 /// <summary>新建流程</summary>
 function newFlow() {
+
     var currSort = $('#flowTree').tree('getSelected');
     var currSortId = "99";
-    if (currSort && currSort.attributes["ISPARENT"] != 0) {//edit by qin 2016/2/16
+    if (currSort && currSort.attributes["ISPARENT"] != 0) { //edit by qin 2016/2/16
         currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
     }
     var dgId = "iframDg";
     var url = "DialogCtr/NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
 
     OpenEasyUiDialog(url, dgId, '新建流程', 650, 500, 'icon-new', true, function () {
+
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
 
@@ -125,10 +127,11 @@ function newFlow() {
                 $('#flowTree').tree('select', $('#flowTree').tree('find', jdata.data.no).target);
                 //在右侧流程设计区域打开新建的流程
                 OpenFlowToCanvas(nodeData, jdata.data.no, jdata.data.name);
+                return;
             }
-            else {
-                $.messager.alert('错误', '新建流程失败：' + jdata.msg, 'error');
-            }
+
+            $.messager.alert('错误', '新建流程失败：' + jdata.msg, 'error');
+
         }, this);
     }, null);
 }

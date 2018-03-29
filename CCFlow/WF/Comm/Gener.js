@@ -79,7 +79,9 @@ function DearUrlParas(urlParam) {
                     if (value != null && typeof value != "undefined"
                             && value != "null"
                             && value != "undefined") {
-                        value = value.trim();
+
+                     //  value = value.trim();
+
                         if (value != "" && value.length > 0) {
                             if (typeof params[key] == "undefined") {
                                 params[key] = value;
@@ -386,7 +388,7 @@ function GenerFullAllCtrlsVal(data) {
                         if (ddl.options.length == 0)
                             return true;
 
-                        console.log(suffix + "_before_" + val);
+                       // console.log(suffix + "_before_" + val);
 
                         //$("#DDLPara_" + suffix).val(""); // 操作权限.
 
@@ -396,7 +398,7 @@ function GenerFullAllCtrlsVal(data) {
                         //  json[kv[0]] = kv[1];
                         //   $("#DDLPara_" + suffix).val("2"); // 操作权限.
 
-                        console.log(suffix + "_" + val);
+                        //console.log(suffix + "_" + val);
 
                         return true;
                     }
@@ -1766,7 +1768,7 @@ var HttpHandler = (function () {
 
             if (jsonString.indexOf("err@") == 0) {
                 alert('请查看控制台:' + jsonString);
-                console.log(jsonString);
+               // console.log(jsonString);
                 return jsonString;
             }
 
@@ -1775,7 +1777,7 @@ var HttpHandler = (function () {
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
                 alert(jsonString);
-                console.log(jsonString);
+              //  console.log(jsonString);
             }
             return jsonString;
         }

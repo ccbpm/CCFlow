@@ -10,40 +10,7 @@
     <base target="_self" />
     <script type="text/javascript">
         
-        //执行保存
-        function Login() {
-
-            $("#Msg").html("<font> ccbpm 正在登录请稍候... </font>");
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-
-            var userNo = $("#TB_UserNo").val();
-            var pass = $("#TB_Pass").val();
-
-            if (userNo=="" || pass=="")
-            {
-                 $("#Msg").html("<font>请输入用户名，密码.</font>");
-                 return;
-            }
-
-            handler.AddPara("TB_UserNo", userNo);
-            handler.AddPara("TB_Pass", pass);
-
-            var data = handler.DoMethodReturnString("Login_Submit");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                window.location.href = data.replace('url@', '');
-                return;
-            }
-            alert(data);
-
-        }
-
+     
         //初始化页面函数.....
         $(function () {
 
@@ -81,7 +48,9 @@
             data = handler.DoMethodReturnString(doType);
 
             if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
+
+                $("#Msg").html("<font color=red>" + data + ". 也许是: java/.net/phtyon 运行环境没有准备好导致的. 请确认运行环境</font>");
+
                 return;
             }
 
@@ -96,6 +65,40 @@
             $("#Msg").html("<font color=green>" + data+ "</font>");
 
         });
+
+        //执行登录.
+        function Login() {
+
+            $("#Msg").html("<font> ccbpm 正在登录请稍候... </font>");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+
+            var userNo = $("#TB_UserNo").val();
+            var pass = $("#TB_Pass").val();
+
+            if (userNo == "" || pass == "") {
+                $("#Msg").html("<font>请输入用户名，密码.</font>");
+                return;
+            }
+
+            handler.AddPara("TB_UserNo", userNo);
+            handler.AddPara("TB_Pass", pass);
+
+            var data = handler.DoMethodReturnString("Login_Submit");
+
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                window.location.href = data.replace('url@', '');
+                return;
+            }
+            alert(data);
+
+        }
+
     </script>
 </head>
 <body >

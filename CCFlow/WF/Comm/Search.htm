@@ -130,9 +130,10 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
 
-            //是否可以新建？ 
-            if (mapBase.IsInsert == "True" ) {
-              $("#newWin").show();
+            if (mapBase.IsInsert == "True") {
+                $("#newWin").show();
+            } else {
+                $("#newWin").hide();
             }
 
         }

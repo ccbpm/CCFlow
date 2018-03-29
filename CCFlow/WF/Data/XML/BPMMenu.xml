@@ -2,9 +2,9 @@
 <NewDataSet>
   <!-- 组织结构管理  -->
   <Item No="01" Name="组织结构管理" Url="" Img="../Images/Btn/Help.gif" ForUser="" DESC=""  DFor="" Enable="">    
-    <Item No="0102" Name="岗位类型" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.StationTypes" Img="../WF/Img/Btn/Card.gif" />
-    <Item No="0103" Name="岗位" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Stations" Img="../WF/Img/Btn/WorkerList.gif" />
-    <Item No="0104" Name="职务维护" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Dutys" Img="../WF/Img/Btn/Reply.gif" />
+    <Item No="0102" Name="岗位类型" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.StationTypes" Img="../WF/Img/Btn/Card.gif" />
+    <Item No="0103" Name="岗位" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.Stations" Img="../WF/Img/Btn/WorkerList.gif" />
+    <Item No="0104" Name="职务维护" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.Dutys" Img="../WF/Img/Btn/Reply.gif" />
     <Item No="0107" Name="岗位分配" Url="StationToDeptEmp.aspx" Img="../WF/Img/Btn/Reply.gif" />
     <!--<Item No="0105" Name="组织结构" Url="OrganizationalStructure.aspx" Img="../WF/Img/Btn/DTS.gif" />-->
     <Item No="0105" Name="组织结构" Url="Organization.aspx" Img="../WF/Img/Btn/DTS.gif" />
@@ -14,7 +14,7 @@
   <!-- 菜单权限管理  -->
   <Item No="02" Name="BPM菜单权限管理" Url="" Img="../Images/Btn/Help.gif" ForUser="" DESC=""  DFor="" Enable="">    
     <Item No="0202" Name="BPM系统菜单" Url="AppList.aspx" Img="Images/Menu/application.png" />
-    <Item No="0203" Name="权限组" Url="../WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Groups" Img="../WF/Img/Btn/AllotTask.gif" />
+    <Item No="0203" Name="权限组" Url="../WF/Comm/Search.htm?EnsName=BP.GPM.Groups" Img="../WF/Img/Btn/AllotTask.gif" />
     <Item No="0204" Name="按菜单分配权限" Url="AppMenuToEmp.aspx" Img="Images/Menu/credit_card.png" />
     <Item No="0205" Name="按用户分配权限" Url="EmpForMenus.aspx" Img="Images/Menu/customers.png" />
     <Item No="0206" Name="按岗位分配权限" Url="StationForMenus.aspx" Img="Images/Menu/feed.png" />

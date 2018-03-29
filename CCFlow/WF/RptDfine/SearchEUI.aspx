@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="SiteEUI.Master" AutoEventWireup="true"
-    CodeBehind="SearchEUI.aspx.cs" Inherits="CCFlow.WF.Rpt.SearchEUI" %>
+    CodeBehind="Search.htm.cs" Inherits="CCFlow.WF.Rpt.SearchEUI" %>
 
 <%@ Register Src="UC/ToolBar.ascx" TagName="ToolBar" TagPrefix="uc2" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">

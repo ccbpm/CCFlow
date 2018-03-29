@@ -167,7 +167,7 @@ function queryData(param, callback, scope, method, showErrMsg) {
         type: method, //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
         contentType: "application/json; charset=utf-8",
-        url: "SearchEUI.aspx", //要访问的后台地址
+        url: "Search.htm", //要访问的后台地址
         data: param, //要发送的数据
         async: false,
         cache: false,

@@ -19,6 +19,10 @@
 .icon-addfolder{
 	background:url('icons/addfolder.gif') no-repeat center center;
 }
+.icon-excel{
+	background:url('icons/excel.gif') no-repeat center center;
+}
+
 .icon-addfile{
 	background:url('icons/addfile.gif') no-repeat center center;
 }

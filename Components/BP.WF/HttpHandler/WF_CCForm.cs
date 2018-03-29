@@ -596,7 +596,7 @@ namespace BP.WF.HttpHandler
                         enOID.InsertAsOID(this.WorkID);
                     }
                 }
-                return "url@../Comm/En.htm?EnsName=" + md.PTable + "&PK=" + this.WorkID;
+                return "url@../Comm/En.htm?EnName=" + md.PTable + "&PKVal=" + this.WorkID;
             }
 
             if (md.HisFrmType == FrmType.VSTOForExcel && this.GetRequestVal("IsFreeFrm") == null)

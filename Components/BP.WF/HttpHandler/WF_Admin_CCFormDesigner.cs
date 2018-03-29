@@ -236,11 +236,11 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
             {
                 /*把表单模版存储到数据库里 */
-                return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No;
+                return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmExcel&PKVal=" + md.No;
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.Entity)
-                return "url@../../Comm/En.htm?EnsName=" + md.PTable;
+                return "url@../../Comm/En.htm?EnName=" + md.PTable;
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
                 return "url@FormDesigner.htm?FK_MapData=" + md.No;
@@ -282,9 +282,6 @@ namespace BP.WF.HttpHandler
             {
                 /* 自由表单 */
                 return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
-
-               // return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + this.FK_MapData;
-                //return "url@./FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
             }
 
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();

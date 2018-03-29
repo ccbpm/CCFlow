@@ -1002,9 +1002,9 @@ namespace BP.WF.HttpHandler
             SFTable sf = new SFTable(attr.UIBindKey);
 
             if (sf.SrcType == SrcType.TableOrView || sf.SrcType == SrcType.BPClass || sf.SrcType == SrcType.CreateTable)
-                return "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + attr.MyPK;
+                return "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=" + attr.MyPK;
             else
-                return "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + attr.MyPK;
+                return "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=" + attr.MyPK;
         }
         #endregion 外键表列表.
 
@@ -1198,7 +1198,7 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.Insert();
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppInt)
@@ -1215,7 +1215,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppMoney)
@@ -1231,7 +1231,7 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0.00";
                 attr.Insert();
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppFloat)
@@ -1249,7 +1249,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDouble)
@@ -1266,7 +1266,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDate)
@@ -1282,7 +1282,7 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppDate;
                 attr.Insert();
 
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDateTime)
@@ -1298,7 +1298,7 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppDateTime;
                 attr.Insert();
 
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppBoolean)
@@ -1315,7 +1315,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             return "err@没有判断的数据类型." + attr.MyDataTypeStr;

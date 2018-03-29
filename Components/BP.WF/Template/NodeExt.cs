@@ -1150,7 +1150,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeComponent()
         {
-            return "../../Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK="+this.NodeID+"&t=" + DataType.CurrentDataTime;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal="+this.NodeID+"&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 特别用户特殊字段权限.
@@ -1248,7 +1248,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PK=" + this.NodeID; 
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID; 
             //PubClass.WinOpen("./RefFunc/UIEn.aspx?EnName=BP.WF.CC&PK=" + this.NodeID, "抄送规则", "Bill", 800, 500, 200, 300);
             //return null;
         }

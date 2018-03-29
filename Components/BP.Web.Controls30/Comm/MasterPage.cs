@@ -465,7 +465,7 @@ namespace BP.Web
         /// <param name="isOpenWindow">是不时打开新的窗口</param>
         public void InvokeEnManager(string enName, string pk, bool isOpenWindow)
         {
-            string url = this.Request.ApplicationPath + "Comm/En.htm?EnsName=" + enName + "&PK=" + pk;
+            string url = this.Request.ApplicationPath + "Comm/En.htm?EnName=" + enName + "&PKVal=" + pk;
             if (isOpenWindow)
             {
                 this.WinOpen(url, "", "card", 800, 400, 50, 50, false, false);
@@ -482,7 +482,7 @@ namespace BP.Web
         /// <param name="isOpenWindow">是不时打开新的窗口</param>
         public void InvokeEnManager(string className, bool isOpenWindow)
         {
-            string url = this.Request.ApplicationPath + "Comm/En.htm?EnsName=" + className;
+            string url = this.Request.ApplicationPath + "Comm/En.htm?EnName=" + className;
             if (isOpenWindow)
             {
                 this.WinOpenShowModalDialog(url, "卡片", "card", 300, 400, 100, 100);

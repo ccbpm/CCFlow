@@ -1220,7 +1220,7 @@ namespace BP.WF.HttpHandler
                     if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintHtml)
                     {
                         string urlr = appPath + "PrintSample.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + BP.Web.WebUser.No + "&IsPrint=1";
-                        toolbar += "<a data-role='button' type=button  name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"printFrom('" + urlr + "'); \" ></a>";
+                        toolbar += "<a data-role='button' type=button  name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"alert('目前'); //printFrom('" + urlr + "'); \" ></a>";
                     }
                 }
 

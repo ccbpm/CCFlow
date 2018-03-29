@@ -1034,13 +1034,6 @@ namespace BP.WF.HttpHandler
         #endregion 查询.
 
         #region Refmethod.htm 相关功能.
-        public string RefEnKey
-        {
-            get
-            {
-                return this.PKVal;
-            }
-        }
         public string Refmethod_Init()
         {
             string ensName = this.EnsName;
@@ -1052,7 +1045,7 @@ namespace BP.WF.HttpHandler
             #region 处理无参数的方法.
             if (rm.HisAttrs == null || rm.HisAttrs.Count == 0)
             {
-                string pk = this.RefEnKey;
+                string pk = this.PKVal;
                 if (pk == null)
                     pk = this.GetRequestVal(en.PK);
 
@@ -1192,11 +1185,13 @@ namespace BP.WF.HttpHandler
             Entity en = ens.GetNewEntity;
             string msg = "";
 
-            string pk = this.RefEnKey;
+            string pk = this.PKVal;
+
             if (pk.Contains(",") == false)
             {
                 /*批处理的方式.*/
                 en.PKVal = pk;
+
                 en.Retrieve();
                 msg = DoOneEntity(en, this.Index);
                 if (msg == null)
@@ -1211,6 +1206,7 @@ namespace BP.WF.HttpHandler
             {
                 if (string.IsNullOrEmpty(mypk) == true)
                     continue;
+
                 en.PKVal = mypk;
                 en.Retrieve();
 
@@ -1218,6 +1214,7 @@ namespace BP.WF.HttpHandler
                 if (s != null)
                     msg += "@" + s;
             }
+
             if (msg == "")
                 return "close@info";
             else

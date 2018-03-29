@@ -965,9 +965,10 @@ namespace BP.WF
                 qo.AddWhereInSQL("No", sql);
                 qo.addAnd();
                 qo.AddWhere(FlowAttr.IsCanStart, true);
+
                 if (WebUser.IsAuthorize)
                 {
-                    /*如果是授权状态*/
+                    /*如果是授权状态 */
                     qo.addAnd();
                     WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
                     qo.AddWhereIn("No", wfEmp.AuthorFlows);

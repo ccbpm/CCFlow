@@ -252,14 +252,21 @@ namespace BP.WF.HttpHandler
 
 
         #region 实体的操作.
-        public string Entity_Init()
+        /// <summary>
+        /// 实体初始化
+        /// </summary>
+        /// <returns></returns>
+        public string EntityOnly_Init()
         {
             try
             {
+                //是否是空白记录.
+                bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
+
                 //初始化entity.
                 string enName = this.EnName;
                 Entity en = null;
-                if (DataType.IsNullOrEmpty(enName) == true)
+                if (isBlank == true)
                 {
                     if (DataType.IsNullOrEmpty(this.EnsName) == true)
                         return "err@类名没有传递过来";
@@ -277,7 +284,7 @@ namespace BP.WF.HttpHandler
                 //获得描述.
                 Map map = en.EnMap;
                 string pkVal = this.PKVal;
-                if (DataType.IsNullOrEmpty(pkVal) == false)
+                if (isBlank == false)
                 {
                     en.PKVal = pkVal;
                     en.RetrieveFromDBSources();
@@ -286,8 +293,11 @@ namespace BP.WF.HttpHandler
                 {
                     foreach (Attr attr in en.EnMap.Attrs)
                         en.SetValByKey(attr.Key, attr.DefaultVal);
+
                     //设置默认的数据.
                     en.ResetDefaultVal();
+
+                    en.SetValByKey("RefPKVal", this.RefPKVal);
                 }
 
                 //定义容器.
@@ -302,197 +312,22 @@ namespace BP.WF.HttpHandler
                 //把权限加入参数里面.
                 if (en.HisUAC.IsInsert)
                     md.SetPara("IsInsert", "1");
-                if (en.HisUAC.IsUpdate)
-                    md.SetPara("IsUpdate", "1");
-                if (en.HisUAC.IsDelete)
-                    md.SetPara("IsDelete", "1");
+
+                if (isBlank == true)
+                {
+                    if (en.HisUAC.IsUpdate)
+                        md.SetPara("IsUpdate", "0");
+                    if (en.HisUAC.IsDelete)
+                        md.SetPara("IsDelete", "0");
+                }
+                else
+                {
+                    if (en.HisUAC.IsUpdate)
+                        md.SetPara("IsUpdate", "1");
+                    if (en.HisUAC.IsDelete)
+                        md.SetPara("IsDelete", "1");
+                }
                 #endregion 加入权限信息.
-
-                #region 增加 上方法.
-                DataTable dtM = new DataTable("dtM");
-                dtM.Columns.Add("No");
-                dtM.Columns.Add("Title");
-                dtM.Columns.Add("Tip");
-                dtM.Columns.Add("Visable");
-
-                dtM.Columns.Add("Url");
-                dtM.Columns.Add("Target");
-                dtM.Columns.Add("Warning");
-                dtM.Columns.Add("RefMethodType");
-                dtM.Columns.Add("GroupName");
-                dtM.Columns.Add("W");
-                dtM.Columns.Add("H");
-                dtM.Columns.Add("Icon");
-                dtM.Columns.Add("IsCanBatch");
-                dtM.Columns.Add("RefAttrKey");
-
-                RefMethods rms = map.HisRefMethods;
-                foreach (RefMethod item in rms)
-                {
-                    string myurl = "";
-                    if (item.RefMethodType != RefMethodType.Func)
-                    {
-                        myurl = item.Do(null) as string;
-                        if (myurl == null)
-                            continue;
-                    }
-                    else
-                    {
-                        myurl = "../RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=" + this.PKVal;
-                    }
-
-                    DataRow dr = dtM.NewRow();
-
-                    dr["No"] = item.Index;
-                    dr["Title"] = item.Title;
-                    dr["Tip"] = item.ToolTip;
-                    dr["Visable"] = item.Visable;
-                    dr["Warning"] = item.Warning;
-                    
-
-                    dr["RefMethodType"] = (int)item.RefMethodType;
-                    dr["RefAttrKey"] = item.RefAttrKey;
-                    dr["URL"] = myurl;
-                    dr["W"] = item.Width;
-                    dr["H"] = item.Height;
-                    dr["Icon"] = item.Icon;
-                    dr["IsCanBatch"] = item.IsCanBatch;
-                    dr["GroupName"] = item.GroupName;
-
-                    dtM.Rows.Add(dr); //增加到rows.
-                }
-                #endregion 增加 上方法.
-
-                #region 加入一对多的实体编辑
-                AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
-                string sql = "";
-                int i = 0;
-                if (oneVsM.Count > 0)
-                {
-                    foreach (AttrOfOneVSM vsM in oneVsM)
-                    {
-                        //判断该dot2dot是否显示？
-                        Entity enMM = vsM.EnsOfMM.GetNewEntity;
-                        enMM.SetValByKey(vsM.AttrOfOneInMM, this.PKVal);
-                        if (enMM.HisUAC.IsView == false)
-                            continue;
-                        DataRow dr = dtM.NewRow();
-                        dr["No"] = enMM.ToString();
-                       // dr["GroupName"] = vsM.GroupName;
-                        if (en.PKVal != null)
-                        {
-                            //判断模式.
-                            string url = "";
-                            if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
-                            {
-                                //url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                              //  url = "Branches.htm?EnName=" + en.ToString() + "&AttrKey=" + vsM.EnsOfMM.ToString();
-
-                                url = "Branches.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
-                               // url += "&PKVal=" + en.PKVal;
-                                url += "&Dot2DotEnName=" + vsM.EnsOfMM.GetNewEntity.ToString(); //存储实体类.
-                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
-                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
-                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
-                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  
-
-                            }
-                            else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
-                            {
-                                //   url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                                url = "BranchesAndLeaf.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
-                             //   url += "&PKVal=" + en.PKVal;
-                                url += "&Dot2DotEnName=" + vsM.EnsOfMM.GetNewEntity.ToString(); //存储实体类.
-                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
-                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
-                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
-                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
-                                //url += "&RootNo=" + vsM.RootNo; //默认的B实体分组依据.  比如:FK_Station.
-                            }
-                            else
-                            {
-                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                                url = "Dot2Dot.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString(); //比如:BP.WF.Template.NodeStations
-                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
-                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM;  //dot2dot存储表那个与实体表.  比如:FK_Station.
-                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体.   //比如:BP.Port.Stations
-                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
-
-                                //+"&RefAttrEnsName=" + vsM.EnsOfM.ToString();
-                                //url += "&RefAttrKey=" + vsM.AttrOfOneInMM + "&RefAttrEnsName=" + vsM.EnsOfM.ToString();
-                            }
-
-                            dr["URL"] = url + "&" + en.PK + "=" + en.PKVal + "&PKVal=" + en.PKVal;
-                            dr["Icon"] = "../Img/M2M.png"; 
-                            
-                        }
-
-                        dr["W"] = "900";
-                        dr["H"] = "500";
-                        dr["RefMethodType"] = (int)RefMethodType.RightFrameOpen;
-
-
-                        // 获得选择的数量.
-                        try
-                        {
-                            sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "='" + en.PKVal + "'";
-                            i = DBAccess.RunSQLReturnValInt(sql);
-                        }
-                        catch
-                        {
-                            sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "=" + en.PKVal;
-                            try
-                            {
-                                i = DBAccess.RunSQLReturnValInt(sql);
-                            }
-                            catch
-                            {
-                                vsM.EnsOfMM.GetNewEntity.CheckPhysicsTable();
-                            }
-                        }
-                        dr["Title"] = vsM.Desc + "(" + i + ")";
-                        dtM.Rows.Add(dr);
-                    }
-                }
-                #endregion 增加 一对多.
-
-                #region 从表
-                EnDtls enDtls = en.EnMap.Dtls;
-                foreach (EnDtl enDtl in enDtls)
-                {
-                    //判断该dtl是否要显示?
-                    Entity myEnDtl = enDtl.Ens.GetNewEntity; //获取他的en
-                    myEnDtl.SetValByKey(enDtl.RefKey, this.PKVal);  //给refpk赋值
-                    if (myEnDtl.HisUAC.IsView == false)
-                        continue;
-
-                    DataRow dr = dtM.NewRow();
-                    //string url = "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() ;
-                    string url = "Dtl.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() ;
-                    try
-                    {
-                        i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "='" + en.PKVal + "'");
-                    }
-                    catch
-                    {
-                        try
-                        {
-                            i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "=" + en.PKVal);
-                        }
-                        catch
-                        {
-                            enDtl.Ens.GetNewEntity.CheckPhysicsTable();
-                        }
-                    }
-                    dr["No"] = enDtl.EnsName;
-                    dr["Title"] = enDtl.Desc+"("+i+")";
-                    dr["Url"] = url;
-                    dr["GroupName"] = enDtl.GroupName;
-                    dtM.Rows.Add(dr);
-                }
-                ds.Tables.Add(dtM); //
-                #endregion 增加 从表.
 
 
                 ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
@@ -544,6 +379,7 @@ namespace BP.WF.HttpHandler
                 DataTable sys_MapAttrs = attrs.ToDataTableField("Sys_MapAttr");
                 sys_MapAttrs.Columns.Remove(MapAttrAttr.GroupID);
                 sys_MapAttrs.Columns.Add("GroupID");
+
                 //sys_MapAttrs.Columns[MapAttrAttr.GroupID].DataType = typeof(string); //改变列类型.
 
                 //给字段增加分组.
@@ -652,8 +488,267 @@ namespace BP.WF.HttpHandler
 
                     ds.Tables.Add(dtEnum);
                 }
-
                 #endregion 把外键与枚举放入里面去.
+
+                return BP.Tools.Json.ToJson(ds);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 实体初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_Init()
+        {
+            try
+            {
+                //是否是空白记录.
+                bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
+                if (DataType.IsNullOrEmpty(this.PKVal) == true)
+                    return "err@主键数据丢失，不能初始化En.htm";
+
+                //初始化entity.
+                string enName = this.EnName;
+                Entity en = null;
+                if (DataType.IsNullOrEmpty(enName) == true)
+                {
+                    if (DataType.IsNullOrEmpty(this.EnsName) == true)
+                        return "err@类名没有传递过来";
+                    Entities ens = ClassFactory.GetEns(this.EnsName);
+                    en = ens.GetNewEntity;
+                }
+                else
+                {
+                    en = ClassFactory.GetEn(this.EnName);
+                }
+
+                if (en == null)
+                    return "err@参数类名不正确.";
+
+                //获得描述.
+                Map map = en.EnMap;
+                string pkVal = this.PKVal;
+
+                en.PKVal = pkVal;
+                en.RetrieveFromDBSources();
+
+                //定义容器.
+                DataSet ds = new DataSet();
+
+                //定义Sys_MapData.
+                MapData md = new MapData();
+                md.No = this.EnName;
+                md.Name = map.EnDesc;
+
+                #region 加入权限信息.
+                //把权限加入参数里面.
+                if (en.HisUAC.IsInsert)
+                    md.SetPara("IsInsert", "1");
+
+                if (isBlank == true)
+                {
+                    if (en.HisUAC.IsUpdate)
+                        md.SetPara("IsUpdate", "0");
+                    if (en.HisUAC.IsDelete)
+                        md.SetPara("IsDelete", "0");
+                }
+                else
+                {
+                    if (en.HisUAC.IsUpdate)
+                        md.SetPara("IsUpdate", "1");
+                    if (en.HisUAC.IsDelete)
+                        md.SetPara("IsDelete", "1");
+                }
+                #endregion 加入权限信息.
+
+                #region 增加 上方法.
+                DataTable dtM = new DataTable("dtM");
+                dtM.Columns.Add("No");
+                dtM.Columns.Add("Title");
+                dtM.Columns.Add("Tip");
+                dtM.Columns.Add("Visable");
+
+                dtM.Columns.Add("Url");
+                dtM.Columns.Add("Target");
+                dtM.Columns.Add("Warning");
+                dtM.Columns.Add("RefMethodType");
+                dtM.Columns.Add("GroupName");
+                dtM.Columns.Add("W");
+                dtM.Columns.Add("H");
+                dtM.Columns.Add("Icon");
+                dtM.Columns.Add("IsCanBatch");
+                dtM.Columns.Add("RefAttrKey");
+
+                RefMethods rms = map.HisRefMethods;
+                foreach (RefMethod item in rms)
+                {
+                    string myurl = "";
+                    if (item.RefMethodType != RefMethodType.Func)
+                    {
+                        myurl = item.Do(null) as string;
+                        if (myurl == null)
+                            continue;
+                    }
+                    else
+                    {
+                        myurl = "../RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=" + this.PKVal;
+                    }
+
+                    DataRow dr = dtM.NewRow();
+
+                    dr["No"] = item.Index;
+                    dr["Title"] = item.Title;
+                    dr["Tip"] = item.ToolTip;
+                    dr["Visable"] = item.Visable;
+                    dr["Warning"] = item.Warning;
+
+
+                    dr["RefMethodType"] = (int)item.RefMethodType;
+                    dr["RefAttrKey"] = item.RefAttrKey;
+                    dr["URL"] = myurl;
+                    dr["W"] = item.Width;
+                    dr["H"] = item.Height;
+                    dr["Icon"] = item.Icon;
+                    dr["IsCanBatch"] = item.IsCanBatch;
+                    dr["GroupName"] = item.GroupName;
+
+                    dtM.Rows.Add(dr); //增加到rows.
+                }
+                #endregion 增加 上方法.
+
+                #region 加入一对多的实体编辑
+                AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
+                string sql = "";
+                int i = 0;
+                if (oneVsM.Count > 0)
+                {
+                    foreach (AttrOfOneVSM vsM in oneVsM)
+                    {
+                        //判断该dot2dot是否显示？
+                        Entity enMM = vsM.EnsOfMM.GetNewEntity;
+                        enMM.SetValByKey(vsM.AttrOfOneInMM, this.PKVal);
+                        if (enMM.HisUAC.IsView == false)
+                            continue;
+                        DataRow dr = dtM.NewRow();
+                        dr["No"] = enMM.ToString();
+                        // dr["GroupName"] = vsM.GroupName;
+                        if (en.PKVal != null)
+                        {
+                            //判断模式.
+                            string url = "";
+                            if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
+                            {
+                                //url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                                //  url = "Branches.htm?EnName=" + en.ToString() + "&AttrKey=" + vsM.EnsOfMM.ToString();
+
+                                url = "Branches.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
+                                // url += "&PKVal=" + en.PKVal;
+                                url += "&Dot2DotEnName=" + vsM.EnsOfMM.GetNewEntity.ToString(); //存储实体类.
+                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
+                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
+                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
+                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  
+
+                            }
+                            else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
+                            {
+                                //   url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                                url = "BranchesAndLeaf.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
+                                //   url += "&PKVal=" + en.PKVal;
+                                url += "&Dot2DotEnName=" + vsM.EnsOfMM.GetNewEntity.ToString(); //存储实体类.
+                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
+                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
+                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
+                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
+                                //url += "&RootNo=" + vsM.RootNo; //默认的B实体分组依据.  比如:FK_Station.
+                            }
+                            else
+                            {
+                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                                url = "Dot2Dot.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString(); //比如:BP.WF.Template.NodeStations
+                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
+                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM;  //dot2dot存储表那个与实体表.  比如:FK_Station.
+                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体.   //比如:BP.Port.Stations
+                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
+
+                                //+"&RefAttrEnsName=" + vsM.EnsOfM.ToString();
+                                //url += "&RefAttrKey=" + vsM.AttrOfOneInMM + "&RefAttrEnsName=" + vsM.EnsOfM.ToString();
+                            }
+
+                            dr["URL"] = url + "&" + en.PK + "=" + en.PKVal + "&PKVal=" + en.PKVal;
+                            dr["Icon"] = "../Img/M2M.png";
+
+                        }
+
+                        dr["W"] = "900";
+                        dr["H"] = "500";
+                        dr["RefMethodType"] = (int)RefMethodType.RightFrameOpen;
+
+
+                        // 获得选择的数量.
+                        try
+                        {
+                            sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "='" + en.PKVal + "'";
+                            i = DBAccess.RunSQLReturnValInt(sql);
+                        }
+                        catch
+                        {
+                            sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "=" + en.PKVal;
+                            try
+                            {
+                                i = DBAccess.RunSQLReturnValInt(sql);
+                            }
+                            catch
+                            {
+                                vsM.EnsOfMM.GetNewEntity.CheckPhysicsTable();
+                            }
+                        }
+                        dr["Title"] = vsM.Desc + "(" + i + ")";
+                        dtM.Rows.Add(dr);
+                    }
+                }
+                #endregion 增加 一对多.
+
+                #region 从表
+                EnDtls enDtls = en.EnMap.Dtls;
+                foreach (EnDtl enDtl in enDtls)
+                {
+                    //判断该dtl是否要显示?
+                    Entity myEnDtl = enDtl.Ens.GetNewEntity; //获取他的en
+                    myEnDtl.SetValByKey(enDtl.RefKey, this.PKVal);  //给refpk赋值
+                    if (myEnDtl.HisUAC.IsView == false)
+                        continue;
+
+                    DataRow dr = dtM.NewRow();
+                    //string url = "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() ;
+                    string url = "Dtl.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString();
+                    try
+                    {
+                        i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "='" + en.PKVal + "'");
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "=" + en.PKVal);
+                        }
+                        catch
+                        {
+                            enDtl.Ens.GetNewEntity.CheckPhysicsTable();
+                        }
+                    }
+                    dr["No"] = enDtl.EnsName;
+                    dr["Title"] = enDtl.Desc + "(" + i + ")";
+                    dr["Url"] = url;
+                    dr["GroupName"] = enDtl.GroupName;
+                    dtM.Rows.Add(dr);
+                }
+                ds.Tables.Add(dtM); //
+                #endregion 增加 从表.
 
                 return BP.Tools.Json.ToJson(ds);
             }

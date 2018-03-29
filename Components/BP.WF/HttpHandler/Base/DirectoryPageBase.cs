@@ -231,7 +231,6 @@ namespace BP.WF.HttpHandler
             {
                 string str = this.GetRequestVal("PKVal");
 
-
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("OID");
 
@@ -714,7 +713,6 @@ namespace BP.WF.HttpHandler
 
         public bool GetValBoolenFromFrmByKey(string key)
         {
-
             string val = this.GetValFromFrmByKey(key, "0");
             if (val == "on" || val == "1")
                 return true;

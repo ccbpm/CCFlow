@@ -441,6 +441,15 @@
     <Content Include="WF\AppClassic\Welcome.htm" />
     <Content Include="WF\AppClassic\Login.htm" />
     <Content Include="WF\CCForm\DtlReadonly.htm" />
+    <Content Include="WF\Comm\RefFunc\Branches.htm" />
+    <Content Include="WF\Comm\RefFunc\BranchesAndLeaf.htm" />
+    <Content Include="WF\Comm\RefFunc\BranchesEUI.htm" />
+    <Content Include="WF\Comm\RefFunc\Dot2Dot.htm" />
+    <Content Include="WF\Comm\RefFunc\Dot2DotStationModel.htm" />
+    <Content Include="WF\Comm\RefFunc\Dtl2018.htm" />
+    <Content Include="WF\Comm\RefFunc\En2018.css" />
+    <Content Include="WF\Comm\RefFunc\En2018.htm" />
+    <Content Include="WF\Comm\RefFunc\EnOnly.htm" />
     <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.htm" />
     <Content Include="WF\Data\Install\DemoData.xml" />
     <Content Include="WF\Data\Install\Informix.sql" />
@@ -643,7 +652,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Flows.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\BusinessRuleTask.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\BusinessRuleTaskBig.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\ManualTask.png" />
@@ -1581,208 +1589,6 @@
     <Content Include="WF\Comm\JS\TBHelpDiv.js" />
     <Content Include="WF\Comm\JS\Tree.js" />
     <Content Include="WF\Comm\JS\TreeEns.js" />
-    <Content Include="WF\Comm\kindeditor\asp.net\bin\LitJSON.dll" />
-    <Content Include="WF\Comm\kindeditor\asp.net\file_manager_json.ashx" />
-    <Content Include="WF\Comm\kindeditor\asp.net\README.txt" />
-    <Content Include="WF\Comm\kindeditor\asp.net\upload_json.ashx" />
-    <Content Include="WF\Comm\kindeditor\kindeditor-all-min.js" />
-    <Content Include="WF\Comm\kindeditor\kindeditor-all.js" />
-    <Content Include="WF\Comm\kindeditor\kindeditor-min.js" />
-    <Content Include="WF\Comm\kindeditor\kindeditor.js" />
-    <Content Include="WF\Comm\kindeditor\lang\zh_CN.js" />
-    <Content Include="WF\Comm\kindeditor\lang\zh_TW.js" />
-    <Content Include="WF\Comm\kindeditor\license.txt" />
-    <Content Include="WF\Comm\kindeditor\plugins\anchor\anchor.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\autoheight\autoheight.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\baidumap\baidumap.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\baidumap\index.html" />
-    <Content Include="WF\Comm\kindeditor\plugins\baidumap\map.html" />
-    <Content Include="WF\Comm\kindeditor\plugins\clearhtml\clearhtml.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\code\code.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\code\prettify.css" />
-    <Content Include="WF\Comm\kindeditor\plugins\code\prettify.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\emoticons.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\0.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\1.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\10.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\100.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\101.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\102.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\103.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\104.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\105.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\106.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\107.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\108.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\109.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\11.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\110.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\111.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\112.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\113.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\114.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\115.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\116.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\117.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\118.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\119.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\12.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\120.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\121.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\122.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\123.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\124.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\125.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\126.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\127.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\128.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\129.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\13.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\130.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\131.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\132.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\133.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\134.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\14.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\15.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\16.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\17.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\18.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\19.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\2.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\20.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\21.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\22.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\23.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\24.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\25.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\26.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\27.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\28.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\29.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\3.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\30.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\31.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\32.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\33.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\34.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\35.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\36.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\37.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\38.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\39.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\4.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\40.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\41.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\42.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\43.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\44.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\45.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\46.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\47.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\48.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\49.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\5.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\50.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\51.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\52.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\53.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\54.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\55.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\56.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\57.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\58.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\59.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\6.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\60.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\61.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\62.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\63.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\64.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\65.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\66.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\67.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\68.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\69.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\7.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\70.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\71.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\72.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\73.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\74.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\75.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\76.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\77.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\78.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\79.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\8.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\80.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\81.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\82.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\83.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\84.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\85.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\86.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\87.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\88.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\89.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\9.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\90.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\91.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\92.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\93.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\94.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\95.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\96.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\97.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\98.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\99.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\emoticons\images\static.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\filemanager\filemanager.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\filemanager\images\file-16.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\filemanager\images\file-64.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\filemanager\images\folder-16.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\filemanager\images\folder-64.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\filemanager\images\go-up.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\flash\flash.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\image\image.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\image\images\align_left.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\image\images\align_right.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\image\images\align_top.gif" />
-    <Content Include="WF\Comm\kindeditor\plugins\image\images\refresh.png" />
-    <Content Include="WF\Comm\kindeditor\plugins\insertfile\insertfile.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\lineheight\lineheight.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\link\link.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\map\map.html" />
-    <Content Include="WF\Comm\kindeditor\plugins\map\map.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\media\media.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\multiimage\images\image.png" />
-    <Content Include="WF\Comm\kindeditor\plugins\multiimage\images\select-files-en.png" />
-    <Content Include="WF\Comm\kindeditor\plugins\multiimage\images\select-files-zh_CN.png" />
-    <Content Include="WF\Comm\kindeditor\plugins\multiimage\images\swfupload.swf" />
-    <Content Include="WF\Comm\kindeditor\plugins\multiimage\multiimage.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\pagebreak\pagebreak.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\plainpaste\plainpaste.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\preview\preview.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\quickformat\quickformat.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\table\table.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\template\html\1.html" />
-    <Content Include="WF\Comm\kindeditor\plugins\template\html\2.html" />
-    <Content Include="WF\Comm\kindeditor\plugins\template\html\3.html" />
-    <Content Include="WF\Comm\kindeditor\plugins\template\template.js" />
-    <Content Include="WF\Comm\kindeditor\plugins\wordpaste\wordpaste.js" />
-    <Content Include="WF\Comm\kindeditor\themes\common\anchor.gif" />
-    <Content Include="WF\Comm\kindeditor\themes\common\blank.gif" />
-    <Content Include="WF\Comm\kindeditor\themes\common\flash.gif" />
-    <Content Include="WF\Comm\kindeditor\themes\common\loading.gif" />
-    <Content Include="WF\Comm\kindeditor\themes\common\media.gif" />
-    <Content Include="WF\Comm\kindeditor\themes\common\rm.gif" />
-    <Content Include="WF\Comm\kindeditor\themes\default\background.png" />
-    <Content Include="WF\Comm\kindeditor\themes\default\default.css" />
-    <Content Include="WF\Comm\kindeditor\themes\default\default.png" />
-    <Content Include="WF\Comm\kindeditor\themes\qq\editor.gif" />
-    <Content Include="WF\Comm\kindeditor\themes\qq\qq.css" />
-    <Content Include="WF\Comm\kindeditor\themes\simple\simple.css" />
     <Content Include="WF\Comm\Menu.js" />
     <Content Include="WF\Comm\Port\ChangePass.aspx" />
     <Content Include="WF\Comm\Port\ChangePass.gif" />
@@ -1799,46 +1605,11 @@
     <Content Include="WF\Comm\Port\SelectUser_Jq.aspx" />
     <Content Include="WF\Comm\Port\ToErrorPage.aspx" />
     <Content Include="WF\Comm\readme.txt" />
-    <Content Include="WF\Comm\RefFunc\Dot2Dot.ascx" />
-    <Content Include="WF\Comm\RefFunc\Dot2Dot.aspx" />
-    <Content Include="WF\Comm\RefFunc\Dot2DotSearch.htm" />
-    <Content Include="WF\Comm\RefFunc\Dot2DotSingle.aspx" />
-    <Content Include="WF\Comm\RefFunc\Dot2DotTreeDeptEmpModel.htm" />
-    <Content Include="WF\Comm\RefFunc\Dot2DotTreeDeptModel.htm" />
-    <Content Include="WF\Comm\RefFunc\Dtl.ascx" />
-    <Content Include="WF\Comm\RefFunc\Dtl.aspx" />
-    <Content Include="WF\Comm\RefFunc\EnVerDtl.aspx" />
-    <Content Include="WF\Comm\RefFunc\Exp.aspx" />
-    <Content Include="WF\Comm\RefFunc\Handler.ashx" />
-    <Content Include="WF\Comm\RefFunc\Img\Max.gif" />
-    <Content Include="WF\Comm\RefFunc\Img\Min.gif" />
-    <Content Include="WF\Comm\RefFunc\Left.ascx" />
-    <Content Include="WF\Comm\RefFunc\MasterPage.master" />
-    <Content Include="WF\Comm\RefFunc\MasterPageSingle.Master" />
-    <Content Include="WF\Comm\RefFunc\RefDtl.ascx" />
-    <Content Include="WF\Comm\RefFunc\RefLeft.ascx" />
-    <Content Include="WF\Comm\RefFunc\RefLeftForDtl.ascx" />
-    <Content Include="WF\Comm\RefFunc\Serv.ashx" />
-    <Content Include="WF\Comm\RefFunc\Style\JScript.js" />
-    <Content Include="WF\Comm\RefFunc\Style\Max.gif" />
-    <Content Include="WF\Comm\RefFunc\Style\Min.gif" />
-    <Content Include="WF\Comm\RefFunc\Style\Style.css" />
-    <Content Include="WF\Comm\RefFunc\Style\Table.css" />
-    <Content Include="WF\Comm\RefFunc\Style\Table.js" />
-    <Content Include="WF\Comm\RefFunc\Style\TableWF.css" />
-    <Content Include="WF\Comm\RefFunc\SysMapEn.aspx" />
-    <Content Include="WF\Comm\RefFunc\SysMapEn.master" />
-    <Content Include="WF\Comm\RefFunc\SysMapEnUC.ascx" />
-    <Content Include="WF\Comm\RefFunc\Top.ascx" />
-    <Content Include="WF\Comm\RefFunc\UIEn.aspx" />
-    <Content Include="WF\Comm\RefFunc\WinOpen.Master" />
     <Content Include="WF\Comm\Rpt2DBA.aspx" />
     <Content Include="WF\Comm\Rpt2DBADtl.aspx" />
     <Content Include="WF\Comm\Rpt2DBAs.aspx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Pie.htm" />
-    <Content Include="WF\Comm\Search.aspx" />
-    <Content Include="WF\Comm\SearchEUI.aspx" />
     <Content Include="WF\Comm\SelectMVals.aspx" />
     <Content Include="WF\Comm\SelfAttrs.aspx" />
     <Content Include="WF\Comm\ShortKey.js" />
@@ -7092,13 +6863,6 @@
     <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.cs">
-      <DependentUpon>Flows.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.designer.cs">
-      <DependentUpon>Flows.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -7787,145 +7551,6 @@
     <Compile Include="WF\Comm\Port\ToErrorPage.aspx.designer.cs">
       <DependentUpon>ToErrorPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dot2Dot.ascx.cs">
-      <DependentUpon>Dot2Dot.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dot2Dot.ascx.designer.cs">
-      <DependentUpon>Dot2Dot.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dot2Dot.aspx.cs">
-      <DependentUpon>Dot2Dot.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dot2Dot.aspx.designer.cs">
-      <DependentUpon>Dot2Dot.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dot2DotSingle.aspx.cs">
-      <DependentUpon>Dot2DotSingle.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dot2DotSingle.aspx.designer.cs">
-      <DependentUpon>Dot2DotSingle.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dtl.ascx.cs">
-      <DependentUpon>Dtl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dtl.ascx.designer.cs">
-      <DependentUpon>Dtl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dtl.aspx.cs">
-      <DependentUpon>Dtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Dtl.aspx.designer.cs">
-      <DependentUpon>Dtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\EnVerDtl.aspx.cs">
-      <DependentUpon>EnVerDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\EnVerDtl.aspx.designer.cs">
-      <DependentUpon>EnVerDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Exp.aspx.cs">
-      <DependentUpon>Exp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Exp.aspx.designer.cs">
-      <DependentUpon>Exp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Left.ascx.cs">
-      <DependentUpon>Left.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Left.ascx.designer.cs">
-      <DependentUpon>Left.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\MasterPage.master.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\MasterPage.master.designer.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\MasterPageSingle.Master.cs">
-      <DependentUpon>MasterPageSingle.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\MasterPageSingle.Master.designer.cs">
-      <DependentUpon>MasterPageSingle.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\RefDtl.ascx.cs">
-      <DependentUpon>RefDtl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\RefDtl.ascx.designer.cs">
-      <DependentUpon>RefDtl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\RefLeft.ascx.cs">
-      <DependentUpon>RefLeft.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\RefLeft.ascx.designer.cs">
-      <DependentUpon>RefLeft.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\RefLeftForDtl.ascx.cs">
-      <DependentUpon>RefLeftForDtl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\RefLeftForDtl.ascx.designer.cs">
-      <DependentUpon>RefLeftForDtl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Serv.ashx.cs">
-      <DependentUpon>Serv.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\SysMapEn.aspx.cs">
-      <DependentUpon>SysMapEn.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\SysMapEn.aspx.designer.cs">
-      <DependentUpon>SysMapEn.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\SysMapEn.master.cs">
-      <DependentUpon>SysMapEn.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\SysMapEn.master.designer.cs">
-      <DependentUpon>SysMapEn.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\SysMapEnUC.ascx.cs">
-      <DependentUpon>SysMapEnUC.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\SysMapEnUC.ascx.designer.cs">
-      <DependentUpon>SysMapEnUC.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Top.ascx.cs">
-      <DependentUpon>Top.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Top.ascx.designer.cs">
-      <DependentUpon>Top.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\UIEn.aspx.cs">
-      <DependentUpon>UIEn.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\UIEn.aspx.designer.cs">
-      <DependentUpon>UIEn.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\WinOpen.Master.cs">
-      <DependentUpon>WinOpen.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\WinOpen.Master.designer.cs">
-      <DependentUpon>WinOpen.Master</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Rpt2DBA.aspx.cs">
       <DependentUpon>Rpt2DBA.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7949,20 +7574,6 @@
     </Compile>
     <Compile Include="WF\Comm\Rpt\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\SearchEUI.aspx.cs">
-      <DependentUpon>SearchEUI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\SearchEUI.aspx.designer.cs">
-      <DependentUpon>SearchEUI.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\SelectMVals.aspx.cs">
       <DependentUpon>SelectMVals.aspx</DependentUpon>

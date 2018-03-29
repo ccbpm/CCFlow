@@ -2176,7 +2176,48 @@ namespace BP.WF
                 default:
                     throw new Exception("no such way...");
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
+            //@杜. 这里需要翻译.
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["ISREAD"].ColumnName = "IsRead";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+
+                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
+                dt.Columns["FK_EMP"].ColumnName = "FK_Emp";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+
+                dt.Columns["LISTTYPE"].ColumnName = "ListType";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["ATPARA"].ColumnName = "AtPara";
+                dt.Columns["MYNUM"].ColumnName = "MyNum";
+            }
+
+            return dt;
         }
         /// <summary>
         /// 获得所有的流程挂起工作列表

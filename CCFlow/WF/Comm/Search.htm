@@ -36,6 +36,8 @@
         ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
         ur.RetrieveFromDBSources();
 
+        var count = ur.GetPara("RecCount");
+
         var mapBase;
 
         //页面启动函数.
@@ -190,10 +192,12 @@
             ur.CfgKey = "SearchAttrs";
             ur.Vals = str;
             ur.FK_MapData = ensName;
+            ur.SetPara("RecCount",count);
             var i = ur.Save();
-            var pager = $("#dg").datagrid('getPager').data("pagination" ).options;  
-            var pageIndex =  pager.pageNumber;
-            window.location.href = "?EnsName=" + ensName + "&PageIdx="+pageIndex;
+            var pager = $("#dg").datagrid('getPager').data("pagination" ).options;
+            var pageIndex = pager.pageNumber;
+            var pageSize = pager.pageSize;
+            window.location.href = "?EnsName=" + ensName + "&PageIdx="+pageIndex+"&PageSize="+pageSize;
         }
 
         function Exp() {
@@ -231,25 +235,14 @@
                 }
                 }]
             });
-        }
+    }
 
-        //生成查询页面..
-        function BindTable() {
-
-            //$("#dataGrid").html();
-
+        function SearchData(pageIdx, pageSize) {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-
-            //获得查询的基本信息, 实体属性 attrs, 实体数据.
-            var pageIdx = this.GetQueryString("PageIdx");
-
-            if (pageIdx == "" || pageIdx == undefined)
-                pageIdx = "1";
-
             handler.AddPara("PageIdx", pageIdx);
+            handler.AddPara("PageSize", pageSize);
             handler.AddPara("EnsName", GetQueryString("EnsName"));
-
             //查询集合
             var data = handler.DoMethodReturnString("Search_SearchIt");
             if (data.indexOf('err@') == 0) {
@@ -258,8 +251,27 @@
             }
 
             data = JSON.parse(data);
+            return data;
+        }
 
-            var attrs = data["Attrs"];
+        //生成查询页面..
+        function BindTable() {
+
+            //获得查询的基本信息, 实体属性 attrs, 实体数据.
+            var pageIdx = this.GetQueryString("PageIdx");
+            var pageSize = this.GetQueryString("PageSize");
+
+            if (pageIdx == "" || pageIdx == undefined)
+                pageIdx = "1";
+            if (pageSize == "" || pageSize == undefined)
+                pageSize = "10";
+
+
+            var mapdata = SearchData(pageIdx, pageSize);
+
+
+
+            var attrs = mapdata["Attrs"];
                     
             if (attrs == undefined) {
                 alert('没有取得属性.');
@@ -308,27 +320,9 @@
             }
 
 
-            /**columns.push({
-                         field: keyOfEn,
-		                title: "操作",
-                        fixed:true,
-                        width:120,
-                        formatter:function(value,row,index){
-                           var html="";
-                           for(var i=0;i<refMethod.length;i++){
-                          
-                             //
-                             html+="<a href='#' onclick='javaScript:RefMethod1(\'/\',"+index+","+refMethod[i].Target+","+GetQueryString('EnsName')+",xx)'>";
-                             html+="<img src="+refMethod[i].Icon+" border='0'/>";
-                             html+=refMethod[i].Title+"</a>";
-                           }
-                           return html;
-                        } 
-                        
-            });*/
-
+            var data = mapdata["DT"];
             $('#dg').datagrid({
-                data: data["DT"],
+                data: data,
                 columns: [columns],
                 fitColumns: false,
                 fit: true,
@@ -371,28 +365,48 @@
             });
         }
 
-         //分页功能      
+            //分页功能 
+            var IsUrl = true;     
             function pagerFilter(data) {  
                 if (typeof data.length == 'number' && typeof data.splice == 'function') {  
                     data = {  
-                        total: data.length,  
-                        rows: data  
-                    }  
-                }  
-                var dg = $(this);  
-                var opts = dg.datagrid('options');  
-                var pager = dg.datagrid('getPager');  
-                pager.pagination({  
-                    onSelectPage: function (pageNum, pageSize) {  
-                        opts.pageNumber = pageNum;  
-                        opts.pageSize = pageSize;  
-                        pager.pagination('refresh', {  
-                            pageNumber: pageNum,  
-                            pageSize: pageSize  
-                        });  
-                        dg.datagrid('loadData', data);  
-                    }  
-                });  
+                        total: count,
+                        rows: data
+                    }
+                }
+                var dg = $(this);
+                var opts = dg.datagrid('options');
+                var pager = dg.datagrid('getPager');
+                
+                //url 路径上包含PageIdx、PageSize
+                if (IsUrl) {
+                    var pageIdx = GetQueryString("PageIdx");
+                    var pageSize = GetQueryString("PageSize");
+                    if (pageIdx !== null && pageIdx != "") {
+                        opts.pageNumber = parseInt(pageIdx);
+                        opts.pageSize = parseInt(pageSize);
+                        pager.data("pagination").options.pageNumber = parseInt(pageIdx);
+                        pager.data("pagination").options.pageSize = parseInt(pageSize);
+                    }
+                }
+               //点击分页
+                pager.pagination({
+                    onSelectPage: function (pageNum, pageSize) {
+                        opts.pageNumber = pageNum;
+                        opts.pageSize = pageSize;
+                        pager.pagination('refresh', {
+                            pageNumber: pageNum,
+                            pageSize: pageSize
+                        });
+                        IsUrl = false;
+                        var mapdata = SearchData(opts.pageNumber, opts.pageSize);
+                        data = mapdata["DT"];
+                        dg.datagrid('loadData', data);
+                    }
+                });
+
+                
+                  
                 if (!data.originalRows) {  
                     if(data.rows)  
                         data.originalRows = (data.rows);  
@@ -401,9 +415,9 @@
                     else  
                         data.originalRows = [];  
                 }  
-                var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);  
-                var end = start + parseInt(opts.pageSize);  
-                data.rows = (data.originalRows.slice(start, end));  
+               // var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);  
+                //var end = start + parseInt(opts.pageSize);  
+                //data.rows = (data.originalRows.slice(start, end));  
                 return data;  
             } 
 
@@ -438,9 +452,40 @@
 
             var windowH = cfg.GetPara("WinCardH");
              if (windowH=="" || windowH==undefined )
-                windowH=500;
+                 windowH = 500;
 
-            OpenEasyUiDialogExt(url,mapBase.EnDesc + ' : 详细', windowW, windowH, true);
+             var localUrl = window.location.href;
+             var pager = $("#dg").datagrid('getPager').data("pagination").options;
+             var pageIndex = pager.pageNumber;
+             var  pageSize = pager.pageSize;
+
+             var localArr = new Array();
+             localArr = localUrl.split("&");
+             if (localArr.length == 1) {
+                 localUrl = localUrl + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
+             } else {
+                 for (var i = 0; i < localArr.length; i++) {
+                     if (localArr[i].indexOf("PageIdx") != -1) {
+                         localArr[i] = "PageIdx=" + pageIndex;
+                     }
+                     if (localArr[i].indexOf("PageSize") != -1) {
+                         localArr[i] = "PageSize=" + pageSize;
+                     }
+                 }
+                 localUrl = "";
+                 for (var i = 0; i < localArr.length; i++) {
+                     localUrl += localArr[i];
+                     if (i != localArr.length - 1) localUrl += "&";
+                 }
+             }
+
+             
+
+            OpenEasyUiDialog(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", true, null, null, null, function () {
+                window.location.href = localUrl;
+
+               
+            });
         }
 
         function New() {
@@ -475,7 +520,7 @@
         {
            var user=new WebUser();
            var url="./Sys/SearchSetting.htm?EnsName="+GetQueryString("EnsName")+"&m="+Math.random();
-            OpenEasyUiDialogExt(url,  '设置', 800, 500, true);
+           OpenEasyUiDialogExt(url, '设置', 800, 500, true);
         }
 
     </script>

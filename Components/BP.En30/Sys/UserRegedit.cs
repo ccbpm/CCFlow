@@ -504,7 +504,6 @@ namespace BP.Sys
             //获取可导入权限
             UserRegedit ur = new UserRegedit("admin", ensName + "_SearchAttrs");
             string impEmps = new AtPara(ur.Paras).GetValStrByKey("ExpEmpNos");
-
             if (string.IsNullOrWhiteSpace(impEmps))
             {
                 return true;

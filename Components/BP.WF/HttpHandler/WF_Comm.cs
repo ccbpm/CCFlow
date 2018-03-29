@@ -1055,6 +1055,7 @@ namespace BP.WF.HttpHandler
                 string pk = this.RefEnKey;
                 if (pk == null)
                     pk = this.GetRequestVal(en.PK);
+
                 if (pk == null)
                     pk = this.PKVal;
 

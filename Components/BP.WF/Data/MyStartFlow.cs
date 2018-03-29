@@ -176,7 +176,7 @@ namespace BP.WF.Data
             {
                 UAC uac = new UAC();
                 uac.Readonly();
-                uac.IsExp = UserRegedit.HaveRoleForExp(this.ToString());
+                uac.IsExp =  UserRegedit.HaveRoleForExp(this.ToString());
                 return uac;
             }
         }

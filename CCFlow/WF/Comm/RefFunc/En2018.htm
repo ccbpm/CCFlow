@@ -425,11 +425,15 @@
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen ) {
                 html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
+            
+            if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
+                html = "<a href='javascript:OPenFun(\""+rm.Url+"\",\""+rm.Warning+"\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
 
-            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel )
                 html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
 
-            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen || parseInt(rm.RefMethodType) == RefMethodType.Func) {
+            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
                 //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
                 html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
@@ -437,7 +441,13 @@
             } 
             return html;
         }
-
+        function OPenFun(url, warning) {
+            warning = warning.replace(/,\s+/g, ",");
+            warning = warning.replace(/\s+/g, "\r\n");
+            if (confirm("\"" + warning + "\"")) {
+                WinOpen(url);
+            }
+        }
         //在右侧框架中显示指定url的页面
         function OpenUrlInRightFrame(ele, url) {
             if (ele != null && ele != undefined) {

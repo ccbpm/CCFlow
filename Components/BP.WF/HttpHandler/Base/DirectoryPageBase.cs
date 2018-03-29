@@ -649,6 +649,19 @@ namespace BP.WF.HttpHandler
                 return this.GetRequestValInt("PageIdx");
             }
         }
+        /// <summary>
+        /// 页面大小
+        /// </summary>
+        public int PageSize
+        {
+            get
+            {
+                int i= this.GetRequestValInt("PageSize");
+                if (i == 0)
+                    return 10;
+                return i;
+            }
+        }
         public int Index
         {
             get

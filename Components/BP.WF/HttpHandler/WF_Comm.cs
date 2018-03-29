@@ -879,7 +879,7 @@ namespace BP.WF.HttpHandler
                 ur.Update();
             }
 
-            qo.DoQuery(en.PK,12,this.PageIdx);
+            qo.DoQuery(en.PK,this.PageSize,this.PageIdx);
             #endregion 获得查询数据.
 
             DataTable mydt = ens.ToDataTableField();

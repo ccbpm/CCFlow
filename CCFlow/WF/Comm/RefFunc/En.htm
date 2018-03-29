@@ -22,9 +22,8 @@
 	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
 
 	<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
-
  
-	<link href="En2018.css" rel="stylesheet" type="text/css" />
+	<link href="En.css" rel="stylesheet" type="text/css" />
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
@@ -143,7 +142,7 @@
             window.open(url);
             return;
 
-           // var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+           // var url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
                 //location = location;
             });
@@ -425,15 +424,11 @@
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen ) {
                 html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
-            
-            if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
-                html = "<a href='javascript:OPenFun(\""+rm.Url+"\",\""+rm.Warning+"\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
-            }
 
-            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel )
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
                 html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
 
-            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
+            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen || parseInt(rm.RefMethodType) == RefMethodType.Func) {
                 // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
                 //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
                 html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
@@ -441,13 +436,7 @@
             } 
             return html;
         }
-        function OPenFun(url, warning) {
-            warning = warning.replace(/,\s+/g, ",");
-            warning = warning.replace(/\s+/g, "\r\n");
-            if (confirm("\"" + warning + "\"")) {
-                WinOpen(url);
-            }
-        }
+
         //在右侧框架中显示指定url的页面
         function OpenUrlInRightFrame(ele, url) {
             if (ele != null && ele != undefined) {

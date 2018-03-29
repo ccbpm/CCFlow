@@ -401,7 +401,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
         SysFileManager sf = new SysFileManager();
         string sql = "DELETE FROM " + sf.EnMap.PhysicsTable + " WHERE " + SysFileManagerAttr.EnName + "='" + this.GetEns.GetNewEntity.ToString() + "' AND RefVal='" + this.PKVal + "' AND " + SysFileManagerAttr.AttrFileNo + "='" + id + "'";
         BP.DA.DBAccess.RunSQL(sql);
-        this.Response.Redirect("En2018.htm?EnName=" + this.EnName + "&PKVal=" + this.PKVal + "&inlayer=" + this.InLayer, true);
+        this.Response.Redirect("En.htm?EnName=" + this.EnName + "&PKVal=" + this.PKVal + "&inlayer=" + this.InLayer, true);
     }
     private void Btn_DelFile_Click(object sender, ImageClickEventArgs e)
     {
@@ -420,7 +420,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                 en.SetValByKey("MyFileName", "");
                 en.SetValByKey("MyFilePath", "");
                 en.Update();
-                this.Response.Redirect("En2018.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&PK=" + this.PKVal + "&inlayer=" + this.InLayer, true);
+                this.Response.Redirect("En.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&PK=" + this.PKVal + "&inlayer=" + this.InLayer, true);
                 return;
             }
         }
@@ -430,7 +430,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
         en.SetValByKey("MyFileName", "");
         en.SetValByKey("MyFilePath", "");
         en.Update();
-        this.Response.Redirect("En2018.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&PK=" + this.PKVal + "&inlayer=" + this.InLayer, true);
+        this.Response.Redirect("En.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&PK=" + this.PKVal + "&inlayer=" + this.InLayer, true);
     }
     private void ToolBar1_ButtonClick(object sender, System.EventArgs e)
     {
@@ -448,7 +448,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     break;
                 case NamesOfBtn.New:
                     //   New();
-                    this.Response.Redirect("En2018.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&inlayer=" + this.InLayer, true);
+                    this.Response.Redirect("En.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&inlayer=" + this.InLayer, true);
                     break;
                 case NamesOfBtn.SaveAndNew:
                     try
@@ -461,7 +461,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         // this.ResponseWriteBlueMsg(ex.Message);
                         return;
                     }
-                    this.Response.Redirect("En2018.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&inlayer=" + this.InLayer, true);
+                    this.Response.Redirect("En.htm?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&inlayer=" + this.InLayer, true);
                     break;
                 case NamesOfBtn.SaveAndClose:
                     try
@@ -501,7 +501,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         this.Alert(ex.Message);
                         return;
                     }
-                    this.Response.Redirect("En2018.htm?EnsName=" + this.EnsName + "&PK=" + this.PKVal + "&EnName=" + this.EnName + "&tab=" + Uri.EscapeDataString(GetHiddenTabTitle()) + "&inlayer=" + this.InLayer, true);
+                    this.Response.Redirect("En.htm?EnsName=" + this.EnsName + "&PK=" + this.PKVal + "&EnName=" + this.EnName + "&tab=" + Uri.EscapeDataString(GetHiddenTabTitle()) + "&inlayer=" + this.InLayer, true);
                     break;
                 case NamesOfBtn.Delete:
                     try
@@ -514,7 +514,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         //this.WinCloseWithMsg("删除成功!!!");
                         //this.ToMsgPage("删除成功!!!");
                         //edited by liuxc,2015-11-10，因为删除成功后，此记录不存在，回调在Page_Load中，导致引发错误，因此使用此种方法，传递DeleteOver=1参数，在Page_Load中判断，显示删除成功的消息
-                        this.Response.Redirect("En2018.htm?EnsName=" + this.EnsName + "&DeleteOver=1&t=" +
+                        this.Response.Redirect("En.htm?EnsName=" + this.EnsName + "&DeleteOver=1&t=" +
                                                DateTime.Now.ToString("yyyyMMddHHmmssffffff") + "&inlayer=" + this.InLayer, true);
                         return;
                     }
@@ -596,7 +596,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
     /// </summary>
     public void New()
     {
-        this.Response.Redirect("En2018.htm?EnsName=" + this.EnsName + "&inlayer=" + this.InLayer, true);
+        this.Response.Redirect("En.htm?EnsName=" + this.EnsName + "&inlayer=" + this.InLayer, true);
         //return;
 
         //this.CurrEn = this.GetEns.GetNewEntity;

@@ -12,26 +12,17 @@
             var paras = url.substring(idx + 4);
 
             if (plant == "CCFlow") {
-                // window.location.href = '/WF/Comm/RefFunc/UIEn.aspx' + paras;
                 if (GetQueryString("EnsName") != "") {
-
-                    window.location.href = '/WF/Comm/RefFunc/UIEn.aspx' + paras;
+                    window.location.href = './RefFunc/En.htm' + paras;
                 }
                 else {
 
-                    window.location.href = './RefFunc/En2018.htm' + paras;
-                    //                    if (paras.indexOf('EnName') == -1) {
-                    //                        var ensName = GetQueryString("EnsName");
-                    //                        var enName = ensName.substring(0, ensName.length - 1);
-                    //                        //alert(enName);
-                    //                        window.location.href = '/WF/Comm/RefFunc/En2018.htm' + paras + "&EnName=" + enName;
-                    //                    } else {
-                    //                        window.location.href = '/WF/Comm/RefFunc/En2018.htm' + paras;
-                    //                    }
+                    window.location.href = './RefFunc/En.htm' + paras;
+                  
                 }
                 return;
             }
-            window.location.href = './RefFunc/UIEn.jsp' + paras;
+            window.location.href = './RefFunc/En.htm' + paras;
         }
 
         window.name = "eudlg";

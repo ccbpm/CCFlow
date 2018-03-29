@@ -194,7 +194,7 @@ public partial class CCFlow_Comm_UIEnsV10 : BP.Web.WebPage
         int i = 0;
         foreach (Entity dtl in ens)
         {
-            string urlExt = "\"javascript:ShowEn('./RefFunc/En2018.htm?EnName=" + ens.ToString() + "&PKVal=" + dtl.PKVal + "', 'cd');\"";
+            string urlExt = "\"javascript:ShowEn('./RefFunc/En.htm?EnName=" + ens.ToString() + "&PKVal=" + dtl.PKVal + "', 'cd');\"";
             i++;
             if (Equals(dtl.PKVal, "0"))
             {

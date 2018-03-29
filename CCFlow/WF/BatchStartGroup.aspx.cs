@@ -201,7 +201,7 @@ namespace CCFlow.WF
                 isEdit = false;
             if (isEdit)
                 this.ToolBar1.AddLab("inse",
-      "<input type=button id='ToolBar1$Btn_New' class=Btn name='ToolBar1$Btn_New' onclick=\"javascript:ShowEn('./RefFunc/En2018.htm?EnName=" + this.EnName + "','cd','" + cfg.WinCardH + "' , '" + cfg.WinCardW + "');\"  value='新建(N)'  />");
+      "<input type=button id='ToolBar1$Btn_New' class=Btn name='ToolBar1$Btn_New' onclick=\"javascript:ShowEn('./RefFunc/En.htm?EnName=" + this.EnName + "','cd','" + cfg.WinCardH + "' , '" + cfg.WinCardW + "');\"  value='新建(N)'  />");
 
             if (WebUser.No=="admin")
                 this.ToolBar1.AddLab("sw", "<input type=button class=Btn  id='ToolBar1$Btn_P' class=Btn name='ToolBar1$Btn_P'  onclick=\"javascript:OpenAttrs('" + this.EnsName + "');\"  value='设置(P)'  />");

@@ -102,7 +102,7 @@ namespace CCFlow.WF.Comm
             //   this.BPToolBar1.ButtonClick += new System.EventHandler(this.ButtonClick);
             if (en.HisUAC.IsInsert)
                 this.ToolBar1.AddLab("inse",
-                    "<input type=button class=Btn id='ToolBar1$Btn_New' name='ToolBar1$Btn_New' onclick=\"javascript:ShowEn('./RefFunc/En2018.htm?EnName=" + this.EnName + "','cd','" + cfg.WinCardH + "' , '" + cfg.WinCardW + "');\"  value='新建(N)' />");
+                    "<input type=button class=Btn id='ToolBar1$Btn_New' name='ToolBar1$Btn_New' onclick=\"javascript:ShowEn('./RefFunc/En.htm?EnName=" + this.EnName + "','cd','" + cfg.WinCardH + "' , '" + cfg.WinCardW + "');\"  value='新建(N)' />");
 
             if (WebUser.No == "admin")
                 this.ToolBar1.AddLab("sw", "<input type=button class=Btn  id='ToolBar1$Btn_P' class=Btn name='ToolBar1$Btn_P'  onclick=\"javascript:OpenAttrs('" + this.EnsName + "');\"  value='设置(P)'  />");

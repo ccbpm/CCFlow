@@ -263,7 +263,7 @@ function Designer_ShowMsg(msg, callBack) {
 //流程属性
 function FlowProperty() {
 
-    url = "../../Comm/En2018.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + CCBPM_Data_FK_Flow + "&Lang=CH";
+    url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + CCBPM_Data_FK_Flow + "&Lang=CH";
     OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
         //window.location.href = window.location.href;
     });
@@ -396,7 +396,7 @@ function NodeProperty_Funs(item) {
     //根据事件名称进行执行
     switch (item.name) {
         case "NodeProperty": //节点属性.
-            url = "../../Comm/En2018.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + FK_Node + "&Lang=CH";
+            url = "../../Comm/En.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + FK_Node + "&Lang=CH";
             // alert(url);
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "PO", "节点属性" + FK_Node, url, item.iconCls);

@@ -15,20 +15,20 @@
 
         $(function () { 
         
-        window.location.href='../../Comm/En2018.htm?EnName=BP.WF.Rpt.RptDfine&No='+GetQueryString("FK_Flow");
+        window.location.href='../../Comm/En.htm?EnName=BP.WF.Rpt.RptDfine&No='+GetQueryString("FK_Flow");
         return;
 
          //我发起的流程.
         var myStartFlows=document.getElementById("MyStartFlows");
-        myStartFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En2018.htm?EnName=BP.WF.Rpt.MyStartFlow&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
+        myStartFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En.htm?EnName=BP.WF.Rpt.MyStartFlow&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
 
         //部门发起的流程.
         var myDeptFlows=document.getElementById("MyDeptFlows");
-        myDeptFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En2018.htm?EnName=BP.WF.Rpt.MyDeptFlow&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
+        myDeptFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En.htm?EnName=BP.WF.Rpt.MyDeptFlow&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
         return;
 
         var myRpt = "ND"+ parseInt(GetQueryString("FK_Flow")) +"MyRpt";
-        window.location.href='../../../Comm/En2018.htm?EnName=BP.WF.Rpt.MapRptExt&No='+myRpt;
+        window.location.href='../../../Comm/En.htm?EnName=BP.WF.Rpt.MapRptExt&No='+myRpt;
         return;
 
           //  InitTable();

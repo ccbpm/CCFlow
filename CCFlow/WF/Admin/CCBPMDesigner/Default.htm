@@ -1217,7 +1217,7 @@ function CCForm_Attr() {
         alert('请选择表单.');
         return;
     }
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
     OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
 }
 
@@ -1437,7 +1437,7 @@ function newDept() {
     if (!node) return;
 
     var pnode = $("#" + ORG_TREE).tree("getParent", node.target);
-    addTab("NewDept", "新建同级部门", "../../Comm/En2018.htm?EnName=BP.GPM.Dept&ParentNo=" + node.id, "icon-new");
+    addTab("NewDept", "新建同级部门", "../../Comm/En.htm?EnName=BP.GPM.Dept&ParentNo=" + node.id, "icon-new");
 }
 
 function newSubDept() {

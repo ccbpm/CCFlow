@@ -126,13 +126,13 @@ namespace CCFlow.WF.MapDef
                         switch (mattr.LGType)
                         {
                             case BP.En.FieldTypeS.Enum:
-                                this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK), true);
+                                this.Response.Redirect("../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK), true);
                                 return;
                             case BP.En.FieldTypeS.Normal:
                                 this.Response.Redirect("EditFieldGuide.htm?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK) + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             case BP.En.FieldTypeS.FK:
-                                this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK) + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
+                                this.Response.Redirect("../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK) + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             default:
                                 break;
@@ -146,10 +146,10 @@ namespace CCFlow.WF.MapDef
                                 this.Response.Redirect("EditFieldGuide.aspx?MyPK=" + ma.MyPK + "&FType=" + ma.MyDataType, true);
                                 return;
                             case FieldTypeS.FK:
-                                this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&MyPK=" + ma.MyPK, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&MyPK=" + ma.MyPK, true);
                                 return;
                             case FieldTypeS.Enum:
-                                this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&MyPK=" + ma.MyPK, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&MyPK=" + ma.MyPK, true);
                                 return;
                             default:
                                 return;

@@ -46,7 +46,7 @@ function FlowRun() {
 
 //旧版本.
 function OldVer() {
-    var url = "Designer.htm?FK_Flow=" + flowNo + "&Lang=CH&&Flow_V=1";
+    var url = "Designer2016.htm?FK_Flow=" + flowNo + "&Lang=CH&&Flow_V=1";
     window.location.href = url;
 }
 
@@ -68,7 +68,7 @@ function Help() {
 function NodeAttr(nodeID) {
 
     //var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
-    var url = "../../Comm/En2018.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
+    var url = "../../Comm/En.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     var html = "";
 
     //var html = "<a href=\"javascript:OpenEasyUiDialogExt('" + url + "','';\" >主页</a> - ";
@@ -77,7 +77,7 @@ function NodeAttr(nodeID) {
 }
 //节点属性
 function NodeAttrOld(nodeID) {
-    var url = "../../Comm/En2018.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
+    var url = "../../Comm/En.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     window.parent.addTab(nodeID,"节点属性",url);
     //OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
 }

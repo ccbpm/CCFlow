@@ -100,7 +100,7 @@ function ExpImp() {
 function GroupField(mypk, OID) {
 
     // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
-    var url = "../../Comm/En2018.htm?EnName=BP.Sys.GroupField&PKVal=" + OID;
+    var url = "../../Comm/En.htm?EnName=BP.Sys.GroupField&PKVal=" + OID;
     OpenEasyUiDialog(url, "eudlgframe", '分组', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
@@ -119,29 +119,29 @@ function Edit(fk_mapdata, mypk, ftype, gf) {
     var title = '';
     if (ftype == 1) {
         title = '字段String属性';
-        url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
         title = '字段Num属性';
-        url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 6 || ftype == 7) {
         title = '字段 date 属性';
 
-        url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 6 || ftype == 7) {
         title = '字段 datetime 属性';
 
-        url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 4) {
         title = '字段 boolen 属性';
-        url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
@@ -154,7 +154,7 @@ function Edit(fk_mapdata, mypk, ftype, gf) {
  
 
 function EditTable(fk_mapdata, keyOfEn, mypk, sfTable, gf) {
-    var url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
+    var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
 
     OpenEasyUiDialog(url, "eudlgframe", '外键' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -231,7 +231,7 @@ function CopyFieldFromNode(mypk) {
 
 // 子线程.
 function EditFrmThread(mypk) {
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmTrack&PKVal=' + mypk;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmTrack&PKVal=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '子线程', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -240,7 +240,7 @@ function EditFrmThread(mypk) {
 
 // 轨迹图.
 function EditTrack(mypk) {
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmTrack&PK=' + mypk;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmTrack&PK=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '轨迹图', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -249,7 +249,7 @@ function EditTrack(mypk) {
 
 /// 审核组件.
 function EditFWC(mypk) {
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=审核组件';
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=审核组件';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -257,8 +257,8 @@ function EditFWC(mypk) {
 }
 //子流程.
 function EditSubFlow(mypk) {
-    // var url = '../Comm/En2018.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
+    // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -267,8 +267,8 @@ function EditSubFlow(mypk) {
 
 //子线程.
 function EditThread(mypk) {
-    // var url = '../Comm/En2018.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=子线程组件';
+    // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=子线程组件';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -278,8 +278,8 @@ function EditThread(mypk) {
 
 //流转自定义.
 function EditFTC(mypk) {
-    // var url = '../Comm/En2018.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=流转自定义';
+    // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=流转自定义';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -289,8 +289,8 @@ function EditFTC(mypk) {
 
 //轨迹组件.
 function EditTrack(mypk) {
-    // var url = '../Comm/En2018.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=轨迹组件';
+    // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=轨迹组件';
 
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
@@ -303,7 +303,7 @@ function MapDataEdit() {
 
     var mypk = GetQueryString('FK_MapData');
 
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + mypk;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '属性', 400, 450, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -316,7 +316,7 @@ function FrmNodeComponent() {
     var mypk = GetQueryString('FK_MapData');
     mypk = mypk.replace('ND', '');
 
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 500, 400, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -350,7 +350,7 @@ function NewMapDtl(fk_mapdata) {
                 return;
             }
 
-            var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + data;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + data;
             OpenEasyUiDialog(url, "eudlgframe", '从表属性', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -363,7 +363,7 @@ function NewMapDtl(fk_mapdata) {
 
 ///编辑从表.
 function EditDtl(fk_mapdata, mypk) {
-    var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '从表', 800, 500, "icon-edit", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -397,7 +397,7 @@ function MapM2MM(mypk) {
 
 //修改附件.
 function EditAth(fk_mapdata, ath) {
-    var url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + fk_mapdata + '&MyPK=' + fk_mapdata + "_" + ath;
+    var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + fk_mapdata + '&MyPK=' + fk_mapdata + "_" + ath;
 
     OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -428,7 +428,7 @@ function NewAth() {
                 return;
             }
 
-            var url = '../../Comm/En2018.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
             OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -463,7 +463,7 @@ function NewFrame(fk_mapdata) {
                 return;
             }
 
-            var url = '../../Comm/En2018.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
 
             OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -474,7 +474,7 @@ function NewFrame(fk_mapdata) {
 }
 
 function EditFrame(fk_mapdata, myPK) {
-    var url = '../../Comm/En2018.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
+    var url = '../../Comm/En.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
 
     OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;

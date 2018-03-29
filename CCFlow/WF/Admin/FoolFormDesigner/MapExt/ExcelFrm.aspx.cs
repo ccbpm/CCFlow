@@ -54,8 +54,6 @@ namespace CCFlow.WF.MapDef.MapExtUI
         {
             BP.Sys.ToolbarExcel en = new ToolbarExcel(this.FK_MapData);
 
-            //this.Pub1.AddH2("编辑Excel表单属性.");
-            //this.Pub1.Add("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=BP.Sys.ToolbarExcel&No=" + this.FK_MapData + "')\" >Excel配置项</a>");
 
             //确定模板文件
             string moduleFile = getModuleFile(new[] { ".xls", ".xlsx" });

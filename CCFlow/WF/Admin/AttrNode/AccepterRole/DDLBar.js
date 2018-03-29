@@ -82,9 +82,7 @@ function Help() {
 //通用的设置岗位的方法。for admin.
 
 function OpenDot2DotStations() {
-    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
-    var nodeID = GetQueryString("FK_Node");
-    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID + '&ShowWay=None&M=' + Math.random();
+
 
     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
     url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";

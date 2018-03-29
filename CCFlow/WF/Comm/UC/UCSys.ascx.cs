@@ -1698,9 +1698,8 @@ namespace CCFlow.WF.Comm.UC
                 #endregion
 
 
-                urlExt = "\"javascript:ShowEn('./RefFunc/UIEn.aspx?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "', 'cd','" + cfg.WinCardH + "','" + cfg.WinCardW + "');\"";
+                urlExt = "\"javascript:ShowEn('./RefFunc/En2018.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "', 'cd','" + cfg.WinCardH + "','" + cfg.WinCardW + "');\"";
 
-                // urlExt = "javascript:ShowEn('./RefFunc/UIEn.aspx?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "', 'cd');";
 
                 switch ((UIRowStyleGlo)cfg.UIRowStyleGlo)
                 {
@@ -1728,7 +1727,6 @@ namespace CCFlow.WF.Comm.UC
                 }
 
 
-                // this.Add("<TR onmouseover=\"TROver(this);\" onmouseout='TROut(this)' ondblclick=\"WinOpen( 'UIEn.aspx?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "', 'cd' )\"   >");
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_" + en.PKVal;
                 cb.Text = idx.ToString();

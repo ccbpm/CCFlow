@@ -20,7 +20,7 @@
         function OpenUrl(wintitle, url) {
             var dlg = $('#win').dialog({ title: wintitle, onClose: function () { $('#winFrame').attr('src', ''); } });
             dlg.dialog('open');
-            $('#winFrame').attr('src', "../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Rpt.MapRpts&EnName=BP.WF.Rpt.MapRpt&AttrKey=BP.WF.Rpt." + rpt + "&No=" + rptNo);
+            $('#winFrame').attr('src', "../../Comm/RefFunc/Dot2Dot.htm?EnsName=BP.WF.Rpt.MapRpts&EnName=BP.WF.Rpt.MapRpt&AttrKey=BP.WF.Rpt." + rpt + "&No=" + rptNo);
         }
 
         function WinOpen(url, winName) {

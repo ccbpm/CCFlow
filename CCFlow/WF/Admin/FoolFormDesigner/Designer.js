@@ -249,7 +249,6 @@ function EditTrack(mypk) {
 
 /// 审核组件.
 function EditFWC(mypk) {
-    //http: //localhost:41466/WF/Comm/RefFunc/UIEn2018.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=7901&EnName=BP.WF.Template.FrmNodeComponent&tab=%E7%88%B6%E5%AD%90%E6%B5%81%E7%A8%8B%E7%BB%84%E4%BB%B6
     var url = '../../Comm/En2018.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=审核组件';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {

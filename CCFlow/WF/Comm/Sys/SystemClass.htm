@@ -70,8 +70,9 @@
             });
         }
 
-        function OpenEn(m,name) {
-            var url = '../En2018.htm?EnsName=' + m;
+        function OpenEn(m, name) {
+            m = m.substring(0, m.length - 1);
+            var url = '../En2018.htm?EnName=' + m;
             OpenEasyUiDialog(url, "eudlgframe",name, 700, 550, "icon-edit", true, null, null, null, function () {
               //  window.location.href = window.location.href;
             });

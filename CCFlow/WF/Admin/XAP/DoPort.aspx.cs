@@ -119,10 +119,10 @@ namespace CCFlow.WF.Admin.XAP
                             this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.FlowSheet&No=" + this.PK, true);
                             return;
                         case "BP.WF.Template.Ext.NodeExts":
-                            this.Response.Redirect("../../Comm/En2018.htm?EnsName=BP.WF.Template.NodeExts&No=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Template.NodeExt&No=" + this.PK, true);
                             return;
                         case "BP.WF.Rpt.MapRptExts":
-                            this.Response.Redirect("../../Comm/En2018.htm?EnsName=BP.WF.Rpt.MapRptExts&PKVal=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En2018.htm?EnName=BP.WF.Rpt.MapRptExt&PKVal=" + this.PK, true);
                             return;
                         case "BP.WF.Node":
                             Node nd = new Node(this.PK);
@@ -139,7 +139,6 @@ namespace CCFlow.WF.Admin.XAP
                             return;
                         default:
                             throw new Exception("err");
-                            //this.Response.Redirect("./Comm/En2018.htm?EnsName=" + this.EnsName + "&No=" + this.PK, true);
                     }
                 case "FrmLib": //"表单库"
                     this.Response.Redirect("../Sln/BindFrms.htm?ShowType=SelectedFrm&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);

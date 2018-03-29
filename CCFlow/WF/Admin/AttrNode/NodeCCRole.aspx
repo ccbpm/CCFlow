@@ -84,7 +84,7 @@
                 <asp:CheckBox ID="CB_Station" Text="抄送到岗位" runat="server" />
             </td>
             <td>
-                <a href="javascript:WinOpen('../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCStations&NodeID=<%=nd.NodeID %>&r=<%=sj%>&ShowWay=None')">
+                <a href="javascript:WinOpen('../../Comm/RefFunc/Dot2Dot.htm?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCStations&NodeID=<%=nd.NodeID %>&r=<%=sj%>&ShowWay=None')">
                     请选择岗位(<%=nss.Count %>)</a>
                     岗位计算规则:<asp:DropDownList ID="DDL_CCStaWay" runat="server">
                 </asp:DropDownList>

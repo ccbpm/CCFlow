@@ -112,7 +112,7 @@
                 html += "<ul class='navlist' >";
                 if (gName == "基本信息") {
                     var url = window.location.href;
-                    html += "<li><a href='"+url+"'><img src='http://localhost:30362/WF/Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
+                    html += "<li><a href='"+url+"'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
                     
                 }
                 for (var idx = 0; idx < dtM.length; idx++) {
@@ -139,6 +139,7 @@
 			$.parser.parse("#Left");
         }
         function OpenIt(url, title, w, h) {
+
             window.open(url);
             return;
 

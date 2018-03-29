@@ -626,8 +626,10 @@ function newFlow() {
             $.messager.alert('错误', '信息填写不完整', 'error');
             return false;
         }
-
-        $("#mymask").show();
+        var html = $("#ShowMsg").html();
+        $("#ShowMsg").html(html + "<font>正在创建，请稍后。。。</font>");
+        $("#ShowMsg").css({ "width": "320px" });
+        $(".mymask").show();
         //传入参数
         var params = {
             action: "NewFlow",
@@ -636,11 +638,15 @@ function newFlow() {
 
         //访问服务
         ajaxService(params, function (data) {
-            $("#mymask").hide();
+            $(".mymask").hide();
+            $("#ShowMsg").html(html);
+            $("#ShowMsg").css({ "width": "32px" });
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
+
+
 
             var flowNo = data;
             var flowName = newFlowInfo.flowName;
@@ -1692,10 +1698,10 @@ function TabCloseByTitle(TabTitle) {
     </script>
 </head>
 <body class="easyui-layout" data-options="fit: true">
-    <div class="panel window mymask mymaskContainer" style="display: block; width: 32px;height: 32px; z-index: 21008; text-align: center; font-size: 14px; font-weight: bold;">
-        <img alt="" src="assets/images/loading_small.gif" align='middle' style="width: 32px;height: 32px;" />
+    <div  id="ShowMsg" class="panel window mymask mymaskContainer" style="display: block; width: 32px;height: 32px; z-index: 21008; text-align: center; font-size: 14px; font-weight: bold;">
+        <img alt="" src="assets/images/loading_small.gif" align='middle' style="width: 32px;height: 32px;" /> 
     </div>
-    <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;z-index: 21006;">
+    <div  class="window-mask mymask" style="width: 100%; height: 100%; display: block;z-index: 21006;">
     </div>
     <div data-options="region:'west',border:true,split:true" title="<img src='../../../DataUser/ICON/CCBPMDesigner.png' style='width:100%;vertical-align:middle' />" style="width: 250px;">
         <div id="menuTab" class="easyui-tabs" data-options="fit:true,border:false">

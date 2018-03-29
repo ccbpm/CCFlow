@@ -22,8 +22,9 @@
 	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
 
 	<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
+
  
-	<link href="En.css" rel="stylesheet" type="text/css" />
+	<link href="En2018.css" rel="stylesheet" type="text/css" />
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
@@ -105,14 +106,14 @@
                 if (gName == "")
                     continue;
                 html += "<div title='" + gName + "' style='overflow:auto;'>";
-                
-               
+
+
                 //填入菜单内容.
                 html += "<ul class='navlist' >";
                 if (gName == "基本信息") {
                     var url = window.location.href;
-                    html += "<li><a href='"+url+"'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
-                    
+                    html += "<li><a href='" + url + "'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
+
                 }
                 for (var idx = 0; idx < dtM.length; idx++) {
 
@@ -135,19 +136,19 @@
             html += "</div>";
 
             $("#Left").append(html);
-			$.parser.parse("#Left");
+            $.parser.parse("#Left");
         }
         function OpenIt(url, title, w, h) {
 
             window.open(url);
             return;
 
-           // var url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+            // var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
                 //location = location;
             });
 
-           // window.open(url);
+            // window.open(url);
         }
         //设置按钮
         function InitToolbar() {
@@ -159,7 +160,7 @@
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
                 $("#Btn_New").show();
-               
+
             }
             if (mapData.GetPara("IsUpdate") == 1) {
                 $("#Btn_Save").show();
@@ -170,7 +171,7 @@
                     $("#Btn_Delete").show();
             }
 
-           
+
         }
 
         function GenerFoolFrm(mapData, mainData, frmData) {
@@ -196,7 +197,7 @@
                 html += "</div>";
             }
             html += "</div>";
-        
+
 
             //加入隐藏控件.
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -421,22 +422,33 @@
                 icon = "../" + rm.Icon;
             }
             var html = "";
-            if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen ) {
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
                 html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
+
+            if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
+                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
                 html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
 
-            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen || parseInt(rm.RefMethodType) == RefMethodType.Func) {
+            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
                 //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
                 html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
 
-            } 
+            }
             return html;
         }
-
+        function OPenFun(url, warning) {
+            alert(url);
+            warning = warning.replace(/,\s+/g, ",");
+            warning = warning.replace(/\s+/g, "\r\n");
+            if (confirm("\"" + warning + "\"")) {
+                WinOpen(url);
+            }
+        }
         //在右侧框架中显示指定url的页面
         function OpenUrlInRightFrame(ele, url) {
             if (ele != null && ele != undefined) {
@@ -553,7 +565,7 @@
                     checkedStr = ' checked="checked" ';
                 }
 
-                checkedStr = "";  
+                checkedStr = "";
 
                 return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
@@ -581,7 +593,7 @@
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn=="NodeID" ) {
+                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn == "NodeID") {
                     enableAttr = "disabled='disabled'";
                 }
                 return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
@@ -639,8 +651,8 @@
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
                     return;
                 }
-                
-              //  alert(defVal);
+
+                //  alert(defVal);
 
 
                 $.each(data, function (i, obj) {
@@ -796,7 +808,7 @@
             }
 
             var accordion = new Accordion($('#accordion'), false);
-           
+
         });
     </script>
 </head> 

@@ -61,7 +61,19 @@
             if (data.indexOf('close@') == 0) {
                 //alert(data);
                 $('#CCForm').html('');
-                $('#CCForm').html(data);
+
+                data = data.replace('close@', '');
+
+
+                var html = "<fieldset>";
+                html += "<legend> 执行信息</legend>";
+                html += data;
+                html += "</fieldset>";
+
+
+                $('#CCForm').html(html);
+                $("#Btn_Done").hide();
+
                 //window.close();
                 return;
             }
@@ -396,49 +408,44 @@
         if (pk == null || pk == undefined)
             pk = GetQueryString("WorkID");
 
-        //初始化数据.
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=Refmethod_Done&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+        handler.AddUrlData();
+        handler.AddFormData();
 
-                //如果错误,就提示.
-                if (data.indexOf('err@') == 0) {
+        var data = handler.DoMethodReturnString("Refmethod_Done");
 
-                    $("#Msg").html(data);
-                    //alert(data);
-                    return;
-                }
+        //如果错误,就提示.
+        if (data.indexOf('err@') == 0) {
 
-                //转到Url..
-                if (data.indexOf('url@') == 0) {
-                    data = data.replace('url@', '');
-                    window.location.href = data;
-                    return;
-                }
+            $("#Msg").html(data);
+            //alert(data);
+            return;
+        }
 
-                //关闭.
-                if (data == "close@info") {
-                    window.close();
-                    return;
-                }
+        //转到Url..
+        if (data.indexOf('url@') == 0) {
+            data = data.replace('url@', '');
+            window.location.href = data;
+            return;
+        }
 
-                //提示信息.
-                if (data == "info@") {
-                    data = data.replace('info@', '');
+        //关闭.
+        if (data == "close@info") {
+            window.close();
+            return;
+        }
 
-                    $("#Msg").html(data);
-                    //alert(data);
-                    return;
-                }
+        //提示信息.
+        if (data == "info@") {
+            data = data.replace('info@', '');
 
-                $("#Msg").html(data);
-                document.getElementByIdx("Btn_Done").disabled = true; 
-            }
-        });
+            $("#Msg").html(data);
+            //alert(data);
+            return;
+        }
+
+        $("#Msg").html(data);
+        document.getElementByIdx("Btn_Done").disabled = true;
     }
 </script>
 

@@ -23,6 +23,7 @@
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             handler.AddUrlData();
+            alert(doType);
             var data = handler.DoMethodReturnString(doType); //执行方法，返回执行结果.
 
             if (data.indexOf('url@') == 0) {
@@ -31,7 +32,7 @@
                 return;
             }
             var formData = JSON.parse(data)
-  
+
             download(formData[0]["FlieContent"], formData[0]["FileName"], formData[0]["FileType"]);
 
             $("#Msg").html("");

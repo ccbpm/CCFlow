@@ -35,7 +35,7 @@ namespace CCFlow.SDKFlowDemo
                 string[] workids =workidsStrs.Split(',');
 
                 // 清除已经有的信息.
-                BP.DA.DBAccess.RunSQL("DELETE ND8601Dtl1 WHERE RefPK='" + OID + "'");
+                BP.DA.DBAccess.RunSQL("DELETE FROM  ND8601Dtl1 WHERE RefPK='" + OID + "'");
 
                 foreach (string id in workids)
                 {
@@ -53,7 +53,7 @@ namespace CCFlow.SDKFlowDemo
 
 
                     //插入之前需要删除该oid,以防止pk重复.
-                    BP.DA.DBAccess.RunSQL("DELETE ND8601Dtl1 WHERE OID='" + id + "'");
+                    BP.DA.DBAccess.RunSQL("DELETE FROM   ND8601Dtl1 WHERE OID='" + id + "'");
 
 
                     //将数据插入里面，并且把子线程的WorkID做主键，当前工作ID做RefPK.

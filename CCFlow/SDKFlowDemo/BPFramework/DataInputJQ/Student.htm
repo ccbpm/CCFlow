@@ -31,13 +31,13 @@
         //页面启动函数.
         $(function () {
 
-//            if (plant == "CCFlow") {
-//                window.location.href = "";
-//                return;
-//            } else {
-//                window.location.href = "";
-//                return;
-//            }
+            //            if (plant == "CCFlow") {
+            //                window.location.href = "";
+            //                return;
+            //            } else {
+            //                window.location.href = "";
+            //                return;
+            //            }
 
 
             $("#Msg").html("正在加载,请稍后......");
@@ -53,6 +53,7 @@
 
             //调用公共类库的方法: 绑定外键表. 班级.
             GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
+
 
             $.ajax({
                 type: 'post',

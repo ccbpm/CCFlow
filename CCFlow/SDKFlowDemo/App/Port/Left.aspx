@@ -25,9 +25,9 @@
     <td>
      <ul>
           <li> <a href="/WF/Comm/Ens.aspx?EnsName=BP.Demo.BPFramework.BanJis" target="main">班级维护</a></li>
-          <li><a href="/WF/Comm/En.htm?EnsName=BP.Demo.BPFramework.Students" target="main">新建学生</a></li>
-          <li> <a href="/WF/Comm/Search.htm?EnsName=BP.Demo.BPFramework.Students" target="main">学生查询</a></li>
-          <li> <a href="/WF/Comm/Group.htm?EnsName=BP.Demo.BPFramework.Students" target="main">学生统计</a></li>
+          <li><a href="/WF/Comm/En.htm?EnName=BP.Demo.BPFramework.Student" target="main">新建学生</a></li>
+          <li> <a href="/WF/Comm/Search.htm?EnName=BP.Demo.BPFramework.Student" target="main">学生查询</a></li>
+          <li> <a href="/WF/Comm/Group.htm?EnName=BP.Demo.BPFramework.Student" target="main">学生统计</a></li>
        </ul>
      </td>
     </tr>

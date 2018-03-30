@@ -12,16 +12,17 @@
 
 		function Test() {
 
-		    var frm = new Entity("ND101Dtl1");
-		    frm.RefPK = 100;
-		    frm.FYLX = 1;
-		    frm.XiaoJi = 100.01;
-		    frm.BeiZhu = 'sss';
-		    var data = frm.Insert();
+		    //var node = new Entity("BP.WF.Node", "1301");
+		    //alert(node.Name);
+		    //return;
 
-		    alert(JSON.stringify(frm));
+		    //创建一个实体,获取实体的属性.
+		    var emp = new Entity("BP.Port.Emp", "liyan");
+		    var name = emp.Name;
+		    var deptNo = emp.FK_Dept;  //部门编号
+		    var deptName = emp.FK_DeptText; //部门名称.
+		    alert("用户编号:" + emp.No + ",名称:" + emp.Name + "部门编号:" + emp.FK_Dept + ",部门名称:" + emp.FK_DeptText);
 		    return;
-		    // Test_FrmEntity();
 
 		    //获得当前用户信息.
 		    var currUser = new WebUser();
@@ -65,8 +66,10 @@
 
 		    //执行实体的方法.
 		    //var msg2 = emp.DoMethodReturnString("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
-		    var msg2 = emp.DoMethodReturnString("ChangePass", "123", "123", "123"); //重置密码:不带参数的方法.
+		    var msg2 = emp.DoMethodReturnString("ChangePass", "123", "321", "321"); //重置密码:不带参数的方法.
 		    alert(msg2);
+
+		    return;
 		}
 		function Test_FrmEntity() {
 
@@ -76,8 +79,8 @@
 		    frm.XiaoJi = 100.01;
 		    frm.BeiZhu = 'sss';
 		    var i = frm.Insert();
-		    alert(JSON.stringify(frm));
 
+		    alert(JSON.stringify(frm));
 		}
 		function Test_EntityPara() {
 
@@ -90,8 +93,6 @@
 
             ur.SetPara("SQLType","all"); //给参数字段赋值.
             ur.Update(); //执行更新.
-
-           //ur.CopyJSON(js);
 
             // 重新查询出来.
             ur.MyPK = "admin_BP.WF.Template.SQLTemplates_SearchAttrs";
@@ -209,6 +210,7 @@
 
             //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
             var handler = HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+
             handler.AddUrlData();  //把url参数加入里面去.
             handler.AddFormData(); //把form数据加入里面去.
 
@@ -218,7 +220,7 @@
             //执行提交.
             var result = handler.Login_Submit();
 
-            var result = handler.DoMethodReturnJSON("Login_Submit");
+            var resultJSON = handler.DoMethodReturnJSON("Login_Submit");
             var result = handler.DoMethodReturnString("Login_Submit");
 
             //处理结果.

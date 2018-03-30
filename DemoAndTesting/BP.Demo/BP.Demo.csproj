@@ -143,6 +143,7 @@
     <Compile Include="UnitTesting\SendCase\Test001.cs" />
     <Compile Include="UnitTesting\TestCaseTemplete.cs" />
     <Compile Include="UnitTesting\SendMessage.cs" />
+    <Compile Include="UnitTesting\YGFlow.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

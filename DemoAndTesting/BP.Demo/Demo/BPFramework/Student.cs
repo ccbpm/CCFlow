@@ -310,6 +310,7 @@ namespace BP.Demo.BPFramework
                 rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
                 rm.GroupName = "功能执行测试";
+                rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
 
                 //不带有参数的方法.
@@ -317,6 +318,7 @@ namespace BP.Demo.BPFramework
                 rm.Title = "注销学籍";
                 rm.Warning = "您确定要注销吗？";
                 rm.ClassMethodName = this.ToString() + ".DoZhuXiao";
+                rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
 
                 this._enMap = map;

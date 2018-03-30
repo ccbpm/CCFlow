@@ -98,19 +98,19 @@ CCForm_Control_Propertys = {
     ],
     TextBoxInt: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
-                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PK=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
+                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
     ],
     TextBoxFloat: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
-                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PK=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
+                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
     ],
     TextBoxMoney: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
-                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PK=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
+                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
     ],
     TextBoxDate: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
-                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PK=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
+                  { proName: 'Propertys', ProText: '属性', DefVal: '/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
     ],
     TextBoxDateTime: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },

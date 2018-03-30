@@ -465,7 +465,7 @@ function NodeProperty_Funs(item) {
             break;
         // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400); 
         case "NodeCCRole": // 抄送人规则.
-            url = "../AttrNode/NodeCCRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../AttrNode/CCRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "抄送人规则" + FK_Node, url, item.iconCls);
             } else {

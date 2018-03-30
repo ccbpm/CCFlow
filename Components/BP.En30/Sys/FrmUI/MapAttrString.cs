@@ -527,6 +527,7 @@ namespace BP.Sys.FrmUI
 
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     sql = "alter table " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
+
                 DBAccess.RunSQL(sql);
             }
             #endregion 自动扩展字段长度.

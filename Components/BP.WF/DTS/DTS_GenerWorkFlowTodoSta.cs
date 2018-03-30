@@ -124,7 +124,8 @@ namespace BP.WF.DTS
             sql += " AND WF_GenerWorkFlow.WFState!=3 ";
             sql += " AND WF_GenerWorkFlow.TodoSta=1 ";
             BP.DA.DBAccess.RunSQL(sql);
-            return "执行成功...";
+
+            return "时间戳修改成功";
         }
     }
 }

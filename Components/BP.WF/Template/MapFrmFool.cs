@@ -141,6 +141,7 @@ namespace BP.WF.Template
                 #region 基本属性.
 
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
+
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 
@@ -164,7 +165,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
                // map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
 
-                map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
+                map.AddTBString(MapDataAttr.Note, null, "备注", true, false,0,400,100, true);
                 //增加参数字段.
                 map.AddTBAtParas(4000);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);

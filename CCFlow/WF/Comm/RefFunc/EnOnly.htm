@@ -144,20 +144,25 @@
             $("#Btn_New").hide();
             $("#Btn_Save").hide();
             $("#Btn_Delete").hide();
-
+            var i = 0;
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
                 $("#Btn_New").show();
+              
 
             }
             if (mapData.GetPara("IsUpdate") == 1) {
                 $("#Btn_Save").show();
+              
             }
             if (mapData.GetPara("IsDelete") == 1) {
                 var pkVal = GetPKVal();
                 if (pkVal != null)
                     $("#Btn_Delete").show();
+               
             }
+
+            
 
 
         }
@@ -819,7 +824,7 @@
                     <a id="Btn_New" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
                     <a id="Btn_Save" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
                     <a id="Btn_Delete" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
-                    <a id="Btn_Close" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-no'" onclick="CloseIt()">关闭</a>
+                   
                 </div>
                 <div data-options="region:'center',noheader:true,border:false" style="margin:0px">
                    <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin:0px;padding:0px;overflow:auto">

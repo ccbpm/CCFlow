@@ -401,7 +401,6 @@
         }
 
         function GenerRM(rm) {
-
             var icon = rm.Icon;
             if (rm.Icon == "" || rm.Icon == null) {
                 icon = "../../Img/dot.png";
@@ -412,11 +411,11 @@
             }
             var html = "";
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
-                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
-                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
@@ -430,13 +429,24 @@
             }
             return html;
         }
-        function OPenFun(url, warning, title) {
-            warning = warning.replace(/,\s+/g, ",");
-            warning = warning.replace(/\s+/g, "\r\n");
-            if (confirm("\"" + warning + "\"")) {
-                OpenEasyUiDialogExt(url, title, 400, 300, false);
+        function OPenFun(url, warning, title, w, h) {
+            if (warning == "null" || warning == "")
+                OpenEasyUiDialogExt(url, title, w, h, false);
+            else {
+                warning = warning.replace(/,\s+/g, ",");
+                warning = warning.replace(/\s+/g, "\r\n");
+
+                if (confirm("\"" + warning + "\"")) {
+                    OpenEasyUiDialogExt(url, title, w, h, false);
+                }
             }
         }
+
+        function OpenIt(url, title, w, h) {
+            window.open(url);
+
+        }
+
         //在右侧框架中显示指定url的页面
         function OpenUrlInRightFrame(ele, url) {
             if (ele != null && ele != undefined) {

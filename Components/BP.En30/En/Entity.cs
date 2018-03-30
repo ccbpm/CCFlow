@@ -203,10 +203,13 @@ namespace BP.En
 			{
 				/*如果包含这个字段,就说明他有参数,把参数也要弄成一个列.*/
 				AtPara ap = this.atPara;
-				foreach (string key in ap.HisHT.Keys)
-				{
-					dt.Columns.Add(key, typeof(string));
-				}
+                foreach (string key in ap.HisHT.Keys)
+                {
+                    if (dt.Columns.Contains(key) == true)
+                        continue;
+
+                    dt.Columns.Add(key, typeof(string));
+                }
 			}
 
 			DataRow dr = dt.NewRow();

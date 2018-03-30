@@ -456,6 +456,7 @@ namespace BP.WF.HttpHandler
                         DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);
                         dt.TableName = attr.Key;
 
+                        //@杜. 翻译当前部分.
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         {
                             dt.Columns["NO"].ColumnName = "No";

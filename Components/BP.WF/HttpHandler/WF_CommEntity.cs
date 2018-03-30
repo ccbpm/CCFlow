@@ -490,6 +490,64 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 把外键与枚举放入里面去.
 
+
+                #region 增加 上方法.
+                DataTable dtM = new DataTable("dtM");
+                dtM.Columns.Add("No");
+                dtM.Columns.Add("Title");
+                dtM.Columns.Add("Tip");
+                dtM.Columns.Add("Visable");
+
+                dtM.Columns.Add("Url");
+                dtM.Columns.Add("Target");
+                dtM.Columns.Add("Warning");
+                dtM.Columns.Add("RefMethodType");
+                dtM.Columns.Add("GroupName");
+                dtM.Columns.Add("W");
+                dtM.Columns.Add("H");
+                dtM.Columns.Add("Icon");
+                dtM.Columns.Add("IsCanBatch");
+                dtM.Columns.Add("RefAttrKey");
+
+                RefMethods rms = map.HisRefMethods;
+                foreach (RefMethod item in rms)
+                {
+                    string myurl = "";
+                    if (item.RefMethodType != RefMethodType.Func)
+                    {
+                        myurl = item.Do(null) as string;
+                        if (myurl == null)
+                            continue;
+                    }
+                    else
+                    {
+                        myurl = "../RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=" + this.PKVal;
+                    }
+
+                    DataRow dr = dtM.NewRow();
+
+                    dr["No"] = item.Index;
+                    dr["Title"] = item.Title;
+                    dr["Tip"] = item.ToolTip;
+                    dr["Visable"] = item.Visable;
+                    dr["Warning"] = item.Warning;
+
+                    dr["RefMethodType"] = (int)item.RefMethodType;
+                    dr["RefAttrKey"] = item.RefAttrKey;
+                    dr["URL"] = myurl;
+                    dr["W"] = item.Width;
+                    dr["H"] = item.Height;
+                    dr["Icon"] = item.Icon;
+                    dr["IsCanBatch"] = item.IsCanBatch;
+                    dr["GroupName"] = item.GroupName;
+
+                    dtM.Rows.Add(dr); //增加到rows.
+                }
+                #endregion 增加 上方法.
+
+                //增加方法。
+                ds.Tables.Add(dtM);
+
                 return BP.Tools.Json.ToJson(ds);
             }
             catch (Exception ex)

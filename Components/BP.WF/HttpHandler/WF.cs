@@ -866,6 +866,15 @@ namespace BP.WF.HttpHandler
         public string Load_Author()
         {
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + BP.Web.WebUser.No + "'");
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "NO";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["NO"].ColumnName = "NO";
+
+
+            }
             return BP.Tools.FormatToJson.ToJson(dt);
         }
         /// <summary>

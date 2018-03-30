@@ -514,6 +514,15 @@ namespace BP.Sys.FrmUI
             }
 
 
+            #region 自动扩展字段长度.
+            if (attr.MaxLen < 4000)
+            {
+                string sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
+                DBAccess.RunSQL(sql);
+            }
+            #endregion 自动扩展字段长度.
+
+
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");
             if (defval == "" || defval == "0")

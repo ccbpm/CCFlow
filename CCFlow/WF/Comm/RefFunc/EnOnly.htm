@@ -106,6 +106,7 @@
             var tableWidth = 800; //  w - 40;
             var html = "<div class='easyui-tabs'>";
             for (var i = 0; i < Sys_GroupFields.length; i++) {
+
                 var gf = Sys_GroupFields[i];
                 var lab = gf.Lab;
                 if (lab.indexOf(',') != -1) {
@@ -116,6 +117,7 @@
                 } else {
                     html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
                 }
+
                 html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
                 html += "</div>";
             }
@@ -222,7 +224,7 @@
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
 
-                var rm = null; //当前的方法.
+                var rm = null; //查找当前字段对应的方法.
                 for (var iRm = 0; iRm < dtM.length; iRm++) {
                     if (dtM[iRm].RefAttrKey == attr.KeyOfEn) {
                         rm = dtM[iRm];

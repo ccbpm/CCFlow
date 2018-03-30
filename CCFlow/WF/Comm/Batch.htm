@@ -1,32 +1,624 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>驰骋工作流</title>
-    <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script type="text/javascript" language="javascript" >
-        function Load() {
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+    <meta charset="UTF-8"/>
+    <title>查询</title>
+
+    <link href="JS/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="JS/EasyUI/themes/default/datagrid.css" rel="stylesheet" type="text/css" />
+    <link href="JS/EasyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="JS/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="JS/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="JS/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script>   
+    <script src="Gener.js" type="text/javascript"></script>
+     <link href='../Comm/Style/Table0.css' rel='stylesheet' type='text/css' />
+     <base target="_self" />
+     <style type="text/css">
+           .datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber
+            {
+                text-overflow: ellipsis;
+            }
+     </style>
+    <script language="javascript" type="text/javascript" >
+
+        //定义公共个变量.
+        var webUser = new WebUser();
+
+        var ensName = GetQueryString("EnsName");
+
+        //当前用户页面信息.
+        var ur = new Entity("BP.Sys.UserRegedit");
+        ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+        ur.RetrieveFromDBSources();
+
+        var count = ur.GetPara("RecCount");
+
+        var mapBase;
+
+        //页面启动函数.
+        $(function () {
+
+            if (webUser.No == undefined) {
+                alert('登录信息丢失，请重新登录。');
                 return;
             }
+
+            if (ensName == null || ensName == undefined) {
+                $("#Msg").html("必要的参数EnsName没有传入.");
+                return;
+            }
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            $("#dialogExpFile").hide();
+            //初始化工具栏.
+            InitToolbar();
+
+            //执行查询.
+            BindTable();
+
+            //批处理事件的获取
+            BatchMethod();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitToolbar() {
+
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddUrlData();  //增加参数.
+
+            //获得map基本信息.
+            mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
+
+            // $("#Title").html(mapBase.EnDesc); 
+            document.title = mapBase.EnDesc;
+
+            //获得查询信息，包含了查询数据表.
+            var data = handler.DoMethodReturnJSON("Search_SearchAttrs");
+
+            var html = "";
+            if (mapBase.IsShowSearchKey == "1")
+                html += "<label for='TB_Key'>关键字</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
+
+            if (mapBase.DTSearchWay != "0") {
+
+                html += mapBase.DTSearchLable;
+
+                if (mapBase.DTSearchWay == "1") {
+                    //html += '<div class="form-group">';
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
+                    //html += '</div>';
+                } else {
+                    //html += '<div class="form-group">';
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' class='form-control' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />";
+                    //html += '</div>';
+                }
+            }
+
+            //绑定外键枚举查询条件.
+            var attrs = data["Attrs"];
+
+            //格式为: @WFSta=0@FK_Dept=02
+            var json = AtParaToJson(ur.Vals);
+
+            $("#toolbar").html(html); //设置基础信息.
+            for (var i = 0; i < attrs.length; i++) {
+
+                var attr = attrs[i];
+                var str = "";
+                str += "&nbsp;&nbsp;&nbsp;&nbsp;<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                str = $(str);
+                $("#toolbar").append(str); //设置基础信息.
+            }
+
+
+            //为查询外键赋值.
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                var selectVal = json[attr.Field];
+
+                if (selectVal == undefined || selectVal == "")
+                    selectVal = "all";
+
+                $("#DDL_" + attr.Field).val(selectVal);
+            }
+
+            if (mapBase.IsInsert == "True") {
+                $("#newWin").show();
+            } else {
+                $("#newWin").hide();
+            }
+
         }
+
+        //初始化下拉列表框的OPERATION
+        function InitDDLOperation(frmData, mapAttr, defVal) {
+
+            var operations = "";
+            operations += "<option value='all' >全部</option>";
+
+            var ens = frmData[mapAttr.Field];
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                if (en.No == undefined)
+                    operations += "<option value='" + en.IntKey + "'>" + en.Lab + "</option>";
+                else
+                    operations += "<option value='" + en.No + "'>" + en.Name + "</option>";
+            }
+            return operations;
+        }
+
+        //执行查询.
+        function Search() {
+
+            //保存查询条件.
+            var ensName = GetQueryString("EnsName");
+            var ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+            ur.FK_Emp = webUser.No;
+
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "")
+                ur.SearchKey = $("#TB_Key").val();
+            else
+                ur.SearchKey = "";
+
+            //设置查询时间.
+            if ($("#TB_DTFrom").length == 1)
+                ur.DTFrom = $("#TB_DTFrom").val();
+
+            if ($("#TB_DTTo").length == 1)
+                ur.DTTo = $("#TB_DTTo").val();
+
+            //获得外键的查询条件,存储里面去.
+            var str = "";
+            $("select[name^='DDL_']").each(function () {
+                var id = $(this).attr("id");
+                id = id.replace("DDL_", "");
+                str += "@" + id + "=" + $(this).val();
+            });
+
+            ur.FK_Emp = webUser.No;
+            ur.CfgKey = "SearchAttrs";
+            ur.Vals = str;
+            ur.FK_MapData = ensName;
+            ur.SetPara("RecCount", count);
+            var i = ur.Save();
+            var pager = $("#dg").datagrid('getPager').data("pagination").options;
+            var pageIndex = pager.pageNumber;
+            var pageSize = pager.pageSize;
+            window.location.href = "?EnsName=" + ensName + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
+        }
+
+        //获取查询数据
+        function SearchData(pageIdx, pageSize) {
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("PageIdx", pageIdx);
+            handler.AddPara("PageSize", pageSize);
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            //查询集合
+            var data = handler.DoMethodReturnString("Search_SearchIt");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+            return data;
+        }
+
+        //生成Easyui DataGrid列表页面..
+        function BindTable() {
+
+            //获得查询的基本信息, 实体属性 attrs, 实体数据.
+            var pageIdx = this.GetQueryString("PageIdx");
+            var pageSize = this.GetQueryString("PageSize");
+
+            if (pageIdx == "" || pageIdx == undefined)
+                pageIdx = "1";
+            if (pageSize == "" || pageSize == undefined)
+                pageSize = "10";
+
+            var mapdata = SearchData(pageIdx, pageSize);
+
+            var attrs = mapdata["Attrs"];
+
+            if (attrs == undefined) {
+                alert('没有取得属性.');
+                return;
+            }
+
+            var keyOfEn = "";
+
+            var columns = new Array(); 
+            columns.push({
+                        field: "ck",
+                        fixed: false,
+                        checkbox:true,
+                        singleSelect:false,
+
+                    });
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+
+                if (attr.UIVisible == 0
+                || attr.KeyOfEn == "OID"
+                || attr.KeyOfEn == "WorkID"
+                || attr.KeyOfEn == "NodeID"
+                || attr.KeyOfEn == "MyNum"
+                || attr.KeyOfEn == "MyPK") {
+                    keyOfEn = attr.KeyOfEn
+                    continue;
+                }
+
+
+                var field = attr.KeyOfEn;
+                var title = attr.Name;
+                if (attr.UIContralType == 1)
+                    field = field + "Text";
+                if (attr.UIContralType == 2)
+                    columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false,
+                        formatter: function (value, row, index) {
+                            if (value == "0") return "否";
+                            if (value == "1") return "是";
+
+                        }
+                    });
+                else
+                    columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false,
+                    });
+            }
+
+
+            var data = mapdata["DT"];
+            $('#dg').datagrid({
+                data: data,
+                columns: [columns],
+                fitColumns: false,
+                fit: true,
+                rownumbers: true,
+                striped: true,
+                singleSelect: false,
+                pagination: true,
+                pagePosition: 'bottom',
+                toolbar: "#tb",
+                loadFilter: pagerFilter,
+                checkOnSelect:false,
+                selectOnCheck:false,
+                onDblClickRow: function (index, rowData) {
+                    var pkval = rowData["No"];
+                    var objectID = "No";
+                    if (pkval == undefined) {
+                        pkval = rowData["OID"];
+                        objectID = "OID";
+                    }
+                    if (pkval == undefined) {
+                        pkval = rowData["MyPK"];
+                        objectID = "MyPK";
+                    }
+                    if (pkval == undefined) {
+                        pkval = rowData["WorkID"];
+                        objectID = "WorkID";
+                    }
+                    if (pkval == undefined) {
+                        pkval = rowData["NodeID"];
+                        objectID = "NodeID";
+                    }
+                    var paras = "&" + objectID + "=" + pkval;
+                    for (var i = 0; i < attrs.length; i++) {
+                        var attr = attrs[i];
+                        if (attr.UIContralType == 1)
+                            paras += "&" + attr.KeyOfEn + "=" + rowData[attr.KeyOfEn];
+                    }
+
+                    OpenEn(pkval, paras);
+                }
+
+            });
+        }
+
+        //分页功能 
+        var IsUrl = true;
+        function pagerFilter(data) {
+            if (typeof data.length == 'number' && typeof data.splice == 'function') {
+                data = {
+                    total: count,
+                    rows: data
+                }
+            }
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            var pager = dg.datagrid('getPager');
+
+            //url 路径上包含PageIdx、PageSize
+            if (IsUrl) {
+                var pageIdx = GetQueryString("PageIdx");
+                var pageSize = GetQueryString("PageSize");
+                if (pageIdx !== null && pageIdx != "") {
+                    opts.pageNumber = parseInt(pageIdx);
+                    opts.pageSize = parseInt(pageSize);
+                    pager.data("pagination").options.pageNumber = parseInt(pageIdx);
+                    pager.data("pagination").options.pageSize = parseInt(pageSize);
+                }
+            }
+            //点击分页
+            pager.pagination({
+                onSelectPage: function (pageNum, pageSize) {
+                    opts.pageNumber = pageNum;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh', {
+                        pageNumber: pageNum,
+                        pageSize: pageSize
+                    });
+                    IsUrl = false;
+                    var mapdata = SearchData(opts.pageNumber, opts.pageSize);
+                    data = mapdata["DT"];
+                    dg.datagrid('loadData', data);
+                }
+            });
+
+            if (!data.originalRows) {
+                if (data.rows)
+                    data.originalRows = (data.rows);
+                else if (data.data && data.data.rows)
+                    data.originalRows = (data.data.rows);
+                else
+                    data.originalRows = [];
+            }
+            return data;
+        }
+
+        //批处理事件的获取
+          function  BatchMethod(){
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            //查询集合
+            var data = handler.DoMethodReturnString("Refmethod_BatchInt");
+             if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+  
+            var refMethods = JSON.parse(data);
+            if(refMethods.length==0) return;
+
+            var html="<table id='Table1' align='left'  border=0 width='100%'>";
+            html +="<tr class='TRSum'  border=0>"
+            html +="<td>"
+                
+            for(var i =0;i<refMethods.length;i++){
+                var en = refMethods[i];
+                html+="<input type='button' value='"+en.Title+"' onclick='operateBatch(\"" + en.RefMethodType + "\",\"" + en.Url + "\",\"" + en.Title + "\",\"" + en.Warning + "\",\"" + en.W + "\",\"" + en.H + "\")'/>";
+            }
+            $("#refMethod").html(html);
+          }
+
+          //点击事件
+           function operateBatch(methodType,url,title,warning,width,height) {
+               //获取前台页面的复选框的值
+            var pkValue = GetChecked();
+            if(pkValue==null || pkValue==""){
+                alert("请选择要执行的行");
+                return;
+            }
+ 
+            url =  url.replace(/PKVal=/g,"PKVal="+pkValue);
+
+            if (parseInt(methodType) == RefMethodType.Func) {
+                  if (warning == "null" || warning == "")
+                     warning="您确定要执行吗?";
+                   
+                else {
+                    warning = warning.replace(/,\s+/g, ",");
+                    warning = warning.replace(/\s+/g, "\r\n");
+                }
+                    if (confirm("\"" + warning + "\"")) {
+                        OpenEasyUiDialogExt(url, title, width,height, false);
+                    }
+                
+            }else{
+                OpenEasyUiDialogExt(url, title , width, height, false);
+            } 
+        }
+
+         //获取选中的行内容
+       function GetChecked(){
+        var checkedItems = $('#dg').datagrid('getChecked');
+  
+        var names ="";
+        $.each(checkedItems, function(index, item){
+           var pkval = item.No;
+           if (pkval == null || pkval == undefined)
+           pkval = item.OID;
+
+           if (pkval == null || pkval == undefined)
+           pkval = item.WorkID;
+
+            if (pkval == null || pkval == undefined)
+           pkval=item.NodeID;
+
+            if (pkval == null || pkval == undefined)
+           pkval=item.MyNum; 
+
+           if (pkval == null || pkval == undefined)
+           pkval=item.MyPK;
+
+           names = names+pkval+",";
+            
+        });              
+            return names.substring(0,names.length-1);
+       }
+
+        //导出EXCEL表
+       function Exp() {
+            var url = "";
+            if (plant == "CCFlow") {
+                url = "Do.aspx?EnsName=" + GetQueryString("EnsName") + "&DoType=SearchExp";
+                window.open(url);
+                return;
+            }
+
+            ReDownExpFile();
+
+        }
+
+        function ReDownExpFile() {
+            var fileName = $("*[id$=expFileName]").val();
+            document.getElementById("downLoad").href = "../../DataUser/Temp/" + fileName;
+
+            $("#dialogExpFile").show();
+            $("#dialogExpFile").dialog({
+                height: 300,
+                width: 400,
+                showMax: false,
+                isResize: true,
+                modal: true,
+                title: "手动下载文件",
+                slide: false,
+                close: function () {
+                },
+                buttons: [{ text: '关闭', handler: function () {
+                    $('#dialogExpFile').dialog('close');
+                }
+                }]
+            });
+        }
+
+        //打开明细表
+        function OpenEn(pk, paras) {
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
+
+            var cfg = new Entity("BP.Sys.EnCfg");
+            cfg.No = ensName;
+            cfg.RetrieveFromDBSources();
+
+            var url = cfg.GetPara("WinOpenUrl");
+
+            if (url == "" || url == undefined) {
+                url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+            }
+            else {
+                if (url.indexOf('?') == -1)
+                    url = url + "?1=1";
+                url = url + "&EnsName=" + ensName + "&enName=" + enName + "&PKVal=" + pk + paras;
+            }
+
+            var windowW = cfg.GetPara("WinCardW");
+            if (windowW == "" || windowW == undefined)
+                windowW = 700;
+
+            var windowH = cfg.GetPara("WinCardH");
+            if (windowH == "" || windowH == undefined)
+                windowH = 500;
+
+            var localUrl = window.location.href;
+            var pager = $("#dg").datagrid('getPager').data("pagination").options;
+            var pageIndex = pager.pageNumber;
+            var pageSize = pager.pageSize;
+
+            var localArr = new Array();
+            localArr = localUrl.split("&");
+            if (localArr.length == 1) {
+                localUrl = localUrl + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
+            } else {
+                for (var i = 0; i < localArr.length; i++) {
+                    if (localArr[i].indexOf("PageIdx") != -1) {
+                        localArr[i] = "PageIdx=" + pageIndex;
+                    }
+                    if (localArr[i].indexOf("PageSize") != -1) {
+                        localArr[i] = "PageSize=" + pageSize;
+                    }
+                }
+                localUrl = "";
+                for (var i = 0; i < localArr.length; i++) {
+                    localUrl += localArr[i];
+                    if (i != localArr.length - 1) localUrl += "&";
+                }
+            }
+
+            OpenEasyUiDialog(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", true, null, null, null, function () {
+                window.location.href = localUrl;
+
+
+            });
+        }
+
+        function New() {
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
+            url = "./RefFunc/EnOnly.htm?EnName=" + enName+"&t=" + Math.random();
+            OpenEasyUiDialogExt(url, '新建', 800, 500, true);
+
+        }
+
+        //跳转到设置页面
+        function Setting() {
+            var user = new WebUser();
+            var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+            OpenEasyUiDialogExt(url, '设置', 800, 500, true);
+        }
+
     </script>
 </head>
-<body  onload="Load()" >
+<body>
 
 <form id="cc">
+ <div data-options="region:'center'" style="padding: 0px;" border="false" style="overflow: hidden;">
+        <div class="easyui-panel" style="height:600px">
+        <div id="tb" style="padding: 3px;">
+            <div id="Div1" style="height: 30px;">
+                <div id="toolbar" style="float: left;"> 
+                </div>
+                <div  style="float: left;"> 
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
+                     <a id="newWin" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
+                </div>
 
-<br />
-<center> <img src='../Img/loading.gif' />正在加载，请稍后。。。 </center>
+                <div  style="float: left;">
+                    <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出</a>
+                    <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="Setting()">设置</a>
+                </div> 
 
+            </div>
+        </div>
+        
+        <table id="dg"></table>
+       </div>
+       <div id="refMethod" ></div>
+    </div>
+<div id="Msg"></div>
 </form>
-
+<div id="dialogExpFile" style="width: 400px; height: 300px;">
+        <div style="margin: 20px; color: Blue;">
+            提示：如果没有正常导出文件，请手动点击下方按钮进行下载。
+            <br />
+            <br />
+            <a id="downLoad" href="" class="easyui-linkbutton" data-options="iconCls:'icon-save'">
+                点击下载</a>
+        </div>
+    </div>
+    <input type="hidden" id="expFileName" runat="server" />
 </body>
 </html>

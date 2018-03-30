@@ -738,7 +738,7 @@
                 var pkval = en.GetPKVal();
 
 
-                 url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
+                url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
                 window.location.href = url; //刷新.
                 return;
             }
@@ -754,7 +754,7 @@
                 alert('更新错误:' + info);
             }
 
-            var url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
+             url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
             window.location.href = window.location.href; //刷新.
         }
 

@@ -514,10 +514,19 @@ namespace BP.Sys.FrmUI
             }
 
 
-            #region 自动扩展字段长度.
+            #region 自动扩展字段长度.  @杜. 需要翻译.
             if (attr.MaxLen < 4000)
             {
-                string sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
+                string sql = "";
+
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
+
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "alter table " + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
+
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "alter table " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
                 DBAccess.RunSQL(sql);
             }
             #endregion 自动扩展字段长度.

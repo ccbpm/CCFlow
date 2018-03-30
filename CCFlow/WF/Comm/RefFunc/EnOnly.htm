@@ -8,11 +8,11 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../Gener.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
-	<script type="text/javascript" src="../../Scripts/easyUI145/jquery.min.js"></script>
-	<script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
+	<script type="text/javascript" src="../../Scripts/easyUI/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/easyUI/locale/easyui-lang-zh_CN.js"></script>
 	<script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
     
     <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
@@ -34,6 +34,8 @@
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
     <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
+     <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>   
+      <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script> 
 
     <!--杨玉慧 -->
     <script type="text/javascript">
@@ -42,11 +44,11 @@
         var mapData;
         var mainData;
         var dtM; //方法集合.
-
         $(function () {
 
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             var enName = GetQueryString("EnName");
+            var type = GetQueryString("type");
             var pkVal = GetPKVal();
             httpHandler.AddPara("EnName", enName);
 
@@ -54,9 +56,9 @@
                 httpHandler.AddPara("PKVal", pkVal);
             }
 
-            var data = httpHandler.DoMethodReturnString("Entity_Init");
+            var data = httpHandler.DoMethodReturnString("EntityOnly_Init");
             if (data.indexOf('err@') == 0) {
-                $("#CCForm").html(data);
+                $("#CCFormTabs").html(data);
                 return;
             }
 
@@ -68,33 +70,96 @@
             dtM = frmData["dtM"];
 
             document.title = mapData.Name;
-            InitToolbar(); //初始工具栏.
- 
+
+            //InitToolbar(); //初始工具栏.
+            // RefMethod(); //初始化菜单.
+
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
 
+
         })
-         
+
+        function RefMethod(mapData, mainData, frmData) {
+
+            if (dtM.length == 0)
+                return;
+
+            //求出所有的分组名称.
+            var groupName = "@基本信息";
+            for (var i = 0; i < dtM.length; i++) {
+                var en = dtM[i];
+                if (en.GroupName == null)
+                    continue;
+                if (groupName.indexOf('@' + en.GroupName) == -1)
+                    groupName += "@" + en.GroupName;
+            }
+
+            var gNames = groupName.split('@');
+
+            //生成菜单.
+            var html = "<div class='easyui-accordion' data-options='fit:true' id='accordion'>";
+            html += "";
+            for (var i = 0; i < gNames.length; i++) {
+                var gName = gNames[i];
+                if (gName == "")
+                    continue;
+                html += "<div title='" + gName + "' style='overflow:auto;'>";
+
+
+                //填入菜单内容.
+                html += "<ul class='navlist' >";
+                if (gName == "基本信息") {
+
+                    html += "<li><a href='" + url + "'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
+
+                }
+                for (var idx = 0; idx < dtM.length; idx++) {
+
+                    var en = dtM[idx];
+                    var myName = en.GroupName;
+                    if (myName == null || myName == "")
+                        myName = "基本信息";
+
+                    if (gName != myName)
+                        continue;
+
+                    if (en.RefAttrKey != null || en.IsCanBatch == "1" || en.Visable == 0)
+                        continue;
+
+                    html += "<li>" + GenerRM(en) + "</li>";
+                }
+                html += "</ul>";   //end填入菜单内容.
+                html += "</div>";
+            }
+            html += "</div>";
+
+            $("#Left").append(html);
+            $.parser.parse("#Left");
+        }
+
         //设置按钮
         function InitToolbar() {
             var html = "";
+            $("#Btn_New").hide();
+            $("#Btn_Save").hide();
+            $("#Btn_Delete").hide();
 
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
-                html += "<input type='button' value='新建' id='Btn_New' onclick='New()' />";
+                $("#Btn_New").show();
+
             }
             if (mapData.GetPara("IsUpdate") == 1) {
-                html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' />";
+                $("#Btn_Save").show();
             }
             if (mapData.GetPara("IsDelete") == 1) {
                 var pkVal = GetPKVal();
                 if (pkVal != null)
-                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' />";
+                    $("#Btn_Delete").show();
             }
 
-            html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' />";
 
-            $("#Btns").append(html);
         }
 
         function GenerFoolFrm(mapData, mainData, frmData) {
@@ -104,24 +169,27 @@
             var mapAtrrs = frmData.Sys_MapAttr;
 
             var tableWidth = 800; //  w - 40;
-            var html = "<div class='easyui-tabs'>";
-            for (var i = 0; i < Sys_GroupFields.length; i++) {
+            var html = "";
+            if (Sys_GroupFields.length > 1)
+                html = "<div class='easyui-tabs' >";
 
+            for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
                 var lab = gf.Lab;
                 if (lab.indexOf(',') != -1) {
                     lab = lab.substring(0, lab.indexOf(','));
                 }
                 if (i == 0) {
-                    html += "<div title='" + lab + "' id='" + gf.OID + "'>";
+                    html += "<div title='" + lab + "' id='" + gf.OID + "' >";
                 } else {
                     html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
                 }
-
                 html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
                 html += "</div>";
             }
-            html += "</div>";
+            if (Sys_GroupFields.length > 1)
+                html += "</div>";
+
 
             //加入隐藏控件.
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -132,9 +200,9 @@
                 }
             }
 
-            $('#CCForm').html("").append(html);
+            $('#CCFormTabs').html("").append(html);
 
-            $.parser.parse("#CCForm");
+            $.parser.parse("#CCFormTabs");
 
 
             //   $.parser.parse("#CCForm");
@@ -213,7 +281,7 @@
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID) {
 
-            var html = "<table border='0' style='width:880px;' >";
+            var html = "<table border='0' style='width:99%;' >";
             var isDropTR = true;
 
             for (var i = 0; i < Sys_MapAttr.length; i++) {
@@ -224,7 +292,7 @@
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
 
-                var rm = null; //查找当前字段对应的方法.
+                var rm = null; //当前的方法.
                 for (var iRm = 0; iRm < dtM.length; iRm++) {
                     if (dtM[iRm].RefAttrKey == attr.KeyOfEn) {
                         rm = dtM[iRm];
@@ -252,7 +320,7 @@
                 if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td  class='FDesc' style='width:25%;'>" + lab + "</td>";
                     html += "<td colspan=3>";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</td>";
@@ -260,7 +328,7 @@
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:120px;'></td>";
+                        html += "<td class='FDesc' style='width:25%;'></td>";
                         html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
@@ -281,7 +349,7 @@
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:120px;'></td>";
+                        html += "<td class='FDesc' style='width:25%;'></td>";
                         html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
@@ -293,7 +361,7 @@
 
                 if (isDropTR == true) {
                     html += "<tr>";
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td class='FDesc' style='width:25%;'>" + lab + "</td>";
                     html += "<td class='FContext'  >";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</td>";
@@ -311,7 +379,7 @@
 
                 if (isDropTR == false) {
 
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td class='FDesc' style='width:25%;'>" + lab + "</td>";
                     html += "<td class='FContext'>";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</td>";
@@ -320,7 +388,7 @@
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:120px;'></td>";
+                        html += "<td class='FDesc' style='width:25%;'></td>";
                         html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
@@ -345,12 +413,50 @@
             if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
                 icon = "../" + rm.Icon;
             }
-            // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
-            //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
-            var html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            var html = "";
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
+
+            if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
+                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
+
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+
+            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
+                // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
+                //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+
+            }
             return html;
         }
+        function OPenFun(url, warning, title) {
+            warning = warning.replace(/,\s+/g, ",");
+            warning = warning.replace(/\s+/g, "\r\n");
+            if (confirm("\"" + warning + "\"")) {
+                OpenEasyUiDialogExt(url, title, 400, 300, false);
+            }
+        }
+        //在右侧框架中显示指定url的页面
+        function OpenUrlInRightFrame(ele, url) {
+            if (ele != null && ele != undefined) {
 
+                currShow = $(ele).parents('li').text(); //有回车符
+
+                $.each($(ele).parents('ul').children('li'), function (i, e) {
+                    $(e).children('div').css('font-weight', $(e).text() == currShow ? 'bold' : 'normal');
+                });
+
+                if (url.indexOf('?') == -1)
+                    url += '?1=1';
+
+                $('#rightFrame').empty();
+                $('#rightFrame').append('<iframe scrolling="auto" frameborder="0"  src="' + url + '&s=' + Math.random() + '" style="width:100%;height:100%;"></iframe>');
+            }
+        }
         function InitMapAttrOfCtrl(mapAttr) {
 
             var str = '';
@@ -362,8 +468,13 @@
             //外部数据源类型.
             if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
 
+                //枚举类型.
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
                 return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-                 
             }
 
             //外键类型.
@@ -444,7 +555,7 @@
                     checkedStr = ' checked="checked" ';
                 }
 
-                checkedStr = "";  
+                checkedStr = "";
 
                 return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
@@ -472,7 +583,7 @@
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn=="NodeID" ) {
+                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn == "NodeID") {
                     enableAttr = "disabled='disabled'";
                 }
                 return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
@@ -515,26 +626,31 @@
 
             var operations = '';
 
-                var data = frmData[mapAttr.KeyOfEn];
-                 if (data == undefined)
-                    data = frmData[mapAttr.UIBindKey];
+            var data = frmData[mapAttr.KeyOfEn];
+            if (data == undefined)
+                data = frmData[mapAttr.UIBindKey];
 
             //外键类型.
             if (mapAttr.LGType == 2) {
+
+                var data = frmData[mapAttr.KeyOfEn];
+                if (data == undefined)
+                    data = frmData[mapAttr.UIBindKey];
 
                 if (data == undefined) {
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
                     return;
                 }
 
+                //  alert(defVal);
+
+
                 $.each(data, function (i, obj) {
                     operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
                 });
             }
 
-            //外部数据源类型.
             if (mapAttr.LGType == 0 && data != undefined) {
-                operations = "";
                 $.each(data, function (i, obj) {
                     operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
                 });
@@ -564,7 +680,6 @@
                         fn = eval(mapAttr.UIBindKey);
                     }
                 } catch (e) {
-
                 }
                 if (typeof fn == "function") {
                     $.each(fn.call(), function (i, obj) {
@@ -585,7 +700,14 @@
         //新建.
         function New() {
             var enName = GetQueryString("EnName");
-            var url = "?EnName=" + GetQueryString("EnName") + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal") + "&t=" + Math.random();
+            var fromName = GetQueryString("FromName");
+            var url = window.location.href;
+            url = url.substring(0, url.indexOf("?") + 1);
+
+            if (fromName == "")
+                url += "EnName=" + GetQueryString("EnName") + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal") + "&t=" + Math.random();
+            else url += "EnName=" + GetQueryString("EnName") + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal") + "&t=" + Math.random();
+            alert(url);
             window.location.href = url; //刷新.
         }
 
@@ -643,7 +765,7 @@
 
             $("#Btns").html("");
             $("#Left").html("");
-            $("#CCForm").html("删除成功..");
+            $("#CCFormTabs").html("删除成功..");
 
             alert("删除成功.");
             window.close();
@@ -683,19 +805,32 @@
             }
 
             var accordion = new Accordion($('#accordion'), false);
+
         });
     </script>
 </head> 
 <body class="easyui-layout">
 	
-
-        <div id="Btns" data-options="region:'north'" style="height:35px;"></div>
-
-	
-    	<div class="easyui-layout" data-options="region:'center'" border="false" id="CCForm">
-			<br />
-			<img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-			<br />
-		</div>
+	<div class="easyui-layout" data-options="region:'center'" border="false">
+        
+		
+            <div class="easyui-layout" data-options="fit:true">
+                <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false" style="height: 30px;padding: 2px; background-color: #E0ECFF">
+                    <a id="Btn_New" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
+                    <a id="Btn_Save" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
+                    <a id="Btn_Delete" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
+                    <a id="Btn_Close" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-no'" onclick="CloseIt()">关闭</a>
+                </div>
+                <div data-options="region:'center',noheader:true,border:false" style="margin:0px">
+                   <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin:0px;padding:0px;overflow:auto">
+             
+			            <br />
+			            <img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+			            <br />
+                    </div> 
+                </div>
+            </div>
+	    
+	</div>
 </body>
 </html>

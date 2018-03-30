@@ -41,10 +41,9 @@
     <script type="text/javascript">
 
         var frmData;
-        var mapData;
-        var mainData;
-        var dtM; //方法集合.
 
+        var dtM; //方法集合.
+        var url;
         $(function () {
 
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
@@ -52,7 +51,7 @@
             var type = GetQueryString("type");
             var pkVal = GetPKVal();
             httpHandler.AddPara("EnName", enName);
-
+            url = "../RefFunc/EnOnly.htm?EnName=" + enName + "&type=" + type + "&PKVal=" + pkVal + "&FromName=En";
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);
             }
@@ -65,23 +64,24 @@
 
             //解析json.
             frmData = JSON.parse(data);
-            mapData = frmData["Sys_MapData"][0];
-            mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
-            mainData = frmData["MainData"];
+            //mapData = frmData["Sys_MapData"][0];
+            //mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
+            //mainData = frmData["MainData"];
             dtM = frmData["dtM"];
 
-            document.title = mapData.Name;
+            //document.title = mapData.Name;
 
-            InitToolbar(); //初始工具栏.
-
+            //InitToolbar(); //初始工具栏.
             RefMethod(); //初始化菜单.
 
             //生成傻瓜表单.
-            GenerFoolFrm(mapData, mainData, frmData);
+            OpenUrlInRightFrame(this, url);
+            //GenerFoolFrm(mapData, mainData, frmData);
+
 
         })
 
-        function RefMethod(mapData, mainData, frmData) {
+        function RefMethod() {
 
             if (dtM.length == 0)
                 return;
@@ -111,8 +111,8 @@
                 //填入菜单内容.
                 html += "<ul class='navlist' >";
                 if (gName == "基本信息") {
-                    var url = window.location.href;
-                    html += "<li><a href='" + url + "'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
+                    html += "<li><a href='javascript:OpenUrlInRightFrame(this,\"" + url + "\")'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
+                    //html += "<li><a href='" + url + "'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
 
                 }
                 for (var idx = 0; idx < dtM.length; idx++) {
@@ -138,18 +138,7 @@
             $("#Left").append(html);
             $.parser.parse("#Left");
         }
-        function OpenIt(url, title, w, h) {
 
-            window.open(url);
-            return;
-
-            // var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
-            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
-                //location = location;
-            });
-
-            // window.open(url);
-        }
         //设置按钮
         function InitToolbar() {
             var html = "";
@@ -423,7 +412,7 @@
             }
             var html = "";
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
-                html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
@@ -441,11 +430,11 @@
             }
             return html;
         }
-        function OPenFun(url, warning,title) {
+        function OPenFun(url, warning, title) {
             warning = warning.replace(/,\s+/g, ",");
             warning = warning.replace(/\s+/g, "\r\n");
             if (confirm("\"" + warning + "\"")) {
-                OpenEasyUiDialogExt(url, title,400,300,false);
+                OpenEasyUiDialogExt(url, title, 400, 300, false);
             }
         }
         //在右侧框架中显示指定url的页面

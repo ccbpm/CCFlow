@@ -525,7 +525,7 @@ namespace BP.Sys.FrmUI
                 if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     sql = "alter table " + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
 
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     sql = "alter table " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
                 DBAccess.RunSQL(sql);
             }

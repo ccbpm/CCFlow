@@ -451,6 +451,7 @@
     <Content Include="WF\Comm\RefFunc\En2018.htm" />
     <Content Include="WF\Comm\RefFunc\EnOnly.htm" />
     <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.htm" />
+    <Content Include="WF\Comm\UC\UCEn.ascx" />
     <Content Include="WF\Data\Install\DemoData.xml" />
     <Content Include="WF\Data\Install\Informix.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitPublicData.sql" />
@@ -1681,7 +1682,6 @@
     <Content Include="WF\Comm\UC\Pub.ascx" />
     <Content Include="WF\Comm\UC\RptSingle.ascx" />
     <Content Include="WF\Comm\UC\ToolBar.ascx" />
-    <Content Include="WF\Comm\UC\UCEn.ascx" />
     <Content Include="WF\Comm\UC\UCGraphics.ascx" />
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\UC\UIEn.ascx" />
@@ -1689,28 +1689,6 @@
     <Content Include="WF\Comm\Sys\Holiday.htm" />
     <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
-    <Content Include="WF\FlowFormTree\Base\FormTreeBase.aspx" />
-    <Content Include="WF\FlowFormTree\Default.aspx" />
-    <Content Include="WF\FlowFormTree\FlowFormTreeEdit.aspx" />
-    <Content Include="WF\FlowFormTree\FlowFormTreeView.aspx" />
-    <Content Include="WF\FlowFormTree\Images\Banal.png" />
-    <Content Include="WF\FlowFormTree\Images\folder.gif" />
-    <Content Include="WF\FlowFormTree\Images\func.gif" />
-    <Content Include="WF\FlowFormTree\Images\logo.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\application.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\archive.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\collaboration.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\credit_card.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\customers.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\desktop_2.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\feed.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\forward.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\my_account.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\shipping.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\sitemap.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\sysset.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\user1.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\window.png" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\GetTask.aspx" />
     <Content Include="WF\HungUpList.htm" />
@@ -1973,7 +1951,6 @@
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\PortDemo.htm" />
     <Content Include="WF\PrintSample.aspx" />
-    <Content Include="WF\PrintWorkNode.aspx" />
     <Content Include="WF\Pub.ascx" />
     <Content Include="WF\RptDfine\Attachment.aspx" />
     <Content Include="WF\RptDfine\Contrast.aspx" />
@@ -7761,34 +7738,6 @@
     <Compile Include="WF\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowFormTree\Base\FormTreeBase.aspx.cs">
-      <DependentUpon>FormTreeBase.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\Base\FormTreeBase.aspx.designer.cs">
-      <DependentUpon>FormTreeBase.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeEdit.aspx.cs">
-      <DependentUpon>FlowFormTreeEdit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeEdit.aspx.designer.cs">
-      <DependentUpon>FlowFormTreeEdit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeView.aspx.cs">
-      <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeView.aspx.designer.cs">
-      <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\GetTask.aspx.cs">
       <DependentUpon>GetTask.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7811,13 +7760,6 @@
     </Compile>
     <Compile Include="WF\PrintSample.aspx.designer.cs">
       <DependentUpon>PrintSample.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\PrintWorkNode.aspx.cs">
-      <DependentUpon>PrintWorkNode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\PrintWorkNode.aspx.designer.cs">
-      <DependentUpon>PrintWorkNode.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

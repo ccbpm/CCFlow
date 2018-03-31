@@ -85,7 +85,7 @@
                     }
                 }
 
-                var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_"+ typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label>" + stationTypes[i].Name + "</label></td></tr>";
+                var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label for='CB_type_" + typeno + "' >" + stationTypes[i].Name + "</label></td></tr>";
                 $("#t1").append(title);
 
                 for (var k = 0, klen = curstas.length; k < klen; k++) {

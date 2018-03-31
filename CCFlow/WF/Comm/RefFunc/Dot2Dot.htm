@@ -166,7 +166,7 @@
                 html += "<tr>";
                 html += "<th colspan=3>";
 
-                html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "'  /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
+                html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "' name='Group_" + group.No + "' /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
 
                 html += "</th>";
                 html += "</tr>";
@@ -281,7 +281,7 @@
             hand.AddPara("Eles", strs);
 
             var data = hand.DoMethodReturnString("Dot2Dot_Save");
-            alert(data);
+            //alert(data);
             window.location.href = window.location.href;
             return;
         }

@@ -45,18 +45,18 @@ INSERT INTO Port_StationType (No,Name) VALUES('3','基层');
  
 -- Port_Station ;
 DELETE FROM Port_Station;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('01','总经理','1') ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('02','市场部经理','2');
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('03','研发部经理','2')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('04','客服部经理','2')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('05','财务部经理','2')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('06','人力资源部经理','2')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('07','销售人员岗','3')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('08','程序员岗','3')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('09','技术服务岗','3')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('10','出纳岗','3')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('11','人力资源助理岗','3')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('12','外来人员岗','3')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('01','总经理','1','0') ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('02','市场部经理','2','0');
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('03','研发部经理','2','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('04','客服部经理','2','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('05','财务部经理','2','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('06','人力资源部经理','2','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('07','销售人员岗','3','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('08','程序员岗','3','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('09','技术服务岗','3','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('10','出纳岗','3','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('11','人力资源助理岗','3','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('12','外来人员岗','3','0')  ;
 
 
 

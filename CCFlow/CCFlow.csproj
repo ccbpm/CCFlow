@@ -379,6 +379,8 @@
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
     <Content Include="WF\Admin\AttrFlow\Imp.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\FrmEvent.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\ResetFrm.htm" />
     <Content Include="WF\Admin\Cond\CondByFrm.htm" />
     <Content Include="WF\Admin\Cond\CondByPara.htm" />
     <Content Include="WF\Admin\Cond\CondBySQL.htm" />
@@ -521,8 +523,6 @@
     <Content Include="WF\Admin\AttrNode\Img\SelfFrm.png" />
     <Content Include="WF\Admin\AttrNode\Img\Tab.png" />
     <Content Include="WF\Admin\AttrNode\Img\Tree.png" />
-    <Content Include="WF\Admin\AttrNode\NodeAccepterRole.aspx" />
-    <Content Include="WF\Admin\AttrNode\NodeCCRole.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
@@ -6557,20 +6557,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\NodeAccepterRole.aspx.cs">
-      <DependentUpon>NodeAccepterRole.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\NodeAccepterRole.aspx.designer.cs">
-      <DependentUpon>NodeAccepterRole.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\NodeCCRole.aspx.cs">
-      <DependentUpon>NodeCCRole.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\NodeCCRole.aspx.designer.cs">
-      <DependentUpon>NodeCCRole.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx.cs">
       <DependentUpon>SepcFiledsSepcUsers.aspx</DependentUpon>

@@ -34,11 +34,13 @@
                 en.SetPara("EditerType", 0); //是否启用相关功能列
                 en.SetPara("WinOpenUrl", ""); //是否启用相关功能列
                 en.Insert();
+
             }
 
             var en = new Entity("BP.Sys.EnCfg");
             en.No = ensName;
             en.Retrieve();
+
 
             //赋值.
             GenerBindEnumKey("DDLPara_UIRowStyleGlo", "UIRowStyleGlo");
@@ -47,6 +49,8 @@
 
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
+
+           // alert(en);
 
         });
 
@@ -138,7 +142,7 @@
 <tr bgcolor='AliceBlue' >
 <td>WinOpenUrl</td>
 <td>双击打开的URL(默认为卡片)</td>
-<td ><input name="TBPara_WinOpenUrl" type="text" value="" id="TBPara_WinOpenUrl" /></td>
+<td ><input name="TBPara_WinOpenUrl" type="text" value="" id="TBPara_WinOpenUrl" style="width:100%;" /></td>
 </tr>
 
 </table>

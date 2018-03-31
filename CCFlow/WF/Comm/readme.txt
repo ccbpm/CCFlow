@@ -2,11 +2,11 @@
 ======================================================================================
 
 查询组件: 
-http://localhost/WF/Comm/Search.aspx?EnsName=BP.WF.Port.Emps
+http://localhost/WF/Comm/Search.htm?EnsName=BP.WF.Port.Emps
 
 
 单个实体: 
-http://localhost/WF/Comm/Search.aspx?EnsName=BP.WF.Port.Emps
+http://localhost/WF/Comm/Search.htm?EnsName=BP.WF.Port.Emps
 
 
 批量修改实体（适用于字典类的维护）: 

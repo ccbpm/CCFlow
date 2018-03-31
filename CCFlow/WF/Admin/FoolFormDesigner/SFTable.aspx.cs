@@ -189,7 +189,7 @@ namespace CCFlow.WF.MapDef
             if (this.FK_SFTable == null)
                 btn.Enabled = false;
             if (en.IsClass)
-                btn.Attributes["onclick"] = "WinOpen('../Search.aspx?EnsName=" + en.No + "', 'dg'); return false;";
+                btn.Attributes["onclick"] = "WinOpen('../Search.htm?EnsName=" + en.No + "', 'dg'); return false;";
             else
                 btn.Attributes["onclick"] = "WinOpen('SFTableEditData.aspx?FK_SFTable=" + this.FK_SFTable + "', 'dg'); return false;";
 

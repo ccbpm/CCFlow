@@ -113,8 +113,10 @@
                 if (gName == "基本信息") {
                     html += "<li><a href='javascript:OpenUrlInRightFrame(this,\"" + url + "\")'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
                     //html += "<li><a href='" + url + "'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
-
                 }
+
+                console.log(dtM);
+
                 for (var idx = 0; idx < dtM.length; idx++) {
 
                     var en = dtM[idx];
@@ -122,11 +124,15 @@
                     if (myName == null || myName == "")
                         myName = "基本信息";
 
+
+
                     if (gName != myName)
                         continue;
 
                     if (en.RefAttrKey != null || en.IsCanBatch == "1" || en.Visable == 0)
                         continue;
+
+
 
                     html += "<li>" + GenerRM(en) + "</li>";
                 }
@@ -141,6 +147,7 @@
 
         //设置按钮
         function InitToolbar() {
+
             var html = "";
             $("#Btn_New").hide();
             $("#Btn_Save").hide();
@@ -401,6 +408,7 @@
         }
 
         function GenerRM(rm) {
+
             var icon = rm.Icon;
             if (rm.Icon == "" || rm.Icon == null) {
                 icon = "../../Img/dot.png";
@@ -409,7 +417,9 @@
             if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
                 icon = "../" + rm.Icon;
             }
+
             var html = "";
+
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
                 html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
@@ -421,12 +431,10 @@
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
                 html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
 
-            if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
-                // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
-                //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
+            if ( html=="" ||  parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
-
             }
+
             return html;
         }
         function OPenFun(url, warning, title, w, h) {

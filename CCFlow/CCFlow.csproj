@@ -526,133 +526,8 @@
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\content-background.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\css\ajaxfileupload.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\css\colorPicker_new.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\css\minimap.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\css\style.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\css\style_1.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\arrow_redo.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\arrow_undo.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\author.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\author.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\background.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\background.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\blank.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\button-login.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\button-login.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\buy.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\cancel.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\centerAlign.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\collaborator.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\collaborators.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\collaborators.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_background.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_hex.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_hsb_b.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_hsb_h.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_hsb_s.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_indic.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_overlay.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_rgb_b.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_rgb_g.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_rgb_r.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_select.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\colorpicker_submit.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\container.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\content-background.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_background.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_hex.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_hsb_b.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_hsb_h.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_hsb_s.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_indic.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_rgb_b.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_rgb_g.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_rgb_r.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\custom_submit.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\deletediagram.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\download.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\download_medium.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\editor.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\editor.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\gridTile.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\gridTile.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\gridTile1.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\gridTile2.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\group.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\group.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\header-background.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\header-background_1.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_back.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_backward.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_connector_jagged.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_connector_organic.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_connector_straight.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_debug_false.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_debug_true.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_export.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_forward.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_front.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_import.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_logout.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_new.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_open.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_print.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_save.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_save_as.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\icon_settings.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\image.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\leftAlign.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\loading.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\loading_small.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\login-background.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\logo_background.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\logo_background.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\logo_background2.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\menu_sep.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\menu_separator.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\menu_separator2.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\no-image.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\noColor.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-endstyle.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-fill.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-h-resize.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-linestyle.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-linewidth.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-startstyle.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-stroke.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-text.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-url.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\prop-icon-v-resize.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\remove.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\remove.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\resize.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\rightAlign.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\rotate.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\save-background.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\select.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\select2.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\slider.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\text.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\text.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\toolbal_background.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\toolbar_background.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\toolbar_separator.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\ungroup.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\ungroup.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\images\upper_bar_separator.jpg" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\ajaxfileupload.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\colorPicker_new.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\dropdownmenu.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\excanvas.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\jquery-1.11.0.min.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\json2.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\BusinessRuleTask.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\BusinessRuleTaskBig.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\ManualTask.png" />
@@ -691,117 +566,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\js\FuncTrees.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\jquery.ez-bg-resize.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\Left.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\browserReady.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\builder.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\canvasprops.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\CanvasChangeColorCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\CanvasChangeSizeCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\CanvasFitCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\Command.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ConnectorAlterCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ConnectorCreateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ConnectorDeleteCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ContainerCreateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ContainerDeleteCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ContainerScaleCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ContainerTranslateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\FigureCloneCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\FigureCreateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\FigureDeleteCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\FigureRotateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\FigureScaleCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\FigureTranslateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\FigureZOrderCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\GroupCloneCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\GroupCreateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\GroupDeleteCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\GroupDestroyCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\GroupRotateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\GroupScaleCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\GroupTranslateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\History.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\InsertedImageFigureCreateCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\commands\ShapeChangePropertyCommand.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\connectionManagers.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\connections.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\containers.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\dashed.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\groups.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\handles.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\ImageFrame.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\importer.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\key.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\log.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\main.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\matrix.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\minimap.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\primitives.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\Activity.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\BusinessRuleTask.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\BusinessRuleTaskBig.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\ManualTask.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\ManualTaskBig.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\ScriptTask.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\ScriptTaskBig.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\ServiceTask.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\ServiceTaskBig.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\SubProcess.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\SubProcessBig.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\text.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\UserTask.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Activity\UserTaskBig.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\EndError.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\EndNone.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\Event.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\StartError.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\StartEvent.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\StartMessage.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\StartNone.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\StartSignal.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Event\StartTimer.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Gateway\EventbasedGateway.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Gateway\ExclusiveGateway.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Gateway\Gateway.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Gateway\InclusiveGateway.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Gateway\lane.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Gateway\ParallelGateway.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\Gateway\pool.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\bpmn\readme.txt" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\CCBPM.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeFHL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeFHL_big.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeFL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeFL_big.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeHL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeHL_big.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeOrdinary.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeOrdinary_big.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeSubThread.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\nodeSubThread_big.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeFHL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeFHL_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeFL.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeFL_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeHL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeHL_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeOrdinary.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeOrdinary_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeSubThread.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\update\nodeSubThread_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeFHL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeFHL_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeFL.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeFL_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeHL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeHL_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeOrdinary.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeOrdinary_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeSubThread.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\ccbpm\Nodes\简单\nodeSubThread_big.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\stack.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\style.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\text.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\NewFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
@@ -6027,9 +5791,6 @@
     <Content Include="WF\WorkOpt\OneWork\Img\时间轴.png" />
     <Content Include="WF\WorkOpt\OneWork\OneWork.htm" />
     <Content Include="WF\WorkOpt\OneWork\OP.htm" />
-    <Content Include="WF\WorkOpt\OneWork\TrackUC.ascx" />
-    <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
-    <Content Include="WF\WorkOpt\OneWork\TruckOnly.aspx" />
     <Content Include="WF\WorkOpt\Press.htm" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
@@ -6065,7 +5826,6 @@
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx" />
     <Content Include="WF\Admin\AttrNode\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
@@ -6833,18 +6593,8 @@
     <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.designer.cs">
       <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx.cs">
-      <DependentUpon>svg.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -8201,27 +7951,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\TrackUC.ascx.cs">
-      <DependentUpon>TrackUC.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\TrackUC.ascx.designer.cs">
-      <DependentUpon>TrackUC.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\TruakUC.ascx.cs">
-      <DependentUpon>TruakUC.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\TruakUC.ascx.designer.cs">
-      <DependentUpon>TruakUC.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\TruckOnly.aspx.cs">
-      <DependentUpon>TruckOnly.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\TruckOnly.aspx.designer.cs">
-      <DependentUpon>TruckOnly.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\PrintDoc.aspx.cs">
       <DependentUpon>PrintDoc.aspx</DependentUpon>

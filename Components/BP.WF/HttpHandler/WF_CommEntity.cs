@@ -191,7 +191,7 @@ namespace BP.WF.HttpHandler
             {
                 string uiBindKey = dr["UIBindKey"].ToString();
                 string lgType = dr["LGType"].ToString();
-                if (lgType != "2")
+                if (lgType.Equals("2")==false)
                     continue;
 
                 string UIIsEnable = dr["UIVisible"].ToString();
@@ -410,11 +410,12 @@ namespace BP.WF.HttpHandler
                 {
                     string uiBindKey = dr["UIBindKey"].ToString();
                     string lgType = dr["LGType"].ToString();
-                    if (lgType != "2")
+                    if (lgType.Equals("2")==false)
                         continue;
 
                     string UIIsEnable = dr["UIVisible"].ToString();
-                    if (UIIsEnable == "0")
+
+                    if (UIIsEnable.Equals("0") == true)
                         continue;
 
                     if (string.IsNullOrEmpty(uiBindKey) == true)
@@ -432,7 +433,10 @@ namespace BP.WF.HttpHandler
                     if (ds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                    DataTable dt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    dt.TableName = keyOfEn;
+
+                    ds.Tables.Add(dt);
                 }
 
                 //加入sql模式的外键.
@@ -542,7 +546,7 @@ namespace BP.WF.HttpHandler
 
                     dr["RefMethodType"] = (int)item.RefMethodType;
                     dr["RefAttrKey"] = item.RefAttrKey;
-                    dr["URL"] = myurl;
+                    dr["Url"] = myurl;
                     dr["W"] = item.Width;
                     dr["H"] = item.Height;
                     dr["Icon"] = item.Icon;
@@ -674,7 +678,7 @@ namespace BP.WF.HttpHandler
 
                     dr["RefMethodType"] = (int)item.RefMethodType;
                     dr["RefAttrKey"] = item.RefAttrKey;
-                    dr["URL"] = myurl;
+                    dr["Url"] = myurl;
                     dr["W"] = item.Width;
                     dr["H"] = item.Height;
                     dr["Icon"] = item.Icon;
@@ -745,7 +749,7 @@ namespace BP.WF.HttpHandler
                                 //url += "&RefAttrKey=" + vsM.AttrOfOneInMM + "&RefAttrEnsName=" + vsM.EnsOfM.ToString();
                             }
 
-                            dr["URL"] = url + "&" + en.PK + "=" + en.PKVal + "&PKVal=" + en.PKVal;
+                            dr["Url"] = url + "&" + en.PK + "=" + en.PKVal + "&PKVal=" + en.PKVal;
                             dr["Icon"] = "../Img/M2M.png";
 
                         }
@@ -807,14 +811,20 @@ namespace BP.WF.HttpHandler
                             enDtl.Ens.GetNewEntity.CheckPhysicsTable();
                         }
                     }
+
                     dr["No"] = enDtl.EnsName;
                     dr["Title"] = enDtl.Desc + "(" + i + ")";
                     dr["Url"] = url;
                     dr["GroupName"] = enDtl.GroupName;
+
+                    dr["RefMethodType"] = (int)RefMethodType.RightFrameOpen;
+
                     dtM.Rows.Add(dr);
                 }
-                ds.Tables.Add(dtM); //
                 #endregion 增加 从表.
+
+                ds.Tables.Add(dtM); //
+
 
                 return BP.Tools.Json.ToJson(ds);
             }

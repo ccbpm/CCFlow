@@ -872,7 +872,7 @@ namespace BP.WF.Data
             {
                 string jsonVal = mydr[attr.Key].ToString();
                 string enVal = wk.GetValStringByKey(attr.Key);
-                if (enVal == "" || enVal == null)
+                if ( DataType.IsNullOrEmpty(enVal)==true)
                 {
                     wk.SetValByKey(attr.Key, jsonVal);
                     isHave = true;
@@ -939,7 +939,7 @@ namespace BP.WF.Data
                     {
                         string jsonVal = mydr[attr.Key].ToString();
                         string enVal = wk.GetValStringByKey(attr.Key);
-                        if (enVal == "" || enVal == null)
+                        if ( DataType.IsNullOrEmpty(enVal) ==true)
                         {
                             wk.SetValByKey(attr.Key, jsonVal);
                             isHave = true;

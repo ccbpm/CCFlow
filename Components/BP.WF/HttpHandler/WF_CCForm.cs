@@ -995,7 +995,7 @@ namespace BP.WF.HttpHandler
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
-                    if (lgType != "2")
+                    if (lgType.Equals("2")==false)
                         continue;
 
                     string UIIsEnable = dr["UIVisible"].ToString();

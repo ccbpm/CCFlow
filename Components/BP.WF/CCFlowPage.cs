@@ -28,7 +28,7 @@ namespace BP.WF
                 foreach (string para in paras)
                 {
                     if (para == null
-                        || para == ""
+                        || para.Equals("") == true
                         || para.Contains("=") == false)
                         continue;
                     urlExt += "&" + para;
@@ -174,7 +174,7 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(s) )
                     s = this.Request.QueryString["No"];
 
-                if (s == null || s == "")
+                if (s == null || s.Equals(""))
                     s = null;
                 return s;
             }

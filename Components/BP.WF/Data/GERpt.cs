@@ -523,8 +523,8 @@ namespace BP.WF.Data
                       || attr.Key == GERptAttr.Title
                       || attr.Key == GERptAttr.PrjNo
                       || attr.Key == GERptAttr.PrjName
-                      || attr.Key == "No"
-                      || attr.Key == "Name")
+                      || attr.Key.Equals("No")
+                      || attr.Key.Equals("Name"))
                     continue;
 
                 if (attr.Key == GERptAttr.MyNum)

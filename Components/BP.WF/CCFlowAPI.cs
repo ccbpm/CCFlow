@@ -324,7 +324,7 @@ namespace BP.WF
                     if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
                     {
                         string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + workID, 0).ToString();
-                        if (pWorkID == null || pWorkID == "0")
+                        if (pWorkID == null || pWorkID.Equals("0") ==true)
                             pWorkID = workID.ToString();
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
@@ -366,11 +366,11 @@ namespace BP.WF
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
-                    if (lgType != "2")
+                    if (lgType.Equals("2") ==false)
                         continue;
 
                     string UIIsEnable = dr["UIVisible"].ToString();
-                    if (UIIsEnable == "0")
+                    if (UIIsEnable.Equals("0")==true)
                         continue;
 
                     string uiBindKey = dr["UIBindKey"].ToString();
@@ -719,11 +719,11 @@ namespace BP.WF
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
-                    if (lgType != "2")
+                    if (lgType.Equals("2") ==false)
                         continue;
 
                     string UIIsEnable = dr["UIIsEnable"].ToString();
-                    if (UIIsEnable == "0")
+                    if (UIIsEnable.Equals("0") == true)
                         continue;
 
                     string uiBindKey = dr["UIBindKey"].ToString();

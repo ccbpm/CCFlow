@@ -392,14 +392,14 @@ namespace BP.WF
 				{
 					string lgType = dr["LGType"].ToString();
 					//不是枚举/外键字段
-					if (lgType == "0")
+					if (lgType.Equals("0"))
 						continue;
 
 					string uiBindKey = dr["UIBindKey"].ToString();
 					var mypk = dr["MyPK"].ToString();
 
 					#region 枚举字段
-					if (lgType == "1")
+					if (lgType.Equals("1") )
 					{
 						// 如果是枚举值, 判断是否存在.
 						if (myds.Tables.Contains(uiBindKey) == true)
@@ -414,7 +414,7 @@ namespace BP.WF
 					#endregion
 
 					string UIIsEnable = dr["UIIsEnable"].ToString();
-					if (UIIsEnable == "0") //字段未启用
+					if (UIIsEnable.Equals("0")) //字段未启用
 						continue;
 
 					#region 外键字段
@@ -564,7 +564,7 @@ namespace BP.WF
 				string uiBindKey = dr["UIBindKey"].ToString();
 				string myPK = dr["MyPK"].ToString();
 				string lgType = dr["LGType"].ToString();
-				if (lgType == "1")
+				if (lgType.Equals("1") )
 				{
 					// 如果是枚举值, 判断是否存在., 
 					if (myds.Tables.Contains(uiBindKey) == true)
@@ -577,11 +577,11 @@ namespace BP.WF
 					continue;
 				}
 
-				if (lgType != "2")
+				if (lgType.Equals("2") ==false)
 					continue;
 
 				string UIIsEnable = dr["UIIsEnable"].ToString();
-				if (UIIsEnable == "0")
+				if (UIIsEnable.Equals("0"))
 					continue;
 
 				// 检查是否有下拉框自动填充。

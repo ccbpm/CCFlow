@@ -957,8 +957,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
@@ -1052,7 +1050,6 @@
     <Content Include="WF\CCForm\Pub.ascx" />
     <Content Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx" />
     <Content Include="WF\Comm\MethodLink.htm" />
-    <Content Include="WF\Comm\Batch.aspx" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
     <Content Include="WF\Comm\Charts\css\Style.css" />
     <Content Include="WF\Comm\Charts\css\style_3.css" />
@@ -1107,7 +1104,6 @@
     <Content Include="WF\Comm\DataHelp.htm" />
     <Content Include="WF\Comm\Do.aspx" />
     <Content Include="WF\Comm\En.htm" />
-    <Content Include="WF\Comm\Ens.aspx" />
     <Content Include="WF\Comm\Gener.js" />
     <Content Include="WF\Comm\Group.aspx" />
     <Content Include="WF\Comm\HelperEnsTextBox.aspx" />
@@ -6636,20 +6632,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.cs">
-      <DependentUpon>AotuGenerNo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.designer.cs">
-      <DependentUpon>AotuGenerNo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx.cs">
-      <DependentUpon>BodyAttr.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx.designer.cs">
-      <DependentUpon>BodyAttr.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx.cs">
       <DependentUpon>ExcelFrm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7093,13 +7075,6 @@
     <Compile Include="WF\CCForm\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\Batch.aspx.cs">
-      <DependentUpon>Batch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Batch.aspx.designer.cs">
-      <DependentUpon>Batch.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Charts\FCExport.aspx.cs">
       <DependentUpon>FCExport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7127,13 +7102,6 @@
     </Compile>
     <Compile Include="WF\Comm\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Ens.aspx.cs">
-      <DependentUpon>Ens.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Ens.aspx.designer.cs">
-      <DependentUpon>Ens.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Group.aspx.cs">
       <DependentUpon>Group.aspx</DependentUpon>

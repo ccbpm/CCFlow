@@ -519,16 +519,21 @@ namespace BP.Sys.FrmUI
             {
                 string sql = "";
 
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
+                MapData md = new MapData();
+                md.No = this.FK_MapData;
+                if (md.RetrieveFromDBSources() == 1)
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
 
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "alter table " + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "alter table " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "alter table " + md.PTable + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
 
-                DBAccess.RunSQL(sql);
+                    DBAccess.RunSQL(sql);
+                }
             }
             #endregion 自动扩展字段长度.
 

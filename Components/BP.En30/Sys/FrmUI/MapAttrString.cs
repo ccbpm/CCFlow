@@ -518,7 +518,6 @@ namespace BP.Sys.FrmUI
             if (attr.MaxLen < 4000)
             {
                 string sql = "";
-
                 MapData md = new MapData();
                 md.No = this.FK_MapData;
                 if (md.RetrieveFromDBSources() == 1)

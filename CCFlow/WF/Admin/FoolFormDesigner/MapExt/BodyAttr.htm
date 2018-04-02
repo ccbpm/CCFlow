@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>属性</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var frmID = GetQueryString("FK_MapData");
+            var en = new Entity("BP.Sys.MapData", frmID);
+
+            $("#TB_Attr").val(en.BodyAttr);
+            $("#Msg").html("");
+
+        });
+
+        //装载  模版.
+        function Save() {
+            var frmID = GetQueryString("FK_MapData");
+            var en = new Entity("BP.Sys.MapData", frmID);
+            en.BodyAttr = $("#TB_Attr").val();
+            en.Update();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+
+
+</head>
+<body  >
+
+<form id="cc">
+
+
+
+<table style="width:100%;">
+<caption>表单body属性</caption>
+<tr>
+<td> 
+
+<textarea id="TB_Attr" name="TB_Attr" rows="15" >
+</textarea>
+     
+    </td>
+</tr>
+
+<tr>
+<td> 
+
+<input type=button value="保存"  onclick="Save()" />
+
+    </td>
+</tr>
+
+</table>
+  
+
+</form>
+
+</body>
+</html>

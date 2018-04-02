@@ -64,13 +64,14 @@
                         var eventList = eventLists[i];
                         var msg = "";
                         if (eventList.IsHaveMsg == 1)
-                            msg = "<img src='/WF/Img/Msg.png' />";
+                            msg = "<img src='../../Img/Msg.png' />";
                         //   alert(JSON.stringify(eventList));
                         if (event == eventList.No)
                             html += "<li title='" + (eventList.Note || "") + "'><a target='_self' href='Action.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&Event=" + eventList.No + "' ><b>" + eventList.CH + msg + "</b></a></li>";
                         else
                             html += "<li title='" + (eventList.Note || "") + "'><a target='_self' href='Action.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&Event=" + eventList.No + "' >" + eventList.CH + msg + "</a></li>";
                     }
+
                     html += "</ul>";
                     html += "</div>";
 

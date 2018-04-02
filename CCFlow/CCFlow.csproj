@@ -962,8 +962,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\List.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.aspx" />
@@ -998,7 +996,6 @@
     <Content Include="WF\BatchSelfDeal.aspx" />
     <Content Include="WF\BatchStart.aspx" />
     <Content Include="WF\BatchStartGroup.aspx" />
-    <Content Include="WF\CC.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\AttachmentFix.htm" />
     <Content Include="WF\CCForm\AttachmentUpload.aspx" />
@@ -1450,7 +1447,6 @@
     <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\Focus.htm" />
-    <Content Include="WF\GetTask.aspx" />
     <Content Include="WF\HungUpList.htm" />
     <Content Include="WF\Img\Action\AskforHelp.png" />
     <Content Include="WF\Img\Action\CallChildenFlow.png" />
@@ -1706,8 +1702,6 @@
     <Content Include="WF\Img\WFState\Save.png" />
     <Content Include="WF\Img\WorkRpt.gif" />
     <Content Include="WF\Img\yaoshi.jpg" />
-    <Content Include="WF\Loading.htm" />
-    <Content Include="WF\Login.htm" />
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\PortDemo.htm" />
     <Content Include="WF\PrintSample.aspx" />
@@ -5735,7 +5729,6 @@
     <Content Include="WF\WebOffice\OfficeServices.ashx" />
     <Content Include="WF\WebOffice\OfficeView.aspx" />
     <Content Include="WF\WebOffice\TempLate.aspx" />
-    <Content Include="WF\WFRpt.aspx" />
     <Content Include="WF\WorkOpt\Accepter.htm" />
     <Content Include="WF\WorkOpt\AllotTask.aspx" />
     <Content Include="WF\WorkOpt\Askfor.aspx" />
@@ -6670,13 +6663,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.aspx.designer.cs">
       <DependentUpon>PageLoadFull.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.aspx.cs">
-      <DependentUpon>PopVal.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.aspx.designer.cs">
-      <DependentUpon>PopVal.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.aspx.cs">
       <DependentUpon>RadioBtns.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6864,13 +6850,6 @@
     </Compile>
     <Compile Include="WF\BatchStartGroup.aspx.designer.cs">
       <DependentUpon>BatchStartGroup.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CC.aspx.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CC.aspx.designer.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\AttachmentUpload.aspx.cs">
       <DependentUpon>AttachmentUpload.aspx</DependentUpon>
@@ -7442,13 +7421,6 @@
     <Compile Include="WF\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\GetTask.aspx.cs">
-      <DependentUpon>GetTask.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\GetTask.aspx.designer.cs">
-      <DependentUpon>GetTask.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -7781,13 +7753,6 @@
     </Compile>
     <Compile Include="WF\WebOffice\TempLate.aspx.designer.cs">
       <DependentUpon>TempLate.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WFRpt.aspx.cs">
-      <DependentUpon>WFRpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WFRpt.aspx.designer.cs">
-      <DependentUpon>WFRpt.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WinOpen.master.cs">
       <DependentUpon>WinOpen.master</DependentUpon>

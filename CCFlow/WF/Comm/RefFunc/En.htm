@@ -429,7 +429,7 @@
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
-                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",540,450,true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
 
             if ( html=="" ||  parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
@@ -439,14 +439,13 @@
         }
         function OPenFun(url, warning, title, w, h) {
             if (warning == "null" || warning == "")
-                OpenEasyUiDialogExt(url, title, w, h, false);
+                warning = "确定要执行吗？";
             else {
                 warning = warning.replace(/,\s+/g, ",");
                 warning = warning.replace(/\s+/g, "\r\n");
-
-                if (confirm("\"" + warning + "\"")) {
-                    OpenEasyUiDialogExt(url, title, w, h, false);
-                }
+            }
+            if (confirm("\"" + warning + "\"")) {
+                OpenEasyUiDialogExt(url, title, 540, 450, false);
             }
         }
 

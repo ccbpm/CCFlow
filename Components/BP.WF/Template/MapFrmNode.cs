@@ -275,7 +275,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/RegularExpression.png";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+               // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "JS编程"; // "设计表单";
@@ -395,7 +395,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //map.AddRefMethod(rm);
                 #endregion 高级设置.
 
                 #region 方法 - 开发接口.
@@ -407,12 +407,12 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
                 rm.GroupName = "开发接口";
-                map.AddRefMethod(rm);
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "调用分析API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoGroup";
-                rm.Icon ="../../Img/Table.gif";
+                rm.Icon = "../../WF/Img/Table.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";

@@ -72,9 +72,9 @@
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
 
-            var url = "En.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
+            var url = "EnOnly.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
-            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 800, 450, "icon-edit", false, function () { }, null, function () {
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 540, 450, "icon-edit", false, function () { }, null, function () {
                 
                 //location = location;
 
@@ -147,7 +147,7 @@
                     mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
                     if (mapAttr.UIVisible == "0")
                     {
-                        hidden += "<input type='hidden' id='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' name='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
+                        html += "<input type='hidden' id='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' name='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
                         continue;
                     }
 
@@ -409,6 +409,7 @@
             var dtl = new Entity(enName);
             newRowIdx++;
             dtl.OID = newRowIdx;
+            dtl.RefPK = GetQueryString("RefVal");
 
             var mapAtrrs = frmData.Sys_MapAttr;
 
@@ -423,7 +424,7 @@
                 var mapAttr = mapAtrrs[attrIdx];
                 mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
                 if (mapAttr.UIVisible == "0") {
-                    hidden += "<input type='hidden' id='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' name='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
+                    html += "<input type='hidden' id='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' name='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
                     continue;
                 }
                 html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, newRowIdx) + "</td>";
@@ -442,7 +443,8 @@
             handler.AddUrlData();  //增加参数属性.
             handler.AddFormData();
 
-            var data=handler.DoMethodReturnString("Dtl_Save");
+            var data = handler.DoMethodReturnString("Dtl_Save");
+            console.log(handler.getParams());
             if (data.indexOf("err@")==0)
             {    
               alert(data);
@@ -482,7 +484,9 @@
 </head>
 <body>
 
-     <div id="Btns"></div>
+     <div id="Btns">
+        <input type='button' value='保存' id='Btn_Save' onclick='Save()' />
+     </div>
      <div id="Msg"></div>
        
                 <form id="divCCForm"  method="post">

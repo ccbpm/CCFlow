@@ -876,7 +876,7 @@ namespace BP.WF.HttpHandler
             if (this.PageIdx == 1)
             {
                 ur.SetPara("RecCount", qo.GetCount());
-                ur.Update();
+                ur.Save();
             }
 
             qo.DoQuery(en.PK,this.PageSize,this.PageIdx);
@@ -1052,34 +1052,55 @@ namespace BP.WF.HttpHandler
                 if (pk == null)
                     pk = this.PKVal;
 
-                en.PKVal = pk;
-                en.Retrieve();
-                rm.HisEn = en;
+                if (pk == null)
+                    return "err@错误pkval 没有值。";
 
-                // 如果是link.
-                if (rm.RefMethodType == RefMethodType.LinkModel
-                    || rm.RefMethodType == RefMethodType.LinkeWinOpen
-                    || rm.RefMethodType == RefMethodType.RightFrameOpen )
+                string infos = "";
+
+                string[] pks = pk.Split(',');
+
+                foreach (string mypk in pks)
                 {
-                    string url = rm.Do(null) as string;
-                    if (string.IsNullOrEmpty(url))
-                        return "err@应该返回的url.";
 
-                    return "url@" + url;
+                    en.PKVal = mypk;
+                    en.Retrieve();
+                    rm.HisEn = en;
+
+                    // 如果是link.
+                    if (rm.RefMethodType == RefMethodType.LinkModel
+                        || rm.RefMethodType == RefMethodType.LinkeWinOpen
+                        || rm.RefMethodType == RefMethodType.RightFrameOpen)
+                    {
+                        string url = rm.Do(null) as string;
+                        if (string.IsNullOrEmpty(url))
+                        {
+                            infos += "err@应该返回的url.";
+                            break;
+                        }
+
+                        infos += "url@" + url;
+                        break;
+                    }
+
+                    object obj = rm.Do(null);
+                    if (obj == null)
+                    {
+                        infos += "close@info";
+                        break;
+                    }
+
+                    string result = obj.ToString();
+                    if (result.IndexOf("url@") != -1)
+                    {
+                        infos += result;
+                        break;
+                    }
+
+                    result = result.Replace("@", "\t\n");
+                    infos += "close@" + result;
                 }
 
-                object obj = rm.Do(null);
-                if (obj == null)
-                {
-                    return "close@info";
-                }
-
-                string info = obj.ToString();
-                if (info.IndexOf("url@") != -1)
-                    return info;
-
-                info = info.Replace("@", "\t\n");
-                return "close@" + info;
+                return infos;
             }
             #endregion 处理无参数的方法.
 
@@ -1179,6 +1200,168 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
+
+        public string Entitys_Init()
+        {
+            //定义容器.
+            DataSet ds = new DataSet();
+
+            //查询出来从表数据.
+            Entities dtls = ClassFactory.GetEns(this.EnsName);
+            ds.Tables.Add(dtls.ToDataTableField("Ens"));
+
+            //实体.
+            Entity dtl = dtls.GetNewEntity;
+            //定义Sys_MapData.
+            MapData md = new MapData();
+            md.No = this.EnName;
+            md.Name = dtl.EnDesc;
+
+            #region 加入权限信息.
+            //把权限加入参数里面.
+            if (dtl.HisUAC.IsInsert)
+                md.SetPara("IsInsert", "1");
+            if (dtl.HisUAC.IsUpdate)
+                md.SetPara("IsUpdate", "1");
+            if (dtl.HisUAC.IsDelete)
+                md.SetPara("IsDelete", "1");
+            #endregion 加入权限信息.
+
+            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
+
+            #region 字段属性.
+            MapAttrs attrs = dtl.EnMap.Attrs.ToMapAttrs;
+            DataTable sys_MapAttrs = attrs.ToDataTableField("Sys_MapAttr");
+            ds.Tables.Add(sys_MapAttrs);
+            #endregion 字段属性.
+
+            #region 把外键与枚举放入里面去.
+            foreach (DataRow dr in sys_MapAttrs.Rows)
+            {
+                string uiBindKey = dr["UIBindKey"].ToString();
+                string lgType = dr["LGType"].ToString();
+                if (lgType.Equals("2") == false)
+                    continue;
+
+                string UIIsEnable = dr["UIVisible"].ToString();
+                if (UIIsEnable == "0")
+                    continue;
+
+                if (string.IsNullOrEmpty(uiBindKey) == true)
+                {
+                    string myPK = dr["MyPK"].ToString();
+                    /*如果是空的*/
+                    //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                }
+
+                // 检查是否有下拉框自动填充。
+                string keyOfEn = dr["KeyOfEn"].ToString();
+                string fk_mapData = dr["FK_MapData"].ToString();
+
+
+                // 判断是否存在.
+                if (ds.Tables.Contains(uiBindKey) == true)
+                    continue;
+
+                ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+            }
+
+            string enumKeys = "";
+            foreach (Attr attr in dtl.EnMap.Attrs)
+            {
+                if (attr.MyFieldType == FieldType.Enum)
+                {
+                    enumKeys += "'" + attr.UIBindKey + "',";
+                }
+            }
+
+            if (enumKeys.Length > 2)
+            {
+                enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
+                // Sys_Enum
+                string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                dtEnum.TableName = "Sys_Enum";
+
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    dtEnum.Columns["MYPK"].ColumnName = "MyPK";
+                    dtEnum.Columns["LAB"].ColumnName = "Lab";
+                    dtEnum.Columns["ENUMKEY"].ColumnName = "EnumKey";
+                    dtEnum.Columns["INTKEY"].ColumnName = "IntKey";
+                    dtEnum.Columns["LANG"].ColumnName = "Lang";
+                }
+                ds.Tables.Add(dtEnum);
+            }
+            #endregion 把外键与枚举放入里面去.
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        #region 获取批处理的方法.
+        public string Refmethod_BatchInt()
+        {
+            string ensName = this.EnsName;
+            Entities ens = BP.En.ClassFactory.GetEns(ensName);
+            Entity en = ens.GetNewEntity;
+            BP.En.RefMethods rms = en.EnMap.HisRefMethods;
+            DataTable dt = new DataTable();
+             dt.TableName = "RM";
+             dt.Columns.Add("No");
+             dt.Columns.Add("Title");
+             dt.Columns.Add("Tip");
+             dt.Columns.Add("Visable");
+
+             dt.Columns.Add("Url");
+             dt.Columns.Add("Target");
+             dt.Columns.Add("Warning");
+             dt.Columns.Add("RefMethodType");
+             dt.Columns.Add("GroupName");
+             dt.Columns.Add("W");
+             dt.Columns.Add("H");
+             dt.Columns.Add("Icon");
+             dt.Columns.Add("IsCanBatch");
+             dt.Columns.Add("RefAttrKey");
+             foreach (RefMethod item in rms)
+            {
+                if (item.IsCanBatch == false)
+                    continue;
+                DataRow mydr = dt.NewRow();
+                string myurl = "";
+                if (item.RefMethodType != RefMethodType.Func)
+                {
+                    myurl = item.Do(null) as string;
+                    if (myurl == null)
+                        continue;
+                }
+                else
+                {
+                    myurl = "../Comm/RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=" + this.PKVal;
+                }
+
+                DataRow dr = dt.NewRow();
+
+                dr["No"] = item.Index;
+                dr["Title"] = item.Title;
+                dr["Tip"] = item.ToolTip;
+                dr["Visable"] = item.Visable;
+                dr["Warning"] = item.Warning;
+
+                dr["RefMethodType"] = (int)item.RefMethodType;
+                dr["RefAttrKey"] = item.RefAttrKey;
+                dr["URL"] = myurl;
+                dr["W"] = item.Width;
+                dr["H"] = item.Height;
+                dr["Icon"] = item.Icon;
+                dr["IsCanBatch"] = item.IsCanBatch;
+                dr["GroupName"] = item.GroupName;
+                dt.Rows.Add(dr);
+            }
+            
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
+
         public string Refmethod_Done()
         {
             Entities ens = BP.En.ClassFactory.GetEns(this.EnsName);

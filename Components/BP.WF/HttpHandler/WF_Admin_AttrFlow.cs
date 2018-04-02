@@ -143,6 +143,8 @@ namespace BP.WF.HttpHandler
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
             string str = fl.DoCheck();
             str = str.Replace("@", "<BR>@");
+            str = str.Replace("@警告", "<label style='color:yellow ;'>@警告</label>");
+            str = str.Replace("@错误", "<label style='color:red ;'>@错误</label>");
 
             if (str == "")
                 str = "检查成功.";

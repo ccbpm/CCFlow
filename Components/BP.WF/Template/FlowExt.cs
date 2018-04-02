@@ -544,10 +544,10 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "一键设置审核组件工作模式";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
-                rm.ClassMethodName = this.ToString() + ".DoSetFWCModel()";
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 第2个节点以后的节点表单都指向第2个节点表单.  \t\n  2, 结束节点都设置为只读模式. ";
                 rm.GroupName = "实验中的功能";
+                rm.ClassMethodName = this.ToString() + ".DoSetFWCModel()";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();

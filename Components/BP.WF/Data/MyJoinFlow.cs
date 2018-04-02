@@ -742,6 +742,7 @@ namespace BP.WF.Data
 
                 //隐藏字段.
                 map.AddTBInt(MyFlowAttr.FK_Node, 0, "FK_Node", false, false);
+                
 
                 map.AddTBMyNum();
 
@@ -789,6 +790,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoOpenLastForm()
         {
+
             Paras pss = new Paras();
             pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
             pss.Add("ActionType", (int)BP.WF.ActionType.Forward);

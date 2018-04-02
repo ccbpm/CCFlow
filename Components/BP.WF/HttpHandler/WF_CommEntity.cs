@@ -312,18 +312,15 @@ namespace BP.WF.HttpHandler
                 //把权限加入参数里面.
                 if (en.HisUAC.IsInsert)
                     md.SetPara("IsInsert", "1");
-
+                if (en.HisUAC.IsUpdate)
+                    md.SetPara("IsUpdate", "1");
                 if (isBlank == true)
-                {
-                    if (en.HisUAC.IsUpdate)
-                        md.SetPara("IsUpdate", "0");
+                {                   
                     if (en.HisUAC.IsDelete)
                         md.SetPara("IsDelete", "0");
                 }
                 else
                 {
-                    if (en.HisUAC.IsUpdate)
-                        md.SetPara("IsUpdate", "1");
                     if (en.HisUAC.IsDelete)
                         md.SetPara("IsDelete", "1");
                 }
@@ -975,7 +972,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                string eles = this.GetRequestVal("Eles");
+                string eles = this.GetRequestVal("ElesAAA");
 
                 //实体集合.
                 string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");

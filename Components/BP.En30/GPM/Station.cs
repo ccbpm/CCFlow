@@ -86,8 +86,8 @@ namespace BP.GPM
                 map.Java_SetDepositaryOfEntity( Depositary.Application);
                 map.Java_SetCodeStruct("4");
 
-                map.AddTBStringPK(EmpAttr.No, null, "编号", true, true, 4, 4, 36);
-                map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 100, 200);
+                map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
+                map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
                 map.AddTBStringDoc(StationAttr.DutyReq, null, "职责要求", true, false, true);
                 map.AddTBStringDoc(StationAttr.Makings, null, "素质要求", true, false, true);

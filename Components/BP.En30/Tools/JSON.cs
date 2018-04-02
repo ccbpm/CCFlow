@@ -224,7 +224,7 @@ namespace BP.Tools
         /// </summary> 
         /// <param name="table">Datatable对象</param> 
         /// <returns>Json字符串</returns> 
-        private static string DataTableToJson(DataTable dt, bool isUpperColumn=true)
+        public static string DataTableToJson(DataTable dt, bool isUpperColumn=true)
         {
             StringBuilder jsonString = new StringBuilder();
             if (dt.Rows.Count == 0)

@@ -1546,7 +1546,9 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.HisStas, value);
             }
         }
-
+        /// <summary>
+        /// 单据IDs
+        /// </summary>
         public string HisBillIDs
         {
             get

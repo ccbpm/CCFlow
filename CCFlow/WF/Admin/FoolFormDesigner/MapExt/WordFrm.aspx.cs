@@ -53,8 +53,6 @@ namespace CCFlow.WF.MapDef.MapExtUI
         {
             MapData ath = new MapData(this.FK_MapData);
 
-            
-
             #region WebOffice控制方式.
             this.Pub1.AddTable("class='Table' cellpadding='0' cellspacing='0' border='0' style='width:100%'");
 

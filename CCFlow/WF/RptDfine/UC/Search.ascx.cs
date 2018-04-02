@@ -386,7 +386,7 @@ namespace CCFlow.WF.Rpt
 
                     if(attr.Key == "Title")
                     {
-                        this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
+                        this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.htm?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
                         continue;
                     }
 

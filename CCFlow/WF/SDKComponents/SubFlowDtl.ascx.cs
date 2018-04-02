@@ -164,7 +164,7 @@ namespace CCFlow.WF.SDKComponents
                         if (sf.SFOpenType == 0)
                         {
                             this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",
-                                "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&PWorkID=" + item.PWorkID + "&PFlowNo=" + item.PFlowNo + "&PNodeID=" + item.PNodeID + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                                "<a href=\"javascript:OpenIt('../WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&PWorkID=" + item.PWorkID + "&PFlowNo=" + item.PFlowNo + "&PNodeID=" + item.PNodeID + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
                         }
                         else
                         {
@@ -221,7 +221,7 @@ namespace CCFlow.WF.SDKComponents
                 }
 
                 this.AddTR();
-                this.AddTD("style='word-break:break-all;' title='"+item.Title+"' ", DataType.GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                this.AddTD("style='word-break:break-all;' title='"+item.Title+"' ", DataType.GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('../WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
                 this.AddTD(item.NodeName); //到达节点名称.
                 if (item.WFState == WFState.Complete)
                     this.AddTD("已完成");

@@ -299,7 +299,7 @@ namespace BP.Web.WF
                     case "WorkRpt":
                         Bill bk1 = new Bill(this.Request.QueryString["OID"]);
                         Node nd = new Node(bk1.FK_Node);
-                        this.Response.Redirect("WFRpt.aspx?WorkID=" + bk1.WorkID + "&FID=" + bk1.FID + "&FK_Flow=" + nd.FK_Flow + "&NodeId=" + bk1.FK_Node, false);
+                        this.Response.Redirect("WFRpt.htm?WorkID=" + bk1.WorkID + "&FID=" + bk1.FID + "&FK_Flow=" + nd.FK_Flow + "&NodeId=" + bk1.FK_Node, false);
                         //this.WinOpen();
                         //this.WinClose();
                         break;

@@ -1264,8 +1264,8 @@ namespace CCFlow.WF.Rpt
                 idx++;
                 this.UCSys1.AddTR();
                 this.UCSys1.AddTDIdx(idx);
-                // this.UCSys1.AddTD("<a href=\"javascript:WinOpen('./../WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" ><img src='/WF/Img/Track.png' border=0 />" + en.GetValByKey("Title") + "</a>");
-                this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
+                // this.UCSys1.AddTD("<a href=\"javascript:WinOpen('./../WFRpt.htm?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" ><img src='/WF/Img/Track.png' border=0 />" + en.GetValByKey("Title") + "</a>");
+                this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.htm?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
 
                 //this.UCSys1.AddTD("<img src='/WF/Img/Track.png' border=0 />" + en.GetValByKey("Title")  );
 

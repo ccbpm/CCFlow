@@ -150,7 +150,7 @@ function saveAttribute(data)
                     return;
                 }
             }
-            
+
             var sRelation = $('#relation_'+id).val();
 
             if( bAdd ){
@@ -228,7 +228,7 @@ function saveAttribute(data)
                     s = "<tr>"+s+"<tr>";
                     $('#ctbody').append(s);
                     ids += id +',';
-                    
+
                     if(_out_condition_data)
                     {
                         $.each(_out_condition_data,function(i,n){
@@ -259,10 +259,10 @@ function saveAttribute(data)
             {
                 $("#process_condition").val(ids);
             }
-  
+
         }
     }
-    
+
 //-----条件设置--end----------------
 
 $(function(){
@@ -272,13 +272,13 @@ $(function(){
         $(this).tab('show');
       if($(this).attr("href")=='#attrJudge')
       {
-          //加载下一步数据 处理 决策项目 
+          //加载下一步数据 处理 决策项目
       }
     })
 
   //步骤类型
   $('input[name="process_type"]').on('click',function(){
-     
+
       if($(this).val()=='is_child')
       {
           $('#current_flow').hide();
@@ -291,7 +291,7 @@ $(function(){
   });
   //返回步骤
   $('input[name="child_after"]').on('click',function(){
-     
+
       if($(this).val()==2)
       {
           $("#child_back_id").show();
@@ -300,7 +300,7 @@ $(function(){
           $("#child_back_id").hide();
       }
   });
-  
+
     //步骤select 2
   $('#process_multiple').multiselect2side({
       selectedPosition: 'left',
@@ -346,7 +346,7 @@ $(function(){
 
 
   });
- 
+
 
 
 
@@ -438,7 +438,7 @@ $(function(){
       }
       var color = self.attr('org-data') ? self.attr('org-data') : '';
 
-     
+
       var parentDiv = self.parents(".colors");
       var orgBind = parentDiv.attr("org-bind");
       if(orgBind == 'style_icon')

@@ -70,28 +70,15 @@ namespace BP.WF.Template
                 #endregion  基础属性
 
                 #region 对应关系
-                // 相关功能。
-                if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                {
-                    //平铺模式.
-                    map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
-                        BP.WF.Template.NodeStationAttr.FK_Node,
-                        BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
-                    map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
-                      BP.WF.Template.NodeStationAttr.FK_Node,
-                      BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddGroupListModel", StationAttr.FK_StationType);
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                    BP.WF.Template.NodeStationAttr.FK_Node,
+                    BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
-                }
-                else
-                {
-                    //节点岗位.
-                    map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(),
-                        new BP.GPM.Stations(),
-                      NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
-                       "节点绑定岗位", BP.GPM.StationAttr.FK_StationType);
-
-                }
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                  BP.WF.Template.NodeStationAttr.FK_Node,
+                  BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddGroupListModel", StationAttr.FK_StationType);
 
 
                 //节点绑定部门. 节点绑定部门.
@@ -104,9 +91,6 @@ namespace BP.WF.Template
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(), new BP.Port.Emps(),
                    BP.WF.Template.NodeEmpAttr.FK_Node,
                    BP.WF.Template.NodeEmpAttr.FK_Emp, "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
-                 
-
-
 
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 

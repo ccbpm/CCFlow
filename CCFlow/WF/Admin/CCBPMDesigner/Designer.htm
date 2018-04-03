@@ -521,30 +521,11 @@
                                   var activeId = _canvas.getActiveId(); //右键当前的ID
                                   var windowtext = $("#window" + activeId).text();
                                   var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                                  var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(" + activeId + ")");
                                   var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
                                   var spanaa = $("#window" + activeId + " span").html();
 
                                   cAlert(xiuNodename);
-
-                                  $('.savetext' + activeId).on('click', function () {
-
-                                      var windowtext = $("#window" + activeId).text(); //旧数据.
-                                      var text = document.getElementById("TB_" + activeId).value; //新修改的值.
-                                      if (windowtext == text)
-                                          return;
-
-                                      var node = new Entity("BP.WF.Node", activeId);
-                                      node.Name = text;
-                                      node.Update();
-
-                                      //更新节点名称与显示
-                                      $("#window" + activeId).text(text);
-                                      //设置修改后的值没有设置成功. @Brilliant  
-                                      var savspan = document.querySelector("#window" + activeId + " span");
-                                      console.log(savspan);
-                                      $("#window" + activeId).html(savspan).append(text); //旧数据.
-                                      //location.reload();
-                                  })
 
                               }
                               , fnDbClick: function () {
@@ -554,7 +535,7 @@
 
                               }
             });
-
+            
             /*保存*/
             $("#Btn_Save").bind('click', function () {
 
@@ -650,7 +631,20 @@
             });
 
         });
+        //修改节点名称
+        function saveNodeName(activeId) {
+            var windowtext = $("#window" + activeId).text(); //旧数据.
+            var text = document.getElementById("TB_" + activeId).value; //新修改的值.
+            if (windowtext == text)
+                return;
 
+            var node = new Entity("BP.WF.Node", activeId);
+            node.Name = text;
+            node.Update();
+
+            //更新节点名称与显示
+            $("#window" + activeId).text(text);
+        }
         //获得流程数据.
         function GenerDrowFlowData() {
 

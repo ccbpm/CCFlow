@@ -14,6 +14,7 @@
     <script type="text/javascript">
 
         var selectedEles = null;
+
         var mapExt = null;
 
         $(function () {
@@ -35,9 +36,6 @@
             selectedEles.ensName = dot2DotEnsName;
             selectedEles.Retrieve(AttrOfOneInMM, GetPKVal());
 
-             //alert(selectedEles.length);
-             //selectedEles.ensName = EnsOfMM;
-
             if (defaultGroupAttrKey == "" || defaultGroupAttrKey == "null") {
                 BindListModel();
             } else {
@@ -50,7 +48,7 @@
             var enName = GetQueryString("EnName"); // 主表实体. A实体.
             var EnsOfMM = GetQueryString("EnsOfMM"); //存储实体.
             var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
-
+            var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应主表的外键.
             //获得列表实体, 查询全部.
             var ensOfM = GetQueryString("EnsOfM"); // 主表实体. A实体.
             var entities = new Entities(ensOfM);
@@ -86,7 +84,7 @@
                     if (ele == null || ele == undefined)
                         continue;
 
-                    if (ele.RefPKVal == en.No) {
+                    if (ele[AttrOfMInMM] == en.No) {
                         isHave = true;
                         break;
                     }
@@ -99,8 +97,10 @@
                 myNum++;
                 if (myNum == 0)
                     html += "<TR>";
-
-                html += "<td><input type='checkbox' name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                if (isHave == true)
+                    html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                else
+                    html += "<td><input type='checkbox' class='dot2_checkbox'  name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
 
                 if (myNum == 2) {
                     html += "</tr>";
@@ -221,10 +221,10 @@
                     if (myNum == 0)
                         html += "<TR>";
 
-                  if (isHave==true)
-                      html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
-                  else
-                      html += "<td><input type='checkbox' class='dot2_checkbox'  name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                    if (isHave == true)
+                        html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                    else
+                        html += "<td><input type='checkbox' class='dot2_checkbox'  name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
 
 
                     if (myNum == 2) {
@@ -253,9 +253,9 @@
         //选择与取消选择.
         function CheckAll(checked, no) {
 
-//            $("input[name='" + no + "']").each(function () {
-//                this.checked = checked;
-//            });
+            //            $("input[name='" + no + "']").each(function () {
+            //                this.checked = checked;
+            //            });
             //获取name=box的复选框 遍历输出复选框
             $("input[class='dot2_checkbox']").each(function () {
                 this.checked = userids;
@@ -272,7 +272,7 @@
             cbs.each(function () {
                 if (this.id.indexOf('CB_') == -1)
                     return true;
-                strs += "," + this.value;
+                strs += "," + this.defaultValue;
             });
 
             //处理
@@ -334,14 +334,14 @@
  <input type=button id="Btn_Save" onclick="Save();" style="display: none;" value="Save"/>
  <div id="Msg"> </div>
  <script type="text/javascript">
-    $(function(){
+     $(function () {
          //给全选的复选框添加事件
-        $("#SelectAll").click(function () {
+         $("#SelectAll").click(function () {
              // this 全选的复选框
-             var userids=this.checked;
+             var userids = this.checked;
              //获取name=box的复选框 遍历输出复选框
              $("input[class='dot2_checkbox']").each(function () {
-                 this.checked=userids;
+                 this.checked = userids;
              });
          });
      });

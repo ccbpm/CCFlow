@@ -643,7 +643,8 @@
             node.Update();
 
             //更新节点名称与显示
-            $("#window" + activeId).text(text);
+            var savspan = document.querySelector("#window" + activeId + " span");
+            $("#window" + activeId).html(savspan).append(text);
         }
         //获得流程数据.
         function GenerDrowFlowData() {

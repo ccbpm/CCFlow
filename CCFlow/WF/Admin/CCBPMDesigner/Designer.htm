@@ -633,18 +633,13 @@
         });
         //修改节点名称
         function saveNodeName(activeId) {
-            var windowtext = $("#window" + activeId).text(); //旧数据.
             var text = document.getElementById("TB_" + activeId).value; //新修改的值.
-            if (windowtext == text)
-                return;
-
             var node = new Entity("BP.WF.Node", activeId);
             node.Name = text;
             node.Update();
 
             //更新节点名称与显示
-            var savspan = document.querySelector("#window" + activeId + " span");
-            $("#window" + activeId).html(savspan).append(text);
+            $("#span_" + activeId).text(text);
         }
         //获得流程数据.
         function GenerDrowFlowData() {

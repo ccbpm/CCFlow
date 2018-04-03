@@ -229,6 +229,7 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
+                #region 字段.
                 Map map = new Map("WF_Node", "选择器");
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
@@ -255,19 +256,30 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(SelectorAttr.SelectorP3, null, "默认选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP4, null, "强制选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, true);
 
-                //map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数,可以为空", true, false, true);
-                //map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源", true, false, true);
+                #endregion 
 
-                // 相关功能。
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
-                    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
-                    DeptAttr.Name, DeptAttr.No, "节点岗位");
+                #region 对应关系
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                    BP.WF.Template.NodeStationAttr.FK_Node,
+                    BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(平铺)", StationAttr.FK_StationType,"Name","No");
 
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
-                DeptAttr.No, "节点部门", Dot2DotModel.Default);
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                  BP.WF.Template.NodeStationAttr.FK_Node,
+                  BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(树)", StationAttr.FK_StationType,"Name","No");
 
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeEmps(), new BP.WF.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
-                    DeptAttr.No, "接受人员", Dot2DotModel.Default);
+
+                //节点绑定部门. 节点绑定部门.
+                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
+                   BP.WF.Template.NodeDeptAttr.FK_Node,
+                   BP.WF.Template.NodeDeptAttr.FK_Dept, "绑定部门", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(), new BP.Port.Emps(),
+                   BP.WF.Template.NodeEmpAttr.FK_Node,
+                   BP.WF.Template.NodeEmpAttr.FK_Emp, "绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                #endregion
+                 
 
 
                 this._enMap = map;

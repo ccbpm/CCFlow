@@ -22,7 +22,6 @@ namespace BP.WF.Template
         /// 保存是否启用
         /// </summary>
         public const string BtnSaveEnable = "BtnSaveEnable";
-
         /// <summary>
         /// 删除标签
         /// </summary>
@@ -201,7 +200,6 @@ namespace BP.WF.Template
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapFrmNodeAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapFrmNodeAttr.FrmType);
                 #endregion 基本属性.
- 
 
                 #region 设计者信息.
                 map.AddTBString(MapFrmNodeAttr.Designer, null, "设计者", true, false, 0, 500, 20);
@@ -466,23 +464,7 @@ namespace BP.WF.Template
             BP.DA.DBAccess.RunSQL(sql);
             return "重置成功,您需要关闭当前H5的表单设计器然后重新打开.";
         }
-        /// <summary>
-        /// 启动自由表单设计器(SL)
-        /// </summary>
-        /// <returns></returns>
-        public string DoDesignerSL()
-        {
-            return "../../Admin/CCFormDesigner/CCFormDesignerSL.htm?FK_MapData="+this.No+"&UserNo="+Web.WebUser.No+"&SID="+BP.Web.WebUser.SID;
-        }
-        /// <summary>
-        /// 启动自由表单设计器(h5)
-        /// </summary>
-        /// <returns></returns>
-        public string DoDesignerH5()
-        {
-            // WF/Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=ND102&UserNo=admin&SID=44a42h5gcbxnwjof2hv2pw5e
-            return "../../Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.No + "&UserNo=" + Web.WebUser.No + "&SID=" + BP.Web.WebUser.SID;
-        }
+       
         /// <summary>
         /// 傻瓜表单设计器
         /// </summary>
@@ -803,7 +785,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBodyAttr()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
+            return "../../Admin/FoolFormDesigner/MapExt/BodyAttr.htm?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
         }
         /// <summary>
         /// 表单事件

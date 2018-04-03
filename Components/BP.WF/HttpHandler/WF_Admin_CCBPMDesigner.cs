@@ -733,8 +733,8 @@ namespace BP.WF.HttpHandler
                 string figureName = this.GetValFromFrmByKey("FigureName");
                 string x = this.GetValFromFrmByKey("x");
                 string y = this.GetValFromFrmByKey("y");
-                int iX = 0;
-                int iY = 0;
+                int iX = 20;
+                int iY = 20;
                 if (!string.IsNullOrEmpty(x)) iX = (int)double.Parse(x);
                 if (!string.IsNullOrEmpty(y)) iY = (int)double.Parse(y);
 

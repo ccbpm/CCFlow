@@ -1146,10 +1146,12 @@ namespace BP.WF
             }
             set
             {
-                this.SetValByKey(NodeAttr.X, value);
+                if (value <= 0)
+                    this.SetValByKey(NodeAttr.X, 5);
+                else
+                    this.SetValByKey(NodeAttr.X, value);
             }
         }
-
         /// <summary>
         /// y
         /// </summary>
@@ -1161,7 +1163,10 @@ namespace BP.WF
             }
             set
             {
-                this.SetValByKey(NodeAttr.Y, value);
+                if (value <= 0)
+                    this.SetValByKey(NodeAttr.Y, 5);
+                else
+                    this.SetValByKey(NodeAttr.Y, value);
             }
         }
         /// <summary>

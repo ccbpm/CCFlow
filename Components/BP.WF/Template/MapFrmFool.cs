@@ -323,7 +323,7 @@ namespace BP.WF.Template
         public string DoNodeFrmCompent()
         {
             if (this.No.Contains("ND") == true)
-                return "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+                return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
             else
                 return "../../Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
         }
@@ -617,7 +617,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBodyAttr()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
+            return "../../Admin/FoolFormDesigner/MapExt/BodyAttr.htm?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
         }
         /// <summary>
         /// 表单事件

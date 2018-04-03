@@ -70,7 +70,6 @@ namespace BP.WF.Template
                 #endregion  基础属性
 
                 #region 对应关系
-
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,

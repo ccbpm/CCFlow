@@ -2137,11 +2137,11 @@ namespace BP.En
 		}
 		public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, bool isUILine)
 		{
-			AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, 300, 300, isUILine);
+			AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, 300,10, isUILine);
 		}
 		public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly)
 		{
-			AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, 300, 300, false);
+            AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, 300, 10, false);
 		}
 		public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, int rows)
 		{

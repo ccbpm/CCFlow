@@ -995,24 +995,7 @@ namespace BP.WF.Template
 
                 #endregion 实验中的功能
 
-                #region 旧版本 .
-                rm = new RefMethod();
-                rm.GroupName = "旧版本";
-                rm.Title = "接受人规则(旧)";
-                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/Sender.png";
-                rm.ClassMethodName = this.ToString() + ".DoAccepterRoleOld";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.GroupName = "旧版本";
-                rm.Title = "表单方案(旧)";
-                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Form.png";
-                rm.ClassMethodName = this.ToString() + ".DoSheetOld";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-                #endregion 旧版本 .
+                 
 
 
                 this._enMap = map;
@@ -1093,14 +1076,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID;
         }
-        /// <summary>
-        /// 接受人规则
-        /// </summary>
-        /// <returns></returns>
-        public string DoAccepterRoleOld()
-        {
-            return "../../Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID;
-        }
+      
         /// <summary>
         /// 发送阻塞规则
         /// </summary>
@@ -1135,7 +1111,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeComponent()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal="+this.NodeID+"&t=" + DataType.CurrentDataTime;
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal="+this.NodeID+"&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 特别用户特殊字段权限.
@@ -1193,32 +1169,6 @@ namespace BP.WF.Template
             PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "ZhiDu/NodeFengXianDian.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "制度", "Bill", 700, 400, 200, 300);
             return null;
         }
-        /// <summary>
-        /// 接收人
-        /// </summary>
-        /// <returns></returns>
-        public string DoSelectAccepter()
-        {
-            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
-            if (nd.HisDeliveryWay != DeliveryWay.ByCCFlowBPM)
-                return "../../Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-            return "../../Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-        }
-        /// <summary>
-        /// 找人规则
-        /// </summary>
-        /// <returns></returns>
-        public string DoAccepterRole()
-        {
-            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
-
-            if (nd.HisDeliveryWay != DeliveryWay.ByCCFlowBPM)
-                return "../../Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-            //    return "节点访问规则您没有设置按照bpm模式，所以您能执行该操作。要想执行该操作请选择节点属性中节点规则访问然后选择按照bpm模式计算，点保存按钮。";
-
-            return "../../Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-            //   return null;
-        }
         
         public string DoTurn()
         {
@@ -1234,8 +1184,6 @@ namespace BP.WF.Template
         public string DoCCRole()
         {
             return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID; 
-            //PubClass.WinOpen("./RefFunc/UIEn.aspx?EnName=BP.WF.CC&PK=" + this.NodeID, "抄送规则", "Bill", 800, 500, 200, 300);
-            //return null;
         }
         /// <summary>
         /// 个性化接受人窗口

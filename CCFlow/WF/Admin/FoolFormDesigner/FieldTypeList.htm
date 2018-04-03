@@ -15,7 +15,7 @@
 	<script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
-		closeWhileEscUp();
+	 
 
         /* ESC Key Down */
         function Esc() {
@@ -121,7 +121,8 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.Clear();
 
-            name = encodeURIComponent(name);
+            if (plant=="CCFlow")
+                name = encodeURIComponent(name);
 
             handler.AddPara("name", name);
             handler.AddPara("FType", fType);

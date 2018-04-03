@@ -404,8 +404,11 @@ function NodeProperty_Funs(item) {
 				WinOpen(url);
 			}
 			break;
-		case "Node_EditNodeName": //修改节点名称
-			var figure = STACK.figureGetById(figureId);
+      case "Node_EditNodeName": //修改节点名称
+
+    var figure = STACK.figureGetById(figureId);
+
+
 			var tId = 1; //STACK.textGetByFigureXY(fId, x, y);
 
 			// check if we clicked a text primitive inside of shape

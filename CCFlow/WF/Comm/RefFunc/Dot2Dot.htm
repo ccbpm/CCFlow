@@ -222,9 +222,9 @@
                         html += "<TR>";
 
                     if (isHave == true)
-                        html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                        html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
                     else
-                        html += "<td><input type='checkbox' class='dot2_checkbox'  name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                        html += "<td><input type='checkbox' class='dot2_checkbox'  name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
 
 
                     if (myNum == 2) {
@@ -253,13 +253,11 @@
         //选择与取消选择.
         function CheckAll(checked, no) {
 
-            //            $("input[name='" + no + "']").each(function () {
-            //                this.checked = checked;
-            //            });
             //获取name=box的复选框 遍历输出复选框
-            $("input[class='dot2_checkbox']").each(function () {
-                this.checked = userids;
-            });
+            var checkeds = document.getElementsByName("CB_" + no);
+            for (var i = 0; i < checkeds.length; i++) {
+                checkeds[i].checked = checked;
+            }
 
         }
 

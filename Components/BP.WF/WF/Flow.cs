@@ -181,20 +181,7 @@ namespace BP.WF
         #endregion 业务数据表同步属性.
 
         #region 基础属性.
-        /// <summary>
-        /// 流程图数据
-        /// </summary>
-        public string FlowJson
-        {
-            get
-            {
-                return this.GetBigTextFromDB("FlowJson");
-            }
-            set
-            {
-                this.SaveBigTxtToDB("FlowJson", value);
-            }
-        }
+        
         /// <summary>
         /// 设计类型
         /// </summary>

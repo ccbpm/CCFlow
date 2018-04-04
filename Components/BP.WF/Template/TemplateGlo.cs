@@ -35,14 +35,6 @@ namespace BP.WF.Template
             //将流程模版保存到数据库里.
             fl.SaveFileToDB("FlowJson", tempFile);
 
-            //替换流程模板中的默认节点编号
-            string flowJson = fl.FlowJson;
-
-            //开始节点
-            flowJson = flowJson.Replace("@UserTask01@", int.Parse(flowNo) + "01");
-            //第二节点
-            flowJson = flowJson.Replace("@UserTask02@", int.Parse(flowNo) + "02");
-            fl.FlowJson = flowJson;
 
             //创建连线
             Direction drToNode = new Direction();
@@ -77,28 +69,6 @@ namespace BP.WF.Template
         {
             BP.WF.Node nd = new WF.Node(nodeid);
             nd.Delete();
-        }
-        /// <summary>
-        /// 获得流程JSON数据.
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <returns>json格式的数据</returns>
-        public static string GenerFlowJsonFromDB(string flowNo)
-        {
-            Flow fl = new Flow(flowNo);
-            return fl.FlowJson;
-        }
-        public static string GenerFlowJsonFromFile(string flowNo)
-        {
-            string tempFile = BP.Sys.SystemConfig.PathOfDataUser + "FlowDesc\\" + flowNo + ".json";
-            if (System.IO.File.Exists(tempFile) == false)
-            {
-                string json = GenerFlowJsonFromDB(flowNo);
-            }
-
-
-            Flow fl = new Flow(flowNo);
-            return fl.FlowJson;
         }
         /// <summary>
         /// 保存流程数据.

@@ -26,6 +26,7 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
         #region 从表.
         /// <summary>
         /// 初始化
@@ -249,7 +250,6 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 从表.
-
 
         #region 实体的操作.
         /// <summary>

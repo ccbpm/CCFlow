@@ -583,16 +583,6 @@ namespace BP.WF.HttpHandler
 
         #region 流程相关 Flow
         /// <summary>
-        /// 加载流程数据
-        /// </summary>
-        /// <returns>流程图数据的JSON</returns>
-        public string Designer_LoadOneFlow()
-        {
-            string flowNo = this.GetValFromFrmByKey("FK_Flow");
-            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
-            return fl.FlowJson;
-        }
-        /// <summary>
         /// 保存流程图信息
         /// </summary>
         /// <returns></returns>
@@ -617,8 +607,7 @@ namespace BP.WF.HttpHandler
             BP.WF.Flow fl = new BP.WF.Flow(flowNo);
             //修改版本
             fl.DType = fl.DType == BP.WF.CCBPM_DType.BPMN ? BP.WF.CCBPM_DType.BPMN : BP.WF.CCBPM_DType.CCBPM;
-            //直接保存了.
-            fl.FlowJson = diagram;
+
             fl.Update();
 
             //节点方向

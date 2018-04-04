@@ -2496,7 +2496,6 @@ namespace BP.WF
             string sql = "SELECT * FROM WF_Flow WHERE No='" + this.No + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Flow";
-            dt.Columns.Remove(FlowAttr.FlowJson); //删除json
             ds.Tables.Add(dt);
 
             // 节点信息

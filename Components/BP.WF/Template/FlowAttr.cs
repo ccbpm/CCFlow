@@ -349,7 +349,6 @@ namespace BP.WF.Template
         public const string PSpecEmp = "PSpecEmp";
         #endregion 权限组.
 
-        public const string FlowJson = "FlowJson";
         /// <summary>
         /// 流程发起测试人
         /// </summary>

@@ -29,12 +29,6 @@ namespace BP.WF.Template
             if (flowVer == "0")
                 return flowNo;
 
-            //确定模板
-            string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "\\WF\\Data\\Templete\\NewFlow.json";
-
-            //将流程模版保存到数据库里.
-            fl.SaveFileToDB("FlowJson", tempFile);
-
 
             //创建连线
             Direction drToNode = new Direction();

@@ -522,16 +522,19 @@ namespace BP.Sys.FrmUI
                 md.No = this.FK_MapData;
                 if (md.RetrieveFromDBSources() == 1)
                 {
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
+                    if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
+                    {
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
 
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "alter table " + md.PTable + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                            sql = "alter table " + md.PTable + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
 
-                    DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
+                    }
                 }
             }
             #endregion 自动扩展字段长度.

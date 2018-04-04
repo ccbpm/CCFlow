@@ -249,7 +249,7 @@ function EditTrack(mypk) {
 
 /// 审核组件.
 function EditFWC(mypk) {
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=审核组件';
+    var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=审核组件';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -258,7 +258,7 @@ function EditFWC(mypk) {
 //子流程.
 function EditSubFlow(mypk) {
     // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
+    var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=父子流程组件';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -268,7 +268,7 @@ function EditSubFlow(mypk) {
 //子线程.
 function EditThread(mypk) {
     // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=子线程组件';
+    var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=子线程组件';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -279,7 +279,7 @@ function EditThread(mypk) {
 //流转自定义.
 function EditFTC(mypk) {
     // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=流转自定义';
+    var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=流转自定义';
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -290,7 +290,7 @@ function EditFTC(mypk) {
 //轨迹组件.
 function EditTrack(mypk) {
     // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=轨迹组件';
+    var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=轨迹组件';
 
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
@@ -316,7 +316,7 @@ function FrmNodeComponent() {
     var mypk = GetQueryString('FK_MapData');
     mypk = mypk.replace('ND', '');
 
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk;
+    var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 500, 400, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;

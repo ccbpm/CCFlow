@@ -12,4 +12,5 @@ function ParseStringToPinYin(parseString, parseModel, prix ) {
         document.getElementById("TB_No").value =  data;
     else
         document.getElementById("TB_No").value = prix + "_" + data;
+
 } 

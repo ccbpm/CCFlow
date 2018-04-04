@@ -70,29 +70,5 @@ namespace BP.WF.Template
             BP.WF.Node nd = new WF.Node(nodeid);
             nd.Delete();
         }
-        /// <summary>
-        /// 保存流程数据.
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <param name="json">json格式的数据.</param>
-        public static string SaveGraphData(string flowNo, string json)
-        {
-            // 保存到临时文件.
-            string tempFile = BP.Sys.SystemConfig.PathOfTemp + "\\" + flowNo + ".json";
-            BP.DA.DataType.WriteFile(tempFile, json);
-
-            #region 第1步骤:进行必要的安全检查.
-            #endregion 进行必要的安全检查.
-
-            #region 第2步骤:进行相关的到ccbpm存储.
-            #endregion 进行相关的到ccbpm存储.
-
-            //执行保存.
-            Flow fl = new Flow(flowNo);
-            fl.SaveFileToDB("FlowJson", tempFile);
-            return null;
-        }
-
-
     }
 }

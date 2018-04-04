@@ -247,9 +247,6 @@
     <Compile Include="Template\FlowFormTree.cs" />
     <Compile Include="Template\FlowSort.cs" />
     <Compile Include="Template\FrmNodeExt.cs" />
-    <Compile Include="Template\TemplateGlo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
     <Compile Include="Template\NodeExt.cs" />
@@ -269,6 +266,9 @@
     <Compile Include="Template\DirectionStation.cs" />
     <Compile Include="Template\NodeYGFlow.cs" />
     <Compile Include="Template\MapFrmNode.cs" />
+    <Compile Include="Template\TemplateGlo.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\Service\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

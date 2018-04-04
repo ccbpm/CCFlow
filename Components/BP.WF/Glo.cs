@@ -423,29 +423,7 @@ namespace BP.WF
                 cc.CheckPhysicsTable();
                 #endregion 其他.
 
-                #region 判断WF_Flow中是否含有FlowJson字段，没有则增加此字段，edited by liuxc,2016-2-25
-                if (BP.DA.DBAccess.IsExitsTableCol("WF_Flow", "FlowJson") == false)
-                {
-                    switch (src.HisDBType)
-                    {
-                        case DBType.MSSQL:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson IMAGE NULL");
-                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FormJson IMAGE NULL");
-                            break;
-                        case DBType.Oracle:
-                        case DBType.Informix:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson BLOB NULL");
-                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FormJson BLOB NULL");
-                            break;
-                        case DBType.MySQL:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson LONGBLOB NULL");
-                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FormJson LONGBLOB NULL");
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                #endregion
+                
 
                 #region 升级sys_sftable
                 //升级

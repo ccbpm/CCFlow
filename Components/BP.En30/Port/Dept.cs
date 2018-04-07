@@ -106,6 +106,7 @@ namespace BP.Port
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 100, 30);
 
 
+
                 RefMethod rm = new RefMethod();
                 rm.Title = "历史变更";
                 rm.ClassMethodName = this.ToString() + ".History";

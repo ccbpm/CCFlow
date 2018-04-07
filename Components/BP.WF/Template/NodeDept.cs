@@ -93,7 +93,7 @@ namespace BP.WF.Template
                 //map.AddDDLEntitiesPK(NodeDeptAttr.FK_Node,0,DataType.AppInt,"节点",new Nodes(),
                 //    NodeAttr.NodeID,NodeAttr.Name,true);
 
-				map.AddDDLEntitiesPK( NodeDeptAttr.FK_Dept,null,"部门",new Depts(),true);
+				map.AddDDLEntitiesPK( NodeDeptAttr.FK_Dept,null,"部门",new BP.Port.Depts(),true);
 
 				this._enMap=map;
 				 

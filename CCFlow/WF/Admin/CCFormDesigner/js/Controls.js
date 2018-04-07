@@ -48,7 +48,7 @@ figureSets["basic"] = {
         { figureFunction: null, name: "Poiner", image: "Poiner.png", CNName: "指针" },
         { figureFunction: null, name: CCForm_Controls.Line, image: "Line.png", CNName: "直线" },
         { figureFunction: "Label", name: CCForm_Controls.Label, image: "Label.png", CNName: "文字" },
-        { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png", CNName: "按钮" },
+     //   { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png", CNName: "按钮" },
         { figureFunction: "HyperLink", name: CCForm_Controls.HyperLink, image: "HyperLink.png", CNName: "超链接" },
         { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png", CNName: "图片" }
 
@@ -67,7 +67,7 @@ function figure_Label(x, y) {
     f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT));
     f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE));
     f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY));
-    //f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
+    f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
     f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
     f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT));
     f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR));

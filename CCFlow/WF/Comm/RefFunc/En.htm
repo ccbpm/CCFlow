@@ -51,6 +51,7 @@
             var type = GetQueryString("type");
             var pkVal = GetPKVal();
             httpHandler.AddPara("EnName", enName);
+
             url = "../RefFunc/EnOnly.htm?EnName=" + enName + "&type=" + type + "&PKVal=" + pkVal + "&FromName=En";
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);

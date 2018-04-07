@@ -24,7 +24,16 @@
             var html = "";
             //获取节点属性
             var nodeID = GetQueryString("FK_Node");
+
             var node = new Entity("BP.WF.Node", nodeID);
+
+            //node.SetPKVal(nodeID);
+            //s node.Retrieve();
+           // console.log(node);
+            //alert(node.Name);
+            //return;
+
+
             //获取节点方案的表单引用值 frmIDSelected为空时为 0当前节点表单，1 其他表单
             var frmIDSelected = node.NodeFrmID;
             if (frmIDSelected == "" || frmIDSelected == null)
@@ -39,14 +48,17 @@
             var nodes = new Entities("BP.WF.Nodes");
             nodes.Retrieve("FK_Flow", node.FK_Flow);
 
+
+
             //增加slect的节点值 
             GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
 
             //表单引用设置
             if (node.FormType == FormType.FoolForm) {
+
                 if (node.NodeFrmID == "" || node.NodeFrmID == null) {
                     document.getElementById("RB_CurrentForm").checked = true;
-                    SetDDLEnable('DDL_Frm', 'enable')
+                    SetDDLEnable('DDL_Frm', 'enable');
                 }
                 else {
                     document.getElementById("RB_OtherForms").checked = true;
@@ -73,8 +85,7 @@
             if (frmValue == "0") {
                 node.NodeFrmID = "";
             } else {
-            node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
-               
+                node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
             }
             node.Update();
 

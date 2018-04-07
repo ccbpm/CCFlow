@@ -29,6 +29,7 @@ $(function () {
     InitDbClick();
 
     InitClick();
+
     //鼠标移动
     //InitonMouseMove();
     //初始节点元素
@@ -240,15 +241,13 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'Image') {
-
-
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmImg&PKVal=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '图片' + figure.CCForm_MyPK + '属性');
         return;
     }
 
     if (shap == 'Button') {
-        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + figure.CCForm_MyPK;
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '按钮' + figure.CCForm_MyPK + '属性');
         return;
     }
@@ -308,7 +307,9 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'HyperLink') {
-        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmLink&PKVal=' + figure.CCForm_MyPK;
+
+        var en=  new Entity("")
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmLink&PKVal=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '超链接属性');
         return;
     }
@@ -523,7 +524,6 @@ function CCForm_FoolFrm() {
    // var url = "../../CCForm/Frm.htm?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
     OpenWindow(url);
 }
-
 
 //表单属性
 function CCForm_Attr() {

@@ -677,6 +677,7 @@ var Entity = (function () {
     var jsonString;
 
     var Entity = function (enName, pkval) {
+
         this.enName = enName;
 
         if (pkval != null && typeof pkval === "object") {
@@ -719,7 +720,7 @@ var Entity = (function () {
         return params.join("&");
     }
 
- 
+
 
     if (plant == "CCFlow") {
         // CCFlow
@@ -741,6 +742,8 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_Init&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
+
+
                     if (data.indexOf("err@") != -1) {
                         alert(data);
                         return;
@@ -1024,10 +1027,10 @@ var Entity = (function () {
 
         DoMethodReturnString: function (methodName) {
 
-//            var params = [];
-//            $.each(arguments, function (i, o) {
-//                if (i > 0)
-//                    params.push(o);
+            //            var params = [];
+            //            $.each(arguments, function (i, o) {
+            //                if (i > 0)
+            //                    params.push(o);
             //            });
 
             var self = this;
@@ -1036,8 +1039,8 @@ var Entity = (function () {
                 type: 'post',
                 async: false,
                 data: arguments,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName  + "&t=" + new Date().getTime(),
-                dataType: 'html',                 
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
+                dataType: 'html',
                 success: function (data) {
                     string = data;
                 },

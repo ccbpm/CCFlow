@@ -53,7 +53,10 @@
                 newRow += "<td>" + db.RecName + "</td>";
 
                 newRow += "<td>";
-                newRow += "<a href=\"javascript:Delete('" + db.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                if (athDesc.IsDelete=="1")
+                    newRow += "<a href=\"javascript:Delete('" + db.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                else
+                    newRow += "";
                 newRow += "</td>";
 
                 newRow += "</tr>";
@@ -78,7 +81,6 @@
          <th>上传人</th>
          <th><div id="Opt"></div></th>
          </tr>
-
          </table>
 
     </form>

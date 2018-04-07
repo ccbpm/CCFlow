@@ -635,9 +635,7 @@ namespace BP.WF.HttpHandler
             string paras = this.RequestParas;
             paras = paras.Replace("&DoType=Frm_Init", "");
 
-            //返回自由表单解析执行器.
-            if (BP.WF.Glo.IsBeta == true)
-            {
+          
                 if (md.HisFrmType == FrmType.FreeFrm)
                 {
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
@@ -658,14 +656,7 @@ namespace BP.WF.HttpHandler
                     return "url@FrmGener.htm?1=2" + paras;
                 else
                     return "url@FrmGener.htm?1=2" + paras;
-            }
-            else
-            {
-                if (Glo.Plant == Plant.CCFlow)
-                    return "url@Frm.aspx?1=2" + paras;
-                else
-                    return "url@FrmGener.htm?1=2" + paras;
-            }
+            
         }
 
         /// <summary>
@@ -3147,6 +3138,113 @@ namespace BP.WF.HttpHandler
             return fileName;
         }
         #endregion 附件组件
+
+
+        #region 必须传递参数
+        /// <summary>
+        /// 执行的内容
+        /// </summary>
+        public string DoWhat
+        {
+            get
+            {
+                string str = this.GetRequestVal("DoWhat");
+                if (DataType.IsNullOrEmpty(str))
+                    return "Frm";
+                return str;
+            }
+        }
+        /// <summary>
+        /// 当前的用户
+        /// </summary>
+        public string UserNo
+        {
+            get
+            {
+                return this.GetRequestVal("UserNo");
+            }
+        }
+        /// <summary>
+        /// 用户的安全校验码(请参考集成章节)
+        /// </summary>
+        public string SID
+        {
+            get
+            {
+                return this.GetRequestVal("SID");
+            }
+        }
+        public string AppPath
+        {
+            get
+            {
+                return BP.WF.Glo.CCFlowAppPath;
+            }
+        }
+        public string Port_Init()
+        {
+            #region 安全性校验.
+            if (this.UserNo == null || this.SID == null || this.DoWhat == null || this.FrmID == null)
+            {
+                return "err@必要的参数没有传入，请参考接口规则。";
+            }
+
+            if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
+            {
+                return "err@非法的访问，请与管理员联系。SID=" + this.SID;
+            }
+
+            if (BP.Web.WebUser.No != this.UserNo)
+            {
+                BP.WF.Dev2Interface.Port_SigOut();
+                BP.WF.Dev2Interface.Port_Login(this.UserNo);
+            }
+            if (this.GetValIntFromFrmByKey("IsMobile") == 1)
+                BP.Web.WebUser.UserWorkDev = UserWorkDev.Mobile;
+            else
+                BP.Web.WebUser.UserWorkDev = UserWorkDev.PC;
+            #endregion 安全性校验.
+
+            #region 生成参数串.
+            string paras = "";
+            foreach (string str in this.context.Request.QueryString)
+            {
+                string val = this.GetRequestVal(str);
+                if (val.IndexOf('@') != -1)
+                    throw new Exception("您没有能参数: [ " + str + " ," + val + " ] 给值 ，URL 将不能被执行。");
+                switch (str.ToLower())
+                {
+                    case "fk_mapdata":
+                    case "workid":
+                    case "fk_node":
+                    case "sid":
+                        break;
+                    default:
+                        paras += "&" + str + "=" + val;
+                        break;
+                }
+            }
+            #endregion 生成参数串.
+
+            string url = "";
+            switch (this.DoWhat)
+            {
+                case "Frm": //如果是调用Frm的查看界面.
+                    url = "Frm.htm?FK_MapData=" + this.FrmID + "&OID=" + this.OID + paras;
+                    break;
+                case "Search": //调用查询界面.
+                    url = "../Comm/Search.htm?EnsName=" + this.FrmID + paras;
+                    break;
+                case "Group": //分组分析界面.
+                    url = "../Comm/Group.htm?EnsName=" + this.FrmID + paras;
+                    break;
+                default:
+                    break;
+            }
+            return "url@" + url;
+        }
+        #endregion
+     
 
 
 

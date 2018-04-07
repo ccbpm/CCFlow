@@ -66,18 +66,7 @@ namespace BP.WF
                             string dbFile = appPath + "DataUser/BPPaint/Def.png";
                             if (db != null)
                                 dbFile = db.Tag1;
-
-                            //if (this.IsReadonly || ele.IsEnable == false)
-                            //{
-                            //    sb.Append("\t\n<img src='" + dbFile + "' onerror=\"this.src='" + appPath + "DataUser/BPPaint/Def.png'\" style='padding: 0px;margin: 0px;border-width: 0px;width:" + ele.W + "px;height:" + ele.H + "px;' />");
-                            //}
-                            //else
-                            //{
-                            //    string url = appPath + "WF/CCForm/BPPaint.aspx?W=" + ele.HandSiganture_WinOpenW + "&H=" + ele.HandSiganture_WinOpenH + "&MyPK=" + ele.PKVal + "&PKVal=" + en.PKVal;
-                            //    myjs = "javascript:BPPaint(this,'" + url + "','" + ele.HandSiganture_WinOpenW + "','" + ele.HandSiganture_WinOpenH + "','" + ele.MyPK + "');";
-                            //    //string myjs = "javascript:window.open('" + appPath + "WF/CCForm/BPPaint.aspx?PKVal=" + en.PKVal + "&MyPK=" + ele.MyPK + "&H=" + ele.HandSiganture_WinOpenH + "&W=" + ele.HandSiganture_WinOpenW + "', 'sdf', 'dialogHeight: " + ele.HandSiganture_WinOpenH + "px; dialogWidth: " + ele.HandSiganture_WinOpenW + "px;center: yes; help: no');";
-                            //    sb.Append("\t\n<img id='Ele" + ele.MyPK + "' onclick=\"" + myjs + "\" onerror=\"this.src='" + appPath + "DataUser/BPPaint/Def.png'\" src='" + dbFile + "' style='padding: 0px;margin: 0px;border-width: 0px;width:" + ele.W + "px;height:" + ele.H + "px;' />");
-                            //}
+                            
                             break;
                         case FrmEle.iFrame: //输出框架.
                         //    string paras = this.RequestParas;

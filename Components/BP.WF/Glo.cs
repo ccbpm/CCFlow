@@ -151,6 +151,7 @@ namespace BP.WF
              * 1, 执行一次Sender发送人的升级，原来由GenerWorkerList 转入WF_GenerWorkFlow.
              * 0, 静默升级启用日期.2014-12
              */
+
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
@@ -182,7 +183,6 @@ namespace BP.WF
                     DBAccess.RunSQL(" UPDATE "+item.PTable+" SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE "+item.PTable+".Oid=WF_GENERWORKFLOW.WORKID)");
                 }
                 #endregion 修复丢失的发起人.
-
 
                 #region 给city 设置拼音.
                 if (DBAccess.IsExitsObject("CN_City") == true)

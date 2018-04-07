@@ -40,7 +40,7 @@ function LoadTreeNodes() {
     parentNo = getArgsFromHref("ParentNo");
     //实体名
     if (treeEnsName == '') {
-        $("body").html("<b style='color:red;'>请传入正确的参数名。如：TreeEns.aspx?TreeEnsName=BP.GPM.Depts&EnsName=BP.Port.Emps&RefPK=FK_Dept<br/>主意：如果根节点ParentNo不为0，需传入根节点ParentNo的值.<b>");
+        $("body").html("<b style='color:red;'>请传入正确的参数名。如：TreeEns.aspx?TreeEnsName=BP.Port.Depts&EnsName=BP.Port.Emps&RefPK=FK_Dept<br/>主意：如果根节点ParentNo不为0，需传入根节点ParentNo的值.<b>");
         return;
     }
     //父编号
@@ -103,7 +103,7 @@ function LoadGridData() {
 
                 //系统错误
                 if (js.status && js.status == 500) {
-                    $(".datagrid-view").html("<b style='color:red;'>请传入正确的参数名。如：TreeEns.aspx?TreeEnsName=BP.GPM.Depts&EnsName=BP.Port.Emps&RefPK=FK_Dept<br/>主意：如果根节点ParentNo不为0，需传入根节点ParentNo的值.<b>");
+                    $(".datagrid-view").html("<b style='color:red;'>请传入正确的参数名。如：TreeEns.aspx?TreeEnsName=BP.Port.Depts&EnsName=BP.Port.Emps&RefPK=FK_Dept<br/>主意：如果根节点ParentNo不为0，需传入根节点ParentNo的值.<b>");
                     return;
                 }
                 var pushData = eval('(' + js + ')');

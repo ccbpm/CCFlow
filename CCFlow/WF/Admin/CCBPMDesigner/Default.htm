@@ -564,22 +564,11 @@ function RefreshFlowJson() {
     //首先关闭tab
     closeTab(node.text);
 
-    $.post(Handler, {
-        DoType: 'Flow_ResetFlowVersion',
-        FK_Flow: node.id
-    }, function (jsonData) {
+    $(".mymask").show();
 
-        if (jsonData.indexOf('err@') == 0) {
-            alert(jsonData);
-            return;
-        }
-
-        $(".mymask").show();
-
-        addTab(node.id, node.text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
-        //延时3秒, 为什么要延迟？
-        setTimeout(DesignerLoaded, 1000);
-    });
+    addTab(node.id, node.text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+    //延时3秒, 为什么要延迟？
+    setTimeout(DesignerLoaded, 1000);
 }
 
 //打开流程到流程图
@@ -967,7 +956,7 @@ function FlowProperty() {
     var userNo = GetQueryString("UserNo");
 
     var fk_flow = currFlow.id;
-    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PKVal=" + fk_flow + "&Lang=CH&UserNo=" + WebUser.No;
+    url = "../../Comm/En.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PKVal=" + fk_flow + "&Lang=CH&UserNo=" + WebUser.No;
     addTab(currFlow + "PO", "流程属性" + fk_flow, url);
     //WinOpen(url);
 }
@@ -1759,7 +1748,7 @@ function TabCloseByTitle(TabTitle) {
     </div>
     <div id="mFlow" class="easyui-menu" style="width: 120px;">
         <div onclick="showFlow()" data-options="iconCls:'icon-design'">设计流程图</div>
-        <div onclick="RefreshFlowJson()" data-options="iconCls:'icon-reset'">重置流程图</div>
+        <!--<div onclick="RefreshFlowJson()" data-options="iconCls:'icon-reset'">重置流程图</div>-->
         <div class="menu-sep"></div>
         <div onclick="ImpFlow()" data-options="iconCls:'icon-redo'">导入流程模板</div>
         <div onclick="ExpFlow()" data-options="iconCls:'icon-unredo'">导出流程模板</div>
@@ -1769,10 +1758,10 @@ function TabCloseByTitle(TabTitle) {
         <div class="menu-sep"></div>
         <div onclick="moveUpFlow()" data-options="iconCls:'icon-up'">上移</div>
         <div onclick="moveDownFlow()" data-options="iconCls:'icon-down'">下移</div>
-        <div class="menu-sep">
         </div>
-        <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
-        <div onclick="ImpColudFlow()" data-options="iconCls:'icon-imp'">导入ccbpm云服务流程模版</div>
+      <!--  <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
+        <div onclick="ImpColudFlow()" data-options="iconCls:'icon-imp'">导入ccbpm云服务流程模版</div>-->
+
     </div>
     <div id="mFormRoot" class="easyui-menu" style="width: 120px;">
         <div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>

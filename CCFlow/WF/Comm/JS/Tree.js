@@ -38,7 +38,7 @@ function LoadTreeNodes() {
     parentNo = getArgsFromHref("ParentNo");
     //实体名
     if (ensName == '') {
-        $("body").html("<b style='color:red;'>请传入正确的参数名。如：Tree.aspx?EnsName=BP.GPM.Depts<br/>主意：如果根节点ParentNo不为0，需传入根节点ParentNo的值.<b>");
+        $("body").html("<b style='color:red;'>请传入正确的参数名。如：Tree.aspx?EnsName=BP.Port.Depts<br/>主意：如果根节点ParentNo不为0，需传入根节点ParentNo的值.<b>");
         return;
     }
     //父编号

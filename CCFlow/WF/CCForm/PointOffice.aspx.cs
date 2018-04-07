@@ -10,7 +10,6 @@ using BP.Sys;
 using System.Data;
 using System.Web.Script.Serialization;
 
-
 namespace CCFlow.WF.CCForm
 {
     public partial class PointOffice : System.Web.UI.Page

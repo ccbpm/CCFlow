@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>附件</title>
+    <meta charset="UTF-8"/>
+    <base target="_self" />
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
+    <script src="../Comm/Gener.js"  type="text/javascript" ></script>
+    <script src="AttachmentUpload.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" >
+      
+        //页面启动函数.
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Port_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+
+            alert(data);
+
+        });
+          
+     </script>
+	 
+</head>
+<body  >
+    <form>
+
+    <h4>正在加载请稍候....</h4>
+    </form>
+</body>
+</html>

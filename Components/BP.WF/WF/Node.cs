@@ -2416,7 +2416,7 @@ namespace BP.WF
 
                 Map map = new Map("WF_Node", "节点");
 
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
 
                 #region 基本属性.

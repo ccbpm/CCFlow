@@ -271,19 +271,18 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
-                map.AddMyPK();
-
+                //连接目标.
+                map.AddMyPK(); 
                 map.AddTBString(FrmLinkAttr.Target, "_blank", "连接目标(_blank,_parent,_self)", true, false, 0, 20, 20);
-
                 map.AddTBString(FrmLinkAttr.Text, "New Link", "标签", true, false, 0, 500, 20, true);
                 map.AddTBString(FrmLinkAttr.URL, null, "URL", true, false, 0, 500, 20, true);
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
 
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
-                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData'", true);
-
+                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组",
+                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData' AND (CtrlType IS NULL OR CtrlType='')  ", true);
+                 
 
                 this._enMap = map;
                 return this._enMap;

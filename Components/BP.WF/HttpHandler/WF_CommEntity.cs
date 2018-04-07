@@ -287,7 +287,9 @@ namespace BP.WF.HttpHandler
                 if (isBlank == false)
                 {
                     en.PKVal = pkVal;
-                    en.RetrieveFromDBSources();
+                    int i = en.RetrieveFromDBSources();
+                    if (i == 0)
+                        return "err@数据[" + map.EnDesc + "]主键为[" + pkVal + "]不存在，或者没有保存。";
                 }
                 else
                 {

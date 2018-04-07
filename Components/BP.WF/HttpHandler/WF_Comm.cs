@@ -59,7 +59,7 @@ namespace BP.WF.HttpHandler
             {
                 string pkval = this.PKVal;
                 Entity en = ClassFactory.GetEn(this.EnName) ;
-                
+
                 if (pkval == "0" || pkval == "" || pkval == null || pkval == "undefined")
                 {
                     Map map = en.EnMap;
@@ -73,6 +73,10 @@ namespace BP.WF.HttpHandler
                 {
                     en.PKVal = pkval;
                     en.Retrieve();
+
+                    //int i=en.RetrieveFromDBSources();
+                    //if (i == 0)
+                    //  return "err@实体:["+"]";
                 }
 
                 return en.ToJson(false);

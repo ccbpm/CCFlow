@@ -985,107 +985,57 @@ namespace BP.En
 		/// 如果查询出来的是多个实体，那把第一个实体给值。	 
 		/// </summary>
 		/// <returns>查询出来的个数</returns>
-		public virtual int Retrieve()
-		{
-			#region 从缓存里获取.
-			if (this.EnMap.DepositaryOfEntity == Depositary.Application)
-			{
-				Entities ens;
-				try
-				{
-					ens = CashEntity.GetEns(this.ToString());
-				}
-				catch (Exception ex)
-				{
-					throw new Exception("@在内存查询期间出现错误@" + ex.Message);
-				}
+        public virtual int Retrieve()
+        {
 
-				// 为空就把它放入里面去。
-				if (ens == null)
-				{
-					ens = this.GetNewEntities;
-					ens.FlodInCash(); /*把整个entities 放入缓存里面去.*/
-				}
-
-				string pk = this.PK;
-				string pkval = this.GetValStrByKey(pk);
-				int count = ens.Count;
-				for (int i = 0; i < count; i++)
-				{
-					Entity en = ens[i];
-					if (en.PK == pk && en.GetValStrByKey(pk) == pkval)
-					{
-						this.Row = en.Row; /* 如果有，就返回它。*/
-						return 1;
-					}
-				}
-
-				if (this.RetrieveFromDBSources() != 0)
-				{
-					/* 从数据表中查询 */
-					ens.FlodInCash();
-					return 1;
-				}
-
-				Attr attr = this.EnMap.GetAttrByKey(pk);
-				if (SystemConfig.IsDebug)
-					throw new Exception("@在[" + this.EnDesc + this.EnMap.PhysicsTable + "]中没有找到[" + attr.Field + attr.Desc + "]=[" + this.PKVal + "]的记录。");
-				else
-					throw new Exception("@在[" + this.EnDesc + "]中没有找到[" + attr.Desc + "]=[" + this.PKVal + "]的记录。");
-			}
-			#endregion 从缓存里获取.
-
-			#region 任何东西都不放.
-			if (this.EnMap.DepositaryOfEntity == Depositary.None)
-			{
-				/*如果是没有放入缓存的实体.*/
-				try
-				{
-					if (EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this)) <= 0)
-					{
-						string msg = "";
-						switch (this.PK)
-						{
-							case "OID":
-								msg += "[ 主键=OID 值=" + this.GetValStrByKey("OID") + " ]";
-								break;
-							case "No":
-								msg += "[ 主键=No 值=" + this.GetValStrByKey("No") + " ]";
-								break;
-							case "MyPK":
-								msg += "[ 主键=MyPK 值=" + this.GetValStrByKey("MyPK") + " ]";
-								break;
-							case "NodeID":
-                                msg += "[ 主键=NodeID 值=" + this.GetValStrByKey("NodeID") + " ]";
-								break;
-                            case "WorkID":
-                                msg += "[ 主键=WorkID 值=" + this.GetValStrByKey("WorkID") + " ]";
-                                break;
-							default:
-								Hashtable ht = this.PKVals;
-								foreach (string key in ht.Keys)
-									msg += "[ 主键=" + key + " 值=" + ht[key] + " ]";
-								break;
-						}
-						Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
-						if (SystemConfig.IsDebug)
-							throw new Exception("@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。" + msg);
-						else
-							throw new Exception("@没有找到记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "记录不存在,请与管理员联系, 或者确认输入错误.");
-					}
-					return 1;
-				}
-				catch (Exception ex)
-				{
-					if (ex.Message.Contains("无效"))
-						this.CheckPhysicsTable();
-					throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);
-				}
-			}
-			#endregion 任何东西都不放.
-
-            throw new Exception("@没有判断的缓存设置类型." + this.EnMap.DepositaryOfEntity);
-		}
+            /*如果是没有放入缓存的实体.*/
+            try
+            {
+                if (EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this)) <= 0)
+                {
+                    string msg = "";
+                    switch (this.PK)
+                    {
+                        case "OID":
+                            msg += "[ 主键=OID 值=" + this.GetValStrByKey("OID") + " ]";
+                            break;
+                        case "No":
+                            msg += "[ 主键=No 值=" + this.GetValStrByKey("No") + " ]";
+                            break;
+                        case "MyPK":
+                            msg += "[ 主键=MyPK 值=" + this.GetValStrByKey("MyPK") + " ]";
+                            break;
+                        case "NodeID":
+                            msg += "[ 主键=NodeID 值=" + this.GetValStrByKey("NodeID") + " ]";
+                            break;
+                        case "WorkID":
+                            msg += "[ 主键=WorkID 值=" + this.GetValStrByKey("WorkID") + " ]";
+                            break;
+                        default:
+                            Hashtable ht = this.PKVals;
+                            foreach (string key in ht.Keys)
+                                msg += "[ 主键=" + key + " 值=" + ht[key] + " ]";
+                            break;
+                    }
+                    Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
+                    if (SystemConfig.IsDebug)
+                        throw new Exception("@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。" + msg);
+                    else
+                        throw new Exception("@没有找到记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "记录不存在,请与管理员联系, 或者确认输入错误.");
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("无效"))
+                {
+                    this.CheckPhysicsTable();
+                    if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable) == false)
+                        return Retrieve(); //让其在查询一遍.
+                }
+                throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);
+            }
+        }
 		/// <summary>
 		/// 判断是不是存在的方法.
 		/// </summary>

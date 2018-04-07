@@ -261,6 +261,7 @@ namespace BP.Sys
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
+
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBString(FrmLinkAttr.Text, "New Link", "Label", true, false, 0, 500, 20);
 
@@ -281,7 +282,7 @@ namespace BP.Sys
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
-
+             
                 this._enMap = map;
                 return this._enMap;
             }

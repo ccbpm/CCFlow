@@ -34,9 +34,7 @@ namespace BP.WF.HttpHandler
         {
             WF_MyFlow en = new WF_MyFlow(this.context);
             return en.GenerWorkNode();
-
-            BP.Sys.MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, "");
+             
         }
         /// <summary>
         /// 获得toolbar

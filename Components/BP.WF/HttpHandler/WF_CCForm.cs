@@ -30,10 +30,11 @@ namespace BP.WF.HttpHandler
 
                 FrmAttachment athDesc = this.GenerAthDesc();
 
-                //查询出来数据实体.
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal,this.FK_FrmAttachment); 
 
-                #region 如果图片显示.
+                //查询出来数据实体.
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal,this.FK_FrmAttachment);
+
+                #region 如果图片显示.(先不考虑.)
                 if (athDesc.FileShowWay == FileShowWay.Pict)
                 {
                     /* 如果是图片轮播，就在这里根据数据输出轮播的html代码.*/
@@ -153,7 +154,6 @@ namespace BP.WF.HttpHandler
                 //增加附件.
                 ds.Tables.Add(dbs.ToDataTableField("DBAths"));
 
-
                 //返回.
                 return BP.Tools.Json.ToJson(ds);
             }
@@ -163,7 +163,6 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 多附件.
-
 
         #region HanderMapExt
         /// <summary>

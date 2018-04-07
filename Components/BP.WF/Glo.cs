@@ -4707,23 +4707,7 @@ namespace BP.WF
                 qo.DoQuery();
                 return dbs;
             }
-
-            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-            {
-                /* 继承模式 */
-                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
-                qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
-
-                //qo.addAnd();
-                //qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
-
-                qo.addOrderBy("RDT");
-                qo.DoQuery();
-                return dbs;
-            }
-
+           
 
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {

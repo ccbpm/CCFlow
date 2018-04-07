@@ -516,13 +516,6 @@
     <Content Include="WF\WorkOpt\PrintDocQRGuide.htm" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
-    <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
-    <Content Include="WF\Admin\AttrNode\Img\Doc.png" />
-    <Content Include="WF\Admin\AttrNode\Img\FreeFrm.png" />
-    <Content Include="WF\Admin\AttrNode\Img\SDKFrm.png" />
-    <Content Include="WF\Admin\AttrNode\Img\SelfFrm.png" />
-    <Content Include="WF\Admin\AttrNode\Img\Tab.png" />
-    <Content Include="WF\Admin\AttrNode\Img\Tree.png" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />

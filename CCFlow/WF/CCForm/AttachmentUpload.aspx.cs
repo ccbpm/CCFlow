@@ -365,20 +365,80 @@ namespace CCFlow.WF.CCForm
                         && string.IsNullOrEmpty(this.FK_Flow) == false
                         && this.FK_Node != 0)
                     {
-                        //是否可以执行当前工作。
-                        bool isCanDoCurrentWork = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
-
-                        // 不能执行.
-                        if (isCanDoCurrentWork == false)
-                        {
+                        isDel = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
+                        if (isDel == false)
                             isUpdate = false;
-                            isDel = false;
-                        }
                     }
                 }
                 #endregion 处理权限问题.
 
-                #region 生成内容
+                if (athDesc.FileShowWay == FileShowWay.Free)
+                {
+                    this.Pub1.AddTable("border='0' cellspacing='0' cellpadding='0' style='width:" + athWidth + "px'");
+                    foreach (FrmAttachmentDB db in dbs)
+                    {
+                        this.Pub1.AddTR();
+                        if (CanEditor(db.FileExts))
+                        {
+                            if (athDesc.IsWoEnableWF)
+                            {
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" +
+                                     this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath +
+                                     "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                            }
+                            else
+                            {
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
+                                            "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                            }
+                        }
+                        else if (DataType.IsImgExt(db.FileExts) || db.FileExts.ToUpper() == "PDF" || db.FileExts.ToUpper() == "CEB")
+                        {
+                            this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
+                                            "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        }
+                        else
+                        {
+                            this.Pub1.AddTDTDTitle(db.FileName, "<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK +
+                                            "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        }
+
+                        if (athDesc.IsDownload)
+                            this.Pub1.AddTD("<a href=\"javascript:Down2017('" + db.MyPK + "')\">下载</a>");
+                        else
+                            this.Pub1.AddTD("");
+
+                        if (this.IsReadonly != "1")
+                        {
+                            if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
+                            {
+                                this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
+                            }
+                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//只能删除自己上传的
+                            {
+                                if (db.Rec.Equals(WebUser.No))
+                                    this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
+                                else
+                                    this.Pub1.AddTD("");
+                            }
+                            else
+                            {
+                                this.Pub1.AddTD("");
+                            }
+                        }
+                        else
+                        {
+                            this.Pub1.AddTD("");
+                            this.Pub1.AddTD("");
+                        }
+
+                        this.Pub1.AddTREnd();
+                    }
+                    AddFileUpload(isUpdate, athDesc);
+                    this.Pub1.AddTableEnd();
+                    return;
+                }
+
                 this.Pub1.AddTable("border='0' cellspacing='0' cellpadding='0' style='width:100%;'");
                 if (athDesc.IsShowTitle == true)
                 {
@@ -425,6 +485,7 @@ namespace CCFlow.WF.CCForm
                 foreach (string sort in fileSorts)
                 {
                     bSort_Add_TD = true;
+
                     string mysort = sort;
                     if (sort.Contains("@") == true)
                         mysort = sort.Substring(sort.IndexOf('@') + 1);
@@ -516,8 +577,9 @@ namespace CCFlow.WF.CCForm
              
                 AddFileUpload(isUpdate, athDesc);
                 this.Pub1.AddTableEnd();
-                #endregion 生成表头表体.
+               
 
+                #endregion 生成表头表体.
             }
             catch (Exception ex)
             {

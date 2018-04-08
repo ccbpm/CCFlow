@@ -15,6 +15,7 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 13. [JFlow的官方网站 ](http://jflow.cn "jflow官方网站."), git网站地址:[http://git.oschina.net/opencc/jflow/tree/develop](http://git.oschina.net/opencc/jflow/tree/develop "jflow在git上.")
 14. ccflow & JFlow 集成多众多的开发人员、流程设计人员、管理人员众多的智慧，成长过程中得到众多企业的帮助。
 15. ccflow帮助了成百上千家企业成功，众多的爱好者的贡献，成功客户案例，请打开官方网站查找. http://ccflow.org/Case.aspx 
+16. ccbpm 支持IE8+, 支持火狐，谷歌，等等大多数浏览器.
 
 ### 为什么选择ccflow? ###
 1. CCFlow成长于中国2003年,历史长久,在多种生产、管理环境中成长起来，是国内老牌的工作流程引擎,拥有众多的爱好者,开发者, 100%的核心代码开源.
@@ -52,7 +53,7 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 7. D:\ccflow\CCFlow  -- BS工作流程引擎前台.  
 8. D:\ccflow\CCFlowServices - 流程服务程序,用于执行自动发起流程、自动任务.
 9. D:\ccflow\DemoAndTesting  - 单元测试&Demo
-10. D:\ccflow\DesignerForSilverlight - 流程设计器，表单设计器(很快去掉了).
+ 
 
 
 ### ccflow前台目录结构.前台程序.(不建议用户修改，如果修改请提交给我们，否则您就没有办法升级.) ###
@@ -67,14 +68,11 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 9. D:\ccflow\CCFlow\WF\UC  --用户控件.
 10. D:\ccflow\CCFlow\WF\DocFlow -- 公文流程(目前还不是很完善)
 11. D:\ccflow\CCFlow\WF\Admin - 对ccflow的管理比如设计方向条件.报表定义...
-12. D:\ccflow\CCFlow\WF\Admin\XAP CCFlowDesigner.xap流程设计器，CCForm.xap表单设计器。   
-13. D:\ccflow\CCFlow\WF\MapDef - 表单定义.
-14. D:\ccflow\CCFlow\WF\SDKComponents  --流程组件目录.
-15. D:\ccflow\CCFlow\WF\WorkOpt -- 工作处理器的附件功能.
-16. D:\ccflow\CCFlow\WF\Admin\CCBPMDesigner -- H5的流程设计器.
-17. D:\ccflow\CCFlow\WF\Admin\CCFormDesigner -- H5的表单设计器.
-18. D:\ccflow\CCFlow\WF\WebOffice -- 公文流程处理程序.
-19. D:\ccflow\CCFlow\SDKFlowDemo -- sdk开发模式的案例.
+12. D:\ccflow\CCFlow\WF\SDKComponents  --流程组件目录.
+13. D:\ccflow\CCFlow\WF\WorkOpt -- 工作处理器的附件功能.
+14. D:\ccflow\CCFlow\WF\Admin\CCBPMDesigner -- H5的流程设计器.
+15. D:\ccflow\CCFlow\WF\Admin\CCFormDesigner -- H5的表单设计器.
+16. D:\ccflow\CCFlow\SDKFlowDemo -- sdk开发模式的案例.
 
 
 ### 1.2 前台的用户数据文件，用户可以更改. ###
@@ -98,7 +96,7 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 18. D:\ccflow\CCFlow\DataUser\Style 用户自定义风格文件。
 19. D:\ccflow\CCFlow\DataUser\UploadFile 表单附件上传文件，单附件，与多附件。
 20. D:\ccflow\CCFlow\DataUser\XML 用户系统配置文件。
-21.  D:\ccflow\CCFlow\GPM\**  -- 权限控制系统，如果不启用权限系统就可以省略。
+
  
 ###  如何学习好ccflow? ###
 1.  多看视频与文档.
@@ -111,26 +109,25 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 
 ### 如何安装并设置ccflow开发环境?(请严格按如下步骤去安装,不要跳跃,否则会导致安装失败.) ###
 
-1. 确认升级到IE7 以上，并且做如下设置.
+1. 确认升级到IE8+ 以上，并且做如下设置.
    1. 菜单->工具->Internet 选项-> 隐私 -> 把打开弹出窗口阻止程序 关闭上，否则一些功能就不能使用.
    2. 菜单->工具->Internet 选项-> 常规 -> 浏览历史记录设置-> 选中 () 每次访问此网页时. 单选按钮. 点确定，以避免缓存对程序有影响。
    3. 确认你是以administrator 超级用户进行安装的。
 
 2. 使用 svn下载源程序,请查看如下连接.
  
-   1. 如果你不会使用svn请看这里: http://hi.baidu.com/ccflow/blog/item/427ceff4ff96d03bbc3109b9.html
+   1. 如果你不会使用svn,请到网上baidu.
    2. 建议把ccflow放在 D:\下面,  ccflow的说明书都以此目录说明, 以方便您定位程序文件.
    3. 特别提示: 如果不放置在D:\ccflow 下，您可能会遇到dll 文件引用找不到路径的问题。
 
-3. 打开解决方案文件并编译它. CCFlow6 解决方案的位置: D:\ccflow\CCFlow6.sln, 设置 Default.aspx为起始页.
+3. 打开解决方案文件并编译它. CCFlow6 解决方案的位置: D:\ccflow\CCFlow6.sln, 设置 /Default.htm 为起始页.
 
    ETC: 如果不能正常打开请按如下步骤检查.
    1. 您的vs是否是2010版本？
-   2. 该版本上是否安装上了   Silverlight4_Tools.exe  ccflow 群共享里可以下载.
-   3. 安装:Silverlight_4_Toolkit_April_2010.msi
+   2. 如果您用的vs比较高的版本，vs就会自动转换，请按照要求转换. 
 
 4. 创建空白数据库.
-   1. 建立数据库(不管你用的什么数据库,oracle,informix,sqlserver系列),先创建一个空白的数据库名称为: CCFlow6
+   1. 建立数据库(不管你用的什么数据库,oracle,sqlserver,mysql,informix系列),先创建一个空白的数据库名称为: CCFlow6
    2. 请看下面第5步骤, 为数据库配置链接.
 
 5. 打开文件 D:\ccflow\CCFlow\web.config   修改 Appsetting 节点中的数据库连接。
@@ -151,7 +148,7 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
    2，如果不需要安装demo，就不选安装demo。
    3，点击接受协议并安装，稍等十几分钟就会安装好。
 
-7. 建立网站应用:
+7. 发布到IIS上,建立网站应用:
 
    1. 开始->> 运行->> 输入 inetmgr 打开IIS管理器.
    2. 确认您的机器已经安装上了.net4.0, 并且，启用了它:
@@ -164,11 +161,9 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 
 8. 启动流程设计器 
   
-   1. 流程设计器进入地址:` http://localhost:5853/WF/Admin/CCBPMDesigner/Login.aspx`
-   2. 如果使用Silverlight 版本流程设计器路径, 您需要安装Silverlight .
-   3. ccflow6已经支持了 html5版本的流程设计器，你可以根据自己的爱好选择一个流程设计器，我们建议使用sl版本的流程设计器.
-   4. 为什么我们没有放弃silverlight流程设计器？ 请参考wiki 界面。
-   
+   1. 流程设计器进入地址:` http://localhost:5853/WF/Admin/CCBPMDesigner/Login.htm`
+   2. 超级用户:admin  密码: 123
+ 
    **说明:**
 
    1. 第一次进入后，会提示您安装与初始化ccflow数据.
@@ -202,47 +197,24 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
          cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319   (32位)
          cd C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319 (64位)
          aspnet_regiis.exe -ua
-         aspnet_regiis.exe -i
+         aspnet_regiis.exe -i	  
 
 
-3. 没有配置mime 类型, 导致流程轨迹图,流程设计器不能被使用. 处理方法.
-
-        windows XP 或 win2003 server 用户:
-        打开IIS->站点属性->HTTP头->MIME类型->新建： 
-        扩展名： .xap     MIME类型：  xapapplication/x-silverlight  
-        扩展名： .xaml   MIME类型：  application/xaml+xml
-
-  Win7 用户:
-
-    1， 启用iis7.
-        控制面板-> 程序和功能-> 在左边有打开或者关闭windows功能.
-        把 Internet information services. 与 Internet 信息服务 全部选择上。
-
-    2,  设置mime类型.
-    
-       开始->运行->输入inetmgr . 把鼠标放在根节点上, 选择iis 分组中的 MIME类型.
-
-       扩展名： .xap     MIME类型：  xapapplication/x-silverlight  
-       扩展名： .xaml    MIME类型：  application/xaml+xml
-
-
-4. 出现用户名及密码错误，请在web.config 文件中.
+3. 出现用户名及密码错误，请在web.config 文件中.
 
     <identity impersonate="true" userName="administrator" password="jiaozi"/> 
     中的 impersonate="true" 修改成 impersonate="false" 或者填写正确的密码, 
-    也可以把  impersonate="false" 
+    也可以把  impersonate="false" 	 
 
-5. silverlight 版本不是 4.0以及4.0以上，请先卸了，重新安装。
+4. 造成流程设计器不能正常打开的原因:有可能是c:\windows\temp 目录访问权限有限制, 修改一下该目录的访问权限，比如everyone都可以读写试一下(不建议你这样)。
 
-6. 造成流程设计器不能正常打开的原因:有可能是c:\windows\temp 目录访问权限有限制, 修改一下该目录的访问权限，比如everyone都可以读写试一下(不建议你这样)。
 
-7, 在按下安装一步时，遇到创建表或者数据库的错误。
+5, 在按下安装一步时，遇到创建表或者数据库的错误。
    1. 指定连接里面数据库用户没有权限，导致错误。
    2. web.config 中的 数据库类型设置错误.
-
         <add key="AppCenterDBType" value="MSSQL" />
 
-8, 用户权限问题.
+6, 用户权限问题.
 
      如果出现:C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files”
      的写访问权限。的错误提示. 解决办法:  把“IIS_IUSERS”和你自己的系统用户赋予它操作
@@ -250,7 +222,7 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 
   重新启动IIS，并尝试再次运行Web应用程序。
 
-9. 如果以上方式都不奏效.
+7. 如果以上方式都不奏效.
 
         cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319
         aspnet_regiis.exe -ua
@@ -258,22 +230,14 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 
    重新安装，就有可能解决，此时可以寻求你的同事解决。
 
-10. 如果您在使用silverlight版本的ccflow时，不能正常工作，进入流程设计器的登录界面，但是admin登录不进去，提示错误。
-
-   **原因:**有可能是: *.asmx 文件解析的方式不对，不是 Framework 4.0.处理方法: 在IIS的“处理程序映射”，添加脚本映射 *.asmx    
-
-     %windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
-
-
-11. VS2010+IE8 调试提示 “找不到元素”
-
+8. VS2010+IE8 调试提示 “找不到元素”
     1.  Open RegEdit //打开注册表编辑器
     2.  Browse to HKEY_LOCALMACHINE -> SOFTWARE -> Microsoft -> Internet Explorer -> Main
     3.  Set TabProcGrowth to 0 //设置 TabProcGrowth 的值为 0
 
-12. 当前ccflow的工作模式为集成模式，您没有安装或者成功配置CCGPM,ccflow的BPM工作模式，必须依赖CCGPM才能运行。
+9. 当前ccflow的工作模式为集成模式，您没有安装或者成功配置CCGPM,ccflow的BPM工作模式，必须依赖CCGPM才能运行。
 
    1. 如果需要集成模式，请先安装CCGPM，然后安装ccflow;
    2. 或者改为简单模式：请在web.config 文件中把OSModel 改为0.
 
-14. 在 mysql, oracle 的安装的时候会越到大小写敏感问题,我们需要被安装的mysql数据库不要区分大小写.
+10. 在  oracle 的安装的时候会越到大小写敏感问题,我们需要被安装的mysql数据库不要区分大小写.

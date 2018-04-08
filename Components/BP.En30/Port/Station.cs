@@ -16,6 +16,11 @@ namespace BP.Port
         /// 岗位类型
         /// </summary>
         public const string FK_StationType = "FK_StationType";
+        /// <summary>
+        /// 隶属组织
+        /// </summary>
+        public const string OrgNo = "OrgNo";
+
     }
     /// <summary>
     /// 岗位
@@ -77,6 +82,7 @@ namespace BP.Port
 
                 map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 4, 4, 4);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 100, 100);
+                map.AddTBString(StationAttr.OrgNo, null, "隶属组织编号", true, false, 0, 100, 100);
 
                 
                 //如果是一人一部门多岗位,就启动这个映射.

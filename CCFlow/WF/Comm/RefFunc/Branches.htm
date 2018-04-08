@@ -302,7 +302,8 @@
         }
 
         function isLegalName(name) {
-            if (!name) {
+
+            if (name==false) {
                 return false;
             }
             return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
@@ -353,6 +354,7 @@
     </script>
 </head>
 <body>
+<!--
     <div class="container-fluid" style=" width:100%;">
         <div class="pull-center search search-margin">
                             <input  type="text" placeholder="请输入关键字." id="TB_Key"/>
@@ -363,10 +365,12 @@
 <input type="button" value="关闭" id="Cancel" onclick="Close()"  />
 </div>
                         </div>
+                        -->
+
 
         <div class="row row-margin-top">
                 <div id="tree"></div>
         </div>
-    </div>
+    <!--</div>-->
 </body>
 </html>

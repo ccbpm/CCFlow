@@ -391,6 +391,7 @@
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
                 handler.AddPara("FK_Node", GetQueryString("FK_Node"));
                 handler.AddPara("WorkID", GetQueryString("WorkID"));
+                handler.AddPara("ToNode", GetQueryString("ToNode"));
                 handler.AddPara("TB_Emps", $("#TB_Emps").val());
                 var data = handler.DoMethodReturnString("AccepterOfGener_SelectEmps");
 

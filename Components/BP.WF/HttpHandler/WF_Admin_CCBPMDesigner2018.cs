@@ -160,5 +160,27 @@ namespace BP.WF.HttpHandler
         }
         #endregion end Node
 
+        /// <summary>
+        /// 删除连接线
+        /// </summary>
+        /// <returns></returns>
+        public string Direction_Delete()
+        {
+            try
+            {
+                Directions di = new Directions();
+                di.Retrieve(DirectionAttr.FK_Flow, this.FK_Flow, DirectionAttr.Node, this.FK_Node, DirectionAttr.ToNode, this.GetValFromFrmByKey("ToNode"));
+                foreach (Direction direct in di)
+                {
+                    direct.Delete();
+                }
+                return "@删除成功！";
+            }
+            catch (Exception ex)
+            {
+                return "@err:"+ex.Message;
+            }
+        }
+
     }
 }

@@ -164,8 +164,8 @@
             .attr("style", row.style)
             .attr("process_to", row.process_to)
             .attr("process_id", row.id)
-            .addClass("process-step btn btn-small")//给名称添加一个span元素
-            .html('<span class="process-flag badge ' + badge + '"><i class="' + icon + ' icon-white"></i></span>&nbsp;<span id="span_' + row.id + '">' + row.process_name+'</span>')
+            .addClass("process-step btn btn-small")//给节点名称添加一个span元素
+            .html('<span class="process-flag badge ' + badge + '"><i class="' + icon + ' icon-white"></i></span>&nbsp;<span id="span_' + row.id + '">' + row.process_name + '</span>')
             .mousedown(function (e) {
                 if (e.which == 3) { //右键绑定
                     _canvas.find('#leipi_active_id').val(row.id);
@@ -210,11 +210,26 @@
 
             fAlert();
 
-            //线的属性选项
+            //删除节点方向连接线
             $("#lineDel").click(function () {
 
                 jsPlumb.detach(c);
 
+                //获取连接线连接的ID
+                var fromNodeID = c.sourceId.replace('window', '');
+                var toNodeID = c.targetId.replace('window', '');
+                //获取流程编号
+                var flowNo = GetQueryString("FK_Flow");
+
+                var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                hander.AddPara("FK_Node", fromNodeID);
+                hander.AddPara("FK_Flow", flowNo);
+                hander.AddPara("ToNode", toNodeID);
+                var data = hander.DoMethodReturnString("Direction_Delete");
+                if (data.indexOf('err@') == 0) {
+                    alert(data); //删除失败的情况.
+                    return;
+                }
             });
 
             $("#lineSet").click(function () {

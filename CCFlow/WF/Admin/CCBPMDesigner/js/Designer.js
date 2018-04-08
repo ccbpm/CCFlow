@@ -404,7 +404,8 @@ function NodeProperty_Funs(item) {
 				WinOpen(url);
 			}
 			break;
-      case "Node_EditNodeName": //修改节点名称
+
+      case "Node_EditNodeName": //修改节点名称
 
     var figure = STACK.figureGetById(figureId);
 

@@ -50,6 +50,14 @@ namespace BP.WF.Template
         /// 是否单项选择？
         /// </summary>
         public const string IsSimpleSelector = "IsSimpleSelector";
+        /// <summary>
+        /// 是否启用部门搜索范围限定
+        /// </summary>
+        public const string IsEnableDeptRange = "IsEnableDeptRange";
+        /// <summary>
+        /// 是否启用岗位搜索范围限定
+        /// </summary>
+        public const string IsEnableStaRange = "IsEnableStaRange";
     }
     /// <summary>
     /// 选择器
@@ -171,6 +179,34 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 是否启用部门搜索范围限定
+        /// </summary>
+        public bool IsEnableDeptRange
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SelectorAttr.IsEnableDeptRange);
+            }
+            set
+            {
+                this.SetValByKey(SelectorAttr.IsEnableDeptRange, value);
+            }
+        }
+        /// <summary>
+        /// 是否启用岗位搜索范围限定
+        /// </summary>
+        public bool IsEnableStaRange
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SelectorAttr.IsEnableStaRange);
+            }
+            set
+            {
+                this.SetValByKey(SelectorAttr.IsEnableStaRange, value);
+            }
+        }
+        /// <summary>
         /// 节点ID
         /// </summary>
         public int NodeID
@@ -244,6 +280,9 @@ namespace BP.WF.Template
 
                 map.AddBoolean(SelectorAttr.IsAutoLoadEmps, true, "是否自动加载上一次选择的人员？", true, true);
                 map.AddBoolean(SelectorAttr.IsSimpleSelector, false, "是否单项选择(只能选择一个人)？", true, true);
+
+                map.AddBoolean(SelectorAttr.IsEnableDeptRange, false, "是否启用部门搜索范围限定(对使用通用人员选择器有效)？", true, true, true);
+                map.AddBoolean(SelectorAttr.IsEnableStaRange, false, "是否启用岗位搜索范围限定(对使用通用人员选择器有效)？", true, true, true);
 
 
            //     map.AddDDLSysEnum(SelectorAttr.IsMinuesAutoLoadEmps, 5, "接收人选择方式", true, true, SelectorAttr.SelectorModel,

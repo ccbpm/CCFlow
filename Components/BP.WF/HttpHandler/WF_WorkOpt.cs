@@ -219,14 +219,9 @@ namespace BP.WF.HttpHandler
                 //标识结束，不要like名字了.
                 if (emp.Contains("/"))
                 {
-                    if (SystemConfig.CustomerNo == "TianYe") //只改了oracle的
+                    if (SystemConfig.CustomerNo == "TianYe") // 只改了oracle的
                     {
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%')";
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001'";
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "SELECT a.No,CONCAT(a.Name,'/',b.FullName) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') LIMIT 12";
+                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001'";
                     }
                     else
                     {
@@ -236,18 +231,21 @@ namespace BP.WF.HttpHandler
                             sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 ";
                         if (SystemConfig.AppCenterDBType == DBType.MySQL)
                             sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') LIMIT 12";
-
                     }
                 }
                 else
+                {
                     if (SystemConfig.CustomerNo == "TianYe")//只改了oracle的
                     {
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and ( a.PinYin LIKE '%," + emp.ToLower() + "%')";
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        Selector sa = new Selector(this.FK_Node);
+                        if (sa.IsEnableStaRange == true || sa.IsEnableDeptRange == true)
+                        {
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + this.FK_Node + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' ";
+                        }
+                        else
+                        {
                             sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' ";
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "SELECT a.No,CONCAT(a.Name,'/',b.FullName) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%' ) LIMIT 12";
+                        }
                     }
                     else
                     {
@@ -258,26 +256,17 @@ namespace BP.WF.HttpHandler
                         if (SystemConfig.AppCenterDBType == DBType.MySQL)
                             sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%' ) LIMIT 12";
                     }
+                }
             }
             else
-                if (SystemConfig.CustomerNo == "TianYe")//只改了oracle的
-                {
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12 AND a.No!='00000001'";
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.FullName) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
-                }
-                else
-                {
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12 ";
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
-                }
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12 ";
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
+            }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 

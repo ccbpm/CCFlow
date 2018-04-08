@@ -37,7 +37,7 @@
         <div class="navbar-inner">
             <div class="container">
                 <div class="pull-left">
-                    <button class="btn btn-danger" type="button" id="Btn_Save" onclick="Save()" >保存</button>
+                    <button class="btn btn-danger" type="button" id="Btn_Save">保存</button>
                     <button class="btn btn-Property" type="button" id="Btn_FlowAttr" onclick="FlowProperty()" >流程属性</button>
                     <button class="btn btn-info" type="button" id="Btn_Imp" onclick="FlowRpt()" >定义报表</button>
                     <button class="btn btn-info" type="button" id="Btn_Check" onclick="FlowCheck()"  >检查流程</button>
@@ -535,85 +535,85 @@
 
                               }
             });
-            
+
             /*保存*/
             $("#Btn_Save").bind('click', function () {
 
                 //获取所有节点信息.
-                var nodes = new Entities("BP.WF.Nodes");
-                nodes.Retrieve("FK_Flow", flowNo);
+                try {
+                    var nodes = new Entities("BP.WF.Nodes");
+                    nodes.Retrieve("FK_Flow", flowNo);
 
-                // 保存x,y位置.
-                var processInfo = _canvas.getProcessInfo(); //连接信息.
-                processInfo = JSON.parse(processInfo);
+                    // 保存x,y位置.
+                    var processInfo = _canvas.getProcessInfo(); //连接信息.
+                    processInfo = JSON.parse(processInfo);
 
-                for (var nodeID in processInfo) {
+                    for (var nodeID in processInfo) {
 
-                    var nodeIDStr = JSON.stringify(nodeID);
-                    var nodeJSON = processInfo[nodeID];
+                        var nodeIDStr = JSON.stringify(nodeID);
+                        var nodeJSON = processInfo[nodeID];
 
-                    for (var idx = 0; idx < nodes.length; idx++) {
+                        for (var idx = 0; idx < nodes.length; idx++) {
 
-                        var node = nodes[idx];
-                        var myID = "\"" + node.NodeID + "\"";
-                        if (myID != nodeIDStr)
-                            continue;
+                            var node = nodes[idx];
+                            var myID = "\"" + node.NodeID + "\"";
+                            if (myID != nodeIDStr)
+                                continue;
 
-                        node = new Entity("BP.WF.Node", node);
-                        node.Y = nodeJSON.top;
-                        node.X = nodeJSON.left;
-                        node.Update();
-                        break;
-                    }
-                }
-
-
-                //删除原来的连接线.
-                //var ens = new Entities("BP.WF.Directions");
-                //ens.
-                DBAccess.RunSQL("DELETE FROM WF_Direction WHERE FK_Flow='" + flowNo + "' ");
-
-
-                //创建一个实体.
-                var dir = new Entity("BP.WF.Template.Direction");
-
-                //保存方向.
-                for (var nodeID in processInfo) {
-
-                    //获得toNode.
-                    var nodeJSON = processInfo[nodeID];
-                    var strs = JSON.stringify(nodeJSON);
-
-                    //获得toNode.
-                    var toNodes = nodeJSON.process_to;
-                    if (toNodes == "")
-                        continue;
-
-                    for (var i = 0; i < toNodes.length; i++) {
-
-                        var toNodeID = toNodes[i];
-
-                        dir.FK_Flow = flowNo;
-                        dir.Node = nodeID;
-                        dir.ToNode = toNodeID;
-                        dir.MyPK = dir.FK_Flow + "_" + dir.Node + "_" + dir.ToNode;
-
-                        //alert(dir.MyPK);
-
-                        try {
-                            dir.Insert();
-                        } catch (e) {
-                            alert(e);
+                            node = new Entity("BP.WF.Node", node);
+                            node.Y = nodeJSON.top;
+                            node.X = nodeJSON.left;
+                            node.Update();
+                            break;
                         }
                     }
 
+
+                    //删除原来的连接线.
+                    //var ens = new Entities("BP.WF.Directions");
+                    //ens.
+                    DBAccess.RunSQL("DELETE FROM WF_Direction WHERE FK_Flow='" + flowNo + "' ");
+
+
+                    //创建一个实体.
+                    var dir = new Entity("BP.WF.Template.Direction");
+
+                    //保存方向.
+                    for (var nodeID in processInfo) {
+
+                        //获得toNode.
+                        var nodeJSON = processInfo[nodeID];
+                        var strs = JSON.stringify(nodeJSON);
+
+                        //获得toNode.
+                        var toNodes = nodeJSON.process_to;
+                        if (toNodes == "")
+                            continue;
+
+                        for (var i = 0; i < toNodes.length; i++) {
+
+                            var toNodeID = toNodes[i];
+
+                            dir.FK_Flow = flowNo;
+                            dir.Node = nodeID;
+                            dir.ToNode = toNodeID;
+                            dir.MyPK = dir.FK_Flow + "_" + dir.Node + "_" + dir.ToNode;
+
+                            dir.Insert();
+                        }
+
+                    }
                 }
+                catch (e) {
+                    alert(e);
+                }
+                alert('保存成功!');
                 return;
 
 
 
                 //执行流程检查.
-                var flow = new Entity("BP.WF.Flow", flowNo);
+                //var flow = new Entity("BP.WF.Flow", flowNo);
 
                 //var info = flow
 
@@ -720,30 +720,6 @@
 
         
         }
-
-        //保存信息.
-        function Save() {
-            //节点.
-            var nodes = new Entities("BP.WF.Nodes");
-            nodes.Retrieve("FK_Flow", flowNo);
-
-            //节点更新 , 更新位置信息.
-            for (var i = 0; i < nodes.length; i++) {
-
-                var nodeJson = nodes[i];
-                var node = new Entity("BP.WF.Node", nodeJson);
-
-                //根据节点.
-                //  node.Name = "sss";
-                // node.Update();
-            }
-
-            alert('保存成功..');
-
-            // lab 更新,位置与文本信息.
-            //连接线更新,先删除在更新.
-        }
-
         //刷新页面
         function page_reload() {
             location.reload();

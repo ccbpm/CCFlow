@@ -231,3 +231,39 @@ if (typeof DeliveryWay == "undefined") {
        /// </summary>
         RefMethodType.RightFrameOpen = 3
    }
+    /// <summary>
+    /// 文件展现方式
+    /// </summary>
+    if (typeof FileShowWay=="undefined"){
+        var FileShowWay = {}
+        /// <summary>
+        /// 表格
+        /// </summary>
+        FileShowWay.Table=0,
+        /// <summary>
+        /// 图片
+        /// </summary>
+        FileShowWay.Pict=1,
+        /// <summary>
+        /// 自由模式
+        /// </summary>
+        FileShowWay.Free=2
+    }
+    /// <summary>
+    /// 附件删除规则
+    /// </summary>
+   if (typeof AthDeleteWay=="undefined"){
+       var AthDeleteWay = {}
+        /// <summary>
+        /// 不删除 0
+        /// </summary>
+       AthDeleteWay.None=0,
+        /// <summary>
+        /// 删除所有 1
+        /// </summary>
+        AthDeleteWay.DelAll=1,
+        /// <summary>
+        /// 只删除自己上传 2
+        /// </summary>
+        AthDeleteWay.DelSelf=2
+    }

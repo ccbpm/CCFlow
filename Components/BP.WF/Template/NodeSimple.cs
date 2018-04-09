@@ -10,7 +10,7 @@ using BP.WF.Template;
 using BP.WF.Port;
 using System.Collections.Generic;
 
-namespace BP.WF
+namespace BP.WF.Template
 {
     /// <summary>
     /// 这里存放每个节点的信息.	 

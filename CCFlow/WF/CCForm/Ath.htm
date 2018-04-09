@@ -7,14 +7,107 @@
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
-    <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
     <script src="../Comm/Gener.js"  type="text/javascript" ></script>
-    <script src="AttachmentUpload.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript" >
-      
-        //页面启动函数.
-        $(function () {
+    <script src="../Scripts/slideBox/jquery.slideBox.min.js" type="text/javascript"></script>
+    <script src="Ath.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"defer="defer"></script>
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
 
+    <script src="/WF/Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js" type="text/javascript"></script>
+   
+
+    <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script>
+
+    <link href='/WF/Scripts/Jquery-plug/fileupload/uploadify.css' rel='stylesheet' type='text/css' />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/slideBox/style/jquery.slideBox.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/CCFormWinOpen.css" rel="stylesheet" type="text/css" />
+    
+    <script language="javascript" type="text/javascript" >
+        function CanEditor(fileType) {
+           //var fileTypes = BP.Sys.SystemConfig.AppSettings["OpenTypes"];
+            var fileTypes = "";
+            if (fileTypes == null || fileTypes=="")
+                fileTypes = "doc,docx,pdf,xls,xlsx,txt";
+
+            if (fileTypes.indexOf(fileType.toLowerCase()) != -1)
+                return true;
+            else
+                return false;
+        }
+        function IsImgExt(ext){
+            ext = ext.replace(".", "").toLowerCase();
+            switch (ext){
+                case "gif":
+                case "jpg":
+                case "jepg":
+                case "jpeg":
+                case "bmp":
+                case "png":
+                case "tif":
+                case "gsp":
+                case "mov":
+                case "psd":
+                case "tiff":
+                case "wmf":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        function  GetSortLenth_FromDB(sort,dbs)
+        {
+            var sortLength = 0;
+            for (var p = 0; p < dbs.length;p++ ) {
+                if (dbs[p].Sort == sort) sortLength++;
+            }
+            return sortLength;
+        }
+
+      
+
+        var Ath;
+        var FK_MapData;
+        var FK_FrmAttachment;
+        var WorkID;
+        var FK_Node;
+        var PKVal;
+        var IsReadonly;
+        var FID;
+        var EnsName;
+        var FK_Flow;
+        //页面启动函数.
+        var WebUser = new WebUser();
+        $(function () {
+            Ath = GetQueryString("Ath");
+            FK_MapData = GetQueryString("FK_MapData");
+            FK_FrmAttachment = GetQueryString("FK_FrmAttachment");
+            PKVal = GetQueryString("PKVal");
+            FK_Node = GetQueryString("FK_Node");
+            WorkID = GetQueryString("WorkID");
+            IsReadonly = GetQueryString("IsReadonly");
+            FID = GetQueryString("FID");
+            EnsName = GetQueryString("EnsName");
+            FK_Flow = GetQueryString("FK_Flow");
+
+            if (WorkID == "undefined" || WorkID == null || WorkID == "")
+                WorkID = GetQueryString("OID");
+            if (WorkID == "undefined" || WorkID == null || WorkID == "")
+                WorkID = GetQueryString("PKVal");
+
+            //关闭上传进度条
+            if (GetQueryString('IsExtend') != undefined && GetQueryString('IsExtend') == "1") {
+                $('#bar').css('display', 'block');
+                $('#btn_Colse').bind('click', close);
+            }
+            $('#btn_Colse').bind('click', close);
+
+            //获取上传附件列表的信息及权限信息
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Ath_Init");
@@ -33,56 +126,415 @@
 
             var athDesc = data["AthDesc"][0];
             var dbs = data["DBAths"];
-          //  athDesc = new Entity(athDesc); //把当前的实体处理成entity.
-            if (athDesc.IsDownload && dbs.length > 0) {
-                $("#Opt").html("<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包下载</a>");
-            } else {
-                $("#Opt").html("操作");
-            }
+            var fileShowWay = athDesc.FileShowWay;
+            if (fileShowWay == "undefined" || fileShowWay == null || fileShowWay == "")
+                fileShowWay = 0;
+            //文件展现方式  自由方式
+            if (fileShowWay == FileShowWay.Free)
+                FileShowWayFree(athDesc, dbs);
 
-            //输出附件..
-            for (var i = 0; i < dbs.length; i++) {
+            //表格方式
+            if (fileShowWay == FileShowWay.Table)
+                FileShowWayTable(athDesc, dbs);
 
-                var db = dbs[i];
+            //Pict
+            /*if (fileShowWay == FileShowWay.Pict)*/
+                //FileShowWayPict(athDesc, dbs);
 
-                var newRow = "";
-                newRow = "<tr ><td class=Idx>" + i + "</td>";
+            //文件上传
+            $('#file_upload').uploadify({
+                'swf': '/WF/Scripts/Jquery-plug/fileupload/uploadify.swf?',
+                'uploader': '/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&WorkID=' + PKVal + '&FID=' + FID + '&DoType=MoreAttach&FK_Node=' + FK_Node + '&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal,
+                'auto': true,
+                'fileTypeDesc': '请选择上传文件',
+                'buttonText': '批量上传',
+                'width': 60,
+                'fileTypeExts': realFileExts,
+                'height': 15,
+                'multi': true,
+                'queueSizeLimit': 999,
+                'onQueueComplete': function (queueData) {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                    handler.AddPara("AttachPK", FK_FrmAttachment);
+                    handler.AddPara("WorkID", PKVal);
+                    handler.AddPara("FID", FID);
+                    handler.AddPara("PKVal", PKVal);
+                    handler.AddUrlData();
+                    handler.DoMethodReturnString("MoreAttach");
+                    window.location.href = window.location.href;
 
-                newRow += "<td><a href=\"javascript:Down2017('" + db.MyPK + "');\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a></td>";
-                newRow += "<td>" + db.FileSize + "</td>";
-                newRow += "<td>" + db.RecName + "</td>";
+                },
+                'removeCompleted': false
+            });
 
-                newRow += "<td>";
-                if (athDesc.IsDelete=="1")
-                    newRow += "<a href=\"javascript:Delete('" + db.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
-                else
-                    newRow += "";
-                newRow += "</td>";
-
-                newRow += "</tr>";
-
-                $("#Table1 tr:last").after(newRow);
-            }
+            setIframeHeight();
 
         });
-          
+        
+        //自由模式
+        function FileShowWayFree(athDesc,dbs){
+            var athWidth = athDesc.W - 20;
+            var html = "";
+            html += "<table border='0' cellspacing='0' cellpadding='0' style='width:" + athWidth + "px'>";
+            for (var i = 0; i < dbs.length; i++) {
+                var db = dbs[i];
+                html += "<tr>";
+                if (CanEditor(db.FileExts)) {
+                    //是否启用weboffice
+                    if (athDesc.IsWoEnableWF)
+                        html += addTdTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + FK_FrmAttachment + "','" +
+                                    WorkID + "','" + db.MyPK + "','" + FK_MapData + "','" + Ath +
+                                    "','" + FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                    
+                    else 
+                        html += addTdTitle(db.FileName, "<a href=\"javascript:OpenView('" + PKVal + "','" + db.MyPK +
+                                        "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                    
+                }else if (IsImgExt(db.FileExts) || db.FileExts.toUpperCase() == "PDF" || db.FileExts.toUpperCase() == "CEB") {
+                    html += addTdTitle(db.FileName, "<a href=\"javascript:OpenView('" + PKVal + "','" + db.MyPK +
+                                        "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                }else {
+                    html += addTdTitle(db.FileName, "<a href=\"javaScript:AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK +
+                                        "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                }
+
+                if (athDesc.IsDownload)
+                    html += "<td><a href=\"javascript:Down2017('" + db.MyPK + "')\">下载</a></td>";
+                else
+                    html += "<td></td>";
+
+                if (IsReadonly != "1") {
+                    if (athDesc.DeleteWay == AthDeleteWay.DelAll)//删除所有
+                        html += "<td style='border:0px'><a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a></td>";
+                    else if (athDesc.DeleteWay == AthDeleteWay.DelSelf)//只能删除自己上传的
+                    {
+                        if (db.Rec.equals(WebUser.No))
+                            html += "<td style='border:0px'><a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a></td>";
+                        else
+                            html += "<td></td>";
+                    }else {
+                        html += "<td></td>";
+                    }
+                } else {
+                    html += "<td></td>";
+                }
+
+                html += "</tr>";
+            }
+            html += AddFileUpload(athDesc);
+            html += "</table>";
+            $("#ShowTable").html(html);
+        }
+
+        //Table模式
+        function FileShowWayTable(athDesc, dbs) {
+           var  html = "<table border='0' cellspacing='0' cellpadding='0' style='width:100%;'>";
+            if (athDesc.IsShowTitle == true) {
+                html += "<tr style='border:0px;'>";
+
+                html += "<td class='TitleExt' style='width:50px;' nowrap=true >序号</td>";
+                if (athDesc.Sort.indexOf(",") != -1) {
+                    var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
+                    if (sortColumn == "")
+                        sortColumn = "类别";
+                    html += "<td class='TitleExt' sstyle='background:#f4f4f4; font-size:12px; padding:3px;' nowrap=true >" + sortColumn + "</td>";
+                }
+                html += "<td class='TitleExt' style='min-width:200px;' nowrap=true >文件名</td>";
+                html += "<td class='TitleExt' style='width:50px;' nowrap=true >大小KB</td>";
+                html += "<td class='TitleExt' style='width:90px;' nowrap=true >上传时间</td>";
+                html += "<td class='TitleExt' style='width:50px;' nowrap=true >上传人</td>";
+                html += "<td class='TitleExt' nowrap=true style='width:50px;' >";
+                if (athDesc.IsDownload && dbs.length > 0)
+                    html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包下载</a>";
+                else
+                    html += "操作";
+                html += "</td>";
+                html += "</tr>";
+            }
+            var i = 0;
+            var fileSorts = new Array("");
+            var haveAuthSort = false;
+            var bSort_Add_TD = false;
+            if (athDesc.Sort.indexOf(",") != -1) {
+                haveAuthSort = true;
+                //追加一个空项
+                if (!athDesc.Sort.endsWith(",")) athDesc.Sort = athDesc.Sort + ",";
+                fileSorts = athDesc.Sort.split(',');
+            }
+
+            for (var j = 0; j < fileSorts.length; j++) {
+                var sort = fileSorts[j]
+                bSort_Add_TD = true;
+
+                var mysort = sort;
+                if (sort.indexOf("@") != -1)
+                    mysort = sort.substring(sort.indexOf('@') + 1);
+
+                for (var k = 0; k < dbs.length; k++) {
+                    var db = dbs[k];
+                    if (haveAuthSort == true && db.Sort != mysort)
+                        continue;
+
+                    i++;
+                    html += "<tr>";
+                    html += "<td class='Idx' nowrap>" + i + "</td>";
+                    if (athDesc.Sort.indexOf(",") != -1) {
+                        if (bSort_Add_TD == true) {
+                            bSort_Add_TD = false;
+                            var rowSpan = GetSortLenth_FromDB(mysort, dbs);
+                            html += "<td rowspan=" + rowSpan + ">" + db.Sort + "</td>";
+                        }
+                    }
+                    if (athDesc.IsDownload) {
+                        if (athDesc.IsWoEnableWF && CanEditor(db.FileExts))
+                            html += addTdTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + FK_FrmAttachment + "','" + WorkID + "','" + db.MyPK + "','" + FK_MapData + "','" + Ath + "','" + FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        else if (IsImgExt(db.FileExts) == true)
+                            html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        else 
+                            html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "');\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");  
+                    }
+                    else
+                        html += "<td><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</td>";
+
+                    html += "<td>" + db.FileSize + "</td>";
+                    html += "<td>" + db.RDT + "</td>";
+                    html += "<td>" + db.RecName + "</td>";
+
+                    //输出操作部分.
+                    html += "<td>";
+                    if (athDesc.IsDownload)
+                        html += "<a href=\"javascript:Down2017('" + db.MyPK + "')\">下载</a>";
+                    if (IsReadonly != "1") {
+                        var op = null;
+
+                        if (athDesc.DeleteWay == AthDeleteWay.DelAll)//删除所有
+                            op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a>";
+                        if (athDesc.DeleteWay == AthDeleteWay.DelSelf)//删除自己上传的
+                            if (db.Rec.equals(WebUser.No))
+                                op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a>";
+
+                        html += op;
+                    }
+                    html += "</td>";
+
+                    html += "</tr>";
+                }
+            }
+            if (i == 0) {
+                html += "<tr>";
+                html += "<td class='Idx' nowrap>" + 0 + "</td>"; ;
+                if (athDesc.Sort.indexOf(",") != -1)
+                    this.Pub1.AddTD("&nbsp&nbsp");
+
+                if (athDesc.IsUpload == true)
+                    html += "<td style='width:100px'> <span style='color:red;' >请点击下方按钮上传附件</span></td>";
+                else
+                    html += "<td style='width:100px'></td>";
+                html += "<td>&nbsp&nbsp</td>";
+                html += "<td>&nbsp&nbsp</td>";
+                html += "<td>&nbsp&nbsp</td>";
+                html += "<td>&nbsp&nbsp</td>";
+                html += "</tr>";
+            }
+
+            html += AddFileUpload(athDesc);
+            html += "</table>";
+
+            $("#ShowTable").html(html);
+
+        }
+
+        //增加文件名称
+        function addTdTitle(title, str) {
+            return "\n<td  nowrap title='" + title + "' >" + str + "</td>";
+        }
+
+        function setIframeHeight() {
+            $("#" + window.frameElement.getAttribute("id"), parent.document).height(Math.max($(document).height(), $("body").height()) + ($(".Idx").length * 2));
+        }
+        var realFileExts = "";
+        function  AddFileUpload(athDesc)
+        {
+            var html="";
+            if (athDesc.IsUpload == true && IsReadonly != "1")
+            {
+                html +="<tr>";
+                if (athDesc.Sort.indexOf(",")!=-1)
+                    html +="<td colspan=7>";
+                else
+                    html +="<td colspan=6>";
+
+                var explorer = window.navigator.userAgent;
+
+                if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) ||(explorer.indexOf('Trident') >= 0))
+                {
+                    var fileExts = athDesc.Exts.replace("|", ";");
+                    fileExts = athDesc.Exts.replace(",", ";");
+
+                    var fileExtData = fileExts.split(';');
+
+                    for (var i=0 ;i<fileExtData.length;i++)
+                    {
+                        var ext = fileExtData[i]
+                        if (ext !=null && ext!="")
+                        {
+                            if (ext.startsWith("*."))
+                                realFileExts += ext + ";";
+                            else
+                                realFileExts += "*." + ext + ";";
+                        }
+                    }
+
+                    if (realFileExts==null || realFileExts=="")
+                     realFileExts = "*.*";
+                    
+
+                    html+="<div id='file_upload-queue' class='uploadify-queue'></div>";
+
+                    if (athDesc.Sort.indexOf(",")!=-1)
+                    {
+                        var sortColumn = athDesc.Sort.indexOf("@")!=-1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
+                        var strs = athDesc.Sort.indexOf("@")!=-1  ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
+                        /*BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
+                        ddl.ID = "ddl";
+                        int ddlIdex = 0;
+                        foreach (string str in strs)
+                        {
+                            if (str == null || str == "")
+                                continue;
+                            ddl.Items.Add(new ListItem(str, ddlIdex.ToString()));
+                            ddlIdex++;
+                        }*/
+                        html+="<div id='s' style='width:360px;text-align:right;float:right;display:inline;' >";
+                        html+="<div style='float:left;'>";
+                        html+="请选择" + sortColumn + "：";
+                        //this.Pub1.Add(ddl);
+                        html+="</div>";
+                    }
+                    else
+                    {
+                        html +="<div id='s' style='text-align:right;float:right;display:inline;' >";
+                    }
+                    html +="<div style='float:left;margin-left:5px;'>";
+                    html +="<input type='file' style='float:left' name='file_upload' id='file_upload' />";
+                    html +="</div>";
+                    html +="</div>";
+
+                    if (athDesc.IsNote)
+                        html+="<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
+
+                }else{
+                    // 让石家庄客户，来完善附件类别支持sql.
+                    if (athDesc.Sort.indexOf(",")!=-1)
+                    {
+                        var sortColumn = athDesc.Sort.indexOf("@")!=-1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
+                        var strs = athDesc.Sort.indexOf("@")!=-1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
+
+                        /*BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
+                        ddl.ID = "ddl";
+                        int ddlIdex = 0;
+                        foreach (string str in strs)
+                        {
+                            if (str == null || str == "")
+                                continue;
+                            ddl.Items.Add(new ListItem(str, ddlIdex.ToString()));
+                            ddlIdex++;
+                        }*/
+                        html+="请选择" + sortColumn + "：";
+                        //this.Pub1.Add(ddl);
+                    }
+
+                    html += "文件:"
+                    html += "<input type='file' name='file' id='file' onchange='UploadChange();'>"
+                    if (athDesc.IsNote)
+                        html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
+                  
+                }
+                html +="</td>";
+                html +="<tr>";
+            }
+            return html;
+        }
+        function UploadChange() {
+
+            var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
+            if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                alert("请选择上传的文件.");
+                return;
+            }
+            var formData = new FormData();
+            var name = $("input").val();
+            formData.append("file",fileObj);
+            formData.append("name",name);
+            var AttachPK = FK_FrmAttachment;
+            $.ajax({
+                type: 'post',
+                async: false,
+                data:formData,
+                dataType: CCFrom,
+                success: function (data) {
+                    string = data;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    string = "Entities_DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    alert(string);
+                }
+            });
+                
+           /* var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddPara("AttachPK", FK_FrmAttachment);
+            handler.AddPara("WorkID", PKVal);
+            handler.AddPara("FID", FID);
+            handler.AddPara("PKVal", PKVal);
+            handler.AddFormData();
+            handler.DoMethodReturnString("MoreAttach");*/
+
+            window.location.href = window.location.href;
+        }
+        function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
+            var date = new Date();
+            var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+            var url = '../WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
+            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+        }
+
+
+
+        function OpenFileView(pkVal, delPKVal) {
+            var url = 'FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=<%=FK_FrmAttachment %>&FK_FrmAttachmentExt=<%=FK_FrmAttachmentExt %>&FK_Flow=<%=FK_Flow %>&FK_Node=<%=FK_Node %>&WorkID=<%=WorkID %>&IsCC=<%=IsCC %>';
+            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no, status=no');
+        }
+        function OpenView(pkVal, delPKVal) {
+            var url = 'FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_MapData=<%=FK_MapData %>&FK_FrmAttachment=<%=FK_FrmAttachment %>&FK_FrmAttachmentExt=<%=FK_FrmAttachmentExt %>&FK_Flow=<%=FK_Flow %>&FK_Node=<%=FK_Node %>&WorkID=<%=WorkID %>&IsCC=<%=IsCC %>';
+            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no, status=no');
+        }
+        // 上传Img.
+        function UploadImg() {
+            // window.(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            //window.location.href = 'AttachmentUploadImg.aspx?FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
+        }
+
+        //关闭窗口  适用于扩展属性
+        function close() {
+            if (parent != undefined && parent.SetAth != undefined && typeof (parent.SetAth) == "function") {
+                var nameTds = $('.Idx').next();
+                var nameStrs = [];
+                $.each(nameTds, function (i, nameTd) {
+                    nameStrs.push($(nameTd).children('a').text());
+                })
+                parent.SetAth(nameStrs);
+            }
+        }
      </script>
 	 
-</head>
+</head> 
 <body  >
     <form>
          <div id="Msg"></div>
-
-         <table style="width:100%;" id="Table1" >
-         <tr>
-         <th>序</th>
-         <th>名称</th>
-         <th>大小</th>
-         <th>上传人</th>
-         <th><div id="Opt"></div></th>
-         </tr>
-         </table>
-
+         <div id="ShowTable"></div>
+         <div id="bar" style="display: none;position: fixed;bottom: 0px;right: 0px;">
+            <button class="btn btn-info" id="btn_Colse" style="border: 0;background: #2884fa;color: #FFF;font-size: 12px;padding: 6px 10px;border-radius: 15px;margin: 5px;">关闭</button>
+         </div>
     </form>
 </body>
 </html>

@@ -1212,6 +1212,8 @@ namespace BP.WF.HttpHandler
 
             //查询出来从表数据.
             Entities dtls = ClassFactory.GetEns(this.EnsName);
+            QueryObject qo = new QueryObject(dtls);
+            qo.DoQuery();
             ds.Tables.Add(dtls.ToDataTableField("Ens"));
 
             //实体.
@@ -1302,6 +1304,151 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
 
+
+        #region 实体集合的保存.
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Entities_Save()
+        {
+            try
+            {
+                #region  查询出来s实体数据.
+                Entities dtls = BP.En.ClassFactory.GetEns(this.EnsName);
+                Entity en = dtls.GetNewEntity;
+                QueryObject qo = new QueryObject(dtls);
+                //qo.DoQuery(en.PK, BP.Sys.SystemConfig.PageSize, this.PageIdx, false);
+                qo.DoQuery();
+                Map map = en.EnMap;
+                foreach (Entity item in dtls)
+                {
+                    string pkval = item.PKVal.ToString();
+                    foreach (Attr attr in map.Attrs)
+                    {
+                        if (attr.IsRefAttr == true)
+                            continue;
+
+                        if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+                        {
+                            if (attr.UIIsReadonly == false)
+                                continue;
+
+                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key, null);
+                            item.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+
+                        if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                        {
+                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key, null);
+                            item.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                        {
+                            string val = this.GetValFromFrmByKey("DDL_" + pkval + "_" + attr.Key);
+                            item.SetValByKey(attr.Key, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+                        {
+                            string val = this.GetValFromFrmByKey("CB_" + pkval + "_" + attr.Key, "-1");
+                            if (val == "-1")
+                                item.SetValByKey(attr.Key, 0);
+                            else
+                                item.SetValByKey(attr.Key, 1);
+                            continue;
+                        }
+                    }
+
+                    item.Update(); //执行更新.
+                }
+                #endregion  查询出来实体数据.
+
+                #region 保存新加行.
+ 
+               
+                string valValue = "";
+               
+
+                foreach (Attr attr in map.Attrs)
+                {
+
+                    if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+                    {
+                        if (attr.UIIsReadonly == false)
+                            continue;
+
+                        valValue = this.GetValFromFrmByKey("TB_" + 0 + "_" + attr.Key, null);
+                        en.SetValByKey(attr.Key, valValue);
+                        continue;
+                    }
+
+                    if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                    {
+                        valValue = this.GetValFromFrmByKey("TB_" + 0 + "_" + attr.Key);
+                        en.SetValByKey(attr.Key, valValue);
+                        continue;
+                    }
+
+                    if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                    {
+                        valValue = this.GetValFromFrmByKey("DDL_" + 0 + "_" + attr.Key);
+                        en.SetValByKey(attr.Key, valValue);
+                        continue;
+                    }
+
+                    if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+                    {
+                        valValue = this.GetValFromFrmByKey("CB_" + 0 + "_" + attr.Key, "-1");
+                        if (valValue == "-1")
+                            en.SetValByKey(attr.Key, 0);
+                        else
+                            en.SetValByKey(attr.Key, 1);
+                        continue;
+                    }
+                }
+                if (en.IsBlank == false)
+                {
+                    if (en.IsNoEntity)
+                    {
+                        if (en.EnMap.IsAutoGenerNo)
+                            en.SetValByKey("No", en.GenerNewNoByKey("No"));
+                    }
+
+                    try
+                    {
+                        if (en.PKVal.ToString() == "0")
+                        {
+                        }
+                        else
+                        {
+                            en.Insert();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //异常处理..
+                        Log.DebugWriteInfo(ex.Message);
+                        //msg += "<hr>" + ex.Message;
+                    }
+                }   
+               
+
+                #endregion 保存新加行.
+
+                return "保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion
         #region 获取批处理的方法.
         public string Refmethod_BatchInt()
         {

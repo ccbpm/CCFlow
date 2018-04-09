@@ -19,7 +19,9 @@ namespace BP.DA
     {
         public static bool IsNullOrEmpty(string s)
         {
- 
+            if (s == "null")
+                return true;
+
             return string.IsNullOrEmpty(s);
         }
 

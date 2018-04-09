@@ -846,11 +846,12 @@ namespace BP.Web
         {
             get
             {
-                string var = BP.Web.WebUser.No;
+                string no = BP.Web.WebUser.No;
 
-                string val = GetValFromCookie("Name", null, true);
+                string val = GetValFromCookie("Name", no, true);
                 if (val == null)
                     throw new Exception("@err-002 Name 登陆信息丢失。");
+
                 return val;
             }
             set

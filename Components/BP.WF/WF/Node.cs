@@ -1346,7 +1346,7 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStrByKey(NodeAttr.NodeFrmID);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return "ND" + this.NodeID;
                 return str;
             }

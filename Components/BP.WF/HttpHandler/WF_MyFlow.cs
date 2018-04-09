@@ -531,9 +531,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 内置表单类型的判断.
 
-            string myurl = "MyFlow.aspx";
-            if (Glo.IsBeta==true)
-                myurl = "MyFlowGener.htm";
+            string myurl = "MyFlowGener.htm";
 
             //处理连接.
             myurl = this.MyFlow_Init_DealUrl(currND, currWK, myurl);

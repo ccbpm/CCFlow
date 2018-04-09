@@ -37,7 +37,7 @@ namespace BP.WF
             get
             {
                 string s = BP.Sys.SystemConfig.AppSettings["PrintBackgroundWord"];
-                if (DataType.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                     s = "驰骋工作流引擎@开源驰骋 - ccflow@openc";
                 return s;
             }
@@ -780,7 +780,7 @@ namespace BP.WF
                     emps.RetrieveAllFromDBSource();
                     foreach (Emp empEn in emps)
                     {
-                        if (DataType.IsNullOrEmpty(empEn.Pass) || empEn.Pass.Length < 30)
+                        if (string.IsNullOrEmpty(empEn.Pass) || empEn.Pass.Length < 30)
                         {
                             empEn.Pass = BP.Tools.Cryptography.EncryptString(empEn.Pass);
                             empEn.DirectUpdate();
@@ -1270,7 +1270,7 @@ namespace BP.WF
             // 流程树根节点校验
             string tmp = "SELECT Name FROM WF_FlowSort WHERE ParentNo='0'";
             tmp = DBAccess.RunSQLReturnString(tmp);
-            if (DataType.IsNullOrEmpty(tmp))
+            if (string.IsNullOrEmpty(tmp))
             {
                 tmp = "INSERT INTO WF_FlowSort(No,Name,ParentNo,TreeNo,idx,IsDir) values('01','流程树',0,'',0,0)";
                 DBAccess.RunSQLReturnString(tmp);
@@ -1279,7 +1279,7 @@ namespace BP.WF
             // 表单树根节点校验
             tmp = "SELECT Name FROM Sys_FormTree WHERE ParentNo = '0' ";
             tmp = DBAccess.RunSQLReturnString(tmp);
-            if (DataType.IsNullOrEmpty(tmp))
+            if (string.IsNullOrEmpty(tmp))
             {
                 tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,Idx,IsDir) values('001','表单树',0,0,0)";
                 DBAccess.RunSQLReturnString(tmp);
@@ -1860,7 +1860,7 @@ namespace BP.WF
             string sendTo = "";
             foreach (string str in strs)
             {
-                if (DataType.IsNullOrEmpty(str))
+                if (string.IsNullOrEmpty(str))
                     continue;
 
                 if (str.Contains("阅知") == true
@@ -1985,7 +1985,7 @@ namespace BP.WF
                 GenerWorkFlow gwfSubFlow = new GenerWorkFlow();
                 foreach (string id in workids)
                 {
-                    if (DataType.IsNullOrEmpty(id))
+                    if (string.IsNullOrEmpty(id))
                         continue;
 
                     // 把数据copy到里面,让子流程也可以得到父流程的数据。
@@ -2015,7 +2015,7 @@ namespace BP.WF
                             string[] myokwokid = okworkids.Split(',');
                             foreach (string okwokid in myokwokid)
                             {
-                                if (DataType.IsNullOrEmpty(id))
+                                if (string.IsNullOrEmpty(id))
                                     continue;
 
                                 // 把数据copy到里面,让子流程也可以得到父流程的数据。
@@ -2054,7 +2054,7 @@ namespace BP.WF
             get
             {
                 string s = BP.Sys.SystemConfig.AppSettings["adminers"];
-                if (DataType.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                     s = "admin,";
                 return s.Contains(BP.Web.WebUser.No);
             }
@@ -2064,7 +2064,7 @@ namespace BP.WF
             get
             {
                 string s = BP.Sys.SystemConfig.AppSettings["IsEnableTrackRec"];
-                if (DataType.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                     return false;
                 if (s == "0")
                     return false;
@@ -2072,24 +2072,6 @@ namespace BP.WF
                 return true;
             }
         }
-        
-        /// <summary>
-        /// 是否启用beta?
-        /// </summary>
-        public static bool IsBeta
-        {
-            get
-            {
-                string s = BP.Sys.SystemConfig.AppSettings["IsBeta"];
-                if (DataType.IsNullOrEmpty(s))
-                    return false;
-                if (s == "0")
-                    return false;
-
-                return true;
-            }
-        }
-        
         /// <summary>
         /// 获取mapdata字段查询Like。
         /// </summary>
@@ -2172,7 +2154,7 @@ namespace BP.WF
         {
             backHtml = "";//需要重新赋空值
             Hashtable ht = null;
-            if (DataType.IsNullOrEmpty(paras) == false)
+            if (string.IsNullOrEmpty(paras) == false)
             {
                 AtPara ap = new AtPara(paras);
                 ht = ap.HisHT;
@@ -2192,7 +2174,7 @@ namespace BP.WF
 
             foreach (string acce in accepters)
             {
-                if (DataType.IsNullOrEmpty(acce) == true)
+                if (string.IsNullOrEmpty(acce) == true)
                     continue;
 
                 // 执行发送.
@@ -2227,7 +2209,7 @@ namespace BP.WF
                 return;
             }
 
-            if (DataType.IsNullOrEmpty(objs.VarAcceptersID))//此处添加为空判断，跳过下面方法的执行，否则出错。
+            if (string.IsNullOrEmpty(objs.VarAcceptersID))//此处添加为空判断，跳过下面方法的执行，否则出错。
             {
                 return;
             }
@@ -2235,7 +2217,7 @@ namespace BP.WF
 
             foreach (string acce in accepters)
             {
-                if (DataType.IsNullOrEmpty(acce) == true)
+                if (string.IsNullOrEmpty(acce) == true)
                     continue;
 
                 //执行发送.
@@ -2479,12 +2461,12 @@ namespace BP.WF
 
             DataTable dt = null;
             string sql = item.Tag;
-            if (DataType.IsNullOrEmpty(sql) == false)
+            if (string.IsNullOrEmpty(sql) == false)
             {
                 /* 如果有填充主表的sql  */
                 sql = Glo.DealExp(sql, en, null);
 
-                if (DataType.IsNullOrEmpty(sql) == false)
+                if (string.IsNullOrEmpty(sql) == false)
                 {
                     if (sql.Contains("@"))
                         throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
@@ -2510,14 +2492,14 @@ namespace BP.WF
                                     break;
                             }
 
-                            if (DataType.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
+                            if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
                                 en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
                         }
                     }
                 }
             }
 
-            if (DataType.IsNullOrEmpty(item.Tag1)
+            if (string.IsNullOrEmpty(item.Tag1)
                 || item.Tag1.Length < 15)
                 return en;
 
@@ -2527,7 +2509,7 @@ namespace BP.WF
                 string[] sqls = item.Tag1.Split('*');
                 foreach (string mysql in sqls)
                 {
-                    if (DataType.IsNullOrEmpty(mysql))
+                    if (string.IsNullOrEmpty(mysql))
                         continue;
                     if (mysql.Contains(dtl.No + "=") == false)
                         continue;
@@ -2538,7 +2520,7 @@ namespace BP.WF
                     sql = Glo.DealExp(mysql, en, null);
                     #endregion 处理sql.
 
-                    if (DataType.IsNullOrEmpty(sql))
+                    if (string.IsNullOrEmpty(sql))
                         continue;
 
                     if (sql.Contains("@"))
@@ -2774,7 +2756,7 @@ namespace BP.WF
                 dt.Columns.Add(new DataColumn("No", typeof(string)));
                 foreach (string str in strs)
                 {
-                    if (DataType.IsNullOrEmpty(str))
+                    if (string.IsNullOrEmpty(str))
                         continue;
 
                     DataRow dr = dt.NewRow();
@@ -2824,7 +2806,7 @@ namespace BP.WF
                 /*如果是bs*/
                 foreach (string key in System.Web.HttpContext.Current.Request.QueryString.Keys)
                 {
-                    if (DataType.IsNullOrEmpty(key))
+                    if (string.IsNullOrEmpty(key))
                         continue;
                     exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
                 }
@@ -2910,7 +2892,7 @@ namespace BP.WF
                     err += "@账号:" + starter + ",不存在。";
                     continue;
                 }
-                if (DataType.IsNullOrEmpty(emp.FK_Dept))
+                if (string.IsNullOrEmpty(emp.FK_Dept))
                 {
                     err += "@账号:" + starter + ",没有部门。";
                     continue;
@@ -2922,7 +2904,7 @@ namespace BP.WF
                     err += "@账号:" + executer + ",不存在。";
                     continue;
                 }
-                if (DataType.IsNullOrEmpty(emp.FK_Dept))
+                if (string.IsNullOrEmpty(emp.FK_Dept))
                 {
                     err += "@账号:" + executer + ",没有部门。";
                     continue;
@@ -3046,7 +3028,7 @@ namespace BP.WF
             foreach (DataRow dr in dt.Rows)
             {
                 string flowPK = dr["FlowPK"].ToString().Trim();
-                if (DataType.IsNullOrEmpty(flowPK))
+                if (string.IsNullOrEmpty(flowPK))
                     continue;
 
                 string starter = dr["Starter"].ToString();
@@ -3081,7 +3063,7 @@ namespace BP.WF
                     continue;
                 }
 
-                if (DataType.IsNullOrEmpty(emp.FK_Dept))
+                if (string.IsNullOrEmpty(emp.FK_Dept))
                 {
                     err += "@账号:" + starter + ",没有设置部门。";
                     continue;
@@ -3097,7 +3079,7 @@ namespace BP.WF
                 else
                 {
                     emp.RetrieveFromDBSources();
-                    if (DataType.IsNullOrEmpty(emp.FK_Dept))
+                    if (string.IsNullOrEmpty(emp.FK_Dept))
                     {
                         err += "@账号:" + starter + ",没有设置部门。";
                         continue;
@@ -3169,9 +3151,9 @@ namespace BP.WF
         /// <param name="userNo"></param>
         public static void IsSingleUser(string userNo)
         {
-            if (DataType.IsNullOrEmpty(WebUser.No) || WebUser.No != userNo)
+            if (string.IsNullOrEmpty(WebUser.No) || WebUser.No != userNo)
             {
-                if (!DataType.IsNullOrEmpty(userNo))
+                if (!string.IsNullOrEmpty(userNo))
                 {
                     BP.WF.Dev2Interface.Port_Login(userNo);
                 }
@@ -3244,7 +3226,7 @@ namespace BP.WF
             }
             set
             {
-                if (DataType.IsNullOrEmpty(value) == true)
+                if (string.IsNullOrEmpty(value) == true)
                     return;
                 Paras p = new Paras();
                 p.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
@@ -3697,7 +3679,7 @@ namespace BP.WF
                 //如果两个参数都不为空说明启用
                 string corpid = BP.Sys.SystemConfig.Ding_CorpID;
                 string corpsecret = BP.Sys.SystemConfig.Ding_CorpSecret;
-                if (DataType.IsNullOrEmpty(corpid) || DataType.IsNullOrEmpty(corpsecret))
+                if (string.IsNullOrEmpty(corpid) || string.IsNullOrEmpty(corpsecret))
                     return false;
 
                 return true;
@@ -3713,7 +3695,7 @@ namespace BP.WF
                 //如果两个参数都不为空说明启用
                 string corpid = BP.Sys.SystemConfig.WX_CorpID;
                 string corpsecret = BP.Sys.SystemConfig.WX_AppSecret;
-                if (DataType.IsNullOrEmpty(corpid) || DataType.IsNullOrEmpty(corpsecret))
+                if (string.IsNullOrEmpty(corpid) || string.IsNullOrEmpty(corpsecret))
                     return false;
 
                 return true;
@@ -3810,7 +3792,7 @@ namespace BP.WF
             get
             {
                 string baseUrl = BP.Sys.SystemConfig.AppSettings["CCIMDBName"];
-                if (DataType.IsNullOrEmpty(baseUrl) == true)
+                if (string.IsNullOrEmpty(baseUrl) == true)
                     baseUrl = "ccPort.dbo";
                 return baseUrl;
             }
@@ -3828,7 +3810,7 @@ namespace BP.WF
                 }
 
                 string baseUrl = BP.Sys.SystemConfig.AppSettings["HostURL"];
-                if (DataType.IsNullOrEmpty(baseUrl) == true)
+                if (string.IsNullOrEmpty(baseUrl) == true)
                     baseUrl = "http://127.0.0.1/";
 
                 if (baseUrl.Substring(baseUrl.Length - 1) != "/")
@@ -3849,7 +3831,7 @@ namespace BP.WF
                 }
 
                 string baseUrl = BP.Sys.SystemConfig.AppSettings["BpmMobileAddress"];
-                if (DataType.IsNullOrEmpty(baseUrl) == true)
+                if (string.IsNullOrEmpty(baseUrl) == true)
                     baseUrl = "http://127.0.0.1/";
 
                 if (baseUrl.Substring(baseUrl.Length - 1) != "/")
@@ -3890,10 +3872,10 @@ namespace BP.WF
             get
             {
                 //BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
-                //if(DataType.IsNullOrEmpty(emp.Style) || emp.Style=="0")
+                //if(string.IsNullOrEmpty(emp.Style) || emp.Style=="0")
                 //{
                 string userStyle = BP.Sys.SystemConfig.AppSettings["UserStyle"];
-                if (DataType.IsNullOrEmpty(userStyle))
+                if (string.IsNullOrEmpty(userStyle))
                     return "ccflow默认";
                 else
                     return userStyle;
@@ -4263,7 +4245,7 @@ namespace BP.WF
             string empids = ",";
             foreach (string str in strs)
             {
-                if (DataType.IsNullOrEmpty(str))
+                if (string.IsNullOrEmpty(str))
                     continue;
 
                 string[] mystr = str.Split(',');
@@ -4883,7 +4865,7 @@ namespace BP.WF
                     string[] strs = flow.StartLimitPara.Split('@');
                     foreach (string str in strs)
                     {
-                        if (DataType.IsNullOrEmpty(str))
+                        if (string.IsNullOrEmpty(str))
                             continue;
                         string[] timeStrs = str.Split('-');
                         string tFrom = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[0].Trim();
@@ -4915,7 +4897,7 @@ namespace BP.WF
                     string[] strs = flow.StartLimitPara.Split('@');
                     foreach (string str in strs)
                     {
-                        if (DataType.IsNullOrEmpty(str))
+                        if (string.IsNullOrEmpty(str))
                             continue;
 
                         string weekStr = DateTime.Now.DayOfWeek.ToString().ToLower();
@@ -4948,7 +4930,7 @@ namespace BP.WF
                     string[] strs = flow.StartLimitPara.Split('@');
                     foreach (string str in strs)
                     {
-                        if (DataType.IsNullOrEmpty(str))
+                        if (string.IsNullOrEmpty(str))
                             continue;
                         string[] timeStrs = str.Split('-');
                         string tFrom = DateTime.Now.ToString("yyyy-MM-") + " " + timeStrs[0].Trim();
@@ -4974,7 +4956,7 @@ namespace BP.WF
                     string[] strs = flow.StartLimitPara.Split('@');
                     foreach (string str in strs)
                     {
-                        if (DataType.IsNullOrEmpty(str))
+                        if (string.IsNullOrEmpty(str))
                             continue;
                         string[] timeStrs = str.Split('-');
                         string tFrom = DateTime.Now.ToString("yyyy-") + " " + timeStrs[0].Trim();
@@ -5000,7 +4982,7 @@ namespace BP.WF
                     string[] strs = flow.StartLimitPara.Split('@');
                     foreach (string str in strs)
                     {
-                        if (DataType.IsNullOrEmpty(str))
+                        if (string.IsNullOrEmpty(str))
                             continue;
                         string[] timeStrs = str.Split('-');
                         string tFrom = DateTime.Now.ToString("yyyy-") + " " + timeStrs[0].Trim();
@@ -5071,7 +5053,7 @@ namespace BP.WF
                 string val = "";
                 foreach (string str in strs)
                 {
-                    if (DataType.IsNullOrEmpty(str) == true)
+                    if (string.IsNullOrEmpty(str) == true)
                         continue;
                     try
                     {

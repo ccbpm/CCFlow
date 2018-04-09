@@ -813,7 +813,7 @@ namespace BP.Sys
         {
             get
             {
-                return SystemConfig.GetValByKeyInt("SessionLostMinute", 500);
+                return SystemConfig.GetValByKeyInt("SessionLostMinute", 500000);
             }
         }
         /// <summary>

@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.WF;
 using BP.Web;
+using BP.DA;
+
 
 namespace CCFlow.WF.WorkOpt
 {
@@ -50,7 +52,7 @@ namespace CCFlow.WF.WorkOpt
         protected void Btn_OK_Click(object sender, EventArgs e)
         {
             string info = this.TextBox1.Text;
-            if (string.IsNullOrEmpty(info))
+            if (DataType.IsNullOrEmpty(info))
             {
                 BP.Sys.PubClass.Alert("请输入强制终止流程的原因。");
                 return;

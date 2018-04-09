@@ -42,7 +42,7 @@ namespace CCFlow.WF.WorkOpt
         private void LoadSelectedEmployees()
         {
             string selUsers = this.SelUsers;
-            if (!String.IsNullOrEmpty(selUsers))
+            if (!DataType.IsNullOrEmpty(selUsers))
             {
                 DataTable dt = DBAccess.RunSQLReturnTable("select * from Port_Emp");
                 if (dt != null)
@@ -70,7 +70,7 @@ namespace CCFlow.WF.WorkOpt
             string method = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (string.IsNullOrEmpty(Request["method"]))
+            if (DataType.IsNullOrEmpty(Request["method"]))
             {
                 LoadSelectedEmployees();
                 return;
@@ -93,7 +93,7 @@ namespace CCFlow.WF.WorkOpt
                     s_responsetext = GetSearchedEmps();
                     break;
             }
-            if (string.IsNullOrEmpty(s_responsetext))
+            if (DataType.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
             //组装ajax字符串格式,返回调用客户端
             Response.Charset = "UTF-8";
@@ -123,20 +123,20 @@ namespace CCFlow.WF.WorkOpt
             if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
             {
                 string filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmp where FK_Dept in ({0}))", deptId);
-                string filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
+                string filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
                 if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
                 {
-                    filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
+                    filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
                 }
                 sql = String.Format("select Port_Emp.*,Port_Dept.Name as DeptName from Port_Emp,Port_Dept where Port_Emp.FK_Dept = Port_Dept.No {0}{1}", filter_dept, filter_name);
             }
             else
             {
                 string filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select No as FK_Emp from Port_Emp where FK_Dept in ({0}))", deptId);
-                string filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
+                string filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
                 if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
                 {
-                    filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
+                    filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
                 }
                 sql = String.Format("select Port_Emp.*,Port_Dept.Name as DeptName from Port_Emp,Port_Dept where Port_Emp.FK_Dept = Port_Dept.No {0}{1}", filter_dept, filter_name);
             }

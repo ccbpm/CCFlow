@@ -54,7 +54,7 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                if (_fk_node == 0 && !string.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
+                if (_fk_node == 0 && !DataType.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
                     return int.Parse(this.Request.QueryString["FK_Node"]);
 
                 return _fk_node;
@@ -69,10 +69,10 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string str = this.Request.QueryString["WorkID"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.Request.QueryString["OID"];
 
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.Request.QueryString["PKVal"];
 
                 return Int64.Parse(str);
@@ -92,7 +92,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string fk_mapdata = this.Request.QueryString["FK_MapData"];
-                if (string.IsNullOrEmpty(fk_mapdata))
+                if (DataType.IsNullOrEmpty(fk_mapdata))
                     fk_mapdata = "ND" + FK_Node;
                 return fk_mapdata;
             }
@@ -110,7 +110,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string paras = this.Request.QueryString["Paras"];
-                if (string.IsNullOrEmpty(paras) == false)
+                if (DataType.IsNullOrEmpty(paras) == false)
                     if (paras.Contains("IsCC=1") == true)
                         return "1";
                 return "ssss";
@@ -123,7 +123,7 @@ namespace CCFlow.WF.CCForm
             FrmAttachmentDB downDB = new FrmAttachmentDB();
             if (this.DoType.Equals("view") || DoType.Equals("ViewPic"))
             {
-                if (string.IsNullOrEmpty(DelPKVal)==false)
+                if (DataType.IsNullOrEmpty(DelPKVal)==false)
                 {
                     downDB.MyPK = this.DelPKVal;
                     downDB.Retrieve();
@@ -214,7 +214,7 @@ namespace CCFlow.WF.CCForm
             {
                 #region 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
                 athDesc.MyPK = this.FK_FrmAttachment;
-                if (athDesc.RetrieveFromDBSources() == 0 && string.IsNullOrEmpty(this.FK_Flow) == false)
+                if (athDesc.RetrieveFromDBSources() == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*如果没有查询到它,就有可能是公文多附件被删除了.*/
                     athDesc.MyPK = this.FK_FrmAttachment;
@@ -304,7 +304,7 @@ namespace CCFlow.WF.CCForm
                 if (DataType.IsImgExt(db.FileExts) == false)
                     continue;
 
-                if (!string.IsNullOrEmpty(type))
+                if (!DataType.IsNullOrEmpty(type))
                 {
                     int updateIdx = int.Parse(this.Request.QueryString["Idx"]);
                     if (type.Equals("UP"))
@@ -342,7 +342,7 @@ namespace CCFlow.WF.CCForm
                 count++;
             }
 
-            if (!string.IsNullOrEmpty(type))
+            if (!DataType.IsNullOrEmpty(type))
                 dbs = LoadAttach(athDesc);
 
             foreach (FrmAttachmentDB db in dbs)

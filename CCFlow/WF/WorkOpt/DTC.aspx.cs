@@ -46,7 +46,7 @@ namespace CCFlow.WF.WorkOpt
                         {
                             string msg = StartFlow(flowno);
 
-                            if (!string.IsNullOrEmpty(msg))
+                            if (!DataType.IsNullOrEmpty(msg))
                             {
                                 re = ReturnJson(false, "发起流程失败：" + msg, false);
                             }

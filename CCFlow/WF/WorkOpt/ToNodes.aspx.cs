@@ -87,7 +87,7 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
                 string[] mytoNodes = this.ToNodes.Split(',');
                 foreach (string str in mytoNodes)
                 {
-                    if (string.IsNullOrEmpty(str) == true)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
                     nds.AddEntity(new Node(int.Parse(str)));
                 }
@@ -232,7 +232,7 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
                 string[] mytoNodes = this.ToNodes.Split(',');
                 foreach (string str in mytoNodes)
                 {
-                    if (string.IsNullOrEmpty(str) == true)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
                     nds.AddEntity(new Node(int.Parse(str)));
                 }

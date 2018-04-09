@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using BP.WF;
 using BP.Sys;
 using BP.En;
+using BP.DA;
+
 
 namespace CCFlow.WF.MapDef.Rpt
 {
@@ -31,7 +33,7 @@ namespace CCFlow.WF.MapDef.Rpt
             get
             {
                 string isChecked = this.Request["IsChecked"];
-                if (string.IsNullOrEmpty(isChecked))
+                if (DataType.IsNullOrEmpty(isChecked))
                     return "false";
                 return this.Request["IsChecked"];
             }

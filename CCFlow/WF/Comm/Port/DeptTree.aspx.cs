@@ -51,7 +51,7 @@ namespace CCFlow.WF.Comm.Port
             //返回值
             string s_responsetext = string.Empty;
 
-            if (string.IsNullOrEmpty(WebUser.No) || string.IsNullOrEmpty(Request["method"]))
+            if (DataType.IsNullOrEmpty(WebUser.No) || DataType.IsNullOrEmpty(Request["method"]))
                 return;
 
             method = Request["method"].ToString();
@@ -64,7 +64,7 @@ namespace CCFlow.WF.Comm.Port
                     s_responsetext = insertMet();
                     break;
             }
-            if (string.IsNullOrEmpty(s_responsetext))
+            if (DataType.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
             //组装ajax字符串格式,返回调用客户端 树型
             Response.Charset = "UTF-8";
@@ -104,7 +104,7 @@ namespace CCFlow.WF.Comm.Port
                 }
             }
             s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "0", s_checkded);
-            if (string.IsNullOrEmpty(s_responsetext) || s_responsetext == "[]")//如果为空，使用另一种查询
+            if (DataType.IsNullOrEmpty(s_responsetext) || s_responsetext == "[]")//如果为空，使用另一种查询
             {
                 treeResult.Clear();
                 s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "O0", s_checkded);
@@ -121,7 +121,7 @@ namespace CCFlow.WF.Comm.Port
             NodeDept nodeDept = new NodeDept();
             nodeDept.Delete(NodeDeptAttr.FK_Node, this.FK_Node);
 
-            if (!string.IsNullOrEmpty(getId))
+            if (!DataType.IsNullOrEmpty(getId))
             {
                 string[] Depts = getId.Split(',');
                 for (int i = 0; i < Depts.Length; i++)

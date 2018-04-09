@@ -667,7 +667,7 @@ namespace CCFlow.WF.Rpt.UC
 
         public void SaveSearchState(string ensName, string key)
         {
-            if (string.IsNullOrEmpty(ensName))
+            if (DataType.IsNullOrEmpty(ensName))
                 throw new Exception("@EnsName 为空" + ensName);
 
             UserRegedit ur = new UserRegedit();

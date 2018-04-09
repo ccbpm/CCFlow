@@ -1574,11 +1574,11 @@ namespace CCFlow.WF.UC
             string v = en.GetValStrByKey(attr.KeyOfEn);
 
             //如果为空，默认使用当前登录人签名
-            if (string.IsNullOrEmpty(v) && activeFilds.Contains(attr.KeyOfEn + ","))
+            if (DataType.IsNullOrEmpty(v) && activeFilds.Contains(attr.KeyOfEn + ","))
                 v = WebUser.No;
 
             //如果为只读并且为空，显示为未签名
-            if (this.IsReadonly && string.IsNullOrEmpty(v))
+            if (this.IsReadonly && DataType.IsNullOrEmpty(v))
                 v = "sigan-readonly";
 
             if (attr.PicType == PicType.ShouDong)
@@ -1604,14 +1604,14 @@ namespace CCFlow.WF.UC
                 if (info.DoQuery() > 0)
                 {
                     isEdit = true;//可编辑，如果值为空显示可编辑图片
-                    if (string.IsNullOrEmpty(v))
+                    if (DataType.IsNullOrEmpty(v))
                         v = "siganture";
                 }
                 else
                 {
                     isEdit = false;
                     //不可编辑，如果值为空显示不可编辑图片
-                    if (string.IsNullOrEmpty(v))
+                    if (DataType.IsNullOrEmpty(v))
                         v = "sigan-readonly";
                 }
             }
@@ -1668,7 +1668,7 @@ namespace CCFlow.WF.UC
                     ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/GDCASign/main.js");
                 }
 
-                if (!string.IsNullOrEmpty(attr.Para_SiganField))
+                if (!DataType.IsNullOrEmpty(attr.Para_SiganField))
                 {
                     //string signClient = this.GetTBByID("TB_" + attr.Para_SiganField).ClientID;
                     string signClient = "";
@@ -1719,7 +1719,7 @@ namespace CCFlow.WF.UC
                     ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/Sign/main.js");
                 }
 
-                if (!string.IsNullOrEmpty(attr.Para_SiganField))
+                if (!DataType.IsNullOrEmpty(attr.Para_SiganField))
                 {
                     //string signClient = this.GetTBByID("TB_" + attr.Para_SiganField).ClientID;
                     string signClient = "";
@@ -1849,7 +1849,7 @@ namespace CCFlow.WF.UC
                             string valOld = ddlFull.SelectedItemStringVal;
                             string fullSQL = me.Doc.Clone() as string;
 
-                            if (string.IsNullOrEmpty(fullSQL) == true)
+                            if (DataType.IsNullOrEmpty(fullSQL) == true)
                             {
                                 me.Delete();
                                 continue;
@@ -1906,7 +1906,7 @@ namespace CCFlow.WF.UC
                                     }
                                 }
                             }
-                            if (string.IsNullOrEmpty(val))
+                            if (DataType.IsNullOrEmpty(val))
                                 ddlFull.SetSelectItem(en.GetValStrByKey(me.AttrOfOper));
                             else
                                 ddlFull.SetSelectItem(val);
@@ -1938,7 +1938,7 @@ namespace CCFlow.WF.UC
                                 string[] strs = me.Tag.Split('$');
                                 foreach (string str in strs)
                                 {
-                                    if (string.IsNullOrEmpty(str))
+                                    if (DataType.IsNullOrEmpty(str))
                                         continue;
 
                                     string[] myCtl = str.Split(':');
@@ -1952,7 +1952,7 @@ namespace CCFlow.WF.UC
                                     }
 
                                     //如果触发的dll 数据为空，则不处理.
-                                    if (string.IsNullOrEmpty(ddlOper.SelectedItemStringVal.Trim()))
+                                    if (DataType.IsNullOrEmpty(ddlOper.SelectedItemStringVal.Trim()))
                                         continue;
 
                                     string sql = myCtl[1].Replace("~", "'");
@@ -2029,7 +2029,7 @@ namespace CCFlow.WF.UC
                                 string[] strs = me.Tag.Split('$');
                                 foreach (string str in strs)
                                 {
-                                    if (string.IsNullOrEmpty(str))
+                                    if (DataType.IsNullOrEmpty(str))
                                         continue;
 
                                     string[] myCtl = str.Split(':');
@@ -2042,7 +2042,7 @@ namespace CCFlow.WF.UC
 
                                     //如果文本库数值为空，就让其返回.
                                     string txt = tbAuto.Text.Trim();
-                                    if (string.IsNullOrEmpty(txt))
+                                    if (DataType.IsNullOrEmpty(txt))
                                         continue;
 
                                     //获取要填充 ddll 的SQL.
@@ -2239,7 +2239,7 @@ namespace CCFlow.WF.UC
             this.Add(js);
             foreach (MapExt ext in mes)
             {
-                if (ext.ExtType.Equals(MapExtXmlList.AutoFull) == false || string.IsNullOrEmpty(ext.Doc) == true)
+                if (ext.ExtType.Equals(MapExtXmlList.AutoFull) == false || DataType.IsNullOrEmpty(ext.Doc) == true)
                     continue;
 
                 js = "\t\n <script type='text/javascript' >";
@@ -2269,7 +2269,7 @@ namespace CCFlow.WF.UC
                     string name = dr[1].ToString();
 
                     if (ext.Doc.Contains("@" + keyofen)
-                        || (ext.Doc.Contains("@" + name) && !string.IsNullOrEmpty(name)))
+                        || (ext.Doc.Contains("@" + name) && !DataType.IsNullOrEmpty(name)))
                     {
                     }
                     else
@@ -2282,7 +2282,7 @@ namespace CCFlow.WF.UC
                     this.GetTBByID(tbID).Attributes["onkeyup"] += "javascript:Auto" + ext.AttrOfOper + "();";
 
                     right = right.Replace("@" + keyofen, " parseFloat( document.forms[0]." + mytb.ClientID + ".value.replace( ',' ,  '' )=='' ? 0 : document.forms[0]." + mytb.ClientID + ".value.replace( ',' ,  '' )) ");
-                    if (!string.IsNullOrEmpty(name))
+                    if (!DataType.IsNullOrEmpty(name))
                         right = right.Replace("@" + name, " parseFloat( document.forms[0]." + mytb.ClientID + ".value.replace( ',' ,  '' )=='' ? 0 : document.forms[0]." + mytb.ClientID + ".value.replace( ',' ,  '' )) ");
                 }
 
@@ -2779,7 +2779,7 @@ namespace CCFlow.WF.UC
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(msg) == false)
+                        if (DataType.IsNullOrEmpty(msg) == false)
                         {
                             en.RetrieveFromDBSources();
                             this.Alert(msg);
@@ -3044,7 +3044,7 @@ namespace CCFlow.WF.UC
                         imgSrc = "/DataUser/ICON/LogBig.png";
 
                     this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                    if (string.IsNullOrEmpty(img.LinkURL) == false)
+                    if (DataType.IsNullOrEmpty(img.LinkURL) == false)
                         this.Add("\t\n<a href='" + img.LinkURL + "' target=" + img.LinkTarget + " ><img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' /></a>");
                     else
                         this.Add("\t\n<img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
@@ -3099,7 +3099,7 @@ namespace CCFlow.WF.UC
                     {
                         #region 加载签章
                         //如果设置了部门与岗位的集合进行拆分
-                        if (!string.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
+                        if (!DataType.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
                         {
                             fk_dept = img.Tag0.Split('^')[0];
                             fk_station = img.Tag0.Split('^')[1];
@@ -3117,7 +3117,7 @@ namespace CCFlow.WF.UC
                                     fk_dept = BP.DA.DBAccess.RunSQLReturnString(sql);
                                 }
                                 //表单字段
-                                if (sealType == "2" && !string.IsNullOrEmpty(sealField))
+                                if (sealType == "2" && !DataType.IsNullOrEmpty(sealField))
                                 {
                                     //判断字段是否存在
                                     foreach (MapAttr attr in mattrs)
@@ -3147,7 +3147,7 @@ namespace CCFlow.WF.UC
 
                         imgSrc = CCFlowAppPath + "DataUser/Seal/" + fk_dept + "_" + stationNo + ".png";
                         //设置主键
-                        string myPK = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                        string myPK = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                         myPK = myPK + "_" + this.HisEn.GetValStrByKey("OID") + "_" + img.MyPK;
 
                         FrmEleDB imgDb = new FrmEleDB();
@@ -3155,9 +3155,9 @@ namespace CCFlow.WF.UC
                         queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
                         queryInfo.DoQuery();
                         //判断是否存在
-                        if (imgDb == null || string.IsNullOrEmpty(imgDb.FK_MapData))
+                        if (imgDb == null || DataType.IsNullOrEmpty(imgDb.FK_MapData))
                         {
-                            imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                            imgDb.FK_MapData = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                             imgDb.EleID = this.HisEn.GetValStrByKey("OID");
                             imgDb.RefPKVal = img.MyPK;
                             imgDb.Tag1 = imgSrc;
@@ -3165,7 +3165,7 @@ namespace CCFlow.WF.UC
                         }
                         else if (!IsPostBack) //edited by liuxc,2015-10-16,因新昌方面出现此处回发时将正确的签章图片路径改成了错误的路径，所以将此处的逻辑在回发时去掉，即回发时不进行签章图片的更新
                         {
-                            imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                            imgDb.FK_MapData = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                             imgDb.EleID = this.HisEn.GetValStrByKey("OID");
                             imgDb.RefPKVal = img.MyPK;
                             imgDb.Tag1 = imgSrc;
@@ -3427,7 +3427,7 @@ namespace CCFlow.WF.UC
                             case BP.DA.DataType.AppString:
                                 if (attr.UIRows == 1)
                                 {
-                                    if (!string.IsNullOrEmpty(en.GetValStringByKey(attr.KeyOfEn)))
+                                    if (!DataType.IsNullOrEmpty(en.GetValStringByKey(attr.KeyOfEn)))
                                         tb.Text = en.GetValStringByKey(attr.KeyOfEn);
                                     else
                                         tb.Text = attr.DefVal;
@@ -3452,7 +3452,7 @@ namespace CCFlow.WF.UC
                                 {
                                     tb.TextMode = TextBoxMode.MultiLine;
 
-                                    if (!string.IsNullOrEmpty(en.GetValStringByKey(attr.KeyOfEn)))
+                                    if (!DataType.IsNullOrEmpty(en.GetValStringByKey(attr.KeyOfEn)))
                                         tb.Text = en.GetValStringByKey(attr.KeyOfEn);
                                     else
                                         tb.Text = attr.DefVal;
@@ -3754,7 +3754,7 @@ namespace CCFlow.WF.UC
                                     }
                                 }
                                 string val = en.GetValStrByKey(attr.KeyOfEn);
-                                if (string.IsNullOrEmpty(val) == true)
+                                if (DataType.IsNullOrEmpty(val) == true)
                                 {
                                     ddlFK.SetSelectItem("");
                                 }
@@ -3787,7 +3787,7 @@ namespace CCFlow.WF.UC
                                 string val = en.GetValStrByKey(attr.KeyOfEn);
                                 string text = en.GetValRefTextByKey(attr.KeyOfEn);
 
-                                if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
+                                if (DataType.IsNullOrEmpty(text) && DataType.IsNullOrEmpty(val) == false)
                                 {
                                     EntitiesNoName ens = attr.HisEntitiesNoName;
                                     EntityNoName enn = ens.GetEntityByKey(val) as EntityNoName;
@@ -4195,7 +4195,7 @@ namespace CCFlow.WF.UC
                     this.Add(lab);
 
                     string node = this.Request.QueryString["FK_Node"];
-                    if (string.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
+                    if (DataType.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
                     {
                         node = en.GetValStrByKey("FK_Node");
                         if (node == "0" || node == "")
@@ -4398,7 +4398,7 @@ namespace CCFlow.WF.UC
                 FrmImgAthDB imgAthDb = new FrmImgAthDB();
                 imgAthDb.MyPK = ath.MyPK + "_" + en.PKVal;
                 imgAthDb.RetrieveFromDBSources();
-                if (imgAthDb != null && !string.IsNullOrEmpty(imgAthDb.FileName))
+                if (imgAthDb != null && !DataType.IsNullOrEmpty(imgAthDb.FileName))
                     this.Add("\t\n<img src='" + appPath + "DataUser/ImgAth/Data/" + imgAthDb.FileName + ".png' onerror=\"this.src='" + appPath + "WF/Data/Img/LogH.PNG'\" name='Img" + ath.MyPK + "' id='Img" + ath.MyPK + "' style='padding: 0px;margin: 0px;border-width: 0px;' width=" + ath.W + " height=" + ath.H + " />");
                 else
                     this.Add("\t\n<img src='" + appPath + "DataUser/ImgAth/Data/" + ath.MyPK + "_" + en.PKVal + ".png' onerror=\"this.src='" + appPath + "WF/Data/Img/LogH.PNG'\" name='Img" + ath.MyPK + "' id='Img" + ath.MyPK + "' style='padding: 0px;margin: 0px;border-width: 0px;' width=" + ath.W + " height=" + ath.H + " />");
@@ -4537,7 +4537,7 @@ namespace CCFlow.WF.UC
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
                     string msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, this.HisEn, "@FK_FrmAttachment=" + frmAth.MyPK + "@FileFullName=" + saveTo);
-                    if(!string.IsNullOrEmpty(msg))
+                    if(!DataType.IsNullOrEmpty(msg))
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
 
@@ -4608,7 +4608,7 @@ namespace CCFlow.WF.UC
 
                     //执行附件上传后事件，added by liuxc,2017-7-4
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, this.HisEn, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
-                    if (!string.IsNullOrEmpty(msg))
+                    if (!DataType.IsNullOrEmpty(msg))
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
 
                     Button myBtnDel = this.GetButtonByID("Btn_Delete_" + athDBPK);
@@ -5134,7 +5134,7 @@ namespace CCFlow.WF.UC
 
         private string ReplaceParamValue(string val)
         {
-            if (string.IsNullOrEmpty(val)) return "";
+            if (DataType.IsNullOrEmpty(val)) return "";
 
             return val.Replace("@FK_Flow", Request.QueryString["FK_Flow"])
                 .Replace("@FK_Node", Request.QueryString["FK_Node"])

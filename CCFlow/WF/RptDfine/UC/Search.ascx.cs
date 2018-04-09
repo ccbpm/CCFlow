@@ -31,7 +31,7 @@ namespace CCFlow.WF.Rpt
             get
             {
                 string s = this.Request.QueryString["RptNo"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return this.EnsName;
                 return s;
             }
@@ -48,7 +48,7 @@ namespace CCFlow.WF.Rpt
             get
             {
                 string s = this.Request.QueryString["FK_Flow"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     throw new Exception("没有得到FK_Flow参数");
                 return s;
             }
@@ -81,7 +81,7 @@ namespace CCFlow.WF.Rpt
             Entity en = this.HisEns.GetNewEntity;
 
             string flowNo = this.currMapRpt.FK_Flow;
-            if (string.IsNullOrEmpty(flowNo))
+            if (DataType.IsNullOrEmpty(flowNo))
             {
                 this.currMapRpt.FK_Flow = this.FK_Flow;
                 this.currMapRpt.Update();
@@ -393,7 +393,7 @@ namespace CCFlow.WF.Rpt
                     if (attr.UIContralType == UIContralType.DDL || attr.UIContralType == UIContralType.RadioBtn)
                     {
                         string s = en.GetValRefTextByKey(attr.Key);
-                        if (string.IsNullOrEmpty(s))
+                        if (DataType.IsNullOrEmpty(s))
                         {
                             switch (attr.Key)
                             {

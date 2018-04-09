@@ -31,7 +31,7 @@ namespace CCFlow.Web.Comm.Port
                     string s_responsetext = string.Empty;
                     DataTable dt_dept = DBAccess.RunSQLReturnTable("select NO,NAME,ParentNo,IDX from port_dept");
                     s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "0","IDX");
-                    if (string.IsNullOrEmpty(s_responsetext) || s_responsetext == "[]")//如果为空，使用另一种查询
+                    if (DataType.IsNullOrEmpty(s_responsetext) || s_responsetext == "[]")//如果为空，使用另一种查询
                     {
                         treeResult.Clear();
                         s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "O0", "IDX");
@@ -93,14 +93,14 @@ namespace CCFlow.Web.Comm.Port
 
             string filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmp where FK_Dept in ({0}))", deptId);
             string filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmpStation where FK_Station='{0}')", stationId);
-            string filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
+            string filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
             if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
             {
-                filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
+                filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
             }
             else if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
             {
-                filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name || ',' || Port_Emp.NO like '%{0}%'", name);
+                filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name || ',' || Port_Emp.NO like '%{0}%'", name);
             }
             string sql = String.Format("select Port_Emp.*,Port_Dept.Name as DeptName from Port_Emp,Port_Dept where Port_Emp.FK_Dept = Port_Dept.No {0}{1}{2}", filter_dept, filter_station, filter_name);
             return DBAccess.RunSQLReturnTable(sql);
@@ -127,14 +127,14 @@ namespace CCFlow.Web.Comm.Port
             else
                 filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmpStation where FK_Station='{0}')", stationId);
 
-            string filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
+            string filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
             if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
             {
-                filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
+                filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
             }
             else if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
             {
-                filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name || ',' || Port_Emp.NO like '%{0}%'", name);
+                filter_name = DataType.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name || ',' || Port_Emp.NO like '%{0}%'", name);
             }
             string sql = String.Format("select Port_Emp.*,Port_Dept.Name as DeptName from Port_Emp,Port_Dept where Port_Emp.FK_Dept = Port_Dept.No {0}{1}{2}", filter_dept, filter_station, filter_name);
             return DBAccess.RunSQLReturnTable(sql);

@@ -59,7 +59,7 @@ namespace BP.App_Ctrl
         private void LoadSelectedEmployees()
         {
             string selUsers = this.SelUsers;
-            if (!String.IsNullOrEmpty(selUsers))
+            if (!DataType.IsNullOrEmpty(selUsers))
             {
                 DataTable dt = this.GetAllEmps();
 
@@ -103,7 +103,7 @@ namespace BP.App_Ctrl
         /// <param name="SelectedValue">选择值</param>
         public static void BindListCtrl(ListItem[] listItems, object listCtrl, string textFormat, string defaultValue, string SelectedValue)
         {
-            if (String.IsNullOrEmpty(textFormat))
+            if (DataType.IsNullOrEmpty(textFormat))
             {
                 textFormat = "{0}";
             }
@@ -111,7 +111,7 @@ namespace BP.App_Ctrl
             {
                 ListControl lc = (ListControl)listCtrl;
                 lc.Items.Clear();
-                if (!String.IsNullOrEmpty(defaultValue))
+                if (!DataType.IsNullOrEmpty(defaultValue))
                 {
                     string[] arr_d = defaultValue.Split('#');
                     lc.Items.Add(new ListItem(arr_d[1], arr_d[0]));
@@ -121,7 +121,7 @@ namespace BP.App_Ctrl
                     li.Text = String.Format(textFormat, li.Text);
                 }
                 lc.Items.AddRange(listItems);
-                if (!String.IsNullOrEmpty(SelectedValue))
+                if (!DataType.IsNullOrEmpty(SelectedValue))
                 {
                     lc.SelectedValue = SelectedValue;
                 }
@@ -130,7 +130,7 @@ namespace BP.App_Ctrl
             {
                 HtmlSelect lc = (HtmlSelect)listCtrl;
                 lc.Items.Clear();
-                if (!String.IsNullOrEmpty(defaultValue))
+                if (!DataType.IsNullOrEmpty(defaultValue))
                 {
                     string[] arr_d = defaultValue.Split('#');
                     lc.Items.Add(new ListItem(arr_d[1], arr_d[0]));
@@ -140,7 +140,7 @@ namespace BP.App_Ctrl
                     li.Text = String.Format(textFormat, li.Text);
                 }
                 lc.Items.AddRange(listItems);
-                if (!String.IsNullOrEmpty(SelectedValue))
+                if (!DataType.IsNullOrEmpty(SelectedValue))
                 {
                     lc.Value = SelectedValue;
                 }

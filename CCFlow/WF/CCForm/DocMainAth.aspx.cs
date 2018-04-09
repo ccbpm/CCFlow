@@ -71,7 +71,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string paras = this.Request.QueryString["Paras"];
-                if (string.IsNullOrEmpty(paras) == false)
+                if (DataType.IsNullOrEmpty(paras) == false)
                     if (paras.Contains("IsCC=1") == true)
                         return "1";
                 return "ssss";
@@ -179,7 +179,7 @@ namespace CCFlow.WF.CCForm
             if (isDel == true || isUpdate == true)
             {
                 if (this.WorkID != 0
-                    && string.IsNullOrEmpty(this.FK_Flow) == false)
+                    && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     isDel = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
                     if (isDel == false)

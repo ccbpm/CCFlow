@@ -68,7 +68,7 @@ namespace CCFlow.WF.Rpt
             string method = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (string.IsNullOrEmpty(Request["method"]))
+            if (DataType.IsNullOrEmpty(Request["method"]))
                 return;
             method = Request["method"].ToString();
             switch (method)
@@ -83,7 +83,7 @@ namespace CCFlow.WF.Rpt
                     s_responsetext = DeleteEnsData();
                     break;
             }
-            if (string.IsNullOrEmpty(s_responsetext))
+            if (DataType.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
             //组装ajax字符串格式,返回调用客户端
             Response.Charset = "UTF-8";
@@ -177,10 +177,10 @@ namespace CCFlow.WF.Rpt
             {
                 //当前页
                 string pageNumber = getUTF8ToString("pageNumber");
-                int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+                int iPageNumber = DataType.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
                 //每页多少行
                 string pageSize = getUTF8ToString("pageSize");
-                int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+                int iPageSize = DataType.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
                 QueryObject obj = new QueryObject(HisEns);
                 obj = this.ToolBar1.GetnQueryObject(HisEns, HisEns.GetNewEntity);

@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.Sys;
 using BP.Web;
+using BP.DA;
 
 namespace CCFlow.WF
 {
@@ -46,7 +47,7 @@ namespace CCFlow.WF
                 string[] strs = this.WorkIDs.Split(',');
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str))
+                    if (DataType.IsNullOrEmpty(str))
                         continue;
 
                     Int64 wkid = Int64.Parse(str);

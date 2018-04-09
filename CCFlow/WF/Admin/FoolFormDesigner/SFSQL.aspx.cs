@@ -54,7 +54,7 @@ namespace CCFlow.WF.MapDef
             get
             {
                 string str= this.Request.QueryString["FK_SFTable"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.Request.QueryString["RefNo"];
                 return str;
             }

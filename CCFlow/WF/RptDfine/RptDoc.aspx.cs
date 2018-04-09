@@ -44,7 +44,7 @@ namespace CCFlow.WF.Rpt
                 }
                 catch
                 {
-                    if (string.IsNullOrEmpty(this.FK_Flow))
+                    if (DataType.IsNullOrEmpty(this.FK_Flow))
                         return 0;
                     else
                         return int.Parse(this.FK_Flow); // 0; 有可能是流程调用独立表单。
@@ -103,7 +103,7 @@ namespace CCFlow.WF.Rpt
             //WebUser.SignInOfGener(new BP.Port.Emp("zhoupeng"));
 
             string type = Request["action"];
-            if (string.IsNullOrEmpty(type))
+            if (DataType.IsNullOrEmpty(type))
             {
                 InitOffice();
             }

@@ -21,7 +21,7 @@ namespace CCFlow.WF.Comm
             string method = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (!string.IsNullOrEmpty(Request["method"]))
+            if (!DataType.IsNullOrEmpty(Request["method"]))
                 method = Request["method"].ToString();
 
             switch (method)
@@ -30,7 +30,7 @@ namespace CCFlow.WF.Comm
                     s_responsetext = SigantureAction();
                     break;
             }
-            if (string.IsNullOrEmpty(s_responsetext))
+            if (DataType.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
 
             //组装ajax字符串格式,返回调用客户端

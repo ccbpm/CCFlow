@@ -47,12 +47,12 @@ namespace CCFlow.WF.MapDef
             if (oid != null)
                 sql = sql.Replace("@OID", oid);
 
-            if (string.IsNullOrEmpty(kvs) == false && sql.Contains("@") == true)
+            if (DataType.IsNullOrEmpty(kvs) == false && sql.Contains("@") == true)
             {
                 string[] strs = kvs.Split('~');
                 foreach (string s in strs)
                 {
-                    if (string.IsNullOrEmpty(s)
+                    if (DataType.IsNullOrEmpty(s)
                         || s.Contains("=") == false)
                         continue;
 
@@ -180,7 +180,7 @@ namespace CCFlow.WF.MapDef
                             string[] strsDtl = me.Tag1.Split('$');
                             foreach (string str in strsDtl)
                             {
-                                if (string.IsNullOrEmpty(str))
+                                if (DataType.IsNullOrEmpty(str))
                                     continue;
 
                                 string[] ss = str.Split(':');

@@ -11,6 +11,8 @@ using BP.En;
 using BP;
 using BP.Sys;
 using BP.Web.Controls;
+using BP.DA;
+
 
 namespace CCFlow.WF.MapDef.MapExtUI
 {
@@ -86,7 +88,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
         void btn_Save_Click(object sender, EventArgs e)
         {
             string txt = this.Pub1.GetTextBoxByID("TB_Doc").Text.Trim();
-            if (string.IsNullOrEmpty(txt))
+            if (DataType.IsNullOrEmpty(txt))
             {
                 string path = SystemConfig.PathOfDataUser + "\\JSLibData\\" + this.FK_MapData + "_Self.js";
                 if (System.IO.File.Exists(path))

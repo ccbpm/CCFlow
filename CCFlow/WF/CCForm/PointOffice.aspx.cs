@@ -9,6 +9,8 @@ using System.Web.UI.WebControls;
 using BP.Sys;
 using System.Data;
 using System.Web.Script.Serialization;
+using BP.DA;
+
 
 namespace CCFlow.WF.CCForm
 {
@@ -102,7 +104,7 @@ namespace CCFlow.WF.CCForm
 
             if (DoType.Equals("EditOffice"))
             {
-                if (!string.IsNullOrEmpty(DelPKVal))
+                if (!DataType.IsNullOrEmpty(DelPKVal))
                 {
 
                     downDB.MyPK = this.DelPKVal;
@@ -110,7 +112,7 @@ namespace CCFlow.WF.CCForm
                     TB_FilePath.Value = downDB.FileFullName;
                     TB_FileType.Value = downDB.FileExts;
                 }
-                if (!string.IsNullOrEmpty(this.FK_FrmAttachment))
+                if (!DataType.IsNullOrEmpty(this.FK_FrmAttachment))
                 {
                     FrmAttachment attachment = new FrmAttachment();
                     int result = 0;
@@ -171,7 +173,7 @@ namespace CCFlow.WF.CCForm
                 }
             }
 
-            if (!string.IsNullOrEmpty(action))
+            if (!DataType.IsNullOrEmpty(action))
             {
                 if (action.Equals("SaveFile"))
                 {

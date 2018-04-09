@@ -44,10 +44,10 @@ namespace CCFlow.WF.OneWork
         protected void Page_Load(object sender, EventArgs e)
         {
             string isZhidu = this.Request.QueryString["isZhiDu"];
-            if (string.IsNullOrEmpty(isZhidu) == false)
+            if (DataType.IsNullOrEmpty(isZhidu) == false)
             {
                 string zhiduNo = this.Request.QueryString["ZhiDuNo"];
-                if (!string.IsNullOrEmpty(zhiduNo))
+                if (!DataType.IsNullOrEmpty(zhiduNo))
                 {
                     try
                     {
@@ -71,7 +71,7 @@ namespace CCFlow.WF.OneWork
 
             string flowID = int.Parse(this.FK_Flow).ToString();
             string sql = "";
-            if (string.IsNullOrEmpty(FK_Node))
+            if (DataType.IsNullOrEmpty(FK_Node))
                 sql = "SELECT * FROM Sys_FrmAttachmentDB WHERE FK_FrmAttachment IN (SELECT MyPK FROM Sys_FrmAttachment WHERE  " + BP.WF.Glo.MapDataLikeKey(this.FK_Flow, "FK_MapData") + "  AND IsUpload=1) AND RefPKVal='" + this.OID + "' ORDER BY RDT";
             else
                 sql = "SELECT * FROM Sys_FrmAttachmentDB WHERE FK_FrmAttachment IN (SELECT MyPK FROM Sys_FrmAttachment WHERE  FK_MapData='ND" + FK_Node + "' ) AND RefPKVal='" + this.OID + "' ORDER BY RDT";

@@ -150,7 +150,7 @@
         string rptName = this.Rpt2Name;
         //分析项目,如果取不到，就获取默认来取.
         string attrOfSelect = this.Request.QueryString["Idx"];
-        if (string.IsNullOrEmpty(attrOfSelect))
+        if (DataType.IsNullOrEmpty(attrOfSelect))
             attrOfSelect = rpt.AttrDefSelected.ToString();
         
         //获得报表对象.
@@ -242,7 +242,7 @@
     <!-- qin -->
     <!--qin-->
     <!-- end内容显示区域 -->
-    <% if (string.IsNullOrEmpty(myattr.DESC) == false)
+    <% if (DataType.IsNullOrEmpty(myattr.DESC) == false)
        { %>
     <br />
     <br />
@@ -322,7 +322,7 @@
         var kvs2 = "";
         foreach (string str in strs)
         {
-            if (string.IsNullOrEmpty(str) == true)
+            if (DataType.IsNullOrEmpty(str) == true)
                 continue;
             chartData += "<dataset seriesname='" + str + "' color='" + colorArray[columnAndLine] + "' >";
             columnAndLine++;

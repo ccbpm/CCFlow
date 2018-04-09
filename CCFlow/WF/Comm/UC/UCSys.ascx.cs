@@ -275,7 +275,7 @@ namespace CCFlow.WF.Comm.UC
             columnStrB.Append("</categories>");
             foreach (var yfield in yfields)
             {
-                if (string.IsNullOrEmpty(yfield.Value) == true)
+                if (DataType.IsNullOrEmpty(yfield.Value) == true)
                     continue;
                 columnStrB.Append("<dataset seriesname='" + yfield.Value + "'  >");
                 foreach (System.Data.DataRow dr in dt.Rows)
@@ -529,7 +529,7 @@ namespace CCFlow.WF.Comm.UC
             lineStrB.Append("</categories>");
             foreach (var yfield in yfields)
             {
-                if (string.IsNullOrEmpty(yfield.Value) == true)
+                if (DataType.IsNullOrEmpty(yfield.Value) == true)
                     continue;
                 lineStrB.Append("<dataset seriesname='" + yfield.Value + "'  >");
                 foreach (System.Data.DataRow dr in dt.Rows)

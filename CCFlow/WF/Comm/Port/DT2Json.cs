@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using BP.DA;
 
 namespace CCFlow.WF.Comm.Port
 {
@@ -53,11 +54,11 @@ namespace CCFlow.WF.Comm.Port
         }
         private void CheckInit()
         {
-            if (this._DT == null || String.IsNullOrEmpty(this._IdName) || String.IsNullOrEmpty(this._ParentIdName))
+            if (this._DT == null || DataType.IsNullOrEmpty(this._IdName) || DataType.IsNullOrEmpty(this._ParentIdName))
             {
                 throw new ApplicationException("输入变量不能为空！");
             }
-            if (String.IsNullOrEmpty(this._ChildNodeName))
+            if (DataType.IsNullOrEmpty(this._ChildNodeName))
                 this._ChildNodeName = "Childs";
         }
         private void AddDegreeColumn()
@@ -67,7 +68,7 @@ namespace CCFlow.WF.Comm.Port
             for (int i = 0; i < 100; i++)
             {
                 string con = null;
-                if (String.IsNullOrEmpty(parentIdList))
+                if (DataType.IsNullOrEmpty(parentIdList))
                     con = String.Format("{0} is null", this._ParentIdName);
                 else
                     con = String.Format("{0} in ({1})", this._ParentIdName, String.Format("'{0}'", parentIdList.Replace(",", "','")));
@@ -77,7 +78,7 @@ namespace CCFlow.WF.Comm.Port
                 foreach (DataRow dr in drs)
                 {
                     dr[LEVEL_COLUMN_NAME] = i;
-                    if (!String.IsNullOrEmpty(parentIdList)) parentIdList += ",";
+                    if (!DataType.IsNullOrEmpty(parentIdList)) parentIdList += ",";
                     parentIdList += Convert.ToString(dr[_IdName]);
                 }
             }
@@ -89,7 +90,7 @@ namespace CCFlow.WF.Comm.Port
         /// <returns></returns>
         public string ToJsonStr(string parentId)
         {
-            if (String.IsNullOrEmpty(parentId))
+            if (DataType.IsNullOrEmpty(parentId))
                 parentId = this._RootParent;
 
             string jsonStr = this.GetJsonFromDataTable(parentId);
@@ -106,14 +107,14 @@ namespace CCFlow.WF.Comm.Port
         {
             String jsonStr = String.Empty;
             string con = null;
-            if (String.IsNullOrEmpty(parentId))
+            if (DataType.IsNullOrEmpty(parentId))
                 con = String.Format("{0} is null", this._ParentIdName);
             else
                 con = String.Format("{0} = '{1}'", this._ParentIdName, parentId);
             DataRow[] drs = this._DT.Select(con);
             foreach (DataRow dr in drs)
             {
-                if (!String.IsNullOrEmpty(jsonStr)) jsonStr += ",";
+                if (!DataType.IsNullOrEmpty(jsonStr)) jsonStr += ",";
                 String drJson = this.GetJsonFromDataRow(dr);
                 jsonStr += drJson;
             }
@@ -135,7 +136,7 @@ namespace CCFlow.WF.Comm.Port
                     //自已加的标志，过滤掉
                     if (this._DT.Columns[i].ColumnName == LEVEL_COLUMN_NAME) continue;
                     //正常字段
-                    if (!String.IsNullOrEmpty(jsonStr)) jsonStr += ",";
+                    if (!DataType.IsNullOrEmpty(jsonStr)) jsonStr += ",";
                     if (this.FormatMode == 2)
                         if (this.FormatMode == 2)
                         {
@@ -153,11 +154,11 @@ namespace CCFlow.WF.Comm.Port
                 string childJson = String.Empty;
                 foreach (DataRow dr in drs)
                 {
-                    if (!String.IsNullOrEmpty(childJson)) childJson += ",";
+                    if (!DataType.IsNullOrEmpty(childJson)) childJson += ",";
                     String drJson = this.GetJsonFromDataRow(dr);
                     childJson += drJson;
                 }
-                if (!String.IsNullOrEmpty(childJson))
+                if (!DataType.IsNullOrEmpty(childJson))
                 {
                     if (this.FormatMode == 0)
                         childJson = this.Name(this._ChildNodeName) + ":[" + childJson + "]";
@@ -173,7 +174,7 @@ namespace CCFlow.WF.Comm.Port
                 {
                     childJson = this.Name(this._ChildNodeName) + ": null";
                 }
-                if (!String.IsNullOrEmpty(jsonStr) && !String.IsNullOrEmpty(childJson)) jsonStr += ",";
+                if (!DataType.IsNullOrEmpty(jsonStr) && !DataType.IsNullOrEmpty(childJson)) jsonStr += ",";
                 //行格式化
                 if (this.FormatMode == 2)
                 {
@@ -277,7 +278,7 @@ namespace CCFlow.WF.Comm.Port
         }
         private string SerializeJsonValue_Replace(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (DataType.IsNullOrEmpty(value))
             {
                 return string.Empty;
             }
@@ -482,7 +483,7 @@ namespace CCFlow.WF.Comm.Port
             DataRow[] drs = this._DT.Select(con);
             foreach (DataRow dr in drs)
             {
-                if (!String.IsNullOrEmpty(jsonStr)) jsonStr += ",";
+                if (!DataType.IsNullOrEmpty(jsonStr)) jsonStr += ",";
                 String drJson = this.GetJsonFromDataRow(dr);
                 jsonStr += drJson;
             }
@@ -502,7 +503,7 @@ namespace CCFlow.WF.Comm.Port
                 for (int i = 0; i < this._DT.Columns.Count; i++)
                 {
                     //正常字段
-                    if (!String.IsNullOrEmpty(jsonStr)) jsonStr += ",";
+                    if (!DataType.IsNullOrEmpty(jsonStr)) jsonStr += ",";
                     if (this.FormatMode == 2)
                         if (this.FormatMode == 2)
                         {
@@ -610,7 +611,7 @@ namespace CCFlow.WF.Comm.Port
         }
         private string SerializeJsonValue_Replace(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (DataType.IsNullOrEmpty(value))
             {
                 return string.Empty;
             }

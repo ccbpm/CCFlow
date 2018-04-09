@@ -299,7 +299,7 @@ public class CCFlowAPI : CCForm
         //string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"/beapp/" + fileName; 
         System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Create);
         System.IO.BinaryWriter bw = new System.IO.BinaryWriter(fs);
-        if (!string.IsNullOrEmpty(base64String) && File.Exists(fileName))
+        if (!DataType.IsNullOrEmpty(base64String) && File.Exists(fileName))
         {
             bw.Write(Convert.FromBase64String(base64String));
         }
@@ -726,7 +726,7 @@ public class CCFlowAPI : CCForm
         string strs = "";
         foreach (string item in toEmps)
         {
-            if (string.IsNullOrEmpty(item) == true)
+            if (DataType.IsNullOrEmpty(item) == true)
                 continue;
             Emp emp = new Emp(item);
             strs += emp.Name + " ";
@@ -758,7 +758,7 @@ public class CCFlowAPI : CCForm
         string[] strs = workids.Split(',');
         foreach (string str in strs)
         {
-            if (string.IsNullOrEmpty(str))
+            if (DataType.IsNullOrEmpty(str))
                 continue;
 
             BP.WF.Dev2Interface.Node_SetWorkRead(nodeID, Int64.Parse(str));
@@ -1217,7 +1217,7 @@ public class CCFlowAPI : CCForm
                     continue;
 
                 string uiBindKey = dr["UIBindKey"].ToString();
-                if (string.IsNullOrEmpty(uiBindKey) == true)
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
                 {
                     string myPK = dr["MyPK"].ToString();
                     /*如果是空的*/
@@ -1627,7 +1627,7 @@ public class CCFlowAPI : CCForm
 
                 string uiBindKey = dr["UIBindKey"].ToString();
 
-                if (string.IsNullOrEmpty(uiBindKey))
+                if (DataType.IsNullOrEmpty(uiBindKey))
                 {
                     string myPK = dr["MyPK"].ToString();
                     /*如果是空的*/

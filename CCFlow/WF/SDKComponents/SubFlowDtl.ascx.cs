@@ -70,7 +70,7 @@ namespace CCFlow.WF.SDKComponents
         {
             get
             {
-                return string.IsNullOrEmpty(this.Request.QueryString["DoType"]) ? "" : this.Request.QueryString["DoType"];
+                return DataType.IsNullOrEmpty(this.Request.QueryString["DoType"]) ? "" : this.Request.QueryString["DoType"];
             }
         }
         #endregion 属性.
@@ -116,7 +116,7 @@ namespace CCFlow.WF.SDKComponents
             string[] strs = sf.SFDefInfo.Split(',');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str) == true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     continue;
 
                 if (str.Length != 3)

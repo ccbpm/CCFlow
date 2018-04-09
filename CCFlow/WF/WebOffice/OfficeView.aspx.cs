@@ -10,6 +10,8 @@ using BP.Web;
 using BP.Web.Controls;
 using BP.WF;
 using Microsoft.Office.Interop.Word;
+using BP.DA;
+
 
 
 namespace CCFlow.WF.WebOffice
@@ -51,7 +53,7 @@ namespace CCFlow.WF.WebOffice
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(Path) || !File.Exists(Server.MapPath("~/" + Path)))
+            if (DataType.IsNullOrEmpty(Path) || !File.Exists(Server.MapPath("~/" + Path)))
             {
                 divMenu.InnerHtml = "<h1 style='color:red'>您传入的路径不正确!<h1>";
                 return;
@@ -60,7 +62,7 @@ namespace CCFlow.WF.WebOffice
             if (!IsPostBack)
             {
                 string type = Request["action"];
-                if (string.IsNullOrEmpty(type))
+                if (DataType.IsNullOrEmpty(type))
                 {
                     LoadMenu(true);
                     ReadFile();

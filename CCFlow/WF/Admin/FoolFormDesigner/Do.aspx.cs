@@ -105,7 +105,7 @@ namespace CCFlow.WF.MapDef
                         mattr.FK_MapData = this.Request.QueryString["FK_MapData"];
                         mattr.MyDataType = int.Parse(this.Request.QueryString["DataType"]);
 
-                        if (!string.IsNullOrEmpty(this.Request.QueryString["UIBindKey"] + ""))
+                        if (!DataType.IsNullOrEmpty(this.Request.QueryString["UIBindKey"] + ""))
                             mattr.UIBindKey = this.Request.QueryString["UIBindKey"];
                         mattr.UIContralType = (UIContralType)int.Parse(this.Request.QueryString["UIContralType"]);
                         mattr.LGType = (BP.En.FieldTypeS)int.Parse(this.Request.QueryString["LGType"]);
@@ -682,7 +682,7 @@ namespace CCFlow.WF.MapDef
         void btn_Click(object sender, EventArgs e)
         {
             string no = this.Pub1.GetTextBoxByID("TB_No").Text;
-            if (string.IsNullOrEmpty(no) == true)
+            if (DataType.IsNullOrEmpty(no) == true)
             {
                 this.Alert("请输入字段名.");
                 return;
@@ -725,7 +725,7 @@ namespace CCFlow.WF.MapDef
         {
             RadioButton rb = sender as RadioButton;
             string name = this.Pub1.GetTextBoxByID("TB_Name").Text;
-            if (string.IsNullOrEmpty(name) == true)
+            if (DataType.IsNullOrEmpty(name) == true)
                 return;
 
             this.Pub1.GetTextBoxByID("TB_No").Text = CCFormAPI.ParseStringToPinyinField(name, rb.ID.Contains("_0"), true, 20);
@@ -735,7 +735,7 @@ namespace CCFlow.WF.MapDef
         {
             TextBox tb = sender as TextBox;
             string text = this.Pub1.GetTextBoxByID("TB_Name").Text;
-            if (string.IsNullOrEmpty(text) == true)
+            if (DataType.IsNullOrEmpty(text) == true)
                 return;
 
             this.Pub1.GetTextBoxByID("TB_No").Text = CCFormAPI.ParseStringToPinyinField(text, this.Pub1.GetRadioButtonByID("RB_PY_0").Checked, true, 20);

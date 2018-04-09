@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Newtonsoft;
 using Newtonsoft.Json;
+using BP.DA;
 
 namespace CCFlow.WF.WebOffice
 {
@@ -15,7 +16,7 @@ namespace CCFlow.WF.WebOffice
         protected void Page_Load(object sender, EventArgs e)
         {
             string load = Request["load"];
-            if (!string.IsNullOrEmpty(load))
+            if (!DataType.IsNullOrEmpty(load))
             {
                 if (load.Equals("true"))
                 {

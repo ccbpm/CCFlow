@@ -4,6 +4,8 @@ using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.DA;
+
 
 namespace CCFlow.WF.CCForm
 {
@@ -68,7 +70,7 @@ namespace CCFlow.WF.CCForm
         {
             if (this.IsPostBack==false)
             {
-                if (string.IsNullOrEmpty(MSG))
+                if (DataType.IsNullOrEmpty(MSG))
                 {
 
                     sourceFile = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Def.jpg";
@@ -77,7 +79,7 @@ namespace CCFlow.WF.CCForm
                     imgDB.MyPK = myPK;
                     imgDB.RetrieveFromDBSources();
 
-                    if (imgDB != null && !string.IsNullOrEmpty(imgDB.FileFullName))
+                    if (imgDB != null && !DataType.IsNullOrEmpty(imgDB.FileFullName))
                     {
                         if (System.IO.File.Exists(Server.MapPath(imgDB.FileFullName)))
                             sourceFile = imgDB.FileFullName;

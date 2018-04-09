@@ -57,7 +57,7 @@ namespace CCFlow.WF.SDKComponents.Base
             get
             {
                 string fk_node = getUTF8ToString("FK_Node");
-                if (!string.IsNullOrEmpty(fk_node))
+                if (!DataType.IsNullOrEmpty(fk_node))
                     return Int32.Parse(getUTF8ToString("FK_Node"));
                 return 0;
             }
@@ -86,7 +86,7 @@ namespace CCFlow.WF.SDKComponents.Base
             string method = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (!string.IsNullOrEmpty(Request["method"]))
+            if (!DataType.IsNullOrEmpty(Request["method"]))
                 method = Request["method"].ToString();
 
             switch (method)
@@ -126,7 +126,7 @@ namespace CCFlow.WF.SDKComponents.Base
                     break;
                     
             }
-            if (string.IsNullOrEmpty(s_responsetext))
+            if (DataType.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
 
             //组装ajax字符串格式,返回调用客户端
@@ -694,7 +694,7 @@ namespace CCFlow.WF.SDKComponents.Base
             foreach (NodeToolbar item in extToolBars)
             {
                 string url = "";
-                if (string.IsNullOrEmpty(item.Url))
+                if (DataType.IsNullOrEmpty(item.Url))
                     continue;
 
                 url = item.Url;
@@ -704,7 +704,7 @@ namespace CCFlow.WF.SDKComponents.Base
                 formTree.ParentNo = "01";
                 formTree.Name = item.Title;
                 formTree.NodeType = "tools|0";
-                if (!string.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
+                if (!DataType.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
                 {
                     formTree.NodeType = "tools|1";
                 }
@@ -798,7 +798,7 @@ namespace CCFlow.WF.SDKComponents.Base
         //    foreach (NodeToolbar item in extToolBars)
         //    {
         //        string url = "";
-        //        if (string.IsNullOrEmpty(item.Url))
+        //        if (DataType.IsNullOrEmpty(item.Url))
         //            continue;
 
         //        url = item.Url;

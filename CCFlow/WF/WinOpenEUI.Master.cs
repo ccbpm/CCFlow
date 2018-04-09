@@ -20,7 +20,7 @@ namespace CCFlow.WF
             get
             {
                 string s = this.Request.QueryString["FK_Flow"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     throw new Exception("@流程编号参数错误...");
 
                 s = DataType.ParseStringOnlyIntNumber(s);   //规避注入风险，added by liuxc
@@ -68,7 +68,7 @@ namespace CCFlow.WF
             get
             {
 
-                if (string.IsNullOrEmpty(this.Request.QueryString["Paras"]) == false)
+                if (DataType.IsNullOrEmpty(this.Request.QueryString["Paras"]) == false)
                 {
                     string myps = this.Request.QueryString["Paras"];
                     if (myps.Contains("IsCC") == true)
@@ -127,10 +127,10 @@ namespace CCFlow.WF
             get
             {
                 string fk_nodeReq = this.Request.QueryString["FK_Node"];
-                if (string.IsNullOrEmpty(fk_nodeReq))
+                if (DataType.IsNullOrEmpty(fk_nodeReq))
                     fk_nodeReq = this.Request.QueryString["NodeID"];
 
-                if (string.IsNullOrEmpty(fk_nodeReq) == false)
+                if (DataType.IsNullOrEmpty(fk_nodeReq) == false)
                     return int.Parse(fk_nodeReq);
 
                 if (_FK_Node == 0)
@@ -169,9 +169,9 @@ namespace CCFlow.WF
                 try
                 {
                     string s = this.Request.QueryString["PWorkID"];
-                    if (string.IsNullOrEmpty(s) == true)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         s = this.Request.QueryString["PWorkID"];
-                    if (string.IsNullOrEmpty(s) == true)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         s = "0";
                     return int.Parse(s);
                 }

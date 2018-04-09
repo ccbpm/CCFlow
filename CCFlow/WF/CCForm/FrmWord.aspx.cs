@@ -39,7 +39,7 @@ namespace CCFlow.WF.CCForm
                 }
                 catch
                 {
-                    if (string.IsNullOrEmpty(this.FK_Flow))
+                    if (DataType.IsNullOrEmpty(this.FK_Flow))
                         return 0;
                     else
                         return int.Parse(this.FK_Flow); // 0; 有可能是流程调用独立表单。
@@ -58,7 +58,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string cworkid = this.Request.QueryString["CWorkID"];
-                if (string.IsNullOrEmpty(cworkid) == false && int.Parse(cworkid) != 0)
+                if (DataType.IsNullOrEmpty(cworkid) == false && int.Parse(cworkid) != 0)
                     return int.Parse(cworkid);
 
                 string oid = this.Request.QueryString["WorkID"];
@@ -222,7 +222,7 @@ namespace CCFlow.WF.CCForm
         protected void Page_Load(object sender, EventArgs e)
         {
             UserName = WebUser.Name;
-            if (string.IsNullOrEmpty(FK_MapData))
+            if (DataType.IsNullOrEmpty(FK_MapData))
             {
                 divMenu.InnerHtml = "<h1 style='color:red'>传入参数错误!<h1>";
                 return;
@@ -231,7 +231,7 @@ namespace CCFlow.WF.CCForm
             var md = new MapData(this.FK_MapData);
 
             string type = Request["action"];
-            if (string.IsNullOrEmpty(type))
+            if (DataType.IsNullOrEmpty(type))
             {
                 /*这里是什么？怎么没有注释？*/
                 InitOffice(true, md);
@@ -308,7 +308,7 @@ namespace CCFlow.WF.CCForm
             string[] paras = this.RequestParas.Split('&');
             foreach (string str in paras)
             {
-                if (string.IsNullOrEmpty(str) || str.Contains("=") == false)
+                if (DataType.IsNullOrEmpty(str) || str.Contains("=") == false)
                     continue;
 
                 string[] kvs = str.Split('=');
@@ -551,7 +551,7 @@ namespace CCFlow.WF.CCForm
             DataTable dt = null;
             MapAttr mattr = null;
             string sql = item.Tag;
-            if (string.IsNullOrEmpty(sql) == false)
+            if (DataType.IsNullOrEmpty(sql) == false)
             {
                 /* 如果有填充主表的sql  */
                 #region 处理sql变量
@@ -569,7 +569,7 @@ namespace CCFlow.WF.CCForm
                 }
                 #endregion 处理sql变量
 
-                if (string.IsNullOrEmpty(sql) == false)
+                if (DataType.IsNullOrEmpty(sql) == false)
                 {
                     if (sql.Contains("@"))
                         throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
@@ -613,7 +613,7 @@ namespace CCFlow.WF.CCForm
 
             ReplaceFields = GenerateFieldsJsonString(fields);
 
-            if (string.IsNullOrEmpty(item.Tag1)
+            if (DataType.IsNullOrEmpty(item.Tag1)
                 || item.Tag1.Length < 15)
             {
                 ReplaceDtls = "[]";
@@ -635,7 +635,7 @@ namespace CCFlow.WF.CCForm
                 string[] sqls = item.Tag1.Split('*');
                 foreach (string mysql in sqls)
                 {
-                    if (string.IsNullOrEmpty(mysql))
+                    if (DataType.IsNullOrEmpty(mysql))
                         continue;
 
                     if (mysql.Contains(dtl.No + "=") == false)
@@ -657,7 +657,7 @@ namespace CCFlow.WF.CCForm
                     }
                     #endregion 处理sql.
 
-                    if (string.IsNullOrEmpty(sql))
+                    if (DataType.IsNullOrEmpty(sql))
                         continue;
 
                     if (sql.Contains("@"))

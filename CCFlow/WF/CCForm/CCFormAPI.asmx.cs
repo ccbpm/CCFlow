@@ -429,7 +429,7 @@ namespace CCFlow.WF.CCForm
 				string[] strs = paras.Split('@');
 				foreach (string s in strs)
 				{
-					if (string.IsNullOrEmpty(s)
+					if (DataType.IsNullOrEmpty(s)
 						|| s.Contains("=") == false)
 						continue;
 

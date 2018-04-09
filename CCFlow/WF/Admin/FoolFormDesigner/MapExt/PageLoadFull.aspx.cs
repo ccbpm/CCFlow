@@ -11,6 +11,8 @@ using BP.En;
 using BP;
 using BP.Sys;
 using BP.Web.Controls;
+using BP.DA;
+
 
 namespace CCFlow.WF.MapDef.MapExtUI
 {
@@ -81,7 +83,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
                     tb.ID = "TB_" + dtl.No;
                     foreach (string sql in sqls)
                     {
-                        if (string.IsNullOrEmpty(sql))
+                        if (DataType.IsNullOrEmpty(sql))
                             continue;
                         string key = sql.Substring(0, sql.IndexOf('='));
                         if (key == dtl.No)
@@ -142,7 +144,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             me.MyPK = MapExtXmlList.PageLoadFull + "_" + this.FK_MapData;
 
             string info = me.Tag1 + me.Tag;
-            if (string.IsNullOrEmpty(info))
+            if (DataType.IsNullOrEmpty(info))
                 me.Delete();
             else
                 me.Save();

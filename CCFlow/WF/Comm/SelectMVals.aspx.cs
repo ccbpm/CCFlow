@@ -42,12 +42,12 @@ namespace CCFlow.WF.Comm
             Entity en = BP.En.ClassFactory.GetEns(this.EnsName).GetNewEntity;
             Attr attr = en.EnMap.GetAttrByKey(this.AttrKey);
             string cfgVal = ur.MVals;
-            if (string.IsNullOrEmpty(cfgVal))
+            if (DataType.IsNullOrEmpty(cfgVal))
                 cfgVal = "";
 
             AtPara ap = new AtPara(cfgVal);
             cfgVal = ap.GetValStrByKey(this.AttrKey);
-            if (string.IsNullOrEmpty(cfgVal))
+            if (DataType.IsNullOrEmpty(cfgVal))
                 cfgVal = "";
 
             if (attr.IsEnum)

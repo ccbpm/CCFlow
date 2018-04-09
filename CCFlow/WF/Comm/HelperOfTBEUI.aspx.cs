@@ -93,7 +93,7 @@ namespace CCFlow.WF.Comm
             string method = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (string.IsNullOrEmpty(Request["method"]))
+            if (DataType.IsNullOrEmpty(Request["method"]))
                 return;
 
             method = Request["method"].ToString();
@@ -115,7 +115,7 @@ namespace CCFlow.WF.Comm
                     s_responsetext = saveHistoryData();
                     break;
             }
-            if (string.IsNullOrEmpty(s_responsetext))
+            if (DataType.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
             //组装ajax字符串格式,返回调用客户端
             Response.Charset = "UTF-8";
@@ -195,7 +195,7 @@ namespace CCFlow.WF.Comm
         private string deleteData()
         {
             string oids = getUTF8ToString("oids");
-            if (string.IsNullOrEmpty(oids))
+            if (DataType.IsNullOrEmpty(oids))
                 return "false";
 
             string lb = getUTF8ToString("lb");
@@ -208,7 +208,7 @@ namespace CCFlow.WF.Comm
 
                 foreach (string oid in oidsArray)
                 {
-                    if (string.IsNullOrEmpty(oid))
+                    if (DataType.IsNullOrEmpty(oid))
                         continue;
 
                     DefVal dv = new DefVal();
@@ -262,7 +262,7 @@ namespace CCFlow.WF.Comm
 
             string text = getUTF8ToString("text");
             text = DataTableConvertJson.GetFilteredStrForJSON(text);
-            if (string.IsNullOrEmpty(text))
+            if (DataType.IsNullOrEmpty(text))
             {
                 return "false";
             }
@@ -351,10 +351,10 @@ namespace CCFlow.WF.Comm
 
 
                 string pageNumber = getUTF8ToString("pageNumber");
-                int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+                int iPageNumber = DataType.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
                 //每页多少行
                 string pageSize = getUTF8ToString("pageSize");
-                int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+                int iPageSize = DataType.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
 
                 switch (DBAccess.AppCenterDBType)
@@ -393,9 +393,9 @@ namespace CCFlow.WF.Comm
                 string[] strArray;
 
                 string pageNumber = getUTF8ToString("pageNumber");
-                int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+                int iPageNumber = DataType.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
                 string pageSize = getUTF8ToString("pageSize");
-                int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+                int iPageSize = DataType.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
 
                 DataTable dt = new DataTable();
@@ -438,7 +438,7 @@ namespace CCFlow.WF.Comm
             jsonBuilder.Append("{rows:[");
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                if (string.IsNullOrEmpty(dt.Rows[i]["OID"].ToString()))
+                if (DataType.IsNullOrEmpty(dt.Rows[i]["OID"].ToString()))
                     continue;
 
                 jsonBuilder.Append("{");
@@ -483,7 +483,7 @@ namespace CCFlow.WF.Comm
             string sql = "";
             string orderByStr = "";
 
-            if (!string.IsNullOrEmpty(orderKey))
+            if (!DataType.IsNullOrEmpty(orderKey))
                 orderByStr = " ORDER BY " + orderKey + " desc";
 
             switch (DBAccess.AppCenterDBType)

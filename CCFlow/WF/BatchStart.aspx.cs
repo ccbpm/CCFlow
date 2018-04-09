@@ -85,7 +85,7 @@ namespace CCFlow.WF
             List<string> endStrs = new List<string>();  //过滤后的批量发起字段列表
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
 
                 if (endStrs.Contains(str))
@@ -127,7 +127,7 @@ namespace CCFlow.WF
 
                 foreach (string str in endStrs)
                 {
-                    if (string.IsNullOrEmpty(str))
+                    if (DataType.IsNullOrEmpty(str))
                         continue;
                     foreach (MapAttr attr in attrs)
                     {
@@ -867,7 +867,7 @@ namespace CCFlow.WF
                 bool isChange = false;
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str))
+                    if (DataType.IsNullOrEmpty(str))
                         continue;
                     foreach (MapAttr attr in attrs)
                     {

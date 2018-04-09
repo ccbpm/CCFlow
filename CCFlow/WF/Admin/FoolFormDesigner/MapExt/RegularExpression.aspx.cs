@@ -13,6 +13,8 @@ using BP.Sys;
 using BP.Web.Controls;
 using BP.WF.Template;
 using BP.Sys.XML;
+using BP.DA;
+
 
 namespace CCFlow.WF.MapDef
 {
@@ -162,7 +164,7 @@ namespace CCFlow.WF.MapDef
             string[] fields = this.RefNo.Split(',');
             foreach (string filed in fields)
             {
-                if (string.IsNullOrEmpty(filed))
+                if (DataType.IsNullOrEmpty(filed))
                     continue;
 
                 MapExt me = new MapExt();
@@ -246,7 +248,7 @@ namespace CCFlow.WF.MapDef
             string[] strs = this.RefNo.Split(',');
             foreach (string field in strs)
             {
-                if (string.IsNullOrEmpty(field)==true)
+                if (DataType.IsNullOrEmpty(field)==true)
                     continue;
 
                 exts.Delete(MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.AttrOfOper, field, MapExtAttr.ExtType, BP.Sys.MapExtXmlList.RegularExpression);
@@ -261,7 +263,7 @@ namespace CCFlow.WF.MapDef
 
                 foreach (string field in strs)
                 {
-                    if (string.IsNullOrEmpty(field) == true)
+                    if (DataType.IsNullOrEmpty(field) == true)
                         continue;
 
                     BP.Sys.MapExt ext = new BP.Sys.MapExt();

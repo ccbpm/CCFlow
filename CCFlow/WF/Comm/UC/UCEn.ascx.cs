@@ -1478,7 +1478,7 @@ namespace CCFlow.Web.Comm.UC
                                     tb.ReadOnly = true;
                                 }
 
-                                if (attr.IsPK && string.IsNullOrEmpty(val.ToString()) == false)
+                                if (attr.IsPK && DataType.IsNullOrEmpty(val.ToString()) == false)
                                 {
                                     tb.ReadOnly = true;
                                 }
@@ -2213,7 +2213,7 @@ namespace CCFlow.Web.Comm.UC
                             if (isReadonly || attr.UIIsReadonly)
                                 tb.ReadOnly = true;
 
-                            if (attr.IsPK && string.IsNullOrEmpty(tb.Text) == false)
+                            if (attr.IsPK && DataType.IsNullOrEmpty(tb.Text) == false)
                                 tb.ReadOnly = true;
 
                             if (attr.Key == noKey && attr.UIIsReadonly == false && attr.UIVisible == true)

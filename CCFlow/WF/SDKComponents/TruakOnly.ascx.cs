@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.WF;
+using BP.DA;
+
 
 namespace CCFlow.WF.App.Comm
 {
@@ -22,7 +24,7 @@ namespace CCFlow.WF.App.Comm
             get
             {
                 string _isHidden = this.Request.QueryString["IsHidden"];
-                if (string.IsNullOrEmpty(_isHidden))
+                if (DataType.IsNullOrEmpty(_isHidden))
                     return false;
                 else
                     return bool.Parse(_isHidden);

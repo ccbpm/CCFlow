@@ -35,7 +35,7 @@ namespace CCFlow.WF.Rpt.UC
             get
             {
                 string s = this.Request.QueryString["RptNo"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "ND" + int.Parse(this.FK_Flow) + "MyRpt";
                 return s;
             }

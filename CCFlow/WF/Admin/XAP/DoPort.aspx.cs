@@ -6,6 +6,8 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using BP.Sys;
 using System.IO;
+using BP.DA;
+
 namespace CCFlow.WF.Admin.XAP
 {
     public partial class DoPort : BP.Web.WebPage
@@ -82,7 +84,7 @@ namespace CCFlow.WF.Admin.XAP
             string fk_Node = this.Request.QueryString["FK_Node"];
 
             string FK_MapData = this.Request.QueryString["FK_MapData"];
-            if (string.IsNullOrEmpty(FK_MapData))
+            if (DataType.IsNullOrEmpty(FK_MapData))
                 FK_MapData = this.Request.QueryString["PK"];
 
             switch (this.DoType)
@@ -224,7 +226,7 @@ namespace CCFlow.WF.Admin.XAP
             try
             {
                 string path = string.Empty, xmlName = string.Empty, ext = ".xml";
-                if (!string.IsNullOrEmpty(FK_MapData))
+                if (!DataType.IsNullOrEmpty(FK_MapData))
                 {
                     if (FK_MapData.StartsWith("ND"))
                     {// 节点表单
@@ -258,7 +260,7 @@ namespace CCFlow.WF.Admin.XAP
                     }
                 }
 
-                if (!string.IsNullOrEmpty(path))
+                if (!DataType.IsNullOrEmpty(path))
                 {
                     string file = path + xmlName + ext;
 
@@ -286,7 +288,7 @@ namespace CCFlow.WF.Admin.XAP
                     else
                     {
                         DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(FK_MapData);
-                        if (!string.IsNullOrEmpty(file) && null != ds)
+                        if (!DataType.IsNullOrEmpty(file) && null != ds)
                             ds.WriteXml(file);
                     }
                 }
@@ -359,20 +361,20 @@ namespace CCFlow.WF.Admin.XAP
 
             string FK_Flow = HttpContext.Current.Request["FK_Flow"];
             string FK_MapData = HttpContext.Current.Request["FK_MapData"];
-            if (!string.IsNullOrEmpty(FK_Flow))
+            if (!DataType.IsNullOrEmpty(FK_Flow))
             {// 共享流程
                 Flow flow = new Flow(FK_Flow);
 
                 path = BP.Sys.SystemConfig.PathOfDataUser + @"FlowDesc\" + flow.No + "." + flow.Name + "\\";
                 pngName = path + "Flow.png";
 
-                if (!string.IsNullOrEmpty(path) && !System.IO.Directory.Exists(path))
+                if (!DataType.IsNullOrEmpty(path) && !System.IO.Directory.Exists(path))
                     System.IO.Directory.CreateDirectory(path);
 
-                if (!string.IsNullOrEmpty(pngName))
+                if (!DataType.IsNullOrEmpty(pngName))
                     uploadPng(pngName);
             }
-            else if (!string.IsNullOrEmpty(FK_MapData))
+            else if (!DataType.IsNullOrEmpty(FK_MapData))
             {// 共享表单
                 WriteToXmlMapData(FK_MapData, true);
             }

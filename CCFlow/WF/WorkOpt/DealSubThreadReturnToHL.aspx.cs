@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.DA;
+
 
 namespace CCFlow.WF.WorkOpt
 {
@@ -72,12 +74,12 @@ namespace CCFlow.WF.WorkOpt
         {
             string shiftNo = TB_ShiftNo.Value;
             string message = TB_Doc.Text;
-            if (string.IsNullOrEmpty(shiftNo))
+            if (DataType.IsNullOrEmpty(shiftNo))
             {
                 Alert("请选择移交人");
                 return;
             }
-            if(string.IsNullOrEmpty(message))
+            if(DataType.IsNullOrEmpty(message))
             {
                 Alert("请填写处理人信息");
                 return;

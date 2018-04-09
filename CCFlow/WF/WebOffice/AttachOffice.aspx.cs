@@ -11,6 +11,8 @@ using BP.Web.Controls;
 using BP.Web;
 using BP.WF;
 using BP.WF.Data;
+using BP.DA;
+
 
 namespace CCFlow.WF.WebOffice
 {
@@ -61,7 +63,7 @@ namespace CCFlow.WF.WebOffice
             {
 
                 string str= this.Request.QueryString["FK_Node"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                 {
                     GenerWorkFlow gwf = new GenerWorkFlow();
                     gwf.WorkID = Int64.Parse(this.PKVal);
@@ -182,7 +184,7 @@ namespace CCFlow.WF.WebOffice
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(FK_MapData) || string.IsNullOrEmpty(FK_FrmAttachment))
+            if (DataType.IsNullOrEmpty(FK_MapData) || DataType.IsNullOrEmpty(FK_FrmAttachment))
             {
                 divMenu.InnerHtml = "<h1 style='color:red'>传入参数错误!<h1>";
                 return;
@@ -191,7 +193,7 @@ namespace CCFlow.WF.WebOffice
             if (IsPostBack==false)
             {
                 string type = Request["action"];
-                if (string.IsNullOrEmpty(type))
+                if (DataType.IsNullOrEmpty(type))
                 {
                     InitOffice(true);
                 }

@@ -573,7 +573,7 @@ namespace CCFlow.WF.Comm.UC
                 string dtFrom = this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
-                if (string.IsNullOrEmpty(dtFrom) == true)
+                if (DataType.IsNullOrEmpty(dtFrom) == true)
                 {
                     if (dw == DTSearchWay.ByDate)
                         dtFrom = "1900-01-01";
@@ -581,7 +581,7 @@ namespace CCFlow.WF.Comm.UC
                         dtFrom = "1900-01-01 00:00";
                 }
 
-                if (string.IsNullOrEmpty(dtTo) == true)
+                if (DataType.IsNullOrEmpty(dtTo) == true)
                 {
                     if (dw == DTSearchWay.ByDate)
                         dtTo = "2999-01-01";
@@ -664,7 +664,7 @@ namespace CCFlow.WF.Comm.UC
 
         public void SaveSearchState(string ensName, string key)
         {
-            if (string.IsNullOrEmpty(ensName))
+            if (DataType.IsNullOrEmpty(ensName))
                 throw new Exception("@EnsName 为空" + ensName);
 
             UserRegedit ur = new UserRegedit();

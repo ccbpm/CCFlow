@@ -34,9 +34,9 @@ namespace CCFlow.WF.WorkOpt
             get
             {
                 string str = this.Request.QueryString["FK_Node"];
-                if (string.IsNullOrEmpty(str) == true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     str = this.Request.QueryString["NodeID"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = "0";
                 return int.Parse(str);
             }
@@ -49,7 +49,7 @@ namespace CCFlow.WF.WorkOpt
             get
             {
                 string str=this.Request.QueryString["OID"];
-                if (string.IsNullOrEmpty(str)==true)
+                if (DataType.IsNullOrEmpty(str)==true)
                     str = this.Request.QueryString["WorkID"];
                 return Int64.Parse(str);
             }

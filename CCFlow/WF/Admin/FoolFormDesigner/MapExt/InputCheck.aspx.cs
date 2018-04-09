@@ -7,6 +7,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.Sys;
 using BP.Web.Controls;
+using BP.DA;
+
 
 namespace CCFlow.WF.MapDef
 {
@@ -198,7 +200,7 @@ namespace CCFlow.WF.MapDef
             lb.Rows = 10;
 
             string file = temFile;
-            if (string.IsNullOrEmpty(temFile) == false)
+            if (DataType.IsNullOrEmpty(temFile) == false)
             {
                 file = file.Substring(file.LastIndexOf('\\') + 4);
                 file = file.Replace(".js", "");

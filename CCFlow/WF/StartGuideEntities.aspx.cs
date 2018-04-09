@@ -155,7 +155,7 @@ namespace CCFlow.WF
                 foreach (DataColumn dc in dt.Columns)
                 {
                     string str = dr[dc.ColumnName] as string;
-                    if (string.IsNullOrEmpty(str) == true)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
 
                     if (str.Contains("<"))
@@ -285,7 +285,7 @@ namespace CCFlow.WF
 
                 cWorkID += ctl.ID.Replace("CB_", "") + ",";
             }
-            if (string.IsNullOrEmpty(cWorkID) == true)
+            if (DataType.IsNullOrEmpty(cWorkID) == true)
             {
                 BP.Sys.PubClass.Alert("您没有选择项目.");
                 return;

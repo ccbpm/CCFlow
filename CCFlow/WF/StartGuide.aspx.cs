@@ -180,7 +180,7 @@ namespace CCFlow.WF
                 foreach (DataColumn dc in dt.Columns)
                 {
                     string val = dr[dc.ColumnName] as string;
-                    if (string.IsNullOrEmpty(val) == true)
+                    if (DataType.IsNullOrEmpty(val) == true)
                         continue;
 
                     paras += "&" + dc.ColumnName + "=" + val;
@@ -318,7 +318,7 @@ namespace CCFlow.WF
 
                 cWorkID += ctl.ID.Replace("CB_", "") + ",";
             }
-            if (string.IsNullOrEmpty(cWorkID) == true)
+            if (DataType.IsNullOrEmpty(cWorkID) == true)
             {
                 BP.Sys.PubClass.Alert("您没有选择项目.");
                 return;

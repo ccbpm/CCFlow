@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.DA;
+
 
 namespace CCFlow.WF.WorkOpt
 {
@@ -116,13 +118,13 @@ namespace CCFlow.WF.WorkOpt
         {
             string accepters = (Pub1.FindControl("HID_SelectedEmps") as HiddenField).Value;// this.Pub1.GetTextBoxByID("TB_Accepter").Text;
             accepters = accepters.Trim();
-            if (string.IsNullOrEmpty(accepters))
+            if (DataType.IsNullOrEmpty(accepters))
             {
                 this.Alert("接受人不能为空");
                 return;
             }
             string title = this.Pub1.GetTextBoxByID("TB_Title").Text;
-            if (string.IsNullOrEmpty(title))
+            if (DataType.IsNullOrEmpty(title))
             {
                 this.Alert("标题不能为空");
                 return;
@@ -138,14 +140,14 @@ namespace CCFlow.WF.WorkOpt
             string errMsg = "";
             foreach (string emp in emps)
             {
-                if (string.IsNullOrEmpty(emp))
+                if (DataType.IsNullOrEmpty(emp))
                     continue;
                 myemp.No = emp;
                 if (myemp.IsExits == false)
                     errMsg += "@人员(" + emp + ")拼写错误。";
             }
 
-            if (string.IsNullOrEmpty(errMsg) == false)
+            if (DataType.IsNullOrEmpty(errMsg) == false)
             {
                 this.Alert(errMsg);
                 return;
@@ -156,7 +158,7 @@ namespace CCFlow.WF.WorkOpt
             string msg = "";
             foreach (string emp in emps)
             {
-                if (string.IsNullOrEmpty(emp))
+                if (DataType.IsNullOrEmpty(emp))
                     continue;
 
                 myemp.No = emp;

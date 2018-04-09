@@ -155,7 +155,7 @@ namespace CCFlow.WF
             string[] strs = nd.BatchParas.Split(',');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str)
+                if (DataType.IsNullOrEmpty(str)
                     || str.Contains("@PFlowNo") == true)
                     continue;
 
@@ -201,7 +201,7 @@ namespace CCFlow.WF
                 #region 显示出来自定义的字段数据..
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str) || str.Contains("@PFlowNo") == true)
+                    if (DataType.IsNullOrEmpty(str) || str.Contains("@PFlowNo") == true)
                         continue;
                     foreach (MapAttr attr in attrs)
                     {
@@ -655,7 +655,7 @@ namespace CCFlow.WF
                 //bool isChange = false;
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str))
+                    if (DataType.IsNullOrEmpty(str))
                         continue;
                     foreach (MapAttr attr in attrs)
                     {
@@ -779,7 +779,7 @@ namespace CCFlow.WF
                 //bool isChange = false;
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str))
+                    if (DataType.IsNullOrEmpty(str))
                         continue;
                     foreach (MapAttr attr in attrs)
                     {

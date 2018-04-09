@@ -112,7 +112,7 @@ namespace BP.Web
                 if (athDesc.IsNote)
                     dbUpload.MyNote = MyNote;
 
-                if (!string.IsNullOrEmpty(sort))
+                if (!DataType.IsNullOrEmpty(sort))
                     dbUpload.Sort = sort;
 
                 dbUpload.UploadGUID = guid;
@@ -207,14 +207,14 @@ namespace BP.Web
             if (Dev2Interface.Port_CheckUserLogin(UserNo, SID) == false)
                 return 0;
 
-            if (string.IsNullOrEmpty(sqls))
+            if (DataType.IsNullOrEmpty(sqls))
                 return 0;
 
             int i = 0;
             string[] strs = sqls.Split('@');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
                 i += BP.DA.DBAccess.RunSQL(str);
             }
@@ -326,7 +326,7 @@ namespace BP.Web
             int i = 0;
             foreach (string sql in strs)
             {
-                if (string.IsNullOrEmpty(sql))
+                if (DataType.IsNullOrEmpty(sql))
                     continue;
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "DT" + i;
@@ -400,7 +400,7 @@ namespace BP.Web
             string[] strs = cfg.Split('@');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
                 string[] kvs = str.Split('=');
                 SysEnum se = new SysEnum();
@@ -781,7 +781,7 @@ namespace BP.Web
                         nd.NodeID = nodeid;
                         if (nd.RetrieveFromDBSources() != 0)
                         {
-                            if (string.IsNullOrEmpty(nd.FocusField) == false)
+                            if (DataType.IsNullOrEmpty(nd.FocusField) == false)
                                 return null;
 
                             nd.FocusField = "@" + gKey + "_Note";
@@ -875,7 +875,7 @@ namespace BP.Web
                     case "SaveSFTable":
                         string enName = v2;
                         string chName = v1;
-                        if (string.IsNullOrEmpty(v1) || string.IsNullOrEmpty(v2))
+                        if (DataType.IsNullOrEmpty(v1) || DataType.IsNullOrEmpty(v2))
                             return "视图中的中英文名称不能为空。";
 
                         SFTable sf = new SFTable();
@@ -1120,7 +1120,7 @@ namespace BP.Web
                 if (en == null)
                     throw new Exception("无效的类名:" + enName);
 
-                if (string.IsNullOrEmpty(pk) == false)
+                if (DataType.IsNullOrEmpty(pk) == false)
                 {
                     en.PKVal = pk;
                     en.RetrieveFromDBSources();
@@ -1214,7 +1214,7 @@ namespace BP.Web
         [WebMethod]
         public string RequestSFTableV1(string uiBindKey)
         {
-            if (string.IsNullOrEmpty(uiBindKey))
+            if (DataType.IsNullOrEmpty(uiBindKey))
                 throw new Exception("@uiBindKey不能为空值.");
 
             DataSet ds = new DataSet();
@@ -1411,7 +1411,7 @@ namespace BP.Web
             // 备份文件
             CCFlow.WF.Admin.XAP.DoPort.WriteToXmlMapData(fk_mapdata, false);
 
-            if (string.IsNullOrEmpty(str))
+            if (DataType.IsNullOrEmpty(str))
                 return null;
 
             return str;

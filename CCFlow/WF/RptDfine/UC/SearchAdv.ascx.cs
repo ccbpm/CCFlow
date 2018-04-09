@@ -29,7 +29,7 @@ namespace CCFlow.WF.Rpt
             get
             {
                 string s = this.Request.QueryString["RptNo"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                 {
                     return "ND1MyRpt";// "ND68MyRpt";
                 }
@@ -42,7 +42,7 @@ namespace CCFlow.WF.Rpt
             get
             {
                 string s = this.Request.QueryString["FK_Flow"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "068";
                 return s;
             }
@@ -178,7 +178,7 @@ namespace CCFlow.WF.Rpt
 
             foreach (string cond in conds)
             {
-                if (string.IsNullOrEmpty(cond))
+                if (DataType.IsNullOrEmpty(cond))
                     continue;
 
                 //参数.
@@ -1134,7 +1134,7 @@ namespace CCFlow.WF.Rpt
         {
             var currUR = new UserRegedit();
 
-            if (string.IsNullOrEmpty(this.CurrentUR_PK))
+            if (DataType.IsNullOrEmpty(this.CurrentUR_PK))
             {
                 currUR.MyPK = ViewState["newur"].ToString();
             }
@@ -1277,7 +1277,7 @@ namespace CCFlow.WF.Rpt
                     if (attr.UIContralType == UIContralType.DDL)
                     {
                         string s = en.GetValRefTextByKey(attr.Key);
-                        if (string.IsNullOrEmpty(s))
+                        if (DataType.IsNullOrEmpty(s))
                         {
                             switch (attr.Key)
                             {

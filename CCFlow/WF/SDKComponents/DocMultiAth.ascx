@@ -10,7 +10,7 @@
     src += "&FK_FrmAttachment=ND" + this.Request.QueryString["FK_Node"] + "_DocMultiAth";
 
     string pkval = this.Request.QueryString["WorkID"];
-    if (string.IsNullOrEmpty(pkval))
+    if (DataType.IsNullOrEmpty(pkval))
         pkval = this.Request.QueryString["OID"];
     
     src += "&RefPKVal=" + pkval;

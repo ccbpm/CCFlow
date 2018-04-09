@@ -156,7 +156,7 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
             TextBox tb = this.UCSys1.GetTextBoxByID("TB_" + i);
             if (tb == null)
                 continue;
-            if (string.IsNullOrEmpty(tb.Text))
+            if (DataType.IsNullOrEmpty(tb.Text))
                 continue;
 
             SysEnum se = new SysEnum();
@@ -201,7 +201,7 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
             return;
         }
         m.Name = name;
-        if (string.IsNullOrEmpty(name))
+        if (DataType.IsNullOrEmpty(name))
         {
             this.Alert("枚举名称不能为空");
             return;
@@ -213,7 +213,7 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
             TextBox tb = this.UCSys1.GetTextBoxByID("TB_" + i);
             if (tb == null)
                 continue;
-            if (string.IsNullOrEmpty(tb.Text))
+            if (DataType.IsNullOrEmpty(tb.Text))
                 continue;
 
             SysEnum se = new SysEnum();

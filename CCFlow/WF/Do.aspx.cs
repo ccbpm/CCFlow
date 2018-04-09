@@ -37,7 +37,7 @@ namespace BP.Web.WF
                 if (s == null)
                     s = this.Request.QueryString["DoType"];
 
-                if (string.IsNullOrEmpty(s) && this.Request.QueryString["SID"] != null)
+                if (DataType.IsNullOrEmpty(s) && this.Request.QueryString["SID"] != null)
                     s = "Track";
                 return s;
             }

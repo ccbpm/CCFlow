@@ -63,7 +63,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             Literal lit = new Literal();
             lit.ID = "litInfo";
 
-            if (!string.IsNullOrEmpty(moduleFile))
+            if (!DataType.IsNullOrEmpty(moduleFile))
             {
                 lit.Text = "[<span style='color:green'>已上传Excel表单模板:<a href='" + moduleFile +
                            "' target='_blank' title='下载或打开模版'>" + moduleFile +
@@ -127,7 +127,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
 
                 string moduleFile = getModuleFile(extArr);
 
-                if (!string.IsNullOrEmpty(moduleFile))
+                if (!DataType.IsNullOrEmpty(moduleFile))
                     File.Delete(Server.MapPath(moduleFile));
 
                 moduleFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\" + this.FK_MapData +

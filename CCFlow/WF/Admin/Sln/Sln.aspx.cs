@@ -40,7 +40,7 @@ namespace CCFlow.WF.MapDef
                 if (_fk_flow == null)
                 {
                     string flowNo = this.Request.QueryString["FK_Flow"];
-                    if (string.IsNullOrEmpty(flowNo)==false)
+                    if (DataType.IsNullOrEmpty(flowNo)==false)
                     {
                         _fk_flow = flowNo;
                     }
@@ -538,7 +538,7 @@ namespace CCFlow.WF.MapDef
                     isChange = true;
 
                 string exp = this.Pub2.GetTextBoxByID("TB_" + attr.KeyOfEn + "_RegularExp").Text;
-                if ( string.IsNullOrEmpty(exp) )
+                if ( DataType.IsNullOrEmpty(exp) )
                     isChange = true;
 
                 if (isChange == false)

@@ -122,7 +122,7 @@ namespace CCOA.Comm
             string method = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (string.IsNullOrEmpty(Request["method"]))
+            if (DataType.IsNullOrEmpty(Request["method"]))
                 return;
 
             method = Request["method"].ToString();
@@ -136,7 +136,7 @@ namespace CCOA.Comm
                     s_responsetext = GetEnsGridData();
                     break;
             }
-            if (string.IsNullOrEmpty(s_responsetext))
+            if (DataType.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
             //组装ajax字符串格式,返回调用客户端
             Response.Charset = "UTF-8";

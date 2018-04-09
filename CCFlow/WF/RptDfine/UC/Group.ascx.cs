@@ -41,7 +41,7 @@ namespace CCFlow.WF.Rpt.UC
             get
             {
                 string s = this.Request.QueryString["RptNo"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "ND" + int.Parse(this.FK_Flow) + "MyRpt";
                 return s;
             }
@@ -227,7 +227,7 @@ namespace CCFlow.WF.Rpt.UC
             {
                 string reAttrs = this.Request.QueryString["Attrs"];
                 // string reAttrs = null; 
-                if (string.IsNullOrEmpty(reAttrs))
+                if (DataType.IsNullOrEmpty(reAttrs))
                     reAttrs = this.currUR.Vals;
 
                 this.CfgVal = this.currUR.Vals;
@@ -445,7 +445,7 @@ namespace CCFlow.WF.Rpt.UC
                 this.UCSys2.AddTREnd();
                 #endregion 处理计算方式。
 
-                if (string.IsNullOrEmpty(this.NumKey))
+                if (DataType.IsNullOrEmpty(this.NumKey))
                 {
                     this.NumKey = attr.Key;
                     this.UCSys2.GetCBByID("CB_" + attr.Key).Checked = true;
@@ -693,7 +693,7 @@ namespace CCFlow.WF.Rpt.UC
                     string cfgVal = sUr.MVals;
                     AtPara ap = new AtPara(cfgVal);
                     string instr = ap.GetValStrByKey(key);
-                    if (string.IsNullOrEmpty(instr))
+                    if (DataType.IsNullOrEmpty(instr))
                     {
                         if (key == "FK_Dept" || key == "FK_Unit")
                         {

@@ -16,6 +16,8 @@ using BP.WF;
 using Microsoft.Office.Interop.Word;
 using BP.WF.Template;
 using BP.WF.Data;
+using BP.DA;
+
 
 
 namespace CCFlow.WF.WorkOpt
@@ -208,7 +210,7 @@ namespace CCFlow.WF.WorkOpt
         #endregion
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(FK_Node.ToString()) || string.IsNullOrEmpty(WorkID.ToString()))
+            if (DataType.IsNullOrEmpty(FK_Node.ToString()) || DataType.IsNullOrEmpty(WorkID.ToString()))
             {
                 divMenu.InnerHtml = "<h1 style='color:red'>传入参数错误!<h1>";
                 return;
@@ -219,7 +221,7 @@ namespace CCFlow.WF.WorkOpt
                 ReadFile();
 
                 string type = Request["action"];
-                if (string.IsNullOrEmpty(type))
+                if (DataType.IsNullOrEmpty(type))
                 {
                     isReadOnly = Request.QueryString["DoType"] == "View";
                     LoadMenu(true && !isReadOnly);
@@ -405,7 +407,7 @@ namespace CCFlow.WF.WorkOpt
                     BtnLab btnLab = new BtnLab(this.FK_Node);
                     OfficeTemplate = btnLab.OfficeTemplate;
 
-                    if (!string.IsNullOrEmpty(OfficeTemplate))
+                    if (!DataType.IsNullOrEmpty(OfficeTemplate))
                     {
                         fileName.Text = "/" + OfficeTemplate;
                         fileType.Text = OfficeTemplate.Split('.')[1];
@@ -668,7 +670,7 @@ namespace CCFlow.WF.WorkOpt
            // OfficeTemplate = btnLab.OfficeTemplate;
             IsSavePDF = btnLab.OfficeReSavePDF;
 
-            if (!string.IsNullOrEmpty(this.MarkName))
+            if (!DataType.IsNullOrEmpty(this.MarkName))
                 AddBtn("ViewMarks", "文档痕迹", "ViewMark");
 
             if (isMenu)

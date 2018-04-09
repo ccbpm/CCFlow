@@ -16,7 +16,7 @@
     this.Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "SDKData", "" + Glo.CCFlowAppPath + "SDKComponents/Base/SDKData.js");
     string isToolbar = Request.QueryString["IsToobar"];
     bool toolbar = true;
-    if (!string.IsNullOrEmpty(isToolbar) && isToolbar == "0")
+    if (!DataType.IsNullOrEmpty(isToolbar) && isToolbar == "0")
         toolbar = false;
          
     string paras = this.Request.QueryString["AtPara"];

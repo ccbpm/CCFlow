@@ -73,7 +73,7 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                if (_fk_node == 0 && !string.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
+                if (_fk_node == 0 && !DataType.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
                     return int.Parse(this.Request.QueryString["FK_Node"]);
 
                 return _fk_node;
@@ -88,10 +88,10 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string str = this.Request.QueryString["WorkID"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.Request.QueryString["OID"];
 
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.Request.QueryString["PKVal"];
 
                 return Int64.Parse(str);
@@ -102,7 +102,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string fk_mapdata = this.Request.QueryString["FK_MapData"];
-                if (string.IsNullOrEmpty(fk_mapdata))
+                if (DataType.IsNullOrEmpty(fk_mapdata))
                     fk_mapdata = "ND" + FK_Node;
                 return fk_mapdata;
             }
@@ -119,7 +119,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string paras = this.Request.QueryString["Paras"];
-                if (string.IsNullOrEmpty(paras) == false)
+                if (DataType.IsNullOrEmpty(paras) == false)
                     if (paras.Contains("IsCC=1") == true)
                         return "1";
                 return "ssss";

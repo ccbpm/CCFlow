@@ -182,7 +182,7 @@ public partial class CCFlow_Comm_Sys_EnsAppCfg : BP.Web.WebPageAdmin
                     SysEnums ses = new SysEnums(attr.Key, attr.UITag);
                     ddl.BindSysEnum(attr.Key);
 
-                    if (string.IsNullOrEmpty(cfg.HisAP.GetValStrByKey(attr.Key)))
+                    if (DataType.IsNullOrEmpty(cfg.HisAP.GetValStrByKey(attr.Key)))
                         ddl.SetSelectItem(attr.DefaultVal.ToString());
                     else
                         ddl.SetSelectItem(cfg.HisAP.GetValIntByKey(attr.Key));
@@ -193,7 +193,7 @@ public partial class CCFlow_Comm_Sys_EnsAppCfg : BP.Web.WebPageAdmin
                     CheckBox cb = new CheckBox();
                     cb.ID = "CB_" + attr.Key;
                     cb.Text = attr.Desc;
-                    if (string.IsNullOrEmpty(cfg.HisAP.GetValStrByKey(attr.Key)))
+                    if (DataType.IsNullOrEmpty(cfg.HisAP.GetValStrByKey(attr.Key)))
                     {
                         if (attr.DefaultVal.ToString() == "0")
                             cb.Checked = false;

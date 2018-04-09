@@ -36,13 +36,13 @@ namespace CCFlow.WF.CCForm
                     string nodeid = this.Request.QueryString["NodeID"];
                     if (nodeid == null)
                         nodeid = this.Request.QueryString["FK_Node"];
-                    //if (string.IsNullOrEmpty(nodeid))
+                    //if (DataType.IsNullOrEmpty(nodeid))
                     //    nodeid = "12201";
                     return int.Parse(nodeid);
                 }
                 catch
                 {
-                    if (string.IsNullOrEmpty(this.FK_Flow))
+                    if (DataType.IsNullOrEmpty(this.FK_Flow))
                         return 0;
                     else
                         return int.Parse(this.FK_Flow); // 0; 有可能是流程调用独立表单。
@@ -54,7 +54,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 var workid = this.Request.QueryString["WorkID"];
-                //if (string.IsNullOrEmpty(workid))
+                //if (DataType.IsNullOrEmpty(workid))
                 //    workid = "167";
                 return workid;
             }
@@ -65,10 +65,10 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string oid = this.Request.QueryString["WorkID"];
-                if (string.IsNullOrEmpty(oid))
+                if (DataType.IsNullOrEmpty(oid))
                     oid = this.Request.QueryString["OID"];
 
-                if (string.IsNullOrEmpty(oid))
+                if (DataType.IsNullOrEmpty(oid))
                     oid = "0";
 
                 return int.Parse(oid);
@@ -214,7 +214,7 @@ namespace CCFlow.WF.CCForm
             //WebUser.SignInOfGener(new BP.Port.Emp("fuhui"));
 
             UserName = WebUser.Name;
-            if (string.IsNullOrEmpty(this.FK_MapData))
+            if (DataType.IsNullOrEmpty(this.FK_MapData))
             {
                 divMenu.InnerHtml = "<h1 style='color:red'>必须传入参数FK_Mapdata!<h1>";
                 return;
@@ -224,7 +224,7 @@ namespace CCFlow.WF.CCForm
 
             //获得外部的标记。
             string type = Request["action"];
-            if (string.IsNullOrEmpty(type))
+            if (DataType.IsNullOrEmpty(type))
             {
                 /** 第一次进来，的时候，没有标记。
                  */
@@ -344,7 +344,7 @@ namespace CCFlow.WF.CCForm
                 string[] paras = this.RequestParas.Split('&');
                 foreach (string str in paras)
                 {
-                    if (string.IsNullOrEmpty(str) || str.Contains("=") == false)
+                    if (DataType.IsNullOrEmpty(str) || str.Contains("=") == false)
                         continue;
                     string[] kvs = str.Split('=');
                     en.SetValByKey(kvs[0], kvs[1]);
@@ -445,7 +445,7 @@ namespace CCFlow.WF.CCForm
             {
                 ToolbarSlns += "{\"" + fk_mapdata + "\":";
 
-                if (string.IsNullOrEmpty(this.FK_Flow) == false)
+                if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*接受到了流程编号，就要找到他的控制方案.*/
                     fn = new BP.WF.Template.FrmNode(this.FK_Flow, this.FK_Node, fk_mapdata);
@@ -666,7 +666,7 @@ namespace CCFlow.WF.CCForm
             //生成json格式。
             ReplaceFields += GenerateFieldsJsonString(fields);
 
-            if (item == null || string.IsNullOrEmpty(item.Tag1)
+            if (item == null || DataType.IsNullOrEmpty(item.Tag1)
                 || item.Tag1.Length < 15)
             {
                 ReplaceDtls += "[]";

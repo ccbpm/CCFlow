@@ -541,7 +541,10 @@
 
                 //获取所有节点信息.
                 try {
-                    var nodes = new Entities("BP.WF.Nodes");
+
+                    //$("#Btn_Save")
+
+                    var nodes = new Entities("BP.WF.Template.NodeSimples");
                     nodes.Retrieve("FK_Flow", flowNo);
 
                     // 保存x,y位置.
@@ -551,6 +554,7 @@
                     for (var nodeID in processInfo) {
 
                         var nodeIDStr = JSON.stringify(nodeID);
+
                         var nodeJSON = processInfo[nodeID];
 
                         for (var idx = 0; idx < nodes.length; idx++) {
@@ -560,7 +564,7 @@
                             if (myID != nodeIDStr)
                                 continue;
 
-                            node = new Entity("BP.WF.Node", node);
+                            node = new Entity("BP.WF.Template.NodeSimple", node);
                             node.Y = nodeJSON.top;
                             node.X = nodeJSON.left;
                             node.Update();
@@ -607,7 +611,9 @@
                 catch (e) {
                     alert(e);
                 }
+
                 alert('保存成功!');
+
                 return;
 
 

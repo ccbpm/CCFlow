@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.DA;
 
 namespace CCFlow.WF.Admin
 {
@@ -45,7 +46,7 @@ namespace CCFlow.WF.Admin
             int idx = 0;
             foreach (string empStr in emps)
             {
-                if (string.IsNullOrEmpty(empStr))
+                if (BP.DA.DataType.IsNullOrEmpty(empStr))
                     continue;
 
                 idx++;

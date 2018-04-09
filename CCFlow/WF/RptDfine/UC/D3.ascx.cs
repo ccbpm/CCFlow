@@ -28,7 +28,7 @@ namespace CCFlow.WF.Rpt.UC
             get
             {
                 string s = this.Request.QueryString["RptNo"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "ND68MyRpt";
                 return s;
             }
@@ -38,7 +38,7 @@ namespace CCFlow.WF.Rpt.UC
             get
             {
                 string s = this.Request.QueryString["FK_Flow"];
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "068";
                 return s;
             }
@@ -428,7 +428,7 @@ namespace CCFlow.WF.Rpt.UC
             tb.BorderWidth = 1;
             //tb.BorderStyle = BorderStyle.Outset;
             tb.Text = ps.GetValStrByKey("W");
-            if (string.IsNullOrEmpty(tb.Text))
+            if (DataType.IsNullOrEmpty(tb.Text))
                 tb.Text = "500";
 
             this.Left.Add("宽：");
@@ -443,7 +443,7 @@ namespace CCFlow.WF.Rpt.UC
             tb.BorderWidth = 1;
             //tb.BorderStyle = BorderStyle.Outset;
             tb.Text = ps.GetValStrByKey("H");
-            if (string.IsNullOrEmpty(tb.Text))
+            if (DataType.IsNullOrEmpty(tb.Text))
                 tb.Text = "300";
 
             this.Left.Add(tb);

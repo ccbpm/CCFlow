@@ -4,6 +4,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.WF.Template;
+using BP.DA;
+
 
 namespace CCFlow.WF.WorkOpt
 {
@@ -45,7 +47,7 @@ namespace CCFlow.WF.WorkOpt
             if (this.IsPostBack == false)
             {
                 string note = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node);
-                if (string.IsNullOrEmpty(note))
+                if (DataType.IsNullOrEmpty(note))
                 {
                     BP.WF.Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID,"已阅", "阅知");
                     note = "已阅";

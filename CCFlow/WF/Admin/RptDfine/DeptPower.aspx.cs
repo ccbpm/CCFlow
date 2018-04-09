@@ -211,7 +211,7 @@ public partial class WF_MapDef_Rpt_DeptPower :WebPage
         string[] empStrs = this.Emps.Split(',');
         foreach (string s in empStrs)
         {
-            if (string.IsNullOrEmpty(s))
+            if (DataType.IsNullOrEmpty(s))
                 continue;
             DBAccess.RunSQL("DELETE FROM WF_DeptFlowSearch WHERE FK_Flow='" + this.FK_Flow + "' AND FK_Emp='" + s + "'");
         }
@@ -228,7 +228,7 @@ public partial class WF_MapDef_Rpt_DeptPower :WebPage
             dfs.FK_Dept = en.No;
             foreach (string s in empStrs)
             {
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     continue;
                 dfs.MyPK = en.No + "_" + s + "_" + this.FK_Flow;
                 dfs.FK_Emp = s;

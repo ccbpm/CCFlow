@@ -16,11 +16,11 @@
 
 <%
     string fk_mapdata = this.Request.QueryString["FK_MapData"];
-    if (string.IsNullOrEmpty(fk_mapdata))
+    if (DataType.IsNullOrEmpty(fk_mapdata))
         fk_mapdata = "ND101";
 
     string fk_node = this.Request.QueryString["FK_Node"];
-    if (string.IsNullOrEmpty(fk_node))
+    if (DataType.IsNullOrEmpty(fk_node))
         fk_mapdata = "101";
     
         

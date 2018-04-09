@@ -76,7 +76,7 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                if (_fk_node == 0 && !string.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
+                if (_fk_node == 0 && !DataType.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
                     return int.Parse(this.Request.QueryString["FK_Node"]);
 
                 return _fk_node;
@@ -91,10 +91,10 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string str = this.Request.QueryString["WorkID"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.Request.QueryString["OID"];
 
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.Request.QueryString["PKVal"];
                 return Int64.Parse(str);
             }
@@ -104,7 +104,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string str = this.Request.QueryString["FID"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return 0;
                 return Int64.Parse(str);
             }
@@ -114,7 +114,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string fk_mapdata = this.Request.QueryString["FK_MapData"];
-                if (string.IsNullOrEmpty(fk_mapdata))
+                if (DataType.IsNullOrEmpty(fk_mapdata))
                     fk_mapdata = "ND" + FK_Node;
                 return fk_mapdata;
             }
@@ -131,7 +131,7 @@ namespace CCFlow.WF.CCForm
             get
             {
                 string paras = this.Request.QueryString["Paras"];
-                if (string.IsNullOrEmpty(paras) == false)
+                if (DataType.IsNullOrEmpty(paras) == false)
                     if (paras.Contains("IsCC=1") == true)
                         return "1";
                 return "ssss";
@@ -362,7 +362,7 @@ namespace CCFlow.WF.CCForm
                 if (isDel == true || isUpdate == true)
                 {
                     if (this.WorkID != 0
-                        && string.IsNullOrEmpty(this.FK_Flow) == false
+                        && DataType.IsNullOrEmpty(this.FK_Flow) == false
                         && this.FK_Node != 0)
                     {
                         isDel = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
@@ -607,7 +607,7 @@ namespace CCFlow.WF.CCForm
                 int result = athDesc.RetrieveFromDBSources();
 
                 #region 判断是否是明细表的多附件.
-                if (result == 0 && string.IsNullOrEmpty(this.FK_Flow) == false
+                if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
                    && this.FK_FrmAttachment.Contains("AthMDtl"))
                 {
                     athDesc.FK_MapData = this.FK_MapData;
@@ -619,7 +619,7 @@ namespace CCFlow.WF.CCForm
                 #endregion 判断是否是明细表的多附件。
 
                 #region 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
-                if (result == 0 && string.IsNullOrEmpty(this.FK_Flow) == false
+                if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
                     && this.FK_FrmAttachment.Contains("DocMultiAth"))
                 {
                     /*如果没有查询到它,就有可能是公文多附件被删除了.*/
@@ -721,7 +721,7 @@ namespace CCFlow.WF.CCForm
                     foreach (string ext in fileExtData)
                     {
 
-                        if (!string.IsNullOrEmpty(ext))
+                        if (!DataType.IsNullOrEmpty(ext))
                         {
                             if (ext.StartsWith("*."))
                                 realFileExts += ext + ";";
@@ -730,7 +730,7 @@ namespace CCFlow.WF.CCForm
                         }
                     }
 
-                    if (string.IsNullOrEmpty(realFileExts))
+                    if (DataType.IsNullOrEmpty(realFileExts))
                         realFileExts = "*.*";
                     ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "uploadify", "" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js");
                     this.Page.RegisterClientScriptBlock("jqueryUpSwfcss",
@@ -880,7 +880,7 @@ namespace CCFlow.WF.CCForm
             try
             {
                 string fileTypes = BP.Sys.SystemConfig.AppSettings["OpenTypes"];
-                if (string.IsNullOrEmpty(fileTypes) == true)
+                if (DataType.IsNullOrEmpty(fileTypes) == true)
                     fileTypes = "doc,docx,pdf,xls,xlsx";
 
                 if (fileTypes.Contains(fileType.ToLower()))
@@ -1004,7 +1004,7 @@ namespace CCFlow.WF.CCForm
 
                             //执行附件上传前事件，added by liuxc,2017-7-15
                             msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + saveTo);
-                            if (!string.IsNullOrEmpty(msg))
+                            if (!DataType.IsNullOrEmpty(msg))
                             {
                                 BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
 
@@ -1074,7 +1074,7 @@ namespace CCFlow.WF.CCForm
                             dbUpload.Sort = strs[0];
                             if (ddl != null)
                             {
-                                int selectedIndex = string.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
+                                int selectedIndex = DataType.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
                                 dbUpload.Sort = strs[selectedIndex];
                             }
                         }
@@ -1084,7 +1084,7 @@ namespace CCFlow.WF.CCForm
                         //执行附件上传后事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
 
-                        if (string.IsNullOrEmpty(msg) == false)
+                        if (DataType.IsNullOrEmpty(msg) == false)
                             BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到iis服务器.
@@ -1100,7 +1100,7 @@ namespace CCFlow.WF.CCForm
 
                         //执行附件上传前事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
-                        if (string.IsNullOrEmpty(msg) == false)
+                        if (DataType.IsNullOrEmpty(msg) == false)
                         {
                             BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
 
@@ -1160,7 +1160,7 @@ namespace CCFlow.WF.CCForm
                             dbUpload.Sort = strs[0];
                             if (ddl != null)
                             {
-                                int selectedIndex = string.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
+                                int selectedIndex = DataType.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
                                 dbUpload.Sort = strs[selectedIndex];
                             }
                         }
@@ -1205,7 +1205,7 @@ namespace CCFlow.WF.CCForm
 
                         //执行附件上传后事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
-                        if (!string.IsNullOrEmpty(msg))
+                        if (!DataType.IsNullOrEmpty(msg))
                             BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到数据库.
@@ -1219,7 +1219,7 @@ namespace CCFlow.WF.CCForm
                     {
                         string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');
                         string strIndex = this.Pub1.GetDDLByID("ddl").SelectedItemStringVal;
-                        int selectedIndex = string.IsNullOrEmpty(strIndex) ? 0 : int.Parse(strIndex);
+                        int selectedIndex = DataType.IsNullOrEmpty(strIndex) ? 0 : int.Parse(strIndex);
                         string fileType = strs[selectedIndex];
 
                         FrmAttachmentDB dbUpload = new FrmAttachmentDB();

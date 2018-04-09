@@ -209,9 +209,9 @@ namespace CCFlow.WF.MapDef
 
             this.Response.Redirect(this.Request.RawUrl);
 
-            //if (string.IsNullOrEmpty(info) == false)
+            //if (DataType.IsNullOrEmpty(info) == false)
             //    this.Pub2.AddFieldSet("保存成功信息", info);
-            //if (string.IsNullOrEmpty(err) == false)
+            //if (DataType.IsNullOrEmpty(err) == false)
             //    this.Pub2.AddFieldSet("保存失败信息", err);
             return;
         }

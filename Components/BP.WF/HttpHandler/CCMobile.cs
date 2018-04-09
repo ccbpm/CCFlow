@@ -392,12 +392,12 @@ namespace BP.WF.HttpHandler
             GenerWorkFlows gwfs = new GenerWorkFlows();
             QueryObject qo = new QueryObject(gwfs);
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
-            if (!string.IsNullOrEmpty(TSpan))
+            if (!DataType.IsNullOrEmpty(TSpan))
             {
                 qo.addAnd();
                 qo.AddWhere(GenerWorkFlowAttr.TSpan, this.GetRequestVal("TSpan"));
             }
-            if (!string.IsNullOrEmpty(FK_Flow))
+            if (!DataType.IsNullOrEmpty(FK_Flow))
             {
                 qo.addAnd();
                 qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.GetRequestVal("FK_Flow"));

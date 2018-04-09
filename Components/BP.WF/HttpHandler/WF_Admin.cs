@@ -87,7 +87,7 @@ namespace BP.WF.HttpHandler
                 string[] strs = fl.Tester.Split(',');
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str) == true)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
 
                     Emp emp = new Emp();
@@ -186,7 +186,7 @@ namespace BP.WF.HttpHandler
                         }
                         break;
                     case DeliveryWay.BySQL:
-                        if (string.IsNullOrEmpty(nd.DeliveryParas))
+                        if (DataType.IsNullOrEmpty(nd.DeliveryParas))
                             return "err@您设置的按SQL访问开始节点，但是您没有设置sql.";
                         break;
                     default:

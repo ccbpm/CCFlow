@@ -286,7 +286,7 @@ namespace BP.Sys
                 {
                     string runObj = this.SelectStatement;
 
-                    if (string.IsNullOrEmpty(runObj))
+                    if (DataType.IsNullOrEmpty(runObj))
                         throw new Exception("@外键类型SQL配置错误," + this.No + " " + this.Name + " 是一个(SQL)类型("+this.GetValStrByKey("SrcType") +")，但是没有配置sql.");
 
                     if (runObj == null)

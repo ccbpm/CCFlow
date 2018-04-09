@@ -82,7 +82,7 @@ namespace BP.WF.DTS
                 nd.Retrieve();
 
                 // 首先判断是否有启动的表达式, 它是是否自动执行的总阀门。
-                if (string.IsNullOrEmpty(nd.DoOutTimeCond) == false)
+                if (DataType.IsNullOrEmpty(nd.DoOutTimeCond) == false)
                 {
                     Node nodeN = new Node(nd.NodeID);
                     Work wk = nodeN.HisWork;
@@ -98,7 +98,7 @@ namespace BP.WF.DTS
                     case OutTimeDeal.None:
                         break;
                     case OutTimeDeal.AutoTurntoNextStep: //自动转到下一步骤.
-                        if (string.IsNullOrEmpty(nd.DoOutTime))
+                        if (DataType.IsNullOrEmpty(nd.DoOutTime))
                         {
                             /*如果是空的,没有特定的点允许，就让其它向下执行。*/
                             msg += BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid).ToMsgOfText();
@@ -111,7 +111,7 @@ namespace BP.WF.DTS
                         }
                         break;
                     case OutTimeDeal.AutoJumpToSpecNode: //自动的跳转下一个节点.
-                        if (string.IsNullOrEmpty(nd.DoOutTime))
+                        if (DataType.IsNullOrEmpty(nd.DoOutTime))
                             throw new Exception("@设置错误,没有设置要跳转的下一步节点.");
                         int nextNodeID = int.Parse(nd.DoOutTime);
                         msg += BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, nextNodeID, null).ToMsgOfText();

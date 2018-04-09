@@ -92,7 +92,7 @@ namespace BP.Rpt
         {
             get
             {
-                if (string.IsNullOrEmpty(_Title))
+                if (DataType.IsNullOrEmpty(_Title))
                     return "";
 
                 if (_Title.Contains("@") == false)

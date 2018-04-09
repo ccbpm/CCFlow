@@ -292,7 +292,7 @@ namespace BP.WF.HttpHandler
 
                 string name = WebUser.Name;
 
-                if (string.IsNullOrEmpty(name) == true)
+                if (DataType.IsNullOrEmpty(name) == true)
                     ht.Add("UserName", WebUser.No);
                 else
                     ht.Add("UserName", name);

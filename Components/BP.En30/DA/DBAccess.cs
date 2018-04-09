@@ -283,7 +283,7 @@ namespace BP.DA
                 byte[] byteFile = null;
                 if (dr.Read())
                 {
-                    if (dr[0] == null || string.IsNullOrEmpty(dr[0].ToString()))
+                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
                         return null;
 
                     byteFile = (byte[])dr[0];
@@ -328,7 +328,7 @@ namespace BP.DA
                 byte[] byteFile = null;
                 if (dr.Read())
                 {
-                    if (dr[0] == null || string.IsNullOrEmpty(dr[0].ToString()))
+                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
                         return null;
 
                     byteFile = (byte[])dr[0];
@@ -372,7 +372,7 @@ namespace BP.DA
                 byte[] byteFile = null;
                 if (dr.Read())
                 {
-                    if (dr[0] == null || string.IsNullOrEmpty(dr[0].ToString()))
+                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
                         return null;
 
                     byteFile = dr[0] as byte[];
@@ -1566,7 +1566,7 @@ namespace BP.DA
             string[] strs = str.Split(';');
             foreach (string s in strs)
             {
-                if (string.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
+                if (DataType.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
                     continue;
 
                 if (s.Contains("--"))
@@ -1588,14 +1588,14 @@ namespace BP.DA
             string[] strs = str.Split(new String[] { "--GO--" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in strs)
             {
-                if (string.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
+                if (DataType.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
                     continue;
 
                 if (s.Contains("/**"))
                     continue;
 
                 string mysql = s.Replace("--GO--", "");
-                if (string.IsNullOrEmpty(mysql.Trim()))
+                if (DataType.IsNullOrEmpty(mysql.Trim()))
                     continue;
                 if (s.Contains("--"))
                     continue;
@@ -1609,7 +1609,7 @@ namespace BP.DA
         /// <param name="sql"></param>
         public static void RunSQLs(string sql)
         {
-            if (string.IsNullOrEmpty(sql))
+            if (DataType.IsNullOrEmpty(sql))
                 return;
 
             sql = sql.Replace("@GO", "~");
@@ -1617,7 +1617,7 @@ namespace BP.DA
             string[] strs = sql.Split('~');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
 
                 if (str.Contains("--") || str.Contains("/*"))
@@ -2822,7 +2822,7 @@ namespace BP.DA
         /// <returns>返回执行结果</returns>
         public static DataTable RunSQLReturnTable(string sql, Paras paras)
         {
-            if (string.IsNullOrEmpty(sql))
+            if (DataType.IsNullOrEmpty(sql))
                 throw new Exception("要执行的 sql = null ");
 
             try

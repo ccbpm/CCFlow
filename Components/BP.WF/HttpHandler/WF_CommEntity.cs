@@ -199,7 +199,7 @@ namespace BP.WF.HttpHandler
                 if (UIIsEnable == "0")
                     continue;
 
-                if (string.IsNullOrEmpty(uiBindKey) == true)
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
                 {
                     string myPK = dr["MyPK"].ToString();
                     /*如果是空的*/
@@ -417,7 +417,7 @@ namespace BP.WF.HttpHandler
                     if (UIIsEnable.Equals("0") == true)
                         continue;
 
-                    if (string.IsNullOrEmpty(uiBindKey) == true)
+                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
                     {
                         string myPK = dr["MyPK"].ToString();
                         /*如果是空的*/

@@ -216,7 +216,7 @@ namespace BP.WF
             sms.MobileInfo = mobileInfo;
             sms.MsgFlag = msgFlag; // 消息标志.
 
-            if (string.IsNullOrEmpty(msgFlag))
+            if (DataType.IsNullOrEmpty(msgFlag))
             {
                 sms.MyPK = DBAccess.GenerGUID();
 
@@ -441,7 +441,7 @@ namespace BP.WF
             get
             {
                 string doc = this.GetValStringByKey(SMSAttr.EmailDoc);
-                if (string.IsNullOrEmpty(doc))
+                if (DataType.IsNullOrEmpty(doc))
                     return this.Title;
                 return doc.Replace('~', '\'');
             }
@@ -458,7 +458,7 @@ namespace BP.WF
             get
             {
                 string doc = this.GetValStringByKey(SMSAttr.EmailDoc);
-                if (string.IsNullOrEmpty(doc))
+                if (DataType.IsNullOrEmpty(doc))
                     return this.Title;
                 return doc.Replace('~', '\'');
 

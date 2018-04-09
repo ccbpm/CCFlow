@@ -116,7 +116,7 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStringByKey(FlowAttr.DTSDBSrc);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return "local";
                 return str;
             }
@@ -382,7 +382,7 @@ namespace BP.WF
             {
                 string str = this.GetValStringByKey(FlowAttr.StartGuidePara2);
                 str = str.Replace("~", "'");
-                if (string.IsNullOrEmpty(str) == null)
+                if (DataType.IsNullOrEmpty(str) == null)
                 {
                     if (this.StartGuideWay == BP.WF.Template.StartGuideWay.ByHistoryUrl)
                     {
@@ -619,7 +619,7 @@ namespace BP.WF
             try
             {
                 //从报表里查询该数据是否存在？
-                if (this.IsGuestFlow == true && string.IsNullOrEmpty(GuestUser.No) == false)
+                if (this.IsGuestFlow == true && DataType.IsNullOrEmpty(GuestUser.No) == false)
                 {
                     /*是客户参与的流程，并且具有客户登陆的信息。*/
                     ps.SQL = "SELECT OID,FlowEndNode FROM " + this.PTable + " WHERE GuestNo=" + dbstr + "GuestNo AND WFState=" + dbstr + "WFState ";
@@ -908,7 +908,7 @@ namespace BP.WF
             #endregion  判断是否装载上一条数据.
 
             #region 处理流程之间的数据传递1。
-            if (string.IsNullOrEmpty(PNodeIDStr) == false && string.IsNullOrEmpty(PWorkIDStr) == false)
+            if (DataType.IsNullOrEmpty(PNodeIDStr) == false && DataType.IsNullOrEmpty(PWorkIDStr) == false)
             {
                 Int64 PWorkID = Int64.Parse(PWorkIDStr);
                 Int64 PNodeID = 0;
@@ -921,7 +921,7 @@ namespace BP.WF
                 Int64 pWorkIDReal = 0;
                 Flow pFlow = new Flow(PFlowNo);
                 string pOID = "";
-                if (string.IsNullOrEmpty(PFIDStr) == true || PFIDStr == "0")
+                if (DataType.IsNullOrEmpty(PFIDStr) == true || PFIDStr == "0")
                     pOID = PWorkID.ToString();
                 else
                     pOID = PFIDStr;
@@ -1170,7 +1170,7 @@ namespace BP.WF
                 Node jumpNode = new Node(jumpNodeID);
 
                 string jumpToEmp = paras["JumpToEmp"].ToString();
-                if (string.IsNullOrEmpty(jumpToEmp))
+                if (DataType.IsNullOrEmpty(jumpToEmp))
                     jumpToEmp = emp.No;
 
                 WorkNode wn = new WorkNode(wk, nd);
@@ -1227,9 +1227,9 @@ namespace BP.WF
             mygwf.BillNo = rpt.BillNo;
             if (mygwf.Title.Contains("@") == true)
                 mygwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, rpt);
-            if (string.IsNullOrEmpty(PNodeIDStr) == false && string.IsNullOrEmpty(PWorkIDStr) == false)
+            if (DataType.IsNullOrEmpty(PNodeIDStr) == false && DataType.IsNullOrEmpty(PWorkIDStr) == false)
             {
-                if (string.IsNullOrEmpty(PFIDStr) == false)
+                if (DataType.IsNullOrEmpty(PFIDStr) == false)
                     mygwf.PFID = Int64.Parse(PFIDStr);
                 mygwf.PEmp = rpt.PEmp;
                 mygwf.PFlowNo = rpt.PFlowNo;
@@ -1387,7 +1387,7 @@ namespace BP.WF
                 try
                 {
                     string billNo = wk.GetValStringByKey(NDXRptBaseAttr.BillNo);
-                    if (string.IsNullOrEmpty(billNo) && nd.HisFlow.BillNoFormat.Length > 2)
+                    if (DataType.IsNullOrEmpty(billNo) && nd.HisFlow.BillNoFormat.Length > 2)
                     {
                         /*让他自动生成编号*/
                         wk.SetValByKey(NDXRptBaseAttr.BillNo,
@@ -1491,7 +1491,7 @@ namespace BP.WF
                             case DBType.Oracle:
                                 if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
                                 {
-                                    if (!string.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
+                                    if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
                                     {
                                         values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
                                     }
@@ -1519,7 +1519,7 @@ namespace BP.WF
                     case Sys.DBSrcType.Oracle:
                         if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
                         {
-                            if (!string.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
+                            if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
                             {
                                 values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
                             }
@@ -1609,7 +1609,7 @@ namespace BP.WF
                 BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return "没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.";
             }
-            if (string.IsNullOrEmpty(me.Tag))
+            if (DataType.IsNullOrEmpty(me.Tag))
             {
                 BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return "没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.";
@@ -1620,7 +1620,7 @@ namespace BP.WF
             string[] dtlSQLs = me.Tag1.Split('*');
             foreach (string sql in dtlSQLs)
             {
-                if (string.IsNullOrEmpty(sql))
+                if (DataType.IsNullOrEmpty(sql))
                     continue;
 
                 string[] tempStrs = sql.Split('=');
@@ -2446,7 +2446,7 @@ namespace BP.WF
 
                 if (!isXmlLocked)
                 {
-                    if (!string.IsNullOrEmpty(path))
+                    if (!DataType.IsNullOrEmpty(path))
                     {
                         if (!System.IO.Directory.Exists(path))
                             System.IO.Directory.CreateDirectory(path);
@@ -2462,7 +2462,7 @@ namespace BP.WF
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(xmlName))
+                    if (!DataType.IsNullOrEmpty(xmlName))
                     {
                         ds.WriteXml(xmlName);
                         isXmlLocked = false;
@@ -2862,7 +2862,7 @@ namespace BP.WF
                 rpt.SetValByKey("OID", oid);
                 rpt.FK_NY = startWork.GetValStrByKey("RDT").Substring(0, 7);
                 rpt.FK_Dept = startWork.GetValStrByKey("FK_Dept");
-                if (string.IsNullOrEmpty(rpt.FK_Dept))
+                if (DataType.IsNullOrEmpty(rpt.FK_Dept))
                 {
                     string fk_dept = DBAccess.RunSQLReturnString("SELECT FK_Dept FROM Port_Emp WHERE No='" + startWork.Rec + "'");
                     rpt.FK_Dept = fk_dept;
@@ -3781,7 +3781,7 @@ namespace BP.WF
             get
             {
                 string s = this.GetValStringByKey(FlowAttr.PTable);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     s = "ND" + int.Parse(this.No) + "Rpt";
                 return s;
             }
@@ -3798,7 +3798,7 @@ namespace BP.WF
             get
             {
                 string strs = this.GetValStringByKey(FlowAttr.HistoryFields);
-                if (string.IsNullOrEmpty(strs))
+                if (DataType.IsNullOrEmpty(strs))
                     strs = "WFState,Title,FlowStartRDT,FlowEndNode";
 
                 return strs;
@@ -5830,7 +5830,7 @@ namespace BP.WF
             try
             {
                 //检查参数的完整性.
-                if (string.IsNullOrEmpty(pTable) == false && pTable.Length >= 1)
+                if (DataType.IsNullOrEmpty(pTable) == false && pTable.Length >= 1)
                 {
                     string c = pTable.Substring(0, 1);
                     if (DataType.IsNumStr(c) == true)
@@ -5847,7 +5847,7 @@ namespace BP.WF
                 this.FK_FlowSort = flowSort;
                 this.FlowMark = FlowMark;
 
-                if (string.IsNullOrEmpty(FlowMark) == false)
+                if (DataType.IsNullOrEmpty(FlowMark) == false)
                 {
                     if (this.IsExit(FlowAttr.FlowMark, FlowMark))
                         throw new Exception("@该流程标示:" + FlowMark + "已经存在于系统中.");

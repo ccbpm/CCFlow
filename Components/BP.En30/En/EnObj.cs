@@ -233,7 +233,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(myval) || myval == v)
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
                                 this.SetValByKey(attr.Key, Web.WebUser.No);
                         }
                         continue;
@@ -244,7 +244,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(myval) || myval == v)
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
                                 this.SetValByKey(attr.Key, Web.WebUser.Name);
                         }
                         continue;
@@ -255,7 +255,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(myval) || myval == v)
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
                                 this.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
                         }
                         continue;
@@ -266,7 +266,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(myval) || myval == v)
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
                                 this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
                         }
                         continue;
@@ -278,7 +278,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(myval) || myval == v)
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
                                 this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                         }
                         continue;
@@ -293,7 +293,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(myval) || myval == v)
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
                             {
                                 if (attr.MyDataType == DataType.AppDate)
                                     this.SetValByKey(attr.Key, DataType.CurrentData);
@@ -312,7 +312,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(myval) || myval == v)
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
                                 this.SetValByKey(attr.Key, DateTime.Now.ToString(v.Replace("@", "")));
                         }
                         continue;
@@ -661,7 +661,7 @@ namespace BP.En
             try
             {
                 string s = this.Row.GetValByKey(key).ToString();
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return isNullAs;
                 else
                     return s;
@@ -844,7 +844,7 @@ namespace BP.En
         public bool GetValBooleanByKey(string key)
         {
             string s = this.GetValStrByKey(key);
-            if (string.IsNullOrEmpty(s))
+            if (DataType.IsNullOrEmpty(s))
                 s = this.EnMap.GetAttrByKey(key).DefaultVal.ToString();
 
             if (s == "0")
@@ -857,7 +857,7 @@ namespace BP.En
             if (s.ToUpper().Equals("TRUE") )
                 return true;
 
-            if (string.IsNullOrEmpty(s))
+            if (DataType.IsNullOrEmpty(s))
                 return false;
 
             if (int.Parse(s) == 0)
@@ -896,7 +896,7 @@ namespace BP.En
         public float GetValFloatByKey(string key, int blNum)
         {
             string val = this.Row.GetValByKey(key).ToString();
-            if (string.IsNullOrEmpty(val))                
+            if (DataType.IsNullOrEmpty(val))                
                 return float.Parse(blNum.ToString("0.00"));
 
             return float.Parse(float.Parse(val).ToString("0.00"));
@@ -1020,7 +1020,7 @@ namespace BP.En
                     if (attr.UIIsReadonly && attr.IsFKorEnum == false)
                         continue;
 
-                    //if (attr.IsFK && string.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
+                    //if (attr.IsFK && DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
                     //    continue; /*如果是外键,并且外键的默认值为null.*/
 
                     if (attr.IsFK)

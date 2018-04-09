@@ -1091,7 +1091,7 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
-                            if (string.IsNullOrEmpty(attr.UIBindKey))
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
                                 throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag);
 
                             Sys.SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
@@ -1188,7 +1188,7 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
-                            if (string.IsNullOrEmpty(attr.UIBindKey))
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
                                 throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag);
 
                             Sys.SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
@@ -1400,7 +1400,7 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
-                            if (string.IsNullOrEmpty(attr.UIBindKey))
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
                                 throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag + "");
 
 #warning 20111-12-03 不应出现异常。
@@ -1489,7 +1489,7 @@ namespace BP.En
                         attr.DefaultVal + ")   " + attr.Key + "";
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
-                            if (string.IsNullOrEmpty(attr.UIBindKey))
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
                                 throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag);
 
 #warning 2011-12-03 不应出现异常。
@@ -2134,7 +2134,7 @@ namespace BP.En
                         string str = en.GetValStrByKey(attr.Key).ToString();
                         str = str.Replace("￥", "");
                         str = str.Replace(",", "");
-                        if (string.IsNullOrEmpty(str))
+                        if (DataType.IsNullOrEmpty(str))
                             ps.Add(attr.Key, 0);
                         else
                             ps.Add(attr.Key, decimal.Parse(str));
@@ -2210,7 +2210,7 @@ namespace BP.En
                         string str = en.GetValStrByKey(attr.Key).ToString();
                         str = str.Replace("￥", "");
                         str = str.Replace(",", "");
-                        if (string.IsNullOrEmpty(str))
+                        if (DataType.IsNullOrEmpty(str))
                             ps.Add(attr.Key, 0);
                         else
                             ps.Add(attr.Key, decimal.Parse(str));
@@ -2325,7 +2325,7 @@ namespace BP.En
                             break;
                         case DataType.AppMoney:
                             string str = en.GetValStrByKey(attr.Key) as string;
-                            if (string.IsNullOrEmpty(str))
+                            if (DataType.IsNullOrEmpty(str))
                             {
                                 if (IsEnableNull)
                                     ps.Add(attr.Key, DBNull.Value);
@@ -2397,7 +2397,7 @@ namespace BP.En
                 else
                     val = val + "," + attr.Field + "=" + dbVarStr + attr.Key;
             }
-            if (string.IsNullOrEmpty(val))
+            if (DataType.IsNullOrEmpty(val))
             {
                 foreach (Attr attr in map.Attrs)
                 {
@@ -2412,7 +2412,7 @@ namespace BP.En
                 }
                 //   throw new Exception("@生成SQL出现错误:" + map.EnDesc + "，" + en.ToString() + "，要更新的字段为空。");
             }
-            if (!string.IsNullOrEmpty(val))
+            if (!DataType.IsNullOrEmpty(val))
                 val = val.Substring(1);
             string sql = "";
             switch (en.EnMap.EnDBUrl.DBType)
@@ -2533,7 +2533,7 @@ namespace BP.En
                 {
                     case DataType.AppString:
                         string str = en.GetValStringByKey(key);
-                        if (string.IsNullOrEmpty(str))
+                        if (DataType.IsNullOrEmpty(str))
                             str = "";
                         else
                             str = str.Replace('\'', '~');

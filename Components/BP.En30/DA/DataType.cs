@@ -22,7 +22,7 @@ namespace BP.DA
             if (s == "null")
                 return true;
 
-            return string.IsNullOrEmpty(s);
+            return DataType.IsNullOrEmpty(s);
         }
 
         #region 与日期相关的操作.
@@ -230,7 +230,7 @@ namespace BP.DA
         public static string ToJson(DataTable dt, string jsonName)
         {
             StringBuilder Json = new StringBuilder();
-            if (string.IsNullOrEmpty(jsonName))
+            if (DataType.IsNullOrEmpty(jsonName))
                 jsonName = dt.TableName;
             Json.Append("{\"" + jsonName + "\":[");
             if (dt.Rows.Count > 0)
@@ -369,7 +369,7 @@ namespace BP.DA
         }
         public static string PraseGB2312_To_utf8(string text)
         {
-            if (string.IsNullOrEmpty(text))
+            if (DataType.IsNullOrEmpty(text))
                 return text;
 
             //声明字符集   

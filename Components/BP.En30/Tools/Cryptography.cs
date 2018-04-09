@@ -5,6 +5,8 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IO;
 using System.Net;
+using BP.DA;
+
 
 namespace BP.Tools
 {
@@ -240,7 +242,7 @@ namespace BP.Tools
         public static string EncryptString(string encryptString)
         {
             string strEncrypt = encryptString;
-            if (string.IsNullOrEmpty(encryptString)) 
+            if (DataType.IsNullOrEmpty(encryptString)) 
                 return encryptString;
 
             strEncrypt = MD5_Encrypt(strEncrypt);

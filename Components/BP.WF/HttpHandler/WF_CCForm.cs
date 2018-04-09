@@ -136,7 +136,7 @@ namespace BP.WF.HttpHandler
                 if (isDel == true || isUpdate == true)
                 {
                     if (this.WorkID != 0
-                        && string.IsNullOrEmpty(this.FK_Flow) == false
+                        && DataType.IsNullOrEmpty(this.FK_Flow) == false
                         && this.FK_Node != 0)
                     {
                         isDel = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
@@ -172,7 +172,7 @@ namespace BP.WF.HttpHandler
         public string HandlerMapExt()
         {
             string fk_mapExt = this.GetRequestVal("FK_MapExt").ToString();
-            if (string.IsNullOrEmpty(this.GetRequestVal("Key")))
+            if (DataType.IsNullOrEmpty(this.GetRequestVal("Key")))
                 return "";
 
             string oid = this.GetRequestVal("OID");
@@ -266,7 +266,7 @@ namespace BP.WF.HttpHandler
                             string[] strsDtl = me.Tag1.Split('$');
                             foreach (string str in strsDtl)
                             {
-                                if (string.IsNullOrEmpty(str))
+                                if (DataType.IsNullOrEmpty(str))
                                     continue;
 
                                 string[] ss = str.Split(':');
@@ -313,7 +313,7 @@ namespace BP.WF.HttpHandler
                             DataTable dt1 = new DataTable("Head");
                             dt1.Columns.Add("DDL", typeof(string));
                             //    dt1.Columns.Add("SQL", typeof(string));
-                            if (string.IsNullOrEmpty(me.Tag) == false)
+                            if (DataType.IsNullOrEmpty(me.Tag) == false)
                             {
                                 string[] strs = me.Tag.Split('$');
                                 foreach (string str in strs)
@@ -388,12 +388,12 @@ namespace BP.WF.HttpHandler
 
             string kvs = this.GetRequestVal("KVs");
 
-            if (string.IsNullOrEmpty(kvs) == false && sql.Contains("@") == true)
+            if (DataType.IsNullOrEmpty(kvs) == false && sql.Contains("@") == true)
             {
                 string[] strs = kvs.Split('~');
                 foreach (string s in strs)
                 {
-                    if (string.IsNullOrEmpty(s)
+                    if (DataType.IsNullOrEmpty(s)
                         || s.Contains("=") == false)
                         continue;
 
@@ -435,7 +435,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (string s in strs)
                 {
-                    if (string.IsNullOrEmpty(s))
+                    if (DataType.IsNullOrEmpty(s))
                         continue;
                     //处理ORACLE中获取字段使用别名的情况，使用别名的字段，取别名
                     ns = s.Trim();
@@ -613,7 +613,7 @@ namespace BP.WF.HttpHandler
                 string[] parasArrary = this.RequestParas.Split('&');
                 foreach (string str in parasArrary)
                 {
-                    if (string.IsNullOrEmpty(str) || str.Contains("=") == false)
+                    if (DataType.IsNullOrEmpty(str) || str.Contains("=") == false)
                         continue;
                     string[] kvs = str.Split('=');
                     if (urlParas.Contains(kvs[0]))
@@ -896,7 +896,7 @@ namespace BP.WF.HttpHandler
                 if (pk == 0)
                     pk = this.WorkID;
 
-                if (this.FK_Node != 0 && string.IsNullOrEmpty(this.FK_Flow) == false)
+                if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*说明是流程调用它， 就要判断谁是表单的PK.*/
                     FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
@@ -931,7 +931,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //把参数放入到 En 的 Row 里面。
-                if (string.IsNullOrEmpty(atParas) == false)
+                if (DataType.IsNullOrEmpty(atParas) == false)
                 {
                     AtPara ap = new AtPara(atParas);
                     foreach (string key in ap.HisHT.Keys)
@@ -954,7 +954,7 @@ namespace BP.WF.HttpHandler
 
                 // 执行表单事件..
                 string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
-                if (string.IsNullOrEmpty(msg) == false)
+                if (DataType.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
 
                 //重设默认值.
@@ -997,7 +997,7 @@ namespace BP.WF.HttpHandler
                     //    continue
 
                     string uiBindKey = dr["UIBindKey"].ToString();
-                    if (string.IsNullOrEmpty(uiBindKey) == true)
+                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
                     {
                         string myPK = dr["MyPK"].ToString();
                         /*如果是空的*/
@@ -1105,7 +1105,7 @@ namespace BP.WF.HttpHandler
                 if (pk == 0)
                     pk = this.WorkID;
 
-                if (this.FK_Node != 0 && string.IsNullOrEmpty(this.FK_Flow) == false)
+                if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*说明是流程调用它， 就要判断谁是表单的PK.*/
                     FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
@@ -1659,7 +1659,7 @@ namespace BP.WF.HttpHandler
                 /* 分页的 */
                 //key
                 string key = this.GetRequestVal("Key");
-                if (string.IsNullOrEmpty(key) == true)
+                if (DataType.IsNullOrEmpty(key) == true)
                     key = "";
 
                 //取出来查询条件.
@@ -1667,12 +1667,12 @@ namespace BP.WF.HttpHandler
 
                 //pageSize
                 string pageSize = this.GetRequestVal("pageSize");
-                if (string.IsNullOrEmpty(pageSize))
+                if (DataType.IsNullOrEmpty(pageSize))
                     pageSize = "10";
 
                 //pageIndex
                 string pageIndex = this.GetRequestVal("pageIndex");
-                if (string.IsNullOrEmpty(pageIndex))
+                if (DataType.IsNullOrEmpty(pageIndex))
                     pageIndex = "1";
 
                 string sqlObjs = me.PopValTablePageSQL;
@@ -1696,7 +1696,7 @@ namespace BP.WF.HttpHandler
                     //参数.
                     string para = cond.Substring(5, cond.IndexOf("#") - 5);
                     string val = context.Request.QueryString[para];
-                    if (string.IsNullOrEmpty(val))
+                    if (DataType.IsNullOrEmpty(val))
                     {
                         if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
                             val = "all";
@@ -1749,7 +1749,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (string cond in conds)
                 {
-                    if (string.IsNullOrEmpty(cond) == true)
+                    if (DataType.IsNullOrEmpty(cond) == true)
                         continue;
 
                     string sql = null;
@@ -1833,7 +1833,7 @@ namespace BP.WF.HttpHandler
                 /* 分页的 */
                 //key
                 string key = this.GetRequestVal("Key");
-                if (string.IsNullOrEmpty(key) == true)
+                if (DataType.IsNullOrEmpty(key) == true)
                     key = "";
 
                 //取出来查询条件.
@@ -1857,7 +1857,7 @@ namespace BP.WF.HttpHandler
                     //参数.
                     string para = cond.Substring(5, cond.IndexOf("#") - 5);
                     string val = context.Request.QueryString[para];
-                    if (string.IsNullOrEmpty(val))
+                    if (DataType.IsNullOrEmpty(val))
                     {
                         if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
                             val = "all";
@@ -1914,7 +1914,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (string cond in conds)
                 {
-                    if (string.IsNullOrEmpty(cond) == true)
+                    if (DataType.IsNullOrEmpty(cond) == true)
                         continue;
 
                     string sql = null;
@@ -1997,7 +1997,7 @@ namespace BP.WF.HttpHandler
                 /* 分页的 */
                 //key
                 string key = this.GetRequestVal("Key");
-                if (string.IsNullOrEmpty(key) == true)
+                if (DataType.IsNullOrEmpty(key) == true)
                     key = "";
 
                 //取出来查询条件.
@@ -2005,12 +2005,12 @@ namespace BP.WF.HttpHandler
 
                 //pageSize
                 string pageSize = this.GetRequestVal("pageSize");
-                if (string.IsNullOrEmpty(pageSize))
+                if (DataType.IsNullOrEmpty(pageSize))
                     pageSize = "10";
 
                 //pageIndex
                 string pageIndex = this.GetRequestVal("pageIndex");
-                if (string.IsNullOrEmpty(pageIndex))
+                if (DataType.IsNullOrEmpty(pageIndex))
                     pageIndex = "1";
 
                 string sqlObjs = me.PopValTablePageSQL;
@@ -2034,7 +2034,7 @@ namespace BP.WF.HttpHandler
                     //参数.
                     string para = cond.Substring(5, cond.IndexOf("#") - 5);
                     string val = context.Request.QueryString[para];
-                    if (string.IsNullOrEmpty(val))
+                    if (DataType.IsNullOrEmpty(val))
                     {
                         if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
                             val = "all";
@@ -2086,7 +2086,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (string cond in conds)
                 {
-                    if (string.IsNullOrEmpty(cond) == true)
+                    if (DataType.IsNullOrEmpty(cond) == true)
                         continue;
 
                     string sql = null;
@@ -2301,7 +2301,7 @@ namespace BP.WF.HttpHandler
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
-                    if (!string.IsNullOrEmpty(msg))
+                    if (!DataType.IsNullOrEmpty(msg))
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
 
@@ -2365,7 +2365,7 @@ namespace BP.WF.HttpHandler
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
-                    if (!string.IsNullOrEmpty(msg))
+                    if (!DataType.IsNullOrEmpty(msg))
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                 }
                 #endregion 文件上传的iis服务器上 or db数据库里.
@@ -2391,7 +2391,7 @@ namespace BP.WF.HttpHandler
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
-                    if (string.IsNullOrEmpty(msg) == false)
+                    if (DataType.IsNullOrEmpty(msg) == false)
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
 
@@ -2447,7 +2447,7 @@ namespace BP.WF.HttpHandler
                     //    dbUpload.Sort = strs[0];
                     //    if (ddl != null)
                     //    {
-                    //        int selectedIndex = string.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
+                    //        int selectedIndex = DataType.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
                     //        dbUpload.Sort = strs[selectedIndex];
                     //    }
                     //}
@@ -2492,7 +2492,7 @@ namespace BP.WF.HttpHandler
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
-                    if (!string.IsNullOrEmpty(msg))
+                    if (!DataType.IsNullOrEmpty(msg))
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                 }
                 #endregion 保存到数据库.
@@ -2569,7 +2569,7 @@ namespace BP.WF.HttpHandler
         public string DtlOpt_Init()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
-            if (string.IsNullOrEmpty(dtl.ImpSQLInit))
+            if (DataType.IsNullOrEmpty(dtl.ImpSQLInit))
             {
                 return "err@从表加载语句为空，请设置从表加载的sql语句。";
             }
@@ -2928,7 +2928,7 @@ namespace BP.WF.HttpHandler
                 int result = athDesc.RetrieveFromDBSources();
 
                 #region 判断是否是明细表的多附件.
-                if (result == 0 && string.IsNullOrEmpty(this.FK_Flow) == false
+                if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
                    && this.FK_FrmAttachment.Contains("AthMDtl"))
                 {
                     athDesc.FK_MapData = this.FK_MapData;
@@ -2940,7 +2940,7 @@ namespace BP.WF.HttpHandler
                 #endregion 判断是否是明细表的多附件。
 
                 #region 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
-                if (result == 0 && string.IsNullOrEmpty(this.FK_Flow) == false
+                if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
                     && this.FK_FrmAttachment.Contains("DocMultiAth"))
                 {
                     /*如果没有查询到它,就有可能是公文多附件被删除了.*/
@@ -3071,7 +3071,7 @@ namespace BP.WF.HttpHandler
                     //求出文件路径.
                     string fileTempPath = db.GenerTempFile(athDesc.AthSaveWay);
 
-                    if (string.IsNullOrEmpty(db.Sort) == false)
+                    if (DataType.IsNullOrEmpty(db.Sort) == false)
                     {
                         copyToPath = tempFilePath + "//" + db.Sort;
                         if (System.IO.Directory.Exists(copyToPath) == false)

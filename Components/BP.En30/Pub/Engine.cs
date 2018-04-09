@@ -696,7 +696,7 @@ namespace BP.Pub
                     //图片高宽
                     float iWidth = imgAth.Size.Width * 15;
                     float iHeight = imgAth.Size.Height * 15;
-                    if (frmImgAth != null && !string.IsNullOrEmpty(frmImgAth.FK_MapData))
+                    if (frmImgAth != null && !DataType.IsNullOrEmpty(frmImgAth.FK_MapData))
                     {
                         iWidth = frmImgAth.W * 15;
                         iHeight = frmImgAth.H * 15;

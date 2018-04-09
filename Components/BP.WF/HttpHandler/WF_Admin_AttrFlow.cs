@@ -170,7 +170,7 @@ namespace BP.WF.HttpHandler
         public string NodeAttrs_Init()
         {
             var strFlowId = GetRequestVal("FK_Flow");
-            if (string.IsNullOrEmpty(strFlowId))
+            if (DataType.IsNullOrEmpty(strFlowId))
             {
                 return "err@参数错误！";
             }
@@ -331,7 +331,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                if (!string.IsNullOrEmpty(str))
+                if (!DataType.IsNullOrEmpty(str))
                     flow.DTSFields = str.TrimEnd(',') + "@" + ywStr.TrimEnd(',');
                 else
                 {
@@ -408,7 +408,7 @@ namespace BP.WF.HttpHandler
             MapAttrs attrs = new MapAttrs(rpt);
 
             string pk = this.GetRequestVal("DDL_OID");
-            if (string.IsNullOrEmpty(pk) == true)
+            if (DataType.IsNullOrEmpty(pk) == true)
                 return "err@必须设置业务表的主键，否则无法同步。";
 
 
@@ -467,7 +467,7 @@ namespace BP.WF.HttpHandler
 
 
             //去除最后一个字符的操作
-            if (string.IsNullOrEmpty(lcStr) || string.IsNullOrEmpty(ywStr))
+            if (DataType.IsNullOrEmpty(lcStr) || DataType.IsNullOrEmpty(ywStr))
             {
                 return "err@要配置的内容为空...";
             }
@@ -601,7 +601,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         public string TruckViewPower_Init() { 
-            if (string.IsNullOrEmpty(FK_Flow))
+            if (DataType.IsNullOrEmpty(FK_Flow))
                 {
                     throw new Exception("流程编号为空");
                     return "err@流程编号为空";
@@ -658,13 +658,13 @@ namespace BP.WF.HttpHandler
             string flowNo = this.FK_Flow;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
             //检查流程编号
-            if (!string.IsNullOrEmpty(flowNo))
+            if (!DataType.IsNullOrEmpty(flowNo))
             {
                 Flow fl = new Flow(flowNo);
                 FK_FlowSort = fl.FK_FlowSort;
             }
             //检查流程类别编号
-            if (string.IsNullOrEmpty(FK_FlowSort))
+            if (DataType.IsNullOrEmpty(FK_FlowSort))
             {
                 return "err@所选流程类别编号不存在。";
             }

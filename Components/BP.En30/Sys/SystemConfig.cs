@@ -32,6 +32,8 @@ using MySql.Data.MySqlClient;
 using IBM;
 using IBM.Data;
 using IBM.Data.Informix;
+using BP.DA;
+
 
 namespace BP.Sys
 {
@@ -397,7 +399,7 @@ namespace BP.Sys
             get
             {
                 string tmp = SystemConfig.AppSettings["DataUserDirPath"];
-                if (string.IsNullOrEmpty(tmp))
+                if (DataType.IsNullOrEmpty(tmp))
                 {
                     tmp = PathOfWebApp + "DataUser\\";
                 }
@@ -454,7 +456,7 @@ namespace BP.Sys
         {
             get
             {
-                if (!string.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"]))
+                if (!DataType.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"]))
                 {
                     return PathOfWebApp + SystemConfig.AppSettings["DataUserDirPath"];
                 }
@@ -468,7 +470,7 @@ namespace BP.Sys
         {
             get
             {
-                if (!string.IsNullOrEmpty(SystemConfig.AppSettings["CCFlowAppPath"]))
+                if (!DataType.IsNullOrEmpty(SystemConfig.AppSettings["CCFlowAppPath"]))
                 {
                     return SystemConfig.AppSettings["CCFlowAppPath"];
                 }
@@ -482,7 +484,7 @@ namespace BP.Sys
         {
             get
             {
-                if (string.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"])==false)
+                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"])==false)
                 {
                     return SystemConfig.AppSettings["HostURL"];
                 }

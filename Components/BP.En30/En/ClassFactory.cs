@@ -217,7 +217,7 @@ namespace BP.En
             string path = AppDomain.CurrentDomain.BaseDirectory;
             if (Directory.Exists(path + "bin\\"))
             {
-                if (!string.IsNullOrEmpty(SystemConfig.AppSettings["CCFlowAppPath"]) && Directory.Exists(path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin\\"))
+                if (!DataType.IsNullOrEmpty(SystemConfig.AppSettings["CCFlowAppPath"]) && Directory.Exists(path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin\\"))
                 {
                     _BasePath = path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin\\";
                 }
@@ -566,7 +566,7 @@ namespace BP.En
                 foreach (Entity en in al)
                 {
                     string key = string.Empty;
-                    if (null == en || string.IsNullOrEmpty(key = en.ToString()))
+                    if (null == en || DataType.IsNullOrEmpty(key = en.ToString()))
                         continue;
 
                     if (Htable_En.ContainsKey(key) == false)

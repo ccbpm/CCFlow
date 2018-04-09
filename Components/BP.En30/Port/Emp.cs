@@ -203,7 +203,7 @@ namespace BP.Port
         {
             //检查是否与通用密码相符.
             //string gePass = SystemConfig.AppSettings["GenerPass"];
-            //if (gePass == pass && string.IsNullOrEmpty(gePass) == false)
+            //if (gePass == pass && DataType.IsNullOrEmpty(gePass) == false)
             //    return true;
 
             if (SystemConfig.OSDBSrc == OSDBSrc.WebServices)

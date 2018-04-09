@@ -52,7 +52,7 @@ namespace BP.WF.Template
 			get
 			{
                 string str= this.GetValStringByKey(MapFrmExcelAttr.DBSave);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return "DBFile";
                 return str;
 			}
@@ -436,7 +436,7 @@ namespace BP.WF.Template
 			foreach (MapDtl dtl in dtls)
 			{
 				GroupField gf = new GroupField();
-				if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true && !string.IsNullOrEmpty(gf.CtrlType))
+				if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
 					continue;
 
 				gf.Lab = dtl.Name;
@@ -453,7 +453,7 @@ namespace BP.WF.Template
 			foreach (MapFrame fram in frams)
 			{
 				GroupField gf = new GroupField();
-				if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true && !string.IsNullOrEmpty(gf.CtrlType))
+				if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
 					continue;
 
 				gf.Lab = fram.Name;
@@ -472,7 +472,7 @@ namespace BP.WF.Template
 			foreach (FrmAttachment ath in aths)
 			{
 				GroupField gf = new GroupField();
-				if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true && !string.IsNullOrEmpty(gf.CtrlType))
+				if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
 					continue;
 
 				gf.Lab = ath.Name;

@@ -571,7 +571,7 @@ namespace BP.WF.Template
                             sql = " SELECT " + this.TagVal1 + " FROM " + this.HisNode.HisFlow.PTable + " WHERE OID=" + this.WorkID;
                             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                             empNo = dt.Rows[0][0] as string;
-                            if (string.IsNullOrEmpty(empNo))
+                            if (DataType.IsNullOrEmpty(empNo))
                                 throw new Exception("@指定的节点字段(" + this.TagVal1 + ")的值为空.");
                             //指定它
                             Emp emp = new Emp();
@@ -584,7 +584,7 @@ namespace BP.WF.Template
                             throw new Exception("@尚未处理的Case:" + this.HisFindLeaderType);
                             break;
                     }
-                    if (string.IsNullOrEmpty(empNo))
+                    if (DataType.IsNullOrEmpty(empNo))
                         throw new Exception("@遗漏的判断步骤，没有找到指定的工作人员.");
                     #endregion
 
@@ -647,7 +647,7 @@ namespace BP.WF.Template
                     sql = "SELECT Leader FROM Port_DeptEmp WHERE FK_Emp='" + empNo + "' AND FK_Dept='" + empDept + "'";
                     dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     leader = dt.Rows[0][0] as string;
-                    if (string.IsNullOrEmpty(leader))
+                    if (DataType.IsNullOrEmpty(leader))
                         throw new Exception("@系统管理员没有给(" + empNo + ")在部门(" + empDept + ")中设置直接领导.");
 
                     break;
@@ -717,7 +717,7 @@ namespace BP.WF.Template
                     sql = "SELECT Leader FROM Port_DeptEmp WHERE FK_Emp='" + empNo + "' AND FK_Dept='" + empDept + "'";
                     dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     leader = dt.Rows[0][0] as string;
-                    if (string.IsNullOrEmpty(leader))
+                    if (DataType.IsNullOrEmpty(leader))
                         throw new Exception("@系统管理员没有给(" + empNo + ")在部门(" + empDept + ")中设置直接领导.");
                     break;
                 case FindLeaderModel.SpecDutyLevelLeader: // 特定职务级别的领导.

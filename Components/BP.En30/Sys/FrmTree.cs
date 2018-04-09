@@ -119,7 +119,7 @@ namespace BP.Sys
 
         protected override bool beforeDelete()
         {
-            if (!string.IsNullOrEmpty(this.No))
+            if (!DataType.IsNullOrEmpty(this.No))
                 DeleteChild(this.No);
             return base.beforeDelete();
         }

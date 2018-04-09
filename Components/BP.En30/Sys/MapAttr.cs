@@ -412,7 +412,7 @@ namespace BP.Sys
             {
                 if (_dt == null)
                 {
-                    if (string.IsNullOrEmpty(this.UIBindKey))
+                    if (DataType.IsNullOrEmpty(this.UIBindKey))
                         throw new Exception("@属性：" + this.MyPK + " 丢失属性 UIBindKey 字段。");
 
                     SFTable sf = new SFTable(this.UIBindKey);
@@ -443,7 +443,7 @@ namespace BP.Sys
                 attr.Desc = this.Name;
 
                 string s = this.DefValReal;
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     attr.DefaultValOfReal = null;
                 else
                 {
@@ -1654,7 +1654,7 @@ namespace BP.Sys
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            if (string.IsNullOrEmpty(this.Name))
+            if (DataType.IsNullOrEmpty(this.Name))
                 throw new Exception("@请输入字段名称。");
 
             if (this.KeyOfEn == null || this.KeyOfEn.Trim() == "")

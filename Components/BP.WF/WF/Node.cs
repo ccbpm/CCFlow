@@ -858,7 +858,7 @@ namespace BP.WF
             get
             {
                 string s = this.GetValStrByKey(NodeAttr.ICON);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     if (this.IsStartNode)
                         return "审核.png";
                     else
@@ -1950,7 +1950,7 @@ namespace BP.WF
             {
                 string str = this.GetValStringByKey(NodeAttr.BlockExp);
 
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                 {
                     if (this.BlockModel == WF.BlockModel.CurrNodeAll)
                         return "还有子流程没有完成您不能提交,需要等到所有的子流程完成后您才能发送.";
@@ -2246,7 +2246,7 @@ namespace BP.WF
                 string s = this.GetValStringByKey(NodeAttr.DeliveryParas);
                 s = s.Replace("~", "'");
 
-                if (this.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormEmpsField && string.IsNullOrEmpty(s) == true)
+                if (this.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormEmpsField && DataType.IsNullOrEmpty(s) == true)
                     return "ToEmps";
                 return s;
             }
@@ -2373,7 +2373,7 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStringByKey(FrmWorkCheckAttr.FWCNodeName);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return this.Name;
                 return str;
             }

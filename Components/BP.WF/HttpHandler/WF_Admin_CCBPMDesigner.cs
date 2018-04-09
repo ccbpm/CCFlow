@@ -396,7 +396,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 //如果登录信息丢失了,就让其重新登录一次.
-                if (string.IsNullOrEmpty(BP.Web.WebUser.NoOfRel) == true)
+                if (DataType.IsNullOrEmpty(BP.Web.WebUser.NoOfRel) == true)
                 {
                     string userNo = this.GetRequestVal("UserNo");
                     string sid = this.GetRequestVal("SID");
@@ -478,7 +478,7 @@ namespace BP.WF.HttpHandler
                 return "url@../DBInstall.htm";
 
             ////让admin登录
-            //if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.IsAdmin == false)
+            //if (DataType.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.IsAdmin == false)
             //    return "url@Login.htm?DoType=Logout";
 
             //如果没有流程表，就执行安装.
@@ -624,8 +624,8 @@ namespace BP.WF.HttpHandler
                 string y = this.GetValFromFrmByKey("y");
                 int iX = 20;
                 int iY = 20;
-                if (!string.IsNullOrEmpty(x)) iX = (int)double.Parse(x);
-                if (!string.IsNullOrEmpty(y)) iY = (int)double.Parse(y);
+                if (!DataType.IsNullOrEmpty(x)) iX = (int)double.Parse(x);
+                if (!DataType.IsNullOrEmpty(y)) iY = (int)double.Parse(y);
 
                 int nodeId = BP.WF.Template.TemplateGlo.NewNode(FK_Flow, iX, iY);
 
@@ -1227,7 +1227,7 @@ namespace BP.WF.HttpHandler
                             foreach (var field in attrFields)
                             {
                                 if (!tabel.Columns.Contains(field)) continue;
-                                if (string.IsNullOrEmpty(row[field].ToString()))
+                                if (DataType.IsNullOrEmpty(row[field].ToString()))
                                 {
                                     attrs += ",\"" + field + "\":\"\"";
                                     continue;

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.International.Converters.PinYinConverter;
 using System.Text;
+using BP.DA;
+
 
 namespace BP.Tools
 {
@@ -143,7 +145,7 @@ namespace BP.Tools
                             ChineseChar chineseChar = new ChineseChar(chrstr[i]);
                             foreach (string value in chineseChar.Pinyins)
                             {
-                                if (!string.IsNullOrEmpty(value))
+                                if (!DataType.IsNullOrEmpty(value))
                                 {
                                     fullSpell.Append(value.Remove(value.Length - 1, 1));
                                     break;

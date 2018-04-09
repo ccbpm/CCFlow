@@ -308,7 +308,7 @@ namespace BP.WF
             md.DoEvent(FrmEventList.FrmLoadBefore, wk, null);
 
 			//把参数放入到 En 的 Row 里面。
-			if (string.IsNullOrEmpty(atParas) == false)
+			if (DataType.IsNullOrEmpty(atParas) == false)
 			{
 				AtPara ap = new AtPara(atParas);
 				foreach (string key in ap.HisHT.Keys)
@@ -358,7 +358,7 @@ namespace BP.WF
 			foreach (MapDtl item in md.MapDtls)
 			{
 				#region 返回指定的明细表的数据.
-				if (string.IsNullOrEmpty(specDtlFrmID) == true)
+				if (DataType.IsNullOrEmpty(specDtlFrmID) == true)
 				{
 				}
 				else
@@ -465,7 +465,7 @@ namespace BP.WF
 
 			// 执行表单事件..
 			string msg = md.DoEvent(FrmEventList.FrmLoadBefore, wk);
-			if (string.IsNullOrEmpty(msg) == false)
+			if (DataType.IsNullOrEmpty(msg) == false)
 				throw new Exception("err@错误:" + msg);
 
 			//重设默认值.
@@ -493,7 +493,7 @@ namespace BP.WF
 			foreach (MapDtl dtl in md.MapDtls)
 			{
 				#region 返回指定的明细表的数据.
-				if (string.IsNullOrEmpty(specDtlFrmID) == true)
+				if (DataType.IsNullOrEmpty(specDtlFrmID) == true)
 				{
 				}
 				else
@@ -838,7 +838,7 @@ namespace BP.WF
                     foreach (DataRow dr in dtDtl.Rows)
                     {
                         //本身是大写的不进行修改
-                        if (string.IsNullOrEmpty(dr[attr.KeyOfEn] + ""))
+                        if (DataType.IsNullOrEmpty(dr[attr.KeyOfEn] + ""))
                         {
                             dr[attr.KeyOfEn] = dr[attr.KeyOfEn.ToUpper()];
                             dr[attr.KeyOfEn.ToUpper()] = null;

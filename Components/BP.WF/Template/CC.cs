@@ -277,7 +277,7 @@ namespace BP.WF.Template
             get
             {
                 string s= this.GetValStringByKey(CCAttr.CCTitle);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     s = "来自@Rec的抄送信息.";
                 return s;
             }
@@ -294,7 +294,7 @@ namespace BP.WF.Template
             get
             {
                 string s = this.GetValStringByKey(CCAttr.CCDoc);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     s = "来自@Rec的抄送信息.";
                 return s;
             }

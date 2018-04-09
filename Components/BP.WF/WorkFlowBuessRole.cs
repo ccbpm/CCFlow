@@ -29,7 +29,7 @@ namespace BP.WF
         public static string GenerTitle(Flow fl, Work wk, Emp emp, string rdt)
         {
             string titleRole = fl.TitleRole.Clone() as string;
-            if (string.IsNullOrEmpty(titleRole))
+            if (DataType.IsNullOrEmpty(titleRole))
             {
                 // 为了保持与ccflow4.5的兼容,从开始节点属性里获取.
                 Attr myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
@@ -39,7 +39,7 @@ namespace BP.WF
                 if (myattr != null)
                     titleRole = myattr.DefaultVal.ToString();
 
-                if (string.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
+                if (DataType.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
                     titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
             }
 
@@ -97,7 +97,7 @@ namespace BP.WF
         public static string GenerTitle(Flow fl, Work wk)
         {
             string titleRole = fl.TitleRole.Clone() as string;
-            if (string.IsNullOrEmpty(titleRole))
+            if (DataType.IsNullOrEmpty(titleRole))
             {
                 // 为了保持与ccflow4.5的兼容,从开始节点属性里获取.
                 Attr myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
@@ -107,11 +107,11 @@ namespace BP.WF
                 if (myattr != null)
                     titleRole = myattr.DefaultVal.ToString();
 
-                if (string.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
+                if (DataType.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
                     titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
             }
 
-            if (titleRole == "@OutPara" || string.IsNullOrEmpty(titleRole) == true)
+            if (titleRole == "@OutPara" || DataType.IsNullOrEmpty(titleRole) == true)
                 titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
 
             titleRole = titleRole.Replace("@WebUser.No", wk.Rec);
@@ -134,7 +134,7 @@ namespace BP.WF
                         continue;
 
                     string temp = wk.GetValStrByKey(attr.Key);
-                    if (string.IsNullOrEmpty(temp))
+                    if (DataType.IsNullOrEmpty(temp))
                     {
 #warning 为什么，加这个代码？牺牲了很多效率，我注销了. by zhoupeng 2016.8.15
                         //  wk.DirectUpdate();
@@ -175,7 +175,7 @@ namespace BP.WF
         public static string GenerTitle(Flow fl, GERpt wk)
         {
             string titleRole = fl.TitleRole.Clone() as string;
-            if (string.IsNullOrEmpty(titleRole))
+            if (DataType.IsNullOrEmpty(titleRole))
             {
                 // 为了保持与ccflow4.5的兼容,从开始节点属性里获取.
                 Attr myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
@@ -185,11 +185,11 @@ namespace BP.WF
                 if (myattr != null)
                     titleRole = myattr.DefaultVal.ToString();
 
-                if (string.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
+                if (DataType.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
                     titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
             }
 
-            if (titleRole == "@OutPara" || string.IsNullOrEmpty(titleRole) == true)
+            if (titleRole == "@OutPara" || DataType.IsNullOrEmpty(titleRole) == true)
                 titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
 
 
@@ -288,7 +288,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string GenerBillNo(string billNo, Int64 workid, Entity en, string flowPTable)
         {
-            if (string.IsNullOrEmpty(billNo))
+            if (DataType.IsNullOrEmpty(billNo))
                 return "";
 
             if (billNo.Contains("@"))
@@ -481,13 +481,13 @@ namespace BP.WF
                     throw new Exception("@参数错误:currWorkFlow");
                 // 获取用户选择的节点.
                 string nodes = currWorkFlow.Paras_ToNodes;
-                if (string.IsNullOrEmpty(nodes))
+                if (DataType.IsNullOrEmpty(nodes))
                     throw new Exception("@用户没有选择发送到的节点.");
 
                 string[] mynodes = nodes.Split(',');
                 foreach (string item in mynodes)
                 {
-                    if (string.IsNullOrEmpty(item))
+                    if (DataType.IsNullOrEmpty(item))
                         continue;
                     //排除到达自身节点
                     if (currNode.NodeID.ToString() == item)
@@ -677,7 +677,7 @@ namespace BP.WF
                     try
                     {
                         string empFild = toNode.DeliveryParas;
-                        if (string.IsNullOrEmpty(empFild))
+                        if (DataType.IsNullOrEmpty(empFild))
                             empFild = " UserNo ";
 
                         ps = new Paras();
@@ -790,7 +790,7 @@ namespace BP.WF
                 string[] nds = strs.Split(',');
                 foreach (string nd in nds)
                 {
-                    if (string.IsNullOrEmpty(nd))
+                    if (DataType.IsNullOrEmpty(nd))
                         continue;
 
                     if (DataType.IsNumStr(nd) == false)
@@ -847,7 +847,7 @@ namespace BP.WF
                 {
                     foreach (string pnodeiD in nds)
                     {
-                        if (string.IsNullOrEmpty(pnodeiD))
+                        if (DataType.IsNullOrEmpty(pnodeiD))
                             continue;
 
                         Node nd = new Node(int.Parse(pnodeiD));
@@ -915,7 +915,7 @@ namespace BP.WF
             {
                 // 检查接受人员规则,是否符合设计要求.
                 string specEmpFields = toNode.DeliveryParas;
-                if (string.IsNullOrEmpty(specEmpFields))
+                if (DataType.IsNullOrEmpty(specEmpFields))
                     specEmpFields = "SysSendEmps";
 
                 if (enParas.EnMap.Attrs.Contains(specEmpFields) == false)
@@ -930,7 +930,7 @@ namespace BP.WF
                     string[] myemps1 = emps.Split(';');
                     foreach (string str in myemps1)
                     {
-                        if (string.IsNullOrEmpty(str))
+                        if (DataType.IsNullOrEmpty(str))
                             continue;
 
                         string[] ss = str.Split(',');
@@ -950,14 +950,14 @@ namespace BP.WF
                 emps = emps.Replace("、", ",");
                 emps = emps.Replace("@", ",");
 
-                if (string.IsNullOrEmpty(emps))
+                if (DataType.IsNullOrEmpty(emps))
                     throw new Exception("@没有在字段[" + enParas.EnMap.Attrs.GetAttrByKey(specEmpFields).Desc + "]中指定接受人，工作无法向下发送。");
 
                 // 把它加入接受人员列表中.
                 string[] myemps = emps.Split(',');
                 foreach (string s in myemps)
                 {
-                    if (string.IsNullOrEmpty(s))
+                    if (DataType.IsNullOrEmpty(s))
                         continue;
 
                     //if (BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(NO) AS NUM FROM Port_Emp WHERE NO='" + s + "' or name='"+s+"'", 0) == 0)
@@ -1159,7 +1159,7 @@ namespace BP.WF
                         throw new Exception("@在找人接收人的时候错误@字段{" + para + "}不包含在rpt里，流程设计错误。");
 
                     empNo = enParas.GetValStrByKey(para);
-                    if (string.IsNullOrEmpty(empNo))
+                    if (DataType.IsNullOrEmpty(empNo))
                         throw new Exception("@字段{" + para + "}不能为空，没有取出来处理人员。");
 
                     BP.Port.Emp em = new BP.Port.Emp(empNo);
@@ -1606,7 +1606,7 @@ namespace BP.WF
 
             //取出抄送人列表
             string ccers = rptGE.GetValStrByKey("SysCCEmps");
-            if (string.IsNullOrEmpty(ccers) == false)
+            if (DataType.IsNullOrEmpty(ccers) == false)
                 return "";
 
             string[] cclist = ccers.Split('|');

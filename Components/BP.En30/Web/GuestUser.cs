@@ -124,7 +124,7 @@ namespace BP.Web
             if (IsBSMode)
             {
                 string str = System.Web.HttpContext.Current.Session[key] as string;
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
             }
@@ -287,7 +287,7 @@ namespace BP.Web
                 else
                     val = hc.Values[valKey];
 
-                if (string.IsNullOrEmpty(val))
+                if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
                 return val;
             }

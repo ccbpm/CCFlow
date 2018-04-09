@@ -258,7 +258,7 @@ namespace BP.WF
                     // 处理传递过来的参数。
                     foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
                     {
-                        if (string.IsNullOrEmpty(k) == true)
+                        if (DataType.IsNullOrEmpty(k) == true)
                             continue;
 
                         wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
@@ -267,7 +267,7 @@ namespace BP.WF
                     // 处理传递过来的frm参数。
                     foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
                     {
-                        if (string.IsNullOrEmpty(k) == true)
+                        if (DataType.IsNullOrEmpty(k) == true)
                             continue;
                         wk.SetValByKey(k, System.Web.HttpContext.Current.Request.Form[k]);
                     }
@@ -275,7 +275,7 @@ namespace BP.WF
 
                 // 执行表单事件..
                 string msg = md.DoEvent(FrmEventList.FrmLoadBefore, wk);
-                if (string.IsNullOrEmpty(msg) == false)
+                if (DataType.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
 
                 // 执行FEE事件.
@@ -374,7 +374,7 @@ namespace BP.WF
                         continue;
 
                     string uiBindKey = dr["UIBindKey"].ToString();
-                    if (string.IsNullOrEmpty(uiBindKey) == true)
+                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
                     {
                         string myPK = dr["MyPK"].ToString();
                         /*如果是空的*/
@@ -642,7 +642,7 @@ namespace BP.WF
 
                 // 执行一次装载前填充.
                 string msg = md.DoEvent(FrmEventList.FrmLoadBefore, wk);
-                if (string.IsNullOrEmpty(msg) == false)
+                if (DataType.IsNullOrEmpty(msg) == false)
                     throw new Exception("错误:" + msg);
 
                 wk.ResetDefaultVal();
@@ -727,7 +727,7 @@ namespace BP.WF
                         continue;
 
                     string uiBindKey = dr["UIBindKey"].ToString();
-                    if (string.IsNullOrEmpty(uiBindKey) == true)
+                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
                     {
                         string myPK = dr["MyPK"].ToString();
                         /*如果是空的*/

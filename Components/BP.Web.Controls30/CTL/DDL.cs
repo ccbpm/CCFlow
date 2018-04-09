@@ -272,7 +272,7 @@ namespace BP.Web.Controls
             string[] strs = atParas.Split('@');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str) == true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     continue;
                 string[] mystrs = str.Split('=');
                 this.Items.Add(new ListItem(mystrs[1], mystrs[0]));

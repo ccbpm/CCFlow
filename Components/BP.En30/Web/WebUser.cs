@@ -111,7 +111,7 @@ namespace BP.Web
 
             WebUser.No = em.No;
             WebUser.Name = em.Name;
-            if (string.IsNullOrEmpty(authNo) == false)
+            if (DataType.IsNullOrEmpty(authNo) == false)
             {
                 WebUser.Auth = authNo; //被授权人，实际工作的执行者.
                 WebUser.AuthName = authName;
@@ -129,7 +129,7 @@ namespace BP.Web
             #region 解决部门的问题.
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
-                if (string.IsNullOrEmpty(em.FK_Dept) == true)
+                if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
                 {
                     string sql = "";
                     if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
@@ -138,7 +138,7 @@ namespace BP.Web
                         sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
 
                     string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
-                    if (string.IsNullOrEmpty(deptNo) == true)
+                    if (DataType.IsNullOrEmpty(deptNo) == true)
                     {
                         throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
                     }
@@ -256,7 +256,7 @@ namespace BP.Web
 
             WebUser.No = userNo;
             WebUser.Name = userName;
-            if (string.IsNullOrEmpty(authNo) == false)
+            if (DataType.IsNullOrEmpty(authNo) == false)
             {
                 WebUser.Auth = authNo; //被授权人，实际工作的执行者.
                 WebUser.AuthName = authName;
@@ -274,7 +274,7 @@ namespace BP.Web
             #region 解决部门的问题.
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
-                if (string.IsNullOrEmpty(deptNo) == true)
+                if (DataType.IsNullOrEmpty(deptNo) == true)
                 {
                     string sql = "";
                     if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
@@ -283,7 +283,7 @@ namespace BP.Web
                         sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + userNo + "'";
 
                     deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
-                    if (string.IsNullOrEmpty(deptNo) == true)
+                    if (DataType.IsNullOrEmpty(deptNo) == true)
                     {
                         throw new Exception("@登录人员(" + userNo + "," + userName + ")没有维护部门...");
                     }
@@ -349,7 +349,7 @@ namespace BP.Web
             if (IsBSMode && System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null)
             {
                 string str = System.Web.HttpContext.Current.Session[key] as string;
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
             }
@@ -535,7 +535,7 @@ namespace BP.Web
             get
             {
                 string val = GetValFromCookie("FK_DeptNameOfFull", null, true);
-                if (string.IsNullOrEmpty(val))
+                if (DataType.IsNullOrEmpty(val))
                 {
                     try
                     {
@@ -719,7 +719,7 @@ namespace BP.Web
             {
                 //先从session里面取.
                 string v = System.Web.HttpContext.Current.Session[valKey] as string;
-                if (string.IsNullOrEmpty(v) == false)
+                if (DataType.IsNullOrEmpty(v) == false)
                     return v;
             }
             catch
@@ -742,7 +742,7 @@ namespace BP.Web
                 else
                     val = hc.Values[valKey];
 
-                if (string.IsNullOrEmpty(val))
+                if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
                 return val;
             }

@@ -291,7 +291,7 @@ namespace BP.WF.HttpHandler
             dtls.Retrieve(MapDtlAttr.FK_MapData, me.FK_MapData);
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str) || str.Contains(":") == false)
+                if (DataType.IsNullOrEmpty(str) || str.Contains(":") == false)
                     continue;
 
                 string[] kvs = str.Split(':');
@@ -664,7 +664,7 @@ namespace BP.WF.HttpHandler
         private void RegularExpression_Save_Tag(string tagID)
         {
             string val = this.GetValFromFrmByKey("TB_Doc_" + tagID);
-            if (string.IsNullOrEmpty(val))
+            if (DataType.IsNullOrEmpty(val))
                 return;
 
             MapExt me = new MapExt();
@@ -789,12 +789,12 @@ namespace BP.WF.HttpHandler
             if (oid != null)
                 sql = sql.Replace("@OID", oid);
 
-            if (string.IsNullOrEmpty(kvs) == false && sql.Contains("@") == true)
+            if (DataType.IsNullOrEmpty(kvs) == false && sql.Contains("@") == true)
             {
                 string[] strs = kvs.Split('~');
                 foreach (string s in strs)
                 {
-                    if (string.IsNullOrEmpty(s)
+                    if (DataType.IsNullOrEmpty(s)
                         || s.Contains("=") == false)
                         continue;
                     string[] mykv = s.Split('=');
@@ -1023,7 +1023,7 @@ namespace BP.WF.HttpHandler
             dtls.Retrieve(MapDtlAttr.FK_MapData, me.FK_MapData);
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str) || str.Contains(":") == false)
+                if (DataType.IsNullOrEmpty(str) || str.Contains(":") == false)
                     continue;
 
                 string[] kvs = str.Split(':');

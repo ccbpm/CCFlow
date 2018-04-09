@@ -10,6 +10,8 @@ using System.Data.Common;
 using System.Web.Script.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using BP.DA;
+
 
 namespace BP.Tools
 {
@@ -165,7 +167,7 @@ namespace BP.Tools
         public static string ListToJson<T>(IList<T> list, string jsonName)
         {
             StringBuilder Json = new StringBuilder();
-            if (string.IsNullOrEmpty(jsonName))
+            if (DataType.IsNullOrEmpty(jsonName))
                 jsonName = list[0].GetType().Name;
             Json.Append("{\"" + jsonName + "\":[");
             if (list.Count > 0)
@@ -387,7 +389,7 @@ namespace BP.Tools
         public static string ToJson(DataTable dt, string jsonName)
         {
             StringBuilder Json = new StringBuilder();
-            if (string.IsNullOrEmpty(jsonName))
+            if (DataType.IsNullOrEmpty(jsonName))
                 jsonName = dt.TableName;
             Json.Append("{\"" + jsonName + "\":[");
             if (dt.Rows.Count > 0)

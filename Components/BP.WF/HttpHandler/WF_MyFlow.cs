@@ -39,7 +39,7 @@ namespace BP.WF.HttpHandler
             {
                 string str = this.GetRequestVal("Paras");
 
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                 {
                     string myps = str;
 
@@ -48,7 +48,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 str = this.GetRequestVal("AtPara");
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                 {
                     if (str.Contains("IsCC=1") == true)
                         return true;
@@ -86,10 +86,10 @@ namespace BP.WF.HttpHandler
             get
             {
                 string fk_nodeReq = this.GetRequestVal("FK_Node");  //this.Request.Form["FK_Node"];
-                if (string.IsNullOrEmpty(fk_nodeReq))
+                if (DataType.IsNullOrEmpty(fk_nodeReq))
                     fk_nodeReq = this.GetRequestVal("NodeID");// this.Request.Form["NodeID"];
 
-                if (string.IsNullOrEmpty(fk_nodeReq) == false)
+                if (DataType.IsNullOrEmpty(fk_nodeReq) == false)
                     return int.Parse(fk_nodeReq);
 
                 if (_FK_Node == 0)
@@ -342,12 +342,12 @@ namespace BP.WF.HttpHandler
                 string pWorkID = this.GetRequestVal("PWorkID");
                 string pNodeID = this.GetRequestVal("PNodeID");
                 string pEmp = this.GetRequestVal("PEmp");
-                if (string.IsNullOrEmpty(pEmp))
+                if (DataType.IsNullOrEmpty(pEmp))
                     pEmp = WebUser.No;
 
                 if (this.WorkID == 0)
                 {
-                    if (string.IsNullOrEmpty(pFlowNo) == true)
+                    if (DataType.IsNullOrEmpty(pFlowNo) == true)
                         this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null);
                     else
                         this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null, Int64.Parse(pWorkID), 0, pFlowNo, int.Parse(pNodeID));
@@ -393,7 +393,7 @@ namespace BP.WF.HttpHandler
                 string[] ps = this.RequestParas.Split('&');
                 foreach (string s in ps)
                 {
-                    if (string.IsNullOrEmpty(s))
+                    if (DataType.IsNullOrEmpty(s))
                         continue;
                     if (toUrl.Contains(s))
                         continue;
@@ -437,7 +437,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 string url = currND.FormUrl;
-                if (string.IsNullOrEmpty(url))
+                if (DataType.IsNullOrEmpty(url))
                 {
                     return "err@设置读取状流程设计错误态错误,没有设置表单url.";
                 }
@@ -993,7 +993,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (bar.ShowWhere == ShowWhere.Toolbar)
                     {
-                        if (!string.IsNullOrEmpty(bar.Target) && bar.Target.ToLower() == "javascript")
+                        if (!DataType.IsNullOrEmpty(bar.Target) && bar.Target.ToLower() == "javascript")
                         {
                             toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"" + bar.Url + "\" />";
                         }
@@ -1354,7 +1354,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (bar.ShowWhere == ShowWhere.Toolbar)
                     {
-                        if (!string.IsNullOrEmpty(bar.Target) && bar.Target.ToLower() == "javascript")
+                        if (!DataType.IsNullOrEmpty(bar.Target) && bar.Target.ToLower() == "javascript")
                         {
                             toolbar += "<a data-role='button' type=button  value='" + bar.Title + "' enable=true onclick=\"" + bar.Url + "\" ></a>";
                         }
@@ -1893,7 +1893,7 @@ namespace BP.WF.HttpHandler
             foreach (NodeToolbar item in extToolBars)
             {
                 string url = "";
-                if (string.IsNullOrEmpty(item.Url))
+                if (DataType.IsNullOrEmpty(item.Url))
                     continue;
 
                 url = item.Url;
@@ -1903,7 +1903,7 @@ namespace BP.WF.HttpHandler
                 formTree.ParentNo = "01";
                 formTree.Name = item.Title;
                 formTree.NodeType = "tools|0";
-                if (!string.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
+                if (!DataType.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
                 {
                     formTree.NodeType = "tools|1";
                 }
@@ -1924,7 +1924,7 @@ namespace BP.WF.HttpHandler
             //二级目录
             foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
             {
-                if (string.IsNullOrEmpty(folder.NodeType) || !folder.NodeType.Equals("folder"))
+                if (DataType.IsNullOrEmpty(folder.NodeType) || !folder.NodeType.Equals("folder"))
                     continue;
 
                 foreach (SysFormTree item in formTrees)
@@ -1960,7 +1960,7 @@ namespace BP.WF.HttpHandler
             parentFolders.Clear();
             foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
             {
-                if (string.IsNullOrEmpty(folder.NodeType) || folder.NodeType.Equals("folder") == false)
+                if (DataType.IsNullOrEmpty(folder.NodeType) || folder.NodeType.Equals("folder") == false)
                     continue;
 
                 bool bHave = false;

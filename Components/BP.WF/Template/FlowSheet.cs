@@ -1143,13 +1143,13 @@ namespace BP.WF.Template
                     nodes = nodes.Replace("，", ",");
                     this.SetValByKey(FlowAttr.DTSSpecNodes, nodes);
 
-                    if (string.IsNullOrEmpty(nodes) == true)
+                    if (DataType.IsNullOrEmpty(nodes) == true)
                         throw new Exception("@业务数据同步数据配置错误，您设置了按照指定的节点配置，但是您没有设置节点,节点的设置格式如下：101,102,103");
 
                     string[] strs = nodes.Split(',');
                     foreach (string str in strs)
                     {
-                        if (string.IsNullOrEmpty(str) == true)
+                        if (DataType.IsNullOrEmpty(str) == true)
                             continue;
 
                         if (BP.DA.DataType.IsNumStr(str) == false)
@@ -1167,7 +1167,7 @@ namespace BP.WF.Template
                 }
 
                 //检查流程数据存储表是否正确
-                if (!string.IsNullOrEmpty(fl.PTable))
+                if (!DataType.IsNullOrEmpty(fl.PTable))
                 {
                     /*检查流程数据存储表填写的是否正确.*/
                     sql = "select count(*) as Num from  " + fl.PTable + " where 1=2";

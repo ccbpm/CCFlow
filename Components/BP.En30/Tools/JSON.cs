@@ -11,6 +11,8 @@ using System.ServiceModel.Channels;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
+using BP.DA;
+
 
 namespace BP.Tools
 {
@@ -509,7 +511,7 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (DataType.IsNullOrEmpty(value))
                 return string.Empty;
 
             string temstr;

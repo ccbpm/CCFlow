@@ -478,7 +478,7 @@ namespace BP.Sys
             /*
             Node nd = new Node();
             nd.NodeID = nodeid;
-            if (nd.RetrieveFromDBSources() != 0 && string.IsNullOrEmpty(nd.FocusField) == true)
+            if (nd.RetrieveFromDBSources() != 0 && DataType.IsNullOrEmpty(nd.FocusField) == true)
             {
                 nd.FocusField = "@" + gKey + "_Note";
                 nd.Update();
@@ -1013,7 +1013,7 @@ namespace BP.Sys
             sqls = "";
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
                 sqls += "@DELETE FROM Sys_FrmLab WHERE MyPK='" + pk + "'";
             }
@@ -1021,7 +1021,7 @@ namespace BP.Sys
             pks = btnsPKs.Split('@');
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
                 sqls += "@DELETE FROM Sys_FrmBtn WHERE MyPK='" + pk + "'";
             }
@@ -1029,7 +1029,7 @@ namespace BP.Sys
             pks = linkPKs.Split('@');
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
 
                 sqls += "@DELETE FROM Sys_FrmLink WHERE MyPK='" + pk + "'";
@@ -1038,7 +1038,7 @@ namespace BP.Sys
             pks = imgPKs.Split('@');
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
 
                 sqls += "@DELETE FROM Sys_FrmImg WHERE MyPK='" + pk + "'";
@@ -1047,7 +1047,7 @@ namespace BP.Sys
             pks = attrPKs.Split('@');
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
 
                 if (pk == "OID")
@@ -1060,7 +1060,7 @@ namespace BP.Sys
             pks = dtlPKs.Split('@');
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
 
                 //调用删除逻辑.
@@ -1076,7 +1076,7 @@ namespace BP.Sys
             pks = athMultis.Split('@');
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
                 sqls += "@DELETE FROM Sys_FrmAttachment WHERE NoOfObj='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
@@ -1085,7 +1085,7 @@ namespace BP.Sys
             pks = athImgs.Split('@');
             foreach (string pk in pks)
             {
-                if (string.IsNullOrEmpty(pk))
+                if (DataType.IsNullOrEmpty(pk))
                     continue;
 
                 sqls += "@DELETE FROM Sys_FrmImgAth WHERE CtrlID='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
@@ -1298,7 +1298,7 @@ namespace BP.Sys
                 for (int i = 0; i < listNames.Count; i++)
                 {
                     string s = strs[i];
-                    if (string.IsNullOrEmpty(s))
+                    if (DataType.IsNullOrEmpty(s))
                         continue;
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(s);
                     dt.TableName = listNames[i];
@@ -1543,7 +1543,7 @@ namespace BP.Sys
                 for (int i = 0; i < listNames.Count; i++)
                 {
                     string s = strs[i];
-                    if (string.IsNullOrEmpty(s))
+                    if (DataType.IsNullOrEmpty(s))
                         continue;
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(s);
                     dt.TableName = listNames[i];
@@ -1597,7 +1597,7 @@ namespace BP.Sys
             string[] strs = cfg.Split('@');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
                 string[] kvs = str.Split('=');
                 SysEnum se = new SysEnum();

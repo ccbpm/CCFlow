@@ -31,13 +31,13 @@ namespace BP.WF.Template
                 string[] mydirs = dirs.Split('~');
                 foreach (string dir in mydirs)
                 {
-                    if (string.IsNullOrEmpty(dir))
+                    if (DataType.IsNullOrEmpty(dir))
                         continue;
 
                     AtPara ap = new AtPara(dir);
 
                     string dots = ap.GetValStrByKey("Dots").Replace('#', '@');
-                    if (string.IsNullOrEmpty(dots) == true)
+                    if (DataType.IsNullOrEmpty(dots) == true)
                         dots = "";
 
                     Direction enDir = new Direction();
@@ -62,7 +62,7 @@ namespace BP.WF.Template
                 string[] nds = nodes.Split('~');
                 foreach (string nd in nds)
                 {
-                    if (string.IsNullOrEmpty(nd))
+                    if (DataType.IsNullOrEmpty(nd))
                         continue;
 
                     AtPara ap = new AtPara(nd);
@@ -79,7 +79,7 @@ namespace BP.WF.Template
                 string[] mylabs = labes.Split('~');
                 foreach (string lab in mylabs)
                 {
-                    if (string.IsNullOrEmpty(lab))
+                    if (DataType.IsNullOrEmpty(lab))
                         continue;
 
                     AtPara ap = new AtPara(lab);

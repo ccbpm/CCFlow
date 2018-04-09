@@ -1274,7 +1274,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapDataAttr.EnPK);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "OID";
                 return s;
             }
@@ -1408,7 +1408,7 @@ namespace BP.Sys
             string[] keys = this.RptSearchKeys.Split('*');
             foreach (string key in keys)
             {
-                if (string.IsNullOrEmpty(key))
+                if (DataType.IsNullOrEmpty(key))
                     continue;
 
                 map.AddSearchAttr(key);
@@ -1952,7 +1952,7 @@ namespace BP.Sys
                 foreach (DataRow dr in dtMap.Rows)
                     oldMapID = dr["No"].ToString();
 
-                if (string.IsNullOrEmpty(oldMapID) == true)
+                if (DataType.IsNullOrEmpty(oldMapID) == true)
                     oldMapID = dtMap.Rows[0]["No"].ToString();
             }
 
@@ -1993,20 +1993,20 @@ namespace BP.Sys
                             }
 
                             //如果物理表为空，则使用编号为物理数据表
-                            if (string.IsNullOrEmpty(md.PTable.Trim()) == true)
+                            if (DataType.IsNullOrEmpty(md.PTable.Trim()) == true)
                                 md.PTable = md.No;
 
                             //表单类别编号不为空，则用原表单类别编号
-                            if (string.IsNullOrEmpty(mdOld.FK_FormTree) == false)
+                            if (DataType.IsNullOrEmpty(mdOld.FK_FormTree) == false)
                                 md.FK_FormTree = mdOld.FK_FormTree;
 
                             //表单类别编号不为空，则用原表单类别编号
-                            if (string.IsNullOrEmpty(mdOld.FK_FrmSort) == false)
+                            if (DataType.IsNullOrEmpty(mdOld.FK_FrmSort) == false)
                                 md.FK_FrmSort = mdOld.FK_FrmSort;
 
-                            if (string.IsNullOrEmpty(mdOld.PTable) == false)
+                            if (DataType.IsNullOrEmpty(mdOld.PTable) == false)
                                 md.PTable = mdOld.PTable;
-                            if (string.IsNullOrEmpty(mdOld.Name) == false)
+                            if (DataType.IsNullOrEmpty(mdOld.Name) == false)
                                 md.Name = mdOld.Name;
 
                             md.HisFrmType = mdOld.HisFrmType;
@@ -2148,7 +2148,7 @@ namespace BP.Sys
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
 
-                            if (string.IsNullOrEmpty(en.CtrlID))
+                            if (DataType.IsNullOrEmpty(en.CtrlID))
                                 en.CtrlID = "ath" + idx;
 
                             en.Insert();
@@ -2254,7 +2254,7 @@ namespace BP.Sys
                                 object val = dr[dc.ColumnName] as object;
                                 if (val == null)
                                     continue;
-                                if (string.IsNullOrEmpty(val.ToString()) == true)
+                                if (DataType.IsNullOrEmpty(val.ToString()) == true)
                                     continue;
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
@@ -2475,7 +2475,7 @@ namespace BP.Sys
             {
                 if (item.LGType == FieldTypeS.Enum || item.LGType == FieldTypeS.FK)
                 {
-                    if (string.IsNullOrEmpty(item.UIBindKey) == true)
+                    if (DataType.IsNullOrEmpty(item.UIBindKey) == true)
                     {
                         item.LGType = FieldTypeS.Normal;
                         item.UIContralType = UIContralType.TB;

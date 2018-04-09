@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using BP.DA;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
@@ -22,14 +23,14 @@ namespace BP.WF
         /// <returns></returns>  
         public HttpWebResponse CreateGetHttpResponse(string url, int? timeout, string userAgent, CookieCollection cookies)
         {
-            if (string.IsNullOrEmpty(url))
+            if (DataType.IsNullOrEmpty(url))
             {
                 throw new ArgumentNullException("url");
             }
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "GET";
             request.UserAgent = DefaultUserAgent;
-            if (!string.IsNullOrEmpty(userAgent))
+            if (!DataType.IsNullOrEmpty(userAgent))
             {
                 request.UserAgent = userAgent;
             }
@@ -56,7 +57,7 @@ namespace BP.WF
         /// <returns></returns>  
         public HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters, int? timeout, string userAgent, Encoding requestEncoding, CookieCollection cookies)
         {
-            if (string.IsNullOrEmpty(url))
+            if (DataType.IsNullOrEmpty(url))
             {
                 throw new ArgumentNullException("url");
             }
@@ -79,7 +80,7 @@ namespace BP.WF
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
 
-            if (!string.IsNullOrEmpty(userAgent))
+            if (!DataType.IsNullOrEmpty(userAgent))
             {
                 request.UserAgent = userAgent;
             }
@@ -135,7 +136,7 @@ namespace BP.WF
         /// <returns></returns>  
         public HttpWebResponse CreatePostHttpResponse(string url, string JsonParameters, int? timeout, string userAgent, Encoding requestEncoding, CookieCollection cookies)
         {
-            if (string.IsNullOrEmpty(url))
+            if (DataType.IsNullOrEmpty(url))
             {
                 throw new ArgumentNullException("url");
             }
@@ -158,7 +159,7 @@ namespace BP.WF
             request.Method = "POST";
             request.ContentType = "application/json";
 
-            if (!string.IsNullOrEmpty(userAgent))
+            if (!DataType.IsNullOrEmpty(userAgent))
             {
                 request.UserAgent = userAgent;
             }
@@ -177,7 +178,7 @@ namespace BP.WF
                 request.CookieContainer.Add(cookies);
             }
             //如果需要POST数据  
-            if (!string.IsNullOrEmpty(JsonParameters))
+            if (!DataType.IsNullOrEmpty(JsonParameters))
             {
                 byte[] data = requestEncoding.GetBytes(JsonParameters);
                 using (Stream stream = request.GetRequestStream())
@@ -201,7 +202,7 @@ namespace BP.WF
         public HttpWebResponse WXCreateGetHttpResponse(string url, StringBuilder parameters,
           int? timeout, string userAgent, Encoding requestEncoding, CookieCollection cookies)
         {
-            if (string.IsNullOrEmpty(url))
+            if (DataType.IsNullOrEmpty(url))
             {
                 throw new ArgumentNullException("url");
             }
@@ -225,7 +226,7 @@ namespace BP.WF
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
 
-            if (!string.IsNullOrEmpty(userAgent))
+            if (!DataType.IsNullOrEmpty(userAgent))
             {
                 request.UserAgent = userAgent;
             }

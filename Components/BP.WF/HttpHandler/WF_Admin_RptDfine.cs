@@ -241,7 +241,7 @@ namespace BP.WF.HttpHandler
             string[] strs = orders.Split('@');
             foreach (string item in strs)
             {
-                if (string.IsNullOrEmpty(item) == true)
+                if (DataType.IsNullOrEmpty(item) == true)
                     continue;
 
                 string[] vals = item.Split(',');

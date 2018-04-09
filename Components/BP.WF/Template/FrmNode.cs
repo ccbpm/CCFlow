@@ -324,7 +324,7 @@ namespace BP.WF.Template
             get
             {
                 string str= this.GetValStringByKey(FrmNodeAttr.TempleteFile);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return this.FK_Frm + ".xls";
                 return str;
             }

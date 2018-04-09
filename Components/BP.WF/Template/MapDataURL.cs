@@ -817,7 +817,7 @@ namespace BP.WF.Template
             get
             {
                 string s = this.GetValStrByKey(MapDataAttr.EnPK);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "OID";
                 return s;
             }

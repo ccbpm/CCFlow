@@ -319,12 +319,12 @@ namespace BP.Sys
                     JsonData borderWidth = properties.GetObjectFromArrary_ByKeyValue("type", "LineWidth");
                     JsonData borderColor = properties.GetObjectFromArrary_ByKeyValue("type", "Color");
                     string strborderWidth = "2";
-                    if (borderWidth != null && borderWidth["PropertyValue"] != null && !string.IsNullOrEmpty(borderWidth["PropertyValue"].ToString()))
+                    if (borderWidth != null && borderWidth["PropertyValue"] != null && !DataType.IsNullOrEmpty(borderWidth["PropertyValue"].ToString()))
                     {
                         strborderWidth = borderWidth["PropertyValue"].ToString();
                     }
                     string strBorderColor = "Black";
-                    if (borderColor != null && borderColor["PropertyValue"] != null && !string.IsNullOrEmpty(borderColor["PropertyValue"].ToString()))
+                    if (borderColor != null && borderColor["PropertyValue"] != null && !DataType.IsNullOrEmpty(borderColor["PropertyValue"].ToString()))
                     {
                         strBorderColor = borderColor["PropertyValue"].ToString();
                     }
@@ -345,7 +345,7 @@ namespace BP.Sys
             string sqls = "";
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
                 sqls += "@DELETE FROM Sys_FrmLine WHERE MyPK='" + str + "'";
             }

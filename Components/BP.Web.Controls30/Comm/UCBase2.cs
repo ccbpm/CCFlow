@@ -117,7 +117,7 @@ namespace BP.Web.UC
             foreach (System.Web.UI.Control ctl in this.Controls)
             {
                 #region 排除非预定的控件
-                if (ctl == null || string.IsNullOrEmpty(ctl.ID))
+                if (ctl == null || DataType.IsNullOrEmpty(ctl.ID))
                     continue;
 
                 string id = ctl.ID;

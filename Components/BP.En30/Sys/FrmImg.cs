@@ -219,7 +219,7 @@ namespace BP.Sys
             get
             {
                 string src = this.GetValStringByKey(FrmImgAttr.ImgPath);
-                if (string.IsNullOrEmpty(src))
+                if (DataType.IsNullOrEmpty(src))
                 {
                     string appPath = BP.Sys.Glo.Request.ApplicationPath;
                     src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
@@ -236,7 +236,7 @@ namespace BP.Sys
             get
             {
                 string src = this.GetValStringByKey(FrmImgAttr.ImgURL);
-                if (string.IsNullOrEmpty(src) || src.Contains("component/Img"))
+                if (DataType.IsNullOrEmpty(src) || src.Contains("component/Img"))
                 {
                     string appPath = BP.Sys.Glo.Request.ApplicationPath;
                     src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";

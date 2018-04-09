@@ -24,7 +24,7 @@ namespace BP.Sys
             this.HisEn = en;
             EnCfg cfg = new EnCfg(en.ToString());
             string paraStr = cfg.UI;
-            if (string.IsNullOrEmpty(paraStr) == true)
+            if (DataType.IsNullOrEmpty(paraStr) == true)
                 paraStr = "@UIRowStyleGlo=0@IsEnableDouclickGlo=1@IsEnableRefFunc=1@IsEnableFocusField=1@IsEnableOpenICON=1@FocusField=''@WinCardH=600@@WinCardW=800@ShowColumns=";
             HisAP = new AtPara(paraStr);
         }
@@ -134,7 +134,7 @@ namespace BP.Sys
             get
             {
                 string s = this.HisAP.GetValStrByKey("FocusField");
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                 {
                     if (this.HisEn.EnMap.Attrs.Contains("Name"))
                         return "Name";

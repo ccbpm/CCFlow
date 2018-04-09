@@ -193,7 +193,7 @@ namespace BP.WF.Template
             get
             {
                 string s = this.GetValStringByKey(PushMsgAttr.PushDoc);
-                if (string.IsNullOrEmpty(s) == true)
+                if (DataType.IsNullOrEmpty(s) == true)
                     s = "";
                 return s;
             }
@@ -207,7 +207,7 @@ namespace BP.WF.Template
             get
             {
                 string s = this.GetValStringByKey(PushMsgAttr.Tag);
-                if (string.IsNullOrEmpty(s) == true)
+                if (DataType.IsNullOrEmpty(s) == true)
                     s = "";
                 return s;
             }
@@ -301,7 +301,7 @@ namespace BP.WF.Template
             get
             {
                 string str = this.GetValStrByKey(PushMsgAttr.MailTitle);
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                     return str;
                 switch (this.FK_Event)
                 {
@@ -374,7 +374,7 @@ namespace BP.WF.Template
             get
             {
                 string str = this.GetValStrByKey(PushMsgAttr.MailDoc);
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                     return str;
                 switch (this.FK_Event)
                 {
@@ -556,7 +556,7 @@ namespace BP.WF.Template
             get
             {
                 string str = this.GetValStrByKey(PushMsgAttr.SMSDoc);
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                     return str;
 
                 switch (this.FK_Event)
@@ -787,7 +787,7 @@ namespace BP.WF.Template
                 string msg = "";
                 foreach (string nodeID in nodes)
                 {
-                    if (string.IsNullOrEmpty(nodeID) == true)
+                    if (DataType.IsNullOrEmpty(nodeID) == true)
                         continue;
 
                     string sql = "SELECT b.Name, b.Email, b.No FROM ND" + int.Parse(this.FK_Flow) + "Track a, WF_Emp b WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID + " AND a.EmpFrom=B.No ";
@@ -801,7 +801,7 @@ namespace BP.WF.Template
                         string empName = dr["Name"].ToString();
                         string empNo = dr["No"].ToString();
 
-                        if (string.IsNullOrEmpty(emailAddress))
+                        if (DataType.IsNullOrEmpty(emailAddress))
                             continue;
 
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
@@ -835,7 +835,7 @@ namespace BP.WF.Template
                     string[] emps = toEmpIDs.Split(',');
                     foreach (string emp in emps)
                     {
-                        if (string.IsNullOrEmpty(emp))
+                        if (DataType.IsNullOrEmpty(emp))
                             continue;
 
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
@@ -875,7 +875,7 @@ namespace BP.WF.Template
                     string[] emps = toEmpIDs.Split(',');
                     foreach (string emp in emps)
                     {
-                        if (string.IsNullOrEmpty(emp))
+                        if (DataType.IsNullOrEmpty(emp))
                             continue;
                         if (emp == WebUser.No)
                             continue;
@@ -924,7 +924,7 @@ namespace BP.WF.Template
 
                     foreach (string emp in emps)
                     {
-                        if (string.IsNullOrEmpty(emp))
+                        if (DataType.IsNullOrEmpty(emp))
                             continue;
 
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
@@ -1010,7 +1010,7 @@ namespace BP.WF.Template
                 string msg = "";
                 foreach (string nodeID in nodes)
                 {
-                    if (string.IsNullOrEmpty(nodeID) == true)
+                    if (DataType.IsNullOrEmpty(nodeID) == true)
                         continue;
 
                     string sql = "SELECT b.Name, b.Tel ,b.No FROM ND" + int.Parse(this.FK_Flow) + "Track a, WF_Emp b WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID + " AND a.EmpFrom=B.No ";
@@ -1024,7 +1024,7 @@ namespace BP.WF.Template
                         string empName = dr["Name"].ToString();
                         string empNo = dr["No"].ToString();
 
-                        if (string.IsNullOrEmpty(tel))
+                        if (DataType.IsNullOrEmpty(tel))
                             continue;
 
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
@@ -1057,7 +1057,7 @@ namespace BP.WF.Template
                     string[] emps = toEmpIDs.Split(',');
                     foreach (string emp in emps)
                     {
-                        if (string.IsNullOrEmpty(emp))
+                        if (DataType.IsNullOrEmpty(emp))
                             continue;
 
                         string smsDocTmpReal = smsDocTmp.Clone() as string;
@@ -1099,7 +1099,7 @@ namespace BP.WF.Template
                     string[] emps = toEmpIDs.Split(',');
                     foreach (string empID in emps)
                     {
-                        if (string.IsNullOrEmpty(empID))
+                        if (DataType.IsNullOrEmpty(empID))
                             continue;
 
                         string smsDocTmpReal = smsDocTmp.Clone() as string;
@@ -1143,7 +1143,7 @@ namespace BP.WF.Template
                     string[] emps = empsStrs.Split('@');
                     foreach (string empID in emps)
                     {
-                        if (string.IsNullOrEmpty(empID))
+                        if (DataType.IsNullOrEmpty(empID))
                             continue;
 
                         if (empID == WebUser.No)

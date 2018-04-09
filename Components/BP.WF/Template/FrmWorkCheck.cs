@@ -500,7 +500,7 @@ namespace BP.WF.Template
             get
             {
                 string str = this.GetValStringByKey(FrmWorkCheckAttr.FWCNodeName);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return this.Name;
                 return str;
             }

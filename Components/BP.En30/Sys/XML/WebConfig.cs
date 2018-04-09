@@ -140,7 +140,7 @@ namespace BP.Sys.XML
             get
             {
                 string str= this.GetValStringByKey(WebConfigDescAttr.DBType);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = "String";
                 return str;
             }

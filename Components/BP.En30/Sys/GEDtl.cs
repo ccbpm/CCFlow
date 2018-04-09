@@ -227,7 +227,7 @@ namespace BP.Sys
                         if (mattr.IsNum)
                         {
                             string s = this.GetValStrByKey(mattr.KeyOfEn);
-                            if (string.IsNullOrEmpty(s))
+                            if (DataType.IsNullOrEmpty(s))
                             {
                                 this.SetValByKey(mattr.KeyOfEn, mattr.DefVal);
                                 s = mattr.DefVal.ToString();

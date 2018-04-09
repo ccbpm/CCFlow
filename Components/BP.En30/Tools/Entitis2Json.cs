@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using BP.En;
+using BP.DA;
+
+
 
 namespace BP.Tools
 {
@@ -160,11 +163,11 @@ namespace BP.Tools
             append.Append("{");
             foreach (Attr attr in attrs)
             {
-                if (!string.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
+                if (!DataType.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
                     continue;
 
                 string strValue = en.GetValStrByKey(attr.Key);
-                if (!string.IsNullOrEmpty(strValue) && strValue.LastIndexOf("\\") > -1)
+                if (!DataType.IsNullOrEmpty(strValue) && strValue.LastIndexOf("\\") > -1)
                 {
                     strValue = strValue.Substring(0, strValue.LastIndexOf("\\"));
                 }
@@ -192,11 +195,11 @@ namespace BP.Tools
                 append.Append("{");
                 foreach (Attr attr in attrs)
                 {
-                    if (!string.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
+                    if (!DataType.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
                         continue;
 
                     string strValue = en.GetValStrByKey(attr.Key);
-                    if (!string.IsNullOrEmpty(strValue) && strValue.EndsWith("\\") == true)
+                    if (!DataType.IsNullOrEmpty(strValue) && strValue.EndsWith("\\") == true)
                     {
                         strValue = strValue.Substring(0, strValue.LastIndexOf("\\"));
                     }
@@ -229,11 +232,11 @@ namespace BP.Tools
                 append.Append("{");
                 foreach (Attr attr in attrs)
                 {
-                    if (!string.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
+                    if (!DataType.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
                         continue;
 
                     string strValue = en.GetValStrByKey(attr.Key);
-                    if (!string.IsNullOrEmpty(strValue) && strValue.EndsWith("\\"))
+                    if (!DataType.IsNullOrEmpty(strValue) && strValue.EndsWith("\\"))
                     {
                         strValue = strValue.Substring(0, strValue.LastIndexOf("\\"));
                     }
@@ -277,7 +280,7 @@ namespace BP.Tools
             {
                 if (attr.UIVisible == false)
                     continue;
-                if (!string.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
+                if (!DataType.IsNullOrEmpty(hidenKeys) && hidenKeys.Contains("@" + attr.Key))
                     continue;
 
                 if (attr.MyFieldType == FieldType.RefText)
@@ -352,7 +355,7 @@ namespace BP.Tools
                 {
                     string chidstring = TansEntitiesToGridTree(ens, pColumnName, cColumnName, en.GetValStrByKey(cColumnName), appendChild);
 
-                    if (!string.IsNullOrEmpty(chidstring) && appendChild == true)
+                    if (!DataType.IsNullOrEmpty(chidstring) && appendChild == true)
                     {
                         stringbuilder.Append(TranslateEntityToJson(en, ""));
                         stringbuilder.Replace('}', ',', stringbuilder.Length - 1, 1);

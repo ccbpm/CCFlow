@@ -87,7 +87,7 @@ namespace BP.Sys.XML
         public bool GetValBoolByKey(string key)
         {
             string val = this.GetValStringByKey(key);
-            if (string.IsNullOrEmpty(val))
+            if (DataType.IsNullOrEmpty(val))
                 return false;
 
             if (val == "1" || val.ToUpper() == "TRUE")

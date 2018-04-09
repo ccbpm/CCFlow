@@ -1978,7 +1978,7 @@ namespace BP.En
 		/// </summary>
 		public void AddAttrsFromMapData()
 		{
-			if (string.IsNullOrEmpty(this.FK_MapData))
+			if (DataType.IsNullOrEmpty(this.FK_MapData))
 				throw new Exception("@您没有为map的 FK_MapData 赋值.");
 
 			MapData md = null;

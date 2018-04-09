@@ -142,7 +142,7 @@ namespace BP.Tools
                 default:
                     throw new Exception("@未判断的数据库类型。");
             }
-            if(!string.IsNullOrEmpty(sql))
+            if(!DataType.IsNullOrEmpty(sql))
                 DBAccess.RunSQL(sql);
         }
 

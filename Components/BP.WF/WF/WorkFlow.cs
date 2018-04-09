@@ -1139,7 +1139,7 @@ namespace BP.WF
             {
                 //取得调起子流程的人员.
                 string pEmp = this.HisGenerWorkFlow.PEmp;
-                if (string.IsNullOrEmpty(pEmp) == true)
+                if (DataType.IsNullOrEmpty(pEmp) == true)
                     throw new Exception("@没有找到调起子流程的工作人员.");
 
                 Emp emp = new Emp();
@@ -1190,7 +1190,7 @@ namespace BP.WF
             if (null == currNode)
                 return "err@当前节点为空..";
 
-            if (string.IsNullOrEmpty(stopMsg))
+            if (DataType.IsNullOrEmpty(stopMsg))
                 stopMsg += "流程结束";
 
             //调用结束前事件.
@@ -1199,7 +1199,7 @@ namespace BP.WF
                 stopMsg += "@" + mymsg;
 
             string exp = currNode.FocusField;
-            if (string.IsNullOrEmpty(exp) == false && exp.Length > 1)
+            if (DataType.IsNullOrEmpty(exp) == false && exp.Length > 1)
             {
                 if (rpt != null)
                     stopMsg += Glo.DealExp(exp, rpt, null);
@@ -1325,7 +1325,7 @@ namespace BP.WF
             gwf.WFState = WFState.Complete;
             gwf.Update();
 
-            //if (string.IsNullOrEmpty(msg) == true)
+            //if (DataType.IsNullOrEmpty(msg) == true)
             //    msg = "流程成功结束.";
             return stopMsg;
         }
@@ -1412,7 +1412,7 @@ namespace BP.WF
             if (this.HisGenerWorkFlow.WFState == WFState.Fix)
                 throw new Exception("@当前已经是冻结的状态您不能执行再冻结.");
 
-            if (string.IsNullOrEmpty(fixMsg))
+            if (DataType.IsNullOrEmpty(fixMsg))
                 fixMsg = "无";
 
 
@@ -1466,7 +1466,7 @@ namespace BP.WF
             if (this.HisGenerWorkFlow.WFState != WFState.Fix)
                 throw new Exception("@当前非冻结的状态您不能执行解除冻结.");
 
-            if (string.IsNullOrEmpty(unFixMsg))
+            if (DataType.IsNullOrEmpty(unFixMsg))
                 unFixMsg = "无";
 
 
@@ -1908,7 +1908,7 @@ namespace BP.WF
             if (this.HisGenerWorkFlow.WFState == WFState.HungUp)
                 throw new Exception("@当前已经是挂起的状态您不能执行在挂起.");
 
-            if (string.IsNullOrEmpty(hungNote))
+            if (DataType.IsNullOrEmpty(hungNote))
                 hungNote = "无";
 
             if (way == HungUpWay.SpecDataRel)

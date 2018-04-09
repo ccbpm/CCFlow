@@ -557,7 +557,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStrByKey(FrmEventAttr.MailTitle);
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                     return str;
                 switch (this.FK_Event)
                 {
@@ -619,7 +619,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStrByKey(FrmEventAttr.MailDoc);
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                     return str;
                 switch (this.FK_Event)
                 {
@@ -716,7 +716,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStrByKey(FrmEventAttr.SMSDoc);
-                if (string.IsNullOrEmpty(str) == false)
+                if (DataType.IsNullOrEmpty(str) == false)
                     return str;
 
                 switch (this.FK_Event)
@@ -856,7 +856,7 @@ namespace BP.Sys
             if (val != null)
                 val = val.Trim();
 
-            if (string.IsNullOrEmpty(val))
+            if (DataType.IsNullOrEmpty(val))
                 return ""; // 说明有事件，执行成功了。
             else
                 return val; // 没有事件. 
@@ -998,7 +998,7 @@ namespace BP.Sys
                     {
                         /*在cs模式下它的baseurl 从web.config中获取.*/
                         string cfgBaseUrl = SystemConfig.HostURL;
-                        if (string.IsNullOrEmpty(cfgBaseUrl))
+                        if (DataType.IsNullOrEmpty(cfgBaseUrl))
                         {
                             string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
                             Log.DefaultLogWriteLineError(err);
@@ -1054,7 +1054,7 @@ namespace BP.Sys
                         else
                         {
                             string cfgBaseUrl =  SystemConfig.HostURL;
-                            if (string.IsNullOrEmpty(cfgBaseUrl))
+                            if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
                                 Log.DefaultLogWriteLineError(err);

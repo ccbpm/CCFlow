@@ -155,7 +155,7 @@ namespace BP.WF.Template
         //    // 组织数据。
         //    // 获取他的ParentNo
         //    string parentNo = "";//this.ParentNo
-        //    if (!string.IsNullOrEmpty(this.ParentNo))
+        //    if (!DataType.IsNullOrEmpty(this.ParentNo))
         //    {
         //        sql = "SELECT * FROM GPM_Menu WHERE Flag='FlowFormTree" + this.ParentNo + "'";
         //        dt = DBAccess.RunSQLReturnTable(sql);

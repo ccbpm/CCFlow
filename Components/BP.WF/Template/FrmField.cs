@@ -305,7 +305,7 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            if (string.IsNullOrEmpty(this.EleType))
+            if (DataType.IsNullOrEmpty(this.EleType))
                 this.EleType = FrmEleType.Field;
 
             this.MyPK = this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + this.KeyOfEn + "_" + this.EleType;

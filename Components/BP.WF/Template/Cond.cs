@@ -247,7 +247,7 @@ namespace BP.WF.Template
 
                 if (way == Template.SpecOperWay.SpenEmpNo)
                 {
-                    if (string.IsNullOrEmpty(this.SpecOperPara) == false)
+                    if (DataType.IsNullOrEmpty(this.SpecOperPara) == false)
                         throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的人员[" + this.SpecOperPara + "]作为处理人，但是人员参数没有设置。");
                     return this.SpecOperPara;
                 }
@@ -943,7 +943,7 @@ namespace BP.WF.Template
                         {
                             /*在cs模式下它的baseurl 从web.config中获取.*/
                             string cfgBaseUrl = SystemConfig.AppSettings["HostURL"];
-                            if (string.IsNullOrEmpty(cfgBaseUrl))
+                            if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
                                 Log.DefaultLogWriteLineError(err);
@@ -966,7 +966,7 @@ namespace BP.WF.Template
                             //throw new Exception("@流程设计的方向条件错误，执行的URL错误:" + url + ", 返回为null, 请检查设置是否正确。");
                             return false;
 
-                        if (string.IsNullOrEmpty(text) == true)
+                        if (DataType.IsNullOrEmpty(text) == true)
                             // throw new Exception("@错误，没有接收到返回值.");
                             return false;
 

@@ -36,10 +36,10 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0)
                     return "Node";
 
-                if (this.FK_Node == 0 && string.IsNullOrEmpty(this.FK_Flow) == false && this.FK_Flow.Length >= 3)
+                if (this.FK_Node == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false && this.FK_Flow.Length >= 3)
                     return "Flow";
 
-                if (this.FK_Node == 0 && string.IsNullOrEmpty(this.FK_MapData) == false)
+                if (this.FK_Node == 0 && DataType.IsNullOrEmpty(this.FK_MapData) == false)
                     return "Frm";
 
                 return "Node";
@@ -182,7 +182,7 @@ namespace BP.WF.HttpHandler
 
             bt.NodeID = this.FK_Node;
             bt.No = this.GetRequestVal("TB_No");
-            if (string.IsNullOrEmpty(bt.No))
+            if (DataType.IsNullOrEmpty(bt.No))
             {
                 bt.No = DA.DBAccess.GenerOID().ToString(); 
             }
@@ -298,7 +298,7 @@ namespace BP.WF.HttpHandler
             #endregion 邮件保存.
 
             //保存.
-            if (string.IsNullOrEmpty(msg.MyPK) == true)
+            if (DataType.IsNullOrEmpty(msg.MyPK) == true)
             {
                 msg.MyPK = BP.DA.DBAccess.GenerGUID();
                 msg.Insert();
@@ -1881,7 +1881,7 @@ namespace BP.WF.HttpHandler
         public string NodeAttrs_Init()
         {
             var strFlowId = GetRequestVal("FK_Flow");
-            if (string.IsNullOrEmpty(strFlowId))
+            if (DataType.IsNullOrEmpty(strFlowId))
             {
                 return "err@参数错误！";
             }
@@ -2027,11 +2027,11 @@ namespace BP.WF.HttpHandler
         {
 
             /*string fk_mapdata = this.GetRequestVal("FK_MapData");
-            if (string.IsNullOrEmpty(fk_mapdata))
+            if (DataType.IsNullOrEmpty(fk_mapdata))
                 fk_mapdata = "ND101";
 
             string fk_node = this.GetRequestVal("FK_Node");
-            if (string.IsNullOrEmpty(fk_node))
+            if (DataType.IsNullOrEmpty(fk_node))
                 fk_mapdata = "101";
 
 
@@ -2471,7 +2471,7 @@ namespace BP.WF.HttpHandler
             #endregion 邮件保存.
 
             //保存.
-            if (string.IsNullOrEmpty(msg.MyPK) == true)
+            if (DataType.IsNullOrEmpty(msg.MyPK) == true)
             {
                 msg.MyPK = BP.DA.DBAccess.GenerGUID();
                 msg.Insert();

@@ -201,7 +201,7 @@ namespace BP.GPM
             get
             {
                 string fk_Duty = this.GetValStrByKey(EmpAttr.FK_Duty);
-                if (string.IsNullOrEmpty(fk_Duty))
+                if (DataType.IsNullOrEmpty(fk_Duty))
                     return "";
                 Duty duty = new Duty();
                 duty.RetrieveByAttr(DutyAttr.No, fk_Duty);

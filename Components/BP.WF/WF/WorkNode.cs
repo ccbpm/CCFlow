@@ -217,12 +217,12 @@ namespace BP.WF
             string FK_Emp;
 
             // 如果指定特定的人员处理。
-            if (string.IsNullOrEmpty(JumpToEmp) == false)
+            if (DataType.IsNullOrEmpty(JumpToEmp) == false)
             {
                 string[] emps = JumpToEmp.Split(',');
                 foreach (string emp in emps)
                 {
-                    if (string.IsNullOrEmpty(emp))
+                    if (DataType.IsNullOrEmpty(emp))
                         continue;
                     DataRow dr = dt.NewRow();
                     dr[0] = emp;
@@ -569,7 +569,7 @@ namespace BP.WF
                 if (this.IsHaveSubThreadGroupMark == true)
                 {
                     wl.GroupMark = dt.Rows[0][2].ToString(); //第3个列是分组标记.
-                    if (string.IsNullOrEmpty(wl.GroupMark))
+                    if (DataType.IsNullOrEmpty(wl.GroupMark))
                         throw new Exception("@｛" + wl.FK_Emp + "｝分组标记中没有值,会导致无法按照分组标记去生成子线程,请检查配置的信息是否正确.");
                 }
 
@@ -752,14 +752,14 @@ namespace BP.WF
                         if (val == null)
                             throw new Exception("@分组标志不能为Null.");
 
-                        if (string.IsNullOrEmpty(val.ToString()) == null)
+                        if (DataType.IsNullOrEmpty(val.ToString()) == null)
                             throw new Exception("@分组标志不能为Null.");
 
                         wl.GroupMark = val.ToString();
                         if (dt.Columns.Count == 4 && this.town.HisNode.HisFormType == NodeFormType.SheetAutoTree)
                         {
                             wl.FrmIDs = dr[3].ToString();
-                            if (string.IsNullOrEmpty(dr[3].ToString()))
+                            if (DataType.IsNullOrEmpty(dr[3].ToString()))
                                 throw new Exception("@组织的接受人数据源不正确,表单IDs不能为空.");
                         }
                     }
@@ -769,7 +769,7 @@ namespace BP.WF
                         {
                             /*如果只有三列, 并且是动态表单树.*/
                             wl.FrmIDs = dr[2].ToString(); //
-                            if (string.IsNullOrEmpty(dr[2].ToString()))
+                            if (DataType.IsNullOrEmpty(dr[2].ToString()))
                                 throw new Exception("@组织的接受人数据源不正确,表单IDs不能为空.");
                         }
                     }
@@ -1069,13 +1069,13 @@ namespace BP.WF
             {
                 // 获取用户选择的节点.
                 string nodes = this.HisGenerWorkFlow.Paras_ToNodes;
-                if (string.IsNullOrEmpty(nodes))
+                if (DataType.IsNullOrEmpty(nodes))
                     throw new Exception("@用户没有选择发送到的节点.");
 
                 string[] mynodes = nodes.Split(',');
                 foreach (string item in mynodes)
                 {
-                    if (string.IsNullOrEmpty(item))
+                    if (DataType.IsNullOrEmpty(item))
                         continue;
 
                     //排除到达自身节点.
@@ -1712,7 +1712,7 @@ namespace BP.WF
                             string sql = "";
 
                             //如果设置了部门与岗位的集合进行拆分
-                            if (!string.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
+                            if (!DataType.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
                             {
                                 fk_dept = img.Tag0.Split('^')[0];
                                 fk_station = img.Tag0.Split('^')[1];
@@ -1728,7 +1728,7 @@ namespace BP.WF
                                         fk_dept = BP.DA.DBAccess.RunSQLReturnString(sql);
                                     }
                                     //表单字段
-                                    if (sealType == "2" && !string.IsNullOrEmpty(sealField))
+                                    if (sealType == "2" && !DataType.IsNullOrEmpty(sealField))
                                     {
                                         //判断字段是否存在
                                         foreach (MapAttr attr in nd.MapData.MapAttrs)
@@ -1758,7 +1758,7 @@ namespace BP.WF
                             {
                                 imgSrc = BP.WF.Glo.CCFlowAppPath + "DataUser/Seal/" + fk_dept + "_" + stationNo + ".jpg";
                                 //设置主键
-                                string myPK = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                                string myPK = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                                 myPK = myPK + "_" + wk.OID + "_" + img.MyPK;
 
                                 FrmEleDB imgDb = new FrmEleDB();
@@ -1766,9 +1766,9 @@ namespace BP.WF
                                 queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
                                 queryInfo.DoQuery();
                                 //判断是否存在
-                                if (imgDb != null && !string.IsNullOrEmpty(imgDb.FK_MapData))
+                                if (imgDb != null && !DataType.IsNullOrEmpty(imgDb.FK_MapData))
                                 {
-                                    imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                                    imgDb.FK_MapData = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                                     imgDb.EleID = wk.OID.ToString();
                                     imgDb.RefPKVal = img.MyPK;
                                     imgDb.Tag1 = imgSrc;
@@ -1776,7 +1776,7 @@ namespace BP.WF
                                 }
                                 else
                                 {
-                                    imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                                    imgDb.FK_MapData = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                                     imgDb.EleID = wk.OID.ToString();
                                     imgDb.RefPKVal = img.MyPK;
                                     imgDb.Tag1 = imgSrc;
@@ -1978,14 +1978,14 @@ namespace BP.WF
             {
                 // 获取用户选择的节点.
                 string nodes = this.HisGenerWorkFlow.Paras_ToNodes;
-                if (string.IsNullOrEmpty(nodes))
+                if (DataType.IsNullOrEmpty(nodes))
                     throw new Exception("@用户没有选择发送到的节点.");
 
                 Nodes nds = new Nodes();
                 string[] mynodes = nodes.Split(',');
                 foreach (string item in mynodes)
                 {
-                    if (string.IsNullOrEmpty(item))
+                    if (DataType.IsNullOrEmpty(item))
                         continue;
                     nds.AddEntity(new Node(int.Parse(item)));
                 }
@@ -2973,7 +2973,7 @@ namespace BP.WF
                             if (worker.Contains(wl.FK_Emp) == false)
                                 continue;
 
-                            if (string.IsNullOrEmpty(dtl.SubThreadGroupMark) == false)
+                            if (DataType.IsNullOrEmpty(dtl.SubThreadGroupMark) == false)
                             {
                                 string groupMarkDtl = gedtl.GetValStringByKey(dtl.SubThreadGroupMark);
                                 if (wl.GroupMark != groupMarkDtl)
@@ -4487,7 +4487,7 @@ namespace BP.WF
             string[] paras = this.HisNode.SubFlowStartParas.Split('@');
             foreach (string item in paras)
             {
-                if (string.IsNullOrEmpty(item))
+                if (DataType.IsNullOrEmpty(item))
                     continue;
 
                 string[] keyvals = item.Split(';');
@@ -4497,7 +4497,7 @@ namespace BP.WF
                 string DtlTable = ""; //明细表.
                 foreach (string keyval in keyvals)
                 {
-                    if (string.IsNullOrEmpty(keyval))
+                    if (DataType.IsNullOrEmpty(keyval))
                         continue;
 
                     string[] strs = keyval.Split('=');
@@ -4526,7 +4526,7 @@ namespace BP.WF
                         string msgInfo = "";
                         foreach (string emp in empStrs)
                         {
-                            if (string.IsNullOrEmpty(emp))
+                            if (DataType.IsNullOrEmpty(emp))
                                 continue;
 
                             //以当前人员的身份登录.
@@ -4786,7 +4786,7 @@ namespace BP.WF
 
                     string str = row[attr.KeyOfEn] == null ? string.Empty : row[attr.KeyOfEn].ToString();
                     /*如果是检查不能为空 */
-                    if (str == null || string.IsNullOrEmpty(str) == true || str.Trim() == "")
+                    if (str == null || DataType.IsNullOrEmpty(str) == true || str.Trim() == "")
                         err += "@字段{" + attr.KeyOfEn + " ; " + attr.Name + "}，不能为空。";
                 }
 
@@ -4949,7 +4949,7 @@ namespace BP.WF
                     if (ff.IsNotNull == true)
                     {
                         /*如果是检查不能为空 */
-                        if (string.IsNullOrEmpty(val) == true || val.Trim() == "")
+                        if (DataType.IsNullOrEmpty(val) == true || val.Trim() == "")
                             err += "@表单{" + md.Name + "}字段{" + ff.KeyOfEn + " ; " + ff.Name + "}，不能为空。";
                     }
 
@@ -5492,7 +5492,7 @@ namespace BP.WF
                 string err = "";
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str) == true)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
 
                     if (str.Contains("=") == false)
@@ -5555,7 +5555,7 @@ namespace BP.WF
                         err += "@子流程ID=" + gwf.WorkID + ",子流程名称" + gwf.FlowName + ",标题:" + gwf.Title + ",当前执行人:" + gwf.TodoEmps + ",运行到节点:" + gwf.NodeName;
                 }
 
-                if (string.IsNullOrEmpty(err) == true)
+                if (DataType.IsNullOrEmpty(err) == true)
                     return;
 
                 err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
@@ -5682,7 +5682,7 @@ namespace BP.WF
         private SendReturnObjs NodeSendToYGFlow(Node node, string toEmpIDs)
         {
             string sql = "";
-            if (string.IsNullOrEmpty(toEmpIDs))
+            if (DataType.IsNullOrEmpty(toEmpIDs))
             {
                 toEmpIDs = "";
 
@@ -5848,7 +5848,7 @@ namespace BP.WF
                 this.IsStopFlow = ap.GetValBoolenByKey("IsStopFlow", false);
 
                 string toEmps = ap.GetValStrByKey("ToEmps");
-                if (string.IsNullOrEmpty(toEmps) == true)
+                if (DataType.IsNullOrEmpty(toEmps) == true)
                     jumpToEmp = toEmps;
 
                 //处理str信息.
@@ -5865,7 +5865,7 @@ namespace BP.WF
                 this.HisWork.ResetDefaultVal();
                 this.HisWork.Rec = this.Execer;
                 this.HisWork.RecText = this.ExecerName;
-                if (string.IsNullOrEmpty(sendWhen) == false)
+                if (DataType.IsNullOrEmpty(sendWhen) == false)
                 {
                     sendWhen = System.Web.HttpUtility.UrlDecode(sendWhen);
                     if (sendWhen.StartsWith("false") || sendWhen.StartsWith("False") || sendWhen.StartsWith("error") || sendWhen.StartsWith("Error"))
@@ -6499,7 +6499,7 @@ namespace BP.WF
                     string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
                     string ccMsg = ccMsg1 + ccMsg2;
 
-                    if (string.IsNullOrEmpty(ccMsg) == false)
+                    if (DataType.IsNullOrEmpty(ccMsg) == false)
                     {
                         this.addMsg("CC", "@自动抄送给:" + ccMsg);
                         this.AddToTrack(ActionType.CC, WebUser.No, WebUser.Name, this.HisNode.NodeID, this.HisNode.Name, ccMsg1 + ccMsg2, this.HisNode);
@@ -6516,7 +6516,7 @@ namespace BP.WF
                     string[] fls = this.HisNode.SFActiveFlows.Split(',');
                     foreach (string flowNo in fls)
                     {
-                        if (string.IsNullOrEmpty(flowNo) == true)
+                        if (DataType.IsNullOrEmpty(flowNo) == true)
                             continue;
 
                         //检查是否有发起限制子流程的条件.
@@ -6613,7 +6613,7 @@ namespace BP.WF
                         string msgOfSendText = msgOfSend.Clone() as string;
                         foreach (SendReturnObj item in this.HisMsgObjs)
                         {
-                            if (string.IsNullOrEmpty(item.MsgFlag))
+                            if (DataType.IsNullOrEmpty(item.MsgFlag))
                                 continue;
 
                             if (msgOfSend.Contains("@") == false)
@@ -6695,7 +6695,7 @@ namespace BP.WF
                     {
                         /*如果是BS系统*/
                         string pflowNo = BP.Sys.Glo.Request.QueryString["PFlowNo"];
-                        if (string.IsNullOrEmpty(pflowNo) == false)
+                        if (DataType.IsNullOrEmpty(pflowNo) == false)
                         {
                             string pWorkID = BP.Sys.Glo.Request.QueryString["PWorkID"];
                             string pNodeID = BP.Sys.Glo.Request.QueryString["PNodeID"];
@@ -6733,7 +6733,7 @@ namespace BP.WF
                     string[] emps = this.HisMsgObjs.VarAcceptersID.Split(',');
                     foreach (string emp in emps)
                     {
-                        if (string.IsNullOrEmpty(emp))
+                        if (DataType.IsNullOrEmpty(emp))
                             continue;
 
                         try
@@ -7029,11 +7029,11 @@ namespace BP.WF
             if (SystemConfig.IsBSsystem)
             {
                 string fk_nodeFrom = BP.Sys.Glo.Request.QueryString["FromNode"];
-                if (string.IsNullOrEmpty(fk_nodeFrom) == false)
+                if (DataType.IsNullOrEmpty(fk_nodeFrom) == false)
                 {
                     Node ndFrom = new Node(int.Parse(fk_nodeFrom));
                     string PWorkID = BP.Sys.Glo.Request.QueryString["PWorkID"];
-                    if (string.IsNullOrEmpty(PWorkID))
+                    if (DataType.IsNullOrEmpty(PWorkID))
                         PWorkID = BP.Sys.Glo.Request.QueryString["PWorkID"];
 
                     string pTitle = DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM  ND" + int.Parse(ndFrom.FK_Flow) + "01 WHERE OID=" + PWorkID, "");
@@ -7068,11 +7068,11 @@ namespace BP.WF
             #region 设置流程标题.
             if (this.title == null)
             {
-                if (this.HisFlow.TitleRole == "@OutPara" || string.IsNullOrEmpty(this.HisFlow.TitleRole) == true)
+                if (this.HisFlow.TitleRole == "@OutPara" || DataType.IsNullOrEmpty(this.HisFlow.TitleRole) == true)
                 {
                     /*如果是外部参数,*/
                     gwf.Title = DBAccess.RunSQLReturnString("SELECT Title FROM " + this.HisFlow.PTable + " WHERE OID=" + this.WorkID);
-                    if (string.IsNullOrEmpty(gwf.Title))
+                    if (DataType.IsNullOrEmpty(gwf.Title))
                         gwf.Title = this.Execer + "," + this.ExecerName + "在:" + DataType.CurrentDataTimeCN + "发起.";
                     //throw new Exception("您设置的流程标题生成规则为外部传来的参数，但是您岋料在创建空白工作时，流程标题值为空。");
                 }
@@ -7090,11 +7090,11 @@ namespace BP.WF
             this.rptGe.Title = gwf.Title;
             #endregion 设置流程标题.
 
-            if (string.IsNullOrEmpty(rptGe.BillNo))
+            if (DataType.IsNullOrEmpty(rptGe.BillNo))
             {
                 //处理单据编号.
                 string billNoTemplate = this.HisFlow.BillNoFormat.Clone() as string;
-                if (string.IsNullOrEmpty(billNoTemplate) == false)
+                if (DataType.IsNullOrEmpty(billNoTemplate) == false)
                 {
                     string billNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNoTemplate, this.WorkID, this.rptGe, this.HisFlow.PTable);
                     gwf.BillNo = billNo;
@@ -7184,7 +7184,7 @@ namespace BP.WF
 
             // 生成FlowNote
             string note = this.HisFlow.FlowNoteExp.Clone() as string;
-            if (string.IsNullOrEmpty(note) == false)
+            if (DataType.IsNullOrEmpty(note) == false)
                 note = BP.WF.Glo.DealExp(note, this.rptGe, null);
             this.rptGe.FlowNote = note;
             gwf.FlowNote = note;
@@ -7787,7 +7787,7 @@ namespace BP.WF
                     emps += "@" + toEmpsStr;
             }
 
-            //if (string.IsNullOrEmpty(emps) == true)
+            //if (DataType.IsNullOrEmpty(emps) == true)
             //{
             //    /*没有找到，就到数据库里在找.*/
             //    GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);

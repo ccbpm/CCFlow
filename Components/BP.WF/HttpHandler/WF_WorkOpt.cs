@@ -401,7 +401,7 @@ namespace BP.WF.HttpHandler
             string infos = "";
             foreach (string empStr in toEmps)
             {
-                if (string.IsNullOrEmpty(empStr) == true)
+                if (DataType.IsNullOrEmpty(empStr) == true)
                     continue;
 
                 if (isPinYin == true)
@@ -1356,12 +1356,12 @@ namespace BP.WF.HttpHandler
                 return "";
 
             //内容为空，取消保存，20170727取消此处限制
-            //if (string.IsNullOrEmpty(doc.Trim()))
+            //if (DataType.IsNullOrEmpty(doc.Trim()))
             //    return "";
 
             string val = string.Empty;
             FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
-            if (string.IsNullOrEmpty(wcDesc.FWCFields) == false)
+            if (DataType.IsNullOrEmpty(wcDesc.FWCFields) == false)
             {
                 //循环属性获取值
                 Attrs fwcAttrs = new Attrs(wcDesc.FWCFields);
@@ -2058,7 +2058,7 @@ namespace BP.WF.HttpHandler
                 string[] strs = emps.Split(';');
                 foreach (string str in strs)
                 {
-                    if (string.IsNullOrEmpty(str) == true)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
 
                     string[] emp = str.Split(',');

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Collections;
+using BP.DA;
+
 namespace BP.En
 {
 	/// <summary>
@@ -98,7 +100,7 @@ namespace BP.En
         public bool GetBoolenByKey(string key)
         {
             object obj = this[key];
-            if (obj == null || string.IsNullOrEmpty(obj.ToString())==true || obj.ToString()=="0")
+            if (obj == null || DataType.IsNullOrEmpty(obj.ToString())==true || obj.ToString()=="0")
                 return false;
             return true;
         }

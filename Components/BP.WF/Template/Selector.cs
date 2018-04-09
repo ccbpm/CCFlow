@@ -426,7 +426,7 @@ namespace BP.WF.Template
 
             //求部门.
             string sqlGroup = this.SelectorP1;
-            if (string.IsNullOrEmpty(sqlGroup) == false)
+            if (DataType.IsNullOrEmpty(sqlGroup) == false)
             {
                 sqlGroup = sqlGroup.Replace("@WebUser.No", WebUser.No);
                 sqlGroup = sqlGroup.Replace("@WebUser.Name", WebUser.Name);

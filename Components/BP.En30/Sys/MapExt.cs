@@ -654,7 +654,7 @@ namespace BP.Sys
         {
             get
             {
-                if (string.IsNullOrEmpty(this.Tag))
+                if (DataType.IsNullOrEmpty(this.Tag))
                     return this.DocOfSQLDeal;
 
                 string sql = this.Tag;

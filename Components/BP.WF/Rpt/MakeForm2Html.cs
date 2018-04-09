@@ -249,7 +249,7 @@ namespace BP.WF
                     imgSrc = "icon.png";
 
                     sb.Append("\t\n<div id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                    if (string.IsNullOrEmpty(img.LinkURL) == false)
+                    if (DataType.IsNullOrEmpty(img.LinkURL) == false)
                         sb.Append("\t\n<a href='" + img.LinkURL + "' target=" + img.LinkTarget + " ><img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' /></a>");
                     else
                         sb.Append("\t\n<img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
@@ -302,7 +302,7 @@ namespace BP.WF
                     {
                         #region 加载签章
                         //如果设置了部门与岗位的集合进行拆分
-                        if (!string.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
+                        if (!DataType.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
                         {
                             fk_dept = img.Tag0.Split('^')[0];
                             fk_station = img.Tag0.Split('^')[1];
@@ -320,7 +320,7 @@ namespace BP.WF
                                     fk_dept = BP.DA.DBAccess.RunSQLReturnString(sql);
                                 }
                                 //表单字段
-                                if (sealType == "2" && !string.IsNullOrEmpty(sealField))
+                                if (sealType == "2" && !DataType.IsNullOrEmpty(sealField))
                                 {
                                     //判断字段是否存在
                                     foreach (MapAttr attr in attrs)
@@ -350,7 +350,7 @@ namespace BP.WF
 
                         imgSrc = CCFlowAppPath + "DataUser/Seal/" + fk_dept + "_" + stationNo + ".png";
                         //设置主键
-                        string myPK = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                        string myPK = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                         myPK = myPK + "_" + en.GetValStrByKey("OID") + "_" + img.MyPK;
 
                         FrmEleDB imgDb = new FrmEleDB();
@@ -358,9 +358,9 @@ namespace BP.WF
                         queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
                         queryInfo.DoQuery();
                         //判断是否存在
-                        if (imgDb == null || string.IsNullOrEmpty(imgDb.FK_MapData))
+                        if (imgDb == null || DataType.IsNullOrEmpty(imgDb.FK_MapData))
                         {
-                            imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                            imgDb.FK_MapData = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                             imgDb.EleID = en.GetValStrByKey("OID");
                             imgDb.RefPKVal = img.MyPK;
                             imgDb.Tag1 = imgSrc;
@@ -721,7 +721,7 @@ namespace BP.WF
                     sb.Append("附件没有转化:" + athDB.FileName);
 
                     //string node = this.Request.QueryString["FK_Node"];
-                    //if (string.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
+                    //if (DataType.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
                     //{
                     //    node = en.GetValStrByKey("FK_Node");
                     //    if (node == "0" || node == "")
@@ -1390,7 +1390,7 @@ namespace BP.WF
                         fileNameFormat = workid.ToString();
                 }
 
-                if (string.IsNullOrEmpty(fileNameFormat) == true)
+                if (DataType.IsNullOrEmpty(fileNameFormat) == true)
                     fileNameFormat = workid.ToString();
 
                 fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);

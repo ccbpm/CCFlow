@@ -54,12 +54,12 @@ namespace BP.WF.Template
             DBAccess.RunSQL(ps);
 
             // 如果指定特定的人员处理。
-            if (string.IsNullOrEmpty(JumpToEmp) == false)
+            if (DataType.IsNullOrEmpty(JumpToEmp) == false)
             {
                 string[] emps = JumpToEmp.Split(',');
                 foreach (string emp in emps)
                 {
-                    if (string.IsNullOrEmpty(emp))
+                    if (DataType.IsNullOrEmpty(emp))
                         continue;
                     DataRow dr = dt.NewRow();
                     dr[0] = emp;
@@ -142,7 +142,7 @@ namespace BP.WF.Template
                     try
                     {
                         string empFild = town.HisNode.DeliveryParas;
-                        if (string.IsNullOrEmpty(empFild))
+                        if (DataType.IsNullOrEmpty(empFild))
                             empFild = " UserNo ";
 
                         ps = new Paras();
@@ -258,7 +258,7 @@ namespace BP.WF.Template
                 string[] nds = strs.Split(',');
                 foreach (string nd in nds)
                 {
-                    if (string.IsNullOrEmpty(nd))
+                    if (DataType.IsNullOrEmpty(nd))
                         continue;
 
                     if (DataType.IsNumStr(nd) == false)
@@ -315,7 +315,7 @@ namespace BP.WF.Template
                 {
                     foreach (string pnodeiD in nds)
                     {
-                        if (string.IsNullOrEmpty(pnodeiD))
+                        if (DataType.IsNullOrEmpty(pnodeiD))
                             continue;
 
                         Node nd = new Node(int.Parse(pnodeiD));
@@ -384,7 +384,7 @@ namespace BP.WF.Template
             {
                 // 检查接受人员规则,是否符合设计要求.
                 string specEmpFields = town.HisNode.DeliveryParas;
-                if (string.IsNullOrEmpty(specEmpFields))
+                if (DataType.IsNullOrEmpty(specEmpFields))
                     specEmpFields = "SysSendEmps";
 
                 if (this.currWn.rptGe.EnMap.Attrs.Contains(specEmpFields) == false)
@@ -400,7 +400,7 @@ namespace BP.WF.Template
                     string[] myemps1 = emps.Split(';');
                     foreach (string str in myemps1)
                     {
-                        if (string.IsNullOrEmpty(str))
+                        if (DataType.IsNullOrEmpty(str))
                             continue;
 
                         string[] ss = str.Split(',');
@@ -420,14 +420,14 @@ namespace BP.WF.Template
                 emps = emps.Replace("、", ",");
                 emps = emps.Replace("@", ",");
 
-                if (string.IsNullOrEmpty(emps))
+                if (DataType.IsNullOrEmpty(emps))
                     throw new Exception("@没有在字段[" + this.currWn.HisWork.EnMap.Attrs.GetAttrByKey(specEmpFields).Desc + "]中指定接受人，工作无法向下发送。");
 
                 // 把它加入接受人员列表中.
                 string[] myemps = emps.Split(',');
                 foreach (string s in myemps)
                 {
-                    if (string.IsNullOrEmpty(s))
+                    if (DataType.IsNullOrEmpty(s))
                         continue;
 
                     //if (BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(NO) AS NUM FROM Port_Emp WHERE NO='" + s + "' or name='"+s+"'", 0) == 0)
@@ -672,7 +672,7 @@ namespace BP.WF.Template
                 para = para.Replace("@", "");
                 para = para.Replace("@", "");
 
-                if (string.IsNullOrEmpty(para) == false)
+                if (DataType.IsNullOrEmpty(para) == false)
                 {
                     string[] strs = para.Split(',');
 
@@ -702,7 +702,7 @@ namespace BP.WF.Template
                         throw new Exception("@在找人接收人的时候错误@字段{" + para + "}不包含在rpt里，流程设计错误。");
 
                     empNo = this.currWn.rptGe.GetValStrByKey(para);
-                    if (string.IsNullOrEmpty(empNo))
+                    if (DataType.IsNullOrEmpty(empNo))
                         throw new Exception("@字段{" + para + "}不能为空，没有取出来处理人员。");
 
                     BP.Port.Emp em = new BP.Port.Emp(empNo);
@@ -1088,7 +1088,7 @@ namespace BP.WF.Template
                     string[] reWays = this.town.HisNode.DeliveryParas.Split('@');
                     foreach (string reWay in reWays)
                     {
-                        if (string.IsNullOrEmpty(reWay))
+                        if (DataType.IsNullOrEmpty(reWay))
                             continue;
                         string[] specItems = reWay.Split('=');
                         //配置规则错误
@@ -1104,7 +1104,7 @@ namespace BP.WF.Template
                                 string[] stations = specContent.Split(',');
                                 foreach (string station in stations)
                                 {
-                                    if (string.IsNullOrEmpty(station))
+                                    if (DataType.IsNullOrEmpty(station))
                                         continue;
 
                                     //获取岗位下的人员
@@ -1112,7 +1112,7 @@ namespace BP.WF.Template
                                     foreach (DataRow empRow in dt_Emps.Rows)
                                     {
                                         //排除为空编号
-                                        if (empRow[0] == null || string.IsNullOrEmpty(empRow[0].ToString()))
+                                        if (empRow[0] == null || DataType.IsNullOrEmpty(empRow[0].ToString()))
                                             continue;
 
                                         DataRow dr = re_dt.NewRow();
@@ -1126,7 +1126,7 @@ namespace BP.WF.Template
                                 foreach (string emp in emps)
                                 {
                                     //排除为空编号
-                                    if (string.IsNullOrEmpty(emp))
+                                    if (DataType.IsNullOrEmpty(emp))
                                         continue;
 
                                     DataRow dr = re_dt.NewRow();

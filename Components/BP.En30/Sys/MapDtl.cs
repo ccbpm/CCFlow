@@ -246,7 +246,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStrByKey(MapDtlAttr.RefPK);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return "RefPK";
                 return str;
             }
@@ -434,7 +434,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetParaString(MapDtlAttr.LinkLabel);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "详细";
                 return s;
             }
@@ -448,7 +448,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetParaString(MapDtlAttr.LinkUrl);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "http://ccport.org";
 
                 s = s.Replace("*", "@");
@@ -466,7 +466,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetParaString(MapDtlAttr.LinkTarget);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "_blank";
                 return s;
             }
@@ -483,7 +483,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetParaString(MapDtlAttr.SubThreadWorker);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "";
                 return s;
             }
@@ -500,7 +500,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetParaString(MapDtlAttr.SubThreadGroupMark);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "";
                 return s;
             }
@@ -1161,7 +1161,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapDtlAttr.FilterSQLExp);
-                if (string.IsNullOrEmpty(s) == true)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return "";
                 s = s.Replace("~", "'");
                 return s.Trim();

@@ -565,7 +565,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = this.GetRequestVal("FK_MapData");  //context.Request.QueryString["FK_MapData"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return "abc";
                 return str;
             }
@@ -1018,7 +1018,7 @@ namespace BP.WF.HttpHandler
             attr.KeyOfEn = this.KeyOfEn;
             attr.FK_MapData = this.FK_MapData;
 
-            if (string.IsNullOrEmpty(this.MyPK) == false)
+            if (DataType.IsNullOrEmpty(this.MyPK) == false)
             {
                 attr.MyPK = this.MyPK;
                 attr.RetrieveFromDBSources();
@@ -1330,7 +1330,7 @@ namespace BP.WF.HttpHandler
             attr.KeyOfEn = this.KeyOfEn;
             attr.FK_MapData = this.FK_MapData;
 
-            if (string.IsNullOrEmpty(this.MyPK) == false)
+            if (DataType.IsNullOrEmpty(this.MyPK) == false)
             {
                 attr.MyPK = this.MyPK;
                 attr.RetrieveFromDBSources();
@@ -1364,7 +1364,7 @@ namespace BP.WF.HttpHandler
             attr.KeyOfEn = this.KeyOfEn;
             attr.FK_MapData = this.FK_MapData;
 
-            if (string.IsNullOrEmpty(this.MyPK) == false)
+            if (DataType.IsNullOrEmpty(this.MyPK) == false)
             {
                 attr.MyPK = this.MyPK;
                 attr.RetrieveFromDBSources();
@@ -1479,7 +1479,7 @@ namespace BP.WF.HttpHandler
                 MapAttr attr = new MapAttr();
                 attr.KeyOfEn = this.KeyOfEn;
                 attr.FK_MapData = this.FK_MapData;
-                if (string.IsNullOrEmpty(this.MyPK) == false)
+                if (DataType.IsNullOrEmpty(this.MyPK) == false)
                 {
                     attr.MyPK = this.MyPK;
                     attr.RetrieveFromDBSources();
@@ -1573,7 +1573,7 @@ namespace BP.WF.HttpHandler
                 MapAttr attr = new MapAttr();
                 attr.KeyOfEn = this.KeyOfEn;
                 attr.FK_MapData = this.FK_MapData;
-                if (string.IsNullOrEmpty(this.MyPK) == false)
+                if (DataType.IsNullOrEmpty(this.MyPK) == false)
                 {
                     attr.MyPK = this.MyPK;
                     attr.RetrieveFromDBSources();
@@ -1663,7 +1663,7 @@ namespace BP.WF.HttpHandler
                 attr.UIBindKey = uiBindKey; //绑定的枚举或者外键.
                 attr.MyDataType = fType; //物理类型.
 
-                if (string.IsNullOrEmpty(this.MyPK) == false)
+                if (DataType.IsNullOrEmpty(this.MyPK) == false)
                 {
                     attr.MyPK = this.MyPK;
                     attr.RetrieveFromDBSources();

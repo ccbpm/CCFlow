@@ -412,7 +412,7 @@ namespace BP.WF.HttpHandler
                 
                 string isClearStr = this.GetRequestVal("IsClear") ;
                 bool isClear = false;
-                if (!string.IsNullOrEmpty(isClearStr) && isClearStr.ToString().ToLower() == "on")
+                if (!DataType.IsNullOrEmpty(isClearStr) && isClearStr.ToString().ToLower() == "on")
                 {
                     isClear = true;
                 }
@@ -426,7 +426,7 @@ namespace BP.WF.HttpHandler
             {
                 string isSetReadonlyStr =this.GetRequestVal("IsSetReadonly");
                 bool isSetReadonly = false;
-                if (!string.IsNullOrEmpty(isSetReadonlyStr) && isSetReadonlyStr.ToString().ToLower() == "on")
+                if (!DataType.IsNullOrEmpty(isSetReadonlyStr) && isSetReadonlyStr.ToString().ToLower() == "on")
                 {
                     isSetReadonly = true;
                 }

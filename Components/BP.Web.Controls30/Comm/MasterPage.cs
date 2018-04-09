@@ -1403,7 +1403,7 @@ namespace BP.Web
 
         protected void AlertHtmlMsg(string msg)
         {
-            if (string.IsNullOrEmpty(msg))
+            if (DataType.IsNullOrEmpty(msg))
                 return;
 
             msg = msg.Replace("@", "<br>@");
@@ -1920,7 +1920,7 @@ namespace BP.Web
         }
         protected void Alert(string mess)
         {
-            if (string.IsNullOrEmpty(mess))
+            if (DataType.IsNullOrEmpty(mess))
                 return;
 
             this.Alert(mess, false);
@@ -1931,7 +1931,7 @@ namespace BP.Web
         /// <param name="mess"></param>
         protected void Alert(string mess, bool isClent)
         {
-            if (string.IsNullOrEmpty(mess))
+            if (DataType.IsNullOrEmpty(mess))
                 return;
 
             //this.ResponseWriteRedMsg(mess);

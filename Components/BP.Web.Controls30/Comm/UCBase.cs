@@ -122,7 +122,7 @@ namespace BP.Web.UC
         }
         protected void Alert(string mess)
         {
-            if (string.IsNullOrEmpty(mess))
+            if (DataType.IsNullOrEmpty(mess))
                 return;
 
             this.Alert(mess, false);
@@ -133,7 +133,7 @@ namespace BP.Web.UC
         /// <param name="mess"></param>
         protected void Alert(string mess, bool isClent, bool goBack = false)
         {
-            if (string.IsNullOrEmpty(mess))
+            if (DataType.IsNullOrEmpty(mess))
                 return;
 
             //this.ResponseWriteRedMsg(mess);
@@ -363,7 +363,7 @@ namespace BP.Web.UC
 
             foreach (System.Web.UI.Control ctl in this.Controls)
             {
-                if (ctl == null || string.IsNullOrEmpty(ctl.ID))
+                if (ctl == null || DataType.IsNullOrEmpty(ctl.ID))
                     continue;
 
                 string ctlid = ctl.ID;
@@ -1984,7 +1984,7 @@ namespace BP.Web.UC
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_" + fieldName + "_" + en.GetValStringByKey("No");
                 cb.Text = en.GetValStringByKey("Name");
-                if (string.IsNullOrEmpty(selectVals) == false)
+                if (DataType.IsNullOrEmpty(selectVals) == false)
                     cb.Checked = selectVals.Contains("," + en.GetValStringByKey("No") + ",");
                 this.Add(cb);
             }
@@ -1998,7 +1998,7 @@ namespace BP.Web.UC
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_" + fieldName + "_" + dr["No"];
                 cb.Text = dr["Name"].ToString();
-                if (string.IsNullOrEmpty(selectVals) == false)
+                if (DataType.IsNullOrEmpty(selectVals) == false)
                     cb.Checked = selectVals.Contains("," + dr["No"] + ",");
                 this.Add(cb);
                 if (idx >= rowNum)
@@ -2032,7 +2032,7 @@ namespace BP.Web.UC
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_" + fieldName + "_" + se.IntKey;
                 cb.Text = se.Lab;
-                if (string.IsNullOrEmpty(selectVals) == false)
+                if (DataType.IsNullOrEmpty(selectVals) == false)
                     cb.Checked = selectVals.Contains("," + se.IntKey + ",");
                 this.Add(cb);
             }

@@ -69,7 +69,7 @@ namespace BP.WF.DTS
                 msg += "@" + sql;
                 //msg += "修复sql: UPDATE " + ndTable"  " ;
             }
-            if (string.IsNullOrEmpty(msg))
+            if (DataType.IsNullOrEmpty(msg))
                 return "@能检测到的数据正常.";
 
             BP.DA.Log.DefaultLogWriteLineInfo(msg);

@@ -118,7 +118,7 @@ namespace BP.WF
 
             Paras ps = new Paras();
             // 执行对报表的数据表WFState状态的更新,让它为runing的状态.
-            if (string.IsNullOrEmpty(title) == false)
+            if (DataType.IsNullOrEmpty(title) == false)
             {
                 ps = new Paras();
                 ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
@@ -208,7 +208,7 @@ namespace BP.WF
             string sql;
 
             /*不是授权状态*/
-            if (string.IsNullOrEmpty(fk_flow))
+            if (DataType.IsNullOrEmpty(fk_flow))
             {
                 ps.SQL = "SELECT * FROM WF_EmpWorks WHERE GuestNo=" + dbstr + "GuestNo AND FK_Emp='Guest' ORDER BY FK_Flow,ADT DESC ";
                 ps.Add("GuestNo", guestNo);
@@ -232,7 +232,7 @@ namespace BP.WF
             string sql;
             int state = (int)WFState.Runing;
 
-            if (string.IsNullOrEmpty(fk_flow))
+            if (DataType.IsNullOrEmpty(fk_flow))
                 sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND B.IsPass=1 AND A.GuestNo='" + guestNo + "' ";
             else
                 sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND B.IsPass=1  AND A.GuestNo='" + guestNo + "'";

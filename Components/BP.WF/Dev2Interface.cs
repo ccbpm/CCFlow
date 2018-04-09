@@ -400,7 +400,7 @@ namespace BP.WF
             string[] dtlSQLs = me.Tag1.Split('*');
             foreach (string sql in dtlSQLs)
             {
-                if (string.IsNullOrEmpty(sql))
+                if (DataType.IsNullOrEmpty(sql))
                     continue;
 
                 string[] tempStrs = sql.Split('=');
@@ -1044,11 +1044,11 @@ namespace BP.WF
 
             foreach (DataRow row in table.Rows)
             {
-                if (string.IsNullOrEmpty(row["ParentNo"].ToString()))
+                if (DataType.IsNullOrEmpty(row["ParentNo"].ToString()))
                 {
                     row["ParentNo"] = row["FK_FlowSort"];
                 }
-                if (string.IsNullOrEmpty(row["ICON"].ToString()))
+                if (DataType.IsNullOrEmpty(row["ICON"].ToString()))
                 {
                     row["ICON"] = "icon-4";
                 }
@@ -1307,7 +1307,7 @@ namespace BP.WF
         /// <returns>共享工作列表</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0)
         {
-            if (string.IsNullOrEmpty(userNo) == true)
+            if (DataType.IsNullOrEmpty(userNo) == true)
                 throw new Exception("err@登录信息丢失.");
 
             Paras ps = new Paras();
@@ -1502,7 +1502,7 @@ namespace BP.WF
             if (WebUser.IsAuthorize == false)
             {
                 /*不是授权状态*/
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                 {
                     if (BP.WF.Glo.IsEnableTaskPool == true)
                         ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow,ADT DESC ";
@@ -1529,7 +1529,7 @@ namespace BP.WF
             switch (emp.HisAuthorWay)
             {
                 case Port.AuthorWay.All:
-                    if (string.IsNullOrEmpty(fk_flow))
+                    if (DataType.IsNullOrEmpty(fk_flow))
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                             ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0 ORDER BY FK_Flow,ADT DESC ";
@@ -1550,7 +1550,7 @@ namespace BP.WF
                     }
                     break;
                 case Port.AuthorWay.SpecFlows:
-                    if (string.IsNullOrEmpty(fk_flow))
+                    if (DataType.IsNullOrEmpty(fk_flow))
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                             sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0 ORDER BY FK_Flow,ADT DESC ";
@@ -1592,7 +1592,7 @@ namespace BP.WF
             if (WebUser.IsAuthorize == false)
             {
                 /*不是授权状态*/
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                 {
                     if (BP.WF.Glo.IsEnableTaskPool == true)
                         ps.SQL = "SELECT * FROM WF_EmpWorks WHERE WFState=" + dbstr + "WFState AND FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0   ORDER BY FK_Flow,ADT DESC ";
@@ -1622,7 +1622,7 @@ namespace BP.WF
             switch (emp.HisAuthorWay)
             {
                 case Port.AuthorWay.All:
-                    if (string.IsNullOrEmpty(fk_flow))
+                    if (DataType.IsNullOrEmpty(fk_flow))
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                             ps.SQL = "SELECT * FROM WF_EmpWorks WHERE WFState=" + dbstr + "WFState AND FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0  ORDER BY FK_Flow,ADT DESC ";
@@ -1646,7 +1646,7 @@ namespace BP.WF
                     }
                     break;
                 case Port.AuthorWay.SpecFlows:
-                    if (string.IsNullOrEmpty(fk_flow))
+                    if (DataType.IsNullOrEmpty(fk_flow))
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                             sql = "SELECT * FROM WF_EmpWorks WHERE WFState=" + dbstr + "WFState AND FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0   ORDER BY FK_Flow,ADT DESC ";
@@ -1998,16 +1998,16 @@ namespace BP.WF
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            if (string.IsNullOrEmpty(fk_flow))
+            if (DataType.IsNullOrEmpty(fk_flow))
             {
-                if (string.IsNullOrEmpty(title))
+                if (DataType.IsNullOrEmpty(title))
                     ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
                 else
                     ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
             }
             else
             {
-                if (string.IsNullOrEmpty(title))
+                if (DataType.IsNullOrEmpty(title))
                     ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
                 else
                     ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
@@ -2240,14 +2240,14 @@ namespace BP.WF
             if (WebUser.IsAuthorize)
             {
                 WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE  A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND A.FK_Flow IN " + emp.AuthorFlows;
                 else
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE  A.FK_Flow='" + fk_flow + "' AND A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND  B.IsPass=1 AND A.FK_Flow IN " + emp.AuthorFlows;
             }
             else
             {
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE  A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1   ";
                 else
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 ";
@@ -2277,14 +2277,14 @@ namespace BP.WF
             if (WebUser.IsAuthorize)
             {
                 WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE  A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND A.FK_Flow IN " + emp.AuthorFlows;
                 else
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND  B.IsPass=1 AND A.FK_Flow IN " + emp.AuthorFlows;
             }
             else
             {
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE  A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1   ";
                 else
                     sql = "SELECT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WFState=" + state + " AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 ";
@@ -2638,7 +2638,7 @@ namespace BP.WF
             if (WebUser.IsAuthorize)
             {
                 WF.Port.WFEmp emp = new Port.WFEmp(userNo);
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                 {
                     if (isMyStarter == true)
                     {
@@ -2671,7 +2671,7 @@ namespace BP.WF
             }
             else
             {
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                 {
                     if (isMyStarter == true)
                     {
@@ -2806,16 +2806,16 @@ namespace BP.WF
         {
             string sql;
             int state = (int)WFState.Runing;
-            if (string.IsNullOrEmpty(fk_flow))
+            if (DataType.IsNullOrEmpty(fk_flow))
             {
-                if (string.IsNullOrEmpty(title))
+                if (DataType.IsNullOrEmpty(title))
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) and A.FK_Flow!='010'";
                 else
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) and A.FK_Flow!='010' and A.Title Like '%" + title + "%'";
             }
             else
             {
-                if (string.IsNullOrEmpty(title))
+                if (DataType.IsNullOrEmpty(title))
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 )";
                 else
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) and A.Title Like '%" + title + "%' ";
@@ -2837,14 +2837,14 @@ namespace BP.WF
             if (WebUser.IsAuthorize)
             {
                 WF.Port.WFEmp emp = new Port.WFEmp(userNo);
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND B.IsPass=1 AND A.FK_Flow IN " + emp.AuthorFlows;
                 else
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND B.IsPass=1 AND A.FK_Flow IN " + emp.AuthorFlows;
             }
             else
             {
-                if (string.IsNullOrEmpty(fk_flow))
+                if (DataType.IsNullOrEmpty(fk_flow))
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND B.IsPass=1 ";
                 else
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND B.IsPass=1 ";
@@ -3189,7 +3189,7 @@ namespace BP.WF
                 ps.SQL = "SELECT SID FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
                 ps.Add("No", userNo);
                 string sid = BP.DA.DBAccess.RunSQLReturnString(ps);
-                if (string.IsNullOrEmpty(sid) == true)
+                if (DataType.IsNullOrEmpty(sid) == true)
                 {
                     try
                     {
@@ -3230,9 +3230,9 @@ namespace BP.WF
         {
             return true;
 
-            if (string.IsNullOrEmpty(userNo))
+            if (DataType.IsNullOrEmpty(userNo))
                 return false;
-            if (string.IsNullOrEmpty(SID))
+            if (DataType.IsNullOrEmpty(SID))
                 return false;
 
             Paras ps = new Paras();
@@ -3325,11 +3325,11 @@ namespace BP.WF
         public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
             string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras = null)
         {
-            if (string.IsNullOrEmpty(mailAddress))
+            if (DataType.IsNullOrEmpty(mailAddress))
                 return;
 
             SMS sms = new SMS();
-            if (string.IsNullOrEmpty(msgPK) == false)
+            if (DataType.IsNullOrEmpty(msgPK) == false)
             {
                 /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
                 if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
@@ -3383,11 +3383,11 @@ namespace BP.WF
         public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
             string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null)
         {
-            //if (string.IsNullOrEmpty(tel))
+            //if (DataType.IsNullOrEmpty(tel))
             //    return;
 
             SMS sms = new SMS();
-            if (string.IsNullOrEmpty(msgPK) == false)
+            if (DataType.IsNullOrEmpty(msgPK) == false)
             {
                 /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
                 if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
@@ -3471,10 +3471,10 @@ namespace BP.WF
             string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null)
         {
             if (at == ActionType.CallChildenFlow)
-                if (string.IsNullOrEmpty(cFlowInfo) == true)
+                if (DataType.IsNullOrEmpty(cFlowInfo) == true)
                     throw new Exception("@必须输入信息cFlowInfo信息,在 CallChildenFlow 模式下.");
 
-            if (string.IsNullOrEmpty(optionMsg))
+            if (DataType.IsNullOrEmpty(optionMsg))
                 optionMsg = Track.GetActionTypeT(at);
 
             Track t = new Track();
@@ -4011,7 +4011,7 @@ namespace BP.WF
             if (parentWorkID == 0)
                 throw new Exception("@设置的父流程的流程编号为 0 ，这是非法的。");
 
-            if (string.IsNullOrEmpty(parentEmpNo))
+            if (DataType.IsNullOrEmpty(parentEmpNo))
                 parentEmpNo = WebUser.No;
 
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -4330,7 +4330,7 @@ namespace BP.WF
             rpt.RetrieveFromDBSources();
 
             string s = wf.DoFlowOver(ActionType.FlowOverByCoercion, msg, currND, rpt);
-            if (string.IsNullOrEmpty(s))
+            if (DataType.IsNullOrEmpty(s))
                 s = "流程已经成功结束.";
             return s;
         }
@@ -4897,7 +4897,7 @@ namespace BP.WF
             string[] strs = paras.Split('@');
             foreach (string item in strs)
             {
-                if (string.IsNullOrEmpty(item))
+                if (DataType.IsNullOrEmpty(item))
                     continue;
                 //GroupMark=xxxx
                 string[] mystr = item.Split('=');
@@ -5038,7 +5038,7 @@ namespace BP.WF
             int idx = 0, cidx = 0;
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
 
                 if (str.Contains("`") == false)
@@ -5165,7 +5165,7 @@ namespace BP.WF
             int idx = 0, cidx = 0;
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
 
                 if (str.Contains(";") == false)
@@ -5417,11 +5417,11 @@ namespace BP.WF
             emp.AuthorWay = AuthorWay;
             emp.AuthorDate = BP.DA.DataType.CurrentData;
 
-            if (!string.IsNullOrEmpty(AuthorFlows))
+            if (!DataType.IsNullOrEmpty(AuthorFlows))
                 emp.AuthorFlows = AuthorFlows;
-            if (!string.IsNullOrEmpty(AuthorDate))
+            if (!DataType.IsNullOrEmpty(AuthorDate))
                 emp.AuthorFlows = AuthorDate;
-            if (!string.IsNullOrEmpty(AuthorToDate))
+            if (!DataType.IsNullOrEmpty(AuthorToDate))
                 emp.AuthorToDate = AuthorToDate;
             int i = emp.Save();
 
@@ -5466,7 +5466,7 @@ namespace BP.WF
                 throw new Exception("@ 非法用户，请执行登录后再试。");
 
             WF.Port.WFEmp emp = new Port.WFEmp(empNo);
-            if (!string.IsNullOrEmpty(emp.Author) && emp.Author == WebUser.No && emp.AuthorIsOK == true)
+            if (!DataType.IsNullOrEmpty(emp.Author) && emp.Author == WebUser.No && emp.AuthorIsOK == true)
             {
                 string sql = "";
                 string wfSql = "  WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + "  OR WFState=" + (int)WFState.AskForReplay + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + " OR WFState=" + (int)WFState.Fix;
@@ -5624,7 +5624,7 @@ namespace BP.WF
                 foreach (string key in htWork.Keys)
                     paras += "@" + key + "=" + htWork[key].ToString();
 
-                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
+                if (DataType.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                 {
                     string dbstr = SystemConfig.AppCenterDBVarStr;
                     Paras ps = new Paras();
@@ -5688,7 +5688,7 @@ namespace BP.WF
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
 
-            if (string.IsNullOrEmpty(starter))
+            if (DataType.IsNullOrEmpty(starter))
                 starter = WebUser.No;
 
             Flow fl = new Flow(flowNo);
@@ -5760,7 +5760,7 @@ namespace BP.WF
 
             Paras ps = new Paras();
             // 执行对报表的数据表WFState状态的更新,让它为runing的状态.
-            if (string.IsNullOrEmpty(title) == false)
+            if (DataType.IsNullOrEmpty(title) == false)
             {
                 ps = new Paras();
                 ps.SQL = "UPDATE " + fl.PTable + " SET PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID,WFState=" + dbstr + "WFState,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
@@ -5812,7 +5812,7 @@ namespace BP.WF
             //if (fl.DraftRole == DraftRole.SaveToDraftList)
             //    gwf.WFState = WFState.Draft;
 
-            if (string.IsNullOrEmpty(title))
+            if (DataType.IsNullOrEmpty(title))
                 gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
             else
                 gwf.Title = title;
@@ -5884,7 +5884,7 @@ namespace BP.WF
             // 给全局变量赋值.
             BP.WF.Glo.SendHTOfTemp = htWork;
 
-            if (string.IsNullOrEmpty(flowStarter))
+            if (DataType.IsNullOrEmpty(flowStarter))
                 flowStarter = WebUser.No;
 
             Flow fl = new Flow(flowNo);
@@ -5986,7 +5986,7 @@ namespace BP.WF
                 gwf.WFState = WFState.Runing;
             }
 
-            if (string.IsNullOrEmpty(title))
+            if (DataType.IsNullOrEmpty(title))
                 gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
             else
                 gwf.Title = title;
@@ -6087,7 +6087,7 @@ namespace BP.WF
                 foreach (string key in htWork.Keys)
                     paras += "@" + key + "=" + htWork[key].ToString();
 
-                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
+                if (DataType.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                 {
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
@@ -6250,7 +6250,7 @@ namespace BP.WF
                     }
                 }
 
-                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
+                if (DataType.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                 {
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
@@ -6447,7 +6447,7 @@ namespace BP.WF
                 string[] emps = toEmps.Split(';');
                 foreach (string empStr in emps)
                 {
-                    if (string.IsNullOrEmpty(empStr) == true || empStr.Contains(",") == false)
+                    if (DataType.IsNullOrEmpty(empStr) == true || empStr.Contains(",") == false)
                         continue;
 
                     string[] strs = empStr.Split(',');
@@ -6518,7 +6518,7 @@ namespace BP.WF
                 string[] depts = toDepts.Split(',');
                 foreach (string deptNo in depts)
                 {
-                    if (string.IsNullOrEmpty(deptNo) == true)
+                    if (DataType.IsNullOrEmpty(deptNo) == true)
                         continue;
 
                     sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + deptNo + "'";
@@ -6593,7 +6593,7 @@ namespace BP.WF
                 string[] stas = toStations.Split(',');
                 foreach (string staNo in stas)
                 {
-                    if (string.IsNullOrEmpty(staNo) == true)
+                    if (DataType.IsNullOrEmpty(staNo) == true)
                         continue;
 
                     sql = "SELECT No,Name, a.FK_Dept FROM Port_Emp a, " + Glo.EmpStation + " B  WHERE a.No=B.FK_Emp AND B.FK_Station='" + staNo + "'";
@@ -6670,7 +6670,7 @@ namespace BP.WF
 
                 foreach (string group in groups)
                 {
-                    if (string.IsNullOrEmpty(group) == true)
+                    if (DataType.IsNullOrEmpty(group) == true)
                         continue;
 
                     //解决分组下的岗位人员.
@@ -6784,7 +6784,7 @@ namespace BP.WF
         /// <param name="mypk"></param>
         public static void Node_CC_SetRead(string mypk)
         {
-            if (string.IsNullOrEmpty(mypk))
+            if (DataType.IsNullOrEmpty(mypk))
                 return;
 
             Paras ps = new Paras();
@@ -7138,7 +7138,7 @@ namespace BP.WF
                     foreach (string key in htWork.Keys)
                         paras += "@" + key + "=" + htWork[key].ToString();
 
-                    if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
+                    if (DataType.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                     {
                         string dbstr = SystemConfig.AppCenterDBVarStr;
                         Paras ps = new Paras();
@@ -7535,7 +7535,7 @@ namespace BP.WF
             string sql = "";
             foreach (string emp in strs)
             {
-                if (string.IsNullOrEmpty(emp))
+                if (DataType.IsNullOrEmpty(emp))
                     continue;
 
                 if (isPinYin == true)
@@ -7813,7 +7813,7 @@ namespace BP.WF
             string[] emps = toEmps.Split(',');
             foreach (string empNo in emps)
             {
-                if (string.IsNullOrEmpty(empNo) == true)
+                if (DataType.IsNullOrEmpty(empNo) == true)
                     continue;
 
                 //人员实体.
@@ -8264,7 +8264,7 @@ namespace BP.WF
                     throw new Exception("@没有找到它的上一步工作。");
 
                 string paras = BP.WF.Dev2Interface.GetFlowParas(fromNodeID, workid);
-                if (string.IsNullOrEmpty(paras) || paras.Contains("@" + BP.WF.WorkSysFieldAttr.SysIsReadReceipts + "=") == false)
+                if (DataType.IsNullOrEmpty(paras) || paras.Contains("@" + BP.WF.WorkSysFieldAttr.SysIsReadReceipts + "=") == false)
                     throw new Exception("@流程设计错误:在当前节点上个您设置了按开发者参数决定是否回执，但是没有找到该参数。");
 
                 // 开发者参数.

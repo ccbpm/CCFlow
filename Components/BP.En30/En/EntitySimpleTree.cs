@@ -108,7 +108,7 @@ namespace BP.En
         /// <param name="no">编号</param>
         public EntitySimpleTree(string no)
         {
-            if (string.IsNullOrEmpty(no))
+            if (DataType.IsNullOrEmpty(no))
                 throw new Exception(this.EnDesc + "@对表[" + this.EnDesc + "]进行查询前必须指定编号。");
 
             this.No = no;

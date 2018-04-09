@@ -277,7 +277,7 @@ namespace BP.WF.HttpHandler
             foreach (string ctrl in ctrls)
             {
                 //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示
-                if (string.IsNullOrWhiteSpace(ctrl) || !string.IsNullOrEmpty(context.Request.QueryString[ctrl]))
+                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(context.Request.QueryString[ctrl]))
                     continue;
 
                 ar = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
@@ -608,7 +608,7 @@ namespace BP.WF.HttpHandler
             #region Url传参条件
             foreach (Attr attr in attrs)
             {
-                if (string.IsNullOrEmpty(context.Request.QueryString[attr.Key]))
+                if (DataType.IsNullOrEmpty(context.Request.QueryString[attr.Key]))
                     continue;
 
                 qo.addAnd();
@@ -713,7 +713,7 @@ namespace BP.WF.HttpHandler
                             AtPara ap = new AtPara(ur.MVals);
                             string instr = ap.GetValStrByKey(attr.Key);
 
-                            if (string.IsNullOrEmpty(instr))
+                            if (DataType.IsNullOrEmpty(instr))
                             {
                                 if (attr.Key == "FK_Dept" || attr.Key == "FK_Unit")
                                 {
@@ -778,7 +778,7 @@ namespace BP.WF.HttpHandler
                 string dtFrom = ur.GetValStringByKey(UserRegeditAttr.DTFrom).Trim();
                 string dtTo = ur.GetValStringByKey(UserRegeditAttr.DTTo).Trim();
 
-                if (string.IsNullOrEmpty(dtFrom) == true)
+                if (DataType.IsNullOrEmpty(dtFrom) == true)
                 {
                     if (md.RptDTSearchWay == DTSearchWay.ByDate)
                         dtFrom = "1900-01-01";
@@ -786,7 +786,7 @@ namespace BP.WF.HttpHandler
                         dtFrom = "1900-01-01 00:00";
                 }
 
-                if (string.IsNullOrEmpty(dtTo) == true)
+                if (DataType.IsNullOrEmpty(dtTo) == true)
                 {
                     if (md.RptDTSearchWay == DTSearchWay.ByDate)
                         dtTo = "2999-01-01";

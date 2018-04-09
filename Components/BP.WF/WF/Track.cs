@@ -673,7 +673,7 @@ namespace BP.WF
             sql += ")";
 
             //如果这里是空的，就认为它是，从系统里面取出。
-            if (string.IsNullOrEmpty(this.ActionTypeText))
+            if (DataType.IsNullOrEmpty(this.ActionTypeText))
                 this.ActionTypeText = Track.GetActionTypeT(this.HisActionType);
 
             if (mypk == 0)

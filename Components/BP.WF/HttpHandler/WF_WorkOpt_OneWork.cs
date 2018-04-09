@@ -55,7 +55,7 @@ namespace BP.WF.HttpHandler
                 if (at == ActionType.CallChildenFlow)
                 {
                     //被调用父流程吊起。
-                    if (string.IsNullOrEmpty(tag) == false)
+                    if (DataType.IsNullOrEmpty(tag) == false)
                     {
                         AtPara ap = new AtPara(tag);
                         GenerWorkFlow mygwf = new GenerWorkFlow();
@@ -74,7 +74,7 @@ namespace BP.WF.HttpHandler
 
                 if (at == ActionType.StartChildenFlow)
                 {
-                    if (string.IsNullOrEmpty(tag) == false)
+                    if (DataType.IsNullOrEmpty(tag) == false)
                     {
                         if (tag.Contains("Sub"))
                             tag = tag.Replace("Sub", "C");

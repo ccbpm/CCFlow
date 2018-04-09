@@ -104,7 +104,7 @@ namespace BP.WF.Template
             get
             {
                 string s= this.GetValStringByKey(HungUpAttr.Title);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     s = "来自@Rec的挂起信息.";
                 return s;
             }

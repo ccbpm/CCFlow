@@ -1057,7 +1057,7 @@ namespace BP.En
 						bool isNeedAddAnd = false;
 						foreach (string pk in pks)
 						{
-							if (string.IsNullOrEmpty(pk))
+							if (DataType.IsNullOrEmpty(pk))
 								continue;
 
 							if (isNeedAddAnd == true)
@@ -1454,7 +1454,7 @@ namespace BP.En
 				try
 				{
 					string atParaStr = this.GetValStringByKey("AtPara");
-					if (string.IsNullOrEmpty(atParaStr))
+					if (DataType.IsNullOrEmpty(atParaStr))
 					{
 						/*没有发现数据，就执行初始化.*/
 						this.InitParaFields();
@@ -1503,7 +1503,7 @@ namespace BP.En
 		public string GetParaString(string key, string isNullAsVal)
 		{
 			string str = atPara.GetValStrByKey(key);
-			if (string.IsNullOrEmpty(str))
+			if (DataType.IsNullOrEmpty(str))
 				return isNullAsVal;
 			return str;
 		}

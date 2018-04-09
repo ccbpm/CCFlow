@@ -186,7 +186,7 @@ namespace BP.WF.Template
             get
             {
                 string s= this.GetValStringByKey(CCListAttr.CCToName);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     s=this.CCTo;
                 return s;
             }
@@ -204,7 +204,7 @@ namespace BP.WF.Template
             get
             {
                 string s = this.GetValStringByKey(CCListAttr.CheckNote);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "无";
                 return s;
             }
@@ -221,7 +221,7 @@ namespace BP.WF.Template
             get
             {
                 string s = this.GetValStringByKey(CCListAttr.CheckNote);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "无";
                 return DataType.ParseText2Html(s);
             }

@@ -162,7 +162,7 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 string uiBindKey = dr["UIBindKey"].ToString();
-                if (string.IsNullOrEmpty(uiBindKey) == true)
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
                 {
                     string myPK = dr["MyPK"].ToString();
                     /*如果是空的*/
@@ -334,7 +334,7 @@ namespace BP.WF.HttpHandler
                 em.Insert();
             }
             string json = em.StartFlows;
-            if (string.IsNullOrEmpty(json) == false)
+            if (DataType.IsNullOrEmpty(json) == false)
                 return json;
 
             //获得当前人员的部门,根据部门获得该人员的组织集合.

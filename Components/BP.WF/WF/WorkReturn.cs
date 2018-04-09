@@ -666,7 +666,7 @@ namespace BP.WF
                     info += "(" + toEmp + "," + toEmpName + ")";
                 }
 
-                if (string.IsNullOrEmpty(toEmp) == true)
+                if (DataType.IsNullOrEmpty(toEmp) == true)
                     throw new Exception("@在退回时出现错误，没有找到分流节点的发送人。");
 
                 // 插入一条数据, 行程一个工作人员记录,这个记录就是子线程的延长点. 给合流点上的接受人设置待办.

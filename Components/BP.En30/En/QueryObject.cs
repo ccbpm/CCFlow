@@ -1036,13 +1036,13 @@ namespace BP.En
             int pageNum = 0;
             
             //如果没有加入排序字段，使用主键
-            if (string.IsNullOrEmpty(this._orderBy))
+            if (DataType.IsNullOrEmpty(this._orderBy))
             {
                 string isDescStr = "";
                 if (isDesc)
                     isDescStr = " DESC ";
 
-                if (string.IsNullOrEmpty(orderBy)) 
+                if (DataType.IsNullOrEmpty(orderBy)) 
                     orderBy = pk;
 
                 this._orderBy =  attr2Field(orderBy) + isDescStr;

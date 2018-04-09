@@ -94,7 +94,7 @@ namespace BP.Sys
             get
             {
                 string s= this.GetValStrByKey(MapFrameAttr.URL);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                     return "http://ccflow.org";
                 return s;
             }

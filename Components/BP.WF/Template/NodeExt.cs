@@ -1331,7 +1331,7 @@ namespace BP.WF.Template
             //    case OutTimeDeal.AutoShiftToSpecUser:
             //    case OutTimeDeal.RunSQL:
             //    case OutTimeDeal.SendMsgToSpecUser:
-            //        if (string.IsNullOrEmpty(doOutTime) == false)
+            //        if (DataType.IsNullOrEmpty(doOutTime) == false)
             //            throw new Exception("@在考核逾期处理方式上，您选择的是:" + this.HisOutTimeDeal + " ,但是您没有为该规则设置内容。");
             //        break;
             //    default:

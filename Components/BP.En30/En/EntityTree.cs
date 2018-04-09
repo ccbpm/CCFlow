@@ -195,7 +195,7 @@ namespace BP.En
         /// <param name="no">编号</param>
         public EntityTree(string no)
         {
-            if (string.IsNullOrEmpty(no))
+            if (DataType.IsNullOrEmpty(no))
                 throw new Exception(this.EnDesc + "@对表[" + this.EnDesc + "]进行查询前必须指定编号。");
 
             this.No = no;
@@ -226,7 +226,7 @@ namespace BP.En
                 }
             }
 
-            if (string.IsNullOrEmpty(this.No))
+            if (DataType.IsNullOrEmpty(this.No))
                 this.No = this.GenerNewNoByKey("No");
             return base.beforeInsert();
         }

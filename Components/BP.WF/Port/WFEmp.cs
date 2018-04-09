@@ -296,7 +296,7 @@ namespace BP.WF.Port
             set
             {
                 //授权流程为空时的bug  解决
-                if (!string.IsNullOrEmpty(value))
+                if (!DataType.IsNullOrEmpty(value))
                 {
                     SetValByKey(WFEmpAttr.AuthorFlows, value.Substring(1));
                 }

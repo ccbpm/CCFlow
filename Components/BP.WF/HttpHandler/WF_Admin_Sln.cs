@@ -144,7 +144,7 @@ namespace BP.WF.HttpHandler
                 string[] strs = formNos.Split(',');
                 foreach (string s in strs)
                 {
-                    if (string.IsNullOrEmpty(s))
+                    if (DataType.IsNullOrEmpty(s))
                         continue;
                     if (fns.Contains(FrmNodeAttr.FK_Frm, s))
                         continue;

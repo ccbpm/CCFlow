@@ -1076,7 +1076,7 @@ namespace BP.WF.HttpHandler
                         || rm.RefMethodType == RefMethodType.RightFrameOpen)
                     {
                         string url = rm.Do(null) as string;
-                        if (string.IsNullOrEmpty(url))
+                        if (DataType.IsNullOrEmpty(url))
                         {
                             infos += "err@应该返回的url.";
                             break;
@@ -1145,7 +1145,7 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 string uiBindKey = dr["UIBindKey"].ToString();
-                if (string.IsNullOrEmpty(uiBindKey) == true)
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
                 {
                     string myPK = dr["MyPK"].ToString();
                     /*如果是空的*/
@@ -1253,7 +1253,7 @@ namespace BP.WF.HttpHandler
                 if (UIIsEnable == "0")
                     continue;
 
-                if (string.IsNullOrEmpty(uiBindKey) == true)
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
                 {
                     string myPK = dr["MyPK"].ToString();
                     /*如果是空的*/
@@ -1538,7 +1538,7 @@ namespace BP.WF.HttpHandler
             string[] pks = pk.Split(',');
             foreach (string mypk in pks)
             {
-                if (string.IsNullOrEmpty(mypk) == true)
+                if (DataType.IsNullOrEmpty(mypk) == true)
                     continue;
 
                 en.PKVal = mypk;

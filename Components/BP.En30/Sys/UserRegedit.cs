@@ -188,7 +188,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStringByKey(UserRegeditAttr.DTFrom);
-                if (string.IsNullOrEmpty(s) || 1 == 1)
+                if (DataType.IsNullOrEmpty(s) || 1 == 1)
                 {
                     DateTime dt = DateTime.Now.AddDays(-14);
                     return dt.ToString(DataType.SysDataFormat);
@@ -208,7 +208,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStringByKey(UserRegeditAttr.DTTo);
-                if (string.IsNullOrEmpty(s) || 1 == 1)
+                if (DataType.IsNullOrEmpty(s) || 1 == 1)
                 {
                     DateTime dt = DateTime.Now;
                     return dt.ToString(DataType.SysDataFormat);
@@ -230,7 +230,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.DTFrom);
                 //string s = this.GetValStringByKey(UserRegeditAttr.DTFrom);
-                //if (string.IsNullOrEmpty(s) || 1==1)
+                //if (DataType.IsNullOrEmpty(s) || 1==1)
                 //{
                 //    DateTime dt = DateTime.Now.AddDays(-14);
                 //    return dt.ToString(DataType.SysDataFormat);
@@ -251,7 +251,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.DTTo);
                 //string s = this.GetValStringByKey(UserRegeditAttr.DTTo);
-                //if (string.IsNullOrEmpty(s) || 1 == 1 )
+                //if (DataType.IsNullOrEmpty(s) || 1 == 1 )
                 //{
                 //    DateTime dt = DateTime.Now;
                 //    return dt.ToString(DataType.SysDataFormat);
@@ -268,7 +268,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStringByKey(UserRegeditAttr.DTFrom);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                 {
                     DateTime dt = DateTime.Now.AddDays(-14);
                     return dt.ToString(DataType.SysDataTimeFormat);
@@ -288,7 +288,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStringByKey(UserRegeditAttr.DTTo);
-                if (string.IsNullOrEmpty(s))
+                if (DataType.IsNullOrEmpty(s))
                 {
                     DateTime dt = DateTime.Now;
                     return dt.ToString(DataType.SysDataTimeFormat);

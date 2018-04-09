@@ -246,7 +246,7 @@ namespace BP.Sys.FrmUI
             get
             {
                 string str = this.GetValStringByKey(FrmAttachmentAttr.Name);
-                if (string.IsNullOrEmpty(str) == true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     str = "未命名";
                 return str;
             }
@@ -919,7 +919,7 @@ namespace BP.Sys.FrmUI
             if (this.FK_Node == 0)
             {
                 //适应设计器新的规则 by dgq 
-                if (!string.IsNullOrEmpty(this.NoOfObj) && this.NoOfObj.Contains(this.FK_MapData))
+                if (!DataType.IsNullOrEmpty(this.NoOfObj) && this.NoOfObj.Contains(this.FK_MapData))
                     this.MyPK = this.NoOfObj;
                 else
                     this.MyPK = this.FK_MapData + "_" + this.NoOfObj;

@@ -134,7 +134,7 @@ namespace BP.WF
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
 
                     // @杜.
-                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.Name + ";") == false)
                     {
                         gwf.TodoEmps += BP.Web.WebUser.No+","+BP.Web.WebUser.Name;
                         gwf.Update();

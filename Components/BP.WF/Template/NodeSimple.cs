@@ -145,7 +145,6 @@ namespace BP.WF.Template
         public NodeSimples(string fk_flow)
         {
             this.Retrieve(NodeAttr.FK_Flow, fk_flow, NodeAttr.Step);
-            return;
         }
         #endregion
 
@@ -156,20 +155,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<Node> ToJavaList()
+        public System.Collections.Generic.IList<NodeSimple> ToJavaList()
         {
-            return (System.Collections.Generic.IList<Node>)this;
+            return (System.Collections.Generic.IList<NodeSimple>)this;
         }
         /// <summary>
         /// 转化成list 为了翻译成java的需要
         /// </summary>
         /// <returns>List</returns>
-        public List<BP.WF.Node> Tolist()
+        public List<BP.WF.Template.NodeSimple> Tolist()
         {
-            List<BP.WF.Node> list = new List<BP.WF.Node>();
+            List<BP.WF.Template.NodeSimple> list = new List<BP.WF.Template.NodeSimple>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((BP.WF.Node)this[i]);
+                list.Add((BP.WF.Template.NodeSimple)this[i]);
             }
             return list;
         }

@@ -6099,9 +6099,6 @@ namespace BP.WF
                 /* 如果是协作*/
                 if (this.DealTeamUpNode() == true)
                 {
-                    //if (this._transferCustom != null)
-                    //    _transferCustom.Delete();
-
                     /*
                      * 1. 判断是否传递过来到达节点，到达人员信息，如果传递过来，就可能是主持人在会签之后执行的发送.
                      * 2. 会签之后执行的发送，就要把到达节点，到达人员存储到数据表里.

@@ -1536,10 +1536,20 @@ namespace BP.WF.HttpHandler
                     return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。"+ex.Message;
                 }
 
-                //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示
+                //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示.
                 if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && ex.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
                 {
                     return "err@" + ex.Message.Replace("@@", "@").Replace("@", "<BR>@");
+                }
+
+                //防止发送失败丢失接受人，导致不能出现下拉方向选择框. @杜.
+                if (this.HisGenerWorkFlow != null)
+                {
+                    if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                    {
+                        this.HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                        this.HisGenerWorkFlow.Update();
+                    }
                 }
 
                 return "err@发送工作出现错误" + ex.Message;

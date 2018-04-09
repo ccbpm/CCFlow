@@ -22,7 +22,7 @@ namespace BP.DA
             if (s == "null")
                 return true;
 
-            return DataType.IsNullOrEmpty(s);
+            return string.IsNullOrEmpty(s);
         }
 
         #region 与日期相关的操作.

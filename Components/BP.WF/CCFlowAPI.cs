@@ -71,6 +71,8 @@ namespace BP.WF
                 gwf.WorkID = workID;
                 gwf.RetrieveFromDBSources();
 
+                 
+
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
                 myds.Tables.Add(WF_Node);
@@ -128,7 +130,16 @@ namespace BP.WF
 
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)
+                {
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
+
+                    // @杜.
+                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                    {
+                        gwf.TodoEmps += BP.Web.WebUser.No+","+BP.Web.WebUser.Name;
+                        gwf.Update();
+                    }
+                }
                  
                 //增加转向下拉框数据.
                 if (nd.CondModel == CondModel.SendButtonSileSelect)

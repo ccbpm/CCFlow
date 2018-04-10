@@ -324,7 +324,7 @@
                 html += "<tr>";
                 html += "<td class='Idx' nowrap>" + 0 + "</td>"; ;
                 if (athDesc.Sort.indexOf(",") != -1)
-                    this.Pub1.AddTD("&nbsp&nbsp");
+                    html += "<td></td>";
 
                 if (athDesc.IsUpload == true)
                     html += "<td style='width:100px'> <span style='color:red;' >请点击下方按钮上传附件</span></td>";
@@ -451,7 +451,7 @@
                   
                 }
                 html +="</td>";
-                html +="<tr>";
+                html +="</tr>";
             }
             return html;
         }
@@ -467,17 +467,30 @@
             formData.append("file",fileObj);
             formData.append("name",name);
             var AttachPK = FK_FrmAttachment;
+            var Url = "";
+            Url = "/WF/CCForm/Handler.ashx?DoType=MoreAttach&FK_FrmAttachment=" + FK_FrmAttachment + "&DoMethod=MoreAttach&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + WorkID + "&PKVal=" + PKVal + "&AttachPK=" + AttachPK + "&t=" + new Date().getTime();
+
             $.ajax({
-                type: 'post',
-                async: false,
-                data:formData,
-                dataType: CCFrom,
-                success: function (data) {
-                    string = data;
+                url: Url,
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
                 },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    string = "Entities_DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(string);
+                success: function (responseStr) {
+
+                    if (responseStr.status === 0) {
+                        console.log("成功" + responseStr);
+                    } else {
+                        console.log("失败");
+                    }
+                },
+                error: function (responseStr) {
+                    console.log("error");
                 }
             });
                 

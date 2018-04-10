@@ -1,5 +1,6 @@
 ﻿/*  Table 风格   */
-body {
+body 
+{
   color: #333333;
   font-family: "Open Sans", sans-serif;
   padding: 0px !important;
@@ -9,7 +10,7 @@ body {
 }
 
 /* 按钮风格 */
-input[type="button"], input[type="submit"],input[type="file"]
+input[type="button"], input[type="submit"], input[type="file"]
 {
     border: 0; /*background: #4D77A7;*/
     background: #009999;
@@ -21,16 +22,18 @@ input[type="button"], input[type="submit"],input[type="file"]
 }
 
 /*文本框只读风格.*/
-input[disabled],input:disabled{
-border:1px solid #DDD;
-background-color:#F5F5F5;
-color:#009999;
+input[disabled], input:disabled
+{
+    border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;
 }
 /*文本框只读风格.*/
-textarea[disabled],input:disabled{
-border:1px solid #DDD;
-background-color:#F5F5F5;
-color:#009999;
+textarea[disabled], input:disabled
+{
+    border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;
 }
 /*文本框只读风格.*/
 select[disabled], input:disabled
@@ -78,7 +81,7 @@ th
     font-size: 14px;
     text-align: left;
     font-size: 12px;
-    font-weight: normal;
+    font-weight: bolder;
 }
  
  /*  idx 表格左侧的序号列 .*/
@@ -225,15 +228,9 @@ caption
     text-align:center;
     vertical-align:middle;
 }
-
-.GroupField a
-{
-    font-weight: bold;
-}
-
-/* 在输入信息字段名称，单元格式的风格 */
  
 
+/* 在输入信息字段名称，单元格式的风格 */
 .FContext
 {
     padding-left: 4px;
@@ -317,22 +314,6 @@ legend
     margin-top: 0px;
 }
  
-Img
-{
-    border: 0px;
-}
-
-.Left
-{
-    background-color: #FFFFFF;
-}
-
-/*鼠标移动到行上，行背景色变化*/
-.tr_hover
-{
-    background: none repeat scroll 0 0 #e0ecff;
-}
-
 #bottomToolBar {
 display:block;
 }
@@ -353,7 +334,9 @@ display:block;
     overflow-y:auto;
     padding:10px;
 }
-.Message {
+
+.Message 
+{
     margin: 0 auto;
     background: white;
     /*display: table;*/
@@ -405,154 +388,8 @@ display:block;
     margin: 0 auto;
     display: table;
 }
- 
-.col-md-2, .col-md-1, .col-md-11,.col-sm-4, .col-sm-2, .col-sm-10 {
-    line-height: 40px;
-    text-align: left;
-    /*padding: 8px 0px;*/
-}
-
-#nav li span {
-}
-
-
-
-#nav {
-    display: inline-block;
-}
-
-.item {
-    width: 180px;
-    margin-right: 10px;
-    display: block;
-    float: left;
-    background: url(/image/arrow1.png) no-repeat;
-    background-position: 85px 10px;
-}
-    
-
-.item1 {
-    width: 180px;
-    margin-right: 10px;
-    display: block;
-    float: left;
-}
-
-    .item1:first-child {
-        background: url(/image/arrow1.png) no-repeat;
-        background-position: 85px 10px;
-    }
-
-div .item1:first-child a {
-    background: #1555a8;
-}
-
-div .item .active {
-    background: #1555a8;
-}
-div .item1:first-child .active {
-    background: #DC143C;
-}
-div .item1 .active{
-background:#a8352c;
-}
-
-        #centerNavDiv {
-            display:block;
-            clear:both;
-        
-        }
-
-            .item a {
-                background: #2682f9;
-                padding: 10px 20px;
-                border-radius: 30px;
-                font-size: 24px;
-                font-weight: bold;
-                cursor:pointer;
-                color:white;
-                text-decoration:none;
-
-                margin-left:10px;
-            }
-
-                .item a:hover, .item a:focus, .item1 a:hover, .item1 a:focus {
-                    color: white;
-                    text-decoration: none !important;
-                }
-
-            .item label {
-                width: 100%;
-                height: 20px;
-                float: left;
-                padding: 15px 0px;
-            }
-
-.item1 a {
-    cursor:pointer;
-    padding: 10px 20px;
-    border-radius: 30px;
-    font-size: 24px;
-    font-weight: bold;
-    background: #da554b;
-    color:white;
-    text-decoration:none !important;
-
-    margin-left:10px;
-}
-
-
-.item1 label {
-    width: 100%;
-    height: 20px;
-    float: left;
-    padding: 15px 0px;
-}
-
-        .owl-prev {
-            background: url(/image/arrow_left_1.png) no-repeat;
-            padding: 20px 0px 20px 0px;
-            color: transparent;
-            width: 35px;
-            height: 100%;
-            float:left;
-            cursor:pointer;
-
-            border-style:none;
-            margin:10px 0px 10px 10px;
-        }
-
-        .owl-next {
-            background: url(/image/arrow_right_1.png) no-repeat;
-            padding: 20px 0px 20px 0px;
-            color: transparent;
-            width: 35px;
-            float:right;
-            cursor:pointer;
-
-            border-style:none;
-            margin:10px 0px 10px 10px;
-        }
-
-        .owl-prev:hover {
-            background: url(/image/arrow_left_2.png) no-repeat;
-            border-style:none;
-        }
-
-        .owl-next:hover {
-            background: url(/image/arrow_right_2.png) no-repeat;
-            border-style:none;
-        }
-        
-        .owl-prev:focus {
-            background: url(/image/arrow_left_2.png) no-repeat;
-            border-style:none;
-        }
-
-        .owl-next:focus {
-            background: url(/image/arrow_right_2.png) no-repeat;
-            border-style:none;
-        }
+  
+            
 
 input[type=text], input[type=password], select
 {
@@ -568,7 +405,6 @@ input[type=text], input[type=password], select
     text-align: left;
     font-size: 12px;
     margin: 4px;
-    background-color: #e0ecff;
     border: lightgrey 1px solid;
     border-top: none;
     width: 30%;
@@ -578,11 +414,7 @@ select {
     height: 29px;
 }
 
-
-.col-md-1 label,.col-sm-2 label {
-    width: auto;
-    text-align: right;
-}
+ 
 
 textarea,iframe[src*="AttachmentUpload.aspx"] {
     margin-top:6px !important;
@@ -596,10 +428,7 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
     text-align: left;
     min-height: 40px;
 }
-
-.bigHeight {
-    height: 150px;
-}
+ 
 
 #topContentDiv {
     background: #fff;
@@ -609,29 +438,9 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
     border: #2854FF 1px solid;
     overflow: auto;
 }
-
-#centerNavDiv {
-
-}
-
-
-#bottomContentDiv {
-    background: #d4e6fe;
-    border-radius: 20px;
-    padding: 10px 0px 0px 0px ;
-    margin: 25px 15px 0px 15px;
-    border: #2884fa 1px solid;
-    overflow: auto;
-}
-
+ 
 #contentDiv {
     width: 100%;
-}
-
-
-.col-md-2 a,.col-md-11 a,.col-md-4 a,.col-md-10 a {
-    line-height: 45px;
-    display: inline-block;
 }
 
 .panel {
@@ -676,42 +485,6 @@ display:none;
 
 }
 
- html,body {
-            scrollbar-face-color:#2884fa; /*������3D���棨ThreedFace������ɫ*/ 
-            scrollbar-highlight-color:white; /*������3D���������ߣ�ThreedHighlight����ɫ*/ 
-            scrollbar-shadow-color:white; /*������3D�����İ��ߣ�ThreedShadow����ɫ*/ 
-            scrollbar-3dlight-color:white; /*���������߿���ɫ*/ 
-            scrollbar-arrow-color:white; /*������������ͷ����ɫ */ 
-            scrollbar-track-color:white; /*���������϶�����(TrackBar)��ɫ*/
-            scrollbar-darkshadow-color:white; /*���������߿���ThreedDarkShadow����ɫ*/ 
-            
-        }
- /*---������Ĭ����ʾ��ʽ--*/  
-        ::-webkit-scrollbar-thumb{  
-          background-color: #2884fa;
-          height: 50px;
-          outline-offset: -2px;
-          outline: 2px solid white;
-          -webkit-border-radius: 4px;
-          border: 2px solid white;
-        }  
-        /*---����������������ʾ��ʽ--*/  
-        ::-webkit-scrollbar-thumb:hover{  
-           background-color:#2884fa;  
-           height:50px;  
-           -webkit-border-radius:4px;  
-        }  
-        /*---��������С--*/  
-        ::-webkit-scrollbar{  
-           width:8px;  
-           height:8px;  
-        }  
-        /*---�����򱳾���ʽ--*/  
-        ::-webkit-scrollbar-track-piece{  
-           background-color: white;  
-           -webkit-border-radius:0;  
-        }
-
 
         /*提示框的CSS 设置*/
 .popover-title {
@@ -741,24 +514,6 @@ display:none;
 .panel {
     margin: 0px !important;
 }
-/*.row {
-  margin-bottom: 20px;
-}
-.row .row {
-  margin-top: 10px;
-  margin-bottom: 0;
-}
-[class*="col-"] {
-  
-  background-color: #eee;
-  background-color: rgba(86,61,124,.15);
-  border: 1px solid #ddd;
-  border: 1px solid rgba(86,61,124,.2);
-
-  
-}*/
-
-
 
 #header {
     height: 50px;
@@ -776,7 +531,6 @@ display:none;
     display:none;
 }
 
-
 #orgTxt {
     margin: 0px !important;
 }
@@ -792,9 +546,9 @@ display:none;
     border-radius: 5px;
     cursor:pointer;
     font-weight: bold;
-
    /* display:none;*/
 }
+
 #CCForm label {
     font-weight: normal;
     font-size:12px;
@@ -805,13 +559,11 @@ display:none;
     cursor:pointer;
 }
 
-
 .reloadIframe {
     color: white;
     cursor: pointer;
     float:right;
 }
-
 
 .form_tree input[type=text] {
     margin: 0px;

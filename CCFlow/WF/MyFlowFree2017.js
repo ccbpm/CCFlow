@@ -184,9 +184,9 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         var enableAttr = '';
         if (mapAttr.UIIsEnable == 1) {
             enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
-        } 
+        }
 
-        eleHtml = "<input  type='text' class='TBcalendar'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
+        eleHtml = "<input  type='text' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
         return eleHtml;
     }
 
@@ -196,7 +196,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (mapAttr.UIIsEnable == 1) {
             enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
         }
-        eleHtml = "<input type='text'  class='TBcalendar form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml = "<input type='text' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
         return eleHtml;
     }
 
@@ -209,8 +209,8 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             checkedStr = ' checked="checked" '
         }
         checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
-        eleHtml += "<div><input class='align_cb form-control ' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
-        eleHtml += '<label class="labRb align_cbl" for="CB_' + mapAttr.KeyOfEn + '">&nbsp;' + mapAttr.Name + '</label></div>';
+        eleHtml += "<div class='checkbox' ><label><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+        eleHtml +=  mapAttr.Name + '</label></div>';
         return eleHtml;
     }
 

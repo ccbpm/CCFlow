@@ -69,8 +69,12 @@
 					}
 				}
 			}
-        
-        function WinOpenIt(url) {
+
+			function WinOpenIt(url) {
+
+			    window.open(url);
+			    return;
+
             layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 
@@ -271,7 +275,7 @@
                     var entStr = nodeID.toString().substr(len - 2);
 
                     //判断流程是否逾期
-                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT ) {
+                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT) {
                         listbox += "<td><font color=red>逾期</font></td>";
                     }
                     else {
@@ -284,7 +288,6 @@
                     //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
 
                     listbox += "</tr>";
-
                 }
             }
 

@@ -6,14 +6,13 @@
     <title>流程发起列表</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
- 	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+ 	<link href="./Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="./Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
 </head>
 <body  class="gray-bg">
 
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row c" id="lists">
-           
             
         </div>
 
@@ -61,6 +60,11 @@
         //发起时打开窗口
         function WinOpenStartFlow(flowNo,title) {
         	var url = "MyFlow.htm?FK_Flow=" + flowNo;
+
+            window.open(url);
+            return;
+
+
 			layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 
@@ -86,6 +90,7 @@
 
         //我发起的流程.
         function WinOpenStart(flowNo,title) {
+
             var intFlowNo = flowNo;
             var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
             layer.open({

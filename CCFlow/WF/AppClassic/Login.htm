@@ -36,36 +36,39 @@
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >//页面启动函数.
 
-layui.use(['form','layer'], function(){
-  var form = layui.form,layer = layui.layer,$= layui.jquery;
+        layui.use(['form', 'layer'], function () {
+            var form = layui.form, layer = layui.layer, $ = layui.jquery;
 
-form.on('submit(formDemo)', function(data){
+            form.on('submit(formDemo)', function (data) {
 
-	var userNo = $("#TB_UserNo").val();
-	var userPass = $("#TB_Pass").val();
+                var userNo = $("#TB_UserNo").val();
+                var userPass = $("#TB_Pass").val();
 
-	if(userNo == "" || userPass == "") {		
-			layer.msg('请输入用户名与密码');
-			return false;	
-	}
+                if (userNo == "" || userPass == "") {
+                    layer.msg('请输入用户名与密码');
+                    return false;
+                }
 
-	var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
 
-	handler.AddPara("TB_UserNo", encodeURIComponent(userNo));
-	handler.AddPara("TB_Pass", userPass);
+                handler.AddPara("TB_UserNo", encodeURIComponent(userNo));
+                handler.AddPara("TB_Pass", userPass);
 
-	var data = handler.DoMethodReturnString("Login_Submit");
+                var data = handler.DoMethodReturnString("Login_Submit");
 
-	if(data.indexOf('err@') == 0) {
-		layer.msg(data,{time:1000,icon:2});		
-	} else {
-		layer.msg(data,{time:1000,icon:1},function(){
-			location.href = 'Home.htm';
-		});
-	
-	}
-})
-    }); </script>
+                if (data.indexOf('err@') == 0) {
 
+                    layer.msg(data, { time: 3000, icon: 2 });
+
+                } else {
+                    layer.msg(data, { time: 10, icon: 1 }, function () {
+                        location.href = 'Home.htm';
+                    });
+
+                }
+            })
+        });
+        
+        </script>
 </body>
 </html>

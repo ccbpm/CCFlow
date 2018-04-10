@@ -28,11 +28,14 @@ table td
 input[type=text], input[type=password], select
 {
     border-radius: 5px;
-    border: 0.5px solid #CCCCCC;
-    margin: 0px 0px;
-    width: 100%;
-    padding-left: 0px;
-    margin:0px;
+    border: thin solid #CCCCCC;
+    margin: 1px 1px;
+    height:23px;
+}
+select {
+    apperance: none;
+-moz-appearance: none;
+-ms-appearance: none;
 }
 
 

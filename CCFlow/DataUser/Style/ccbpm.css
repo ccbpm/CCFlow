@@ -76,7 +76,7 @@ th
     line-height: 25px;
     color: 0a0a0a;
     white-space: nowrap;
-    padding: 0 2px;
+    padding: 5px 2px;
     background-color: #e0ecff;
     font-size: 14px;
     text-align: left;
@@ -389,14 +389,14 @@ display:block;
     display: table;
 }
   
-            
+   
 
 input[type=text], input[type=password], select
 {
     border-radius: 5px;
     border: thin solid #CCCCCC;
     margin: 1px 1px;
-    height: 23px;
+    height:23px;
 }
 
 .FDesc
@@ -407,8 +407,10 @@ input[type=text], input[type=password], select
     margin: 4px;
     border: lightgrey 1px solid;
     border-top: none;
-    width: 30%;
+    width: 18%;
 }
+#contentTable .form-control{ margin:0px 3%; width:92%}
+#contentTable .checkbox{margin-left:3%;}
 
 select {
     height: 29px;

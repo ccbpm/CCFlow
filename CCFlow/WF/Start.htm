@@ -148,15 +148,6 @@
 
             $("#Msg").html("<img src='./Img/loading.gif' />正在加载,请稍后......");
 
-            InitPage();
-
-            $("#Msg").html("");
-        });
-
-        //初始化数据.
-        function InitPage() {
-
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             var data = handler.DoMethodReturnString("Start_Init");
             if (data.indexOf('err@') == 0) {
@@ -239,6 +230,8 @@
                     $("#Table1 tr:last").after(newRow);
                 }
             }
+
+            $("#Msg").html("");
         }
 
         function Ref() {

@@ -2,29 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-   <title>模版导出</title>
+   <title>表单模版导出</title>
 
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet"
-        type="text/css" />
-    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
-    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../../Scripts/config.js"></script>
-    <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../../Scripts/download.js"></script>
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../../Scripts/download.js"></script>
     <script language="javascript" type="text/javascript" >
         //初始化页面函数.....
         $(function () {
 
             //  $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在生成代码.</font>");
 
-            var fk_flow = GetQueryString("FK_Flow");
+            var fk_flow = GetQueryString("FK_MapData");
 
             $("#downli").html("驰骋工作流引擎已经为您生成了流程模版文件，<a href=\"javascript:Down();\" >请点击这里下载到本机</a>。");
 
@@ -43,21 +39,21 @@
 
         function Down() {
 
-            var fk_flow = GetQueryString("FK_Flow");
-            var flow = new Entity("BP.WF.Flow", fk_flow);
+            var frmID = GetQueryString("FK_MapData");
+            var md = new Entity("BP.Sys.MapData", frmID);
 
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             handler.AddUrlData();
-
-            var data = handler.DoMethodReturnString("ExpFlowTemplete"); //执行方法，返回执行结果.
+            var data = handler.DoMethodReturnString("DownFormTemplete"); //执行方法，返回执行结果.
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
                 window.location.href = url;
                 return;
             }
-            download(data, flow.Name, "xml");
+
+            download(data, md.Name, "xml");
             return;
         }
 
@@ -68,7 +64,7 @@
 <body >
  
     <table style="width: 100%">
-        <caption> 模版导出  </caption>
+        <caption> 表单模版导出  </caption>
         <tr>
             <td valign="top" style="width:30%;">
                 <fieldset>

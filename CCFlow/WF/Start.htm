@@ -72,13 +72,15 @@
 				  area:['96%','90%'],
 				  content: url
 				}); 
-			
         }
 
-        //查询
+         //查询
         function WinOpenSearch(flowNo,title) {
         	var intFlowNo = flowNo;
             var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;       
+            window.open(url);
+            return;
+
             layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 
@@ -88,11 +90,28 @@
 				}); 
         }
 
+        //我的流程
+        function WinOpenMyFlow(flowNo,title) {
+        	var intFlowNo = flowNo;
+            var url = "Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;       
+
+            layer.open({
+				  skin: 'layer-class',	
+				  type: 2, 
+				  title: title+' : 我的流程', 
+				  area:['96%','90%'],
+				  content: url
+				}); 
+        }
+
         //我发起的流程.
         function WinOpenStart(flowNo,title) {
 
             var intFlowNo = flowNo;
-            var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
+            var url = "./RptDfine/FlowSearch.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
+            //window.open(url);
+           // return;
+
             layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 
@@ -105,7 +124,7 @@
         //我发起的流程.
         function WinOpenJoin(flowNo,title) {
             var intFlowNo = flowNo;
-            var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
+            var url = "./RptDfine/FlowSearch.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
             layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 
@@ -212,10 +231,13 @@
 					
 					 if (flow.IsBatchStart == "1")
 					listbox+="<li><a href=\"javascript:WinOpenBatch('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >批量发起</a></li>";
+
+
 					listbox+="<li><a href=\"javascript:WinOpenStart('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >我发起的流程</a></li>";
 					listbox+="<li><a href=\"javascript:WinOpenJoin('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >我审批的流程</a></li>";
+					listbox+="<li><a href=\"javascript:WinOpenMyFlow('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" ><font color=red>*</font>我的流程</a></a></li>";
 					listbox+="<li><a href=\"javascript:WinOpenSearch('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >查询主页</a></li></ul></td></tr>";
-                  
+
                 }
                 listbox+='</tbody></table></div></div></div>';
                myNum++;

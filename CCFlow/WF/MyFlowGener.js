@@ -295,7 +295,7 @@ function setToobarDisiable() {
 
 function setToobarEnable() {
     //隐藏下方的功能按钮
-    $('.Bar input').css('background', '#009999');
+    $('.Bar input').css('background', '');
     $('.Bar input').removeAttr('disabled');
 }
 //设置表单元素不可用
@@ -1317,10 +1317,12 @@ function GenerWorkNode() {
 }
 
 function SetFrmReadonly() {
+ 
 
     $('#CCForm').find('input,textarea,select').attr('disabled', false);
     $('#CCForm').find('input,textarea,select').attr('readonly', true);
     $('#CCForm').find('input,textarea,select').attr('disabled', true);
+
     $('#Btn_Save').attr('disabled', true);
 }
 

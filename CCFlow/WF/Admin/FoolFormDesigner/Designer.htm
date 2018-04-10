@@ -2,21 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title> ccform傻瓜表单设计器</title>
-
+    
         <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
         <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+
         <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
         <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
         <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-        <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
         <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
         <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
         <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
+        <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <script src="../../Scripts/config.js" type="text/javascript"></script>
         <script src="../../Comm/Gener.js" type="text/javascript"></script>
         <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
-        <script src="../CCBPMDesigner/assets/javascript/json2.js" type="text/javascript"></script>
         <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
         <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
         <base target="_self" />
@@ -166,7 +165,7 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><select id='" + mapAttr.KeyOfEn + "'><option>" + mapAttr.UIBindKey + "</option></select></td>";
+                            html += "<td ColSpan=1 ><select id='" + mapAttr.KeyOfEn + "' class='form-control' ><option>" + mapAttr.UIBindKey + "</option></select></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -185,7 +184,7 @@
                                 //跨三列，并且单行.
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=" + mapAttr.ColSpan + "><input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><input class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -197,7 +196,7 @@
                                 //跨三列，并且单行.
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=3><textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "<td ColSpan=3><textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -207,7 +206,7 @@
                                 //跨4列，并且多行. 是大块文本的情况.
                                 var uiHeight = mapAttr.UIHeight;
                                 html += "<tr>";
-                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:99%;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><textarea class='form-control' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -221,7 +220,7 @@
                                 }
 
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=1 ><input maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
+                                html += "<td ColSpan=1 ><input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
 
                                 if (isDrawTR == false) {
                                     html += "</tr>";
@@ -254,7 +253,7 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><input style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/></td>";
+                            html += "<td ColSpan=1 ><input  class='form-control' style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -277,7 +276,7 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' class='align_cb' /><label class='align_cbl' for='CB_" + mapAttr.KeyOfEn + "' >&nbsp;" + mapAttr.Name + "</label></td>";
+                            html += "<td ColSpan=1 ><div class='checkbox' ><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -294,7 +293,7 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
+                            html += "<td ColSpan=1 ><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -315,7 +314,7 @@
                                 html += "<tr>";
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><input  style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
+                            html += "<td ColSpan=1 ><input class='form-control' style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
 
                             if (isDrawTR == false)
                                 html += "</tr>";
@@ -337,7 +336,7 @@
                             tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
                             if (mapAttr.UIContralType == 1) { //DDL
-                                tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
+                                tbody.children(":last").append($("<td><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
                             }
                             continue;
                         }
@@ -1083,7 +1082,7 @@
             <div data-options="region:'center',title:'ccform傻瓜表单设计器'" style="padding: 5px; width: 100%; height: 628px;" title="" class="panel-body layout-body panel-noscroll">
                 <div class="easyui-layout layout" data-options="fit:true" style="width: 100%; height: 628px;">
                     <div class="panel layout-panel layout-panel-north" style="left: 0px; top: 0px; width: 100%;">
-                        <div data-options="region:'north'" style="height: 24px; padding: 5px; overflow-y: hidden; " title="" class="panel-body panel-body-noheader layout-body">
+                        <div data-options="region:'north'" style=" padding: 5px; overflow-y: hidden; " title="" class="panel-body panel-body-noheader layout-body">
 
                           <a href="javascript:MapDataEdit();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">
                                 表单属性

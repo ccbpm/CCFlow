@@ -106,13 +106,13 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     /***************** 外键 *****************************/
     if (mapAttr.LGType == 2 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  >" + InitDDLOperation(flowData, mapAttr) + "</select>";
+        eleHtml = "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  >" + InitDDLOperation(flowData, mapAttr) + "</select>";
         return eleHtml;
     }
 
     /***************** 外部数据源 *****************************/
     if (mapAttr.LGType == 1 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+        eleHtml = "<select  style='padding:0px;'  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
         return eleHtml;
     }
 
@@ -218,7 +218,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
         if (mapAttr.UIContralType == 1) { //DDL
             //多选下拉框.
-            eleHtml += "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+            eleHtml += "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
         }
         return eleHtml;
     }

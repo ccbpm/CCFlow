@@ -471,13 +471,13 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (mapAttr.UIIsEnable == 0) {
             enableAttr = "disabled='disabled'";
         }
-        eleHtml = "<select class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + enableAttr + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + enableAttr + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         return eleHtml;
     }
 
     /***************** 外部数据源 *****************************/
     if (mapAttr.LGType == 1 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         return eleHtml;
     }
 
@@ -577,8 +577,8 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             checkedStr = ' checked="checked" '
         }
         checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
-        eleHtml += "<div><input class='align_cb form-control'  " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
-        eleHtml += '<label class="labRb align_cbl" for="CB_' + mapAttr.KeyOfEn + '">&nbsp;' + mapAttr.Name + '</label></div>';
+        eleHtml += "<div class='checkbox' ><label > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+        eleHtml += '&nbsp;' + mapAttr.Name + '</label></div>';
         return eleHtml;
     }
 
@@ -586,7 +586,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
         if (mapAttr.UIContralType == 1) { //DDL
             //多选下拉框
-            eleHtml += "<select  class='form-control'  data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            eleHtml += "<select style='padding:0px;'  class='form-control'  data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         }
         return eleHtml;
     }

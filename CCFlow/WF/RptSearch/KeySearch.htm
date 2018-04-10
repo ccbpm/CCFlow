@@ -2,12 +2,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
-    <title>驰骋工作流引擎ccbpm6 </title>
+    <title>驰骋工作流引擎</title>
+      <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+		<link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+		<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+		<link href="../Style/skin/plugins/iCheck/custom.css" rel="stylesheet">
+	<link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    
+    
+</head>
+<body topmargin="0" leftmargin="0" onkeypress="NoSubmit(event);">
+	<div class="wrapper wrapper-content animated fadeInRight">
+	
+    <form  role="form"  onkeypress="NoSubmit(event);">
+    	<div class="row">
+    		 <div class="col-sm-12 form-inline pull-right"> 
+    		 	<div class="form-group">
+                      <label>关键字</label>
+                      <input name="TB_KeyWords"  type="text" id="TB_KeyWords" class="form-control"  />
+                 </div>
+          
+                  <div class="checkbox m-l m-r-xs">
+                                <label class="i-checks">
+                                    <input id="CHK_Myself" type="checkbox" name="CHK_Myself"  value="1"><i></i> 仅查询我审批的流程</label>
+                    </div>
+                 <div class="form-group">
+                      <input type="button" value="按工作ID查" id="Btn_ByWorkID" name="ByWorkID" class="btn btn-white"  onclick="Btn_Click();"/>
+                    <input type="button" value="按流程标题字段关键字查" id="Btn_ByTitle" name="ByTitle" class="btn btn-white"  onclick="Btn_Click();"/>
+                 </div>
+    		 </div>
+    	</div>
+
+
+        <div id="result">
+        </div>
+
+    </form>
+   
+       </div>
     <script src="../Scripts/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    
+	 <script src="../Style/skin/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
     <script type="text/javascript">
         function OpenIt(workid, fk_node, fk_flow) {
             var url = '../WFRpt.htm?WorkID=' + workid + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node;
@@ -16,7 +63,7 @@
             return;
         }
     </script>
-    <base target="_self" />
+ 
     <script type="text/javascript">
         function RSize() {
 
@@ -136,28 +183,5 @@
             });
         }
     </script>
-</head>
-<body topmargin="0" leftmargin="0" onkeypress="NoSubmit(event);" class="easyui-layout">
-    <form id="cc" onkeypress="NoSubmit(event);">
-    <div id="mainPanel" region="center" border="true" border="false" class="mainPanel">
-        <table width="100%;" border="0">
-            <tr>
-                <td style="text-align: center">
-                    </br></br> <b>&nbsp;输入任何关键字:</b><input name="TB_KeyWords"
-                        type="text" id="TB_KeyWords" style="border-color: AliceBlue;border-style: Inset; font-size: Large; font-weight: bold; width: 259px;" />
-                    <span style="color: #0033CC; font-weight: bold;">
-                        <input id="CHK_Myself" type="checkbox" name="CHK_Myself" value="1"/><label for="CHK_Myself">仅查询我审批的流程</label></span>
-                    <br />
-                    &nbsp;<input type="button" value="按工作ID查" id="Btn_ByWorkID" name="ByWorkID" onclick="Btn_Click();"/>
-                    <input type="button" value="按流程标题字段关键字查" id="Btn_ByTitle" name="ByTitle" onclick="Btn_Click();"/>
-                    </br>
-                </td>
-            </tr>
-        </table>
-        <div id="result">
-        </div>
-
-    </div>
-    </form>
 </body>
 </html>

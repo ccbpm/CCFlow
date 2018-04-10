@@ -1,41 +1,64 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-    <title>授权</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授权详细信息-驰骋工作流程管理系统</title>
+     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+		<link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+		<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body onkeypress="Esc()" class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+			
+			<div class="ibox float-e-margins">
+						
+						<div class="ibox-content">
+						<div class="usercenter">授权详细信息</div>
+							<div class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">授权给</label>
+										<div class="col-sm-4">
+										<input  type="text"  class="form-control"/>
+									   </div>
+									   <div class="col-sm-4">
+										<input  type="button" value="选择授权人"  id="Btn_Auto" class="btn btn-default"/>
+									   </div>
+                                    </div>
+									<div class="form-group">
+                                        <label class="col-sm-3 control-label">收回授权日期</label>
+										<div class="col-sm-8">
+											<input name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$TB_DT" type="text" class="form-control" value="2017-10-13 12:20" maxlength="20" id="ContentPlaceHolder1_Tools1_ToolsWap1_TB_DT" class="TBcalendar" onfocus="WdatePicker({dateFmt:&#39;yyyy-MM-dd HH:mm&#39;});" />
+											</div>
+                                    </div>
+									
+									<div class="form-group">
+                                        <label class="col-sm-3 control-label">授权方式</label>
+										<div class="col-sm-8">
+											<select name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$DDL_AuthorWay"  class="form-control"  id="ContentPlaceHolder1_Tools1_ToolsWap1_DDL_AuthorWay">
+										<option selected="selected" value="0">不授权</option>
+										<option value="1">全部流程授权</option>
+										<option value="2">指定流程授权</option>
 
-<fieldset width='100%' ><legend>&nbsp;授权详细信息&nbsp;</legend><BR><Table class='Table' cellpadding='2' cellspacing='2'>
-<TR>
-<TH >项目</TH>
-<TH >内容</TH>
-</TR>
-<TR>
-<TD  nowrap >授权给:</TD>
-<TD  nowrap ><input type=text value="" /> <input type=button  value="选择授权人" id="Btn_Auto" /> </TD>
-
-</TR>
-<TR>
-<TD  nowrap >收回授权日期:</TD>
-<TD ><input name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$TB_DT" type="text" value="2017-10-13 12:20" maxlength="20" id="ContentPlaceHolder1_Tools1_ToolsWap1_TB_DT" class="TBcalendar" onfocus="WdatePicker({dateFmt:&#39;yyyy-MM-dd HH:mm&#39;});" /></TD>
-</TR>
-<TR>
-<TD  nowrap >授权方式:</TD>
-<TD ><select name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$DDL_AuthorWay" id="ContentPlaceHolder1_Tools1_ToolsWap1_DDL_AuthorWay">
-	<option selected="selected" value="0">不授权</option>
-	<option value="1">全部流程授权</option>
-	<option value="2">指定流程授权</option>
-
-</select></TD>
-</TR>
-<TR>
-<TD colspan=1 ><b><a href="javascript:WinShowModalDialog('ToolsSet.aspx?RefNo=AthFlows&d=2017/9/29 12:20:55')" >设置要授权的流程范围</a></b></TD>
-<TD  nowrap colspan=1  ><input type="submit" name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$Btn_Save" value="保存" id="ContentPlaceHolder1_Tools1_ToolsWap1_Btn_Save" class="Btn" /></TD>
-</TR>
-<TR>
-<TD class='BigDoc' colspan=2 valign=top>说明:在您确定了收回授权日期后，被授权人不能再以您的身份登陆，<br>如果未到指定的日期您可以取回授权。</TD>
-</TR></Table><Br>
-</fieldset>
-
+									</select>
+										</div>
+                                    </div>
+									<div class="form-group">
+                                        <label class="col-sm-3 control-label">
+											<a href="javascript:WinShowModalDialog('ToolsSet.aspx?RefNo=AthFlows&d=2017/9/29 12:20:55')" >设置要授权的流程范围</a></label>
+										<div class="col-sm-8">
+											<input type="submit" name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$Btn_Save" value="保存" id="ContentPlaceHolder1_Tools1_ToolsWap1_Btn_Save" class="btn btn-info" /> <a class="btn btn-white"  href="Default.htm">返回</a></div>
+                                    </div>
+									
+									<div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-8">
+									<span class="fred">说明:</span>在您确定了收回授权日期后，被授权人不能再以您的身份登陆，如果未到指定的日期您可以取回授权。
+                                </div>
+                            </div>
+							</div>
+					
+				</div>
+			</div>
 </body>
 </html>

@@ -1,27 +1,51 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>草稿</title>
-    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
+	<link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+ 	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+</head>
+<body  class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+						<div class="ibox-content">
+							<table  class="table  table-striped">
+								<thead>
+									<th>#</th>
+									<th>标题</th>
+									<th>流程</th>
+									<th>保存日期</th>
+									<th>备注</th>
+									<th>操作</th>
+									</tr>
+								</thead>
+								<tbody id="Table1"></tbody>
+							</table>
+							
+						</div>
+				
+				</div>
+				
+
+ <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
-     <base target="_self" />
-    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
         function WinOpenIt(url) {
-            //窗口最大化e
-            var scrWidth = screen.availWidth;
-            var scrHeight = screen.availHeight;
-            var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
-            self.moveTo(0, 0);
-            self.resizeTo(scrWidth, scrHeight);
-            self.focus();
-            // var newWindow = window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
-            // newWindow.focus();
-            return;
+           layer.open({
+				  skin: 'layer-class',	
+				  type: 2, 
+				  title: '我的草稿', 
+				  area:['96%','90%'],
+				  content: url
+				});
+            
         }
 
         /* ESC Key Down */
@@ -33,12 +57,8 @@
 
         //页面启动函数.
         $(function () {
+        	InitPage();
 
-            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
-
-            InitPage();
-
-            $("#Msg").html("");
         });
 
         //初始化数据.
@@ -59,7 +79,7 @@
 
                     var timeKey = Math.random();
                     data = JSON.parse(data);
-
+					var listbox='';
                     //增加处理.
                     var idx = 0;
                     for (var i = 0; i < data.length; i++) {
@@ -83,19 +103,18 @@
                             paras = "1" + paras;
                         }
 
-                        var newRow = "";
-                        newRow = "<tr ><td class=Idx >" + idx + "</td>";
-                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + workID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
-                        newRow += "<td>" + flowName + "</td>";
-                        newRow += "<td>" + rdt + "</td>";
-                        newRow += "<td>" + flowNote + "</td>";
-                        newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + flowNo + "','" + workID + "')\"><img src='./Img/Btn/Delete.gif' border=0 />删除</a>";
-                        newRow += "</td>";
-                        newRow += "</tr>";
+                        listbox = "<tr ><td class=Idx >" + idx + "</td>";
+                        listbox += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + workID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
+                        listbox += "<td>" + flowName + "</td>";
+                        listbox += "<td>" + rdt + "</td>";
+                        listbox += "<td>" + flowNote + "</td>";
+                        listbox += "<td>";
+                        listbox += "<a href=\"javascript:Delete('" + flowNo + "','" + workID + "')\">删除</a>";
+                        listbox += "</td>";
+                        listbox += "</tr>";
 
-                        $("#Table1 tr:last").after(newRow);
                     }
+                    $('#Table1').html(listbox);
                 }
             });
         }
@@ -126,21 +145,5 @@
             });
         }
      </script>
-</head>
-<body onkeypress="Esc()" >
-
-<table id="Table1" style="width:100%;">
-<tr>
-<th>序</th>
-<th>标题</th>
-<th>流程</th>
-<th>保存日期</th>
-<th>备注</th>
-<th>操作</th>
-</tr>
-</table>
-
-<div id="Msg"></div>
-
 </body>
 </html>

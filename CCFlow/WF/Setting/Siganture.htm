@@ -1,41 +1,56 @@
-﻿<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-    <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <title>电子签名设置</title>
+     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+		<link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+		<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-
-    <fieldset>
-        <legend>&nbsp;电子签名设置&nbsp;</legend>
-         
-</fieldset>
-
-    <fieldset>
-        <legend>&nbsp;电子签名设置&nbsp;</legend>
-        <p align="center">
-            <img id="sigimg"  width="120" height="30"   border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
-        </p>
-        上传<input type="file" name="myfile" id="myfile" />
-            <input id="btn" type="button" value="确定" onclick="Upload()" /><br/><br/>
-
-        <b>利用扫描仪设置步骤:</b>
-        <ul>
+<body  class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+					<div class="ibox float-e-margins">
+					
+						<div class="ibox-content">
+	<div class="usercenter">电子签名设置</div>
+			<div class="row">
+				<div class="col-sm-2">
+					<img id="sigimg"  width="120" height="30"   border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+				</div>
+				<div class="col-sm-3">
+					<input type="file" name="myfile" id="myfile" />
+				</div>
+					<div class="col-sm-7">
+				<input id="btn"   class="btn btn-info"  type="button" value="确定" onclick="Upload()" />
+				<a class="btn btn-white"  href="Default.htm">返回</a>
+				</div>
+			
+				<div class="col-sm-12">
+					<b>利用扫描仪设置步骤:</b>
+        <ul class="lh24">
             <li>在白纸上写下您的签名</li>
             <li>送入扫描仪扫描，并得到jpg文件。</li>
             <li>利用图片处理工具把他们处理缩小到 90*30像素大小。</li>
         </ul>
         <b>手写设置:</b>
-        <ul>
+      <ul class="lh24">
             <li>启动画板程序，写下您的签名。</li>
             <li>保存成.jpg文件，设置文件为90*30像素大小。</li>
         </ul>
         <!--<B>让系统自动为您创建（请选择字体）:</B><ul><li><a href='Siganture.htm?RefNo=Siganture&DoType=ST'>宋体</a></li> -->
         <!--<li><a href='Siganture.htm?RefNo=Siganture&DoType=LS'>隶书</a></li> 	-->
-    </fieldset>
+				</div>
+			</div>
+        
+	</div>
+					
+		</div>
+</div>
 
-     <script type="text/javascript" language="javascript">
+	<script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+	<script type="text/javascript" language="javascript">
 
          //页面启动函数.
          $(function () {
@@ -79,3 +94,5 @@
 	</script>
 </body>
 </html>
+
+

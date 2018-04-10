@@ -1,14 +1,193 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
+
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>驰骋工作流程管理系统</title>
-     <meta charset="UTF-8"/>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+   <!-- <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
+   
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+ 	<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+ 	<link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close"><i class="fa fa-times-circle"></i>
+            </div>
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs" style="font-size:20px;">
+                                       
+                                        <strong class="font-bold"><img src="../Style/skin/images/logow.png"/></strong>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="logo-element">驰骋
+                        </div>
+                    </li>
+                 
+                    <li>
+                        <a href="#">
+                            <i class="icon iconfont icon-huaban"></i>
+                            <span class="nav-label">基础功能</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                        <li><a href="../Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i>发起</a></li>
+                        <li><a href="../Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>待办<label class="label label-warning pull-right"  id="Todolist_EmpWorks" ></label></a></li>
+                        <li><a href="../HuiQianList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i>会签</a></li>
+                        <li><a href="../Runing.htm " class="J_menuItem"><i class="icon iconfont icon-zaitu-"></i>在途 <label class="label label-info pull-right" id="Todolist_Runing" ></label> </a></li>
+                        <li><a href="../Comm/Search.aspx?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i>我发起的</a></li>
+                        <li><a href="../Comm/Search.aspx?EnsName=BP.WF.Data.MyJoinFlows" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i>我审批的</a></li>
+                        <li><a href="../RptSearch/DistributedOfMy.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i>我的流程分布</a></li>
+                        <li><a href="../Search.htm" class="J_menuItem"><i class="icon iconfont icon-liuchengdingyi"></i>我的流程</a></li>
+                        <li><a href="../RptDfine/Flowlist.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i>单流程查询</a></li>
+                        <li><a href="../RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>综合查询</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">共享任务</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                             <li><a href="../TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 共享任务<label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
+                        <li><a href="../TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i> 申请下来的任务<label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="icon iconfont icon-xitongguanli"></i> <span class="nav-label">流程高级功能</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                        <li><a href="../Draft.htm" class="J_menuItem"><i class="icon iconfont icon-caogao"></i>我的草稿</a></li>
+                        <li><a href="../CC.htm" class="J_menuItem"><i class="icon iconfont icon-guanjianzi"></i>抄送</a></li>
+                        <li><a href="../Focus.htm" class="J_menuItem"><i class="icon iconfont icon-wodeguanzhu"></i>我的关注</a></li>
+                        <li><a href="../TodolistOfAuth.htm" class="J_menuItem"><i class="icon iconfont icon-qy_bdfw_6"></i>授权待办</a></li>
+                        <li><a href="../Batch.htm" class="J_menuItem"><i class="icon iconfont icon-piliangchuli"></i>批处理</a></li>
+                        <li><a href="../GetTask.htm" class="J_menuItem"><i class="icon iconfont icon-buliangquhui"></i>取回审批</a></li>
+                        <li><a href="../HungUpList.htm" class="J_menuItem"><i class="icon iconfont icon-guaqi"></i>挂起的工作</a></li>
+                        <li><a href="../Setting/Default.htm" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i>我的设置</a></li>
+                        </ul>
+                    </li>
+                   
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i class="fa fa-bars"></i> </a>
+                    
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                    	
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-messages">
+                                <li class="m-t-xs">
+                                    <div class="dropdown-messages-box">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="../Style/skin/images/a7.jpg">
+                                        </a>
+                                        <div class="media-body">
+                                            <small class="pull-right">46小时前</small>
+                                            <strong>张超</strong> 下午开会前准备好相关项目资料
+                                            <br>
+                                            <small class="text-muted">3天前 2018.4.3</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="../Style/skin/images/a4.jpg">
+                                        </a>
+                                        <div class="media-body ">
+                                            <small class="pull-right text-navy">25小时前</small>
+                                            <strong>张一凡</strong> 收到
+                                            <br>
+                                            <small class="text-muted">昨天</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a class="J_menuItem" href="#">
+                                            <i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-bell"></i> <span class="label label-primary">8</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-alerts">
+                                <li>
+                                    <a href="#">
+                                        <div>
+                                            <i class="fa fa-envelope fa-fw"></i> 您有16条未读消息
+                                            <span class="pull-right text-muted small">4分钟前</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="profile.html">
+                                        <div>
+                                            <i class="fa fa-qq fa-fw"></i> 3条新回复
+                                            <span class="pull-right text-muted small">12分钟钱</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a class="J_menuItem" href="notifications.html">
+                                            <strong>查看所有 </strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><i class="icon iconfont icon-wo"></i><label id="UserName" /></li>
+                        <li>
+                        	<a href="Login.htm?DoType=Out"><i class="icon iconfont icon-tuichu"></i></a> 
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row J_mainContent" id="content-main">
+                <iframe id="J_iframe" width="100%" height="100%" src="../Start.htm" frameborder="0" data-id="../Start.htm" seamless></iframe>
+            </div>
+        </div>
+        <!--右侧部分结束-->
+    </div>
+
+ 
+ 	
+	<script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="../Scripts/config.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+   
+ 	<script src="../Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    	
+    <script src="../Style/skin/js/appnew.js?v=4.1.0"></script>	
+    <script type="text/javascript" src="../Style/skin/js/index.js"></script>	
+    	
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
@@ -16,8 +195,6 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-
-            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在为登做准备.</font>");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
             var data = handler.DoMethodReturnString("Home_Init");
@@ -41,22 +218,7 @@
             return;
         });
     </script>
-    <base target="main" />
-</head>
-<frameset rows="70,*" frameborder="no" border="0" framespacing="0">
-<frame src="Top.htm" noresize="noresize" frameborder="0"name="topFrame" id="top" target="main" marginwidth="0" 
-marginheight="0" scrolling="no">
-<frameset rows="*" cols="205,*" id="frame">
-<frame src="Left.htm" name="leftFrame" noresize="noresize"marginwidth="0"  
-marginheight="0" frameborder="1" scrolling="auto">
-<frame src="../Todolist.htm" name="main" marginwidth="0"marginheight="0" 
- frameborder="1" scrolling="yes"></frameset>
- <frame src="UntitledFrame-1"
-  noresize="noresize" frameborder="0"name="bottomFrame" marginwidth="0" marginheight="0" 
-  scrolling="no">
-  <noframes>
-  <body>
+    
   </body>
-  </noframes>
-  </frameset>
+ 
 </html>

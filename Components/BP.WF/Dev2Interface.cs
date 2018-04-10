@@ -2912,7 +2912,6 @@ namespace BP.WF
             DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null);
             /*暂时屏蔽type的拼接，拼接后转json会报错 于庆海修改*/
             /*dt.Columns.Add("Type");
-
             foreach (DataRow row in dt.Rows)
             {
                 row["Type"] = "RUNNING";

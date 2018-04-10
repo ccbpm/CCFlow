@@ -299,7 +299,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Export.png";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "导出到xml";
-                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;           
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -809,9 +809,8 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoExp()
         {
-            string urlExt = "../../Admin/XAP/DoPort.htm?DoType=DownFormTemplete&FK_MapData=" + this.No;
-            PubClass.WinOpen(urlExt, 900, 1000);
-            return null;
+            return "../../Admin/FoolFormDesigner/Exp.htm?FK_MapData=" + this.No;
+ 
         }
         #endregion 方法.
     }

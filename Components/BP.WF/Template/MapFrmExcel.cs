@@ -273,6 +273,7 @@ namespace BP.WF.Template
 				rm = new RefMethod();
 				rm.Title = "导出XML表单模版"; // "设计表单";
 				rm.ClassMethodName = this.ToString() + ".DoExp";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
 				rm.Icon = "../../WF/Img/Export.png";
 				rm.Visable = true;
 				rm.RefAttrLinkLabel = "导出到xml";
@@ -675,9 +676,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoExp()
 		{
-			string urlExt = "../../Admin/XAP/DoPort.htm?DoType=DownFormTemplete&FK_MapData=" + this.No;
-			PubClass.WinOpen(urlExt, 900, 1000);
-			return null;
+            return "../../Admin/FoolFormDesigner/Exp.htm?FK_MapData=" + this.No;
 		}
 		#endregion 方法.
 	}

@@ -67,41 +67,27 @@ namespace BP.WF.HttpHandler
         {
             Flow flow = new Flow(this.FK_Flow);
             string fileXml = flow.GenerFlowXmlTemplete();
-
             string docs = DataType.ReadTextFile(fileXml);
-
-           DataTable dt = new DataTable();
-           dt.Columns.Add("FileName");
-           dt.Columns.Add("FileType");
-           dt.Columns.Add("FlieContent");
-           DataRow dr = dt.NewRow();
-           dr["FileName"] = flow.Name+".xml";
-           dr["FileType"]= "xml";
-           dr["FlieContent"] = docs;
-           dt.Rows.Add(dr);
-           return BP.Tools.Json.ToJson(dt);
-
-           // return fileXml;
+            return docs;
         }
         public string DownFormTemplete()
         {
-
-            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(FK_MapData);
-            BP.Sys.MapData md = new BP.Sys.MapData(FK_MapData);
-            string file = BP.Sys.SystemConfig.PathOfTemp + md.No + ".xml";
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(this.FK_MapData);
+            string file = BP.Sys.SystemConfig.PathOfTemp + this.FK_MapData + ".xml";
             ds.WriteXml(file);
             string docs = DataType.ReadTextFile(file);
+            return docs;
 
-            DataTable dt = new DataTable();
-            dt.Columns.Add("FileName");
-            dt.Columns.Add("FileType");
-            dt.Columns.Add("FlieContent");
-            DataRow dr = dt.NewRow();
-            dr["FileName"] = md.Name+".xml";
-            dr["FileType"] = "xml";
-            dr["FlieContent"] = docs;
-            dt.Rows.Add(dr);
-            return BP.Tools.Json.ToJson(dt);
+            //DataTable dt = new DataTable();
+            //dt.Columns.Add("FileName");
+            //dt.Columns.Add("FileType");
+            //dt.Columns.Add("FlieContent");
+            //DataRow dr = dt.NewRow();
+            //dr["FileName"] = md.Name+".xml";
+            //dr["FileType"] = "xml";
+            //dr["FlieContent"] = docs;
+            //dt.Rows.Add(dr);
+            //return BP.Tools.Json.ToJson(dt);
         }
 
         #region 执行父类的重写方法.

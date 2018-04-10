@@ -361,19 +361,16 @@
                 switch (groupEn.CtrlType) {
 
                     case "Ath":
-                        var ath = data.Sys_FrmAttachment;
-                        if (ath.length == 1) {
 
-                            // PKVal=1568&Ath=AttachM1&FK_MapData=ND1501&FK_FrmAttachment=ND1501_AttachM1;
 
-                            var src = "../../CCForm/AttachmentUpload.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + ath[0].MyPK;
-                            var frameUrl = "<iframe ID='F" + ath[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + ath[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                            return "<tr><td colspan=4 id='TD" + ath[0].MyPK + "' style='width:" + ath[0].H + "px;'>" + frameUrl + "</td></tr>";
+                        var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
 
-                        } else {
-                            var html = "<tr><td colspan=4 style='width:100%;height:200px;' > 附件[" + groupEn.CtrlID + "]丢失</td></tr>";
-                            return html;
-                        }
+
+                        var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK;
+                        var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                        return "<tr><td colspan=4 id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
+
+
                         break;
                     case "FWC":
 

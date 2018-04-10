@@ -6,18 +6,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="./Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
-        function Load() {
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
-        }
+     
          function Tackback(fk_flow, fk_node, toNode, workid) {
              if (window.confirm('您确定要执行取回操作吗？') == false)
                  return;
@@ -26,7 +15,7 @@
          }
     </script>
 </head>
-<body  onload="Load()" >
+<body >
 
 <form id="cc">
     

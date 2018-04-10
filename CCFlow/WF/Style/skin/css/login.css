@@ -1,0 +1,10 @@
+.login-bg{ background: url(../images/login_bg.png) no-repeat center top;}
+
+/*login box*/
+.login-box{z-index:100;margin:0 auto;padding-top:10%;max-width:360px}
+
+.login-box h1{ background: url(../images/logoblue.png) no-repeat left; height: 88px; text-indent: -9999px;}
+.login-form{ background:  #fff; padding: 40px 30px; border:1px solid #ddd; border-radius: 5px;}
+
+.login-nav{ color: #999; font-size: 12px;}
+

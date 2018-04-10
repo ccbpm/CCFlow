@@ -13,13 +13,26 @@ body
 input[type="button"], input[type="submit"], input[type="file"]
 {
     border: 0; /*background: #4D77A7;*/
-    background: #009999;
-    color: #FFF;
+    background: #fff;
+    color: #545454;
     font-size: 12px;
-    padding: 4px 8px;
+    padding: 4px 15px;
     margin: 5px 3px 5px 3px;
-    border-radius: 5px;
+    border-radius: 3px;
+    border:1px solid #1d7dd4;
 }
+input:hover[type="button"]
+{
+    border: 0; /*background: #4D77A7;*/
+    background: #1d7dd4;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+     border:1px solid #1d7dd4;
+}
+
 
 /*文本框只读风格.*/
 input[disabled], input:disabled
@@ -437,7 +450,7 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
     border-radius: 5px;
     padding: 8px 0px 0px 0px;
     margin: 8px 15px 15px 15px;
-    border: #2854FF 1px solid;
+    border: #EFEFEF 1px solid;
     overflow: auto;
 }
  

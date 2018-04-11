@@ -37,6 +37,10 @@ namespace BP.Sys
         /// </summary>
         public const string EnName = "EnName";
         /// <summary>
+        /// 表单ID
+        /// </summary>
+        public const string FrmID = "FrmID";
+        /// <summary>
         /// Lab
         /// </summary>
         public const string Lab = "Lab";
@@ -88,6 +92,17 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(GroupFieldAttr.EnName, value);
+            }
+        }
+        public string FrmID
+        {
+            get
+            {
+                return this.GetValStrByKey(GroupFieldAttr.FrmID);
+            }
+            set
+            {
+                this.SetValByKey(GroupFieldAttr.FrmID, value);
             }
         }
         /// <summary>
@@ -176,8 +191,8 @@ namespace BP.Sys
                 map.AddTBIntPKOID();
                 map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20,true);
                 map.AddTBString(GroupFieldAttr.EnName, null, "类", false, false, 0, 200, 20);
+                map.AddTBString(GroupFieldAttr.FrmID, null, "表单ID", false, false, 0, 200, 20);
                 map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", false, false);
-
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
                 map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", false, false, 0, 50, 20);
@@ -206,6 +221,14 @@ namespace BP.Sys
         }
         #endregion
 
+        protected override void afterInsert()
+        {
+            if (this.FrmID != "")
+                this.EnName = this.FrmID;
+            base.afterInsert();
+        }
+         
+
         /// <summary>
         /// 删除所有隶属该分组的字段.
         /// </summary>
@@ -227,13 +250,11 @@ namespace BP.Sys
 
         protected override bool beforeUpdate()
         {
-          //  this.Update("Lab", this.Lab);
-            string sql = "UPDATE Sys_GroupField SET LAB='"+this.Lab+"' WHERE OID="+this.OID;
+            this.FrmID = this.EnName;
+            string sql = "UPDATE Sys_GroupField SET LAB='" + this.Lab + "' WHERE OID=" + this.OID;
             BP.DA.DBAccess.RunSQL(sql);
             return base.beforeUpdate(); //edited by liuxc,2017-2-9,修复GroupField不能更新的问题
         }
-
-       
 
         public void DoDown()
         {

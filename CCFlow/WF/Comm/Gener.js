@@ -46,6 +46,7 @@ function GetPKVal() {
 
     if (val == "null" || val == "" || val == undefined)
         return null;
+
     return val;
 }
 

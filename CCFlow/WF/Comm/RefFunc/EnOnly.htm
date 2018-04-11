@@ -760,13 +760,12 @@
 
         function Delete() {
 
+
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
             var enName = GetQueryString("EnName");
-            var en = new Entity(enName);
-            en.pkval = GetPKVal();
-            en.RetrieveFromDBSources();
+            var en = new Entity(enName, GetPKVal());
             en.Delete();
 
             $("#Btns").html("");

@@ -251,6 +251,7 @@ namespace BP.Sys
         protected override bool beforeUpdate()
         {
             this.FrmID = this.EnName;
+
             string sql = "UPDATE Sys_GroupField SET LAB='" + this.Lab + "' WHERE OID=" + this.OID;
             BP.DA.DBAccess.RunSQL(sql);
             return base.beforeUpdate(); //edited by liuxc,2017-2-9,修复GroupField不能更新的问题
@@ -268,6 +269,9 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
+            if (this.FrmID != "")
+                this.EnName = this.FrmID;
+
             //if (this.IsExit(GroupFieldAttr.EnName, this.EnName, GroupFieldAttr.Lab, this.Lab) == true)
             //    throw new Exception("@已经在("+this.EnName+")里存在("+this.Lab+")的分组了。");
             try

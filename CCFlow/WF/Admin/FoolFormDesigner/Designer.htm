@@ -610,9 +610,20 @@
             }
             function GroupFieldNew() {
 
-                //                var val = prompt('请输入分组名称:', '我的字段分组');
-                //                if (val == null || val == undefined)
-                //                    return;
+                var val = prompt('请输入分组名称:', '我的字段分组');
+                if (val == null || val == undefined)
+                    return;
+
+                var en = new Entity("BP.Sys.GroupField");
+                en.Lab = val;
+                en.FrmID = GetQueryString("FK_MapData");
+                en.Insert();
+                var oid = en.OID;
+                //alert(oid);
+                //DBAccess.RunSQL("update SYS_GROUPFIELD set enName='" + GetQueryString("FK_MapData") + "' where oid=" + oid);
+                window.location.href = window.location.href;
+                return;
+
 
                 var url = 'GroupField.htm?FK_MapData=' + GetQueryString("FK_MapData") + "&RefOID=0&DoType=FunList";
                 OpenEasyUiDialog(url, "eudlgframe", '新建分组', 600, 500, "icon-property", true, null, null, null, function () {

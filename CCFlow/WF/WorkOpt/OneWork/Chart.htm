@@ -192,7 +192,7 @@
 
                 //确定节点图标
                 if (nodeTrack != null) {
-                    this.ICON = DATA_USER_ICON_PATH + (nodeTrack.type == "FROM" ? nodeTrack.track.EMPFROM : nodeTrack.track.EMPTO) + '.png';
+                    this.ICON = DATA_USER_ICON_PATH + (nodeTrack.type == "FROM" ? nodeTrack.track.EmpFrom : nodeTrack.track.EmpTo) + '.png';
 
                     isExist = checkUrl(encodeURI(this.ICON));
                     if (isExist == false) {
@@ -219,10 +219,10 @@
                 }
 
                 //开始绘制
-                rNode = new RNode(this.ID, this.NAME, this.X - STYLE_NODE_WIDTH / 2, this.Y - STYLE_NODE_HEIGHT / 2);
+                rNode = new RNode(this.ID, this.Name, this.X - STYLE_NODE_WIDTH / 2, this.Y - STYLE_NODE_HEIGHT / 2);
                 rNode.rBorder = r.rect(rNode.x, rNode.y, STYLE_NODE_WIDTH, STYLE_NODE_HEIGHT, STYLE_NODE_BORDER_RADIUS);
                 rNode.rIcon = r.image(this.ICON, rNode.x + 1, rNode.y + 1, STYLE_NODE_WIDTH - 2, STYLE_NODE_HEIGHT - 2);
-                rNode.rText = r.text(rNode.x + STYLE_NODE_WIDTH / 2, rNode.y + STYLE_NODE_HEIGHT + Math.ceil(this.NAME.length / 7.00) * 7 + 10, breakstr(this.NAME, 7));    //edited by liuxc,2016-3-31,增加节点名称换行处理
+                rNode.rText = r.text(rNode.x + STYLE_NODE_WIDTH / 2, rNode.y + STYLE_NODE_HEIGHT + Math.ceil(this.Name.length / 7.00) * 7 + 10, breakstr(this.Name, 7));    //edited by liuxc,2016-3-31,增加节点名称换行处理
                 rNode.rBorderColor = nodeBorderColor;
                 rNode.isTrackNode = nodeTrack != null;
                 rNode.tracks = nodeTracks;
@@ -231,13 +231,13 @@
                 //在节点右侧绘制流程轨迹中当前节点的处理人/处理时间
                 if (rNode.isTrackNode) {
                     //判断此节点是否是多人处理
-                    if (rNode.currTrack.track.EMPTOT.indexOf('多人接受') > -1) {
+                    if (rNode.currTrack.track.EmpToT.indexOf('多人接受') > -1) {
                         //alert(rNode.currTrack.track.EMPTOT);
                         this.ICON = DATA_MULTI_USER_ICON_DEFAULT;
                         rNode.rIcon.attr("src", this.ICON);
                     }
 
-                    rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EMPFROMT + '\n' + getChineseDateTime(rNode.currTrack.track.RDT)) : rNode.currTrack.track.EMPTOT);
+                    rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EmpFromT + '\n' + getChineseDateTime(rNode.currTrack.track.RDT)) : rNode.currTrack.track.EmpToT);
                     rNode.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                     rNode.rTrackText.toFront();
                 }
@@ -246,7 +246,7 @@
                     rNode.rPossible = datas.POSSIBLE.findByField("FK_NODE", this.ID);
 
                     if (rNode.rPossible) {
-                        rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EMPNAME + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
+                        rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EmpName + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
                         rNode.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                         rNode.rPossibleText.toFront();
                     }
@@ -254,7 +254,7 @@
 
                 rNode.rBorder.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_BORDER_COLOR_TRACK : nodeBorderColor), "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
                 rNode.rText.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "fill": getFillTextColor(rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "font-size": STYLE_FONT_SIZE_NODE });
-                rNode.rIcon.attr("title", this.NAME);
+                rNode.rIcon.attr("title", this.Name);
 
                 //增加节点图片的鼠标滑过/移开效果
                 rNode.rIcon.hover(function () {
@@ -282,7 +282,7 @@
 
                                 var at = this.track.ACTIONTYPE;
                                 if (at == 1 || at == 28 || at == 30) {
-                                    operID = this.track.EMPFROM + "_" + this.track.NDTO + ",";
+                                    operID = this.track.EmpFrom + "_" + this.track.NDTo + ",";
                                     return true;
                                 }
 
@@ -300,17 +300,17 @@
                                 var at = this.track.ACTIONTYPE;
 
                                 if (val == "协作") {
-                                    operID = this.track.EMPFROM + "_" + this.track.NDTO;
+                                    operID = this.track.EmpFrom + "_" + this.track.NDTo;
                                     return true;
                                 }
 
                                 if (val == "前进" && node.isTrackNode.length != 1) {
-                                    operID = this.track.EMPFROM + "_" + this.track.NDTO;
+                                    operID = this.track.EmpFrom + "_" + this.track.NDTo;
                                     return true;
                                 }
 
                                 //仅仅显示已经审批过的人员记录, 对于打开过，但是没有审批的，不显示.
-                                var myoperID = this.track.EMPFROM + "_" + this.track.NDTO;
+                                var myoperID = this.track.EmpFrom + "_" + this.track.NDTo;
 
                                 if (at == 22 || val == "审核") {
                                     if (operID.indexOf(myoperID) == 0) {
@@ -318,7 +318,7 @@
                                     }
                                 }
 
-                                var emp = this.track.EMPTOT;
+                                var emp = this.track.EmpToT;
                                 if (emp.indexOf('(') >= 0) {
                                     return true;
                                 }
@@ -326,9 +326,9 @@
                                 tablehtml +=
                                     '<tr>' +
                                     '   <td style="width:120px">' + this.track.RDT + '</td>' +
-                                    '   <td style="width:200px">' + this.track.ACTIONTYPETEXT + '</td>' +
-                                    '   <td style="width:50px">' + this.track.EMPTOT + '</td>' +
-                                    '   <td><font color=green>' + this.track.MSG.replace(/~/g, "'") + '</font></td>' +
+                                    '   <td style="width:200px">' + this.track.ActionType + '</td>' +
+                                    '   <td style="width:50px">' + this.track.EmpToT + '</td>' +
+                                    '   <td><font color=green>' + this.track.Msg.replace(/~/g, "'") + '</font></td>' +
                                     '</tr>';
                             });
                         }
@@ -414,17 +414,17 @@
             //绘制节点的连线
             var fromNode, toNode, tracknode;
             $.each(datas.WF_DIRECTION, function () {
-                rDir = new RDirection(this.NODE, this.TONODE, this.DIRTYPE, this.ISCANBACK);
-                rDir.FromNode = rFlow.getNode(this.NODE);
-                rDir.ToNode = rFlow.getNode(this.TONODE);
+                rDir = new RDirection(this.Node, this.ToNode, this.DirType, this.IsCanBack);
+                rDir.FromNode = rFlow.getNode(this.Node);
+                rDir.ToNode = rFlow.getNode(this.ToNode);
 
                 //计算连线的起始点
                 rDir.rPath = r.drawArr({
                     rStart: rDir.FromNode.rBorder,
                     rEnd: rDir.ToNode.rBorder,
-                    rDots: getDots(this.DOTS),
-                    node: this.NODE,
-                    tonode: this.TONODE,
+                    rDots: getDots(this.Dots),
+                    node: this.Node,
+                    tonode: this.ToNode,
                     pathColor: datas.TRACK.findBy2Field("NDFROM", rDir.FromNode.id, "NDTO", rDir.ToNode.id) != null ? STYLE_LINE_TRACK_COLOR : STYLE_LINE_COLOR    //&& rDir.ToNode.isTrackNode,edited by liuxc,2016-03-15,工作到哪个节点的轨迹都显示出来
                 });
 
@@ -435,8 +435,8 @@
 
             //绘制标签
             $.each(datas.WF_LABNOTE, function () {
-                rLabel = new RLabel(this.MYPK, this.NAME, this.X, this.Y);
-                rLabel.rText = r.text(this.X, this.Y + STYLE_FONT_SIZE_LABEL, this.NAME);
+                rLabel = new RLabel(this.MyPK, this.Name, this.X, this.Y);
+                rLabel.rText = r.text(this.X, this.Y + STYLE_FONT_SIZE_LABEL, this.Name);
                 rLabel.rText.attr({ "stroke": STYLE_LABEL_COLOR_FORE, "fill": getFillTextColor(STYLE_LABEL_COLOR_FORE), "font-size": STYLE_FONT_SIZE_LABEL, "text-anchor": "start" });
                 rLabel.rText.toFront();
             });
@@ -448,20 +448,20 @@
             var subflow;
 
             $.each(jdata.FLOWINFO, function () {
-                if (this.PNODEID == 0 || this.PNODEID != nodeId) {
+                if (this.PNodeID == 0 || this.PNodeID != nodeId) {
                     return true;
                 }
 
-                if (flows.indexOf(this.FK_FLOW + ",") == -1) {
-                    flows += this.FK_FLOW + ",";
-                    subflow = { No: this.FK_FLOW, Name: this.FLOWNAME, Flows: [] };
-                    subflows["F" + this.FK_FLOW] = subflow;
+                if (flows.indexOf(this.FK_Flow + ",") == -1) {
+                    flows += this.FK_Flow + ",";
+                    subflow = { No: this.FK_Flow, Name: this.FlowName, Flows: [] };
+                    subflows["F" + this.FK_Flow] = subflow;
                 }
                 else {
-                    subflow = subflows["F" + this.FK_FLOW];
+                    subflow = subflows["F" + this.FK_Flow];
                 }
 
-                subflow.Flows.push({ Title: this.TITLE, NodeName: this.NODENAME, WFStaText: this.WFSTATEXT, RDT: this.RDT, Url: "./OneWork.htm?CurrTab=Truck&FK_Flow=" + this.FK_FLOW + "&FK_Node=" + this.FK_NODE + "&WorkID=" + this.WORKID + "&FID=0" });
+                subflow.Flows.push({ Title: this.Title, NodeName: this.NodeName, WFStaText: this.WFStaText, RDT: this.RDT, Url: "./OneWork.htm?CurrTab=Truck&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=0" });
             });
 
             return subflows;
@@ -694,10 +694,10 @@
             var ts = new Array();
 
             $.each(tracks, function () {
-                if (this.NDFROM == nodeId) {
+                if (this.NDFrom == nodeId) {
                     ts.push({ track: this, type: "FROM" });
                 }
-                else if (this.NDTO == nodeId) {
+                else if (this.NDTo == nodeId) {
                     ts.push({ track: this, type: "TO" });
                 }
             });
@@ -709,15 +709,15 @@
             /// <summary>获取此节点轨迹集合中的用于绘制到此节点的轨迹</summary>
             /// <param name="tracks" Type="Array">轨迹数组</param>
             for (var i = tracks.length - 1; i >= 0; i--) {
-                if (tracks[i].track.ACTIONTYPE == 1 ||    //前进
-                tracks[i].track.ACTIONTYPE == 2 ||    //退回
-                tracks[i].track.ACTIONTYPE == 6 ||    //分流前进
-                tracks[i].track.ACTIONTYPE == 7 ||    //合流前进
-                tracks[i].track.ACTIONTYPE == 8 ||    //流程正常结束
-                tracks[i].track.ACTIONTYPE == 11 ||   //子线程前进
-                tracks[i].track.ACTIONTYPE == 26 ||   //自动条转的方式向下发送
-                tracks[i].track.ACTIONTYPE == 27 ||   //队列发送
-                tracks[i].track.ACTIONTYPE == 28) {   //协作发送
+                if (tracks[i].track.ActionType == 1 ||    //前进
+                tracks[i].track.ActionType == 2 ||    //退回
+                tracks[i].track.ActionType == 6 ||    //分流前进
+                tracks[i].track.ActionType == 7 ||    //合流前进
+                tracks[i].track.ActionType == 8 ||    //流程正常结束
+                tracks[i].track.ActionType == 11 ||   //子线程前进
+                tracks[i].track.ActionType == 26 ||   //自动条转的方式向下发送
+                tracks[i].track.ActionType == 27 ||   //队列发送
+                tracks[i].track.ActionType == 28) {   //协作发送
                     return tracks[i];
                 }
             }

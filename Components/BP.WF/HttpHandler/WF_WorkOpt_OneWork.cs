@@ -453,16 +453,16 @@ namespace BP.WF.HttpHandler
             try
             {
                 //获取流程信息
-                var sql = "SELECT NO,Name,Paras,ChartType FROM WF_Flow WHERE No='" + fk_flow + "'";
+                var sql = "SELECT \"No\",\"Name\", \"Paras\", \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "WF_FLOW";
+                dt.TableName = "WF_Flow";
                 ds.Tables.Add(dt);
 
                 //获取流程中的节点信息
                 sql = "SELECT NodeID ID,Name,Icon,X,Y,NodePosType,RunModel,HisToNDs,TodolistModel FROM WF_Node WHERE FK_Flow='" +
                     fk_flow + "' ORDER BY Step";
                 dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "WF_NODE";
+                dt.TableName = "WF_Node";
                 ds.Tables.Add(dt);
 
                 //获取流程中的标签信息

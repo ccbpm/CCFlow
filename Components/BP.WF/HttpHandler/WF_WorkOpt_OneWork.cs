@@ -453,26 +453,26 @@ namespace BP.WF.HttpHandler
             try
             {
                 //获取流程信息
-                var sql = "SELECT \"No\",\"Name\", \"Paras\", \"ChartType\" FROM \"WF_Flow\" WHERE No='" + fk_flow + "'";
+                var sql = "SELECT No \"No\", Name \"Name\", Paras \"Paras\", ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_FLOW";
                 ds.Tables.Add(dt);
 
                 //获取流程中的节点信息
-                sql = "SELECT \"NodeID\" \"ID\",\"Name\",\"Icon\",\"X\",\"Y\",\"NodePosType\",\"RunModel\",\"HisToNDs\",\"TodolistModel\" FROM \"WF_Node\" WHERE FK_Flow='" +
+                sql = "SELECT NodeID \"ID\", Name \"Name\", ICON \"Icon\", X \"X\", Y \"Y\", NodePosType \"NodePosType\",RunModel \"RunModel\",HisToNDs \"HisToNDs\",TodolistModel \"TodolistModel\" FROM WF_Node WHERE FK_Flow='" +
                     fk_flow + "' ORDER BY Step";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_NODE";
                 ds.Tables.Add(dt);
 
                 //获取流程中的标签信息
-                sql = "SELECT \"MyPK\",\"Name\",\"X\",\"Y\" FROM \"WF_LabNote\" WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT MyPK \"MyPK\", Name \"Name\", X \"X\", Y \"Y\" FROM WF_LabNote WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_LABNOTE";
                 ds.Tables.Add(dt);
 
                 //获取流程中的线段方向信息
-                sql = "SELECT \"Node\",\"ToNode\",\"DirType\",\"IsCanBack\",\"Dots\" FROM \"WF_Direction\" WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\",DirType \"DirType\", IsCanBack \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_DIRECTION";
                 ds.Tables.Add(dt);
@@ -518,7 +518,7 @@ namespace BP.WF.HttpHandler
 
                     //获取工作轨迹信息
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
-                    sql = "SELECT \"NDFrom\",\"NDFromT\", \"NDTo\",\"NDToT\", \"ActionType\",\"ActionTypeText\",\"Msg\",\"RDT\",\"EmpFrom\",\"EmpFromT\",\"EmpToT\",\"EmpTo\" FROM " + trackTable +
+                    sql = "SELECT NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
                           " WHERE WorkID=" +
                           workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT ASC";
                     dt = DBAccess.RunSQLReturnTable(sql);
@@ -559,12 +559,13 @@ namespace BP.WF.HttpHandler
                 else
                 {
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
-                    sql = "SELECT \"NDFrom\", \"NDTo\",\"ActionType\",\"ActionTypeText\",\"Msg\",\"RDT\",\"EmpFrom\",\"EmpFromT\",\"EmpToT\",\"EmpTo\" FROM " + trackTable +
+                    sql = "SELECT NDFrom \"NDFrom\", NDTo \"NDTo\",ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\",EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
                           " WHERE WorkID=0 ORDER BY RDT ASC";
                     dt = DBAccess.RunSQLReturnTable(sql);
                     dt.TableName = "TRACK";
                     ds.Tables.Add(dt);
                 }
+
                 //for (int i = 0; i < ds.Tables.Count; i++)
                 //{
                 //    dt = ds.Tables[i];

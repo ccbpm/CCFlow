@@ -2647,15 +2647,17 @@ namespace BP.En
 						}
 						else
 						{
-							/*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
-							foreach (DataRow dr in dtYueShu.Rows)
-							{
-								if (dr["FName"].ToString().ToLower() == attr.Key.ToLower())
-									DBAccess.RunSQL("ALTER TABLE " + table + " drop constraint " + dr[0].ToString());
-							}
+                            throw new Exception("err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]");
 
-							DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " drop column " + attr.Field);
-							DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " NVARCHAR(" + attr.MaxLength + ") DEFAULT '" + attr.DefaultVal + "' NULL");
+                            ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
+                            //foreach (DataRow dr in dtYueShu.Rows)
+                            //{
+                            //    if (dr["FName"].ToString().ToLower() == attr.Key.ToLower())
+                            //        DBAccess.RunSQL("ALTER TABLE " + table + " drop constraint " + dr[0].ToString());
+                            //}
+
+							//DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " drop column " + attr.Field);
+							//DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " NVARCHAR(" + attr.MaxLength + ") DEFAULT '" + attr.DefaultVal + "' NULL");
 							continue;
 						}
 						break;
@@ -2663,16 +2665,17 @@ namespace BP.En
 					case DataType.AppBoolean:
 						if (FType != "int")
 						{
-							/*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
-							foreach (DataRow dr in dtYueShu.Rows)
-							{
-								if (dr["FName"].ToString().ToLower() == attr.Key.ToLower())
-									DBAccess.RunSQL("alter table " + table + " drop constraint " + dr[0].ToString());
-							}
+                            throw new Exception("err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]");
 
-							DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " drop column " + attr.Field);
-							DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
-							continue;
+                            ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
+                            //foreach (DataRow dr in dtYueShu.Rows)
+                            //{
+                            //    if (dr["FName"].ToString().ToLower() == attr.Key.ToLower())
+                            //        DBAccess.RunSQL("alter table " + table + " drop constraint " + dr[0].ToString());
+                            //}
+                            //DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " drop column " + attr.Field);
+                            //DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
+                            //continue;
 						}
 						break;
 					case DataType.AppFloat:
@@ -2680,15 +2683,17 @@ namespace BP.En
 					case 9:
 						if (FType != "float")
 						{
-							/*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
-							foreach (DataRow dr in dtYueShu.Rows)
-							{
-								if (dr["FName"].ToString().ToLower() == attr.Key.ToLower())
-									DBAccess.RunSQL("alter table " + table + " drop constraint " + dr[0].ToString());
-							}
-							DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " drop column " + attr.Field);
-							DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
-							continue;
+                            throw new Exception("err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]");
+
+                            ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
+                            //foreach (DataRow dr in dtYueShu.Rows)
+                            //{
+                            //    if (dr["FName"].ToString().ToLower() == attr.Key.ToLower())
+                            //        DBAccess.RunSQL("alter table " + table + " drop constraint " + dr[0].ToString());
+                            //}
+                            //DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " drop column " + attr.Field);
+                            //DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
+                            //continue;
 						}
 						break;
 					default:

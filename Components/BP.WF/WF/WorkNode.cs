@@ -1896,7 +1896,7 @@ namespace BP.WF
                 throw new Exception("没有找到它的下了步节点.");
 
             Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.PRI);
+            dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID,  CondAttr.PRI);
             //if (dcsAll.Count == 0)
             //    throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件.");
 
@@ -1922,9 +1922,7 @@ namespace BP.WF
 
                 if (dcs.Count == 0)
                 {
-                    throw new Exception("@流程设计错误：流程{" + currNode.FlowName + "}从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
-                    continue;
-                    // throw new Exception(string.Format(this.ToE("WN10", "@定义节点的方向条件错误:没有给从{0}节点到{1},定义转向条件."), this.HisNode.NodeID + this.HisNode.Name, nd.NodeID + nd.Name));
+                    throw new Exception("@worknode 流程设计错误：流程{" + currNode.FlowName + "}从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
                 }
 
                 if (dcs.IsPass) // 如果通过了.

@@ -214,7 +214,7 @@ namespace BP.Tools
             foreach (DataTable table in dataSet.Tables)
             {
                 if (isUpperColumn == true)
-                    jsonString += "\"" + table.TableName.ToUpper() + "\":" + DataTableToJson(table, true) + ",";
+                    jsonString += "\"" + table.TableName + "\":" + DataTableToJson(table, true) + ",";
                 else
                     jsonString += "\"" + table.TableName + "\":" + DataTableToJson(table, false) + ",";
             }
@@ -245,7 +245,7 @@ namespace BP.Tools
                     string strKey = null;
                     if (isUpperColumn == true)
                     {
-                        strKey = dt.Columns[j].ColumnName.ToUpper();
+                        strKey = dt.Columns[j].ColumnName;
                     }
                     else
                     {

@@ -484,10 +484,10 @@ namespace BP.WF.HttpHandler
                     //sql =
                     //    "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow wgwf WHERE wgwf.WorkID = " +
                     //    workid;
-                    sql = "SELECT wgwf.Starter,"
-                          + "        wgwf.StarterName,"
-                          + "        wgwf.RDT,"
-                          + "        wgwf.WFSta,"
+                    sql = "SELECT wgwf.Starter as \"Starter\","
+                          + "        wgwf.StarterName as \"StarterName\","
+                          + "        wgwf.RDT as \"RDT\" ,"
+                          + "        wgwf.WFSta as \"WFSta\" ,"
                           + "        se.Lab       WFStaText,"
                           + "        wgwf.WFState,"
                           + "        wgwf.FID,"

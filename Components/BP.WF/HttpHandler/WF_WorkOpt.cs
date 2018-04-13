@@ -221,7 +221,10 @@ namespace BP.WF.HttpHandler
                 {
                     if (SystemConfig.CustomerNo == "TianYe") // 只改了oracle的
                     {
-                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001'";
+                        string endSql = "";
+                        if (Web.WebUser.FK_Dept.IndexOf("1099") == 0)
+                            endSql = " AND B.No LIKE '1099%' ";
+                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001' " + endSql;
                     }
                     else
                     {
@@ -237,14 +240,18 @@ namespace BP.WF.HttpHandler
                 {
                     if (SystemConfig.CustomerNo == "TianYe")//只改了oracle的
                     {
+                        string endSql = "";
+                        if (Web.WebUser.FK_Dept.IndexOf("1099") == 0)
+                            endSql = " AND B.No LIKE '1099%' ";
+
                         Selector sa = new Selector(this.FK_Node);
                         if (sa.IsEnableStaRange == true || sa.IsEnableDeptRange == true)
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' ";
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' " + endSql;
                         }
                         else
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' ";
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' " + endSql;
                         }
                     }
                     else

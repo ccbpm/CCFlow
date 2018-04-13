@@ -303,7 +303,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Start_InitTianYe_JieShui()
         {
-
             //获得当前人员的部门,根据部门获得该人员的组织集合.
             Paras ps = new Paras();
             ps.SQL = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
@@ -311,7 +310,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.
-            string orgNos = "'Z'"; //空的数据.
+            string orgNos = "'1099'"; //空的数据.
             foreach (DataRow dr in dt.Rows)
             {
                 string deptNo = dr[0].ToString();
@@ -408,7 +407,6 @@ namespace BP.WF.HttpHandler
                 DBAccess.RunSQL("UPDATE WF_FLOWSORT SET ORGNO='0' WHERE ORGNO='' OR ORGNO IS NULL OR ORGNO='101'");
             }
 
-           
 
             //需要翻译.
             BP.WF.Port.WFEmp em = new WFEmp();

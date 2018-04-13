@@ -18,6 +18,9 @@
         processMenus: {
             "one": function (t) { alert('步骤右键') }
         },
+        canvasLabMenu: {
+            "one": function (t) { alert('标签右键') }
+        },
         /*右键菜单样式*/
         menuStyle: {
             border: '1px solid #5a6377',
@@ -178,6 +181,27 @@
                 lastProcessId = row.id;
             }); //each
         }
+        //显示标签
+        var labNoteData = defaults.labNoteData;
+        if (labNoteData.list) {
+            $.each(labNoteData.list, function (i, lab) {
+                var labDiv = document.createElement('div');
+                var labId = "lab" + lab.id, badge = 'badge-inverse';
+                $(labDiv).attr("id", labId)
+                .attr("style", lab.style)
+                .attr("process_id", lab.id)
+                .addClass("process-lab")
+                .html('<span class="process-flag badge ' + badge + '"></span>&nbsp;<span id="lab_span_' + lab.id + '">' + lab.process_name + '</span>')
+                 .mousedown(function (e) {
+                     if (e.which == 3) { //右键绑定
+                         _canvas.find('#leipi_active_id').val(lab.id);
+                         contextmenu.bindings = defaults.canvasLabMenu
+                         $(this).contextMenu('canvasLabMenu', contextmenu);
+                     }
+                 });
+            _canvas.append(labDiv);
+            }); //each
+        }
 
         var timeout = null;
         //点击或双击事件,这里进行了一个单击事件延迟，因为同时绑定了双击事件
@@ -192,8 +216,12 @@
             defaults.fnDbClick();
         });
 
-        //使之可拖动
+        //使节点可拖动
         jsPlumb.draggable(jsPlumb.getSelector(".process-step"));
+        initEndPoints();
+
+        //使标签可拖动
+        jsPlumb.draggable(jsPlumb.getSelector(".process-lab"));
         initEndPoints();
 
         //绑定添加连接操作。画线-input text值  拒绝重复连接
@@ -353,7 +381,7 @@
                 .attr("process_to", row.process_to)
                 .attr("process_id", row.id)
                 .addClass("process-step btn btn-small")
-                .html('<span class="process-flag badge ' + badge + '"><i class="' + icon + ' icon-white"></i></span>&nbsp;<span id="span_' + row.id + '">' + row.process_name+'</span>')
+                .html('<span class="process-flag badge ' + badge + '"><i class="' + icon + ' icon-white"></i></span>&nbsp;<span id="span_' + row.id + '">' + row.process_name + '</span>')
                 .mousedown(function (e) {
                     if (e.which == 3) { //右键绑定
                         _canvas.find('#leipi_active_id').val(row.id);
@@ -394,10 +422,47 @@
                 return true;
 
             },
+            addLabProcess: function (lab) {
+
+                if (lab.id <= 0) {
+                    return false;
+                }
+                var labDiv = document.createElement('div');
+                var labId = "lab" + lab.id, badge = 'badge-inverse';
+
+                if (lab.icon) {
+                    icon = lab.icon;
+                }
+                $(labDiv).attr("id", labId)
+                .attr("style", lab.style)
+                .attr("process_id", lab.id)
+                .addClass("process-lab")
+                .html('<span class="process-flag badge ' + badge + '"></span>&nbsp;<span id="lab_span_' + lab.id + '">' + lab.process_name + '</span>')
+                .mousedown(function (e) {
+                    if (e.which == 3) { //右键绑定
+                        _canvas.find('#leipi_active_id').val(lab.id);
+                        contextmenu.bindings = defaults.canvasLabMenu
+                        $(this).contextMenu('canvasLabMenu', contextmenu);
+                    }
+                });
+
+                _canvas.append(labDiv);
+                //使之可拖动 和 连线
+                jsPlumb.draggable(jsPlumb.getSelector(".process-lab"));
+                initEndPoints();
+                return true;
+
+            },
             delProcess: function (activeId) {
                 if (activeId <= 0) return false;
 
                 $("#window" + activeId).remove();
+                return true;
+            },
+            delLabNote: function (activeId) {
+                if (activeId <= 0) return false;
+
+                $("#lab" + activeId).remove();
                 return true;
             },
             getActiveId: function () {
@@ -441,6 +506,29 @@
                         }
                     })
                     return JSON.stringify(aProcessData);
+                } catch (e) {
+                    return '';
+                }
+
+            },
+            getLabNoteInfo: function () {
+                try {
+                    var aLabNoteData = {};
+                    /*位置*/
+                    _canvas.find("div.process-lab").each(function (i) { //生成Json字符串，发送到服务器解析
+                        if ($(this).attr('id')) {
+                            var pId = $(this).attr('process_id');
+                            var pLeft = parseInt($(this).css('left'));
+                            var pTop = parseInt($(this).css('top'));
+                            if (!aLabNoteData[pId]) {
+                                aLabNoteData[pId] = { "top": 0, "left": 0 };
+                            }
+                            aLabNoteData[pId]["top"] = pTop;
+                            aLabNoteData[pId]["left"] = pLeft;
+
+                        }
+                    })
+                    return JSON.stringify(aLabNoteData);
                 } catch (e) {
                     return '';
                 }

@@ -8,6 +8,8 @@ html,body{height:100%;}
 
 .process-step{position: absolute; cursor: move; min-width: 100px; line-height: 28px}
 .process-step span{cursor: pointer;}
+.process-lab{position: absolute; cursor: move; min-width: 100px; line-height: 28px}
+.process-lab span{cursor: pointer;}
 
 /*颜色*/
 .colors {

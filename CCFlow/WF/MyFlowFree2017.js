@@ -157,7 +157,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 //只读状态直接 div 展示富文本内容
                 //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
                 var defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                eleHtml = "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
+                eleHtml = "<div class='richText' style='style='width:99%;'>" + defValue + "</div>";
                 return eleHtml;
             }
 

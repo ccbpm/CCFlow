@@ -13,7 +13,7 @@ function GenerFoolFrm(wn) {
     $('#CCForm').html('');
 
     var tableWidth = w - 40;
-    var html = "<table style='width:" + tableWidth + "px;' >";
+    var html = "<table style='width:100%;' >";
 
     var frmName = flowData.Sys_MapData[0].Name;
     var Sys_GroupFields = flowData.Sys_GroupField;
@@ -225,7 +225,9 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             //如果是富文本就使用百度 UEditor
             if (mapAttr.UIIsEnable == "0") {
                 //只读状态直接 div 展示富文本内容                
-                eleHtml += "<div class='richText'>" + defValue + "</div>";
+                eleHtml += "<div class='richText' style='width:99%;margin-right:2px'>" + defValue + "</div>";
+
+
             } else {
                 document.BindEditorMapAttr = mapAttr; //存到全局备用
 

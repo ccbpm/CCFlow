@@ -395,12 +395,6 @@
                                       strs += "}";
                                       strs = eval("(" + strs + ")");
 
-                                      //避免没点击保存，直接刷新后，坐标失效
-                                      var node = new Entity("BP.WF.Template.NodeSimple", data.NodeID);
-                                      node.Y = mTop;
-                                      node.X = mLeft;
-                                      node.Update();
-
                                       if (_canvas.addProcess(strs) == false) //添加
                                       {
                                           alert("添加失败");

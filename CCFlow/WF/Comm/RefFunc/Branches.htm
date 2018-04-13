@@ -31,6 +31,7 @@
     </style>
     <script type="text/javascript">
         var mapExt = null;
+        var rootNo;
         $(function () {
 
             //global
@@ -44,7 +45,7 @@
             $("#TB_Key").attr("placeholder", tip); //设置查询提示.
 
             //跟节点编号.
-            var rootNo = "0";
+            rootNo = "0";
             if (rootNo == "@WebUser.FK_Dept") {
                 var webUser = new WebUser();
                 rootNo = webUser.FK_Dept;
@@ -182,19 +183,27 @@
                 nodeIcon: 'glyphicon',
                 emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
-                onNodeChecked: function (event, data) {
-
-                    //  alert(JSON.stringify(data));
-                    // alert(JSON.stringify(data.id));
+                onNodeChecked: function (event, node) {
+                     var selectNodes = getChildNodeIdArr(node,true); //获取所有子节点
+                         if (selectNodes) { //子节点不为空，则选中所有子节点
+                             $('#tree').treeview('checkNode', [selectNodes, { silent: true}]);
+                        }
+                         var parentNode = $("#tree").treeview("getNode", node.parentId);
+                       setParentNodeCheck(node);
+                    
 
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                    en[GetQueryString("AttrOfMInMM")] = data.id;
+                    en[GetQueryString("AttrOfMInMM")] = node.id;
 
                     en.Insert();
                 },
                 onNodeUnchecked: function (event, node) {
-
+                    
+                     var selectNodes = getChildNodeIdArr(node,false); //获取所有子节点
+                         if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                             $('#tree').treeview('uncheckNode', [selectNodes, { silent: true}]);
+                     }
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
                     en[GetQueryString("AttrOfMInMM")] = node.id;
@@ -338,34 +347,103 @@
             }
             return nodeIds;
         }
+
+         function getChildNodeIdArr(node,checked) {
+             var ts = [];
+             if (node.nodes) {
+                 for (x in node.nodes) {
+                     ts.push(node.nodes[x].nodeId);
+                     if (checked == true) {
+                         var en = new Entity(GetQueryString("Dot2DotEnName"));
+                         en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                         en[GetQueryString("AttrOfMInMM")] = node.nodes[x].id;
+                         en.Insert();
+                     } else {
+                         var en = new Entity(GetQueryString("Dot2DotEnName"));
+                         en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                         en[GetQueryString("AttrOfMInMM")] = node.nodes[x].id;
+                         en.Delete();
+                     }
+                     
+                     if (node.nodes[x].nodes) {
+                         var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                         for (j in getNodeDieDai) {
+                              ts.push(getNodeDieDai[j]);
+                         }
+                     }
+                 }
+             } else {
+                  ts.push(node.nodeId);
+
+                  
+             }
+             return ts;
+        }
+ 
+         function setParentNodeCheck(node) {
+             var parentNode = $("#tree").treeview("getNode", node.parentId);
+             if (parentNode.nodes) {
+                 var checkedCount = 0;
+                 for (x in parentNode.nodes) {
+                    if (parentNode.nodes[x].state.checked) {
+                         checkedCount ++;
+                     } else {
+                         break;
+                     }
+                 }
+                 if (checkedCount === parentNode.nodes.length) {
+                     $("#tree").treeview("checkNode", parentNode.nodeId);
+                     setParentNodeCheck(parentNode);
+                     var en = new Entity(GetQueryString("Dot2DotEnName"));
+                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                     en[GetQueryString("AttrOfMInMM")] = parentNode.nodeId;
+                     en.Insert();
+                 }
+             }
+        }
         function CheckAll() {
-            alert("尚未实现.");
+            var node = $('#tree').treeview('getNode', rootNo);
+            $('#tree').treeview('checkNode', [node, { silent: true}]);
+
+            var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
+            if (selectNodes) { //子节点不为空，则选中所有子节点
+                $('#tree').treeview('checkNode', [selectNodes, { silent: true}]);
+            }
+            var en = new Entity(GetQueryString("Dot2DotEnName"));
+            en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+            en[GetQueryString("AttrOfMInMM")] = node.id;
+            en.Insert();
         }
         function UnCheckAll() {
-            alert("尚未实现.");
+            var node = $('#tree').treeview('getNode', rootNo);
+
+            $('#tree').treeview('uncheckNode', [node, { silent: true}]);
+
+            var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
+            if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                $('#tree').treeview('uncheckNode', [selectNodes, { silent: true}]);
+            }
+            var en = new Entity(GetQueryString("Dot2DotEnName"));
+            en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+            en[GetQueryString("AttrOfMInMM")] = node.id;
+            en.Delete();
         }
 
-        function Search() {
-            alert("尚未实现.");
-        }
+       
         function Close() {
             alert("尚未实现.");
         }
     </script>
 </head>
 <body>
-<!--
+
     <div class="container-fluid" style=" width:100%;">
-        <div class="pull-center search search-margin">
-                            <input  type="text" placeholder="请输入关键字." id="TB_Key"/>
-<input type="button" value="查询" id="Search" onclick="Search()"  />
-<div style=" float:right">
-<input type="button" value="全选" id="Save" onclick="CheckAll()"  />
-<input type="button" value="全不选" id="Button1" onclick="UnCheckAll()"  />
-<input type="button" value="关闭" id="Cancel" onclick="Close()"  />
-</div>
-                        </div>
-                        -->
+        <div class="pull-center search search-margin"style="text-align:right" >
+            <input type="button" value="全选" id="Cancel" onclick="CheckAll()"  />
+             <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()"  />
+        </div>
+    </div>
+
 
 
         <div class="row row-margin-top">

@@ -12,6 +12,7 @@
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
@@ -21,6 +22,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
     <style type="text/css">
         #TB_Doc {
             height: 132px;
@@ -232,11 +234,23 @@
             $('#toPrevDept').bind('click', function () {
                 if (pageData.ParentDept == 'null' || pageData.ParentDept == 0) {
                     alert("已到第一级机构");
+                    return;
                 }
-                else {
-                    pageData.FK_Dept = pageData.ParentDept;
-                    $('#OrgJSTree').jstree(true).refresh();
+
+                //判断最高级别.
+                var user = new WebUser();
+                if (user.CustomerNo == 'TianYe') {
+                    if (user.FK_Dept.indexOf('1099') == 0) {
+                        if (pageData.ParentDept.indoexOf('1099') != 0) {
+                            alert('已经是最高级别了.');
+                            return;
+                        }
+                    }
                 }
+
+                pageData.FK_Dept = pageData.ParentDept;
+
+                $('#OrgJSTree').jstree(true).refresh();
             });
         }
         //获取树选中的值
@@ -276,12 +290,12 @@
     </script>
 </head>
 <body>
-  <input type="button" onclick="Close()" value="取消"/>|<input type="button" onclick="SelectEmps()" value="确定" />|<input type="button" value="上一级" id="toPrevDept" />
+  <input type="button" onclick="Close()" value="取消"/><input type="button" value="上一级" id="toPrevDept" /><input type="button" onclick="SelectEmps()" value="确定" />
 
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
 
-    <input type="button" onclick="Close()" value="取消"/>|<input type="button" onclick="SelectEmps()" value="确定" />
+    <input type="button" onclick="Close()" value="取消"/><input type="button" onclick="SelectEmps()" value="确定" />
  
 </body>
 </html>

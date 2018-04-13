@@ -62,7 +62,7 @@
                    + '<div class="modal-content" style="border-radius:0px;width:700px;">'
                       + '<div class="modal-header">'
                           + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                           + '<h4 class="modal-title">选择下一步接受人员列表人</h4>'
+                           + '<h4 class="modal-title">接受人</h4>'
                        + '</div>'
                        + '<div class="modal-body">'
                            + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
@@ -72,6 +72,7 @@
            + '</div>';
 
             $('body').append($(selectEmpModalHtml));
+
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
             if (dept == null || dept == '' || dept == undefined) {
                 dept = $.cookie('FK_Dept');
@@ -86,7 +87,10 @@
                 dept = "0";
             }
 
+
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
+
+            //为天业集团做的特殊判断.
             url = url.replace('=101&', '=10102&');
 
             //   url = url.replace('=101&', '=10102&');
@@ -102,7 +106,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("AccepterOfGener_Init");
-
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -187,7 +190,8 @@
             return;
         }
 
-        //确定  执行下一步接受人员列表操作
+
+        //确定 执行下一步接受人员列表操作.
         function AddEmps(isSend) {
             var emps = this.document.getElementById("TB_Emps").value;
             if (isSend == false && emps == "") {

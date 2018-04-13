@@ -2852,20 +2852,20 @@ Figure.loadArray = function(v){
 }
 
 Figure.prototype = {
-    
+
     constructor: Figure,
-    
+
     /* TODO: Remove it!
-     * This is wrong as a Figure can have many Text figure inside and picking the first Text
-     * is simply wrong
-     * 
-     * Used by the edit panel
-     * @return {Text} the text item
-     * @deprecated 
-     */
-    getText:function(){
-        for(var i=0; i<this.primitives.length; i++){
-            if(this.primitives[i] instanceof Text){
+    * This is wrong as a Figure can have many Text figure inside and picking the first Text
+    * is simply wrong
+    * 
+    * Used by the edit panel
+    * @return {Text} the text item
+    * @deprecated 
+    */
+    getText: function () {
+        for (var i = 0; i < this.primitives.length; i++) {
+            if (this.primitives[i] instanceof Text) {
                 return this.primitives[i];
             }
         }
@@ -2874,16 +2874,16 @@ Figure.prototype = {
     },
 
     /*TODO: Remove it!
-     * This is wrong as a Figure can have many Text figure inside set all Text to same
-     * text is wrong
-     *
-     *Set the text from edit panel
-     *@param{Text} text - text object
-     *@deprecated
-     */
-    setText:function(text){
-        for(var i=0; i<this.primitives.length; i++){
-            if(this.primitives[i] instanceof Text){
+    * This is wrong as a Figure can have many Text figure inside set all Text to same
+    * text is wrong
+    *
+    *Set the text from edit panel
+    *@param{Text} text - text object
+    *@deprecated
+    */
+    setText: function (text) {
+        for (var i = 0; i < this.primitives.length; i++) {
+            if (this.primitives[i] instanceof Text) {
                 this.primitives[i] = text;
             }
         }
@@ -2891,12 +2891,12 @@ Figure.prototype = {
 
     //@param{bool} transformConnector - should we transform the connector? Used when we transform a figure,
     //without redrawing it.
-    transform:function(matrix, transformConnector){
-        if(transformConnector == "undefined" || transformConnector == undefined){
+    transform: function (matrix, transformConnector) {
+        if (transformConnector == "undefined" || transformConnector == undefined) {
             transformConnector = true;
         }
         //transform all composing primitives
-        for(var i = 0; i<this.primitives.length; i++ ){
+        for (var i = 0; i < this.primitives.length; i++) {
             this.primitives[i].transform(matrix);
         }
 
@@ -2905,26 +2905,26 @@ Figure.prototype = {
 
         //cascade transform to the connection point
         //Log.info('Figure: transform()');
-        if(transformConnector){
-            CONNECTOR_MANAGER.connectionPointTransform(this.id,matrix);
+        if (transformConnector) {
+            CONNECTOR_MANAGER.connectionPointTransform(this.id, matrix);
         }
 
         //some figures don't have rotation coords, i.e. those that aren't "real" figures, such as the highlight rectangle
-        if(this.rotationCoords.length!=0){
+        if (this.rotationCoords.length != 0) {
             this.rotationCoords[0].transform(matrix);
             this.rotationCoords[1].transform(matrix);
         }
     },
 
-    getPoints:function(){
+    getPoints: function () {
         var points = [];
-        for (var i=0; i<this.primitives.length; i++){
+        for (var i = 0; i < this.primitives.length; i++) {
             points = points.concat(this.primitives[i].getPoints()); //add all primitive's points in a single pass
         }
         return points;
     },
 
-    addPrimitive:function(primitive){
+    addPrimitive: function (primitive) {
         // add id property to primitive equal its index
         primitive.id = this.primitives.length;
 
@@ -2935,10 +2935,10 @@ Figure.prototype = {
     },
 
     //no more points to add, so create the handles and selectRect
-    finalise:function(){
+    finalise: function () {
         var bounds = this.getBounds();
 
-        if(bounds == null){
+        if (bounds == null) {
             throw 'Figure bounds are null !!!';
             return;
         }
@@ -2952,48 +2952,48 @@ Figure.prototype = {
         this.rotationCoords[1] = new Point(this.rotationCoords[0].x, bounds[1]);
     },
 
-    clone:function(){
+    clone: function () {
         var ret = new Figure(this.name);
-        
-        for (var i=0; i<this.primitives.length; i++){
+
+        for (var i = 0; i < this.primitives.length; i++) {
             ret.addPrimitive(this.primitives[i].clone());
         }
         ret.properties = this.properties.slice(0);
         ret.style = this.style.clone();
-        ret.rotationCoords[0]=this.rotationCoords[0].clone();
-        ret.rotationCoords[1]=this.rotationCoords[1].clone();
+        ret.rotationCoords[0] = this.rotationCoords[0].clone();
+        ret.rotationCoords[1] = this.rotationCoords[1].clone();
         ret.url = this.url;
-        
+
         //get all connection points and add them to the figure
         var cps = CONNECTOR_MANAGER.connectionPointGetAllByParent(this.id);
-        
+
         cps.forEach(
-            function(connectionPoint){
-                CONNECTOR_MANAGER.connectionPointCreate(ret.id,connectionPoint.point.clone(), ConnectionPoint.TYPE_FIGURE);
+            function (connectionPoint) {
+                CONNECTOR_MANAGER.connectionPointCreate(ret.id, connectionPoint.point.clone(), ConnectionPoint.TYPE_FIGURE);
             }
         );
-        
+
         return ret;
     },
 
     /*
-     *TODO: this is based on getText which is a WRONG (my or Zack's fault I think)
-     *
-     *apply/clone another figure style onto this figure
-     *@param{Figure} anotherFigure - another figure
-     *@author Janis Sejans <janis.sejans@towntech.lv>
-     *TODO: From Janis: we don`t have Undo for this operation
-     *@deprecated
-     */
-    applyAnotherFigureStyle:function(anotherFigure){
+    *TODO: this is based on getText which is a WRONG (my or Zack's fault I think)
+    *
+    *apply/clone another figure style onto this figure
+    *@param{Figure} anotherFigure - another figure
+    *@author Janis Sejans <janis.sejans@towntech.lv>
+    *TODO: From Janis: we don`t have Undo for this operation
+    *@deprecated
+    */
+    applyAnotherFigureStyle: function (anotherFigure) {
         this.style = anotherFigure.style.clone();
-        
+
         var newText = this.getText(); //will contain new text object
         //TODO: From Janis: there is some problem if applying text twice, the getText returns empty string, this means it is not properly cloned
-        if(newText instanceof Text){
+        if (newText instanceof Text) {
             var currTextStr = newText.getTextStr(); //remember text str
             var currTextVector = newText.vector; //remember text vector
-            
+
             newText = anotherFigure.getText().clone();
             newText.setTextStr(currTextStr); //restore text str
             newText.vector = currTextVector; //restore text vector
@@ -3001,23 +3001,23 @@ Figure.prototype = {
         }
     },
 
-    contains:function(x,y){
-        var points=[];
-        for(var i=0; i<this.primitives.length; i++){
-            if(this.primitives[i].contains(x,y)){
+    contains: function (x, y) {
+        var points = [];
+        for (var i = 0; i < this.primitives.length; i++) {
+            if (this.primitives[i].contains(x, y)) {
                 return true;
             }
             points = points.concat(this.primitives[i].getPoints());
         }
-        return Util.isPointInside(new Point(x,y),points);
+        return Util.isPointInside(new Point(x, y), points);
     },
 
 
     /**
-     * @return {Array<Number>} - returns [minX, minY, maxX, maxY] - bounds, where
-     *  all points are in the bounds.
-     */
-    getBounds: function(){
+    * @return {Array<Number>} - returns [minX, minY, maxX, maxY] - bounds, where
+    *  all points are in the bounds.
+    */
+    getBounds: function () {
         var points = [];
         for (var i = 0; i < this.primitives.length; i++) {
             var bounds = this.primitives[i].getBounds();
@@ -3028,148 +3028,148 @@ Figure.prototype = {
     },
 
 
-    paint:function(context){
-        if(this.style){
+    paint: function (context) {
+        if (this.style) {
             this.style.setupContext(context);
         }
-        for(var i = 0; i<this.primitives.length; i++ ){
-			context.save();
-            var primitive  = this.primitives[i];
-            
+        for (var i = 0; i < this.primitives.length; i++) {
+            context.save();
+            var primitive = this.primitives[i];
+
 
             var oldStyle = null;
-            if(primitive.style){ //save primitive's style
+            if (primitive.style) { //save primitive's style
                 oldStyle = primitive.style.clone();
             }
 
-            if(primitive.style == null){ //if primitive does not have a style use Figure's one
+            if (primitive.style == null) { //if primitive does not have a style use Figure's one
                 primitive.style = this.style.clone();
             }
-            else{ //if primitive has a style merge it
+            else { //if primitive has a style merge it
                 primitive.style.merge(this.style);
             }
 
-            
+
             primitive.paint(context);
             primitive.style = oldStyle;
-			
-//            if(this.style.image != null){ //TODO: should a figure has a Style can't just delegate all to primitives?
-//                //clip required for background images, there were two methods, this was the second I tried
-//                //neither work in IE
-//                context.clip();
-//                context.save();
-//                if(this.rotationCoords.length != 0){
-//                    var angle=Util.getAngle(this.rotationCoords[0], this.rotationCoords[1]);
-//                    if(IE && angle==0){
-//                        angle=0.00000001;//stupid excanves, without this it puts all images down and right of the correct location
-//                    //and by an amount relative to the distane from the top left corner
-//                    }
-//
-//                    //if we perform a rotation on the actual rotationCoords[0] (centerPoint), when we try to translate it back,
-//                    //rotationCoords[0] will = 0,0, so we create a clone that does not get changed
-//                    var rotPoint = this.rotationCoords[0].clone();
-//
-//                    //move to origin, make a rotation, move back in place
-//                    this.transform(Matrix.translationMatrix(-rotPoint.x, -rotPoint.y))
-//                    this.transform(Matrix.rotationMatrix(-angle));
-//                    this.transform(Matrix.translationMatrix(rotPoint.x, rotPoint.y))
-//
-//                    //TODO: these are not used...so why the whole acrobatics ?
-//                    //this was the second method that is also not supported by IE, get the image, place it in
-//                    //the correct place, then shrink it, so its still an 'image mask' but it is only a small image
-//                    //context.scale below is also part of this
-//                    //var shrinkBounds = this.getBounds();
-//
-//                    //move back to origin, 'undo' the rotation, move back in place
-//                    this.transform(Matrix.translationMatrix(-rotPoint.x, -rotPoint.y))
-//                    this.transform(Matrix.rotationMatrix(angle));
-//                    this.transform(Matrix.translationMatrix(rotPoint.x, rotPoint.y))
-//
-//                    //rotate current canvas to prepare it to draw the image (you can not roate the image...:D)
-//                    context.translate(rotPoint.x,rotPoint.y);
-//                    context.rotate(angle);
-//                    //context.scale(0.01,0.01)//1/getCanvas().width*shrinkBounds[0]+(shrinkBounds[2]-shrinkBounds[0])/2,1/getCanvas().width*shrinkBounds[1]+(shrinkBounds[3]-shrinkBounds[1])/2)
-//                    context.translate(-rotPoint.x,-rotPoint.y);
-//                }
-//                //draw image
-//                /*context.fill();
-//                context.beginPath();
-//                context.globalCompositeOperation = "source-atop"
-//                 clip works best,but this works too, neither will work in IE*/
-//                //context.fill();
-//                context.drawImage(this.style.image,this.rotationCoords[0].x-this.style.image.width/2,this.rotationCoords[0].y-this.style.image.height/2,this.style.image.width,this.style.image.height)
-//
-//                context.restore();
-//            }
-//            else if (this.style.image!=null){
-//                context.fill();
-//            }
+
+            //            if(this.style.image != null){ //TODO: should a figure has a Style can't just delegate all to primitives?
+            //                //clip required for background images, there were two methods, this was the second I tried
+            //                //neither work in IE
+            //                context.clip();
+            //                context.save();
+            //                if(this.rotationCoords.length != 0){
+            //                    var angle=Util.getAngle(this.rotationCoords[0], this.rotationCoords[1]);
+            //                    if(IE && angle==0){
+            //                        angle=0.00000001;//stupid excanves, without this it puts all images down and right of the correct location
+            //                    //and by an amount relative to the distane from the top left corner
+            //                    }
+            //
+            //                    //if we perform a rotation on the actual rotationCoords[0] (centerPoint), when we try to translate it back,
+            //                    //rotationCoords[0] will = 0,0, so we create a clone that does not get changed
+            //                    var rotPoint = this.rotationCoords[0].clone();
+            //
+            //                    //move to origin, make a rotation, move back in place
+            //                    this.transform(Matrix.translationMatrix(-rotPoint.x, -rotPoint.y))
+            //                    this.transform(Matrix.rotationMatrix(-angle));
+            //                    this.transform(Matrix.translationMatrix(rotPoint.x, rotPoint.y))
+            //
+            //                    //TODO: these are not used...so why the whole acrobatics ?
+            //                    //this was the second method that is also not supported by IE, get the image, place it in
+            //                    //the correct place, then shrink it, so its still an 'image mask' but it is only a small image
+            //                    //context.scale below is also part of this
+            //                    //var shrinkBounds = this.getBounds();
+            //
+            //                    //move back to origin, 'undo' the rotation, move back in place
+            //                    this.transform(Matrix.translationMatrix(-rotPoint.x, -rotPoint.y))
+            //                    this.transform(Matrix.rotationMatrix(angle));
+            //                    this.transform(Matrix.translationMatrix(rotPoint.x, rotPoint.y))
+            //
+            //                    //rotate current canvas to prepare it to draw the image (you can not roate the image...:D)
+            //                    context.translate(rotPoint.x,rotPoint.y);
+            //                    context.rotate(angle);
+            //                    //context.scale(0.01,0.01)//1/getCanvas().width*shrinkBounds[0]+(shrinkBounds[2]-shrinkBounds[0])/2,1/getCanvas().width*shrinkBounds[1]+(shrinkBounds[3]-shrinkBounds[1])/2)
+            //                    context.translate(-rotPoint.x,-rotPoint.y);
+            //                }
+            //                //draw image
+            //                /*context.fill();
+            //                context.beginPath();
+            //                context.globalCompositeOperation = "source-atop"
+            //                 clip works best,but this works too, neither will work in IE*/
+            //                //context.fill();
+            //                context.drawImage(this.style.image,this.rotationCoords[0].x-this.style.image.width/2,this.rotationCoords[0].y-this.style.image.height/2,this.style.image.width,this.style.image.height)
+            //
+            //                context.restore();
+            //            }
+            //            else if (this.style.image!=null){
+            //                context.fill();
+            //            }
 
             context.restore();
         }
     },
 
-    equals:function(anotherFigure){
-        if(!anotherFigure instanceof Figure){
+    equals: function (anotherFigure) {
+        if (!anotherFigure instanceof Figure) {
             Log.info("Figure:equals() 0");
             return false;
         }
 
 
-        if(this.primitives.length == anotherFigure.primitives.length){
-            for(var i=0; i<this.primitives.length; i++){
-                if(!this.primitives[i].equals(anotherFigure.primitives[i])){
+        if (this.primitives.length == anotherFigure.primitives.length) {
+            for (var i = 0; i < this.primitives.length; i++) {
+                if (!this.primitives[i].equals(anotherFigure.primitives[i])) {
                     Log.info("Figure:equals() 1");
                     return false;
                 }
             }
         }
-        else{
+        else {
             Log.info("Figure:equals() 2");
             return false;
         }
         //test group
-        if(this.groupId != anotherFigure.groupId){
+        if (this.groupId != anotherFigure.groupId) {
             return false;
         }
 
         //test rotation coords
-        if(this.rotationCoords.length == anotherFigure.rotationCoords.length){
-            for(var i in this.rotationCoords){
-                if(!this.rotationCoords[i].equals(anotherFigure.rotationCoords[i])){
+        if (this.rotationCoords.length == anotherFigure.rotationCoords.length) {
+            for (var i in this.rotationCoords) {
+                if (!this.rotationCoords[i].equals(anotherFigure.rotationCoords[i])) {
                     return false;
                 }
             }
         }
-        else{
+        else {
             return false;
         }
 
         //test style
-        if(!this.style.equals(anotherFigure.style)){
+        if (!this.style.equals(anotherFigure.style)) {
             return false;
         }
-        
+
         //test url
-        if(!this.url == anotherFigure.url){
+        if (!this.url == anotherFigure.url) {
             return false;
         }
 
         return true;
     },
 
-    near:function(x,y,radius){
-        for(var i=0; i<this.primitives.length; i++){
-            if(this.primitives[i].near(x,y,radius)){
+    near: function (x, y, radius) {
+        for (var i = 0; i < this.primitives.length; i++) {
+            if (this.primitives[i].near(x, y, radius)) {
                 return true;
             }
         }
         return false;
     },
-    
-    toString:function(){
+
+    toString: function () {
         var result = this.name + ' [id: ' + this.id + '] (';
-        for(var i = 0; i<this.primitives.length; i++ ){
+        for (var i = 0; i < this.primitives.length; i++) {
             result += this.primitives[i].toString();
         }
         result += ')';
@@ -3177,33 +3177,33 @@ Figure.prototype = {
     },
 
 
-    toSVG: function(){
+    toSVG: function () {
         var tempSVG = '';
-        tempSVG += "\n" + repeat("\t", INDENTATION) +  "<!--Figure start-->";
-        for(var i = 0; i<this.primitives.length; i++ ){
-            var primitive  = this.primitives[i];
+        tempSVG += "\n" + repeat("\t", INDENTATION) + "<!--Figure start-->";
+        for (var i = 0; i < this.primitives.length; i++) {
+            var primitive = this.primitives[i];
 
             var oldStyle = null;
-            if(primitive.style){ //save primitive's style
+            if (primitive.style) { //save primitive's style
                 oldStyle = primitive.style.clone();
             }
 
-            if(primitive.style == null){ //if primitive does not have a style use Figure's one
+            if (primitive.style == null) { //if primitive does not have a style use Figure's one
                 primitive.style = this.style;
             }
-            else{ //if primitive has a style merge it
+            else { //if primitive has a style merge it
                 primitive.style.merge(this.style);
             }
 
             tempSVG += this.primitives[i].toSVG();
-            
+
             //URL not exported
             throw Exception("Figure->toSVG->URL not exported");
 
             //restore primitives style
             primitive.style = oldStyle;
         }
-        tempSVG += "\n" + repeat("\t", INDENTATION) +  "<!--Figure end-->" + "\n";
+        tempSVG += "\n" + repeat("\t", INDENTATION) + "<!--Figure end-->" + "\n";
 
         return tempSVG;
     }

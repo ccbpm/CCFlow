@@ -181,6 +181,42 @@ namespace BP.WF.HttpHandler
                 return "@err:"+ex.Message;
             }
         }
+        /// <summary>
+        /// 添加标签
+        /// </summary>
+        /// <returns></returns>
+        public string CreatLabNote()
+        {
+            try
+            {
+                LabNote lb = new LabNote();
 
+                //获取当前流程已经存在的数量
+                LabNotes labNotes = new LabNotes();
+                int num = labNotes.Retrieve(LabNoteAttr.FK_Flow, this.FK_Flow);
+
+                string Name = this.GetValFromFrmByKey("LabName");
+                int x = int.Parse(this.GetValFromFrmByKey("X"));
+                int y = int.Parse(this.GetValFromFrmByKey("Y"));
+
+                lb.MyPK = this.FK_Flow + "_" + x + "_" + y + "_" + (num + 1);
+                lb.Name = Name;
+                lb.FK_Flow = this.FK_Flow;
+                lb.X = x;
+                lb.Y = y;
+
+                lb.DirectInsert();
+
+                Hashtable ht = new Hashtable();
+                ht.Add("MyPK", this.FK_Flow + "_" + x + "_" + y + "_" + (num + 1));
+                ht.Add("FK_Flow", this.FK_Flow);
+
+                return BP.Tools.Json.ToJsonEntityModel(ht);
+            }
+            catch (Exception ex)
+            {
+                return "@err:" + ex.Message;
+            }
+        }
     }
 }

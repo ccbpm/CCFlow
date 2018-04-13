@@ -882,7 +882,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 MapData md = new MapData(this.EnsName);
-                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
                 #region 把主表数据放入.
                 string atParas = "";
@@ -1091,7 +1091,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 MapData md = new MapData(this.EnsName);
-                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
                 #region 把主表数据放入.
                 string atParas = "";

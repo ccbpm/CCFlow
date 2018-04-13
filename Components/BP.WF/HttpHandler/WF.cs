@@ -36,7 +36,7 @@ namespace BP.WF.HttpHandler
            
 
             //获得表单模版.
-            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
+            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
 
             #region 把主从表数据放入里面.
@@ -298,22 +298,106 @@ namespace BP.WF.HttpHandler
             return wf.HandlerMapExt();
         }
         /// <summary>
-        /// 获得发起列表 
+        /// 节水公司
         /// </summary>
         /// <returns></returns>
-        public string Start_Init()
+        public string Start_InitTianYe_JieShui()
         {
 
-            //通用的处理器.
-            if (BP.Sys.SystemConfig.CustomerNo == "TianYe" || BP.Sys.SystemConfig.CustomerNo == "CZBank")
-            {
+            //获得当前人员的部门,根据部门获得该人员的组织集合.
+            Paras ps = new Paras();
+            ps.SQL = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            ps.AddFK_Emp();
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-            }
-            else
+            //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.
+            string orgNos = "'Z'"; //空的数据.
+            foreach (DataRow dr in dt.Rows)
             {
-                return Start_Init2016();
+                string deptNo = dr[0].ToString();
+                orgNos += ",'" + deptNo + "'";
             }
 
+            #region 获取类别列表(根据当前人员所在组织结构进行过滤类别.)
+            FlowSorts fss = new FlowSorts();
+            BP.En.QueryObject qo = new En.QueryObject(fss);
+            qo.AddWhereIn(FlowSortAttr.OrgNo, "(" + orgNos + ")");  //指定的类别.
+
+            //排序.
+            qo.addOrderBy(FlowSortAttr.No, FlowSortAttr.Idx);
+
+            DataTable dtSort = qo.DoQueryToTable();
+            dtSort.TableName = "Sort";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtSort.Columns["NO"].ColumnName = "No";
+                dtSort.Columns["NAME"].ColumnName = "Name";
+                dtSort.Columns["PARENTNO"].ColumnName = "ParentNo";
+                dtSort.Columns["ORGNO"].ColumnName = "OrgNo";
+            }
+
+            //定义容器.
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dtSort); //增加到里面去.
+            #endregion 获取类别列表.
+
+            //构造流程实例数据容器。
+            DataTable dtStart = new DataTable();
+            dtStart.TableName = "Start";
+            dtStart.Columns.Add("No");
+            dtStart.Columns.Add("Name");
+            dtStart.Columns.Add("FK_FlowSort");
+            dtStart.Columns.Add("IsBatchStart");
+            dtStart.Columns.Add("IsStartInMobile");
+            dtStart.Columns.Add("Note");
+
+            //获得所有的流程（包含了所有子公司与集团的可以发起的流程但是没有根据组织结构进行过滤.）
+            DataTable dtAllFlows = Dev2Interface.DB_StarFlows(Web.WebUser.No);
+
+            //按照当前用户的流程类别权限进行过滤.
+            foreach (DataRow drSort in dtSort.Rows)
+            {
+                foreach (DataRow drFlow in dtAllFlows.Rows)
+                {
+                    if (drSort["No"].ToString() != drFlow["FK_FlowSort"].ToString())
+                        continue;
+
+                    DataRow drNew = dtStart.NewRow();
+
+                    drNew["No"] = drFlow["No"];
+                    drNew["Name"] = drFlow["Name"];
+                    drNew["FK_FlowSort"] = drFlow["FK_FlowSort"];
+                    drNew["IsBatchStart"] = drFlow["IsBatchStart"];
+                    drNew["IsStartInMobile"] = drFlow["IsStartInMobile"];
+                    drNew["Note"] = drFlow["Note"];
+                    dtStart.Rows.Add(drNew); //增加到里里面去.
+                }
+            }
+
+            //把经过权限过滤的流程实体放入到集合里.
+            ds.Tables.Add(dtStart); //增加到里面去.
+
+            //返回组合
+            string json = BP.Tools.Json.DataSetToJson(ds, false);
+
+            //放入缓存里面去.
+            BP.WF.Port.WFEmp em = new WFEmp();
+            em.No = BP.Web.WebUser.No;
+
+            //把json存入数据表，避免下一次再取.
+            if (json.Length > 40)
+            {
+                em.StartFlows = json;
+                em.Update();
+            }
+            return json;
+        }
+        /// <summary>
+        /// 天业集团的发起，特殊处理.
+        /// </summary>
+        /// <returns></returns>
+        public string Start_InitTianYe()
+        {
             //如果请求了刷新.
             if (this.GetRequestVal("IsRef") != null)
             {
@@ -323,6 +407,8 @@ namespace BP.WF.HttpHandler
                 //处理权限,为了防止未知的错误.
                 DBAccess.RunSQL("UPDATE WF_FLOWSORT SET ORGNO='0' WHERE ORGNO='' OR ORGNO IS NULL OR ORGNO='101'");
             }
+
+           
 
             //需要翻译.
             BP.WF.Port.WFEmp em = new WFEmp();
@@ -336,6 +422,10 @@ namespace BP.WF.HttpHandler
             string json = em.StartFlows;
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
+
+            //如果是节水公司的，就特别处理.
+            if (WebUser.FK_Dept.IndexOf("1099") == 0)
+                return Start_InitTianYe_JieShui();
 
             //获得当前人员的部门,根据部门获得该人员的组织集合.
             Paras ps = new Paras();
@@ -368,10 +458,8 @@ namespace BP.WF.HttpHandler
             //排序.
             qo.addOrderBy(FlowSortAttr.No, FlowSortAttr.Idx);
 
-
             DataTable dtSort = qo.DoQueryToTable();
             dtSort.TableName = "Sort";
-
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dtSort.Columns["NO"].ColumnName = "No";
@@ -394,7 +482,6 @@ namespace BP.WF.HttpHandler
             dtStart.Columns.Add("IsBatchStart");
             dtStart.Columns.Add("IsStartInMobile");
             dtStart.Columns.Add("Note");
-
 
             //获得所有的流程（包含了所有子公司与集团的可以发起的流程但是没有根据组织结构进行过滤.）
             DataTable dtAllFlows = Dev2Interface.DB_StarFlows(Web.WebUser.No);
@@ -434,8 +521,17 @@ namespace BP.WF.HttpHandler
 
             return json;
         }
-        public string Start_Init2016()
+        /// <summary>
+        /// 获得发起列表 
+        /// </summary>
+        /// <returns></returns>
+        public string Start_Init()
         {
+            //通用的处理器.
+            if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
+                return Start_InitTianYe();
+
+            //定义容器.
             DataSet ds = new DataSet();
 
             //流程类别.

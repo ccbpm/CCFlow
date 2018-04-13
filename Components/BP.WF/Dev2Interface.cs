@@ -4611,7 +4611,7 @@ namespace BP.WF
                 gwf.WorkID = workID;
                 if (gwf.RetrieveFromDBSources() == 0)
                     return true;
-                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
+                string mysql = "SELECT \"FK_Emp\", \"IsPass\" FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                 if (mydt.Rows.Count == 0)
                     return true;

@@ -64,13 +64,12 @@ namespace BP.WF
                     wk, null);
 
                 //获得表单模版.
-                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
+                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
                 //把流程信息表发送过去.
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = workID;
                 gwf.RetrieveFromDBSources();
-
                  
 
                 //加入WF_Node.

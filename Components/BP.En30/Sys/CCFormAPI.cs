@@ -1159,168 +1159,11 @@ namespace BP.Sys
             MapData.ImpMapData(toFrmID, fromds);
         }
         /// <summary>
-        /// 获得表单模版dataSet格式.
-        /// </summary>
-        /// <param name="fk_mapdata">表单ID</param>
-        /// <param name="isCheckFrmType">是否检查表单类型</param>
-        /// <returns>DataSet</returns>
-        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata, bool isCheckFrmType = false)
-        {
-            MapData md = new MapData(fk_mapdata);
-
-            // 20150513 小周鹏修改，原因：手机端无法显示 dtl Start
-            // string sql = "SELECT FK_MapData,No,X,Y,W,H  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
-            string sql = "SELECT *  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
-            // 20150513 小周鹏修改 End
-
-            sql = string.Format(sql, fk_mapdata);
-            DataTable dtMapDtl = DBAccess.RunSQLReturnTable(sql);
-            dtMapDtl.TableName = "Sys_MapDtl";
-
-            string ids = string.Format("'{0}'", fk_mapdata);
-            foreach (DataRow dr in dtMapDtl.Rows)
-            {
-                ids += ",'" + dr["No"] + "'";
-            }
-            string sqls = string.Empty;
-            List<string> listNames = new List<string>();
-            // Sys_GroupField.
-            listNames.Add("Sys_GroupField");
-            sql = "SELECT * FROM Sys_GroupField WHERE  EnName IN (" + ids + ")";
-            sqls += sql;
-
-            // Sys_Enum
-            listNames.Add("Sys_Enum");
-            sql = "@SELECT * FROM Sys_Enum WHERE EnumKey IN ( SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData IN (" + ids + ") ) order By EnumKey,IntKey";
-            sqls += sql;
-
-            // 审核组件
-            string nodeIDstr = fk_mapdata.Replace("ND", "");
-            if (DataType.IsNumStr(nodeIDstr))
-            {
-                // 审核组件状态:0 禁用;1 启用;2 只读;
-                listNames.Add("WF_Node");
-                sql = "@SELECT NodeID,FWC_X,FWC_Y,FWC_W,FWC_H,FWCSTA,FWCTYPE,SFSTA,SF_X,SF_Y,SF_H,SF_W FROM WF_Node WHERE NodeID=" + nodeIDstr + " AND  ( FWCSta >0  OR SFSta >0 )";
-                sqls += sql;
-            }
-
-            string where = " FK_MapData IN (" + ids + ")";
-
-            // Sys_MapData.
-            listNames.Add("Sys_MapData");
-            //杨玉慧  加上TableWidth,TableHeight,TableCol 获取傻瓜表单的宽度
-            //sql = "@SELECT No,Name,FrmW,FrmH FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
-          //  sql = "@SELECT No,Name,FrmW,FrmH,TableWidth,TableHeight,TableCol,PTable FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
-            sql = "@SELECT * FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
-            sqls += sql;
-
-            // Sys_MapAttr.
-            listNames.Add("Sys_MapAttr");
-
-            sql = "@SELECT * FROM Sys_MapAttr WHERE " + where + " AND KeyOfEn NOT IN('WFState') ORDER BY FK_MapData, IDX  ";
-            sqls += sql;
-
-            //// Sys_MapM2M.
-            //listNames.Add("Sys_MapM2M");
-            //sql = "@SELECT MyPK,FK_MapData,NoOfObj,M2MTYPE,X,Y,W,H FROM Sys_MapM2M WHERE " + where;
-            //sqls += sql;
-
-            // Sys_MapExt.
-            listNames.Add("Sys_MapExt");
-            sql = "@SELECT * FROM Sys_MapExt WHERE " + where;
-            sqls += sql;
-
-            //if (isCheckFrmType == true && md.HisFrmType == FrmType.FreeFrm)
-            //{
-            // line.
-            listNames.Add("Sys_FrmLine");
-            sql = "@SELECT MyPK,FK_MapData, X1,X2, Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
-            sqls += sql;
-
-            // link.
-            listNames.Add("Sys_FrmLink");
-            sql = "@SELECT FK_MapData,MyPK,Text,URL,Target,FontSize,FontColor,X,Y from Sys_FrmLink WHERE " + where;
-            sqls += sql;
-
-            // btn.
-            listNames.Add("Sys_FrmBtn");
-            sql = "@SELECT FK_MapData,MyPK,Text,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
-            sqls += sql;
-
-            // Sys_FrmImg.
-            listNames.Add("Sys_FrmImg");
-            sql = "@SELECT * FROM Sys_FrmImg WHERE " + where;
-            sqls += sql;
-
-            // Sys_FrmLab.
-            listNames.Add("Sys_FrmLab");
-            sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic FROM Sys_FrmLab WHERE " + where;
-            sqls += sql;
-            //}
-
-            // Sys_FrmRB.
-            listNames.Add("Sys_FrmRB");
-            sql = "@SELECT * FROM Sys_FrmRB WHERE " + where;
-            sqls += sql;
-
-            // ele.
-            listNames.Add("Sys_FrmEle");
-            sql = "@SELECT FK_MapData,MyPK,EleType,EleID,EleName,X,Y,W,H FROM Sys_FrmEle WHERE " + where;
-            sqls += sql;
-
-            //Sys_MapFrame.
-            listNames.Add("Sys_MapFrame");
-            sql = "@SELECT MyPK,FK_MapData,Name,URL,W,H FROM Sys_MapFrame WHERE " + where;
-            sqls += sql;
-
-            // Sys_FrmAttachment. 
-            listNames.Add("Sys_FrmAttachment");
-            /* 20150730 小周鹏修改 添加AtPara 参数 START */
-            //sql = "@SELECT  MyPK,FK_MapData,UploadType,X,Y,W,H,NoOfObj,Name,Exts,SaveTo,IsUpload,IsDelete,IsDownload "
-            // + " FROM Sys_FrmAttachment WHERE " + where + " AND FK_Node=0";
-            sql = "@SELECT MyPK,FK_MapData,UploadType,X,Y,W,H,NoOfObj,Name,Exts,SaveTo,IsUpload,DeleteWay,IsDownload ,AtPara"
-                + " FROM Sys_FrmAttachment WHERE " + where + " AND FK_Node=0";
-
-            /* 20150730 小周鹏修改 添加AtPara 参数 END */
-            sqls += sql;
-
-            // Sys_FrmImgAth.
-            listNames.Add("Sys_FrmImgAth");
-            sql = "@SELECT * FROM Sys_FrmImgAth WHERE " + where;
-            sqls += sql;
-        
-
-            string[] strs = sqls.Split('@');
-            DataSet ds = new DataSet();
-
-            if (strs != null && strs.Length == listNames.Count)
-            {
-                for (int i = 0; i < listNames.Count; i++)
-                {
-                    string s = strs[i];
-                    if (DataType.IsNullOrEmpty(s))
-                        continue;
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(s);
-                    dt.TableName = listNames[i];
-                    ds.Tables.Add(dt);
-                }
-            }
-
-            foreach (DataTable item in ds.Tables)
-            {
-                if (item.TableName == "Sys_MapAttr" && item.Rows.Count == 0)
-                    md.RepairMap();
-            }
-
-            ds.Tables.Add(dtMapDtl);
-            return ds;
-        }
-        /// <summary>
         /// 获得表单信息.
         /// </summary>
         /// <param name="fk_mapdata"></param>
         /// <returns></returns>
-        public static System.Data.DataSet GenerHisDataSet_2017(string fk_mapdata)
+        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata)
         {
             DataSet ds = new DataSet();
 
@@ -1330,22 +1173,18 @@ namespace BP.Sys
             //加入主表信息.
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
             ds.Tables.Add(Sys_MapData);
-
-
+             
             //加入分组表.
             DataTable Sys_GroupField = md.GroupFields.ToDataTableField("Sys_GroupField");
             ds.Tables.Add(Sys_GroupField);
-
-
+             
             //加入明细表.
             DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
             ds.Tables.Add(Sys_MapDtl);
 
-
             //加入枚举表.
             DataTable Sys_Menu = md.SysEnums.ToDataTableField("Sys_Enum");
             ds.Tables.Add(Sys_Menu);
-        
 
             //加入外键属性.
             DataTable Sys_MapAttr = md.MapAttrs.ToDataTableField("Sys_MapAttr");

@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <!-- calertModal -->
+    <!-- 修改节点名称 -->
     <div id="alertModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -80,7 +80,19 @@
             <button class="btn btn-primary savetext" data-dismiss="modal"  aria-hidden="true">保存</button>
         </div>
     </div>
-
+    <!-- 修改标签名称 -->
+    <div id="alertModal3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>修改标签名称</h3>
+        </div>
+        <div class="modal-body">
+            <p>提示内容</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal"  aria-hidden="true">保存</button>
+        </div>
+    </div>
     <!-- 点击线的提示 -->
     <div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
@@ -149,6 +161,13 @@
             <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
             <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
             <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
+        </ul>
+    </div>
+
+    <div id="canvasLabMenu" style="display:none;">
+        <ul>
+            <li id="clmNewName"><i class="icon-wrench"></i>&nbsp;<span class="_label">修改标签</span></li>
+            <li id="clmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除标签</span></li>
         </ul>
     </div>
     <!--end div-->
@@ -310,6 +329,7 @@
 
             var alertModal = $('#alertModal'), attributeModal = $("#attributeModal");
             var alertModal1 = $('#alertModal1'), attributeModal = $("#attributeModal");
+            var alertModal3 = $('#alertModal3'), attributeModal = $("#attributeModal");
             //消息提示
             mAlert = function (messages, s) {
                 if (!messages) messages = "";
@@ -325,6 +345,14 @@
                 alertModal1.find(".modal-body").html(messages);
                 alertModal1.modal('toggle');
                 setTimeout(function () { alertModal1.modal("hide") }, s);
+            }
+            //消息弹出（标签）
+            labAlert = function (messages, s) {
+                if (!messages) messages = "";
+                if (!s) s = 200000;
+                alertModal3.find(".modal-body").html(messages);
+                alertModal3.modal('toggle');
+                setTimeout(function () { alertModal3.modal("hide") }, s);
             }
             //消息弹出（线）
             fAlert = function (messages, s) {
@@ -356,10 +384,13 @@
 
             /*步骤数据*/
             var processData = GenerDrowFlowData();
+            //标签数据
+            var labNoteData = GetLabNoteData();
             console.log(processData);
             /*创建流程设计器*/
             var _canvas = $("#flowdesign_canvas").Flowdesign({
-                "processData": processData
+                "processData": processData,
+                "labNoteData": labNoteData
                               , mtAfterDrop: function (params) {
                                   //alert("连接：" + params.sourceId + " -> " + params.targetId);
                               }
@@ -419,13 +450,42 @@
                                   "cmNewLabel": function (t) {
                                       var mLeft = $("#jqContextMenu").css("left").replace('px', '');
                                       var mTop = $("#jqContextMenu").css("top").replace('px', '');
-                                      var username = document.createElement("input");
-                                      username.type = "text";
-                                      username.style = "width:140px;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;position:absolute"
-                                      username.placeholder = "请输入标签";
-                                      username.id = "";
-                                      //这里需要什么参数自己添加
-                                      document.body.appendChild(username);
+
+                                      //创建一个标签
+                                      var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                                      hander.AddPara("X", mLeft);
+                                      hander.AddPara("Y", mTop);
+                                      hander.AddPara("FK_Flow", flowNo);
+                                      hander.AddPara("LabName", "请输入标签");
+
+                                      var data = hander.DoMethodReturnString("CreatLabNote");
+                                      if (data.indexOf('err@') == 0) {
+                                          alert(data);
+                                          return;
+                                      }
+
+                                      //添加标签样式与坐标
+                                      data = JSON.parse(data);
+                                      var strs = "";
+                                      strs += "{'id':'" + data.MyPK + "',";
+                                      strs += "'flow_id':'" + data.FK_Flow + "',";
+                                      strs += "'process_name':'请输入标签',";
+                                      strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
+                                      strs += "}";
+                                      strs = eval("(" + strs + ")");
+
+                                      if (_canvas.addLabProcess(strs) == false) //添加
+                                      {
+                                          alert("添加失败");
+                                          return;
+                                      }
+                                      //                                      var username = document.createElement("input");
+                                      //                                      username.type = "text";
+                                      //                                      username.style = "width:140px;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;position:absolute"
+                                      //                                      username.placeholder = "请输入标签";
+                                      //                                      username.id = "";
+                                      //                                      //这里需要什么参数自己添加
+                                      //                                      document.body.appendChild(username);
                                       //离开焦点执行保存
                                   },
                                   "cmPaste": function (t) {
@@ -514,6 +574,30 @@
                                       NodeAccepterRole(activeId);
 
                                   }
+                              },
+                              canvasLabMenu: {
+                                  "clmDelete": function (t) {
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID.
+                                      if (confirm("你确定删除该标签吗？") == false)
+                                          return;
+
+                                      //删除标签.
+                                      var lb = new Entity("BP.WF.Template.LabNote", activeId);
+                                      lb.Delete();
+                                      _canvas.delLabNote(activeId);
+
+                                  },
+                                  "clmNewName": function (t) {
+                                      //修改标签名称.
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      var windowtext = $("#lab" + activeId).text();
+                                      var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                                      var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
+                                      var xiuNodename = '修改名称：<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
+                                      var spanaa = $("#lab" + activeId + " span").html();
+
+                                      labAlert(xiuNodename);
+                                  }
                               }
                               , fnRepeat: function () {
                                   //alert("步骤连接重复1");//可使用 jquery ui 或其它方式提示
@@ -525,7 +609,7 @@
                                   var activeId = _canvas.getActiveId(); //右键当前的ID
                                   var windowtext = $("#window" + activeId).text();
                                   var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
-                                  var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(" + activeId + ")");
+                                  var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(\"" + activeId + "\")");
                                   var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
                                   var spanaa = $("#window" + activeId + " span").html();
 
@@ -611,6 +695,20 @@
                         }
 
                     }
+
+                    //标签
+                    var labNoteInfo = _canvas.getLabNoteInfo(); //标签信息.
+                    labNoteInfo = JSON.parse(labNoteInfo);
+
+                    for (var lab in labNoteInfo) {
+
+                        var labJSON = labNoteInfo[lab];
+
+                        var lb = new Entity("BP.WF.Template.LabNote", lab);
+                        lb.Y = labJSON.top;
+                        lb.X = labJSON.left;
+                        lb.Update();
+                    }
                 }
                 catch (e) {
                     alert(e);
@@ -650,6 +748,16 @@
 
             //更新节点名称与显示
             $("#span_" + activeId).text(text);
+        }
+        //修改标签名称
+        function saveLabName(activeId) {
+            var lb = new Entity("BP.WF.Template.LabNote", activeId);
+            var text = document.getElementById("TB_LAB_" + activeId).value; //新修改的值.
+            lb.Name = text;
+            lb.Update();
+
+            //更新名称与显示
+            $("#lab_span_" + activeId).text(text);
         }
         //获得流程数据.
         function GenerDrowFlowData() {
@@ -700,7 +808,7 @@
                     /* 如果是其他的情况,就要考虑分合流 */
                 }
 
-             
+
 
                 strs += "'style':'width:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 
@@ -713,22 +821,32 @@
             strs += "] }";
 
             return eval("(" + strs + ")");
-
+        }
+        function GetLabNoteData() {
             //标签. 取出来显示
             var labs = new Entities("BP.WF.Template.LabNotes");
             labs.Retrieve("FK_Flow", flowNo);
 
-            //遍历标签到画布上.
+            var strs = "{ 'total':" + labs.length + ", 'list':[";
+            //遍历标签个数
             for (var i = 0; i < labs.length; i++) {
+
                 var lab = labs[i];
 
-                var labelText = lab.Name;
-                var x = lab.X;
-                var y = lab.Y;
+                strs += "{'id':'" + lab.MyPK + "',";
+                strs += "'flow_id':'" + lab.FK_Flow + "',";
+                strs += "'process_name':'" + lab.Name + "',";
+                strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + lab.X + "px" + ";top:" + lab.Y + "px;'";
 
+                if (i == labs.length - 1)
+                    strs += "}";
+                else
+                    strs += "},";
             }
 
-        
+            strs += "] }";
+
+            return eval("(" + strs + ")");
         }
         //刷新页面
         function page_reload() {

@@ -55,8 +55,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 string FK_Flow = this.GetRequestVal("FK_Flow");
-                string x = this.GetRequestVal("x");
-                string y = this.GetRequestVal("y");
+                string x = this.GetRequestVal("X");
+                string y = this.GetRequestVal("Y");
                 int iX = 20;
                 int iY = 20;
                 

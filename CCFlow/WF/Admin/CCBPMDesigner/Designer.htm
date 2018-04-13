@@ -367,9 +367,11 @@
                               , canvasMenus: {
                                   "cmNewNode": function (t) {
 
+                                      //获取坐标
                                       var mLeft = $("#jqContextMenu").css("left").replace('px', '');
                                       var mTop = $("#jqContextMenu").css("top").replace('px', '');
 
+                                      //创建一个节点
                                       var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
                                       hander.AddPara("X", mLeft);
                                       hander.AddPara("Y", mTop);
@@ -381,6 +383,7 @@
                                           return;
                                       }
 
+                                      //添加节点样式与坐标
                                       data = JSON.parse(data);
                                       var strs = "";
                                       strs += "{'id':'" + data.NodeID + "',";
@@ -391,6 +394,13 @@
                                       strs += "'style':'width:auto;height:41px;line-height:41px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
                                       strs += "}";
                                       strs = eval("(" + strs + ")");
+
+                                      //避免没点击保存，直接刷新后，坐标失效
+                                      var node = new Entity("BP.WF.Template.NodeSimple", data.NodeID);
+                                      node.Y = mTop;
+                                      node.X = mLeft;
+                                      node.Update();
+
                                       if (_canvas.addProcess(strs) == false) //添加
                                       {
                                           alert("添加失败");

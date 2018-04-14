@@ -3482,7 +3482,7 @@ namespace BP.WF
 
             //记录日期.
             DateTime d;
-            if (string.IsNullOrWhiteSpace(rdt) || DateTime.TryParse(rdt, out d) == false)
+            if (DataType.IsNullOrEmpty(rdt))
                 t.RDT = DataType.CurrentDataTimess;
             else
                 t.RDT = rdt;
@@ -3584,7 +3584,6 @@ namespace BP.WF
         /// <param name="optionName">操作名称(比如:科长审核、部门经理审批),如果为空就是"审核".</param>
         public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)
         {
-
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -3615,32 +3614,32 @@ namespace BP.WF
 
                 //写入日志.
                 WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName);
+                return;
             }
-            else
+
+            ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
+                     "RDT WHERE  Tag=" + dbStr + "Tag ";
+            ps.Add(TrackAttr.NDFromT, nodeName);
+            ps.Add(TrackAttr.Msg, msg);
+            ps.Add(TrackAttr.Tag, tag);
+            ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
+            int num = DBAccess.RunSQL(ps);
+
+            if (num > 1)
             {
-                ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
-                         "RDT WHERE  Tag=" + dbStr + "Tag ";
-                ps.Add(TrackAttr.NDFromT, nodeName);
-                ps.Add(TrackAttr.Msg, msg);
+                ps.Clear();
+                ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  Tag=" + dbStr + "Tag ";
                 ps.Add(TrackAttr.Tag, tag);
-                ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
-                int num = DBAccess.RunSQL(ps);
-
-                if (num > 1)
-                {
-                    ps.Clear();
-                    ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  Tag=" + dbStr + "Tag ";
-                    ps.Add(TrackAttr.Tag, tag);
-                    DBAccess.RunSQL(ps);
-                    num = 0;
-                }
-
-                if (num == 0)
-                {
-                    //如果没有更新到，就写入.
-                    WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null);
-                }
+                DBAccess.RunSQL(ps);
+                num = 0;
             }
+
+            if (num == 0)
+            {
+                //如果没有更新到，就写入.
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null);
+            }
+
         }
 
         public static void WriteTrackWorkCheckForTangRenYiYao(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)

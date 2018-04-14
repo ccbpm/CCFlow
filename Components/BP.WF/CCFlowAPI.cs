@@ -218,7 +218,6 @@ namespace BP.WF
                         #endregion 为天业集团做一个特殊的判断.
 
 
-
                         foreach (Node item in nds)
                         {
                             DataRow dr = dtToNDs.NewRow();
@@ -240,6 +239,7 @@ namespace BP.WF
                             dtToNDs.Rows.Add(dr);
                         }
                         #endregion 到达其他节点。
+
 
                         //增加一个下拉框, 对方判断是否有这个数据.
                         myds.Tables.Add(dtToNDs);

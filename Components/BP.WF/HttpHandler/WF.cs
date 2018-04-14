@@ -422,7 +422,7 @@ namespace BP.WF.HttpHandler
                 return json;
 
             //如果是节水公司的，就特别处理.
-            if (WebUser.FK_Dept.IndexOf("1099") == 0)
+            if (WebUser.FK_Dept.IndexOf("18099") == 0)
                 return Start_InitTianYe_JieShui();
 
             //获得当前人员的部门,根据部门获得该人员的组织集合.

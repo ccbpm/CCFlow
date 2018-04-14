@@ -574,6 +574,9 @@ namespace BP.WF.HttpHandler
         {
             //获得
             Entities ens = ClassFactory.GetEns(this.EnsName);
+            if (ens == null)
+                return "err@类名:" + this.EnsName + "错误";
+
             Entity en = ens.GetNewEntity;
             Map map = ens.GetNewEntity.EnMapInTime;
 

@@ -310,7 +310,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.
-            string orgNos = "'1099'"; //空的数据.
+            string orgNos = "'18099'"; //空的数据.
             foreach (DataRow dr in dt.Rows)
             {
                 string deptNo = dr[0].ToString();

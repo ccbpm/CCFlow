@@ -226,8 +226,9 @@
     <Compile Include="Port\Dept.cs" />
     <Compile Include="Port\Station.cs" />
     <Compile Include="Port\StationType.cs" />
-    <Compile Include="Port\SubInc\StationType.cs" />
     <Compile Include="Port\SubInc\AdminEmp.cs" />
+    <Compile Include="Port\SubInc\Emp.cs" />
+    <Compile Include="Port\SubInc\StationType.cs" />
     <Compile Include="Port\SubInc\Inc.cs" />
     <Compile Include="Rpt\db\MapRpt.cs">
       <SubType>Code</SubType>

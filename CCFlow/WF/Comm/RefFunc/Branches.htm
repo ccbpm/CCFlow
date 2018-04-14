@@ -184,32 +184,34 @@
                 emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
                 onNodeChecked: function (event, node) {
-                     var selectNodes = getChildNodeIdArr(node,true); //获取所有子节点
-                         if (selectNodes) { //子节点不为空，则选中所有子节点
-                             $('#tree').treeview('checkNode', [selectNodes, { silent: true}]);
-                        }
-                         var parentNode = $("#tree").treeview("getNode", node.parentId);
-                       setParentNodeCheck(node);
-                    
+                    var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
+                    if (selectNodes) { //子节点不为空，则选中所有子节点
+                        $('#tree').treeview('checkNode', [selectNodes, { silent: true}]);
+                        saveCheckNodes(selectNodes, 1);
+                    }
 
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
                     en[GetQueryString("AttrOfMInMM")] = node.id;
+                    en.Save();
 
-                    en.Insert();
+                    // var parentNode = $("#tree").treeview("getNode", node.parentId);
+                    //setParentNodeCheck(parentNode);
+
+
                 },
                 onNodeUnchecked: function (event, node) {
-                    
-                     var selectNodes = getChildNodeIdArr(node,false); //获取所有子节点
-                         if (selectNodes) { //子节点不为空，则取消选中所有子节点
-                             $('#tree').treeview('uncheckNode', [selectNodes, { silent: true}]);
-                     }
+
+                    var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
+                    if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                        $('#tree').treeview('uncheckNode', [selectNodes, { silent: true}]);
+                        deleteCheckNodes(selectNodes, 1);
+                    }
+
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
                     en[GetQueryString("AttrOfMInMM")] = node.id;
                     en.Delete();
-
-                    // alert("删除成功:" + node.nodeId);
                     //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
                 },
                 onNodeSelected: function (event, node) {
@@ -312,124 +314,97 @@
 
         function isLegalName(name) {
 
-            if (name==false) {
+            if (name == false) {
                 return false;
             }
             return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
         }
 
 
-        ///获取已经勾选节点
-        function GetCheckNodes() {
-            var nodeIds = [];
-            var gridPanel = $("#viewGrid_Panel");
-            if (gridPanel.is(':hidden')) {//如果列表是隐藏的则获取树控件值
-                var checkedNodes = [];
-                if (mapExt.ShowCheckBox == true) {
-                    checkedNodes = $('#tree').treeview("getChecked");
-                } else {
-                    checkedNodes = $('#tree').treeview("getSelected");
+
+
+        function getChildNodeIdArr(node, checked) {
+            var ts = [];
+            if (node.nodes) {
+                for (x in node.nodes) {
+                    ts.push(node.nodes[x].nodeId);
+                    if (node.nodes[x].nodes) {
+                        var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                        for (j in getNodeDieDai) {
+                            ts.push(getNodeDieDai[j]);
+                        }
+                    }
                 }
-                $.each(checkedNodes, function (i, node) {
-                    var item = {};
-                    item.No = node.id;
-                    item.Name = node.text;
-                    nodeIds.push(item);
-                });
             } else {
-                var selectedRows = $("#viewGrid").bootstrapTable("getSelections");
-                $.each(selectedRows, function (i, row) {
-                    var item = {};
-                    item.No = row.No;
-                    item.Name = row.Name;
-                    nodeIds.push(item);
-                });
+                ts.push(node.nodeId);
             }
-            return nodeIds;
+            return ts;
         }
 
-         function getChildNodeIdArr(node,checked) {
-             var ts = [];
-             if (node.nodes) {
-                 for (x in node.nodes) {
-                     ts.push(node.nodes[x].nodeId);
-                     if (checked == true) {
-                         var en = new Entity(GetQueryString("Dot2DotEnName"));
-                         en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                         en[GetQueryString("AttrOfMInMM")] = node.nodes[x].id;
-                         en.Insert();
-                     } else {
-                         var en = new Entity(GetQueryString("Dot2DotEnName"));
-                         en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                         en[GetQueryString("AttrOfMInMM")] = node.nodes[x].id;
-                         en.Delete();
-                     }
-                     
-                     if (node.nodes[x].nodes) {
-                         var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
-                         for (j in getNodeDieDai) {
-                              ts.push(getNodeDieDai[j]);
-                         }
-                     }
-                 }
-             } else {
-                  ts.push(node.nodeId);
-
-                  
-             }
-             return ts;
-        }
- 
-         function setParentNodeCheck(node) {
-             var parentNode = $("#tree").treeview("getNode", node.parentId);
-             if (parentNode.nodes) {
-                 var checkedCount = 0;
-                 for (x in parentNode.nodes) {
+        function setParentNodeCheck(node) {
+            var parentNode = $("#tree").treeview("getNode", node.parentId);
+            if (parentNode.nodes) {
+                var checkedCount = 0;
+                for (x in parentNode.nodes) {
                     if (parentNode.nodes[x].state.checked) {
-                         checkedCount ++;
-                     } else {
-                         break;
-                     }
-                 }
-                 if (checkedCount === parentNode.nodes.length) {
-                     $("#tree").treeview("checkNode", parentNode.nodeId);
-                     setParentNodeCheck(parentNode);
-                     var en = new Entity(GetQueryString("Dot2DotEnName"));
-                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                     en[GetQueryString("AttrOfMInMM")] = parentNode.nodeId;
-                     en.Insert();
-                 }
-             }
+                        checkedCount++;
+                    } else {
+                        break;
+                    }
+                }
+                if (checkedCount === parentNode.nodes.length) {
+                    var en = new Entity(GetQueryString("Dot2DotEnName"));
+                    en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                    en[GetQueryString("AttrOfMInMM")] = parentNode.nodeId;
+                    en.Save();
+                    $("#tree").treeview("checkNode", parentNode.nodeId);
+                    setParentNodeCheck(parentNode);
+                }
+            }
+        }
+
+        var en = null;
+        function saveCheckNodes(selectNodes, flag) {
+            for (var i = 0; i < selectNodes.length; i++) {
+                en = new Entity(GetQueryString("Dot2DotEnName"));
+                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                if (flag == 0)
+                    en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
+                else
+                    en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
+                en.Save();
+            }
+        }
+        function deleteCheckNodes(selectNodes, flag) {
+            for (var i = 0; i < selectNodes.length; i++) {
+                var en = new Entity(GetQueryString("Dot2DotEnName"));
+                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                if (flag == 0)
+                    en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
+                else
+                    en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
+                en.Delete();
+            }
         }
         function CheckAll() {
-            var node = $('#tree').treeview('getNode', rootNo);
-            $('#tree').treeview('checkNode', [node, { silent: true}]);
-
-            var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
+            $('#tree').treeview('checkAll', { silent: true });
+            var selectNodes = $('#tree').treeview('getChecked');
             if (selectNodes) { //子节点不为空，则选中所有子节点
-                $('#tree').treeview('checkNode', [selectNodes, { silent: true}]);
+                saveCheckNodes(selectNodes, 0);
             }
-            var en = new Entity(GetQueryString("Dot2DotEnName"));
-            en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-            en[GetQueryString("AttrOfMInMM")] = node.id;
-            en.Insert();
+
         }
         function UnCheckAll() {
-            var node = $('#tree').treeview('getNode', rootNo);
+            $('#tree').treeview('uncheckAll', { silent: true });
+            var selectNodes = $('#tree').treeview('getUnselected');
 
-            $('#tree').treeview('uncheckNode', [node, { silent: true}]);
-
-            var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
             if (selectNodes) { //子节点不为空，则取消选中所有子节点
-                $('#tree').treeview('uncheckNode', [selectNodes, { silent: true}]);
+                deleteCheckNodes(selectNodes, 0);
             }
-            var en = new Entity(GetQueryString("Dot2DotEnName"));
-            en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-            en[GetQueryString("AttrOfMInMM")] = node.id;
-            en.Delete();
+
         }
 
-       
+
         function Close() {
             alert("尚未实现.");
         }

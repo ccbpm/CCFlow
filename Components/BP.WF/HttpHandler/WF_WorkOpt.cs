@@ -1262,8 +1262,6 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtTrack);
             }
 
-          
-
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>

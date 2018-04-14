@@ -49,7 +49,6 @@ namespace BP.WF.HttpHandler
             //清除缓存.
             BP.Sys.SystemConfig.DoClearCash();
 
-
             if (BP.Web.WebUser.IsAdmin == false )
                 return "err@您不是管理员，无法执行该操作.";
 
@@ -104,6 +103,8 @@ namespace BP.WF.HttpHandler
                 }
                 return BP.Tools.Json.ToJson(dtEmps);
             }
+
+         
 
             //fl.DoCheck();
 
@@ -225,6 +226,15 @@ namespace BP.WF.HttpHandler
 
                     dtMyEmps.Rows.Add(drNew);
                 }
+
+
+                //检查物理表,避免错误.
+                Nodes nds = new Nodes(this.FK_Flow);
+                foreach (Node mynd in nds)
+                {
+                    mynd.HisWork.CheckPhysicsTable();
+                }
+
 
                 //返回数据源.
                 return BP.Tools.Json.ToJson(dtMyEmps);

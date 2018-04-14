@@ -486,10 +486,9 @@ namespace BP.WF
                     strs += "@" + dr[0].ToString();
                 nd.HisDeptStrs = strs;
 
-
                 // 节点方向.
                 strs = "";
-                Directions dirs = new Directions(nd.NodeID, 0);
+                Directions dirs = new Directions(nd.NodeID);
                 foreach (Direction dir in dirs)
                     strs += "@" + dir.ToNode;
                 nd.HisToNDs = strs;

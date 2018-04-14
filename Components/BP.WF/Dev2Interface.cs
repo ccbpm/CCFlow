@@ -2559,7 +2559,7 @@ namespace BP.WF
                     break;
                 case ReturnRole.ByReturnLine: //按照流程图画的退回线执行退回.
                     Directions dirs = new Directions();
-                    dirs.Retrieve(DirectionAttr.Node, fk_node, DirectionAttr.DirType, 1);
+                    dirs.Retrieve(DirectionAttr.Node, fk_node);
                     if (dirs.Count == 0)
                         throw new Exception("@流程设计错误:当前节点没有画向后退回的退回线,更多的信息请参考退回规则.");
                     foreach (Direction dir in dirs)
@@ -4611,15 +4611,15 @@ namespace BP.WF
                 gwf.WorkID = workID;
                 if (gwf.RetrieveFromDBSources() == 0)
                     return true;
-                string mysql = "SELECT \"FK_Emp\", \"IsPass\" FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
+                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                 if (mydt.Rows.Count == 0)
                     return true;
 
                 foreach (DataRow dr in mydt.Rows)
                 {
-                    string fk_emp = dr["FK_Emp"].ToString();
-                    string isPass = dr["IsPass"].ToString();
+                    string fk_emp = dr[0].ToString();
+                    string isPass = dr[1].ToString();
                     if (fk_emp == userNo && (isPass == "0" || isPass == "80" || isPass == "90"))
                         return true;
                 }

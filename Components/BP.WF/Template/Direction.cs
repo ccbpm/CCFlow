@@ -25,10 +25,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Flow = "FK_Flow";
         /// <summary>
-        /// 方向类型
-        /// </summary>
-        public const string DirType = "DirType";
-        /// <summary>
         /// 是否可以原路返回
         /// </summary>
         public const string IsCanBack = "IsCanBack";
@@ -60,17 +56,6 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(DirectionAttr.Node, value);
-            }
-        }
-        public int DirType
-        {
-            get
-            {
-                return this.GetValIntByKey(DirectionAttr.DirType);
-            }
-            set
-            {
-                this.SetValByKey(DirectionAttr.DirType, value);
             }
         }
         public string FK_Flow
@@ -146,7 +131,6 @@ namespace BP.WF.Template
                 map.AddTBString(DirectionAttr.FK_Flow, null, "流程", true, true, 0, 10, 0, false);
                 map.AddTBInt(DirectionAttr.Node, 0, "从节点", false, true);
 				map.AddTBInt( DirectionAttr.ToNode,0,"到节点",false,true);
-                map.AddTBInt(DirectionAttr.DirType, 0, "类型0前进1返回", false, true);
                 map.AddTBInt(DirectionAttr.IsCanBack, 0, "是否可以原路返回(对后退线有效)", false, true);
                 /*
                  * Dots 存储格式为: @x1,y1@x2,y2
@@ -174,12 +158,12 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Flow+"_" +this.Node + "_" + this.ToNode + "_" + this.DirType;
+            this.MyPK = this.FK_Flow+"_" +this.Node + "_" + this.ToNode;
             return base.beforeInsert();
         }
         protected override bool beforeDelete()
         {
-            this.MyPK = this.FK_Flow + "_" + this.Node + "_" + this.ToNode + "_" + this.DirType;
+            this.MyPK = this.FK_Flow + "_" + this.Node + "_" + this.ToNode;
             return base.beforeDelete();
         }
 	}
@@ -204,13 +188,10 @@ namespace BP.WF.Template
         /// 节点方向
         /// </summary>
         /// <param name="NodeID">节点ID</param>
-        /// <param name="dirType">类型</param>
-        public Directions(int NodeID, int dirType)
+        public Directions(int NodeID)
 		{
 			QueryObject qo = new QueryObject(this);
-			qo.AddWhere(DirectionAttr.Node,NodeID);
-            qo.addAnd();
-            qo.AddWhere(DirectionAttr.DirType, dirType);
+			qo.AddWhere(DirectionAttr.Node,NodeID);            
 		    qo.DoQuery();			
 		}
 		/// <summary>

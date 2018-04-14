@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>退回</title>
+    <title>选择接受人</title>
     <!--
     1, 退回界面。
     2，需要 FK_Flow, FK_Node,WorkID, FID.
@@ -240,8 +240,8 @@
                 //判断最高级别.
                 var user = new WebUser();
                 if (user.CustomerNo == 'TianYe') {
-                    if (user.FK_Dept.indexOf('1099') == 0) {
-                        if (pageData.ParentDept.indoexOf('1099') != 0) {
+                    if (user.FK_Dept.indexOf('18099') == 0) {
+                        if (pageData.ParentDept.indexOf('18099') != 0) {
                             alert('已经是最高级别了.');
                             return;
                         }

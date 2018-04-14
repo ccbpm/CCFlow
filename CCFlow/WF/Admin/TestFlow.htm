@@ -11,6 +11,8 @@
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         /* ESC Key Down */
         function Esc() {
@@ -45,63 +47,59 @@
             var doWhat = GetQueryString("DoWhat");
             var userNo = getQueryStringByName("UserNo");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=" + doType + "&UserNo=" + userNo + "&DoWhat=" + doWhat + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            handler.AddUrlData();
 
-                        document.getElementById("Msg").innerHTML = data;
+            var data = handler.DoMethodReturnString(doType);
 
-                        if (data.indexOf('管理员') != -1) {
-                            alert(data);
-                            return;
-                        }
+            if (data.indexOf('err@') == 0) {
 
-                        if (window.confirm(data) == true) {
-                            window.location.href = './AttrNode/NodeAccepterRole.htm?FK_Node=' + fk_flow + '01';
-                            return;
-                        }
-                    }
+                document.getElementById("Msg").innerHTML = data;
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
-
-                    data = JSON.parse(data);
-
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-
-                        var newRow = "";
-                        var emp = data[i];
-
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + emp.No + "</td>";
-                        newRow += "<td>" + emp.Name + "</td>";
-
-                        var url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
-                        //  newRow += "<td>" + url + "</td>";
-
-                        url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
-                        newRow += "<td>" + url + "</td>";
-
-                        url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/ie.gif' border=0 />手机模式</a>";
-                        // newRow += "<td>" + url + "</td>";
-                        newRow += "<td>无</td>";
-
-                        newRow += "<td>" + emp.FK_DeptText + "</td>";
-                        newRow += "</tr>";
-                        $("#Table1 tr:last").after(newRow);
-                    }
+                if (data.indexOf('管理员') != -1) {
+                    alert(data);
+                    return;
                 }
-            });
+
+                if (window.confirm(data) == true) {
+                    window.location.href = './AttrNode/NodeAccepterRole.htm?FK_Node=' + fk_flow + '01';
+                    return;
+                }
+            }
+
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            //增加处理.
+            for (var i = 0; i < data.length; i++) {
+
+                var newRow = "";
+                var emp = data[i];
+
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + emp.No + "</td>";
+                newRow += "<td>" + emp.Name + "</td>";
+
+                var url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
+                //  newRow += "<td>" + url + "</td>";
+
+                url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
+                newRow += "<td>" + url + "</td>";
+
+                url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/ie.gif' border=0 />手机模式</a>";
+                // newRow += "<td>" + url + "</td>";
+                newRow += "<td>无</td>";
+
+                newRow += "<td>" + emp.FK_DeptText + "</td>";
+                newRow += "</tr>";
+                $("#Table1 tr:last").after(newRow);
+            }
         }
          
     </script>

@@ -30,13 +30,10 @@
         var webUser = new WebUser();
 
         var ensName = GetQueryString("EnsName");
-
         //当前用户页面信息.
         var ur = new Entity("BP.Sys.UserRegedit");
         ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
         ur.RetrieveFromDBSources();
-
-        var count = ur.GetPara("RecCount");
 
         var mapBase;
 
@@ -73,7 +70,6 @@
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddUrlData();  //增加参数.
-
             //获得map基本信息.
             mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
 
@@ -251,6 +247,12 @@
             }
 
             data = JSON.parse(data);
+            //当前用户页面信息.
+            var ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+           
+            count = ur.GetPara("RecCount");
             return data;
         }
 

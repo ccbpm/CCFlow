@@ -587,8 +587,6 @@ namespace BP.WF.Template
                 #endregion 流程模版管理.
 
                 #region 开发接口.
-
-
                 rm = new RefMethod();
                 rm.Title = "与业务表数据同步";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";

@@ -3889,7 +3889,7 @@ namespace BP.WF
         /// <param name="workId"></param>
         /// <param name="nodeFrom"></param>
         /// <returns></returns>
-        public static string GetCheckInfo(string flowNo, Int64 workId, int nodeFrom, string isNullAsVal)
+        public static string GetCheckInfo(string flowNo, Int64 workId, int nodeFrom, string isNullAsVal="同意" )
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Msg FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";

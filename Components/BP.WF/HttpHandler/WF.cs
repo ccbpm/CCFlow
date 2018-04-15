@@ -407,8 +407,9 @@ namespace BP.WF.HttpHandler
 
                 //处理权限,为了防止未知的错误.
                 DBAccess.RunSQL("UPDATE WF_FLOWSORT SET ORGNO='0' WHERE ORGNO='' OR ORGNO IS NULL OR ORGNO='101'");
-            }
 
+                DBAccess.RunSQL("UPDATE wf_flowsort SET ORGNO = REPLACE(NO,'Inc','') where  no like 'Inc%'");
+            }
 
             //需要翻译.
             BP.WF.Port.WFEmp em = new WFEmp();

@@ -1145,8 +1145,6 @@ namespace BP.WF.HttpHandler
                         row = rows[0];
                         row["IsDoc"] = true;
 
-
-
                         row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                         if (row["Msg"].ToString().Equals("") )
                             row["RDT"] = "";
@@ -1256,7 +1254,8 @@ namespace BP.WF.HttpHandler
             }
 
             string str= BP.Tools.Json.ToJson(ds);
-           // DataType.WriteFile("c:\\ccflow.txt", str);
+           
+            DataType.WriteFile("c:\\WorkCheck_Init_ccflow.txt", str);
             return str;
         }
         /// <summary>

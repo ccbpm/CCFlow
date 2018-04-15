@@ -5039,11 +5039,6 @@ namespace BP.En
                 }
                 dt.Rows.Add(dr);
             }
-
-
-            //foreach (Entity myen in this)
-            //{
-            //}
             return dt;
         }
 		public DataTable ToDataTableDesc()

@@ -748,6 +748,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string WorkCheck_Init()
         {
+            if (Web.WebUser.No == null)
+                return "err@登录信息丢失,请重新登录.";
+
             #region 定义变量.
             FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
             FrmWorkCheck frmWorkCheck = null;
@@ -769,7 +772,8 @@ namespace BP.WF.HttpHandler
             if (this.GetRequestVal("IsReadonly") != null && this.GetRequestVal("IsReadonly").Equals("1"))
                 isReadonly = true;
 
-            Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
+          //  Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
+            DataTable nodeEmps = new DataTable();
             FrmWorkCheck fwc = null;
             DataTable dt = null;
             int idx = 0;
@@ -964,13 +968,17 @@ namespace BP.WF.HttpHandler
                     if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                         wcDesc.HisFrmWorkCheckType == FWCType.Check || (
                                         (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)
-                                        && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
+                                        && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) 
+                                        || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog 
+                                        && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
                                         ))
                     {
                         bool isLast = true;
                         foreach (Track tk1 in tks)
                         {
-                            if (tk1.HisActionType == tk.HisActionType && tk1.NDFrom == tk.NDFrom && tk1.RDT.CompareTo(tk.RDT) > 0)
+                            if (tk1.HisActionType == tk.HisActionType 
+                                && tk1.NDFrom == tk.NDFrom 
+                                && tk1.RDT.CompareTo(tk.RDT) > 0)
                             {
                                 isLast = false;
                                 break;
@@ -982,12 +990,8 @@ namespace BP.WF.HttpHandler
                             isExitTb_doc = false;
                             row["IsDoc"] = true;
                             isDoc = true;
-                            row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+                            row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                             tkDoc = tk;
-
-                            //增加默认审核意见
-                            if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
-                                row["Msg"] = wcDesc.FWCDefInfo;
                         }
                         else
                         {
@@ -1062,7 +1066,7 @@ namespace BP.WF.HttpHandler
                                     row["Msg"] = mysubtk.MsgHtml;
                                     row["EmpFrom"] = mysubtk.EmpFrom;
                                     row["EmpFromT"] = mysubtk.EmpFromT;
-                                    row["RDT"] = mysubtk.RDT ?? "";
+                                    row["RDT"] = mysubtk.RDT ;
                                     row["IsDoc"] = false;
                                     row["ParentNode"] = tk.NDFrom;
                                     row["T_NodeIndex"] = idx++;
@@ -1078,17 +1082,11 @@ namespace BP.WF.HttpHandler
                         }
                     }
                     #endregion
-
-                    //    //todo:抄送暂未处理，不明逻辑
-                    //    continue;
-                    ////判断是否显示所有步骤
-                    //if (wcDesc.FWCIsShowAllStep == false)
-                    //    continue;
-
-                    //todo:抄送暂未处理，不明逻辑
+                  
                 }
 
-                if (tkDoc != null)
+                #warning 处理审核信息,删除掉他
+                if (tkDoc != null && 1==2 )
                 {
                     //判断可编辑审核信息是否处于最后一条，不处于最后一条，则将其移到最后一条
                     DataRow rdoc = tkDt.Select("IsDoc=True")[0];
@@ -1146,14 +1144,13 @@ namespace BP.WF.HttpHandler
                     {
                         row = rows[0];
                         row["IsDoc"] = true;
-                        row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
 
-                        if (row["Msg"] == DBNull.Value || string.IsNullOrWhiteSpace(row["Msg"] as string))
+
+
+                        row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
+                        if (row["Msg"].ToString().Equals("") )
                             row["RDT"] = "";
 
-                        //增加默认审核意见
-                        if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
-                            row["Msg"] = wcDesc.FWCDefInfo;
                     }
                     else
                     {
@@ -1163,15 +1160,12 @@ namespace BP.WF.HttpHandler
                         row["IsDoc"] = true;
                         row["ParentNode"] = 0;
                         row["RDT"] = "";
-                        row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+
+                        row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
-
-                        //增加默认审核意见
-                        if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
-                            row["Msg"] = wcDesc.FWCDefInfo;
 
                         tkDt.Rows.Add(row);
                     }
@@ -1184,15 +1178,12 @@ namespace BP.WF.HttpHandler
                     row["IsDoc"] = true;
                     row["ParentNode"] = 0;
                     row["RDT"] = "";
-                    row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+
+                    row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
-
-                    //增加默认审核意见
-                    if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
-                        row["Msg"] = wcDesc.FWCDefInfo;
 
                     tkDt.Rows.Add(row);
                 }
@@ -1225,7 +1216,9 @@ namespace BP.WF.HttpHandler
 
                 row = tkDt.NewRow();
                 row["NodeID"] = item.NodeID;
-                row["NodeName"] = (nds.GetEntityByKey(item.NodeID) as Node).FWCNodeName;
+
+                Node mynd = (Node)nds.GetEntityByKey(item.NodeID);
+                row["NodeName"] = mynd.FWCNodeName;
                 row["IsDoc"] = false;
                 row["ParentNode"] = 0;
                 row["RDT"] = "";
@@ -1262,7 +1255,9 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtTrack);
             }
 
-            return BP.Tools.Json.ToJson(ds);
+            string str= BP.Tools.Json.ToJson(ds);
+           // DataType.WriteFile("c:\\ccflow.txt", str);
+            return str;
         }
         /// <summary>
         /// 获取审核组件中刚上传的附件列表信息

@@ -321,6 +321,8 @@ namespace BP.WF.HttpHandler
             FlowSorts fss = new FlowSorts();
             BP.En.QueryObject qo = new En.QueryObject(fss);
             qo.AddWhereIn(FlowSortAttr.OrgNo, "(" + orgNos + ")");  //指定的类别.
+            qo.addOr();
+            qo.AddWhere(FlowSortAttr.Name, " LIKE ", "%节水%");  //指定的类别.
 
             //排序.
             qo.addOrderBy(FlowSortAttr.No, FlowSortAttr.Idx);

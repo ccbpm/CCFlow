@@ -53,7 +53,7 @@ function InitPage() {
                     break;
                 }
             }
-			var timebox='';
+
             //输出列表. zhoupeng 2017-12-19 修改算法，所有的审核动作都依靠发送来显示.
             for (var i = 0; i < tracks.length; i++) {
 
@@ -120,22 +120,20 @@ function InitPage() {
                     }
 
                     doc += "<p>";
-                    doc += "<font color=green>" + msg + "</font>";
+                    doc += "<font color=green><br>" + msg + "</font><br>";
                     doc += "</p>";
                 }
 
 
                 //输出row
-                timebox += '<div class="vertical-timeline-block">';
-                timebox += '<div class="vertical-timeline-icon navy-bg">';
-                timebox += '<i class="fa fa-user"></i>';
-                timebox += '</div>';
-				timebox += '<div class="vertical-timeline-content">';
-                timebox += '<div >'  + doc + '</div>';
-              
-                timebox += '<span class="vertical-date">' + GenerLeftIcon(track);
-                timebox += '</span></div></div>';
-           
+                var newRow = "";
+                newRow = "<tr  title='" + track.ActionTypeText + "' >";
+                newRow += "<td class='TDTime' >" + GenerLeftIcon(track) + "</td>";
+                newRow += "<td class='TDBase' ></td>";
+                newRow += "<td class='TDDoc' >" + doc + "</td>";
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
 
                 idx++;
             }
@@ -157,16 +155,10 @@ function InitPage() {
                 //如果有尚未审核的人员，就输出.
                 if (isHaveNoChecker == true) {
 
-                
-                   timebox += '<div class="vertical-timeline-block">';
-                timebox += '<div class="vertical-timeline-icon yellow-bg">';
-                timebox += '<i class="fa fa-user"></i>';
-                timebox += '</div>';
-				timebox += '<div class="vertical-timeline-content">';
-                timebox += '<p>等待审批</p>';
-              
-                timebox += '<span class="vertical-date">' + gwf.NodeName;
-                timebox += '</span></div></div>';
+                    var rowDay = "<tr>";
+                    rowDay += "<td colspan=3 class=TDDay ><span>等待审批</span><b>" + gwf.NodeName + "</b></td>";
+                    rowDay += "</tr>";
+                    $("#Table1 tr:last").after(rowDay);
 
 
                     for (var i = 0; i < gwls.length; i++) {
@@ -177,17 +169,18 @@ function InitPage() {
                             continue;
 
                         var doc = "";
-                        doc += "<p><span>审批人:";
+                        doc += "<span>审批人</span>";
                         doc += gwl.FK_EmpText;
 
-                        doc += "</span><span>阅读状态:";
+                        doc += "<br>";
+                        doc += "<span>阅读状态:</span>";
 
                         if (gwl.IsRead == "1")
-                            doc += "<font color=green>已阅读.</font>";
+                            doc += "<span><font color=green>已阅读.</font></span>";
                         else
-                            doc += "<font color=green>尚未阅读.</font></span>";
-                      
-                        doc += "<span>工作到达日期:";
+                            doc += "<span><font color=green>尚未阅读.</font></span>";
+                        doc += "<br>";
+                        doc += "<span>工作到达日期:</span>";
                         doc += gwl.RDT;
 
                         //到达时间.
@@ -199,11 +192,12 @@ function InitPage() {
                         timeDot = new Date();
 
 
-                        doc += "</span></p><p>";
-                        doc += "<span>已经耗时:";
+                        doc += "<br>";
+                        doc += "<span>已经耗时:</span>";
                         doc += GetSpanTime(toTimeDot, timeDot);
 
-                        doc += "</span><span>应完成日期:";
+                        doc += "<br>";
+                        doc += "<span>应完成日期:</span>";
                         doc += gwl.SDT;
 
 
@@ -215,31 +209,27 @@ function InitPage() {
                         //当前发生日期.
                         timeDot = new Date();
 
-                      
-                        doc += "</span><span>还剩余:";
+                        doc += "<br>";
+                        doc += "<span>还剩余:</span>";
                         doc += GetSpanTime(timeDot, toTimeDot);
-                        doc += '</span></p>';
 
                         var left = "";
-                        left += "<img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:30px;' />";
+                        left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
                         left += "<br>" + gwl.FK_EmpText;
 
-						
-						timebox += '<div class="vertical-timeline-block">';
-                timebox += '<div class="vertical-timeline-icon navy-bg">';
-                timebox += '<i class="fa fa-user"></i>';
-                timebox += '</div>';
-				timebox += '<div class="vertical-timeline-content">';
-                timebox += '<div class="spbox">'  + doc + '</div>';
-              
-                timebox += '<span class="vertical-date">' + left;
-                timebox += '</span></div></div>';
-                      
+                        var newRow = "";
+                        newRow = "<tr  title='等待审批人员' >";
+                        newRow += "<td class='TDTime' >" + left + "</td>";
+                        newRow += "<td class='TDBase' ></td>";
+                        newRow += "<td class='TDDoc' >" + doc + "</td>";
+                        newRow += "</tr>";
+
+                        $("#Table1 tr:last").after(newRow);
                     }
                 }
             }
 
-            $('#Table1').html(timebox);
+
             //调整大小.
             if (window.screen) {
                 var w = screen.availWidth;
@@ -258,19 +248,16 @@ function OpenFrm(nodeID) {
 //生成左边的icon.
 function GenerLeftIcon(track) {
     //左边的日期点.
-    var left = "";
+    var left = "<center>";
     left = track.RDT.substring(5, 16);
     left = left.replace('-', '月');
     left = left.replace(' ', '日');
     left = left.replace(':', '时');
 
     left = left + "分";
-    var nameinfo='';
- 	nameinfo += "<img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:30px;' />";
-  	nameinfo += "<br>" + track.EmpFromT;
-  
-    
-    left=nameinfo+'<br><small>' +left +'</small>'
+    left += "<br><img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
+    left += "<br>" + track.EmpFromT + "&nbsp;&nbsp;&nbsp;";
+    left += "</center>";
     return left;
 }
 

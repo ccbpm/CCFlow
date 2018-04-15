@@ -110,6 +110,9 @@
 
                         html += "<div style='float:left;width:100%;'>";
                         var msg = this.Msg;
+                        if (msg == null)
+                            msg = "";
+
 
                         while (msg.indexOf('<BR>') >= 0) {
                             msg = msg.replace('<BR>', '\t\n');

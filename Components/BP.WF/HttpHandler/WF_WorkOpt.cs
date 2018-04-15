@@ -960,7 +960,7 @@ namespace BP.WF.HttpHandler
 
 
                     row["ParentNode"] = 0;
-                    row["RDT"] = string.IsNullOrWhiteSpace(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && string.IsNullOrWhiteSpace(tk.Msg) ? "" : tk.RDT;
+                    row["RDT"] = DataType.IsNullOrEmpty(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && DataType.IsNullOrEmpty(tk.Msg) ? "" : tk.RDT;
                     row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
                     row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
@@ -1256,8 +1256,8 @@ namespace BP.WF.HttpHandler
             }
 
             string str= BP.Tools.Json.ToJson(ds);
-           
-            DataType.WriteFile("c:\\WorkCheck_Init_ccflow.txt", str);
+           //用于jflow数据输出格式对比.
+          //  DataType.WriteFile("c:\\WorkCheck_Init_ccflow.txt", str);
             return str;
         }
         /// <summary>

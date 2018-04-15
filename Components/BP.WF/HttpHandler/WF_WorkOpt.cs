@@ -793,7 +793,6 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("ParentNode", typeof(int));
             tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
             tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
-            ds.Tables.Add(tkDt);
 
             //流程附件.
             DataTable athDt = new DataTable("Aths");
@@ -1230,12 +1229,15 @@ namespace BP.WF.HttpHandler
             }
             #endregion 增加空白.
 
+            ds.Tables.Add(tkDt);
+
+            /*
             DataView dv = tkDt.DefaultView;
             dv.Sort = "T_NodeIndex ASC,T_CheckIndex ASC";
             DataTable sortedTKs = dv.ToTable("Tracks");
-
             ds.Tables.Remove("Tracks");
             ds.Tables.Add(sortedTKs);
+             * */
 
             //如果有 SignType 列就获得签名信息.
             if (SystemConfig.CustomerNo == "TianYe" )

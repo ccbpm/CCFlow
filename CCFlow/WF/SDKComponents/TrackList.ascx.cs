@@ -81,7 +81,7 @@ namespace CCFlow.WF.SDKComponents
                 {
                     case BP.WF.ActionType.Forward: //前进.
                     case BP.WF.ActionType.Start:   //发起.
-                        string checkInfo = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, tk.NDFrom);
+                        string checkInfo = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, tk.NDFrom,"");
                         if (checkInfo == null)
                             this.Add(tk.MsgHtml);
                         else

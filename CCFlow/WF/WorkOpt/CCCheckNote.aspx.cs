@@ -46,7 +46,7 @@ namespace CCFlow.WF.WorkOpt
         {
             if (this.IsPostBack == false)
             {
-                string note = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node);
+                string note = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node,"");
                 if (DataType.IsNullOrEmpty(note))
                 {
                     BP.WF.Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID,"已阅", "阅知");

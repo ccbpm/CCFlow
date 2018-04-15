@@ -2048,7 +2048,7 @@ public class CCFlowAPI : CCForm
         if (BP.Web.WebUser.No != userNo)
             BP.WF.Dev2Interface.Port_Login(userNo);
 
-        return BP.WF.Dev2Interface.GetCheckInfo(fk_flow, workID, fk_node);
+        return BP.WF.Dev2Interface.GetCheckInfo(fk_flow, workID, fk_node,"");
     }
     /// <summary>
     /// 写入工作审核日志:

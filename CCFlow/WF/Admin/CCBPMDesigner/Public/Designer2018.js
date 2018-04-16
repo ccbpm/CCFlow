@@ -34,7 +34,8 @@ function FlowCheck() {
     flowId = String(flowId);
     url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
     // WinOpen(url);
-    window.parent.addTab(flowNo + "_JCLC", "检查流程" + flowNo, url);
+    OpenEasyUiDialog(url, "FlowCheck" + flowNo, "检查流程" + flowNo, 600, 500, "icon - library",false);
+    //window.parent.addTab(flowNo + "_JCLC", "检查流程" + flowNo, url);
 }
 
 //运行流程

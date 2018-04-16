@@ -12,7 +12,7 @@
             margin: 10px; /*border: 1px dashed #c0c0c0;*/
         }
     </style>
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/Raphael/raphael.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/designer.utility.js" type="text/javascript"></script>
@@ -516,17 +516,15 @@
         }
 
         function getChineseDateTime(time) {
-            /// <summary>获取指定时间字符串的中文日期时间表示形式</summary>
-            /// <param name="time" Type="String">时间字符串</param>
+
             if (!time || time.length < 10) {
                 return '';
             }
 
-            time = time.replace(/-/g, ':').replace(' ', ':');
-            time = time.split(':');
-
-            return time[0] + "年" + (time[1] - 1) + "月" + time[2] + "日 " + time[3];
+            var myDate = new Date(Date.parse(time.replace(/-/g, "/")));
+            return myDate.getMonth() + "月" + myDate.getDate() + "日 " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds() ;
         }
+
 
         function iconDrag() {
             this.ox = this.attr("x");

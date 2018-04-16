@@ -274,17 +274,16 @@ namespace BP.WF.HttpHandler
                 dr["FlowNote"] = wfstaT;
                 dr["AtPara"] = (wfsta == (int)BP.WF.WFSta.Complete ? dr["Sender"].ToString().TrimStart('(').TrimEnd(')').Split(',')[1] : "");
             }
-
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns["NO"].ColumnName = "";
-                dt.Columns["NAME"].ColumnName = "";
-                dt.Columns[""].ColumnName = "";
-                dt.Columns[""].ColumnName = "";
-                dt.Columns[""].ColumnName = "";
-            }
-
             return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 取消关注
+        /// </summary>
+        /// <returns></returns>
+        public string Focus_Delete()
+        {
+            BP.WF.Dev2Interface.Flow_Focus(this.WorkID);
+            return "执行成功";
         }
         #endregion 我的关注.
 

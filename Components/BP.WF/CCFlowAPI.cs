@@ -144,8 +144,8 @@ namespace BP.WF
 
                             dr[GroupFieldAttr.OID] = 100;
                             dr[GroupFieldAttr.EnName] = nd.NodeFrmID;
-                            dr[BP.Sys.GroupFieldAttr.CtrlType] ="FWC";
-                            dr[BP.Sys.GroupFieldAttr.CtrlID] = "FWCND"+nd.NodeID;
+                            dr[GroupFieldAttr.CtrlType] ="FWC";
+                            dr[GroupFieldAttr.CtrlID] = "FWCND"+nd.NodeID;
                             dr[GroupFieldAttr.Idx] = 100;
                             dr[GroupFieldAttr.Lab] = "审核信息";
 

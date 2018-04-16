@@ -818,6 +818,7 @@
         function GetLabNoteData() {
 
         return "";
+    
 
             //标签. 取出来显示
             var labs = new Entities("BP.WF.Template.LabNotes");
@@ -843,6 +844,7 @@
             strs += "] }";
 
             `return eval("(" + strs + ")");
+              
         }
         //刷新页面
         function page_reload() {

@@ -200,7 +200,7 @@
                      }
                  });
             _canvas.append(labDiv);
-            }); //each
+            }); 
         }
 
         var timeout = null;
@@ -430,9 +430,6 @@
                 var labDiv = document.createElement('div');
                 var labId = "lab" + lab.id, badge = 'badge-inverse';
 
-                if (lab.icon) {
-                    icon = lab.icon;
-                }
                 $(labDiv).attr("id", labId)
                 .attr("style", lab.style)
                 .attr("process_id", lab.id)

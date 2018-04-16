@@ -949,6 +949,209 @@ namespace BP.WF.HttpHandler
             return ds;
 
         }
+
+        private DataTable Search_Data(Entities ens, Entity en)
+        {
+            //获得.
+            Map map = en.EnMapInTime;
+
+            MapAttrs attrs = map.Attrs.ToMapAttrs;
+            //取出来查询条件.
+            BP.Sys.UserRegedit ur = new UserRegedit();
+            ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            //获得关键字.
+            AtPara ap = new AtPara(ur.Vals);
+
+            //关键字.
+            string keyWord = ur.SearchKey;
+            QueryObject qo = new QueryObject(ens);
+
+            #region 关键字字段.
+            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length > 1)
+            {
+                Attr attrPK = new Attr();
+                foreach (Attr attr in map.Attrs)
+                {
+                    if (attr.IsPK)
+                    {
+                        attrPK = attr;
+                        break;
+                    }
+                }
+                int i = 0;
+                foreach (Attr attr in map.Attrs)
+                {
+                    switch (attr.MyFieldType)
+                    {
+                        case FieldType.Enum:
+                        case FieldType.FK:
+                        case FieldType.PKFK:
+                            continue;
+                        default:
+                            break;
+                    }
+
+                    if (attr.MyDataType != DataType.AppString)
+                        continue;
+
+                    if (attr.MyFieldType == FieldType.RefText)
+                        continue;
+
+                    if (attr.Key == "FK_Dept")
+                        continue;
+
+                    i++;
+                    if (i == 1)
+                    {
+                        /* 第一次进来。 */
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@")
+                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        else
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        continue;
+                    }
+                    qo.addOr();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@")
+                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    else
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+
+                }
+                qo.MyParas.Add("SKey", keyWord);
+                qo.addRightBracket();
+
+            }
+            else
+            {
+                qo.AddHD();
+            }
+            #endregion
+
+            if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)
+            {
+                string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
+                string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
+
+                if (map.DTSearchWay == DTSearchWay.ByDate)
+                {
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
+                    qo.addAnd();
+                    qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                    qo.addRightBracket();
+                }
+
+                if (map.DTSearchWay == DTSearchWay.ByDateTime)
+                {
+                    //取前一天的24：00
+                    if (dtFrom.Trim().Length == 10) //2017-09-30
+                        dtFrom += " 00:00:00";
+                    if (dtFrom.Trim().Length == 16) //2017-09-30 00:00
+                        dtFrom += ":00";
+
+                    dtFrom = DateTime.Parse(dtFrom).AddDays(-1).ToString("yyyy-MM-dd") + " 24:00";
+
+                    if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
+                        dtTo += " 24:00";
+
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
+                    qo.addAnd();
+                    qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                    qo.addRightBracket();
+                }
+            }
+
+
+            #region 普通属性
+            string opkey = ""; // 操作符号。
+            foreach (AttrOfSearch attr in en.EnMap.AttrsOfSearch)
+            {
+                if (attr.IsHidden)
+                {
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
+                    qo.addRightBracket();
+                    continue;
+                }
+
+                if (attr.SymbolEnable == true)
+                {
+                    opkey = ap.GetValStrByKey("DDL_" + attr.Key);
+                    if (opkey == "all")
+                        continue;
+                }
+                else
+                {
+                    opkey = attr.DefaultSymbol;
+                }
+
+                qo.addAnd();
+                qo.addLeftBracket();
+
+                if (attr.DefaultVal.Length >= 8)
+                {
+                    string date = "2005-09-01";
+                    try
+                    {
+                        /* 就可能是年月日。 */
+                        string y = ap.GetValStrByKey("DDL_" + attr.Key + "_Year");
+                        string m = ap.GetValStrByKey("DDL_" + attr.Key + "_Month");
+                        string d = ap.GetValStrByKey("DDL_" + attr.Key + "_Day");
+                        date = y + "-" + m + "-" + d;
+
+                        if (opkey == "<=")
+                        {
+                            DateTime dt = DataType.ParseSysDate2DateTime(date).AddDays(1);
+                            date = dt.ToString(DataType.SysDataFormat);
+                        }
+                    }
+                    catch
+                    {
+                    }
+
+                    qo.AddWhere(attr.RefAttrKey, opkey, date);
+                }
+                else
+                {
+                    qo.AddWhere(attr.RefAttrKey, opkey, ap.GetValStrByKey("TB_" + attr.Key));
+                }
+                qo.addRightBracket();
+            }
+            #endregion
+
+            #region 获得查询数据.
+            foreach (string str in ap.HisHT.Keys)
+            {
+                var val = ap.GetValStrByKey(str);
+                if (val.Equals("all"))
+                    continue;
+                qo.addAnd();
+                qo.addLeftBracket();
+                qo.AddWhere(str, ap.GetValStrByKey(str));
+                qo.addRightBracket();
+            }
+
+            //获得行数.
+            if (this.PageIdx == 1)
+            {
+                ur.SetPara("RecCount", qo.GetCount());
+                ur.Save();
+            }
+
+          
+            #endregion 获得查询数据.
+            return qo.DoQueryToTable();
+            
+           
+        }
         public string Search_GenerPageIdx()
         {
 
@@ -1026,17 +1229,19 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Search_Exp()
         {
+            Entities ens = ClassFactory.GetEns(this.EnsName);;
+            Entity en = ens.GetNewEntity;
 
             DataSet ds = Search_Search();
             DataTable dt = ds.Tables["DT"];
+           // string filePath = ExportDGToExcel(Search_Data(ens,en), en, "数据导出");
+           string  name = "数据导出";
+           string filename = name + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
 
-           string  name = "导出";
-            string filename = SystemConfig.PathOfTemp  + name + "_" + DateTime.Today.ToString("yyyy年MM月dd日") + ".xls";
+           DataTableToExcel(Search_Data(ens, en), filename, name,
+                                                              BP.Web.WebUser.Name, true, true, true);
 
-            //CCFlow.WF.Comm.Utilities.NpoiFuncs.DataTableToExcel(myDT, filename, name,
-            //                                                    BP.Web.WebUser.Name, true, true, true);
-
-            return "";
+           return "/DataUser/Temp/" + filename;
         }
         #endregion 查询.
 

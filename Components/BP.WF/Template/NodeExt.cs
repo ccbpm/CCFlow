@@ -438,10 +438,10 @@ namespace BP.WF.Template
            NodeAttr.ThreadKillRole, "@0=不能删除@1=手工删除@2=自动删除", true);
                 //map.SetHelperUrl(NodeAttr.ThreadKillRole, ""); //增加帮助
 
-
-                map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
-                map.SetHelperUrl(BtnAttr.SubFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=16262");
-                map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
+                //功能和子流程组件重复，屏蔽 hzm
+              //  map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
+              //  map.SetHelperUrl(BtnAttr.SubFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=16262");
+             //   map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
 
                 //map.AddDDLSysEnum(BtnAttr.SubFlowCtrlRole, 0, "控制规则", true, true, BtnAttr.SubFlowCtrlRole, "@0=无@1=不可以删除子流程@2=可以删除子流程");
 

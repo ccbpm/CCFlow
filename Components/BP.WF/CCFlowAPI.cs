@@ -127,7 +127,6 @@ namespace BP.WF
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                         DataTable gf = myds.Tables["Sys_GroupField"];
-
                         bool isHave = false;
                         foreach (DataRow dr in gf.Rows)
                         {
@@ -143,12 +142,12 @@ namespace BP.WF
                         {
                             DataRow dr = gf.NewRow();
 
-                            dr["OID"] = 100;
-                            dr["EnName"] = nd.NodeFrmID;
+                            dr[GroupFieldAttr.OID] = 100;
+                            dr[GroupFieldAttr.EnName] = nd.NodeFrmID;
                             dr[BP.Sys.GroupFieldAttr.CtrlType] ="FWC";
                             dr[BP.Sys.GroupFieldAttr.CtrlID] = "FWCND"+nd.NodeID;
-                            dr["Idx"] = 100;
-                            dr["Lab"] = "审核信息";
+                            dr[GroupFieldAttr.Idx] = 100;
+                            dr[GroupFieldAttr.Lab] = "审核信息";
 
                             gf.Rows.Add(dr);
 

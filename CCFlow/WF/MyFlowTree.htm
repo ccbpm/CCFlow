@@ -233,9 +233,13 @@
             handler.AddPara("WorkID", GetQueryString("WorkID"));
             var str = handler.DoMethodReturnString("DeleteFlow");
             alert(str);
+
+            if (window.parent != null) {
+                window.parent.Reload();
+            }
+
             window.close();
         }
-
     </script>
 
 	<style type="text/css">

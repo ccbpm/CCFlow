@@ -264,8 +264,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string OP_GetStatus()
         {
-            int wfState = BP.DA.DBAccess.RunSQLReturnValInt("SELECT WFState FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID, 1);
-            WFState wfstateEnum = (WFState)wfState;
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
             Hashtable ht = new Hashtable();
 
@@ -294,7 +293,7 @@ namespace BP.WF.HttpHandler
                     if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
                         string empFrom = dr[1].ToString();
-                        if ( isAdmin == true || BP.Web.WebUser.No == empFrom)
+                        if ( isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter==WebUser.No )
                         {
                             CanPackUp = true;
                             break;
@@ -311,7 +310,7 @@ namespace BP.WF.HttpHandler
             ht.Add("CanPackUp", CanPackUp.ToString().ToLower());
 
             //是否可以打印.
-            switch (wfstateEnum)
+            switch (gwf.WFState)
             {
                 case WFState.Runing: /* 运行时*/
                     /*删除流程.*/

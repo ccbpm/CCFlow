@@ -1434,7 +1434,6 @@ namespace BP.WF.Template
             }
             #endregion 创建审核组件附件
 
-
             #region 审核组件.
             GroupField gf = new GroupField();
             if (this.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)

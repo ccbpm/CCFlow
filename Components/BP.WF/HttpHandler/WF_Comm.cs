@@ -1138,14 +1138,6 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere(str, ap.GetValStrByKey(str));
                 qo.addRightBracket();
             }
-
-            //获得行数.
-            if (this.PageIdx == 1)
-            {
-                ur.SetPara("RecCount", qo.GetCount());
-                ur.Save();
-            }
-
           
             #endregion 获得查询数据.
             return qo.DoQueryToTable();

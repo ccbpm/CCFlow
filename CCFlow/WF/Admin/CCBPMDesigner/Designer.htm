@@ -801,7 +801,6 @@
                 }
 
 
-
                 strs += "'style':'width:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 
                 if (i == nodes.length - 1)
@@ -812,9 +811,14 @@
 
             strs += "] }";
 
+
+
             return eval("(" + strs + ")");
         }
         function GetLabNoteData() {
+
+        return "";
+
             //标签. 取出来显示
             var labs = new Entities("BP.WF.Template.LabNotes");
             labs.Retrieve("FK_Flow", flowNo);
@@ -838,7 +842,7 @@
 
             strs += "] }";
 
-            return eval("(" + strs + ")");
+            `return eval("(" + strs + ")");
         }
         //刷新页面
         function page_reload() {

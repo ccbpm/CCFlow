@@ -1224,7 +1224,7 @@ namespace BP.WF.HttpHandler
             Entities ens = ClassFactory.GetEns(this.EnsName);;
             Entity en = ens.GetNewEntity;
            string  name = "数据导出";
-           string filename = name + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
+           string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
 
            DataTableToExcel(Search_Data(ens, en), filename, name,
                                                               BP.Web.WebUser.Name, true, true, true);

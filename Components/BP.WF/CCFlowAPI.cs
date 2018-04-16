@@ -51,9 +51,7 @@ namespace BP.WF
             try
             {
                 MapData md = new MapData();
-                md.No = nd.NodeFrmID;                
-                md.Name = nd.Name;
-
+                md.No = nd.NodeFrmID;
                 if (md.RetrieveFromDBSources() == 0)
                     throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
 
@@ -66,7 +64,8 @@ namespace BP.WF
                     wk, null);
 
                 //获得表单模版.
-                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No,nd.Name);
+
 
                 //把流程信息表发送过去.
                 GenerWorkFlow gwf = new GenerWorkFlow();

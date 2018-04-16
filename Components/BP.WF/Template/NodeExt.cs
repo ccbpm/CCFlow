@@ -436,6 +436,7 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(NodeAttr.ThreadKillRole, (int)ThreadKillRole.None, "子线程删除方式", true, true,
            NodeAttr.ThreadKillRole, "@0=不能删除@1=手工删除@2=自动删除", true);
+
                 //map.SetHelperUrl(NodeAttr.ThreadKillRole, ""); //增加帮助
 
                 //功能和子流程组件重复，屏蔽 hzm

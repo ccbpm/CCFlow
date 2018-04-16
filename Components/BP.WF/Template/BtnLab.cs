@@ -496,17 +496,17 @@ namespace BP.WF.Template
         /// <summary>
         /// 标签是否启用？
         /// </summary>
-        public bool SubFlowEnable
-        {
-            get
-            {
-                return this.GetValBooleanByKey(BtnAttr.SubFlowEnable);
-            }
-            set
-            {
-                this.SetValByKey(BtnAttr.SubFlowEnable, value);
-            }
-        }
+        //public bool SubFlowEnable111
+        //{
+        //    get
+        //    {
+        //        return this.GetValBooleanByKey(BtnAttr.SubFlowEnable);
+        //    }
+        //    set
+        //    {
+        //        this.SetValByKey(BtnAttr.SubFlowEnable, value);
+        //    }
+        //}
         /// <summary>
         /// 审核是否可用
         /// </summary>

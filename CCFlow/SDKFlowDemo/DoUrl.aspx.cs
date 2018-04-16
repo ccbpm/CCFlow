@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 using BP.WF;
 using BP.Port;
 using BP.Web;
+using BP.DA;
 
 namespace CCFlow.SDKFlowDemo
 {
@@ -20,8 +21,8 @@ namespace CCFlow.SDKFlowDemo
             string fk_flow = this.Request.QueryString["FK_Flow"];
             string fk_nodeStr = this.Request.QueryString["FK_Node"];
             string workidStr = this.Request.QueryString["WorkID"];
-            if (string.IsNullOrEmpty(fk_flow) || string.IsNullOrEmpty(fk_nodeStr)
-                || string.IsNullOrEmpty(workidStr))
+            if (DataType.IsNullOrEmpty(fk_flow) || DataType.IsNullOrEmpty(fk_nodeStr)
+                || DataType.IsNullOrEmpty(workidStr))
             {
                 this.Response.Write("ERR: 参数不完整,原始的url是:"+this.Request.RawUrl);
                 return;
@@ -37,7 +38,7 @@ namespace CCFlow.SDKFlowDemo
             string[] strs = doc.Split(',');
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     continue;
                 // 发起子流程.
                 Hashtable ht = new Hashtable();

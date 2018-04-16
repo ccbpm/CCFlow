@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.DA;
 
 namespace CCFlow.SDKFlowDemo
 {
@@ -19,7 +20,7 @@ namespace CCFlow.SDKFlowDemo
             try
             {
                 //提交前做完整的校验.
-                if (string.IsNullOrEmpty(this.TB_Pass.Text.Trim()))
+                if (DataType.IsNullOrEmpty(this.TB_Pass.Text.Trim()))
                     throw new Exception("密码不能为空.");
 
                 if (this.TB_Pass.Text.Trim() != this.TB_Pass1.Text.Trim())

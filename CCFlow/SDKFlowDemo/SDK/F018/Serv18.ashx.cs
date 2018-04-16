@@ -7,6 +7,7 @@ using BP.WF;
 using BP.Demo.SDK;
 using BP.Demo.FlowEvent;
 using BP.Demo.BPFramework;
+using BP.DA;
 
 namespace CCFlow.SDKFlowDemo.SDK.F018
 {
@@ -62,7 +63,7 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
             get
             {
                 string fk_node = getUTF8ToString("FK_Node");
-                if (!string.IsNullOrEmpty(fk_node))
+                if (!DataType.IsNullOrEmpty(fk_node))
                     return Int32.Parse(getUTF8ToString("FK_Node"));
                 return 0;
             }

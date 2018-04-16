@@ -76,7 +76,7 @@
 
     <% 
      //   int workid = int.Parse(this.Request.QueryString["WorkID"]);
-     //   var url = "javascript:window.open('/WF/WFRpt.aspx?WorkID=" + workid + "')";
+        //   var url = "javascript:window.open('/WF/WFRpt.htm?WorkID=" + workid + "')";
          %>
     <asp:Button ID="Btn_Track" runat="server" Text="流程图" 
         onclick="Btn_Track_Click" />

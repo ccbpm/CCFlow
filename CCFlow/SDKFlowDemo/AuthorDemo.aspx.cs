@@ -21,7 +21,7 @@ namespace CCFlow.SDKFlowDemo
         protected void Page_Load(object sender, EventArgs e)
         {
             this.Pub1.Clear();
-            if (string.IsNullOrEmpty(WebUser.No))
+            if (DataType.IsNullOrEmpty(WebUser.No))
             {
                 BindLogin();
             }
@@ -62,7 +62,7 @@ namespace CCFlow.SDKFlowDemo
 
         void BindExit()
         {
-            if (string.IsNullOrEmpty(WebUser.No))
+            if (DataType.IsNullOrEmpty(WebUser.No))
                 return;
 
             this.Pub1.AddFieldSet("当前登录人信息");
@@ -111,7 +111,7 @@ namespace CCFlow.SDKFlowDemo
         /// </summary>
         private void Author_CoverEmps()
         {
-            if (string.IsNullOrEmpty(WebUser.No))
+            if (DataType.IsNullOrEmpty(WebUser.No))
                 return;
             /*如果是授权状态, 获取当前委托人的信息. */
             WFEmps emps = new WFEmps();
@@ -138,17 +138,17 @@ namespace CCFlow.SDKFlowDemo
         /// </summary>
         private void Author_AreadyEmps()
         {
-            if (string.IsNullOrEmpty(WebUser.No))
+            if (DataType.IsNullOrEmpty(WebUser.No))
                 return;
 
             this.Pub1.AddFieldSet(WebUser.Name + "：委托信息");
             WFEmp emp = new WFEmp(WebUser.No);
-            if (string.IsNullOrEmpty(emp.Author))
+            if (DataType.IsNullOrEmpty(emp.Author))
             {
                 this.Pub1.Add("无");
             }
 
-            if (!string.IsNullOrEmpty(emp.Author))
+            if (!DataType.IsNullOrEmpty(emp.Author))
             {
                 Emp empPort = new Emp(emp.Author);
                 this.Pub1.Add("委托人：" + empPort.No + "-" + empPort.Name + " 委托方式：" + emp.HisAuthorWay);
@@ -164,7 +164,7 @@ namespace CCFlow.SDKFlowDemo
         /// </summary>
         private void Author_Set()
         {
-            if (string.IsNullOrEmpty(WebUser.No))
+            if (DataType.IsNullOrEmpty(WebUser.No))
                 return;
             this.Pub1.AddFieldSet("设置委托");
 
@@ -237,7 +237,7 @@ namespace CCFlow.SDKFlowDemo
         /// </summary>
         private void Author_Cancel()
         {
-            if (string.IsNullOrEmpty(WebUser.No))
+            if (DataType.IsNullOrEmpty(WebUser.No))
                 return;
 
             this.Pub1.AddFieldSet("撤销委托");
@@ -267,7 +267,7 @@ namespace CCFlow.SDKFlowDemo
         /// </summary>
         private void Author_BindData()
         {
-            if (string.IsNullOrEmpty(WebUser.No))
+            if (DataType.IsNullOrEmpty(WebUser.No))
                 return;
 
             this.Pub1.AddFieldSet("委托待办数据");
@@ -292,7 +292,7 @@ namespace CCFlow.SDKFlowDemo
                     string GroupBy = this.Request.QueryString["GroupBy"];
                     string appPath = BP.WF.Glo.CCFlowAppPath;//this.Request.ApplicationPath;
 
-                    if (string.IsNullOrEmpty(GroupBy))
+                    if (DataType.IsNullOrEmpty(GroupBy))
                     {
                         if (this.DoType == "CC")
                             GroupBy = "Rec";
@@ -344,7 +344,7 @@ namespace CCFlow.SDKFlowDemo
                     int gIdx = 0;
                     foreach (string g in gVals)
                     {
-                        if (string.IsNullOrEmpty(g))
+                        if (DataType.IsNullOrEmpty(g))
                             continue;
                         gIdx++;
                         sBuilder.Append("<tr>");

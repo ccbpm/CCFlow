@@ -20,7 +20,7 @@ public partial class AppDemo_GuestApp_Default1 : System.Web.UI.Page
         get
         {
             string s = this.Request.QueryString["FK_Flow"];
-            if (string.IsNullOrEmpty(s))
+            if (DataType.IsNullOrEmpty(s))
                 throw new Exception("@流程编号为空...");
             return s;
         }
@@ -63,10 +63,10 @@ public partial class AppDemo_GuestApp_Default1 : System.Web.UI.Page
         get
         {
             string fk_nodeReq = this.Request.QueryString["FK_Node"];
-            if (string.IsNullOrEmpty(fk_nodeReq))
+            if (DataType.IsNullOrEmpty(fk_nodeReq))
                 fk_nodeReq = this.Request.QueryString["NodeID"];
 
-            if (string.IsNullOrEmpty(fk_nodeReq) == false)
+            if (DataType.IsNullOrEmpty(fk_nodeReq) == false)
                 return int.Parse(fk_nodeReq);
 
             if (_FK_Node == 0)

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.DA;
+
 
 namespace CCFlow.SDKFlowDemo
 {
@@ -22,7 +24,7 @@ namespace CCFlow.SDKFlowDemo
 
             //如果没有toNodeID ,就结束流程。
             string toNodeID = this.Request.QueryString["ToNodeID"].Trim();
-            if (string.IsNullOrEmpty(toNodeID))
+            if (DataType.IsNullOrEmpty(toNodeID))
                 this.Response.Write("1");
             else
                 this.Response.Write("0");

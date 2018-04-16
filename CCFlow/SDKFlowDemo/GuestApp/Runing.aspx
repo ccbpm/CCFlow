@@ -47,7 +47,7 @@
                                 <%=idx %>
                             </td>
                             <td>
-                                <a href="javascript:WinOpen('/WF/WFRpt.aspx?FK_Flow=<%=dr["FK_Flow"] %>&GuestNo=<%=BP.Web.GuestUser.No%>&GuestName=<%=BP.Web.GuestUser.Name%>&WorkID=<%=workID %>')">
+                                <a href="javascript:WinOpen('/WF/WFRpt.htm?FK_Flow=<%=dr["FK_Flow"] %>&GuestNo=<%=BP.Web.GuestUser.No%>&GuestName=<%=BP.Web.GuestUser.Name%>&WorkID=<%=workID %>')">
                                     <%=title %>
                                 </a>
                             </td>

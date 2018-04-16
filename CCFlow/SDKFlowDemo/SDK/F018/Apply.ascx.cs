@@ -9,6 +9,8 @@ using BP.Demo.SDK;
 using BP.Demo.FlowEvent;
 using BP.Demo.BPFramework;
 using BP.Web;
+using BP.DA;
+
 
 namespace CCFlow.SDKFlowDemo.SDK.F018
 {
@@ -20,7 +22,7 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
             get
             {
                 string temp = this.Request.QueryString["WorkID"];
-                if (string.IsNullOrEmpty(temp))
+                if (DataType.IsNullOrEmpty(temp))
                 {
                     return 0;
                 }
@@ -35,7 +37,7 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
             get
             {
                 string temp = this.Request.QueryString["FID"];
-                if (string.IsNullOrEmpty(temp))
+                if (DataType.IsNullOrEmpty(temp))
                 {
                     return 0;
                 }

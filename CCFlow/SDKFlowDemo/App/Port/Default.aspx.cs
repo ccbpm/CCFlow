@@ -59,10 +59,10 @@ public partial class AppDemo_DefaultSDK : System.Web.UI.Page
         get
         {
             string fk_nodeReq = this.Request.QueryString["FK_Node"];
-            if (string.IsNullOrEmpty(fk_nodeReq))
+            if (DataType.IsNullOrEmpty(fk_nodeReq))
                 fk_nodeReq = this.Request.QueryString["NodeID"];
 
-            if (string.IsNullOrEmpty(fk_nodeReq) == false)
+            if (DataType.IsNullOrEmpty(fk_nodeReq) == false)
                 return int.Parse(fk_nodeReq);
 
             if (_FK_Node == 0)

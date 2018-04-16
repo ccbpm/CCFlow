@@ -5,6 +5,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.Demo;
 using BP.Demo.BPFramework;
+using BP.DA;
+
 
 namespace CCFlow.SDKFlowDemo
 {
@@ -112,7 +114,7 @@ namespace CCFlow.SDKFlowDemo
                 string pass1 = this.Pub1.GetTBByID("TB_Pass1").Text;
 
                 //提交前做完整的校验.
-                if (string.IsNullOrEmpty(pass))
+                if (DataType.IsNullOrEmpty(pass))
                     throw new Exception("密码不能为空.");
                 if (pass != pass1)
                     throw new Exception("输入的密码两次不一致.");

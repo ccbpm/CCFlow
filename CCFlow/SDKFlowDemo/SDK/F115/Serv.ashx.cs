@@ -64,7 +64,7 @@ namespace CCFlow.SDKFlowDemo.SDK.F115
             get
             {
                 string fk_node = getUTF8ToString("FK_Node");
-                if (!string.IsNullOrEmpty(fk_node))
+                if (!DataType.IsNullOrEmpty(fk_node))
                     return Int32.Parse(getUTF8ToString("FK_Node"));
                 return 0;
             }
@@ -89,7 +89,7 @@ namespace CCFlow.SDKFlowDemo.SDK.F115
             string result = "";
             MyContext = context;
             string doType = MyContext.Request["DoType"].ToString();
-            if (string.IsNullOrEmpty(doType) == true)
+            if (DataType.IsNullOrEmpty(doType) == true)
                 doType = "Save";
 
             switch (doType)

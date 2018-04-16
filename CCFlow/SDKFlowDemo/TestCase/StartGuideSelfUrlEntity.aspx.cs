@@ -9,6 +9,8 @@ using BP.WF;
 using BP.Sys;
 using BP.Demo;
 using BP.Demo.License;
+using BP.DA;
+
 
 namespace CCFlow.app
 {
@@ -23,7 +25,7 @@ namespace CCFlow.app
             get
             {
                 string str= this.Request.QueryString["SFZ"];
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     str = this.TB_SFZ.Text;
 
                 return str;

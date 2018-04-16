@@ -4,6 +4,8 @@ using System.Data;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.DA;
+
 
 namespace CCFlow.SDKFlowDemo
 {
@@ -17,8 +19,8 @@ namespace CCFlow.SDKFlowDemo
                 string fk_flow = this.Request.QueryString["FK_Flow"];
                 string fk_nodeStr = this.Request.QueryString["FK_Node"];
                 string OID = this.Request.QueryString["OID"];
-                if (string.IsNullOrEmpty(fk_flow) || string.IsNullOrEmpty(fk_nodeStr)
-                    || string.IsNullOrEmpty(OID))
+                if (DataType.IsNullOrEmpty(fk_flow) || DataType.IsNullOrEmpty(fk_nodeStr)
+                    || DataType.IsNullOrEmpty(OID))
                 {
                     this.Response.Write("ERR: 参数不完整,原始的url是:" + this.Request.RawUrl);
                     return;
@@ -26,7 +28,7 @@ namespace CCFlow.SDKFlowDemo
                 #endregion 检查变量是否完整.
 
                 string workidsStrs = this.Request.QueryString["WorkIDs"];
-                if (string.IsNullOrEmpty(workidsStrs))
+                if (DataType.IsNullOrEmpty(workidsStrs))
                 {
                     /*有可能是查看节点表单信息，就不要向下执行填充信息了.*/
                     return;
@@ -39,7 +41,7 @@ namespace CCFlow.SDKFlowDemo
 
                 foreach (string id in workids)
                 {
-                    if (string.IsNullOrEmpty(id))
+                    if (DataType.IsNullOrEmpty(id))
                         continue;
 
                     string sql = "SELECT * FROM ND82Rpt WHERE OID=" + id;

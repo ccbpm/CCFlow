@@ -1166,7 +1166,7 @@ namespace BP.WF.HttpHandler
                             case "Double":
                             case "Decimal":
                                 cell.CellStyle = cstyles[col.ColumnName];
-                                cell.SetCellValue(((double)dr[col.ColumnName]));
+                                cell.SetCellValue((Convert.ToDouble(dr[col.ColumnName])));
                                 break;
                             default:
                                 cell.CellStyle = cellStyle;

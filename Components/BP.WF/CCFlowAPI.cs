@@ -66,12 +66,10 @@ namespace BP.WF
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No,nd.Name);
 
-
                 //把流程信息表发送过去.
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = workID;
                 gwf.RetrieveFromDBSources();
-                 
 
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
@@ -123,6 +121,44 @@ namespace BP.WF
                     fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValFloatByKey(FTCAttr.FTC_W));
                     fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
                     fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
+
+                    #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
+                    if (md.HisFrmType == FrmType.FoolForm)
+                    {
+                        //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
+                        DataTable gf = myds.Tables["Sys_GroupField"];
+
+                        bool isHave = false;
+                        foreach (DataRow dr in gf.Rows)
+                        {
+                            string cType = dr["CtrlType"] as string;
+                            if (cType == null)
+                                continue;
+
+                            if (cType.Equals("FWC") == true)
+                                isHave = true;
+                        }
+
+                        if (isHave == false)
+                        {
+                            DataRow dr = gf.NewRow();
+
+                            dr["OID"] = 100;
+                            dr["EnName"] = nd.NodeFrmID;
+                            dr[BP.Sys.GroupFieldAttr.CtrlType] ="FWC";
+                            dr[BP.Sys.GroupFieldAttr.CtrlID] = "FWCND"+nd.NodeID;
+                            dr["Idx"] = 100;
+                            dr["Lab"] = "审核信息";
+
+                            gf.Rows.Add(dr);
+
+                            myds.Tables.Remove("Sys_GroupField");
+                            myds.Tables.Add(gf);
+                        }
+
+                    }
+                    #endregion 没有审核组件分组就增加上审核组件分组.
+
                 }
 
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
@@ -185,7 +221,6 @@ namespace BP.WF
                         #endregion 增加到达延续子流程节点。
 
                         #region 到达其他节点.
-
                         //上一次选择的节点.
                         int defalutSelectedNodeID = 0;
                         if (nds.Count > 1)
@@ -294,7 +329,6 @@ namespace BP.WF
                     wk, null);
                 if (msgOfLoad != null)
                     wk.RetrieveFromDBSources();
-
 
                 //执行装载填充.
                 MapExt me = new MapExt();

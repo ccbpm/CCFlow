@@ -577,13 +577,14 @@ namespace BP.WF.HttpHandler
                 //    }
                 //}
 
-                return BP.Tools.Json.DataSetToJson(ds);
+                string str = BP.Tools.Json.DataSetToJson(ds);
+                //  DataType.WriteFile("c:\\GetFlowTrackJsonData_CCflow.txt", str);
+                return str;
             }
             catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
-
             return json;
         }
         /// <summary>

@@ -1,12 +1,12 @@
 ﻿/*  Table 风格   */
-body 
+body
 {
-  color: #333333;
-  font-family: "Open Sans", sans-serif;
-  padding: 0px !important;
-  margin: 0px !important;
-  font-size: 14px;
-  direction: ltr;
+    color: #333333;
+    font-family: "Open Sans" , sans-serif;
+    padding: 0px !important;
+    margin: 0px !important;
+    font-size: 14px;
+    direction: ltr;
 }
 
 /* 按钮风格 */
@@ -401,15 +401,13 @@ display:block;
     margin: 0 auto;
     display: table;
 }
-  
-   
 
 input[type=text], input[type=password], select
 {
     border-radius: 5px;
     border: thin solid #CCCCCC;
     margin: 1px 1px;
-    height:23px;
+    height:28px;
 }
 
 .FDesc

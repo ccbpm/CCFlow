@@ -40,10 +40,11 @@ select {
 
 
 /*文本框只读风格.*/
-textarea[disabled],input:disabled{
-border:1px solid #DDD;
-background-color:#F5F5F5;
-color:#ACA899;
+textarea[disabled], input:disabled,select[disabled]
+{
+    border: 1px solid #DDD;
+    background-color: #F9f9f9;
+    color: #ACA899;
 }
 
 
@@ -56,14 +57,7 @@ td input[type="textbox"]
 
 input[disabled],input:disabled{
 border:1px solid #DDD;
-background-color:#F5F5F5;
+background-color:#F9F9F9;
 color:#ACA899;
-}
-
-/*文本框只读风格.*/
-select[disabled],input:disabled{
-border:1px solid #DDD;
-background-color:#F5F5F5;
-color:#ACA899;
-}
+} 
  

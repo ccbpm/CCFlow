@@ -95,6 +95,8 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(GroupFieldAttr.EnName, value);
+                this.SetValByKey(GroupFieldAttr.FrmID, value);
+
             }
         }
         /// <summary>

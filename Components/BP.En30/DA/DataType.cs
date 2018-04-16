@@ -1591,6 +1591,13 @@ namespace BP.DA
                 return DateTime.Now.ToString("yy年MM月dd日 HH时mm分");
             }
         }
+        public static string CurrentDataTimeCNOfLong
+        {
+            get
+            {
+                return DateTime.Now.ToString("yy年MM月dd日 HH时mm分ss秒");
+            }
+        }
         public static string CurrentDataCNOfShort
         {
             get

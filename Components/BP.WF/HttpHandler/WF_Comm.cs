@@ -1225,11 +1225,11 @@ namespace BP.WF.HttpHandler
             Entity en = ens.GetNewEntity;
            string  name = "数据导出";
            string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
+           string filePath = ExportDGToExcel(Search_Data(ens, en),en,name);
+          // DataTableToExcel(Search_Data(ens, en),en, filename, name,
+          //                                                    BP.Web.WebUser.Name, true, true, true);
 
-           DataTableToExcel(Search_Data(ens, en), filename, name,
-                                                              BP.Web.WebUser.Name, true, true, true);
-
-           return "/DataUser/Temp/" + filename;
+           return filePath;
         }
         #endregion 查询.
 

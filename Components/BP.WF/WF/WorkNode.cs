@@ -2033,9 +2033,33 @@ namespace BP.WF
             }
             #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
 
+            #region 走到最后，发现一个条件都不符合，就找没有设置方向条件的节点. （@杜翻译）
+            if (myNodes.Count == 0)
+            {
+                /*如果没有找到其他节点，就找没有设置方向条件的节点.*/
+                foreach (Node nd in toNodes)
+                {
+                    Conds conds = new Conds();
+                    int i= conds.Retrieve(CondAttr.NodeID, nd.NodeID, CondAttr.CondType, 2);
+                    if (i == 0)
+                        continue;
+
+                    //增加到节点集合.
+                    myNodes.AddEntity(nd);
+                }
+
+                //如果没有设置方向条件的节点有多个，就清除在后面抛出异常.
+                if (myNodes.Count != 1)
+                    myNodes.Clear();
+            }
+            #endregion 走到最后，发现一个条件都不符合，就找没有设置方向条件的节点.
+
+
             if (myNodes.Count == 0)
                 throw new Exception(string.Format("@定义节点的方向条件错误:没有给从{0}节点到其它节点,定义转向条件或者您定义的所有转向条件都不成立.",
                     this.HisNode.NodeID + this.HisNode.Name));
+
+
             return myNodes;
         }
         /// <summary>

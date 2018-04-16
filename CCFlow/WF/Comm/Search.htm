@@ -495,16 +495,18 @@
         }
 
          function Exp() {
-
+             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+             handler.AddPara("EnsName", GetQueryString("EnsName"));
+             //查询集合
+            var data = handler.DoMethodReturnString("Search_Exp");
             var url = "";
-            if (plant == "CCFlow") {
-                url = "Do.aspx?EnsName=" + GetQueryString("EnsName") + "&DoType=SearchExp";
-                window.open(url);
-                return;
+            if (data.indexOf('err@') == 0) {
+              alert(data);
             }
 
-            alert("尚未实现");
-            window.location.href = data;
+          window.open(data);
+            return;
+          
         }
 
 

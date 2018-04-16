@@ -116,16 +116,16 @@
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\CCFlow\Bin\NPOI.dll</HintPath>
+      <HintPath>..\..\RefDLL\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\CCFlow\Bin\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\..\RefDLL\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\CCFlow\Bin\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\..\RefDLL\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\CCFlow\Bin\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\..\RefDLL\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

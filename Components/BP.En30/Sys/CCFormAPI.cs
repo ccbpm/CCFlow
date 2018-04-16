@@ -1163,12 +1163,16 @@ namespace BP.Sys
         /// </summary>
         /// <param name="fk_mapdata"></param>
         /// <returns></returns>
-        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata)
+        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata, string frmName=null)
         {
             DataSet ds = new DataSet();
 
             //创建实体对象.
             MapData md = new MapData(fk_mapdata);
+
+            if (frmName != null)
+                md.Name = frmName;
+
 
             //加入主表信息.
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");

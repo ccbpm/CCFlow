@@ -51,7 +51,9 @@ namespace BP.WF
             try
             {
                 MapData md = new MapData();
-                md.No = nd.NodeFrmID;
+                md.No = nd.NodeFrmID;                
+                md.Name = nd.Name;
+
                 if (md.RetrieveFromDBSources() == 0)
                     throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
 

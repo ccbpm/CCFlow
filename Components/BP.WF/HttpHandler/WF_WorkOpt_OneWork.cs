@@ -321,7 +321,6 @@ namespace BP.WF.HttpHandler
                     /*取回审批*/
                     isCan = false;
                     string para = "";
-                    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                     string sql = "SELECT NodeID FROM WF_Node WHERE CheckNodes LIKE '%" + gwf.FK_Node + "%'";
                     int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
 

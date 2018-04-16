@@ -83,6 +83,9 @@ namespace BP.Sys
 
         #region 属性
         public bool IsUse = false;
+        /// <summary>
+        /// 表单ID
+        /// </summary>
         public string EnName
         {
             get
@@ -94,6 +97,9 @@ namespace BP.Sys
                 this.SetValByKey(GroupFieldAttr.EnName, value);
             }
         }
+        /// <summary>
+        /// 表单ID
+        /// </summary>
         public string FrmID
         {
             get
@@ -221,14 +227,28 @@ namespace BP.Sys
         }
         #endregion
 
+        /// <summary>
+        /// 外部调用的
+        /// </summary>
+        /// <returns></returns>
+        public string AddGroup()
+        {
+            this.EnName = this.FrmID;
+            this.InsertAsNew();
+            return "执行成功.";
+
+        }
         protected override void afterInsert()
         {
             if (this.FrmID != "")
                 this.EnName = this.FrmID;
             base.afterInsert();
         }
-         
-
+        protected override bool beforeUpdateInsertAction()
+        {
+            DBAccess.RunSQL("UPDATE Sys_GroupField SET EnName=FrmID WHERE FrmID IS NOT NULL ");
+            return base.beforeUpdateInsertAction();
+        }
         /// <summary>
         /// 删除所有隶属该分组的字段.
         /// </summary>
@@ -269,8 +289,8 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
-            if (this.FrmID != "")
-                this.EnName = this.FrmID;
+            if (DataType.IsNullOrEmpty( this.FrmID)==true)
+                this.SetValByKey(GroupFieldAttr.EnName,this.FrmID);
 
             //if (this.IsExit(GroupFieldAttr.EnName, this.EnName, GroupFieldAttr.Lab, this.Lab) == true)
             //    throw new Exception("@已经在("+this.EnName+")里存在("+this.Lab+")的分组了。");

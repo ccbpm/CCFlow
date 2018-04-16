@@ -499,6 +499,7 @@ namespace BP.Sys
             GroupField gf = new GroupField();
             gf.Lab = groupName;
             gf.EnName = frmID;
+            gf.FrmID = frmID;
             gf.Insert();
 
             MapAttr attr = new MapAttr();

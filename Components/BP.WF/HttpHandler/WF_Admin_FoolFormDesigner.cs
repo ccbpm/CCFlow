@@ -498,13 +498,26 @@ namespace BP.WF.HttpHandler
             return "保存成功";
         }
         /// <summary>
+        /// 创建审核分组
+        /// </summary>
+        /// <returns></returns>
+        public string GroupField_Create()
+        {
+            BP.Sys.GroupField gf = new GroupField();
+            gf.FrmID = this.FK_MapData;
+            gf.Lab = this.GetRequestVal("Lab");
+            gf.EnName =this.FK_MapData;
+            gf.Insert();
+            return "创建成功..";
+        }
+        /// <summary>
         /// 保存分组
         /// </summary>
         /// <returns></returns>
         public string GroupField_SaveCheck()
         {
-            string lab = this.GetValFromFrmByKey("TB_Check_Name");
-            string prx = this.GetValFromFrmByKey("TB_Check_No");
+            string lab = this.GetRequestVal("TB_Check_Name");
+            string prx = this.GetRequestVal("TB_Check_No");
             BP.Sys.CCFormAPI.CreateCheckGroup(this.FK_MapData, lab, prx);
             return "创建成功...";
         }

@@ -1160,7 +1160,7 @@ namespace BP.WF.HttpHandler
                                 cell.CellStyle = col.ColumnName == "序"
                                                      ? idxCellStyle
                                                      : qian ? qCellStyle : numCellStyle;
-                                cell.SetCellValue((int)dr[col.ColumnName]);
+                                cell.SetCellValue(Convert.ToInt64(dr[col.ColumnName]));
                                 break;
                             case "Single":
                             case "Double":

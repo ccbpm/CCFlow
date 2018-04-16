@@ -1231,10 +1231,6 @@ namespace BP.WF.HttpHandler
         {
             Entities ens = ClassFactory.GetEns(this.EnsName);;
             Entity en = ens.GetNewEntity;
-
-            DataSet ds = Search_Search();
-            DataTable dt = ds.Tables["DT"];
-           // string filePath = ExportDGToExcel(Search_Data(ens,en), en, "数据导出");
            string  name = "数据导出";
            string filename = name + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
 

@@ -1065,9 +1065,9 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.ThreadIsCanDel, false, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
                 map.AddBoolean(BtnAttr.ThreadIsCanShift, false, "是否可以移交子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
 
-
-                map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
+                //功能和子流程组件重复，屏蔽 hzm
+              //  map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
+               // map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
 
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);

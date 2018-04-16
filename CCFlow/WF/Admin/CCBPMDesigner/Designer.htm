@@ -215,7 +215,7 @@
         }
     </style>
     <script type="text/javascript">
-        
+
         $("#pmfun,#processMenu3").hover(function () {
             var mLeft = $("#jqContextMenu").css("left").replace('px', '');
             var mTop = $("#jqContextMenu").css("top").replace('px', '');
@@ -224,12 +224,12 @@
         }, function () {
             $("#processMenu3").hide();
         });
-       
+
         //节点类型设置
         $('#Node_Ordinary').on('click', function () {
 
-            
-            
+
+
 
             SetNodeRunModel(101, 0);
 
@@ -242,7 +242,7 @@
             alert('分流节点');
 
             SetNodeRunModel(101, 2);
-            
+
             $('#pmfun span').text($(this).text());
 
         });
@@ -277,14 +277,14 @@
         var the_flow_id = '4';
 
         /*页面回调执行    callbackSuperDialog
-            if(window.ActiveXObject){ //IE
-                window.returnValue = globalValue
-            }else{ //非IE
-                if(window.opener) {
-                    window.opener.callbackSuperDialog(globalValue) ;
-                }
-            }
-            window.close();
+        if(window.ActiveXObject){ //IE
+        window.returnValue = globalValue
+        }else{ //非IE
+        if(window.opener) {
+        window.opener.callbackSuperDialog(globalValue) ;
+        }
+        }
+        window.close();
         */
         function callbackSuperDialog(selectValue) {
             var aResult = selectValue.split('@leipi@');
@@ -293,14 +293,14 @@
             //document.getElementById(window._hidField).value = aResult[1];
         }
         /**
-         * 弹出窗选择用户部门角色
-         * showModalDialog 方式选择用户
-         * URL 选择器地址
-         * viewField 用来显示数据的ID
-         * hidField 隐藏域数据ID
-         * isOnly 是否只能选一条数据
-         * dialogWidth * dialogHeight 弹出的窗口大小
-         */
+        * 弹出窗选择用户部门角色
+        * showModalDialog 方式选择用户
+        * URL 选择器地址
+        * viewField 用来显示数据的ID
+        * hidField 隐藏域数据ID
+        * isOnly 是否只能选一条数据
+        * dialogWidth * dialogHeight 弹出的窗口大小
+        */
         function superDialog(URL, viewField, hidField, isOnly, dialogWidth, dialogHeight) {
             dialogWidth || (dialogWidth = 620)
             , dialogHeight || (dialogHeight = 520)
@@ -479,6 +479,14 @@
                                           alert("添加失败");
                                           return;
                                       }
+                                      //                                      var username = document.createElement("input");
+                                      //                                      username.type = "text";
+                                      //                                      username.style = "width:140px;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;position:absolute"
+                                      //                                      username.placeholder = "请输入标签";
+                                      //                                      username.id = "";
+                                      //                                      //这里需要什么参数自己添加
+                                      //                                      document.body.appendChild(username);
+                                      //离开焦点执行保存
                                   },
                                   "cmPaste": function (t) {
                                       var pasteId = _canvas.paste(); //右键当前的ID
@@ -567,30 +575,30 @@
 
                                   }
                               },
-                              canvasLabMenu: {
-                                  "clmDelete": function (t) {
-                                      var activeId = _canvas.getActiveId(); //右键当前的ID.
-                                      if (confirm("你确定删除该标签吗？") == false)
-                                          return;
+                canvasLabMenu: {
+                    "clmDelete": function (t) {
+                        var activeId = _canvas.getActiveId(); //右键当前的ID.
+                        if (confirm("你确定删除该标签吗？") == false)
+                            return;
 
-                                      //删除标签.
-                                      var lb = new Entity("BP.WF.Template.LabNote", activeId);
-                                      lb.Delete();
-                                      _canvas.delLabNote(activeId);
+                        //删除标签.
+                        var lb = new Entity("BP.WF.Template.LabNote", activeId);
+                        lb.Delete();
+                        _canvas.delLabNote(activeId);
 
-                                  },
-                                  "clmNewName": function (t) {
-                                      //修改标签名称.
-                                      var activeId = _canvas.getActiveId(); //右键当前的ID
-                                      var windowtext = $("#lab" + activeId).text();
-                                      var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
-                                      var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
-                                      var xiuNodename = '修改名称：<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
-                                      var spanaa = $("#lab" + activeId + " span").html();
+                    },
+                    "clmNewName": function (t) {
+                        //修改标签名称.
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        var windowtext = $("#lab" + activeId).text();
+                        var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                        var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
+                        var xiuNodename = '修改名称：<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
+                        var spanaa = $("#lab" + activeId + " span").html();
 
-                                      labAlert(xiuNodename);
-                                  }
-                              }
+                        labAlert(xiuNodename);
+                    }
+                }
                               , fnRepeat: function () {
                                   //alert("步骤连接重复1");//可使用 jquery ui 或其它方式提示
                                   mAlert("步骤连接重复了，请重新连接");
@@ -801,6 +809,7 @@
                 }
 
 
+
                 strs += "'style':'width:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 
                 if (i == nodes.length - 1)
@@ -811,15 +820,9 @@
 
             strs += "] }";
 
-
-
             return eval("(" + strs + ")");
         }
         function GetLabNoteData() {
-
-        return "";
-    
-
             //标签. 取出来显示
             var labs = new Entities("BP.WF.Template.LabNotes");
             labs.Retrieve("FK_Flow", flowNo);
@@ -843,8 +846,7 @@
 
             strs += "] }";
 
-            `return eval("(" + strs + ")");
-              
+            return eval("(" + strs + ")");
         }
         //刷新页面
         function page_reload() {

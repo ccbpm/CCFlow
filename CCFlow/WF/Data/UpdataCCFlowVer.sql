@@ -4,13 +4,14 @@
 
 update sys_groupfield set frmID=enName where frmid is  null;
 
-UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%'
+UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%';
+
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta'; 
 DELETE FROM Sys_Enum WHERE EnumKey ='EventDoType'; 
-DELETE FROM Sys_Enum WHERE EnumKey ='EditModel';  
+DELETE FROM Sys_Enum WHERE EnumKey ='EditModel';
 
 
 -- 更新枚举值;

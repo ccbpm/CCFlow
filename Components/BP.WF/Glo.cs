@@ -932,6 +932,12 @@ namespace BP.WF
 
             MapAttr attr = new MapAttr();
             attr.CheckPhysicsTable();
+
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.CheckPhysicsTable();
+
+            BP.WF.Data.CH ch = new CH();
+            ch.CheckPhysicsTable();
             #endregion 先创建表，否则列的顺序就会变化.
 
             #region 1, 创建or修复表

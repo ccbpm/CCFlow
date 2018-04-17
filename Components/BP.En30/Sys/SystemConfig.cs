@@ -803,8 +803,6 @@ namespace BP.Sys
         }
         #endregion
 
-
-
         #region 处理临时缓存
         /// <summary>
         /// 回话丢失时间长度(默认为500分钟)

@@ -617,7 +617,7 @@ namespace BP.WF.Data
                 Map map = new Map("WF_CH", "时效考核");
 
                 map.AddMyPK();
-
+                    
                 #region 基本属性.
                 map.AddTBInt(CHAttr.WorkID, 0, "工作ID", false, true);
                 map.AddTBInt(CHAttr.FID, 0, "FID", false, true);

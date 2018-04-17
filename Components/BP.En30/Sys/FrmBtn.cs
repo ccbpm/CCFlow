@@ -409,7 +409,7 @@ namespace BP.Sys
                 map.AddTBInt(FrmBtnAttr.IsView, 0, "是否可见", false, false);
                 map.AddTBInt(FrmBtnAttr.IsEnable, 0, "是否起用", false, false);
 
-              //  map.AddTBInt(FrmBtnAttr.BtnType, 0, "类型", false, false);
+                //map.AddTBInt(FrmBtnAttr.BtnType, 0, "类型", false, false);
 
                 map.AddTBInt(FrmBtnAttr.UAC, 0, "控制类型", false, false);
                 map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", true, false, 0, 3900, 20);

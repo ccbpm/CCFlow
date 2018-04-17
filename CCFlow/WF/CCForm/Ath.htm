@@ -464,11 +464,11 @@
             var AttachPK = FK_FrmAttachment;
             var Url = "";
             Url = "/WF/CCForm/Handler.ashx?DoType=MoreAttach&FK_FrmAttachment=" + FK_FrmAttachment + "&DoMethod=MoreAttach&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + WorkID + "&PKVal=" + PKVal + "&AttachPK=" + AttachPK + "&t=" + new Date().getTime();
-
             $.ajax({
                 url: Url,
                 type: 'POST',
                 data: formData,
+                async: false,
                 // 告诉jQuery不要去处理发送的数据
                 processData: false,
                 // 告诉jQuery不要去设置Content-Type请求头

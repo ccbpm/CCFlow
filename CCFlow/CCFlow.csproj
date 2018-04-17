@@ -991,9 +991,7 @@
     <Content Include="WF\BatchStartGroup.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\AttachmentFix.htm" />
-    <Content Include="WF\CCForm\AttachmentUpload.aspx" />
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
-    <Content Include="WF\CCForm\Dtl.css" />
     <Content Include="WF\CCForm\Frm.htm" />
     <Content Include="WF\CCForm\CCFormAPI.asmx" />
     <Content Include="WF\CCForm\Do.aspx" />
@@ -1082,12 +1080,6 @@
     <Content Include="WF\Comm\En.htm" />
     <Content Include="WF\Comm\Gener.js" />
     <Content Include="WF\Comm\Group.aspx" />
-    <Content Include="WF\Comm\HelperEnsTextBox.aspx" />
-    <Content Include="WF\Comm\HelperOfDDL.aspx" />
-    <Content Include="WF\Comm\HelperOfDDLAdv.aspx" />
-    <Content Include="WF\Comm\HelperOfSiganture.aspx" />
-    <Content Include="WF\Comm\HelperOfTBEUI.aspx" />
-    <Content Include="WF\Comm\HelperOfTBNo.aspx" />
     <Content Include="WF\Comm\JScript.js" />
     <Content Include="WF\Comm\JS\Calendar\calendar.js" />
     <Content Include="WF\Comm\JS\Calendar\config.js" />
@@ -6827,13 +6819,6 @@
     <Compile Include="WF\BatchStartGroup.aspx.designer.cs">
       <DependentUpon>BatchStartGroup.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\CCForm\AttachmentUpload.aspx.cs">
-      <DependentUpon>AttachmentUpload.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\AttachmentUpload.aspx.designer.cs">
-      <DependentUpon>AttachmentUpload.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\CCForm\AttachmentUploadImg.aspx.cs">
       <DependentUpon>AttachmentUploadImg.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6969,48 +6954,6 @@
     </Compile>
     <Compile Include="WF\Comm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\HelperEnsTextBox.aspx.cs">
-      <DependentUpon>HelperEnsTextBox.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\HelperEnsTextBox.aspx.designer.cs">
-      <DependentUpon>HelperEnsTextBox.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfDDL.aspx.cs">
-      <DependentUpon>HelperOfDDL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfDDL.aspx.designer.cs">
-      <DependentUpon>HelperOfDDL.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfDDLAdv.aspx.cs">
-      <DependentUpon>HelperOfDDLAdv.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfDDLAdv.aspx.designer.cs">
-      <DependentUpon>HelperOfDDLAdv.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfSiganture.aspx.cs">
-      <DependentUpon>HelperOfSiganture.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfSiganture.aspx.designer.cs">
-      <DependentUpon>HelperOfSiganture.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfTBEUI.aspx.cs">
-      <DependentUpon>HelperOfTBEUI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfTBEUI.aspx.designer.cs">
-      <DependentUpon>HelperOfTBEUI.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfTBNo.aspx.cs">
-      <DependentUpon>HelperOfTBNo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\HelperOfTBNo.aspx.designer.cs">
-      <DependentUpon>HelperOfTBNo.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\MasterPage.master.cs">
       <DependentUpon>MasterPage.master</DependentUpon>

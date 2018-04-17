@@ -1,8 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>流程查询</title>
@@ -10,7 +8,6 @@
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
  	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-   
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -116,7 +113,7 @@
                 else
                     html += "<button onclick=\"TSpan('" + tSpan.IntKey + "');\" class=\"btn btn-default \">" + tSpan.Lab + "</button> ";
             }
-           
+
 
             $("#TSpan").html(html);
 
@@ -140,13 +137,13 @@
 
 
             // 流程实例列表.
-            var ens = data['WF_GenerWorkFlow'],
-                        _Html = "";
+            var ens = data['WF_GenerWorkFlow'];
+            _Html = "";
 
             //当前登录人员的编号.
             var userNo = webUser.No;
             var todoEmpsName = "";
-            htmlbox='';
+            htmlbox = '';
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
@@ -206,9 +203,9 @@
                 htmlbox += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.WFState, en.FK_Flow, en.FK_Node, en.FID, isCanDo) + "</font></td>";
 
                 htmlbox += "</tr>";
-                
+
             }
-			$("#Table1").html(htmlbox);
+            $("#Table1").html(htmlbox);
             $("#List").append(_Html);
             $("#Msg").html("");
 

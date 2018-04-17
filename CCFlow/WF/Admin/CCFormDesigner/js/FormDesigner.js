@@ -518,7 +518,8 @@ function CCForm_BrowserView() {
 
 //预览表单
 function CCForm_FoolFrm() {
-    var url = '../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_Flow=001&MyPK=ND101&IsEditMapData=True';
+
+    var url = '../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_Flow=001&MyPK=ND101&IsEditMapData=True&IsFirst=1';
    // var url = "../../CCForm/Frm.htm?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
     OpenWindow(url);
 }

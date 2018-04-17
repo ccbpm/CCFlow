@@ -23,7 +23,6 @@
 									<th>状态</th>
 									<th>停留节点 </th>
 									<th>当前处理人 </th>
-									<th>最后处理人</th>
 									<th>操作</th>
 									</tr>
 								</thead>
@@ -40,50 +39,141 @@
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>    
+    <script src="./Comm/Gener.js" type="text/javascript"></script>    
     <script language="javascript" type="text/javascript" >
        
         //页面启动函数.
         $(function () {
-            InitPage();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var data = handler.DoMethodReturnString("Focus_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
+            data = JSON.parse(data);
+
+            var webUser = new WebUser();
+
+            var listbox = "";
+            //增加处理.
+            for (var i = 0; i < data.length; i++) {
+
+                var en = data[i];
+
+                //是否可以执行当前工作?
+                var isCanDo = false;
+                if (en.TodoEmps != null) {
+                    if (en.TodoEmps.indexOf(webUser.No) != -1)
+                        isCanDo = true;
+                }
+
+                //获得icon.
+                var icon = GenerICON(isCanDo, en.WFState);
+
+                // 获得颜色.
+                var color = GenerColor(en.WFState, isCanDo);
+
+
+
+                listbox += "<tr ><td class=Idx>" + i + "</td>";
+                listbox += "<td>" + en.FlowName + "</td>";
+                //  listbox += "<td>" + en.Title + "</td>";
+                listbox += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + webUser.No + "')\">" + en.Title + "</td>";
+
+                listbox += "<td>" + en.StarterName + "</td>";
+                listbox += "<td>" + en.RDT + "</td>";
+
+                listbox += "<td><font color='" + color + "'>" + GetWFState(en.WFState, isCanDo) + "</font></td>";
+
+
+                listbox += "<td>" + en.NodeName + "</td>";
+                listbox += "<td>" + en.TodoEmps + "</td>";
+
+                listbox += "<td>";
+                listbox += "<a href=\"javascript:Delete('" + en.WorkID + "')\">删除</a>";
+                listbox += "</td>";
+                listbox += "</tr>";
+            }
+
+            $('#Table1').html(listbox);
 
         });
 
-        //初始化数据.
-        function InitPage() {
+        function GenerColor(wfState, isCanDo) {
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Focus_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            if (isCanDo == true && wfState != 3)
+                return "red";
 
-                    data = JSON.parse(data);
-			 var listbox = "";
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
+            if (wfState == 5) {
+                return "yellow";
+            }
 
-                       
+            if (wfState == 3) {
+                return "green";
+            }
 
-                        listbox += "<tr ><td class=Idx>" + i + "</td>";
-                        listbox += "<td>" + data[i].NO + "</td>";
-                        listbox += "<td>" + data[i].NAME + "</td>";
-                        listbox += "<td>" + data[i].TEL + "</td>";
-                        listbox += "<td>" + data[i].EMAIL + "</td>";
-                        listbox += "<td>" + data[i].ADDR + "</td>";
+            if (wfState == 2)
+                return "";
 
-                        listbox += "<td>";
-                        listbox += "<a href=\"javascript:Edit('" + data[i].NO + "')\">编辑</a>";
-                        listbox += "<a href=\"javascript:Delete('" + data[i].NO + "')\">删除</a>";
-                        listbox += "</td>";
+            return "";
+        }
 
-                        listbox += "</tr>";
+        function GenerICON(isCanDo, wfState) {
 
-                    }
-                     $('#Table1').html(listbox);
-                }
+            if (wfState == 3)
+                icon = "./Img/WFState/Complete.png";  //已经完成.
+            else if (wfState == 2)
+                icon = "./Img/WFState/Runing.png"; //运行中. 
+            else if (wfState == 5)
+                icon = "./Img/WFState/ReturnSta.png"; //退回.
+            else
+                icon = "./Img/WFState/Etc.png"; //其他.
+
+            if (isCanDo == true && wfState != 3)
+                icon = "./Img/WFState/Todo.png"; //其他.
+
+            return icon;
+        }
+
+        function OpenIt(wfState, workid, flowNo, nodeID, emps, userNo) {
+
+            var url = "";
+            if (wfState != 3 && emps.indexOf(userNo) >= 0) {
+                url = "MyFlow.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+            } else {
+                url = "WFRpt.htm?WorkID=" + workid + "&FK_Flow=" + flowNo;
+            }
+            WinOpen(url);
+            return;
+
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                title: '我的流程',
+                area: ['96%', '90%'],
+                content: url
             });
+        }
+
+        function GetWFState(wfState, isCanDo) {
+
+            if (isCanDo == true && wfState != 3)
+                return "待办";
+
+            if (wfState == 5) {
+                return "退回";
+            }
+
+            if (wfState == 3) {
+                return "已完成";
+            }
+
+            if (wfState == 2)
+                return "运行中";
+
+            return "其他";
         }
 
         function Delete(no) {
@@ -91,29 +181,15 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            //删除焦点.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Focus_Delete&No=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("WorkID", no);
+            var data = handler.DoMethodReturnString("Focus_Delete");
 
-                    $("#Msg").html(data);
-
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-
-                    } else {
-
-                        alert(data);
-
-                        window.location.href = window.location.href;
-                    }
-                }
-            });
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            window.location.href = window.location.href;
         }
 
      </script>

@@ -106,7 +106,7 @@ function NodeFrmD(nodeID) {
 
 function NodeFrmFool(nodeID) {
     //傻瓜表单.
-    var url = "../FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    var url = "../FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     //WinOpen(url);
     window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
 }

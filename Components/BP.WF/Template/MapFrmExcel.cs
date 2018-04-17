@@ -281,14 +281,7 @@ namespace BP.WF.Template
 				map.AddRefMethod(rm);
 
 
-				rm = new RefMethod();
-				rm.Title = "表单检查";  //"设计表单";
-				rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
-				rm.Visable = true;
-				rm.RefAttrLinkLabel = "表单检查";
-				rm.Icon = "../../WF/Img/Check.png";
-				rm.Target = "_blank";
-				map.AddRefMethod(rm);
+			 
 
 				//rm = new RefMethod();
 				//rm.Title = "节点表单组件"; // "设计表单";
@@ -368,7 +361,7 @@ namespace BP.WF.Template
         }
 		public string DoDesignerFool()
 		{
-			return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
+            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True&IsFirst=1";
 		}
 		public string DoEditExcelTemplate()
 		{
@@ -393,109 +386,7 @@ namespace BP.WF.Template
 			else
 				return "../../Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
 		}
-		/// <summary>
-		/// 执行旧版本的兼容性检查.
-		/// </summary>
-		public string DoCheckFixFrmForUpdateVer()
-		{
-			// 更新状态.
-			DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
-			DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
-
-			string str = "";
-
-			// 处理失去分组的字段. 
-			string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "' AND CtrlType='' ) ";
-			MapAttrs attrs = new MapAttrs();
-			attrs.RetrieveInSQL(sql);
-			if (attrs.Count != 0)
-			{
-				GroupField gf = null;
-				GroupFields gfs = new GroupFields(this.No);
-				foreach (GroupField mygf in gfs)
-				{
-					if (mygf.CtrlID == "")
-						gf = mygf;
-				}
-				if (gf == null)
-				{
-					gf = new GroupField();
-					gf.Lab = "基本信息";
-					gf.EnName = this.No;
-					gf.Insert();
-				}
-
-				//设置GID.
-				foreach (MapAttr attr in attrs)
-				{
-					attr.Update(MapAttrAttr.GroupID, gf.OID);
-				}
-			}
-
-			//从表.
-			MapDtls dtls = new MapDtls(this.No);
-			foreach (MapDtl dtl in dtls)
-			{
-				GroupField gf = new GroupField();
-				if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
-					continue;
-
-				gf.Lab = dtl.Name;
-				gf.CtrlID = dtl.No;
-				gf.CtrlType = "Dtl";
-				gf.EnName = dtl.FK_MapData;
-				gf.DirectSave();
-
-				str += "@为从表" + dtl.Name + " 增加了分组.";
-			}
-
-			// 框架.
-			MapFrames frams = new MapFrames(this.No);
-			foreach (MapFrame fram in frams)
-			{
-				GroupField gf = new GroupField();
-				if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
-					continue;
-
-				gf.Lab = fram.Name;
-				gf.CtrlID = fram.MyPK;
-				gf.CtrlType = "Frame";
-				gf.EnName = fram.FK_MapData;
-				gf.Insert();
-
-				str += "@为框架 " + fram.Name + " 增加了分组.";
-
-			}
-
-
-			// 附件.
-			FrmAttachments aths = new FrmAttachments(this.No);
-			foreach (FrmAttachment ath in aths)
-			{
-				GroupField gf = new GroupField();
-				if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
-					continue;
-
-				gf.Lab = ath.Name;
-				gf.CtrlID = ath.MyPK;
-				gf.CtrlType = "Ath";
-				gf.EnName = ath.FK_MapData;
-				gf.Insert();
-
-				str += "@为附件 " + ath.Name + " 增加了分组.";
-			}
-
-			if (this.IsNodeFrm == true)
-			{
-				FrmNodeComponent conn = new FrmNodeComponent(this.NodeID);
-				conn.Update();
-			}
-
-			if (str == "")
-				return "检查成功.";
-
-			return str + ", @@@ 检查成功。";
-		}
+		 
 		#endregion
 
 		#region 通用方法.
@@ -602,7 +493,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoDFromCol4()
 		{
-			string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&IsFirst=1&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
 			PubClass.WinOpen(url, 800, 650);
 			return null;
 		}

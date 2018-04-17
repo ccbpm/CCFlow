@@ -930,19 +930,19 @@ namespace BP.Sys.FrmUI
             //更新相关的分组信息.
 
             GroupField gf = new GroupField();
-            int i= gf.Retrieve(GroupFieldAttr.EnName, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
 
             if (i == 0)
             {
                 gf.Lab = this.Name;
-                gf.EnName = this.FK_MapData;
+                gf.FrmID = this.FK_MapData;
                 gf.CtrlType = "Ath";
                 gf.Insert();
             }
             else
             {
                 gf.Lab = this.Name;
-                gf.EnName = this.FK_MapData;
+                gf.FrmID = this.FK_MapData;
                 gf.CtrlType = "Ath";
                 gf.Update();
             }
@@ -981,7 +981,7 @@ namespace BP.Sys.FrmUI
             GroupField gf = new GroupField();
             if (gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
-                gf.EnName = this.FK_MapData;
+                gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.MyPK;
                 gf.CtrlType = "Ath";
                 gf.Lab = this.Name;

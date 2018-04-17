@@ -314,7 +314,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDesignerFool()
         {
-            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
+            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsFirst=1&IsEditMapData=True";
         }
 
         /// <summary>
@@ -360,7 +360,7 @@ namespace BP.WF.Template
                 {
                     gf = new GroupField();
                     gf.Lab = "基本信息";
-                    gf.EnName = this.No;
+                    gf.FrmID = this.No;
                     gf.Insert();
                 }
 
@@ -382,7 +382,7 @@ namespace BP.WF.Template
                 gf.Lab = dtl.Name;
                 gf.CtrlID = dtl.No;
                 gf.CtrlType = "Dtl";
-                gf.EnName = dtl.FK_MapData;
+                gf.FrmID = dtl.FK_MapData;
                 gf.DirectSave();
                 str += "@为从表" + dtl.Name + " 增加了分组.";
             }
@@ -402,22 +402,21 @@ namespace BP.WF.Template
                 gf.Insert();
 
                 str += "@为框架 " + fram.Name + " 增加了分组.";
-
             }
-
 
             // 附件.
             FrmAttachments aths = new FrmAttachments(this.No);
             foreach (FrmAttachment ath in aths)
             {
                 GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
+                int i = gf.Retrieve(GroupFieldAttr.CtrlID, ath.MyPK, GroupFieldAttr.FrmID, this.No);
+                if (i == 1)
                     continue;
-
+                 
                 gf.Lab = ath.Name;
                 gf.CtrlID = ath.MyPK;
                 gf.CtrlType = "Ath";
-                gf.EnName = ath.FK_MapData;
+                gf.FrmID = ath.FK_MapData;
                 gf.Insert();
 
                 str += "@为附件 " + ath.Name + " 增加了分组.";
@@ -444,7 +443,7 @@ namespace BP.WF.Template
                 string ctrlType = dr[2].ToString();
 
                 GroupFields gfs = new GroupFields();
-                gfs.Retrieve(GroupFieldAttr.EnName, enName, GroupFieldAttr.CtrlID, ctrlID, GroupFieldAttr.CtrlType, ctrlType);
+                gfs.Retrieve(GroupFieldAttr.FrmID, enName, GroupFieldAttr.CtrlID, ctrlID, GroupFieldAttr.CtrlType, ctrlType);
 
                 if (gfs.Count <= 1)
                     continue;
@@ -568,7 +567,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFromCol4()
         {
-            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&IsFirst=1&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }

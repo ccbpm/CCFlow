@@ -2380,7 +2380,7 @@ namespace BP.Sys
             if (gfs.Count == 0)
             {
                 GroupField gf = new GroupField();
-                gf.EnName = this.No;
+                gf.FrmID = this.No;
                 gf.Lab = this.Name;
                 gf.Insert();
 

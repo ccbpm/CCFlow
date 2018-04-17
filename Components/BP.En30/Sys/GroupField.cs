@@ -33,10 +33,6 @@ namespace BP.Sys
     public class GroupFieldAttr : EntityOIDAttr
     {
         /// <summary>
-        /// 主表
-        /// </summary>
-        public const string EnName = "EnName";
-        /// <summary>
         /// 表单ID
         /// </summary>
         public const string FrmID = "FrmID";
@@ -86,23 +82,18 @@ namespace BP.Sys
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string EnName
+        public string FrmID
         {
             get
             {
-                return this.GetValStrByKey(GroupFieldAttr.EnName);
+                return this.GetValStrByKey(GroupFieldAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(GroupFieldAttr.EnName, value);
                 this.SetValByKey(GroupFieldAttr.FrmID, value);
-
             }
         }
-        /// <summary>
-        /// 表单ID
-        /// </summary>
-        public string FrmID
+        public string EnName
         {
             get
             {
@@ -198,7 +189,6 @@ namespace BP.Sys
 
                 map.AddTBIntPKOID();
                 map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20,true);
-                map.AddTBString(GroupFieldAttr.EnName, null, "类", false, false, 0, 200, 20);
                 map.AddTBString(GroupFieldAttr.FrmID, null, "表单ID", false, false, 0, 200, 20);
                 map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", false, false);
 
@@ -235,16 +225,8 @@ namespace BP.Sys
         /// <returns></returns>
         public string AddGroup()
         {
-            this.EnName = this.FrmID;
             this.InsertAsNew();
             return "执行成功.";
-
-        }
-        protected override void afterInsert()
-        {
-            if (this.FrmID != "")
-                this.EnName = this.FrmID;
-            base.afterInsert();
         }
         protected override bool beforeUpdateInsertAction()
         {
@@ -257,7 +239,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoDelAllField()
         {
-            string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.EnName + "' AND GroupID=" + this.OID+" AND KeyOfEn NOT IN ('OID','RDT','REC','RefPK','FID')";
+            string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "' AND GroupID=" + this.OID + " AND KeyOfEn NOT IN ('OID','RDT','REC','RefPK','FID')";
             int i= BP.DA.DBAccess.RunSQL(sql);
             return "删除字段{"+i+"}个，被删除成功, 执行的SQL:"+sql;
         }
@@ -267,38 +249,30 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoAddField()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/FieldTypeList.htm?DoType=AddF&FK_MapData11=" + this.EnName + "&GroupField=" + this.OID; // DataType.CurrentDataTime;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/FieldTypeList.htm?DoType=AddF&FK_MapData11=" + this.FrmID + "&GroupField=" + this.OID; // DataType.CurrentDataTime;
         }
-
         protected override bool beforeUpdate()
         {
-            this.FrmID = this.EnName;
-
             string sql = "UPDATE Sys_GroupField SET LAB='" + this.Lab + "' WHERE OID=" + this.OID;
             BP.DA.DBAccess.RunSQL(sql);
-            return base.beforeUpdate(); //edited by liuxc,2017-2-9,修复GroupField不能更新的问题
+            return base.beforeUpdate(); 
         }
-
         public void DoDown()
         {
-            this.DoOrderDown(GroupFieldAttr.EnName, this.EnName, GroupFieldAttr.Idx);
+            this.DoOrderDown(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.Idx);
             return;
         }
         public void DoUp()
         {
-            this.DoOrderUp(GroupFieldAttr.EnName, this.EnName, GroupFieldAttr.Idx);
+            this.DoOrderUp(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.Idx);
             return;
         }
         protected override bool beforeInsert()
         {
-            if (DataType.IsNullOrEmpty( this.FrmID)==true)
-                this.SetValByKey(GroupFieldAttr.EnName,this.FrmID);
-
-            //if (this.IsExit(GroupFieldAttr.EnName, this.EnName, GroupFieldAttr.Lab, this.Lab) == true)
-            //    throw new Exception("@已经在("+this.EnName+")里存在("+this.Lab+")的分组了。");
+            
             try
             {
-                string sql = "SELECT MAX(IDX) FROM " + this.EnMap.PhysicsTable + " WHERE EnName='" + this.EnName + "'";
+                string sql = "SELECT MAX(IDX) FROM " + this.EnMap.PhysicsTable + " WHERE EnName='" + this.FrmID + "'";
                 this.Idx = DBAccess.RunSQLReturnValInt(sql, 0) + 1;
             }
             catch
@@ -326,11 +300,11 @@ namespace BP.Sys
         /// <param name="enName">名称</param>
         public GroupFields(string enName)
         {
-            int i = this.Retrieve(GroupFieldAttr.EnName, enName, GroupFieldAttr.Idx);
+            int i = this.Retrieve(GroupFieldAttr.FrmID, enName, GroupFieldAttr.Idx);
             if (i == 0)
             {
                 GroupField gf = new GroupField();
-                gf.EnName = enName;
+                gf.FrmID = enName;
                 MapData md = new MapData();
                 md.No = enName;
                 if (md.RetrieveFromDBSources() == 0)
@@ -360,7 +334,7 @@ namespace BP.Sys
         public int RetrieveFieldGroup(string enName)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(GroupFieldAttr.EnName, enName);
+            qo.AddWhere(GroupFieldAttr.FrmID, enName);
             qo.addAnd();
             qo.AddWhereIsNull(GroupFieldAttr.CtrlID);
             //qo.AddWhereLen(GroupFieldAttr.CtrlID, " = ", 0, SystemConfig.AppCenterDBType);
@@ -369,7 +343,7 @@ namespace BP.Sys
             if (num==0)
             {
                 GroupField gf = new GroupField();
-                gf.EnName = enName;
+                gf.FrmID = enName;
                 MapData md = new MapData();
                 md.No = enName;
                 if (md.RetrieveFromDBSources() == 0)

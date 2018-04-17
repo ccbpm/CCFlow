@@ -2632,7 +2632,7 @@ namespace BP.WF
 
             // 删除分组.
             BP.Sys.GroupFields gfs = new BP.Sys.GroupFields();
-            gfs.Delete(BP.Sys.GroupFieldAttr.EnName, md.No);
+            gfs.Delete(BP.Sys.GroupFieldAttr.FrmID, md.No);
 
             //删除它的明细。
             BP.Sys.MapDtls dtls = new BP.Sys.MapDtls(md.No);

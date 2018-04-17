@@ -1615,7 +1615,7 @@ namespace BP.Sys
             GroupField gf = new GroupField();
             if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
             {
-                gf.EnName = this.FK_MapData;
+                gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.No;
                 gf.CtrlType = "Dtl";
                 gf.Lab = this.Name;

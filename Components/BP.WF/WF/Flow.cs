@@ -3543,12 +3543,12 @@ namespace BP.WF
             {
                 string flowInfo = "流程信息";
                 GroupField flowGF = new GroupField();
-                int num = flowGF.Retrieve(GroupFieldAttr.EnName, fk_mapData, GroupFieldAttr.Lab, "流程信息");
+                int num = flowGF.Retrieve(GroupFieldAttr.FrmID, fk_mapData, GroupFieldAttr.Lab, "流程信息");
                 if (num == 0)
                 {
                     flowGF = new GroupField();
                     flowGF.Lab = flowInfo;
-                    flowGF.EnName = fk_mapData;
+                    flowGF.FrmID = fk_mapData;
                     flowGF.Idx = -1;
                     flowGF.Insert();
                 }
@@ -5633,7 +5633,7 @@ namespace BP.WF
                                 gf.SetValByKey(dc.ColumnName, val);
                             }
                             int oid = DBAccess.GenerOID();
-                            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + oid + " WHERE FK_MapData='" + gf.EnName + "' AND GroupID=" + gf.OID);
+                            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + oid + " WHERE FK_MapData='" + gf.FrmID + "' AND GroupID=" + gf.OID);
                             gf.InsertAsOID(oid);
                         }
                         break;

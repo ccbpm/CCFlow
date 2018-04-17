@@ -1294,7 +1294,7 @@ namespace BP.Sys
             GroupField gf = new GroupField();
             if (gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
-                gf.EnName = this.FK_MapData;
+                gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.MyPK;
                 gf.CtrlType = "Ath";
                 gf.Lab = this.Name;

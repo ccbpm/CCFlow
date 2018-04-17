@@ -1439,11 +1439,11 @@ namespace BP.WF.Template
             GroupField gf = new GroupField();
             if (this.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
-                gf.Delete(GroupFieldAttr.EnName, "ND" + this.NodeID, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
+                gf.Delete(GroupFieldAttr.FrmID, "ND" + this.NodeID, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.CtrlType, GroupCtrlType.FWC, GroupFieldAttr.EnName, "ND" + this.NodeID) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlType, GroupCtrlType.FWC, GroupFieldAttr.FrmID, "ND" + this.NodeID) == false)
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;

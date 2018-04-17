@@ -275,7 +275,7 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
             {
                 /* 自由表单 */
-                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
+                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData + "&IsFirst=1";
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.VSTOForExcel)

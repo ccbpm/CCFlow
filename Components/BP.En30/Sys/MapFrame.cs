@@ -220,7 +220,7 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            gf.EnName = this.FK_MapData;
+            gf.FrmID = this.FK_MapData;
             gf.CtrlID =  this.MyPK;
             gf.CtrlType = "Frame";
             gf.Lab = this.Name;

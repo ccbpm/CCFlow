@@ -568,7 +568,7 @@ namespace BP.WF.HttpHandler
 
             groups = new GroupFields();
             qo = new QueryObject(groups);
-            qo.AddWhere(GroupFieldAttr.EnName, FK_MapData);
+            qo.AddWhere(GroupFieldAttr.FrmID, FK_MapData);
             qo.addOrderBy(GroupFieldAttr.Idx);
             qo.DoQuery();
             #endregion
@@ -655,7 +655,7 @@ namespace BP.WF.HttpHandler
                     {
                         group = new GroupField();
                         group.Lab = mapDtl.Name;
-                        group.EnName = mapDtl.FK_MapData;
+                        group.FrmID = mapDtl.FK_MapData;
                         group.CtrlType = GroupCtrlType.Dtl;
                         group.CtrlID = mapDtl.No;
                         group.Insert();
@@ -689,7 +689,7 @@ namespace BP.WF.HttpHandler
                     {
                         group = new GroupField();
                         group.Lab = fbtn.Text;
-                        group.EnName = fbtn.FK_MapData;
+                        group.FrmID = fbtn.FK_MapData;
                         group.CtrlType = GroupCtrlType.Btn;
                         group.CtrlID = fbtn.MyPK;
                         group.Insert();
@@ -916,7 +916,7 @@ namespace BP.WF.HttpHandler
                     case "group":
                         //获取分组对象的集合
                         GroupFields groups = new GroupFields(EnsName);
-                        GroupField group = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName, GroupFieldAttr.OID, MyPK) as GroupField;
+                        GroupField group = groups.GetEntityByKey(GroupFieldAttr.FrmID, EnsName, GroupFieldAttr.OID, MyPK) as GroupField;
                         //如果存在此分组
                         if (group != null)
                         {
@@ -929,7 +929,7 @@ namespace BP.WF.HttpHandler
                                 //查找下一个位置
                                 newIdx = oldIdx - i;
 
-                                newGroup = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName, GroupFieldAttr.Idx, newIdx) as GroupField;
+                                newGroup = groups.GetEntityByKey(GroupFieldAttr.FrmID, EnsName, GroupFieldAttr.Idx, newIdx) as GroupField;
                                 if (newGroup != null)
                                 {
                                     newGroup.Idx = oldIdx;
@@ -945,7 +945,7 @@ namespace BP.WF.HttpHandler
                             QueryObject qo;
                             groups = new GroupFields();
                             qo = new QueryObject(groups);
-                            qo.AddWhere(GroupFieldAttr.EnName, EnsName);
+                            qo.AddWhere(GroupFieldAttr.FrmID, EnsName);
                             qo.addAnd();
                             qo.AddWhere(GroupFieldAttr.Idx, "<", oldIdx);
                             qo.addOrderBy(GroupFieldAttr.Idx);
@@ -1060,7 +1060,7 @@ namespace BP.WF.HttpHandler
                     case "group":
                         //获取分组对象的集合
                         GroupFields groups = new GroupFields(EnsName);
-                        GroupField group = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName,GroupFieldAttr.OID,MyPK) as GroupField;
+                        GroupField group = groups.GetEntityByKey(GroupFieldAttr.FrmID, EnsName, GroupFieldAttr.OID, MyPK) as GroupField;
                         //如果存在此分组
                         if (group != null)
                         {
@@ -1072,7 +1072,7 @@ namespace BP.WF.HttpHandler
                                 //查找下一个位置
                                 newIdx = oldIdx + i;
 
-                                newGroup = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName, GroupFieldAttr.Idx, newIdx) as GroupField;
+                                newGroup = groups.GetEntityByKey(GroupFieldAttr.FrmID, EnsName, GroupFieldAttr.Idx, newIdx) as GroupField;
                                 if (newGroup != null)
                                 {
                                     newGroup.Idx = oldIdx;
@@ -1089,7 +1089,7 @@ namespace BP.WF.HttpHandler
                             QueryObject qo;
                             groups = new GroupFields();
                             qo = new QueryObject(groups);
-                            qo.AddWhere(GroupFieldAttr.EnName, EnsName);
+                            qo.AddWhere(GroupFieldAttr.FrmID, EnsName);
                             qo.addAnd();
                             qo.AddWhere(GroupFieldAttr.Idx, ">", oldIdx);
                             qo.addOrderBy(GroupFieldAttr.Idx);
@@ -1219,7 +1219,7 @@ namespace BP.WF.HttpHandler
 
                 GroupFields groups = new GroupFields();
                 obj = new QueryObject(groups);
-                obj.AddWhere(GroupFieldAttr.EnName, FK_MapData);
+                obj.AddWhere(GroupFieldAttr.FrmID, FK_MapData);
                 obj.addOrderBy(GroupFieldAttr.Idx);
                 obj.DoQuery();
 
@@ -1261,7 +1261,7 @@ namespace BP.WF.HttpHandler
 
                     tgroups = new GroupFields();
                     qo = new QueryObject(tgroups);
-                    qo.AddWhere(GroupFieldAttr.EnName, tmd);
+                    qo.AddWhere(GroupFieldAttr.FrmID, tmd);
                     qo.addOrderBy(GroupFieldAttr.Idx);
                     qo.DoQuery();
 
@@ -1327,7 +1327,7 @@ namespace BP.WF.HttpHandler
                             {
                                 tgrp = new GroupField();
                                 tgrp.Lab = group.Lab;
-                                tgrp.EnName = tmd;
+                                tgrp.FrmID = tmd;
                                 tgrp.Idx = group.Idx;
                                 tgrp.Insert();
                                 tgroups.AddEntity(tgrp);
@@ -1384,7 +1384,7 @@ namespace BP.WF.HttpHandler
                         {
                             group = new GroupField();
                             group.Lab = tdtl.Name;
-                            group.EnName = tdtl.FK_MapData;
+                            group.FrmID = tdtl.FK_MapData;
                             group.CtrlType = GroupCtrlType.Dtl;
                             group.CtrlID = tdtl.No;
                             group.Idx = groupidx;
@@ -1424,7 +1424,7 @@ namespace BP.WF.HttpHandler
 
                         ogroups = new GroupFields();
                         qo = new QueryObject(ogroups);
-                        qo.AddWhere(GroupFieldAttr.EnName, dtl.No);
+                        qo.AddWhere(GroupFieldAttr.FrmID, dtl.No);
                         qo.addOrderBy(GroupFieldAttr.Idx);
                         qo.DoQuery();
                         #endregion
@@ -1440,7 +1440,7 @@ namespace BP.WF.HttpHandler
 
                         targroups = new GroupFields();
                         qo = new QueryObject(targroups);
-                        qo.AddWhere(GroupFieldAttr.EnName, tdtl.No);
+                        qo.AddWhere(GroupFieldAttr.FrmID, tdtl.No);
                         qo.addOrderBy(GroupFieldAttr.Idx);
                         qo.DoQuery();
                         #endregion
@@ -1542,7 +1542,7 @@ namespace BP.WF.HttpHandler
                         {
                             tgroup = new GroupField();
                             tgroup.Lab = tdtl.Name;
-                            tgroup.EnName = tdtl.FK_MapData;
+                            tgroup.FrmID = tdtl.FK_MapData;
                             tgroup.CtrlType = GroupCtrlType.Dtl;
                             tgroup.CtrlID = tdtl.No;
                             tgroup.Idx = maxDtlIdx;

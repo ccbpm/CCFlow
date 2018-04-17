@@ -143,7 +143,7 @@ namespace BP.WF
                             DataRow dr = gf.NewRow();
 
                             dr[GroupFieldAttr.OID] = 100;
-                            dr[GroupFieldAttr.EnName] = nd.NodeFrmID;
+                            dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
                             dr[GroupFieldAttr.CtrlType] ="FWC";
                             dr[GroupFieldAttr.CtrlID] = "FWCND"+nd.NodeID;
                             dr[GroupFieldAttr.Idx] = 100;

@@ -153,14 +153,14 @@ namespace BP.WF.Template
             fwc.Copy(this);
             if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
-                gf.Delete(GroupFieldAttr.EnName, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
+                gf.Delete(GroupFieldAttr.FrmID, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.EnName, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC) == false)
+                if (gf.IsExit(GroupFieldAttr.FrmID, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC) == false)
                 {
                     gf = new GroupField();
-                    gf.EnName = "ND" + this.NodeID;
+                    gf.FrmID = "ND" + this.NodeID;
                     gf.CtrlType = GroupCtrlType.FWC;
                     gf.Lab = "审核组件";
                     gf.Idx = 0;
@@ -182,7 +182,7 @@ namespace BP.WF.Template
                 if (gf.IsExit(GroupFieldAttr.CtrlID, "SubFlow" + this.No) == false)
                 {
                     gf = new GroupField();
-                    gf.EnName = "ND" + this.NodeID;
+                    gf.FrmID = "ND" + this.NodeID;
                     gf.CtrlID = "SubFlow" + this.No;
                     gf.CtrlType = GroupCtrlType.SubFlow;
                     gf.Lab = "父子流程组件";
@@ -204,7 +204,7 @@ namespace BP.WF.Template
                 if (gf.IsExit(GroupFieldAttr.CtrlID, "FrmTrack" + this.No) == false)
                 {
                     gf = new GroupField();
-                    gf.EnName = "ND" + this.NodeID;
+                    gf.FrmID = "ND" + this.NodeID;
                     gf.CtrlID = "FrmTrack" + this.No;
                     gf.CtrlType = GroupCtrlType.Track;
                     gf.Lab = "轨迹";
@@ -250,7 +250,7 @@ namespace BP.WF.Template
                 if (gf.IsExit(GroupFieldAttr.CtrlID, "FrmFTC" + this.No) == false)
                 {
                     gf = new GroupField();
-                    gf.EnName = "ND" + this.NodeID;
+                    gf.FrmID = "ND" + this.NodeID;
                     gf.CtrlID = "FrmFTC" + this.No;
                     gf.CtrlType = GroupCtrlType.FTC;
                     gf.Lab = "流转自定义";

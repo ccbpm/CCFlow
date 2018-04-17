@@ -1534,7 +1534,7 @@ namespace BP.Sys
         {
             //规整groupID.
             GroupField gf = new GroupField();
-            gf.Retrieve(GroupFieldAttr.EnName, this.FK_MapData);
+            gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData);
             BP.DA.DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
 
             this.DoOrderUp(MapAttrAttr.FK_MapData,this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
@@ -1554,7 +1554,7 @@ namespace BP.Sys
         {
             //规整groupID.
             GroupField gf = new GroupField();
-            gf.Retrieve(GroupFieldAttr.EnName, this.FK_MapData);
+            gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData);
             BP.DA.DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
 
             this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
@@ -1604,13 +1604,13 @@ namespace BP.Sys
             {
                 //查找分组，查找到的第一个分组，关联当前属性
                 GroupField group = new GroupField();
-                if (group.Retrieve(GroupFieldAttr.EnName, this.FK_MapData) > 0)
+                if (group.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData) > 0)
                 {
                     this.GroupID = group.OID;
                 }
                 else
                 {
-                    group.EnName = this.FK_MapData;
+                    group.FrmID = this.FK_MapData;
                     group.Lab = "基础信息";
                     group.Idx = 1;
                     group.Insert();

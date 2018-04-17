@@ -1545,13 +1545,39 @@ namespace BP.WF.HttpHandler
                 //防止发送失败丢失接受人，导致不能出现下拉方向选择框. @杜.
                 if (this.HisGenerWorkFlow != null)
                 {
-                    if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                    //如果是会签状态.
+                    if (this.HisGenerWorkFlow.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                     {
-                        this.HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
-                        this.HisGenerWorkFlow.Update();
+                        //如果是主持人.
+                        if (this.HisGenerWorkFlow.HuiQianZhuChiRen == WebUser.No)
+                        {
+                            if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                            {
+                                this.HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                                this.HisGenerWorkFlow.Update();
+                            }
+                        }
+                        else
+                        {
+                            //非主持人.
+                            if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.Name + ",") == false)
+                            {
+                                this.HisGenerWorkFlow.TodoEmps += BP.Web.WebUser.Name + ";";
+                                this.HisGenerWorkFlow.Update();
+                            }
+                        }
+                    }
+
+
+                    if (this.HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.HuiQianing)
+                    {
+                        if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                        {
+                            this.HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                            this.HisGenerWorkFlow.Update();
+                        }
                     }
                 }
-
                 return "err@发送工作出现错误" + ex.Message;
             }
         }

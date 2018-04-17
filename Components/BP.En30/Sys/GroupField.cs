@@ -189,24 +189,19 @@ namespace BP.Sys
 
                 map.AddTBIntPKOID();
                 map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20,true);
-                map.AddTBString(GroupFieldAttr.FrmID, null, "表单ID", false, false, 0, 200, 20);
-                map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", false, false);
+                map.AddTBString(GroupFieldAttr.FrmID, null, "表单ID", true, true, 0, 200, 20);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
-                map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", false, false, 0, 50, 20);
-                map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", false, false, 0, 500, 20);
+                map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, true, 0, 50, 20);
+                map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, true, 0, 500, 20);
+                map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
+                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, true, 0, 128, 20,true);
                 map.AddTBAtParas(3000);
 
+
                 RefMethod rm = new RefMethod();
-                //rm.Title = "增加字段";
-                //rm.Icon = "../WF/Img/Btn/New.gif";
-                //rm.ClassMethodName = this.ToString() + ".DoAddField";
-                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "删除隶属分组的字段";
-                rm.Icon = "../WF/Img/Btn/Delete.gif";
                 rm.Warning = "您确定要删除该分组下的所有字段吗？";
                 rm.ClassMethodName = this.ToString() + ".DoDelAllField";
                 rm.RefMethodType = RefMethodType.Func;

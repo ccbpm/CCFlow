@@ -376,8 +376,13 @@ namespace BP.WF.Template
             foreach (MapDtl dtl in dtls)
             {
                 GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
+                int i = gf.Retrieve(GroupFieldAttr.CtrlID, dtl.No, GroupFieldAttr.FrmID, this.No);
+                if (i == 1)
                     continue;
+
+                //GroupField gf = new GroupField();
+                //if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
+                //    continue;
 
                 gf.Lab = dtl.Name;
                 gf.CtrlID = dtl.No;
@@ -392,7 +397,8 @@ namespace BP.WF.Template
             foreach (MapFrame fram in frams)
             {
                 GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true && !DataType.IsNullOrEmpty(gf.CtrlType))
+                int i = gf.Retrieve(GroupFieldAttr.CtrlID, fram.MyPK, GroupFieldAttr.FrmID, this.No);
+                if (i == 1)
                     continue;
 
                 gf.Lab = fram.Name;

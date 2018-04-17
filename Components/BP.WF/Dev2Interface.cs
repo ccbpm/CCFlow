@@ -6186,7 +6186,6 @@ namespace BP.WF
             sw.OID = workID;
             sw.RetrieveFromDBSources();
 
-
             Node ndOfToNode = null; //到达节点ID
             if (toNodeID != 0)
                 ndOfToNode = new Node(toNodeID);

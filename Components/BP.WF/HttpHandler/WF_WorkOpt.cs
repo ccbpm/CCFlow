@@ -696,17 +696,7 @@ namespace BP.WF.HttpHandler
 
             return "";
         }
-        /// <summary>
-        /// 会签发送
-        /// </summary>
-        /// <returns></returns>
-        public string HuiQianToNodes_Send()
-        {
-
-
-
-            return "";
-        }
+        
         #endregion 会签
 
         #region 审核组件.
@@ -823,7 +813,6 @@ namespace BP.WF.HttpHandler
                 gwf.WorkID = this.WorkID;
                 gwf.Retrieve();
             }
-
 
             if (isCanDo == false && isReadonly == true)
             {

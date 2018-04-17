@@ -240,6 +240,15 @@ namespace BP.Sys
 
             base.afterDelete();
         }
+        protected override bool beforeUpdate()
+        {
+            GroupField gf = new GroupField();
+            gf.Retrieve(GroupFieldAttr.CtrlID, this.MyPK);
+            gf.Lab = this.Name;
+            gf.Update();
+
+            return base.beforeUpdate();
+        }
         #endregion
     }
     /// <summary>
@@ -260,7 +269,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public MapFrames(string fk_mapdata)
         {
-            this.Retrieve(MapFrameAttr.FK_MapData, fk_mapdata, FrmEleAttr.EleType, "iFrame");
+            this.Retrieve(MapFrameAttr.FK_MapData, fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

@@ -20,10 +20,13 @@ function Down2017(mypk) {
         var i = data.indexOf('\DataUser');
         var str = '/' + data.substring(i);
         str = str.replace('\\\\', '\\');
+        if (plant != 'CCFlow') {
+            var currentPath = window.document.location.href;
+            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+            str = path + str;
+        }
         var a = window.open(str, "_blank", "width=800, height=600,toolbar=yes");
-        //a.document.execCommand("SaveAs");
-        //a.window.close();
-        //a.close();   
+
         return;
     }
     if (data.indexOf("fromdb") > -1) {
@@ -32,7 +35,7 @@ function Down2017(mypk) {
     }
     return;
 
-   
+
 }
 
 
@@ -93,7 +96,6 @@ function DownZip() {
 
     if (data.indexOf('err@') == 0) {
         alert(data); //如果是异常，就提提示.
-        console.log(data);
         return;
     }
 
@@ -104,8 +106,11 @@ function DownZip() {
         var i = data.indexOf('\DataUser');
         var str = '/' + data.substring(i);
         str = str.replace('\\\\', '\\');
-        console.log(str);
-
+        if (plant != 'CCFlow') {
+            var currentPath = window.document.location.href;
+            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+            str = path + str;
+        }
         window.open(str, "_blank", "width=800, height=600,toolbar=yes");
         return;
     }

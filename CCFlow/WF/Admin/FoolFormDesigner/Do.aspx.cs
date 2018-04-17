@@ -413,7 +413,7 @@ namespace CCFlow.WF.MapDef
                         int oidIdx = gf.Idx;
                         gf.Idx = gf.Idx - 1;
                         GroupField gfUp = new GroupField();
-                        if (gfUp.Retrieve(GroupFieldAttr.EnName, gf.EnName, GroupFieldAttr.Idx, gf.Idx) == 1)
+                        if (gfUp.Retrieve(GroupFieldAttr.FrmID, gf.EnName, GroupFieldAttr.Idx, gf.Idx) == 1)
                         {
                             gfUp.Idx = oidIdx;
                             gfUp.Update();
@@ -428,7 +428,7 @@ namespace CCFlow.WF.MapDef
                         int oidIdx1 = mygf.Idx;
                         mygf.Idx = mygf.Idx + 1;
                         GroupField gfDown = new GroupField();
-                        if (gfDown.Retrieve(GroupFieldAttr.EnName, mygf.EnName, GroupFieldAttr.Idx, mygf.Idx) == 1)
+                        if (gfDown.Retrieve(GroupFieldAttr.FrmID, mygf.EnName, GroupFieldAttr.Idx, mygf.Idx) == 1)
                         {
                             gfDown.Idx = oidIdx1;
                             gfDown.Update();

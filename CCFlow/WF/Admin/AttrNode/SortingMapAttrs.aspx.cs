@@ -164,7 +164,7 @@ namespace CCFlow.WF.Admin
 
             groups = new GroupFields();
             qo = new QueryObject(groups);
-            qo.AddWhere(GroupFieldAttr.EnName, FK_MapData);
+            qo.AddWhere(GroupFieldAttr.FrmID, FK_MapData);
             qo.addOrderBy(GroupFieldAttr.Idx);
             qo.DoQuery();
             #endregion
@@ -706,7 +706,7 @@ namespace CCFlow.WF.Admin
 
                 tgroups = new GroupFields();
                 qo = new QueryObject(tgroups);
-                qo.AddWhere(GroupFieldAttr.EnName, tmd);
+                qo.AddWhere(GroupFieldAttr.FrmID, tmd);
                 qo.addOrderBy(GroupFieldAttr.Idx);
                 qo.DoQuery();
 
@@ -869,7 +869,7 @@ namespace CCFlow.WF.Admin
 
                     ogroups = new GroupFields();
                     qo = new QueryObject(ogroups);
-                    qo.AddWhere(GroupFieldAttr.EnName, dtl.No);
+                    qo.AddWhere(GroupFieldAttr.FrmID, dtl.No);
                     qo.addOrderBy(GroupFieldAttr.Idx);
                     qo.DoQuery();
                     #endregion
@@ -885,7 +885,7 @@ namespace CCFlow.WF.Admin
 
                     targroups = new GroupFields();
                     qo = new QueryObject(targroups);
-                    qo.AddWhere(GroupFieldAttr.EnName, tdtl.No);
+                    qo.AddWhere(GroupFieldAttr.FrmID, tdtl.No);
                     qo.addOrderBy(GroupFieldAttr.Idx);
                     qo.DoQuery();
                     #endregion

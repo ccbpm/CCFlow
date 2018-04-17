@@ -74,6 +74,25 @@ function GenerFoolFrm(wn) {
             continue;
         }
 
+
+        //附件类的控件.
+        if (gf.CtrlType == 'Frame') {
+
+            html += "<tr>";
+            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "  <td colspan='4' >";
+
+            html += Ele_Frame(flowData, gf);
+
+            html += "  </td>";
+            html += "</tr>";
+
+            continue;
+        }
+
         //审核组件..
         if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
 
@@ -326,6 +345,7 @@ var flowData = {};
 
 //初始化 IMAGE附件
 function Ele_ImgAth(frmImageAth) {
+
     var isEdit = frmImageAth.IsEdit;
     var eleHtml = $("<div></div>");
     var img = $("<img/>");
@@ -394,6 +414,31 @@ function Ele_FrmCheck(wf_node) {
     eleHtml += " frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
     return eleHtml;
 }
+
+
+//初始化 框架
+function Ele_Frame(flowData, gf) {
+
+    var frame = flowData.Sys_MapFrame[0];
+    if (frame == null)
+        return "没有找到框架的定义，请与管理员联系。";
+
+    var eleHtml = '';
+
+    var url = "";
+    url += "&WorkID=" + GetQueryString("WorkID");
+    url += "&FK_Node=" + GetQueryString("FK_Node");
+
+    var src = frame.URL;
+    if (src.indexOf('?') == -1)
+        src += "?1=2";
+
+    src += "&PKVal=" + pageData.WorkID + "&FK_MapFrame=" + frame.MyPK   + url;
+
+    eleHtml += "<iframe style='width:100%;height:" + frame.H + "px;' ID='" + frame.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    return eleHtml;
+}
+
 
 //初始化 附件
 function Ele_Attachment(flowData, gf) {

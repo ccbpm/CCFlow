@@ -2706,8 +2706,6 @@ namespace BP.Sys
             sql = "SELECT * FROM Sys_MapDtl WHERE FK_MapData ='" + this.No + "'";
             DataTable Sys_MapDtl = DBAccess.RunSQLReturnTable(sql);
 
-            //string ids = "'" + this.No + "'";
-
             string whereFK_MapData = "FK_MapData= '" + this.No + "' ";
             string whereEnsName = "FrmID= '" + this.No + "' ";
             string whereNo = "No='" + this.No + "' ";

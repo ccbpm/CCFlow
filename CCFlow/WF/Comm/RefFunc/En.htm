@@ -412,7 +412,7 @@
                 icon = "../../Img/dot.png";
             }
 
-            if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
+            if (rm.Icon != null && rm.Icon != "" && rm.Icon.indexOf('http') != 0) {
                 icon = "../" + rm.Icon;
             }
 

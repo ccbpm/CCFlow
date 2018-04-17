@@ -266,7 +266,7 @@ namespace BP.Sys
             
             try
             {
-                string sql = "SELECT MAX(IDX) FROM " + this.EnMap.PhysicsTable + " WHERE EnName='" + this.FrmID + "'";
+                string sql = "SELECT MAX(IDX) FROM " + this.EnMap.PhysicsTable + " WHERE FrmID='" + this.FrmID + "'";
                 this.Idx = DBAccess.RunSQLReturnValInt(sql, 0) + 1;
             }
             catch

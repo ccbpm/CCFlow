@@ -116,11 +116,12 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值表达式", true, false, 0, 400, 20);
 
-                map.AddTBFloat(MapAttrAttr.MinLen, 0, "最小长度", true, false);
-                map.AddTBFloat(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
+                map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
+                map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, false);
+
                 //map.AddTBFloat("ExtRows", 1, "文本框行数(决定高度)", true, false);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);

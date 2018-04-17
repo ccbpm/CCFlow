@@ -1439,7 +1439,10 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
 
                 //显示的分组.
-                map.AddTBInt(MapAttrAttr.GroupID, 0, "显示的分组", true, false);
+                map.AddTBString(MapAttrAttr.GroupID, null, "显示的分组", true, false, 0, 100, 20);
+
+                //map.AddTBInt(MapAttrAttr.GroupID, 0, "显示的分组", true, false);
+
                 map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
 

@@ -438,41 +438,6 @@ function NewAth() {
     });
 }
 
-function NewFrame(fk_mapdata) {
-
-    var fk_mapdata = GetQueryString('FK_MapData');
-    var val = prompt('请输入框架ID，要求表单唯一。', 'Frame1');
-    if (val == null) {
-        return;
-    }
-    if (val == '') {
-        alert('框架ID不能为空，请重新输入！');
-        NewFrame(fk_mapdata);
-        return;
-    }
-
-    $.ajax({
-        type: 'post',
-        async: true,
-        url: Handler + "?DoType=Designer_NewFrame&FK_MapData=" + fk_mapdata + "&FrameNo=" + val + "&m=" + Math.random(),
-        dataType: 'html',
-        success: function (data) {
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            var url = '../../Comm/En.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
-
-            OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
-            return;
-        }
-    });
-}
-
 function EditFrame(fk_mapdata, myPK) {
     var url = '../../Comm/En.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
 

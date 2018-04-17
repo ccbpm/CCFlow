@@ -2709,14 +2709,14 @@ namespace BP.Sys
             //string ids = "'" + this.No + "'";
 
             string whereFK_MapData = "FK_MapData= '" + this.No + "' ";
-            string whereEnsName = "EnName= '" + this.No + "' ";
+            string whereEnsName = "FrmID= '" + this.No + "' ";
             string whereNo = "No='" + this.No + "' ";
 
             foreach (DataRow dr in Sys_MapDtl.Rows)
             {
                 // ids += ",'" + dr["No"] + "'";
                 whereFK_MapData += " OR FK_MapData='" + dr["No"] + "' ";
-                whereEnsName += " OR EnName='" + dr["No"] + "' ";
+                whereEnsName += " OR FrmID='" + dr["No"] + "' ";
                 whereNo += " OR No='" + dr["No"] + "' ";
             }
 

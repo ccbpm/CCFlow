@@ -1701,7 +1701,7 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapData WHERE No='" + this.No + "'";
-            sql += "@DELETE FROM Sys_GroupField WHERE EnName='" + this.No + "'";
+            sql += "@DELETE FROM Sys_GroupField WHERE FrmID='" + this.No + "'";
             sql += "@DELETE FROM Sys_GroupField WHERE CtrlID='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapM2M WHERE FK_MapData='" + this.No + "'";
             DBAccess.RunSQLs(sql);

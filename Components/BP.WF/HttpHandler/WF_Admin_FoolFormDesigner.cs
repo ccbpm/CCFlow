@@ -806,7 +806,7 @@ namespace BP.WF.HttpHandler
                     FrmAttachment ath = new FrmAttachment(en.AthRefObj);
                     ath.IsVisable = false;
                     ath.Update();
-                    BP.DA.DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE EnName='" + this.FK_MapData + "' AND CtrlID='" + en.AthRefObj + "'");
+                    BP.DA.DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + this.FK_MapData + "' AND CtrlID='" + en.AthRefObj + "'");
 
                     FrmAttachments aths = new FrmAttachments(this.FK_MapData);
                     foreach (FrmAttachment item in aths)

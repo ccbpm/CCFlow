@@ -225,7 +225,6 @@ namespace BP.Sys
         }
         protected override bool beforeUpdateInsertAction()
         {
-            DBAccess.RunSQL("UPDATE Sys_GroupField SET EnName=FrmID WHERE FrmID IS NOT NULL ");
             return base.beforeUpdateInsertAction();
         }
         /// <summary>

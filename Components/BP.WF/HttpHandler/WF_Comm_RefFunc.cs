@@ -547,7 +547,7 @@ namespace BP.WF.HttpHandler
             {
                 BP.Port.Dept parentDept = new BP.Port.Dept(parentid);
                 BP.Port.Depts depts = new BP.Port.Depts();
-                depts.Retrieve(BP.Port.DeptAttr.ParentNo, parentid,"Idx");
+                depts.Retrieve(BP.Port.DeptAttr.ParentNo, parentid);
 
                 //增加部门
                 foreach (BP.Port.Dept dept in depts)

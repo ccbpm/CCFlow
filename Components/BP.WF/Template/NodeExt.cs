@@ -1371,6 +1371,26 @@ namespace BP.WF.Template
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.TeamupGroupLeader + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
             }
 
+            // @杜. 翻译&测试.
+            if (nd.CondModel == CondModel.ByLineCond)
+            {
+                /* 如果当前节点方向条件控制规则是按照连接线决定的, 
+                 * 那就判断到达的节点的接受人规则，是否是按照上一步来选择，如果是就抛出异常.*/
+
+                //获得到达的节点.
+                Nodes nds = nd.HisToNodes;
+                foreach (Node mynd in nds)
+                {
+                    if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
+                    {
+                        string errInfo = "设置矛盾:";
+                        errInfo += "@当前节点您设置的访问规则是按照方向条件控制的";
+                        errInfo += "但是到达的节点["+mynd.Name+"]的接收人规则是按照上一步选择的,设置矛盾.";
+                        throw new Exception(errInfo);
+                    }
+                }
+            }
+
             //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?
             if (nd.CondModel != CondModel.SendButtonSileSelect)
             {

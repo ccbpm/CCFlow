@@ -400,27 +400,7 @@ namespace BP.WF.HttpHandler
             //返回字串.
             return en.No;
         }
-        /// <summary>
-        /// 新建框架
-        /// </summary>
-        /// <returns></returns>
-        public string Designer_NewFrame()
-        {
-            MapFrame frm = new MapFrame();
-            frm.FK_MapData = this.FK_MapData;
-            frm.MyPK = frm.FK_MapData + "_" + this.GetRequestVal("FrameNo");
-            if (frm.RetrieveFromDBSources() == 1)
-                return "err@框架ID:" + this.GetRequestVal("FrameNo") + "已经存在.";
-            else
-            {
-                frm.URL = "http://ccport.org/About.aspx";
-                frm.Name = "我的框架" + this.GetRequestVal("FrameNo");
-                frm.Insert();
-            }
-
-            //BP.Sys.CCFormAPI.CreateOrSaveAthMulti(this.FK_MapData, this.GetRequestVal("FrameNo"), "我的附件", 100, 200);
-            return frm.MyPK;
-        }
+       
         /// <summary>
         /// 创建一个多附件
         /// </summary>

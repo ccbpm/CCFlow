@@ -1020,6 +1020,10 @@ namespace BP.En
                     if (attr.UIIsReadonly && attr.IsFKorEnum == false)
                         continue;
 
+                    //日期类型.
+                    if (attr.Key == "RDT")
+                        continue;
+
                     //if (attr.IsFK && DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
                     //    continue; /*如果是外键,并且外键的默认值为null.*/
 

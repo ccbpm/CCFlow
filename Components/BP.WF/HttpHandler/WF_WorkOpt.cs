@@ -224,12 +224,15 @@ namespace BP.WF.HttpHandler
                         string endSql = "";
                         if (Web.WebUser.FK_Dept.IndexOf("18099") == 0)
                             endSql = " AND B.No LIKE '18099%' ";
+                        else
+                            endSql = " AND B.No NOT LIKE '18099%' ";
+
                         sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001' " + endSql;
                     }
                     else
                     {
                         if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND B.No ";
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                             sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 ";
                         if (SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -243,6 +246,8 @@ namespace BP.WF.HttpHandler
                         string endSql = "";
                         if (Web.WebUser.FK_Dept.IndexOf("18099") == 0)
                             endSql = " AND B.No LIKE '18099%' ";
+                        else
+                            endSql = " AND B.No NOT LIKE '18099%' ";
 
                         Selector sa = new Selector(this.FK_Node);
                         if (sa.IsEnableStaRange == true || sa.IsEnableDeptRange == true)
@@ -1917,7 +1922,14 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = new DataSet();
 
-            string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx";
+            string sql = "";
+            sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx";
+
+            //如果是节水公司的.
+            if (SystemConfig.CustomerNo == "TianYe" && WebUser.FK_Dept.IndexOf("10899") == 0)
+                sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE (No='" + fk_dept + "' OR ParentNo='" + fk_dept + "') AND No NOT LIKE '10899%' ORDER BY Idx ";
+
+
             DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dtDept.Rows.Count == 0)
             {

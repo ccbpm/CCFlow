@@ -2680,13 +2680,13 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ORDER BY B.CDT DESC ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)  ORDER BY B.CDT DESC ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) ";
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -2694,14 +2694,14 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter  ORDER BY B.CDT DESC  ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 )  ORDER BY B.CDT DESC  ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                     }

@@ -2636,7 +2636,9 @@ namespace BP.WF
         {
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            if (WebUser.IsAuthorize)
+
+            //授权模式.
+            if (WebUser.IsAuthorize ==true)
             {
                 WF.Port.WFEmp emp = new Port.WFEmp(userNo);
                 if (DataType.IsNullOrEmpty(fk_flow))
@@ -2670,19 +2672,21 @@ namespace BP.WF
                     }
                 }
             }
-            else
+            
+            //非授权模式，
+            if (WebUser.IsAuthorize ==false)
             {
                 if (DataType.IsNullOrEmpty(fk_flow))
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ORDER BY B.CDT DESC ";
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)  ORDER BY B.CDT DESC ";
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -2690,14 +2694,14 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter  ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter  ORDER BY B.CDT DESC  ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
+                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 )  ORDER BY B.CDT DESC  ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                     }
@@ -2911,6 +2915,7 @@ namespace BP.WF
         public static DataTable DB_GenerRuning()
         {
             DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null);
+
             /*暂时屏蔽type的拼接，拼接后转json会报错 于庆海修改*/
             /*dt.Columns.Add("Type");
             foreach (DataRow row in dt.Rows)

@@ -1020,8 +1020,10 @@ namespace BP.En
                     if (attr.UIIsReadonly && attr.IsFKorEnum == false)
                         continue;
 
-                    //日期类型.
-                    if (attr.Key == "RDT")
+                    //日期类型.  @杜. 这里需要翻译.
+                    if (attr.Key.Equals("RDT") || attr.Key.Equals("Rec") )
+                        continue;
+                    if (attr.DefaultValOfReal.Contains("@") == true)
                         continue;
 
                     //if (attr.IsFK && DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)

@@ -4606,8 +4606,21 @@ namespace BP.WF
                 return true;
 
             GenerWorkFlow mygwf = new GenerWorkFlow(workID);
-            if (mygwf.TodoEmps.IndexOf(userNo + ",") >= 0)
-                return true;
+            {
+                if (mygwf.TodoEmps.IndexOf(userNo + ",") >= 0)
+                {
+                    //string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
+                    //DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+                    //if (mydt.Rows.Count == 0)
+                    //    return true;
+
+                    GenerWorkerList gwl = new GenerWorkerList();
+                     int inum= gwl.Retrieve(GenerWorkerListAttr.WorkID, workID, GenerWorkerListAttr.FK_Emp, userNo,
+                        GenerWorkerListAttr.FK_Node, nodeID);
+                     if (inum == 1 && gwl.IsPassInt == 0)
+                         return true;
+                }
+            }
 
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */

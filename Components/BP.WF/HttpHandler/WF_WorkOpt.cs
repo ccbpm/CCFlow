@@ -1926,8 +1926,8 @@ namespace BP.WF.HttpHandler
             sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx";
 
             //如果是节水公司的.
-            if (SystemConfig.CustomerNo == "TianYe" && WebUser.FK_Dept.IndexOf("10899") == 0)
-                sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE (No='" + fk_dept + "' OR ParentNo='" + fk_dept + "') AND No NOT LIKE '10899%' ORDER BY Idx ";
+            if (SystemConfig.CustomerNo == "TianYe" && WebUser.FK_Dept.IndexOf("18099") == -1)
+                sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE  No='" + fk_dept + "'  OR (ParentNo='" + fk_dept + "' AND No!='18099') ORDER BY Idx ";
 
 
             DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);

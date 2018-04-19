@@ -25,8 +25,11 @@ function Down2017(mypk) {
             var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
             str = path + str;
         }
-        var a = window.open(str, "_blank", "width=800, height=600,toolbar=yes");
+        //var a = window.open(str, "_blank", "width=800, height=600,toolbar=yes");
+        window.frames["hrong"].location.href   =   str;   
 
+        sa();   
+        return;
         return;
     }
     if (data.indexOf("fromdb") > -1) {
@@ -38,6 +41,20 @@ function Down2017(mypk) {
 
 }
 
+
+function   sa()   
+
+{   
+
+       if(window.frames["hrong"].document.readyState!="complete")   
+
+            setTimeout("sa()",   100);   
+
+      else   
+
+         window.frames["hrong"].document.execCommand('SaveAs');   
+
+ }   
 
 /* 一下的方法从网上找到的，都不适用 . */
 

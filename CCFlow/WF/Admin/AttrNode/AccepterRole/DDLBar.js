@@ -40,7 +40,7 @@ function InitBar(key) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input type=button onclick='SaveAndClose()' value='保存&关闭' />";
+   // html += "<input type=button onclick='SaveAndClose()' value='保存&关闭' />";
 
     html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
 

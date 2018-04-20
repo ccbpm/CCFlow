@@ -41,7 +41,7 @@ namespace BP.WF.HttpHandler
                 DataRow dr = dt.NewRow();
                 dr["FlowNo"] = fl.No;
                 dr["FlowName"] = fl.Name;
-                dr["NumOfRuning"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  WF_GenerWorkFlow WHERE FK_Flow='"+fl.No+"' AND WFState in (2,5)",0);
+                dr["NumOfRuning"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  WF_GenerWorkFlow WHERE FK_Flow='" + fl.No + "' AND WFState in (2,5)", 0);
                 dr["NumOfOK"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  WF_GenerWorkFlow WHERE FK_Flow='" + fl.No + "' AND WFState = 3 ", 0);
                 dr["NumOfEtc"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  WF_GenerWorkFlow WHERE FK_Flow='" + fl.No + "' AND WFState in (4,5,6,7,8) ", 0);
 
@@ -455,12 +455,12 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties. @异常信息:"+ex.Message;
+                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties. @异常信息:" + ex.Message;
             }
 
 
             //检查是否缺少Port_Emp 表，如果没有就是没有安装.
-            if (DBAccess.IsExitsObject("Port_Emp") == false)
+            if (DBAccess.IsExitsObject("Port_Emp") == false && DBAccess.IsExitsObject("WF_Flow") == false)
                 return "url@../DBInstall.htm";
 
             ////让admin登录
@@ -1446,7 +1446,7 @@ namespace BP.WF.HttpHandler
         /// 表单树 - 创建表单子类别
         /// </summary>
         /// <returns></returns>
-        public string CCForm_NewSubSort() 
+        public string CCForm_NewSubSort()
         {
             SysFormTree formTree = new SysFormTree(this.No);
             string subNo = formTree.DoCreateSubNode().No;

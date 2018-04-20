@@ -54,9 +54,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string CCToDept = "CCToDept";
         /// <summary>
-        /// 审核意见
+        /// 抄送给部门名称
         /// </summary>
-        public const string CheckNote = "CheckNote";
+        public const string CCToDeptName = "CCToDeptName";
         /// <summary>
         /// 审核时间
         /// </summary>
@@ -65,11 +65,6 @@ namespace BP.WF.Template
         /// 抄送人员
         /// </summary>
         public const string Rec = "Rec";
-        /// <summary>
-        /// 抄送人员部门
-        /// </summary>
-        public const string RecDept = "RecDept";
-
         /// <summary>
         /// RDT
         /// </summary>
@@ -197,30 +192,30 @@ namespace BP.WF.Template
         }
 
         /// <summary>
-        /// 审核意见
+        /// 抄送给部门名称
         /// </summary>
-        public string CheckNote
+        public string CCToDeptName
         {
             get
             {
-                string s = this.GetValStringByKey(CCListAttr.CheckNote);
+                string s = this.GetValStringByKey(CCListAttr.CCToDeptName);
                 if (DataType.IsNullOrEmpty(s))
                     return "无";
                 return s;
             }
             set
             {
-                this.SetValByKey(CCListAttr.CheckNote, value);
+                this.SetValByKey(CCListAttr.CCToDeptName, value);
             }
         }
         /// <summary>
-        /// 审核意见
+        /// 抄送给部门名称
         /// </summary>
-        public string CheckNoteHtml
+        public string CCToDeptNameHtml
         {
             get
             {
-                string s = this.GetValStringByKey(CCListAttr.CheckNote);
+                string s = this.GetValStringByKey(CCListAttr.CCToDeptName);
                 if (DataType.IsNullOrEmpty(s))
                     return "无";
                 return DataType.ParseText2Html(s);
@@ -447,32 +442,31 @@ namespace BP.WF.Template
                 Map map = new Map("WF_CCList", "抄送列表");
 
                 map.AddMyPK();
+
                 map.AddTBString(CCListAttr.Title, null, "标题", true, true, 0, 500, 10, true);
+                map.AddTBInt(CCListAttr.Sta, 0, "状态", true, true);
+
                 map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", true, true, 0, 3, 10, true);
                 map.AddTBString(CCListAttr.FlowName, null, "流程名称", true, true, 0, 200, 10, true);
-                
-               // map.AddTBInt(CCListAttr.NDFrom, 0, "从节点", true, true);
                 map.AddTBInt(CCListAttr.FK_Node, 0, "节点", true, true);
-
                 map.AddTBString(CCListAttr.NodeName, null, "节点名称", true, true, 0, 500, 10, true);
+
                 map.AddTBInt(CCListAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBInt(CCListAttr.FID, 0, "FID", true, true);
+                
                 map.AddTBStringDoc();
 
                 map.AddTBString(CCListAttr.Rec, null, "抄送人员", true, true, 0, 50, 10, true);
-                map.AddTBString(CCListAttr.RecDept, null, "抄送人员部门", 
-                    true, true, 0, 50, 10, true);
-
                 map.AddTBDateTime(CCListAttr.RDT, null, "记录日期", true, false);
 
-                map.AddTBInt(CCListAttr.Sta, 0, "状态", true, true);
 
                 map.AddTBString(CCListAttr.CCTo, null, "抄送给", true, false, 0, 50, 10, true);
-                map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToName, null, "抄送给(人员名称)", true, false, 0, 50, 10, true);
-                map.AddTBString(CCListAttr.CheckNote, null, "审核意见", true, false, 0, 600, 10, true);
-                map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, false);
 
+                map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
+                map.AddTBString(CCListAttr.CCToDeptName, null, "抄送给部门名称", true, false, 0, 600, 10, true);
+
+                map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, false);
 
                 map.AddTBString(CCListAttr.PFlowNo, null, "父流程编号", true, true, 0, 100, 10, true);
                 map.AddTBInt(CCListAttr.PWorkID, 0, "父流程WorkID", true, true);

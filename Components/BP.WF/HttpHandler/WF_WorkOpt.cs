@@ -1595,11 +1595,12 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        #region 抄送Adv.
         /// <summary>
         /// 选择权限组
         /// </summary>
         /// <returns></returns>
-        public string CC_SelectGroups()
+        public string CCAdv_SelectGroups()
         {
             string sql = "SELECT NO,NAME FROM GPM_Group ORDER BY IDX";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -1609,7 +1610,7 @@ namespace BP.WF.HttpHandler
         /// 抄送初始化.
         /// </summary>
         /// <returns></returns>
-        public string CC_Init()
+        public string CCAdv_Init()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Hashtable ht = new Hashtable();
@@ -1637,7 +1638,7 @@ namespace BP.WF.HttpHandler
         /// 选择部门呈现信息.
         /// </summary>
         /// <returns></returns>
-        public string CC_SelectDepts()
+        public string CCAdv_SelectDepts()
         {
             BP.Port.Depts depts = new BP.Port.Depts();
             depts.RetrieveAll();
@@ -1647,7 +1648,7 @@ namespace BP.WF.HttpHandler
         /// 选择部门呈现信息.
         /// </summary>
         /// <returns></returns>
-        public string CC_SelectStations()
+        public string CCAdv_SelectStations()
         {
             //岗位类型.
             string sql = "SELECT NO,NAME FROM Port_StationType ORDER BY NO";
@@ -1663,6 +1664,70 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtSta);
             return BP.Tools.Json.ToJson(ds);
         }
+        /// <summary>
+        /// 抄送发送.
+        /// </summary>
+        /// <returns></returns>
+        public string CCAdv_Send()
+        {
+            //人员信息. 格式 zhangsan,张三;lisi,李四;
+            string emps = this.GetRequestVal("Emps");
+
+            //岗位信息. 格式:  001,002,003,
+            string stations = this.GetRequestVal("Stations");
+            stations = stations.Replace(";", ",");
+
+            //权限组. 格式:  001,002,003,
+            string groups = this.GetRequestVal("Groups");
+            if (groups == null)
+                groups = "";
+            groups = groups.Replace(";", ",");
+
+            //部门信息.  格式: 001,002,003,
+            string depts = this.GetRequestVal("Depts");
+            //标题.
+            string title = this.GetRequestVal("TB_Title");
+            //内容.
+            string doc = this.GetRequestVal("TB_Doc");
+
+            //调用抄送接口执行抄送.
+            string ccRec = BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, title, doc, emps, depts, stations, groups);
+
+            if (ccRec == "")
+                return "没有抄送到任何人。";
+            else
+                return "本次抄送给如下人员：" + ccRec;
+            //return "执行抄送成功.emps=(" + emps + ")  depts=(" + depts + ") stas=(" + stations + ") 标题:" + title + " ,抄送内容:" + doc;
+        }
+        #endregion 抄送Adv.
+
+
+        #region 抄送普通的抄送.
+        public string CC_AddEmps()
+        {
+            string toEmpStrs = this.GetRequestVal("AddEmps");
+            toEmpStrs = toEmpStrs.Replace(",", ";");
+            string[] toEmps = toEmpStrs.Split(';');
+            string infos = "";
+            foreach (string empStr in toEmps)
+            {
+                if (DataType.IsNullOrEmpty(empStr) == true)
+                    continue;
+                
+                BP.GPM.Emp emp = new GPM.Emp(empStr);
+
+                CCList cc = new CCList();
+                cc.FK_Flow = this.FK_Flow;
+                cc.FK_Node = this.FK_Node;
+                cc.WorkID = this.WorkID;
+                cc.Rec = emp.No;
+
+                cc.Insert();
+            }
+
+            return "";
+        }
+       
         /// <summary>
         /// 抄送发送.
         /// </summary>
@@ -1696,9 +1761,9 @@ namespace BP.WF.HttpHandler
                 return "没有抄送到任何人。";
             else
                 return "本次抄送给如下人员：" + ccRec;
-
             //return "执行抄送成功.emps=(" + emps + ")  depts=(" + depts + ") stas=(" + stations + ") 标题:" + title + " ,抄送内容:" + doc;
         }
+        #endregion 抄送普通的抄送.
 
         #region 退回到分流节点处理器.
         /// <summary>

@@ -1835,21 +1835,21 @@ namespace BP.Sys
                     continue;
                 }
 
-                //      if (attr.UIIsEnable == false)
-                //       {
-                //           attr.UIIsEnable = true;
-                //          attr.Update();
-                //         continue;
-                //     }
+                if (attr.UIIsEnable == true)
+                {
+                    attr.UIIsEnable = false;
+                    attr.Update();
+                    continue;
+                }
             }
 
             //把从表字段设置为只读.
             MapDtls dtls = new MapDtls(fk_mapdata);
             foreach (MapDtl dtl in dtls)
             {
-                dtl.IsInsert = true;
-                dtl.IsUpdate = true;
-                dtl.IsDelete = true;
+                dtl.IsInsert = false;
+                dtl.IsUpdate = false;
+                dtl.IsDelete = false;
                 dtl.Update();
 
                 attrs = new MapAttrs(dtl.No);
@@ -1863,12 +1863,12 @@ namespace BP.Sys
                         attr.Update();
                     }
 
-                    //    if (attr.UIIsEnable == false)
-                    //     {
-                    //        attr.UIIsEnable = true;
-                    //          attr.Update();
-                    //          continue;
-                    //      }
+                    if (attr.UIIsEnable == true)
+                    {
+                        attr.UIIsEnable = false;
+                        attr.Update();
+                        continue;
+                    }
                 }
             }
 

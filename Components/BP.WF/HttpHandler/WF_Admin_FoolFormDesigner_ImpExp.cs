@@ -211,16 +211,17 @@ namespace BP.WF.HttpHandler
             {
                 string fromMapData =frmID;
                 if (fromMapData==null)
-                  fromMapData = this.FromMapData;
+                  fromMapData = this.GetRequestVal("FromFrmID");
 
-                bool isClear = this.IsClear;
+                bool isClear = this.GetRequestValBoolen("IsClear");
+                bool isSetReadonly = this.GetRequestValBoolen("IsSetReadonly");
 
                 MapData md = new MapData(fromMapData);
 
                 MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
 
                 //设置为只读模式.
-                if (this.IsSetReadonly == true)
+                if (isSetReadonly == true)
                     MapData.SetFrmIsReadonly(this.FK_MapData);
 
                 // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
@@ -402,45 +403,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #endregion
-
-
      
-        public bool IsClear
-        {
-            get
-            {
-                
-                string isClearStr = this.GetRequestVal("IsClear") ;
-                bool isClear = false;
-                if (!DataType.IsNullOrEmpty(isClearStr) && isClearStr.ToString().ToLower() == "on")
-                {
-                    isClear = true;
-                }
-                return isClear;
-            }
-        }
-
-        public bool IsSetReadonly
-        {
-            get
-            {
-                string isSetReadonlyStr =this.GetRequestVal("IsSetReadonly");
-                bool isSetReadonly = false;
-                if (!DataType.IsNullOrEmpty(isSetReadonlyStr) && isSetReadonlyStr.ToString().ToLower() == "on")
-                {
-                    isSetReadonly = true;
-                }
-                return isSetReadonly;
-            }
-        }
-
-        public string FromMapData
-        {
-            get
-            {
-                string fromMapData = this.GetRequestVal("FromMapData") ;
-                return fromMapData;
-            }
-        }
     }
 }

@@ -86,8 +86,6 @@
         if (empNos == "" || empNos ==undefined || empNos==null)
             return;
 
-        //alert(empNos);
-
         $.ajax({
             type: 'post',
             async: true,
@@ -107,6 +105,7 @@
 
     //取消移交
     function Close() {
+
         if (window.parent != null && window.parent.ShiftWorkWindowClose != null) {
             window.parent.ShiftWorkWindowClose("取消");
         } else {
@@ -114,6 +113,7 @@
             window.close();
         }
     }
+
     //设置选中的人员
     function selectEmpsWindowClose(data) {
 
@@ -123,6 +123,11 @@
         }
 
         $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+    }
+
+    //撤销移交.
+    function UnShif() {
+
     }
     </script>
 

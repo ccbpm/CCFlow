@@ -1508,6 +1508,12 @@ function InitToolBar() {
                 $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
             }
 
+            if ($('[name=CC]').length > 0) {
+                $('[name=CC]').attr('onclick', '');
+                $('[name=CC]').unbind('click');
+                $('[name=CC]').bind('click', function () { initModal("CC"); $('#returnWorkModal').modal().show(); });
+            }
+
             if ($('[name=PackUp_zip]').length > 0) {
                 $('[name=PackUp_zip]').attr('onclick', '');
                 $('[name=PackUp_zip]').unbind('click');
@@ -1622,6 +1628,10 @@ function initModal(modalType, toNode) {
                  $('#modalHeader').text("会签");
 
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode="+toNode+"&Info=&s=" + Math.random()
+                break;
+            case "CC":
+                $('#modalHeader').text("抄送");
+                modalIframeSrc = "./WorkOpt/CC.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random()
                 break;
             case "PackUp_zip":
             case "PackUp_html":

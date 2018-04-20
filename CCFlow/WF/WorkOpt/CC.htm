@@ -490,19 +490,21 @@
         <div id="labInfo">
            输入关键字: <input type="text" id="TB_Emps"  title="查张三,您可输入: zs或zhangs或zhangsan"
          placeholder="查张三,您可输入:zs或zhangs或zhangsan"  name="TB_Emps" value='' style="width: 300px;" />
-            <input type="button" id="Btn_SelectEmps" value='选择抄送人' /><a href="javascript:Help()">帮助</a>
+            <input type="button" id="Btn_SelectEmps" value='选择抄送人' />
+            <br /><img src="../Img/CC.png"  style="width:27px;"/><a href="javascript:Help()">帮助</a>
             <div id="SelectEmp">
             </div>
             <br />
             <div id="next">
+<!--
                 <input type="button" id="Btn_CC" value="执行抄送" onclick="SaveAndClose();" />
-                <img src="../Img/Multiplayer.png"  onclick="SaveAndClose();"  style="width:27px;"/>
+                <img src="../Img/CC.png"  onclick="SaveAndClose();"  style="width:27px;"/>-->
+
                 <div id="HelpInfo" style="">
                     <ul>
-                        1、当前节点工作的处理人为抄送主持人，可增加其他人员作为抄送人，提供意见。
-                        <br />2、点击“保存抄送人列表并关闭”按钮后，可将工作发送至列表中除主持人以外的所有抄送人的待办，在所有抄送人都处理完成后，主持人才可向下一步发送工作。
-                        <br />3、若抄送人长时间未处理该工作，或抄送主持人不再需要该人提供处理意见，在抄送人列表中状态为“未审批”的情况下，可以由抄送主持人移除。 
-                        <br />4、可以使用人员名称拼音，支持全拼和简拼。
+                        1、抄送就是把当前的工作抄送给其他人查阅，但是对方没有审批审核的权限。
+                        <br />2、被抄送人，可以在抄送列表里查看抄送信息。
+                        <br />3、可以使用人员名称拼音，支持全拼和简拼。
                         <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua 
                         <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx 
                     </ul>

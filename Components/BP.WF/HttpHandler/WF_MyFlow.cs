@@ -634,16 +634,12 @@ namespace BP.WF.HttpHandler
                 {
                     isAskForOrHuiQian = true;
                 }
-                else
+
+                /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮. */
+                if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
-                    /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮. */
-                    if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                    {
-                        if (gwf.TodoEmps.Contains(WebUser.Name + ";") == false)
-                            isAskForOrHuiQian = false; //处理垃圾数据.
-                        else
-                            isAskForOrHuiQian = true;
-                    }
+                    if (gwf.HuiQianZhuChiRen != WebUser.No)
+                        isAskForOrHuiQian = true;
                 }
             }
             #endregion 处理是否是加签，或者是否是会签模式，.

@@ -645,7 +645,6 @@ namespace BP.WF.HttpHandler
             tk.FK_Flow = this.FK_Flow;
 
 
-
             tk.WorkID = this.WorkID;
             if (this.MyPK != null)
             {

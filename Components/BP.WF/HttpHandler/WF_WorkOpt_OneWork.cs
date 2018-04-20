@@ -413,7 +413,6 @@ namespace BP.WF.HttpHandler
 
             OneWorkXmls xmls = new OneWorkXmls();
             xmls.RetrieveAll();
-
              
             int  nodeID = this.FK_Node;
             if (nodeID == 0)

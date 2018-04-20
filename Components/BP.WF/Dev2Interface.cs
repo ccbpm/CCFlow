@@ -3904,7 +3904,8 @@ namespace BP.WF
             {
                 //BP.Sys.FrmWorkCheck fwc = new FrmWorkCheck(nodeFrom);
                 //return fwc.FWCDefInfo;
-                return null;
+                return isNullAsVal;
+
             }
             string checkinfo = dt.Rows[0][0].ToString();
             if (DataType.IsNullOrEmpty(checkinfo))

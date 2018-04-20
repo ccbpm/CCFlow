@@ -192,6 +192,9 @@
     <Compile Include="DTS\DeletTempFiles.cs" />
     <Compile Include="DTS\Tool_Repair.cs" />
     <Compile Include="Glo.cs" />
+    <Compile Include="HttpHandler\AppACE.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -216,7 +219,6 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_App_OneFlow.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_App_CH.cs" />
-    <Compile Include="HttpHandler\AppACE.cs" />
     <Compile Include="HttpHandler\WF_Admin.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt.cs" />
     <Compile Include="HttpHandler\CCMobile.cs" />
@@ -260,6 +262,9 @@
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\FlowFormTree.cs" />
     <Compile Include="Template\FlowSort.cs" />
+    <Compile Include="Template\Frm.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Template\FrmNodeExt.cs" />
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
@@ -374,10 +379,8 @@
     <Compile Include="Template\BtnLab.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Template\FlowEmp.cs" />
     <Compile Include="Template\FlowNode.cs" />
     <Compile Include="Template\SysFormTree.cs" />
-    <Compile Include="Template\Frm.cs" />
     <Compile Include="Template\FlowSheet.cs" />
     <Compile Include="Template\NodeSheet.cs" />
     <Compile Include="Template\LabNote.cs" />

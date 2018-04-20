@@ -1397,7 +1397,7 @@ namespace BP.WF.Template
 
             gwf.FK_Node = nodeID;
             gwf.NodeName = nd.Name;
-            gwf.TodoEmps = emp.No;
+            gwf.TodoEmps = emp.No+emp.Name+";";
             gwf.TodoEmpsNum = 1;
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.Update();

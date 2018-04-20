@@ -51,7 +51,7 @@ namespace BP.WF.HttpHandler
 
         public string Login_Init()
         {
-            BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
+            BP.WF.HttpHandler.WF ace = new WF(this.context);
             return ace.Login_Init();
         }
 

@@ -273,7 +273,7 @@ function pageParamToUrl() {
 //设置附件为只读
 function setAttachDisabled() {
     //附件设置
-    var attachs = $('iframe[src*="AttachmentUpload.htm"]');
+    var attachs = $('iframe[src*="Ath.htm"]');
     $.each(attachs, function (i, attach) {
         if (attach.src.indexOf('IsReadonly') == -1) {
             $(attach).attr('src', $(attach).attr('src') + "&IsReadonly=1");

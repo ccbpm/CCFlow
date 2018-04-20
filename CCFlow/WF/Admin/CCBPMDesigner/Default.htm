@@ -1479,6 +1479,7 @@ function WinOpen(url) {
 //用户信息
 var WebUser = { No: '', Name: '', FK_Dept: '', SID: '' };
 function InitUserInfo() {
+
     var params = {
         action: "GetWebUserInfo"
     };
@@ -1641,7 +1642,12 @@ function ShowSubDepts(node, treeid) {
 var treesObj;   //保存功能区处理对象
 
 $(function () {
+
+
     //InitUserInfo();
+
+
+
     var params = {
         action: "GetWebUserInfo"
     };
@@ -1666,6 +1672,8 @@ $(function () {
         treesObj.loadTrees();
         $(".mymask").hide();
     }, this);
+
+
 });
 
 function SetTreeRoot(data) {

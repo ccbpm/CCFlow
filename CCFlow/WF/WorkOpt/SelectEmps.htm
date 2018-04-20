@@ -154,6 +154,7 @@
 
             $('#OrgJSTree').jstree({
                 'core': {
+
                     'data': function (node, cb) {
 
                         url = Handler + "?DoType=SelectEmps_Init&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');

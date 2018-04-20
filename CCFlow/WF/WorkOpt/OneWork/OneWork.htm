@@ -37,7 +37,43 @@
                 }
             });
 
-            InitPage();
+            //  
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("OneWork_GetTabs");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data == "[]") {
+                return;
+            }
+
+            data = eval('(' + data + ')');
+
+            $.each(data, function () {
+
+                addTab(this.No, this.Name, this.Url);
+                tpo[this.No] = this.Name;
+            });
+
+            if (currtab == false) {
+
+                $("#mtabs").tabs("select", 0);
+            }
+            else {
+
+                $("#mtabs").tabs("select", tpo[currtab]);
+            }
+
+            if (window.screen) {
+                var w = screen.availWidth;
+                var h = screen.availHeight;
+                window.moveTo(0, 0);
+                window.resizeTo(w, h);
+            }
+
         });
 
         function addTab(id, title, url) {
@@ -59,45 +95,7 @@
         function createFrame(url) {
             return '<iframe scrolling="auto" frameborder="0"  src="'+ url + '" style="width:100%;height:100%;"></iframe>';
         }
-        function InitPage() {
-
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("OneWork_GetTabs");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            if (data == "[]") {
-                return;
-            }
-
-            data = eval('(' + data + ')');
-
-            $.each(data, function () {
-
-                addTab(this.No, this.Name, this.Url);
-
-                tpo[this.No] = this.Name;
-            });
-
-            if (!currtab) {
-                $("#mtabs").tabs("select", 0);
-            }
-            else {
-                $("#mtabs").tabs("select", tpo[currtab]);
-            }
-
-            if (window.screen) {
-                var w = screen.availWidth;
-                var h = screen.availHeight;
-                window.moveTo(0, 0);
-                window.resizeTo(w, h);
-            }
-        }
+      
 
         function RSize() {
             if (document.body.scrollWidth > (window.screen.availWidth - 100)) {

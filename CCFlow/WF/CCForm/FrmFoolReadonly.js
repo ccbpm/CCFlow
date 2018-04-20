@@ -180,7 +180,7 @@ function pageParamToUrl() {
 //设置附件为只读
 function setAttachDisabled() {
     //附件设置
-    var attachs = $('iframe[src*="AttachmentUpload.htm"]');
+    var attachs = $('iframe[src*="Ath.htm"]');
     $.each(attachs, function (i, attach) {
         if (attach.src.indexOf('IsReadonly') == -1) {
             $(attach).attr('src', $(attach).attr('src') + "&IsReadonly=1");
@@ -860,9 +860,9 @@ function figure_Template_Attachment(workNodeData, gf) {
     }
     var src = "";
     if (pageData.IsReadonly)
-        src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
     else
-        src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 

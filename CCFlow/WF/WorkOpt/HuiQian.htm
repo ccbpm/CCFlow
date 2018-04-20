@@ -15,14 +15,12 @@
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
-
-    <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <link href="../../DataUser/Style/Table0.css" rel="Stylesheet" />
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+
     <style type="text/css">
         body
         {
@@ -74,8 +72,6 @@
         $(function () {
 
             Help();
-            //$("#HelpInfo").show();
-            //            Help
 
             //初始化页面移交页面
             param = {
@@ -121,24 +117,18 @@
             //$("section").show();
             $(".Msg").hide();
 
-            // 初始化人员.   //开始加载数据.
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=HuiQian_Init&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("HuiQian_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            var gwls = JSON.parse(data);
+            BindTable(gwls);
 
-                    var gwls = JSON.parse(data);
-                    BindTable(gwls);
-                }
-            });
         });
 
         function BindTable(gwls) {
@@ -192,63 +182,56 @@
             //            if (window.confirm('您确定要移除[' + empNo + ']') == false)
             //                return;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=HuiQian_Delete&FK_Emp=" + empNo + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            hand.AddPara("FK_Emp", empNo);
+            var data = hand.DoMethodReturnString("HuiQian_Delete");
 
-                    if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    //delRow(row); //清空单个table tbody
-                    ClearTable();
+            //delRow(row); //清空单个table tbody
+            ClearTable();
 
-                    // 把返回的结果，重新绑定.
-                    var sas = JSON.parse(data);
-                    BindTable(sas);
-                    return;
-                }
-            });
+            // 把返回的结果，重新绑定.
+            var sas = JSON.parse(data);
+            BindTable(sas);
+            return;
         }
 
 
         //确定  执行会签操作
         function DoHuiQian(emps) {
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: { FK_Flow: param.FK_Flow, WorkID: param.WorkID, FID: param.FID, FK_Node: param.FK_Node },
-                url: Handler + "?DoType=HuiQian_AddEmps&FK_Flow=" + param.FK_Flow + "&WorkID=" + param.WorkID + "&FID=" + param.FID + "&FK_Node=" + param.FK_Node + "&m=" + Math.random() + "&AddEmps=" + emps,
-                dataType: 'html',
-                success: function (data) {
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            hand.AddPara("AddEmps", emps);
+            var data = hand.DoMethodReturnString("HuiQian_AddEmps");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('info@') == 0) {
-                        $(".Msg").show();
-                        $(".Msg").html(data);
-                        return;
-                    }
+            if (data.indexOf('info@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+                return;
+            }
 
-                    var gwls = JSON.parse(data);
-                    BindTable(gwls);
-                    return;
-                }
-            });
+            var gwls = JSON.parse(data);
+            BindTable(gwls);
+            return;
             $(".foot").hide();
         }
 
         //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
         function SaveAndClose() {
-        
+
             // var url = "HuiQianToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
             // window.location.href = url;
             // return;
@@ -261,138 +244,125 @@
             $("#Btn_HuiQian").val("执行中...");
             $("#Btn_SelectEmps").attr("disabled", "disabled");
 
-            //需要调用设置会签状态并返回才可以.
-            var myurl = Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + toNode + "&m=" + Math.random();
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: myurl,
-                dataType: 'html',
-                success: function (data) {
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("HuiQian_SaveAndClose");
 
-                    if (data.indexOf('url@') == 0) {
-                        data = data.replace('url@', '');
-                        window.location.href = data;
-                        return;
-                    }
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                window.location.href = data;
+                return;
+            }
 
-                    //如果需要发送,就执行发送.
-                    if (data.indexOf('Send@') == 0) {
-                        SendIt();
-                        return;
-                    }
+            //如果需要发送,就执行发送.
+            if (data.indexOf('Send@') == 0) {
+                SendIt();
+                return;
+            }
 
-                    //提示信息后关闭窗口.
-                    if (data.indexOf('close@') == 0) {
+            //提示信息后关闭窗口.
+            if (data.indexOf('close@') == 0) {
 
-                        alert(data.replace('close@', ''));
+                alert(data.replace('close@', ''));
 
-                        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                            window.parent.returnWorkWindowClose("");
-                            window.parent.close();
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose("");
+                    window.parent.close();
 
-                        } else {
+                } else {
 
-                            $('body').append($('<div>' + "已取消操作" + '</div>'));
+                    $('body').append($('<div>' + "已取消操作" + '</div>'));
 
-                            window.close();
-                        }
-                        return;
-                    }
-
-                    //提示信息.
-                    if (data.indexOf('info@') == 0) {
-                        alert(data.replace('info@', ''));
-
-                        $("#Btn_HuiQian").attr("disabled", false);
-                        $("#Btn_HuiQian").val("执行会签");
-                        $("#Btn_SelectEmps").attr("disabled", false);
-
-                        return;
-                    }
-
-                    alert(data);
                     window.close();
-                    return;
                 }
-            });
+                return;
+            }
 
+            //提示信息.
+            if (data.indexOf('info@') == 0) {
+                alert(data.replace('info@', ''));
+
+                $("#Btn_HuiQian").attr("disabled", false);
+                $("#Btn_HuiQian").val("执行会签");
+                $("#Btn_SelectEmps").attr("disabled", false);
+
+                return;
+            }
+
+            alert(data);
+            window.close();
+            return;
         }
 
         //执行发送.
         function SendIt() {
 
-            var url = Handler + "?DoType=AccepterOfGener_Send&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&ToNode=" + GetQueryString("ToNode");
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("AccepterOfGener_Send");
 
-                    if (data.indexOf('err@') == 0) {
-                        $(".Msg").show();
-                        $(".Msg").html(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+                return;
+            }
 
-                    data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
-                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
 
-                    data = data.replace("'WFRpt", "'../WFRpt");
-                    data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
 
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
 
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
 
 
-                    data = data.replace('@', '<br/>@');
-                    data = data.replace(/@/g, '<br/>&nbsp;@');
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>&nbsp;@');
 
-                    data = data.replace('@', '<br/>@');
-                    data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+            data = data.replace('@', '<br/>@');
+            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
 
-                    $("#btns").attr("display", "block");
+            $("#btns").attr("display", "block");
 
-                    $(".Msg").show();
-                    $(".Msg").html(data);
+            $(".Msg").show();
+            $(".Msg").html(data);
 
-                    $("#labInfo").empty();
-                    $("#next").empty();
+            $("#labInfo").empty();
+            $("#next").empty();
 
+            //  display
 
-                    //  display
+            //隐藏table.
+            document.getElementById("Table1").style.display = "none";
+            document.getElementById("TB_Emps").style.display = "none";
+            document.getElementById("Btn_SelectEmps").style.display = "none";
 
-                    //隐藏table.
-                    document.getElementById("Table1").style.display = "none";
-                    document.getElementById("TB_Emps").style.display = "none";
-                    document.getElementById("Btn_SelectEmps").style.display = "none";
+            //document.getElementById("Btn_AddEmps").style.display = "none";
 
-                    //document.getElementById("Btn_AddEmps").style.display = "none";
+            var ctrl = document.getElementById("Btn_Send");
+            if (ctrl != null)
+                ctrl.style.display = "none";
 
-                    var ctrl = document.getElementById("Btn_Send");
-                    if (ctrl != null)
-                        ctrl.style.display = "none";
+            ctrl = document.getElementById("labInfo");
+            if (ctrl != null)
+                ctrl.style.display = "none";
 
-                    ctrl = document.getElementById("labInfo");
-                    if (ctrl != null)
-                        ctrl.style.display = "none";
-
-                    ctrl = document.getElementById("Btn_Close");
-                    if (ctrl != null)
-                        ctrl.style.display = "none";
-                }
-            });
+            ctrl = document.getElementById("Btn_Close");
+            if (ctrl != null)
+                ctrl.style.display = "none";
         }
 
         //取消移交
@@ -410,11 +380,6 @@
             if (data == '取消') {
                 return;
             }
-
-            // alert(frames["iframeSelectEmpsForm"].window.returnVal.Name);
-            //alert(data);
-            //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
-            // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
 
             DoHuiQian(frames["iframeSelectEmpsForm"].window.returnVal.No);
             return;
@@ -438,44 +403,40 @@
 
         $(function () {
 
-          //  $("#TB_Emps").plac
+            //  $("#TB_Emps").plac
             //人员选择
             $("#TB_Emps").bind('input propertychange', function () {
-                //if (e.keyCode == 13) {
+
+               
                 if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
                     //alert("输入内容为空！");
                     //return;
                     $("#SelectEmp").hide().html("");
                     return;
-                } else {
-                    //回去输入内容，查询数据库
-                    $.ajax({
-                        type: 'post',
-                        async: true,
-                        data: null,
-                        url: Handler + "?DoType=HuiQian_SelectEmps&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random() + "&TB_Emps=" + $("#TB_Emps").val(),
-                        dataType: 'html',
-                        success: function (data) {
-
-                            if (data.indexOf('err@') == 0) {
-                                alert(data);
-                                return;
-                            }
-
-                            //SelectEmp
-                            //jQuery("#select_id").append("<option value='Value'>Text</option>");  
-                            data = JSON.parse(data);
-                            //$("#SelectEmp").hide().html("");
-                            var html = "";
-                            for (var i = 0; i < data.length; i++) {
-                                //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
-                                html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
-                            }
-                            $("#SelectEmp").show().html(html);
-                        }
-                    });
                 }
-                //}
+
+                //执行数据初始化工作.
+                var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+                hand.AddUrlData();
+                hand.AddPara("TB_Emps", $("#TB_Emps").val());
+                var data = hand.DoMethodReturnString("HuiQian_SelectEmps");
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                //SelectEmp
+                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
+
+                data = JSON.parse(data);
+                //$("#SelectEmp").hide().html("");
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                }
+                $("#SelectEmp").show().html(html);
+                
             });
         });
 

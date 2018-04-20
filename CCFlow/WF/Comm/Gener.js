@@ -712,6 +712,7 @@ var Entity = (function () {
     }
 
     function getParams1(self) {
+
         var params = ["t=" + new Date().getTime()];
         $.each(jsonString, function (n, o) {
             if (typeof self[n] !== "function" && (self[n] != o || true)) {
@@ -743,7 +744,6 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_Init&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
-
 
                     if (data.indexOf("err@") != -1) {
                         alert(data);
@@ -999,8 +999,13 @@ var Entity = (function () {
         },
 
         IsExits: function () {
+
             var self = this;
             var result;
+
+            var data = getParams1(self);
+
+
             $.ajax({
                 type: 'post',
                 async: false,

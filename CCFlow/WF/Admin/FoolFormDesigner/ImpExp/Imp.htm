@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="../../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Comm/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .style1
         {
@@ -44,7 +43,6 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
-
     <script type="text/javascript" language="javascript">
 
         closeWhileEscUp();
@@ -234,27 +232,42 @@
         //从一个节点导入.
         function CopyFromNodeFrm() {
 
-            if (confirm('您确定要执行导入吗？导入后会清空当前的设计的元素。') == false)
+            var nodeIdSelected = $('#ulNodeFrmImp input:checked').data().nodeid;
+
+            if (nodeIdSelected == null || nodeIdSelected == undefined) {
+                alert('请选择一个节点');
+                return;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("FromFrmID", "ND" + nodeIdSelected);
+
+            if ($('#CB_IsClear').attr('checked') == 'checked')
+                handler.AddPara("IsClear", 1);
+            else
+                handler.AddPara("IsClear", 0);
+
+            var val = document.getElementById("CB_IsSetReadonly").checked;
+            if (val == true)
+                handler.AddPara("IsSetReadonly", 1);
+            else
+                handler.AddPara("IsSetReadonly", 0);
+
+            if (confirm('您确定要从[' + nodeIdSelected + ']执行导入吗？导入后会清空当前的设计的元素。') == false)
                 return;
 
-            var nodeId = $('#ulNodeFrmImp input:checked').data().nodeid;
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Imp_FromsCopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var data = handler.DoMethodReturnString("Imp_FromsCopyFrm");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-                    window.parent.location.href = window.parent.location.href;
+            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+            window.parent.location.href = window.parent.location.href;
 
-                }
-            });
         }
 
         //从xml文件导入
@@ -658,11 +671,13 @@
                 <ul id="ulNodeFrmImp">
                 </ul>
                 <hr />
-                <input type="checkbox" checked="checked" id="ckClear" name="IsClear" disabled="true" />
-                <label for="ckClear">
+                <input type="checkbox" checked="checked" id="CB_IsClear" name="CB_IsClear" disabled="true" />
+                <label for="CB_IsClear">
                     是否清除现在已有的元素</label>
-                <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" /><label
-                    for="ckReadOnly">是否只读</label>
+
+                <input type="checkbox" checked="checked" id="CB_IsSetReadonly" name="CB_IsSetReadonly" /><label
+                    for="CB_IsSetReadonly">是否只读</label>
+
                 <input type="button" value="执行从节点表单导入" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
             </fieldset>
         </div>

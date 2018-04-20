@@ -1,151 +1,97 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>抄送人</title>
+    <title>抄送</title>
+    <!--
+    1, 退回界面。
+    2，需要 FK_Flow, FK_Node,WorkID, FID.
+    3, 调用方法 CC.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
-
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
-    <script src="../Scripts/QueryString2016.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/config.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
+    <link href="../../DataUser/Style/Table0.css" rel="Stylesheet" />
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+
     <style type="text/css">
-        * {
-            list-style: none;
+        body
+        {
+            background: transparent;
         }
-
-        .btn {
-            background: #2884fa !important;
-            border-radius: 20px !important;
-            color: white !important;
-            padding: 4px 17px !important;
+        body div
+        {
+            text-align: left;
         }
-
-        header {
-            height: 40px;
-            font: bold 18px "宋体";
-            background: url('/DataUser/Style/Img/TitleBG.png') repeat-x;
-            line-height: 35px;
-            padding-left: 10px;
+        #Message
+        {
+            width: 100%;
         }
-
-        body {
-            background: #e0ecff;
+        
+        #SelectEmp
+        {
+            position: relative;
+            width: 400px;
+            border-top: 0;
+            display: none;
+            margin-top: -7px; /*border: solid 2px #3175af;*/
         }
-
-        .ys {
-            margin: 20px auto;
-            padding: 0px 30px;
-            font-size: 12px;
-            overflow: hidden;
+        
+        .item
+        {
+            padding: 3px 5px;
+            cursor: pointer;
+            float: left;
+            width: 190px;
+            line-height: 20px;
+            display: inline-block;
+            background-color: #F7F7F7;
         }
-
-            .ys .Tos {
-                height: 30px;
-                line-height: 24px;
-                width: 70%;
-                border-radius: 25px 0px 0px 25px;
-                border: 1px solid #2884fa;
-                resize: none;
-                float: right;
-                padding-left: 20px;
-                font-size: 12px;
-            }
-
-            .ys .csTitle, #csry {
-                width: 85%;
-                border-radius: 25px;
-            }
-
-            .ys input {
-                width: 15%;
-                border-radius: 0px 25px 25px 0px;
-                height: 30px;
-                float: right;
-                background: #2884fa;
-                color: #fff;
-                border: none;
-            }
-
-        #yss {
-            width: 85%;
-            float: right;
-            border-radius: 25px;
-            min-height: 150px;
-            border: 1px solid #2884fa;
-            resize: none;
-            padding: 20px;
-            font-size: 12px;
+        
+        #next
+        {
+            float: left;
+            position: relative;
+            width: 600px;
+        }
+        
+        .addbg
+        {
+            background: #CFCFCF;
         }
     </style>
     <script type="text/javascript">
-
+        var param = {};
         $(function () {
-            dtTable();
-            initSelectEmpModal();
-            $(".BtnSelectEmpsb").click(function () {
-                var state = $(this).parent("").siblings(".jstree");
-                var stateb = $(this).parents(".selectEmpsDivg").siblings().find(".jstree");
-                if (state.css("display") == "none") {
-                    state.addClass("active").addClass("in").show();
-                    stateb.removeClass("active").addClass("in").hide();
-                    $(".closs").click(function() {
-                        state.hide();
-                    });
-                } else {
-                    state.removeClass("active").addClass("in").hide();
-                    stateb.removeClass("active").addClass("in").hide();
-                }
-            });
 
-            initTreeData();
+            Help();
 
-            StationT();
-
-            SelectGroups();
-
-          });
-        //初始化、接收人
-        function dtTable() {
-            var param = {
+            //初始化页面移交页面
+            param = {
                 FK_Node: GetQueryString('FK_Node'),
                 WorkID: GetQueryString('WorkID'),
                 FID: GetQueryString('FID'),
+                Message: GetQueryString('Info'),
                 FK_Flow: GetQueryString("FK_Flow")
             };
-            $.ajax({
-                dataType: 'html',
-                url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
-                success: function (data) {
-                    if (data != null) {
-                        var dataArr = JSON.parse(data);
-                        if (dataArr != undefined) {
-                            $(".csTitle").val(dataArr.Title);
-                            if (dataArr.CCTo != "") {
-                                $(".cs").show();
-                                $("#csry").val(dataArr.CCTo);
-                            }
-                            if (dataArr.IsGroup == "1") {
-                                $(".gt").show();
-                            }
-                        }
-                    }
 
-                }
-            });
-        }
-        function initSelectEmpModal() {
-            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 80%;margin: 40px auto;">' +
-               '<div class="modal-dialog" style="margin: 0px;">'
+            $('#Msg').val(param.Message);
+
+            //初始化人员选择窗口
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
+               '<div class="modal-dialog">'
                    + '<div class="modal-content" style="border-radius:0px;width:700px;">'
                       + '<div class="modal-header">'
                           + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                           + '<h4 class="modal-title">选择人员</h4>'
+                           + '<h4 class="modal-title">选择抄送人</h4>'
                        + '</div>'
                        + '<div class="modal-body">'
                            + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
@@ -155,384 +101,438 @@
            + '</div>';
 
             $('body').append($(selectEmpModalHtml));
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+            if (dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
+            //  url = url.replace('101', '10102');
+            url = url.replace('=101&', '=10102&');
 
-            $('#BtnSelectEmpsp').bind('click', function () {
+            $('#iframeSelectEmpsForm').attr('src', url);
+            $('#Btn_SelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            //$("section").show();
+            $(".Msg").hide();
 
 
-                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random() + "&IsSelectMore=1");
-                $('#selectEmpsModal').modal().show();
-            });
+
+            //查询出来抄送的信息.
+            var ccs = new Entities("BP.WF.Template.CCLists");
+            ccs.Retrieve("FK_Node", GetQueryString("FK_Node"), "WorkID", GetQueryString("WorkID"));
+
+            BindTable(ccs);
+
+        });
+
+        function BindTable(ccs) {
+
+            for (var i = 0; i < ccs.length; i++) {
+
+                var cc = ccs[i];
+
+                var row = "";
+                row += "<tr>";
+                // row += "<td>" + i + "</td>";
+                row += "<td>" + cc.CCTo+"," + cc.CCToName + "</td>";
+                row += "<td  title='" + cc.CCToDeptName + "' >" + cc.CCToDeptName + "</td>";
+
+                row += "<td><a href=\"javascript:DeleteIt('" + cc.MyPK + "'," + i + ");\" >移除</a></td>";
+
+                row += "</tr>";
+
+                //$("#Table1 tr:last").after(row);
+                $("#Table1 tbody").append(row);
+            }
         }
+
+        function DeleteIt(mypk, row) {
+
+            var cc = new Entity("BP.WF.Template.CCList");
+            cc.MyPK = mypk;
+            cc.Delete();
+            window.location.href = window.location.href;
+            return;
+
+            //delRow(row); //清空单个table tbody
+            ClearTable();
+
+            // 把返回的结果，重新绑定.
+            var sas = JSON.parse(data);
+            BindTable(sas);
+            return;
+        }
+
+
+        //确定  执行抄送操作
+        function DoCC(empStr) {
+
+            var workID = GetQueryString("WorkID");
+
+            var webUser = new WebUser();
+
+            var emp = new Entity("BP.Port.Emp", empStr);
+
+            var empName = emp.Name;
+            var empDeptNo = emp.FK_Dept;
+            var empDeptName = emp.FK_DeptText;
+
+            var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
+
+            var title = gwf.Title;
+            var nodeName = gwf.NodeName;
+            var flowName = gwf.FlowName;
+                         
+            var cc = new Entity("BP.WF.Template.CCList");
+
+            //当前人员的信息.
+            cc.Rec = webUser.No;
+            cc.RecName = webUser.Name;
+
+            //抄送给人员的信息.
+            cc.CCTo = empStr;
+            cc.CCToName = empName;
+
+            cc.FK_Node = GetQueryString("FK_Node");
+            cc.WorkID = GetQueryString("WorkID");
+
+            cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
+
+            if (cc.IsExits() == true) {
+                alert('该人员[' + cc.CCToName + ']已经存在.');
+                return;
+            }
+
+            //抄送给部门的信息.
+            cc.CCToDept = empDeptNo;
+            cc.CCToDeptName = empDeptName;
+
+            cc.WorkID = GetQueryString("WorkID");
+            cc.FK_Node = GetQueryString("FK_Node");
+
+            cc.NodeName = nodeName;
+            cc.FK_Flow = GetQueryString("FK_Flow");
+            cc.FlowName = flowName;
+            cc.Title = title;
+
+            //cc.PWorkID = gwf.PWorkID;
+            //cc.PFlowNo = gwf.PFlowNo;
+
+               cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
+
+            //cc.pkval = cc.MyPK;
+            //emp.SetPKVal(cc.MyPK);
+            if (cc.IsExits() == true) {
+                alert('该人员已经存在.');
+                return;
+            }
+
+            cc.Insert();
+
+            window.location.href = window.location.href;
+
+            $(".foot").hide();
+        }
+
+        //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
+        function SaveAndClose() {
+
+            // var url = "CCToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            // window.location.href = url;
+            // return;
+
+            var toNode = GetQueryString("ToNode");
+            if (toNode == undefined || toNode == "undefined")
+                toNode = "0";
+
+            $("#Btn_CC").attr("disabled", "disabled");
+            $("#Btn_CC").val("执行中...");
+            $("#Btn_SelectEmps").attr("disabled", "disabled");
+
+
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("CC_SaveAndClose");
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                window.location.href = data;
+                return;
+            }
+
+            //如果需要发送,就执行发送.
+            if (data.indexOf('Send@') == 0) {
+                SendIt();
+                return;
+            }
+
+            //提示信息后关闭窗口.
+            if (data.indexOf('close@') == 0) {
+
+                alert(data.replace('close@', ''));
+
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose("");
+                    window.parent.close();
+
+                } else {
+
+                    $('body').append($('<div>' + "已取消操作" + '</div>'));
+
+                    window.close();
+                }
+                return;
+            }
+
+            //提示信息.
+            if (data.indexOf('info@') == 0) {
+                alert(data.replace('info@', ''));
+
+                $("#Btn_CC").attr("disabled", false);
+                $("#Btn_CC").val("执行抄送");
+                $("#Btn_SelectEmps").attr("disabled", false);
+
+                return;
+            }
+
+            alert(data);
+            window.close();
+            return;
+        }
+
+        //执行发送.
+        function SendIt() {
+
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("AccepterOfGener_Send");
+
+            if (data.indexOf('err@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+                return;
+            }
+
+            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
+
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+
+
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>&nbsp;@');
+
+            data = data.replace('@', '<br/>@');
+            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+
+            $("#btns").attr("display", "block");
+
+            $(".Msg").show();
+            $(".Msg").html(data);
+
+            $("#labInfo").empty();
+            $("#next").empty();
+
+            //  display
+
+            //隐藏table.
+            document.getElementById("Table1").style.display = "none";
+            document.getElementById("TB_Emps").style.display = "none";
+            document.getElementById("Btn_SelectEmps").style.display = "none";
+
+            //document.getElementById("Btn_AddEmps").style.display = "none";
+
+            var ctrl = document.getElementById("Btn_Send");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+
+            ctrl = document.getElementById("labInfo");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+
+            ctrl = document.getElementById("Btn_Close");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+        }
+
+        //取消移交
+        function CloseAll() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.close();
+            }
+            window.close();
+        }
+
+        //设置选中的人员
         function selectEmpsWindowClose(data) {
+
             $('#selectEmpsModal').modal('hide');
             if (data == '取消') {
                 return;
-            } else {
-                $('#ToEmps').val(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
             }
-        }
-        //部门
-        function initTreeData() {
-            $.ajax({
-                dataType: 'html',
-                url: Handler + "?DoType=CC_SelectDepts&m=",
-                success: function (data) {
-                    if (data != null) {
-                        var dataArr = JSON.parse(data);
-                        if (dataArr != undefined) {
-                            var jsTreedata = [];
-                            $.each(dataArr, function (i, obj) {
-                                jsTreedata.push({ "id": obj.No, "parent": obj.ParentNo, "text": obj.Name, "data": obj });
-                            });
-                            for (var i = 0; i < jsTreedata.length; i++) {
-                                if (jsTreedata[i].parent != '#') {
-                                    var pNode = $.grep(jsTreedata, function (value) {
-                                        return value.id == jsTreedata[i].parent;
-                                    });
-                                    if (pNode.length == 0) {
-                                        jsTreedata[i].parent = '#';
-                                    }
-                                }
-                            }
-                            $('#jstreeb').jstree({
-                                plugins: ["checkbox"],
-                                'core': {
-                                    "multiple": true,
-                                    'data': jsTreedata
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-        }
-        var returnVal = {};
-        function GetTreeReturnVal() {
-            var instance = $("#jstreeb").jstree(true);
-            var selectedIdArr = instance.get_selected();
-            var selectedNodes = [];
-            $.each(selectedIdArr, function (i, selectedId) {
-                selectedNodes.push(instance.get_node(selectedId));
-            });
-            var nameArr = [];
-            var noArr = [];
-            $.each(selectedNodes, function (i, selectedNode) {
-                if (selectedNode.icon == true) {
-                    nameArr.push(selectedNode.text);
-                    noArr.push(selectedNode.id);
-                }
-            });
-            returnVal.Value = nameArr.join(';');
-            returnVal.name = noArr.join(';');
-            $('#ToDepts').val(returnVal.Value);
-            $('#ToDepts').attr("name", returnVal.name);
-            $("#jstreebs").hide();
+
+            DoCC(frames["iframeSelectEmpsForm"].window.returnVal.No);
+            return;
+            $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
 
-        //岗位
-        function StationT() {
-            $.ajax({
-                dataType: 'html',
-                url: Handler + "?DoType=CC_SelectStations&m=" + Math.random(),
-                success: function (data) {
-                    if (data != null) {
-                        var datgArr = JSON.parse(data).Port_StationType;
-                        var dateArr = JSON.parse(data).Port_Station;
-                        if (datgArr != undefined && dateArr != undefined) {
-                            var ultdg = '';
-                            var ultde = '';
-                            $.each(datgArr, function (i, obje) {
-                                for (var k = 0; k < dateArr.length; k++) {
-                                    if (obje.NO == dateArr[k].FK_STATIONTYPE) {
-                                        ultde += "<li data-data='true' style='min-width:120px;display: inline-block;margin:0px 5px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/><span>" + dateArr[k].NAME + "</span></li>";
-                                    }
-                                }
-                                ultdg += "<li data-data='true' class='lif' name='" + obje.NO + "' style='background: #D9E3F0;font-size:14px;font-weight: bold;'><input type='checkbox' class='ulm_head' style='margin: 10px 5px 0px 10px;'/><span>" + obje.NAME + "</span><ul style='overflow:hidden;margin:10px 0px 10px 0px;padding-left: 20px;background: #fff;font-size:12px;font-weight: normal;'>" + ultde + "</ul></li>";
-                                ultde = "";
-                            });
-                            $("#jstreeg #dt").html(ultdg);
-                            $(".wait").hide();
-                            $.each(dateArr, function (k, obj) {
-                                var lifs = $("#jstreeg #dt .lif");
-                                for (var i = 0; i < lifs.length; i++) {
-                                    if ($(lifs[i]).attr("name") == obj.FK_STATIONTYPE) {
-                                        var limData = $(lifs[i]).find(".lim");
-                                        for (var m = 0; m < limData.length; m++) {
-                                            var lim = limData[m];
-                                            if ($(lim).text() == obj.NAME && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
-                                                $(lim).data().data = obj;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                            $(".ulm_head").click(function () {
-                                if (this.checked) {
-                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
-                                } else {
-                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
-                                }
-                            });
-                            $(".lif>span").click(function () {
-                                if (this.parentNode.childNodes[0].checked) {
-                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
-                                    $(this).prev("input").removeAttr("checked", "checked");
-                                } else {
-                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
-                                    $(this).prev("input").prop("checked", "checked");
-                                }
-                            });
-                            $(".lim>span").click(function () {
-                                if (this.parentNode.childNodes[0].checked) {
-                                    $(this).prev("input").removeAttr("checked", "checked");
-                                } else {
-                                    $(this).prev("input").prop("checked", "checked");
-                                }
-                            });
-                        }
-                    }
-                }
-
-            });
+        //删除当前行
+        function delRow(nowTr) {
+            //$(nowTr).parents("tr").remove();
+            $("#Table1 tbody tr:eq(" + nowTr + ")").remove();
         }
 
-        // 岗位.
-        function GetStationsReturnVal() {
-            var checked = $('input:checked');
-            var selectedIdArrm = [];
-            var selectedNodesm = [];
-            for (var i = 0; i < checked.parent(".lim").length; i++) {
-                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.NO);
-                selectedNodesm.push($(checked.parent(".lim")[i]).data().data.NAME);
-            }
-            returnVal.Value = selectedIdArrm.join(',');
-            returnVal.name = selectedNodesm.join(',');
-            $('#ToStations').val(returnVal.name);
-            $('#ToStations').attr("name", returnVal.Value);
-            $("#jstreeg").hide();
+        //得到行对象
+        function ClearTable() {
+
+            var table = $("#Table1");
+            var tbody = $("#Table1 tbody");
+            var trArr = $("#Table1 tbody tr");
+            tbody.empty();
         }
 
-        //权限组.
-        function SelectGroups() {
-            $.ajax({
-                dataType: 'html',
-                url: Handler + "?DoType=CC_SelectGroups&m=" + Math.random(),
-                success: function (data) {
-                    if (data != null) {
-                        var datgArr = JSON.parse(data);
-                        if (datgArr != undefined) {
-                            var ultdg = '';
-                            $.each(datgArr, function (i, obje) {
-                                ultdg += "<li data-data='true' class='lig' name='" + obje.NO + "' title='" + obje.NAME + "'><input type='checkbox' class='ulm_head' style='margin: 10px 5px 0px 10px;'/><span>" + obje.NAME + "</span></li>";
-                            });
-                            $("#Div1 #Ul1").html(ultdg);
-                            $(".wait").hide();
-                        }
-                    }
-                }
+        $(function () {
 
-            });
-        }
-        
+            //  $("#TB_Emps").plac
+            //人员选择
+            $("#TB_Emps").bind('input propertychange', function () {
 
-        function GetGroupReturnVal() {
-            var checked = $('input:checked');
-            var selectedIdArrms = [];
-            var selectedNodesms = [];
-            for (var i = 0; i < checked.length; i++) {
-                selectedIdArrms.push($(checked[i]).parent(".lig").attr("name"));
-                selectedNodesms.push($(checked[i]).parent(".lig").attr("title"));
-            }
-            if (selectedIdArrms.length > 1 || selectedNodesms.length > 1) {
-                returnVal.Value = selectedIdArrms.join(',');
-                returnVal.name = selectedNodesms.join(',');
-            }
-            $('#ToGroups').val(returnVal.name);
-            $('#ToGroups').attr("name", returnVal.Value);
-            $("#Div1").hide();
-        }
-        //发送
-        function Close() {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose("取消");
 
-                window.close();
-            } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                window.opener.returnWorkWindowClose("取消");
-
-                window.close();
-            } else {
-                $('body').append($('<div>' + data + '</div>'));
-                $('#btnOk').attr('disabled', true);
-            }
-        }
-        function SendNode() {
-            var tb_Title = $(".csTitle").val();
-            var tb_Doc = $("#yss").val();
-            var emps; //选择的人员.
-            var stations; //选择的岗位.
-            var depts; //选择的部门.
-            var groups;//选择的权限组
-            if (frames["iframeSelectEmpsForm"].window.returnVal != undefined) {
-                var empsn = frames["iframeSelectEmpsForm"].window.returnVal.No.split(",");
-                var empsm = frames["iframeSelectEmpsForm"].window.returnVal.Name.split(",");
-                var s = [];
-                $.each(empsn, function (i, obj) {
-                    s.push(obj +','+ empsm[i]);
-                });
-                emps = s.join(";");
-
-            } else {
-                emps = "";
-            }
-            if ($('#ToDepts').attr("name") != undefined) {
-                depts = $('#ToDepts').attr("name");
-            } else {
-                depts = "";
-            }
-
-            if ($('#ToStations').attr("name") != undefined) {
-                stations = $('#ToStations').attr("name");
-            } else {
-                stations = "";
-            }
-            if ($('#ToGroups').attr("name") != undefined) {
-                groups = $('#ToGroups').attr("name");
-            } else {
-                groups = "";
-            }
-            if (depts == "" && emps == "" && stations == "") {
-                alert('请选择人员、部门、岗位任意一种.');
-                return;
-            }
-
-            $.ajax({
-                url: Handler + "?DoType=CC_Send&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&Emps=" + emps + "&Stations=" + stations + "&Depts=" + depts + "&TB_Title=" + tb_Title + "&TB_Doc=" + tb_Doc + "&Groups=" + groups + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                        window.parent.returnWorkWindowClose(data);
-                    } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                        window.opener.returnWorkWindowClose(data);
-                        alert(data);
-                    } else {
-                        $('#btnOk').attr('disabled', true);
-                        alert(data);
-                    }
-                    window.close();
+                if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
+                    //alert("输入内容为空！");
+                    //return;
+                    $("#SelectEmp").hide().html("");
                     return;
                 }
+
+                //执行数据初始化工作.
+                var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+                hand.AddUrlData();
+                hand.AddPara("TB_Emps", $("#TB_Emps").val());
+                var data = hand.DoMethodReturnString("HuiQian_SelectEmps");
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                //SelectEmp
+                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
+
+                data = JSON.parse(data);
+                //$("#SelectEmp").hide().html("");
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                }
+                $("#SelectEmp").show().html(html);
+
             });
-            $(".foot").hide();
+        });
+
+        function selectAdd(No) {
+            DoCC(No);
         }
-</script>
+
+        //鼠标事件
+        function getFocus(obj) {
+            $(".item").removeClass("addbg");
+            $(obj).addClass("addbg");
+        }
+
+        //选择下拉数据
+        function getCon(no) {
+
+            $("#TB_Emps").val('');
+
+            DoCC(no);
+
+            $("#SelectEmp").hide().html("");
+        }
+
+        function Help() {
+            $("#HelpInfo").toggle();
+        }
+    </script>
 </head>
 <body>
-    <header>工作抄送</header>
-    <section>
-        <div id="selectEmpsDivp">
-            <div class="ys">
-                请选择接受人：
-                <input type="button" id="BtnSelectEmpsp" value='选择接受人' />
-                <textarea id="ToEmps" class="Tos"></textarea>
+    <table id="Table1" style="width: 98%;">
+        <thead>
+            <tr id='title'>
+                <th>名称</th>
+                <th> 所在部门 </th>
+                <th> 操作 </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+    <div>
+        <div id="labInfo">
+           输入关键字: <input type="text" id="TB_Emps"  title="查张三,您可输入: zs或zhangs或zhangsan"
+         placeholder="查张三,您可输入:zs或zhangs或zhangsan"  name="TB_Emps" value='' style="width: 300px;" />
+            <input type="button" id="Btn_SelectEmps" value='选择抄送人' /><a href="javascript:Help()">帮助</a>
+            <div id="SelectEmp">
             </div>
-        </div>
-        <div class="selectEmpsDivg">
-            <div class="ys">
-                请选择部门：
-                <input type="button" class="BtnSelectEmpsb" value='选择接部门' />
-                <textarea id="ToDepts" class="Tos"></textarea>
-            </div>
-            <div class="modal fade jstree" style="background: #898F98;" id="jstreebs">
-                <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
-                    <div class="modal-content" style="height: 487px; border-radius: 0px;">
-                        <div class="modal-header" style="font-size: 16px;">
-                            选择部门
-                        </div>
-                        <div class="modal-body" style="height: 380px; overflow-y: auto;">
-                            <div id="jstreeb"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-info" onclick="GetTreeReturnVal()">确定</button>
-                            <button class="btn btn-info closs">取消</button>
-                        </div>
-                    </div>
+            <br />
+            <div id="next">
+                <input type="button" id="Btn_CC" value="执行抄送" onclick="SaveAndClose();" />
+                <img src="../Img/Multiplayer.png"  onclick="SaveAndClose();"  style="width:27px;"/>
+                <div id="HelpInfo" style="">
+                    <ul>
+                        1、当前节点工作的处理人为抄送主持人，可增加其他人员作为抄送人，提供意见。
+                        <br />2、点击“保存抄送人列表并关闭”按钮后，可将工作发送至列表中除主持人以外的所有抄送人的待办，在所有抄送人都处理完成后，主持人才可向下一步发送工作。
+                        <br />3、若抄送人长时间未处理该工作，或抄送主持人不再需要该人提供处理意见，在抄送人列表中状态为“未审批”的情况下，可以由抄送主持人移除。 
+                        <br />4、可以使用人员名称拼音，支持全拼和简拼。
+                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua 
+                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx 
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="selectEmpsDivg">
-            <div class="ys">
-                请选择岗位：
-                <input type="button" class="BtnSelectEmpsb" value='选择岗位' />
-                <textarea id="ToStations" class="Tos"></textarea>
-            </div>
-            <div class="modal fade jstree" style="background: #898F98;" id="jstreeg">
-                <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
-                    <div class="modal-content" style="height: 487px; border-radius: 0px;">
-                        <div class="modal-header" style="font-size: 16px;">
-                            选择岗位
-                        </div>
-                        <div class="modal-body" style="height: 380px; overflow-y: auto;">
-                            <div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
-                            <ul id="dt" data-data="true"></ul>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-info" onclick="GetStationsReturnVal()">确定</button>
-                            <button class="btn btn-info closs">取消</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="Msg" style="float: left;">
+            <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
+    </div>
+    <br />
+    <!--
 
-
-        <div class="selectEmpsDivg gt" style="display: none;">
-            <div class="ys">
-                选择权限组：
-                <input type="button" class="BtnSelectEmpsb" value='选择权限组' />
-                <textarea id="ToGroups" class="Tos"></textarea>
-            </div>
-            <div class="modal fade jstree" style="background: #898F98;" id="Div1">
-                <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
-                    <div class="modal-content" style="height: 487px; border-radius: 0px;">
-                        <div class="modal-header" style="font-size: 16px;">
-                            选择权限组
-                        </div>
-                        <div class="modal-body" style="height: 380px; overflow-y: auto;">
-                            <div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
-                            <ul id="Ul1" data-data="true"></ul>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-info" onclick="GetGroupReturnVal()">确定</button>
-                            <button class="btn btn-info closs">取消</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="ys">
-            标题：
-            <textarea class="Tos csTitle"></textarea>
-        </div>
-        <div class="ys">
-            抄送信息：
-            <textarea id="yss" name=""></textarea>
-        </div>
-        <div class="ys cs" style="display: none;">
-            已经抄送人员：
-            <textarea id="csry" name="" class="Tos"></textarea>
-        </div>
-        <div style="float: right" class="foot">
-            <button id="btnOk" class="btn btn-info" onclick="SendNode()">抄送</button>
-            <button id="btnCancel" class="btn btn-info" onclick="Close()">取消</button>
-        </div>
-    </section>
+<section style="display: none;">
+    <div>
+        请选择要抄送的人：
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
+    </div>
+    <div>
+        抄送原因:
+        <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea><br/>
+    </div>
+    <div style="margin: 20px auto;">
+        <h5> 抄送模式:</h5>
+        <input type="radio" value="0" name="RB_Model" checked=checked checked=checked id="RB_Model_0"/> <label for="RB_Model_0">抄送后直接发送给下一步处理人</label>
+        <input type="radio" id="RB_Model_1" value="1" name="RB_Model"/> <label for="RB_Model_1">抄送后发送给我由我发送给下一步处理人</label>
+    </div>
+    <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
+        <input type=button value="确定" onclick="DoCC();"/>
+        <input type="button" id="" value="关闭" onclick="Close();"/>
+    </div>
+</section>-->
 </body>
 </html>

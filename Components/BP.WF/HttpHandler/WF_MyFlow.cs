@@ -816,8 +816,14 @@ namespace BP.WF.HttpHandler
 
                 if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
                 {
-                    /* 抄送 */
-                    toolbar += "<input name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','ds'); \" />";
+                    if (this.IsMobile)
+                    {
+                        String urlrDel = "./WorkOpt/CC.htm?WorkID=" + this.WorkID+ "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey;
+                        toolbar += "<input name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />";
+                    }
+                    else
+                        // 抄送 
+                        toolbar += "<input name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + "./WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','ds'); \" />";
                 }
 
                 if (btnLab.DeleteEnable != 0 )

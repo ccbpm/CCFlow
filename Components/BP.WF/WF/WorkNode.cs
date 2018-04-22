@@ -1278,32 +1278,6 @@ namespace BP.WF
                             }
                             #endregion 复制Ele
 
-                            #region 复制多选数据
-                            if (this.HisNode.MapData.MapM2Ms.Count > 0)
-                            {
-                                M2Ms m2ms = new M2Ms("ND" + this.HisNode.NodeID, this.WorkID);
-                                if (m2ms.Count >= 1)
-                                {
-                                    foreach (M2M item in m2ms)
-                                    {
-                                        M2M m2 = new M2M();
-                                        m2.Copy(item);
-                                        m2.EnOID = this.WorkID;
-                                        m2.FK_MapData = m2.FK_MapData.Replace("ND" + this.HisNode.NodeID, "ND" + nd.NodeID);
-                                        m2.InitMyPK();
-                                        try
-                                        {
-                                            m2.DirectInsert();
-                                        }
-                                        catch
-                                        {
-                                            m2.DirectUpdate();
-                                        }
-                                    }
-                                }
-                            }
-                            #endregion
-
                             #region 复制明细数据
                             // int deBugDtlCount=
                             Sys.MapDtls dtls = this.HisNode.MapData.MapDtls;
@@ -1443,26 +1417,6 @@ namespace BP.WF
                                                         "ND" + nd.NodeID);
                                                     athDB_N.RefPKVal = dtCopy.OID.ToString();
                                                     athDB_N.DirectInsert();
-                                                }
-                                            }
-                                        }
-                                        if (toDtl.IsEnableM2M || toDtl.IsEnableM2MM)
-                                        {
-                                            /*如果启用了m2m */
-                                            M2Ms m2ms = new M2Ms(dtl.No, gedtl.OID);
-                                            if (m2ms.Count > 0)
-                                            {
-                                                i = 0;
-                                                foreach (M2M m2m in m2ms)
-                                                {
-                                                    i++;
-                                                    M2M m2m_N = new M2M();
-                                                    m2m_N.Copy(m2m);
-                                                    m2m_N.FK_MapData = toDtl.No;
-                                                    m2m_N.MyPK = toDtl.No + "_" + m2m.M2MNo + "_" + gedtl.ToString() + "_" + m2m.DtlObj;
-                                                    m2m_N.EnOID = gedtl.OID;
-                                                    m2m.InitMyPK();
-                                                    m2m_N.DirectInsert();
                                                 }
                                             }
                                         }
@@ -3196,33 +3150,11 @@ namespace BP.WF
                                         }
                                     }
                                 }
-                                if (toDtl.IsEnableM2M || toDtl.IsEnableM2MM)
-                                {
-                                    /*如果启用了m2m */
-                                    M2Ms m2ms = new M2Ms(dtl.No, gedtl.OID);
-                                    if (m2ms.Count > 0)
-                                    {
-                                        i = 0;
-                                        foreach (M2M m2m in m2ms)
-                                        {
-                                            i++;
-                                            M2M m2m_N = new M2M();
-                                            m2m_N.Copy(m2m);
-                                            m2m_N.FK_MapData = toDtl.No;
-                                            m2m_N.MyPK = toDtl.No + "_" + m2m.M2MNo + "_" + gedtl.ToString() + "_" + m2m.DtlObj;
-                                            m2m_N.EnOID = gedtl.OID;
-                                            m2m_N.InitMyPK();
-                                            m2m_N.DirectInsert();
-                                        }
-                                    }
-                                }
                                 #endregion  复制从表单条 - 附件信息
-
                             }
                         }
                     }
                     #endregion  复制附件信息
-
                 }
 
                 #region (循环最后处理)产生工作的信息
@@ -4058,32 +3990,6 @@ namespace BP.WF
             }
             #endregion 复制Ele
 
-            #region 复制多选数据
-            if (this.HisNode.MapData.MapM2Ms.Count > 0)
-            {
-                M2Ms m2ms = new M2Ms("ND" + this.HisNode.NodeID, this.WorkID);
-                if (m2ms.Count >= 1)
-                {
-                    foreach (M2M item in m2ms)
-                    {
-                        M2M m2 = new M2M();
-                        m2.Copy(item);
-                        m2.EnOID = this.WorkID;
-                        m2.FK_MapData = m2.FK_MapData.Replace("ND" + this.HisNode.NodeID, "ND" + toND.NodeID);
-                        m2.InitMyPK();
-                        try
-                        {
-                            m2.DirectInsert();
-                        }
-                        catch
-                        {
-                            m2.DirectUpdate();
-                        }
-                    }
-                }
-            }
-            #endregion
-
             #region 复制明细数据
             // int deBugDtlCount=
             Sys.MapDtls dtls = this.HisNode.MapData.MapDtls;
@@ -4253,33 +4159,6 @@ namespace BP.WF
                                         athDB_N.DirectUpdate();
                                     }
 
-                                }
-                            }
-                        }
-                        if (toDtl.IsEnableM2M || toDtl.IsEnableM2MM)
-                        {
-                            /*如果启用了m2m */
-                            M2Ms m2ms = new M2Ms(dtl.No, gedtl.OID);
-                            if (m2ms.Count > 0)
-                            {
-                                i = 0;
-                                foreach (M2M m2m in m2ms)
-                                {
-                                    i++;
-                                    M2M m2m_N = new M2M();
-                                    m2m_N.Copy(m2m);
-                                    m2m_N.FK_MapData = toDtl.No;
-                                    m2m_N.MyPK = m2m.MyPK + "_" + m2m.M2MNo + "_" + gedtl.ToString() + "_" + m2m.DtlObj;
-                                    m2m_N.EnOID = gedtl.OID;
-                                    m2m.InitMyPK();
-                                    try
-                                    {
-                                        m2m_N.DirectInsert();
-                                    }
-                                    catch
-                                    {
-                                        m2m_N.DirectUpdate();
-                                    }
                                 }
                             }
                         }

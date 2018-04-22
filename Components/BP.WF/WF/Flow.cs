@@ -2698,7 +2698,7 @@ namespace BP.WF
             ds.Tables.Add(dt);
 
             // Sys_GroupField
-            sql = "SELECT * FROM Sys_GroupField WHERE   " + Glo.MapDataLikeKey(this.No, "EnName"); // +" " + Glo.MapDataLikeKey(this.No, "EnName");
+            sql = "SELECT * FROM Sys_GroupField WHERE   " + Glo.MapDataLikeKey(this.No, "FrmID"); // +" " + Glo.MapDataLikeKey(this.No, "EnName");
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_GroupField";
             ds.Tables.Add(dt);
@@ -2707,12 +2707,6 @@ namespace BP.WF
             sql = "SELECT * FROM Sys_MapFrame WHERE" + Glo.MapDataLikeKey(this.No, "FK_MapData");
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapFrame";
-            ds.Tables.Add(dt);
-
-            // Sys_MapM2M
-            sql = "SELECT * FROM Sys_MapM2M WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_MapM2M";
             ds.Tables.Add(dt);
 
             // Sys_FrmLine.
@@ -4518,7 +4512,6 @@ namespace BP.WF
             DataTable myDTAth = ds.Tables["Sys_FrmAttachment"];
             DataTable myDTDtl = ds.Tables["Sys_MapDtl"];
             DataTable myDFrm = ds.Tables["Sys_MapFrame"];
-            DataTable myDM2M = ds.Tables["Sys_MapM2M"];
             if (mydtGF != null)
             {
                 //throw new Exception("@" + fl.No + fl.Name + ", 缺少：Sys_GroupField");
@@ -4577,19 +4570,6 @@ namespace BP.WF
                     {
                         // frm.
                         foreach (DataRow dr1 in myDFrm.Rows)
-                        {
-                            if (dr1["GroupID"] == null)
-                                dr1["GroupID"] = 0;
-
-                            if (dr1["GroupID"].ToString() == oldID.ToString())
-                                dr1["GroupID"] = gf.OID;
-                        }
-                    }
-
-                    if (myDM2M != null && myDM2M.Columns.Contains("GroupID"))
-                    {
-                        // m2m.
-                        foreach (DataRow dr1 in myDM2M.Rows)
                         {
                             if (dr1["GroupID"] == null)
                                 dr1["GroupID"] = 0;
@@ -5545,24 +5525,6 @@ namespace BP.WF
                             }
                         }
                         break;
-                    case "Sys_MapM2M": //Sys_MapM2M.
-                        idx = 0;
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            idx++;
-                            MapM2M en = new MapM2M();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-
-                                val = val.Replace("ND" + oldFlowID, "ND" + flowID);
-                                en.SetValByKey(dc.ColumnName, val);
-                            }
-                            en.Insert();
-                        }
-                        break;
                     case "Sys_FrmRB": //Sys_FrmRB.
                         idx = 0;
                         foreach (DataRow dr in dt.Rows)
@@ -6058,12 +6020,11 @@ namespace BP.WF
             foreach (Node nd in nds)
             {
                 // 删除节点所有相关的东西.
-                sql += "@ DELETE  FROM Sys_MapM2M WHERE FK_MapData='ND" + nd.NodeID + "'";
                 nd.Delete();
             }
 
             sql += "@ DELETE  FROM WF_Node WHERE FK_Flow='" + this.No + "'";
-            sql += "@ DELETE  FROM  WF_LabNote WHERE FK_Flow='" + this.No + "'";
+            sql += "@ DELETE  FROM WF_LabNote WHERE FK_Flow='" + this.No + "'";
 
             //删除分组信息
             sql += "@ DELETE FROM Sys_GroupField WHERE FrmID NOT IN(SELECT NO FROM Sys_MapData)";

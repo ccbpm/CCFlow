@@ -215,22 +215,7 @@ namespace BP.WF.Rpt
                 return obj;
             }
         }
-        /// <summary>
-        /// 一对多
-        /// </summary>
-        public MapM2Ms MapM2Ms
-        {
-            get
-            {
-                MapM2Ms obj = this.GetRefObject("MapM2Ms") as MapM2Ms;
-                if (obj == null)
-                {
-                    obj = new MapM2Ms(this.No);
-                    this.SetRefObject("MapM2Ms", obj);
-                }
-                return obj;
-            }
-        }
+       
         /// <summary>
         /// 从表
         /// </summary>

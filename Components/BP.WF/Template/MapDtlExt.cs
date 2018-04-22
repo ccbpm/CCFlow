@@ -323,22 +323,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 一对多
-        /// </summary>
-        public MapM2Ms MapM2Ms
-        {
-            get
-            {
-                MapM2Ms obj = this.GetRefObject("MapM2Ms") as MapM2Ms;
-                if (obj == null)
-                {
-                    obj = new MapM2Ms(this.No);
-                    this.SetRefObject("MapM2Ms", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
         /// 从表
         /// </summary>
         public MapDtls MapDtls
@@ -1032,7 +1016,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".HidAttr";
-                rm.Icon = "/WF/Img/Setting.png";
+                rm.Icon = "../Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1055,7 +1039,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "设计傻瓜表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DFoolFrm";
-                rm.Icon = "/WF/Img/Setting.png";
+                rm.Icon = "../Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -1064,7 +1048,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "设计自由表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DFreeFrm";
-                rm.Icon = "/WF/Img/Setting.png";
+                rm.Icon = "../Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -1075,7 +1059,7 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "列自动计算"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".ColAutoExp";
-                rm.Icon = "/WF/Img/Setting.png";
+                rm.Icon = "../Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1085,7 +1069,7 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "数据导入"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DtlImp";
-                rm.Icon = "/WF/Img/Setting.png";
+                rm.Icon = "../Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1097,7 +1081,7 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
-                rm.Icon = "/WF/Img/Setting.png";
+                rm.Icon = "../Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1107,7 +1091,7 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "高级设置";
                 rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
-                rm.Icon = "/WF/Img/Setting.png";
+                rm.Icon = "../Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";

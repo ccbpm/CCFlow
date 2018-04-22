@@ -755,22 +755,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 一对多
-        /// </summary>
-        public MapM2Ms MapM2Ms
-        {
-            get
-            {
-                MapM2Ms obj = this.GetRefObject("MapM2Ms") as MapM2Ms;
-                if (obj == null)
-                {
-                    obj = new MapM2Ms(this.No);
-                    this.SetRefObject("MapM2Ms", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
         /// 从表
         /// </summary>
         public MapDtls MapDtls
@@ -2203,30 +2187,6 @@ namespace BP.Sys
                             }
                         }
                         break;
-                    case "Sys_MapM2M":
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            idx++;
-                            MapM2M en = new MapM2M();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                object val = dr[dc.ColumnName] as object;
-                                if (val == null)
-                                    continue;
-
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
-                            }
-
-                            try
-                            {
-                                en.Insert();
-                            }
-                            catch
-                            {
-                                en.Update();
-                            }
-                        }
-                        break;
                     case "Sys_MapFrame":
                         foreach (DataRow dr in dt.Rows)
                         {
@@ -2388,7 +2348,6 @@ namespace BP.Sys
                 sqls += "@UPDATE Sys_MapDtl SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
                 sqls += "@UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
                 //sqls += "@UPDATE Sys_MapFrame SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
-                sqls += "@UPDATE Sys_MapM2M SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
                 sqls += "@UPDATE Sys_FrmAttachment SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
                 DBAccess.RunSQLs(sqls);
             }
@@ -2732,14 +2691,12 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_FrmImgAth WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmRB WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmAttachment WHERE " + whereFK_MapData;
-            sql += "@DELETE FROM Sys_MapM2M WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_MapFrame WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_MapExt WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_MapAttr WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_GroupField WHERE " + whereEnsName;
             sql += "@DELETE FROM Sys_MapData WHERE " + whereNo;
-            sql += "@DELETE FROM Sys_MapM2M WHERE " + whereFK_MapData;
-            sql += "@DELETE FROM Sys_M2M WHERE " + whereFK_MapData;
+           // sql += "@DELETE FROM Sys_M2M WHERE " + whereFK_MapData;
             sql += "@DELETE FROM WF_FrmNode WHERE FK_Frm='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmSln WHERE " + whereFK_MapData;
             DBAccess.RunSQLs(sql);

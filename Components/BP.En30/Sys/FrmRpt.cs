@@ -204,22 +204,7 @@ namespace BP.Sys
                 return obj;
             }
         }
-        /// <summary>
-        /// 一对多
-        /// </summary>
-        public MapM2Ms MapM2Ms
-        {
-            get
-            {
-                MapM2Ms obj = this.GetRefObject("MapM2Ms") as MapM2Ms;
-                if (obj == null)
-                {
-                    obj = new MapM2Ms(this.No);
-                    this.SetRefObject("MapM2Ms", obj);
-                }
-                return obj;
-            }
-        }
+       
         /// <summary>
         /// 从表
         /// </summary>
@@ -1111,36 +1096,6 @@ namespace BP.Sys
                     athDesc.Insert();
                 }
             }
-
-            if (this.IsEnableM2M)
-            {
-                MapM2M m2m = new MapM2M();
-                m2m.MyPK = this.No + "_M2M";
-                m2m.Name = "M2M";
-                m2m.NoOfObj = "M2M";
-                m2m.FK_MapData = this.No;
-                if (m2m.RetrieveFromDBSources() == 0)
-                {
-                    m2m.FK_MapData = this.No;
-                    m2m.NoOfObj = "M2M";
-                    m2m.Insert();
-                }
-            }
-
-            if (this.IsEnableM2MM)
-            {
-                MapM2M m2m = new MapM2M();
-                m2m.MyPK = this.No + "_M2MM";
-                m2m.Name = "M2MM";
-                m2m.NoOfObj = "M2MM";
-                m2m.FK_MapData = this.No;
-                if (m2m.RetrieveFromDBSources() == 0)
-                {
-                    m2m.FK_MapData = this.No;
-                    m2m.NoOfObj = "M2MM";
-                    m2m.Insert();
-                }
-            }
         }
         protected override bool beforeInsert()
         {
@@ -1185,7 +1140,6 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapData WHERE No='" + this.No + "'";
             sql += "@DELETE FROM Sys_GroupField WHERE FrmID='" + this.No + "'";
-            sql += "@DELETE FROM Sys_MapM2M WHERE FK_MapData='" + this.No + "'";
             DBAccess.RunSQLs(sql);
             try
             {

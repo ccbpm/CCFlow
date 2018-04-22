@@ -785,9 +785,9 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" />";
                 }
 
-                if (btnLab.JumpWayEnable)
+                if (btnLab.JumpWayEnable && 1==2 )
                 {
-                    /*如果没有焦点字段*/
+                    /*跳转*/
                     string urlr = "./WorkOpt/JumpWay.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
                 }
@@ -818,7 +818,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (this.IsMobile)
                     {
-                        String urlrDel = "./WorkOpt/CC.htm?WorkID=" + this.WorkID+ "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey;
+                        String urlrDel = "./WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey;
                         toolbar += "<input name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />";
                     }
                     else
@@ -950,7 +950,6 @@ namespace BP.WF.HttpHandler
                         toolbar += "<input type=button name='Confirm' value='" + btnLab.ConfirmLab + "' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
                 }
 
-
                 // 需要翻译.
 
                 /* 打包下载zip */
@@ -1024,7 +1023,6 @@ namespace BP.WF.HttpHandler
             string str = InitToolBar();
             str=str.Replace("Send()","SendIt()");
             return str;
-
 
             #region 处理是否是加签，或者是否是会签模式，.
             bool isAskForOrHuiQian = false;

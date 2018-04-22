@@ -372,26 +372,27 @@ namespace BP.Pub
         /// <returns></returns>
         public string GetValueM2MStrs(string key)
         {
-            string[] strs = key.Split('.');
-            string sql = "SELECT ValsName FROM SYS_M2M WHERE FK_MapData='" + strs[0] + "' AND M2MNo='" + strs[2] + "' AND EnOID='" + this.HisGEEntity.PKVal + "'";
-            string vals = DBAccess.RunSQLReturnStringIsNull(sql, null);
-            if (vals == null)
-                return "无数据";
+            return "";
 
-            vals = vals.Replace("@", "  ");
-            vals = vals.Replace("<font color=green>", "");
-            vals = vals.Replace("</font>", "");
-            return vals;
+            //string[] strs = key.Split('.');
+            //string sql = "SELECT ValsName FROM SYS_M2M WHERE FK_MapData='" + strs[0] + "' AND M2MNo='" + strs[2] + "' AND EnOID='" + this.HisGEEntity.PKVal + "'";
+            //string vals = DBAccess.RunSQLReturnStringIsNull(sql, null);
+            //if (vals == null)
+            //    return "无数据";
 
+            //vals = vals.Replace("@", "  ");
+            //vals = vals.Replace("<font color=green>", "");
+            //vals = vals.Replace("</font>", "");
+            //return vals;
 
-            string val = "";
-            string[] objs = vals.Split('@');
-            foreach (string obj in objs)
-            {
-                string[] noName = obj.Split(',');
-                val += noName[1];
-            }
-            return val;
+            //string val = "";
+            //string[] objs = vals.Split('@');
+            //foreach (string obj in objs)
+            //{
+            //    string[] noName = obj.Split(',');
+            //    val += noName[1];
+            //}
+            //return val;
         }
         /// <summary>
         /// 获取写字版的数据

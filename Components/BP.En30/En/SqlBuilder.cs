@@ -572,7 +572,7 @@ namespace BP.En
             string sql = "CREATE TABLE  " + en.EnMap.PhysicsTable + " ( ";
             Attrs attrs = en.EnMap.Attrs;
             if (attrs.Count == 0)
-                throw new Exception("@" + en.EnDesc + " , 没有属性集合 attrs.Count = 0 ,能执行数据表的创建.");
+                throw new Exception("@" + en.EnDesc + " , [" + en.EnMap.PhysicsTable + "]没有属性/字段集合 attrs.Count = 0 ,能执行数据表的创建.");
 
             foreach (Attr attr in attrs)
             {

@@ -2641,11 +2641,7 @@ namespace BP.WF
             //删除框架
             BP.Sys.MapFrames frams = new BP.Sys.MapFrames(md.No);
             frams.Delete();
-
-            // 删除多选
-            BP.Sys.MapM2Ms m2ms = new BP.Sys.MapM2Ms(md.No);
-            m2ms.Delete();
-
+       
             // 删除扩展
             BP.Sys.MapExts exts = new BP.Sys.MapExts(md.No);
             exts.Delete();

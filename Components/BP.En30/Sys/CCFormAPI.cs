@@ -1301,11 +1301,7 @@ namespace BP.Sys
 
             sql = "@SELECT * FROM Sys_MapAttr WHERE " + where + " AND KeyOfEn NOT IN('WFState') ORDER BY FK_MapData, IDX  ";
             sqls += sql;
-
-            //// Sys_MapM2M.
-            //listNames.Add("Sys_MapM2M");
-            //sql = "@SELECT MyPK,FK_MapData,NoOfObj,M2MTYPE,X,Y,W,H FROM Sys_MapM2M WHERE " + where;
-            //sqls += sql;
+        
 
             // Sys_MapExt.
             listNames.Add("Sys_MapExt");

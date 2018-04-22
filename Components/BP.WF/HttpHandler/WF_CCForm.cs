@@ -217,48 +217,6 @@ namespace BP.WF.HttpHandler
 
                             return JSONTODT(dt);
                             break;
-                        case "ReqM2MFullList":
-                            /* 获取填充的M2m集合. */
-                            DataTable dtM2M = new DataTable("Head");
-                            dtM2M.Columns.Add("Dtl", typeof(string));
-                            string[] strsM2M = me.Tag2.Split('$');
-                            foreach (string str in strsM2M)
-                            {
-                                if (str == "" || str == null)
-                                    continue;
-
-                                string[] ss = str.Split(':');
-                                string noOfObj = ss[0];
-                                string mysql = ss[1];
-                                mysql = DealSQL(mysql, key);
-
-                                DataTable dtFull = DBAccess.RunSQLReturnTable(mysql);
-                                M2M m2mData = new M2M();
-                                m2mData.FK_MapData = me.FK_MapData;
-                                m2mData.EnOID = int.Parse(oid);
-                                m2mData.M2MNo = noOfObj;
-                                string mystr = ",";
-                                string mystrT = "";
-                                foreach (DataRow dr in dtFull.Rows)
-                                {
-                                    string myno = dr["No"].ToString();
-                                    string myname = dr["Name"].ToString();
-                                    mystr += myno + ",";
-                                    mystrT += "@" + myno + "," + myname;
-                                }
-                                m2mData.Vals = mystr;
-                                m2mData.ValsName = mystrT;
-                                m2mData.InitMyPK();
-                                m2mData.NumSelected = dtFull.Rows.Count;
-                                m2mData.Save();
-
-                                DataRow mydr = dtM2M.NewRow();
-                                mydr[0] = ss[0];
-                                dtM2M.Rows.Add(mydr);
-                            }
-                            return JSONTODT(dtM2M);
-
-                            break;
                         case "ReqDtlFullList":
                             /* 获取填充的从表集合. */
                             DataTable dtDtl = new DataTable("Head");

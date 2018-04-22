@@ -359,9 +359,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\FrmImgAthDB.cs" />
-    <Compile Include="Sys\M2M.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Sys\FrmEle.cs" />
     <Compile Include="Sys\FrmEleDB.cs" />
     <Compile Include="Sys\FrmReportField.cs" />
@@ -425,7 +422,6 @@
     <Compile Include="Sys\GEEntity.cs" />
     <Compile Include="Sys\MapExtXml.cs" />
     <Compile Include="Sys\MapExt.cs" />
-    <Compile Include="Sys\MapM2M.cs" />
     <Compile Include="Sys\InputCheckXml.cs" />
     <Compile Include="Sys\ExpFucnXml.cs" />
     <Compile Include="Sys\XML\TBEventXml.cs" />

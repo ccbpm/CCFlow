@@ -816,8 +816,18 @@
         }
 
         function DealSpecStr(str) {
-            return str.replace("\"", "\\\"").replace("\r\n", "<br/>").replace("\n", "<br/>").replace("\r", "<br/>");
+
+            str = str.toString().replace(new RegExp('(["\"])', 'g'), "\\\"");
+            str = str.replace("\"", "\\\"").replace("\r\n", "<br/>").replace("\n", "<br/>").replace("\r", "<br/>");
+            str = str.replace("\"", "\'");
+
+            if (str.indexOf('开发要点说明') != -1) {
+                return "";
+            }
+
+            return str;
         }
+
         function GetLabNoteData() {
             //标签. 取出来显示
             var labs = new Entities("BP.WF.Template.LabNotes");
@@ -829,13 +839,15 @@
 
                 var lab = labs[i];
 
+                //console.log(lab.Name);
+
                 lab.Name = DealSpecStr(lab.Name);
 
                 //alert(lab.Name);
 
                 strs += "{'id':'" + lab.MyPK + "',";
                 strs += "'flow_id':'" + lab.FK_Flow + "',";
-                strs += "'process_name':\"" + lab.Name + "\",";
+                strs += "\"process_name\":\"" + lab.Name + "\",";
                 strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + lab.X + "px" + ";top:" + lab.Y + "px;'";
 
                 if (i == labs.length - 1)
@@ -846,8 +858,13 @@
 
             strs += "] }";
 
-            return eval("(" + strs + ")");
+            try {
+                return eval("(" + strs + ")");
+            } catch (e) {
+                return "";
+            }
         }
+
         //刷新页面
         function page_reload() {
             location.reload();

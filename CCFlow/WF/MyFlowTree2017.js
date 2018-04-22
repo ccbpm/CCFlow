@@ -24,83 +24,73 @@ function FlowFormTree_Init() {
 
     //表单参数没有传递过去, 这个需要把url 所有的参数都要传递过去.
     //@代国强.
-    var frms = GetQueryString("Frms");
-    var FK_Flow = GetQueryString("FK_Flow");
-    var FK_Node = GetQueryString("FK_Node");
-    var WorkID = GetQueryString("WorkID");
-    var IsCC = GetQueryString("IsCC");
+    //zhoupeng 2018.4.22修改.
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("FlowFormTree_Init");
 
-    var para = {
-        DoType: "FlowFormTree_Init",
-        FK_Flow: FK_Flow,
-        FK_Node: FK_Node,
-        WorkID: WorkID,
-        Frms: frms
-    };
+    if (data.indexOf('err@') == 0) {//发送时发生错误
+        alert(data);
+        return;
+    }
 
-    AjaxService(para, function (data) {
-        if (data.indexOf('err@') == 0) {//发送时发生错误
-            alert(data);
-            return;
-        }
-        var i = 0;
-        var isSelect = false;
-        var pushData = eval('(' + data + ')');
-        var urlExt = urlExtFrm();
+    var i = 0;
+    var isSelect = false;
+    var pushData = eval('(' + data + ')');
+    var urlExt = urlExtFrm();
 
-        //加载类别树
-        $("#flowFormTree").tree({
-            data: pushData,
-            iconCls: 'tree-folder',
-            collapsed: true,
-            lines: true,
-            formatter: function (node) {
-                if (i == 0) {
-                    if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
-                        i++;
-                        var isEdit = node.attributes.IsEdit;
-                        if ((IsCC && IsCC == "1") || IsReadonly == "1") isEdit = "0";
-                        var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
-                        addTab(node.id, node.text, url);
-                    }
-                }
-                return node.text;
-            },
-            onClick: function (node) {
-                if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {/*普通表单和必填表单*/
+    //加载类别树
+    $("#flowFormTree").tree({
+        data: pushData,
+        iconCls: 'tree-folder',
+        collapsed: true,
+        lines: true,
+        formatter: function (node) {
+            if (i == 0) {
+                if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
+                    i++;
                     var isEdit = node.attributes.IsEdit;
                     if ((IsCC && IsCC == "1") || IsReadonly == "1") isEdit = "0";
                     var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                     addTab(node.id, node.text, url);
-                } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
-                    var url = node.attributes.Url;
-                    while (url.indexOf('|') >= 0) {
-                        url = url.replace('|', '/');
-                    }
-                    if (url.indexOf('?') > 0) {
-                        url = url + "&FK_MapData=" + node.id + "&" + urlExt;
-                    }
-                    else {
-                        url = url + "?FK_MapData=" + node.id + "&" + urlExt;
-                    }
-                    addTab(node.id, node.text, url);
-                } else if (node.attributes.NodeType == "tools|1") {/*工具栏按钮打开新窗体*/
-                    var url = node.attributes.Url;
-                    while (url.indexOf('|') >= 0) {
-                        url = url.replace('|', '/');
-                    }
-                    if (url.indexOf('?') > 0) {
-                        url = url + "&FK_MapData=" + node.id + "&" + urlExt;
-                    }
-                    else {
-                        url = url + "?FK_MapData=" + node.id + "&" + urlExt;
-                    }
-                    WinOpenPage("_blank", url, node.text);
                 }
             }
-        });
-        $("#pageloading").hide();
-    }, this);
+            return node.text;
+        },
+        onClick: function (node) {
+            if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") { /*普通表单和必填表单*/
+                var isEdit = node.attributes.IsEdit;
+                if ((IsCC && IsCC == "1") || IsReadonly == "1") isEdit = "0";
+                var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
+                addTab(node.id, node.text, url);
+            } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
+                var url = node.attributes.Url;
+                while (url.indexOf('|') >= 0) {
+                    url = url.replace('|', '/');
+                }
+                if (url.indexOf('?') > 0) {
+                    url = url + "&FK_MapData=" + node.id + "&" + urlExt;
+                }
+                else {
+                    url = url + "?FK_MapData=" + node.id + "&" + urlExt;
+                }
+                addTab(node.id, node.text, url);
+            } else if (node.attributes.NodeType == "tools|1") {/*工具栏按钮打开新窗体*/
+                var url = node.attributes.Url;
+                while (url.indexOf('|') >= 0) {
+                    url = url.replace('|', '/');
+                }
+                if (url.indexOf('?') > 0) {
+                    url = url + "&FK_MapData=" + node.id + "&" + urlExt;
+                }
+                else {
+                    url = url + "?FK_MapData=" + node.id + "&" + urlExt;
+                }
+                WinOpenPage("_blank", url, node.text);
+            }
+        }
+    });
+    $("#pageloading").hide();
 }
 
 $(function () {

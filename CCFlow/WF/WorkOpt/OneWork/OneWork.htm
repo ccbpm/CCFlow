@@ -19,8 +19,7 @@
         var tpo = {};
 
         $(function () {
-
-
+         
             $("#mtabs").tabs({
                 onSelect: function (title, index) {
                     document.title = title;
@@ -53,7 +52,6 @@
             data = eval('(' + data + ')');
 
             $.each(data, function () {
-
                 addTab(this.No, this.Name, this.Url);
                 tpo[this.No] = this.Name;
             });
@@ -82,6 +80,16 @@
                 $('#mtabs').tabs('select', title); //选中并刷新
                 var currTab = $('#mtabs').tabs('getSelected');
             } else {
+
+            if (url.indexOf('FK_Node') == -1)
+                url += "&FK_Node=" + GetQueryString("FK_Node");
+
+            if (url.indexOf('WorkID') == -1)
+                url += "&WorkID=" + GetQueryString("WorkID");
+
+            if (url.indexOf('FK_Flow') == -1)
+                url += "&FK_Flow=" + GetQueryString("FK_Flow");
+
                 var content = createFrame(url);
                 $('#mtabs').tabs('add', {
                     title: title,

@@ -999,7 +999,7 @@ namespace BP.WF.Template
         public string DoDataManger()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
-            PubClass.WinOpen("../../Comm/Search.aspx?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
+            PubClass.WinOpen("../../Comm/Search.htm?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
             return null;
         }
         /// <summary>

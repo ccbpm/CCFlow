@@ -1162,18 +1162,17 @@ namespace BP.Sys
         /// <summary>
         /// 获得表单信息.
         /// </summary>
-        /// <param name="fk_mapdata"></param>
+        /// <param name="frmID">表单</param>
         /// <returns></returns>
-        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata, string frmName=null)
+        public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName=null)
         {
             DataSet ds = new DataSet();
 
             //创建实体对象.
-            MapData md = new MapData(fk_mapdata);
+            MapData md = new MapData(frmID);
 
             if (frmName != null)
                 md.Name = frmName;
-
 
             //加入主表信息.
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
@@ -1247,15 +1246,12 @@ namespace BP.Sys
         /// <param name="fk_mapdata">表单ID</param>
         /// <param name="isCheckFrmType">是否检查表单类型</param>
         /// <returns>DataSet</returns>
-        public static System.Data.DataSet GenerHisDataSet_ForAndroid(string fk_mapdata, bool isCheckFrmType = false)
+        public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata, bool isCheckFrmType = false)
         {
             MapData md = new MapData(fk_mapdata);
 
-            // 20150513 小周鹏修改，原因：手机端无法显示 dtl Start
-            // string sql = "SELECT FK_MapData,No,X,Y,W,H  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
-            string sql = "SELECT *  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
-            // 20150513 小周鹏修改 End
-
+            //从表.
+            string sql = "SELECT * FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
             sql = string.Format(sql, fk_mapdata);
             DataTable dtMapDtl = DBAccess.RunSQLReturnTable(sql);
             dtMapDtl.TableName = "Sys_MapDtl";
@@ -1267,9 +1263,10 @@ namespace BP.Sys
             }
             string sqls = string.Empty;
             List<string> listNames = new List<string>();
+
             // Sys_GroupField.
             listNames.Add("Sys_GroupField");
-            sql = "SELECT * FROM Sys_GroupField WHERE  EnName IN (" + ids + ")";
+            sql = "SELECT * FROM Sys_GroupField WHERE  FrmID IN (" + ids + ")";
             sqls += sql;
 
             // Sys_Enum
@@ -1283,7 +1280,7 @@ namespace BP.Sys
             {
                 // 审核组件状态:0 禁用;1 启用;2 只读;
                 listNames.Add("WF_Node");
-                sql = "@SELECT NodeID,FWC_X,FWC_Y,FWC_W,FWC_H,FWCSTA,FWCTYPE,SFSTA,SF_X,SF_Y,SF_H,SF_W FROM WF_Node WHERE NodeID=" + nodeIDstr + " AND  ( FWCSta >0  OR SFSta >0 )";
+                sql = "@SELECT * FROM WF_Node WHERE NodeID=" + nodeIDstr + " AND  ( FWCSta >0  OR SFSta >0 )";
                 sqls += sql;
             }
 
@@ -1291,9 +1288,7 @@ namespace BP.Sys
 
             // Sys_MapData.
             listNames.Add("Sys_MapData");
-            //杨玉慧  加上TableWidth,TableHeight,TableCol 获取傻瓜表单的宽度
-            //sql = "@SELECT No,Name,FrmW,FrmH FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
-            sql = "@SELECT No,Name,FrmW,FrmH,TableWidth,TableHeight,TableCol FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
+            sql = "@SELECT * FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
             sqls += sql;
 
             // Sys_MapAttr.
@@ -1301,7 +1296,7 @@ namespace BP.Sys
 
             sql = "@SELECT * FROM Sys_MapAttr WHERE " + where + " AND KeyOfEn NOT IN('WFState') ORDER BY FK_MapData, IDX  ";
             sqls += sql;
-        
+
 
             // Sys_MapExt.
             listNames.Add("Sys_MapExt");
@@ -1312,17 +1307,17 @@ namespace BP.Sys
             //{
             // line.
             listNames.Add("Sys_FrmLine");
-            sql = "@SELECT MyPK,FK_MapData, X1,X2, Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
+            sql = "@SELECT * FROM Sys_FrmLine WHERE " + where;
             sqls += sql;
 
             // link.
             listNames.Add("Sys_FrmLink");
-            sql = "@SELECT FK_MapData,MyPK,Text,URL,Target,FontSize,FontColor,X,Y from Sys_FrmLink WHERE " + where;
+            sql = "@SELECT * FROM Sys_FrmLink WHERE " + where;
             sqls += sql;
 
             // btn.
             listNames.Add("Sys_FrmBtn");
-            sql = "@SELECT FK_MapData,MyPK,Text,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
+            sql = "@SELECT * FROM Sys_FrmBtn WHERE " + where;
             sqls += sql;
 
             // Sys_FrmImg.
@@ -1332,7 +1327,7 @@ namespace BP.Sys
 
             // Sys_FrmLab.
             listNames.Add("Sys_FrmLab");
-            sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic FROM Sys_FrmLab WHERE " + where;
+            sql = "@SELECT * FROM Sys_FrmLab WHERE " + where;
             sqls += sql;
             //}
 
@@ -1343,12 +1338,12 @@ namespace BP.Sys
 
             // ele.
             listNames.Add("Sys_FrmEle");
-            sql = "@SELECT FK_MapData,MyPK,EleType,EleID,EleName,X,Y,W,H FROM Sys_FrmEle WHERE " + where;
+            sql = "@SELECT * FROM Sys_FrmEle WHERE " + where;
             sqls += sql;
 
             //Sys_MapFrame.
             listNames.Add("Sys_MapFrame");
-            sql = "@SELECT MyPK,FK_MapData,Name,URL,W,H FROM Sys_MapFrame WHERE " + where;
+            sql = "@SELECT * FROM Sys_MapFrame WHERE " + where;
             sqls += sql;
 
             // Sys_FrmAttachment. 
@@ -1356,14 +1351,15 @@ namespace BP.Sys
             /* 20150730 小周鹏修改 添加AtPara 参数 START */
             //sql = "@SELECT  MyPK,FK_MapData,UploadType,X,Y,W,H,NoOfObj,Name,Exts,SaveTo,IsUpload,IsDelete,IsDownload "
             // + " FROM Sys_FrmAttachment WHERE " + where + " AND FK_Node=0";
-            sql = "@SELECT MyPK,FK_MapData,UploadType,X,Y,W,H,NoOfObj,Name,Exts,SaveTo,IsUpload,DeleteWay,IsDownload ,AtPara"
-                + " FROM Sys_FrmAttachment WHERE " + where + " AND FK_Node=0";
+            sql = "@SELECT * "
+                + " FROM Sys_FrmAttachment WHERE " + where + "";
 
             /* 20150730 小周鹏修改 添加AtPara 参数 END */
             sqls += sql;
 
             // Sys_FrmImgAth.
             listNames.Add("Sys_FrmImgAth");
+
             sql = "@SELECT * FROM Sys_FrmImgAth WHERE " + where;
             sqls += sql;
 

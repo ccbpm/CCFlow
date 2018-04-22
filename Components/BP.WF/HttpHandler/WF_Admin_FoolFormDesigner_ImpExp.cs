@@ -218,7 +218,7 @@ namespace BP.WF.HttpHandler
 
                 MapData md = new MapData(fromMapData);
 
-                MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
+                MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(md.No));
 
                 //设置为只读模式.
                 if (isSetReadonly == true)

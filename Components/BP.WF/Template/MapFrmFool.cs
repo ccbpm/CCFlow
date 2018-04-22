@@ -589,7 +589,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSearch()
         {
-            return "../../Comm/Search.aspx?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
+            return "../../Comm/Search.htm?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
         }
         /// <summary>
         /// 调用分析API
@@ -605,7 +605,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDBSrc()
         {
-            return "../../Comm/Search.aspx?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
+            return "../../Comm/Search.htm?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
         }
         public string DoWordFrm()
         {

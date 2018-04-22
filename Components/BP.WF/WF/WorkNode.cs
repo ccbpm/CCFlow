@@ -5739,7 +5739,7 @@ namespace BP.WF
                 int nodeid = ap.GetValIntByKey("ToNodeID", 0);
                 if (nodeid != 0)
                 {
-                    if (jumpToNode != null)
+                    if (jumpToNode != null && jumpToNode.NodeID != nodeid)
                         throw new Exception("在该流程的FEE中您指定了跳转到的节点,但是在外部您有传入了发送到的节点，两者相矛盾,系统不知道要转向:" + jumpToNode.NodeID + ",还是转向:" + nodeid);
 
                     jumpToNode = new Node(nodeid);

@@ -573,10 +573,9 @@ namespace BP.WF.HttpHandler
             qo.DoQuery();
             #endregion
 
-
             DataSet ds = new DataSet();
 
-            _BindData4SortingMapAttrs_Init(mapdatas,
+            BindData4SortingMapAttrs_Init(mapdatas,
             attrs,
             groups,
             dtls,
@@ -596,7 +595,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
 
-        private void _BindData4SortingMapAttrs_Init(MapDatas mapdatas,
+        private void BindData4SortingMapAttrs_Init(MapDatas mapdatas,
             MapAttrs attrs,
             GroupFields groups,
             MapDtls dtls,

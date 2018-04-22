@@ -814,6 +814,10 @@
 
             return eval("(" + strs + ")");
         }
+
+        function DealSpecStr(str) {
+            return str.replace("\"", "\\\"").replace("\r\n", "<br/>").replace("\n", "<br/>").replace("\r", "<br/>");
+        }
         function GetLabNoteData() {
             //标签. 取出来显示
             var labs = new Entities("BP.WF.Template.LabNotes");
@@ -825,9 +829,13 @@
 
                 var lab = labs[i];
 
+                lab.Name = DealSpecStr(lab.Name);
+
+                //alert(lab.Name);
+
                 strs += "{'id':'" + lab.MyPK + "',";
                 strs += "'flow_id':'" + lab.FK_Flow + "',";
-                strs += "'process_name':'" + lab.Name + "',";
+                strs += "'process_name':\"" + lab.Name + "\",";
                 strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + lab.X + "px" + ";top:" + lab.Y + "px;'";
 
                 if (i == labs.length - 1)

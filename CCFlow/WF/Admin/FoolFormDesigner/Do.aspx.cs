@@ -454,24 +454,6 @@ namespace CCFlow.WF.MapDef
                     //    }
                     //    this.WinClose();
                     //    break;
-                    case "M2MDoUp":
-                        MapM2M ddtl1 = new MapM2M(this.MyPK);
-                        if (ddtl1.RowIdx > 0)
-                        {
-                            ddtl1.RowIdx = ddtl1.RowIdx - 1;
-                            ddtl1.Update();
-                        }
-                        this.WinClose();
-                        break;
-                    case "M2MDoDown":
-                        MapM2M ddtl2 = new MapM2M(this.MyPK);
-                        if (ddtl2.RowIdx < 10)
-                        {
-                            ddtl2.RowIdx = ddtl2.RowIdx + 1;
-                            ddtl2.Update();
-                        }
-                        this.WinClose();
-                        break;
                     case "FrameDoUp":
                         //MapFrame frame1 = new MapFrame(this.MyPK);
                         //if (frame1.RowIdx > 0)

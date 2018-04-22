@@ -487,7 +487,7 @@
                     return tdUp + "<a href=\"javascript:EditEnum('"+attr.FK_MapData+"','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
 
                 if (attr.LGType == 2)
-                    return tdUp + "<a href=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "');\" > " + attr.Name + "</a>" + tdDown;
+                    return tdUp + "<a href=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "','"+attr.KeyOfEn+"');\" > " + attr.Name + "</a>" + tdDown;
             }
 
             function AddFForDtl( fk_mapdtl ) {
@@ -734,9 +734,8 @@
                     window.location.href = window.location.href;
                 });
             }
-             
 
-            function EditTable(fk_mapData, mypk, keyOfEn) {
+            function EditTable(fk_mapData, mypk,keyOfEn) {
 
                 var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
 

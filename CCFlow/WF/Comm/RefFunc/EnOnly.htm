@@ -159,12 +159,7 @@
                 var pkVal = GetPKVal();
                 if (pkVal != null)
                     $("#Btn_Delete").show();
-               
             }
-
-            
-
-
         }
 
         function GenerFoolFrm(mapData, mainData, frmData) {
@@ -296,7 +291,6 @@
                     continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
-
                 var rm = null; //当前的方法.
                 for (var iRm = 0; iRm < dtM.length; iRm++) {
                     if (dtM[iRm].RefAttrKey == attr.KeyOfEn) {
@@ -304,11 +298,18 @@
                     }
                 }
 
+                //输出帮助连接.
                 var name = null;
-                if (attr.UIRefKeyText == "" || attr == null)
+                if (attr.UIRefKeyText == "" || attr == null) {
                     name = attr.Name;
-                else
-                    name = "<a href='" + attr.UIRefKeyText + "' target=_blank >" + attr.Name + "</a>";
+                }
+                else {
+
+                    if (attr.UIRefKeyText.indexOf('javascr') == 0)
+                        name = "<a href=\"" + attr.UIRefKeyText + "\" >" + attr.Name + "</a>";
+                    else
+                        name = "<a href=\"" + attr.UIRefKeyText + "\" target=_blank >" + attr.Name + "</a>";
+                }
 
                 var lab = "";
                 if (attr.UIContralType == 0)

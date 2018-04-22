@@ -313,6 +313,8 @@
         function SaveImpFromLib() {
 
             var nodeId = selFrmNode.value;
+            alert(nodeID);
+
             $.ajax({
                 type: 'post',
                 async: true,
@@ -336,24 +338,18 @@
         function SaveImpOtherFlow() {
 
             //var flowNo = Hidden1.value;
+
             var flowNo = $("#Hidden1").val();
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Imp_CopyFromFlow&FK_MapData=" + frmID + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnString("Imp_CopyFromFlow");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-                    window.parent.location.href = window.parent.location.href;
-
-                }
-            });
+            alert(data + '\t\n如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+            window.parent.location.href = window.parent.location.href;
         }
 
     </script>

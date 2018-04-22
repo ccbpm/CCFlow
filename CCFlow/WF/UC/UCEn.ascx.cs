@@ -38,7 +38,6 @@ namespace CCFlow.WF.UC
         public BP.Sys.GroupField currGF = new BP.Sys.GroupField();
         public MapDtls dtls;
         public MapFrames frames;
-        public MapM2Ms m2ms;
         public FrmAttachments aths;
         private GroupFields gfs;
         public int rowIdx = 0;
@@ -60,7 +59,6 @@ namespace CCFlow.WF.UC
             gfs = this.mapData.GroupFields;
             dtls = this.mapData.MapDtls;
             frames = this.mapData.MapFrames;
-            m2ms = this.mapData.MapM2Ms;
             aths = this.mapData.FrmAttachments;
             mes = this.mapData.MapExts;
 
@@ -328,11 +326,6 @@ namespace CCFlow.WF.UC
             {
                 //  if (fr.IsAutoSize)
                 js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
-            }
-            foreach (MapM2M m2m in m2ms)
-            {
-                //  if (m2m.ShowWay == FrmShowWay.FrmAutoSize)
-                js += "\t\n window.setInterval(\"ReinitIframe('F" + m2m.NoOfObj + "','TD" + m2m.NoOfObj + "')\", 200);";
             }
             foreach (FrmAttachment ath in aths)
             {
@@ -668,7 +661,6 @@ namespace CCFlow.WF.UC
             gfs = this.mapData.GroupFields;
             dtls = this.mapData.MapDtls;
             frames = this.mapData.MapFrames;
-            m2ms = this.mapData.MapM2Ms;
             aths = this.mapData.FrmAttachments;
             mes = this.mapData.MapExts;
 
@@ -1513,11 +1505,6 @@ namespace CCFlow.WF.UC
             {
                 //  if (fr.IsAutoSize)
                 js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
-            }
-            foreach (MapM2M m2m in m2ms)
-            {
-                //  if (m2m.ShowWay == FrmShowWay.FrmAutoSize)
-                js += "\t\n window.setInterval(\"ReinitIframe('F" + m2m.NoOfObj + "','TD" + m2m.NoOfObj + "')\", 200);";
             }
             foreach (FrmAttachment ath in aths)
             {
@@ -2681,11 +2668,6 @@ namespace CCFlow.WF.UC
                 //  if (fr.IsAutoSize)
                 js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
             }
-            foreach (MapM2M m2m in m2ms)
-            {
-                //  if (m2m.ShowWay == FrmShowWay.FrmAutoSize)
-                js += "\t\n window.setInterval(\"ReinitIframe('F" + m2m.NoOfObj + "','TD" + m2m.NoOfObj + "')\", 200);";
-            }
             foreach (FrmAttachment ath in aths)
             {
                 // if (ath.IsAutoSize)
@@ -2760,7 +2742,6 @@ namespace CCFlow.WF.UC
             this.FK_MapData = enName;
             this.HisEn = en;
             this.EnName = enName;
-            this.m2ms = this.mapData.MapM2Ms;
             this.dtls = this.mapData.MapDtls;
             this.mes = this.mapData.MapExts;
 
@@ -4105,67 +4086,6 @@ namespace CCFlow.WF.UC
             }
             #endregion 父子流程组件
 
-            #region 多对多的关系
-            foreach (MapM2M m2m in m2ms)
-            {
-                x = m2m.X + wtX;
-                this.Add("<DIV id='Fd" + m2m.NoOfObj + "' style='position:absolute; left:" + x + "px; top:" + m2m.Y + "px; width:" + m2m.W + "px; height:" + m2m.H + "px;text-align: left;' >");
-                this.Add("<span>");
-
-                string src = ".aspx?NoOfObj=" + m2m.NoOfObj;
-                string paras = this.RequestParas;
-                try
-                {
-                    if (paras.Contains("FID=") == false)
-                        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-                }
-                catch
-                {
-                }
-
-                if (paras.Contains("OID=") == false)
-                    paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
-                src += "&r=q" + paras;
-                if (m2m.IsEdit)
-                    src += "&IsEdit=1";
-                else
-                    src += "&IsEdit=0";
-
-                if (src.Contains("FK_MapData") == false)
-                    src += "&FK_MapData=" + enName;
-
-                if (m2m.HisM2MType == M2MType.M2MM)
-                    src = appPath + "WF/CCForm/M2MM" + src;
-                else
-                    src = appPath + "WF/CCForm/M2M" + src;
-
-                switch (m2m.ShowWay)
-                {
-                    case FrmShowWay.FrmAutoSize:
-                    case FrmShowWay.FrmSpecSize:
-                        if (m2m.IsEdit)
-                        {
-                            AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
-
-                            // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "'   scrolling=auto/></iframe>");
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'  onload='F" + m2m.NoOfObj + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "'   scrolling=auto/></iframe>");
-
-                        }
-                        else
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "'   scrolling=auto/></iframe>");
-                        break;
-                    case FrmShowWay.Hidden:
-                        break;
-                    case FrmShowWay.WinOpen:
-                        this.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
-                        break;
-                    default:
-                        break;
-                }
-                this.Add("</span>");
-                this.Add("</DIV>");
-            }
-            #endregion 多对多的关系
 
             #region 输出附件
             FrmAttachments aths = this.mapData.FrmAttachments;

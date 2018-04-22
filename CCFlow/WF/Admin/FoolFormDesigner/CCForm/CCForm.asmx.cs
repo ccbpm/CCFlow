@@ -788,13 +788,7 @@ namespace BP.Web
                             nd.Update();
                         }
                         return null;
-                    case "DelM2M":
-                        MapM2M m2mDel = new MapM2M();
-                        m2mDel.MyPK = v1;
-                        m2mDel.Delete();
-                        //M2M m2mData = new M2M();
-                        //m2mData.Delete(M2MAttr.FK_MapData, v1);
-                        return null;
+                   
                     case "NewAthM": // 新建 NewAthM. 
                         string fk_mapdataAth = v1;
                         string athName = v2;
@@ -810,32 +804,7 @@ namespace BP.Web
                         athM.FK_MapData = fk_mapdataAth;
                         athM.Insert();
                         return null;
-                    case "NewM2M":
-                        string fk_mapdataM2M = v1;
-                        string m2mName = v2;
-                        MapM2M m2m = new MapM2M();
-                        m2m.FK_MapData = v1;
-                        m2m.NoOfObj = v2;
-                        if (v3 == "0")
-                        {
-                            m2m.HisM2MType = M2MType.M2M;
-                            m2m.Name = "新建一对多";
-                        }
-                        else
-                        {
-                            m2m.HisM2MType = M2MType.M2MM;
-                            m2m.Name = "新建一对多多";
-                        }
-
-                        m2m.X = float.Parse(v4);
-                        m2m.Y = float.Parse(v5);
-                        m2m.MyPK = m2m.FK_MapData + "_" + m2m.NoOfObj;
-                        if (m2m.IsExits)
-                            return "多选名称:" + m2mName + "，已经存在。";
-                        m2m.Insert();
-                        return null;
                     case "DelEnum":
-
                         //删除空数据.
                         BP.DA.DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE FK_MapData Is null or FK_MapData='' ");
 

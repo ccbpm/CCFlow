@@ -4657,9 +4657,27 @@ namespace BP.En
 		public virtual int Retrieve(string pks)
 		{
 			QueryObject qo = new QueryObject(this);
-			qo.AddWhere(this.GetNewEntity.PK, " in ", pks);
+            qo.AddWhere(this.GetNewEntity.PK, " IN ", pks);
 			return qo.DoQuery();
 		}
+        /// <summary>
+        /// 按照IDs查询
+        /// 比如: FrmID  IN  '001','002' 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="vals"></param>
+        /// <returns></returns>
+        public virtual int RetrieveIn(string key, string vals)
+        {
+            QueryObject qo = new QueryObject(this);
+
+            if (vals.Contains("(") == false)
+                qo.AddWhere(key, " IN ", "(" + vals + ")");
+            else
+                qo.AddWhere(key, " IN ", vals);
+
+            return qo.DoQuery();
+        }
 		public virtual int RetrieveInSQL(string attr, string sql)
 		{
 			QueryObject qo = new QueryObject(this);

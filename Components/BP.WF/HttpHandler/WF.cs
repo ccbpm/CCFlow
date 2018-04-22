@@ -715,11 +715,32 @@ namespace BP.WF.HttpHandler
                 return "err@" + err;
             }
 
-            Frms frms = nd.HisFrms;
-            if (frms.Count == 0)
-                return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+            if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.SheetAutoTree)
+                return "url@../../../MyFlowTreeReadonly.htm?3=4&FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
 
-            return "url@../../../MyFlowTreeReadonly.htm?3=3" + this.RequestParas;
+            if (nd.HisFormType == NodeFormType.FreeForm)
+            {
+                MapData md = new MapData(nd.NodeFrmID);
+                if (md.HisFrmType != FrmType.FreeFrm)
+                {
+                    md.HisFrmType = FrmType.FreeFrm;
+                    md.Update();
+                }
+            }
+            else
+            {
+                MapData md = new MapData(nd.NodeFrmID);
+                if (md.HisFrmType != FrmType.FoolForm)
+                {
+                    md.HisFrmType = FrmType.FoolForm;
+                    md.Update();
+                }
+            }
+
+            return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+
+
+
         }
         /// <summary>
         /// 草稿

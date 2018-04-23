@@ -632,75 +632,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion ActiveDDL 功能界面.
 
-        #region xxx 界面
-        /// <summary>
-        /// 初始化正则表达式界面
-        /// </summary>
-        /// <returns></returns>
-        public string RegularExpression_Init()
-        {
-            DataSet ds = new DataSet();
-            string sql = "SELECT * FROM Sys_MapExt WHERE AttrOfOper='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_MapExt";
-            ds.Tables.Add(dt);
-
-            BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
-            res.RetrieveAll();
-
-            DataTable myDT = res.ToDataTable();
-            myDT.TableName = "RE";
-            ds.Tables.Add(myDT);
-
-
-            BP.Sys.XML.RegularExpressionDtls dtls = new BP.Sys.XML.RegularExpressionDtls();
-            dtls.RetrieveAll();
-            DataTable myDTDtls = dtls.ToDataTable();
-            myDTDtls.TableName = "REDtl";
-            ds.Tables.Add(myDTDtls);
-
-            return BP.Tools.Json.ToJson(ds);
-        }
-        private void RegularExpression_Save_Tag(string tagID)
-        {
-            string val = this.GetValFromFrmByKey("TB_Doc_" + tagID);
-            if (DataType.IsNullOrEmpty(val))
-                return;
-
-            MapExt me = new MapExt();
-            me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn + "_" + tagID;
-            me.FK_MapData = this.FK_MapData;
-            me.AttrOfOper = this.KeyOfEn;
-            me.ExtType = "RegularExpression";
-            me.Tag = tagID;
-            me.Doc = val;
-            me.Tag1 = this.GetValFromFrmByKey("TB_Tag1_" + tagID);
-            me.Save();
-        }
-        /// <summary>
-        /// 执行 保存.
-        /// </summary>
-        /// <returns></returns>
-        public string RegularExpression_Save()
-        {
-            //删除该字段的全部扩展设置. 
-            MapExt me = new MapExt();
-            me.Delete(MapExtAttr.FK_MapData, this.FK_MapData,
-                MapExtAttr.ExtType, MapExtXmlList.RegularExpression,
-                MapExtAttr.AttrOfOper, this.KeyOfEn);
-
-            //执行存盘.
-            RegularExpression_Save_Tag("onblur");
-            RegularExpression_Save_Tag("onchange");
-            RegularExpression_Save_Tag("onclick");
-            RegularExpression_Save_Tag("ondblclick");
-            RegularExpression_Save_Tag("onkeypress");
-            RegularExpression_Save_Tag("onkeyup");
-            RegularExpression_Save_Tag("onsubmit");
-
-
-            return "保存成功...";
-        }
+        #region 单选按钮事件
         /// <summary>
         /// 返回信息。
         /// </summary>
@@ -771,6 +703,81 @@ namespace BP.WF.HttpHandler
 
             return "保存成功.";
         }
+        #endregion
+
+        #region xxx 界面
+        /// <summary>
+        /// 初始化正则表达式界面
+        /// </summary>
+        /// <returns></returns>
+        public string RegularExpression_Init()
+        {
+            DataSet ds = new DataSet();
+            string sql = "SELECT * FROM Sys_MapExt WHERE AttrOfOper='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
+            res.RetrieveAll();
+
+            DataTable myDT = res.ToDataTable();
+            myDT.TableName = "RE";
+            ds.Tables.Add(myDT);
+
+
+            BP.Sys.XML.RegularExpressionDtls dtls = new BP.Sys.XML.RegularExpressionDtls();
+            dtls.RetrieveAll();
+            DataTable myDTDtls = dtls.ToDataTable();
+            myDTDtls.TableName = "REDtl";
+            ds.Tables.Add(myDTDtls);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        private void RegularExpression_Save_Tag(string tagID)
+        {
+            string val = this.GetValFromFrmByKey("TB_Doc_" + tagID);
+            if (DataType.IsNullOrEmpty(val))
+                return;
+
+            MapExt me = new MapExt();
+            me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn + "_" + tagID;
+            me.FK_MapData = this.FK_MapData;
+            me.AttrOfOper = this.KeyOfEn;
+            me.ExtType = "RegularExpression";
+            me.Tag = tagID;
+            me.Doc = val;
+            me.Tag1 = this.GetValFromFrmByKey("TB_Tag1_" + tagID);
+            me.Save();
+        }
+
+
+        /// <summary>
+        /// 执行 保存.
+        /// </summary>
+        /// <returns></returns>
+        public string RegularExpression_Save()
+        {
+            //删除该字段的全部扩展设置. 
+            MapExt me = new MapExt();
+            me.Delete(MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.ExtType, MapExtXmlList.RegularExpression,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            //执行存盘.
+            RegularExpression_Save_Tag("onblur");
+            RegularExpression_Save_Tag("onchange");
+            RegularExpression_Save_Tag("onclick");
+            RegularExpression_Save_Tag("ondblclick");
+            RegularExpression_Save_Tag("onkeypress");
+            RegularExpression_Save_Tag("onkeyup");
+            RegularExpression_Save_Tag("onsubmit");
+
+
+            return "保存成功...";
+        }
+
+
         string no;
         string name;
         string fk_dept;

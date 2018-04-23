@@ -37,64 +37,53 @@
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在获取部门信息.</font>");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=ChangeDept_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            var data = handler.DoMethodReturnString("ChangeDept_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            data = JSON.parse(data);
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    data = JSON.parse(data);
+            if (data.length == 0) {
+                $("#Msg").html("您有0个部门不需要切换部门.");
+                return;
+            }
 
-                    if (data.length == 0) {
-                        $("#Msg").html("您有0个部门不需要切换部门.");
-                        return;
-                    }
+            if (data.length == 1) {
+                $("#Msg").html("<br><br>您有1个部门<font color=green >(" + data[0].Name + ")</font>不需要切换部门.<br><br>");
+                return;
+            }
 
-                    if (data.length == 1) {
-                        $("#Msg").html("<br><br>您有1个部门<font color=green >(" + data[0].Name + ")</font>不需要切换部门.<br><br>");
-                        return;
-                    }
+            var html = "<ul>";
+            for (var i = 0; i < data.length; i++) {
+                var dept = data[i];
 
-                    var html = "<ul>";
-                    for (var i = 0; i < data.length; i++) {
-                        var dept = data[i];
+                if (dept.CurrentDept == 1)
+                    html += "<li ><font color='green'><b>" + dept.Name + "（当前部门）</b></font></li>";
+                else
+                    html += "<li onclick=\"ChangeDept_Submit('" + dept.No + "');\" style='font-color:green;' ><u>" + dept.Name + "</u></li>";
+            }
 
-                        if (dept.CurrentDept == 1)
-                            html += "<li ><font color='green'><b>" + dept.Name + "（当前部门）</b></font></li>";
-                        else
-                            html += "<li onclick=\"ChangeDept_Submit('" + dept.No + "');\" style='font-color:green;' ><u>" + dept.Name + "</u></li>";
-                    }
+            html += "</ul>";
 
-                    html += "</ul>";
-
-                    $("#Msg").html(html);
-                    return;
-                }
-            });
+            $("#Msg").html(html);
+            return;
         });
 
         function ChangeDept_Submit(deptNo) {
 
-            //执行登录..
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=ChangeDept_Submit&DeptNo=" + deptNo + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = "javascript:history.back()";
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            handler.AddPara("DeptNo", deptNo);
+            var data = handler.DoMethodReturnString("ChangeDept_Submit");
+
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+            alert(data);
+            window.location.href = "javascript:history.back()";
+
         }
     </script>
 </body>

@@ -24,7 +24,6 @@
                     <th>标题 </th>
                     <th>内容 </th>
                     <th>日期 </th>
-                    <th>操作 </th>
 								</tr>
 					         </thead>
 					       <tbody id="Rows">
@@ -89,7 +88,7 @@
                         row += "<td>" + data[i].Doc + "</td>";
                         row += "<td>" + data[i].RDT + "</td>";
                         //row += "<td><a href='" + url + "' target=_blank >回复</a></td>";
-                        row += "<td><a href='#' onclick='WinOpenFull(\"" + url + "\")' >回复</a></td>";
+                        //row += "<td><a href='#' onclick='WinOpenFull(\"" + url + "\")' >回复</a></td>";
                         row += "</tr>";
                     }
                     $("#Rows").html(row);

@@ -1315,6 +1315,7 @@ namespace BP.WF.Template
             }
             catch
             {
+
             }
            
             #region  检查考核逾期处理的设置的完整性.
@@ -1369,6 +1370,7 @@ namespace BP.WF.Template
 
                 if (this.HuiQianRole == WF.HuiQianRole.TeamupGroupLeader)
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.TeamupGroupLeader + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
+
             }
 
             // @杜. 翻译&测试.
@@ -1386,7 +1388,7 @@ namespace BP.WF.Template
                         string errInfo = "设置矛盾:";
                         errInfo += "@当前节点您设置的访问规则是按照方向条件控制的";
                         errInfo += "但是到达的节点["+mynd.Name+"]的接收人规则是按照上一步选择的,设置矛盾.";
-                        throw new Exception(errInfo);
+                        // throw new Exception(errInfo);
                     }
                 }
             }

@@ -107,10 +107,10 @@ namespace BP.Sys.FrmUI
 
               //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 
-                map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, false, "EnumUIContralType",
+                map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
                  "@1=下拉框@3=单选按钮");
 
-                map.AddDDLSysEnum("RBShowModel", 0, "单选按钮的展现方式", true, false, "RBShowModel",
+                map.AddDDLSysEnum("RBShowModel", 0, "单选按钮的展现方式", true, true, "RBShowModel",
             "@0=竖向@3=横向");
 
                 //map.AddDDLSysEnum(MapAttrAttr.LGType, 0, "逻辑类型", true, false, MapAttrAttr.LGType, 

@@ -4967,7 +4967,7 @@ namespace BP.WF
             GenerWorkerList gwl = new GenerWorkerList();
             int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.IsPass, 90);
             if (i != 1)
-                return "@您已经会签完毕，还有(" + this.HisGenerWorkFlow.TodoEmps + ")没有处理.";
+                return "@您已经会签完毕.";
 
             gwl.IsPassInt = 0; //从会签列表里移动到待办.
             gwl.IsRead = false; //设置为未读.

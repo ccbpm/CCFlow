@@ -1240,13 +1240,100 @@ namespace BP.Sys
 
             return ds;
         }
+        public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata)
+        {
+
+            MapData md = new MapData(fk_mapdata);
+
+            //求出 frmIDs 
+            string frmIDs = "'" + fk_mapdata + "'";
+            MapDtls mdtls = new MapDtls(md.No);
+            foreach (MapDtl item in mdtls)
+                frmIDs += ",'" + item.No + "'";
+            
+            DataSet ds = new DataSet();
+
+            //加入主表信息.
+            DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
+            ds.Tables.Add(Sys_MapData);
+
+            //加入分组表.
+            GroupFields gfs = new GroupFields();
+            gfs.RetrieveIn(GroupFieldAttr.FrmID, frmIDs);
+            DataTable Sys_GroupField = gfs.ToDataTableField("Sys_GroupField");
+            ds.Tables.Add(Sys_GroupField);
+
+            //加入明细表.
+            DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
+            ds.Tables.Add(Sys_MapDtl);
+
+            //加入枚举表.
+            SysEnums ses = new SysEnums();
+            ses.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData IN (" + frmIDs + ") ");
+            DataTable Sys_Menu = ses.ToDataTableField("Sys_Enum");
+            ds.Tables.Add(Sys_Menu);
+
+            //加入字段属性.
+            MapAttrs attrs = new MapAttrs();
+            attrs.RetrieveIn(MapAttrAttr.FK_MapData,   frmIDs);
+            DataTable Sys_MapAttr = attrs.ToDataTableField("Sys_MapAttr");
+            ds.Tables.Add(Sys_MapAttr);
+
+            //加入扩展属性.
+            MapExts exts = new MapExts();
+            exts.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
+            DataTable Sys_MapExt = exts.ToDataTableField("Sys_MapExt");
+            ds.Tables.Add(Sys_MapExt);
+
+            //线.
+            DataTable Sys_FrmLine = md.FrmLines.ToDataTableField("Sys_FrmLine");
+            ds.Tables.Add(Sys_FrmLine);
+
+            //link.
+            DataTable Sys_FrmLink = md.FrmLinks.ToDataTableField("Sys_FrmLink");
+            ds.Tables.Add(Sys_FrmLink);
+
+            //btn.
+            DataTable Sys_FrmBtn = md.FrmBtns.ToDataTableField("Sys_FrmBtn");
+            ds.Tables.Add(Sys_FrmBtn);
+
+            //Sys_FrmLab.
+            DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
+            ds.Tables.Add(Sys_FrmLab);
+
+            //img.
+            DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
+            ds.Tables.Add(Sys_FrmImg);
+
+            //Sys_FrmRB.
+            DataTable Sys_FrmRB = md.FrmRBs.ToDataTableField("Sys_FrmRB");
+            ds.Tables.Add(Sys_FrmRB);
+
+            //Sys_FrmEle.
+            DataTable Sys_FrmEle = md.FrmEles.ToDataTableField("Sys_FrmEle");
+            ds.Tables.Add(Sys_FrmEle);
+
+            //Sys_MapFrame.
+            DataTable Sys_MapFrame = md.MapFrames.ToDataTableField("Sys_MapFrame");
+            ds.Tables.Add(Sys_MapFrame);
+
+            //Sys_FrmAttachment.
+            DataTable Sys_FrmAttachment = md.FrmAttachments.ToDataTableField("Sys_FrmAttachment");
+            ds.Tables.Add(Sys_FrmAttachment);
+
+            //FrmImgAths. 上传图片附件.
+            DataTable Sys_FrmImgAth = md.FrmImgAths.ToDataTableField("Sys_FrmImgAth");
+            ds.Tables.Add(Sys_FrmImgAth);
+
+            return ds;
+        }
         /// <summary>
         /// 获得表单模版dataSet格式.
         /// </summary>
         /// <param name="fk_mapdata">表单ID</param>
         /// <param name="isCheckFrmType">是否检查表单类型</param>
         /// <returns>DataSet</returns>
-        public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata, bool isCheckFrmType = false)
+        public static System.Data.DataSet GenerHisDataSet_AllEleInfo2017(string fk_mapdata, bool isCheckFrmType = false)
         {
             MapData md = new MapData(fk_mapdata);
 

@@ -58,6 +58,8 @@ namespace BP.WF
                 Work wk = nd.HisWork;
                 wk.OID = workID;
                 wk.RetrieveFromDBSources();
+                wk.ResetDefaultVal();
+
 
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,

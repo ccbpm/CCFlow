@@ -136,29 +136,7 @@ namespace BP.WF
                     return obj;
                     //this.SetRefObject("HisWork", obj);
                 }
-                // return obj;
-                /* 放入缓存就没有办法执行数据的clone. */
-                // Work obj = this.GetRefObject("HisWork") as Work;
-                // if (obj == null)
-                // {
-                //     if (this.IsStartNode)
-                //     {
-                //         obj = new BP.WF.GEStartWork(this.NodeID);
-                //         obj.HisNode = this;
-                //         obj.NodeID = this.NodeID;
-                //         this.SetRefObject("HisWork", obj);
-                //     }
-                //     else
-                //     {
-                //         obj = new BP.WF.GEWork(this.NodeID);
-                //         obj.HisNode = this;
-                //         obj.NodeID = this.NodeID;
-                //         this.SetRefObject("HisWork", obj);
-                //     }
-                // }
-                //// obj.GetNewEntities.GetNewEntity;
-                //// obj.Row = null;
-                // return obj;
+                
             }
         }
         /// <summary>

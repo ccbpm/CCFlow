@@ -259,7 +259,6 @@
             $("#Btn_Send").val("正在发送请稍候...");
             $("#Btn_Close").attr("disabled", "disabled");
             $("#Btn_SelectEmps").attr("disabled", "disabled");
-             
 
             var data = httphandler.DoMethodReturnString("AccepterOfGener_Send");
 
@@ -328,6 +327,7 @@
 
         //取消移交
         function CloseAll() {
+
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.close();
             }
@@ -386,6 +386,7 @@
             //人员选择
             $("#TB_Emps").bind('input propertychange', function () {
                 //if (e.keyCode == 13) {
+
                 if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
                     //alert("输入内容为空！");
                     //return;

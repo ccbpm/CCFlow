@@ -198,7 +198,6 @@ namespace BP.WF.HttpHandler
             string deptNo = this.GetRequestVal("DeptNo");
             BP.GPM.Dept dept = new GPM.Dept(deptNo);
 
-
             BP.Web.WebUser.FK_Dept = dept.No;
             BP.Web.WebUser.FK_DeptName = dept.Name;
             BP.Web.WebUser.FK_DeptNameOfFull = dept.NameOfPath;
@@ -211,6 +210,10 @@ namespace BP.WF.HttpHandler
             strs += "@FK_DeptName=" + WebUser.FK_DeptName;
             strs += "@FK_DeptNameOfFull=" + WebUser.FK_DeptNameOfFull;
             BP.Web.WebUser.SetValToCookie(strs);
+
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            emp.StartFlows = "";
+            emp.Update();
 
             return "@执行成功,已经切换到｛" + BP.Web.WebUser.FK_DeptName + "｝部门上。";
         }

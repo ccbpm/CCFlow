@@ -60,6 +60,8 @@
         <script type="text/javascript">
             //然浏览器最大化.
             function ResizeWindow() {
+          
+
                 if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
                     var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
                     var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高
@@ -293,7 +295,35 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
+
+
+                            if (mapAttr.UIContralType == 2) {
+                                html += "<td ColSpan=1 ><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
+                            } else {
+
+                                var rbHtmls = "";
+                                var ses = new Entities("BP.Sys.SysEnums");
+                                ses.Retrieve("EnumKey", mapAttr.UIBindKey);
+
+                                //显示方式,默认为横向展示.
+                                var RBShowModel = 0;
+                                if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0 )
+                                    RBShowModel = 1;
+
+                                for (var i = 0; i < ses.length; i++) {
+                                    var se = ses[i];
+
+                                    if (RBShowModel == 1)
+                                        rbHtmls += "<label><input type=radio name='" + mapAttr.KeyOfEn + "' id='RB_" + se.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' />" + se.Lab + "</label><br>";
+                                    else
+                                        rbHtmls += "<label><input type=radio name='" + mapAttr.KeyOfEn + "' id='RB_" + se.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' />" + se.Lab + "</label>";
+
+                                }
+
+
+                                html += "<td ColSpan=1 >" + rbHtmls + " </td>";
+                            }
+
 
                             if (isDrawTR == false) {
                                 html += "</tr>";

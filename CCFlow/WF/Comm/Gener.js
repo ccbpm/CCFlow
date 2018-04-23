@@ -296,6 +296,27 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
 }
 
 /*为页面的所有字段属性赋值. */
+function GenerChangeParentValue(data) {
+
+    //判断data是否是一个数组，如果是一个数组，就取第1个对象.
+    var json = data;
+    if (data.length == 1)
+        json = data[0];
+
+    var unSetCtrl = "";
+    for (var attr in json) {
+
+        var val = json[attr]; //值
+
+        var div = window.parent.document.getElementById(attr);
+        if (div != null) {
+            div.innerHTML = val;
+            continue;
+        }
+    }
+}
+
+/*为页面的所有字段属性赋值. */
 function GenerFullAllCtrlsVal(data) {
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
@@ -1710,6 +1731,8 @@ var HttpHandler = (function () {
 
         AddFormData: function () {
             formData = $("form").serialize();
+            //form表单序列化时调用了encodeURLComponent方法将数据编码了
+            formData = decodeURIComponent(formData, true);
             if (formData.length > 0) {
                 var self = this;
                 $.each(formData.split("&"), function (i, o) {
@@ -1777,7 +1800,7 @@ var HttpHandler = (function () {
 
             if (jsonString.indexOf("err@") == 0) {
                 alert('请查看控制台:' + jsonString);
-               // console.log(jsonString);
+                // console.log(jsonString);
                 return jsonString;
             }
 
@@ -1786,7 +1809,7 @@ var HttpHandler = (function () {
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
                 alert(jsonString);
-              //  console.log(jsonString);
+                //  console.log(jsonString);
             }
             return jsonString;
         }

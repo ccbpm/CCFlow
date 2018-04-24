@@ -317,15 +317,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
-            var RBShowModel = 0;
-            if (mapAttr.AtPara.indexOf("@RBShowModel=0") == -1)
-                RBShowModel = 1;
+            var RBShowModel = 3;
+            if (mapAttr.AtPara.indexOf("@RBShowModel=3") == -1)
+                RBShowModel = 0;
             return InitRBShowContent(flowData, mapAttr, defValue, RBShowModel);
 
         }
-
-
-
     }
 
     // AppDouble  AppFloat
@@ -517,7 +514,7 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel) {
         return value.EnumKey == mapAttr.UIBindKey;
     });
     $.each(enums, function (i, obj) {
-        if (RBShowModel == 0)
+        if (RBShowModel == 3)
         //<input  " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label</div>";
             rbHtml += "<label><input " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' />&nbsp;" + obj.Lab + "</label>";
         else

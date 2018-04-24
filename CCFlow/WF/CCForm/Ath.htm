@@ -363,23 +363,22 @@
 
                 if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) ||(explorer.indexOf('Trident') >= 0))
                 {
-                    var fileExts = athDesc.Exts.replace("|", ";");
-                    fileExts = athDesc.Exts.replace(",", ";");
+                    if (athDesc.Exts != null && athDesc.Exts != "") {
+                        var fileExts = athDesc.Exts.replace("|", ";");
+                        fileExts = athDesc.Exts.replace(",", ";");
 
-                    var fileExtData = fileExts.split(';');
+                        var fileExtData = fileExts.split(';');
 
-                    for (var i=0 ;i<fileExtData.length;i++)
-                    {
-                        var ext = fileExtData[i]
-                        if (ext !=null && ext!="")
-                        {
-                            if (ext.startsWith("*."))
-                                realFileExts += ext + ";";
-                            else
-                                realFileExts += "*." + ext + ";";
+                        for (var i = 0; i < fileExtData.length; i++) {
+                            var ext = fileExtData[i]
+                            if (ext != null && ext != "") {
+                                if (ext.startsWith("*."))
+                                    realFileExts += ext + ";";
+                                else
+                                    realFileExts += "*." + ext + ";";
+                            }
                         }
                     }
-
                     if (realFileExts==null || realFileExts=="")
                      realFileExts = "*.*";
                     

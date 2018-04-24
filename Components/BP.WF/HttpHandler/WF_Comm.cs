@@ -776,7 +776,7 @@ namespace BP.WF.HttpHandler
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
-                if (map.DTSearchWay == DTSearchWay.ByDate)
+                /*if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
                     qo.addAnd();
                     qo.addLeftBracket();
@@ -784,9 +784,9 @@ namespace BP.WF.HttpHandler
                     qo.addAnd();
                     qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
                     qo.addRightBracket();
-                }
+                }*/
 
-                if (map.DTSearchWay == DTSearchWay.ByDateTime)
+                if (map.DTSearchWay == DTSearchWay.ByDateTime ||map.DTSearchWay == DTSearchWay.ByDate)
                 {
                     //取前一天的24：00
                     if (dtFrom.Trim().Length == 10) //2017-09-30
@@ -1036,7 +1036,7 @@ namespace BP.WF.HttpHandler
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
-                if (map.DTSearchWay == DTSearchWay.ByDate)
+                /*if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
                     qo.addAnd();
                     qo.addLeftBracket();
@@ -1044,9 +1044,9 @@ namespace BP.WF.HttpHandler
                     qo.addAnd();
                     qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
                     qo.addRightBracket();
-                }
+                }*/
 
-                if (map.DTSearchWay == DTSearchWay.ByDateTime)
+                if (map.DTSearchWay == DTSearchWay.ByDateTime || map.DTSearchWay == DTSearchWay.ByDate)
                 {
                     //取前一天的24：00
                     if (dtFrom.Trim().Length == 10) //2017-09-30
@@ -1226,8 +1226,8 @@ namespace BP.WF.HttpHandler
            string  name = "数据导出";
            string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
            string filePath = ExportDGToExcel(Search_Data(ens, en),en,name);
-          // DataTableToExcel(Search_Data(ens, en),en, filename, name,
-          //                                                    BP.Web.WebUser.Name, true, true, true);
+           //DataTableToExcel(Search_Data(ens, en),en, filename, name,
+            //                                                  BP.Web.WebUser.Name, true, true, true);
 
            return filePath;
         }

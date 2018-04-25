@@ -1,4 +1,5 @@
 ﻿var flowData = null;
+var IsCC = false;
 function GenerFreeFrm(wn) {
 
     flowData = wn;

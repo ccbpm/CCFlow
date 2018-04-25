@@ -4,6 +4,8 @@
 */
 var workNode = null;
 var IsReadonly = "0";
+var IsCC = "0";
+
 
 function GenerTreeFrm(wn) {
     workNode = wn;

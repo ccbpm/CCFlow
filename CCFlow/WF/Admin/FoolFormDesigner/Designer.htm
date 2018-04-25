@@ -1094,7 +1094,7 @@
                 en.Y = 100;
                 en.Insert();
 
-                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + en.MyPK;
+                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + en.MyPK;
                 OpenEasyUiDialog(url, "eudlgframe", '框架', 600, 400, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;
                 });
@@ -1102,7 +1102,7 @@
             }
 
             function EditFrame(myPK) {
-                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + myPK;
+                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + myPK;
                 OpenEasyUiDialog(url, "eudlgframe", '框架', 600, 400, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;
                 });

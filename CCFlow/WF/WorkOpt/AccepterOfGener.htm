@@ -107,6 +107,8 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("AccepterOfGener_Init");
 
+           // alert(data);
+
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 window.parent.close();

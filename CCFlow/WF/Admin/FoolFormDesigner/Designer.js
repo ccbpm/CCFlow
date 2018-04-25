@@ -439,7 +439,8 @@ function NewAth() {
 }
 
 function EditFrame(fk_mapdata, myPK) {
-    var url = '../../Comm/En.htm?EnName=BP.Sys.MapFrame&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
+
+    var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
 
     OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;

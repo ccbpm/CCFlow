@@ -141,6 +141,8 @@
             handler.AddPara("WorkID", GetQueryString("WorkID"));
             var data = handler.DoMethodReturnString("Accepter_Init");
 
+           // alert(data);
+
             if (data.indexOf('info@') == 0) {
                 alert(data);
                 Close();

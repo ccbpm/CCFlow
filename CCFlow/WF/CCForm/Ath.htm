@@ -177,20 +177,15 @@
                 if (CanEditor(db.FileExts)) {
                     //是否启用weboffice
                     if (athDesc.IsWoEnableWF)
-                        html += addTdTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + FK_FrmAttachment + "','" +
-                                    WorkID + "','" + db.MyPK + "','" + FK_MapData + "','" + Ath +
-                                    "','" + FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                     
                     else 
-                        html += addTdTitle(db.FileName, "<a href=\"javascript:OpenView('" + PKVal + "','" + db.MyPK +
-                                        "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                     
                 }else if (IsImgExt(db.FileExts) || db.FileExts.toUpperCase() == "PDF" || db.FileExts.toUpperCase() == "CEB") {
-                    html += addTdTitle(db.FileName, "<a href=\"javascript:OpenView('" + PKVal + "','" + db.MyPK +
-                                        "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                    html += addTdTitle(db.FileName, "<a href=\"javascript:javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                 }else {
-                    html += addTdTitle(db.FileName, "<a href=\"javaScript:AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK +
-                                        "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                    html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                 }
 
                 if (athDesc.IsDownload)
@@ -282,7 +277,7 @@
                     }
                     if (athDesc.IsDownload) {
                         if (athDesc.IsWoEnableWF && CanEditor(db.FileExts))
-                            html += addTdTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + FK_FrmAttachment + "','" + WorkID + "','" + db.MyPK + "','" + FK_MapData + "','" + Ath + "','" + FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                            html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         else if (IsImgExt(db.FileExts) == true)
                             html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         else 
@@ -361,24 +356,26 @@
 
                 var explorer = window.navigator.userAgent;
 
-                if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) ||(explorer.indexOf('Trident') >= 0))
+                if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) ||(explorer.indexOf('Trident') >= 0)) {
                 {
-                    if (athDesc.Exts != null && athDesc.Exts != "") {
-                        var fileExts = athDesc.Exts.replace("|", ";");
-                        fileExts = athDesc.Exts.replace(",", ";");
+                    
+                    var fileExts = athDesc.Exts.replace("|", ";");
+                    fileExts = athDesc.Exts.replace(",", ";");
 
-                        var fileExtData = fileExts.split(';');
+                    var fileExtData = fileExts.split(';');
 
-                        for (var i = 0; i < fileExtData.length; i++) {
-                            var ext = fileExtData[i]
-                            if (ext != null && ext != "") {
-                                if (ext.startsWith("*."))
-                                    realFileExts += ext + ";";
-                                else
-                                    realFileExts += "*." + ext + ";";
-                            }
+                    for (var i=0 ;i<fileExtData.length;i++)
+                    {
+                        var ext = fileExtData[i]
+                        if (ext !=null && ext!="")
+                        {
+                            if (ext.startsWith("*."))
+                                realFileExts += ext + ";";
+                            else
+                                realFileExts += "*." + ext + ";";
                         }
                     }
+
                     if (realFileExts==null || realFileExts=="")
                      realFileExts = "*.*";
                     

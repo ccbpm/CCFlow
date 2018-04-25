@@ -880,11 +880,9 @@ namespace BP.WF.HttpHandler
             }
 
             //获得行数.
-            if (this.PageIdx == 1)
-            {
-                ur.SetPara("RecCount", qo.GetCount());
-                ur.Save();
-            }
+             ur.SetPara("RecCount", qo.GetCount());
+             ur.Save();
+            
 
             qo.DoQuery(en.PK,this.PageSize,this.PageIdx);
             #endregion 获得查询数据.

@@ -34,7 +34,7 @@
         var ur = new Entity("BP.Sys.UserRegedit");
         ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
         ur.RetrieveFromDBSources();
-
+        var count = ur.GetPara("RecCount");
         var mapBase;
 
         //页面启动函数.
@@ -51,13 +51,13 @@
             }
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
-            
-             $("#dialogExpFile").hide();
+
+            $("#dialogExpFile").hide();
             //初始化工具栏.
             InitToolbar();
 
             //执行查询.
-             BindTable();
+            BindTable();
 
             //生成翻页.
             GenerPageIdx();
@@ -88,15 +88,15 @@
                 html += mapBase.DTSearchLable;
 
                 if (mapBase.DTSearchWay == "1") {
-					//html += '<div class="form-group">';
-                    html += 	"<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
+                    //html += '<div class="form-group">';
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
                     html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
-					//html += '</div>';
+                    //html += '</div>';
                 } else {
-					//html += '<div class="form-group">';
-                    html += 	"<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' class='form-control' />";
-                    html += 	"到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />";
-					//html += '</div>';
+                    //html += '<div class="form-group">';
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' class='form-control' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />";
+                    //html += '</div>';
                 }
             }
 
@@ -147,7 +147,7 @@
 
                 var en = ens[i];
 
-                if (en.No == undefined )
+                if (en.No == undefined)
                     operations += "<option value='" + en.IntKey + "'>" + en.Lab + "</option>";
                 else
                     operations += "<option value='" + en.No + "'>" + en.Name + "</option>";
@@ -164,10 +164,10 @@
             ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
-            if ($("#TB_Key") != null && $("#TB_Key").val()!="")
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "")
                 ur.SearchKey = $("#TB_Key").val();
-           else
-              ur.SearchKey = "";
+            else
+                ur.SearchKey = "";
 
             //设置查询时间.
             if ($("#TB_DTFrom").length == 1)
@@ -184,16 +184,11 @@
                 str += "@" + id + "=" + $(this).val();
             });
 
-            ur.FK_Emp = webUser.No;
-            ur.CfgKey = "SearchAttrs";
-            ur.Vals = str;
-            ur.FK_MapData = ensName;
-            ur.SetPara("RecCount",count);
-            var i = ur.Save();
-            var pager = $("#dg").datagrid('getPager').data("pagination" ).options;
+
+            var pager = $("#dg").datagrid('getPager').data("pagination").options;
             var pageIndex = pager.pageNumber;
             var pageSize = pager.pageSize;
-            window.location.href = "?EnsName=" + ensName + "&PageIdx="+pageIndex+"&PageSize="+pageSize;
+            window.location.href = "?EnsName=" + ensName + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
         }
 
         function Exp() {
@@ -205,11 +200,11 @@
                 return;
             }
 
-           ReDownExpFile();
-            
+            ReDownExpFile();
+
         }
 
-   
+
 
         function ReDownExpFile() {
             var fileName = $("*[id$=expFileName]").val();
@@ -231,7 +226,7 @@
                 }
                 }]
             });
-    }
+        }
 
         function SearchData(pageIdx, pageSize) {
             //创建处理器.
@@ -251,7 +246,7 @@
             var ur = new Entity("BP.Sys.UserRegedit");
             ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
             ur.RetrieveFromDBSources();
-           
+
             count = ur.GetPara("RecCount");
             return data;
         }
@@ -274,50 +269,50 @@
 
 
             var attrs = mapdata["Attrs"];
-                    
+
             if (attrs == undefined) {
                 alert('没有取得属性.');
                 return;
             }
-           
-            var keyOfEn="";
+
+            var keyOfEn = "";
 
             var columns = new Array(); ;
             for (var i = 0; i < attrs.length; i++) {
-                var attr = attrs[i]; 
+                var attr = attrs[i];
 
                 if (attr.UIVisible == 0
                 || attr.KeyOfEn == "OID"
                 || attr.KeyOfEn == "WorkID"
                 || attr.KeyOfEn == "NodeID"
-                || attr.KeyOfEn == "MyNum" 
-                || attr.KeyOfEn == "MyPK"){
-                    keyOfEn=attr.KeyOfEn
+                || attr.KeyOfEn == "MyNum"
+                || attr.KeyOfEn == "MyPK") {
+                    keyOfEn = attr.KeyOfEn
                     continue;
                 }
-              
+
 
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
                 if (attr.UIContralType == 1)
                     field = field + "Text";
-                if (attr.UIContralType == 2) 
+                if (attr.UIContralType == 2)
                     columns.push({
                         field: field,
                         title: title,
                         fixed: false,
                         formatter: function (value, row, index) {
-                             if (value == "0") return "否";
-                             if (value == "1") return "是";
+                            if (value == "0") return "否";
+                            if (value == "1") return "是";
 
                         }
-                     });
+                    });
                 else
                     columns.push({
                         field: field,
                         title: title,
                         fixed: false
-                       
+
                     });
             }
 
@@ -367,64 +362,64 @@
             });
         }
 
-            //分页功能 
-            var IsUrl = true;     
-            function pagerFilter(data) {  
-                if (typeof data.length == 'number' && typeof data.splice == 'function') {  
-                    data = {  
-                        total: count,
-                        rows: data
-                    }
+        //分页功能 
+        var IsUrl = true;
+        function pagerFilter(data) {
+            if (typeof data.length == 'number' && typeof data.splice == 'function') {
+                data = {
+                    total: count,
+                    rows: data
                 }
-                var dg = $(this);
-                var opts = dg.datagrid('options');
-                var pager = dg.datagrid('getPager');
-                
-                //url 路径上包含PageIdx、PageSize
-                if (IsUrl) {
-                    var pageIdx = GetQueryString("PageIdx");
-                    var pageSize = GetQueryString("PageSize");
-                    if (pageIdx !== null && pageIdx != "") {
-                        opts.pageNumber = parseInt(pageIdx);
-                        opts.pageSize = parseInt(pageSize);
-                        pager.data("pagination").options.pageNumber = parseInt(pageIdx);
-                        pager.data("pagination").options.pageSize = parseInt(pageSize);
-                    }
+            }
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            var pager = dg.datagrid('getPager');
+
+            //url 路径上包含PageIdx、PageSize
+            if (IsUrl) {
+                var pageIdx = GetQueryString("PageIdx");
+                var pageSize = GetQueryString("PageSize");
+                if (pageIdx !== null && pageIdx != "") {
+                    opts.pageNumber = parseInt(pageIdx);
+                    opts.pageSize = parseInt(pageSize);
+                    pager.data("pagination").options.pageNumber = parseInt(pageIdx);
+                    pager.data("pagination").options.pageSize = parseInt(pageSize);
                 }
-               //点击分页
-                pager.pagination({
-                    onSelectPage: function (pageNum, pageSize) {
-                        opts.pageNumber = pageNum;
-                        opts.pageSize = pageSize;
-                        pager.pagination('refresh', {
-                            pageNumber: pageNum,
-                            pageSize: pageSize
-                        });
-                        IsUrl = false;
-                        var mapdata = SearchData(opts.pageNumber, opts.pageSize);
-                        data = mapdata["DT"];
-                        dg.datagrid('loadData', data);
-                    }
-                });
+            }
+            //点击分页
+            pager.pagination({
+                onSelectPage: function (pageNum, pageSize) {
+                    opts.pageNumber = pageNum;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh', {
+                        pageNumber: pageNum,
+                        pageSize: pageSize
+                    });
+                    IsUrl = false;
+                    var mapdata = SearchData(opts.pageNumber, opts.pageSize);
+                    data = mapdata["DT"];
+                    dg.datagrid('loadData', data);
+                }
+            });
 
-                
-                  
-                if (!data.originalRows) {  
-                    if(data.rows)  
-                        data.originalRows = (data.rows);  
-                    else if(data.data && data.data.rows)  
-                        data.originalRows = (data.data.rows);  
-                    else  
-                        data.originalRows = [];  
-                }  
-               // var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);  
-                //var end = start + parseInt(opts.pageSize);  
-                //data.rows = (data.originalRows.slice(start, end));  
-                return data;  
-            } 
 
-        function operate(value, row, index) {  
-            return '<a href="#" onclick="editUser('+index+')">查看明细</a>';  
+
+            if (!data.originalRows) {
+                if (data.rows)
+                    data.originalRows = (data.rows);
+                else if (data.data && data.data.rows)
+                    data.originalRows = (data.data.rows);
+                else
+                    data.originalRows = [];
+            }
+            // var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);  
+            //var end = start + parseInt(opts.pageSize);  
+            //data.rows = (data.originalRows.slice(start, end));  
+            return data;
+        }
+
+        function operate(value, row, index) {
+            return '<a href="#" onclick="editUser(' + index + ')">查看明细</a>';
         }
 
         function OpenEn(pk, paras) {
@@ -437,56 +432,54 @@
 
             var url = cfg.GetPara("WinOpenUrl");
 
-            if (url=="" || url ==undefined )
-            {
-              url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+            if (url == "" || url == undefined) {
+                url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
             }
-            else
-            {
-                 if (url.indexOf('?')==-1)
-                    url= url+"?1=1";
-                 url = url+"&EnsName="+ensName+"&enName="+enName+ "&PKVal=" + pk+paras;
+            else {
+                if (url.indexOf('?') == -1)
+                    url = url + "?1=1";
+                url = url + "&EnsName=" + ensName + "&enName=" + enName + "&PKVal=" + pk + paras;
             }
 
             var windowW = cfg.GetPara("WinCardW");
-            if (windowW=="" || windowW==undefined)
-                windowW=700;
+            if (windowW == "" || windowW == undefined)
+                windowW = 700;
 
             var windowH = cfg.GetPara("WinCardH");
-             if (windowH=="" || windowH==undefined )
-                 windowH = 500;
+            if (windowH == "" || windowH == undefined)
+                windowH = 500;
 
-             var localUrl = window.location.href;
-             var pager = $("#dg").datagrid('getPager').data("pagination").options;
-             var pageIndex = pager.pageNumber;
-             var  pageSize = pager.pageSize;
+            var localUrl = window.location.href;
+            var pager = $("#dg").datagrid('getPager').data("pagination").options;
+            var pageIndex = pager.pageNumber;
+            var pageSize = pager.pageSize;
 
-             var localArr = new Array();
-             localArr = localUrl.split("&");
-             if (localArr.length == 1) {
-                 localUrl = localUrl + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
-             } else {
-                 for (var i = 0; i < localArr.length; i++) {
-                     if (localArr[i].indexOf("PageIdx") != -1) {
-                         localArr[i] = "PageIdx=" + pageIndex;
-                     }
-                     if (localArr[i].indexOf("PageSize") != -1) {
-                         localArr[i] = "PageSize=" + pageSize;
-                     }
-                 }
-                 localUrl = "";
-                 for (var i = 0; i < localArr.length; i++) {
-                     localUrl += localArr[i];
-                     if (i != localArr.length - 1) localUrl += "&";
-                 }
-             }
+            var localArr = new Array();
+            localArr = localUrl.split("&");
+            if (localArr.length == 1) {
+                localUrl = localUrl + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
+            } else {
+                for (var i = 0; i < localArr.length; i++) {
+                    if (localArr[i].indexOf("PageIdx") != -1) {
+                        localArr[i] = "PageIdx=" + pageIndex;
+                    }
+                    if (localArr[i].indexOf("PageSize") != -1) {
+                        localArr[i] = "PageSize=" + pageSize;
+                    }
+                }
+                localUrl = "";
+                for (var i = 0; i < localArr.length; i++) {
+                    localUrl += localArr[i];
+                    if (i != localArr.length - 1) localUrl += "&";
+                }
+            }
 
-             
+
 
             OpenEasyUiDialog(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", true, null, null, null, function () {
                 window.location.href = localUrl;
 
-               
+
             });
         }
 
@@ -494,23 +487,23 @@
             OpenEn("");
         }
 
-         function Exp() {
-             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-             handler.AddPara("EnsName", GetQueryString("EnsName"));
-             //查询集合
+        function Exp() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            //查询集合
             var data = handler.DoMethodReturnString("Search_Exp");
             var url = "";
             if (data.indexOf('err@') == 0) {
-              alert(data);
+                alert(data);
             }
-          if (plant != 'CCFlow') {
-              var currentPath = window.document.location.href;
-              var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-              data = path + data;
-          }
-          window.open(data);
+            if (plant != 'CCFlow') {
+                var currentPath = window.document.location.href;
+                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                data = path + data;
+            }
+            window.open(data);
             return;
-          
+
         }
 
 
@@ -520,15 +513,14 @@
             handler.AddPara("EnsName", GetQueryString("EnsName"));
             handler.AddPara("PageIdx", this.GetQueryString("PageIdx"));
 
-            var html= handler.DoMethodReturnString("Search_GenerPageIdx");
+            var html = handler.DoMethodReturnString("Search_GenerPageIdx");
             $("#end").html(html);
         }
 
-        function Setting()
-        {
-           var user=new WebUser();
-           var url="./Sys/SearchSetting.htm?EnsName="+GetQueryString("EnsName")+"&m="+Math.random();
-           OpenEasyUiDialogExt(url, '设置', 800, 500, true);
+        function Setting() {
+            var user = new WebUser();
+            var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+            OpenEasyUiDialogExt(url, '设置', 800, 500, true);
         }
 
     </script>

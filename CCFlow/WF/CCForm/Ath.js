@@ -1,5 +1,5 @@
 ﻿//点击右边的下载标签.
-function Down(fk_ath, pkVal, delPKVal) {
+function Down2018(fk_ath, pkVal, delPKVal) {
     window.location.href = 'AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
 }
 
@@ -25,11 +25,24 @@ function Down2017(mypk) {
             var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
             str = path + str;
         }
-        //var a = window.open(str, "_blank", "width=800, height=600,toolbar=yes");
-        window.frames["hrong"].location.href   =   str;   
+       // var a = window.open(str, "_blank", "width=800, height=600,toolbar=yes");
+      // window.frames["hrong"].location.href   =   str;
+        //window.frames["hrong"].src = str;
+      // sa();
 
-        sa();   
-        return;
+       //js方法  
+ 
+                var a = document.getElementById("downPdf");  
+                a.href=str;  
+                a.download="11.txt";  
+                a.click();  
+         
+
+        //var fileURL = window.open(str, "_blank", "height=0,width=0,toolbar=no,menubar=no,scrollbars=no,resizable=on,location=no,status=no");
+        //f/ileURL.document.execCommand("SaveAs");
+        //fileURL.window.close();
+        //fileURL.close();
+
         return;
     }
     if (data.indexOf("fromdb") > -1) {

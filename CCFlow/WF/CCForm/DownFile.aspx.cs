@@ -151,9 +151,49 @@ namespace CCFlow.WF.CCForm
 
                 downDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
                 downDB.Retrieve();
+                FrmAttachment dbAtt = new FrmAttachment();
+                dbAtt.MyPK = downDB.FK_FrmAttachment;
+                dbAtt.Retrieve();
+                if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
+                {
+                    #region 解密下载
+                    //1、先解密到本地
+                    string filepath = downDB.FileFullName + ".tmp";
+                    string tempName = downDB.FileFullName;
 
-                string downpath = GetRealPath(downDB.FileFullName);
-                BP.Sys.PubClass.DownloadFile(downpath, downDB.FileName);
+                    EncHelper.DecryptDES(downDB.FileFullName, filepath);
+                    //PubClass.DownloadFile(filepath, tempName);
+                    #region 文件下载（并删除临时明文文件）
+                    if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
+                        tempName = HttpUtility.UrlEncode(tempName);
+
+                    HttpContext.Current.Response.Charset = "GB2312";
+                    HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
+                    HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
+                    HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
+                    //HttpContext.Current.Response.ContentType = "application/ms-msword";  //image/JPEG;text/HTML;image/GIF;application/ms-excel
+                    //HttpContext.Current.EnableViewState =false;
+
+                    HttpContext.Current.Response.WriteFile(filepath);
+                    File.Delete(filepath);
+                    HttpContext.Current.Response.End();
+                    HttpContext.Current.Response.Close();
+                    #endregion
+
+                    #endregion
+                }
+
+                if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
+                {
+                    PubClass.DownloadFile(downDB.GenerTempFile(dbAtt.AthSaveWay), downDB.FileName);
+                }
+
+                if (dbAtt.AthSaveWay == AthSaveWay.DB)
+                {
+                    PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
+                }
+                //string downpath = GetRealPath(downDB.FileFullName);
+                //BP.Sys.PubClass.DownloadFile(downpath, downDB.FileName);
                 this.WinClose();
                 return;
             }

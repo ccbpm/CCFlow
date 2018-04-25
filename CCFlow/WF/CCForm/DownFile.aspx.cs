@@ -190,10 +190,11 @@ namespace CCFlow.WF.CCForm
 
                 if (dbAtt.AthSaveWay == AthSaveWay.DB)
                 {
+                    string downpath = GetRealPath(downDB.FileFullName);
+                    BP.Sys.PubClass.DownloadFile(downpath, downDB.FileName);
                     PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
                 }
-                //string downpath = GetRealPath(downDB.FileFullName);
-                //BP.Sys.PubClass.DownloadFile(downpath, downDB.FileName);
+               
                 this.WinClose();
                 return;
             }

@@ -261,7 +261,7 @@ namespace BP.Tools
                 }
                 jsonString += "\"" + ToJson(propertyInfo[i].Name) + "\":" + value + ",";
             }
-            jsonString.Remove(jsonString.Length - 1, jsonString.Length);
+            jsonString = jsonString.Substring(0, jsonString.Length - 1);
             return jsonString + "}";
         }
         /// <summary> 
@@ -276,7 +276,7 @@ namespace BP.Tools
             {
                 jsonString += ToJson(item) + ",";
             }
-            jsonString.Remove(jsonString.Length - 1, jsonString.Length);
+            jsonString = jsonString.Substring(0, jsonString.Length - 1);
             return jsonString + "]";
         }
         /// <summary> 

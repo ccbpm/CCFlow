@@ -62,17 +62,38 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_FrmEle", "框架");
+                Map map = new Map("Sys_MapFrame", "框架");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
+
                 map.AddMyPK();
-                map.AddTBString(FrmEleAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
-                map.AddTBString(FrmEleAttr.URL, null, "URL(支持ccbpm的表达式)", true, false, 0, 3900, 20, true);
+                map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
+                map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20, true);
+
+                map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
+
+                map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType, "@0=自定义@1=表单库");
+                //显示的分组.
+                map.AddDDLSQL(MapFrameAttr.FrmID, "0", "表单表单","SELECT No, Name FROM Sys_Mapdata  WHERE  FrmType=3 ", true);
+
+                map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
+                map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
+
+                map.AddTBString(FrmEleAttr.W, null, "宽度", true, false, 0, 20, 20);
+                map.AddTBString(FrmEleAttr.H, null, "高度", true, false, 0, 20, 20);
+
+                map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
+
+                map.AddTBString(FrmEleAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
+
+                // map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
+                // map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
+
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
-                map.AddTBString(FrmBtnAttr.GroupID, null, "所在分组", false, false, 0, 128, 20);
+
 
                 ////显示的分组.
                 //map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
@@ -83,6 +104,19 @@ namespace BP.Sys.FrmUI
             }
         }
         #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            int val = this.GetValIntByKey(MapFrameAttr.UrlSrcType, 0);
+            if (val == 1)
+            {
+                string sql = "SELECT Url FROM Sys_MapData WHERE No='" + this.GetValStrByKey(MapFrameAttr.FrmID) + "'";
+                string url = DBAccess.RunSQLReturnStringIsNull(sql, "");
+                this.SetValByKey(MapFrameAttr.URL, url);
+            }
+
+            return base.beforeUpdateInsertAction();
+        }
     }
     /// <summary>
     /// 框架s

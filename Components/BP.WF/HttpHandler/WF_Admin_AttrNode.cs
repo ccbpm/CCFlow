@@ -1818,6 +1818,7 @@ namespace BP.WF.HttpHandler
             ht.Add("TeamLeaderConfirmRole", (int)nd.TeamLeaderConfirmRole);
             ht.Add("TeamLeaderConfirmDoc", nd.TeamLeaderConfirmDoc);
             return BP.Tools.Json.ToJson(ht);
+
         }
         /// <summary>
         /// 保存

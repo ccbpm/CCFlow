@@ -18,6 +18,9 @@ namespace BP.Sys
         /// URL
         /// </summary>
         public const string URL = "URL";
+        public const string UrlSrcType = "UrlSrcType";
+        public const string FrmID = "FrmID";
+
         /// <summary>
         /// 高度
         /// </summary>
@@ -38,6 +41,7 @@ namespace BP.Sys
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
+
     }
     /// <summary>
     /// 框架

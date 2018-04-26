@@ -456,5 +456,41 @@ namespace BP.Sys
             // 格式为: err@错误中文提示信息. tech@info 数据库错误,查询sqL为.
             return alertInfo;
         }
+
+        #region 加密解密文件.
+        public static void File_JiaMi(string fileFullPath)
+        {
+            //南京宝旺达.
+            if (SystemConfig.CustomerNo == "BWDA")
+            {
+
+            }
+        }
+        public static void File_JieMi(string fileFullPath)
+        {
+            //南京宝旺达.
+            if (SystemConfig.CustomerNo == "BWDA")
+            {
+
+            }
+        }
+        /// <summary>
+        /// 字符串的解密
+        /// </summary>
+        /// <param name="str">加密的字符串</param>
+        /// <returns>返回解密后的字符串</returns>
+        public static string String_JieMi(string str)
+        {
+
+            //南京宝旺达.
+            if (SystemConfig.CustomerNo == "BWDA")
+            {
+                return str;
+            }
+
+            return str;
+        }
+        #endregion 加密解密文件.
+
     }
 }

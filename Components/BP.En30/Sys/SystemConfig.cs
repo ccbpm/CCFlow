@@ -111,7 +111,9 @@ namespace BP.Sys
         {
             get
             {
-                return SystemConfig.AppSettings["FTPUserNo"];
+
+                string str = SystemConfig.AppSettings["FTPUserNo"];
+                return BP.Sys.Glo.String_JieMi(str);
             }
         }
 
@@ -119,7 +121,8 @@ namespace BP.Sys
         {
             get
             {
-                return SystemConfig.AppSettings["FTPUserPassword"];
+                string str= SystemConfig.AppSettings["FTPUserPassword"];
+                return BP.Sys.Glo.String_JieMi(str);
             }
         }
 

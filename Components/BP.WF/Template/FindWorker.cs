@@ -200,7 +200,7 @@ namespace BP.WF.Template
                             if (select.SelectorModel == SelectorModel.GenerUserSelecter)
                                 throw new Exception("url@./WorkOpt/AccepterOfGener.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
                             else
-                                throw new Exception("url@./WorkOpt/AccepterGener.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                                throw new Exception("url@./WorkOpt/Accepter.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
                         }
                         else
                         {

@@ -184,7 +184,12 @@
                 str += "@" + id + "=" + $(this).val();
             });
 
-
+            ur.FK_Emp = webUser.No;
+            ur.CfgKey = "SearchAttrs";
+            ur.Vals = str;
+            ur.FK_MapData = ensName;
+            ur.SetPara("RecCount", count);
+            var i = ur.Save();
             var pager = $("#dg").datagrid('getPager').data("pagination").options;
             var pageIndex = pager.pageNumber;
             var pageSize = pager.pageSize;

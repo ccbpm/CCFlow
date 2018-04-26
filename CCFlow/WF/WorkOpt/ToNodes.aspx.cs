@@ -368,25 +368,25 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
                     this.Response.Redirect(myurl, true);
                     return;
                 case TurnToDeal.TurnToByCond:
-                    TurnTos tts = new TurnTos(this.FK_Flow);
-                    if (tts.Count == 0)
-                        throw new Exception("@您没有设置节点完成后的转向条件。");
-                    foreach (TurnTo tt in tts)
-                    {
-                        tt.HisWork = wk;
-                        if (tt.IsPassed == true)
-                        {
-                            string url = tt.TurnToURL.Clone().ToString();
-                            if (url.Contains("?") == false)
-                                url += "?1=1";
-                            url = BP.WF.Glo.DealExp(url, wk, null);
-                            url += "&PFlowNo=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&PWorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
-                            this.Response.Redirect(url, true);
-                            return;
-                        }
-                    }
-#warning 为上海修改了如果找不到路径就让它按系统的信息提示。
-                    this.ToMsg(msg, "info");
+                    //                    TurnTos tts = new TurnTos(this.FK_Flow);
+                    //                    if (tts.Count == 0)
+                    //                        throw new Exception("@您没有设置节点完成后的转向条件。");
+                    //                    foreach (TurnTo tt in tts)
+                    //                    {
+                    //                        tt.HisWork = wk;
+                    //                        if (tt.IsPassed == true)
+                    //                        {
+                    //                            string url = tt.TurnToURL.Clone().ToString();
+                    //                            if (url.Contains("?") == false)
+                    //                                url += "?1=1";
+                    //                            url = BP.WF.Glo.DealExp(url, wk, null);
+                    //                            url += "&PFlowNo=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&PWorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                    //                            this.Response.Redirect(url, true);
+                    //                            return;
+                    //                        }
+                    //                    }
+                    //#warning 为上海修改了如果找不到路径就让它按系统的信息提示。
+                    //                    this.ToMsg(msg, "info");
                     //throw new Exception("您定义的转向条件不成立，没有出口。");
                     break;
                 default:

@@ -54,7 +54,13 @@
             var data = handler.DoMethodReturnString(doType);
 
             if (data.indexOf('err@') == 0) {
-                document.getElementById("Info").innerHTML = data;
+
+                if (data.indexOf('管理员') > 0) {
+                    window.location.href = './CCBPMDesigner/Login.htm';
+                    return;
+                }
+
+                document.getElementById("Info").innerHTML = "<font color=red>"+ data+'</font>';
                 return;
             }
 

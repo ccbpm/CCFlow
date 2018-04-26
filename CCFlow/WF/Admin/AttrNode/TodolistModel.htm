@@ -20,36 +20,29 @@
 
             //初始化groupID.
             var nodeID = GetQueryString("FK_Node");
+            var btnLab = new Entity("BP.WF.Template.BtnLab", nodeID);
 
-            //调用公共类库的方法.
-           // GenerBindEnumKey("DDL_TWay", "TWay", "1");
-           
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=TodolistModel_Init&FK_Node=" + nodeID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            if (btnLab.HuiQianRole != 0) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+                $("#Msg").html("<font color=red >当前是会签模式，您不能设置多人处理规则.</font>");
+                document.getElementById("Btn_Save").disabled = true;
+                return ;
+            }
 
-                    data = JSON.parse(data);
+            var node = new Entity("BP.WF.Node", nodeID);
 
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
 
-                    $("#Msg").html("");
-                }
-            });
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(node);
+
+            $("#Msg").html("");
+
         });
     </script>
 </head>
 <body>
 <form id="cc">
-
+<div id="Msg"></div>
 <fieldset>
 <legend> <input type="radio" value="0"  id="RB_TodolistModel_0" name="RB_TodolistModel" /> <label for="RB_TodolistModel_0">抢办模式 </label> </legend>
 <ul >
@@ -116,7 +109,7 @@
 
 </fieldset>
 
-<input type="button"  value="保存" onclick="Save()" />
+<input type="button" id="Btn_Save"  value="保存" onclick="Save()" />
 
 <script type="text/javascript">
 
@@ -152,7 +145,6 @@
     }
 </script>
 
-<div id="Msg"></div>
 </form>
 
 </body>

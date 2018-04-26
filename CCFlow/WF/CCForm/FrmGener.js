@@ -570,29 +570,57 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
         });
     }
 
-    //外部数据源类型 MyFlowGener.js.InitDDLOperation
+    //外部数据源类型 FrmGener.js.InitDDLOperation
     if (mapAttr.LGType == 0) {
+
+        //如果是一个函数.
         var fn;
         try {
             if (mapAttr.UIBindKey) {
                 fn = eval(mapAttr.UIBindKey);
             }
         } catch (e) {
+            alert(e);
         }
+
         if (typeof fn == "function") {
             $.each(fn.call(), function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
-        } else if (typeof CommonHandler == "function") {
+            return operations;
+        }
+
+        if (typeof CommonHandler == "function") {
             CommonHandler.call("", mapAttr.UIBindKey, function (data) {
                 GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
             })
-        } else {
-            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-            //alert('没有获得约定的数据源.');
+            return "";
         }
+
+        if (mapAttr.UIIsEnable == 0) {
+
+            alert('不可编辑');
+            operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
+            return operations;
+        }
+
+        if (flowData[mapAttr.KeyOfEn] != undefined) {
+            $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+            return operations;
+        }
+
+        if (flowData[mapAttr.UIBindKey] != undefined) {
+
+            $.each(flowData[mapAttr.UIBindKey], function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+            return operations;
+        }
+        //   alert('没有获得约定的数据源.');
+        alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
     }
-    return operations;
 }
 
 
@@ -640,6 +668,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     var formArrResult = [];
     //获取CHECKBOX的值
     $.each(formArr, function (i, ele) {
+
         if (ele.split('=')[0].indexOf('CB_') == 0) {
             if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
                 ele = ele.split('=')[0] + '=1';
@@ -647,6 +676,18 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 ele = ele.split('=')[0] + '=0';
             }
         }
+
+        if (ele.split('=')[0].indexOf('DDL_') == 0) {
+
+            var ctrlID = ele.split('=')[0];
+
+            var item = $("select[name='" + ctrlID + "'] option[selected]").text();
+
+            var mystr = ctrlID.substring(4) + 'T=' + item;
+            formArrResult.push(mystr);
+        }
+
+
         formArrResult.push(ele);
     });
 

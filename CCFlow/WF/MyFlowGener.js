@@ -434,7 +434,6 @@ function refSubSubFlowIframe() {
 }
 
 
-
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
 function GepParaByName(name, atPara) {
     var params = atPara.split('@');
@@ -446,43 +445,32 @@ function GepParaByName(name, atPara) {
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(flowData, mapAttr, defVal) {
+
     var operations = '';
-    //外键类型
-	//外部数据源类型 FrmGener.js.InitDDLOperation
-	if (mapAttr.LGType == 0) {
-		var fn;
-		try {
-			if (mapAttr.UIBindKey) {
-				fn = eval(mapAttr.UIBindKey);
-			}
-		} catch (e) {
-		}
-		if (typeof fn == "function") {
-		    $.each(fn.call(), function (i, obj) {
-		        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-		    });
-		} else if (typeof CommonHandler == "function") {
-		    CommonHandler.call("", mapAttr.UIBindKey, function (data) {
-		        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
-		    })
-		} else {
 
-		    //   alert('没有获得约定的数据源.');
-		    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+    //外键类型的.
+    if (mapAttr.LGType == 2) {
 
-		}
-	} else if (mapAttr.LGType == 2) {
         if (flowData[mapAttr.KeyOfEn] != undefined) {
+
             $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
+
         }
-        else if (flowData[mapAttr.UIBindKey] != undefined) {
+
+        if (flowData[mapAttr.UIBindKey] != undefined) {
+
             $.each(flowData[mapAttr.UIBindKey], function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
         }
-    } else {
+        return operations;
+    }
+
+    //枚举类型的.
+    if (mapAttr.LGType == 1) {
+
         var enums = flowData.Sys_Enum;
         enums = $.grep(enums, function (value) {
             return value.EnumKey == mapAttr.UIBindKey;
@@ -492,10 +480,66 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
         $.each(enums, function (i, obj) {
             operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
         });
-
+        return operations;
     }
-    return operations;
+
+
+    //外部数据源类型 FrmGener.js.InitDDLOperation
+    if (mapAttr.LGType == 0) {
+
+        //如果是一个函数.
+        var fn;
+        try {
+            if (mapAttr.UIBindKey) {
+                fn = eval(mapAttr.UIBindKey);
+            }
+        } catch (e) {
+            alert(e);
+        }
+
+        if (typeof fn == "function") {
+            $.each(fn.call(), function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+            return operations;
+        }
+
+        if (typeof CommonHandler == "function") {
+            CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+                GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+            })
+            return "";
+        }
+
+        if (mapAttr.UIIsEnable == 0) {
+
+            alert('不可编辑');
+            operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
+            return operations;
+        }
+
+        if (flowData[mapAttr.KeyOfEn] != undefined) {
+            $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+            return operations;
+        }
+
+        if (flowData[mapAttr.UIBindKey] != undefined) {
+
+            $.each(flowData[mapAttr.UIBindKey], function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+            return operations;
+        }
+        return "";
+        //   alert('没有获得约定的数据源.');
+        alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+    }
+
+    alert(mapAttr.LGType + "没有判断.");
 }
+
 
 //填充默认数据
 function ConvertDefVal(flowData, defVal, keyOfEn) {
@@ -541,10 +585,12 @@ function ConvertDefVal(flowData, defVal, keyOfEn) {
 function getFormData(isCotainTextArea, isCotainUrlParam) {
 
     var formss = $('#divCCForm').serialize();
+
     var formArr = formss.split('&');
     var formArrResult = [];
     //获取CHECKBOX的值
     $.each(formArr, function (i, ele) {
+
         if (ele.split('=')[0].indexOf('CB_') == 0) {
             if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
                 ele = ele.split('=')[0] + '=1';
@@ -552,12 +598,26 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 ele = ele.split('=')[0] + '=0';
             }
         }
+
+        if (ele.split('=')[0].indexOf('DDL_') == 0) {
+
+            var ctrlID = ele.split('=')[0];
+
+            var item = $("select[name='" + ctrlID + "'] option[selected]").text();
+
+            var mystr = ctrlID.substring(4) + 'T=' + item;
+            formArrResult.push(mystr);
+        }
+
         formArrResult.push(ele);
     });
+
+    
 
     //获取表单中禁用的表单元素的值
     var disabledEles = $('#divCCForm :disabled');
     $.each(disabledEles, function (i, disabledEle) {
+
         var name = $(disabledEle).attr('id');
 
         switch (disabledEle.tagName.toUpperCase()) {
@@ -578,20 +638,21 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框        
+            //下拉框  
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+                formArrResult.push(name + 'T=' + $(disabledEle).children('option:checked').text());
                 break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());       
-            //对于复选下拉框获取值得方法       
-            //                if ($('[data-id=' + name + ']').length > 0) {       
-            //                    var val = $(disabledEle).val().join(',');       
-            //                    formArrResult.push(name + '=' + val);       
-            //                } else {       
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());       
-            //                }       
-            // break;       
-            //文本区域        
+            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());         
+            //对于复选下拉框获取值得方法         
+            //                if ($('[data-id=' + name + ']').length > 0) {         
+            //                    var val = $(disabledEle).val().join(',');         
+            //                    formArrResult.push(name + '=' + val);         
+            //                } else {         
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());         
+            //                }         
+            // break;         
+            //文本区域          
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -775,7 +836,17 @@ function execSend(toNode) {
                 return;
             }
 
-            if (data.indexOf('url@') == 0) { //发送成功时转到指定的URL 
+            if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
+
+                if (data.indexOf('Accepter') != 0) {
+
+                    //求出来 url里面的FK_Node=xxxx 
+                    var toNodeID = 101;
+                    initModal("sendAccepter", toNodeID);
+                    $('#returnWorkModal').modal().show();
+                    return;
+                }
+
                 var url = data;
                 url = url.replace('url@', '');
                 window.location.href = url;

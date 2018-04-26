@@ -2643,10 +2643,10 @@ namespace BP.WF
 
 
             // Sys_MapExt
-            sql = "SELECT No FROM Sys_MapDtl WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            sql = "SELECT MyPK FROM Sys_MapExt WHERE  " + Glo.MapDataLikeKey(this.No, "FK_MapData");
             MapExts mexts = new MapExts();
             mexts.RetrieveInSQL(sql);
-            ds.Tables.Add(mexts.ToDataTableField("Sys_MapDtl"));
+            ds.Tables.Add(mexts.ToDataTableField("Sys_MapExt"));
 
              
 
@@ -2658,64 +2658,72 @@ namespace BP.WF
              
 
             // Sys_MapFrame
-            sql = "SELECT * FROM Sys_MapFrame WHERE" + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_MapFrame";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_MapFrame WHERE" + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            MapFrames mfs = new MapFrames();
+            mfs.RetrieveInSQL("MyPK",sql);
+            ds.Tables.Add(mfs.ToDataTableField("Sys_MapFrame"));
+
+           
 
             // Sys_FrmLine.
-            sql = "SELECT * FROM Sys_FrmLine WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmLine";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmLine WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmLines frmls = new FrmLines();
+            frmls.RetrieveInSQL(sql);
+            ds.Tables.Add(frmls.ToDataTableField("Sys_FrmLine"));
+           
 
             // Sys_FrmLab.
-            sql = "SELECT * FROM Sys_FrmLab WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmLab";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmLab WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmLabs frmlabs = new FrmLabs();
+            frmlabs.RetrieveInSQL(sql);
+            ds.Tables.Add(frmlabs.ToDataTableField("Sys_FrmLab"));
+
+            
 
             // Sys_FrmEle.
-            sql = "SELECT * FROM Sys_FrmEle WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmEle";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmEle WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+
+            FrmEles frmEles = new FrmEles();
+            frmEles.RetrieveInSQL(sql);
+            ds.Tables.Add(frmEles.ToDataTableField("Sys_FrmEle"));
 
             // Sys_FrmLink.
-            sql = "SELECT * FROM Sys_FrmLink WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmLink";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmLink WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmLinks frmLinks = new FrmLinks();
+            frmLinks.RetrieveInSQL(sql);
+            ds.Tables.Add(frmLinks.ToDataTableField("Sys_FrmLink"));
 
             // Sys_FrmRB.
-            sql = "SELECT * FROM Sys_FrmRB WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmRB";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmRB WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmRBs frmRBs = new FrmRBs();
+            frmRBs.RetrieveInSQL(sql);
+            ds.Tables.Add(frmRBs.ToDataTableField("Sys_FrmRB"));
+
 
             // Sys_FrmImgAth.
-            sql = "SELECT * FROM Sys_FrmImgAth WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmImgAth";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmImgAth WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmImgAths frmIs = new FrmImgAths();
+            frmIs.RetrieveInSQL(sql);
+            ds.Tables.Add(frmIs.ToDataTableField("Sys_FrmImgAth"));
 
             // Sys_FrmImg.
-            sql = "SELECT * FROM Sys_FrmImg WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmImg";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmImg WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmImgs frmImgs = new FrmImgs();
+            frmImgs.RetrieveInSQL(sql);
+            ds.Tables.Add(frmImgs.ToDataTableField("Sys_FrmImg"));
+
 
             // Sys_FrmAttachment.
-            sql = "SELECT * FROM Sys_FrmAttachment WHERE FK_Node=0 AND " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmAttachment";
-            ds.Tables.Add(dt);
+            sql = "SELECT MyPK FROM Sys_FrmAttachment WHERE FK_Node=0 AND " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmAttachments frmaths = new FrmAttachments();
+            frmaths.RetrieveInSQL(sql);
+            ds.Tables.Add(frmaths.ToDataTableField("Sys_FrmAttachment"));
 
             // Sys_FrmEvent.
-            sql = "SELECT * FROM Sys_FrmEvent WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_FrmEvent";
-            ds.Tables.Add(dt);
+            sql = "SELECT OID FROM Sys_FrmEvent WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            FrmEvents frmevens = new FrmEvents();
+            frmevens.RetrieveInSQL(sql);
+            ds.Tables.Add(frmevens.ToDataTableField("Sys_FrmEvent"));
             return ds;
         }
 

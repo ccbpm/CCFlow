@@ -494,7 +494,7 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
                 fn = eval(mapAttr.UIBindKey);
             }
         } catch (e) {
-            alert(e);
+           // alert(e);
         }
 
         if (typeof fn == "function") {
@@ -606,6 +606,8 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             var item = $("select[name='" + ctrlID + "'] option[selected]").text();
 
             var mystr = ctrlID.substring(4) + 'T=' + item;
+
+
             formArrResult.push(mystr);
         }
 

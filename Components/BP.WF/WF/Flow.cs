@@ -2615,14 +2615,14 @@ namespace BP.WF
              
 
             // Sys_MapAttr.
-            sql = "SELECT MyPK FROM Sys_MapAttr WHERE  " + Glo.MapDataLikeKey(this.No, "FK_MapData") + " ORDER BY FK_MapData,Idx";
+            sql = "SELECT MyPK FROM Sys_MapAttr WHERE  " + Glo.MapDataLikeKey(this.No, "FK_MapData");
             MapAttrs attrs = new MapAttrs();
             attrs.RetrieveInSQL(MapAttrAttr.MyPK, sql);
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
              
 
             // Sys_EnumMain
-            sql = "SELECT * FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + ")";
+            sql = "SELECT No FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + ")";
             SysEnumMains ses = new SysEnumMains();
             ses.RetrieveInSQL(SysEnumMainAttr.No, sql);
             ds.Tables.Add(ses.ToDataTableField("Sys_EnumMain"));
@@ -2720,7 +2720,7 @@ namespace BP.WF
             ds.Tables.Add(frmaths.ToDataTableField("Sys_FrmAttachment"));
 
             // Sys_FrmEvent.
-            sql = "SELECT OID FROM Sys_FrmEvent WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            sql = "SELECT MyPK FROM Sys_FrmEvent WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
             FrmEvents frmevens = new FrmEvents();
             frmevens.RetrieveInSQL(sql);
             ds.Tables.Add(frmevens.ToDataTableField("Sys_FrmEvent"));

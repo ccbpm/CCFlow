@@ -215,6 +215,21 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     //外部数据源类型.
     if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1) {
 
+        if (mapAttr.UIIsEnable == 0) {
+            var ctrl = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type=hidden  class='form-control' type='text'/>";
+
+
+           //console.log(flowData);
+           // defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn + "Text");
+            defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn + "T");
+
+            if (defValue == '' || defValue == null)
+                defValue = '无';
+
+            ctrl += "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "Text'  value='" + defValue + "' disabled='disabled'   class='form-control' type='text'/>";
+            return ctrl;
+        }
+
         return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 

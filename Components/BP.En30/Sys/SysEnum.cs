@@ -26,10 +26,6 @@ namespace BP.Sys
 		/// Language
 		/// </summary>
 		public const string Lang="Lang";
-        ///// <summary>
-        ///// 风格
-        ///// </summary>
-        //public const string Style="Style";
 	}
 	/// <summary>
 	/// SysEnum

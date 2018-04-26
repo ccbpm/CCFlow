@@ -2392,6 +2392,7 @@ namespace BP.WF
 
             string path = this.No + "." + name;
             path = PathFlowDesc + path + "\\";
+
             this.DoExpFlowXmlTemplete(path);
 
             // name = path + name + "." + this.Ver.Replace(":", "_") + ".xml";
@@ -2494,6 +2495,238 @@ namespace BP.WF
 
             // 流程信息。
             string sql = "SELECT * FROM WF_Flow WHERE No='" + this.No + "'";
+
+            Flow fl = new Flow(this.No);
+            DataTable dtFlow = fl.ToDataTableField("WF_Flow");
+            dtFlow.TableName = "WF_Flow";
+            ds.Tables.Add(dtFlow);
+
+            // 节点信息
+            Nodes nds = new Nodes(this.No);
+            DataTable dtNodes = nds.ToDataTableField("WF_Node");
+            ds.Tables.Add(dtNodes);
+
+            // 单据模版. 
+            BillTemplates tmps = new BillTemplates(this.No);
+            string pks = "";
+            foreach (BillTemplate tmp in tmps)
+            {
+                try
+                {
+                    if (path != null)
+                        System.IO.File.Copy(SystemConfig.PathOfDataUser + @"\CyclostyleFile\" + tmp.No + ".rtf", path + "\\" + tmp.No + ".rtf", true);
+                }
+                catch
+                {
+                    pks += "@" + tmp.PKVal;
+                    tmp.Delete();
+                }
+            }
+            tmps.Remove(pks);
+            ds.Tables.Add(tmps.ToDataTableField("WF_BillTemplate"));
+
+
+
+            string sqlin = "SELECT NodeID FROM WF_Node WHERE fk_flow='" + this.No + "'";
+
+            // 条件信息
+            Conds cds = new Template.Conds(this.No);
+            ds.Tables.Add(cds.ToDataTableField("WF_Cond") );
+
+
+            //// 转向规则.
+            //sql = "SELECT * FROM WF_TurnTo WHERE FK_Flow='" + this.No + "'";
+            //dt = DBAccess.RunSQLReturnTable(sql);
+            //dt.TableName = "WF_TurnTo";
+            //ds.Tables.Add(dt);
+
+            // 节点与表单绑定.
+            FrmNodes fns = new Template.FrmNodes();
+            fns.Retrieve(FrmNodeAttr.FK_Flow, this.No);
+            ds.Tables.Add(fns.ToDataTableField("WF_FrmNode"));
+
+
+            // 表单方案.
+            FrmFields ffs = new Template.FrmFields();
+            ffs.Retrieve(FrmFieldAttr.FK_Flow, this.No);
+            ds.Tables.Add(ffs.ToDataTableField("Sys_FrmSln"));
+
+            // 方向
+            Directions dirs = new Directions();
+            dirs.Retrieve(DirectionAttr.FK_Flow, this.No);
+            ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
+
+            // 流程标签.
+            LabNotes labs = new LabNotes(this.No);
+            ds.Tables.Add(labs.ToDataTableField("WF_LabNote"));
+
+            // 可退回的节点。
+            NodeReturns nrs = new NodeReturns();
+            nrs.RetrieveInSQL(NodeReturnAttr.FK_Node, sqlin);
+            ds.Tables.Add(nrs.ToDataTableField("WF_NodeReturn"));
+
+             
+
+            // 工具栏。
+            NodeToolbars tools = new NodeToolbars();
+            tools.RetrieveInSQL(NodeToolbarAttr.FK_Node, sqlin);
+            ds.Tables.Add(tools.ToDataTableField("WF_NodeToolbar"));
+
+             
+            // 节点与部门。
+            NodeDepts ndepts = new NodeDepts();
+            ndepts.RetrieveInSQL(NodeDeptAttr.FK_Node, sqlin);
+            ds.Tables.Add(ndepts.ToDataTableField("WF_NodeDept"));
+             
+
+            // 节点与岗位权限。
+            NodeStations nss = new NodeStations();
+            nss.RetrieveInSQL(NodeStationAttr.FK_Node, sqlin);
+            ds.Tables.Add(nss.ToDataTableField("WF_NodeStation"));
+             
+            // 节点与人员。
+            NodeEmps nes = new NodeEmps();
+            nes.RetrieveInSQL(NodeEmpAttr.FK_Node, sqlin);
+            ds.Tables.Add(nes.ToDataTableField("WF_NodeEmp"));
+              
+
+            // 抄送人员。
+            CCEmps ces = new CCEmps();
+            ces.RetrieveInSQL(CCEmpAttr.FK_Node, sqlin);
+            ds.Tables.Add(ces.ToDataTableField("WF_CCEmp"));
+             
+
+            // 抄送部门。
+            CCDepts cdds = new CCDepts();
+            cdds.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
+            ds.Tables.Add(cdds.ToDataTableField("WF_CCDept"));
+          
+
+            // 延续子流程。
+            NodeYGFlows fls = new Template.NodeYGFlows();
+            fls.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
+            ds.Tables.Add(fls.ToDataTableField("WF_NodeSubFlow"));
+
+            //表单信息，包含从表.
+            sql = "SELECT No FROM Sys_MapData WHERE " + Glo.MapDataLikeKey(this.No, "No");
+            MapDatas mds = new MapDatas();
+            mds.RetrieveInSQL(MapDataAttr.No, sql);
+            ds.Tables.Add(mds.ToDataTableField("Sys_MapData"));
+             
+
+            // Sys_MapAttr.
+            sql = "SELECT MyPK FROM Sys_MapAttr WHERE  " + Glo.MapDataLikeKey(this.No, "FK_MapData") + " ORDER BY FK_MapData,Idx";
+            MapAttrs attrs = new MapAttrs();
+            attrs.RetrieveInSQL(MapAttrAttr.MyPK, sql);
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+             
+
+            // Sys_EnumMain
+            sql = "SELECT * FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + ")";
+            SysEnumMains ses = new SysEnumMains();
+            ses.RetrieveInSQL(SysEnumMainAttr.No, sql);
+            ds.Tables.Add(ses.ToDataTableField("Sys_EnumMain"));
+             
+
+            // Sys_Enum
+            sql = "SELECT MyPK FROM Sys_Enum WHERE EnumKey IN ( SELECT No FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + " ) )";
+            SysEnums sesDtl = new SysEnums();
+            sesDtl.RetrieveInSQL("MyPK", sql);
+            ds.Tables.Add(sesDtl.ToDataTableField("Sys_Enum"));
+              
+
+            // Sys_MapDtl
+            sql = "SELECT No FROM Sys_MapDtl WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            MapDtls mdtls = new MapDtls();
+            mdtls.RetrieveInSQL(sql);
+            ds.Tables.Add(mdtls.ToDataTableField("Sys_MapDtl"));
+
+
+            // Sys_MapExt
+            sql = "SELECT No FROM Sys_MapDtl WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            MapExts mexts = new MapExts();
+            mexts.RetrieveInSQL(sql);
+            ds.Tables.Add(mexts.ToDataTableField("Sys_MapDtl"));
+
+             
+
+            // Sys_GroupField
+            sql = "SELECT OID FROM Sys_GroupField WHERE   " + Glo.MapDataLikeKey(this.No, "FrmID"); // +" " + Glo.MapDataLikeKey(this.No, "EnName");
+            GroupFields gfs = new GroupFields();
+            gfs.RetrieveInSQL(sql);
+            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
+             
+
+            // Sys_MapFrame
+            sql = "SELECT * FROM Sys_MapFrame WHERE" + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapFrame";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmLine.
+            sql = "SELECT * FROM Sys_FrmLine WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmLine";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmLab.
+            sql = "SELECT * FROM Sys_FrmLab WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmLab";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmEle.
+            sql = "SELECT * FROM Sys_FrmEle WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmEle";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmLink.
+            sql = "SELECT * FROM Sys_FrmLink WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmLink";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmRB.
+            sql = "SELECT * FROM Sys_FrmRB WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmRB";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmImgAth.
+            sql = "SELECT * FROM Sys_FrmImgAth WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmImgAth";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmImg.
+            sql = "SELECT * FROM Sys_FrmImg WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmImg";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmAttachment.
+            sql = "SELECT * FROM Sys_FrmAttachment WHERE FK_Node=0 AND " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmAttachment";
+            ds.Tables.Add(dt);
+
+            // Sys_FrmEvent.
+            sql = "SELECT * FROM Sys_FrmEvent WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_FrmEvent";
+            ds.Tables.Add(dt);
+            return ds;
+        }
+
+
+        public DataSet GetFlow2017(string path)
+        {
+            // 把所有的数据都存储在这里。
+            DataSet ds = new DataSet();
+
+            // 流程信息。
+            string sql = "SELECT * FROM WF_Flow WHERE No='" + this.No + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Flow";
             ds.Tables.Add(dt);
@@ -2524,18 +2757,7 @@ namespace BP.WF
             ds.Tables.Add(tmps.ToDataTableField("WF_BillTemplate"));
 
             string sqlin = "SELECT NodeID FROM WF_Node WHERE fk_flow='" + this.No + "'";
-
-            //// 独立表单
-            //sql = "SELECT * FROM WF_FlowForm WHERE FK_Flow='" + this.No + "'";
-            //dt = DBAccess.RunSQLReturnTable(sql);
-            //dt.TableName = "WF_FlowForm";
-            //ds.Tables.Add(dt);
-
-            //// 节点表单权限
-            //sql = "SELECT * FROM WF_NodeForm WHERE FK_Node IN (" + sqlin + ")";
-            //dt = DBAccess.RunSQLReturnTable(sql);
-            //dt.TableName = "WF_NodeForm";
-            //ds.Tables.Add(dt);
+ 
 
             // 条件信息
             sql = "SELECT * FROM WF_Cond WHERE FK_Flow='" + this.No + "'";
@@ -2566,12 +2788,6 @@ namespace BP.WF
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Direction";
             ds.Tables.Add(dt);
-
-            //// 应用设置 FAppSet
-            //sql = "SELECT * FROM WF_FAppSet WHERE FK_Flow='" + this.No + "'";
-            //dt = DBAccess.RunSQLReturnTable(sql);
-            //dt.TableName = "WF_FAppSet";
-            //ds.Tables.Add(dt);
 
             // 流程标签.
             LabNotes labs = new LabNotes(this.No);
@@ -2632,29 +2848,7 @@ namespace BP.WF
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_NodeSubFlow";
             ds.Tables.Add(dt);
-
-            //// 流程报表。
-            //WFRpts rpts = new WFRpts(this.No);
-            //// rpts.SaveToXml(path + "WFRpts.xml");
-            //ds.Tables.Add(rpts.ToDataTableField("WF_Rpt"));
-
-            //// 流程报表属性
-            //RptAttrs rptAttrs = new RptAttrs();
-            //rptAttrs.RetrieveAll();
-            //ds.Tables.Add(rptAttrs.ToDataTableField("RptAttrs"));
-
-            //// 流程报表访问权限。
-            //RptStations rptStations = new RptStations(this.No);
-            //rptStations.RetrieveAll();
-            ////  rptStations.SaveToXml(path + "RptStations.xml");
-            //ds.Tables.Add(rptStations.ToDataTableField("RptStations"));
-
-            //// 流程报表人员访问权限。
-            //RptEmps rptEmps = new RptEmps(this.No);
-            //rptEmps.RetrieveAll();
-
-            // rptEmps.SaveToXml(path + "RptEmps.xml");
-            // ds.Tables.Add(rptEmps.ToDataTableField("RptEmps"));
+          
 
             int flowID = int.Parse(this.No);
             sql = "SELECT * FROM Sys_MapData WHERE " + Glo.MapDataLikeKey(this.No, "No");

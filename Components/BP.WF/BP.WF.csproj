@@ -375,7 +375,6 @@
     <Compile Include="Template\CCStation.cs" />
     <Compile Include="Template\CCList.cs" />
     <Compile Include="Template\Cond.cs" />
-    <Compile Include="Template\TurnTo.cs" />
     <Compile Include="Template\BtnLab.cs">
       <SubType>Code</SubType>
     </Compile>

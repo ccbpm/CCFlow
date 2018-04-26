@@ -5051,7 +5051,7 @@ namespace BP.En
                     if (val == null)
                         continue;
 
-                    /*如果是外键 就要去掉左右空格。
+                    /*如果是外键 就要去掉左右空格
                      *  */
                     if (attr.MyFieldType == FieldType.FK
                         || attr.MyFieldType == FieldType.PKFK)

@@ -737,42 +737,39 @@ namespace BP.Sys
                 dt = ens.ToDataTableField(uiBindKey);
                 return dt;
             }
-            else
+
+            //added by liuxc,2017-09-11,增加动态SQL查询类型的处理，此种类型没有固定的数据表或视图
+            SFTable sf = new SFTable();
+            sf.No = uiBindKey;
+            if (sf.RetrieveFromDBSources() != 0)
+                dt = sf.GenerHisDataTable;
+
+            if (dt == null)
+                dt = new DataTable();
+
+            #region 把列名做成标准的.
+            foreach (DataColumn col in dt.Columns)
             {
-                //added by liuxc,2017-09-11,增加动态SQL查询类型的处理，此种类型没有固定的数据表或视图
-                SFTable sf = new SFTable();
-                sf.No = uiBindKey;
-                if (sf.RetrieveFromDBSources() != 0)
-                    dt = sf.GenerHisDataTable;
-
-                if (dt == null)
-                    dt = new DataTable();
-
-                #region 把列名做成标准的.
-                foreach (DataColumn col in dt.Columns)
+                string colName = col.ColumnName.ToLower();
+                switch (colName)
                 {
-                    switch (col.ColumnName.ToLower())
-                    {
-                        case "no":
-                            col.ColumnName = "No";
-                            break;
-                        case "name":
-                            col.ColumnName = "Name";
-                            break;
-                        case "parentno":
-                            col.ColumnName = "ParentNo";
-                            break;
-                        default:
-                            break;
-                    }
+                    case "no":
+                        col.ColumnName = "No";
+                        break;
+                    case "name":
+                        col.ColumnName = "Name";
+                        break;
+                    case "parentno":
+                        col.ColumnName = "ParentNo";
+                        break;
+                    default:
+                        break;
                 }
-                #endregion 把列名做成标准的.
-
-
-                dt.TableName = uiBindKey;
-                return dt;
-            
             }
+            #endregion 把列名做成标准的.
+
+            dt.TableName = uiBindKey;
+            return dt;
         }
         /// <summary>
         /// 获取数据源

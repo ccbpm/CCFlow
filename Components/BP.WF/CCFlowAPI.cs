@@ -60,7 +60,6 @@ namespace BP.WF
                 wk.RetrieveFromDBSources();
                 wk.ResetDefaultVal();
 
-
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
                     wk, null);
@@ -412,24 +411,25 @@ namespace BP.WF
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
-                    if (lgType.Equals("2") ==false)
-                        continue;
-
-                    string UIIsEnable = dr["UIVisible"].ToString();
-                    if (UIIsEnable.Equals("0")==true)
-                        continue;
-
                     string uiBindKey = dr["UIBindKey"].ToString();
+
                     if (DataType.IsNullOrEmpty(uiBindKey) == true)
-                    {
-                        string myPK = dr["MyPK"].ToString();
-                        /*如果是空的*/
-                     //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
-                    }
+                        continue; //为空就continue.
+
+                    if (lgType.Equals("1")==true)
+                        continue; //枚举值就continue;
+
+                    string uiIsEnable = dr["UIIsEnable"].ToString();
+                    if (uiIsEnable.Equals("0") == true && lgType.Equals("1") == true)
+                        continue; //如果是外键，并且是不可以编辑的状态.
+
+                    if (uiIsEnable.Equals("1") == true && lgType.Equals("0") == true)
+                        continue; //如果是外部数据源，并且是不可以编辑的状态.
 
                     // 检查是否有下拉框自动填充。
                     string keyOfEn = dr["KeyOfEn"].ToString();
                     string fk_mapData = dr["FK_MapData"].ToString();
+
 
                     #region 处理下拉框数据范围. for 小杨.
                     me = mes.GetEntityByKey(MapExtAttr.ExtType,  MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;

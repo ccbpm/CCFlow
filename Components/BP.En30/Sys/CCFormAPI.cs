@@ -234,9 +234,9 @@ namespace BP.Sys
                 case SrcType.CreateTable:
                 case SrcType.TableOrView:
                 case SrcType.BPClass:
-                case SrcType.SQL:
                     attr.LGType = FieldTypeS.FK;
-                    break;             
+                    break;
+                case SrcType.SQL: //是sql模式.
                 default:
                     attr.LGType = FieldTypeS.Normal;
                     break;

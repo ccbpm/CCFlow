@@ -1527,11 +1527,11 @@ namespace BP.WF.HttpHandler
                         return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
                     }
 
-                    if (this.currND.CondModel != CondModel.SendButtonSileSelect)
-                    {
-                        currND.CondModel = CondModel.SendButtonSileSelect;
-                        currND.Update();
-                    }
+                    //if (this.currND.CondModel != CondModel.SendButtonSileSelect)
+                    //{
+                    //    currND.CondModel = CondModel.SendButtonSileSelect;
+                    //    currND.Update();
+                    //}
 
                     return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。"+ex.Message;
                 }
@@ -1578,7 +1578,7 @@ namespace BP.WF.HttpHandler
                         }
                     }
                 }
-                return "err@发送工作出现错误" + ex.Message;
+                return ex.Message;
             }
         }
         /// <summary>

@@ -387,6 +387,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_AddEmps()
         {
+
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
                 return "err@您不是会签主持人，您不能执行该操作。";
@@ -397,161 +398,77 @@ namespace BP.WF.HttpHandler
                  GenerWorkerListAttr.FK_Node, this.FK_Node);
 
             Node nd = new Node(this.FK_Node);
-
             if (num == 0)
                 return "err@没有查询到当前人员的工作列表数据.";
 
-            //是否有拼音字段？
-            bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
-            string sql = "";
+            string fk_emp = this.GetRequestVal("AddEmps");
+            Emp emp = new Emp(fk_emp);
 
-            #region 求人员集合.
-            Emps emps = new Emps();
-            string toEmpStrs = this.GetRequestVal("AddEmps");
-            toEmpStrs = toEmpStrs.Replace(",", ";");
-            string[] toEmps = toEmpStrs.Split(';');
-            string infos = "";
-            foreach (string empStr in toEmps)
-            {
-                if (DataType.IsNullOrEmpty(empStr) == true)
-                    continue;
-
-                if (isPinYin == true)
-                {
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No = '" + empStr + "' OR a.NAME = '" + empStr + "'  OR a.PinYin LIKE '%," + empStr + "%,')";
-
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' and ROWNUM <=12 ";
-
-                }
-                else
-                {
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
-
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "' AND ROWNUM  <= 12 ";
-
-
-                }
-
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count > 12 || dt.Rows.Count == 0)
-                    continue;
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    string empNo = dr[0].ToString();
-                    string empName = dr[1].ToString();
-
-                    //查查是否存在队列里？
-                    num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, empNo,
+            //查查是否存在队列里？
+            num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
                     GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
-                    if (num == 1)
-                    {
-                        infos += "\t\n@人员[" + empStr + "]已经在队列里.";
-                        continue;
-                    }
 
-                    //增加到队列里面.
-                    emps.AddEntity(new Emp(empNo));
-                }
+            if (num == 1)
+            {
+                return "err@人员[" + emp.No + "," + emp.Name + "]已经在队列里.";
             }
 
-            if (infos != "" && emps.Count != 0)
-                return "info@" + infos;
-
-            if (emps.Count == 0)
-                return "info@你输入的人员编号错误, 执行信息:" + infos;
-            #endregion 求人员集合.
-
-            //把集合都放入到这里.
-            GenerWorkerLists gwls = new GenerWorkerLists();
 
             //查询出来其他列的数据.
             gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
                 GenerWorkerListAttr.WorkID, this.WorkID,
                 GenerWorkerListAttr.FK_Node, this.FK_Node);
 
-            //遍历人员集合.
-            foreach (Emp item in emps)
+            gwlOfMe.FK_Emp = emp.No;
+            gwlOfMe.FK_EmpText = emp.Name;
+            gwlOfMe.IsPassInt = -1; //设置不可以用.
+            gwlOfMe.FK_Dept = emp.FK_Dept;
+            gwlOfMe.FK_DeptT = emp.FK_DeptText; //部门名称.
+            gwlOfMe.IsRead = false;
+
+            #region 计算会签时间.
+            if (nd.HisCHWay == CHWay.None)
             {
-                gwlOfMe.FK_Emp = item.No;
-                gwlOfMe.FK_EmpText = item.Name;
-                gwlOfMe.IsPassInt = -1; //设置不可以用.
-                gwlOfMe.FK_Dept = item.FK_Dept;
-                gwlOfMe.FK_DeptT = item.FK_DeptText; //部门名称.
-                gwlOfMe.IsRead = false;
-
-                #region 计算会签时间.
-                if (nd.HisCHWay == CHWay.None)
-                {
-                    gwlOfMe.SDT = "无"; 
-                }
-                else
-                {
-                    //给会签人设置应该完成日期. 考虑到了节假日.                
-                    DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
-                         nd.TSpanMinues, nd.TWay);
-                    //应完成日期.
-                    gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
-                }
-
-                //求警告日期.
-                DateTime dtOfWarning = DateTime.Now;
-                if (nd.WarningDay == 0)
-                {
-                  //  dtOfWarning = "无";
-                }
-                else
-                {
-                    //计算警告日期。
-                    // 增加小时数. 考虑到了节假日.
-                    dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, nd.TWay);
-                }
-                gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
-                #endregion 计算会签时间.
-
-                gwlOfMe.Sender = BP.Web.WebUser.Name; //发送人为当前人.
-                gwlOfMe.IsHuiQian = true;
-                gwlOfMe.Insert(); //插入作为待办.
-                infos += "\t\n@" + item.No + "  " + item.Name;
-
-                gwlOfMe.Retrieve();
-
-                GenerWorkerList gwl = new GenerWorkerList();
-                gwl.Copy(gwlOfMe);
-                gwls.AddEntity(gwl);
-
-                //发送消息.
-                BP.WF.Dev2Interface.Port_SendMsg(item.No,
-                    "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + item.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwl.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+                gwlOfMe.SDT = "无";
+            }
+            else
+            {
+                //给会签人设置应该完成日期. 考虑到了节假日.                
+                DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
+                     nd.TSpanMinues, nd.TWay);
+                //应完成日期.
+                gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
             }
 
-            //把加签的人员显示到正在处理人员列表中.
-            foreach (GenerWorkerList item in gwls)
+            //求警告日期.
+            DateTime dtOfWarning = DateTime.Now;
+            if (nd.WarningDay == 0)
             {
-                if (gwf.TodoEmps.Contains(item.FK_EmpText + ";") == false)
-                    gwf.TodoEmps += item.FK_EmpText + ";";
+                //  dtOfWarning = "无";
             }
+            else
+            {
+                //计算警告日期。
+                // 增加小时数. 考虑到了节假日.
+                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, nd.TWay);
+            }
+            gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
+            #endregion 计算会签时间.
+
+            gwlOfMe.Sender = BP.Web.WebUser.Name; //发送人为当前人.
+            gwlOfMe.IsHuiQian = true;
+            gwlOfMe.Insert(); //插入作为待办.
+
+            //发送消息.
+            BP.WF.Dev2Interface.Port_SendMsg(emp.No,
+                "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+
+            if (gwf.TodoEmps.Contains(emp.Name + ";") == false)
+                gwf.TodoEmps += emp.Name + ";";
+
             gwf.Update();
 
-
-            //赋值部门名称。
-            DataTable mydt = gwls.ToDataTableField();
-            mydt.Columns.Add("FK_DeptT");
-            foreach (DataRow dr in mydt.Rows)
-            {
-                string fk_emp = dr["FK_Emp"].ToString();
-                foreach (GenerWorkerList item in gwls)
-                {
-                    if (item.FK_Emp == fk_emp)
-                        dr["FK_DeptT"] = item.FK_DeptT;
-                }
-            }
-
-            return BP.Tools.Json.ToJson(mydt);
+            return "增加成功.";
         }
         #endregion
 
@@ -617,7 +534,8 @@ namespace BP.WF.HttpHandler
             DBAccess.RunSQL(sql);
 
             //执行会签,写入日志.
-            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, ActionType.HuiQian, "执行会签", null);
+            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian,
+                ActionType.HuiQian, "执行会签", null);
             
             string str = "";
             if (nd.TodolistModel == TodolistModel.TeamupGroupLeader)

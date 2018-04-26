@@ -166,15 +166,7 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF wfPage = new WF(this.context);
           return  wfPage.Runing_Init();
         }
-        /// <summary>
-        /// 旧版本
-        /// </summary>
-        /// <returns></returns>
-        public string Todolist_Init111()
-        {
-            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
-            return wfPage.Todolist_Init();
-        }
+        
         /// <summary>
         /// 新版本.
         /// </summary>

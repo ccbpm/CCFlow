@@ -514,7 +514,7 @@ namespace BP.WF
             Conds dcsAll = new Conds();
             dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.PRI);
             if (dcsAll.Count == 0)
-                throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件");
+                throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件,有分支的地方必须有方向条件.");
 
             #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
             Nodes myNodes = new Nodes();
@@ -540,7 +540,7 @@ namespace BP.WF
 
                 if (dcs.Count == 0)
                 {
-                    throw new Exception("@流程设计错误：从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
+                   // throw new Exception("@流程设计错误：从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
                     continue;
                 }
 
@@ -549,7 +549,24 @@ namespace BP.WF
             }
             #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
 
-            // 如果没有找到.
+            // 如果没有找到,就找到没有设置方向条件的节点,没有设置方向条件的节点是默认同意的.
+            if (myNodes.Count == 0)
+            {
+                foreach (Node nd in nds)
+                {
+                    Conds dcs = new Conds();
+                    foreach (Cond dc in dcsAll)
+                    {
+                        if (dc.ToNodeID != nd.NodeID)
+                            continue;
+                        dcs.AddEntity(dc);
+                    }
+
+                    if (dcs.Count == 0)
+                        return nd;
+                }
+            }
+
             if (myNodes.Count == 0)
                 throw new Exception("@当前用户(" + BP.Web.WebUser.Name + "),定义节点的方向条件错误:从{" + currNode.NodeID + currNode.Name + "}节点到其它节点,定义的所有转向条件都不成立.");
 

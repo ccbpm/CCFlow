@@ -179,7 +179,7 @@ namespace BP.WF
                 }
                  
                 //增加转向下拉框数据.
-                if (nd.CondModel == CondModel.SendButtonSileSelect)
+                if (nd.CondModel == CondModel.SendButtonSileSelect )
                 {
                     if (nd.IsStartNode == true || gwf.TodoEmps.Contains(WebUser.No + ",") == true)
                     {

@@ -194,9 +194,18 @@ namespace BP.WF.Template
                     if (i == 0)
                     {
                         if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected)
-                            throw new Exception("@请选择下一步骤工作(" + town.HisNode.Name + ")接受人员。");
+                        {
+                            Node toNode = this.town.HisNode;
+                            Selector select = new Selector(toNode.NodeID);
+                            if (select.SelectorModel == SelectorModel.GenerUserSelecter)
+                                throw new Exception("url@./WorkOpt/AccepterOfGener.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                            else
+                                throw new Exception("url@./WorkOpt/AccepterGener.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                        }
                         else
+                        {
                             throw new Exception("@流程设计错误，请重写FEE，然后为节点(" + town.HisNode.Name + ")设置接受人员，详细请参考cc流程设计手册。");
+                        }
                     }
 
                     //插入里面.

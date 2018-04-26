@@ -1876,13 +1876,33 @@ namespace BP.WF
 
                 if (dcs.Count == 0)
                 {
-                    throw new Exception("@worknode 流程设计错误：流程{" + currNode.FlowName + "}从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
+                    continue;
+                    //throw new Exception("@worknode 流程设计错误：流程{" + currNode.FlowName + "}从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
                 }
 
                 if (dcs.IsPass) // 如果通过了.
                     myNodes.AddEntity(nd);
             }
             #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
+
+
+            // 如果没有找到,就找到没有设置方向条件的节点,没有设置方向条件的节点是默认同意的.
+            if (myNodes.Count == 0)
+            {
+                foreach (Node nd in nds)
+                {
+                    Conds dcs = new Conds();
+                    foreach (Cond dc in dcsAll)
+                    {
+                        if (dc.ToNodeID != nd.NodeID)
+                            continue;
+                        dcs.AddEntity(dc);
+                    }
+
+                    if (dcs.Count == 0)
+                        return nd;
+                }
+            }
 
             // 如果没有找到.
             if (myNodes.Count == 0)
@@ -5055,7 +5075,7 @@ namespace BP.WF
             {
                 if (item.IsPassInt == 0 || item.IsPassInt == 90)
                 {
-                    if (item.FK_Emp != WebUser.No)
+                    if (item.FK_Emp.Equals(WebUser.No)==false)
                         todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
                     num++;
                 }
@@ -5086,7 +5106,7 @@ namespace BP.WF
             //把当前的待办设置已办，并且提示未处理的人。
             foreach (GenerWorkerList gwl in gwls)
             {
-                if (gwl.FK_Emp != WebUser.No)
+                if (gwl.FK_Emp.Equals(WebUser.No)==false)
                     continue;
 
                 //设置当前不可以用.

@@ -394,6 +394,7 @@ function returnWorkWindowClose(data) {
 
     if (data == "" || data == "取消") {
         $('#returnWorkModal').modal('hide');
+        setToobarEnable();
         return;
     }
 
@@ -840,10 +841,10 @@ function execSend(toNode) {
 
             if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
 
-                if (data.indexOf('Accepter') != 0) {
+                if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener')==-1) {
 
                     //求出来 url里面的FK_Node=xxxx 
-                    var toNodeID = 101;
+                    var toNodeID = 101
             		var params = data.split("&");
             		for(var i=0;i<params.length;i++){
             			if(params[i].indexOf("ToNode")==-1)
@@ -853,12 +854,12 @@ function execSend(toNode) {
             				break;
             			}
             		}
-                   
-                    initModal("ToNode", toNodeID);
+                   var toNode = new Entity("BP.WF.Node",toNodeID)
+                    initModal("sendAccepter", toNode);
                     $('#returnWorkModal').modal().show();
                     return;
                 }
-
+                
                 var url = data;
                 url = url.replace('url@', '');
                 window.location.href = url;
@@ -1732,7 +1733,7 @@ function initModal(modalType, toNode) {
             //发送选择接收节点和接收人      
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
-                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.NodeID + "&s=" + Math.random()
                 break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");

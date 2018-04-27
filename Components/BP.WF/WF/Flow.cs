@@ -2774,10 +2774,10 @@ namespace BP.WF
             ds.Tables.Add(dt);
 
             // 转向规则.
-            sql = "SELECT * FROM WF_TurnTo WHERE FK_Flow='" + this.No + "'";
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "WF_TurnTo";
-            ds.Tables.Add(dt);
+            //sql = "SELECT * FROM WF_TurnTo WHERE FK_Flow='" + this.No + "'";
+            //dt = DBAccess.RunSQLReturnTable(sql);
+            //dt.TableName = "WF_TurnTo";
+            //ds.Tables.Add(dt);
 
             // 节点与表单绑定.
             sql = "SELECT * FROM WF_FrmNode WHERE FK_Flow='" + this.No + "'";
@@ -6163,7 +6163,7 @@ namespace BP.WF
 
             sql += "@ DELETE FROM WF_NodeToolbar WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
             sql += "@ DELETE FROM WF_SelectAccper WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-            sql += "@ DELETE FROM WF_TurnTo WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            //sql += "@ DELETE FROM WF_TurnTo WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             //删除侦听.
             // sql += "@ DELETE FROM WF_Listen WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";

@@ -5233,37 +5233,6 @@ namespace BP.WF
                             dir.Insert();
                         }
                         break;
-                    case "WF_TurnTo": //转向规则.
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            TurnTo fs = new TurnTo();
-
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-                                switch (dc.ColumnName.ToLower())
-                                {
-                                    case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                fs.SetValByKey(dc.ColumnName, val);
-                            }
-                            fs.FK_Flow = fl.No;
-                            fs.Save();
-                        }
-                        break;
-                    case "WF_FAppSet": //FAppSets.xml。
-                        continue;
                     case "WF_LabNote": //LabNotes.xml。
                         idx = 0;
                         foreach (DataRow dr in dt.Rows)

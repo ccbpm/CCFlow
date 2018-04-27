@@ -1477,36 +1477,36 @@ namespace BP.WF.HttpHandler
                         myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
                         return "url@" + myurl;
                     case TurnToDeal.TurnToByCond:
-                        TurnTos tts = new TurnTos(this.FK_Flow);
-                        if (tts.Count == 0)
-                        {
-                            BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", "您没有设置节点完成后的转向条件。", "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
-                            throw new Exception("@您没有设置节点完成后的转向条件。");
-                        }
+                        //TurnTos tts = new TurnTos(this.FK_Flow);
+                        //if (tts.Count == 0)
+                        //{
+                        //    BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", "您没有设置节点完成后的转向条件。", "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                        //    throw new Exception("@您没有设置节点完成后的转向条件。");
+                        //}
 
-                        foreach (TurnTo tt in tts)
-                        {
-                            tt.HisWork = currNode.HisWork;
-                            if (tt.IsPassed == true)
-                            {
-                                string url = tt.TurnToURL.Clone().ToString();
-                                if (url.Contains("?") == false)
-                                    url += "?1=1";
-                                Attrs attrs = currNode.HisWork.EnMap.Attrs;
-                                Work hisWK1 = currNode.HisWork;
-                                foreach (Attr attr in attrs)
-                                {
-                                    if (url.Contains("@") == false)
-                                        break;
-                                    url = url.Replace("@" + attr.Key, hisWK1.GetValStrByKey(attr.Key));
-                                }
-                                if (url.Contains("@"))
-                                    throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + url);
+                        //foreach (TurnTo tt in tts)
+                        //{
+                        //    tt.HisWork = currNode.HisWork;
+                        //    if (tt.IsPassed == true)
+                        //    {
+                        //        string url = tt.TurnToURL.Clone().ToString();
+                        //        if (url.Contains("?") == false)
+                        //            url += "?1=1";
+                        //        Attrs attrs = currNode.HisWork.EnMap.Attrs;
+                        //        Work hisWK1 = currNode.HisWork;
+                        //        foreach (Attr attr in attrs)
+                        //        {
+                        //            if (url.Contains("@") == false)
+                        //                break;
+                        //            url = url.Replace("@" + attr.Key, hisWK1.GetValStrByKey(attr.Key));
+                        //        }
+                        //        if (url.Contains("@"))
+                        //            throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + url);
 
-                                url += "&PFlowNo=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&PWorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
-                                return "url@" + url;
-                            }
-                        }
+                        //        url += "&PFlowNo=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&PWorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                        //        return "url@" + url;
+                        //    }
+                        //}
                         return msg;
                     default:
                         msg = msg.Replace("@WebUser.No", BP.Web.WebUser.No);

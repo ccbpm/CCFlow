@@ -844,8 +844,6 @@ function execSend(toNode) {
 
                     //求出来 url里面的FK_Node=xxxx 
                     var toNodeID = 101;
-                    if (data.indexOf('Accepter') != 0) {
-            		 var toNodeID = 101;
             		var params = data.split("&");
             		for(var i=0;i<params.length;i++){
             			if(params[i].indexOf("ToNode")==-1)

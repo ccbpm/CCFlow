@@ -97,7 +97,9 @@
                         newRow += "<td>" + sfTable.FK_SFDBSrcText + "</td>";
                         newRow += "<td>" + sfTable.SrcTypeText + "</td>";
                         newRow += "<td>";
+                        
                         newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a>";
+
                         newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
                         newRow += "</td>";
                         newRow += "</tr>";
@@ -210,12 +212,16 @@
 
             var ensName = '';
             //if (sfType == "0" || sfType==1 ) {
-                ensName = "BP.Sys.FrmUI.SFTable";
+                ensName = "BP.Sys.SFTable";
             //}
 
             if (fk_sftable.indexOf('.') != -1) {
-                ensName = 'BP.Sys.FrmUI.SFTableClass';
+                ensName = 'BP.Sys.SFTableClass';
             }
+
+            if (sfType == "3")
+                ensName = 'BP.Sys.SFTable';
+
 
             var url = '../../Comm/En.htm?EnName=' + ensName + '&No=' + fk_sftable;
             window.location.href = url;

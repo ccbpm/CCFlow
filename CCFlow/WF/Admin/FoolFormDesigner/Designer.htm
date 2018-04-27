@@ -643,15 +643,25 @@
                 });
             }
 
-
             /* 审核组件模式 */
             function GroupFieldFWCNew() {
 
-                var val = prompt('请输入分组名称,比如:部门主管审核', '部门主管审核');
+                var mapData = new Entity("BP.Sys.MapData", GetQueryString("FK_MapData"));
+                var val = prompt('请输入分组名称,比如:部门主管审核', mapData.Name );
                 if (val == null || val == undefined)
                     return;
 
-                var prix = prompt('请输入分组前缀,比如:输入BM,系统就会创建 BM_Checker,BM_RDT,BM_Note三个字段', '');
+                //转化为默认的拼音.
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
+                handler.AddPara("name", val);
+                handler.AddPara("flag", "0");
+                var defVal = handler.DoMethodReturnString("FrmTextBox_ParseStringToPinyin");
+
+                if (defVal == '' || defVal == null)
+                    defVal = "";
+
+
+                var prix = prompt('请输入分组前缀,比如:输入BM,系统就会创建 BM_Checker,BM_RDT,BM_Note三个字段', defVal);
                 if (prix == null || prix == undefined) 
                     return;
                 
@@ -667,8 +677,9 @@
             }
 
             function GroupFieldNew() {
-            
-                var val = prompt('请输入分组名称:', '我的字段分组');
+
+                var mapData = new Entity("BP.Sys.MapData", GetQueryString("FK_MapData") );
+                var val = prompt('请输入分组名称:', mapData.Name);
                 if (val == null || val == undefined)
                     return;
 

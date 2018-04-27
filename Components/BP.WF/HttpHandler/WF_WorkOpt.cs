@@ -107,7 +107,22 @@ namespace BP.WF.HttpHandler
                     if (emps == "" || emps == null)
                         emps = dt.Rows[0]["EmpTo"].ToString();
 
-                    BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
+                    if (emps.Contains(",") == true)
+                    {
+                        if (emps.Contains("'") == true)
+                        {
+                            string[] strs = emps.Split(';');
+                            foreach (string str in strs)
+                            {
+                                string[] emp = str.Split(',');
+                                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emp[0], false);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
+                    }
                 }
 
                 if (dt.Rows.Count != 0)

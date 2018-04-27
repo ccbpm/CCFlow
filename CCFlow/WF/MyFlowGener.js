@@ -606,8 +606,12 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
             var item = $("select[name='" + ctrlID + "'] option[selected]").text();
 
-            var mystr = ctrlID.substring(4) + 'T=' + item;
+            var mystr = '';
 
+            //mystr = ctrlID.substring(4) + 'T=' + item;
+            mystr = ctrlID+ 'T=' + item;
+
+            //var mystr = ctrlID + 'T=' + item;
 
             formArrResult.push(mystr);
         }

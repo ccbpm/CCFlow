@@ -149,8 +149,8 @@ namespace BP.WF
                             nd.WorkID = workID; //为获取表单ID提供参数.
                             dr[GroupFieldAttr.OID] = 100;
                             dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
-                            dr[GroupFieldAttr.CtrlType] ="FWC";
-                            dr[GroupFieldAttr.CtrlID] = "FWCND"+nd.NodeID;
+                            dr[GroupFieldAttr.CtrlType] = "FWC";
+                            dr[GroupFieldAttr.CtrlID] = "FWCND" + nd.NodeID;
                             dr[GroupFieldAttr.Idx] = 100;
                             dr[GroupFieldAttr.Lab] = "审核信息";
 
@@ -165,7 +165,50 @@ namespace BP.WF
 
                 }
 
+                #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
+                if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
+                {
+                    if (md.HisFrmType == FrmType.FoolForm)
+                    {
+                        //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
+                        DataTable gf = myds.Tables["Sys_GroupField"];
+                        bool isHave = false;
+                        foreach (DataRow dr in gf.Rows)
+                        {
+                            string cType = dr["CtrlType"] as string;
+                            if (cType == null)
+                                continue;
+
+                            if (cType.Equals("FWC") == true)
+                                isHave = true;
+                        }
+
+                        if (isHave == false)
+                        {
+                            DataRow dr = gf.NewRow();
+
+                            nd.WorkID = workID; //为获取表单ID提供参数.
+                            dr[GroupFieldAttr.OID] = 100;
+                            dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
+                            dr[GroupFieldAttr.CtrlType] = "FWC";
+                            dr[GroupFieldAttr.CtrlID] = "FWCND" + nd.NodeID;
+                            dr[GroupFieldAttr.Idx] = 100;
+                            dr[GroupFieldAttr.Lab] = "审核信息";
+
+                            gf.Rows.Add(dr);
+
+                            myds.Tables.Remove("Sys_GroupField");
+                            myds.Tables.Add(gf);
+                        }
+                    }
+                }
+                #endregion 没有审核组件分组就增加上审核组件分组.
+
+
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
+
+                
+
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
                 #region 流程设置信息.

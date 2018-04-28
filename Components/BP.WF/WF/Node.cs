@@ -1327,7 +1327,7 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStrByKey(NodeAttr.NodeFrmID);
-                if (DataType.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str)==true)
                     return "ND" + this.NodeID;
 
                 if (str.Equals("Pri") == true &&

@@ -5,7 +5,7 @@ function Down2018(fk_ath, pkVal, delPKVal) {
 	else{
 		var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-        Url = 'downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
+        Url = 'downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;
         window.location.href=Url;
 	}
 		

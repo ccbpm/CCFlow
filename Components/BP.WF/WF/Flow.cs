@@ -5283,6 +5283,7 @@ namespace BP.WF
                         {
                             BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
                             BP.WF.Template.CC cc = new CC(); // 抄送相关的信息.
+                            //cc.CheckPhysicsTable();
                             BP.WF.Template.FrmWorkCheck fwc = new FrmWorkCheck();
 
                             foreach (DataColumn dc in dt.Columns)
@@ -5346,6 +5347,9 @@ namespace BP.WF
                             }
                             catch (Exception ex)
                             {
+                                cc.CheckPhysicsTable();
+                                fwc.CheckPhysicsTable();
+
                                 throw new Exception("@导入节点:FlowName:" + nd.FlowName + " nodeID: " + nd.NodeID + " , " + nd.Name + " 错误:" + ex.Message);
                             }
                             //删除mapdata.

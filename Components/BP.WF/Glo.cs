@@ -930,6 +930,12 @@ namespace BP.WF
             NodeExt ne = new NodeExt();
             ne.CheckPhysicsTable();
 
+            CC cc = new CC();
+            cc.CheckPhysicsTable();
+
+            BP.WF.Template.FrmWorkCheck fwc = new FrmWorkCheck();
+            fwc.CheckPhysicsTable();
+
             MapAttr attr = new MapAttr();
             attr.CheckPhysicsTable();
 

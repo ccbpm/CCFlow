@@ -356,9 +356,8 @@ namespace BP.WF.HttpHandler
             else
                 attr.Name = "枚举" + attr.UIBindKey;
 
-            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
+            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND ( CtrlType='' OR CtrlType IS NULL ) ORDER BY OID DESC ";
             attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);
-
             attr.Insert();
             return attr.MyPK;
         }
@@ -972,7 +971,7 @@ namespace BP.WF.HttpHandler
             BP.Sys.CCFormAPI.SaveFieldSFTable(this.FK_MapData, this.KeyOfEn, null, this.GetRequestVal("SFTable"), 100, 100, 1);
 
             attr.Retrieve();
-            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
+            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
             attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);
             attr.Update();
 
@@ -1126,7 +1125,7 @@ namespace BP.WF.HttpHandler
             int iGroupID = this.GroupField;
             try
             {
-                DataTable dt = DBAccess.RunSQLReturnTable("SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.FK_MapData + "' and (CtrlID is null or ctrlid ='')");
+                DataTable dt = DBAccess.RunSQLReturnTable("SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.FK_MapData + "' and (CtrlID is null or ctrlid ='') ORDER BY OID DESC ");
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     iGroupID = int.Parse(dt.Rows[0][0].ToString());

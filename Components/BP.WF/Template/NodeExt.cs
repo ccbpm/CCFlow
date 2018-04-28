@@ -489,7 +489,6 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.EndFlowEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.EndFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17989"); //增加帮助
 
-
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "是否启用", true, true);
@@ -499,8 +498,6 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
-
-
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "打印方式", true,
@@ -583,7 +580,7 @@ namespace BP.WF.Template
 
                 // add by 周朋 2015-12-24. 节点时限.
                 map.AddTBString(BtnAttr.FocusLab, "关注", "关注", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.FocusEnable, true, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.FocusEnable, false, "是否启用", true, true);
 
                 // add 2017.5.4 确认就是告诉发送人，我接受这件工作了.
                 map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);

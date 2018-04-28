@@ -790,18 +790,18 @@ function Send(isHuiQian) {
     if ($('#DDL_ToNode').length > 0) {
 
         var selectToNode = $('#DDL_ToNode  option:selected').data();
-        toNode = selectToNode.No;
+        toNodeID = selectToNode.No;
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
 
             Save(); //执行保存.
 
             if (isHuiQian == true) {
-                initModal("HuiQian", toNode);
+                initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
 
             } else {
-                initModal("sendAccepter", selectToNode);
+                initModal("sendAccepter", toNodeID);
                 $('#returnWorkModal').modal().show();
             }
             return false;
@@ -811,13 +811,12 @@ function Send(isHuiQian) {
             if (isHuiQian == true) {
 
                 Save(); //执行保存.
-                initModal("HuiQian", toNode);
+                initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
                 return false;
             }
         }
     }
-
 
     //执行发送.
     execSend(toNode);
@@ -858,8 +857,8 @@ function execSend(toNode) {
             				break;
             			}
             		}
-                   var toNode = new Entity("BP.WF.Node",toNodeID)
-                    initModal("sendAccepter", toNode);
+                //   var toNode = new Entity("BP.WF.Node",toNodeID)
+                   initModal("sendAccepter", toNodeID);
                     $('#returnWorkModal').modal().show();
                     return;
                 }
@@ -1708,14 +1707,16 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("审核");
                 modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
-            case "HuiQian": 
-               
-               if (toNode!=null)
-                 $('#modalHeader').text("先会签，后发送。");
-                else
-                 $('#modalHeader').text("会签");
+            case "HuiQian":
 
-                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode="+toNode+"&Info=&s=" + Math.random()
+                if (toNode != null)
+                    $('#modalHeader').text("先会签，后发送。");
+                else
+                    $('#modalHeader').text("会签");
+
+                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&Info=&s=" + Math.random()
+
+
                 break;
             case "CC":
                 $('#modalHeader').text("抄送");
@@ -1736,8 +1737,9 @@ function initModal(modalType, toNode) {
 
             //发送选择接收节点和接收人      
             case "sendAccepter":
-                $('#modalHeader').text("发送到节点：" + toNode.Name);
-                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.NodeID + "&s=" + Math.random()
+
+                $('#modalHeader').text("发送到节点");
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");

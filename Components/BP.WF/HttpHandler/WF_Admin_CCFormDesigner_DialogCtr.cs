@@ -216,6 +216,7 @@ namespace BP.WF.HttpHandler
             string name = GetRequestVal("name");
             string flag = this.GetRequestVal("flag");
             flag = DataType.IsNullOrEmpty(flag) == true ? "true" : flag.ToLower();
+
             //此处配置最大长度为20，edited by liuxc,2017-9-25
             return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
         }

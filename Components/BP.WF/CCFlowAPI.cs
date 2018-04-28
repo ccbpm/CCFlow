@@ -50,6 +50,7 @@ namespace BP.WF
             Node nd = new Node(fk_node);
             try
             {
+                nd.WorkID = workID; //为获取表单ID提供参数.
                 MapData md = new MapData();
                 md.No = nd.NodeFrmID;
                 if (md.RetrieveFromDBSources() == 0)
@@ -78,6 +79,8 @@ namespace BP.WF
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
                 BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
+
+                nd.WorkID = workID; //为获取表单ID提供参数.
                 if (nd.NodeFrmID != "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                 {
                     /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
@@ -143,6 +146,7 @@ namespace BP.WF
                         {
                             DataRow dr = gf.NewRow();
 
+                            nd.WorkID = workID; //为获取表单ID提供参数.
                             dr[GroupFieldAttr.OID] = 100;
                             dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
                             dr[GroupFieldAttr.CtrlType] ="FWC";
@@ -349,6 +353,9 @@ namespace BP.WF
                 #endregion
 
                 #region 图片附件
+
+                nd.WorkID = workID; //为获取表单ID提供参数.
+
                 FrmImgAthDBs imgAthDBs = new FrmImgAthDBs(nd.NodeFrmID, workID.ToString());
                 if (imgAthDBs != null && imgAthDBs.Count > 0)
                 {
@@ -359,6 +366,8 @@ namespace BP.WF
 
                 #region 增加附件信息.
                 BP.Sys.FrmAttachments athDescs = new FrmAttachments();
+
+                nd.WorkID = workID; //为获取表单ID提供参数.
                 athDescs.Retrieve(FrmAttachmentAttr.FK_MapData, nd.NodeFrmID);
                 if (athDescs.Count != 0)
                 {
@@ -606,6 +615,8 @@ namespace BP.WF
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     /* 独立流程节点表单. */
+
+                    nd.WorkID = workID; //为获取表单ID ( NodeFrmID )提供参数.
 
                     FrmNode fn = new FrmNode();
                     fn.MyPK = nd.NodeFrmID + "_" + nd.NodeID + "_" + nd.FK_Flow;

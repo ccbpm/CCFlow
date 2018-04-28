@@ -454,6 +454,8 @@ namespace BP.WF.HttpHandler
             NodeFormType frmtype = this.currND.HisFormType;
             if (frmtype != NodeFormType.RefOneFrmTree)
             {
+                currND.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+
                 if (this.currND.NodeFrmID.Contains(this.currND.NodeID.ToString()) == false)
                 {
                     /*如果当前节点引用的其他节点的表单.*/

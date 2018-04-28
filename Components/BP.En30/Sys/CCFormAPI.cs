@@ -407,7 +407,7 @@ namespace BP.Sys
             i += attrN.Retrieve(MapAttrAttr.FK_MapData, frmID, MapAttrAttr.KeyOfEn, gKey + "_Checker");
             i += attrN.Retrieve(MapAttrAttr.FK_MapData, frmID, MapAttrAttr.KeyOfEn, gKey + "_RDT");
             if (i > 0)
-                return "error:前缀已经使用：" + gKey + " ， 请确认您是否增加了这个审核分组或者，请您更换其他的前缀。";
+                return "err@前缀已经使用：" + gKey + " ， 请确认您是否增加了这个审核分组或者，请您更换其他的前缀。";
 
             GroupField gf = new GroupField();
             gf.Lab = gName;
@@ -438,7 +438,7 @@ namespace BP.Sys
             attrN.MinLen = 0;
             attrN.UIIsEnable = true;
             attrN.UIIsLine = false;
-            attrN.DefVal = "@WebUser.No";
+            attrN.DefVal = "@WebUser.Name";
             attrN.UIIsEnable = false;
             attrN.GroupID = gf.OID;
             attrN.IsSigan = true;

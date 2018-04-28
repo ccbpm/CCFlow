@@ -992,6 +992,8 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0 && this.FK_Node != 999999)
                 {
                     Node nd = new Node(this.FK_Node);
+                    nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
                     {

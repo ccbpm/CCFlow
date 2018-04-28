@@ -1856,6 +1856,7 @@ namespace BP.WF.HttpHandler
         public string ViewWorkNodeFrm()
         {
             Node nd = new Node(this.FK_Node);
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
 
             Hashtable ht = new Hashtable();
             ht.Add("FormType", nd.FormType.ToString());

@@ -360,6 +360,7 @@ namespace BP.WF.HttpHandler
             // 当前节点信息.
             Node nd = new Node(this.FK_Node);
 
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
             nd.NodeFrmID = nd.NodeFrmID;
             // nd.FormUrl = nd.FormUrl;
 

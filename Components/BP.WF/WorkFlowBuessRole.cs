@@ -687,6 +687,8 @@ namespace BP.WF
                 if (toNode.HisRunModel != RunModel.SubThread)
                     throw new Exception("@您设置的节点接收人方式为：以分流点表单的明细表数据源确定子线程的接收人，但是当前节点非子线程节点。");
 
+                currNode.WorkID = workid; //为获取表单ID ( NodeFrmID )提供参数.
+
                 BP.Sys.MapDtls dtls = new BP.Sys.MapDtls(currNode.NodeFrmID);
                 string msg = null;
                 foreach (BP.Sys.MapDtl dtl in dtls)

@@ -981,7 +981,7 @@ namespace BP.WF.HttpHandler
             if (sf.SrcType == SrcType.TableOrView || sf.SrcType == SrcType.BPClass || sf.SrcType == SrcType.CreateTable)
                 return "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=" + attr.MyPK;
             else
-                return "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=" + attr.MyPK;
+                return "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=" + attr.MyPK;
         }
         #endregion 外键表列表.
 

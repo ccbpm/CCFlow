@@ -8,11 +8,10 @@ using System.Web;
 
 namespace BP.Sys.FrmUI
 {
-      
     /// <summary>
-    /// 外键字段
+    /// 外部数据源
     /// </summary>
-    public class MapAttrSFTable : EntityMyPK
+    public class MapAttrSFSQL : EntityMyPK
     {
         #region 文本字段参数属性.
         /// <summary>
@@ -75,9 +74,9 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
-        /// 外键字段
+        /// 外部数据源
         /// </summary>
-        public MapAttrSFTable()
+        public MapAttrSFSQL()
         {
         }
         /// <summary>
@@ -90,7 +89,7 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "外键字段");
+                Map map = new Map("Sys_MapAttr", "外部数据源");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -212,17 +211,29 @@ namespace BP.Sys.FrmUI
             return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion 方法执行.
+
+        /// <summary>
+        /// 删除，把影子字段也要删除.
+        /// </summary>
+        protected override void afterDelete()
+        {
+            MapAttr attr = new MapAttr();
+            attr.MyPK = attr.FK_MapData + "_" + this.KeyOfEn + "T";
+            attr.Delete();
+
+            base.afterDelete();
+        }
     }
     /// <summary>
     /// 实体属性s
     /// </summary>
-    public class MapAttrSFTables : EntitiesMyPK
+    public class MapAttrSFSQLs : EntitiesMyPK
     {
         #region 构造
         /// <summary>
         /// 实体属性s
         /// </summary>
-        public MapAttrSFTables()
+        public MapAttrSFSQLs()
         {
         }
         /// <summary>
@@ -232,7 +243,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new MapAttrSFTable();
+                return new MapAttrSFSQL();
             }
         }
         #endregion
@@ -242,20 +253,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapAttrSFTable> ToJavaList()
+        public System.Collections.Generic.IList<MapAttrSFSQL> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapAttrSFTable>)this;
+            return (System.Collections.Generic.IList<MapAttrSFSQL>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapAttrSFTable> Tolist()
+        public System.Collections.Generic.List<MapAttrSFSQL> Tolist()
         {
-            System.Collections.Generic.List<MapAttrSFTable> list = new System.Collections.Generic.List<MapAttrSFTable>();
+            System.Collections.Generic.List<MapAttrSFSQL> list = new System.Collections.Generic.List<MapAttrSFSQL>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapAttrSFTable)this[i]);
+                list.Add((MapAttrSFSQL)this[i]);
             }
             return list;
         }

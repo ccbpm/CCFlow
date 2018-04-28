@@ -26,7 +26,7 @@ namespace BP.WF.HttpHandler
         public string FrmView_Init()
         {
             Node nd = new Node(this.FK_Node);
-        
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
 
             MapData md = new MapData();
             md.No = nd.NodeFrmID;
@@ -58,7 +58,10 @@ namespace BP.WF.HttpHandler
             DataTable WF_Node = nd.ToDataTableField("WF_Node");
             myds.Tables.Add(WF_Node);
 
+
+
             #region 加入组件的状态信息, 在解析表单的时候使用.
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
             BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
             if (nd.NodeFrmID != "ND" + nd.NodeID)
             {
@@ -99,6 +102,8 @@ namespace BP.WF.HttpHandler
 
             #region 增加附件信息.
             BP.Sys.FrmAttachments athDescs = new FrmAttachments();
+
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
             athDescs.Retrieve(FrmAttachmentAttr.FK_MapData, nd.NodeFrmID);
             if (athDescs.Count != 0)
             {
@@ -207,6 +212,7 @@ namespace BP.WF.HttpHandler
             #endregion End把外键表加入DataSet
 
             #region 图片附件
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
             FrmImgAthDBs imgAthDBs = new FrmImgAthDBs(nd.NodeFrmID, this.WorkID.ToString());
             if (imgAthDBs != null && imgAthDBs.Count > 0)
             {
@@ -715,6 +721,8 @@ namespace BP.WF.HttpHandler
                 return "err@" + err;
             }
 
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+
             if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.SheetAutoTree)
                 return "url@../../../MyFlowTreeReadonly.htm?3=4&FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
 
@@ -729,6 +737,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
+                nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
                 MapData md = new MapData(nd.NodeFrmID);
                 if (md.HisFrmType != FrmType.FoolForm)
                 {
@@ -736,6 +745,7 @@ namespace BP.WF.HttpHandler
                     md.Update();
                 }
             }
+
 
             return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
         }

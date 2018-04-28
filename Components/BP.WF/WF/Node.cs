@@ -1316,6 +1316,10 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 工作ID
+        /// </summary>
+        public Int64 WorkID = 0;
+        /// <summary>
         /// 节点表单ID
         /// </summary>
         public string NodeFrmID
@@ -1325,6 +1329,38 @@ namespace BP.WF
                 string str = this.GetValStrByKey(NodeAttr.NodeFrmID);
                 if (DataType.IsNullOrEmpty(str))
                     return "ND" + this.NodeID;
+
+                if (str.Equals("Pri") == true &&
+                    (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FreeForm))
+                {
+                    if (this.WorkID == 0)
+                        return "ND" + this.NodeID;
+                    // throw new Exception("err@获得当前节点的上一个节点表单出现错误,没有给参数WorkID赋值.");
+
+                    /* 要引擎上一个节点表单 */
+                    string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track A, WF_Node B ";
+                    sql += " WHERE A.NDFrom=B.NodeID AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + ")  ";
+                    sql += "  AND (FormType=0 OR FormType=1) ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+to_char(B.NodeID) ) ";
+
+                    sql += "  AND (A.WorkID=" + this.WorkID + ") ";
+
+                    sql += " ORDER BY A.RDT ";
+
+                    int nodeID = DBAccess.RunSQLReturnValInt(sql, 0);
+                    if (nodeID == 0)
+                        throw new Exception("err@没有找到指定的节点.");
+
+                    return "ND" + nodeID;
+                }
                 return str;
             }
             set

@@ -803,6 +803,8 @@ namespace BP.WF.Data
             }
 
             Node nd = new Node(this.FK_Node);
+            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+
             return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
         }
         #endregion

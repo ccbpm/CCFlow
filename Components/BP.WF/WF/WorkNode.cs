@@ -1149,6 +1149,8 @@ namespace BP.WF
 
                 // 获取它的下一步节点.
                 Node nd = this.NodeSend_GenerNextStepNode_Ext(mynd);
+                nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+
                 mynd = nd;
                 Work skipWork = null;
                 if (mywork.NodeFrmID != nd.NodeFrmID)

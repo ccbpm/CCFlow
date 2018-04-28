@@ -208,6 +208,7 @@
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
     <Compile Include="Sys\FrmUI\SFTable.cs" />
     <Compile Include="Sys\FrmUI\MapFrameExt.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrSFSQL.cs" />
     <Compile Include="Sys\MapFrame.cs">
       <SubType>Code</SubType>
     </Compile>

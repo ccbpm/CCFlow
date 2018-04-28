@@ -148,12 +148,10 @@
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
                 $("#Btn_New").show();
-              
-
             }
+
             if (mapData.GetPara("IsUpdate") == 1) {
                 $("#Btn_Save").show();
-              
             }
             if (mapData.GetPara("IsDelete") == 1) {
                 var pkVal = GetPKVal();
@@ -326,7 +324,7 @@
                 if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td  class='FDesc' style='width:25%;'>" + lab + "</td>";
+                    html += "<td  class='FDesc' style='width:20%;'>" + lab + "</td>";
                     html += "<td colspan=3>";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</td>";
@@ -334,7 +332,7 @@
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:25%;'></td>";
+                        html += "<td class='FDesc' style='width:20%;'></td>";
                         html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
@@ -355,7 +353,7 @@
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:25%;'></td>";
+                        html += "<td class='FDesc' style='width:20%;'></td>";
                         html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
@@ -367,10 +365,18 @@
 
                 if (isDropTR == true) {
                     html += "<tr>";
-                    html += "<td class='FDesc' style='width:25%;'>" + lab + "</td>";
-                    html += "<td class='FContext'  >";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
+
+                    if (attr.UIContralType == 2) {
+                        html += "<td class='FContext' colspan='2' >";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    }else{
+                        html += "<td class='FDesc' style='width:20%;'>" + lab + "</td>";
+                        html += "<td class='FContext'  >";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    }
+
                     isDropTR = !isDropTR;
 
                     if (rm != null) {
@@ -385,11 +391,18 @@
 
                 if (isDropTR == false) {
 
-                    html += "<td class='FDesc' style='width:25%;'>" + lab + "</td>";
-                    html += "<td class='FContext'>";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
-                    html += "</tr>";
+                    if (attr.UIContralType == 2) {
+                        html += "<td class='FContext' colspan='2' >";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    } else {
+                        html += "<td class='FDesc' style='width:20%;'>" + lab + "</td>";
+                        html += "<td class='FContext'  >";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    }
+
+
                     isDropTR = !isDropTR;
 
                     if (rm != null) {

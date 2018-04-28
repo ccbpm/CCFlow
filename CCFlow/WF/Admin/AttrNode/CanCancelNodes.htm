@@ -27,54 +27,51 @@
 
             var fk_node = GetQueryString("FK_Node");
             var fk_flow = GetQueryString("FK_Flow");
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CanCancelNodes_Init&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    data = JSON.parse(data);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CanCancelNodes_Init");
 
-                    var nds = data.nds;
-                    var rnds = data.rnds;
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data.mynd);
-                    //GenerBindDDL("DDL_BRole", ses, "IntKey", "Lab", data.BatchRole);
-                    $("#titl").text(data.mynd.Name);
-                    var rndsArr = [];
-                    rnds.forEach(function (i) {
-                        rndsArr.push(i.CancelTo);
-                    });
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    for (var i = 0; i < nds.length; i++) {
-                        nd = nds[i];
-                        if (nd.NodeID == GetQueryString("FK_Node")) {
 
-                        }
-                        else {
-                            var newRow = "";
-                            newRow = "<tr style='width:100%'><td class=Idx style='width:10%'>" + i + "</td>";
-                            newRow += "<td style='width:40%'>第" + nd.Step + "步</td>";
-                            if ($.inArray(nd.NodeID, rndsArr) > -1) {
-                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
-                            } else {
-                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
-                            }
-                            newRow += "</tr>";
-                            $("#table1 tr:last").after(newRow);
-                        }
-                    }
-                    var newBtn = "<TR class='TRSum' ><TD >&nbsp;</TD><TD>&nbsp;</TD><TD><input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()'/></TD>";
-                    $("#table1 tr:last").after(newBtn);
-                    return;
-                }
+            data = JSON.parse(data);
+
+            var nds = data.nds;
+            var rnds = data.rnds;
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data.mynd);
+            //GenerBindDDL("DDL_BRole", ses, "IntKey", "Lab", data.BatchRole);
+            $("#titl").text(data.mynd.Name);
+            var rndsArr = [];
+            rnds.forEach(function (i) {
+                rndsArr.push(i.CancelTo);
             });
+
+            for (var i = 0; i < nds.length; i++) {
+                nd = nds[i];
+                if (nd.NodeID == GetQueryString("FK_Node")) {
+
+                }
+                else {
+                    var newRow = "";
+                    newRow = "<tr style='width:100%'><td class=Idx style='width:10%'>" + i + "</td>";
+                    newRow += "<td style='width:40%'>第" + nd.Step + "步</td>";
+                    if ($.inArray(nd.NodeID, rndsArr) > -1) {
+                        newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
+                    } else {
+                        newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
+                    }
+                    newRow += "</tr>";
+                    $("#table1 tr:last").after(newRow);
+                }
+            }
+            var newBtn = "<TR class='TRSum' ><TD >&nbsp;</TD><TD>&nbsp;</TD><TD><input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()'/></TD>";
+            $("#table1 tr:last").after(newBtn);
+            return;
         }
 
         //ajax 提交

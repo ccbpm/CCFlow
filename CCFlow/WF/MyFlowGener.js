@@ -784,7 +784,7 @@ function Send(isHuiQian) {
 
     window.hasClickSend = true; //标志用来刷新待办.
 
-    var toNode=0;
+    var toNodeID = 0;
 
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
@@ -819,10 +819,10 @@ function Send(isHuiQian) {
     }
 
     //执行发送.
-    execSend(toNode);
+    execSend(toNodeID);
 }
 
-function execSend(toNode) {
+function execSend(toNodeID) {
 
     //先设置按钮等不可用
     setToobarDisiable();
@@ -830,7 +830,7 @@ function execSend(toNode) {
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData(true, true) + "&ToNode=" + toNode,
+        data: getFormData(true, true) + "&ToNode=" + toNodeID,
         url: MyFlow + "?DoType=Send",
         dataType: 'html',
         success: function (data) {
@@ -844,25 +844,25 @@ function execSend(toNode) {
 
             if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
 
-                if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener')==-1) {
+                if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
 
-                    //求出来 url里面的FK_Node=xxxx 
-                    var toNodeID = 101
-            		var params = data.split("&");
-            		for(var i=0;i<params.length;i++){
-            			if(params[i].indexOf("ToNode")==-1)
-            				continue;
-            			else{
-            				toNodeID = params[i].split("=")[1];
-            				break;
-            			}
-            		}
-                //   var toNode = new Entity("BP.WF.Node",toNodeID)
-                   initModal("sendAccepter", toNodeID);
+                    //                    //求出来 url里面的FK_Node=xxxx 
+                    //                    var toNodeID = 101
+                    //                    var params = data.split("&");
+                    //                    for (var i = 0; i < params.length; i++) {
+                    //                        if (params[i].indexOf("ToNode") == -1)
+                    //                            continue;
+                    //                        else {
+                    //                            toNodeID = params[i].split("=")[1];
+                    //                            break;
+                    //                        }
+                    //                    }
+                    //   var toNode = new Entity("BP.WF.Node",toNodeID)
+                    initModal("sendAccepter", toNodeID);
                     $('#returnWorkModal').modal().show();
                     return;
                 }
-                
+
                 var url = data;
                 url = url.replace('url@', '');
                 window.location.href = url;
@@ -1715,7 +1715,6 @@ function initModal(modalType, toNode) {
                     $('#modalHeader').text("会签");
 
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random()
-
 
                 break;
             case "CC":

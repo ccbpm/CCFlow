@@ -4,16 +4,6 @@
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
   <script language="JavaScript" src="../Comm/JScript.js"  type="text/javascript"></script>
     <script type="text/javascript">
-        function NoSubmit(ev) {
-            if (window.event.srcElement.tagName == "TEXTAREA")
-                return true;
-            if (ev.keyCode == 13) {
-                window.event.keyCode = 9;
-                ev.keyCode = 9;
-                return true;
-            }
-            return true;
-        }
 
         $(function () {
             //当IsShowTitle 不为0时，不显示标题

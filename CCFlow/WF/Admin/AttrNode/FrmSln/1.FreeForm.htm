@@ -46,7 +46,9 @@
             if (node.FormType == FormType.FreeForm) {
                 if (node.NodeFrmID == "" || node.NodeFrmID == null) {
                     document.getElementById("RB_CurrentForm").checked = true;
-                    SetDDLEnable('DDL_Frm', 'enable')
+                    SetDDLEnable('DDL_Frm', 'enable');
+                } else if (node.NodeFrmID == "Pri") {
+                    document.getElementById("RB_Pri").checked = true;
                 }
                 else {
                     document.getElementById("RB_OtherForms").checked = true;
@@ -69,12 +71,23 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.FormType = FormType.FreeForm;
             var frmValue = $("input[name='RefFrm']:checked").val();
+
+
+            //其他节点表单.
             if (frmValue == "0") {
                 node.NodeFrmID = "";
-            } else {
-                node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
-
             }
+
+            //引用指定节点表单.
+            if (frmValue == "1") {
+                node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
+            }
+
+            //上一个节点表单.
+            if (frmValue == "2") {
+                node.NodeFrmID = "Pri";
+            }
+             
             node.Update();
 
             //更新表单类型.
@@ -135,6 +148,18 @@
 </ul>
 
 </fieldset>
+
+
+<fieldset>
+<legend><input type="radio"  value="2"   id="RB_Pri"   name="RefFrm" />
+ <label  for="RB_Pri" >有上一个节点表单来确定</label> - <a href="javascript:ShowFWCAttr()">节点表单组件属性</a></legend>
+ <ul>
+  <li>1.当前节点可以引用其上一个节点的表单.</li>
+  <li>2.如果上一个节点表单也是引用的上一个节点表单，那么系统就会依次类推的去寻找第一个当前节点表单.</li>
+</ul>
+
+</fieldset>
+
 
 <fieldset>
 <legend>表单样例</legend>

@@ -29,10 +29,9 @@
 
             //node.SetPKVal(nodeID);
             //s node.Retrieve();
-           // console.log(node);
+            // console.log(node);
             //alert(node.Name);
             //return;
-
 
             //获取节点方案的表单引用值 frmIDSelected为空时为 0当前节点表单，1 其他表单
             var frmIDSelected = node.NodeFrmID;
@@ -49,7 +48,6 @@
             nodes.Retrieve("FK_Flow", node.FK_Flow);
 
 
-
             //增加slect的节点值 
             GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
 
@@ -59,6 +57,8 @@
                 if (node.NodeFrmID == "" || node.NodeFrmID == null) {
                     document.getElementById("RB_CurrentForm").checked = true;
                     SetDDLEnable('DDL_Frm', 'enable');
+                } else if (node.NodeFrmID == "Pri") {
+                    document.getElementById("RB_Pri").checked = true;
                 }
                 else {
                     document.getElementById("RB_OtherForms").checked = true;
@@ -82,11 +82,19 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.FormType = FormType.FoolForm;
             var frmValue = $("input[name='RefFrm']:checked").val();
+
             if (frmValue == "0") {
                 node.NodeFrmID = "";
-            } else {
+            }
+            if (frmValue == "1") {
                 node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
             }
+
+            //上一个节点表单.
+            if (frmValue == "2") {
+                node.NodeFrmID = "Pri";
+            }
+
             node.Update();
 
             //更新表单类型.
@@ -149,8 +157,18 @@
   <li>3: 在第2个节点上拖入一个审核组件，并设置为启用状态(审核组件有禁用，启用，只读三个状态) </li>
   <li>4: 在第3个节点以及第3个节点以后，设置为引用第2个节点的表单,并把审核组件启用起来.</li>
 </ul>
+</fieldset>
+
+<fieldset>
+<legend><input type="radio"  value="2"   id="RB_Pri"   name="RefFrm" />
+ <label  for="RB_Pri" >有上一个节点表单来确定</label> - <a href="javascript:ShowFWCAttr()">节点表单组件属性</a></legend>
+ <ul>
+  <li>1.当前节点可以引用其上一个节点的表单.</li>
+  <li>2.如果上一个节点表单也是引用的上一个节点表单，那么系统就会依次类推的去寻找第一个当前节点表单.</li>
+</ul>
 
 </fieldset>
+
 <fieldset>
 <legend>说明</legend>
 <ul>

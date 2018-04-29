@@ -762,6 +762,10 @@ namespace BP.WF
                 this._nodeID = value;
             }
         }
+        /// <summary>
+        /// 已经路过的节点
+        /// </summary>
+        public string HisPassedFrmIDs = null;
         #endregion
     }
     /// <summary>

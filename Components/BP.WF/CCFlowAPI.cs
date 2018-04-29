@@ -168,7 +168,7 @@ namespace BP.WF
                 #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
                 if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                 {
-                    if (md.HisFrmType == FrmType.FoolForm)
+                    if (nd.FormType == NodeFormType.FoolForm )
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                         DataTable gf = myds.Tables["Sys_GroupField"];
@@ -204,12 +204,116 @@ namespace BP.WF
                 }
                 #endregion 没有审核组件分组就增加上审核组件分组.
 
-
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
 
                 
 
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
+
+                #region 增加 groupfields
+                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false)
+                {
+                    //计算累加的字段分组.
+                    GroupFields gfs = new GroupFields();
+                    gfs.RetrieveIn(GroupFieldAttr.FrmID, "("+wk.HisPassedFrmIDs+")" );
+
+                    DataTable gf = myds.Tables["Sys_GroupField"];
+
+                    //让其按照顺序排列.
+                    string[] frmIDs = wk.HisPassedFrmIDs.Split(',');
+
+                    for (int i = 0; i < frmIDs.Length; i++)
+                    {
+                        int idx = frmIDs.Length - i-1;
+
+                        string frmID = frmIDs[idx];
+                        frmID = frmID.Replace("'", "");
+                        frmID = frmID.Replace("'", "");
+
+                        //数量.
+                        int numOfBar = gfs.GetCountByKey(GroupFieldAttr.FrmID, frmID);
+
+                        int insertNum = 0; //已经插入的数量.
+
+                        for (int ii = 0; ii < gfs.Count; ii++)
+                        {
+                            idx = gfs.Count - ii - 1;
+
+                            GroupField item = (GroupField)gfs[idx];
+                            if (item.FrmID != frmID)
+                                continue;
+
+                            DataRow dr = gf.NewRow();
+                            dr[GroupFieldAttr.CtrlID] = item.CtrlID;
+                            dr[GroupFieldAttr.CtrlType] = item.CtrlType;
+                            dr[GroupFieldAttr.Idx] = item.Idx;
+                            dr[GroupFieldAttr.Lab] = item.Lab;
+                            dr[GroupFieldAttr.OID] = item.OID;
+                            dr[GroupFieldAttr.FrmID] = item.FrmID;
+
+
+                            if (insertNum == 0 && numOfBar == 1)
+                            {
+                                gf.Rows.InsertAt(dr, 0); //增加一行.
+                                break;
+                            }
+
+                            //if (insertNum == 0 && numOfBar == 2)
+                            gf.Rows.InsertAt(dr, 0); //增加一行.
+
+                            //if (numOfBar == 1)
+                            // gf.Rows.InsertAt(dr, 0); //增加一行.
+                            // else
+                            // gf.Rows.InsertAt(dr, numOfBar - 1); //增加一行.
+                        }
+                    }
+                    //计算累加的字段集合.
+                    MapAttrs attrs = new MapAttrs();
+                    QueryObject qo = new QueryObject(attrs);
+                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")" );
+                    DataTable dtAttrs = qo.DoQueryToTable();
+
+                    DataTable mapAttr = myds.Tables["Sys_MapAttr"]; //增加行.
+                    foreach (DataRow dr in dtAttrs.Rows)
+                    {
+                        dr[MapAttrAttr.UIIsEnable] = 0; //把字段设置为只读的.
+                        mapAttr.Rows.Add(dr.ItemArray);
+                    }
+
+
+                    //计算累加的 从表字段集合.
+                    MapDtls dtls = new MapDtls();
+                    qo = new QueryObject(dtls);
+                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
+                    DataTable dtDtls = qo.DoQueryToTable();
+
+                    DataTable mdtls = myds.Tables["Sys_MapDtl"]; //增加行.
+                    foreach (DataRow dr in mdtls.Rows)
+                    {
+                        dr[MapDtlAttr.IsDelete] = 0;  //把字段设置为只读的.
+                        dr[MapDtlAttr.IsInsert] = 0; 
+                        dr[MapDtlAttr.IsUpdate] = 0;
+                        mdtls.Rows.Add(dr.ItemArray);
+                    }
+
+                    //计算累加的 附件集合.
+                    FrmAttachments aths = new FrmAttachments();
+                    qo = new QueryObject(aths);
+                    qo.AddWhere(FrmAttachmentAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
+
+                    DataTable dtAths = qo.DoQueryToTable();
+
+                    DataTable mAths = myds.Tables["Sys_FrmAttachment"]; //增加行.
+                    foreach (DataRow dr in dtAths.Rows)
+                    {
+                        dr[FrmAttachmentAttr.IsUpload] = 0; //把字段设置为只读的.
+                        dr[FrmAttachmentAttr.IsDownload] = 0;
+                        mAths.Rows.Add(dr.ItemArray);
+                    }
+
+                }
+                #endregion 增加 groupfields
+
 
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)

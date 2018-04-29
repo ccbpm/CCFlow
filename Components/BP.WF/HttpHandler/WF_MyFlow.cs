@@ -485,7 +485,8 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyFlowFoolTruck.htm";
+             //   string url = "MyFlowFoolTruck.htm";
+                string url = "MyFlowGener.htm";
 
                 //处理连接.
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);

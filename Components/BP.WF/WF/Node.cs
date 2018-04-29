@@ -130,13 +130,78 @@ namespace BP.WF
                 }
                 else
                 {
+                    
+                    if (this.FormType != NodeFormType.FoolTruck || this.WorkID == 0 || this.IsStartNode==true)
+                    {
+                        obj = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
+                        obj.HisNode = this;
+                        obj.NodeID = this.NodeID;
+                        return obj;
+                    }
+
+                    //如果是累加表单,一下是处理逻辑.
                     obj = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
+
+                    Map ma = obj.EnMap;
+
+                    /* 求出来走过的表单集合 */
+                    string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track A, WF_Node B ";
+                    sql += " WHERE A.NDFrom=B.NodeID  ";
+                    sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + ")  ";
+                    sql += "  AND B.FormType=" +(int)NodeFormType.FoolTruck+ " "; //仅仅找累加表单.
+                    sql += "  AND NDFrom!="+this.NodeID+" "; //排除当前的表单.
+
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+cast(B.NodeID as varchar(10)) ) ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+to_char(B.NodeID) ) ";
+
+                    sql += "  AND (A.WorkID=" + this.WorkID + ") ";
+                    sql += " ORDER BY A.RDT ";
+
+                    // 获得已经走过的节点IDs.
+                    DataTable  dtNodeIDs = DBAccess.RunSQLReturnTable(sql);
+                    string frmIDs = "";
+                    if (dtNodeIDs.Rows.Count > 0)
+                    {
+                        //把所有的节点字段.
+                        foreach (DataRow dr in dtNodeIDs.Rows)
+                        {
+                            frmIDs += "'ND" + dr[0].ToString() + "',";
+                        }
+
+                        frmIDs = frmIDs.Substring(0,frmIDs.Length - 1);
+                        obj.HisPassedFrmIDs = frmIDs;  //求出所有的fromID.
+
+                        MapAttrs attrs = new MapAttrs();
+                        QueryObject qo = new QueryObject(attrs);
+                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "("+frmIDs+")" );
+                        // qo.addAnd();
+                        //   qo.AddWhere(MapAttrAttr.KeyOfEn, " NOT IN ","('Rec','WorkID','OID','MD5','MyNum','RecText','Emps','CDT')");
+                        qo.DoQuery();
+
+                        //设置成不可以用.
+                        foreach (MapAttr item in attrs)
+                        {
+                            item.UIIsEnable = false; //设置为只读的.
+                            item.DefValReal = "";    //设置默认值为空.
+                            ma.Attrs.Add(item.HisAttr);
+                        }
+
+                        //设置为空.
+                        obj.SQLCash = null;
+                    }
+
+
                     obj.HisNode = this;
                     obj.NodeID = this.NodeID;
                     return obj;
                     //this.SetRefObject("HisWork", obj);
                 }
-                
             }
         }
         /// <summary>
@@ -864,6 +929,9 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.FormUrl, value);
             }
         }
+        /// <summary>
+        /// 表单类型
+        /// </summary>
         public NodeFormType FormType
         {
             get
@@ -1346,7 +1414,7 @@ namespace BP.WF
                         sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
 
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
+                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+cast(B.NodeID as varchar(10)) ) ";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+to_char(B.NodeID) ) ";

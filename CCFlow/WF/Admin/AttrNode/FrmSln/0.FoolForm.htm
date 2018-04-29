@@ -105,17 +105,7 @@
 
             alert("保存成功.");
         }
-        
-        //打开傻瓜表单设计器.
-        function DFrm() {
-
-            var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
-            var url = '../../FoolFormDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
-            window.open(url);
-
-            //OpenEasyUiDialogExt(url, '傻瓜表单设计器', 800, 500, false);
-        }
+       
 
         //节点表单组件属性.
         function ShowFWCAttr() {
@@ -129,14 +119,13 @@
 
 <div id="bar"> </div>
 
-
 <fieldset>
-<legend><input type="radio"  value="0"   id="RB_CurrentForm" checked="true" onclick="SetDDLEnable('DDL_Frm','enable')"  name="RefFrm" />
+<legend><input type="radio" value="0" id="RB_CurrentForm" checked="true" onclick="SetDDLEnable('DDL_Frm','enable')"  name="RefFrm" />
  <label  for="RB_CurrentForm" >当前节点表单 </label></legend>
 <ul>
   <li>每个节点都有一个独立表单</li>
   <li>在创建节点的时候默认的为当前节点表单.</li>
-  <li><a href="javascript:DFrm()">设计傻瓜表单</a></li>
+  <li><a href="javascript:DFoolFrm()">设计傻瓜表单</a></li>
 </ul>
 </fieldset>
 

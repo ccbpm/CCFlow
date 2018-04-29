@@ -1241,6 +1241,8 @@ function GenerWorkNode() {
             }
 
             var node = flowData.WF_Node[0];
+            var gfs = flowData.Sys_MapAttr;
+            console.log(gfs);
 
             //设置标题.
             document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
@@ -1272,7 +1274,7 @@ function GenerWorkNode() {
                 return;
             }
 
-            if (node.FormType == 0) {
+            if (node.FormType == 0 || node.FormType == 10) {
                 GenerFoolFrm(flowData); //傻瓜表单.
             }
 

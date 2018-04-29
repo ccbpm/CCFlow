@@ -24,6 +24,7 @@ function GenerFoolFrm(wn) {
     html += "</tr>";
 
 
+
     //遍历循环生成 listview
     for (var i = 0; i < Sys_GroupFields.length; i++) {
 
@@ -477,12 +478,18 @@ function Ele_Attachment(flowData, gf) {
 
     var eleHtml = '';
 
+    var nodeID= GetQueryString("FK_Node");
     var url = "";
     url += "&WorkID=" + GetQueryString("WorkID");
-    url += "&FK_Node=" + GetQueryString("FK_Node");
+    url += "&FK_Node=" +nodeID;
+     
+    var isReadonly=false;
+    if (gf.FrmID.indexOf( nodeID ) == -1 )
+        isReadonly = true;
+
 
     var src = "";
-    if (pageData.IsReadonly)
+    if (pageData.IsReadonly || isReadonly == true)
         src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + url;
     else
         src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + url;

@@ -8,10 +8,10 @@ function InitBar(optionKey) {
     html += "<option value=" + FormType.SelfForm + " >2.嵌入式表单</option>";
     html += "<option value=" + FormType.RefOneFrmTree + " >3.绑定表单库的表单</option>";
     html += "<option value=" + FormType.SheetTree + " >4.绑定多表单(表单树)</option>";
-   // html += "<option value=" + FormType.FoolTruck + " >6.软通动力（傻瓜轨迹表单）</option>";
    
     html += "<option value=" + FormType.SDKForm + " >5.使用SDK表单(我自定义的表单)</option>";
     html += "<option value=" + FormType.WebOffice + " >6.绑定公文表单</option>";
+    html += "<option value=" + FormType.FoolTruck + " >7.内置累加傻瓜模式表单</option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
@@ -32,6 +32,27 @@ function OldVer() {
     var url = '../NodeFromWorkModel.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
     window.location.href = url;
 }
+
+
+//打开傻瓜表单设计器.
+function DFoolFrm() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var node = new Entity("BP.WF.Node", nodeID);
+    var url = '../../FoolFormDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
+    window.open(url);
+
+    //OpenEasyUiDialogExt(url, '傻瓜表单设计器', 800, 500, false);
+}
+
+//打开自由表单设计器.
+function DFreeFrm() {
+    var nodeID = GetQueryString("FK_Node");
+    var node = new Entity("BP.WF.Node", nodeID);
+    var url = '../../CCFormDesigner/FormDesigner.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
+    OpenEasyUiDialogExt(url, '傻瓜表单设计器', 1100, 600, false);
+}
+
 
 
 function Help() {

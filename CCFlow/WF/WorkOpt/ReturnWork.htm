@@ -70,6 +70,7 @@
                         if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') >= 0) {
                             return true;
                         }
+
                         nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
                     });
 

@@ -522,7 +522,11 @@
             }
 
             var myDate = new Date(Date.parse(time.replace(/-/g, "/")));
-            return myDate.getMonth() + "月" + myDate.getDate() + "日 " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds() ;
+            return myDate.toLocaleString();
+
+            //alert(myDate);
+            //alert(myDate.getMonth());
+            //return myDate.getMonth() + "月" + myDate.getDate() + "日 " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds() ;
         }
 
 

@@ -583,6 +583,9 @@
                         //修改标签名称.
                         var activeId = _canvas.getActiveId(); //右键当前的ID
                         var windowtext = $("#lab" + activeId).text();
+
+                        windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, ""); //去掉左右空格.
+
                         var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
                         var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
                         var xiuNodename = '修改名称：<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
@@ -785,7 +788,7 @@
 
                 strs += "{'id':'" + node.NodeID + "',";
                 strs += "'flow_id':'" + flowNo + "',";
-                strs += "'process_name':'" + node.Name + "',";
+                strs += "'process_name':'" + node.Name.replace(/(^\s*)|(\s*$)/g, "") + "',";
                 strs += "'process_to':'" + toNodes + "',";
 
                 //判断是否是开始节点?
@@ -800,8 +803,6 @@
                     /* 如果是其他的情况,就要考虑分合流 */
                 }
 
-
-
                 strs += "'style':'width:auto;minWidth:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 
                 if (i == nodes.length - 1)
@@ -811,6 +812,7 @@
             }
 
             strs += "] }";
+
 
             return eval("(" + strs + ")");
         }

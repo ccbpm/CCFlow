@@ -765,7 +765,7 @@ namespace BP.WF
         /// <summary>
         /// 已经路过的节点
         /// </summary>
-        public string HisPassedFrmIDs = null;
+        public string HisPassedFrmIDs = "";
         #endregion
     }
     /// <summary>

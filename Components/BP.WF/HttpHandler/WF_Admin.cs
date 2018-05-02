@@ -65,7 +65,7 @@ namespace BP.WF.HttpHandler
 
             FlowExt fl = new FlowExt(this.FK_Flow);
 
-            if (BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
+            if (1 == 2 &&  BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
             {
                 string msg= "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
                 msg += "您需要在流程属性里的底部[设置流程发起测试人]的属性里，设置可以发起的测试人员,多个人员用逗号分开.";

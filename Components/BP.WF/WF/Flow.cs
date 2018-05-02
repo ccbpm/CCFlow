@@ -4410,7 +4410,6 @@ namespace BP.WF
                 // add 2013-01-01. 
                 map.AddTBString(FlowAttr.PTable, null, "流程数据存储主表", true, false, 0, 30, 10);
 
-
                 // 草稿规则 "@0=无(不设草稿)@1=保存到待办@2=保存到草稿箱"
                 map.AddTBInt(FlowAttr.Draft, 0, "草稿规则", true, false);
 

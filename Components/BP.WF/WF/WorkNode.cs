@@ -1111,7 +1111,7 @@ namespace BP.WF
             var beforeSkipNodeID = 0;   //added by liuxc,2015-7-13,标识自动跳转之前的节点ID
 
 
-            #region 判断是否有延续流程.
+            #region (最后)判断是否有延续流程.
             NodeYGFlows ygflows = new NodeYGFlows();
             ygflows.Retrieve(NodeYGFlowAttr.FK_Node, this.HisNode.NodeID);
             if (ygflows.Count != 0)
@@ -1130,7 +1130,7 @@ namespace BP.WF
                         return new Node(int.Parse(item.FK_Flow + "01"));
                 }
             }
-            #endregion 判断是否有延续流程.
+            #endregion (最后)判断是否有延续流程.
 
 
 

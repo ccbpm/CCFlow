@@ -2204,10 +2204,8 @@ namespace BP.WF.HttpHandler
                     qo.DoQuery();
                     //把节点与表单的关联管理放入到系统.
                     ds.Tables.Add(fns.ToDataTableField("FrmNodes"));
-
                 }
                 #endregion 如果是移动应用就考虑多表单的问题.
-
 
                 return BP.Tools.Json.ToJson(ds);
             }

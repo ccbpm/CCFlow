@@ -168,6 +168,9 @@ namespace BP.WF
                 #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
                 if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                 {
+
+                 //   Work wk1 = nd.HisWork;
+
                     if (nd.FormType == NodeFormType.FoolForm )
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
@@ -206,12 +209,10 @@ namespace BP.WF
 
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
 
-                
-
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
                 #region 增加 groupfields
-                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false)
+                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs)==false)
                 {
                     //计算累加的字段分组.
                     GroupFields gfs = new GroupFields();
@@ -251,20 +252,12 @@ namespace BP.WF
                             dr[GroupFieldAttr.OID] = item.OID;
                             dr[GroupFieldAttr.FrmID] = item.FrmID;
 
-
                             if (insertNum == 0 && numOfBar == 1)
                             {
                                 gf.Rows.InsertAt(dr, 0); //增加一行.
                                 break;
                             }
-
-                            //if (insertNum == 0 && numOfBar == 2)
                             gf.Rows.InsertAt(dr, 0); //增加一行.
-
-                            //if (numOfBar == 1)
-                            // gf.Rows.InsertAt(dr, 0); //增加一行.
-                            // else
-                            // gf.Rows.InsertAt(dr, numOfBar - 1); //增加一行.
                         }
                     }
                     //计算累加的字段集合.
@@ -279,7 +272,6 @@ namespace BP.WF
                         dr[MapAttrAttr.UIIsEnable] = 0; //把字段设置为只读的.
                         mapAttr.Rows.Add(dr.ItemArray);
                     }
-
 
                     //计算累加的 从表字段集合.
                     MapDtls dtls = new MapDtls();

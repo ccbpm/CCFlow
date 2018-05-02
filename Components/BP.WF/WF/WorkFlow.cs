@@ -1106,7 +1106,6 @@ namespace BP.WF
                 return "父流程自动结束.";
             }
 
-
             // 检查是否是最后的一个.
             int num = BP.WF.Dev2Interface.Flow_NumOfSubFlowRuning(this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.WorkID);
             if (num != 0)

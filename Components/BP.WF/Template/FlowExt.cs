@@ -381,9 +381,10 @@ namespace BP.WF.Template
 
                 // 数据存储.
                 map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow,
-                    "cc", true, true, FlowAttr.DataStoreModel,
+                    "数据存储", true, true, FlowAttr.DataStoreModel,
                    "@0=数据轨迹模式@1=数据合并模式");
                 map.SetHelperUrl(FlowAttr.DataStoreModel, "http://ccbpm.mydoc.io/?v=5404&t=17038");
+
 
                 map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
                 map.SetHelperUrl(FlowAttr.PTable, "http://ccbpm.mydoc.io/?v=5404&t=17897");

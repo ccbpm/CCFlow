@@ -3814,7 +3814,7 @@ namespace BP.WF
             string str = null;
             if (this.FEventEntity == null)
             {
-                ///*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法. */
+                /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法. */
                 //if (doType == EventListOfNode.SendSuccess)
                 //{
                 //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();

@@ -56,6 +56,11 @@ namespace BP.Sys
         /// 字体大小，AtPara中属性，added by liuxc,2017-05-22
         /// </summary>
         public const string FontSize = "FontSize";
+        /// <summary>
+        /// 设置的值
+        /// </summary>
+        public const string SetVal = "SetVal";
+        
     }
     /// <summary>
     /// 单选框
@@ -242,6 +247,8 @@ namespace BP.Sys
                 map.AddTBString(FrmRBAttr.FieldsCfg, null, "配置信息@FieldName=Sta", true, false, 0, 4000, 20);
 
                 map.AddTBString(FrmRBAttr.Tip, null, "选择后提示的信息", true, false, 0, 1000, 20);
+                map.AddTBString(FrmRBAttr.SetVal, null, "设置的值", true, false, 0, 200, 20);
+
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 map.AddTBAtParas(1000);

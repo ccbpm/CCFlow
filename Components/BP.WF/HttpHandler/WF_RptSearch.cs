@@ -135,6 +135,7 @@ namespace BP.WF.HttpHandler
             sql += " FROM WF_GenerWorkFlow A ";
             sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
             sql += " AND A.Emps LIKE '@%" + WebUser.No + "%' ";
+            sql += " AND A.TodoEmps LIKE '@%" + WebUser.No + "%' ";
             sql += " AND A.WFState!=0 ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

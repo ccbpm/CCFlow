@@ -1591,6 +1591,12 @@ function InitToolBar() {
                 $('[name=Askfor]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
             }
 
+            if ($('[name=Track]').length > 0) {
+                $('[name=Track]').attr('onclick', '');
+                $('[name=Track]').unbind('click');
+                $('[name=Track]').bind('click', function () { initModal("Track"); $('#returnWorkModal').modal().show(); });
+            }
+
             if ($('[name=HuiQian]').length > 0) {
                 $('[name=HuiQian]').attr('onclick', '');
                 $('[name=HuiQian]').unbind('click');
@@ -1708,6 +1714,11 @@ function initModal(modalType, toNode) {
             case "Btn_WorkCheck":
                 $('#modalHeader').text("审核");
                 modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+
+            case "Track": //轨迹.
+                $('#modalHeader').text("轨迹");
+                 modalIframeSrc = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "HuiQian":
 

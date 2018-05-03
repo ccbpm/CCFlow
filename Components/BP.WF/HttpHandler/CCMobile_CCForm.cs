@@ -122,7 +122,10 @@ namespace BP.WF.HttpHandler
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");
                     string guid = BP.DA.DBAccess.GenerGUID();
+                    
                     string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
+                    if (fileName.LastIndexOf("\\") > 0)
+                        fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
                     string ext = System.IO.Path.GetExtension(file.FileName);
                     string realSaveTo = savePath + "\\" + guid + "." + fileName + ext;
 
@@ -173,7 +176,7 @@ namespace BP.WF.HttpHandler
                     }
                     #endregion 处理文件路径，如果是保存到数据库，就存储pk.
 
-                    dbUpload.FileName = file.FileName;
+                    dbUpload.FileName = fileName + ext;
                     dbUpload.FileSize = (float)info.Length;
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
@@ -262,9 +265,6 @@ namespace BP.WF.HttpHandler
 
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
-                    // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
-                    //dbUpload.FileExts = info.Extension;
-                    // dbUpload.FileFullName = saveTo;
                     dbUpload.FileName = file.FileName;
                     dbUpload.FileSize = (float)info.Length;
                     dbUpload.RDT = DataType.CurrentDataTimess;

@@ -2183,6 +2183,34 @@ namespace BP.WF
                 }
                 #endregion
 
+                #region 检查越轨流程,子流程发起。
+                NodeYGFlows ygflows = new NodeYGFlows();
+                ygflows.Retrieve(NodeYGFlowAttr.FK_Flow, this.No);
+                foreach (NodeYGFlow flow in ygflows)
+                {
+                    Flow fl = new Flow(flow.FK_Flow);
+
+                    /* 如果当前为子流程的时候，允许节点自动运行下一步骤，就要确定下一步骤的节点，必须有确定的可以计算的接收人. */
+                    if (fl.SubFlowOver == SubFlowOver.SendParentFlowToNextStep)
+                    {
+                        Node nd = new Node(flow.FK_Node);
+                        if (nd.HisToNodes.Count > 1)
+                        {
+                            msg += "@当前节点[" + nd.Name + "]的可以启动子流程或者延续流程.被启动的子流程设置了当子流程结束时让父流程自动运行到下一个节点，但是当前节点有分支，导致流程无法运行到下一个节点.";
+                        }
+
+                        if (nd.HisToNodes.Count == 1)
+                        {
+                            Node toNode = nd.HisToNodes[0] as Node;
+                            if (nd.HisDeliveryWay == DeliveryWay.BySelected)
+                                msg += "@当前节点[" + nd.Name + "]的可以启动子流程或者延续流程.被启动的子流程设置了当子流程结束时让父流程自动运行到下一个节点，但是当前节点有分支，导致流程无法运行到下一个节点.";
+                        }
+
+                    }
+                }
+                #endregion 检查越轨流程,子流程发起。
+
+
                 msg += "@流程的基础信息: ------ ";
                 msg += "@编号:  " + this.No + " 名称:" + this.Name + " , 存储表:" + this.PTable;
 

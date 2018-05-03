@@ -1114,7 +1114,7 @@ namespace BP.WF
             #region (最后)判断是否有延续流程.
             NodeYGFlows ygflows = new NodeYGFlows();
             ygflows.Retrieve(NodeYGFlowAttr.FK_Node, this.HisNode.NodeID);
-            if (ygflows.Count != 0)
+            if (ygflows.Count != 0 && 1==2 )
             {
                 foreach (NodeYGFlow item in ygflows)
                 {
@@ -1133,7 +1133,7 @@ namespace BP.WF
             #endregion (最后)判断是否有延续流程.
 
 
-
+            #region 计算到达的节点.
             this.ndFrom = this.HisNode;
             while (true)
             {
@@ -1757,6 +1757,9 @@ namespace BP.WF
                 mynd = nd;
                 ndFrom = nd;
             }//结束循环。
+
+            #endregion 计算到达的节点.
+
 
             throw new Exception("@找到下一步节点.");
         }

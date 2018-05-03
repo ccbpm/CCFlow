@@ -131,7 +131,7 @@ namespace BP.WF.HttpHandler
             string keywords = this.GetRequestVal("TB_KeyWords");
 
             string sql = "";
-            sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState ";
+            sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.FID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState ";
             sql += " FROM WF_GenerWorkFlow A ";
             sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
             sql += " AND A.Emps LIKE '@%" + WebUser.No + "%' ";
@@ -147,12 +147,22 @@ namespace BP.WF.HttpHandler
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
                 dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["TITLE"].ColumnName = "Title";
                 dt.Columns["STARTERNAME"].ColumnName = "StarterName";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
                 dt.Columns["EMPS"].ColumnName = "Emps";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人.
                 dt.Columns["WFSTATE"].ColumnName = "WFState"; //处理人.
+            }
+            if (dt != null)
+            {
+                dt.Columns.Add("TDTime");
+                foreach (DataRow dr in dt.Rows)
+                {
+
+                    dr["TDTime"] = BP.WF.HttpHandler.CCMobile.GetTraceNewTime(dr["FK_Flow"].ToString(), int.Parse(dr["WorkID"].ToString()), int.Parse(dr["FID"].ToString()));
+                }
             }
             return BP.Tools.Json.ToJson(dt);
         }

@@ -138,6 +138,7 @@
 
             // 流程实例列表.
             var ens = data['WF_GenerWorkFlow'];
+
             _Html = "";
 
             //当前登录人员的编号.
@@ -195,8 +196,10 @@
                 htmlbox += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
 
                 htmlbox += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
-
-                htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+                if(en.TDTime == null)
+                    htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+                else
+                    htmlbox += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
 
                 htmlbox += "<td><font color='" + color + "'>" + GetWFState(en.WFState, isCanDo) + "</font></td>";
 
@@ -436,8 +439,12 @@
 
 
                 htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
+                if (en.TDTime == null)
+                    htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+                else
+                    htmlboxs += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
 
-                htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+               
 
                 htmlboxs += "<td><font color='" + color + "'>" + GetWFState(en.WFState, isCanDo) + "</font></td>";
 

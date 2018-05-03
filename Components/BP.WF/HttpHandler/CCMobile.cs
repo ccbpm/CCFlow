@@ -365,12 +365,59 @@ namespace BP.WF.HttpHandler
                 mydt = qo.DoQueryToTable();
                 mydt.TableName = "WF_GenerWorkFlow";
             }
-            #endregion
+           
+            if (mydt != null)
+            {
+                 mydt.Columns.Add("TDTime");
+                 foreach (DataRow dr in mydt.Rows)
+                 {
 
+                     dr["TDTime"] = GetTraceNewTime(dr["FK_Flow"].ToString(), int.Parse(dr["WorkID"].ToString()), int.Parse(dr["FID"].ToString()));
+                 }
+            }
+            #endregion
+            
 
             ds.Tables.Add(mydt);
 
             return BP.Tools.Json.ToJson(ds);
+        }
+         public static string  GetTraceNewTime(string fk_flow, Int64 workid, Int64 fid)
+        {
+            #region 获取track数据.
+            string sqlOfWhere2 = "";
+            string sqlOfWhere1 = "";
+            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            Paras ps = new Paras();
+            if (fid == 0)
+            {
+                sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
+                ps.Add("WorkID11", workid);
+                ps.Add("WorkID12", workid);
+            }
+            else
+            {
+                sqlOfWhere1 = " WHERE (FID=" + dbStr + "FID11 OR WorkID=" + dbStr + "FID12 ) ";
+                ps.Add("FID11", fid);
+                ps.Add("FID12", fid);
+            }
+
+            string sql = "";
+            sql = "SELECT MAX(RDT) FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 ;
+             sql = "SELECT RDT FROM  ND" + int.Parse(fk_flow) + "Track  WHERE RDT=("+sql+")";
+            ps.SQL = sql;
+
+            try
+            {
+                return DBAccess.RunSQLReturnString(ps);
+            }
+            catch
+            {
+                // 处理track表.
+                Track.CreateOrRepairTrackTable(fk_flow);
+                return DBAccess.RunSQLReturnString(ps);
+            }
+            #endregion 获取track数据.
         }
         /// <summary>
         /// 查询

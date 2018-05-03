@@ -245,9 +245,9 @@ namespace BP.Sys
                 //要执行的脚本.
                 map.AddTBString(FrmRBAttr.Script, null, "要执行的脚本", true, false, 0, 4000, 20);
                 map.AddTBString(FrmRBAttr.FieldsCfg, null, "配置信息@FieldName=Sta", true, false, 0, 4000, 20);
+                map.AddTBString(FrmRBAttr.SetVal, null, "设置的值", true, false, 0, 200, 20);
 
                 map.AddTBString(FrmRBAttr.Tip, null, "选择后提示的信息", true, false, 0, 1000, 20);
-                map.AddTBString(FrmRBAttr.SetVal, null, "设置的值", true, false, 0, 200, 20);
 
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);

@@ -151,7 +151,7 @@ namespace BP.WF
              * 1, 执行一次Sender发送人的升级，原来由GenerWorkerList 转入WF_GenerWorkFlow.
              * 0, 静默升级启用日期.2014-12
              */
-
+          
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
@@ -930,6 +930,9 @@ namespace BP.WF
             NodeExt ne = new NodeExt();
             ne.CheckPhysicsTable();
 
+            MapDtl mapdtl = new MapDtl();
+            mapdtl.CheckPhysicsTable();
+
             CC cc = new CC();
             cc.CheckPhysicsTable();
 
@@ -938,7 +941,7 @@ namespace BP.WF
 
             MapAttr attr = new MapAttr();
             attr.CheckPhysicsTable();
-
+           
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.CheckPhysicsTable();
 

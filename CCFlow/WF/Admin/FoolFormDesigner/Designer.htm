@@ -298,7 +298,9 @@
 
 
                             if (mapAttr.UIContralType == 2) {
+
                                 html += "<td ColSpan=1 ><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
+
                             } else {
 
                                 var rbHtmls = "";
@@ -307,19 +309,22 @@
 
                                 //显示方式,默认为横向展示.
                                 var RBShowModel = 0;
-                                if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0 )
+                                if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
                                     RBShowModel = 1;
 
                                 for (var i = 0; i < ses.length; i++) {
                                     var se = ses[i];
 
+                                    var br = "";
                                     if (RBShowModel == 1)
-                                        rbHtmls += "<label><input type=radio name='" + mapAttr.KeyOfEn + "' id='RB_" + se.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' />" + se.Lab + "</label><br>";
-                                    else
-                                        rbHtmls += "<label><input type=radio name='" + mapAttr.KeyOfEn + "' id='RB_" + se.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' />" + se.Lab + "</label>";
+                                        br = "<br>";
 
+                                    var checked = "";
+                                    if (se.IntKey == mapAttr.DefVal)
+                                        checked = " checked=true";
+
+                                    rbHtmls += "<label style='font-weight:normal;'><input type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + se.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " />" + se.Lab + " </label>&nbsp;" + br;
                                 }
-
 
                                 html += "<td ColSpan=1 >" + rbHtmls + " </td>";
                             }
@@ -380,11 +385,167 @@
                 $('#contentTable').children().remove();
                 $('#contentTable').append(tbody);
 
+                var mapAttrs = data.Sys_MapAttr;
+
+                //解析设置表单字段联动显示与隐藏.
+                for (var i = 0; i < mapAttrs.length; i++) {
+
+                    var mapAttr = mapAttrs[i];
+                    if (mapAttr.UIVisible == 0)
+                        continue;
+
+                    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
+
+                        if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                            /*启用了显示与隐藏.*/
+                            var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                            ddl.change(function () {
+
+                                var selecedval = $(this).children('option:selected').val();  //弹出select的值.
+                                alert(selecedval);
+
+                                var pkval = mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn + "_" + selecedval;
+                                var frmRB = new Entity("BP.Sys.FrmRB", pkval);
+
+
+                                //解决字段隐藏显示.
+                                var cfgs = frmRB.FieldsCfg;
+
+                                //@Title=3@OID=2@RDT=1@FID=3@CDT=2@Rec=1@Emps=3@FK_Dept=2@FK_NY=3
+                                if (cfgs) {
+
+                                    var strs = cfgs.split('@');
+
+                                    for (var i = 0; i < strs.length; i++) {
+
+                                        var str = strs[i];
+                                        var kv = str.split('=');
+
+                                        var key = kv[0];
+                                        var sta = kv[1];
+
+                                        if (sta == 0)
+                                            continue; //什么都不设置.
+
+
+                                        if (sta == 1) {  //要设置为可编辑.
+                                            SetCtrlEnable(key);                                           
+                                        }
+
+                                        if (sta == 2) { //要设置为不可编辑.
+                                            SetCtrlUnEnable(key);                                           
+                                        }
+
+                                        if (sta == 3) { //不可见.
+                                            SetCtrlHidden(key);                                           
+                                        }
+
+                                    }
+
+
+                                }
+
+                                //解决为其他字段设置值.
+                                var setVal = frmRB.SetVal;
+                                if (setVal) {
+
+                                }
+
+
+                            });
+
+                        }
+                    }
+                }
+
 
                 $("#Msg").html("");
                 ResizeWindow();
 
             });
+
+            //设置是否可以用?
+            function SetCtrlEnable(id) {
+
+                var ctrl = $("#TB_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("readonly", "false");
+                }
+
+                ctrl = $("#DDL_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("disabled", "true");
+                }
+
+                ctrl = $("#CB_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("disabled", "true");
+                }
+
+                ctrl = $("#RB_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("disabled", "true");
+                }
+            }
+            function SetCtrlUnEnable(id) {
+
+                var ctrl = $("#TB_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("readonly", "true");
+                }
+
+                ctrl = $("#DDL_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("disabled", "false");
+                }
+
+                ctrl = $("#CB_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("disabled", "false");
+                }
+
+                ctrl = $("#RB_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("disabled", "false");
+                }
+            }
+            //设置隐藏显示?
+            function SetCtrlHidden(id) {
+
+                var ctrl = $("#TB_" + key);
+                if (ctrl != null) {
+                    ctrl.show();
+                    ctrl.attr("readonly", "true");
+                }
+
+                ctrl = $("#DDL_" + key);
+                if (ctrl != null) {
+                    ctrl.hide();
+                }
+
+                ctrl = $("#CB_" + key);
+                if (ctrl != null) {
+                    ctrl.hide();
+                }
+
+                ctrl = $("#RB_" + key);
+                if (ctrl != null) {
+                    ctrl.hide();
+                }
+            }
+
+            //设置值?
+            function SetCtrlVal(id, isEnable) {
+
+            }
 
             function GenerGroupContext(groupEn, data) {
 
@@ -533,9 +694,9 @@
                 });
             }
 
+
         </script>
 
-    
 
         <script language="javascript" type="text/javascript">
             var pageParam = {};
@@ -568,7 +729,6 @@
 
                 if (mypk == null || mypk == "undefined")
                     mypk = GetQueryString("FK_Node");
-
 
                 var url = 'FrmEvent.htm?FK_MapData=' + mypk;
                 var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');

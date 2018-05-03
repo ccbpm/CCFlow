@@ -25,6 +25,14 @@
             if (pageData.selectIntKey == null)
                 pageData.selectIntKey = "1";
 
+            //设置是否启用?
+            var pkval = GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var attr = new Entity("BP.Sys.MapAttr", pkval);
+            document.getElementById("RB_IsEnableJS_0").checked = true;
+            if (attr.AtPara.indexOf('@IsEnableJS=1') >= 0 ) 
+                document.getElementById("RB_IsEnableJS_1").checked = true;
+
+            //获得的数据.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("RadioBtns_Init");
@@ -69,7 +77,6 @@
                 //设置的值.
                 mapAttrHtml += '<td><input type="text" id="TB_' + attr.KeyOfEn + '" name="TB_' + attr.KeyOfEn + '" value="" /></td>';
 
-
                 mapAttrHtml += '</tr>';
 
                 //mapAttrHtml += '<tr><td>' + (i + 1) + '</td><td>' + attr.KeyOfEn + '</td><td>' + attr.Name + '</td><td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td><td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/><label for="' + attr.KeyOfEn + '1" >可用</label></td><td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/><label for="' + attr.KeyOfEn + '2" >可见</label></td></td><td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/> <label for="' + attr.KeyOfEn + '3" >不可见</label></td></tr>';
@@ -99,22 +106,41 @@
             var currentSaveRb = $.grep(initData.Sys_FrmRB, function (value) {
                 return value.IntKey == pageData.selectIntKey;
             });
+
             var configData = $('#formFields').serialize();
             configDataArr = configData.split('&');
+
             configDataArr = $.grep(configDataArr, function (value) {
                 return value.split('=').length == 2 && value.split('=')[1] != 0;
             });
+
             if (configDataArr.length > 0) {
                 configData = '@' + configDataArr.join('@');
             } else {
                 configData = '';
             }
+
             var script = $('#TB_Script').val();
             var tip = $('#TB_Tip').val();
+
+
+
             currentSaveRb[0].Script = script;
             currentSaveRb[0].FieldsCfg = configData;
             currentSaveRb[0].Tip = tip;
+
+            var strs = "";
+
+            $.each(initData.Sys_MapAttr, function (i, attr) {
+
+                var val = $("#TB_" + attr.KeyOfEn).val();
+                if (val == "" || val == null)
+                   return true;
+                strs += "@" + attr.KeyOfEn + '=' + val;
+            })
+            currentSaveRb[0].SetVal = strs;
         }
+
 
         function SaveEditData() {
             var selectRb = $.grep(initData.Sys_FrmRB, function (value) {
@@ -185,6 +211,16 @@
             window.close();
         }
 
+        //设置是否启用
+        function SaveEnableJS(ctrl) {
+
+            var pkval = GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var attr = new Entity("BP.Sys.MapAttr", pkval);
+            attr.SetPara("IsEnableJS", ctrl.value);
+            attr.Update();
+
+        }
+
         function Close() {
             window.close();
         }
@@ -196,6 +232,15 @@
         <tr>
             
             <td valign="top">
+
+              <fieldset>
+                    <legend>是否启用？</legend>
+
+                      <input type="radio" value="1" id="RB_IsEnableJS_1" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" /> <label for="RB_IsEnableJS_1">启用 </label>
+                      <input type="radio" value="0" id="RB_IsEnableJS_0"  onclick="SaveEnableJS(this)"  name="RB_IsEnableJS" /> <label for="RB_IsEnableJS_0">禁用 </label>
+                    
+                </fieldset>
+
            
             <fieldset>
                     <legend> 列表值 </legend>
@@ -204,7 +249,7 @@
                     </ul>
                 </fieldset>
 
-
+                 
 
                 <fieldset>
                     <legend>执行JS脚本</legend>
@@ -229,8 +274,8 @@
                                         <th>字段</th>
                                         <th>字段名</th>
                                         <th>不设置</th>
-                                        <th>可用</th>
-                                        <th>可见</th>
+                                        <th>可以编辑</th>
+                                        <th>不可编辑</th>
                                         <th>不可见</th>
                                         <th>设置值</th>
                                     </tr>

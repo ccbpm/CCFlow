@@ -9,6 +9,7 @@ function MultipleChoiceSmall(mapExt) {
             var tag1 = mapExt.Tag1;
             tag1 = tag1.replace(/;/g, ',');
 
+
             $.each(tag1.split(","), function (i, o) {
                 data.push({ No: i, Name: o })
             });

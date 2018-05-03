@@ -41,7 +41,7 @@
 				<th>发起日期</th>
 				<th>停留节点</th>
 				<th>审批人</th>
-				<th width='90'>到达日期</th>
+				<th width='90'>应完成日期</th>
 				<th width='60'>状态</th>
 				<th width='60'>操作</th>
 			</tr>
@@ -196,10 +196,11 @@
                 htmlbox += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
 
                 htmlbox += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
-                if(en.TDTime == null)
+
+                if (en.SDTOfNode == null)
                     htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
                 else
-                    htmlbox += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
+                    htmlbox += "<td><font color='" + color + "'>" + en.SDTOfNode.substring(5) + "</font></td>";
 
                 htmlbox += "<td><font color='" + color + "'>" + GetWFState(en.WFState, isCanDo) + "</font></td>";
 
@@ -398,7 +399,7 @@
             tableHtml += "<th>流程</th>";
             tableHtml += "<th>停留节点</th>";
             tableHtml += "<th>审批人</th>";
-            tableHtml += "<th width='90'>到达日期</th>";
+            tableHtml += "<th width='90'>应完成日期</th>";
             tableHtml += "<th width='60'>状态</th>";
             tableHtml += "<th width='50'>操作</th>";
           //  tableHtml += "<th>参与人</th>";

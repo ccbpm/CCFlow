@@ -28,6 +28,7 @@
         var mapData;
         var dtM; //方法集合.
         var webUser = new WebUser();
+       
         $(function () {
 
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
@@ -394,10 +395,10 @@
 
         //更新.
         function Save() {
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddUrlData();  //增加参数属性.
             formData = $("form").serialize();
+
             handler.AddFormData();
             //name = encodeURIComponent(name);
             var data = handler.DoMethodReturnString("Entities_Save");
@@ -409,60 +410,32 @@
            window.location.href = window.location.href; //刷新.
         }
 
-        function Delete(pkval) {
-
+        function Delete() {
+            var ensName = GetQueryString("EnsName");
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-
+           
             //获得存储的值.
             var cbs = $("input[type='checkbox']:checked");
             var str = "";
+            
             cbs.each(function () {
                 if (this.id.indexOf('IDX_') == -1)
                     return true;
-                str = str.substring(4);
-                alert(str);
-                var en = new Entity();
+                str = this.id.substring(4);
+                var en = new Entity(ensName.substring(0, ensName.length - 1));
+                en.No = str;
+                en.MyPK = str;
+                en.WorkID = str;
+                en.NodeID = str;
+                en.Delete();
+
             });
-
-            var ensName = GetQueryString("EnsName");
-            var ens = new Entities(ensName);
-            for (var i = 0; i < ens.length;i++ ) {
-                var en = ens[i];
-                var obj = document.getElementById("IDX_" + en.PKVal)
-                if(obj.checked==true)
-                    en.Delete();
-            }
-
-           
-
+            
             window.location.href = window.location.href;
-        }
+          }
 
-        function CloseIt() {
-            if (window.parent && window.parent.CloseBootstrapDialog) {
-                window.parent.CloseBootstrapDialog("取消");
-            } else {
-                window.close();
-            }
-        }
-
-        function SelectAll() {
-            var arrObj = document.all;
-            if (document.forms[0].checkedAll.checked) {
-                for (var i = 0; i < arrObj.length; i++) {
-                    if (typeof arrObj[i].type != "undefined" && arrObj[i].type == 'checkbox') {
-                        arrObj[i].checked = true;
-                    }
-                }
-            } else {
-                for (var i = 0; i < arrObj.length; i++) {
-                    if (typeof arrObj[i].type != "undefined" && arrObj[i].type == 'checkbox')
-                        arrObj[i].checked = false;
-                }
-            }
-        }
-
+       
     
  
     </script>

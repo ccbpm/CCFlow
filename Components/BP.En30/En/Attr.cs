@@ -1504,11 +1504,22 @@ namespace BP.En
 			}
 			return -1;
 		}
+
+        
         public Attr GetAttrByKey(string key)
 		{
             foreach (Attr  item in this)
             {
                 if (item.Key == key)
+                    return item;
+            }
+            return null;
+        }
+        public Attr GetAttrByKeyOfEn(string Field)
+        {
+            foreach (Attr item in this)
+            {
+                if (item.Field == Field)
                     return item;
             }
             return null;

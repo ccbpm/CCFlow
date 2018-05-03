@@ -668,11 +668,11 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
     //获取表单中隐藏的表单元素的值
     var hiddens = $('input[type=hidden]');
-    $.each(hiddens, function (i, hidden) {
-        if ($(hidden).attr("id").indexOf('TB_') == 0) {
-            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-        }
-    });
+    //$.each(hiddens, function (i, hidden) {
+    //    if ($(hidden).attr("id").indexOf('TB_') == 0) {
+     //       //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
+      //  }
+   // });
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {

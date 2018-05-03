@@ -1,13 +1,13 @@
 ﻿//小范围的多选,不需要搜索.
 function MultipleChoiceSmall(mapExt) {
-
+    var webUser = new WebUser();
     var data = [];
     var valueField = "No";
     var textField = "Name";
     switch (mapExt.DoWay) {
         case 1:
             var tag1 = mapExt.Tag1;
-            tag1 = tag1.replace(';', ',');
+            tag1 = tag1.replace(/;/g, ',');
 
             $.each(tag1.split(","), function (i, o) {
                 data.push({ No: i, Name: o })
@@ -18,7 +18,10 @@ function MultipleChoiceSmall(mapExt) {
             textField = "Lab";
             var enums = new Entities("BP.Sys.SysEnums");
             enums.Retrieve("EnumKey", mapExt.Tag2);
-            data = enums;
+            $.each(enums, function (i, o) {
+                data.push({ No: o.EnumKey, Name: o.Lab, IntKey: o.IntKey })
+            });
+            //data = enums;
             break;
         case 3:
             var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
@@ -80,30 +83,53 @@ function MultipleChoiceSmall(mapExt) {
             }
         });
         cbx.combobox("loadData", data);
+        cbx.combobox({
+            onLoadSuccess: function (p) {
+               var frmEleDBs = getVals(mapExt.FK_MapData, AttrOfOper, pageData.WorkID);
+                for (var i = 0; i < frmEleDBs.length; i++) {
+                    var tag1 = frmEleDBs[i].Tag1;
+                    (function sel(tag1, KeyOfEn, FK_MapData) {
+                    })(p[valueField], AttrOfOper, FK_MapData);
+                } 
+            }
+        });
+
     })(mapExt.AttrOfOper, data, mapExt.FK_MapData);
 }
 
 
 //checkbox 模式.
 function MakeCheckBoxsModel(mapExt, data) {
-
-    var textbox = $("#TB_" + mapExt.AttrOfOper);
+    var textboxId = "TB_" + mapExt.AttrOfOper
+    var textbox = $("#" + textboxId);
     textbox.css("visibility", "hidden");
     var tbVal = textbox.val();
+    if (tbVal == null) tbVal = "";
     for (var i = 0; i < data.length; i++) {
 
         var en = data[i];
 
         var eleHtml = "";
-        var id = "CB_" + mapExt.AttrOfOper + "_" + en.No;
-        var cb = $('<input type="checkbox" />');
-        cb.attr("id", id);
-        cb.attr("name", id);
+        var name;
+        var id;
+        var keyValue;
+        if(mapExt.DoWay ==2){
+            name = "CB_" + mapExt.AttrOfOper + "_" + en.No;
+            id = name + "_" + en.IntKey
+            keyValue = en.IntKey;
+        }else{
+            name = "CB_" + mapExt.AttrOfOper + "_" + mapExt.AttrOfOper;
+             id = name + "_" + en.No;
+             keyValue = en.No;
+         }
 
-        if (tbVal.indexOf(en.Name + ',') == 0)
-            cb.attr("checked", false);
-        else
+         var cb = $("<input type='checkbox' id='" + id + "' name='" + name + "' value='" + keyValue + "'onclick='changeValue(\"" + textboxId + "\",\"" + name + "\")'  />");
+
+
+         if (tbVal.indexOf(keyValue + ',') != -1)
             cb.attr("checked", true);
+        else
+            cb.attr("checked", false);
 
         //开始绑定事件.
 
@@ -112,12 +138,26 @@ function MakeCheckBoxsModel(mapExt, data) {
         textbox.before(cb);
 
         if (mapExt.Tag == "1")
-            var lab = $('<label class="labRb align_cbl" for=' + id + ' >&nbsp;' + en.Name + '</label>');
+            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "</label>");
         else
-            var lab = $('<label class="labRb align_cbl" for=' + id + ' >&nbsp;' + en.Name + '</label><br>');
+            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "</label><br>");
 
         textbox.before(lab);
     }
+  
+}
+
+function changeValue(changeIdV, getNameV) {
+    var strgetSelectValue="";
+    var getSelectValueMenbers = $("input[name='" + getNameV + "']:checked").each(function (j) {
+
+        if (j >= 0) {
+            strgetSelectValue += $(this).val() + ",";
+        }
+    });
+
+   $("#" + changeIdV).val(strgetSelectValue);
+    
 }
 
 //删除数据.
@@ -145,30 +185,14 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
         frmEleDB.Insert();
     }
 }
-/**
-{
-	"Sys_MapExt":[{
-		"MyPK":"PopDeptEmpModelAdv_CCFrm_FFFFF_TEST",
-		"FK_MapData":"CCFrm_FFFFF",
-		"ExtType":"PopDeptEmpModelAdv",
-		"DoWay":0,
-		"AttrOfOper":"TEST",
-		"AttrsOfActive":"",
-		"FK_DBSrc":"",
-		"Doc":"",
-		"Tag":"",
-		"Tag1":"\/SDKFlowDemo\/Handler.ashx?DoType=SearchEmps&Keyword=@Key",
-		"Tag2":"\/SDKFlowDemo\/Handler.ashx?DoType=ReqDepts",
-		"Tag3":"\/SDKFlowDemo\/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key",
-		"Tag4":"",
-		"AtPara":"@Title=关联流水@SearchTip=请输入付款人名称,进行搜索@RootNo=0",
-		"DBSrc":"",
-		"H":500,
-		"W":400,
-		"PRI":0
-	}]
+
+function getVals(fk_mapData,eleID, keyOfEn) {
+    var groupId = "";
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs"); 
+    return  frmEleDBs;
+
 }
- */
+
 function DeptEmpModelAdv0(mapExt) {
 	var target = $("#TB_" + mapExt.AttrOfOper);
 	target.hide();

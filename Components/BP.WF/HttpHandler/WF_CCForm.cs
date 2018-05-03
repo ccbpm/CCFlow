@@ -2397,20 +2397,7 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
-                    //if (athDesc.IsNote)
-                    //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
-
-                    //if (athDesc.Sort.Contains(","))
-                    //{
-                    //    string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');
-                    //    BP.Web.Controls.DDL ddl = this.Pub1.GetDDLByID("ddl");
-                    //    dbUpload.Sort = strs[0];
-                    //    if (ddl != null)
-                    //    {
-                    //        int selectedIndex = DataType.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
-                    //        dbUpload.Sort = strs[selectedIndex];
-                    //    }
-                    //}
+ 
 
                     dbUpload.UploadGUID = guid;
 

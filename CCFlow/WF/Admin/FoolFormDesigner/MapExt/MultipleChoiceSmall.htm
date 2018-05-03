@@ -23,7 +23,7 @@
                 $("#Btn_Delete").attr("disabled", true);
             else
                 $("#Btn_Delete").removeAttr("disabled");
-             
+
 
             //设置文本框选择的值.
             $("#RB_" + en.DoWay).attr("checked", true);
@@ -47,6 +47,7 @@
             while (tag.indexOf('~') > 1) {
                 tag = tag.replace("~", "'");
             }
+            $("#DDL_Tag").val(en.Tag);
 
             //绑定SQL
             $("#TB_SQL").val(tag);
@@ -145,7 +146,7 @@
 <legend>高级设置 </legend>
 工作方式：
 <select id="DDL_Tag">
-<option value="0"> combox 方式 </option>
+<!--<option value="0"> combox 方式 </option>-->
 <option value="1"> checkboxs 横向</option>
 <option value="2"> checkboxs 纵向</option>
 </select>

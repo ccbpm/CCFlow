@@ -78,6 +78,7 @@
             //返回节点数组
             var initNodeData = function (data, fk_dept2) {
                 data = eval('(' + data + ')');
+                console.log(data);
                 var fk_dept = fk_dept2;//pageData.FK_Dept;
                 var parentNo = undefined;
                 var fkDeptObj = $.grep(data.Depts, function (value) {
@@ -168,12 +169,11 @@
                                 data: {},
                                 dataType: 'html',
                                 success: function (data) {
-                                	if (data.indexOf('err@')==0)
-                               	 { 
-                               		alert(data);
-                               		return;                                    		
-                               	 }
-                                	
+                                    if (data.indexOf('err@') == 0) {
+                                        alert(data);
+                                        return;
+                                    }
+                                   
                                     var fk_dept2 = pageData.FK_Dept;
                                     cb(initNodeData(data, fk_dept2));
                                 }
@@ -194,14 +194,13 @@
                                     data: {},
                                     dataType: 'html',
                                     success: function (data) {
-                                    	 
-                                    	if (data.indexOf('err@')==0)
-                                    	 { 
-                                    		alert(data);
-                                    		return;                                    		
-                                    	 }
-                                    		 
-                                    		
+
+                                        if (data.indexOf('err@') == 0) {
+                                            alert(data);
+                                            return;
+                                        }
+
+
                                         var fk_dept2 = node.id;
                                         cb(initNodeData(data, fk_dept2));
                                     }

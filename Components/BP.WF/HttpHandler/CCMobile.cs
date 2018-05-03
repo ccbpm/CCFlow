@@ -311,9 +311,9 @@ namespace BP.WF.HttpHandler
 
             #region 2、处理流程类别列表.
             if (tSpan == "-1")
-                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "'  AND WFState > 1 GROUP BY FK_Flow, FlowName";
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY FK_Flow, FlowName";
             else
-                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY FK_Flow, FlowName";
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%"+BP.Web.WebUser.No+",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -332,6 +332,8 @@ namespace BP.WF.HttpHandler
 
             qo.addLeftBracket();
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
+            qo.addOr();
+            qo.AddWhere(GenerWorkFlowAttr.TodoEmps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
             qo.addOr();
             qo.AddWhere(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
             qo.addRightBracket();

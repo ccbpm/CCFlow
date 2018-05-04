@@ -328,7 +328,46 @@ namespace BP.WF.HttpHandler
 
             #region 3、处理流程实例列表.
             GenerWorkFlows gwfs = new GenerWorkFlows();
-            BP.En.QueryObject qo = new QueryObject(gwfs);
+            String sqlWhere = "";
+            sqlWhere = "(1 = 1)AND (((Emps LIKE '%" + WebUser.No + "%')OR(TodoEmps LIKE '%" + WebUser.No + "%')OR(Starter = '" + WebUser.No + "')) AND (WFState > 1)";
+            if (tSpan != "-1")
+            {
+                sqlWhere += "AND (TSpan = '" + tSpan + "') ";
+            }
+
+            if (this.FK_Flow != null)
+            {
+                sqlWhere += "AND (FK_Flow = '" + this.FK_Flow + "')) ";
+            }
+            else
+            {
+                sqlWhere += ")";
+            }
+            sqlWhere += "ORDER BY RDT DESC";
+
+            sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM (select * from WF_GenerWorkFlow where " + sqlWhere + ") where rownum <= 50";
+            DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                mydt.Columns[0].ColumnName = "WorkID";
+                mydt.Columns[1].ColumnName = "FID";
+                mydt.Columns[2].ColumnName = "FK_Flow";
+                mydt.Columns[3].ColumnName = "FlowName";
+                mydt.Columns[4].ColumnName = "Title";
+                mydt.Columns[5].ColumnName = "WFSta";
+                mydt.Columns[6].ColumnName = "Starter";
+                mydt.Columns[7].ColumnName = "StarterName";
+                mydt.Columns[8].ColumnName = "Sender";
+                mydt.Columns[9].ColumnName = "RDT";
+                mydt.Columns[10].ColumnName = "FK_Node";
+                mydt.Columns[11].ColumnName = "NodeName";
+                mydt.Columns[12].ColumnName = "TodoEmps";
+
+
+            }
+            mydt.TableName = "WF_GenerWorkFlow";
+
+            /*BP.En.QueryObject qo = new QueryObject(gwfs);
 
             qo.addLeftBracket();
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
@@ -366,7 +405,7 @@ namespace BP.WF.HttpHandler
             {
                 mydt = qo.DoQueryToTable();
                 mydt.TableName = "WF_GenerWorkFlow";
-            }
+            }*/
            
             if (mydt != null)
             {

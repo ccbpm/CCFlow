@@ -403,22 +403,14 @@
                                 var nowKey = ddl.val();
 
                                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
-                                ddl.change(function () {
-                                    var selecedval = $(this).children('option:selected').val();  //弹出select的值.
-                                    alert(selecedval);
-                                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval);
-                                });
+                               
                             }
                             if (mapAttr.UIContralType == 3) {
                                 /*启用了显示与隐藏.*/
                                 var rb = $("#RB_" + mapAttr.KeyOfEn);
                                 var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
                                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
-
-                                rb.click(function () {
-                                    var selectVal = $(this).val();
-                                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selectVal);
-                                });
+                               
                             }
                         }
                     }

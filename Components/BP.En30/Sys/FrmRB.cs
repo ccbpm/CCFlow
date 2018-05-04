@@ -82,6 +82,21 @@ namespace BP.Sys
                 this.SetValByKey(FrmRBAttr.Tip, value);
             }
         }
+
+        /// <summary>
+        /// 字段设置值
+        /// </summary>
+        public string SetVal
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmRBAttr.SetVal);
+            }
+            set
+            {
+                this.SetValByKey(FrmRBAttr.SetVal, value);
+            }
+        }
         /// <summary>
         /// 要执行的脚本
         /// </summary>

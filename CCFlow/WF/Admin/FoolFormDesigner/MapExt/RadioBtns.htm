@@ -23,7 +23,7 @@
             };
 
             if (pageData.selectIntKey == null)
-                pageData.selectIntKey = "1";
+                pageData.selectIntKey = "0";
 
             //设置是否启用?
             var pkval = GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
@@ -108,37 +108,37 @@
             });
 
             var configData = $('#formFields').serialize();
+
+            //中文序列化乱码
+            configData = decodeURIComponent(configData, true);
+
             configDataArr = configData.split('&');
 
             configDataArr = $.grep(configDataArr, function (value) {
                 return value.split('=').length == 2 && value.split('=')[1] != 0;
             });
 
+            var fieldsCfg = "";
+            var setValue = "";
+
             if (configDataArr.length > 0) {
-                configData = '@' + configDataArr.join('@');
-            } else {
-                configData = '';
+                for (var i = 0; i < configDataArr.length; i++) {
+                    if (configDataArr[i].indexOf("TB_") == -1)
+                        fieldsCfg += '@' + configDataArr[i];
+                    else
+                        setValue += '@' + configDataArr[i].replace("TB_","");
+                }
+               
             }
 
             var script = $('#TB_Script').val();
             var tip = $('#TB_Tip').val();
 
-
-
             currentSaveRb[0].Script = script;
-            currentSaveRb[0].FieldsCfg = configData;
+            currentSaveRb[0].FieldsCfg = fieldsCfg;
             currentSaveRb[0].Tip = tip;
-
-            var strs = "";
-
-            $.each(initData.Sys_MapAttr, function (i, attr) {
-
-                var val = $("#TB_" + attr.KeyOfEn).val();
-                if (val == "" || val == null)
-                   return true;
-                strs += "@" + attr.KeyOfEn + '=' + val;
-            })
-            currentSaveRb[0].SetVal = strs;
+            currentSaveRb[0].SetVal = setValue;
+           
         }
 
 
@@ -158,7 +158,19 @@
             $('#TB_Script').val(selectRb[0].Script);
             $('#TB_Tip').val(selectRb[0].Tip);
             //解析下面的元素显示与否
+            var setVal = selectRb[0].SetVal;
+            if (setVal != null && setVal != "") {
+                var setVals = setVal.split("@");
+                for (var i = 0; i < setVals.length; i++) {
+                    if (setVals[i] != '' && setVals[i]) {
+                        var valObjs = setVals[i].split('=');
+                        $("#TB_"+valObjs[0]).val(valObjs[1]);
+                    }
+                }
+
+            }
             var fieldsCfg = selectRb[0].FieldsCfg;
+            
 
             //'@ConfigInfo:' + $('[name=xx]:checked').val() + '@ViewSta:' + 
             //开始绑定字段状态信息

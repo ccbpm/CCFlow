@@ -152,6 +152,8 @@
                     html += GenerGroupContext(groupObj, data);
 
                     var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+                       
+
 
                     var isDrawTR = true; //是否需要话tr ?
                     for (var j = 0; j < mapAttrs.length; j++) {
@@ -167,7 +169,7 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><select id='" + mapAttr.KeyOfEn + "' class='form-control' ><option>" + mapAttr.UIBindKey + "</option></select></td>";
+                            html += "<td ColSpan=1 ><div id='DIV_"+mapAttr.KeyOfEn +"'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\""+mapAttr.FK_MapData+"\",\""+mapAttr.KeyOfEn+"\")'><option>" + mapAttr.UIBindKey + "</option></select></div></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -179,14 +181,13 @@
 
 
                         // 添加文本框 ，日期控件等.
-                        // AppString  
                         if (mapAttr.MyDataType == "1") { //不是外键
-
+                          
                             if (mapAttr.ColSpan == 3 && mapAttr.UIHeight <= 40) {
                                 //跨三列，并且单行.
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=" + mapAttr.ColSpan + "><input class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_"+mapAttr.KeyOfEn +"'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -198,7 +199,7 @@
                                 //跨三列，并且单行.
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=3><textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "<td ColSpan=3><div id='DIV_"+mapAttr.KeyOfEn +"'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -208,7 +209,7 @@
                                 //跨4列，并且多行. 是大块文本的情况.
                                 var uiHeight = mapAttr.UIHeight;
                                 html += "<tr>";
-                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><textarea class='form-control' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></td>";
+                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_"+mapAttr.KeyOfEn +"'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'  type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -222,7 +223,7 @@
                                 }
 
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=1 ><input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
+                                html += "<td ColSpan=1 ><div id='DIV_"+mapAttr.KeyOfEn +"'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
 
                                 if (isDrawTR == false) {
                                     html += "</tr>";
@@ -255,7 +256,7 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><input  class='form-control' style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/></td>";
+                            html += "<td ColSpan=1 ><div id='DIV_"+mapAttr.KeyOfEn +"'> <input  class='form-control' style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -278,7 +279,7 @@
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><div class='checkbox' ><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
+                            html += "<td ColSpan=1 ><div class='checkbox' id='DIV_"+mapAttr.KeyOfEn+"'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -299,7 +300,7 @@
 
                             if (mapAttr.UIContralType == 2) {
 
-                                html += "<td ColSpan=1 ><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " ><option >" + mapAttr.UIBindKey + "</option></select></td>";
+                                html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\")'><option >" + mapAttr.UIBindKey + "</option></select></div></td>";
 
                             } else {
 
@@ -323,10 +324,10 @@
                                     if (se.IntKey == mapAttr.DefVal)
                                         checked = " checked=true";
 
-                                    rbHtmls += "<label style='font-weight:normal;'><input type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + se.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " />" + se.Lab + " </label>&nbsp;" + br;
+                                    rbHtmls += "<label style='font-weight:normal;'><input type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\")' />" + se.Lab + " </label>&nbsp;" + br;
                                 }
 
-                                html += "<td ColSpan=1 >" + rbHtmls + " </td>";
+                                html += "<td ColSpan=1 ><div id='DIV_"+mapAttr.KeyOfEn +"'>" + rbHtmls + "</div> </td>";
                             }
 
 
@@ -349,7 +350,7 @@
                                 html += "<tr>";
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><input class='form-control' style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /> </td>";
+                            html += "<td ColSpan=1 ><div id='DIV_"+mapAttr.KeyOfEn +"'><input class='form-control' style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
 
                             if (isDrawTR == false)
                                 html += "</tr>";
@@ -371,7 +372,7 @@
                             tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
                             if (mapAttr.UIContralType == 1) { //DDL
-                                tbody.children(":last").append($("<td><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
+                                tbody.children(":last").append($("<td><div id='DIV_" + mapAttr.KeyOfEn + "'><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\")'>" + '' + "</select></div></td>"));
                             }
                             continue;
                         }
@@ -386,8 +387,7 @@
                 $('#contentTable').append(tbody);
 
                 var mapAttrs = data.Sys_MapAttr;
-
-                //解析设置表单字段联动显示与隐藏.
+                    //解析设置表单字段联动显示与隐藏.
                 for (var i = 0; i < mapAttrs.length; i++) {
 
                     var mapAttr = mapAttrs[i];
@@ -395,67 +395,34 @@
                         continue;
 
                     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
-
                         if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
-                            /*启用了显示与隐藏.*/
-                            var ddl = $("#DDL_" + mapAttr.KeyOfEn);
-                            ddl.change(function () {
+                            if (mapAttr.UIContralType == 1) {
+                                /*启用了显示与隐藏.*/
+                                var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                                //初始化页面的值
+                                var nowKey = ddl.val();
 
-                                var selecedval = $(this).children('option:selected').val();  //弹出select的值.
-                                alert(selecedval);
+                                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+                                ddl.change(function () {
+                                    var selecedval = $(this).children('option:selected').val();  //弹出select的值.
+                                    alert(selecedval);
+                                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval);
+                                });
+                            }
+                            if (mapAttr.UIContralType == 3) {
+                                /*启用了显示与隐藏.*/
+                                var rb = $("#RB_" + mapAttr.KeyOfEn);
+                                var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
+                                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
-                                var pkval = mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn + "_" + selecedval;
-                                var frmRB = new Entity("BP.Sys.FrmRB", pkval);
-
-
-                                //解决字段隐藏显示.
-                                var cfgs = frmRB.FieldsCfg;
-
-                                //@Title=3@OID=2@RDT=1@FID=3@CDT=2@Rec=1@Emps=3@FK_Dept=2@FK_NY=3
-                                if (cfgs) {
-
-                                    var strs = cfgs.split('@');
-
-                                    for (var i = 0; i < strs.length; i++) {
-
-                                        var str = strs[i];
-                                        var kv = str.split('=');
-
-                                        var key = kv[0];
-                                        var sta = kv[1];
-
-                                        if (sta == 0)
-                                            continue; //什么都不设置.
-
-
-                                        if (sta == 1) {  //要设置为可编辑.
-                                            SetCtrlEnable(key);                                           
-                                        }
-
-                                        if (sta == 2) { //要设置为不可编辑.
-                                            SetCtrlUnEnable(key);                                           
-                                        }
-
-                                        if (sta == 3) { //不可见.
-                                            SetCtrlHidden(key);                                           
-                                        }
-
-                                    }
-
-
-                                }
-
-                                //解决为其他字段设置值.
-                                var setVal = frmRB.SetVal;
-                                if (setVal) {
-
-                                }
-
-
-                            });
-
+                                rb.click(function () {
+                                    var selectVal = $(this).val();
+                                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selectVal);
+                                });
+                            }
                         }
                     }
+
                 }
 
 
@@ -464,87 +431,162 @@
 
             });
 
+            function changeEnable(obj, FK_MapData, KeyOfEn) {
+                var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+                setEnable(FK_MapData, KeyOfEn, selecedval);
+            }
+            function clickEnable(obj, FK_MapData, KeyOfEn) {
+                var selectVal = $(obj).val();
+
+                setEnable(FK_MapData, KeyOfEn, selectVal);
+            }
+            //启用了显示与隐藏.
+            function setEnable(FK_MapData, KeyOfEn, selectVal) {
+                var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
+                var frmRB = new Entity("BP.Sys.FrmRB", pkval);
+
+
+                //解决字段隐藏显示.
+                var cfgs = frmRB.FieldsCfg;
+
+                //@Title=3@OID=2@RDT=1@FID=3@CDT=2@Rec=1@Emps=3@FK_Dept=2@FK_NY=3
+                if (cfgs) {
+
+                    var strs = cfgs.split('@');
+
+                    for (var i = 0; i < strs.length; i++) {
+
+                        var str = strs[i];
+                        var kv = str.split('=');
+
+                        var key = kv[0];
+                        var sta = kv[1];
+
+                        if (sta == 0)
+                            continue; //什么都不设置.
+
+
+                        if (sta == 1) {  //要设置为可编辑.
+                            SetCtrlEnable(key);
+                        }
+
+                        if (sta == 2) { //要设置为不可编辑.
+                            SetCtrlUnEnable(key);
+                        }
+
+                        if (sta == 3) { //不可见.
+                            SetCtrlHidden(key);
+                        }
+
+                    }
+
+
+                }
+
+                //解决为其他字段设置值.
+                var setVal = frmRB.SetVal;
+                if (setVal) {
+                    var strs = setVal.split('@');
+
+                    for (var i = 0; i < strs.length; i++) {
+
+                        var str = strs[i];
+                        var kv = str.split('=');
+
+                        var key = kv[0];
+                        var value = kv[1];
+                        SetCtrlVal(key, value);
+
+                    }
+                }
+            }
+
             //设置是否可以用?
-            function SetCtrlEnable(id) {
+            function SetCtrlEnable(key) {
 
                 var ctrl = $("#TB_" + key);
-                if (ctrl != null) {
+                if (ctrl.length>0) {
                     ctrl.show();
-                    ctrl.attr("readonly", "false");
+                    ctrl.removeAttr("readonly");
                 }
 
                 ctrl = $("#DDL_" + key);
-                if (ctrl != null) {
+                if (ctrl.length > 0) {
                     ctrl.show();
-                    ctrl.attr("disabled", "true");
+                    ctrl.removeAttr("disabled");
                 }
 
                 ctrl = $("#CB_" + key);
-                if (ctrl != null) {
+                if (ctrl.length > 0) {
                     ctrl.show();
-                    ctrl.attr("disabled", "true");
+                    ctrl.removeAttr("disabled");
                 }
 
                 ctrl = $("#RB_" + key);
-                if (ctrl != null) {
+                if (ctrl.length > 0) {
                     ctrl.show();
-                    ctrl.attr("disabled", "true");
+                    ctrl.removeAttr("disabled");
                 }
             }
-            function SetCtrlUnEnable(id) {
+            function SetCtrlUnEnable(key) {
 
                 var ctrl = $("#TB_" + key);
-                if (ctrl != null) {
+                if (ctrl.length > 0) {
                     ctrl.show();
                     ctrl.attr("readonly", "true");
                 }
 
                 ctrl = $("#DDL_" + key);
-                if (ctrl != null) {
+                if (ctrl.length > 0) {
                     ctrl.show();
-                    ctrl.attr("disabled", "false");
+                    ctrl.attr("disabled", "disabled");
                 }
 
                 ctrl = $("#CB_" + key);
-                if (ctrl != null) {
+                if (ctrl.length > 0) {
                     ctrl.show();
-                    ctrl.attr("disabled", "false");
+                   
+                    ctrl.attr("disabled", "disabled");
                 }
 
                 ctrl = $("#RB_" + key);
                 if (ctrl != null) {
                     ctrl.show();
-                    ctrl.attr("disabled", "false");
+                     $('input[name=RB_'+key+']').attr("disabled","disabled"); 
+                    //ctrl.attr("disabled", "disabled");
                 }
             }
             //设置隐藏显示?
-            function SetCtrlHidden(id) {
+            function SetCtrlHidden(key) {
 
-                var ctrl = $("#TB_" + key);
-                if (ctrl != null) {
-                    ctrl.show();
-                    ctrl.attr("readonly", "true");
-                }
-
-                ctrl = $("#DDL_" + key);
-                if (ctrl != null) {
+                var ctrl = $("#DIV_" + key);
+                if (ctrl.length > 0) {
                     ctrl.hide();
                 }
 
-                ctrl = $("#CB_" + key);
-                if (ctrl != null) {
-                    ctrl.hide();
-                }
-
-                ctrl = $("#RB_" + key);
-                if (ctrl != null) {
-                    ctrl.hide();
-                }
             }
 
             //设置值?
-            function SetCtrlVal(id, isEnable) {
+            function SetCtrlVal(key, value) {
+                var ctrl = $("#TB_" + key);
+                if (ctrl.length > 0) {
+                    ctrl.val(value);
+                }
 
+                ctrl = $("#DDL_" + key);
+                if (ctrl.length > 0) {
+                    ctrl.val(value);
+                }
+
+                ctrl = $("#CB_" + key);
+                if (ctrl.length > 0) {
+                    ctrl.val(value);
+                }
+
+                ctrl = $("#RB_" + key);
+                if (ctrl.length > 0) {
+                    ctrl.val(value);
+                }
             }
 
             function GenerGroupContext(groupEn, data) {

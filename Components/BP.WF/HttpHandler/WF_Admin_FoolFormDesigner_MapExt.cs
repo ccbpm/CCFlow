@@ -699,7 +699,7 @@ namespace BP.WF.HttpHandler
                 rb.FieldsCfg = dr["FieldsCfg"].ToString(); //格式为 @字段名1=1@字段名2=0
                 rb.Tip = dr["Tip"].ToString(); //提示信息
 
-                rb.Tip = dr["SetVal"].ToString(); //设置值.
+                rb.SetVal = dr["SetVal"].ToString(); //设置值.
 
                 rb.Update();
             }

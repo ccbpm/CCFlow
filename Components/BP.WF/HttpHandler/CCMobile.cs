@@ -354,7 +354,7 @@ namespace BP.WF.HttpHandler
             qo.AddWhere(GenerWorkFlowAttr.WFState, " > ", 1);
 
             qo.addOrderByDesc("RDT");
-            qo.Top = 50;
+            //qo.Top = 50;
 
             DataTable mydt = null;
             if (SystemConfig.AppCenterDBType == DBType.Oracle)

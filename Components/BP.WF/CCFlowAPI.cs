@@ -212,7 +212,8 @@ namespace BP.WF
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
                 #region 增加 groupfields
-                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs)==false)
+                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false 
+                    && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs)==false)
                 {
                     //计算累加的字段分组.
                     GroupFields gfs = new GroupFields();
@@ -260,6 +261,7 @@ namespace BP.WF
                             gf.Rows.InsertAt(dr, 0); //增加一行.
                         }
                     }
+
                     //计算累加的字段集合.
                     MapAttrs attrs = new MapAttrs();
                     QueryObject qo = new QueryObject(attrs);

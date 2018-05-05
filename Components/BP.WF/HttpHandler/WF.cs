@@ -57,8 +57,7 @@ namespace BP.WF.HttpHandler
             //加入WF_Node.
             DataTable WF_Node = nd.ToDataTableField("WF_Node");
             myds.Tables.Add(WF_Node);
-
-
+             
 
             #region 加入组件的状态信息, 在解析表单的时候使用.
             nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.

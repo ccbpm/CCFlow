@@ -1177,7 +1177,10 @@ namespace BP.WF
 
                 string info = "这个错误";
                 if (ex.Message.Contains("WorkOpt/") == true)
+                {
                     info += "@流程设计错误:自动运行到的下一个节点的接收人规则是由上一个人员来选择的,导致到不能自动运行到下一步骤.";
+                    return info;
+                }
 
                 return "@在最后一个子流程完成后，让父流程的节点自动发送时，出现错误:" + ex.Message;
             }

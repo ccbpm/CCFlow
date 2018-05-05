@@ -4,10 +4,13 @@
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript"   src="../Scripts/config.js" ></script>
+     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js"  type="text/javascript"></script>
     <script type="text/javascript" language="javascript" >
         function Load() {
 
-            var url = window.location.href;
+            /*var url = window.location.href;
             if (plant == "CCFlow") {
                 url = url.replace('.htm', '.aspx');
                 window.location.href = url;
@@ -16,7 +19,26 @@
                 url = url.replace('.htm', '.jsp');
                 window.location.href = url;
                 return;
+            }*/
+           
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+            var flowNo = GetQueryString("FK_Flow");
+            if(flowNo.indexOf("'")>=0)
+            flowNo = flowNo.substring(0,flowNo.length-1);
+            handler.AddPara("flowNo", flowNo);
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            var data = handler.DoMethodReturnString("AccepterOfGener_UnSend");
+            if (data.indexOf("@error") == 0)
+                alert(data);
+            else {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.close();
+                }
+                window.close();
             }
+               
+               
+            $("#showMsg").html("");
         }
     </script>
 </head>
@@ -25,7 +47,7 @@
 <form id="cc">
     
 <br />
-<center> <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。 </center>
+<center> <div id="showMsg"><img  src='../Img/loading.gif' alt="" />正在加载，请稍后。。。 </div></center>
 </form>
 
 </body>

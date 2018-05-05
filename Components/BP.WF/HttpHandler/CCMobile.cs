@@ -358,13 +358,14 @@ namespace BP.WF.HttpHandler
                 mydt.Columns[3].ColumnName = "FlowName";
                 mydt.Columns[4].ColumnName = "Title";
                 mydt.Columns[5].ColumnName = "WFSta";
-                mydt.Columns[6].ColumnName = "Starter";
-                mydt.Columns[7].ColumnName = "StarterName";
-                mydt.Columns[8].ColumnName = "Sender";
-                mydt.Columns[9].ColumnName = "RDT";
-                mydt.Columns[10].ColumnName = "FK_Node";
-                mydt.Columns[11].ColumnName = "NodeName";
-                mydt.Columns[12].ColumnName = "TodoEmps";
+                mydt.Columns[6].ColumnName = "WFState";
+                mydt.Columns[7].ColumnName = "Starter";
+                mydt.Columns[8].ColumnName = "StarterName";
+                mydt.Columns[9].ColumnName = "Sender";
+                mydt.Columns[10].ColumnName = "RDT";
+                mydt.Columns[11].ColumnName = "FK_Node";
+                mydt.Columns[12].ColumnName = "NodeName";
+                mydt.Columns[13].ColumnName = "TodoEmps";
 
 
             }

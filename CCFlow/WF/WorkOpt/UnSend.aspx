@@ -20,7 +20,7 @@
     string doIt = this.Request.QueryString["DoIt"];
     BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workid);
     BP.WF.Node nd = new BP.WF.Node(gwf.FK_Node);
-    if (DataType.IsNullOrEmpty(doIt) == true)
+    if (BP.DA.DataType.IsNullOrEmpty(doIt) == true)
     {
         %>
          <fieldset>

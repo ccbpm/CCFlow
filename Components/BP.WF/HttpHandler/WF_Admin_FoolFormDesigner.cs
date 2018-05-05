@@ -123,6 +123,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MapDefDtlFreeFrm_Init()
         {
+            string isFor = this.GetRequestVal("For");
+            if (isFor != "")
+                return "sln@" + isFor;
+
+
             MapDtl dtl = new MapDtl();
 
             //如果传递来了节点信息, 就是说明了独立表单的节点方案处理, 现在就要做如下判断
@@ -1139,14 +1144,15 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                MapData md = new MapData(this.FK_MapData);
-                md.CheckPTableSaveModel(newNo);
+                MapData md = new MapData();
+                md.No = this.FK_MapData;
+                if (md.RetrieveFromDBSources() != 0)
+                    md.CheckPTableSaveModel(newNo);
             }
             catch (Exception ex)
             {
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
-
 
             //求出选择的字段类型.
             MapAttr attr = new MapAttr();

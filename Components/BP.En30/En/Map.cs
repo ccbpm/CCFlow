@@ -2149,6 +2149,9 @@ namespace BP.En
 		}
 		public void AddTBStringDoc(string key, string field, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, int rows, bool isUILine)
 		{
+            if (field == null)
+                field = key;
+
 			Attr attr = new Attr();
 			attr.Key = key;
 			attr.Field = field;

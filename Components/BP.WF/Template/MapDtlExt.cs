@@ -1101,6 +1101,7 @@ namespace BP.WF.Template
                 return this._enMap;
             }
         }
+         
         /// <summary>
         /// 列自动计算
         /// </summary>

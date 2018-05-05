@@ -367,18 +367,6 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(FrmAttachmentAttr.H, value);
             }
         }
-      
-        public int GroupID
-        {
-            get
-            {
-                return this.GetValIntByKey(FrmAttachmentAttr.GroupID);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.GroupID, value);
-            }
-        }
         /// <summary>
         /// 数据控制方式
         /// </summary>
@@ -804,6 +792,8 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsNote, true, "是否增加备注", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsExpCol, true, "是否启用扩展列", true, true);
+
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, true);
                 map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false,
                     FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
@@ -850,16 +840,14 @@ namespace BP.Sys.FrmUI
                 #region 其他属性。
                 //参数属性.
                 map.AddTBAtParas(3000);
-                map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, true);
-                map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", false, true, 0, 128, 20);
                 #endregion 其他属性。
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "高级配置";
               //  rm.Icon = "/WF/Admin/CCFormDesigner/Img/Menu/CC.png";
-                rm.ClassMethodName = this.ToString() + ".DoAdv";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm.ClassMethodName = this.ToString() + ".DoAdv";
+               // rm.RefMethodType = RefMethodType.RightFrameOpen;
+              //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "类别设置";
@@ -873,11 +861,23 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "设置扩展列";
+                rm.ClassMethodName = this.ToString() + ".DtlOfAth";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        public string DtlOfAth()
+        {
+            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl="+this.MyPK+"&For="+this.MyPK;
+            return url;
+        }
 
         /// <summary>
         /// 测试连接
@@ -902,7 +902,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoSettingSort()
         {
-            return "/WF/Admin/FoolFormDesigner/AttachmentSortSetting.htm?FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&Ath=" + this.NoOfObj;
+            return "../../Admin/FoolFormDesigner/AttachmentSortSetting.htm?FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&Ath=" + this.NoOfObj;
         }
         /// <summary>
         /// 执行高级设置.

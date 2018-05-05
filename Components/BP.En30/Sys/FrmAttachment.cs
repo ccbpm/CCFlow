@@ -209,6 +209,10 @@ namespace BP.Sys
         /// </summary>
         public const string IsNote = "IsNote";
         /// <summary>
+        /// 是否启用扩展列
+        /// </summary>
+        public const string IsExpCol = "IsExpCol";
+        /// <summary>
         /// 是否显示标题列
         /// </summary>
         public const string IsShowTitle = "IsShowTitle";
@@ -372,6 +376,10 @@ namespace BP.Sys
         /// </summary>
         public const string FastKeyGenerRole = "FastKeyGenerRole";
         #endregion
+        /// <summary>
+        /// 字段属性
+        /// </summary>
+        public const string Attrs = "Attrs";
     }
     /// <summary>
     /// 附件
@@ -1174,6 +1182,7 @@ namespace BP.Sys
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
 
+
                 map.AddTBString(FrmAttachmentAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件编号", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.FK_Node, 0, "节点控制(对sln有效)", false, false);
@@ -1205,6 +1214,8 @@ namespace BP.Sys
 
                 map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsNote, true, "是否增加备注", false, false);
+                map.AddBoolean(FrmAttachmentAttr.IsExpCol, false, "是否启用扩展列", false, false);
+
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", false, false);
                 map.AddTBInt(FrmAttachmentAttr.UploadType, 0, "上传类型0单个1多个2指定", false, false);
 
@@ -1214,7 +1225,6 @@ namespace BP.Sys
 
                 //数据引用，如果为空就引用当前的.
                 map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, null, "数据引用组件ID", true, false, 0, 150, 20, true, null);
-
 
                 #region WebOffice控制方式
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableWF, true, "是否启用weboffice", true, true);
@@ -1240,6 +1250,9 @@ namespace BP.Sys
                 map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, false);
                 map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
+                //字段属性.
+                map.AddTBStringDoc(FrmAttachmentAttr.Attrs, null, null, "字段属性", true, false, 0, 500, 20, 12, true);
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -1264,7 +1277,6 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
-
             this.IsWoEnableWF = true;
             this.IsWoEnableSave = false;
             this.IsWoEnableReadonly = false;

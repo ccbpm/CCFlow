@@ -1287,7 +1287,7 @@ namespace BP.WF
                 if (flowNo != null)
                 {
                     gwf= new GenerWorkFlow(workid);
-                    billUrl = SystemConfig.HostURLOfBS + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FK_Flow=" + flowNo+"&FK_Node="+gwf.FK_Node+"&Starter="+gwf.Starter+"&BillNo="+gwf.BillNo+"&FK_Dept="+gwf.FK_Dept;
+                    billUrl = SystemConfig.HostURLOfBS + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + gwf.FK_Node + "&Starter=" + gwf.Starter + "&BillNo=" + gwf.BillNo + "&FK_Dept=" + gwf.FK_Dept;
                 }
 
                 ThoughtWorks.QRCode.Codec.QRCodeEncoder qrc = new ThoughtWorks.QRCode.Codec.QRCodeEncoder();

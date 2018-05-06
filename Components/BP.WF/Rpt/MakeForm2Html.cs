@@ -1238,6 +1238,8 @@ namespace BP.WF
         {
             try
             {
+                GenerWorkFlow gwf = null;
+
                 #region 准备目录文件.
                 string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\";
                 try
@@ -1279,7 +1281,15 @@ namespace BP.WF
                 #region 生成二维码.
                 /*说明是图片文件.*/
                 string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
-                string billUrl = SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
+                //string billUrl = SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
+
+                string billUrl = SystemConfig.HostURLOfBS + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo="+flowNo;
+                if (flowNo != null)
+                {
+                    gwf= new GenerWorkFlow(workid);
+                    billUrl = SystemConfig.HostURLOfBS + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FK_Flow=" + flowNo+"&FK_Node="+gwf.FK_Node+"&Starter="+gwf.Starter+"&BillNo="+gwf.BillNo+"&FK_Dept="+gwf.FK_Dept;
+                }
+
                 ThoughtWorks.QRCode.Codec.QRCodeEncoder qrc = new ThoughtWorks.QRCode.Codec.QRCodeEncoder();
                 qrc.QRCodeEncodeMode = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ENCODE_MODE.BYTE;
                 qrc.QRCodeScale = 4;
@@ -1348,9 +1358,8 @@ namespace BP.WF
                 docs = docs.Replace("@Height", mapData.FrmH.ToString());
                 docs = docs.Replace("@PrintDT", DateTime.Now.ToString("yyyy年MM月dd日HH时mm分ss秒") );
 
-                if (flowNo != null)
+                if (flowNo != null )
                 {
-                    GenerWorkFlow gwf = new GenerWorkFlow();
                     gwf.WorkID = workid;
                     gwf.RetrieveFromDBSources();
 

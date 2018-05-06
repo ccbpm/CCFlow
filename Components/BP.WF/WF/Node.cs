@@ -183,6 +183,7 @@ namespace BP.WF
                     {
                         item.UIIsEnable = false; //设置为只读的.
                         item.DefValReal = "";    //设置默认值为空.
+
                         ma.Attrs.Add(item.HisAttr);
                     }
 

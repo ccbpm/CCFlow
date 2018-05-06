@@ -14,18 +14,28 @@
 
         $(function () {
 
-            var workid = GetQueryString("WorkID");
-            var flowNo = GetQueryString("FK_Flow");
-            var billNo = GetQueryString("BillNo");
-            var frmID = GetQueryString("FrmID");
-            var starter = GetQueryString("Starter");
-            var deptNo = GetQueryString("FK_Dept");
-            var nodeID = GetQueryString("FK_Node");
-            var starter = GetQueryString("Starter");
+
+            var ap = GetQueryString("AP");
+            alert(ap);
+
+            var strs = ap.split('$');
+            var frmID = ap[0]; //表单ID.
+            var paras = strs[1].split('_');
+
+            var workid = paras[0];
+            var flowNo = paras[1];
+            var nodeID = paras[2];
+            var starter = paras[3];
+            var nodeID = paras[4];
+            var deptNo = paras[4];
+              
 
             //校验是否正确.
             var gwf = new Entity("BP.WF.GenerWorkFlow", workid);
+
+
             if (gwf.FK_Flow != flowNo || gwf.FK_Dept != deptNo || gwf.Starter != starter) {
+                alert('参数错误：' + window.location.href);
                 return;
             }
 

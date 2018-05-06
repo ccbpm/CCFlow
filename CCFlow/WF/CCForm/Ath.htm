@@ -120,6 +120,15 @@
             data = JSON.parse(data);
 
             var athDesc = data["AthDesc"][0];
+
+
+            //自定义表单模式.
+            if (athDesc.AthRunModel == 2) {
+                src = "../../DataUser/AthSelf.htm?PKVal=" + GetPKVal() + "&Ath=" + athDesc.NoOfObj + "&FK_MapData=" + athDesc.FK_MapData + "&FK_FrmAttachment=" + athDesc.MyPK;
+                window.location.href = src;
+                return;
+            }
+
             var dbs = data["DBAths"];
             var fileShowWay = athDesc.FileShowWay;
             if (fileShowWay == "undefined" || fileShowWay == null || fileShowWay == "")

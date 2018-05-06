@@ -1,7 +1,41 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>正在调入单据请稍候...</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <!-- 导入配置文件. -->
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script type="text/javascript" src="../Scripts/config.js"  ></script>
+    <script type="text/javascript" src="../Comm/Gener.js" ></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            var workid = GetQueryString("WorkID");
+            var flowNo = GetQueryString("FK_Flow");
+            var billNo = GetQueryString("BillNo");
+            var frmID = GetQueryString("FrmID");
+            var starter = GetQueryString("Starter");
+            var deptNo = GetQueryString("FK_Dept");
+            var nodeID = GetQueryString("FK_Node");
+            var starter = GetQueryString("Starter");
+
+            //校验是否正确.
+            var gwf = new Entity("BP.WF.GenerWorkFlow", workid);
+            if (gwf.FK_Flow != flowNo || gwf.FK_Dept != deptNo || gwf.Starter != starter) {
+                return;
+            }
+
+            var url = "";
+
+
+        });
+
+    </script>
+
 </head>
 <body>
 

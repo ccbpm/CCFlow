@@ -6,7 +6,6 @@ INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal)VALUES ('CN_SF','省份
 
 DELETE FROM Sys_SFTable WHERE No='CN_City';
 INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal)VALUES ('CN_City','城市','FK_City','中国的市级城市','');
- 
 
 DELETE FROM Sys_SFTable WHERE No='BP.Port.Depts';
 INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal)VALUES ('BP.Port.Depts','部门','FK_Dept','部门','');

@@ -649,6 +649,9 @@
 
                         var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
                         var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK;
+
+                       
+
                         var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                         return "<tr><td colspan=4 id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
 

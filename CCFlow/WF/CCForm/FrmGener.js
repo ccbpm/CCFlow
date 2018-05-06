@@ -928,6 +928,7 @@ function ShowTextBoxNoticeInfo() {
 
     $.each(mapAttr, function (i, attr) {
         $('#TB_' + attr.KeyOfEn).bind('focus', function (obj) {
+
             var frmData = JSON.parse(jsonStr);
             var mapAttr = frmData.Sys_MapAttr;
 

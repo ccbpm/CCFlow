@@ -8,94 +8,90 @@
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript">
 
         $(function () {
 
             var fileTypes = GetQueryString("FileType");
-            // 初始化人员.   //开始加载数据.
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=Packup_Init&FileType=" + GetQueryString("FileType") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        document.getElementById("Msg").innerHTML = data;
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
 
-                    var filetype = GetQueryString("FileType");
-                    var urls = JSON.parse(data);
-                    var html = "";
-                    for (var i = 0; i < urls.length; i++) {
+            var data = handler.DoMethodReturnString("Packup_Init");
 
-                        var url = urls[i];
-                        if (fileTypes.indexOf(url.No) < 0)
-                            continue;
+            if (data.indexOf('err@') == 0) {
+                document.getElementById("Msg").innerHTML = data;
+                return;
+            }
 
-                        if (url.No == "htm" || url.No == "html") {
-                            html += "<fieldset>";
-                            html += "<legend>html在线预览打印</legend>";
-                            html += "<ul>";
-                            html += "<li>系统把整个表单生成了一个静态的html文件.</li>";
-                            html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/htm.gif' />进行在线预览</a></li>";
-                            html += "</ul>";
-                            html += "</fieldset>";
+            var filetype = GetQueryString("FileType");
+            var urls = JSON.parse(data);
+            var html = "";
+            for (var i = 0; i < urls.length; i++) {
 
-                            window.location.href = url.Name;
-                        }
+                var url = urls[i];
+                if (fileTypes.indexOf(url.No) < 0)
+                    continue;
 
-                        if (url.No == "pdf") {
+                if (url.No == "htm" || url.No == "html") {
+                    html += "<fieldset>";
+                    html += "<legend>html在线预览打印</legend>";
+                    html += "<ul>";
+                    html += "<li>系统把整个表单生成了一个静态的html文件.</li>";
+                    html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/htm.gif' />进行在线预览</a></li>";
+                    html += "</ul>";
+                    html += "</fieldset>";
 
-                            if (url.Name.indexOf('err@') == 0) {
-                                html += "<fieldset>";
-                                html += "<legend>pdf 生成pdf出现错误</legend>";
-                                html += "<font color=red>" + url.Name + "</font>";
-                                html += "</fieldset>";
-                            } else {
-                                html += "<fieldset>";
-                                html += "<legend>pdf 在线打印与预览</legend>";
-                                html += "<ul>";
-                                html += "<li>系统把整个表单生成了一个pdf文件.</li>";
-                                html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
-                                html += "</ul>";
-                                html += "</fieldset>";
-
-                                downloadFile(url.Name);
-                            }
-                        }
-
-                        if (url.No == "zip") {
-
-                            if (url.Name.indexOf('err@') == 0) {
-                                html += "<fieldset>";
-                                html += "<legend>生成zip出现错误</legend>";
-                                html += "<font color=red>" + url.Name + "</font>";
-                                html += "</fieldset>";
-                            } else {
-                                html += "<fieldset>";
-                                html += "<legend>zip 在线打印与预览</legend>";
-                                html += "<ul>";
-                                html += "<li>系统把整个表单生成了一个zip文件,这个文件里包括了,表单的附件，二维码等信息.</li>";
-                                html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/Zip.gif' />进行打包下载</a></li>";
-                                html += "</ul>";
-                                html += "</fieldset>";
-
-                                window.location.href = url.Name;
-                            }
-                        }
-                    }
-                    html = '<b><font color=red>提示:如果不能弹出打印窗口,请点击连接手工打印下载.</font></b>' + html;
-
-                    html += "<br><br><center><div style=''><a href='javascript:window.parent.close();' >关闭窗口</a></div></center>";
-                    document.getElementById("Msg").innerHTML = html;
+                    window.location.href = url.Name;
                 }
-            });
-        });
 
+                if (url.No == "pdf") {
+
+                    if (url.Name.indexOf('err@') == 0) {
+                        html += "<fieldset>";
+                        html += "<legend>pdf 生成pdf出现错误</legend>";
+                        html += "<font color=red>" + url.Name + "</font>";
+                        html += "</fieldset>";
+                    } else {
+                        html += "<fieldset>";
+                        html += "<legend>pdf 在线打印与预览</legend>";
+                        html += "<ul>";
+                        html += "<li>系统把整个表单生成了一个pdf文件.</li>";
+                        html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
+                        html += "</ul>";
+                        html += "</fieldset>";
+
+                        downloadFile(url.Name);
+                    }
+                }
+
+                if (url.No == "zip") {
+
+                    if (url.Name.indexOf('err@') == 0) {
+                        html += "<fieldset>";
+                        html += "<legend>生成zip出现错误</legend>";
+                        html += "<font color=red>" + url.Name + "</font>";
+                        html += "</fieldset>";
+                    } else {
+                        html += "<fieldset>";
+                        html += "<legend>zip 在线打印与预览</legend>";
+                        html += "<ul>";
+                        html += "<li>系统把整个表单生成了一个zip文件,这个文件里包括了,表单的附件，二维码等信息.</li>";
+                        html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/Zip.gif' />进行打包下载</a></li>";
+                        html += "</ul>";
+                        html += "</fieldset>";
+
+                        window.location.href = url.Name;
+                    }
+                }
+            }
+            html = '<b><font color=red>提示:如果不能弹出打印窗口,请点击连接手工打印下载.</font></b>' + html;
+
+            html += "<br><br><center><div style=''><a href='javascript:window.parent.close();' >关闭窗口</a></div></center>";
+            document.getElementById("Msg").innerHTML = html;
+
+        });
 
         function downloadFile(url) {
 

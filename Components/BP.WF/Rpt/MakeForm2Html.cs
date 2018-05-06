@@ -1281,13 +1281,15 @@ namespace BP.WF
                 #region 生成二维码.
                 /*说明是图片文件.*/
                 string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
-                //string billUrl = SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
+                string billUrl = SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
 
-                string billUrl = SystemConfig.HostURLOfBS + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo="+flowNo;
+                string qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo="+flowNo;
                 if (flowNo != null)
                 {
-                    gwf= new GenerWorkFlow(workid);
-                    billUrl = SystemConfig.HostURLOfBS + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + gwf.FK_Node + "&Starter=" + gwf.Starter + "&BillNo=" + gwf.BillNo + "&FK_Dept=" + gwf.FK_Dept;
+                    gwf = new GenerWorkFlow(workid);
+                    //qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + gwf.FK_Node + "&Starter=" + gwf.Starter + "&BillNo=" + gwf.BillNo + "&FK_Dept=" + gwf.FK_Dept;
+                    qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?AP=" + frmID + "$" + workid + "_" + flowNo + "_" + gwf.FK_Node + "_" + gwf.Starter + "_" + gwf.FK_Dept;
+                    // qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?WorkID="+workid;
                 }
 
                 ThoughtWorks.QRCode.Codec.QRCodeEncoder qrc = new ThoughtWorks.QRCode.Codec.QRCodeEncoder();
@@ -1295,7 +1297,7 @@ namespace BP.WF
                 qrc.QRCodeScale = 4;
                 qrc.QRCodeVersion = 7;
                 qrc.QRCodeErrorCorrect = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ERROR_CORRECTION.M;
-                System.Drawing.Bitmap btm = qrc.Encode(billUrl, System.Text.Encoding.UTF8);
+                System.Drawing.Bitmap btm = qrc.Encode(qrUrl, System.Text.Encoding.UTF8);
                 btm.Save(pathQR);
                 #endregion
 
@@ -1458,12 +1460,6 @@ namespace BP.WF
 
 
                 #region 判断当前流程是否是最后一个节点，是否是反馈给申请人.
-
-                 
-
-
-              
-
 
                 #endregion 判断当前流程是否是最后一个节点，是否是反馈给申请人.
 

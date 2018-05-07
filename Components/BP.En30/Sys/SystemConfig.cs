@@ -491,7 +491,7 @@ namespace BP.Sys
                 {
                     return SystemConfig.AppSettings["HostURL"];
                 }
-                return "http:/127.0.0.1/";
+                return HostURLOfBS; // "http:/127.0.0.1/";
             }
         }
         /// <summary>

@@ -70,7 +70,7 @@ namespace BP.WF.HttpHandler
 
                 Node nd = new Node(nodeID);
                 Work wk = nd.HisWork;
-                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null);
+                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null,true);
             }
             catch (Exception ex)
             {

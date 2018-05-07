@@ -1234,7 +1234,7 @@ namespace BP.WF
         public static string ZipFilePath = "";
 
         public static string CCFlowAppPath = "/";
-        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
+        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null, bool urlIsHostUrl=false)
         {
             try
             {
@@ -1422,7 +1422,10 @@ namespace BP.WF
                 try
                 {
                     Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                    ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                    if (urlIsHostUrl == false)
+                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                    else
+                        ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                 }
                 catch (Exception ex)
                 {

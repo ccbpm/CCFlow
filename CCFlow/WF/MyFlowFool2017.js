@@ -204,6 +204,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
     return html;
 }
 
+
 function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
     var str = '';
@@ -231,7 +232,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             return ctrl;
         }
 
-        return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+        //return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>"; 
     }
 
     //外键类型.
@@ -244,7 +246,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+        //return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>"; 
     }
 
     //添加文本框 ，日期控件等.
@@ -334,7 +337,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
         if (mapAttr.UIContralType == 1)
-            return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+            //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>";       
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -368,6 +372,205 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
     alert(mapAttr.Name + "的类型没有判断.");
     return;
+}
+
+//记录改变字段样式 不可编辑，不可见
+var mapAttrs = [];
+function changeEnable(obj, FK_MapData, KeyOfEn, AtPara) {
+    var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+    cleanAll();
+    if (AtPara.indexOf('@IsEnableJS=1') >= 0)
+        setEnable(FK_MapData, KeyOfEn, selecedval);
+
+}
+//清空所有的设置
+function cleanAll(){
+    for(var i=0;i<mapAttrs.length;i++){
+        SetCtrlShow(mapAttrs[i]);
+        SetCtrlEnable(mapAttrs[i]);
+        CleanCtrlVal(mapAttrs[i]);
+    }
+
+}
+//启用了显示与隐藏.
+function setEnable(FK_MapData, KeyOfEn, selectVal) {
+    var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
+    var frmRB = new Entity("BP.Sys.FrmRB", pkval);
+
+
+    //解决字段隐藏显示.
+    var cfgs = frmRB.FieldsCfg;
+
+    //@Title=3@OID=2@RDT=1@FID=3@CDT=2@Rec=1@Emps=3@FK_Dept=2@FK_NY=3
+    if (cfgs) {
+
+        var strs = cfgs.split('@');
+
+        for (var i = 0; i < strs.length; i++) {
+
+            var str = strs[i];
+            var kv = str.split('=');
+
+            var key = kv[0];
+            var sta = kv[1];
+
+            if (sta == 0)
+                continue; //什么都不设置.
+
+
+            if (sta == 1) {  //要设置为可编辑.
+                SetCtrlShow(key);
+                SetCtrlEnable(key);
+            }
+
+            if (sta == 2) { //要设置为不可编辑.
+                SetCtrlShow(key);
+                SetCtrlUnEnable(key);
+                mapAttrs.push(key);
+            }
+
+            if (sta == 3) { //不可见.
+                SetCtrlHidden(key);
+                mapAttrs.push(key);
+            }
+
+        }
+
+
+    }
+
+    //解决为其他字段设置值.
+    var setVal = frmRB.SetVal;
+    if (setVal) {
+        var strs = setVal.split('@');
+
+        for (var i = 0; i < strs.length; i++) {
+
+            var str = strs[i];
+            var kv = str.split('=');
+
+            var key = kv[0];
+            var value = kv[1];
+            SetCtrlVal(key, value);
+            mapAttrs.push(key);
+
+        }
+    }
+}
+
+//设置是否可以用?
+function SetCtrlEnable(key) {
+
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length>0) {
+        ctrl.removeAttr("readonly");
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.removeAttr("disabled");
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.removeAttr("disabled");
+    }
+
+    ctr = document.getElementsByName('RB_' + key);
+    if (ctrl!=null) {
+        var ses = new Entities("BP.Sys.SysEnums");
+        ses.Retrieve("EnumKey", key);
+        for(var i=0;i<ses.length;i++)
+            $("#RB_" + key + "_" + ses[i].IntKey).removeAttr("disabled");
+    }
+}
+function SetCtrlUnEnable(key) {
+
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.attr("readonly", "true");
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.attr("disabled", "disabled");
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+
+        ctrl.attr("disabled", "disabled");
+    }
+
+    ctrl = $("#RB_" + key);
+    if (ctrl != null) {
+         $('input[name=RB_'+key+']').attr("disabled","disabled"); 
+        //ctrl.attr("disabled", "disabled");
+    }
+}
+//设置隐藏?
+function SetCtrlHidden(key) {
+
+    var ctrl = $("#DIV_" + key);
+    if (ctrl.length > 0) {
+        ctrl.hide();
+    }
+
+}
+//设置显示?
+function SetCtrlShow(key) {
+
+    var ctrl = $("#DIV_" + key);
+    if (ctrl.length > 0) {
+        ctrl.show();
+    }
+
+}
+
+//设置值?
+function SetCtrlVal(key, value) {
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+    }
+
+    ctrl = $("#RB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+    }
+}
+
+//清空值?
+function CleanCtrlVal(key) {
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val('');
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val('');
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val('');
+    }
+
+    ctrl = $("#RB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val('');
+    }
 }
 
 var flowData = {};

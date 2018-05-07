@@ -85,6 +85,26 @@
             }
             return data;
         }
+
+        function saveData() {
+            var str = "";
+            var inputArray = $("input[type='checkbox']"); //取到所有的input 并且放到一个数组中  
+            inputArray.each(//使用数组的循环函数 循环这个input数组  
+                function() {
+                    var input = $(this); //循环中的每一个input元素  
+                    if (input.is(':checked')) {
+                        str += input.attr("id") + ","; //查看循环中的每一个input的id
+                    }                    
+                });
+            var gloVar = new Entity("BP.Sys.GloVar");
+            gloVar.No = "Holiday";
+            gloVar.RetrieveFromDBSources();
+            gloVar.Val = str;
+            gloVar.Holidays = str;
+            gloVar.Save();
+            window.location.href = window.location.href;
+        }
+        
        
     </script>
 </head>
@@ -111,5 +131,6 @@
 <center><div id="showMsg"> <img src='../../Img/loading.gif' alt="" />正在加载，请稍后。。。 </center></div>
 </form>
 
+<input type="submit" name="Btn_Save" value="保存" onclick="saveData()" id="Btn_Save" />
 </body>
 </html>

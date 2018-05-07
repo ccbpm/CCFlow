@@ -24,19 +24,10 @@
             GenerBindEnumKey("DDL_TWay", "TWay", "1");
 
             //执行.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("CHRole_Init");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            data = JSON.parse(data);
-
+            var node = new Entity("BP.WF.Node", nodeID);
+             
             //调用公共类库的方法:执行批量主表赋值
-            GenerFullAllCtrlsVal(data);
+            GenerFullAllCtrlsVal(node);
         });
     </script>
 </head>
@@ -60,18 +51,18 @@
 <table style=" width:100%;">
 <tr>
 <td nowarp=true> 限期完成时限：</td>
-<td> <input type=text id="TB_TimeLimit" name="TB_TimeLimit" />天,</td>
-<td>天数</td>
-<td style=" color:Gray">天数</td>
+<td> <input type=text id="TB_TimeLimit_Day" name="TB_TimeLimit_Day" style="width:30px;" />天,</td>
+<td><input type=text id="TB_TimeLimit_Hour" name="TB_TimeLimit_Hour" style="width:30px;" />小时,</td>
+<td style=" color:Gray"><input type=text id="TB_TimeLimit_MM" name="TB_TimeLimit_MM" style="width:30px;" />分钟</td>
 </tr>
-
+<!--
 <tr>
 <td>预警：</td>
 <td>  <input type=text id="TB_WarningDay" name="TB_WarningDay" /> 天,</td>
 <td> 天数 </td>
 <td style=" color:Gray">天数</td>
 </tr>
-
+-->
 <tr>
 <td>节假日</td>
 

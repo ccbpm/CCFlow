@@ -83,12 +83,14 @@
 </ul>
 </fieldset>
 
-
 <fieldset>
 <legend><input type="radio" value="1"  id="RB_OutTimeDeal_1" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_1">自动向下运动 </label> </legend>
 
 <ul style=" color:Gray">
 <li>超时了当前节点自动运动到下一个环节，如果要控制特定的条件下不向下运动，就需要在当前节点的发送前事件里编写相关的业务逻辑。</li>
+<li>自动向下运动需要明确下一个节点的接受人，与到达的节点，所以一下两种行为不能自动向下运动。</li>
+<li>1. 当前节点的方向条件控制规则是选择的模式.</li>
+<li>2. 到达的节点的接受人规则是上一个节点选择的.</li>
 </ul>
 </fieldset>
 

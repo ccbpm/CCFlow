@@ -408,7 +408,7 @@ function EditAth(fk_mapdata, ath) {
 function NewAth() {
 
     var fk_mapdata = GetQueryString('FK_MapData');
-    var val = prompt('请输入附件ID，要求表单唯一。', 'Ath1');
+    var val = prompt('请输入附件ID:(要求是字母数字下划线，非中文等特殊字符.)', 'Ath1');
     if (val == null) {
         return;
     }
@@ -417,6 +417,7 @@ function NewAth() {
         NewAth(fk_mapdata);
         return;
     }
+
     $.ajax({
         type: 'post',
         async: true,
@@ -481,8 +482,8 @@ function Sln(fk_mapdata) {
 ////然浏览器最大化.
 //function ResizeWindow() {
 //    if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
-//        var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
-//        var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高     
+//        var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽.   
+//        var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高.
 //        window.moveTo(0, 0);           //把window放在左上角     
 //        window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
 //    }

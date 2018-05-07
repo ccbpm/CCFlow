@@ -35,16 +35,51 @@
                 return;
             }
 
-            var url = "Packup.htm?FileType=pdf&WorkID=" + workid + "&FK_Flow=" + flowNo;
-            window.location.href = url;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("PrintDocQRGuide_Init");
+            alert(data);
+
+            var urls = JSON.parse(data);
+            for (var i = 0; i < urls.length; i++) {
+                var url = urls[i];
+
+
+                 if (url.No == "pdf") {
+
+                     if (url.Name.indexOf('err@') == 0) {
+                        html += "<fieldset>";
+                        html += "<legend>pdf 生成pdf出现错误</legend>";
+                        html += "<font color=red>" + url.Name + "</font>";
+                        html += "</fieldset>";
+                    } else {
+                        html += "<fieldset>";
+                        html += "<legend>pdf 在线打印与预览</legend>";
+                        html += "<ul>";
+                        html += "<li>系统把整个表单生成了一个pdf文件.</li>";
+                        html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
+                        html += "</ul>";
+                        html += "</fieldset>";
+
+                        downloadFile(url.Name);
+                    }
+                }
+            }
 
 
         });
+
+        function downloadFile(url) {
+            window.open(url);
+            return;
+        }
 
     </script>
 
 </head>
 <body>
+
 
 正在调入单据请稍候.....
 

@@ -1423,9 +1423,9 @@ namespace BP.WF
                 {
                     Html2Pdf(pdfFileExe, billUrl, pdfFile);
                     if (urlIsHostUrl == false)
-                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                        ht.Add("pdf", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                     else
-                        ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                        ht.Add("pdf", SystemConfig.HostURL + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                 }
                 catch (Exception ex)
                 {
@@ -1436,7 +1436,7 @@ namespace BP.WF
                     try
                     {
                         Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                        ht.Add("pdf", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
                     }
                     catch
                     {
@@ -1453,7 +1453,7 @@ namespace BP.WF
                 {
                     (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
-                    ht.Add("zip", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + DataType.PraseStringToUrlFileName( fileNameFormat) + ".zip");
+                    ht.Add("zip", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".zip");
                 }
                 catch (Exception ex)
                 {

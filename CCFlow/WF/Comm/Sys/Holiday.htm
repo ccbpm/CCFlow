@@ -1,30 +1,114 @@
 ﻿<head>
-    <title>驰骋工作流</title>
-    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <title>节假日设置</title>
+    <link href="../Style/Table.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Gener.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript" >
-        //页面启动函数.
-        function ToURL() {
+        //枚举值
+        if (typeof DayOfWeek == "undefined") {
+        var DayOfWeek = {}
 
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+            DayOfWeek.Sunday = 0,
+
+            DayOfWeek.Monday = 1,
+ 
+            DayOfWeek.Tuesday = 2,
+           
+            DayOfWeek.Wednesday = 3,
+        
+            DayOfWeek.Thursday = 4,
+
+            DayOfWeek.Friday = 5,
+
+            DayOfWeek.Saturday = 6
         }
+        $(function () {
+            //系统设置
+            var gloVar = new Entity("BP.Sys.GloVar");
+            gloVar.No = "Holiday";
+            gloVar.RetrieveFromDBSources();
+
+            //获取当前时间
+            var dt = new Date();
+            while (dt.getDay() != DayOfWeek.Sunday)
+                dt.setDate(dt.getDate() - 1);
+            var htm = "";
+            var idx = 0;
+            while (true) {
+
+                var text = getFullMonth(dt.getMonth()+1) + "月" + getFullDay(dt.getDate()) + "日";
+                var id = getFullMonth(dt.getMonth()+1) + "-" + getFullDay(dt.getDate());
+                var checked = "";
+                if (gloVar.Val.indexOf(id) >= 0)
+                    checked = "checked='checked'";
+
+
+                switch (dt.getDay()) {
+                    case DayOfWeek.Sunday:
+                        idx++;
+                        htm += "<tr>";
+                        htm += "<td class='Idx' nowrap>" + idx + "</td>";
+                        htm += "<td nowrap >" + (dt.getMonth() + 1 )+ "月</td>";
+                        htm += "<td  nowrap   ><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " /><label for='" + id + "'>" + text + "</label></td>";
+
+                        break;
+                    case DayOfWeek.Saturday:
+                        htm += "<td  nowrap   ><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " /><label for='" + id + "'>" + text + "</label></td>";
+                        htm += "</tr>";
+                        break;
+                    default:
+                        htm += "<td  nowrap class='TRSum'  ><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " /><label for='" + id + "'>" + text + "</label></td>";
+                        break;
+                }
+
+                if (dt.getFullYear() != new Date().getFullYear())
+                    break;
+
+                dt.setDate(dt.getDate() + 1);
+
+            }
+            $("#HolidayTab").append(htm);
+            $("#showMsg").html("");
+        });
+        function getFullMonth(month) {
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            return month;
+        }
+        function getFullDay(data) {
+            if (data >= 0 && data <= 9) {
+                data = "0" + data;
+            }
+            return data;
+        }
+       
     </script>
 </head>
 <body  onload="ToURL()" >
 
 <form id="cc">
-
-    
+<center>
+  <table id="HolidayTab" border=1  >
+     <caption>节假日设置(请在属于节假日的日期里打勾)</caption>
+     <tr>
+     <th>序</th>
+     <th>月份</th>
+     <th>周日</th>
+     <th>周一</th>
+     <th>周二</th>
+     <th>周三</th>
+     <th>周四</th>
+     <th>周五</th>
+     <th>周六</th>
+     </tr>
+</table>
+ </center>   
 <br />
-<center> <img src='../../Img/loading.gif' alt="" />正在加载，请稍后。。。 </center>
+<center><div id="showMsg"> <img src='../../Img/loading.gif' alt="" />正在加载，请稍后。。。 </center></div>
 </form>
 
 </body>

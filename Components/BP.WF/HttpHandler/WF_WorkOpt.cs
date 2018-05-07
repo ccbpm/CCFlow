@@ -54,6 +54,30 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 扫描二维码获得文件.
+        /// </summary>
+        /// <returns></returns>
+        public string PrintDocQRGuide_Init()
+        {
+            try
+            {
+                int nodeID = this.FK_Node;
+                if (this.FK_Node == 0)
+                {
+                    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                    nodeID = gwf.FK_Node;
+                }
+
+                Node nd = new Node(nodeID);
+                Work wk = nd.HisWork;
+                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
         /// 选择表单,发起前置导航.
         /// </summary>
         /// <returns></returns>

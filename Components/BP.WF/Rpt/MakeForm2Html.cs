@@ -1281,14 +1281,14 @@ namespace BP.WF
                 #region 生成二维码.
                 /*说明是图片文件.*/
                 string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
-                string billUrl = SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
+                string billUrl = SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
 
-                string qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo="+flowNo;
+                string qrUrl = SystemConfig.HostURL + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo="+flowNo;
                 if (flowNo != null)
                 {
                     gwf = new GenerWorkFlow(workid);
                     //qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + gwf.FK_Node + "&Starter=" + gwf.Starter + "&BillNo=" + gwf.BillNo + "&FK_Dept=" + gwf.FK_Dept;
-                    qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?AP=" + frmID + "$" + workid + "_" + flowNo + "_" + gwf.FK_Node + "_" + gwf.Starter + "_" + gwf.FK_Dept;
+                    qrUrl = SystemConfig.HostURL + "/WF/WorkOpt/PrintDocQRGuide.htm?AP=" + frmID + "$" + workid + "_" + flowNo + "_" + gwf.FK_Node + "_" + gwf.Starter + "_" + gwf.FK_Dept;
                     // qrUrl = SystemConfig.HostURLOfBS + "WF/WorkOpt/PrintDocQRGuide.htm?WorkID="+workid;
                 }
 

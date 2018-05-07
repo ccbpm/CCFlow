@@ -846,11 +846,9 @@ namespace BP.WF.HttpHandler
                 DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
                 DataRow newRootRow = dt.Select("NO='F" + aemp.RootOfFlow + "'")[0];
 
-
                 newRootRow["PARENTNO"] = "F0";
                 DataTable newDt = dt.Clone();
                 newDt.Rows.Add(newRootRow.ItemArray);
-
                 GenerChildRows(dt, newDt, newRootRow);
                 dt = newDt;
             }
@@ -861,11 +859,9 @@ namespace BP.WF.HttpHandler
         public void GenerChildRows(DataTable dt, DataTable newDt, DataRow parentRow)
         {
             DataRow[] rows = dt.Select("ParentNo='" + parentRow["NO"] + "'");
-
             foreach (DataRow r in rows)
             {
                 newDt.Rows.Add(r.ItemArray);
-
                 GenerChildRows(dt, newDt, r);
             }
         }
@@ -900,65 +896,77 @@ namespace BP.WF.HttpHandler
         public string GetFormTreeTable()
         {
             #region 检查数据是否符合规范.
-            string rootNo =
-                DBAccess.RunSQLReturnStringIsNull("SELECT No FROM Sys_FormTree WHERE ParentNo='' OR ParentNo IS NULL", null);
-
-            if (!string.IsNullOrWhiteSpace(rootNo))
+            string rootNo =DBAccess.RunSQLReturnStringIsNull("SELECT No FROM Sys_FormTree WHERE ParentNo='' OR ParentNo IS NULL", null);
+            if (DataType.IsNullOrEmpty(rootNo)==false)
             {
+                //删除垃圾数据.
                 DBAccess.RunSQL(string.Format("DELETE FROM Sys_FormTree WHERE No='{0}'", rootNo));
-                DataTable dtRoot = DBAccess.RunSQLReturnTable("SELECT No,ParentNo FROM Sys_FormTree WHERE No='1'");
-
-                if (dtRoot.Rows.Count == 0)
-                    DBAccess.RunSQL("INSERT INTO Sys_FormTree (No,Name,ParentNo) VALUES ('1','根目录','0')");
-                else if (Equals(dtRoot.Rows[0]["ParentNo"], "0") == false)
-                    DBAccess.RunSQL("UPDATE Sys_FormTree SET ParentNo='0' WHERE No='1'");
-
-                DBAccess.RunSQL(string.Format("UPDATE Sys_FormTree SET ParentNo='1' WHERE ParentNo='{0}' AND No != '1'", rootNo));
+            }
+            //检查根目录是否符合规范.
+            FrmTree ft = new FrmTree();
+            ft.No = "1";
+            if (ft.RetrieveFromDBSources() == 0)
+            {
+                ft.Name = "表单库";
+                ft.ParentNo = "0";
+                ft.Insert();
+            }
+            if (ft.ParentNo.Equals("0") == false)
+            {
+                ft.ParentNo = "0";
+                ft.Update();
             }
             #endregion 检查数据是否符合规范.
 
             //组织数据源.
-            string sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree ORDER BY Idx ASC ; ";
-            sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+            string sqls = "";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree ORDER BY Idx ASC ; ";
+                sqls += "SELECT No \"No\", FK_FormTree as \"ParentNo\", Name \"Name\",Idx \"Idx\", 0 \"IsParent\", 'FORM' \"TType\" FROM Sys_MapData  WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+            }
+            else
+            {
+                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree ORDER BY Idx ASC ; ";
+                sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+            }
+
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
+
+            FrmTrees fts = new FrmTrees();
+            fts.RetrieveAll();
+
 
             //获得表单数据.
             DataTable dtSort = ds.Tables[0]; //类别表.
-            DataTable dtForm = ds.Tables[1].Clone(); //表单表.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dtSort.Columns["NO"].ColumnName = "No";
-                dtSort.Columns["PARENTNO"].ColumnName = "ParentNo";
-                dtSort.Columns["NAME"].ColumnName = "Name";
-                dtSort.Columns["IDX"].ColumnName = "Idx";
-                dtSort.Columns["ISPARENT"].ColumnName = "IsParent";
-                dtSort.Columns["TTYPE"].ColumnName = "TType";
+            DataTable dtForm = ds.Tables[1].Clone(); //表单表,这个是最终返回的数据.
 
-                dtForm.Columns["NO"].ColumnName = "No";
-                dtForm.Columns["NAME"].ColumnName = "Name";
-                dtForm.Columns["PARENTNO"].ColumnName = "ParentNo";
-                dtForm.Columns["ISPARENT"].ColumnName = "IsParent";
-                dtForm.Columns["TTYPE"].ColumnName = "TType";
-            }
-
-            //过滤
+            //增加顶级目录.
             DataRow[] rowsOfSort = dtSort.Select("ParentNo='0'");
-            if (rowsOfSort.Length == 0)
-                dtForm.Rows.Add("1", "0", "表单库", 0, 1, "FORMTYPE");
-            else
-                dtForm.Rows.Add(rowsOfSort[0]["NO"], "0", rowsOfSort[0]["Name"], rowsOfSort[0]["IDX"], rowsOfSort[0]["ISPARENT"], rowsOfSort[0]["TTYPE"]);
+            DataRow drFormRoot = dtForm.NewRow();
+            drFormRoot[0] = rowsOfSort[0]["No"];
+            drFormRoot[1] = "0";
+            drFormRoot[2] = rowsOfSort[0]["Name"];
+            drFormRoot[3] = rowsOfSort[0]["Idx"];
+            drFormRoot[4] = rowsOfSort[0]["IsParent"];
+            drFormRoot[5] = rowsOfSort[0]["TType"];
+            dtForm.Rows.Add(drFormRoot); //增加顶级类别..
 
+            //把类别数据组装到form数据里.
             foreach (DataRow dr in dtSort.Rows)
             {
-                dtForm.Rows.Add(dr["No"], dr["ParentNo"], dr["Name"], dr["Idx"], dr["IsParent"], dr["TType"]);
+                DataRow drForm = dtForm.NewRow();
+                drForm[0] = dr["No"];
+                drForm[1] = dr["ParentNo"];
+                drForm[2] = dr["Name"];
+                drForm[3] = dr["Idx"];
+                drForm[4] = dr["IsParent"];
+                drForm[5] = dr["TType"];
+                dtForm.Rows.Add(drForm); //类别.
             }
 
-            foreach (DataRow row in ds.Tables[1].Rows)
-            {
-                dtForm.Rows.Add(row.ItemArray);
-            }
-
-            if (WebUser.No != "admin")
+            if (WebUser.No.Equals("admin")==false)
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
@@ -979,24 +987,14 @@ namespace BP.WF.HttpHandler
                 GenerChildRows(dtForm, newDt, newRootRow);
                 dtForm = newDt;
             }
-            return BP.Tools.Json.ToJson(dtForm);
+
+            String str = BP.Tools.Json.ToJson(dtForm);
+         //   BP.DA.DataType.WriteFile("C:\\TreeCCFlow.txt", str);
+            return str;
+
+            //return BP.Tools.Json.ToJson(dtForm);
         }
-        public string GetSrcTreeTable()
-        {
-            string sql1 = "SELECT ss.NO,'SrcRoot' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC";
-            string sql2 = "SELECT st.NO, st.FK_SFDBSrc AS PARENTNO,st.NAME,0 AS IDX, 0 ISPARENT, 'SRCTABLE' TTYPE FROM Sys_SFTable st";
-            string sqls = sql1 + ";" + Environment.NewLine + sql2 + " ;";
-            DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
-            DataTable dt = ds.Tables[0].Clone();
-
-            foreach (DataRow row in ds.Tables[0].Rows)
-                dt.Rows.Add(row.ItemArray);
-
-            foreach (DataRow row in ds.Tables[1].Rows)
-                dt.Rows.Add(row.ItemArray);
-
-            return BP.Tools.Json.ToJson(dt);
-        }
+        
 
         public string GetStructureTreeTable()
         {
@@ -1260,7 +1258,6 @@ namespace BP.WF.HttpHandler
             }
             return treeJson;
         }
-
         /// <summary>
         /// 删除流程
         /// </summary>
@@ -1288,29 +1285,12 @@ namespace BP.WF.HttpHandler
 
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(fk_floSort, flowName, dataSaveModel, pTable, flowMark, flowVer);
                 return flowNo;
-
             }
             catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
         }
-
-        public string DelNode()
-        {
-            try
-            {
-                BP.WF.Node nd = new BP.WF.Node();
-                nd.NodeID = this.FK_Node;
-                nd.Delete();
-                return "删除成功.";
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-
         /// <summary>
         /// 上移流程
         /// </summary>
@@ -1337,11 +1317,9 @@ namespace BP.WF.HttpHandler
         {
             FlowSorts flowSorts = new FlowSorts();
             flowSorts.RetrieveAll(FlowSortAttr.Idx);
-
             BP.WF.Port.AdminEmp emp = new Port.AdminEmp(BP.Web.WebUser.No);
 
             string strs = BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, emp.RootOfFlow);
-
             return strs;
         }
         /// <summary>

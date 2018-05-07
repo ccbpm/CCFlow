@@ -501,10 +501,6 @@ namespace BP.Sys
         {
             get
             {
-                //如果运行在内网上,就需要固定的url.
-                if (SystemConfig.CustomerNo == "TianYe")
-                    return HostURL;
-
                 string url = "http://" + System.Web.HttpContext.Current.Request.Url.Authority;
                 return url;
             }

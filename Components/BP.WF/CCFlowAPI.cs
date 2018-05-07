@@ -153,11 +153,23 @@ namespace BP.WF
                             dr[GroupFieldAttr.CtrlID] = "FWCND" + nd.NodeID;
                             dr[GroupFieldAttr.Idx] = 100;
                             dr[GroupFieldAttr.Lab] = "审核信息";
-
                             gf.Rows.Add(dr);
 
                             myds.Tables.Remove("Sys_GroupField");
                             myds.Tables.Add(gf);
+
+                            //执行更新,就自动生成那个丢失的字段分组.
+                            refFnc.Update();
+
+                            /*
+                            //丢失了就插入新的.
+                            BP.Sys.GroupField gfEn = new GroupField();
+                            gfEn.FrmID = nd.NodeFrmID;
+                            gfEn.CtrlType = "FWC";
+                            gfEn.CtrlID = "FWCND" + nd.NodeID;
+                            gfEn.Idx = 100;
+                            gfEn.Lab = "审核信息";
+                            gfEn.Insert(); */
                         }
 
                     }
@@ -197,11 +209,15 @@ namespace BP.WF
                             dr[GroupFieldAttr.CtrlID] = "FWCND" + nd.NodeID;
                             dr[GroupFieldAttr.Idx] = 100;
                             dr[GroupFieldAttr.Lab] = "审核信息";
-
                             gf.Rows.Add(dr);
 
                             myds.Tables.Remove("Sys_GroupField");
                             myds.Tables.Add(gf);
+
+                            //更新,为了让其自动增加审核分组.
+                            BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(nd.NodeID);
+                            refFnc.Update();
+
                         }
                     }
                 }

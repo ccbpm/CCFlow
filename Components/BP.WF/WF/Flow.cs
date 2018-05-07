@@ -5786,9 +5786,8 @@ namespace BP.WF
                                 {
                                     case "enname":
                                     case "keyofen":
-                                        val = val.Replace("ND" + oldFlowID, "ND" + flowID);
-                                        break;
                                     case "ctrlid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
+                                    case "frmid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
                                         val = val.Replace("ND" + oldFlowID, "ND" + flowID);
                                         break;
                                     default:

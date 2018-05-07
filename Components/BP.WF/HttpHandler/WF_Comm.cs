@@ -721,13 +721,16 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 int i = 0;
+                string enumKey = ","; //求出枚举值外键.
                 foreach (Attr attr in map.Attrs)
                 {
                     switch (attr.MyFieldType)
                     {
                         case FieldType.Enum:
+                            enumKey = "," + attr.Key + "Text,";
+                            break;
                         case FieldType.FK:
-                        case FieldType.PKFK:
+                            // case FieldType.PKFK:
                             continue;
                         default:
                             break;
@@ -736,8 +739,12 @@ namespace BP.WF.HttpHandler
                     if (attr.MyDataType != DataType.AppString)
                         continue;
 
+                    //排除枚举值关联refText.
                     if (attr.MyFieldType == FieldType.RefText)
-                        continue;
+                    {
+                        if (enumKey.Contains("," + attr.Key + ",") == true)
+                            continue;
+                    }
 
                     if (attr.Key == "FK_Dept")
                         continue;

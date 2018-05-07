@@ -723,6 +723,7 @@ namespace BP.WF.Data
                 map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 100, 200, true);
 
                 map.AddDDLEntities(MyStartFlowAttr.FK_Flow, null, "流程", new Flows(), false);
+
                 map.AddTBString(MyStartFlowAttr.BillNo, null, "单据编号", true, true, 0, 100, 50);
                 map.AddTBInt(MyStartFlowAttr.FK_Node, 0, "节点编号", false, false);
 

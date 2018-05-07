@@ -658,16 +658,15 @@ namespace BP.WF.HttpHandler
             string flowNo = this.FK_Flow;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
             //检查流程编号
-            if (!DataType.IsNullOrEmpty(flowNo))
+            if (DataType.IsNullOrEmpty(flowNo)==false)
             {
                 Flow fl = new Flow(flowNo);
                 FK_FlowSort = fl.FK_FlowSort;
             }
             //检查流程类别编号
             if (DataType.IsNullOrEmpty(FK_FlowSort))
-            {
                 return "err@所选流程类别编号不存在。";
-            }
+
             //导入模式
             BP.WF.ImpFlowTempleteModel model = (BP.WF.ImpFlowTempleteModel)this.GetRequestValInt("ImpWay");
             if (model == ImpFlowTempleteModel.AsSpecFlowNo)
@@ -675,7 +674,6 @@ namespace BP.WF.HttpHandler
 
             //执行导入
             BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(FK_FlowSort, filePath, model, flowNo);
-
 
             Hashtable ht = new Hashtable();
             ht.Add("FK_Flow", flow.No);

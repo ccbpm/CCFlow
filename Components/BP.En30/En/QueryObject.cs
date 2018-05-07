@@ -599,9 +599,23 @@ namespace BP.En
                 _HisMap = value;
             }
         }
-        private string attr2Field(string attr)
+        /// <summary>
+        /// 增加字段.
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <returns></returns>
+        private string attr2Field(string attrKey)
         {
-            return this.HisMap.PhysicsTable + "." + this.HisMap.GetFieldByKey(attr);
+            Attr attr = this.HisMap.GetAttrByKey(attrKey);
+            if (attr.IsRefAttr == true)
+            {
+              //  Entity en = attr.HisFKEn;
+                return "T" + attr.Key.Replace("Text","") + ".Name";
+
+            }
+
+            return this.HisMap.PhysicsTable + "." + attr.Field;
+           // return this.HisMap.PhysicsTable + "."+attr;
         }
         public DataTable DoGroupReturnTable(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
         {
@@ -1098,10 +1112,14 @@ namespace BP.En
                             }
                             else
                             {
+                                string mysql = this.SQL;
+                                mysql = mysql.Substring(mysql.IndexOf("FROM "));
+
                                 if (top == 0)
-                                    sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy + "   )  WHERE ROWNUM <=" + pageSize;
+                                    sql = "SELECT * FROM ( SELECT  " + pk + " " + mysql + " )  WHERE ROWNUM <=" + pageSize;
                                 else
-                                    sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy + "   ) ";
+                                    sql = "SELECT * FROM ( SELECT  " + pk + " " + mysql + " ) ";
+                                //sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy + "   ) ";
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");
@@ -1121,7 +1139,7 @@ namespace BP.En
                             if (this._sql == "" || this._sql == null)
                             {
                                 if (top == 0)
-                                    sql = " SELECT first  " + pageSize + "  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
+                                    sql = " SELECT first " + pageSize + "  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
                                 else
                                     sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
                             }
@@ -1179,8 +1197,6 @@ namespace BP.En
                         case DBType.MSSQL:
                         default:
                             toIdx = top + pageSize;
-
-                            
                             if (this._sql == "" || this._sql == null)
                             {
                                 //此处去掉原有的第1页时用top pagesize的写法，会导致第1页数据查询出来的不准确，统一都用下面的写法，edited by liuxc,2017-8-30

@@ -610,8 +610,14 @@ namespace BP.En
             if (attr.IsRefAttr == true)
             {
               //  Entity en = attr.HisFKEn;
-                return "T" + attr.Key.Replace("Text","") + ".Name";
-
+                if (this.HisDBType == DBType.Oracle)
+                    return "T" + attr.Key.Replace("Text", "") + ".Name";
+                else
+                {
+                    Entity en = attr.HisFKEn;
+                    return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
+                }
+                   
             }
 
             return this.HisMap.PhysicsTable + "." + attr.Field;
@@ -1105,8 +1111,10 @@ namespace BP.En
                             toIdx = top + pageSize;
                             if (this._sql == "" || this._sql == null)
                             {
+                               
+
                                 if (top == 0)
-                                    sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " " + this._orderBy + "   ) WHERE ROWNUM <=" + pageSize;
+                                    sql = "SELECT * FROM ( SELECT  " + pk + " " + map.PhysicsTable + " " + this._orderBy + "   ) WHERE ROWNUM <=" + pageSize;
                                 else
                                     sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " " + this._orderBy + ") ";
                             }
@@ -1145,10 +1153,12 @@ namespace BP.En
                             }
                             else
                             {
+                                string mysql = this.SQL;
+                                mysql = mysql.Substring(mysql.IndexOf("FROM "));
                                 if (top == 0)
-                                    sql = "SELECT first " + pageSize + " " + this.En.PKField + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy;
+                                    sql = "SELECT first " + pageSize + " " + this.En.PKField + "  " + mysql;
                                 else
-                                    sql = "SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy;
+                                    sql = "SELECT  " + this.En.PKField + " " + mysql;
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");
@@ -1175,10 +1185,13 @@ namespace BP.En
                             }
                             else
                             {
+                                string mysql = this.SQL;
+                                mysql = mysql.Substring(mysql.IndexOf("FROM "));
+
                                 if (top == 0)
-                                    sql = "SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy + " LIMIT " + pageSize;
+                                    sql = "SELECT  " + this.En.PKField + " " + mysql + " LIMIT " + pageSize;
                                 else
-                                    sql = "SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy;
+                                    sql = "SELECT  " + this.En.PKField + " " + mysql;
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");
@@ -1205,7 +1218,9 @@ namespace BP.En
                             }
                             else
                             {
-                                    sql = "SELECT  [" + this.En.PKField + "] FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy;
+                                    string mysql = this.SQL;
+                                    mysql = mysql.Substring(mysql.IndexOf("FROM "));
+                                    sql = "SELECT  [" + this.En.PKField + "]  " + mysql;
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");
@@ -1286,7 +1301,13 @@ namespace BP.En
                     if (this._sql == "" || this._sql == null)
                         sql = "SELECT COUNT(" + ptable + "." + pk + ") as C FROM " + ptable;
                     else
-                        sql = "SELECT COUNT(" + ptable + "." + pk + ") as C FROM " + ptable + " WHERE " + this._sql;
+                    {
+                        sql = sql.Substring(sql.IndexOf("FROM "));
+                        if(sql.IndexOf("ORDER BY")>=0)
+                            sql = sql.Substring(0,sql.IndexOf("ORDER BY")-1);
+                        sql = "SELECT COUNT(" + ptable + "." + pk + ") as C " + sql;
+                    }
+                      
 
                     //sql="SELECT COUNT(*) as C "+this._endSql  +sql.Substring(  sql.IndexOf("FROM ") ) ;
                     //sql="SELECT COUNT(*) as C FROM "+ this._ens.GetNewEntity.EnMap.PhysicsTable+ "  " +sql.Substring(sql.IndexOf("WHERE") ) ;

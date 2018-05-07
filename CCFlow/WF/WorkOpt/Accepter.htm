@@ -291,9 +291,11 @@
                     data = data.replace("'./Img", "'../Img");
                     data = data.replace("'./Img", "'../Img");
 
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
+                    if (data.indexOf("UnSend.htm") == -1) {
+                        data = data.replace("'./WorkOpt/", "");
+                        data = data.replace("'./WorkOpt/", "");
+                        data = data.replace("'./WorkOpt/", "");
+                    }
 
                     data = data.replace('@', '<br/>@');
                     data = data.replace(/@/g, '<br/>&nbsp;@');

@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自定义附件组件</title>
+    <script type="text/javascript" src="../../WF/Scripts/easyUI145/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/config.js"></script>
+    <script src="../../WF/Comm/Gener.js"  type="text/javascript" ></script>
+    
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+        /** 如果您要把该页面转入其他页面，请按照如下方式处理.
+            var url = window.location.href;
+            url = url.replace('AthSelf.htm', 'XXXX.jsp');
+                window.location.href = url;
+                return;
+                */
+
+            var url = window.location.href;
+            $("#url").html(url);
+
+        });
+
+    </script>
+</head>
+<body>
+
+<!--<h5> 这个是自定义附件组件</h5>-->
+<ul>
+<li>当附件组件设置为使用自定义附件组件的时候，系统就会转到这个界面.</li>
+<li>开发者可以重写这个界面完成自己的附件管理，或者把这个页面的url转入到自己定义的.jsp,php,aspx页面上去.</li>
+<li>对于附件组件的属性可以使用访问当前附件模版的配置信息,进行权限控制或者行为渲染.URL如下:</li>
+<li><font color=red><div id="url"></div></font></li>
+</ul>
+</body>
+</html>

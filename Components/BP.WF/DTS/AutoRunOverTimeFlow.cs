@@ -70,10 +70,8 @@ namespace BP.WF.DTS
                 string compleateTime = row["SDTOfNode"] + "";
                 string starter = row["Starter"] + "";
 
-
                 GenerWorkerLists gwls = new GenerWorkerLists();
                 gwls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, fk_node);
-
 
                 bool isLogin = false;
                 foreach (GenerWorkerList item in gwls)

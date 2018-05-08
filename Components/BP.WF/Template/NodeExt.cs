@@ -360,6 +360,9 @@ namespace BP.WF.Template
 
                 map.AddBoolean(NodeAttr.IsGuestNode, false, "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true);
 
+
+                string sql = "SELECT * FROM ";
+
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义参数", true, false, 0, 500, 10, true);
                 #endregion  基础属性
 

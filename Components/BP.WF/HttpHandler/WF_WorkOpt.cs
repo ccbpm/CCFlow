@@ -474,7 +474,7 @@ namespace BP.WF.HttpHandler
             {
                 //给会签人设置应该完成日期. 考虑到了节假日.                
                 DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
-                     nd.TSpanMinues, nd.TWay);
+                     nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
                 //应完成日期.
                 gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
             }
@@ -489,7 +489,7 @@ namespace BP.WF.HttpHandler
             {
                 //计算警告日期。
                 // 增加小时数. 考虑到了节假日.
-                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, nd.TWay);
+                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0,0, nd.TWay);
             }
             gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
             #endregion 计算会签时间.

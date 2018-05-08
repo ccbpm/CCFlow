@@ -465,9 +465,10 @@ namespace BP.WF
                 {
                     int day = 0;
                     int hh = 0;
+
                     //增加天数. 考虑到了节假日.                
                     dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,
-                        this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);
+                        this.town.HisNode.TimeLimitHH, this.town.HisNode.TimeLimitMM, this.town.HisNode.TWay);
                 }
             }
 
@@ -480,9 +481,9 @@ namespace BP.WF
             }
             else
             {
-                //计算警告日期。
-                // 增加小时数. 考虑到了节假日.
-                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.WarningDay, 0, this.town.HisNode.TWay);
+                //计算警告日期.
+                //增加小时数. 考虑到了节假日.
+                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.WarningDay,0, 0, this.town.HisNode.TWay);
             }
 
             switch (this.HisNode.HisNodeWorkType)
@@ -1798,7 +1799,7 @@ namespace BP.WF
             {
                 //增加天数. 考虑到了节假日.             
                 dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.HisNode.TimeLimit,
-                    this.HisNode.TSpanMinues, this.HisNode.TWay);
+                    this.HisNode.TimeLimitHH, this.HisNode.TimeLimitMM, this.HisNode.TWay);
             }
             // 应完成日期.
             string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
@@ -5038,8 +5039,9 @@ namespace BP.WF
                 TimeSpan ts = t_lastDTOfHuiQian - t_dtOfToZhuChiRen;
 
                 //生成该节点设定的 时间范围.
-                int hour = this.HisNode.TimeLimit * 24 + int.Parse(this.HisNode.TSpanHour.ToString());
-                TimeSpan tsLimt = new TimeSpan(hour, 0, 0);
+                int hour = this.HisNode.TimeLimit * 24 + this.HisNode.TimeLimitHH; 
+                // int.Parse(this.HisNode.TSpanHour.ToString());
+                TimeSpan tsLimt = new TimeSpan(hour, this.HisNode.TimeLimitMM, 0);
 
                 //获得剩余的时间范围.
                 TimeSpan myLeftTS = tsLimt - ts;

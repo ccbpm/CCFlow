@@ -327,7 +327,8 @@ namespace BP.WF
             sa.PlanADT = this.LastTimeDot;
 
             //计算当前节点的应该完成日期。
-            DateTime dtOfShould = Glo.AddDayHoursSpan(this.LastTimeDot, nd.TimeLimit, nd.TSpanMinues, nd.TWay);
+            DateTime dtOfShould = Glo.AddDayHoursSpan(this.LastTimeDot, nd.TimeLimit, nd.TimeLimitHH, 
+                nd.TimeLimitMM, nd.TWay);
             sa.PlanSDT = dtOfShould.ToString( DataType.SysDatatimeFormatCN );
 
             //给最后的时间点复制.

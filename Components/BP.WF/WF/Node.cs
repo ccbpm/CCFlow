@@ -953,36 +953,13 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 需要小时数（限期）
-        /// </summary>
-        public float TSpanHour
-        {
-            get
-            {
-                float i = this.GetValFloatByKey(NodeAttr.TSpanHour);
-                if (i == 0)
-                    return 0;
-                return i;
-            }
-            set
-            {
-                if (value != 0)
-                    throw new Exception("@目前不支持小时制.");
-
-                this.SetValByKey(NodeAttr.TSpanHour, value);
-            }
-        }
-        /// <summary>
         /// 限期天
         /// </summary>
         public int TimeLimit
         {
             get
             {
-                int i= this.GetValIntByKey(NodeAttr.TimeLimit);
-                if (i == 0)
-                    return 2;
-                return i;
+                return this.GetValIntByKey(NodeAttr.TimeLimit);
             }
             set
             {
@@ -990,15 +967,34 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 本天分钟数.
+        /// 限期小时
         /// </summary>
-        public int TSpanMinues
+        public int TimeLimitHH
         {
             get
             {
-                return (int)(this.TSpanHour * 60f);
+                return this.GetParaInt("TimeLimitHH", 0);
+            }
+            set
+            {
+                this.SetPara("TimeLimitHH", value);
             }
         }
+        /// <summary>
+        /// 限期分钟
+        /// </summary>
+        public int TimeLimitMM
+        {
+            get
+            {
+                return this.GetParaInt("TimeLimitMM", 0);
+            }
+            set
+            {
+                this.SetPara("TimeLimitMM", value);
+            }
+        }
+       
         /// <summary>
         /// 逾期提醒规则
         /// </summary>
@@ -1039,18 +1035,6 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(NodeAttr.TAlertWay, (int)value);
-            }
-        }
-
-        /// <summary>
-        /// 合计分钟.
-        /// </summary>
-        public int TSpanTotalMinues
-        {
-            get
-            {
-                float dayM = this.TimeLimit * (float)Glo.AMPMHours * 60f;
-                return (int)(this.TSpanHour * 60f) + (int)dayM;
             }
         }
         /// <summary>
@@ -2526,7 +2510,7 @@ namespace BP.WF
 
                 #region 考核属性.
                 map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
-                map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(天)".
+              //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
                 map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
 
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"

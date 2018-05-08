@@ -869,7 +869,7 @@ namespace BP.WF
             {
                 //增加天数. 考虑到了节假日.             
                 dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.ReturnToNode.TimeLimit,
-                    this.ReturnToNode.TSpanMinues, this.ReturnToNode.TWay);
+                    this.ReturnToNode.TimeLimitHH, this.ReturnToNode.TimeLimitMM, this.ReturnToNode.TWay);
             }
             // 应完成日期.
             string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);

@@ -17,51 +17,38 @@
 
             $("#Msg").html("<img src='../../Img/loading.gif' />&nbsp;正在加载,请稍后......");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CHOvertimeRole_Init&FK_Node=" + GetQueryString("FK_Node") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (json) {
+            var nodeID = GetQueryString("FK_Node");
+            var nodeEntity = new Entity("BP.WF.Node", nodeID); //流程实体.
 
-                    if (json.indexOf('err@') == 0) {
-                        alert(json);
-                        return;
-                    }
+            var nodes = new Entities("BP.WF.Nodes"); //节点s.
+            nodes.Retrieve("FK_Flow", nodeEntity.FK_Flow);
 
-                    json = JSON.parse(json);
+            //绑定数据源.
+            GenerBindDDL("DDL_Nodes", nodes, "NodeID", "Name", nodeEntity.DoOutTime);
 
-                    var nodeEntity = json['Node'][0];
-                    var nodes = json['Nodes'];
+            if (nodeEntity.OutTimeDeal == 3) {
+                //自动移交到指定的人员.
+                document.getElementById("TB_Shift").value = nodeEntity.DoOutTime;
+            }
 
-                    //绑定数据源.
-                    GenerBindDDL("DDL_Nodes", nodes, "NodeID", "Name", nodeEntity.DoOutTime);
+            if (nodeEntity.OutTimeDeal == 4) {
+                //向指定的人员发送消息.
+                document.getElementById("TB_SendEmps").value = nodeEntity.DoOutTime;
+            }
 
-                    if (nodeEntity.OutTimeDeal == 3) {
-                        //自动移交到指定的人员.
-                        document.getElementById("TB_Shift").value = nodeEntity.DoOutTime;
-                    }
+            if (nodeEntity.OutTimeDeal == 6) {
+                //执行SQL.
+                document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
+            }
 
-                    if (nodeEntity.OutTimeDeal == 4) {
-                        //向指定的人员发送消息.
-                        document.getElementById("TB_SendEmps").value = nodeEntity.DoOutTime;
-                    }
+            //  if (nodeEntity.IsEval == 1)
+            //   document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
 
-                    if (nodeEntity.OutTimeDeal == 6) {
-                        //执行SQL.
-                        document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
-                    }
-
-                    //  if (nodeEntity.IsEval == 1)
-                    //   document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
-
-                    //调用公共类库的方法:执行批量主表赋值.
-                    GenerFullAllCtrlsVal(nodeEntity);
-                    return;
-                }
-            });
+            //调用公共类库的方法:执行批量主表赋值.
+            GenerFullAllCtrlsVal(nodeEntity);
 
             $("#Msg").html("");
+
         });
     </script>
 </head>
@@ -177,46 +164,64 @@
 
 </table>
 
-
-
-
 <script type="text/javascript">
 
     function Save() {
 
         $("#Msg").html("正在保存,请稍后......");
 
-        var frmData = $("#cc").serialize();
-
         var checked = document.getElementById("CB_IsEval").checked;
         if (checked == true)
             checked = 1;
-         else
-             checked = 0;
+        else
+            checked = 0;
 
-        var myurl = Handler + "?DoType=CHOvertimeRole_Save&FK_Node=" + GetQueryString("FK_Node") + "&IsEval=" + checked + "&m=" + Math.random();
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: myurl,
-            dataType: 'html',
-            success: function (data) {
+        var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
+        node.IsEval = checked; //是否是质量考核.
 
-                if (data.indexOf('err@') != -1) {
+        //如果是无.
+        if (document.getElementById("RB_OutTimeDeal_0").checked == true) {
+            node.OutTimeDeal = 0;
+        }
 
-                    $("#Msg").html("<font color=red>" + data + "</font>");
-                    return;
-                }
 
-                $("#Msg").html("<font color=green>" + data + "</font>");
-                return;
-            },
-            error: function (data) {
-                alert(data);
-                console.info(data);
-            }
-        });
+        //如果是自动运行到下一个节点.
+        if (document.getElementById("RB_OutTimeDeal_1").checked == true) {
+            node.OutTimeDeal = 1;
+        }
+
+        //跳转到指定的节点.
+        if (document.getElementById("RB_OutTimeDeal_2").checked == true) {
+            node.OutTimeDeal = 2;
+            node.DoOutTime = $("#DDL_Nodes").val(); //
+        }
+
+        //移交指定的人员.
+        if (document.getElementById("RB_OutTimeDeal_3").checked == true) {
+            node.OutTimeDeal = 3;
+            node.DoOutTime = $("#TB_Shift").val(); //
+        }
+
+        //要发送给指定的人员.
+        if (document.getElementById("RB_OutTimeDeal_4").checked == true) {
+            node.OutTimeDeal = 4;
+            node.DoOutTime = $("#TB_SendEmps").val(); //
+        }
+
+        //删除流程.
+        if (document.getElementById("RB_OutTimeDeal_5").checked == true) {
+            node.OutTimeDeal = 5;
+            //node.DoOutTime = $("#TB_SendEmps").val(); //
+        }
+
+        //执行sql.
+        if (document.getElementById("RB_OutTimeDeal_6").checked == true) {
+            node.OutTimeDeal = 6;
+            node.DoOutTime = $("#TB_SQL").val(); //
+        }
+
+        node.Update(); //执行更新.
+        window.location.href = window.location.href;
     }
 </script>
 

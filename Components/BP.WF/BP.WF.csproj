@@ -157,7 +157,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaoWangDa\FrmTree.cs" />
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />

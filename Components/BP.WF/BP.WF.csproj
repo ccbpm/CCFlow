@@ -175,6 +175,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Dev2InterfaceHtml.cs" />
+    <Compile Include="DTS\AutoRunOverTimeFlow.cs" />
+    <Compile Include="DTS\AutoRunWF_Task.cs" />
     <Compile Include="DTS\ChangeUserNo.cs" />
     <Compile Include="DTS\DeleteBlankGroupField.cs" />
     <Compile Include="DTS\LoadTempleteOfBuess.cs" />

@@ -21,7 +21,8 @@
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/slideBox/style/jquery.slideBox.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    
+    <!-- 导入可以扩展的按钮事件. -->
+    <script src="../../DataUser/OverrideFiles/Ath.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
         function CanEditor(fileType) {
            //var fileTypes = BP.Sys.SystemConfig.AppSettings["OpenTypes"];
@@ -124,7 +125,7 @@
 
             //自定义表单模式.
             if (athDesc.AthRunModel == 2) {
-                src = "../../DataUser/AthSelf.htm?PKVal=" + GetPKVal() + "&Ath=" + athDesc.NoOfObj + "&FK_MapData=" + athDesc.FK_MapData + "&FK_FrmAttachment=" + athDesc.MyPK;
+                src = "../../DataUser/OverrideFiles/AthSelf.htm?PKVal=" + GetPKVal() + "&Ath=" + athDesc.NoOfObj + "&FK_MapData=" + athDesc.FK_MapData + "&FK_FrmAttachment=" + athDesc.MyPK;
                 window.location.href = src;
                 return;
             }
@@ -184,6 +185,7 @@
                 var db = dbs[i];
                 html += "<tr>";
                 if (CanEditor(db.FileExts)) {
+
                     //是否启用weboffice
                     if (athDesc.IsWoEnableWF)
                         html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
@@ -445,7 +447,7 @@
                     }
 
                     html += "文件:"
-                    html += "<input type='file' name='file' id='file' onchange='UploadChange();'>"
+                    html += "<input type='file' name='file' id='file' onclick='return Upload()' onchange='UploadChange();'>"
                     if (athDesc.IsNote)
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
                   
@@ -455,7 +457,32 @@
             }
             return html;
         }
+
+        //上传.
+        function Upload() {
+
+            try {
+
+                if (OnUploadClick() == false)
+                    return false;
+
+            } catch (e) {
+                alert(e);
+                //return;
+            }
+        }
         function UploadChange() {
+
+            try {
+
+                if (OnUploadClick() == false)
+                    return false;
+
+            } catch (e) {
+                alert(e);
+                //return;
+            }
+                
 
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
             if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {

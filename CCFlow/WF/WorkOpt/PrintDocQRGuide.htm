@@ -38,17 +38,23 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddPara("FK_Node", nodeID);
             handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Flow", flowNo);
+
             var data = handler.DoMethodReturnString("PrintDocQRGuide_Init");
-            alert(data);
+            //alert(data);
 
             var urls = JSON.parse(data);
+
+            var html = "";
+
             for (var i = 0; i < urls.length; i++) {
                 var url = urls[i];
 
+                //alert(url.No);
 
-                 if (url.No == "pdf") {
+                if (url.No == "pdf") {
 
-                     if (url.Name.indexOf('err@') == 0) {
+                    if (url.Name.indexOf('err@') == 0) {
                         html += "<fieldset>";
                         html += "<legend>pdf 生成pdf出现错误</legend>";
                         html += "<font color=red>" + url.Name + "</font>";
@@ -61,12 +67,10 @@
                         html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
                         html += "</ul>";
                         html += "</fieldset>";
-
                         downloadFile(url.Name);
                     }
                 }
             }
-
 
         });
 

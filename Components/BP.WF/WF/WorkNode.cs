@@ -465,7 +465,6 @@ namespace BP.WF
                 {
                     int day = 0;
                     int hh = 0;
-
                     //增加天数. 考虑到了节假日.                
                     dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,
                         this.town.HisNode.TimeLimitHH, this.town.HisNode.TimeLimitMM, this.town.HisNode.TWay);

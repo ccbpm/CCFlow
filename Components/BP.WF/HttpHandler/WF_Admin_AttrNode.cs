@@ -1738,8 +1738,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 表单模式
 
-       
-
         #region 考核超时规则.
         /// <summary>
         /// 初始化考核规则.
@@ -1841,38 +1839,6 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion 多人处理规则.
-
-        #region 考核规则.
-        public string CHRole_Init()
-        {
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            return nd.ToJson();
-        }
-
-        public string CHRole_Save()
-        {
-            BP.WF.Node nd = new BP.WF.Node();
-            nd.NodeID = this.FK_Node;
-            nd.RetrieveFromDBSources();
-
-            nd.HisCHWay = (CHWay)this.GetRequestValInt("RB_CHWay");  //考核方式.
-
-            nd.TimeLimit = this.GetRequestValInt("TB_TimeLimit");
-            nd.WarningDay = this.GetRequestValInt("TB_WarningDay");
-            nd.TCent = this.GetRequestValFloat("TB_TCent");
-
-            nd.TWay = (BP.DA.TWay)this.GetRequestValInt("DDL_TWay");  //节假日计算方式.
-
-            if (this.GetRequestValInt("CB_IsEval") == 1)
-                nd.IsEval = true;
-            else
-                nd.IsEval = false;
-
-            nd.Update();
-
-            return "保存成功...";
-        }
-        #endregion 考核规则.
 
         #region 节点属性（列表）的操作
         /// <summary>

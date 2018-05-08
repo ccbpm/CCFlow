@@ -25,9 +25,22 @@
 
             //执行.
             var node = new Entity("BP.WF.Node", nodeID);
-             
+
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(node);
+
+            var str = $("#TB_TimeLimit").val();
+            if (str == null || str == "")
+                $("#TB_TimeLimit").val(0);
+
+            str = $("#TBPara_TimeLimitHH").val();
+            if (str == null || str == "")
+                $("#TBPara_TimeLimitHH").val(0);
+
+            str = $("#TBPara_TimeLimitMM").val();
+            if (str == null || str == "")
+                $("#TBPara_TimeLimitMM").val(0);
+
         });
     </script>
 </head>
@@ -51,9 +64,9 @@
 <table style=" width:100%;">
 <tr>
 <td nowarp=true> 限期完成时限：</td>
-<td> <input type=text id="TB_TimeLimit_Day" name="TB_TimeLimit_Day" style="width:30px;" />天,</td>
-<td><input type=text id="TB_TimeLimit_Hour" name="TB_TimeLimit_Hour" style="width:30px;" />小时,</td>
-<td style=" color:Gray"><input type=text id="TB_TimeLimit_MM" name="TB_TimeLimit_MM" style="width:30px;" />分钟</td>
+<td> <input type=text id="TB_TimeLimit" name="TB_TimeLimit" style="width:30px;" />天,</td>
+<td><input type=text id="TBPara_TimeLimitHH" name="TBPara_TimeLimitHH" style="width:30px;" />小时,</td>
+<td style=" color:Gray"><input type=text id="TBPara_TimeLimitMM" name="TBPara_TimeLimitMM" style="width:30px;" />分钟</td>
 </tr>
 <!--
 <tr>
@@ -71,7 +84,7 @@
     </td>
 
 <td colspan="2"  >
-<a href="javascript:WinOpen('../../Comm/Sys/Holiday.aspx');" > 节假日维护</a>
+<a href="javascript:WinOpen('../../Comm/Sys/Holiday.htm');" > 节假日维护</a>
 
 </td>
 </tr>
@@ -121,31 +134,31 @@
 
         var nodeID = GetQueryString("FK_Node");
 
-   //    var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-     //   alert(CheckBoxIDs);
+        //执行查询.
+        var node = new Entity("BP.WF.Node", nodeID);
+        node.CopyForm(); //复制表单数据.
 
-        var frmData = $("#cc").serialize();
-       // alert(frmData);
+        //考核方式.
+        var chWay = 0;
+        if (document.getElementById("RB_CHWay_1").checked)
+            chWay = 1;
+        if (document.getElementById("RB_CHWay_2").checked)
+            chWay = 2;
+        node.CHWay = chWay;
 
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=CHRole_Save&FK_Node=" + nodeID + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
+        //节假日计算方式.
+        node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
 
-                if (data.indexOf('err@') >= 0) {
-                    alert(data);
-                    return;
-                }
+        //是否是时效考核.
+        if (document.getElementById("CB_IsEval").checked == true)
+            node.IsEval = 1;
+        else
+            node.IsEval = 0;
 
-                alert(data);
+        node.Update();
 
-                window.location.href = window.location.href;
-                return;
-            }
-        });
+        window.location.href = window.location.href;
+        return;
     }
 </script>
 

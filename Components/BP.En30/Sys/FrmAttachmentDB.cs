@@ -420,7 +420,6 @@ namespace BP.Sys
                 map.AddTBString(FrmAttachmentDBAttr.RefPKVal, null, "实体主键", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentDBAttr.FID, 0, "FID", true, false);
 
-
                 map.AddTBString(FrmAttachmentDBAttr.Sort, null, "类别", true, false, 0, 200, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FileFullName, null, "文件路径", true, false, 0, 700, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FileName, null, "名称", true, false, 0, 500, 20);
@@ -440,6 +439,8 @@ namespace BP.Sys
 
                 //这个值在上传时候产生.
                 map.AddTBString(FrmAttachmentDBAttr.UploadGUID, null, "上传GUID", true, false, 0, 500, 20);
+
+                map.AddTBAtParas(3000); //增加参数属性.
 
                 this._enMap = map;
                 return this._enMap;

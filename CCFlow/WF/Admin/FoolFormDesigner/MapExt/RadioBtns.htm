@@ -50,7 +50,7 @@
             var ulListValuesLiHtml = '';
 
             $.each(initData.Sys_FrmRB, function (i, rb) {
-                ulListValuesLiHtml += '<li style=\"float:left\" >' + '<input id="RB_' + rb.KeyOfEn + rb.IntKey + '"' + (rb.IntKey == pageData.selectIntKey ? ' checked="true" ' : '') + '     type="radio" name="' + pageData.KeyOfEn + '" value="' + rb.IntKey + '" /> <label for="RB_' + rb.KeyOfEn + rb.IntKey + '" > ' + rb.Lab + '</label></li>';
+                ulListValuesLiHtml += '<li style="list-style-type:none;float:left;" >' + '<input id="RB_' + rb.KeyOfEn + rb.IntKey + '"' + (rb.IntKey == pageData.selectIntKey ? ' checked="true" ' : '') + '     type="radio" name="' + pageData.KeyOfEn + '" value="' + rb.IntKey + '" /> <label for="RB_' + rb.KeyOfEn + rb.IntKey + '" > ' + rb.Lab + '</label></li>';
             })
             $('#ulListValues').html(ulListValuesLiHtml);
 
@@ -256,7 +256,7 @@
            
             <fieldset>
                     <legend> 列表值 </legend>
-                    <ul id="ulListValues">
+                    <ul id="ulListValues" style = "margin: 0;border: 0;padding: 0;">
                         
                     </ul>
                 </fieldset>

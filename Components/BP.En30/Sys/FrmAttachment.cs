@@ -624,6 +624,22 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.IsNote, value);
             }
         }
+
+        /// <summary>
+        /// 是否启用扩张列
+        /// </summary>
+        public bool IsExpCol
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsExpCol);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.IsExpCol, value);
+            }
+        }
+
         /// <summary>
         /// 附件名称
         /// </summary>

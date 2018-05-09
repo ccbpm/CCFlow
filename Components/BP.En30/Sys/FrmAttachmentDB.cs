@@ -86,6 +86,8 @@ namespace BP.Sys
         /// 保存方式
         /// </summary>
         public const string AthSaveWay = "AthSaveWay";
+
+
     }
     /// <summary>
     /// 附件数据存储

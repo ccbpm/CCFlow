@@ -295,7 +295,14 @@ function PopTableSearch_Done(mapExt) {
     var pkval = GetPKVal();
 
     //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
-    var url = 'Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+    var url = "";
+
+    var host = window.location.href;
+
+    if (host.indexOf('MyFlow') == -1)
+        url = 'Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+    else
+        url = './CCForm/Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
     if (window.parent && window.parent.OpenBootStrapModal) {
         window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", false, function () { }, null, function () {

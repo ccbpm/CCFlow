@@ -296,7 +296,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input type='text' " + enableAttr + " value='" + defValue + "' style='width:120px;' class='form-control' id='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input type='text' " + enableAttr + " value='" + defValue + "' style='width:125px;' class='form-control' id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     //时期时间类型.
@@ -308,7 +308,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input  type='text'  value='" + defValue + "' style='width:140px;' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input  type='text'  value='" + defValue + "' style='width:145px;' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     // boolen 类型.

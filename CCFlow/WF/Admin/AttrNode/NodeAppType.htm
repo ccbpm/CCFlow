@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>业务类型</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript" >
+        var nodeID = "";
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            //初始化groupID.
+            var flowNo = GetQueryString("FK_Flow");
+
+            var flow = new Entity("BP.WF.Template.FlowExt", flowNo);
+            var nodeAppType = flow.NodeAppType;
+
+            if (nodeAppType == "" || nodeAppType == undefined) {
+                alert('您没有在流程属性里定义NodeAppType枚举值.');
+                return;
+            }
+
+            var sql = "SELECT NodeAppType FROM WF_Node WHERE NodeID=" + GetQueryString("FK_Node");
+            var val = DBAccess.RunSQLReturnTable(sql);
+
+            var type = val[0].NodeAppType;
+
+            GenerBindEnumKey("DDL_NodeAppType", nodeAppType, type);
+
+           // $("#DDL_NodeAppType").val(type);
+
+
+            //增加slect的节点值 
+            //GenerBindDDL("DDL_NodeAppType", mapAttrs, "KeyOfEn", "Name", node.CCFormAttr);
+
+        });
+        function Save() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var appType = $("#DDL_NodeAppType").val();
+            var sql = "UPDATE WF_Node SET NodeAppType=" + appType + " WHERE NodeID=" + nodeID;
+            DBAccess.RunSQL(sql);
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+
+<form id="cc">
+ <table style="width:99%;">
+        <tr>
+            <th colspan="2">
+                设置节点类型
+            </th>
+        </tr>
+
+        <tr>
+        <td>
+       请选择业务类型:  <select id="DDL_NodeAppType" name="DDL_NodeAppType" > </select>
+        </td>
+        </tr>
+        
+    </table>
+    <div style=" text-align:center">
+    <input type="button" name="Btn_Save" value="保存" id="Btn_Save" onclick="Save()" />
+    </div>
+
+</form>
+
+</body>
+</html>

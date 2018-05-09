@@ -31,6 +31,7 @@
             nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.FormType = FormType.FoolTruck;
+            node.NodeFrmID = "ND" + nodeID;
             node.Update();
 
             //更新表单类型.

@@ -14,12 +14,6 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
 
         var fk_flow = GetQueryString('FK_Flow');
         var fk_node = GetQueryString('FK_Node');
@@ -54,6 +48,14 @@
             var data = handler.DoMethodReturnString(doType);
 
             if (data.indexOf('err@') == 0) {
+
+
+                if (data.indexOf('访问规则') > 0) {
+                    document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
+                    return;
+                   // document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
+                }
+
 
                 if (data.indexOf('管理员') > 0) {
                     window.location.href = './CCBPMDesigner/Login.htm';

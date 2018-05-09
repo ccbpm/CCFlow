@@ -402,8 +402,10 @@
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1)
                     html += "<td></td>";
 
+                //<span style='color:red;' >请点击下方按钮上传附件</span>
+
                 if (athDesc.IsUpload == true)
-                    html += "<td style='width:100px'> <span style='color:red;' >请点击下方按钮上传附件</span></td>";
+                    html += "<td style='width:100px'> </td>";
                 else
                     html += "<td style='width:100px'></td>";
                 html += "<td>&nbsp&nbsp</td>";

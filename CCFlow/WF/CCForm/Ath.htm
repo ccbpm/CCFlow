@@ -244,7 +244,7 @@
                         html += "<td style='border:0px'><a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a></td>";
                     else if (athDesc.DeleteWay == AthDeleteWay.DelSelf)//只能删除自己上传的
                     {
-                        if (db.Rec.equals(WebUser.No))
+                        if (db.Rec == WebUser.No)
                             html += "<td style='border:0px'><a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a></td>";
                         else
                             html += "<td></td>";
@@ -381,12 +381,12 @@
                     if (athDesc.IsDownload)
                         html += "<a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">下载</a>";
                     if (IsReadonly != "1") {
-                        var op = null;
+                        var op = "";
 
                         if (athDesc.DeleteWay == AthDeleteWay.DelAll)//删除所有
                             op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a>";
                         if (athDesc.DeleteWay == AthDeleteWay.DelSelf)//删除自己上传的
-                            if (db.Rec.equals(WebUser.No))
+                            if (db.Rec ==WebUser.No)
                                 op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a>";
 
                         html += op;

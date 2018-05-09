@@ -145,7 +145,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 athDesc.IsUpload = isUpdate;
-                athDesc.HisDeleteWay = AthDeleteWay.DelAll; 
+                //athDesc.HisDeleteWay = AthDeleteWay.DelAll; 
                 #endregion 处理权限问题.
 
                 //增加附件描述.
@@ -153,7 +153,7 @@ namespace BP.WF.HttpHandler
 
                 //增加附件.
                 ds.Tables.Add(dbs.ToDataTableField("DBAths"));
-
+              
                 //返回.
                 return BP.Tools.Json.ToJson(ds);
             }
@@ -2187,6 +2187,7 @@ namespace BP.WF.HttpHandler
         {
             string PKVal = this.GetRequestVal("PKVal");
             string attachPk = this.GetRequestVal("AttachPK");
+            string paras = this.GetRequestVal("parasData");
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
             MapData mapData = new MapData(athDesc.FK_MapData);
@@ -2285,6 +2286,16 @@ namespace BP.WF.HttpHandler
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FileExts = info.Extension;
+                    if (athDesc.IsExpCol == true)
+                    {
+                        if (paras != null && paras.Length > 0)
+                        {
+                            foreach(string para in paras.Split('@')){
+                                 dbUpload.SetPara(para.Split('=')[0],para.Split('=')[1]);
+                            }
+                        }
+                    }
+                       
 
                     #region 处理文件路径，如果是保存到数据库，就存储pk.
                     if (athDesc.AthSaveWay == AthSaveWay.IISServer)
@@ -2397,7 +2408,16 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
- 
+                    if (athDesc.IsExpCol == true)
+                    {
+                        if (paras != null && paras.Length > 0)
+                        {
+                            foreach (string para in paras.Split('@'))
+                            {
+                                dbUpload.SetPara(para.Split('=')[0], para.Split('=')[1]);
+                            }
+                        }
+                    }
 
                     dbUpload.UploadGUID = guid;
 

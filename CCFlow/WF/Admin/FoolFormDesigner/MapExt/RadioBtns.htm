@@ -220,7 +220,11 @@
 
         function SaveAndClose() {
             Save();
-            window.close();
+            if (parent && parent.parent && typeof parent.parent.doCloseDialog === 'function') {
+                parent.parent.doCloseDialog.call();
+            } else {
+                window.close();
+            }
         }
 
         //设置是否启用
@@ -234,7 +238,11 @@
         }
 
         function Close() {
-            window.close();
+            if (parent && parent.parent && typeof parent.parent.doCloseDialog === 'function') {
+                parent.parent.doCloseDialog.call();
+            } else {
+                window.close();
+            }
         }
     </script>
 </head>

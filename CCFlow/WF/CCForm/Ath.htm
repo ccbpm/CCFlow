@@ -553,17 +553,6 @@
         }
         function UploadChange() {
 
-            try {
-
-                if (OnUploadClick() == false)
-                    return false;
-
-            } catch (e) {
-                alert(e);
-                //return;
-            }
-
-
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
             if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
                 alert("请选择上传的文件.");

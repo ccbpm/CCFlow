@@ -11,7 +11,7 @@
     <script src="../Scripts/slideBox/jquery.slideBox.min.js" type="text/javascript"></script>
         <script src="Ath.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"defer="defer"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -19,7 +19,7 @@
     <link href='../Scripts/Jquery-plug/fileupload/uploadify.css' rel='stylesheet' type='text/css' />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/slideBox/style/jquery.slideBox.css" rel="stylesheet" type="text/css" />
+     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <!-- 导入可以扩展的按钮事件. -->
     <script src="../../DataUser/OverrideFiles/Ath.js" type="text/javascript"></script>
@@ -79,6 +79,7 @@
         var FK_Flow;
         //页面启动函数.
         var WebUser = new WebUser();
+        var data;
         $(function () {
             Ath = GetQueryString("Ath");
             FK_MapData = GetQueryString("FK_MapData");
@@ -106,7 +107,7 @@
             //获取上传附件列表的信息及权限信息
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Ath_Init");
+            data = handler.DoMethodReturnString("Ath_Init");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -153,25 +154,60 @@
             else {
                 url = "AttachmentUpload.do?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal;
             }
-            $('#file_upload').uploadify({
-                'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
-                'uploader': url,
-                'auto': true,
-                'fileTypeDesc': '请选择上传文件',
-                'buttonText': '批量上传',
-                'width': 60,
-                'fileTypeExts': realFileExts,
-                'height': 15,
-                'multi': true,
-                'queueSizeLimit': 999,
-                'onQueueComplete': function (queueData) {
+            if (athDesc.IsExpCol == 0) {
+                $('#file_upload').uploadify({
+                    'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
+                    'uploader': url,
+                    'auto': true,
+                    'fileTypeDesc': '请选择上传文件',
+                    'buttonText': '批量上传',
+                    'width': 60,
+                    'fileTypeExts': realFileExts,
+                    'height': 15,
+                    'multi': true,
+                    'queueSizeLimit': 999,
+                    'onQueueComplete': function (queueData) {
+                        window.location.href = window.location.href;
 
-                    window.location.href = window.location.href;
+                    },
+                    'removeCompleted': false
+                });
+            }
+            if (athDesc.IsExpCol == 1) {
+                var parasData = "";
+                //form表单序列化时调用了encodeURLComponent方法将数据编码了
+                // alert(parasData);
+                $('#file_upload').uploadify({
+                    'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
+                    'uploader': url,
+                    'method': 'Get',
+                    'auto': true,
+                    'fileTypeDesc': '请选择上传文件',
+                    'buttonText': '批量上传',
+                    'width': 60,
+                    'fileTypeExts': realFileExts,
+                    'height': 15,
+                    'multi': false,
+                    'formData': { "parasData": parasData },
+                    'queueSizeLimit': 999,
+                    'onUploadStart': function (file) {
+                        parasData = $("form").serialize();
+                        parasData = decodeURIComponent(parasData, true);
+                        parasData = parasData.replace(/&/g, '@');
+                        parasData = parasData.replace(/TB_/g, '');
+                        parasData = parasData.replace(/RB_/g, '');
+                        parasData = parasData.replace(/CB_/g, '');
+                        parasData = parasData.replace(/DDL_/g, '');
+                        $('#file_upload').uploadify('settings','formData',{ "parasData": parasData });
+                       
+                    },
+                    'onQueueComplete': function (queueData) {
+                        window.location.href = window.location.href;
 
-                },
-                'removeCompleted': false
-            });
-
+                    },
+                    'removeCompleted': false
+                });
+            }
             setIframeHeight();
 
         });
@@ -228,6 +264,7 @@
         }
 
         //Table模式
+        var columnNum = 6;
         function FileShowWayTable(athDesc, dbs) {
            var  html = "<table border='0' cellspacing='0' cellpadding='0' style='width:100%;'>";
             if (athDesc.IsShowTitle == true) {
@@ -240,10 +277,28 @@
                         sortColumn = "类别";
                     html += "<td class='TitleExt' sstyle='background:#f4f4f4; font-size:12px; padding:3px;' nowrap=true >" + sortColumn + "</td>";
                 }
-                html += "<td class='TitleExt' style='min-width:200px;' nowrap=true >文件名</td>";
-                html += "<td class='TitleExt' style='width:50px;' nowrap=true >大小KB</td>";
-                html += "<td class='TitleExt' style='width:90px;' nowrap=true >上传时间</td>";
-                html += "<td class='TitleExt' style='width:50px;' nowrap=true >上传人</td>";
+                //是否启用附件从表 0 禁用 1启用
+                if (athDesc.IsExpCol == 0) {
+                    html += "<td class='TitleExt' style='min-width:200px;' nowrap=true >文件名</td>";
+                    html += "<td class='TitleExt' style='width:50px;' nowrap=true >大小KB</td>";
+                    html += "<td class='TitleExt' style='width:90px;' nowrap=true >上传时间</td>";
+                    html += "<td class='TitleExt' style='width:50px;' nowrap=true >上传人</td>";
+                    //html += "<td class='TitleExt' nowrap=true style='width:50px;' >";
+                } else {
+                    html += "<th nowrap=true >文件名</th>";
+                    html += "<th nowrap=true >大小KB</th>";
+                    html += "<th nowrap=true >上传时间</th>";
+                    html += "<th nowrap=true >上传人</th>";
+                    //获取扩展的字段
+                   
+                    var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                    mapAttrs.Retrieve("FK_MapData", athDesc.MyPK);
+                    for (var ii = 0; ii < mapAttrs.length; ii++) {
+                        var mapAttr = mapAttrs[ii];
+                        html += "<th nowrap=true >" + mapAttr.Name + "</th>";
+                    }
+                    columnNum = columnNum + mapAttrs.length;
+                }
                 html += "<td class='TitleExt' nowrap=true style='width:50px;' >";
                 if (athDesc.IsDownload && dbs.length > 0)
                     html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包下载</a>";
@@ -300,7 +355,24 @@
                     html += "<td>" + db.FileSize + "</td>";
                     html += "<td>" + db.RDT + "</td>";
                     html += "<td>" + db.RecName + "</td>";
+                    //如果有数据,就要解析它附件属性.
+                    if (athDesc.IsExpCol == 1) {
+                        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                        mapAttrs.Retrieve("FK_MapData", athDesc.MyPK);
+                        for (var ii = 0; ii < mapAttrs.length; ii++) {
+                            var mapAttr = mapAttrs[ii];
+                            var defVal = GetPara(mapAttr.KeyOfEn, db.AtPara);
+                            if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
+                                var senum = new Entity("BP.Sys.SysEnum", mapAttr.UIBindKey+"_CH"+"_"+defVal);
+                                defVal = senum.Lab;
+                            }
 
+                            html += "<td>" + defVal + "</td>";
+                            //html += "<td></td>";
+
+                        }
+
+                    }
                     //输出操作部分.
                     html += "<td>";
                     if (athDesc.IsDownload)
@@ -321,7 +393,7 @@
                     html += "</tr>";
                 }
             }
-            if (i == 0) {
+            if (i == 0||(athDesc.IsExpCol == 1)) {
                 html += "<tr>";
                 html += "<td class='Idx' nowrap>" + 0 + "</td>"; ;
                 if (athDesc.Sort !=null && athDesc.Sort.indexOf(",") != -1)
@@ -334,7 +406,16 @@
                 html += "<td>&nbsp&nbsp</td>";
                 html += "<td>&nbsp&nbsp</td>";
                 html += "<td>&nbsp&nbsp</td>";
-                html += "<td>&nbsp&nbsp</td>";
+                //如果有数据,就要解析它附件属性.
+				if (athDesc.IsExpCol ==1 ) {
+					var mapAttrs = new Entities("BP.Sys.MapAttrs");
+					mapAttrs.Retrieve("FK_MapData", athDesc.MyPK);
+					for (var ii = 0; ii < mapAttrs.length; ii++) {
+					  
+					      html += "<td>" + InitMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";
+                        }
+			}
+			    html += "<td>&nbsp&nbsp</td>";
                 html += "</tr>";
             }
 
@@ -361,9 +442,9 @@
             {
                 html +="<tr>";
                 if (athDesc.Sort!=null && athDesc.Sort.indexOf(",") != -1)
-                    html +="<td colspan=7>";
+                    html +="<td colspan="+(columnNum+1)+">";
                 else
-                    html +="<td colspan=6>";
+                    html +="<td colspan="+columnNum+">";
 
                 var explorer = window.navigator.userAgent;
 
@@ -489,6 +570,17 @@
                 alert("请选择上传的文件.");
                 return;
             }
+            //form表单序列话
+            var parasData = $("form").serialize();
+            //form表单序列化时调用了encodeURLComponent方法将数据编码了
+            parasData = decodeURIComponent(parasData, true);
+            parasData = decodeURIComponent(parasData, true);
+            parasData = parasData.replace(/&/g, '@');
+            parasData = parasData.replace(/TB_/g, '');
+            parasData = parasData.replace(/RB_/g, '');
+            parasData = parasData.replace(/CB_/g, '');
+            parasData = parasData.replace(/DDL_/g, '');
+
             var formData = new FormData();
             var name = $("input").val();
             formData.append("file",fileObj);
@@ -496,11 +588,11 @@
             var AttachPK = FK_FrmAttachment;
             var Url = "";
             if (plant == 'CCFlow')
-                Url = "/WF/CCForm/Handler.ashx?DoType=MoreAttach&FK_FrmAttachment=" + FK_FrmAttachment + "&DoMethod=MoreAttach&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + WorkID + "&PKVal=" + PKVal + "&AttachPK=" + AttachPK + "&t=" + new Date().getTime();
+                Url = "/WF/CCForm/Handler.ashx?DoType=MoreAttach&FK_FrmAttachment=" + FK_FrmAttachment + "&DoMethod=MoreAttach&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + WorkID + "&PKVal=" + PKVal + "&AttachPK=" + AttachPK +"&parasData="+parasData+ "&t=" + new Date().getTime();
             else {
                 var currentPath = window.document.location.href;
                 var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                Url = path + "/WF/CCForm/AttachmentUploadS.do/?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal;
+                Url = path + "/WF/CCForm/AttachmentUploadS.do/?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal+"&parasData="+parasData;
 
             }
 
@@ -563,7 +655,7 @@
 	 
 </head> 
 <body  >
-    <form>
+    <form id="Ath_Form">
          <div id="Msg"></div>
          <div id="ShowTable"></div>
          <div id="bar" style="display: none;position: fixed;bottom: 0px;right: 0px;">

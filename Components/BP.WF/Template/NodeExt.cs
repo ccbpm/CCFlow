@@ -361,7 +361,26 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.IsGuestNode, false, "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true);
 
 
-                string sql = "SELECT * FROM ";
+
+                //节点业务类型.
+                map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
+
+
+                ////为宝旺达，增加业务类型.
+                //if ( this.PKVal!=null )
+                //{
+                //    int nodeid = int.Parse(this.PKVal.ToString());
+                //    if (nodeid != 0)
+                //    {
+                //        Node nd = new Node(nodeid);
+                //        Flow fl = new Flow(nd.FK_Flow);
+
+                //        string nodeAppType = fl.GetValStrByKey("NodeAppType");
+                //        map.AddDDLSysEnum("NodeAppType", 0, "节点业务类型", true, true, nodeAppType);
+                //    }
+                //    // map.AddTBString("NodeAppType", null, "业务类型枚举", true, false, 0, 50, 10, true);
+                //}
+
 
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义参数", true, false, 0, 500, 10, true);
                 #endregion  基础属性
@@ -962,6 +981,16 @@ namespace BP.WF.Template
 
                 #region 实验中的功能
                 rm = new RefMethod();
+                rm.Title = "设置节点类型";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.ClassMethodName = this.ToString() + ".DoNodeAppType()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                rm.Visable = false;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "批量设置节点属性";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
@@ -1136,6 +1165,17 @@ namespace BP.WF.Template
         }
         #endregion 表单相关.
 
+        #region 实验中的功能.
+        /// <summary>
+        /// 设置节点类型
+        /// </summary>
+        /// <returns></returns>
+        public string DoNodeAppType()
+        {
+            return "../../Admin/AttrNode/NodeAppType.htm?FK_Node=" + this.NodeID + "&FK_Flow="+this.FK_Flow+"&tk=" + new Random().NextDouble();
+        }
+        #endregion
+        
         /// <summary>
         /// 延续子流程
         /// </summary>

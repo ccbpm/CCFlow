@@ -4422,6 +4422,16 @@ namespace BP.WF
             return BP.DA.DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
+        /// 根据流程标记获得流程编号
+        /// </summary>
+        /// <param name="flowMark">流程属性的流程标记</param>
+        /// <returns>流程编号</returns>
+        public static string Flow_GetFlowNoByFlowMark(string flowMark)
+        {
+            string sql = "SELECT No FROM WF_Flow WHERE FlowMark='"+flowMark+"'";
+            return DBAccess.RunSQLReturnStringIsNull(sql, null);
+        }
+        /// <summary>
         /// 检查是否可以发起流程
         /// </summary>
         /// <param name="flowNo">流程编号</param>

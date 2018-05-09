@@ -180,10 +180,9 @@ namespace BP.WF
                 #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
                 if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                 {
-
                  //   Work wk1 = nd.HisWork;
 
-                    if (nd.FormType == NodeFormType.FoolForm )
+                    if (nd.FormType == NodeFormType.FoolForm  )
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                         DataTable gf = myds.Tables["Sys_GroupField"];
@@ -323,7 +322,6 @@ namespace BP.WF
 
                 }
                 #endregion 增加 groupfields
-
 
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)

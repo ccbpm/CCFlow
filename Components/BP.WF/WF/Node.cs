@@ -1376,6 +1376,9 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(str)==true)
                     return "ND" + this.NodeID;
 
+                if (this.HisFormType ==  NodeFormType.FoolTruck)
+                    return "ND" + this.NodeID;
+
                 if (str.Equals("Pri") == true &&
                     (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FreeForm))
                 {

@@ -1,14 +1,14 @@
 ﻿//点击右边的下载标签.
 function Down2018(fk_ath, pkVal, delPKVal) {
-	if(plant == "CCFlow")
-		window.location.href = 'DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
-	else{
-		var currentPath = window.document.location.href;
+    if (plant == "CCFlow")
+        window.location.href = 'DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
+    else {
+        var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
         Url = 'downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;
-        window.location.href=Url;
-	}
-		
+        window.location.href = Url;
+    }
+
 }
 
 //点击文件名称执行的下载.
@@ -32,11 +32,11 @@ function Down2017(mypk) {
             var currentPath = window.document.location.href;
             var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
             str = path + str;
-        } 
-                var a = document.getElementById("downPdf");  
-                a.href=str;  
-                a.download="11.txt";  
-                a.click(); 
+        }
+        var a = document.getElementById("downPdf");
+        a.href = str;
+        a.download = "11.txt";
+        a.click();
 
         return;
     }
@@ -50,19 +50,17 @@ function Down2017(mypk) {
 }
 
 
-function   sa()   
+function sa() {
 
-{   
+    if (window.frames["hrong"].document.readyState != "complete")
 
-       if(window.frames["hrong"].document.readyState!="complete")   
+        setTimeout("sa()", 100);
 
-            setTimeout("sa()",   100);   
+    else
 
-      else   
+        window.frames["hrong"].document.execCommand('SaveAs');
 
-         window.frames["hrong"].document.execCommand('SaveAs');   
-
- }   
+}
 
 /* 一下的方法从网上找到的，都不适用 . */
 
@@ -269,9 +267,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
             checkedStr = ' checked="checked" ';
         }
 
-        checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
-
-        return "<div class='checkbox'><label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label</div>";
+        return "<div class='checkbox'><label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> </label</div>";
     }
 
     //枚举类型.
@@ -346,7 +342,7 @@ function InitDDLOperation(mapAttr, defVal) {
     //枚举类型的.
     if (mapAttr.LGType == 1) {
         var enums = new Entities("BP.Sys.SysEnums");
-        enums.Retrieve("EnumKey", mapAttr.UIBindKey); 
+        enums.Retrieve("EnumKey", mapAttr.UIBindKey);
 
 
         $.each(enums, function (i, obj) {

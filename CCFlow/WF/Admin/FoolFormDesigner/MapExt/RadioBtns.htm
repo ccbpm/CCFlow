@@ -62,8 +62,8 @@
 
             //绑定表单的所有字段
             var mapAttrHtml = '';
-            $.each(initData.Sys_MapAttr, function (i, attr) {
-
+//            alert(initData.Sys_MapAttr);
+			$.each(initData.Sys_MapAttr, function (i, attr) {
 
                 mapAttrHtml += '<tr>';
                 mapAttrHtml += '<td>' + (i + 1) + '</td>';
@@ -75,7 +75,19 @@
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/><label for="' + attr.KeyOfEn + '3" >不可见</label></td>';
 
                 //设置的值.
-                mapAttrHtml += '<td><input type="text" id="TB_' + attr.KeyOfEn + '" name="TB_' + attr.KeyOfEn + '" value="" /></td>';
+                //判断是否枚举类型                           
+            	if (attr.MyDataType == 2 && attr.LGType == 1) { 
+                    var ses = new Entities("BP.Sys.SysEnums");
+                    ses.Retrieve("EnumKey", attr.UIBindKey);
+                    var operations ="<option  value=''><label>&nbsp;&nbsp;&nbsp;</label></option>";
+                    $.each(ses, function (i, obj) {
+                    	operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                    	
+                    });
+                     mapAttrHtml += "<td><div id='DIV_" + attr.KeyOfEn + "'><select class='form-control' name='DDL_" + attr.KeyOfEn + "' id='DDL_" + attr.KeyOfEn +"' style='width:140px'>" + operations + "</select></div></td>";
+            	}else{
+                	mapAttrHtml += '<td><input type="text" id="TB_' + attr.KeyOfEn + '" name="TB_' + attr.KeyOfEn + '" value="" /></td>';
+            		}
 
                 mapAttrHtml += '</tr>';
 
@@ -86,11 +98,11 @@
 
             //为表单字段绑定DATA
             $.each($('#Fields tbody tr'), function (i, tr) {
-                $(tr).data(initData.Sys_MapAttr[i]);
+               $(tr).data(initData.Sys_MapAttr[i]);
             });
 
             BindConfig();
-        })
+   		});
 
         function bindData() {
 
@@ -115,7 +127,9 @@
             configDataArr = configData.split('&');
 
             configDataArr = $.grep(configDataArr, function (value) {
-                return value.split('=').length == 2 && value.split('=')[1] != 0;
+
+            	return (value.split('=').length == 2 && value.split('=')[1] != 0) || (value.split('=').length == 2 && value.split('=')[0].indexOf("DDL_") !=-1 && value.split('=')[1] != '');
+                 
             });
 
             var fieldsCfg = "";
@@ -123,10 +137,13 @@
 
             if (configDataArr.length > 0) {
                 for (var i = 0; i < configDataArr.length; i++) {
-                    if (configDataArr[i].indexOf("TB_") == -1)
+                    if (configDataArr[i].indexOf("TB_") == -1 && configDataArr[i].indexOf("DDL_") == -1)
                         fieldsCfg += '@' + configDataArr[i];
                     else
-                        setValue += '@' + configDataArr[i].replace("TB_","");
+                    	if(configDataArr[i].indexOf("TB_") >=0)
+                        	setValue += '@' + configDataArr[i].replace("TB_","");
+                    	else
+                    		setValue += '@' + configDataArr[i].replace("DDL_","");
                 }
                
             }
@@ -164,7 +181,10 @@
                 for (var i = 0; i < setVals.length; i++) {
                     if (setVals[i] != '' && setVals[i]) {
                         var valObjs = setVals[i].split('=');
+                        if($("#TB_"+valObjs[0]).length>0)
                         $("#TB_"+valObjs[0]).val(valObjs[1]);
+                        if($("#DDL_"+valObjs[0]).length>0)
+                        $("#DDL_"+valObjs[0]).val(valObjs[1]);
                     }
                 }
 

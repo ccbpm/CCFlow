@@ -302,7 +302,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
 
         //alert(defValue);
 
-        return "<input  value='" + defValue + "' style='text-align:right;width:80px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input  value='0' style='text-align:right;width:80px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     //AppMoney  AppRate
@@ -428,14 +428,14 @@ function InitRBShowContent(mapAttr, defValue, RBShowModel, enableAttr) {
 function GetPara(key, AtPara) {
     var atPara = AtPara;
     if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
-        return undefined;
+        return "";
     }
     var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
     var results = atPara.match(reg);
     if (results != null) {
         return unescape(results[2]);
     }
-    return undefined;
+    return "";
 }
 
    

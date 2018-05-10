@@ -134,17 +134,10 @@
             var fileShowWay = athDesc.FileShowWay;
             if (fileShowWay == "undefined" || fileShowWay == null || fileShowWay == "")
                 fileShowWay = 0;
-            //文件展现方式  自由方式
-            if (fileShowWay == FileShowWay.Free)
-                FileShowWayFree(athDesc, dbs);
 
             //表格方式
             if (fileShowWay == FileShowWay.Table)
                 FileShowWayTable(athDesc, dbs);
-
-            //Pict
-            /*if (fileShowWay == FileShowWay.Pict)*/
-            //FileShowWayPict(athDesc, dbs);
 
             //文件上传
             var url = "";
@@ -174,13 +167,11 @@
             }
             if (athDesc.IsExpCol == 1) {
                 var parasData = "";
-                //form表单序列化时调用了encodeURLComponent方法将数据编码了
-                // alert(parasData);
                 $('#file_upload').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
                     'uploader': url,
                     'method': 'GET',
-                    'auto': true,
+                    'auto': false,
                     'fileTypeDesc': '请选择上传文件',
                     'buttonText': '批量上传',
                     'width': 60,
@@ -210,57 +201,6 @@
             setIframeHeight();
 
         });
-
-        //自由模式
-        function FileShowWayFree(athDesc, dbs) {
-            var athWidth = athDesc.W - 20;
-            var html = "";
-            html += "<table border='0' cellspacing='0' cellpadding='0' style='width:" + athWidth + "px'>";
-            for (var i = 0; i < dbs.length; i++) {
-                var db = dbs[i];
-                html += "<tr>";
-                if (CanEditor(db.FileExts)) {
-
-                    //是否启用weboffice
-                    if (athDesc.IsWoEnableWF)
-                        html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
-
-                    else
-                        html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
-
-                } else if (IsImgExt(db.FileExts) || db.FileExts.toUpperCase() == "PDF" || db.FileExts.toUpperCase() == "CEB") {
-                    html += addTdTitle(db.FileName, "<a href=\"javascript:javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
-                } else {
-                    html += addTdTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
-                }
-
-                if (athDesc.IsDownload)
-                    html += "<td><a href=\"javascript:Down('" + FK_FrmAttachment + "','" + db.PKVal + "','" + db.MyPK + "')\">下载</a></td>";
-                else
-                    html += "<td></td>";
-
-                if (IsReadonly != "1") {
-                    if (athDesc.DeleteWay == AthDeleteWay.DelAll)//删除所有
-                        html += "<td style='border:0px'><a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a></td>";
-                    else if (athDesc.DeleteWay == AthDeleteWay.DelSelf)//只能删除自己上传的
-                    {
-                        if (db.Rec == WebUser.No)
-                            html += "<td style='border:0px'><a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a></td>";
-                        else
-                            html += "<td></td>";
-                    } else {
-                        html += "<td></td>";
-                    }
-                } else {
-                    html += "<td></td>";
-                }
-
-                html += "</tr>";
-            }
-            html += AddFileUpload(athDesc);
-            html += "</table>";
-            $("#ShowTable").html(html);
-        }
 
         //Table模式
         var columnNum = 6;
@@ -386,11 +326,12 @@
                         if (athDesc.DeleteWay == AthDeleteWay.DelAll)//删除所有
                             op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a>";
                         if (athDesc.DeleteWay == AthDeleteWay.DelSelf)//删除自己上传的
-                            if (db.Rec ==WebUser.No)
+                            if (db.Rec == WebUser.No)
                                 op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a>";
 
                         html += op;
                     }
+
                     html += "</td>";
 
                     html += "</tr>";
@@ -398,7 +339,7 @@
             }
             if (i == 0 || (athDesc.IsExpCol == 1)) {
                 html += "<tr>";
-                html += "<td class='Idx' nowrap>" + 0 + "</td>"; ;
+                html += "<td class='Idx' nowrap>*</td>"; ;
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1)
                     html += "<td></td>";
 
@@ -420,7 +361,10 @@
                         html += "<td>" + InitMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";
                     }
                 }
-                html += "<td>&nbsp&nbsp</td>";
+                if (athDesc.IsExpCol == 1)
+                    html += "<td><a href=\"javascript:SaveUpload()\">保存</a></td>";
+                else
+                    html += "<td>&nbsp&nbsp</td>";
                 html += "</tr>";
             }
 
@@ -527,7 +471,10 @@
                     }
 
                     html += "文件:"
-                    html += "<input type='file' name='file' id='file' onclick='return Upload()' onchange='UploadChange();'>"
+                    if (athDesc.IsExpCol == 1)
+                        html += "<input type='file' name='file' id='file' onclick='return Upload()'>"
+                    else
+                        html += "<input type='file' name='file' id='file' onclick='return Upload()' onchange='UploadChange();'>"
                     if (athDesc.IsNote)
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
 
@@ -547,9 +494,16 @@
                     return false;
 
             } catch (e) {
-               // alert(e);
+                //alert(e);
                 //return;
             }
+        }
+        function SaveUpload() {
+            var explorer = window.navigator.userAgent;
+            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))
+                $('#file_upload').uploadify("upload", "*");
+            else
+                UploadChange();
         }
         function UploadChange() {
 
@@ -559,10 +513,9 @@
                     return false;
 
             } catch (e) {
-                //    alert(e);
+               // alert(e);
                 //return;
             }
-
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
             if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
                 alert("请选择上传的文件.");

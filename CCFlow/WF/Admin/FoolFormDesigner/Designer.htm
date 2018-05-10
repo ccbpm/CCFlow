@@ -60,7 +60,7 @@
         <script type="text/javascript">
             //然浏览器最大化.
             function ResizeWindow() {
-          
+
 
                 if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
                     var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
@@ -94,7 +94,7 @@
         </script>
         <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript">
-        //页面启动函数.
+            //页面启动函数.
             $(function () {
 
                 $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
@@ -445,11 +445,11 @@
                     setEnable(FK_MapData, KeyOfEn, selecedval);
 
             }
-            function clickEnable(obj, FK_MapData, KeyOfEn,AtPara) {
+            function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
                 var selectVal = $(obj).val();
                 cleanAll();
                 if (AtPara.indexOf('@IsEnableJS=1') >= 0)
-                setEnable(FK_MapData, KeyOfEn, selectVal);
+                    setEnable(FK_MapData, KeyOfEn, selectVal);
             }
             //启用了显示与隐藏.
             function setEnable(FK_MapData, KeyOfEn, selectVal) {
@@ -521,7 +521,7 @@
             function SetCtrlEnable(key) {
 
                 var ctrl = $("#TB_" + key);
-                if (ctrl.length>0) {
+                if (ctrl.length > 0) {
                     ctrl.removeAttr("readonly");
                 }
 
@@ -536,10 +536,10 @@
                 }
 
                 ctr = document.getElementsByName('RB_' + key);
-                if (ctrl!=null) {
+                if (ctrl != null) {
                     var ses = new Entities("BP.Sys.SysEnums");
                     ses.Retrieve("EnumKey", key);
-                    for(var i=0;i<ses.length;i++)
+                    for (var i = 0; i < ses.length; i++)
                         $("#RB_" + key + "_" + ses[i].IntKey).removeAttr("disabled");
                 }
             }
@@ -563,7 +563,7 @@
 
                 ctrl = $("#RB_" + key);
                 if (ctrl != null) {
-                     $('input[name=RB_'+key+']').attr("disabled","disabled"); 
+                    $('input[name=RB_' + key + ']').attr("disabled", "disabled");
                     //ctrl.attr("disabled", "disabled");
                 }
             }
@@ -603,9 +603,10 @@
                     ctrl.val(value);
                 }
 
-                ctrl = $("#RB_" + key);
+                ctrl = $("#RB_" + key + "_" + value);
                 if (ctrl.length > 0) {
                     ctrl.val(value);
+                    ctrl.attr('checked', true);
                 }
             }
 
@@ -632,8 +633,8 @@
                 }
             }
             //清空所有的设置
-            function cleanAll(){
-                for(var i=0;i<mapAttrs.length;i++){
+            function cleanAll() {
+                for (var i = 0; i < mapAttrs.length; i++) {
                     SetCtrlShow(mapAttrs[i]);
                     SetCtrlEnable(mapAttrs[i]);
                     CleanCtrlVal(mapAttrs[i]);
@@ -650,7 +651,7 @@
                         var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
                         var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK;
 
-                       
+
 
                         var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                         return "<tr><td colspan=4 id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
@@ -679,7 +680,7 @@
 
                         var h = wf_node.FWC_H;
                         var w = wf_node.FWC_W;
-                      
+
                         if (h == 0)
                             h = 400;
 
@@ -772,13 +773,13 @@
                     return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "');\" > " + attr.Name + "</a>" + tdDown;
 
                 if (attr.LGType == 1)
-                    return tdUp + "<a href=\"javascript:EditEnum('"+attr.FK_MapData+"','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
+                    return tdUp + "<a href=\"javascript:EditEnum('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
 
                 if (attr.LGType == 2)
-                    return tdUp + "<a href=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "','"+attr.KeyOfEn+"');\" > " + attr.Name + "</a>" + tdDown;
+                    return tdUp + "<a href=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
             }
 
-            function AddFForDtl( fk_mapdtl ) {
+            function AddFForDtl(fk_mapdtl) {
 
                 var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdtl + '&inlayer=1&s=' + Math.random();
                 OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
@@ -786,7 +787,7 @@
                     var frm = document.getElementById("F" + fk_mapdtl);
                     frm.src = frm.src;
 
-                   // window.location.href = window.location.href;
+                    // window.location.href = window.location.href;
                     //ReloadDtlFrame();
                 });
             }
@@ -904,7 +905,7 @@
             function GroupFieldFWCNew() {
 
                 var mapData = new Entity("BP.Sys.MapData", GetQueryString("FK_MapData"));
-                var val = prompt('请输入分组名称,比如:部门主管审核', mapData.Name );
+                var val = prompt('请输入分组名称,比如:部门主管审核', mapData.Name);
                 if (val == null || val == undefined)
                     return;
 
@@ -919,9 +920,9 @@
 
 
                 var prix = prompt('请输入分组前缀,比如:输入BM,系统就会创建 BM_Checker,BM_RDT,BM_Note三个字段', defVal);
-                if (prix == null || prix == undefined) 
+                if (prix == null || prix == undefined)
                     return;
-                
+
 
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
                 handler.AddPara("TB_Check_Name", val);
@@ -935,7 +936,7 @@
 
             function GroupFieldNew() {
 
-                var mapData = new Entity("BP.Sys.MapData", GetQueryString("FK_MapData") );
+                var mapData = new Entity("BP.Sys.MapData", GetQueryString("FK_MapData"));
                 var val = prompt('请输入分组名称:', mapData.Name);
                 if (val == null || val == undefined)
                     return;
@@ -950,7 +951,7 @@
                 alert(data);
 
                 window.location.href = window.location.href;
-                return; 
+                return;
 
 
                 var url = 'GroupField.htm?FK_MapData=' + GetQueryString("FK_MapData") + "&RefOID=0&DoType=FunList";
@@ -960,7 +961,7 @@
             }
             function ExpImp() {
 
-                var url = './ImpExp/Imp.htm?FK_MapData=' + pageParam.fk_mapdata + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") +"&FK_Node="+GetQueryString("FK_Node");
+                var url = './ImpExp/Imp.htm?FK_MapData=' + pageParam.fk_mapdata + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
 
                 OpenEasyUiDialog(url, "eudlgframe", '导入导出', 800, 500, "icon-edit", true, null, null, null, function () {
                     window.location.href = window.location.href;
@@ -1015,7 +1016,7 @@
                 }
 
                 OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-                
+
                     window.location.href = window.location.href;
 
                 });
@@ -1033,7 +1034,7 @@
                 });
             }
 
-            function EditTable(fk_mapData, mypk,keyOfEn) {
+            function EditTable(fk_mapData, mypk, keyOfEn) {
 
                 var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
 
@@ -1195,7 +1196,7 @@
                 if (mypk == null || mypk == "undefined")
                     mypk = GetQueryString("FK_Node");
 
-              
+
                 var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=轨迹组件';
 
 
@@ -1295,7 +1296,7 @@
 
             //修改附件.
             function EditAth(ath) {
-                var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' +  ath;
+                var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + ath;
 
                 OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
                     window.location.href = window.location.href;

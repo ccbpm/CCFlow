@@ -1417,6 +1417,7 @@ namespace BP.WF
                 if (System.IO.Directory.Exists(pdfPath) == false)
                     System.IO.Directory.CreateDirectory(pdfPath);
 
+                fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
                 string pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
                 string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
                 try

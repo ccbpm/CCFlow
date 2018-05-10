@@ -36,7 +36,7 @@
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-       // alert(val);
+        // alert(val);
 
         $('#TB_' + mapAttr.KeyOfEn).val(val);
 
@@ -52,7 +52,7 @@
         //枚举下拉框.
         if (mapAttr.UIContralType == 1) {
 
-           // InitDDLOperation(flowData, mapAttr, val);
+            // InitDDLOperation(flowData, mapAttr, val);
             $('#DDL_' + mapAttr.KeyOfEn).val(val);
 
         }
@@ -63,6 +63,40 @@
                 $('#CB_' + mapAttr.KeyOfEn).attr("checked", "true");
         }
     }
+
+    var mapAttrs = frmData.Sys_MapAttr;
+    //解析设置表单字段联动显示与隐藏.
+    for (var i = 0; i < mapAttrs.length; i++) {
+
+        var mapAttr = mapAttrs[i];
+        if (mapAttr.UIVisible == 0)
+            continue;
+
+        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
+            if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                if (mapAttr.UIContralType == 1) {
+                    /*启用了显示与隐藏.*/
+                    var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                    //初始化页面的值
+                    var nowKey = ddl.val();
+
+
+                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+
+                }
+                if (mapAttr.UIContralType == 3) {
+                    /*启用了显示与隐藏.*/
+                    var rb = $("#RB_" + mapAttr.KeyOfEn);
+                    var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
+                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+
+                }
+            }
+        }
+
+    }
+
+
 }
 
 //处理 MapExt 的扩展. 工作处理器，独立表单都要调用他.
@@ -76,7 +110,7 @@ function AfterBindEn_DealMapExt(frmData) {
         //一起转成entity.
         var mapExt = new Entity("BP.Sys.MapExt", mapExt);
 
-		//debugger;
+        //debugger;
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":
                 MultipleChoiceSmall(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
@@ -115,45 +149,45 @@ function AfterBindEn_DealMapExt(frmData) {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary>      
-                    /// 自定义URL      
-                    /// </summary>      
-                    //SelfUrl =1,      
+                    /// <summary>       
+                    /// 自定义URL       
+                    /// </summary>       
+                    //SelfUrl =1,       
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                    /// <summary>      
-                    /// 表格模式      
-                    /// </summary>      
-                    // TableOnly,      
+                    /// <summary>       
+                    /// 表格模式       
+                    /// </summary>       
+                    // TableOnly,       
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                    /// <summary>      
-                    /// 表格分页模式      
-                    /// </summary>      
-                    //TablePage,      
+                    /// <summary>       
+                    /// 表格分页模式       
+                    /// </summary>       
+                    //TablePage,       
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>      
-                    /// 分组模式      
-                    /// </summary>      
-                    // Group,      
+                    /// <summary>       
+                    /// 分组模式       
+                    /// </summary>       
+                    // Group,       
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>      
-                    /// 树展现模式      
-                    /// </summary>      
-                    // Tree,      
+                    /// <summary>       
+                    /// 树展现模式       
+                    /// </summary>       
+                    // Tree,       
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                    /// <summary>      
-                    /// 双实体树      
-                    /// </summary>      
-                    // TreeDouble      
+                    /// <summary>       
+                    /// 双实体树       
+                    /// </summary>       
+                    // TreeDouble       
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -169,19 +203,19 @@ function AfterBindEn_DealMapExt(frmData) {
             case "BindFunction": //控件绑定函数.
 
                 if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
-                    $('#TB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt,"TB_"));
+                    $('#TB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "TB_"));
                     break;
                 }
                 if ($('#DDL_' + mapExt.AttrOfOper).length == 1) {
-                    $('#DDL_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt,"DDL_"));
+                    $('#DDL_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "DDL_"));
                     break;
                 }
                 if ($('#CB_' + mapExt.AttrOfOper).length == 1) {
-                    $('#CB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt,"CB_"));
+                    $('#CB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "CB_"));
                     break;
                 }
                 if ($('#RB_' + mapExt.AttrOfOper).length == 1) {
-                    $('#RB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt,"RB_"));
+                    $('#RB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "RB_"));
                     break;
                 }
                 break;
@@ -190,7 +224,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 if (mapExt.Tag == "onblur") {
                     var tb = $('[name$=' + "TB_" + mapExt.AttrOfOper + ']');
                     tb.blur(function () {  // 失去焦点 
-                    //    SetQingJiaTianShu();
+                        //    SetQingJiaTianShu();
                     });
                     return;
                 }
@@ -392,7 +426,7 @@ function AfterBindEn_DealMapExt(frmData) {
     }
 }
 
-function DynamicBind(mapExt,ctrlType) {
+function DynamicBind(mapExt, ctrlType) {
 
     $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {
         DBAccess.RunFunctionReturnStr(mapExt.Doc);

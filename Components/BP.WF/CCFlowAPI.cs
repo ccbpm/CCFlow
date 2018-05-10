@@ -230,52 +230,50 @@ namespace BP.WF
                 if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false 
                     && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs)==false)
                 {
-                    //计算累加的字段分组.
+
+                    #region 处理字段分组排序.
+                    //查询所有的分组.
+                    string myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node+"'";
                     GroupFields gfs = new GroupFields();
-                    gfs.RetrieveIn(GroupFieldAttr.FrmID, "("+wk.HisPassedFrmIDs+")" );
+                    gfs.RetrieveIn(GroupFieldAttr.FrmID, "(" + myFrmIDs + ")");
 
-                    DataTable gf = myds.Tables["Sys_GroupField"];
-
-                    //让其按照顺序排列.
-                    string[] frmIDs = wk.HisPassedFrmIDs.Split(',');
-
-                    for (int i = 0; i < frmIDs.Length; i++)
+                    //按照时间的顺序查找出来 ids .
+                    string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + myFrmIDs + ")";
+                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
                     {
-                        int idx = frmIDs.Length - i-1;
-
-                        string frmID = frmIDs[idx];
-                        frmID = frmID.Replace("'", "");
-                        frmID = frmID.Replace("'", "");
-
-                        //数量.
-                        int numOfBar = gfs.GetCountByKey(GroupFieldAttr.FrmID, frmID);
-
-                        int insertNum = 0; //已经插入的数量.
-
-                        for (int ii = 0; ii < gfs.Count; ii++)
-                        {
-                            idx = gfs.Count - ii - 1;
-
-                            GroupField item = (GroupField)gfs[idx];
-                            if (item.FrmID != frmID)
-                                continue;
-
-                            DataRow dr = gf.NewRow();
-                            dr[GroupFieldAttr.CtrlID] = item.CtrlID;
-                            dr[GroupFieldAttr.CtrlType] = item.CtrlType;
-                            dr[GroupFieldAttr.Idx] = item.Idx;
-                            dr[GroupFieldAttr.Lab] = item.Lab;
-                            dr[GroupFieldAttr.OID] = item.OID;
-                            dr[GroupFieldAttr.FrmID] = item.FrmID;
-
-                            if (insertNum == 0 && numOfBar == 1)
-                            {
-                                gf.Rows.InsertAt(dr, 0); //增加一行.
-                                break;
-                            }
-                            gf.Rows.InsertAt(dr, 0); //增加一行.
-                        }
+                        myFrmIDs = myFrmIDs.Replace("'", "");
+                        sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "',FrmID) , Idx";
                     }
+
+                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    {
+                        myFrmIDs = myFrmIDs.Replace("'", "");
+                        sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + myFrmIDs + "'), Idx";
+                    }
+
+                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+                    {
+                        myFrmIDs = myFrmIDs.Replace("'", "");
+                        sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + myFrmIDs + "'), Idx";
+                    }
+                    DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);
+
+                    //创建容器,把排序的分组放入这个容器.
+                    GroupFields gfsNew = new GroupFields();
+
+                    //遍历查询出来的分组.
+                    foreach (DataRow dr in dtOrder.Rows)
+                    {
+                        string pkOID = dr[0].ToString();
+                        var mygf  =gfs.GetEntityByKey( pkOID);
+                        gfsNew.AddEntity(mygf); //把分组字段加入里面去.
+                    }
+
+                    DataTable dtGF = gfsNew.ToDataTableField("Sys_GroupField");
+                    myds.Tables.Remove("Sys_GroupField");
+                    myds.Tables.Add(dtGF);
+                    #endregion 处理字段分组排序.
+
 
                     //计算累加的字段集合.
                     MapAttrs attrs = new MapAttrs();

@@ -1788,7 +1788,20 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.CancelRole, (int)value);
             }
         }
-
+        /// <summary>
+        /// 对方已读不能撤销
+        /// </summary>
+        public bool CancelDisWhenRead
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.CancelDisWhenRead);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.CancelDisWhenRead, value);
+            }
+        }
         /// <summary>
         /// 数据写入规则
         /// </summary>
@@ -2549,6 +2562,8 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.IsExpSender, 1, "本节点接收人不允许包含上一步发送人", true, true);
 
                 map.AddTBInt(NodeAttr.CancelRole, 0, "撤销规则", true, true);
+                map.AddTBInt(NodeAttr.CancelDisWhenRead, 0, "对方已读不能撤销", true, true);
+
 
                 map.AddTBInt(NodeAttr.WhenNoWorker, 0, "未找到处理人时", true, true);
                 map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);

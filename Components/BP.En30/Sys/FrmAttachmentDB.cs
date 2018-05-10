@@ -483,14 +483,13 @@ namespace BP.Sys
             return base.beforeInsert();
         }
 
-        protected override void afterDelete()
+        protected override bool beforeDelete()
         {
             //判断删除excel数据提取的数据
             if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
-                return;
+                return true;
 
             FrmAttachment ath = new FrmAttachment(this.FK_FrmAttachment);
-
             try
             {
                 // @于庆海需要翻译.
@@ -503,18 +502,19 @@ namespace BP.Sys
                              SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                     string fullName = this.FileFullName;
-                    //ny + "//" + athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
-
+                    ftpconn.DeleteFile(fullName);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.DebugWriteError(ex.Message);
             }
 
 
+
+            //没有看明白这是什么意思.
             string fkefs = ath.GetParaString("FK_ExcelFile", null);
-            if (string.IsNullOrWhiteSpace(fkefs) == false)
+            if (DataType.IsNullOrEmpty(fkefs) == false)
             {
                 string[] efarr = fkefs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 ExcelFile ef = null;
@@ -536,8 +536,11 @@ namespace BP.Sys
                 }
             }
 
-            base.afterDelete();
+
+            return base.beforeDelete();
         }
+
+     
         #endregion
 
         /// <summary>

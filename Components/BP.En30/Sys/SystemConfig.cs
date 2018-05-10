@@ -98,25 +98,43 @@ namespace BP.Sys
     /// </summary>
     public class SystemConfig
     {
-        #region ftp配置.
+        #region ftp 配置.
+        /// <summary>
+        /// ftp服务器类型.
+        /// </summary>
+        public static string FTPServerType
+        {
+            get
+            {
+                string str = SystemConfig.AppSettings["FTPServerType"];
+                return BP.Sys.Glo.String_JieMi(str);
+            }
+        }
+        /// <summary>
+        /// 服务器IP
+        /// </summary>
         public static string FTPServerIP
         {
             get
             {
-                return SystemConfig.AppSettings["FTPServerIP"];
+                string str = SystemConfig.AppSettings["FTPServerIP"];
+                return BP.Sys.Glo.String_JieMi(str);
             }
         }
-
+        /// <summary>
+        /// 用户编号
+        /// </summary>
         public static string FTPUserNo
         {
             get
             {
-
                 string str = SystemConfig.AppSettings["FTPUserNo"];
                 return BP.Sys.Glo.String_JieMi(str);
             }
         }
-
+        /// <summary>
+        /// 密码
+        /// </summary>
         public static string FTPUserPassword
         {
             get
@@ -125,7 +143,17 @@ namespace BP.Sys
                 return BP.Sys.Glo.String_JieMi(str);
             }
         }
-
+        /// <summary>
+        /// 端口号
+        /// </summary>
+        public static string FTPPort
+        {
+            get
+            {
+                string str = SystemConfig.AppSettings["FTPPort"];
+                return BP.Sys.Glo.String_JieMi(str);
+            }
+        }
         public static string AttachWebSite
         {
             get

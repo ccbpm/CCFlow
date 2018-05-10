@@ -250,18 +250,13 @@ namespace BP.WF.HttpHandler
         }
         #endregion 创建表单.
 
-
         public string LetLogin()
         {
             BP.Port.Emp emp = new BP.Port.Emp("admin");
             WebUser.SignInOfGener(emp);
             return "登录成功.";
         }
-
-        public string CCFormDesignerSL_Init()
-        {
-            return BP.WF.Glo.SilverlightDownloadUrl;
-        }
+      
         public string GoToFrmDesigner_Init()
         {
             //根据不同的表单类型转入不同的表单设计器上去.

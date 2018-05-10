@@ -481,7 +481,6 @@ namespace BP.Sys
         /// <returns>返回解密后的字符串</returns>
         public static string String_JieMi(string str)
         {
-
             //南京宝旺达.
             if (SystemConfig.CustomerNo == "BWDA")
             {

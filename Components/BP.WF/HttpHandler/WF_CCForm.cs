@@ -2459,8 +2459,9 @@ namespace BP.WF.HttpHandler
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
-                    if (!DataType.IsNullOrEmpty(msg))
+                    if (DataType.IsNullOrEmpty(msg)==false)
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
+
                 }
                 #endregion 保存到数据库.
             }
@@ -2805,6 +2806,7 @@ namespace BP.WF.HttpHandler
 
             FrmAttachmentDB delDB = new FrmAttachmentDB();
             delDB.MyPK = delPK == null ? this.MyPK : delPK;
+            delDB.RetrieveFromDBSources();
             delDB.Delete(); //删除上传的文件.
             return "删除成功.";
         }
@@ -2837,10 +2839,11 @@ namespace BP.WF.HttpHandler
             {
                 string fileFullName = downDB.GenerTempFile(dbAtt.AthSaveWay);
 
-                //    BP.Sys.PubClass.DownloadFileV2(fileFullName, downDB.FileName);
-                //  return "";
-                //PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
-                return "url@" + DataType.PraseStringToUrlFileName(  fileFullName);
+                // BP.Sys.PubClass.DownloadFileV2(fileFullName, downDB.FileName);
+                // return "";
+                // PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
+
+                return "url@" + DataType.PraseStringToUrlFileName(fileFullName);
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.DB)

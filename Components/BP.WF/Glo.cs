@@ -3596,16 +3596,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 下载sl的地址
-        /// </summary>
-        public static string SilverlightDownloadUrl
-        {
-            get
-            {
-                return BP.Sys.SystemConfig.GetValByKey("SilverlightDownloadUrl", "http://go.microsoft.com/fwlink/?LinkID=124807");
-            }
-        }
-        /// <summary>
         /// 处理显示格式
         /// </summary>
         /// <param name="no"></param>
@@ -3757,7 +3747,6 @@ namespace BP.WF
                 return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableCheckFrmTreeIsNull", true);
             }
         }
-
         /// <summary>
         /// 是否启动工作时打开新窗口
         /// </summary>
@@ -3852,48 +3841,6 @@ namespace BP.WF
                 if (baseUrl.Substring(baseUrl.Length - 1) != "/")
                     baseUrl = baseUrl + "/";
                 return baseUrl;
-            }
-        }
-        public static string CurrPageID
-        {
-            get
-            {
-                try
-                {
-                    string url = BP.Sys.Glo.Request.RawUrl;
-
-                    int i = url.LastIndexOf("/") + 1;
-                    int i2 = url.IndexOf(".aspx") - 6;
-                    try
-                    {
-                        url = url.Substring(i);
-                        return url.Substring(0, url.IndexOf(".aspx"));
-
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.Message + url + " i=" + i + " i2=" + i2);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("获取当前PageID错误:" + ex.Message);
-                }
-            }
-        }
-        //用户表单风格控制
-        public static string GetUserStyle
-        {
-            get
-            {
-                //BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
-                //if(string.IsNullOrEmpty(emp.Style) || emp.Style=="0")
-                //{
-                string userStyle = BP.Sys.SystemConfig.AppSettings["UserStyle"];
-                if (string.IsNullOrEmpty(userStyle))
-                    return "ccflow默认";
-                else
-                    return userStyle;
             }
         }
         #endregion

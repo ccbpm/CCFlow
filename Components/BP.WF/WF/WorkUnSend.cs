@@ -364,6 +364,18 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
+            // 如果停留的节点是分合流。
+            Node nd = new Node(gwf.FK_Node);
+
+            //如果启用了对方已读，就不能撤销.
+            if (nd.CancelDisWhenRead == true)
+            {
+                int i = DBAccess.RunSQLReturnValInt("SELECT IsRead FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
+                if (i == 1)
+                    return "err@对方已经打开了该工作您不能执行撤销.";
+            }
+
+
             #region 如果是越轨流程状态 @du.
             string sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE WorkID="+this.WorkID+" AND IsPass=80";
             if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
@@ -385,8 +397,6 @@ namespace BP.WF
             if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwf.FK_Flow, gwf.FK_Node, this.WorkID, WebUser.No) == true)
                 return "err@您有处理当前工作的权限,可能您已经执行了撤销,请使用退回或者发送功能.";
 
-            // 如果停留的节点是分合流。
-            Node nd = new Node(gwf.FK_Node);
 
             #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的.
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)

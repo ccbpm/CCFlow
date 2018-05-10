@@ -339,6 +339,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string CancelRole = "CancelRole";
         /// <summary>
+        /// 对方已读不能撤销
+        /// </summary>
+        public const string CancelDisWhenRead = "CancelDisWhenRead";
+        /// <summary>
         /// 抄送数据写入规则
         /// </summary>
         public const string CCWriteTo = "CCWriteTo";

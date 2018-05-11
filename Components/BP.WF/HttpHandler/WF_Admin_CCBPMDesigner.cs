@@ -966,6 +966,11 @@ namespace BP.WF.HttpHandler
                 dtForm.Rows.Add(drForm); //类别.
             }
 
+            foreach (DataRow row in ds.Tables[1].Rows)
+            {
+                dtForm.Rows.Add(row.ItemArray);
+            }
+
             if (WebUser.No.Equals("admin")==false)
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();

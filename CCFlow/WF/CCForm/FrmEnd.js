@@ -103,17 +103,25 @@
 function AfterBindEn_DealMapExt(frmData) {
 
     var mapExts = frmData.Sys_MapExt;
+    var mapAttrs = frmData.Sys_MapAttr;
 
     for (var i = 0; i < mapExts.length; i++) {
         var mapExt = mapExts[i];
 
         //一起转成entity.
         var mapExt = new Entity("BP.Sys.MapExt", mapExt);
+        var mapAttr = null;
+        for (var j = 0; j < mapAttrs.length; j++) {
+            if (mapAttrs[j].FK_MapData == mapExt.FK_MapData && mapAttrs[j].KeyOfEn == mapExt.AttrOfOper) {
+                mapAttr = mapAttrs[j];
+                break;
+            }
+        }
 
         //debugger;
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":
-                MultipleChoiceSmall(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                MultipleChoiceSmall(mapExt, mapAttr); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "MultipleChoiceSearch":
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.

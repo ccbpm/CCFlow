@@ -489,6 +489,14 @@ namespace BP.Sys
             if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
                 return true;
 
+            //是一个流程先判断流程是否结束，如果结束了，就不让删除.
+         //   string nodeID = this.FK_MapData.Replace("ND", "");
+          //  if (DataType.IsNumStr(nodeID) = true)
+           // {
+            //}
+
+
+
             FrmAttachment ath = new FrmAttachment(this.FK_FrmAttachment);
             try
             {

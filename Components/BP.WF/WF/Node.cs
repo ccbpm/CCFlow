@@ -147,14 +147,14 @@ namespace BP.WF
                 sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
                 sql += "  AND NDFrom!=" + this.NodeID + " "; //排除当前的表单.
 
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
+                //if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
 
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+cast(B.NodeID as varchar(10)) ) ";
+                //if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+cast(B.NodeID as varchar(10)) ) ";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+to_char(B.NodeID) ) ";
+                //if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+to_char(B.NodeID) ) ";
 
                 sql += "  AND (A.WorkID=" + this.WorkID + ") ";
                 sql += " ORDER BY A.RDT ";
@@ -1391,14 +1391,15 @@ namespace BP.WF
                     sql += " WHERE A.NDFrom=B.NodeID AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + ")  ";
                     sql += "  AND (FormType=0 OR FormType=1) ";
 
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
+                    //if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
 
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID= CONCAT('ND',cast(B.NodeID as varchar(10)) ) ) ";
+                    //if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID= CONCAT('ND',cast(B.NodeID as varchar(10)) ) ) ";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'||to_char(B.NodeID) ) ";
+                    //if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'||to_char(B.NodeID) ) ";
+
 
                     sql += "  AND (A.WorkID=" + this.WorkID + ") ";
 

@@ -294,6 +294,7 @@
     <Compile Include="Template\TemplateGlo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Template\FoolTruckNodeFrm.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\Service\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

@@ -25,10 +25,50 @@
 
             InitBar(FormType.FoolTruck);
 
+            Sln(); //设置权限控制方案.
+
         });
 
+        //权限控制方案.
+        function Sln() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            if (node.FormType != FormType.FoolTruck)
+                return;
+
+            var html = "<ul>";
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
+
+            var frmID="ND"+nodeID;
+
+            for (var i = 0; i < nodes.length; i++) {
+
+                var json = nodes[i];
+                if (json.NodeID == nodeID)
+                    continue;
+
+                var sln = new Entity("BP.WF.Template.FoolTruckNodeFrm");
+                sln.MyPK = frmID + "_" + json.NodeID;
+                if (sln.IsExit() == false) {
+                    sln.FK_Flow = json.FK_Flow;
+                 //   sln.in
+                }
+
+                var myNode = new Entity("BP.WF.Node", json);
+
+                html += "<li>[" + sln.FrmSln + "]" + myNode.Name + "</li>";
+            }
+
+            html += "</ul>";
+
+            $("#sln").html(html);
+        }
+
         function Save() {
-            nodeID = GetQueryString("FK_Node");
+
+            var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.FormType = FormType.FoolTruck;
             node.NodeFrmID = "ND" + nodeID;
@@ -42,7 +82,39 @@
 
             alert("保存成功.");
         }
+        ///设置该流程的所有节点都是用该方案。
+        function SetAllNodeFrmUseThisSln() {
 
+            if (confirm('您确定要设置吗？') == false)
+                return;
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            var flowNo = node.FK_Flow;
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo);
+
+            for (var i = 0; i < nds.length; i++) {
+
+                var jsNode = nds[i];
+
+                var node = new Entity("BP.WF.Node", jsNode);
+
+                node.FormType = FormType.FoolTruck;
+                node.NodeFrmID = "ND" + node.NodeID;
+                node.Update();
+
+
+                //更新表单类型.
+                var frmID = "ND" + node.NodeID;
+                var mapData = new Entity("BP.Sys.MapData", frmID);
+                mapData.FrmType = FormType.FoolTruck;
+                mapData.Update();
+            }
+            alert('设置成功.');
+
+        }
     </script>
 </head>
 <body >
@@ -54,8 +126,17 @@
         <li>该表单是傻瓜表单的一种变形展现方式.</li>
         <li>也叫轨迹表单模式,为软通动力定制的一种表单展示类型.</li>
         <li>适合一个节点一个表单模式,简洁流畅，容易追踪历史运动过程.</li>
-         <li><a href="javascript:DFoolFrm()">设计傻瓜表单</a></li>
+         <li><a href="javascript:DFoolFrm()">设计傻瓜表单</a> - <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
      </ul>
 </fieldset>
+
+<fieldset>
+    <legend>当前表单权限控制方案</legend>
+
+    <div id="sln"></div>
+    
+</fieldset>
+
+
 </body>
 </html>

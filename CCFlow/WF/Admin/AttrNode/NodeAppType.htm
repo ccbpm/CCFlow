@@ -32,7 +32,7 @@
                 return;
             }
 
-            var sql = "SELECT NodeAppType FROM WF_Node WHERE NodeID=" + GetQueryString("FK_Node");
+            var sql = "SELECT \"NodeAppType\" FROM WF_Node WHERE NodeID=" + GetQueryString("FK_Node");
             var val = DBAccess.RunSQLReturnTable(sql);
 
             var type = val[0].NodeAppType;

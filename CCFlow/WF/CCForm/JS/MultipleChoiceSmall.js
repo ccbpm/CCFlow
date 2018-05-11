@@ -1,5 +1,5 @@
 ﻿//小范围的多选,不需要搜索.
-function MultipleChoiceSmall(mapExt) {
+function MultipleChoiceSmall(mapExt, mapAttr) {
     var webUser = new WebUser();
     var data = [];
     var valueField = "No";
@@ -46,7 +46,7 @@ function MultipleChoiceSmall(mapExt) {
 
         //如果是checkbox 多选.
         if (mapExt.Tag == "1" || mapExt.Tag == "2") {
-            return MakeCheckBoxsModel(mapExt, data);
+            return MakeCheckBoxsModel(mapExt, data, mapAttr);
         }
 
         var tb = $("#TB_" + AttrOfOper);
@@ -86,12 +86,12 @@ function MultipleChoiceSmall(mapExt) {
         cbx.combobox("loadData", data);
         cbx.combobox({
             onLoadSuccess: function (p) {
-               var frmEleDBs = getVals(mapExt.FK_MapData, AttrOfOper, pageData.WorkID);
+                var frmEleDBs = getVals(mapExt.FK_MapData, AttrOfOper, pageData.WorkID);
                 for (var i = 0; i < frmEleDBs.length; i++) {
                     var tag1 = frmEleDBs[i].Tag1;
                     (function sel(tag1, KeyOfEn, FK_MapData) {
                     })(p[valueField], AttrOfOper, FK_MapData);
-                } 
+                }
             }
         });
 
@@ -100,7 +100,8 @@ function MultipleChoiceSmall(mapExt) {
 
 
 //checkbox 模式.
-function MakeCheckBoxsModel(mapExt, data) {
+function MakeCheckBoxsModel(mapExt, data, mapAttr) {
+
     var textboxId = "TB_" + mapExt.AttrOfOper
     var textbox = $("#" + textboxId);
     textbox.css("visibility", "hidden");
@@ -114,20 +115,24 @@ function MakeCheckBoxsModel(mapExt, data) {
         var name;
         var id;
         var keyValue;
-        if(mapExt.DoWay ==2){
+        if (mapExt.DoWay == 2) {
             name = "CB_" + mapExt.AttrOfOper + "_" + en.No;
             id = name + "_" + en.IntKey
             keyValue = en.IntKey;
-        }else{
+        } else {
             name = "CB_" + mapExt.AttrOfOper + "_" + mapExt.AttrOfOper;
-             id = name + "_" + en.No;
-             keyValue = en.No;
-         }
+            id = name + "_" + en.No;
+            keyValue = en.No;
+        }
+        var enableAttr = '';
+        if (mapAttr != null && mapAttr.UIIsEnable != 1) {
+            enableAttr = "disabled='disabled'";
+        }
 
-         var cb = $("<input type='checkbox' id='" + id + "' name='" + name + "' value='" + keyValue + "'onclick='changeValue(\"" + textboxId + "\",\"" + name + "\")'  />");
+        var cb = $("<input " + enableAttr + " type='checkbox' id='" + id + "' name='" + name + "' value='" + keyValue + "'onclick='changeValue(\"" + textboxId + "\",\"" + name + "\")'  />");
 
 
-         if (tbVal.indexOf(keyValue + ',') != -1)
+        if (tbVal.indexOf(keyValue + ',') != -1)
             cb.attr("checked", true);
         else
             cb.attr("checked", false);
@@ -145,11 +150,11 @@ function MakeCheckBoxsModel(mapExt, data) {
 
         textbox.before(lab);
     }
-  
+
 }
 
 function changeValue(changeIdV, getNameV) {
-    var strgetSelectValue="";
+    var strgetSelectValue = "";
     var getSelectValueMenbers = $("input[name='" + getNameV + "']:checked").each(function (j) {
 
         if (j >= 0) {
@@ -157,8 +162,8 @@ function changeValue(changeIdV, getNameV) {
         }
     });
 
-   $("#" + changeIdV).val(strgetSelectValue);
-    
+    $("#" + changeIdV).val(strgetSelectValue);
+
 }
 
 //删除数据.
@@ -187,62 +192,62 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
     }
 }
 
-function getVals(fk_mapData,eleID, keyOfEn) {
+function getVals(fk_mapData, eleID, keyOfEn) {
     var groupId = "";
-    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs"); 
-    return  frmEleDBs;
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    return frmEleDBs;
 
 }
 
 function DeptEmpModelAdv0(mapExt) {
-	var target = $("#TB_" + mapExt.AttrOfOper);
-	target.hide();
+    var target = $("#TB_" + mapExt.AttrOfOper);
+    target.hide();
 
-	var width = target.width();
-	var height = target.height();
-	var container = $("<div></div>");
-	target.after(container);
-	container.width(width);
-	container.height(height);
-	container.attr("id", mapExt.AttrOfOper + "_mtags");
+    var width = target.width();
+    var height = target.height();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    container.height(height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
 
-	$("#" + mapExt.AttrOfOper + "_mtags").mtags({
-		"fit" : true,
-		"onUnselect" : function (record) {
-			console.log("unselect: " + JSON.stringify(record));
-		}
-	});
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            console.log("unselect: " + JSON.stringify(record));
+        }
+    });
 
-	var width = mapExt.W;
-	var height = mapExt.H;
-	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
-	var title = GetAtPara(mapExt.AtPara, "Title");
-	var oid = (pageData.WorkID || pageData.OID || "");
-	
-	var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-	frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
-	var initJsonData = [];
-	$.each(frmEleDBs, function (i, o) {
-		initJsonData.push({
-			"No" : o.Tag1,
-			"Name" : o.Tag2
-		});
-	});
-	$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
-	//解项羽 这里需要相对路径.
-	var url = "../CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
-	container.on("dblclick", function () {
-		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
-			var iframe = document.getElementById(iframeId);
-			if (iframe) {
-				var selectedRows = iframe.contentWindow.selectedRows;
-				if ($.isArray(selectedRows)) {
-					var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
-					mtags.mtags("loadData", selectedRows);
-					$("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
-				}
-			}
-			return true;
-		});
-	});
+    var width = mapExt.W;
+    var height = mapExt.H;
+    var iframeId = mapExt.MyPK + mapExt.FK_MapData;
+    var title = GetAtPara(mapExt.AtPara, "Title");
+    var oid = (pageData.WorkID || pageData.OID || "");
+
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
+    //解项羽 这里需要相对路径.
+    var url = "../CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+    container.on("dblclick", function () {
+        OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
+            var iframe = document.getElementById(iframeId);
+            if (iframe) {
+                var selectedRows = iframe.contentWindow.selectedRows;
+                if ($.isArray(selectedRows)) {
+                    var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
+                    mtags.mtags("loadData", selectedRows);
+                    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                }
+            }
+            return true;
+        });
+    });
 }

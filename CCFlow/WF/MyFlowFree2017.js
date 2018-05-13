@@ -1,5 +1,4 @@
-﻿var flowData = null;
-var IsCC = false;
+﻿var IsCC = false;
 function GenerFreeFrm(wn) {
 
     flowData = wn;
@@ -58,10 +57,36 @@ function GenerFreeFrm(wn) {
         $('#CCForm').append(createdFigure);
     }
 
+    // 主表扩展(统计从表)
+    var detailExt = {};
+    // 装载公式 从表id -> 公式
+    $.each(flowData.Sys_MapExt, function (i, o) {
+        if (o.ExtType == "AutoFullDtlField") {	// 明细统计公式
+            // 从表id.列.[Sum|Avg|Max|Min] -> CCFrm_CongBiaoCeShiDtl1.ShanJia.Avg
+
+            var docs = o.Doc.split("\.");
+            if (docs.length == 3) {
+                var ext = {
+                    "DtlNo": docs[0],
+                    "FK_MapData": o.FK_MapData,
+                    "AttrOfOper": o.AttrOfOper,
+                    "Doc": o.Doc,
+                    "DtlColumn": docs[1],
+                    "exp": docs[2]
+                };
+                if (!$.isArray(detailExt[ext.DtlNo])) {
+                    detailExt[ext.DtlNo] = [];
+                }
+                detailExt[ext.DtlNo].push(ext);
+                $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
+            }
+        }
+    });
+
     //循环 从表
     for (var i in flowData.Sys_MapDtl) {
         var frmMapDtl = flowData.Sys_MapDtl[i];
-        var createdFigure = figure_Template_Dtl(frmMapDtl);
+        var createdFigure = figure_Template_Dtl(frmMapDtl, detailExt[frmMapDtl.No]); // 根据从表id获取公式 从表id -> 公式
         $('#CCForm').append(createdFigure);
     }
 
@@ -498,40 +523,41 @@ function connector_Template_Line(frmLine) {
 }
 
 //初始化从表
-function figure_Template_Dtl(frmDtl) {
+function figure_Template_Dtl(frmDtl, ext) {
     var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
     var paras = this.pageData;
     var strs = "";
     for (var str in paras) {
+
         if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
             continue
-        else
-            strs += "&" + str + "=" + paras[str];
+
+        var val = paras[str];
+        if (val == null || val == "null" || val == undefined || val == "undefined")
+            continue;
+        strs += "&" + str + "=" + paras[str];
     }
     var src = "";
-    var href = window.location.href;
-    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
-    urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.ListShowModel == "0") {
-        //表格模式
+        //表格模式        
         if (pageData.IsReadonly) {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
         } else {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
         }
     } else if (frmDtl.ListShowModel == "1") {
-        //卡片模式
+        //卡片模式        
         if (pageData.IsReadonly) {
-            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
         } else {
-            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
         }
     }
 
     var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +
+    eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
-                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='atuo' /></iframe>");
     if (pageData.IsReadonly) {
 
     } else {
@@ -541,6 +567,24 @@ function figure_Template_Dtl(frmDtl) {
         }
     }
     eleHtml.append(eleIframe);
+
+    if (ext) {	// 表达式传入iframe(表达式为数组)
+        eleIframe.load(function () {
+            /*
+            var iframeExp = $(this).contents().find(":input[id=formExt]").val();
+            if (iframeExp == null || typeof iframeExp == "undefined" || iframeExp == "") {
+            iframeExp = "[]";
+            }
+            iframeExp = JSON.parse(iframeExp);
+            iframeExp.push(ext);
+            */
+            $(this).contents().find(":input[id=formExt]").val(JSON.stringify(ext));
+            if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+                this.contentWindow.parentStatistics(ext);
+            }
+        });
+    }
+
     //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
     var js = "";
     if (!pageData.IsReadonly) {

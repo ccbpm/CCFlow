@@ -327,14 +327,16 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_NodeFrm", "累加表单方案");
-
+                Map map = new Map("WF_FrmNode", "累加表单方案");
                 map.AddMyPK();
 
                 map.AddTBInt(FoolTruckNodeFrmAttr.FK_Node, 0, "要作用的节点ID", true, false);
                 map.AddTBString(FoolTruckNodeFrmAttr.FK_Frm, null, "表单ID", true, true, 1, 200, 200);
-                map.AddTBInt(FoolTruckNodeFrmAttr.FrmSln, 0, "表单控制方案", true, false);
 
+                map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
+                   "@0=默认方案@1=只读方案@2=自定义方案");
+
+               // map.AddTBInt(FoolTruckNodeFrmAttr.FrmSln, 0, "表单控制方案", true, false);
 
                 //菜单在本节点的权限控制.
                 map.AddTBInt(FoolTruckNodeFrmAttr.IsEnableLoadData, 0, "是否启用装载填充事件", true, false);

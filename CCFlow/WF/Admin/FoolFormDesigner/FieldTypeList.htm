@@ -145,6 +145,7 @@
         }
 
         function ContainsChinese(str) {
+
             ///<summary>判断指定字符串是否包含汉字</summary>
             if (!str) {
                 return false;
@@ -158,6 +159,11 @@
             var url = "FieldTypeListChoseOneField.htm?FK_MapData=" + GetQueryString("FK_MapData");
             window.location.href = url;
         }
+
+        function ToTemplate() {
+            var url = "./Template/Fields.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+        }
     </script>
     <!--<base target="_self" /> -->
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
@@ -168,7 +174,7 @@
 
 <table style="width:100%;">
 <tr>
-  <th colspan="2">新增普通类型的字段</th>
+  <th colspan="2"><div style="float:left">新增普通类型的字段</div><div style="float:right"><a href="javascript:ToTemplate();">模版</a></div></th>
 </tr>
 
 <tr>

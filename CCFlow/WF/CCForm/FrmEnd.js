@@ -360,7 +360,6 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "AutoFullDtlField": //主表扩展(统计从表)
                 var docs = mapExt.Doc.split("\.");
-                debugger
                 if (docs.length == 3) {
                     var ext = {
                         "DtlNo": docs[0],
@@ -376,7 +375,6 @@ function AfterBindEn_DealMapExt(frmData) {
                     detailExt[ext.DtlNo].push(ext);
                     var iframeDtl = $("#F" + ext.DtlNo);
                     iframeDtl.load(function () {
-                        debugger
                         $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[ext.DtlNo]));
                         if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
                             this.contentWindow.parentStatistics(detailExt[ext.DtlNo]);

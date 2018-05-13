@@ -50,20 +50,42 @@
                     continue;
 
                 var sln = new Entity("BP.WF.Template.FoolTruckNodeFrm");
-                sln.MyPK = frmID + "_" + json.NodeID;
-                if (sln.IsExit() == false) {
+                sln.MyPK = frmID + "_" + json.NodeID + "_" + json.FK_Flow;
+
+                if (sln.IsExits() == false) {
                     sln.FK_Flow = json.FK_Flow;
-                 //   sln.in
+                    sln.FK_Frm = frmID;
+                    sln.FK_Node = json.NodeID; //节点ID.
+                    sln.FrmSln = 1; //只读方案.
+                    sln.Insert();
+                } else {
+                    sln.Retrieve();
                 }
 
-                var myNode = new Entity("BP.WF.Node", json);
+                if (sln.FrmSln == 1 || sln.FrmSln == 0) {
+                    html += "<li>[只读]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.Name + "</a></li>";
+                    continue;
+                }
 
-                html += "<li>[" + sln.FrmSln + "]" + myNode.Name + "</li>";
+                var def = " - <a href=\"javascript:DefField('')\" >定义字段权限</a>";
+                def += " - <a href=\"javascript:DefField('')\" >附件权限</a>";
+                def += " - <a href=\"javascript:DefField('')\" >从表权限</a>";
+
+                html += "<li>[" + sln.FrmSlnText + "]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.Name + "</a> " + def + "</li>";
             }
+
 
             html += "</ul>";
 
             $("#sln").html(html);
+        }
+        function EditSln(mypk) {
+
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FoolTruckNodeFrm&MyPK=" + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", '表单方案', 600,300, "icon-property", true, null, null, null, function () {
+                    window.location.href = window.location.href;
+            });
         }
 
         function Save() {
@@ -115,6 +137,7 @@
             alert('设置成功.');
 
         }
+     
     </script>
 </head>
 <body >

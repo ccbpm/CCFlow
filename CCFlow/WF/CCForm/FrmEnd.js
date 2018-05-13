@@ -104,6 +104,8 @@ function AfterBindEn_DealMapExt(frmData) {
 
     var mapExts = frmData.Sys_MapExt;
     var mapAttrs = frmData.Sys_MapAttr;
+    // 主表扩展(统计从表)
+    var detailExt = {};
 
     for (var i = 0; i < mapExts.length; i++) {
         var mapExt = mapExts[i];
@@ -355,6 +357,33 @@ function AfterBindEn_DealMapExt(frmData) {
                 if (mapExt.Doc == undefined || mapExt.Doc == '')
                     continue;
                 calculator(mapExt);
+                break;
+            case "AutoFullDtlField": //主表扩展(统计从表)
+                var docs = mapExt.Doc.split("\.");
+                debugger
+                if (docs.length == 3) {
+                    var ext = {
+                        "DtlNo": docs[0],
+                        "FK_MapData": mapExt.FK_MapData,
+                        "AttrOfOper": mapExt.AttrOfOper,
+                        "Doc": mapExt.Doc,
+                        "DtlColumn": docs[1],
+                        "exp": docs[2]
+                    };
+                    if (!$.isArray(detailExt[ext.DtlNo])) {
+                        detailExt[ext.DtlNo] = [];
+                    }
+                    detailExt[ext.DtlNo].push(ext);
+                    var iframeDtl = $("#F" + ext.DtlNo);
+                    iframeDtl.load(function () {
+                        debugger
+                        $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[ext.DtlNo]));
+                        if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+                            this.contentWindow.parentStatistics(detailExt[ext.DtlNo]);
+                        }
+                    });
+                    $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
+                }
                 break;
             case "DDLFullCtrl": // 自动填充其他的控件..  先不做
 

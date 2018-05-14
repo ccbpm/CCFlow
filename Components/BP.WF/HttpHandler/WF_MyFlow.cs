@@ -2207,6 +2207,8 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 如果是移动应用就考虑多表单的问题.
 
+                ds.WriteXml("c:\\xx.xml");
+
                 return BP.Tools.Json.ToJson(ds);
             }
             catch (Exception ex)

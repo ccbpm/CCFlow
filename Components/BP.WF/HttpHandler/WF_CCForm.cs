@@ -2880,112 +2880,153 @@ namespace BP.WF.HttpHandler
                 return this.GetRequestVal("FK_FrmAttachment");
             }
         }
+        public BP.Sys.FrmAttachment GenerAthDescOfFoolTruck()
+        {
+            FoolTruckNodeFrm sln = new FoolTruckNodeFrm();
+            sln.MyPK = this.FK_MapData + "_" + this.FK_Node + "_" + this.FK_Flow;
+            if (sln.RetrieveFromDBSources() == 0 || sln.FrmSln==1 || sln.FrmSln==0 )
+            {
+                /*没有查询到解决方案, 就是只读方案 */
+                BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
+                athDesc.MyPK = this.FK_FrmAttachment;
+                athDesc.IsUpload = false;
+                athDesc.IsDownload = false;
+                athDesc.HisDeleteWay = AthDeleteWay.None; //删除模式.
+                return athDesc;
+            }
+
+            //如果是自定义方案,就查询自定义方案信息.
+            if (sln.FrmSln == 2)
+            {
+                /*没有查询到解决方案, 就是只读方案 */
+                BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
+                athDesc.MyPK = this.FK_Node+"_Ath1";
+                if (athDesc.RetrieveFromDBSources() == 0)
+                {
+                    athDesc.IsUpload = false;
+                    athDesc.HisDeleteWay = AthDeleteWay.None;
+                    athDesc.IsDownload = false;
+                    athDesc.Insert();
+                }
+                return athDesc;
+            }
+           
+            return null;
+        }
         /// <summary>
         /// 生成描述
         /// </summary>
         /// <returns></returns>
         public BP.Sys.FrmAttachment GenerAthDesc()
         {
+            #region 为累加表单做的特殊判断.
+            if (this.GetRequestValInt("FormType") == 10)
+            {
+                if (this.FK_FrmAttachment.Contains(this.FK_MapData) == false)
+                    return GenerAthDescOfFoolTruck();
+            }
+            #endregion
+
+
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
             athDesc.MyPK = this.FK_FrmAttachment;
             if (this.FK_Node == 0 || this.FK_Flow == null)
             {
                 athDesc.RetrieveFromDBSources();
+                return athDesc;
+            }
+
+            athDesc.MyPK = this.FK_FrmAttachment;
+            int result = athDesc.RetrieveFromDBSources();
+
+            #region 判断是否是明细表的多附件.
+            if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
+               && this.FK_FrmAttachment.Contains("AthMDtl"))
+            {
+                athDesc.FK_MapData = this.FK_MapData;
+                athDesc.NoOfObj = "AthMDtl";
+                athDesc.Name = "我的从表附件";
+                athDesc.UploadType = AttachmentUploadType.Multi;
+                athDesc.Insert();
+            }
+            #endregion 判断是否是明细表的多附件。
+
+            #region 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
+            if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
+                && this.FK_FrmAttachment.Contains("DocMultiAth"))
+            {
+                /*如果没有查询到它,就有可能是公文多附件被删除了.*/
+                athDesc.MyPK = this.FK_FrmAttachment;
+                athDesc.NoOfObj = "DocMultiAth";
+                athDesc.FK_MapData = this.FK_MapData;
+                athDesc.Exts = "*.*";
+
+                //存储路径.
+                athDesc.SaveTo = "/DataUser/UploadFile/";
+                athDesc.IsNote = false; //不显示note字段.
+                athDesc.IsVisable = false; // 让其在form 上不可见.
+
+                //位置.
+                athDesc.X = (float)94.09;
+                athDesc.Y = (float)333.18;
+                athDesc.W = (float)626.36;
+                athDesc.H = (float)150;
+
+                //多附件.
+                athDesc.UploadType = AttachmentUploadType.Multi;
+                athDesc.Name = "公文多附件(系统自动增加)";
+                athDesc.SetValByKey("AtPara",
+                    "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=@IsWoEnableTemplete=1");
+                athDesc.Insert();
+
+                //有可能在其其它的节点上没有这个附件，所以也要循环增加上它.
+                BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
+                foreach (BP.WF.Node nd in nds)
+                {
+                    athDesc.FK_MapData = "ND" + nd.NodeID;
+                    athDesc.MyPK = athDesc.FK_MapData + "_" + athDesc.NoOfObj;
+                    if (athDesc.IsExits == true)
+                        continue;
+
+                    athDesc.Insert();
+                }
+
+                //重新查询一次，把默认值加上.
+                athDesc.RetrieveFromDBSources();
+            }
+            #endregion 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
+
+            #region 处理权限方案。
+            /*首先判断是否具有权限方案*/
+            string at = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            Paras ps = new BP.DA.Paras();
+            ps.SQL = "SELECT FrmSln FROM WF_FrmNode WHERE FK_Node=" + at + "FK_Node AND FK_Flow=" + at + "FK_Flow AND FK_Frm=" + at + "FK_Frm";
+            ps.Add("FK_Node", this.FK_Node);
+            ps.Add("FK_Flow", this.FK_Flow);
+            ps.Add("FK_Frm", this.FK_MapData);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (dt.Rows.Count == 0)
+            {
+                athDesc.RetrieveFromDBSources();
             }
             else
             {
-                athDesc.MyPK = this.FK_FrmAttachment;
-                int result = athDesc.RetrieveFromDBSources();
-
-                #region 判断是否是明细表的多附件.
-                if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
-                   && this.FK_FrmAttachment.Contains("AthMDtl"))
-                {
-                    athDesc.FK_MapData = this.FK_MapData;
-                    athDesc.NoOfObj = "AthMDtl";
-                    athDesc.Name = "我的从表附件";
-                    athDesc.UploadType = AttachmentUploadType.Multi;
-                    athDesc.Insert();
-                }
-                #endregion 判断是否是明细表的多附件。
-
-                #region 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
-                if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
-                    && this.FK_FrmAttachment.Contains("DocMultiAth"))
-                {
-                    /*如果没有查询到它,就有可能是公文多附件被删除了.*/
-                    athDesc.MyPK = this.FK_FrmAttachment;
-                    athDesc.NoOfObj = "DocMultiAth";
-                    athDesc.FK_MapData = this.FK_MapData;
-                    athDesc.Exts = "*.*";
-
-                    //存储路径.
-                    athDesc.SaveTo = "/DataUser/UploadFile/";
-                    athDesc.IsNote = false; //不显示note字段.
-                    athDesc.IsVisable = false; // 让其在form 上不可见.
-
-                    //位置.
-                    athDesc.X = (float)94.09;
-                    athDesc.Y = (float)333.18;
-                    athDesc.W = (float)626.36;
-                    athDesc.H = (float)150;
-
-                    //多附件.
-                    athDesc.UploadType = AttachmentUploadType.Multi;
-                    athDesc.Name = "公文多附件(系统自动增加)";
-                    athDesc.SetValByKey("AtPara",
-                        "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=@IsWoEnableTemplete=1");
-                    athDesc.Insert();
-
-                    //有可能在其其它的节点上没有这个附件，所以也要循环增加上它.
-                    BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
-                    foreach (BP.WF.Node nd in nds)
-                    {
-                        athDesc.FK_MapData = "ND" + nd.NodeID;
-                        athDesc.MyPK = athDesc.FK_MapData + "_" + athDesc.NoOfObj;
-                        if (athDesc.IsExits == true)
-                            continue;
-
-                        athDesc.Insert();
-                    }
-
-                    //重新查询一次，把默认值加上.
-                    athDesc.RetrieveFromDBSources();
-                }
-                #endregion 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
-
-                #region 处理权限方案。
-                /*首先判断是否具有权限方案*/
-                string at = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                Paras ps = new BP.DA.Paras();
-                ps.SQL = "SELECT FrmSln FROM WF_FrmNode WHERE FK_Node=" + at + "FK_Node AND FK_Flow=" + at + "FK_Flow AND FK_Frm=" + at + "FK_Frm";
-                ps.Add("FK_Node", this.FK_Node);
-                ps.Add("FK_Flow", this.FK_Flow);
-                ps.Add("FK_Frm", this.FK_MapData);
-                DataTable dt = DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count == 0)
+                int sln = int.Parse(dt.Rows[0][0].ToString());
+                if (sln == 0)
                 {
                     athDesc.RetrieveFromDBSources();
                 }
                 else
                 {
-                    int sln = int.Parse(dt.Rows[0][0].ToString());
-                    if (sln == 0)
-                    {
-                        athDesc.RetrieveFromDBSources();
-                    }
-                    else
-                    {
-                        result = athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData,
-                            FrmAttachmentAttr.FK_Node, this.FK_Node, FrmAttachmentAttr.NoOfObj, this.Ath);
+                    result = athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData,
+                        FrmAttachmentAttr.FK_Node, this.FK_Node, FrmAttachmentAttr.NoOfObj, this.Ath);
 
-                        if (result == 0) /*如果没有定义，就获取默认的.*/
-                            athDesc.RetrieveFromDBSources();
-                        //  throw new Exception("@该独立表单在该节点("+this.FK_Node+")使用的是自定义的权限控制，但是没有定义该附件的权限。");
-                    }
+                    if (result == 0) /*如果没有定义，就获取默认的.*/
+                        athDesc.RetrieveFromDBSources();
+                    //  throw new Exception("@该独立表单在该节点("+this.FK_Node+")使用的是自定义的权限控制，但是没有定义该附件的权限。");
                 }
-                #endregion 处理权限方案。
             }
+            #endregion 处理权限方案。
 
             return athDesc;
         }

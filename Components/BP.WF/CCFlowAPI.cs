@@ -274,20 +274,35 @@ namespace BP.WF
                     myds.Tables.Add(dtGF);
                     #endregion 处理字段分组排序.
 
-
-                    //计算累加的字段集合.
+                    #region 处理 mapattrs 
+                    //求当前表单的字段集合.
                     MapAttrs attrs = new MapAttrs();
                     QueryObject qo = new QueryObject(attrs);
-                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")" );
-                    DataTable dtAttrs = qo.DoQueryToTable();
+                    qo.AddWhere(MapAttrAttr.FK_MapData,  "ND"+nd.NodeID);
+                    qo.addOrderBy(MapAttrAttr.Idx);
+                    qo.DoQuery();
 
-                    DataTable mapAttr = myds.Tables["Sys_MapAttr"]; //增加行.
-                    foreach (DataRow dr in dtAttrs.Rows)
+                    //计算累加的字段集合.
+                    MapAttrs attrsLeiJia = new MapAttrs();
+                    qo = new QueryObject(attrsLeiJia);
+                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")" );
+                    qo.addOrderBy(MapAttrAttr.Idx);
+                    qo.DoQuery();
+
+                    //把两个集合接起来.
+                    foreach (MapAttr item in attrsLeiJia)
                     {
-                        dr[MapAttrAttr.UIIsEnable] = 0; //把字段设置为只读的.
-                        mapAttr.Rows.Add(dr.ItemArray);
+                        item.UIIsEnable = false; //设置为只读的.
+                        attrs.AddEntity(item);
                     }
 
+                    //替换掉现有的.
+                    myds.Tables.Remove("Sys_MapAttr"); //移除.
+                    myds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr")); //增加.
+
+                    #endregion 处理mapattrs
+
+                    /*
                     //计算累加的 从表字段集合.
                     MapDtls dtls = new MapDtls();
                     qo = new QueryObject(dtls);
@@ -317,7 +332,7 @@ namespace BP.WF
                         dr[FrmAttachmentAttr.IsDownload] = 0;
                         mAths.Rows.Add(dr.ItemArray);
                     }
-
+                    */
                 }
                 #endregion 增加 groupfields
 

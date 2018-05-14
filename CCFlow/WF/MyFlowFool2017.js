@@ -340,7 +340,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             enableAttr = "disabled='disabled'";
         if (mapAttr.UIContralType == 1)
         //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>";
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' value='" + defValue + "'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -697,7 +697,12 @@ function Ele_Attachment(flowData, gf, node) {
     var url = "";
     url += "&WorkID=" + GetQueryString("WorkID");
     url += "&FK_Node=" + nodeID;
+    url += "&FK_Flow=" + node.FK_Flow;
     url += "&FormType=" + node.FormType; //表单类型，累加表单，傻瓜表单，自由表单.
+    var no = node.NodeID.toString().substring(node.NodeID.toString().length - 2);
+    var IsStartNode = 0;
+    if(no=="01") 
+     url += "&IsStartNode=" + 1; //是否是开始节点
 
     var isReadonly = false;
     if (gf.FrmID.indexOf(nodeID) == -1)
@@ -710,9 +715,9 @@ function Ele_Attachment(flowData, gf, node) {
     var noOfObj = athPK.replace(gf.FrmID + "_", "");
 
     var src = "";
-    if (pageData.IsReadonly || isReadonly == true)
-        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + "&IsReadonly=1" + url;
-    else
+    //if (pageData.IsReadonly || isReadonly == true)
+    //    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + "&IsReadonly=1" + url;
+   // else
         src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
 
     //自定义表单模式.

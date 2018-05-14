@@ -3063,13 +3063,24 @@ namespace BP.WF.HttpHandler
                 //删除临时文件，保证一个用户只能存一份，减少磁盘占用空间.
                 info = "@创建用户临时目录:" + tempUserPath;
                 if (System.IO.Directory.Exists(tempUserPath) == false)
+                {
                     System.IO.Directory.CreateDirectory(tempUserPath);
-
-                //如果有这个临时的目录就把他删除掉.
-                if (System.IO.Directory.Exists(tempFilePath) == true)
-                    System.IO.Directory.Delete(tempFilePath);
-
-                System.IO.Directory.CreateDirectory(tempFilePath);
+                }
+                else
+                {
+                    //如果有这个临时的目录就把他删除掉.
+                    try
+                    {
+                        System.IO.Directory.Delete(tempFilePath);
+                    }
+                    catch
+                    {
+                        /*删除文件*/
+                        //FileInfo fls= 
+                    }
+                     
+                    System.IO.Directory.CreateDirectory(tempFilePath);
+                }
             }
             catch (Exception ex)
             {

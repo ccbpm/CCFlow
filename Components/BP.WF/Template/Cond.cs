@@ -1031,6 +1031,7 @@ namespace BP.WF.Template
                     case "<>":
                     case "!=":
                     case "budingyu":
+                    case "budengyu": //不等于.
                         if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString())==false)
                             return true;
                         else

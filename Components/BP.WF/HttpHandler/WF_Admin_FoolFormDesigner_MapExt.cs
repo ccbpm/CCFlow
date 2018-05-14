@@ -118,7 +118,7 @@ namespace BP.WF.HttpHandler
             //把从表的字段放入.
             foreach (MapDtl dtl in dtls)
             {
-                string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='"+dtl.No+"' AND (MyDataType=2 OR MyDataType=3 OR MyDataType=5 OR MyDataType=8)  ";  
+                string sql = "SELECT KeyOfEn as \"No\",Name as \"Name\" FROM Sys_MapAttr WHERE FK_MapData='"+dtl.No+"' AND (MyDataType=2 OR MyDataType=3 OR MyDataType=5 OR MyDataType=8)  ";  
                 sql+=" AND KeyOfEn !='OID' AND KeyOfEn!='FID' AND KeyOfEn!='RefPK' ";
 
                 //把从表增加里面去.

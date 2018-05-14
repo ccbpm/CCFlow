@@ -67,7 +67,7 @@ function GenerFoolFrm(wn) {
             html += "<tr>";
             html += "  <td colspan='4' >";
 
-            html += Ele_Attachment(flowData, gf);
+            html += Ele_Attachment(flowData, gf,node);
 
             html += "  </td>";
             html += "</tr>";
@@ -690,36 +690,36 @@ function Ele_Frame(flowData, gf) {
 
 
 //初始化 附件
-function Ele_Attachment(flowData, gf) {
-
-    var ath = flowData.Sys_FrmAttachment[0];
-    if (ath == null)
-        return "没有找到附件定义，请与管理员联系。";
+function Ele_Attachment(flowData, gf, node) {
 
     var eleHtml = '';
-
     var nodeID = GetQueryString("FK_Node");
     var url = "";
     url += "&WorkID=" + GetQueryString("WorkID");
     url += "&FK_Node=" + nodeID;
+    url += "&FormType=" + node.FormType;
 
     var isReadonly = false;
     if (gf.FrmID.indexOf(nodeID) == -1)
         isReadonly = true;
 
+    var ath = new Entity("BP.Sys.FrmAttachment", gf.CtrlID);
+
+    var athPK = gf.CtrlID;
+    var noOfObj = athPK.replace(gf.FrmID + "_", "");
 
     var src = "";
     if (pageData.IsReadonly || isReadonly == true)
-        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + url;
+        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + "&IsReadonly=1" + url;
     else
-        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + url;
+        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {
-        src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + url;
+        src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
     }
 
-    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + gf.CtrlID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     return eleHtml;
 }
 

@@ -9,17 +9,15 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js"  type="text/javascript" ></script>
     <script src="../Scripts/slideBox/jquery.slideBox.min.js" type="text/javascript"></script>
-        <script src="Ath.js" type="text/javascript"></script>
+    <script src="Ath.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
-    <script src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script>
     <link href='../Scripts/Jquery-plug/fileupload/uploadify.css' rel='stylesheet' type='text/css' />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
-     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <!-- 导入可以扩展的按钮事件. -->
     <script src="../../DataUser/OverrideFiles/Ath.js" type="text/javascript"></script>
@@ -107,6 +105,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData();
             data = handler.DoMethodReturnString("Ath_Init");
+
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;

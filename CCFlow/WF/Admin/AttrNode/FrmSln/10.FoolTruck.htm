@@ -41,7 +41,8 @@
             var nodes = new Entities("BP.WF.Nodes");
             nodes.Retrieve("FK_Flow", node.FK_Flow);
 
-            var frmID="ND"+nodeID;
+            var frmID = "ND" + GetQueryString("FK_Node");
+           
 
             for (var i = 0; i < nodes.length; i++) {
 
@@ -67,9 +68,11 @@
                     continue;
                 }
 
-                var def = " - <a href=\"javascript:DefField('')\" >定义字段权限</a>";
-                def += " - <a href=\"javascript:DefField('')\" >附件权限</a>";
-                def += " - <a href=\"javascript:DefField('')\" >从表权限</a>";
+                var def = "";
+
+                //def = " - <a href=\"javascript:DefField('')\" >定义字段权限</a>";
+                def += " - <a href=\"javascript:DefAth('" + json.NodeID + "')\" >附件权限</a>";
+                //def += " - <a href=\"javascript:DefDtl('')\" >从表权限</a>";
 
                 html += "<li>[" + sln.FrmSlnText + "]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.Name + "</a> " + def + "</li>";
             }
@@ -78,6 +81,45 @@
             html += "</ul>";
 
             $("#sln").html(html);
+        }
+        function DefField() {
+            alert('未开通.');
+        }
+        function DefDtl() {
+            alert('未开通.');
+        }
+        function DefAth(nodeID) {
+
+            var frmID = "ND" + GetQueryString("FK_Node");
+
+            var aths = new Entities("BP.Sys.FrmAttachments");
+            aths.Retrieve("FK_MapData", frmID);
+
+            if (aths.length == 0) {
+                alert('当前节点表单没有附件。');
+                return;
+            }
+            if (aths.length != 1) {
+                alert("未涉及到两个附件的情况.");
+                return;
+            }
+
+            var ath = aths[0];
+            var athSln = new Entity("BP.Sys.FrmAttachment");
+            athSln.MyPK = nodeID + "_" + ath.NoOfObj;
+            if (athSln.IsExits() == false) {
+
+                athSln.CopyJSON(ath);
+                athSln.MyPK = nodeID + "_" + ath.NoOfObj;
+                athSln.FK_MapData = nodeID;
+                athSln.Insert(); //插入新的.
+            }
+
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + athSln.MyPK;
+            OpenEasyUiDialog(url, "eudlgframe", '附件权限', 600, 500, "icon-property", true, null, null, null, function () {
+               // window.location.href = window.location.href;
+            });
+
         }
         function EditSln(mypk) {
 

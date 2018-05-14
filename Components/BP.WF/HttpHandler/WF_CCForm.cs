@@ -3095,7 +3095,6 @@ namespace BP.WF.HttpHandler
 
                     //求出文件路径.
                     string fileTempPath = db.GenerTempFile(athDesc.AthSaveWay);
-
                     if (DataType.IsNullOrEmpty(db.Sort) == false)
                     {
                         copyToPath = tempFilePath + "//" + db.Sort;

@@ -3092,7 +3092,11 @@ namespace BP.WF.HttpHandler
                     }
                     //新文件目录
                     copyToPath = copyToPath + "//" + db.FileName;
-                    File.Copy(fileTempPath, copyToPath, true);
+
+                    if (File.Exists(fileTempPath) == true)
+                    {
+                        File.Copy(fileTempPath, copyToPath, true);
+                    }
                 }
             }
             catch (Exception ex)

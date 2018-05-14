@@ -1124,9 +1124,9 @@ namespace BP.En
                                 mysql = mysql.Substring(mysql.IndexOf("FROM "));
 
                                 if (top == 0)
-                                    sql = "SELECT * FROM ( SELECT  " + pk + " " + mysql + " )  WHERE ROWNUM <=" + pageSize;
+                                    sql = "SELECT * FROM ( SELECT " + map.PhysicsTable + "." + pk + " " + mysql + " )  WHERE ROWNUM <=" + pageSize;
                                 else
-                                    sql = "SELECT * FROM ( SELECT  " + pk + " " + mysql + " ) ";
+                                    sql = "SELECT * FROM ( SELECT " + map.PhysicsTable + "." + pk + " " + mysql + " ) ";
                                 //sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy + "   ) ";
                             }
 
@@ -1189,9 +1189,9 @@ namespace BP.En
                                 mysql = mysql.Substring(mysql.IndexOf("FROM "));
 
                                 if (top == 0)
-                                    sql = "SELECT  " + this.En.PKField + " " + mysql + " LIMIT " + pageSize;
+                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql + " LIMIT " + pageSize;
                                 else
-                                    sql = "SELECT  " + this.En.PKField + " " + mysql;
+                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql;
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");
@@ -1220,7 +1220,7 @@ namespace BP.En
                             {
                                     string mysql = this.SQL;
                                     mysql = mysql.Substring(mysql.IndexOf("FROM "));
-                                    sql = "SELECT  [" + this.En.PKField + "]  " + mysql;
+                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " as  [" + this.En.PKField + "]  " + mysql;
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");

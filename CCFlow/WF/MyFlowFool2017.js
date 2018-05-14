@@ -697,12 +697,13 @@ function Ele_Attachment(flowData, gf, node) {
     var url = "";
     url += "&WorkID=" + GetQueryString("WorkID");
     url += "&FK_Node=" + nodeID;
-    url += "&FormType=" + node.FormType;
+    url += "&FormType=" + node.FormType; //表单类型，累加表单，傻瓜表单，自由表单.
 
     var isReadonly = false;
     if (gf.FrmID.indexOf(nodeID) == -1)
         isReadonly = true;
 
+        //创建附件描述信息.
     var ath = new Entity("BP.Sys.FrmAttachment", gf.CtrlID);
 
     var athPK = gf.CtrlID;

@@ -8,7 +8,7 @@ using BP.Sys;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 累加表单
+    /// 累加表单方案
     /// </summary>
     public class FoolTruckNodeFrm : EntityMyPK
     {

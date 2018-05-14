@@ -2872,7 +2872,9 @@ namespace BP.WF.HttpHandler
                 HttpContext.Current.Response.Close();
             }
         }
-
+        /// <summary>
+        /// 附件ID.
+        /// </summary>
         public string FK_FrmAttachment
         {
             get
@@ -2906,6 +2908,7 @@ namespace BP.WF.HttpHandler
                     athDesc.IsUpload = false;
                     athDesc.HisDeleteWay = AthDeleteWay.None;
                     athDesc.IsDownload = false;
+                    athDesc.HisCtrlWay = AthCtrlWay.WorkID; //没有方案.
                     athDesc.Insert();
                 }
                 return athDesc;

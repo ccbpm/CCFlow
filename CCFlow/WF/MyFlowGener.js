@@ -420,8 +420,7 @@ function returnWorkWindowClose(data) {
         $('#MessageDiv').modal().show();
         return;
     }
-
-
+     
     OptSuc(data);
 }
 

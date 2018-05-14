@@ -72,6 +72,13 @@
         if (mapAttr.UIVisible == 0)
             continue;
 
+        if (mapAttr.LGType != 1)
+            continue;
+
+        if (mapAttr.UIIsEnable ==0)
+            continue;
+
+
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
             if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
                 if (mapAttr.UIContralType == 1) {
@@ -79,7 +86,7 @@
                     var ddl = $("#DDL_" + mapAttr.KeyOfEn);
                     //初始化页面的值
                     var nowKey = ddl.val();
-
+                                        
 
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 

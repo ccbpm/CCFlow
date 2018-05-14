@@ -455,23 +455,23 @@ namespace BP.Sys
         /// <returns></returns>
         private string MakeFullFileFromFtp()
         {
-            string tempFile = SystemConfig.PathOfTemp + Web.WebUser.No +"\\" + this.FileName;
-            FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
-                SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+            // string tempFile =  SystemConfig.PathOfTemp +System.Guid.NewGuid()+"."+this.FileExts;
+            string tempFile = SystemConfig.PathOfTemp + this.FileName;
             try
             {
                 if (System.IO.File.Exists(tempFile) == true)
-                    System.IO.File.Delete(tempFile);                
-
-                conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.Archive);
+                    System.IO.File.Delete(tempFile);
             }
             catch
             {
                 //  tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
             }
-            finally {
-                conn.Close();
-            }
+
+            FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+            conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.Archive);
+
             return tempFile;
         }
         /// <summary>

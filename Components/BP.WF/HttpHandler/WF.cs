@@ -1111,7 +1111,7 @@ namespace BP.WF.HttpHandler
             if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
                 return "err@非法的访问，请与管理员联系。SID=" + this.SID;
 
-            if (BP.Web.WebUser.No.Equals(this.UserNo) == false)
+            if (DataType.IsNullOrEmpty(WebUser.No) == true || BP.Web.WebUser.No.Equals(this.UserNo) == false)
             {
                 BP.WF.Dev2Interface.Port_SigOut();
                 try

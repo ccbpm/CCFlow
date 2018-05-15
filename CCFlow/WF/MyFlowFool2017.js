@@ -112,6 +112,7 @@ function GenerFoolFrm(wn) {
             continue;
         }
 
+
         //字段类的控件.
         if (gf.CtrlType == '' || gf.CtrlType == null) {
 
@@ -120,6 +121,23 @@ function GenerFoolFrm(wn) {
             html += "</tr>";
 
             html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID);
+            continue;
+        }
+
+        //父子流程
+        if (gf.CtrlType == 'SubFlow') {
+            html += "<tr>";
+            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "  <td colspan='4' >";
+
+            html += Ele_SubFlow(node);
+
+            html += "  </td>";
+            html += "</tr>";
+
             continue;
         }
     }
@@ -661,6 +679,36 @@ function Ele_FrmCheck(wf_node) {
 
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "'";
     eleHtml += " frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
+    return eleHtml;
+}
+
+//子流程
+function Ele_SubFlow(wf_node) {
+    //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
+    var sta = wf_node.SFSta;
+    var h = wf_node.SF_H+1300;
+
+    if (sta == 0)
+        return $('');
+
+    var src = "./WorkOpt/SubFlow.htm?s=2";
+    var fwcOnload = "";
+    var paras = '';
+
+    paras += "&FID=" + pageData["FID"];
+    paras += "&OID=" + pageData["WorkID"];
+    paras += '&FK_Flow=' + pageData.FK_Flow;
+    paras += '&FK_Node=' + pageData.FK_Node;
+    paras += '&WorkID=' + pageData.WorkID;
+    if (sta == 2)//只读
+    {
+        src += "&DoType=View";
+    }
+    src += "&r=q" + paras;
+    if (h == 0)
+        h = 400;
+    var eleHtml =  "<iframe id=FSF" + wf_node.NodeID + " style='width:100%;height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
+
     return eleHtml;
 }
 

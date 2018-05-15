@@ -499,10 +499,12 @@
         }
         function SaveUpload() {
             var explorer = window.navigator.userAgent;
-            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))
+            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)) {
+                Upload();
                 $('#file_upload').uploadify("upload", "*");
-            else
+            } else {
                 UploadChange();
+            }
         }
         function UploadChange() {
 

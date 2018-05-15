@@ -106,7 +106,7 @@ functrees.push({
     Nodes: [{
         Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0", ColDefine: "TType",
         Defines: [{
-            Value: "FORMTYPE", ColDefine: "ParentNo", Defines: [{ Value: "0", IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true }, { IconCls: "icon-tree_folder", MenuId: "mFormSort"}]
+            Value: "FORMTYPE", ColDefine: "ParentNo", Defines: [{ Value: "0", IconCls: "icon-formtree", MenuId: "mFormSrc", Opened: true }, { IconCls: "icon-tree_folder", MenuId: "mFormSort"}]
         }, {
             Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"
         }]

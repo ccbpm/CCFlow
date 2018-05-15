@@ -883,7 +883,7 @@
 		    //excel模式导入方式
 		    if (impModel == 2) {
 		        var url = window.location.href;
-		        url = url.replace('Dtl.htm', 'DtlOpt.aspx');
+		        url = url.replace('Dtl.htm', 'DtlOpt.htm');
 
 		    }
 		    if (window.parent && window.parent.OpenBootStrapModal) {
@@ -1540,11 +1540,31 @@
                     }
 
                     var changeEvent = ctrl.attr(mapExt.Tag2);
-                    if (changeEvent.indexOf(mapExt.Tag1 + '(') != -1) {
+                    if (changeEvent && changeEvent.indexOf(mapExt.Tag1 + '(') != -1) {
                         continue;
                     }
 
-                    ctrl.attr(mapExt.Tag2, changeEvent + mapExt.Tag1 + '(this);');
+                    ctrl.attr(mapExt.Tag2, mapExt.Tag1 + '(this);');
+                    break;
+                case "BindFunction": //绑定函数
+                    if (mapExt.AttrOfOper.length == 0 || mapExt.Doc.length == 0 || mapExt.Tag.length == 0) {
+                        continue;
+                    }
+                    //判断是否已经增加了函数
+                    var ctrl = $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']');
+
+                    if (ctrl.length == 0) {
+                        continue;
+                    }
+
+                    var changeEvent = ctrl.attr(mapExt.Tag);
+                    if (changeEvent && changeEvent.indexOf(mapExt.Doc + '(') != -1) {
+                        continue;
+                    }
+
+                    ctrl.bind(mapExt.Tag, function (obj) {
+                        eval(mapExt.Doc + '(this)');
+                    });
                     break;
                 case "TBFullCtrl": //自动填充  先不做.
                     var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
@@ -1920,6 +1940,37 @@
         eleHtml.append(childRbEle).append(childLabEle);
         eleHtml.css('position', 'absolute').css('top', frmRb.Y).css('left', frmRb.X);
         return eleHtml;
+    }
+
+    function GenerCurTableTR() {
+        var tr = $('.table.wupop tbody tr')[thisRowIndex];
+        if (!tr) {
+            //alert("没有获取到行数据");
+            return false;
+        }
+        return tr;
+    }
+
+    function ReqCtrlVal(ctrlID) {
+        var tr = GenerCurTableTR();
+        if (tr && $(tr).find("[name=TB_" + ctrlID + ']').length > 0) {
+            return $(tr).find("[name=TB_" + ctrlID + ']').val();
+        }
+        if (tr && $(tr).find("[name=DDL_" + ctrlID + ']').length > 0) {
+            return $(tr).find("[name=DDL_" + ctrlID + ']').val();
+        }
+        return null;
+    }
+
+    // 设置值.
+    function SetCtrlVal(ctrlID, val) {
+        var tr = GenerCurTableTR();
+        if (tr && $(tr).find("[name=TB_" + ctrlID + ']').length > 0) {
+            return $(tr).find("[name=TB_" + ctrlID + ']').val(val);
+        }
+        if (tr && $(tr).find("[name=DDL_" + ctrlID + ']').length > 0) {
+            return $(tr).find("[name=DDL_" + ctrlID + ']').val(val);
+        }
     }
 </script>
    <!--DIVINFO-->

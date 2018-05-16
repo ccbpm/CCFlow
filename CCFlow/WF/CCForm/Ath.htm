@@ -498,9 +498,9 @@
             }
         }
         function SaveUpload() {
+            Upload();
             var explorer = window.navigator.userAgent;
             if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)) {
-                Upload();
                 $('#file_upload').uploadify("upload", "*");
             } else {
                 UploadChange();
@@ -508,19 +508,7 @@
         }
         function UploadChange() {
 
-            try {
-
-              //  if (OnUploadClick() == false)
-                //    return false;
-
-            } catch (e) {
-               // alert(e);
-                //return;
-            }
-
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
-            alert(fileObj);
-            alert(fileObj.size);
 
             if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
                 alert("请选择上传的文件.");

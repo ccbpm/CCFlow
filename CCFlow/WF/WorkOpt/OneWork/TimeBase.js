@@ -46,7 +46,7 @@ function InitPage() {
             for (var i = 0; i < tracks.length; i++) {
 
                 var track = tracks[i];
-
+                
                 // 记录审核节点。
                 if (track.ActionType == ActionType.WorkCheck) {
                     isHaveCheck = true;
@@ -117,6 +117,7 @@ function InitPage() {
 
                     while (msg.indexOf('\t\n') >= 0) {
                         msg = msg.replace('\t\n', '<br>');
+                        msg = msg.replace('null', '');
                     }
 
                     doc += "<p>";

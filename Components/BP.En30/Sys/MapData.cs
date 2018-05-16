@@ -1677,6 +1677,24 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoEvent(string eventType, Entity en, string atParas = null)
         {
+
+           #region 首先执行通用的事件重载方法.
+            if (FrmEventList.FrmLoadBefore.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_LoadBefore(this.No, en);
+
+            //装载之后.
+            if (FrmEventList.FrmLoadAfter.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_FrmLoadAfter(this.No, en);
+
+            ///保存之前.
+            if (FrmEventList.SaveBefore.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_SaveBefore(this.No, en);
+
+            //保存之后.
+            if (FrmEventList.SaveAfter.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_SaveAfter(this.No, en);
+            #endregion 首先执行通用的事件重载方法.
+
             string str = this.FrmEvents.DoEventNode(eventType, en);
 
             string mystrs = null;

@@ -192,10 +192,56 @@ namespace BP.En
 			}
 			return BP.Tools.Json.ToJson(ds);
 		}
+        /// <summary>
+        /// 创建一个空的表
+        /// </summary>
+        /// <param name="en"></param>
+        /// <returns></returns>
+        public DataTable ToEmptyTableField(Entity en = null)
+        {
+            DataTable dt = new DataTable();
+            if (en == null)
+                en = this;
 
+            dt.TableName = en.EnMap.PhysicsTable;
+
+            foreach (Attr attr in en.EnMap.Attrs)
+            {
+                switch (attr.MyDataType)
+                {
+                    case DataType.AppString:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
+                        break;
+                    case DataType.AppInt:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(int)));
+                        break;
+                    case DataType.AppFloat:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(float)));
+                        break;
+                    case DataType.AppBoolean:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
+                        break;
+                    case DataType.AppDouble:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(double)));
+                        break;
+                    case DataType.AppMoney:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(double)));
+                        break;
+                    case DataType.AppDate:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
+                        break;
+                    case DataType.AppDateTime:
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
+                        break;
+                    default:
+                        throw new Exception("@bulider insert sql error: 没有这个数据类型");
+                }
+            }
+            return dt;
+        }
 		public DataTable ToDataTableField(string tableName = "Main")
 		{
-			DataTable dt = this.GetNewEntities.ToEmptyTableField();
+            DataTable dt = this.ToEmptyTableField(this); 
 			dt.TableName = tableName;
 
 			//增加参数列.
@@ -5229,10 +5275,12 @@ namespace BP.En
 		/// 取到一个空表结构。
 		/// </summary>
 		/// <returns></returns>
-		public DataTable ToEmptyTableField()
+		public DataTable ToEmptyTableField(Entity en=null)
 		{
 			DataTable dt = new DataTable();
-			Entity en = this.GetNewEntity;
+            if (en==null)
+                en=this.GetNewEntity;
+
 			dt.TableName = en.EnMap.PhysicsTable;
 
 			foreach (Attr attr in en.EnMap.Attrs)

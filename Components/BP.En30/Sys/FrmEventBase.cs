@@ -12,7 +12,7 @@ namespace BP.Sys
     /// <summary>
     /// 表单事件列表
     /// </summary>
-    public enum FrmEvenList
+    public enum FrmEvenList11
     {
         /// <summary>
         /// 创建OID

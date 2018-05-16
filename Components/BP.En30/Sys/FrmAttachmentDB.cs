@@ -456,6 +456,8 @@ namespace BP.Sys
         private string MakeFullFileFromFtp()
         {
             string tempFile =  SystemConfig.PathOfTemp +System.Guid.NewGuid()+"."+this.FileExts;
+
+
           //  string tempFile = SystemConfig.PathOfTemp + + this.FileName;
             try
             {

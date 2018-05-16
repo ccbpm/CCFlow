@@ -167,6 +167,7 @@
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
     <Compile Include="GPM\DeptType.cs" />
+    <Compile Include="OverrideFile.cs" />
     <Compile Include="Pub\ConfigEns.cs" />
     <Compile Include="Pub\Day.cs" />
     <Compile Include="References\LitJSON\IJsonWrapper.cs" />

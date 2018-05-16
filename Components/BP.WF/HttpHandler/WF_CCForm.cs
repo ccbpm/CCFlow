@@ -842,6 +842,7 @@ namespace BP.WF.HttpHandler
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
+
                 #region 把主表数据放入.
                 string atParas = "";
                 //主表实体.
@@ -927,6 +928,10 @@ namespace BP.WF.HttpHandler
                     MapDtls dtls = new MapDtls(this.EnsName);
                     en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
                 }
+
+                //执行事件
+                md.DoEvent(FrmEventList.SaveBefore, en, null);
+
 
                 //增加主表数据.
                 DataTable mainTable = en.ToDataTableField(md.No);

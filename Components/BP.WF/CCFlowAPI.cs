@@ -301,6 +301,34 @@ namespace BP.WF
                     myds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr")); //增加.
                     #endregion 处理mapattrs
 
+
+                   #region 把枚举放入里面去.
+                    myds.Tables.Remove("Sys_Enum");
+
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    SysEnums enums = new SysEnums();
+                    enums.RetrieveInSQL(SysEnumAttr.EnumKey,
+                            "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData in(" + myFrmIDs + ")");
+
+                    // 加入最新的枚举.
+                    myds.Tables.Add(enums.ToDataTableField("Sys_Enum"));
+                    #endregion 把枚举放入里面去.
+
+                    #region  MapExt .
+                    myds.Tables.Remove("Sys_MapExt");
+
+                    // 把扩展放入里面去.
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    BP.Sys.MapExts exts = new MapExts();
+                    qo = new QueryObject(exts);
+                    qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
+                    qo.DoQuery();
+
+                    // 加入最新的MapExt.
+                    myds.Tables.Add(exts.ToDataTableField("Sys_MapExt"));
+                    #endregion  MapExt .
+
+
                     /*
                     //计算累加的 从表字段集合.
                     MapDtls dtls = new MapDtls();
@@ -515,14 +543,11 @@ namespace BP.WF
                 if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
                   && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
-                    GERpt rpt = nd.HisFlow.HisGERpt;
-                    rpt.OID = workID;
-                    rpt.RetrieveFromDBSources();
+
+                    GERpt rpt =new GERpt("ND"+int.Parse(nd.FK_Flow)+"Rpt", workID); // nd.HisFlow.HisGERpt;
                     rpt.Copy(wk);
 
-                    DataTable mainTable = wk.ToDataTableField(md.No);
-                    mainTable.TableName = "MainTable";
-                    myds.Tables.Add(mainTable);
+                    myds.Tables.Add(rpt.ToDataTableField("MainTable"));
 
                 }
                 else

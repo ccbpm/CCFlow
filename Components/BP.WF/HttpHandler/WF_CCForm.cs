@@ -911,10 +911,11 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                // 执行表单事件..
+                // 执行表单事件. FrmLoadBefore .
                 string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
                 if (DataType.IsNullOrEmpty(msg) == false)
-                    throw new Exception("err@错误:" + msg);
+                    return "err@错误:" + msg;
+
 
                 //重设默认值.
                 en.ResetDefaultVal();

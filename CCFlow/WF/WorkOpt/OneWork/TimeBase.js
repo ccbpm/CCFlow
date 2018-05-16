@@ -102,7 +102,7 @@ function InitPage() {
 
                         var checkTrack = tracks[myIdx];
                         if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                            doc += "<p><span>会签意见：</span><font color=green>" + checkTrack.Msg + "</font> </p>";
+                            doc += "<p><span>会签意见：</span><font color=green>" + checkTrack.Msg.replace('null','') + "</font> </p>";
                         }
                     }
                 }

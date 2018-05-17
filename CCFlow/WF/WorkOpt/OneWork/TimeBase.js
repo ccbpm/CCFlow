@@ -293,6 +293,7 @@ function GetSpanTime(date1, date2) {
     if (str.length == 0) {
         var leave3 = leave2 % (60 * 1000);
         var seconds = Math.floor(leave3 / 1000);
+
         str += seconds + '秒';
 
         if (seconds == NaN)

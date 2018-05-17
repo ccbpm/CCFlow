@@ -336,7 +336,7 @@
                     html += "</tr>";
                 }
             }
-            if (i == 0 || (athDesc.IsExpCol == 1)) {
+            if (i == 0 || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true)) {
                 html += "<tr>";
                 html += "<td class='Idx' nowrap>*</td>"; ;
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1)
@@ -471,9 +471,9 @@
 
                     html += "文件:"
                     if (athDesc.IsExpCol == 1)
-                        html += "<input type='file' name='file' id='file' onclick='return Upload()'>"
+                        html += "<input type='file' name='file' id='file' >"
                     else
-                        html += "<input type='file' name='file' id='file' onclick='return Upload()' onchange='UploadChange();'>"
+                        html += "<input type='file' name='file' id='file'  onclick='UploadChange();'>"
                     if (athDesc.IsNote)
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
 
@@ -500,16 +500,13 @@
         function SaveUpload() {
             Upload();
             var explorer = window.navigator.userAgent;
-            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)) {
+            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))
                 $('#file_upload').uploadify("upload", "*");
-            } else {
+            else
                 UploadChange();
-            }
         }
         function UploadChange() {
-
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
-
             if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
                 alert("请选择上传的文件.");
                 return;

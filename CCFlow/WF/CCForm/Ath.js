@@ -66,7 +66,6 @@ function sa() {
 
 function Down3(str) {
 
-    alert(str);
     var a;
     a = window.open(str, "_blank", "width=0, height=0,status=0");
     a.document.execCommand("SaveAs");
@@ -137,7 +136,7 @@ function DownZip() {
         window.open(str, "_blank", "width=800, height=600,toolbar=yes");
         return;
     }
-    alert(data);
+
 }
 
 //删除附件.
@@ -178,7 +177,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
         }
 
 
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(mapAttr, defValue) + "</select></div>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
     }
 
     //外键类型.
@@ -192,7 +191,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
             enableAttr = "disabled='disabled'";
 
 
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(mapAttr, defValue) + "</select></div>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
     }
 
     //添加文本框 ，日期控件等.
@@ -267,7 +266,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
             checkedStr = ' checked="checked" ';
         }
 
-        return "<div class='checkbox'><label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> </label</div>";
+        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> </label>";
     }
 
     //枚举类型.
@@ -278,7 +277,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
             enableAttr = "disabled='disabled'";
         if (mapAttr.UIContralType == 1)
         //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(mapAttr, defValue) + "</select></div>";
+            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;

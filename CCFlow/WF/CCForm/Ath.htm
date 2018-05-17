@@ -19,6 +19,7 @@
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../MyFlowGener.js" type="text/javascript"></script>
     <!-- 导入可以扩展的按钮事件. -->
     <script src="../../DataUser/OverrideFiles/Ath.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
@@ -232,8 +233,22 @@
                     var mapAttrs = new Entities("BP.Sys.MapAttrs");
                     mapAttrs.Retrieve("FK_MapData", athDesc.MyPK);
                     for (var ii = 0; ii < mapAttrs.length; ii++) {
-                        var mapAttr = mapAttrs[ii];
-                        html += "<th nowrap=true >" + mapAttr.Name + "</th>";
+                        var attr = mapAttrs[ii];
+                        if (attr.UIIsInput == 1 && attr.UIIsEnable == 1)
+                            html += "<th nowrap=true ><span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
+                        else
+                            html += "<th nowrap=true >";
+                        if (attr.UIContralType == 0)
+                            html += "<label for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' >" + attr.Name + "</label></th>";
+
+                        if (attr.UIContralType == 1)
+                            html += "<label for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' >" + attr.Name + "</label></th>";
+                        if (attr.UIContralType == 2)
+                            html += "<label for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'  >" + attr.Name + "</label></th>";
+                        //
+                        if (attr.UIContralType == 3)
+                            html += "<label for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'  >" + attr.Name + "</label></th>";
+
                     }
                     columnNum = columnNum + mapAttrs.length;
                 }
@@ -361,7 +376,7 @@
                     }
                 }
                 if (athDesc.IsExpCol == 1)
-                    html += "<td><a href=\"javascript:SaveUpload()\">保存</a></td>";
+                    html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a></td>";
                 else
                     html += "<td>&nbsp&nbsp</td>";
                 html += "</tr>";
@@ -454,26 +469,15 @@
                     if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                         var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                         var strs = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
-
-                        /*BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
-                        ddl.ID = "ddl";
-                        int ddlIdex = 0;
-                        foreach (string str in strs)
-                        {
-                        if (str == null || str == "")
-                        continue;
-                        ddl.Items.Add(new ListItem(str, ddlIdex.ToString()));
-                        ddlIdex++;
-                        }*/
                         html += "请选择" + sortColumn + "：";
-                        //this.Pub1.Add(ddl);
+
                     }
 
                     html += "文件:"
                     if (athDesc.IsExpCol == 1)
-                        html += "<input type='file' name='file' id='file' >"
+                        html += "<input type='file' name='file' id='file'  >"
                     else
-                        html += "<input type='file' name='file' id='file'  onclick='UploadChange();'>"
+                        html += "<input type='file' name='file' id='file' onclick='return Upload();' onchange='UploadChange();'>"
                     if (athDesc.IsNote)
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
 
@@ -498,7 +502,22 @@
             }
         }
         function SaveUpload() {
-            Upload();
+            //必填项和正则表达式检查
+            var formCheckResult = true;
+
+            if (checkBlanks() == false) {
+                formCheckResult = false;
+            }
+
+            if (checkReg() == false) {
+                formCheckResult = false;
+            }
+
+            if (formCheckResult == false) {
+                alert("请检查表单必填项和正则表达式");
+                return false;
+            }
+
             var explorer = window.navigator.userAgent;
             if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))
                 $('#file_upload').uploadify("upload", "*");

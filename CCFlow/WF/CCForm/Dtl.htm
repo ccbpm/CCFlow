@@ -1561,9 +1561,10 @@
                     if (changeEvent && changeEvent.indexOf(mapExt.Doc + '(') != -1) {
                         continue;
                     }
-
+                    ctrl.data().MapExt = mapExt;
                     ctrl.bind(mapExt.Tag, function (obj) {
-                        eval(mapExt.Doc + '(this)');
+                        var mapExtThis = $(obj.target).data().MapExt;
+                        eval(mapExtThis.Doc + '(this)');
                     });
                     break;
                 case "TBFullCtrl": //自动填充  先不做.

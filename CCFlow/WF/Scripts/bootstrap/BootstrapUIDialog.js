@@ -16,7 +16,7 @@
 
     if (dlg.length == 0) {
         isTheFirst = true;
-        var divDom = $("<div class='modal fade' data-backdrop='static'></div>");
+        var divDom = $("<div class='modal fade' data-backdrop='true' aria-hidden='true'></div>");
         divDom.attr("id", "bootStrapdlg");
         $(document.body).append(divDom);
         dlg = $('#bootStrapdlg');

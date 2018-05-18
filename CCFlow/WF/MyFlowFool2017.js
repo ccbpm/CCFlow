@@ -578,8 +578,10 @@ function SetCtrlVal(key, value) {
 
     ctrl = $("#RB_" + key + "_" + value);
     if (ctrl.length > 0) {
-        ctrl.val(value);
-        ctrl.attr('checked', true);
+        var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
+        document.getElementById("RB_" + key + "_" + checkVal).checked = false;
+        document.getElementById("RB_" + key + "_" + value).checked = true;
+       // ctrl.attr('checked', 'checked');
     }
 }
 
@@ -819,11 +821,15 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
         return value.EnumKey == mapAttr.UIBindKey;
     });
     $.each(enums, function (i, obj) {
+        var onclickEvent = "";
+        if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+            onclickEvent = "onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'";
+        }
         if (RBShowModel == 3)
         //<input  " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label</div>";
-            rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />&nbsp;" + obj.Lab + "</label>";
+            rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' "+onclickEvent+" />&nbsp;" + obj.Lab + "</label>";
         else
-            rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'  onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'/>&nbsp;" + obj.Lab + "</label><br/>";
+            rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' " + onclickEvent + "/>&nbsp;" + obj.Lab + "</label><br/>";
     });
     return rbHtml;
 }

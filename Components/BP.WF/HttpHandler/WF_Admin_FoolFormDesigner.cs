@@ -952,8 +952,10 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    MapData md = new MapData(this.FK_MapData);
-                    pTableModel = md.PTableModel;
+                    MapData md = new MapData();
+                    md.No = this.FK_MapData;
+                    if(md.RetrieveFromDBSources() == 1)
+                        pTableModel = md.PTableModel;
                 }
             }
 

@@ -156,7 +156,7 @@ function Del(fk_ath, pkVal, delPKVal) {
 
 
 //解析附件扩张字段
-function InitMapAttrOfCtrlFool(db, mapAttr) {
+function InitAthMapAttrOfCtrlFool(db, mapAttr) {
     var defValue = "";
     if (db == !"")
         defValue = GetPara(mapAttr.Name, db.AtPara)
@@ -277,7 +277,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
             enableAttr = "disabled='disabled'";
         if (mapAttr.UIContralType == 1)
         //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
+            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitAthDDLOperation(mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -314,7 +314,7 @@ function InitMapAttrOfCtrlFool(db, mapAttr) {
 }
 
 //初始化下拉列表框的OPERATION
-function InitDDLOperation(mapAttr, defVal) {
+function InitAthDDLOperation(mapAttr, defVal) {
 
     var operations = '';
 

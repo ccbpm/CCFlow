@@ -252,7 +252,7 @@
                     columnNum = columnNum + mapAttrs.length;
                 }
                 html += "<td class='TitleExt' nowrap=true style='width:50px;' >";
-                if (athDesc.IsDownload && dbs.length > 0)
+                if (athDesc.IsDownload==1 && dbs.length > 0)
                     html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包下载</a>";
                 else
                     html += "操作";
@@ -293,7 +293,7 @@
                             html += "<td rowspan=" + rowSpan + ">" + db.Sort + "</td>";
                         }
                     }
-                    if (athDesc.IsDownload) {
+                    if (athDesc.IsDownload==1) {
                         if (athDesc.IsWoEnableWF && CanEditor(db.FileExts))
                             html += addTdTitle(db.FileName, "<a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         else if (IsImgExt(db.FileExts) == true)
@@ -325,13 +325,11 @@
 
                             html += "<td>" + defVal + "</td>";
                             //html += "<td></td>";
-
                         }
-
                     }
                     //输出操作部分.
                     html += "<td>";
-                    if (athDesc.IsDownload)
+                    if (athDesc.IsDownload==1)
                         html += "<a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">下载</a>";
                     if (IsReadonly != "1") {
                         var op = "";

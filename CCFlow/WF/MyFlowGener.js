@@ -636,9 +636,10 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
                     case "RADIO": //单选钮
-                        var eleResult = name + '=' + $('[name="' + name + ':checked"]').val();
-                        if (!$.inArray(formArrResult, eleResult)) {
-                            formArrResult.push();
+                        name = $(disabledEle).attr('name');
+                        var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
+                        if ($.inArray(eleResult, formArrResult) == -1) {
+                            formArrResult.push(eleResult);
                         }
                         break;
                 }

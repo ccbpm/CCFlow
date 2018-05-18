@@ -219,7 +219,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
         if (mapAttr.UIContralType == 1) { //DDL
             //多选下拉框.
-            eleHtml += "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+            eleHtml += "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
         }
         return eleHtml;
     }
@@ -307,14 +307,18 @@ function figure_Template_Btn(frmBtn) {
 
 //初始化单选按钮
 function figure_Template_RB(frmRb) {
+    var MyPK = frmRb.FK_MapData+"_"+frmRb.KeyOfEn;
+    var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
 
     var eleHtml = '<div></div>';
     eleHtml = $(eleHtml);
-    var childRbEle = $('<input id="RB_ChuLiFangShi2" type="radio"/>');
+    var childRbEle = $('<input id="RB_ChuLiFangShi2" type="radio" />');
     var childLabEle = $('<label class="labRb"></label>');
-    childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
+    childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn +"_"+ frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
 
-    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
+    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn +"_"+ frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
+    if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0)
+        childRbEle.attr("onclick", "clickEnable( this ,\"" + frmRb.FK_MapData + "\",\"" + frmRb.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")");
 
     if (frmRb.UIIsEnable == false)
         childRbEle.attr('disabled', 'disabled');

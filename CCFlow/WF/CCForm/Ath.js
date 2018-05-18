@@ -149,8 +149,6 @@ function Del(fk_ath, pkVal, delPKVal) {
     handler.AddPara("DelPKVal", delPKVal);
     var data = handler.DoMethodReturnString("AttachmentUpload_Del");
 
-    alert(data);
-
     window.location.href = window.location.href;
 }
 
@@ -436,5 +434,93 @@ function GetPara(key, AtPara) {
     }
     return "";
 }
+
+//必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
+function checkBlanks() {
+    var checkBlankResult = true;
+    //获取所有的列名 找到带* 的LABEL mustInput
+    //var lbs = $('[class*=col-md-1] label:contains(*)');
+    var lbs = $('.mustInput'); //获得所有的class=mustInput的元素.
+    $.each(lbs, function (i, obj) {
+        if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
+            var keyofen = $(obj).data().keyofen;
+
+            var ele = $('[id$=_' + keyofen + ']');
+            if (ele.length == 1) {
+                switch (ele[0].tagName.toUpperCase()) {
+                    case "INPUT":
+                        if (ele.attr('type') == "text") {
+                            if (ele.val() == "") {
+                                checkBlankResult = false;
+                                ele.addClass('errorInput');
+                            } else {
+                                ele.removeClass('errorInput');
+                            }
+                        }
+                        break;
+                    case "SELECT":
+                        if (ele.val() == "" || ele.children('option:checked').text() == "*请选择") {
+                            checkBlankResult = false;
+                            ele.addClass('errorInput');
+                        } else {
+                            ele.removeClass('errorInput');
+                        }
+                        break;
+                    case "TEXTAREA":
+                        if (ele.val() == "") {
+                            checkBlankResult = false;
+                            ele.addClass('errorInput');
+                        } else {
+                            ele.removeClass('errorInput');
+                        }
+                        break;
+                }
+            }
+        }
+    });
+
+
+    //2.对 UMEditor 中的必填项检查
+    if (document.activeEditor != null && document.activeEditor.$body != null) {
+        /* #warning 这个地方有问题.*/
+
+        //        var ele = document.activeEditor.$body;
+        //        if (ele != null && document.activeEditor.getPlainTxt().trim() === "") {
+        //            checkBlankResult = false;
+        //            ele.addClass('errorInput');
+        //        } else {
+        //            ele.removeClass('errorInput');
+        //        }
+    }
+
+    return checkBlankResult;
+}
+
+//正则表达式检查
+function checkReg() {
+    var checkRegResult = true;
+    var regInputs = $('.CheckRegInput');
+    $.each(regInputs, function (i, obj) {
+        var name = obj.name;
+        var mapExtData = $(obj).data();
+        if (mapExtData.Doc != undefined) {
+            var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
+            var tag1 = mapExtData.Tag1;
+            if ($(obj).val() != undefined && $(obj).val() != '') {
+
+                var result = CheckRegInput(name, regDoc, tag1);
+                if (!result) {
+                    $(obj).addClass('errorInput');
+                    checkRegResult = false;
+                } else {
+                    $(obj).removeClass('errorInput');
+                }
+            }
+        }
+    });
+
+    return checkRegResult;
+}
+
 
    

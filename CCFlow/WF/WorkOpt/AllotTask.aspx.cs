@@ -258,7 +258,6 @@ namespace CCFlow.WF
             this.Application["info" + WebUser.No] = msg;
             BP.WF.Glo.SessionMsg = msg;
             this.Response.Redirect("../MyFlowInfo.aspx?FK_Flow=" + this.FK_Flow + "&FK_Type=" + type + "&FK_Node=" + this.NodeID + "&WorkID=" + this.WorkID, false);
-
         }
 
         public void DealWithFHLFlow(ArrayList al, GenerWorkerLists wlSeles)

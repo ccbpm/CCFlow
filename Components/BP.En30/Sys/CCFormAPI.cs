@@ -205,8 +205,10 @@ namespace BP.Sys
         public static void SaveFieldSFTable(string fk_mapdata, string fieldName, string fieldDesc, string fk_SFTable, float x, float y, int colSpan = 1)
         {
             //检查是否可以创建字段? 
-            MapData md = new MapData(fk_mapdata);
-            md.CheckPTableSaveModel(fieldName);
+            MapData md = new MapData();
+            md.No = fk_mapdata;
+            if(md.RetrieveFromDBSources() == 1)
+                md.CheckPTableSaveModel(fieldName);
 
             //外键字段表.
             SFTable sf = new SFTable(fk_SFTable);

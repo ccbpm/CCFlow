@@ -57,7 +57,6 @@
                     var sfTabls = data["SFTables"]; //外键表字段.
                     var fields = data["Fields"]; //已经存在的字段，所有的字段.
 
-
                     //增加处理.
                     for (var i = 0; i < sfTabls.length; i++) {
 
@@ -142,8 +141,13 @@
                 return;
             }
 
+
+            var defField = sfTable.replace('.', "_");
+            defField = defField.replace('.', "_");
+            defField = defField.replace('.', "_");
+
             var url = '';
-            var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", sfTable);
+            var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", defField);
             if (str == null)
                 return;
 

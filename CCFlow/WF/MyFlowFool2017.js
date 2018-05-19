@@ -765,10 +765,9 @@ function Ele_Attachment(flowData, gf, node) {
     var noOfObj = athPK.replace(gf.FrmID + "_", "");
 
     var src = "";
-    //if (pageData.IsReadonly || isReadonly == true)
-    //    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + "&IsReadonly=1" + url;
-   // else
-        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
+
+    //这里的连接要取 FK_MapData的值.
+    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + noOfObj + "&FK_MapData=ND" + node.NodeID + "&FromFrm="+ gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {

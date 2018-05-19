@@ -124,9 +124,6 @@
 
             var athDesc = data["AthDesc"][0];
 
-
-
-
             //自定义表单模式.
             if (athDesc.AthRunModel == 2) {
                 src = "../../DataUser/OverrideFiles/AthSelf.htm?PKVal=" + GetPKVal() + "&Ath=" + athDesc.NoOfObj + "&FK_MapData=" + athDesc.FK_MapData + "&FK_FrmAttachment=" + athDesc.MyPK;
@@ -144,10 +141,23 @@
             numOfUpload = athDesc.NumOfUpolad; //最低上传的数量.
             numOfAths = dbs.length; //现有的数量.
 
+            var mapAttrs = null;
+
+
+            if (athDesc.IsExpCol != 0) {
+                mapAttrs = new Entities("BP.Sys.MapAttrs");
+                // ND26501_Ath1
+                var extMapData = GetQueryString("FromFrm") + "_Ath1";
+                mapAttrs.Retrieve("FK_MapData", extMapData);
+
+                //  alert(extMapData);
+                //  alert(mapAttrs.length);
+            }
+
 
             //表格方式
             if (fileShowWay == FileShowWay.Table)
-                FileShowWayTable(athDesc, dbs);
+                FileShowWayTable(athDesc, dbs, mapAttrs);
 
             //文件上传
             var url = "";
@@ -224,9 +234,11 @@
 
         //Table模式
         var columnNum = 6;
-        function FileShowWayTable(athDesc, dbs) {
+        function FileShowWayTable(athDesc, dbs, mapAttrs ) {
             var html = "<table border='0' cellspacing='0' cellpadding='0' style='width:100%;'>";
-            if (athDesc.IsShowTitle == true) {
+
+            if (athDesc.IsShowTitle == 1) {
+
                 html += "<tr style='border:0px;'>";
 
                 html += "<td class='TitleExt' style='width:50px;' nowrap=true >序号</td>";
@@ -236,8 +248,10 @@
                         sortColumn = "类别";
                     html += "<td class='TitleExt' sstyle='background:#f4f4f4; font-size:12px; padding:3px;' nowrap=true >" + sortColumn + "</td>";
                 }
+
                 //是否启用附件从表 0 禁用 1启用
                 if (athDesc.IsExpCol == 0) {
+
                     html += "<td class='TitleExt' style='min-width:200px;' nowrap=true >文件名</td>";
                     html += "<td class='TitleExt' style='width:50px;' nowrap=true >大小KB</td>";
                     html += "<td class='TitleExt' style='width:90px;' nowrap=true >上传时间</td>";
@@ -248,10 +262,8 @@
                     html += "<th nowrap=true >大小KB</th>";
                     html += "<th nowrap=true >上传时间</th>";
                     html += "<th nowrap=true >上传人</th>";
-                    //获取扩展的字段
+                  
 
-                    var mapAttrs = new Entities("BP.Sys.MapAttrs");
-                    mapAttrs.Retrieve("FK_MapData", athDesc.MyPK);
                     for (var ii = 0; ii < mapAttrs.length; ii++) {
                         var attr = mapAttrs[ii];
                         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1)
@@ -274,12 +286,13 @@
                 }
                 html += "<td class='TitleExt' nowrap=true style='width:50px;' >";
                 if (athDesc.IsDownload==1 && dbs.length > 0)
-                    html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包下载</a>";
+                    html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包</a>";
                 else
                     html += "操作";
                 html += "</td>";
                 html += "</tr>";
             }
+
             var i = 0;
             var fileSorts = new Array("");
             var haveAuthSort = false;
@@ -328,10 +341,11 @@
                     html += "<td>" + db.FileSize + "</td>";
                     html += "<td>" + db.RDT + "</td>";
                     html += "<td>" + db.RecName + "</td>";
+
                     //如果有数据,就要解析它附件属性.
                     if (athDesc.IsExpCol == 1) {
-                        var mapAttrs = new Entities("BP.Sys.MapAttrs");
-                        mapAttrs.Retrieve("FK_MapData", athDesc.MyPK);
+                     
+
                         for (var ii = 0; ii < mapAttrs.length; ii++) {
                             var mapAttr = mapAttrs[ii];
                             var defVal = GetPara(mapAttr.KeyOfEn, db.AtPara);
@@ -384,10 +398,10 @@
                 html += "<td>&nbsp&nbsp</td>";
                 html += "<td>&nbsp&nbsp</td>";
                 html += "<td>&nbsp&nbsp</td>";
+
                 //如果有数据,就要解析它附件属性.
-                if (athDesc.IsExpCol == 1) {
-                    var mapAttrs = new Entities("BP.Sys.MapAttrs");
-                    mapAttrs.Retrieve("FK_MapData", athDesc.MyPK);
+                if (athDesc.IsExpCol == 1) {                    
+                
                     for (var ii = 0; ii < mapAttrs.length; ii++) {
 
                         html += "<td>" + InitAthMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";

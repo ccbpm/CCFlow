@@ -101,11 +101,13 @@
                              newRow += "<td>" + sysEnumMain.No + "</td>";
 
                          newRow += "<td>" + sysEnumMain.Name + "</td>";
-                         newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
-                         newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
-                         newRow += "<td><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' >删除</a></td>";
 
-                         newRow += "<td>" + sysEnumMain.CfgVal + "</td>";
+                         //newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
+                         //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
+
+                         newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                         newRow += "<td><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
+
                          newRow += "</tr>";
 
                          $("#Table1 tr:last").after(newRow);
@@ -213,8 +215,8 @@
 <th>序</th>
 <th>枚举值</th>
 <th>名称</th>
-<th colspan=3>操作</th>
 <th>枚举信息</th>
+<th >操作</th>
 </tr>
 </table>
 

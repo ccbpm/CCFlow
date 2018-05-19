@@ -321,6 +321,7 @@ namespace BP.WF.HttpHandler
 
                 //属性.
                 MapAttrs attrs = new MapAttrs(this.FK_MapData);
+                attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, 1);
                 ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
 
                 FrmBtns btns = new FrmBtns(this.FK_MapData);

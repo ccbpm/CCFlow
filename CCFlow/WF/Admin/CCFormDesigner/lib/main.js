@@ -3328,7 +3328,9 @@ function exportCanvas() {
 *@param {String} tempDiagramName - the name of temporary diagram
 **/
 function LoadTempDiagram(frmID) {
-
+    //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
+    Conver_CCForm_V1ToV2();
+    /*
     $.post(Handler, { action: 'FormDesigner_Loadform', FK_MapData: frmID },
 
         function (data) {
@@ -3343,8 +3345,7 @@ function LoadTempDiagram(frmID) {
                 // 装载表单入口.
                 if (data == "" || data == "" || data == null) {
 
-                    //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
-                    Conver_CCForm_V1ToV2();
+                    
                     return;
                 }
 
@@ -3375,6 +3376,7 @@ function LoadTempDiagram(frmID) {
             }
         }
     );
+    */
 }
 
 

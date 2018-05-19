@@ -22,6 +22,9 @@
     <!-- 导入可以扩展的按钮事件. -->
     <script src="../../DataUser/OverrideFiles/Ath.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
+
+        var numOfUpload = 0;  //要求上传的数量.
+        var numOfAths = 0;    //附件数量.
         function CanEditor(fileType) {
             //var fileTypes = BP.Sys.SystemConfig.AppSettings["OpenTypes"];
             var fileTypes = "";
@@ -122,6 +125,8 @@
             var athDesc = data["AthDesc"][0];
 
 
+
+
             //自定义表单模式.
             if (athDesc.AthRunModel == 2) {
                 src = "../../DataUser/OverrideFiles/AthSelf.htm?PKVal=" + GetPKVal() + "&Ath=" + athDesc.NoOfObj + "&FK_MapData=" + athDesc.FK_MapData + "&FK_FrmAttachment=" + athDesc.MyPK;
@@ -133,6 +138,12 @@
             var fileShowWay = athDesc.FileShowWay;
             if (fileShowWay == "undefined" || fileShowWay == null || fileShowWay == "")
                 fileShowWay = 0;
+
+
+            //用于必须上传的校验.
+            numOfUpload = athDesc.NumOfUpolad; //最低上传的数量.
+            numOfAths = dbs.length; //现有的数量.
+
 
             //表格方式
             if (fileShowWay == FileShowWay.Table)
@@ -200,6 +211,16 @@
             setIframeHeight();
 
         });
+
+
+        //检查上传附件的数量,如果不符合最低要求alert错误，并且返回false.
+        function CheckNumOfUpload() {
+            if ( numOfUpload > numOfAths) {
+                alert('您必须上传["+numOfUpload+"]个附件');
+                return false;
+            }
+            return true;          
+        }
 
         //Table模式
         var columnNum = 6;

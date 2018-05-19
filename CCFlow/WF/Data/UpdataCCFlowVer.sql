@@ -52,9 +52,7 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日HH时mm分','
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');
-
-
-
+ 
 -- 升级数据源 2016.0
 UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';
 UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
@@ -65,8 +63,7 @@ DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.FrmAttachmentExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.FrmAttachmentExt',
 '@MyPK=基础信息,附件的基本配置.
 @DeleteWay=权限控制,控制附件的下载与上传权限.@IsRowLock=WebOffice属性,设置与公文有关系的属性配置.
-@IsToHeLiuHZ=流程相关,控制节点附件的分合流.
-@Attrs=字段属性,为每个附件设置字段.');
+@IsToHeLiuHZ=流程相关,控制节点附件的分合流.');
 
 -- 2016.07.20 升级明细表维护分组;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDtlExt';

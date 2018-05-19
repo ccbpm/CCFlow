@@ -31,126 +31,141 @@
 		    //明细表ID.
 		    var fk_mapDtl = GetQueryString("FK_MapDtl");
 
-		    var myurl = Handler + "?DoType=DtlAttrs&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random();
+		    var attrs = new Entities("BP.Sys.MapAttrs");
+		    attrs.Retrieve("FK_MapData", fk_mapDtl);
 
-		    //初始化 GroupID.
-		    $.ajax({
-		        type: 'post',
-		        async: true,
-		        url: Handler + "?DoType=DtlAttrs&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random(),
-		        dataType: 'html',
-		        success: function (data) {
+		    $("#trTitle").append("<th>序</th>");
 
-		            data = JSON.parse(data);
+		    var colNum = 0;
+		    //生成表头..
+		    for (var i = 0; i < attrs.length; i++) {
 
-		            $("#trTitle").append("<th>序</th>");
-
-		            var colNum = 0;
-		            //生成表头..
-		            for (var i = 0; i < data.length; i++) {
-		                var visable = data[i].UIVisible;
-		                if (visable == 0)
-		                    continue;
-
-		                colNum++;
-
-		                var mypk = data[i].MyPK;
-		                var dataType = data[i].MyDataType;
-		                var field = data[i].KeyOfEn;
-		                var name = data[i].Name;
-		                var lgType = data[i].LGType;
-		                var uiBindKey = data[i].UIBindKey;
-		                var uiContralType = data[i].UIContralType; //控件类型.
-		                var uiWidth = data[i].UIWidth; //宽度.
-
-		                var nameLink = "";
-		                if (lgType == 0) {
-		                    nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "')\" > " + name + "</a>";
-		                }
-
-		                if (lgType == 1) {
-		                    nameLink = "<a href=\"javascript:EditEnumForDtl('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
-		                }
-
-		                if (lgType == 2) {
-		                    nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
-		                }
-
-		                var col = "";
-		                if (dataType == 2 || dataType == 3 || dataType == 5 || dataType == 6 || dataType == 8)
-		                    col = "<th style='word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
-		                else
-		                    col = "<th style='width:" + uiWidth + "px;word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
-
-		                $("#trTitle").append(col);
-		            }
+		        var attr = attrs[i];
+		        var visable = attr.UIVisible;
+		        if (visable == 0)
+		            continue;
 
 
-		            //生成内容行.
-		            for (var idx = 0; idx < 6; idx++) {
+		        colNum++;
 
+		        var mypk = attr.MyPK;
+		        var dataType = attr.MyDataType;
+		        var field = attr.KeyOfEn;
+		        var name = attr.Name;
+		        var lgType = attr.LGType;
+		        var uiBindKey = attr.UIBindKey;
+		        var uiContralType = attr.UIContralType; //控件类型.
+		        var uiWidth = attr.UIWidth; //宽度.
 
-		                var newRow = "<tr><td class=Idx >" + idx + "</td>";
-
-		                //   for (var colIdx = 0; colIdx < colNum; colIdx++) {
-
-		                for (var i = 0; i < data.length; i++) {
-		                    var visable = data[i].UIVisible;
-		                    if (visable == 0)
-		                        continue;
-
-		                    var mypk = data[i].MyPK;
-		                    var dataType = data[i].MyDataType;
-		                    var field = data[i].KeyOfEn;
-		                    var name = data[i].Name;
-		                    var lgType = data[i].LGType;
-		                    var uiBindKey = data[i].UIBindKey;
-		                    var uiContralType = data[i].UIContralType; //控件类型.
-		                    var uiWidth = data[i].UIWidth; //宽度.
-		                    var defVal = data[i].DefVal; //默认值.
-
-		                    if (defVal == "null" || defVal==null)
-		                        defVal = "";
-
-
-		                    var td = "";
-		                    td = "<td >" + defVal + "</td>";
-
-		                    //doubble, float 类型.
-		                    if (dataType == 3 || dataType == 5 || dataType == 2)
-		                        td = "<td style='text-align:right'  >" + defVal + "</td>";
-
-		                    //money 类型.
-		                    if (dataType == 8)
-		                        td = "<td style='text-align:right' >" + defVal + "</td>";
-
-		                    //日期类型.
-		                    if (dataType == 6) {
-		                        td = "<td >yyyy-MM-dd</td>";
-		                    }
-
-		                    //日期时间类型.
-		                    if (dataType == 7) {
-		                        td = "<td >yyyy-MM-dd HH:mm</td>";
-		                    }
-
-		                    if (dataType == 4) {
-		                        td = "<td ><input type=checkbox value='1' id=" + field + "_" + i + " />" + name + "</td>";
-		                    }
-
-
-		                    if (uiContralType == 1)
-		                        td = "<td >[下拉框]</td>";
-
-
-		                    newRow += td;
-		                }
-
-		                newRow += "</tr>";
-		                $("#dtlTable tr:last").after(newRow);
-		            }
+		        var nameLink = "";
+		        if (lgType == 0) {
+		            nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "')\" > " + name + "</a>";
 		        }
-		    });
+
+		        if (lgType == 1) {
+		            nameLink = "<a href=\"javascript:EditEnumForDtl('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
+		        }
+
+		        if (lgType == 2) {
+		            nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
+		        }
+
+		        var col = "";
+		        if (dataType == 2 || dataType == 3 || dataType == 5 || dataType == 6 || dataType == 8)
+		            col = "<th style='word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
+		        else
+		            col = "<th style='width:" + uiWidth + "px;word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
+
+		        $("#trTitle").append(col);
+		    }
+
+		    var mapDtl = new Entity("BP.Sys.MapDtl", fk_mapDtl);
+
+
+		    if (mapDtl.IsEnableAthM) {
+		        $("#trTitle").append("<th>附件</th>");
+		    }
+
+
+		    $("#trTitle").append("<th>操作</th>");
+
+		    //  $("#trTitle").append("</tr>");
+
+
+		    //生成内容行.
+		    for (var idx = 0; idx < 6; idx++) {
+
+		        var newRow = "<tr>";
+
+		        newRow += "<td class=Idx >" + idx + "</td>";
+
+		        //   for (var colIdx = 0; colIdx < colNum; colIdx++) {
+
+		        for (var i = 0; i < attrs.length; i++) {
+
+		            var attr = attrs[i];
+
+		            var visable = attr.UIVisible;
+		            if (visable == 0)
+		                continue;
+
+		            var mypk = attr.MyPK;
+		            var dataType = attr.MyDataType;
+		            var field = attr.KeyOfEn;
+		            var name = attr.Name;
+		            var lgType = attr.LGType;
+		            var uiBindKey = attr.UIBindKey;
+		            var uiContralType = attr.UIContralType; //控件类型.
+		            var uiWidth = attr.UIWidth; //宽度.
+		            var defVal = attr.DefVal; //默认值.
+
+		            if (defVal == "null" || defVal == null)
+		                defVal = "";
+
+		            var td = "";
+		            td = "<td >" + defVal + "</td>";
+
+		            //doubble, float 类型.
+		            if (dataType == 3 || dataType == 5 || dataType == 2)
+		                td = "<td style='text-align:right'  >" + defVal + "</td>";
+
+		            //money 类型.
+		            if (dataType == 8)
+		                td = "<td style='text-align:right' >" + defVal + "</td>";
+
+		            //日期类型.
+		            if (dataType == 6) {
+		                td = "<td >yyyy-MM-dd</td>";
+		            }
+
+		            //日期时间类型.
+		            if (dataType == 7) {
+		                td = "<td >yyyy-MM-dd HH:mm</td>";
+		            }
+
+		            if (dataType == 4) {
+		                td = "<td ><input type=checkbox value='1' id=" + field + "_" + i + " />" + name + "</td>";
+		            }
+
+
+		            if (uiContralType == 1)
+		                td = "<td >[下拉框]</td>";
+
+		            newRow += td;
+		        }
+
+
+		        if (mapDtl.IsEnableAthM) {
+		            var opt = "";
+		            opt += "<a href=\"javascript:alert('1.点击可以上传附件.\t\r 2.附件权限控制在从表属性里设置.')\" >上传</a>";
+		            newRow += "<td>" + opt + "</td>";
+		        }
+
+		        newRow += "<td></td>";
+
+		        newRow += "</tr>";
+		        $("#dtlTable tr:last").after(newRow);
+		    }
 
 		    $("#Msg").html("");
 

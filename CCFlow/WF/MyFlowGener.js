@@ -1117,6 +1117,16 @@ function ShowTextBoxNoticeInfo() {
     })
 }
 
+//检查附件数量.
+function checkAths() {
+
+    var frmEle = document.getElementById("");
+
+    return true;
+  
+}
+
+
 //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
 function checkBlanks() {
     var checkBlankResult = true;

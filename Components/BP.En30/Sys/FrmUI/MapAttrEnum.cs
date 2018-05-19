@@ -135,8 +135,8 @@ namespace BP.Sys.FrmUI
 
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组",
-                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'  AND (CtrlType IS NULL OR CtrlType='')  ", true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+
                 #endregion 傻瓜表单。
 
                 #region 执行的方法.
@@ -218,7 +218,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoSysEnum()
         {
-            return "../../Admin/FoolFormDesigner/SysEnum.aspx?EnumKey=" + this.UIBindKey;
+            return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.aspx?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
         }
         /// <summary>
         /// 设置自动填充

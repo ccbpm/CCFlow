@@ -376,10 +376,7 @@ namespace BP.Sys
         /// </summary>
         public const string FastKeyGenerRole = "FastKeyGenerRole";
         #endregion
-        /// <summary>
-        /// 字段属性
-        /// </summary>
-        public const string Attrs = "Attrs";
+     
     }
     /// <summary>
     /// 附件
@@ -1267,9 +1264,6 @@ namespace BP.Sys
               //  map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
                 map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, false);
                 map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-
-                //字段属性.
-                map.AddTBStringDoc(FrmAttachmentAttr.Attrs, null, null, "字段属性", true, false, 0, 500, 20, 12, true);
 
                 this._enMap = map;
                 return this._enMap;

@@ -88,12 +88,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(FrmEleAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
 
-                // map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
-                // map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
-
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
-
-
 
                 ////显示的分组.
                 //map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",

@@ -2891,12 +2891,17 @@ namespace BP.WF.HttpHandler
         public BP.Sys.FrmAttachment GenerAthDescOfFoolTruck()
         {
             FoolTruckNodeFrm sln = new FoolTruckNodeFrm();
-            sln.MyPK = this.FK_MapData + "_" + this.FK_Node + "_" + this.FK_Flow;
-            if (sln.RetrieveFromDBSources() == 0 || sln.FrmSln==1 || sln.FrmSln==0 )
+            sln.FrmSln = -1;
+            sln.MyPK = this.GetRequestVal("FromFrm") + "_" + this.FK_Node + "_" + this.FK_Flow;
+            int result=sln.RetrieveFromDBSources();
+
+            if (result == 0 || sln.FrmSln == 1)
             {
                 /*没有查询到解决方案, 就是只读方案 */
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
                 athDesc.MyPK = this.FK_FrmAttachment;
+                athDesc.RetrieveFromDBSources();
+
                 athDesc.IsUpload = false;
                 athDesc.IsDownload = false;
                 athDesc.HisDeleteWay = AthDeleteWay.None; //删除模式.
@@ -2932,10 +2937,9 @@ namespace BP.WF.HttpHandler
             if (this.GetRequestValInt("FormType") == 10)
             {
                 if (this.FK_FrmAttachment.Contains(this.FK_MapData) == false)
-                    return GenerAthDescOfFoolTruck();
+                    return GenerAthDescOfFoolTruck(); //如果当前表单的ID。
             }
             #endregion
-
 
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
             athDesc.MyPK = this.FK_FrmAttachment;

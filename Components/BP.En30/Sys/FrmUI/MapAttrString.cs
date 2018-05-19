@@ -139,8 +139,7 @@ namespace BP.Sys.FrmUI
                     "@1=跨1个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组",
-                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'  AND (CtrlType IS NULL OR CtrlType='')  ", true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
                     MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA");
@@ -299,6 +298,16 @@ namespace BP.Sys.FrmUI
 
                 this._enMap = map;
                 return this._enMap;
+            }
+        }
+        /// <summary>
+        /// 字段分组查询语句
+        /// </summary>
+        public static string SQLOfGroupAttr
+        {
+            get
+            {
+                return "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'  AND (CtrlType IS NULL OR CtrlType='')  ";
             }
         }
         /// <summary>

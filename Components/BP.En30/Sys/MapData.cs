@@ -1004,23 +1004,23 @@ namespace BP.Sys
         /// <summary>
         /// 表单图数据
         /// </summary>
-        public string FormJson
-        {
-            get
-            {
-                // return this.GenerHisFrm();
-                string str = this.GetBigTextFromDB("FormJson");
-                if (str == null || str == "")
-                {
-                    return "";
-                }
-                return str;
-            }
-            set
-            {
-                this.SaveBigTxtToDB("FormJson", value);
-            }
-        }
+        //public string FormJson
+        //{
+        //    get
+        //    {
+        //        // return this.GenerHisFrm();
+        //        string str = this.GetBigTextFromDB("FormJson");
+        //        if (str == null || str == "")
+        //        {
+        //            return "";
+        //        }
+        //        return str;
+        //    }
+        //    set
+        //    {
+        //        this.SaveBigTxtToDB("FormJson", value);
+        //    }
+        //}
         /// <summary>
         /// 生成Frm
         /// </summary>

@@ -925,16 +925,10 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsShowTitle, true, "是否显示标题？", true, true);
                 map.AddBoolean(MapDtlAttr.IsView, true, "是否可见？", true, true);
 
-
                 map.AddBoolean(MapDtlAttr.IsInsert, true, "是否可以插入行？", true, true);
                 map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行？", true, true);
                 map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", true, true);
-
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", true, true);
-
-                //map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", true, true);
-                //map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M2", true, true);
-
                 map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 // 为浙商银行设置从表打开.翻译.
@@ -976,15 +970,10 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", true, true, MapDtlAttr.ImpModel,
                     "@0=不导入@1=按配置模式导入@2=按照xls文件模版导入");
                 map.SetHelperAlert(MapDtlAttr.ImpModel, "您需要在相关功能里设置相对应的导入模式设置.");
-
-              //  map.AddBoolean(MapDtlAttr.IsImp, true, "是否可以导入？(从约定的模版格式文件里导入到表.)", true, true, true);
-                //map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?(定义导入数据源导入到表格里)", true, true, true);
-
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false,true);
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", true, false, 0, 900, 20, true);
-
                 #endregion 导入导出填充.
 
                 #region 多表头.
@@ -1010,8 +999,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true, MapDtlAttr.DtlOpenType, "@0=操作员@1=工作ID@2=流程ID");
                 #endregion 工作流相关.
 
+
                 RefMethod  rm = new RefMethod();
-               
 
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";

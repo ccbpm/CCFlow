@@ -58,7 +58,6 @@ namespace BP.Sys
                 map.AddTBInt("IsTemplate", 0, "是否是表单模版", true, false);
                 #endregion 基础信息.
 
-
                 #region 设计者信息.
                 //增加参数字段.
                 map.AddTBAtParas(4000);

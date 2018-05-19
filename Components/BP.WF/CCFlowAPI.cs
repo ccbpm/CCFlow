@@ -545,7 +545,7 @@ namespace BP.WF
                 {
 
                     GERpt rpt =new GERpt("ND"+int.Parse(nd.FK_Flow)+"Rpt", workID); // nd.HisFlow.HisGERpt;
-                    rpt.Copy(wk);
+                    //rpt.Copy(wk); //加入后就出现了错误.
 
                     myds.Tables.Add(rpt.ToDataTableField("MainTable"));
 

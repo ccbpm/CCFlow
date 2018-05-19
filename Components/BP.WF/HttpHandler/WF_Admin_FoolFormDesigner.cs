@@ -1749,16 +1749,6 @@ namespace BP.WF.HttpHandler
                 return ex.Message;
             }
         }
-
-        /// <summary>
-        /// 获得从表的列.
-        /// </summary>
-        /// <returns></returns>
-        public string DtlAttrs()
-        {
-            MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
-            return attrs.ToJson();
-        }
         /// <summary>
         /// 该方法有2处调用。
         /// 1，修改字段。

@@ -760,15 +760,23 @@ namespace BP.Sys.FrmUI
                   "@0=流水模式@1=固定模式@2=自定义页面");
 
                 map.AddTBString(FrmAttachmentAttr.Name, null, "附件名称", true, false, 0, 50, 20,true);
-                map.AddTBString(FrmAttachmentAttr.Exts, null, "文件格式(*.*,*.doc)", true, false, 0, 50, 20, true, null);
+
+                map.AddTBString(FrmAttachmentAttr.Exts, null, "文件格式", true, false, 0, 50, 20, true, null);
+                map.SetHelperAlert(FrmAttachmentAttr.Exts, "上传要求,设置模式为: *.*, *.doc, *.docx, *.png,多个中间用逗号分开.\t\n表示仅仅允许上传指定的后缀的文件.");
+
+                map.AddTBInt("NumOfUpolad", 0, "最低上传数量", true, false);
+                map.SetHelperAlert("NumOfUpolad", "如果为0则标识必须上传. \t\n用户上传的附件数量低于指定的数量就不让保存.");
 
                 //for tianye group 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
                   "@0=保存到IIS服务器@1=保存到数据库@2=ftp服务器");
 
-                map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20,true,null);
+                map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", false, false, 0, 150, 20, true, null);
 
-                map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(比如:生产类,文件类)", true, false, 0, 500, 20, true, null);
+
+                map.AddTBString(FrmAttachmentAttr.Sort, null, "类别", true, false, 0, 500, 20, true, null);
+                map.SetHelperAlert(FrmAttachmentAttr.Sort, "比如:生产类,文件类,目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");
+
                 map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true,true);
 
                 //位置.
@@ -795,11 +803,9 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(FrmAttachmentAttr.IsExpCol, true, "是否启用扩展列", true, true);
 
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, true);
-                map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false,
-                    FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
+                map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false,FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
 
-                map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay, 
-                    "@0=继承模式@1=协作模式");
+                map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay,"@0=继承模式@1=协作模式");
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, "Ath"+FrmAttachmentAttr.CtrlWay,
                     "@0=PK-主键@1=FID-流程ID@2=ParentID-父流程ID@3=仅能查看自己上传的附件@4=按照WorkID计算(对流程节点表单有效)");
@@ -807,7 +813,6 @@ namespace BP.Sys.FrmUI
 
                 //map.AddDDLSysEnum(FrmAttachmentAttr.DataRef, 0, "数据引用", true, true, FrmAttachmentAttr.DataRef,
                 //    "@0=当前组件ID@1=指定的组件ID");
-                map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, "AttachM1", "对应附件标识(对WorkID权限模式有效)", true, false, 0, 150, 20);
                 #endregion 权限控制。
 
                 #region WebOffice控制方式。
@@ -833,9 +838,11 @@ namespace BP.Sys.FrmUI
                 //    "@0=不能删除@1=删除所有@2=只能删除自己上传的");
                 map.AddBoolean(FrmAttachmentAttr.IsToHeLiuHZ, true, "该附件是否要汇总到合流节点上去？(对子线程节点有效)", true, true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsHeLiuHuiZong, true, "是否是合流节点的汇总附件组件？(对合流节点有效)", true, true, true);
-                #endregion 节点相关
+                map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, "AttachM1", "对应附件标识", true, false, 0, 150, 20);
+                map.SetHelperAlert("DataRefNoOfObj", "对WorkID权限模式有效,用于查询贯穿整个流程的附件标识,与从表的标识一样.");
 
-                //map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", true, false);
+                
+                #endregion 节点相关
 
                 #region 其他属性。
                 //参数属性.

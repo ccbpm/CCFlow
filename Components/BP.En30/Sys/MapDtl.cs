@@ -1558,7 +1558,7 @@ namespace BP.Sys
                     athDesc.FK_MapData = this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
-                    athDesc.Insert();
+                    athDesc.DirectInsert();
                 }
             }
             

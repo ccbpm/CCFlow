@@ -429,8 +429,7 @@
                           delTh = $('<th style="width:60px;"><img title="选项" style="width: 30px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /></th>');
                       else
                           delTh = $('<th style="width:60px;"></th>');
-
-
+                            
                       //var delTh = $("<th style="width:20px;" onclick= ></th>");
 
                       var delThData;
@@ -1001,6 +1000,7 @@
 
         //升级表单元素 初始化文本框、日期、时间
         function figure_MapAttr_Template(mapAttr) {
+
             var eleHtml = '';
             if (mapAttr.UIVisible == 1) {//是否显示
 
@@ -1339,7 +1339,7 @@
 	        isDelRowAlert = true;
 	        var result = parent.window.confirm('确定要删除吗?');
 	        if (result == false)
-	            return;
+	            return ;
 
 	        var rowData = $(index).parent().parent().data().data;
 	        var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;

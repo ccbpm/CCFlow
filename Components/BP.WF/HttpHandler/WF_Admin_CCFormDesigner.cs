@@ -82,15 +82,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-        /// <summary>
-        /// 加载表单
-        /// </summary>
-        /// <returns></returns>
-        public string FormDesigner_Loadform()
-        {
-            MapData mapData = new MapData(this.FK_MapData);
-            return mapData.FormJson; //要返回的值.
-        }
+        
         /// <summary>
         /// 转换拼音
         /// </summary>
@@ -480,9 +472,7 @@ namespace BP.WF.HttpHandler
         {
             MapData md = new MapData(this.FK_MapData);
             md.ResetMaxMinXY();
-            md.FormJson = "";
             md.Update();
-
             return "重置成功.";
         }
     }

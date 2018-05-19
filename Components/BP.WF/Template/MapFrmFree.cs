@@ -305,19 +305,7 @@ namespace BP.WF.Template
                 rm.RefAttrLinkLabel = "导出到xml";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
-           
-
-                rm = new RefMethod();
-                rm.Title = "重置表单";  //"设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoReset";
-                rm.Warning = "重置就是重新让设计器还原原来的设置. \t\n注意:执行重置有可能会导致部分的界面元素不能按照原始的方式还原上来.";
-                rm.Visable = true;
-                rm.RefAttrLinkLabel = "重置表单";
-                rm.Icon = "../../WF/Img/Check.png";
-                map.AddRefMethod(rm);
-
-
+                           
                 rm = new RefMethod();
                 rm.Title = "Tab顺序键"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoTabIdx";
@@ -375,15 +363,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Btn/Copy.GIF";
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "重置表单";
-                rm.ClassMethodName = this.ToString() + ".DoResetFrm";
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
-
-
+                
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
                 rm.GroupName = "高级设置";
@@ -437,13 +417,6 @@ namespace BP.WF.Template
         {
             return SystemConfig.CCFlowWebPath +"WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
         }
-
-        public string DoResetFrm()
-        {
-            string sql = "UPDATE Sys_MapData SET FormJson= null WHERE No='"+this.No+"'";
-            DBAccess.RunSQL(sql);
-            return "表单已经重置成功, 请关闭表单设计器重新打开.";
-        }
         
         /// <summary>
         /// 复制表单
@@ -455,12 +428,6 @@ namespace BP.WF.Template
         }
 
         #region 节点表单方法.
-        public string DoReset()
-        {
-            string sql = "UPDATE Sys_MapData SET FormJson = null WHERE No='"+this.No+"'";
-            BP.DA.DBAccess.RunSQL(sql);
-            return "重置成功,您需要关闭当前H5的表单设计器然后重新打开.";
-        }
         /// <summary>
         /// 启动自由表单设计器(SL)
         /// </summary>

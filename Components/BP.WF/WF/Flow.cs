@@ -2437,6 +2437,7 @@ namespace BP.WF
         {
             if (Directory.Exists(path)==false)
                 Directory.CreateDirectory(path);
+
             DataSet ds = GetFlow(path);
             if (ds != null)
             {
@@ -2554,19 +2555,11 @@ namespace BP.WF
             ds.Tables.Add(tmps.ToDataTableField("WF_BillTemplate"));
 
 
-
             string sqlin = "SELECT NodeID FROM WF_Node WHERE fk_flow='" + this.No + "'";
 
             // 条件信息
             Conds cds = new Template.Conds(this.No);
             ds.Tables.Add(cds.ToDataTableField("WF_Cond") );
-
-
-            //// 转向规则.
-            //sql = "SELECT * FROM WF_TurnTo WHERE FK_Flow='" + this.No + "'";
-            //dt = DBAccess.RunSQLReturnTable(sql);
-            //dt.TableName = "WF_TurnTo";
-            //ds.Tables.Add(dt);
 
             // 节点与表单绑定.
             FrmNodes fns = new Template.FrmNodes();
@@ -2643,7 +2636,10 @@ namespace BP.WF
              
 
             // Sys_MapAttr.
-            sql = "SELECT MyPK FROM Sys_MapAttr WHERE  " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            sql = "SELECT MyPK FROM Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
+            sql += " UNION ";   //增加多附件的扩展列.
+            sql += "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT MyPK FROM Sys_FrmAttachment WHERE FK_Node=0 AND " + Glo.MapDataLikeKey(this.No, "FK_MapData") +" ) "; 
+
             MapAttrs attrs = new MapAttrs();
             attrs.RetrieveInSQL(MapAttrAttr.MyPK, sql);
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));

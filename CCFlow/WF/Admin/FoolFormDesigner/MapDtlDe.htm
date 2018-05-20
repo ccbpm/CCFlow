@@ -32,7 +32,7 @@
 		    var fk_mapDtl = GetQueryString("FK_MapDtl");
 
 		    var attrs = new Entities("BP.Sys.MapAttrs");
-		    attrs.Retrieve("FK_MapData", fk_mapDtl);
+		    attrs.Retrieve("FK_MapData", fk_mapDtl, "Idx");
 
 		    $("#trTitle").append("<th>序</th>");
 
@@ -72,17 +72,19 @@
 
 		        var col = "";
 		        if (dataType == 2 || dataType == 3 || dataType == 5 || dataType == 6 || dataType == 8)
-		            col = "<th style='word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
+		            col = "<th style='word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
 		        else
-		            col = "<th style='width:" + uiWidth + "px;word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
+		            col = "<th style='width:" + uiWidth + "px;word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
 
 		        $("#trTitle").append(col);
 		    }
 
-		    var mapDtl = new Entity("BP.Sys.MapDtl", fk_mapDtl);
+		    var mapDtl = new Entity("BP.Sys.MapDtl");
+            mapDtl.No=fk_mapDtl;
+            mapDtl.RetrieveFromDBSources();
 
 
-		    if (mapDtl.IsEnableAthM) {
+		    if (mapDtl.IsEnableAthM==1 ) {
 		        $("#trTitle").append("<th>附件</th>");
 		    }
 
@@ -98,9 +100,6 @@
 		        var newRow = "<tr>";
 
 		        newRow += "<td class=Idx >" + idx + "</td>";
-
-		        //   for (var colIdx = 0; colIdx < colNum; colIdx++) {
-
 		        for (var i = 0; i < attrs.length; i++) {
 
 		            var attr = attrs[i];
@@ -154,7 +153,7 @@
 		            newRow += td;
 		        }
 
-		        if (mapDtl.IsEnableAthM) {
+		        if (mapDtl.IsEnableAthM==1) {
 		            var opt = "";
 		            opt += "<a href=\"javascript:alert('1.点击可以上传附件.\t\r 2.附件权限控制在从表属性里设置.')\" >上传</a>";
 		            newRow += "<td>" + opt + "</td>";
@@ -325,36 +324,26 @@
             $("#eudlg").dialog("close");
         }
 
-        function Up(fk_mapdata, mypk) {
-            var param = {
-                DoType: "DtlFieldUp",
-                MyPK: mypk
-            };
+        function Up(mypk) {
 
-            Handler_AjaxQueryData(param, function (data) {
-                if (data.indexOf("err@") != -1) {
-                    $.messager.alert("错误", data, "icon-error");
-                    return;
-                }
+            var en = new Entity("BP.Sys.MapAttr", mypk);
+            var data = en.DoMethodReturnString("DoUpForMapDtl");
+            if (data.indexOf('err@') != -1)
+                alert(data);
 
-                window.location.href = window.location.href;
-            }, this);
+            window.location.href = window.location.href;
         }
-        function Down(fk_mapdata, mypk) {
-            var param = {
-                DoType: "DtlFieldDown",
-                MyPK: mypk
-            };
+        function Down(mypk) {
 
-            Handler_AjaxQueryData(param, function (data) {
-                if (data.indexOf("err@") != -1) {
-                    $.messager.alert("错误", data, "icon-error");
-                    return;
-                }
+            var en = new Entity("BP.Sys.MapAttr", mypk);
+            var data = en.DoMethodReturnString("DoDownForMapDtl");
+            if (data.indexOf('err@') != -1)
+                alert(data);
 
-                window.location.href = window.location.href;
-            }, this);
+            window.location.href = window.location.href;
         }
+
+         
         function Del(fk_mapdata, refNo) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;

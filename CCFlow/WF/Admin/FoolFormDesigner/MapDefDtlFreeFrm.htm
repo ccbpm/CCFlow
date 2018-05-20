@@ -34,17 +34,16 @@
 
         var isFor = GetQueryString("For");
 
-
-        var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl + "&m=" + Math.random();
+        var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl + "&For=" + isFor + "&m=" + Math.random();
 
         $(function () {
 
             $("#F").attr("src", url);
 
-            if (isFor) {
+            if (isFor != null || isFor != undefined) {
 
                 $("#DtlAttr").html(isFor);
-
+                return;
                 // $("#DtlAttr").hide();
                 //document.getElementById("DtlAttr").style = "";
             }
@@ -52,8 +51,9 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddUrlData();
-
             var data = handler.DoMethodReturnString("MapDefDtlFreeFrm_Init");
+
+
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;

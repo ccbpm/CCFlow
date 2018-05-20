@@ -741,6 +741,28 @@
             node.Name = text;
             node.Update();
 
+
+            //修改表单名称.
+            var mapData = new Entity("BP.Sys.MapData", "ND" + activeId);
+            mapData.Name = text;
+            mapData.Update();
+
+            //修改分组名称.
+            var groups = new Entities("BP.Sys.GroupFields");
+            groups.Retrieve("FrmID", "ND" + activeId);
+
+         //  alert(groups.length);
+
+            if (groups.length == 1) {
+
+                var group = groups[0];
+
+                var groupEn = new Entity("BP.Sys.GroupField", group.OID);
+                groupEn.Lab = text;
+                groupEn.Update();
+            }
+            
+
             //更新节点名称与显示
             $("#span_" + activeId).text(text);
         }

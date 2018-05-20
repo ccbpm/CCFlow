@@ -15,6 +15,7 @@
   <OneWork No="Truck" CH="轨迹图" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm"  />
   <OneWork No="TimeBase" CH="时间轴"  UrlCCFlow="TimeBase.htm" UrlJFlow="TimeBase.htm"  />
   <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm"/>
+  
 
   <!-- 可以配置的. -->
   <OneWork1 No="LogOfTable" CH="流程日志(表格)"   UrlCCFlow="LogOfTable.aspx" UrlJFlow="LogOfTable.htm" />

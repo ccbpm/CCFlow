@@ -92,7 +92,7 @@ namespace CCFlow.WF
                 if (ndPri.HisFormType == NodeFormType.FoolForm)
                 {
                     this.UCEn1.BindColumn4(wnPri.HisWork, "ND" + wnPri.HisNode.NodeID);
-                    this.UCEn1.Add(wnPri.HisWork.WorkEndInfo);
+                //    this.UCEn1.Add(wnPri.HisWork.WorkEndInfo);
                 }
                 else if (ndPri.HisFormType == NodeFormType.FreeForm)
                 {

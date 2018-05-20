@@ -1044,14 +1044,24 @@
             }
             // 向上移动.
             function Up(mypk, idx, t) {
-                var url = '?DoType=Up&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
-                AjaxServiceGener(null, url, ReLoad, this);
+
+                var en = new Entity("BP.Sys.MapAttr", mypk);
+                var data = en.DoMethodReturnString("DoUp");
+                if (data.indexOf('err@') != -1)
+                    alert(data);
+                window.location.href = window.location.href;
             }
+
             //向下移动.
             function Down(mypk, idx, t) {
-                var url = '?DoType=Down&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
-                AjaxServiceGener(null, url, ReLoad, this);
+
+                var en = new Entity("BP.Sys.MapAttr", mypk);
+                var data = en.DoMethodReturnString("DoDown");
+                if (data.indexOf('err@') != -1)
+                    alert(data);
+                window.location.href = window.location.href;
             }
+
 
             function GFDoUp(refoid) {
                 var url = '?DoType=GFDoUp&RefOID=' + refoid;

@@ -148,28 +148,7 @@ function Ele_FrmCheck(wf_node) {
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
     return eleHtml;
 }
-
-//初始化 附件
-function figure_Template_Attachment(frmData, gf) {
-
-    var ath = frmData.Sys_FrmAttachment[0];
-    if (ath == null)
-        return "没有找到附件定义，请与管理员联系。";
-
-    var eleHtml = '';
-    //    if (ath.UploadType == 0) { //单附件上传 L4204
-    //        return '';
-    //    }
-    var src = "";
-    if (pageData.IsReadonly)
-        src = "Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-    else
-        src = "Ath.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-
-    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-
-    return eleHtml;
-}
+ 
 
 
 //解析表单字段 MapAttr.
@@ -436,9 +415,49 @@ function InitMapAttrOfCtrl(mapAttr) {
 //初始化 附件
 function Ele_Attachment(workNode, gf) {
 
+    var eleHtml = '';
+    var nodeID = GetQueryString("FK_Node");
+    var url = "";
+    url += "&WorkID=" + GetQueryString("WorkID");
+    url += "&FK_Node=" + GetQueryString("FK_Node");
+    url += "&FK_Flow=" + GetQueryString("FK_Flow");
+    url += "&FormType=" + GetQueryString("FormType"); //表单类型，累加表单，傻瓜表单，自由表单.
+
+    var nodeID = GetQueryString("FK_Node");
+    var no = nodeID.substring(nodeID.length - 2);
+    var IsStartNode = 0;
+    if (no == "01")
+        url += "&IsStartNode=1"; //是否是开始节点
+
+    var isReadonly = false;
+    if (gf.FrmID.indexOf(nodeID) == -1)
+        isReadonly = true;
+
+
+    //创建附件描述信息.
+    var ath = new Entity("BP.Sys.FrmAttachment", gf.CtrlID);
+
+    var athPK = gf.CtrlID;
+    var noOfObj = athPK.replace(gf.FrmID + "_", "");
+
+    var src = "";
+    
+    //这里的连接要取 FK_MapData的值.
+    src = "Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
+
+    //自定义表单模式.
+    if (ath.AthRunModel == 2) {
+        src = "../../DataUser/OverrideFiles/Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
+    }
+
+    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + gf.CtrlID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    return eleHtml;
+
+    /*
+
     var ath = workNode.Sys_FrmAttachment[0];
     if (ath == null)
-        return "没有找到附件定义，请与管理员联系。";
+    return "没有找到附件定义，请与管理员联系。";
 
     var eleHtml = '';
     //    if (ath.UploadType == 0) { //单附件上传 L4204
@@ -447,17 +466,17 @@ function Ele_Attachment(workNode, gf) {
 
     var pkval = GetQueryString("WorkID");
     if (pkval == undefined)
-        pkval = GetQueryString("OID");
+    pkval = GetQueryString("OID");
 
     var src = "";
     if (pageData.IsReadonly)
-        src = "Ath.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+    src = "Ath.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
     else
-        src = "Ath.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+    src = "Ath.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 
-    return eleHtml;
+    return eleHtml; */
 }
 
 

@@ -407,7 +407,7 @@ function NodeProperty_Funs(item) {
 
       case "Node_EditNodeName": //修改节点名称
 
-    var figure = STACK.figureGetById(figureId);
+           var figure = STACK.figureGetById(figureId);
 
 
 			var tId = 1; //STACK.textGetByFigureXY(fId, x, y);

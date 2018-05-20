@@ -964,15 +964,10 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapFrame.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pub.ascx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFTable.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Max.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Min.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB.xml" />
-    <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\TabIdx.aspx" />
     <Content Include="WF\Admin\Img\DesignRpt.png" />
@@ -1391,7 +1386,6 @@
     <Content Include="WF\Comm\Sys\EnsDataIO.aspx" />
     <Content Include="WF\Comm\Sys\EnumList.aspx" />
     <Content Include="WF\Comm\Sys\Handler.ashx" />
-    <Content Include="WF\Comm\Sys\Holiday.aspx" />
     <Content Include="WF\Comm\Sys\Img\MySQL.png" />
     <Content Include="WF\Comm\Sys\Img\Oracle.png" />
     <Content Include="WF\Comm\Sys\Img\SQLServer.png" />
@@ -6672,41 +6666,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\Rpt.master.designer.cs">
       <DependentUpon>Rpt.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFSQL.aspx.cs">
-      <DependentUpon>SFSQL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFSQL.aspx.designer.cs">
-      <DependentUpon>SFSQL.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx.cs">
-      <DependentUpon>SFSQLDataView.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx.designer.cs">
-      <DependentUpon>SFSQLDataView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFTable.aspx.cs">
-      <DependentUpon>SFTable.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFTable.aspx.designer.cs">
-      <DependentUpon>SFTable.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx.cs">
-      <DependentUpon>SFTableEditData.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx.designer.cs">
-      <DependentUpon>SFTableEditData.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
-      <DependentUpon>SysEnum.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.designer.cs">
-      <DependentUpon>SysEnum.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\TabIdx.aspx.cs">
       <DependentUpon>TabIdx.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7106,13 +7065,6 @@
     </Compile>
     <Compile Include="WF\Comm\Sys\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\Holiday.aspx.cs">
-      <DependentUpon>Holiday.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\Holiday.aspx.designer.cs">
-      <DependentUpon>Holiday.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Sys\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

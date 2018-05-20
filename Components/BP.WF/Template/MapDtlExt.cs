@@ -1318,7 +1318,6 @@ namespace BP.WF.Template
 
 
             #region 检查填充的SQL是否符合要求.
-             
             #endregion
 
             //更新分组标签.

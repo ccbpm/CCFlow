@@ -935,10 +935,8 @@ namespace BP.Sys.FrmUI
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
 
             //更新相关的分组信息.
-
             GroupField gf = new GroupField();
             int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
-
             if (i == 0)
             {
                 gf.Lab = this.Name;

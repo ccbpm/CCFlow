@@ -127,6 +127,9 @@ namespace BP.WF.HttpHandler
             if (isFor != "")
                 return "sln@" + isFor;
 
+            if (this.FK_MapDtl.Contains("_Ath") == true)
+                return "info@附件扩展";
+
 
             MapDtl dtl = new MapDtl();
 
@@ -139,7 +142,13 @@ namespace BP.WF.HttpHandler
                 {
                     // 开始复制它的属性.
                     MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
-                    MapDtl odtl = new Sys.MapDtl(this.FK_MapDtl);
+                    MapDtl odtl = new Sys.MapDtl();
+                    odtl.No = this.FK_MapDtl;
+                    int i= odtl.RetrieveFromDBSources();
+                    if (i == 0)
+                        return "info@字段列";
+
+
                     //存储表要与原明细表一致
                     if (string.IsNullOrWhiteSpace(odtl.PTable))
                         dtl.PTable = odtl.No;
@@ -245,30 +254,6 @@ namespace BP.WF.HttpHandler
             
             switch (this.DoType)
             {
-                case "DtlFieldUp": //字段上移
-                    MapAttr attrU = new MapAttr(this.MyPK);
-                    attrU.DoUpForMapDtl();
-                    msg = "";
-                    break;
-                case "DtlFieldDown": //字段下移.
-                    MapAttr attrD = new MapAttr(this.MyPK);
-                    attrD.DoDownForMapDtl();
-                    msg = "";
-                    break;
-                case "HidAttr": //获得隐藏的字段.
-                    MapAttrs attrs = new MapAttrs();
-                    attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData,
-                        MapAttrAttr.UIVisible, 0);
-                    msg = attrs.ToJson();
-                    break;
-                case "Up": //移动位置..
-                    MapAttr attr = new MapAttr(this.MyPK);
-                    attr.DoUp();
-                    break;
-                case "Down": //移动位置.
-                    MapAttr attrDown = new MapAttr(this.MyPK);
-                    attrDown.DoDown();
-                    break;
                 case "GFDoUp":
                     GroupField gf = new GroupField(this.RefOID);
                     gf.DoUp();
@@ -300,22 +285,6 @@ namespace BP.WF.HttpHandler
                     }
                     mygf.Update();
                     break;
-                case "FrameDoUp":
-                    //MapFrame frame1 = new MapFrame(this.MyPK);
-                    //if (frame1.RowIdx > 0)
-                    //{
-                    //    frame1.RowIdx = frame1.RowIdx - 1;
-                    //    frame1.Update();
-                    //}
-                    break;
-                case "FrameDoDown":
-                    //MapFrame frame2 = new MapFrame(this.MyPK);
-                    //if (frame2.RowIdx < 10)
-                    //{
-                    //    frame2.RowIdx = frame2.RowIdx + 1;
-                    //    frame2.Update();
-                    //}
-                    break;
                 default:
                     throw new Exception("没有判断的执行类型：" + this.DoType);
                     break;
@@ -323,7 +292,6 @@ namespace BP.WF.HttpHandler
             return msg;
         }
 
-        
         /// <summary>
         /// 删除枚举值
         /// </summary>

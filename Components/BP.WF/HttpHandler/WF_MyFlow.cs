@@ -2150,37 +2150,7 @@ namespace BP.WF.HttpHandler
 
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
                     this.FID, BP.Web.WebUser.No);
-
-                #region 增加上流程的信息.
-                string sql = "";
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,NVL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
-                else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,IFNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
-                else
-                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
-
-                DataTable wf_generWorkFlowDt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                wf_generWorkFlowDt.TableName = "WF_GenerWorkFlow";
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                {
-                    wf_generWorkFlowDt.Columns["WFSTATE"].ColumnName = "WFState";
-                    wf_generWorkFlowDt.Columns["PWFSTATE"].ColumnName = "PWFState";
-                    wf_generWorkFlowDt.Columns["PFID"].ColumnName = "PFID";
-                    wf_generWorkFlowDt.Columns["PWORKID"].ColumnName = "PWorkID";
-                    wf_generWorkFlowDt.Columns["PNODEID"].ColumnName = "PNodeID";
-                    wf_generWorkFlowDt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
-
-                    wf_generWorkFlowDt.Columns["PWORKID2"].ColumnName = "PWorkID2";
-                    wf_generWorkFlowDt.Columns["PNODEID2"].ColumnName = "PNodeID2";
-                    wf_generWorkFlowDt.Columns["PFLOWNO2"].ColumnName = "PFlowNo2";
-
-                    wf_generWorkFlowDt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
-                    wf_generWorkFlowDt.Columns["FK_NODE"].ColumnName = "FK_Node";
-                    wf_generWorkFlowDt.Columns["WORKID"].ColumnName = "WorkID";
-                }
-                #endregion 增加上流程的信息.
-
+                 
                 //Node nd = new Node(this.FK_Node);
                 //if (nd.HisFormType == NodeFormType.SheetTree)
                 //{
@@ -2206,8 +2176,6 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(fns.ToDataTableField("FrmNodes"));
                 }
                 #endregion 如果是移动应用就考虑多表单的问题.
-
-                //ds.WriteXml("c:\\xx.xml");
 
                 return BP.Tools.Json.ToJson(ds);
             }

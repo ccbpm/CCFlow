@@ -1533,7 +1533,7 @@ namespace BP.Sys
         /// <summary>
         /// 上移for 明细表.
         /// </summary>
-        public void DoUpForMapDtl()
+        public string DoUpForMapDtl()
         {
             //规整groupID.
             GroupField gf = new GroupField();
@@ -1549,11 +1549,12 @@ namespace BP.Sys
                 //  attr.Idx = -1;
                 attr.Update("Idx", -1);
             }
+            return "执行成功";
         }
         /// <summary>
         /// 下移 for 明细表.
         /// </summary>
-        public void DoDownForMapDtl()
+        public string DoDownForMapDtl()
         {
             //规整groupID.
             GroupField gf = new GroupField();
@@ -1568,6 +1569,8 @@ namespace BP.Sys
             {
                 attr.Update("Idx", -1);
             }
+
+            return "执行成功";
         }
         public void DoJump(MapAttr attrTo)
         {

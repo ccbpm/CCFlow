@@ -475,43 +475,7 @@ namespace BP.WF
             }
             return paras;
         }
-        public virtual string WorkEndInfo
-        {
-            get
-            {
-                string tp = "";
-                //FAppSets sets = new FAppSets(this.NodeID);
-                //foreach (FAppSet set in sets)
-                //{
-                //    if (set.DoWhat.Contains("?"))
-                //        tp += "[<a href=\"javascript:WinOpen('" + set.DoWhat + "&WorkID=" + this.OID + "' ,'sd');\" ><img src='/WF/Img/Btn/Do.gif' border=0/>" + set.Name + "</a>]";
-                //    else
-                //        tp += "[<a href=\"javascript:WinOpen('" + set.DoWhat + "?WorkID=" + this.OID + "' ,'sd');\" ><img src='/WF/Img/Btn/Do.gif' border=0/>" + set.Name + "</a>]";
-                //}
-                //if (this.HisNode.IsHaveSubFlow)
-                //{
-                //    NodeFlows flows = new NodeFlows(this.HisNode.NodeID);
-                //    foreach (NodeFlow fl in flows)
-                //    {
-                //        tp += "[<a href='CallSubFlow.aspx?FID=" + this.OID + "&FK_Flow=" + fl.FK_Flow + "&FK_FlowFrom=" + this.HisNode.FK_Flow + "' ><img src='/WF/Img/Btn/Do.gif' border=0/>" + fl.FK_FlowT + "</a>]";
-                //    }
-                //}
-                if (tp.Length > 0)
-                    return "<div align=left>" + tp + "</div>";
-                return tp;
-            }
-        }
-        /// <summary>
-        /// 产生要执行的url.
-        /// </summary>
-        public string GenerNextUrl()
-        {
-            string appName = BP.Sys.Glo.Request.ApplicationPath;
-            string ip = SystemConfig.AppSettings["CIP"];
-            if (ip == null || ip == "")
-                throw new Exception("@您没有设置CIP");
-            return "http://" + ip + "/" + appName + "/WF/Port.aspx?UserNo=" + BP.Web.WebUser.No + "&DoWhat=DoNode&WorkID=" + this.OID + "&FK_Node=" + this.HisNode.NodeID + "&Key=MyKey";
-        }
+        
         #endregion
 
         #region 需要子类写的方法

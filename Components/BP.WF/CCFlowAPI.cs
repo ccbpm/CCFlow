@@ -327,39 +327,6 @@ namespace BP.WF
                     // 加入最新的MapExt.
                     myds.Tables.Add(exts.ToDataTableField("Sys_MapExt"));
                     #endregion  MapExt .
-
-
-                    /*
-                    //计算累加的 从表字段集合.
-                    MapDtls dtls = new MapDtls();
-                    qo = new QueryObject(dtls);
-                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
-                    DataTable dtDtls = qo.DoQueryToTable();
-
-                    DataTable mdtls = myds.Tables["Sys_MapDtl"]; //增加行.
-                    foreach (DataRow dr in mdtls.Rows)
-                    {
-                        dr[MapDtlAttr.IsDelete] = 0;  //把字段设置为只读的.
-                        dr[MapDtlAttr.IsInsert] = 0; 
-                        dr[MapDtlAttr.IsUpdate] = 0;
-                        mdtls.Rows.Add(dr.ItemArray);
-                    }
-
-                    //计算累加的 附件集合.
-                    FrmAttachments aths = new FrmAttachments();
-                    qo = new QueryObject(aths);
-                    qo.AddWhere(FrmAttachmentAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
-
-                    DataTable dtAths = qo.DoQueryToTable();
-
-                    DataTable mAths = myds.Tables["Sys_FrmAttachment"]; //增加行.
-                    foreach (DataRow dr in dtAths.Rows)
-                    {
-                        dr[FrmAttachmentAttr.IsUpload] = 0; //把字段设置为只读的.
-                        dr[FrmAttachmentAttr.IsDownload] = 0;
-                        mAths.Rows.Add(dr.ItemArray);
-                    }
-                    */
                 }
                 #endregion 增加 groupfields
 

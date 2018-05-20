@@ -745,8 +745,13 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+            //加入是累加表单的标志，目的是让附件可以看到.
+            string endUrl = "";
+            if (nd.HisFormType == NodeFormType.FoolTruck)
+                endUrl = "&FormType=10&FromWorkOpt=" + this.GetRequestVal("FromWorkOpt");
 
-            return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+            return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1" + endUrl;
+
         }
         /// <summary>
         /// 草稿

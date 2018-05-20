@@ -839,6 +839,26 @@ namespace BP.WF.HttpHandler
         {
             try
             {
+                #region 特殊判断 适应累加表单.
+                string fromWhere = this.GetRequestVal("FromWorkOpt");
+                if (fromWhere != null && fromWhere.Equals("1") && this.FK_Node != 0 && this.FK_Node != 999999)
+                {
+                    Node nd = new Node(this.FK_Node);
+
+                    nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+
+                    //如果是累加表单.
+                    if (nd.HisFormType == NodeFormType.FoolTruck)
+                    {
+                        DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
+                  this.FID, BP.Web.WebUser.No);
+
+                        return BP.Tools.Json.ToJson(myds);
+                    }
+                }
+                #endregion 特殊判断.适应累加表单
+
+
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
@@ -999,6 +1019,7 @@ namespace BP.WF.HttpHandler
                 {
                     Node nd = new Node(this.FK_Node);
                     nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+ 
 
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)

@@ -225,37 +225,32 @@
             $("#processMenu3").hide();
         });
 
-        //节点类型设置
+        //节点类型--普通
         $('#Node_Ordinary').on('click', function () {
 
             var nodeID = document.getElementById("leipi_active_id");
             SetNodeRunModel(nodeID.value, 0);
 
-            //设置节点的状态,为正常类型.
-            //$('#pmfun span').text($(this).text());
-
         });
+        //节点类型--分流
         $('#Node_FL').on('click', function () {
             var nodeID = document.getElementById("leipi_active_id");
             SetNodeRunModel(nodeID.value, 2);
-
-            //$('#pmfun span').text($(this).text());
-
         });
+        //节点类型--合流
         $('#Node_HL').on('click', function () {
             var nodeID = document.getElementById("leipi_active_id");
             SetNodeRunModel(nodeID.value, 1);
-            //$('#pmfun span').text($(this).text());
         });
+        //节点类型--分合流
         $('#Node_FHL').on('click', function () {
             var nodeID = document.getElementById("leipi_active_id");
             SetNodeRunModel(nodeID.value, 3);
-            //$('#pmfun span').text($(this).text());
         });
+        //节点类型--子线程
         $('#Node_SubThread').on('click', function () {
             var nodeID = document.getElementById("leipi_active_id");
             SetNodeRunModel(nodeID.value, 4);
-            //$('#pmfun span').text($(this).text());
         });
 
         //设置节点类型。

@@ -228,35 +228,34 @@
         //节点类型设置
         $('#Node_Ordinary').on('click', function () {
 
-
-
-
-            SetNodeRunModel(101, 0);
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 0);
 
             //设置节点的状态,为正常类型.
-            $('#pmfun span').text($(this).text());
+            //$('#pmfun span').text($(this).text());
 
         });
         $('#Node_FL').on('click', function () {
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 2);
 
-            alert('分流节点');
-
-            SetNodeRunModel(101, 2);
-
-            $('#pmfun span').text($(this).text());
+            //$('#pmfun span').text($(this).text());
 
         });
         $('#Node_HL').on('click', function () {
-            alert('合流节点');
-            $('#pmfun span').text($(this).text());
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 1);
+            //$('#pmfun span').text($(this).text());
         });
         $('#Node_FHL').on('click', function () {
-            alert('分合流节点');
-            $('#pmfun span').text($(this).text());
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 3);
+            //$('#pmfun span').text($(this).text());
         });
         $('#Node_SubThread').on('click', function () {
-            alert('子线程节点');
-            $('#pmfun span').text($(this).text());
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 4);
+            //$('#pmfun span').text($(this).text());
         });
 
         //设置节点类型。
@@ -265,6 +264,7 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.RunModel = runModel;
             node.Update();
+            alert("修改成功！");
         }
 
         //改变节点风格.

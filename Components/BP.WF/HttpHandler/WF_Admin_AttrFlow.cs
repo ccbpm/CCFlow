@@ -133,34 +133,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 发起限制.
 
-        #region 流程字段列表
-        /// <summary>
-        /// 执行流程检查.
-        /// </summary>
-        /// <returns></returns>
-        public string CheckFlow_Init()
-        {
-            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-            string str = fl.DoCheck();
-
-            str = str.Replace("@", "<BR>@");
-            str = str.Replace("@警告", "<label style='color:yellow ;'>@警告</label>");
-            str = str.Replace("@错误", "<label style='color:red ;'>@错误</label>");
-
-            if (str == "")
-                str = "检查成功.";
-            return str;
-        }
-        /// <summary>
-        /// 流程字段列表
-        /// </summary>
-        /// <returns></returns>
-        public string FlowFields_Init()
-        {
-            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
-            return attrs.ToJson();
-        }
-        #endregion
+        
 
         #region 节点属性（列表）的操作
         /// <summary>

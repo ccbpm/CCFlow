@@ -764,16 +764,15 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "文件格式", true, false, 0, 50, 20, true, null);
                 map.SetHelperAlert(FrmAttachmentAttr.Exts, "上传要求,设置模式为: *.*, *.doc, *.docx, *.png,多个中间用逗号分开.\t\n表示仅仅允许上传指定的后缀的文件.");
 
-                map.AddTBInt("NumOfUpolad", 0, "最低上传数量", true, false);
-                map.SetHelperAlert("NumOfUpolad", "如果为0则标识必须上传. \t\n用户上传的附件数量低于指定的数量就不让保存.");
+                map.AddTBInt("NumOfUpload", 0, "最低上传数量", true, false);
+                map.SetHelperAlert("NumOfUpload", "如果为0则标识必须上传. \t\n用户上传的附件数量低于指定的数量就不让保存.");
 
                 //for tianye group 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
                   "@0=保存到IIS服务器@1=保存到数据库@2=ftp服务器");
 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", false, false, 0, 150, 20, true, null);
-
-
+                 
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别", true, false, 0, 500, 20, true, null);
                 map.SetHelperAlert(FrmAttachmentAttr.Sort, "比如:生产类,文件类,目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");
 

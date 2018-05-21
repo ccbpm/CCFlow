@@ -2633,7 +2633,6 @@ namespace BP.WF
             MapDatas mds = new MapDatas();
             mds.RetrieveInSQL(MapDataAttr.No, sql);
             ds.Tables.Add(mds.ToDataTableField("Sys_MapData"));
-             
 
             // Sys_MapAttr.
             sql = "SELECT MyPK FROM Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");

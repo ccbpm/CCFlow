@@ -26,7 +26,9 @@
         var numOfUpload = 0;  //要求上传的数量.
         var numOfAths = 0;    //附件数量.
         function CanEditor(fileType) {
+
             //var fileTypes = BP.Sys.SystemConfig.AppSettings["OpenTypes"];
+
             var fileTypes = "";
             if (fileTypes == null || fileTypes == "")
                 fileTypes = "doc,docx,pdf,xls,xlsx,txt";
@@ -80,6 +82,25 @@
         //页面启动函数.
         var WebUser = new WebUser();
         var data;
+ 
+
+        //检查上传的附件数量是否符合要求
+        function CheckAthNum() {
+
+            return true;
+
+            alert('开始执行:CheckAthNum');
+
+            alert(numOfUpload);
+
+            if (numOfUpload > numOfAths) {
+                alert("您至少要上传[" + numOfUpload + "]个附件.");
+                return false;
+            }
+            return true;
+        }
+
+
         $(function () {
             Ath = GetQueryString("Ath");
             FK_MapData = GetQueryString("FK_MapData");
@@ -123,6 +144,7 @@
             data = JSON.parse(data);
 
             var athDesc = data["AthDesc"][0];
+            numOfAskForUplaod = athDesc.numOfAskForUplaod; //要求上传的附件最小数量.
 
             //自定义表单模式.
             if (athDesc.AthRunModel == 2) {
@@ -132,17 +154,16 @@
             }
 
             var dbs = data["DBAths"];
+
             var fileShowWay = athDesc.FileShowWay;
             if (fileShowWay == "undefined" || fileShowWay == null || fileShowWay == "")
                 fileShowWay = 0;
-
 
             //用于必须上传的校验.
             numOfUpload = athDesc.NumOfUpolad; //最低上传的数量.
             numOfAths = dbs.length; //现有的数量.
 
             var mapAttrs = null;
-
 
             if (athDesc.IsExpCol != 0) {
                 mapAttrs = new Entities("BP.Sys.MapAttrs");
@@ -527,13 +548,13 @@
 
                 if (OnUploadClick() == false)
                     return false;
-
             } catch (e) {
                 //alert(e);
                 //return;
             }
         }
         function SaveUpload() {
+
             //必填项和正则表达式检查
             var formCheckResult = true;
 
@@ -551,10 +572,12 @@
             }
 
             var explorer = window.navigator.userAgent;
-            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))
+            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)) {
                 $('#file_upload').uploadify("upload", "*");
-            else
-                UploadChange();
+                return;
+            }
+
+            UploadChange();
         }
         function UploadChange() {
             var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
@@ -585,8 +608,8 @@
                 var currentPath = window.document.location.href;
                 var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
                 Url = path + "/WF/CCForm/AttachmentUploadS.do/?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal + "&parasData=" + parasData;
-
             }
+
 
             $.ajax({
                 url: Url,
@@ -615,8 +638,6 @@
             var url = '../WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
             window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
         }
-
-
 
         function OpenFileView(pkVal, delPKVal) {
             var url = 'FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=<%=FK_FrmAttachment %>&FK_FrmAttachmentExt=<%=FK_FrmAttachmentExt %>&FK_Flow=<%=FK_Flow %>&FK_Node=<%=FK_Node %>&WorkID=<%=WorkID %>&IsCC=<%=IsCC %>';
@@ -654,7 +675,7 @@
             <button class="btn btn-info" id="btn_Colse" style="border: 0;background: #2884fa;color: #FFF;font-size: 12px;padding: 6px 10px;border-radius: 15px;margin: 5px;">关闭</button>
          </div>
     </form>
-     <iframe   width='0'   height='0'   frameborder='0'   name="hrong"   style="display:   none"></iframe> 
+     <iframe   width='0'   height='0' frameborder='0' name="hrong"  style="display:none"></iframe> 
     
     
 </body>

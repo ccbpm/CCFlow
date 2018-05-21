@@ -81,14 +81,25 @@
                 var emp = data[i];
 
                 newRow = "<tr ><td class=Idx>" + i + "</td>";
+
+
                 newRow += "<td>" + emp.No + "</td>";
-                newRow += "<td>" + emp.Name + "</td>";
+
+                if (emp.No=="admin")
+                    newRow += "<td><font color=red><b>" + emp.Name + "</b>-推荐使用</font></td>";
+                else
+                    newRow += "<td>" + emp.Name + "</td>";
 
                 var url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
                 //  newRow += "<td>" + url + "</td>";
 
                 url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
-                newRow += "<td>" + url + "</td>";
+
+                if (emp.No == "admin")
+                    newRow += "<td><font color=green><b>" + url + "</b></font></td>";
+                else
+                    newRow += "<td>" + url + "</td>";
+
 
                 url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/ie.gif' border=0 />手机模式</a>";
                 // newRow += "<td>" + url + "</td>";

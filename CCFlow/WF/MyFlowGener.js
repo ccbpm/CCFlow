@@ -338,6 +338,10 @@ function Save() {
             return false;
     }
 
+    if (checkAths() == false)
+        return false;
+
+
     //必填项和正则表达式检查
     var formCheckResult = true;
 
@@ -765,6 +769,10 @@ function Send(isHuiQian) {
     if (CheckFWC() == false)
         return false;
 
+    if (checkAths() == false)
+        return false;
+
+
     //检查最小最大长度.
     var f = CheckMinMaxLength();
     if (f == false)
@@ -1120,10 +1128,16 @@ function ShowTextBoxNoticeInfo() {
 //检查附件数量.
 function checkAths() {
 
-    var frmEle = document.getElementById("");
+    // 不支持火狐浏览器。
+    var frm = document.getElementById('Ath1');
 
-    return true;
-  
+    if (frm == null || frm == undefined) {
+        return true;
+        //alert('系统错误,没有找到SelfForm的ID.');
+    }
+
+    //执行保存.
+    return frm.contentWindow.CheckAthNum();
 }
 
 
@@ -1887,6 +1901,7 @@ function ConfirmBtn(btn, workid) {
 }
 
 
+
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
 function SaveSelfFrom() {
 
@@ -1900,6 +1915,7 @@ function SaveSelfFrom() {
 }
 
 function SendSelfFrom() {
+
     if (SaveSelfFrom() == false) {
         alert('表单保存失败，不能发送。');
         return false;

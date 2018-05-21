@@ -19,25 +19,28 @@
 
             $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行流程检查,大约持续1-3分钟时间,请稍后......</blue><br><br><br><br></center>");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CheckFlow_Init&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var en = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
+            var data = en.DoMethodReturnString("DoCheck");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            data = data.replace("@", "<BR>@");
+            data = data.replace("@警告", "<label style='color:yellow;'>@警告</label>");
+            data = data.replace("@错误", "<label style='color:red ;'>@错误</label>");
 
-                    $("#Msg").html(data);
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    return;
-                }
-            });
+            $("#Msg").html(data);
+            return;
 
         });
+
+        //发起流程测试.
+        function StartTester() {
+            var url = '../TestFlow.htm?FK_Flow=' + GetQueryString("FK_Flow");
+            window.location.href = url;
+        }
     </script>
 
 </head>
@@ -64,7 +67,7 @@
  <tr>
  <td  style="width:70%;" valign="top" >
  <fieldset>
- <legend>流程检查信息</legend>
+ <legend>流程检查信息 - <a href='javascript:StartTester();'>发起流程测试</a></legend>
 
  <div id="Msg"/> 
   

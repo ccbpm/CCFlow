@@ -27,17 +27,14 @@
 
             $("#downli").html("驰骋工作流引擎已经为您生成了流程模版文件，<a href=\"javascript:Down();\" >请点击这里下载到本机</a>。");
 
-            var doType = "APICodeFEE_Init&FK_Flow=" + fk_flow;
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddUrlData();
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                dataType: 'html',
-                url: Handler + "?DoType=" + doType,
-                success: function (data) {
-                    $("#Msg").html(data);
-                }
-            });
+            var data = handler.DoMethodReturnString("APICodeFEE_Init"); //执行方法，返回执行结果.
+
+            $("#Msg").html(data);
+
         });
 
         function Down() {
@@ -96,9 +93,9 @@
 
             <td valign="top">
                 <fieldset>
-                    <legend>下载到本机 </legend>
+                    <legend>下载到本机   </legend> 
                     <ul>
-                        <li id="downli"></li>
+                           <li id="downli"></li>
                         <li>该xml格式的流程模版文件可以通过，软盘交换到其它ccbpm系统中去。</li>
                     </ul>
                 </fieldset>

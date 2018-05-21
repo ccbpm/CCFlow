@@ -162,7 +162,7 @@
             var updateTr =$( $('table tbody tr')[pageData.saveRowCurrent.rowIndex]);
             //更新 pageData.DBDTL
             var updateData = $.grep(pageData.DBDtl, function (val) { return val.OID == returnRowData.OID });
-            if (updateData.length == 0) {//新增的  直接PUSH
+            if (updateData.length == 0) { //新增的  直接PUSH
                 var rowData = {};
                 //$.each(workNodeData.Sys_MapAttr, function (i, mapAttr) {
                 //    rowData[mapAttr.KeyOfEn] = returnRowData[mapAttr.KeyOfEn];
@@ -171,6 +171,10 @@
                 updateTr.data().data = returnRowData;
                 //新增数据  将移除改成删除
                 updateTr.find('.delRow').attr('src', '../Img/Btn/delete.png');
+
+                updateTr.find('.Ath').attr('href', "javascript:alert('ss')");
+
+
             } else {
                 for (var obj in updateData[0].RowData) {//更新值
                     updateData[0].RowData[obj] = returnRowData[obj];
@@ -184,6 +188,30 @@
             pageData.saveRowCurrent.rowIndex = -1;
 
             return;
+        }
+
+        //打开附件.
+        function Ath(dtlOID) {
+
+            //var url = "Ath.htm?OID=" + rowID + "&AthID=" + GetQueryString("EnsName") + "_Ath";
+
+            //http://localhost:16866/WF/CCForm/Dtl.htm?EnsName=ND26801Dtl1&RefPKVal=580&IsReadonly=0&t=0.14726925438067884&WorkID=580&NodeID=26801&FK_Node=26801&FID=0&UserNo=admin&SID=y4ll5mzmvdvpyswjwg51oiq0&FK_Flow=268&Version=1
+
+            var dtlName=GetQueryString("EnsName");
+            var fk_node=GetQueryString("FK_Node");
+            var fk_flow=GetQueryString("FK_Flow");
+
+            var url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + dtlOID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow;
+
+            /*
+
+             "<a href=\"javascript:window.showModalDialog('AttachmentUpload.aspx?IsBTitle=1&PKVal=" +
+                                dtl.OID + "&Ath=AthMDtl&FK_MapData=" + mdtl.No + "&FK_Node=" + this.FK_Node + "&FK_FrmAttachment=" + mdtl.No +
+                                "_AthMDtl','dialogHeight: 300px; dialogWidth: 800px;center: yes; help: no')\"> */
+
+
+            OpenEasyUiDialog(url, "ath111", '附件', 400, 300, null, false, null, null, null, null);
+
         }
 
         //插入行.
@@ -271,13 +299,21 @@
                     insertTr.append(td);
 
                 } else if ($(threadThObj).data().coltype == 'SN') {
+                    
                     insertTr.append($('<td>' + (newRowIndex + 1) + '</td>'));
+
                 } else {
 
                 }
             });
             //insertTr.append($('<td><img ="width:30px;padding:0="" 10px;cursor:pointer;"="" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
-            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
+
+            //如果允许上传附件.
+           // if (sys_MapDtl.IsEnableAthM == 1) {
+                insertTr.append($("<td><a class='Ath' href=\"javascript:alert('保存后才能上传');\" >附件</a></td>"));
+            //}
+
+            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" title="移除"/></td>'));
 
 
             //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
@@ -447,12 +483,15 @@
                               delThData.customcontent1 = 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.EditModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@';
                           }
                       }
+                       
 
                       //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                       //如果能删除，就有删除按钮
                       if (sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
                           delTh.data(delThData);
                       }
+
+
                       //可删除或者可新增时，有操作列
                       if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
                           threadTr.append(delTh);
@@ -599,7 +638,6 @@
 
                           //mouseleave  鼠标离开行
                           regMouseLeaveTr();
-
                       }
                   };
 
@@ -620,6 +658,7 @@
                       });
                   }
                   if ($.isArray(dbDtl) && dbDtl.length > 0) {
+
                       /**
                       * 统计行
                       * "ColAutoExp":"@ShuLiang:Sum@DanJia:Sum@XiaoJi:Sum"

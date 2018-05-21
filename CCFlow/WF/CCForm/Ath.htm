@@ -67,8 +67,6 @@
             return sortLength;
         }
 
-
-
         var Ath;
         var FK_MapData;
         var FK_FrmAttachment;
@@ -86,13 +84,6 @@
 
         //检查上传的附件数量是否符合要求
         function CheckAthNum() {
-
-            return true;
-
-            alert('开始执行:CheckAthNum');
-
-            alert(numOfUpload);
-
             if (numOfUpload > numOfAths) {
                 alert("您至少要上传[" + numOfUpload + "]个附件.");
                 return false;
@@ -100,8 +91,8 @@
             return true;
         }
 
-
         $(function () {
+
             Ath = GetQueryString("Ath");
             FK_MapData = GetQueryString("FK_MapData");
             FK_FrmAttachment = GetQueryString("FK_FrmAttachment");
@@ -144,7 +135,6 @@
             data = JSON.parse(data);
 
             var athDesc = data["AthDesc"][0];
-            numOfAskForUplaod = athDesc.numOfAskForUplaod; //要求上传的附件最小数量.
 
             //自定义表单模式.
             if (athDesc.AthRunModel == 2) {
@@ -160,8 +150,9 @@
                 fileShowWay = 0;
 
             //用于必须上传的校验.
-            numOfUpload = athDesc.NumOfUpolad; //最低上传的数量.
+            numOfUpload = athDesc.NumOfUpload; //最低上传的数量.
             numOfAths = dbs.length; //现有的数量.
+
 
             var mapAttrs = null;
 

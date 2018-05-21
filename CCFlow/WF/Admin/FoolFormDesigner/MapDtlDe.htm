@@ -357,18 +357,12 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 350px; dialogWidth: 550px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
+        
         function Attachment(fk_mapdtl) {
-            var url = 'Attachment.aspx?IsBTitle=1&PKVal=0&FK_MapData=' + fk_mapdtl + '&FK_FrmAttachment=' + fk_mapdtl + '_AthMDtl&Ath=AthMDtl&s=' + Math.random();
+            var url = 'Ath.htm?IsBTitle=1&PKVal=0&FK_MapData=' + fk_mapdtl + '&FK_FrmAttachment=' + fk_mapdtl + '_AthMDtl&Ath=AthMDtl&s=' + Math.random();
             window.showModalDialog(url, 'xx','dialogWidth=750px;dialogHeight=700px');
         }
-        function MapM2M(fk_mapdtl) {
-            window.showModalDialog('MapM2M.aspx?NoOfObj=M2M&PKVal=0&FK_MapData=' + fk_mapdtl + '&FK_FrmAttachment=' + fk_mapdtl + '_AthMDtl&Ath=AthMDtl&s=' + Math.random());
-        }
+       
       </script>
 </head>
 <body>

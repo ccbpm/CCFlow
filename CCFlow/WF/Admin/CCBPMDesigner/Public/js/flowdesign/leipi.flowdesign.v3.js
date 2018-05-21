@@ -172,7 +172,24 @@
             .mousedown(function (e) {
                 if (e.which == 3) { //右键绑定
                     _canvas.find('#leipi_active_id').val(row.id);
-                    contextmenu.bindings = defaults.processMenus
+                    contextmenu.bindings = defaults.processMenus;
+                    var nodeID = document.getElementById("leipi_active_id");
+                    var node = new Entity("BP.WF.Node", nodeID.value);
+                    if (node.RunModel == 0) {
+                        $('#pmfun span').text("普通");
+                    }
+                    else if (node.RunModel == 1) {
+                        $('#pmfun span').text("合流");
+                    }
+                    else if (node.RunModel == 2) {
+                        $('#pmfun span').text("分流");
+                    }
+                    else if (node.RunModel == 3) {
+                        $('#pmfun span').text("分合流");
+                    }
+                    else if (node.RunModel == 4) {
+                        $('#pmfun span').text("子线程");
+                    }
                     $(this).contextMenu('processMenu', contextmenu);
                 }
             });
@@ -195,12 +212,12 @@
                  .mousedown(function (e) {
                      if (e.which == 3) { //右键绑定
                          _canvas.find('#leipi_active_id').val(lab.id);
-                         contextmenu.bindings = defaults.canvasLabMenu
+                         contextmenu.bindings = defaults.canvasLabMenu;
                          $(this).contextMenu('canvasLabMenu', contextmenu);
                      }
                  });
-            _canvas.append(labDiv);
-            }); 
+                _canvas.append(labDiv);
+            });
         }
 
         var timeout = null;
@@ -267,7 +284,7 @@
 
                 var flowNo = GetQueryString("FK_Flow");
 
-                // @张庆鹏 看看这个bug 怎么解决.
+
                 var url = "../Cond/ConditionLine.htm?FK_Flow=" + flowNo + "&FK_MainNode=" + fromNodeID + "&FK_Node=" + fromNodeID + "&ToNodeID=" + targetId + "&CondType=2&Lang=CH&t=" + new Date().getTime();
                 $("#alertModal2").hide();
                 $(".modal-backdrop").hide();
@@ -385,7 +402,24 @@
                 .mousedown(function (e) {
                     if (e.which == 3) { //右键绑定
                         _canvas.find('#leipi_active_id').val(row.id);
-                        contextmenu.bindings = defaults.processMenus
+                        contextmenu.bindings = defaults.processMenus;
+                        var nodeID = document.getElementById("leipi_active_id");
+                        var node = new Entity("BP.WF.Node", nodeID.value);
+                        if (node.RunModel == 0) {
+                            $('#pmfun span').text("普通");
+                        }
+                        else if (node.RunModel == 1) {
+                            $('#pmfun span').text("合流");
+                        }
+                        else if (node.RunModel == 2) {
+                            $('#pmfun span').text("分流");
+                        }
+                        else if (node.RunModel == 3) {
+                            $('#pmfun span').text("分合流");
+                        }
+                        else if (node.RunModel == 4) {
+                            $('#pmfun span').text("子线程");
+                        }
                         $(this).contextMenu('processMenu', contextmenu);
                     }
                 });
@@ -438,7 +472,7 @@
                 .mousedown(function (e) {
                     if (e.which == 3) { //右键绑定
                         _canvas.find('#leipi_active_id').val(lab.id);
-                        contextmenu.bindings = defaults.canvasLabMenu
+                        contextmenu.bindings = defaults.canvasLabMenu;
                         $(this).contextMenu('canvasLabMenu', contextmenu);
                     }
                 });

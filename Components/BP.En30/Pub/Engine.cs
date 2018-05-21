@@ -576,6 +576,88 @@ namespace BP.Pub
             throw new Exception("参数设置错误 GetValueByKey ：" + key);
         }
         /// <summary>
+        /// 获得所所有的审核人员信息.
+        /// </summary>
+        /// <returns></returns>
+        public string GetValueCheckWorks()
+        {
+            string html = "";
+
+            //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
+           string sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + this.HisGEEntity.PKVal;
+            DataTable dtOfTodo = DBAccess.RunSQLReturnTable(sql);
+
+            foreach (DataRow dr in dtTrack.Rows)
+            {
+                #region 排除正在审批的人员.
+                string nodeID = dr["NDFrom"].ToString();
+                string empFrom = dr["EmpFrom"].ToString();
+                if (dtOfTodo.Rows.Count != 0)
+                {
+                    bool isHave = false;
+                    foreach (DataRow mydr in dtOfTodo.Rows)
+                    {
+                        if (mydr["FK_Node"].ToString() != nodeID)
+                            continue;
+
+                        if (mydr["FK_Emp"].ToString() != empFrom)
+                            continue;
+                        isHave = true;
+                    }
+
+                    if (isHave == true)
+                        continue;
+                }
+                #endregion 排除正在审批的人员.
+
+
+                html += "<tr>";
+                html += " <td valign=middle >" + dr["NDFromT"] + "</td>";
+
+                string msg = dr["Msg"].ToString();
+
+                msg += "<br>";
+                msg += "<br>";
+
+                string empStrs = "";
+                if (dtTrack == null)
+                {
+                    empStrs = dr["EmpFromT"].ToString();
+                }
+                else
+                {
+                    string singType = "0";
+                    foreach (DataRow drTrack in dtTrack.Rows)
+                    {
+                        if (drTrack["No"].ToString() == dr["EmpFrom"].ToString())
+                        {
+                            singType = drTrack["SignType"].ToString();
+                            break;
+                        }
+                    }
+
+                    if (singType == "0" || singType == "2")
+                    {
+                        empStrs = dr["EmpFromT"].ToString();
+                    }
+
+
+                    if (singType == "1")
+                    {
+                        empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" /> " + dr["EmpFromT"];
+                    }
+
+                }
+
+                msg += "审核人:" + empStrs + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
+
+                html += " <td colspan=3 valign=middle >" + msg + "</td>";
+                html += " </tr>";
+            }
+
+            return html;
+        }
+        /// <summary>
         /// 获得审核组件的信息.
         /// </summary>
         /// <param name="key"></param>
@@ -1057,6 +1139,8 @@ namespace BP.Pub
                             || para.Contains("WorkCheck.RecName")
                             || para.Contains("WorkCheck.Note"))   // 审核组件的审核日期.
                             str = str.Replace("<" + para + ">", this.GetValueCheckWorkByKey(para));
+                        else if (para.Contains("WorkChecks") == true) //为烟台增加审核人员的信息,把所有的审核人员信息都输入到这里.
+                            str = str.Replace("<" + para + ">", this.GetValueCheckWorks());
                         else if (para.Contains(".") == true)
                             continue; /*有可能是明细表数据.*/
                         else

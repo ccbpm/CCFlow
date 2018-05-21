@@ -1549,7 +1549,7 @@ namespace BP.Sys
         private void InitExtMembers()
         {
             /* 如果启用了多附件*/
-            if (this.IsEnableAthM)
+            if (this.IsEnableAthM==true )
             {
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
                 athDesc.MyPK = this.No + "_AthMDtl";

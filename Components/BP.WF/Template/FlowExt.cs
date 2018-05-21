@@ -414,12 +414,12 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);
                 map.AddTBString(FlowAttr.Tester, null, "设置流程发起测试人", true, false, 0, 300, 10, true);
 
-                map.AddTBString("NodeAppType", null, "业务类型枚举", true, false, 0, 50, 10, true);
+                String sql = "SELECT No,Name FROM Sys_EnumMain WHERE No LIKE 'Flow_%' ";
+                map.AddDDLSQL("NodeAppType", null, "业务类型枚举", sql, true);
 
-
+                //map.AddTBString("NodeAppType", null, "业务类型枚举", true, false, 0, 50, 10, true);
                 map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, false, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, false, 0, 50, 10, false);
-
 
                 #endregion 基本属性。
 

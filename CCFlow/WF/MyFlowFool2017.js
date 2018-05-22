@@ -183,7 +183,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             isDropTR = true;
             html += "<tr>";
             html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td ColSpan=3>";
+            html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -194,7 +194,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (attr.ColSpan == 4) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td ColSpan='4'>" + lab + "</br>";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4'>" + lab + "</br>";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -204,7 +204,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (isDropTR == true) {
             html += "<tr>";
             html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td class='FContext'  >";
+            html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             isDropTR = !isDropTR;
@@ -213,7 +213,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
         if (isDropTR == false) {
             html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td class='FContext'>";
+            html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'>";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -238,7 +238,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1) {
 
         if (mapAttr.UIIsEnable == 0) {
-            var ctrl = "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type=hidden  class='form-control' type='text'/></div>";
+            var ctrl = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type=hidden  class='form-control' type='text'/>";
 
 
             //console.log(flowData);
@@ -248,12 +248,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             if (defValue == '' || defValue == null)
                 defValue = '无';
 
-            ctrl += "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "Text'  value='" + defValue + "' disabled='disabled'   class='form-control' type='text'/></div>";
+            ctrl += "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "Text'  value='" + defValue + "' disabled='disabled'   class='form-control' type='text'/>";
             return ctrl;
         }
 
         //return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 
     //外键类型.
@@ -267,7 +267,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             enableAttr = "disabled='disabled'";
 
         //return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 
     //添加文本框 ，日期控件等.
@@ -275,7 +275,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     if (mapAttr.MyDataType == "1") {  //不是外键
 
         if (mapAttr.UIHeight <= 40) //普通的文本框.
-            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  class='form-control' type='text'/></div>";
+            return "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  class='form-control' type='text'/>";
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
 
@@ -305,7 +305,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         }
 
         //普通的大块文本.
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea maxlength=" + mapAttr.MaxLen + "  class='form-control' style='height:" + mapAttr.UIHeight + "px;width:100%;' id='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>"
+        return "<textarea maxlength=" + mapAttr.MaxLen + "  class='form-control' style='height:" + mapAttr.UIHeight + "px;width:100%;' id='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
     }
 
     //日期类型.
@@ -316,7 +316,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input type='text' " + enableAttr + " value='" + defValue + "' style='width:125px;' class='form-control' id='TB_" + mapAttr.KeyOfEn + "' /></div>";
+        return " <input type='text' " + enableAttr + " value='" + defValue + "' style='width:125px;' class='form-control' id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     //时期时间类型.
@@ -328,7 +328,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input  type='text'  value='" + defValue + "' style='width:145px;' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' /></div>";
+        return " <input  type='text'  value='" + defValue + "' style='width:145px;' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     // boolen 类型.
@@ -347,7 +347,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
 
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='checkbox'><label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label</div>";
+        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label>";
     }
 
     //枚举类型.
@@ -358,7 +358,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             enableAttr = "disabled='disabled'";
         if (mapAttr.UIContralType == 1)
         //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' value='" + defValue + "'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select></div>";
+            return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' value='" + defValue + "'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -371,7 +371,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
     // AppDouble  AppFloat
     if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input  value='" + defValue + "' style='text-align:right;width:80px;'class='form-control'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/></div>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:80px;'class='form-control'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -382,12 +382,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         //alert(defValue);
 
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input  value='" + defValue + "' style='text-align:right;width:80px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/></div>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:80px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     //AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input  value='" + defValue + "' style='text-align:right;width:80px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/></div>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:80px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");
@@ -539,27 +539,28 @@ function SetCtrlUnEnable(key) {
 }
 //设置隐藏?
 function SetCtrlHidden(key) {
-
-    var ctrl = $("#DIV_" + key);
-    if (ctrl.length > 0) {
-        ctrl.hide();
-    }
-     ctrl = $("#Lab_" + key);
+    ctrl = $("#Lab_" + key);
     if (ctrl.length > 0)
-        ctrl.hide();
+        ctrl.parent('tr').hide();
+
+    var ctrl = $("#Td_" + key);
+    if (ctrl.length > 0) {
+        ctrl.parent('tr').hide();
+    }
+   
 
 }
 //设置显示?
 function SetCtrlShow(key) {
 
-    var ctrl = $("#DIV_" + key);
+    var ctrl = $("#Td_" + key);
     if (ctrl.length > 0) {
-        ctrl.show();
+        ctrl.parent('tr').show();
     }
 
     ctrl = $("#Lab_" + key);
     if (ctrl.length > 0)
-        ctrl.show();
+        ctrl.parent('tr').show();
 
 }
 

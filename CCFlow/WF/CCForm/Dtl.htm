@@ -191,26 +191,21 @@
         }
 
         //打开附件.
-        function Ath(dtlOID) {
-
-            //var url = "Ath.htm?OID=" + rowID + "&AthID=" + GetQueryString("EnsName") + "_Ath";
-
-            //http://localhost:16866/WF/CCForm/Dtl.htm?EnsName=ND26801Dtl1&RefPKVal=580&IsReadonly=0&t=0.14726925438067884&WorkID=580&NodeID=26801&FK_Node=26801&FID=0&UserNo=admin&SID=y4ll5mzmvdvpyswjwg51oiq0&FK_Flow=268&Version=1
+        function Ath(index) {
+            var dtlOID = $(index).parent().parent().data().data.OID;
+            var workID = $(index).parent().parent().data().data.RefPK;
+            
 
             var dtlName=GetQueryString("EnsName");
             var fk_node=GetQueryString("FK_Node");
             var fk_flow=GetQueryString("FK_Flow");
 
-            var url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + dtlOID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow;
-
-            /*
-
-             "<a href=\"javascript:window.showModalDialog('AttachmentUpload.aspx?IsBTitle=1&PKVal=" +
-                                dtl.OID + "&Ath=AthMDtl&FK_MapData=" + mdtl.No + "&FK_Node=" + this.FK_Node + "&FK_FrmAttachment=" + mdtl.No +
-                                "_AthMDtl','dialogHeight: 300px; dialogWidth: 800px;center: yes; help: no')\"> */
+            var url = "CCForm/Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow;
 
 
-            OpenEasyUiDialog(url, "ath111", '附件', 400, 300, null, false, null, null, null, null);
+            parent.OpenEasyUiDialogExt(url, '附件上传', 800, 500, false);
+
+
 
         }
 
@@ -451,10 +446,21 @@
                           }
                       });
 
-
                       //增加附件.
+                      var athTh = $('<th style="width:30px;">附件</th>');
+                      var athThData;
+                      athThData = {
+                          custom: true,
+                          customcontent: 1,
+                          customcontent1: "a@href='javaScript:void(0);' onclick='Ath(this)' titile=附件 @附件",
+                           coltype: 'Operation1'
+                          
+                      };
+                    
                       if (sys_MapDtl.IsEnableAthM == 1) {
-                          threadTr.append($('<th style="width:30px;">附件</th>'));
+                          athTh.data(athThData);
+                          threadTr.append(athTh);
+                        
                       }
 
 
@@ -465,7 +471,7 @@
                           delTh = $('<th style="width:60px;"><img title="选项" style="width: 30px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /></th>');
                       else
                           delTh = $('<th style="width:60px;"></th>');
-                            
+
                       //var delTh = $("<th style="width:20px;" onclick= ></th>");
 
                       var delThData;
@@ -483,7 +489,7 @@
                               delThData.customcontent1 = 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.EditModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@';
                           }
                       }
-                       
+
 
                       //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                       //如果能删除，就有删除按钮
@@ -616,6 +622,7 @@
                                       }
                                   }
                               });
+                              
                           })
 
                           //如果是只读的，全部设置成只读

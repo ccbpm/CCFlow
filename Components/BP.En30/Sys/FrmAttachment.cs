@@ -1250,7 +1250,7 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnablePrint, true, "是否打印", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableOver, true, "是否启用套红", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableSeal, true, "是否启用签章", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableTemplete, true, "是否启用模板文件", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableTemplete, false, "是否启用模板文件", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableCheck, true, "是否记录节点信息", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFlow, true, "是否启用插入流程", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFengXian, true, "是否启用插入风险点", true, true);

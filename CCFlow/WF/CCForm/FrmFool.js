@@ -113,6 +113,44 @@ function GenerFoolFrm(mapData, frmData) {
     }
 
     $('#CCForm').html("").append(html);
+    var mapAttrs = frmData.Sys_MapAttr;
+    //解析设置表单字段联动显示与隐藏.
+    for (var i = 0; i < mapAttrs.length; i++) {
+
+        var mapAttr = mapAttrs[i];
+        if (mapAttr.UIVisible == 0)
+            continue;
+
+        if (mapAttr.LGType != 1)
+            continue;
+
+        if (mapAttr.UIIsEnable == 0)
+            continue;
+
+
+        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
+            if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                if (mapAttr.UIContralType == 1) {
+                    /*启用了显示与隐藏.*/
+                    var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                    //初始化页面的值
+                    var nowKey = ddl.val();
+
+
+                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+
+                }
+                if (mapAttr.UIContralType == 3) {
+                    /*启用了显示与隐藏.*/
+                    var rb = $("#RB_" + mapAttr.KeyOfEn);
+                    var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
+                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+
+                }
+            }
+        }
+
+    }
 }
 
 
@@ -168,24 +206,24 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
 
         var lab = "";
         if (attr.UIContralType == 0)
-            lab = "<label for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+            lab = "<label id=Lab_"+attr.KeyOfEn + "'  for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         if (attr.UIContralType == 1)
-            lab = "<label for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+            lab = "<label id=Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
 
         if (attr.UIContralType == 3)
-            lab = "<label for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+            lab = "<label id=Lab_" + attr.KeyOfEn + "' for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         //线性展示并且colspan=3
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
             isDropTR = true;
             html += "<tr>";
             html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td ColSpan=3>";
+            html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan=3>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -196,7 +234,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
         if (attr.ColSpan == 4) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td ColSpan='4'>" + lab + "</br>";
+            html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan='4'>" + lab + "</br>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -206,7 +244,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
         if (isDropTR == true) {
             html += "<tr>";
             html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td class='FContext'  >";
+            html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             isDropTR = !isDropTR;
@@ -215,7 +253,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
 
         if (isDropTR == false) {
             html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td class='FContext'>";
+            html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -409,6 +447,230 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     alert(mapAttr.Name + "的类型没有判断.");
     return;
+}
+
+//记录改变字段样式 不可编辑，不可见
+var mapAttrs = [];
+function changeEnable(obj, FK_MapData, KeyOfEn, AtPara) {
+    if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
+        var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+        cleanAll();
+        setEnable(FK_MapData, KeyOfEn, selecedval);
+    }
+}
+function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
+    if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
+        var selectVal = $(obj).val();
+        cleanAll();
+        setEnable(FK_MapData, KeyOfEn, selectVal);
+    }
+}
+
+//清空所有的设置
+function cleanAll() {
+    for (var i = 0; i < mapAttrs.length; i++) {
+        SetCtrlShow(mapAttrs[i]);
+        SetCtrlEnable(mapAttrs[i]);
+        CleanCtrlVal(mapAttrs[i]);
+    }
+
+}
+//启用了显示与隐藏.
+function setEnable(FK_MapData, KeyOfEn, selectVal) {
+    var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
+    var frmRB = new Entity("BP.Sys.FrmRB", pkval);
+
+
+    //解决字段隐藏显示.
+    var cfgs = frmRB.FieldsCfg;
+
+    //解决为其他字段设置值.
+    var setVal = frmRB.SetVal;
+    if (setVal) {
+        var strs = setVal.split('@');
+
+        for (var i = 0; i < strs.length; i++) {
+
+            var str = strs[i];
+            var kv = str.split('=');
+
+            var key = kv[0];
+            var value = kv[1];
+            SetCtrlVal(key, value);
+            mapAttrs.push(key);
+
+        }
+    }
+    //@Title=3@OID=2@RDT=1@FID=3@CDT=2@Rec=1@Emps=3@FK_Dept=2@FK_NY=3
+    if (cfgs) {
+
+        var strs = cfgs.split('@');
+
+        for (var i = 0; i < strs.length; i++) {
+
+            var str = strs[i];
+            var kv = str.split('=');
+
+            var key = kv[0];
+            var sta = kv[1];
+
+            if (sta == 0)
+                continue; //什么都不设置.
+
+
+            if (sta == 1) {  //要设置为可编辑.
+                SetCtrlShow(key);
+                SetCtrlEnable(key);
+            }
+
+            if (sta == 2) { //要设置为不可编辑.
+                SetCtrlShow(key);
+                SetCtrlUnEnable(key);
+                mapAttrs.push(key);
+            }
+
+            if (sta == 3) { //不可见.
+                SetCtrlHidden(key);
+                mapAttrs.push(key);
+            }
+
+        }
+
+
+    }
+
+
+}
+
+//设置是否可以用?
+function SetCtrlEnable(key) {
+
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.removeAttr("readonly");
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.removeAttr("disabled");
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.removeAttr("disabled");
+    }
+
+    ctr = document.getElementsByName('RB_' + key);
+    if (ctrl != null) {
+        var ses = new Entities("BP.Sys.SysEnums");
+        ses.Retrieve("EnumKey", key);
+        for (var i = 0; i < ses.length; i++)
+            $("#RB_" + key + "_" + ses[i].IntKey).removeAttr("disabled");
+    }
+}
+function SetCtrlUnEnable(key) {
+
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.attr("readonly", "true");
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.attr("disabled", "disabled");
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+
+        ctrl.attr("disabled", "disabled");
+    }
+
+    ctrl = $("#RB_" + key);
+    if (ctrl != null) {
+        $('input[name=RB_' + key + ']').attr("disabled", "disabled");
+        //ctrl.attr("disabled", "disabled");
+    }
+}
+//设置隐藏?
+function SetCtrlHidden(key) {
+    ctrl = $("#Lab_" + key);
+    if (ctrl.length > 0)
+        ctrl.parent('tr').hide();
+
+    var ctrl = $("#Td_" + key);
+    if (ctrl.length > 0) {
+        ctrl.parent('tr').hide();
+    }
+
+
+}
+//设置显示?
+function SetCtrlShow(key) {
+
+    var ctrl = $("#Td_" + key);
+    if (ctrl.length > 0) {
+        ctrl.parent('tr').show();
+    }
+
+    ctrl = $("#Lab_" + key);
+    if (ctrl.length > 0)
+        ctrl.parent('tr').show();
+
+}
+
+//设置值?
+function SetCtrlVal(key, value) {
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+        // ctrl.attr("value",value);
+        //$("#DDL_"+key+" option[value='"+value+"']").attr("selected", "selected");
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+        ctrl.attr('checked', true);
+    }
+
+    ctrl = $("#RB_" + key + "_" + value);
+    if (ctrl.length > 0) {
+        var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
+        document.getElementById("RB_" + key + "_" + checkVal).checked = false;
+        document.getElementById("RB_" + key + "_" + value).checked = true;
+        // ctrl.attr('checked', 'checked');
+    }
+}
+
+//清空值?
+function CleanCtrlVal(key) {
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val('');
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        //ctrl.attr("value",'');
+        ctrl.val('');
+        // $("#DDL_"+key+" option:first").attr('selected','selected');
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.attr('checked', false); ;
+    }
+
+    ctrl = $("#RB_" + key + "_" + 0);
+    if (ctrl.length > 0) {
+        ctrl.attr('checked', true);
+    }
 }
 
 

@@ -1701,7 +1701,7 @@ function initModal(modalType, toNode) {
     //初始化退回窗口的SRC.
     var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
        '<div class="modal-dialog">'
-           + '<div class="modal-content" style="border-radius:0px;width:750px;text-align:left;">'
+           + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
               + '<div class="modal-header">'
                   + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
                    + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'

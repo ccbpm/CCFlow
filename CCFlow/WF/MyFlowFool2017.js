@@ -166,17 +166,17 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
         var lab = "";
         if (attr.UIContralType == 0)
-            lab = "<label for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         if (attr.UIContralType == 1)
-            lab = "<label for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
 
         if (attr.UIContralType == 3)
-            lab = "<label for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         //线性展示并且colspan=3
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
@@ -544,6 +544,9 @@ function SetCtrlHidden(key) {
     if (ctrl.length > 0) {
         ctrl.hide();
     }
+     ctrl = $("#Lab_" + key);
+    if (ctrl.length > 0)
+        ctrl.hide();
 
 }
 //设置显示?
@@ -553,6 +556,10 @@ function SetCtrlShow(key) {
     if (ctrl.length > 0) {
         ctrl.show();
     }
+
+    ctrl = $("#Lab_" + key);
+    if (ctrl.length > 0)
+        ctrl.show();
 
 }
 

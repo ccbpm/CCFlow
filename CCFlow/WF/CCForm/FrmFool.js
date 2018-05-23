@@ -569,7 +569,7 @@ function SetCtrlEnable(key) {
 
     var ctrl = $("#TB_" + key);
     if (ctrl.length > 0) {
-        ctrl.removeAttr("readonly");
+        ctrl.removeAttr("disabled");
     }
 
     ctrl = $("#DDL_" + key);
@@ -594,7 +594,7 @@ function SetCtrlUnEnable(key) {
 
     var ctrl = $("#TB_" + key);
     if (ctrl.length > 0) {
-        ctrl.attr("readonly", "true");
+        ctrl.attr("disabled", "true");
     }
 
     ctrl = $("#DDL_" + key);

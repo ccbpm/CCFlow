@@ -713,21 +713,24 @@
         }
 
 		function triggerStatistics() {
-			$.each($("#dtlDiv div table thead tr th"), function (i, th) {
-				var matchesColumn = $.grep(window.columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
-					return val.KeyOfEn == $(th).data().colname;
-				});
-				if (matchesColumn.length == 1) {	// 如果是统计列
-					var o = $(th);
-					var template = figure_MapAttr_Template(o.data());	// 根据该列表头的数据(data)获取到与当前列类型一致的表单元素
-					var name = template.attr("name");
-					$(":input[name=" + name + "]").each(function (i, e) {	// 根据遍历该列所有元素
-						if (i == 0) {
-							$(e).trigger("change");	// 页面初始化后进行合计计算(仅触发合计列第一个元素即可)
-						}
-					});
-				}
-			});
+		    $.each($("#dtlDiv div table thead tr th"), function (i, th) {
+		        var matchesColumn = [];
+		        if (window.columnExp) {
+		            matchesColumn = $.grep(window.columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
+		                return val.KeyOfEn == $(th).data().colname;
+		            });
+		        }		        
+		        if (matchesColumn.length == 1) {	// 如果是统计列
+		            var o = $(th);
+		            var template = figure_MapAttr_Template(o.data()); // 根据该列表头的数据(data)获取到与当前列类型一致的表单元素
+		            var name = template.attr("name");
+		            $(":input[name=" + name + "]").each(function (i, e) {	// 根据遍历该列所有元素
+		                if (i == 0) {
+		                    $(e).trigger("change"); // 页面初始化后进行合计计算(仅触发合计列第一个元素即可)
+		                }
+		            });
+		        }
+		    });
 		}
 
 		function bindStatistics() {

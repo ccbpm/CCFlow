@@ -196,10 +196,74 @@ namespace BP.En
 
         #region 方法
         /// <summary>
+        /// 设置默认值.
+        /// </summary>
+        public void ResetDefaultValRowValues()
+        {
+            if (this._enMap == null)
+                return;
+
+            foreach (Attr attr in this._enMap.Attrs)
+            {
+                string key=attr.Key;
+
+                string v = this.GetValStringByKey(key,null);  // this._row[key] as string;
+
+                if (v == null || v.IndexOf('@') == -1)
+                    continue;
+
+
+                // 设置默认值.
+                if (v.Equals("@WebUser.No"))
+                {
+
+                    this.SetValByKey(attr.Key, Web.WebUser.No);
+
+                    continue;
+                }
+                else if (v.Equals("@WebUser.Name"))
+                {
+                    this.SetValByKey(attr.Key, Web.WebUser.Name);
+                    continue;
+                }
+                else if (v.Equals("@WebUser.FK_Dept"))
+                {
+                    this.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                    continue;
+                }
+                else if (v.Equals("@WebUser.FK_DeptName"))
+                {
+                    this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                    continue;
+                }
+                else if (v.Equals("@WebUser.FK_DeptNameOfFull"))
+                {
+                    this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                    continue;
+                }
+                else if (v.Equals("@RDT"))
+                {
+                    if (attr.MyDataType == DataType.AppDate)
+                        this.SetValByKey(attr.Key, DataType.CurrentData);
+
+                    if (attr.MyDataType == DataType.AppDateTime)
+                        this.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                    continue;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+        /// <summary>
         /// 重新设置默信息.
         /// </summary>
         public void ResetDefaultVal()
         {
+           
+            ResetDefaultValRowValues();
+
             Attrs attrs = this.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {

@@ -2916,7 +2916,7 @@ namespace BP.WF.HttpHandler
             sln.MyPK = this.GetRequestVal("FromFrm") + "_" + this.FK_Node + "_" + this.FK_Flow;
             int result=sln.RetrieveFromDBSources();
 
-            if (result == 0 || sln.FrmSln == 1)
+            if (result == 0 || sln.FrmSln == 1 || sln.FrmSln == 0)
             {
                 /*没有查询到解决方案, 就是只读方案 */
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();

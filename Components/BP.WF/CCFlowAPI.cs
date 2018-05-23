@@ -58,6 +58,8 @@ namespace BP.WF
 
                 Work wk = nd.HisWork;
                 wk.OID = workID;
+                 
+               
                 wk.RetrieveFromDBSources();
                 wk.ResetDefaultVal();
 
@@ -512,6 +514,8 @@ namespace BP.WF
                 {
 
                     GERpt rpt =new GERpt("ND"+int.Parse(nd.FK_Flow)+"Rpt", workID); // nd.HisFlow.HisGERpt;
+                    rpt.ResetDefaultVal();
+
                     //rpt.Copy(wk); //加入后就出现了错误.
 
                     myds.Tables.Add(rpt.ToDataTableField("MainTable"));
@@ -526,7 +530,6 @@ namespace BP.WF
                 string sql = "";
                 DataTable dt = null;
                 #endregion
-
                 
 
                 #region 把外键表加入DataSet

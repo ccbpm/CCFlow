@@ -659,6 +659,7 @@ namespace BP.WF.Data
         }
         public GERpt()
         {
+
         }
         /// <summary>
         /// 报表

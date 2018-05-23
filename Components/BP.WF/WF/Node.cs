@@ -118,27 +118,27 @@ namespace BP.WF
         {
             get
             {
-                Work obj = null;
+                Work wk = null;
                 if (this.IsStartNode)
                 {
-                    obj = new BP.WF.GEStartWork(this.NodeID, this.NodeFrmID);
-                    obj.HisNode = this;
-                    obj.NodeID = this.NodeID;
-                    return obj;
+                    wk = new BP.WF.GEStartWork(this.NodeID, this.NodeFrmID);
+                    wk.HisNode = this;
+                    wk.NodeID = this.NodeID;
+                    return wk;
                 }
 
                 if (this.FormType != NodeFormType.FoolTruck || this.WorkID == 0 || this.IsStartNode == true)
                 {
-                    obj = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
-                    obj.HisNode = this;
-                    obj.NodeID = this.NodeID;
-                    return obj;
+                    wk = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
+                    wk.HisNode = this;
+                    wk.NodeID = this.NodeID;
+                    return wk;
                 }
 
                 //如果是累加表单.
-                obj = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
+                wk = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
 
-                Map ma = obj.EnMap;
+                Map ma = wk.EnMap;
 
                 /* 求出来走过的表单集合 */
                 string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track A, WF_Node B ";
@@ -171,7 +171,7 @@ namespace BP.WF
                     }
 
                     frmIDs = frmIDs.Substring(0, frmIDs.Length - 1);
-                    obj.HisPassedFrmIDs = frmIDs;  //求出所有的fromID.
+                    wk.HisPassedFrmIDs = frmIDs;  //求出所有的fromID.
 
                     MapAttrs attrs = new MapAttrs();
                     QueryObject qo = new QueryObject(attrs);
@@ -188,12 +188,15 @@ namespace BP.WF
                     }
 
                     //设置为空.
-                    obj.SQLCash = null;
+                    wk.SQLCash = null;
                 }
 
-                obj.HisNode = this;
-                obj.NodeID = this.NodeID;
-                return obj;
+                wk.HisNode = this;
+                wk.NodeID = this.NodeID;
+                wk.SQLCash = null;
+
+                BP.DA.Cash.SQL_Cash.Remove( "ND"+this.NodeID);
+                return wk;
                 //this.SetRefObject("HisWork", obj);
 
             }

@@ -168,6 +168,12 @@
 
 			    if (data.indexOf('url@') == 0) {
 			        data = data.replace('url@', '');
+
+			        if (data.indexOf('FromWorkOpt') == -1)
+			            data = data + "&FromWorkOpt=1";
+
+			        //alert(data);
+
 			        //window.location.href = data;
 			        window.open(data);
 			        return;

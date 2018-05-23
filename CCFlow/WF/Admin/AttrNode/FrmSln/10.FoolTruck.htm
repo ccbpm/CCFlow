@@ -39,10 +39,9 @@
 
             var html = "<ul>";
             var nodes = new Entities("BP.WF.Nodes");
-            nodes.Retrieve("FK_Flow", node.FK_Flow);
+            nodes.Retrieve("FK_Flow", node.FK_Flow, "NodeID");
 
             var frmID = "ND" + GetQueryString("FK_Node");
-           
 
             for (var i = 0; i < nodes.length; i++) {
 
@@ -64,7 +63,7 @@
                 }
 
                 if (sln.FrmSln == 1 || sln.FrmSln == 0) {
-                    html += "<li>[只读]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.Name + "</a></li>";
+                    html += "<li>[只读]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" +json.NodeID+" - " + json.Name + "</a></li>";
                     continue;
                 }
 
@@ -74,7 +73,7 @@
                 def += " - <a href=\"javascript:DefAth('" + json.NodeID + "')\" >附件权限</a>";
                 //def += " - <a href=\"javascript:DefDtl('')\" >从表权限</a>";
 
-                html += "<li>[" + sln.FrmSlnText + "]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.Name + "</a> " + def + "</li>";
+                html += "<li>[" + sln.FrmSlnText + "]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.NodeID + " - " + json.Name + "</a> " + def + "</li>";
             }
 
 
@@ -178,6 +177,7 @@
                 mapData.Update();
             }
             alert('设置成功.');
+            window.location.href = window.location.href;
 
         }
      

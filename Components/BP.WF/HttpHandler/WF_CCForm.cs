@@ -1371,7 +1371,7 @@ namespace BP.WF.HttpHandler
             GEDtl dtl = new GEDtl(this.FK_MapDtl);
             dtl.OID = this.RefOID;
             dtl.Delete();
-            return "删除成功";
+            return "{\"sucess\":\"删除成功\"}";
         }
         /// <summary>
         /// 重新获取单个ddl数据

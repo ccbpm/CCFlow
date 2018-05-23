@@ -113,6 +113,9 @@ function InitPage() {
                     tag = tag.replace("~", "'");
 
                 var msg = track.Msg;
+                if (msg == "0")
+                    msg = "";
+
                 if (msg != "") {
 
                     while (msg.indexOf('\t\n') >= 0) {

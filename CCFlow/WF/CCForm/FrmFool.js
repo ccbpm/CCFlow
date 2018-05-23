@@ -113,6 +113,11 @@ function GenerFoolFrm(mapData, frmData) {
     }
 
     $('#CCForm').html("").append(html);
+    Set_Frm_Enable(frmData);
+}
+
+
+function Set_Frm_Enable(frmData) {
     var mapAttrs = frmData.Sys_MapAttr;
     //解析设置表单字段联动显示与隐藏.
     for (var i = 0; i < mapAttrs.length; i++) {
@@ -123,10 +128,6 @@ function GenerFoolFrm(mapData, frmData) {
 
         if (mapAttr.LGType != 1)
             continue;
-
-        if (mapAttr.UIIsEnable == 0)
-            continue;
-
 
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
             if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
@@ -152,7 +153,6 @@ function GenerFoolFrm(mapData, frmData) {
 
     }
 }
-
 
 //审核组件
 function Ele_FrmCheck(wf_node) {
@@ -314,7 +314,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             var RBShowModel = 3;
             if (mapAttr.AtPara.indexOf("@RBShowModel=3") == -1)
                 RBShowModel = 0;
-            return InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr);
+            return InitRBShowContent(frmData, mapAttr, defValue, RBShowModel, enableAttr);
 
         }
     }
@@ -406,12 +406,30 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     //枚举类型.
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
+        //枚举类型.
         if (mapAttr.UIIsEnable == 1)
             enableAttr = "";
         else
             enableAttr = "disabled='disabled'";
 
+        if (mapAttr.UIContralType == 1)
+            return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        if (mapAttr.UIContralType == 3) {
+            //横向排列
+            var RBShowModel = 3;
+            if (mapAttr.AtPara.indexOf("@RBShowModel=3") == -1)
+                RBShowModel = 0;
+            return InitRBShowContent(frmData, mapAttr, defValue, RBShowModel, enableAttr);
+
+        }
+
+        /*if (mapAttr.UIIsEnable == 1)
+            enableAttr = "";
+        else
+            enableAttr = "disabled='disabled'";
+
         return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        */
     }
 
     // AppDouble  AppFloat
@@ -607,15 +625,16 @@ function SetCtrlHidden(key) {
 }
 //设置显示?
 function SetCtrlShow(key) {
-
     var ctrl = $("#Td_" + key);
     if (ctrl.length > 0) {
         ctrl.parent('tr').show();
     }
 
     ctrl = $("#Lab_" + key);
-    if (ctrl.length > 0)
+    if (ctrl.length > 0) {
         ctrl.parent('tr').show();
+    }
+   
 
 }
 

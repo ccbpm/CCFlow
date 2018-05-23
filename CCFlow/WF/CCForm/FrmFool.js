@@ -113,7 +113,11 @@ function GenerFoolFrm(mapData, frmData) {
     }
 
     $('#CCForm').html("").append(html);
+
+
+    //表单联动设置
     Set_Frm_Enable(frmData);
+
 }
 
 

@@ -267,6 +267,17 @@ function GenerFrm() {
 
             }
 
+            try {
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = "../../DataUser/JSLibData/" + enName + ".js";
+                var tmp = document.getElementsByTagName('script')[0];
+                tmp.parentNode.insertBefore(s, tmp);
+            }
+            catch (err) {
+
+            }
+
 
             if (isReadonly != "1") {
 

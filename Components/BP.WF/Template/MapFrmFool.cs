@@ -322,16 +322,6 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdate()
         {
-            //修改关联明细表
-            MapDtl dtl = new MapDtl();
-            dtl.No = this.No;
-            if (dtl.RetrieveFromDBSources() == 1)
-            {
-                dtl.Name = this.Name;
-                dtl.PTable = this.PTable;
-                dtl.Update();
-            }
-
             //注册事件表单实体.
             //BP.Sys.FormEventBase feb = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
             //if (feb == null)
@@ -342,7 +332,25 @@ namespace BP.WF.Template
 
             return base.beforeUpdate();
         }
+        protected override void afterUpdate()
+        {
+            //修改关联明细表
+            MapDtl dtl = new MapDtl();
+            dtl.No = this.No;
+            if (dtl.RetrieveFromDBSources() == 1)
+            {
+                dtl.Name = this.Name;
+                dtl.PTable = this.PTable;
+                dtl.DirectUpdate();
 
+                MapData map = new MapData(this.No);
+                //避免显示在表单库中
+                map.FK_FrmSort = "";
+                map.FK_FormTree = "";
+                map.DirectUpdate();
+            }
+            base.afterUpdate();
+        }
         #region 节点表单方法.
 
         /// <summary>

@@ -215,12 +215,16 @@ function PopBranches(mapExt) {
                 var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     var nodes = iframe.contentWindow.GetCheckNodes();
+                    var nodeText;
                     if ($.isArray(nodes)) {
                         $.each(nodes, function (i, node) {
                             SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
+                            nodeText = node.Name + ",";
                         });
                         //重新加载
                         Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
+                        if (nodeText != null)
+                            $("#TB_" + mapExt.AttrOfOper).val(nodeText.substring(0, nodeText.length - 1));
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
                             ValSetter(mapExt.Tag4, nodes[0].No);

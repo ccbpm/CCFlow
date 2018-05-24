@@ -1637,6 +1637,9 @@ namespace BP.Sys
             {
                 md.Name = this.Name;
                 md.PTable = this.PTable;
+                //避免在表单库中显示
+                md.FK_FormTree = "";
+                md.FK_FrmSort = "";
                 md.DirectUpdate();
             }
 

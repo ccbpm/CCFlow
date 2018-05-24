@@ -52,6 +52,20 @@ namespace BP.WF.Template
 
         #region 属性
         /// <summary>
+        /// 物理存储表
+        /// </summary>
+        public string PTable
+        {
+            get
+            {
+                return this.GetValStrByKey(MapDataAttr.PTable);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.PTable, value);
+            }
+        }
+        /// <summary>
         /// 表单事件实体
         /// </summary>
         public string FromEventEntity
@@ -403,6 +417,16 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdate()
         {
+            //修改关联明细表
+            MapDtl dtl = new MapDtl();
+            dtl.No = this.No;
+            if (dtl.RetrieveFromDBSources() == 1)
+            {
+                dtl.Name = this.Name;
+                dtl.PTable = this.PTable;
+                dtl.Update();
+            }
+
             //注册事件表单实体.
             BP.Sys.FormEventBase feb = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
             if (feb == null)

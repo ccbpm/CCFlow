@@ -35,6 +35,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 物理存储表
+        /// </summary>
+        public string PTable
+        {
+            get
+            {
+                return this.GetValStrByKey(MapDataAttr.PTable);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.PTable, value);
+            }
+        }
+        /// <summary>
         /// 节点ID.
         /// </summary>
         public int NodeID
@@ -305,6 +319,29 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        protected override bool beforeUpdate()
+        {
+            //修改关联明细表
+            MapDtl dtl = new MapDtl();
+            dtl.No = this.No;
+            if (dtl.RetrieveFromDBSources() == 1)
+            {
+                dtl.Name = this.Name;
+                dtl.PTable = this.PTable;
+                dtl.Update();
+            }
+
+            //注册事件表单实体.
+            //BP.Sys.FormEventBase feb = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
+            //if (feb == null)
+            //    this.FromEventEntity = "";
+            //else
+
+            //    this.FromEventEntity = feb.ToString();
+
+            return base.beforeUpdate();
+        }
 
         #region 节点表单方法.
 

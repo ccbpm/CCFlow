@@ -567,7 +567,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoExp()
 		{
-            return "../../Admin/FoolFormDesigner/Exp.htm?FK_MapData=" + this.No;
+            return "../../Admin/FoolFormDesigner/ImpExp/Exp.htm?FK_MapData=" + this.No;
 		}
 		#endregion 方法.
 	}

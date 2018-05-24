@@ -1630,7 +1630,12 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                return BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node, this.WorkID, this.GetMainTableHT(), null);
+                string str= BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node, this.WorkID, this.GetMainTableHT(), null);
+
+                if (this.PWorkID != 0)
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID,this.GetRequestVal("PFlow"), this.PWorkID, this.GetRequestValInt("PNodeID"), WebUser.No);
+
+                return str;
             }
             catch (Exception ex)
             {

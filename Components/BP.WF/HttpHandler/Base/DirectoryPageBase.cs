@@ -535,7 +535,6 @@ namespace BP.WF.HttpHandler
             get
             {
                 return this.GetRequestValInt("PWorkID");
- 
             }
         }
         private Int64 _workID = 0;

@@ -884,12 +884,7 @@ namespace BP.WF.Template
 
                 map.AddBoolean(BtnAttr.OfficeIsParent, true, "是否使用父流程的文档", true, true);
 
-                if (BP.WF.Glo.IsEnableZhiDu)
-                {
-                    map.AddTBString(BtnAttr.OfficeFengXianTemplate, "", "风险点模板", true, false, 0, 100, 10);
-                    map.AddTBString(BtnAttr.OfficeInsertFengXian, "插入风险点", "插入风险点标签", true, false, 0, 50, 10);
-                    map.AddBoolean(BtnAttr.OfficeInsertFengXianEnabel, false, "是否启用", true, true);
-                }
+             
 
                 map.AddBoolean(BtnAttr.OfficeIsTrueTH, false, "是否自动套红", true, true);
                 map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 50, 10);

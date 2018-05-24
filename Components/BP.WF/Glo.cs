@@ -3438,19 +3438,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 流程控制器按钮
-        /// </summary>
-        public static string FlowCtrlBtnPos
-        {
-            get
-            {
-                string s = BP.Sys.SystemConfig.AppSettings["FlowCtrlBtnPos"] as string;
-                if (s == null || s == "Top")
-                    return "Top";
-                return "Bottom";
-            }
-        }
-        /// <summary>
         /// 全局的安全验证码
         /// </summary>
         public static string GloSID
@@ -3718,26 +3705,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 是否是集团使用
-        /// </summary>
-        public static bool IsUnit
-        {
-            get
-            {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsUnit", false);
-            }
-        }
-        /// <summary>
-        /// 是否启用制度
-        /// </summary>
-        public static bool IsEnableZhiDu
-        {
-            get
-            {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableZhiDu", false);
-            }
-        }
-        /// <summary>
         /// 是否检查表单树字段填写是否为空
         /// </summary>
         public static bool IsEnableCheckFrmTreeIsNull
@@ -3745,26 +3712,6 @@ namespace BP.WF
             get
             {
                 return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableCheckFrmTreeIsNull", true);
-            }
-        }
-        /// <summary>
-        /// 是否启动工作时打开新窗口
-        /// </summary>
-        public static int IsWinOpenStartWork
-        {
-            get
-            {
-                return BP.Sys.SystemConfig.GetValByKeyInt("IsWinOpenStartWork", 1);
-            }
-        }
-        /// <summary>
-        /// 是否打开待办工作时打开窗口
-        /// </summary>
-        public static bool IsWinOpenEmpWorks
-        {
-            get
-            {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsWinOpenEmpWorks", true);
             }
         }
         /// <summary>

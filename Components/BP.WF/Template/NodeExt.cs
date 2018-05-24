@@ -746,13 +746,7 @@ namespace BP.WF.Template
                 //map.AddBoolean(BtnAttr.OfficeTHEnable, false, "是否自动套红", true, true);
                 //map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 200, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeTHTemplate, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-
-                //if (Glo.IsEnableZhiDu)
-                //{
-                //    map.AddTBString(BtnAttr.OfficeFengXianTemplate, "", "风险点模板", true, false, 0, 100, 10);
-                //    map.AddTBString(BtnAttr.OfficeInsertFengXian, "插入风险点", "插入风险点标签", true, false, 0, 50, 10);
-                //    map.AddBoolean(BtnAttr.OfficeInsertFengXianEnabel, false, "是否启用", true, true);
-                //}
+ 
 
                 //map.AddTBString(BtnAttr.OfficeDownLab, "下载", "下载按钮标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.OfficeIsDown, false, "是否启用", true, true);
@@ -840,28 +834,6 @@ namespace BP.WF.Template
                 //  rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-
-                if (BP.WF.Glo.IsEnableZhiDu)
-                {
-                    rm = new RefMethod();
-                    rm.Title = "对应制度章节"; // "个性化接受人窗口";
-                    rm.ClassMethodName = this.ToString() + ".DoZhiDu";
-                    rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                    map.AddRefMethod(rm);
-
-                    rm = new RefMethod();
-                    rm.Title = "风险点"; // "个性化接受人窗口";
-                    rm.ClassMethodName = this.ToString() + ".DoFengXianDian";
-                    rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                    map.AddRefMethod(rm);
-
-                    rm = new RefMethod();
-                    rm.Title = "岗位职责"; // "个性化接受人窗口";
-                    rm.ClassMethodName = this.ToString() + ".DoGangWeiZhiZe";
-                    rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                    map.AddRefMethod(rm);
-                }
                 #endregion 基础功能.
 
                 #region 字段相关功能（不显示在菜单里）

@@ -1588,31 +1588,6 @@ namespace BP.WF.Template
             //更新流程版本
             Flow.UpdateVer(this.No);
 
-            #region 校验 flowmark 是不是唯一.
-            if (this.FlowMark.Length > 0)
-            {
-                //如果是集团模式，则判断机构下的流程标记不可重复
-                if (Glo.IsUnit == true)
-                {
-                    FlowSort flSort = new FlowSort(this.FK_FlowSort);
-                    FlowSorts flowSorts = new FlowSorts();
-                    //同一机构下不允许标记重复
-                    flowSorts.RetrieveByAttr(FlowSortAttr.OrgNo, flSort.OrgNo);
-                    foreach (FlowSort flowSort in flowSorts)
-                    {
-                        /*校验该标记是否重复.*/
-                        Flows fls = new Flows();
-                        fls.Retrieve(FlowAttr.FK_FlowSort, flowSort.No, FlowAttr.FlowMark, this.FlowMark);
-                        foreach (Flow myfl in fls)
-                        {
-                            if (myfl.No != this.No)
-                                throw new Exception("@该流程标记{" + this.FlowMark + "}已经存在.");
-                        }
-                    }
-                }
-            }
-            #endregion 校验 flowmark 是不是唯一.
-
             #region 同步事件实体.
             try
             {

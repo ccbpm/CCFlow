@@ -82,10 +82,11 @@ function GenerFreeFrm(wn) {
 
 function figure_MapAttr_Template(mapAttr) {
 
+
     //根据不同的类型控件，生成html.
     var ele = figure_MapAttr_TemplateEle(mapAttr);
 
-    eleHtml += mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
+    ele += mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
 
     var eleHtml = $('<div>' + ele + '</div>');
 
@@ -307,16 +308,16 @@ function figure_Template_Btn(frmBtn) {
 
 //初始化单选按钮
 function figure_Template_RB(frmRb) {
-    var MyPK = frmRb.FK_MapData+"_"+frmRb.KeyOfEn;
+    var MyPK = frmRb.FK_MapData + "_" + frmRb.KeyOfEn;
     var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
 
     var eleHtml = '<div></div>';
     eleHtml = $(eleHtml);
     var childRbEle = $('<input id="RB_ChuLiFangShi2" type="radio" />');
     var childLabEle = $('<label class="labRb"></label>');
-    childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn +"_"+ frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
+    childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn + "_" + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
 
-    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn +"_"+ frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
+    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + "_" + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
     if (mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0)
         childRbEle.attr("onclick", "clickEnable( this ,\"" + frmRb.FK_MapData + "\",\"" + frmRb.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")");
 

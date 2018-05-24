@@ -5,7 +5,7 @@
 <script type="text/javascript" language="javascript" src="/DataUser/PrintTools/LodopFuncs.js"></script>
 <script type="text/javascript">
     $(function () {
-        var userStyle = "<%=BP.WF.Glo.GetUserStyle %>";
+        var userStyle = ""; // "<%=BP.WF.Glo.GetUserStyle %>";
         $('#myFlowcss').attr('href', '/DataUser/Style/MyFlow.css');
         var screenHeight = window.screen.height; //document.documentElement.clientHeight;
         var topBarHeight = 40;

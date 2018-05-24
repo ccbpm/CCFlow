@@ -1579,7 +1579,7 @@ var DBAccess = (function () {
                 return eval(funcName);
 
         } catch (e) {
-            if (e.Message.indexOf('not defined') != -1)
+            if (e.message)
                 alert("执行方法[" + funcName + "]错误:" + e.message);
         }
     };

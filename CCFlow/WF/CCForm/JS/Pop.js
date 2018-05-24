@@ -20,9 +20,11 @@ function SelfUrl_Done(mapExt) {
 
     //获得主键.
     var pkval = GetPKVal();
+    var webUser = new WebUser();
+
     var url = mapExt.Tag;
     if (url.indexOf('?') == -1)
-        url = url + "?PKVal=" + pkval;
+        url = url + "?PKVal=" + pkval + "&UserNo=" + webUser.No;
     var title = mapExt.GetPara("Title");
 
     if (window.parent && window.parent.OpenBootStrapModal) {
@@ -86,7 +88,7 @@ function PopBranchesAndLeaf(mapExt) {
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
-				var selectType = mapExt.GetPara("SelectType");
+                var selectType = mapExt.GetPara("SelectType");
                 //单选清空数据
                 if (selectType == "0") {
                     //清空数据
@@ -99,10 +101,10 @@ function PopBranchesAndLeaf(mapExt) {
                         var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
                         mtags.mtags("loadData", selectedRows);
                         $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
-						// 单选复制当前表单
-						if (selectType == "0" && selectedRows.length == 1) {
-							ValSetter(mapExt.Tag4, selectedRows[0].No);
-						}
+                        // 单选复制当前表单
+                        if (selectType == "0" && selectedRows.length == 1) {
+                            ValSetter(mapExt.Tag4, selectedRows[0].No);
+                        }
                     }
                 }
             }, null, function () {
@@ -158,12 +160,16 @@ function PopBranchesAndLeaf_Deal() {
 }
 
 function ValSetter(tag4, key) {
-	if (!tag4 || !key) {
-		return;
-	}
-	tag4 = tag4.replace(/@Key/g, key).replace(/~/g, "'");
-	var dt = DBAccess.RunSQLReturnTable(tag4);
-	GenerFullAllCtrlsVal(dt)
+    if (!tag4 || !key) {
+        return;
+    }
+    tag4 = tag4.replace(/@Key/g, key).replace(/~/g, "'");
+    var dt;
+    if (tag4.indexOf("/") == 0)
+        dt = DBAccess.RunDBSrc(tag4);
+    else
+        dt = DBAccess.RunSQLReturnTable(tag4);
+    GenerFullAllCtrlsVal(dt);
 }
 
 //树干模式.
@@ -215,10 +221,10 @@ function PopBranches(mapExt) {
                         });
                         //重新加载
                         Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
-						// 单选复制当前表单
-						if (selectType == "0" && nodes.length == 1) {
-							ValSetter(mapExt.Tag4, nodes[0].No);
-						}
+                        // 单选复制当前表单
+                        if (selectType == "0" && nodes.length == 1) {
+                            ValSetter(mapExt.Tag4, nodes[0].No);
+                        }
                     }
                 }
             }, null, function () {
@@ -336,10 +342,12 @@ function PopGroupList_Done(mapExt) {
     //获得主键.
     var pkval = GetPKVal();
 
+
+
     //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
     var local = window.location.href;
     var url = "";
-    if (local.indexOf('MyFlow')== -1 )
+    if (local.indexOf('MyFlow') == -1)
         url = 'Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
     else
         url = 'CCForm/Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
@@ -353,11 +361,11 @@ function PopGroupList_Done(mapExt) {
                     var selectVals = savefn();
                     $("#TB_" + mapExt.AttrOfOper).val(selectVals);
                 }
-				// 单选复制当前表单
-				var selectType = mapExt.GetPara("SelectType");
-				if (selectType == "0" && selectVals.length == 1) {
-					ValSetter(mapExt.Tag4, selectVals[0]);
-				}
+                // 单选复制当前表单
+                var selectType = mapExt.GetPara("SelectType");
+                if (selectType == "0" && selectVals.length == 1) {
+                    ValSetter(mapExt.Tag4, selectVals[0]);
+                }
             }
         }, null, function () {
 

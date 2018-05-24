@@ -31,15 +31,8 @@ namespace BP.WF
         /// <param name="fid">FID</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>返回dataset</returns>
-        public static DataSet GenerWorkNode(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo)
+        public static DataSet GenerWorkNode(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo, string fromWorkOpt="0")
         {
-            //让其登录. ??? 为什么需要登录？
-            if (WebUser.No != userNo)
-            {
-                Emp emp = new Emp(userNo);
-                BP.Web.WebUser.SignInOfGener(emp);
-            }
-
             //节点.
             if (fk_node == 0)
                 fk_node = int.Parse(fk_flow + "01");
@@ -234,8 +227,20 @@ namespace BP.WF
                 {
 
                     #region 处理字段分组排序.
-                    //查询所有的分组.
-                    string myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node+"'";
+                    //查询所有的分组, 如果是查看表单的方式，就不应该把当前的表单显示出来.
+                    string myFrmIDs = ""; 
+                    if (fromWorkOpt.Equals("1") == true)
+                    {
+                        if (gwf.WFState == WFState.Complete)
+                            myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                        else
+                            myFrmIDs = wk.HisPassedFrmIDs; //流程未完成并且是查看表单的情况.
+                    }
+                    else
+                    {
+                        myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    }
+
                     GroupFields gfs = new GroupFields();
                     gfs.RetrieveIn(GroupFieldAttr.FrmID, "(" + myFrmIDs + ")");
 
@@ -753,6 +758,7 @@ namespace BP.WF
                 throw new Exception(ex.Message);
             }
         }
+         
         /// <summary>
         /// 产生一个WorkNode
         /// </summary>

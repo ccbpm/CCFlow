@@ -443,10 +443,6 @@ namespace BP.Sys
             {
                 return (AthSaveWay)this.GetValIntByKey(FrmAttachmentAttr.AthSaveWay);
             }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.AthSaveWay, (int)value);
-            }
         }
         #endregion 参数属性.
 

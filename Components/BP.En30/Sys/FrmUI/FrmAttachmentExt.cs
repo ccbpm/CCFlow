@@ -951,10 +951,6 @@ namespace BP.Sys.FrmUI
                 gf.Update();
             }
 
-
-
-
-
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeInsert()

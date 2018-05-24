@@ -850,8 +850,9 @@ namespace BP.WF.HttpHandler
                     //如果是累加表单.
                     if (nd.HisFormType == NodeFormType.FoolTruck)
                     {
+
                         DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
-                  this.FID, BP.Web.WebUser.No);
+                  this.FID, BP.Web.WebUser.No, this.GetRequestVal("FromWorkOpt"));
 
                         return BP.Tools.Json.ToJson(myds);
                     }
@@ -1303,7 +1304,7 @@ namespace BP.WF.HttpHandler
 
             #region 从表保存前处理事件.
             //获得主表事件.
-            FrmEvents fes = new FrmEvents(this.FK_MapData); //获得事件.
+            FrmEvents fes = new FrmEvents(this.FK_MapDtl); //获得事件.
             GEEntity mainEn = null;
             if (fes.Count > 0)
             {

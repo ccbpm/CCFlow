@@ -44,12 +44,28 @@ function FlowRun() {
     //WinOpen(url);
     window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
 }
+//运行流程
+function FlowRunAdmin() {
+
+    //var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    var webUser = new WebUser();
+
+    var url = "../TestFlow.htm?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + webUser.No + "&FK_Flow=" + flowNo;
+    //  var url = "../../MyFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    WinOpen(url);
+    //window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
+}
+
+
+
 
 //旧版本.
 function OldVer() {
     var url = "Designer2016.htm?FK_Flow=" + flowNo + "&Lang=CH&&Flow_V=1";
     window.location.href = url;
 }
+
+
 
 function Help() {
 

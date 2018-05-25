@@ -1,0 +1,83 @@
+﻿<head>
+    <title>驰骋工作流</title>
+   <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+
+    <script type="text/javascript" language="javascript" >
+
+        var result = null;
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../Img/loading.gif />正在加载,请稍后......");
+           
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData();
+
+          //  var data = handler.DoMethodReturnString("DtlOpt_Init");
+           
+          //  if (data.indexOf('err@') == 0) {
+             //   alert(data); //如果是异常，就提提示.
+             //   return;
+           // }
+
+            $("#Msg").html("<a href='javascript:DownTemplate();'><img src='../Img/FileType/xls.gif' />下载导入模版...</a>");
+
+            return;
+        });
+
+
+        function Imp() {
+         
+        }
+
+        //下载指定格式的模版.
+        function DownTemplate() {
+
+            var url = "/DataUser/DtlTemplete/" + GetQueryString("FK_MapDtl") + ".xlsx";
+            WinOpen(url);
+
+            //                string file = this.Request.PhysicalApplicationPath + "DataUser\\DtlTemplete\\" + this.FK_MapDtl + ".xlsx";
+        }
+    </script>
+</head>
+<body>
+	<form id="cc" action="" >
+		 
+
+
+        <fieldset>
+
+        <legend> 导入导出 </legend>
+        <br />
+
+
+        点击本机文件：
+        <input type=file id="F1" name="F1" /> 
+
+        选择方式: <select id="DDL_ImpWay"  name="DDL_ImpWay">
+        <option value="0"> 清空方式</option>
+        <option value="1"> 追加方式</option>
+        </select>
+
+        <br />
+
+        <input type="button" onclick="Imp();" value="执行导入" />
+        <br />
+        <br />
+        <br />
+
+        <p>
+		<div id="Msg" ></div>
+        </p>
+
+        </fieldset>
+
+      
+	</form>
+</body>
+</html>

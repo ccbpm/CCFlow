@@ -15,33 +15,29 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />正在加载,请稍后......");
 
-            var href = window.location.href;
-            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
-            var url = Handler + "?DoType=DtlOpt_Init&" + urlParam + "&m=" + Math.random();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData();
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
+            var data = handler.DoMethodReturnString("DtlOpt_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data); //如果是异常，就提提示.
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data); //如果是异常，就提提示.
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        data = data.replace('url@', ''); //如果返回url，就直接转向.
-                        window.location.href = data;
-                        return;
-                    }
+         //   alert(handler.getParams());
 
-                    result = JSON.parse(data);
-                    BindTable();
-                    return;
-                }
-            });
+            if (data.indexOf('url@') == 0) {
+
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+
+                window.location.href = data + handler.getParams();
+                return;
+            }
+
+            result = JSON.parse(data);
+            BindTable();
+            return;
         });
 
         function BindTable() {

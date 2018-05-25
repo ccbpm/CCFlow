@@ -548,7 +548,6 @@ function GepParaByName(name, atPara) {
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(frmData, mapAttr, defVal) {
-
     var operations = '';
     //外键类型.
     if (mapAttr.LGType == 2) {
@@ -565,6 +564,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
         $.each(data, function (i, obj) {
             operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
         });
+        return operations;
     }
 
 
@@ -579,6 +579,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
         $.each(enums, function (i, obj) {
             operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
         });
+        return operations;
     }
 
     //外部数据源类型 FrmGener.js.InitDDLOperation

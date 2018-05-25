@@ -55,9 +55,11 @@
         var nodeID = GetQueryString("FK_Node");
         var btnFrmLib = null;
         var selFrmNode = null;
+        var Btn_Flows = null;
         $(function () {
             btnFrmLib = document.getElementById("btnFrmLib");
             selFrmNode = document.getElementById("selFrmNode");
+            Btn_Flows = document.getElementById("Btn_Flows");
             if (flowNo == null) {
                 //如果当前不是节点表单 就隐藏节点表单导入
                 // $('#divUlNodeFrmImp').hide();
@@ -196,11 +198,10 @@
                         data: [root],
                         onSelect: function (node) {
                             if (node.children == undefined) {
-                                Button1.disabled = "";
-                                // selFrmNode111.value = node.id;
-                                $("#Hidden1").val(node.id);
+                                Btn_Flows.disabled = "";
+                                $("#HD_FlowID").val(node.id);
                             } else {
-                                Button1.disabled = "disabled";
+                                Btn_Flows.disabled = "disabled";
                             }
 
 
@@ -335,11 +336,9 @@
 
         //从其他流程导入
         function SaveImpOtherFlow() {
-
-            //var flowNo = Hidden1.value;
-
-            var flowNo = $("#Hidden1").val();
+            var flowNo = $("#HD_FlowID").val();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_MapData", frmID);
             handler.AddPara("FK_Flow", flowNo);
             var data = handler.DoMethodReturnString("Imp_CopyFromFlow");
             if (data.indexOf('err@') == 0) {
@@ -679,8 +678,8 @@
         <div title="从其他流程导入" id="div1" style="padding: 15px; text-align: left">
             <ul id="ul1" style="height: auto;">
             </ul>
-            <input type="hidden" value="" id="Hidden1" name="selFrmNode111" />
-            <input type="button" value="从其他流程导入" id="Button1" onclick="SaveImpOtherFlow()" style="margin: 25px;"
+            <input type="hidden" value="" id="HD_FlowID" name="HD_FlowID" />
+            <input type="button" value="从其他流程导入" id="Btn_Flows" onclick="SaveImpOtherFlow()" style="margin: 25px;"
                 disabled="disabled" />
         </div>
 

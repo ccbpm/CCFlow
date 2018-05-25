@@ -53,9 +53,11 @@
         var frmID = GetQueryString("FK_MapData");
         var flowNo = GetQueryString("FK_Flow");
         var nodeID = GetQueryString("FK_Node");
-
+        var btnFrmLib = null;
+        var selFrmNode = null;
         $(function () {
-
+            btnFrmLib = document.getElementById("btnFrmLib");
+            selFrmNode = document.getElementById("selFrmNode");
             if (flowNo == null) {
                 //如果当前不是节点表单 就隐藏节点表单导入
                 // $('#divUlNodeFrmImp').hide();
@@ -311,34 +313,24 @@
 
         //从表单库导入
         function SaveImpFromLib() {
+            var nodeId = selFrmNode.value;
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Imp_FromsCopyFrm&FK_MapData=" + frmID + "&FromFrmID=" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
 
-           // var nodeId = selFrmNode.value;
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
 
-            //@袁丽娜.
-            alert('没有获取到选择的表单节点，导致无法导入');
-            return;
+                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.parent.location.href = window.parent.location.href;
 
-            var nodeIdSelected = $('#ulLib input:checked').data().nodeid;
-
-        
-           // var nodeIdSelected=window.prompt('请输入导入的表单ID',
-            //alert(nodeIdSelected);
-
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
-            handler.AddPara("FK_MapData", frmID);
-            handler.AddPara("FromFrmID", nodeId);
-
-            var data = handler.DoMethodReturnString("Imp_FromsCopyFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-            window.parent.location.href = window.parent.location.href;
-
+                }
+            });
         }
 
         //从其他流程导入
@@ -643,28 +635,6 @@
             });
         }
 
-
-        function ImpByID()
-        {
-
-         var myfrmID= window.prompt("请输入已经存在的表单ID：（比如:ND101, Frm_QingJia）");
-          if (myfrmID==null || myfrmID ==undefined)
-              return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
-            handler.AddPara("FK_MapData", frmID);
-            handler.AddPara("FromFrmID", myfrmID);
-
-            var data = handler.DoMethodReturnString("Imp_FromsCopyFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-            window.parent.location.href = window.parent.location.href;
-        }
         
     </script>
 </head>
@@ -686,13 +656,7 @@
                     <br />
                     <input type="file" id="localXmlFile" name="localXmlFile" />
                     <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
-
-                     <input type="button"  onclick="ImpByID()" value="输入FromID,快速导入." name="Btn_ImpByID" id="Btn_ImpByID" />
-
                 </fieldset>
-
-                <br />
-
             </div>
         </div>
         <div title="从节点表单导入" id="divUlNodeFrmImp" style="padding: 15px; text-align: left">
@@ -711,13 +675,11 @@
 
                 <input type="button" value="执行从节点表单导入" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
             </fieldset>
-
-
         </div>
         <div title="从其他流程导入" id="div1" style="padding: 15px; text-align: left">
             <ul id="ul1" style="height: auto;">
             </ul>
-            <input type="hidden" value="" id="Hidden1" name="selFrmNode" />
+            <input type="hidden" value="" id="Hidden1" name="selFrmNode111" />
             <input type="button" value="从其他流程导入" id="Button1" onclick="SaveImpOtherFlow()" style="margin: 25px;"
                 disabled="disabled" />
         </div>
@@ -728,8 +690,6 @@
             <input type="hidden" value="" id="selFrmNode" name="selFrmNode" />
             <input type="button" value="表单库导入" id="btnFrmLib" onclick="SaveImpFromLib()" style="margin: 25px;"
                 disabled="disabled" />
-
-                <input type="button"  onclick="ImpByID()" value="输入FromID,快速导入." name="Btn_ImpByID1" id="Button2" />
         </div>
         <div title="从外部数据源导入" style="padding: 15px; text-align: left">
             <div class="easyui-layout" style="height: 280px;">

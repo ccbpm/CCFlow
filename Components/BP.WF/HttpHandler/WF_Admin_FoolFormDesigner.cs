@@ -347,7 +347,8 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                en.Name = "我的从表" + en.No;
+                //en.Name = "从表" + en.No;
+                en.Name = "从表";
                 en.PTable = en.No;
                 en.Insert();
                 en.IntMapAttrs();

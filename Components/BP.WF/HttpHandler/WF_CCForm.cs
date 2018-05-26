@@ -191,7 +191,6 @@ namespace BP.WF.HttpHandler
             // key = "周";
             switch (me.ExtType)
             {
-
                 case BP.Sys.MapExtXmlList.ActiveDDL: // 动态填充ddl。
                     sql = this.DealSQL(me.DocOfSQLDeal, key);
                     if (sql.Contains("@") == true)
@@ -201,9 +200,7 @@ namespace BP.WF.HttpHandler
                             sql = sql.Replace("@" + strKey, context.Request[strKey]);
                         }
                     }
-
                     dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-
                     return JSONTODT(dt);
                 case BP.Sys.MapExtXmlList.AutoFullDLL://填充下拉框
                 case BP.Sys.MapExtXmlList.TBFullCtrl: // 自动完成。

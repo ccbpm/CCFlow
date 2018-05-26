@@ -530,13 +530,7 @@ namespace BP.WF.HttpHandler
                 return int.Parse(str);
             }
         }
-        public Int64 PWorkID
-        {
-            get
-            {
-                return this.GetRequestValInt("PWorkID");
-            }
-        }
+       
         private Int64 _workID = 0;
         public Int64 WorkID
         {
@@ -746,6 +740,38 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 属性.
+
+        #region 父子流程相关的属性.
+        public Int64 PWorkID
+        {
+            get
+            {
+                return this.GetRequestValInt64("PWorkID");
+            }
+        }
+        public Int64 PFID
+        {
+            get
+            {
+                return this.GetRequestValInt64("PFID");
+            }
+        }
+        public int PNodeID
+        {
+            get
+            {
+                return this.GetRequestValInt("PNodeID");
+            }
+        }
+        public string PFlowNo
+        {
+            get
+            {
+                return this.GetRequestVal("PFlowNo");
+            }
+        }
+        #endregion 父子流程相关的属性.
+
 
         protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title)
         {

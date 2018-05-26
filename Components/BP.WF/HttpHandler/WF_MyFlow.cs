@@ -295,6 +295,11 @@ namespace BP.WF.HttpHandler
             if (this.WorkID == 0 && this.currND.IsStartNode &&  this.GetRequestVal("IsCheckGuide") == null)
             {
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
+
+                if (this.PWorkID != 0)
+                  BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, workid, this.PFlowNo, this.PWorkID, this.PNodeID, WebUser.No);
+
+
                 switch (this.currFlow.StartGuideWay)
                 {
                     case StartGuideWay.None:
@@ -540,6 +545,9 @@ namespace BP.WF.HttpHandler
             myurl = this.MyFlow_Init_DealUrl(currND, currWK, myurl);
             myurl = myurl.Replace("DoType=MyFlow_Init&", "");
             myurl = myurl.Replace("&DoWhat=StartClassic", "");
+
+
+
             return "url@" + myurl;
         }
         private string MyFlow_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)

@@ -13,6 +13,7 @@
 
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
+        var mapExt;
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
@@ -34,7 +35,7 @@
 
                     json = JSON.parse(json);
 
-                    var mapExt = json['Sys_MapExt'];
+                    mapExt = json['Sys_MapExt'];
 
                     //绑定下拉框.
                     GenerBindDDL("DDL_AttrsOfActive", json['Sys_MapAttr'], "No", "Name", mapExt.AttrsOfActive);
@@ -50,6 +51,19 @@
 
             $("#Msg").html("");
         });
+
+        function changeDoc(obj) {
+            if (obj.value == 0)
+                $("#TR_SQL").show();
+            else
+                $("#TR_SQL").hide();
+
+            if (obj.value != mapExt.DBType)
+                $("#TB_Doc").val("");
+            else
+                $("#TB_Doc").val(mapExt.Doc);
+        }
+
         //装载模版.
         function LoadTemplate() {
 
@@ -73,17 +87,25 @@
 <td> <select name="DDL_AttrsOfActive" id="DDL_AttrsOfActive" > </select> </td>
 <td> 要实现联动的菜单 </td>
 </tr>
-
-<tr>
+<tr> 
+	<td>数据源类型 </td>
+	<td> 
+		<select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+		<option value="0">执行SQL</option>
+		<option value="1">执行url返回JSON</option>
+		<option value="2">执行SFTable.js返回JSON</option>
+		</select>  
+	</td>
+</tr>
+<tr id="TR_SQL">
 <td> 执行SQL的数据源 </td>
 <td> <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc" > </select> </td>
 <td> ccform允许从其他数据源中取数据,
-<!--<a href="/WF/Comm/Sys/SFDBSrcNewGuide.aspx" ><img alt='' src='/WF/Img/Setting.png' border=0 />设置/新建数据源</a>-->
 </td>
 </tr>
 
 <tr>
-<td colspan="3"> 执行的SQL </td>
+<td colspan="3"> 执行数据源 </td>
 </tr>
 
 <tr> 
@@ -96,7 +118,7 @@
 <input type="button" value="装载模版" onclick="LoadTemplate()" id="Button1" />
 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
 <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-<a href="javascript:ShowHidden('sqlexp')"  >自动级联SQL帮助: </a>
+<a href="javascript:ShowHidden('sqlexp')"  >自动级联帮助: </a>
  </td>
 </tr>
 
@@ -127,31 +149,26 @@
     function Save() {
 
         $("#Msg").html("正在保存,请稍后......");
+        //组织主键.
+        var mypk = "ActiveDDL_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+        var en = new Entity("BP.Sys.MapExt");
+        en.MyPK = mypk;
+        en.RetrieveFromDBSources();
 
-        var frmData = $("#cc").serialize();
+        en.CopyForm(); //复制表单数据.
 
-        var myurl = Handler + "?DoType=ActiveDDL_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: myurl,
-            dataType: 'html',
-            success: function (data) {
-                if (data.indexOf('err@') != -1) {
+        en.FK_MapData = GetQueryString("FK_MapData");
+        en.AttrOfOper = GetQueryString("KeyOfEn");
+        en.ExtType = "ActiveDDL";
+        en.MyPK = mypk;
 
-                    $("#Msg").html("<font color=red>" + data + "</font>");
-                    return;
-                }
+        if (en.Update() == 0)
+            en.Insert();
 
-                $("#Msg").html("<font color=green>" + data + "</font>");
-                return;
-            },
-            error: function (data) {
-                alert(data);
-                // console.info(data);
-            }
-        });
+        $("#Msg").html("<font color=green>保存成功</font>");
+        return;
+
+
     }
 
     function Delete() {

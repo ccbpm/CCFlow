@@ -75,7 +75,7 @@
         if (mapAttr.LGType != 1)
             continue;
 
-        if (mapAttr.UIIsEnable ==0)
+        if (mapAttr.UIIsEnable == 0)
             continue;
 
 
@@ -86,7 +86,7 @@
                     var ddl = $("#DDL_" + mapAttr.KeyOfEn);
                     //初始化页面的值
                     var nowKey = ddl.val();
-                                        
+
 
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
@@ -166,45 +166,45 @@ function AfterBindEn_DealMapExt(frmData) {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary>       
-                    /// 自定义URL       
-                    /// </summary>       
-                    //SelfUrl =1,       
+                    /// <summary>        
+                    /// 自定义URL        
+                    /// </summary>        
+                    //SelfUrl =1,        
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                    /// <summary>       
-                    /// 表格模式       
-                    /// </summary>       
-                    // TableOnly,       
+                    /// <summary>        
+                    /// 表格模式        
+                    /// </summary>        
+                    // TableOnly,        
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                    /// <summary>       
-                    /// 表格分页模式       
-                    /// </summary>       
-                    //TablePage,       
+                    /// <summary>        
+                    /// 表格分页模式        
+                    /// </summary>        
+                    //TablePage,        
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>       
-                    /// 分组模式       
-                    /// </summary>       
-                    // Group,       
+                    /// <summary>        
+                    /// 分组模式        
+                    /// </summary>        
+                    // Group,        
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>       
-                    /// 树展现模式       
-                    /// </summary>       
-                    // Tree,       
+                    /// <summary>        
+                    /// 树展现模式        
+                    /// </summary>        
+                    // Tree,        
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                    /// <summary>       
-                    /// 双实体树       
-                    /// </summary>       
-                    // TreeDouble       
+                    /// <summary>        
+                    /// 双实体树        
+                    /// </summary>        
+                    // TreeDouble        
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -277,9 +277,12 @@ function AfterBindEn_DealMapExt(frmData) {
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
                 if (tbAuto == null)
                     continue;
-
                 tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'TB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\');");
+                var dbsrc = mapExt.Doc;
+                if (mapExt.DBType == 0)
+                    dbSrc = "";
+
+                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'TB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\', \'" + mapExt.dbSrc + "\', \'" + mapExt.DBType + "\');");
                 tbAuto.attr("AUTOCOMPLETE", "OFF");
                 if (mapExt.Tag != "") {
                     /* 处理下拉框的选择范围的问题 */
@@ -347,10 +350,17 @@ function AfterBindEn_DealMapExt(frmData) {
                 var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
                 if (ddlPerant == null || ddlChild == null)
                     continue;
-                ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\')");
-                // 处理默认选择。
-                //string val = ddlPerant.SelectedItemStringVal;
+                var dbSrc = mapExt.Doc;
+                if (mapExt.DBType == 0)
+                    dbSrc = "";
+
+                ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\', \'" + dbSrc + "\', \'" + mapExt.DBType + "\',\'" + ddlPerant.val() + "\')");
+
                 var valClient = ConvertDefVal(frmData, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
+
+                //初始化页面时方法加载
+
+                DDLAnsc($("#DDL_" + mapExt.AttrOfOper).val(), "DDL_" + mapExt.AttrsOfActive, mapExt.MyPK, dbSrc, mapExt.DBType);
 
                 //ddlChild.select(valClient);  未写
                 break;
@@ -397,8 +407,13 @@ function AfterBindEn_DealMapExt(frmData) {
                     continue;
 
                 var enName = frmData.Sys_MapData[0].No;
+                var dbSrc = mapExt.Doc;
 
-                ddlOper.attr("onchange", "Change('" + enName + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
+                //SQL 数据源获取
+                if (mapExt.DBType == 0)
+                    dbSrc = "";
+
+                ddlOper.attr("onchange", "Change('" + enName + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\', \'" + dbSrc + "\', \'" + mapExt.DBType + "\')");
 
                 // alert(enName + " " + ddlOper.length + " " + mapExt.AttrOfOper + " " + document.getElementById("DDL_" + mapExt.AttrOfOper));
                 //ddlOper.bind("change", function () {

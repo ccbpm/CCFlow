@@ -557,6 +557,20 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             data = frmData[mapAttr.UIBindKey];
 
         if (data == undefined) {
+            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
+            if (sfTable != null && sfTable != "") {
+                var selectStatement = sfTable.SelectStatement;
+                var srcType = sfTable.SrcType;
+                //Handler 获取外部数据源
+                if (srcType == 5)
+                    data = DBAccess.RunDBSrc(selectStatement, 1);
+                //JavaScript获取外部数据源
+                if (srcType == 6)
+                    data = DBAccess.RunDBSrc(selectStatement, 2);
+            }
+        }
+
+        if (data == undefined) {
             alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
             return;
         }

@@ -742,7 +742,11 @@ namespace BP.Sys
             SFTable sf = new SFTable();
             sf.No = uiBindKey;
             if (sf.RetrieveFromDBSources() != 0)
+            {
+                if (sf.SrcType == SrcType.Handler || sf.SrcType == SrcType.JQuery)
+                    return null;
                 dt = sf.GenerHisDataTable;
+            }
 
             if (dt == null)
                 dt = new DataTable();

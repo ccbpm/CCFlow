@@ -164,11 +164,7 @@ function ValSetter(tag4, key) {
         return;
     }
     tag4 = tag4.replace(/@Key/g, key).replace(/~/g, "'");
-    var dt;
-    if (tag4.indexOf("/") == 0)
-        dt = DBAccess.RunDBSrc(tag4);
-    else
-        dt = DBAccess.RunSQLReturnTable(tag4);
+    var dt = DBAccess.RunDBSrc(tag4);
     GenerFullAllCtrlsVal(dt);
 }
 

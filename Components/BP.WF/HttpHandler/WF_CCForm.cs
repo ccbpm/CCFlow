@@ -1011,7 +1011,10 @@ namespace BP.WF.HttpHandler
                     if (ds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                    DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    if (dataTable != null)
+                        ds.Tables.Add(dataTable);
+                   
                 }
                 #endregion End把外键表加入DataSet
 

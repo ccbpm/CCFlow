@@ -454,20 +454,35 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
     //外键类型的.
     if (mapAttr.LGType == 2) {
 
-        if (flowData[mapAttr.KeyOfEn] != undefined) {
+        var data = flowData[mapAttr.KeyOfEn];
 
-            $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
+        if (data == undefined)
+            data = flowData[mapAttr.UIBindKey];
 
+        if (data == undefined) {
+            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
+            if (sfTable != null && sfTable != "") {
+                var selectStatement = sfTable.SelectStatement;
+                var srcType = sfTable.SrcType;
+                //Handler 获取外部数据源
+                if (srcType == 5)
+                    data = DBAccess.RunDBSrc(selectStatement, 1);
+                //JavaScript获取外部数据源
+                if (srcType == 6)
+                    data = DBAccess.RunDBSrc(selectStatement, 2);
+            }
         }
 
-        if (flowData[mapAttr.UIBindKey] != undefined) {
-
-            $.each(flowData[mapAttr.UIBindKey], function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
+        if (data == undefined) {
+            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+            return;
         }
+
+        $.each(data, function (i, obj) {
+            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+        });
+
+       
         return operations;
     }
 

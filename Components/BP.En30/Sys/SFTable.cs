@@ -314,8 +314,9 @@ namespace BP.Sys
                 }
                 #endregion
 
+                return null;
 
-                throw new Exception("@没有判断的数据类型." + this.SrcType + " - " + this.SrcTypeText);
+                //throw new Exception("@没有判断的数据类型." + this.SrcType + " - " + this.SrcTypeText);
             }
         }
         /// <summary>

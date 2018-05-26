@@ -31,8 +31,18 @@
         });
 
 
+        //执行导入.
         function Imp() {
-         
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData(); //增加参数属性.
+
+            //怎么增加文件？
+            var data = handler.DoMethodReturnString("DtlImpByExcel_Imp");
+
+            alert(data);
+
+            return;
         }
 
         //下载指定格式的模版.
@@ -48,35 +58,34 @@
 <body>
 	<form id="cc" action="" >
 		 
-
-
         <fieldset>
 
         <legend> 导入导出 </legend>
         <br />
 
 
-        点击本机文件：
-        <input type=file id="F1" name="F1" /> 
+        第1步:点击本机文件：
+        <input type=file id="F1" name="F1" />   
+        <br />
+        <br />
 
-        选择方式: <select id="DDL_ImpWay"  name="DDL_ImpWay">
+        第2步：选择方式: <select id="DDL_ImpWay"  name="DDL_ImpWay">
         <option value="0"> 清空方式</option>
         <option value="1"> 追加方式</option>
         </select>
-
+        <br />
         <br />
 
-        <input type="button" onclick="Imp();" value="执行导入" />
-        <br />
+        第3步:<input type="button" onclick="Imp();" value="执行导入" />
         <br />
         <br />
 
         <p>
-		<div id="Msg" ></div>
+		
         </p>
 
         </fieldset>
-
+         <div id="Msg" ></div>
       
 	</form>
 </body>

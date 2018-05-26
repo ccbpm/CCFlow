@@ -913,23 +913,39 @@
 
         //选项 导入导出功能.
 		function Option(impModel) {
+
+         
+         
 		    if (impModel == 0) {
 		        alert("请配置导入方式。");
 		    }
+
             //SQL\JSON导入方式
 		    if (impModel == 1) {
 		        var url = window.location.href;
 		        //url = url.replace('Dtl.htm', 'DtlOpt.htm');
 		        url = url.replace('Dtl.htm', 'DtlImp.htm');
 		    }
+
 		    //excel模式导入方式
 		    if (impModel == 2) {
 		        var url = window.location.href;
 		        url = url.replace('Dtl.htm', 'DtlOpt.htm');
 
 		    }
+
+		    //SQL\JSON导入方式
+		    if (impModel == 3) {
+		        var url = window.location.href;
+		        //url = url.replace('Dtl.htm', 'DtlOpt.htm');
+		        url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
+		    }
+
+
 		    if (window.parent && window.parent.OpenBootStrapModal) {
+
 		        var dtl_ImpMapExt = $.grep(mapExts, function (ext) { return ext.ExtType == "DtlImp" });
+
 		        var title = "导入数据";
 		        var digWidth = 900;
 		        var digHeight = 450;
@@ -949,6 +965,7 @@
 		        });
 		        return;
 		    }
+
 		    window.location.href = url;
 		}
 

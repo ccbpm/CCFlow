@@ -244,7 +244,7 @@
 				}
 
 		        //显示列的中文名称.
-		        if (typeof mapExt.Tag == "string") {
+		        if (typeof mapExt.Tag == "string" && mapExt.Tag!=null && mapExt.Tag!="") {
 
 		            $.each(mapExt.Tag.split(","), function (i, o) {
 		                var exp = o.split("=");

@@ -1065,7 +1065,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-
                 rm = new RefMethod();
                 rm.GroupName = "实验中的功能";
                 rm.Title = "事件"; // "设计表单";
@@ -1076,15 +1075,15 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.GroupName = "实验中的功能";
-                rm.Title = "高级设置";
-                rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
-                rm.Icon = "../Img/Setting.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "实验中的功能";
+                //rm.Title = "高级设置";
+                //rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
+                //rm.Icon = "../Img/Setting.png";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
+                //map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -1230,14 +1229,7 @@ namespace BP.WF.Template
             }
             return strs;
         }
-        /// <summary>
-        /// 高级设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoAdvSetting()
-        {
-            return "../../Admin/FoolFormDesigner/MapDtl.htm?DoType=Edit&FK_MapDtl=" + this.No + "&t=" + DataType.CurrentDataTime;
-        }
+        
         /// <summary>
         /// 高级设置
         /// </summary>

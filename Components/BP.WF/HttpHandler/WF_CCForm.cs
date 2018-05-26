@@ -186,6 +186,7 @@ namespace BP.WF.HttpHandler
             key = System.Web.HttpUtility.UrlDecode(key,
                 System.Text.Encoding.GetEncoding("GB2312"));
             key = key.Trim();
+            key = key.Replace("'", ""); //去掉单引号.
 
             // key = "周";
             switch (me.ExtType)
@@ -311,7 +312,10 @@ namespace BP.WF.HttpHandler
                             return JSONTODT(dt);
                             break;
                         default:
+                            key = key.Replace("'", "");
+
                             sql = this.DealSQL(me.DocOfSQLDeal, key);
+
                             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                             return JSONTODT(dt);
                             break;
@@ -2568,17 +2572,22 @@ namespace BP.WF.HttpHandler
         public string DtlOpt_Init()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
-            if (DataType.IsNullOrEmpty(dtl.ImpSQLInit))
-            {
-                return "err@从表加载语句为空，请设置从表加载的sql语句。";
-            }
-            else
-            {
-                DataSet ds = new DataSet();
-                DataTable dt = DBAccess.RunSQLReturnTable(dtl.ImpSQLInit);
 
-                return BP.Tools.Json.ToJson(dt);
-            }
+            if (dtl.ImpModel == 0)
+                return "err@该从表不允许导入.";
+
+            if (dtl.ImpModel == 2)
+                return "url@DtlImpByExcel.htm?FK_MapDtl="+this.FK_MapDtl;
+
+
+            if (DataType.IsNullOrEmpty(dtl.ImpSQLInit))
+                return "err@从表加载语句为空，请设置从表加载的sql语句。";
+
+            DataSet ds = new DataSet();
+            DataTable dt = DBAccess.RunSQLReturnTable(dtl.ImpSQLInit);
+
+            return BP.Tools.Json.ToJson(dt);
+
         }
         /// <summary>
         /// 增加

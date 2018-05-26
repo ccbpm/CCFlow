@@ -45,6 +45,9 @@
 
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(mapExt);
+                    if (mapExt.DBType != 0)
+                        $("#TR_SQL").hide();
+
                     return;
                 }
             });

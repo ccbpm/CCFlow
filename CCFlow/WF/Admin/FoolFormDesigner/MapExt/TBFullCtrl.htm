@@ -12,52 +12,177 @@
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
+        /*  $(function () {
+
+        $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+        $.ajax({
+        type: 'post',
+        async: true,
+        url: Handler + "?DoType=TBFullCtrl_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+        dataType: 'html',
+        success: function (data) {
+
+        if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+        }
+
+        data = JSON.parse(data);
+
+        var mapExt = data['Sys_MapExt'][0];
+
+        //绑定数据源.
+        GenerBindDDL("DDL_FK_DBSrc", data['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+
+        //  alert(mapExt.MyPK);
+
+        //调用公共类库的方法:执行批量主表赋值
+        GenerFullAllCtrlsVal(mapExt);
+
+        //特殊判断该字段的值，在后台返回的时候做了特殊处理如果。
+        if (mapExt.W == "0") {
+        document.getElementById("Btn_FullDtl").disabled = true;
+        document.getElementById("Btn_FullDDL").disabled = true;
+        document.getElementById("Btn_Delete").disabled = true;
+        }
+
+        return;
+        }
+        });
+
+        $("#Msg").html("");
+        });
+        function save(){
+
+        var frmData = $("#cc").serialize();
+
+        var fk_mapdata = GetQueryString("FK_MapData");
+        var myurl = Handler + "?DoType=TBFullCtrl_Save&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
+
+        $.ajax({
+        data: frmData,
+        type: 'post',
+        async: true,
+        url: myurl,
+        dataType: 'html',
+        success: function (data) {
+
+        if (data.indexOf('err@') != -1) {
+        $("#Msg").html("<font color=red>" + data + "</font>");
+        return;
+        }
+
+        alert(data);
+
+        var mypk = 'TBFullCtrl_' + GetQueryString('FK_MapData') + '_' + GetQueryString('KeyOfEn');
+        var url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
+        window.location.href = url; 
+        return;
+        },
+        error: function (data) {
+        alert(data);
+                   
+        }
+        });
+        }
+        */
+        var mapExt;
+        //页面启动函数.
         $(function () {
 
-            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            //组织主键.
+            var mypk = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=TBFullCtrl_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = mypk;
+            var i = mapExt.RetrieveFromDBSources();
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            GenerFullAllCtrlsVal(mapExt);
 
-                    data = JSON.parse(data);
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
 
-                    var mapExt = data['Sys_MapExt'][0];
+            //去掉 ' 号。
+            var tag = mapExt.Doc;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
 
-                    //绑定数据源.
-                    GenerBindDDL("DDL_FK_DBSrc", data['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+            //按照文本计算.
+            $("#TB_Doc").val(tag);
 
-                    //  alert(mapExt.MyPK);
-
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(mapExt);
-
-                    //特殊判断该字段的值，在后台返回的时候做了特殊处理如果。
-                    if (mapExt.W == "0") {
-                        document.getElementById("Btn_FullDtl").disabled = true;
-                        document.getElementById("Btn_FullDDL").disabled = true;
-                        document.getElementById("Btn_Delete").disabled = true;
-                    }
-
-                    return;
-                }
-            });
-
-            $("#Msg").html("");
         });
 
         //装载模版.
         function LoadTemplate() {
             var url = "../../SettingTemplate.htm?TemplateType=TBFullCtrl";
             WinOpen(url, 'ss');
+        }
+        function changeDoc(obj) {
+            if (obj.value != mapExt.DBType)
+                $("#TB_Doc").val("");
+            else
+                $("#TB_Doc").val(mapExt.Doc);
+        }
+        function FullDtl() {
+            var myPK = GetQueryString('MyPK');
+            var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK;
+            window.location.href = url;
+            return;
+        }
+
+        //填充ddl.
+        function FullDDL() {
+
+            var myPK = GetQueryString('MyPK');
+            var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK;
+            window.location.href = url;
+            return;
+        }
+
+        function Save() {
+
+            $("#Msg").html("正在保存,请稍后......");
+            //组织主键.
+            var mypk = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.CopyForm(); //复制表单数据.
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.ExtType = "TBFullCtrl";
+            en.MyPK = mypk;
+
+            if (en.Update() == 0)
+                en.Insert();
+
+            window.location.href = "TBFullCtrl.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            return;
+
+        }
+
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return false;
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=TBFullCtrl_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
         }
     </script>
 </head>
@@ -69,132 +194,65 @@
 
 
 <table id="table" style="width:100%;">
-<caption>为文本框填充其它控件</caption>
+	<caption>为文本框填充其它控件</caption>
+ 	<tr> 
+ 		<td>数据源类型 </td>
+ 		<td> 
+			<select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+			<option value="0">执行SQL</option>
+			<option value="1">执行url返回JSON</option>
+			<option value="2">执行CCFromRef.js返回JSON</option>
+			</select>  
+		</td>
+ 	</tr>
 
-<tr>
-<th>属性</th>
-<th>输入</th>
-<th>描述</th>
-</tr>
-<tr>
-<td> 执行SQL的数据源 </td>
-<td> <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc" > </select> </td>
-<td>
- <!--ccform允许从其他数据源中取数据,
- <a href="../../../Comm/Sys/SFDBSrcNewGuide.htm" ><img alt='' src='/WF/Img/Setting.png' border=0 />设置/新建数据源</a>
--->
- </td>
-</tr>
+	<tr>
+		<th colspan="2"> 数据源</th>
+	</tr>
+	<tr>
+		<td colspan="2"> 执行数据源
+			<a href="javascript:ShowHidden('sqlexp')"  >帮助: </a>
+			<div id='sqlexp'  style='color:Gray; display:none'>
+				<ul>
+				 <li>填充SQL帮助:</li>
+				 <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
+				 <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+				 <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+				 <li>4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM WF_Emp WHERE No LIKE '@Key%' </li>
+				 <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
+				 <li><img alt="" src="../Img/TBCtrlFull.png" /></li>
+				 </ul>
+				 <ul>
+					 <li>填充URL帮助:</li>
+					 <li>/DataUser/Handler.ashx?xxx=sss </li>
+					 <li>方法的格式为:</li>
+					 <li>MyFunName</li>
+				</ul>
+			</div>
+		 </td>
+	</tr>
+	<tr> 
+		<td colspan="2" style="width:100%;"> 
+			<textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:95%;" > </textarea> 
+		</td>
+	</tr>
 
-<tr>
-<td colspan="3"> 执行的SQL
-<a href="javascript:ShowHidden('sqlexp')"  >填充SQL帮助: </a>
-
-<div id='sqlexp'  style='color:Gray; display:none'>
-<ul>
- <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
- <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
- <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
- <li>4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM WF_Emp WHERE No LIKE '@Key%' </li>
- <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
- <li><img alt="" src="../Img/TBCtrlFull.png" /></li>
- </ul>
-</div>
-
- </td>
-</tr>
-
-<tr> 
-<td colspan="3" style="width:100%;"> <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:95%;" > </textarea> </td>
-</tr>
-
-<tr>
-<td colspan=3 >
-
-<input type="button" value="加载模版" onclick="LoadTemplate()" id="TBFullCtrl" />
-<input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-<input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-
-<input type="button" value="填充从表" onclick="FullDtl()" id="Btn_FullDtl" title = "当数据填充后，需要改变指定的从表数据。比如：主表选择人员，从表人员简历信息。"  />
-<input type="button" value="填充下拉框" onclick="FullDDL()" id="Btn_FullDDL"  title="当数据填充后，需要改变指定的下拉框内容。比如：选择人员后，有一个人员岗位的下拉框，该下拉框的内容仅仅需要显示人员岗位。" />
-
- </td>
-</tr>
+	<tr>
+		<td colspan=2 >
+		
+		<input type="button" value="加载模版" onclick="LoadTemplate()" id="TBFullCtrl" />
+		<input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+		<input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+		
+		<input type="button" value="填充从表" onclick="FullDtl()" id="Btn_FullDtl" title = "当数据填充后，需要改变指定的从表数据。比如：主表选择人员，从表人员简历信息。"  />
+		<input type="button" value="填充下拉框" onclick="FullDDL()" id="Btn_FullDDL"  title="当数据填充后，需要改变指定的下拉框内容。比如：选择人员后，有一个人员岗位的下拉框，该下拉框的内容仅仅需要显示人员岗位。" />
+		 </td>
+	</tr>
 
 </table>
 
 <script type="text/javascript">
-
-    function FullDtl() {
-        var myPK = GetQueryString('MyPK');
-        var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn='+GetQueryString('KeyOfEn')+'&MyPK=' + myPK;
-        window.location.href = url;
-        return;
-    }
-
-    //填充ddl.
-    function FullDDL() {
-
-        var myPK = GetQueryString('MyPK');
-        var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK;
-        window.location.href = url;
-        return;
-    }
-
-    function Save() {
-
-        $("#Msg").html("正在保存,请稍后......");
-
-        var frmData = $("#cc").serialize();
-
-        var fk_mapdata = GetQueryString("FK_MapData");
-        var myurl = Handler + "?DoType=TBFullCtrl_Save&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
-
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: myurl,
-            dataType: 'html',
-            success: function (data) {
-
-                if (data.indexOf('err@') != -1) {
-                    $("#Msg").html("<font color=red>" + data + "</font>");
-                    return;
-                }
-
-                alert(data);
-
-                var mypk = 'TBFullCtrl_' + GetQueryString('FK_MapData') + '_' + GetQueryString('KeyOfEn');
-                var url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
-                window.location.href = url; 
-                //$("#Msg").html("<font color=green>" + data + "</font>");
-                return;
-            },
-            error: function (data) {
-                alert(data);
-                // console.info(data);
-            }
-        });
-    }
-
-    function Delete() {
-
-        if (window.confirm('您确定要删除吗？') == false)
-            return false;
-
-        $.ajax({
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=TBFullCtrl_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-                alert(data);
-                window.location.href = window.location.href;
-                return;
-            }
-        });
-    }
+	
 </script>
 </form>
 </body>

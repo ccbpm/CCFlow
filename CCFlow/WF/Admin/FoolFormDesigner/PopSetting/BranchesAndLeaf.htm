@@ -52,7 +52,7 @@
                 return;
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData")+"_"+GetQueryString("KeyOfEn");
+            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
             window.location.href = window.location.href;
@@ -254,8 +254,10 @@
                     <ul>
                         <li>该数据源可以为空</li>
                         <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
-                        <li>数据源必须包含@Key变量，并且当前模式为单选。</li>
-                        <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, Tel AS DianHua, Email AS YouJian FROM port_emp WHERE No='@Key'</li>                      
+                        <li>当使用SQL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
+                        <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, Tel AS DianHua, Email AS YouJian FROM port_emp WHERE No='@Key'</li> 
+                        <li>当使用URL获取数据源必须包含@Key变量，并且当前模式为单选。</li>  
+                         <li>例如：/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key @Key是选择的主键</li>                   
                     </ul>
                 </div>
             </th>

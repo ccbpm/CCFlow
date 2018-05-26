@@ -48,6 +48,7 @@
 
         }
         $(function () {
+
             //当IsShowTitle 不为0时，不显示标题
             if (GetQueryString("IsShowTitle") != undefined && GetQueryString("IsShowTitle") == 0) {
                 $('#DelMsg table caption').hide();
@@ -56,24 +57,36 @@
             //查询出来所有子流程的数据.
             var sf = new Entity("BP.WF.Template.FrmSubFlow", GetQueryString("FK_Node"));
             var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
-            if (sf.SFDefInfo.trim().Length == 0) return;
+            if (sf.SFDefInfo.trim().Length == 0)
+                return;
+
             var html = "";
+
             html += "<table width='100%'>";
             html += "<tr>";
-            html += "<td class='TitleExt' nowrap=true >发起人</td>";
-            html += "<td class='TitleExt' nowrap=true >标题</td>";
-            html += "<td class='TitleExt' nowrap=true >停留节点</td>";
-            html += "<td class='TitleExt' nowrap=true >状态</td>";
-            html += "<td class='TitleExt' nowrap=true >处理人</td>";
-            html += "<td class='TitleExt' nowrap=true >处理时间</td>";
-            html += "<td class='TitleExt' nowrap=true >信息</td>";
+            html += "<th class='TitleExt'>发起人</th>";
+            html += "<th class='TitleExt'>标题</th>";
+            html += "<th class='TitleExt'>停留节点</th>";
+            html += "<th class='TitleExt'>状态</th>";
+            html += "<th class='TitleExt'>处理人</th>";
+            html += "<th class='TitleExt'>处理时间</th>";
+            html += "<th class='TitleExt'>信息</th>";
             html += "</tr>";
+
             var emps = null;
             var strs = sf.SFDefInfo.split(',');
             var str;
             var tdHtml = "";
             var webUser = new WebUser();
+
+            var workID = GetQueryString("WorkID");
+            var flowNo = GetQueryString("FK_Flow");
+            var nodeID = GetQueryString("FK_Node");
+
+
+            //遍历子流程.
             for (var i = 0; i < strs.length; i++) {
+
                 str = strs[i];
                 if (str == null || str == "")
                     continue;
@@ -84,10 +97,11 @@
                 var fl = new Entity("BP.WF.Flow", str);
 
                 if (sf.SFSta == FrmSubFlowSta.Enable && GetQueryString("DoType") != "View")
-                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + node.FK_Flow + "&PFID=" + this.FID + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + fl.No + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
 
                 if (sf.SFSta == FrmSubFlowSta.Readonly || GetQueryString("DoType") == "View")
                     tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";
+
 
                 html += "<tr>";
                 html += "<td class='TRSum' colspan=7 >" + tdHtml + "</td>";
@@ -102,6 +116,7 @@
 
 
                 for (var j = 0; j < gwfs.length; j++) {
+
                     var item = gwfs[j];
                     if (item.WFState == 0)
                         continue;
@@ -135,11 +150,14 @@
                     else
                         html += "<td nowrap>" + item.WFStateText + "</td>";
 
-                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                    handler.AddPara("TodoEmps", item.TodoEmps);
-                    emps = handler.DoMethodReturnString("DealUserInfoShowModel");
+
+
+                    //  var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+                    //   handler.AddPara("TodoEmps", item.TodoEmps);
+                    //  emps = handler.DoMethodReturnString("DealUserInfoShowModel");
+
                     //到达人员.
-                    htm += "<td title='" + emps + "'>" + emps + "</td>";
+                    html += "<td title='" + item.TodoEmps + "'>" + item.TodoEmps + "</td>";
 
                     //日期.
                     if (item.RDT == null || item.RDT == "")
@@ -148,16 +166,24 @@
                         html += "<td nowrap>" + item.RDT + "</td>";
 
                     //流程备注.
-                    htm += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
+                    if (item.FlowNote == null)
+                        html += "<td title='" + item.FlowNote + "'></td>";
+                    else
+                        html += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
+
 
                     html += "</tr>";
 
                     //加载他下面的子流程.
-                    html = InsertSubFlows(item.FK_Flow, item.FK_Node, item.WorkID, 1);
-
+                    //   html = InsertSubFlows(item.FK_Flow, item.FK_Node, item.WorkID, 1);
                 }
             }
+
+
             html += "</table>";
+
+            //   alert(html);
+
             $("#showMsg").html(html);
         })
 

@@ -734,10 +734,21 @@
                         var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
                         var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK;
 
-
-
                         var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                         return "<tr><td colspan=4 id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
+
+                        break;
+                    case "SubFlow":
+
+                        var flowNo = GetQueryString("FK_Flow");
+                        var nodeID = GetQueryString("FK_Node");
+
+                        var src = "../../WorkOpt/SubFlow.htm?WorkID=0@FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+
+                        var compent = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
+
+                        var frameDocs = "<iframe ID='F_SubFlow_" + nodeID + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + compent.SF_H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                        return "<tr><td colspan=4 id='SubFlow" + nodeID + "' style='width:300px;'>" + frameDocs + "</td></tr>";
 
                         break;
                     case "Frame":
@@ -880,6 +891,7 @@
 
 
         <script language="javascript" type="text/javascript">
+
             var pageParam = {};
             pageParam.fk_mapdata = GetQueryString("FK_MapData")
             //公共方法

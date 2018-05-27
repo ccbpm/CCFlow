@@ -5694,7 +5694,9 @@ namespace BP.WF
         /// <param name="jumpToEmp">要跳转到的人员,如果没有则为null.</param>
         /// <returns>为开始节点创建工作后产生的WorkID.</returns>
         public static Int64 Node_CreateBlankWork(string flowNo, Hashtable ht = null, DataSet workDtls = null,
-            string starter = null, string title = null, Int64 parentWorkID = 0, Int64 parentFID = 0, string parentFlowNo = null, int parentNodeID = 0, string parentEmp = null,
+            string starter = null, string title = null, Int64 parentWorkID = 0,
+            Int64 parentFID = 0, string parentFlowNo = null, 
+            int parentNodeID = 0, string parentEmp = null,
             int jumpToNode = 0, string jumpToEmp = null)
         {
             //把一些其他的参数也增加里面去,传递给ccflow.

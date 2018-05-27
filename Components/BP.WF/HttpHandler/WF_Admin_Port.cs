@@ -54,7 +54,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string OrderOfDept_Init()
         {
-            string sql = "SELECT No,Name, ParentNo, Idx FROM Port_Dept";
+            string sql = "SELECT No,Name,ParentNo,Idx FROM Port_Dept";
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             return "";
         }

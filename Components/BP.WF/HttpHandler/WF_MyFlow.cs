@@ -294,11 +294,15 @@ namespace BP.WF.HttpHandler
 
             if (this.WorkID == 0 && this.currND.IsStartNode &&  this.GetRequestVal("IsCheckGuide") == null)
             {
+                Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow,null,null,WebUser.No,null,this.PWorkID,this.PFID,this.PFlowNo,this.PNodeID,null,0,null);
+              
+                /*
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
-
                 if (this.PWorkID != 0)
-                  BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, workid, this.PFlowNo, this.PWorkID, this.PNodeID, WebUser.No);
-
+                {
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, workid, this.PFlowNo, this.PWorkID, this.PNodeID, WebUser.No);
+                }
+                */
 
                 switch (this.currFlow.StartGuideWay)
                 {

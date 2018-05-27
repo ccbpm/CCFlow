@@ -32,7 +32,7 @@ namespace BP.WF.HttpHandler
 
 
                 //查询出来数据实体.
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal,this.FK_FrmAttachment);
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment);
 
                 #region 如果图片显示.(先不考虑.)
                 if (athDesc.FileShowWay == FileShowWay.Pict)
@@ -153,7 +153,7 @@ namespace BP.WF.HttpHandler
 
                 //增加附件.
                 ds.Tables.Add(dbs.ToDataTableField("DBAths"));
-              
+
                 //返回.
                 return BP.Tools.Json.ToJson(ds);
             }
@@ -594,28 +594,28 @@ namespace BP.WF.HttpHandler
             string paras = this.RequestParas;
             paras = paras.Replace("&DoType=Frm_Init", "");
 
-          
-                if (md.HisFrmType == FrmType.FreeFrm)
-                {
-                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                        return "url@FrmGener.htm?1=2" + paras;
-                    else
-                        return "url@FrmGener.htm?1=2" + paras;
-                }
 
-                if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm )
-                {
-                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                        return "url@FrmVSTO.aspx?1=2" + paras;
-                    else
-                        return "url@FrmVSTO.aspx?1=2" + paras;
-                }
-
+            if (md.HisFrmType == FrmType.FreeFrm)
+            {
                 if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                     return "url@FrmGener.htm?1=2" + paras;
                 else
                     return "url@FrmGener.htm?1=2" + paras;
-            
+            }
+
+            if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
+            {
+                if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                    return "url@FrmVSTO.aspx?1=2" + paras;
+                else
+                    return "url@FrmVSTO.aspx?1=2" + paras;
+            }
+
+            if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                return "url@FrmGener.htm?1=2" + paras;
+            else
+                return "url@FrmGener.htm?1=2" + paras;
+
         }
 
         /// <summary>
@@ -735,9 +735,9 @@ namespace BP.WF.HttpHandler
             {
                 //剪切图
                 bool bSuc = Crop(strImgPath, savePath, w, h, x, y);
-               imgAthDB.FileFullName = webPath;
-               imgAthDB.Update();
-               return webPath;
+                imgAthDB.FileFullName = webPath;
+                imgAthDB.Update();
+                return webPath;
             }
             return imgAthDB.FileFullName;
         }
@@ -751,7 +751,7 @@ namespace BP.WF.HttpHandler
         /// <param name="X"></param>
         /// <param name="Y"></param>
         /// <returns></returns>
-        private bool Crop(string Img,string savePath, int Width, int Height, int X, int Y)
+        private bool Crop(string Img, string savePath, int Width, int Height, int X, int Y)
         {
             try
             {
@@ -971,7 +971,7 @@ namespace BP.WF.HttpHandler
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
-                    if (lgType.Equals("2")==false)
+                    if (lgType.Equals("2") == false)
                         continue;
 
                     string UIIsEnable = dr["UIVisible"].ToString();
@@ -1015,7 +1015,7 @@ namespace BP.WF.HttpHandler
                     DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
                     if (dataTable != null)
                         ds.Tables.Add(dataTable);
-                   
+
                 }
                 #endregion End把外键表加入DataSet
 
@@ -1024,7 +1024,7 @@ namespace BP.WF.HttpHandler
                 {
                     Node nd = new Node(this.FK_Node);
                     nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
- 
+
 
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
@@ -1230,13 +1230,13 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            if (this.GetRequestVal("IsReadonly") == "1" )
+            if (this.GetRequestVal("IsReadonly") == "1")
             {
                 mdtl.IsInsert = false;
                 mdtl.IsDelete = false;
                 mdtl.IsUpdate = false;
             }
-           
+
 
             string strs = this.RequestParas;
             strs = strs.Replace("?", "@");
@@ -1548,9 +1548,9 @@ namespace BP.WF.HttpHandler
         /// <param name="dt"></param>
         public void DoCheckTableColumnNameCase(DataTable dt)
         {
-            foreach(DataColumn col in dt.Columns)
+            foreach (DataColumn col in dt.Columns)
             {
-                switch(col.ColumnName.ToLower())
+                switch (col.ColumnName.ToLower())
                 {
                     case "no":
                         col.ColumnName = "No";
@@ -2322,12 +2322,13 @@ namespace BP.WF.HttpHandler
                     {
                         if (paras != null && paras.Length > 0)
                         {
-                            foreach(string para in paras.Split('@')){
-                                 dbUpload.SetPara(para.Split('=')[0],para.Split('=')[1]);
+                            foreach (string para in paras.Split('@'))
+                            {
+                                dbUpload.SetPara(para.Split('=')[0], para.Split('=')[1]);
                             }
                         }
                     }
-                       
+
 
                     #region 处理文件路径，如果是保存到数据库，就存储pk.
                     if (athDesc.AthSaveWay == AthSaveWay.IISServer)
@@ -2390,7 +2391,7 @@ namespace BP.WF.HttpHandler
                         file.SaveAs(temp);
                     }
 
-                  //  fu.SaveAs(temp);
+                    //  fu.SaveAs(temp);
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
@@ -2407,7 +2408,7 @@ namespace BP.WF.HttpHandler
                         }
 
                         throw new Exception("err@上传附件错误：" + msg);
-                     }
+                    }
 
                     FileInfo info = new FileInfo(temp);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
@@ -2432,7 +2433,7 @@ namespace BP.WF.HttpHandler
 
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
-                   // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
+                    // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
                     //dbUpload.FileExts = info.Extension;
                     // dbUpload.FileFullName = saveTo;
                     dbUpload.FileName = file.FileName;
@@ -2491,7 +2492,7 @@ namespace BP.WF.HttpHandler
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
-                    if (DataType.IsNullOrEmpty(msg)==false)
+                    if (DataType.IsNullOrEmpty(msg) == false)
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
 
                 }
@@ -2545,7 +2546,7 @@ namespace BP.WF.HttpHandler
 
             en.OID = oid;
 
-            if(en.RetrieveFromDBSources() == 0)
+            if (en.RetrieveFromDBSources() == 0)
             {
                 ht.Add("IsExist", 0);
             }
@@ -2574,7 +2575,7 @@ namespace BP.WF.HttpHandler
                 return "err@该从表不允许导入.";
 
             if (dtl.ImpModel == 2)
-                return "url@DtlImpByExcel.htm?FK_MapDtl="+this.FK_MapDtl;
+                return "url@DtlImpByExcel.htm?FK_MapDtl=" + this.FK_MapDtl;
 
 
             if (DataType.IsNullOrEmpty(dtl.ImpSQLInit))
@@ -2617,7 +2618,7 @@ namespace BP.WF.HttpHandler
                 i++;
             }
 
-            return "成功的导入了["+i+"]行数据...";
+            return "成功的导入了[" + i + "]行数据...";
         }
         /// <summary>
         /// 执行查询.
@@ -2626,10 +2627,10 @@ namespace BP.WF.HttpHandler
         public string DtlOpt_Search()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
-            
+
             string sql = dtl.ImpSQLSearch;
             sql = sql.Replace("@Key", this.GetRequestVal("Key"));
-            sql = sql.Replace("@WebUser.No",WebUser.No);
+            sql = sql.Replace("@WebUser.No", WebUser.No);
             sql = sql.Replace("@WebUser.Name", WebUser.Name);
             sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
 
@@ -2648,11 +2649,15 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string fileName = "";
                 string tempPath = BP.Sys.SystemConfig.PathOfTemp;
 
                 MapDtl dtl = new MapDtl(this.FK_MapDtl);
+
+                HttpFileCollection files = context.Request.Files;
+                if (files.Count == 0)
+                    return "err@请选择要上传的从表模版。";
                 //求出扩展名.
+                string fileName = files[0].FileName;
                 if (fileName.Contains(".xls") == false)
                 {
                     return "err@上传的文件必须是excel文件.";
@@ -2663,8 +2668,13 @@ namespace BP.WF.HttpHandler
                     ext = ".xlsx";
 
                 //保存临时文件.
-                string file = tempPath + WebUser.No + ext;
+                string file = tempPath + "\\" + WebUser.No + ext;
+
+                if (System.IO.Directory.Exists(tempPath) == false)
+                    System.IO.Directory.CreateDirectory(tempPath);
+
                 //执行保存附件. @袁丽娜.
+                files[0].SaveAs(file);
 
                 GEDtls dtls = new GEDtls(this.FK_MapDtl);
                 System.Data.DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(file);
@@ -2869,7 +2879,7 @@ namespace BP.WF.HttpHandler
                 System.IO.Directory.CreateDirectory(toPath);
 
             // string billFile = toPath + "\\" + tempName + "." + this.FID + ".doc";
-            string billFile = toPath + "\\" +  tempNameChinese + "." + this.WorkID + ".doc";
+            string billFile = toPath + "\\" + tempNameChinese + "." + this.WorkID + ".doc";
 
             BP.Pub.RTFEngine engine = new BP.Pub.RTFEngine();
             if (tempName.ToLower() == "all")
@@ -2913,7 +2923,7 @@ namespace BP.WF.HttpHandler
                     engine.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
                 }
                 // engine.MakeDoc(file, toPath, tempName + "." + this.WorkID + ".doc", null, false);
-                engine.MakeDoc(file, toPath,  tempNameChinese + "." + this.WorkID + ".doc", null, false);
+                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", null, false);
             }
             else
             {
@@ -2938,7 +2948,7 @@ namespace BP.WF.HttpHandler
                 ps.Add(TrackAttr.WorkID, this.WorkID);
                 engine.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
-                engine.MakeDoc(file, toPath,  tempNameChinese + "." + this.WorkID + ".doc", null, false);
+                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", null, false);
             }
 
             #region 保存单据，以方便查询.
@@ -3013,7 +3023,7 @@ namespace BP.WF.HttpHandler
         }
         public string AttachmentUpload_DownByStream()
         {
-           // return AttachmentUpload_Down(true);
+            // return AttachmentUpload_Down(true);
             return AttachmentUpload_Down();
         }
         /// <summary>
@@ -3033,7 +3043,7 @@ namespace BP.WF.HttpHandler
             if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
             {
                 //PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
-                return "url@" + DataType.PraseStringToUrlFileName( downDB.FileFullName);
+                return "url@" + DataType.PraseStringToUrlFileName(downDB.FileFullName);
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
@@ -3088,7 +3098,7 @@ namespace BP.WF.HttpHandler
             FoolTruckNodeFrm sln = new FoolTruckNodeFrm();
             sln.FrmSln = -1;
             sln.MyPK = this.GetRequestVal("FromFrm") + "_" + this.FK_Node + "_" + this.FK_Flow;
-            int result=sln.RetrieveFromDBSources();
+            int result = sln.RetrieveFromDBSources();
 
             if (result == 0 || sln.FrmSln == 1 || sln.FrmSln == 0)
             {
@@ -3108,7 +3118,7 @@ namespace BP.WF.HttpHandler
             {
                 /*没有查询到解决方案, 就是只读方案 */
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
-                athDesc.MyPK = this.FK_Node+"_Ath1";
+                athDesc.MyPK = this.FK_Node + "_Ath1";
                 if (athDesc.RetrieveFromDBSources() == 0)
                 {
                     athDesc.IsUpload = false;
@@ -3119,7 +3129,7 @@ namespace BP.WF.HttpHandler
                 }
                 return athDesc;
             }
-           
+
             return null;
         }
         /// <summary>
@@ -3258,7 +3268,7 @@ namespace BP.WF.HttpHandler
 
             string basePath = SystemConfig.PathOfDataUser + "Temp";
             string tempUserPath = basePath + "\\" + WebUser.No;
-            string tempFilePath = basePath + "\\" + WebUser.No+"\\"+this.OID;
+            string tempFilePath = basePath + "\\" + WebUser.No + "\\" + this.OID;
             string zipPath = basePath + "\\" + WebUser.No;
             string zipFile = zipPath + "\\" + zipName + ".zip";
 
@@ -3272,7 +3282,7 @@ namespace BP.WF.HttpHandler
 
                 //如果有这个临时的目录就把他删除掉.
                 if (System.IO.Directory.Exists(tempFilePath) == true)
-                    System.IO.Directory.Delete(tempFilePath,true);
+                    System.IO.Directory.Delete(tempFilePath, true);
 
                 System.IO.Directory.CreateDirectory(tempFilePath);
             }
@@ -3337,26 +3347,26 @@ namespace BP.WF.HttpHandler
         }
         public string DearFileName(string fileName)
         {
-            fileName= DearFileNameExt(fileName,"+","%2B");
-            fileName= DearFileNameExt(fileName," ","%20");
-            fileName= DearFileNameExt(fileName,"/","%2F");
-            fileName= DearFileNameExt(fileName,"?","%3F");
-            fileName= DearFileNameExt(fileName,"%","%25");
-            fileName= DearFileNameExt(fileName,"#","%23");
-            fileName= DearFileNameExt(fileName,"&","%26");
-            fileName= DearFileNameExt(fileName,"=","%3D");
+            fileName = DearFileNameExt(fileName, "+", "%2B");
+            fileName = DearFileNameExt(fileName, " ", "%20");
+            fileName = DearFileNameExt(fileName, "/", "%2F");
+            fileName = DearFileNameExt(fileName, "?", "%3F");
+            fileName = DearFileNameExt(fileName, "%", "%25");
+            fileName = DearFileNameExt(fileName, "#", "%23");
+            fileName = DearFileNameExt(fileName, "&", "%26");
+            fileName = DearFileNameExt(fileName, "=", "%3D");
             return fileName;
         }
         public string DearFileNameExt(string fileName, string val, string replVal)
         {
-            fileName=fileName.Replace(val,replVal);
-            fileName=fileName.Replace(val,replVal);
-            fileName=fileName.Replace(val,replVal);
-            fileName=fileName.Replace(val,replVal);
-            fileName=fileName.Replace(val,replVal);
-            fileName=fileName.Replace(val,replVal);
-            fileName=fileName.Replace(val,replVal);
-            fileName=fileName.Replace(val,replVal);
+            fileName = fileName.Replace(val, replVal);
+            fileName = fileName.Replace(val, replVal);
+            fileName = fileName.Replace(val, replVal);
+            fileName = fileName.Replace(val, replVal);
+            fileName = fileName.Replace(val, replVal);
+            fileName = fileName.Replace(val, replVal);
+            fileName = fileName.Replace(val, replVal);
+            fileName = fileName.Replace(val, replVal);
             return fileName;
         }
         #endregion 附件组件
@@ -3466,7 +3476,7 @@ namespace BP.WF.HttpHandler
             return "url@" + url;
         }
         #endregion
-     
+
 
 
 

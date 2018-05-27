@@ -5751,7 +5751,6 @@
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\StopFlow.aspx" />
-    <Content Include="WF\WorkOpt\SubFlow.aspx" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
@@ -7646,13 +7645,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\StopFlow.aspx.designer.cs">
       <DependentUpon>StopFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SubFlow.aspx.cs">
-      <DependentUpon>SubFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SubFlow.aspx.designer.cs">
-      <DependentUpon>SubFlow.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\ThreadDtl.aspx.cs">
       <DependentUpon>ThreadDtl.aspx</DependentUpon>

@@ -1,5 +1,5 @@
-
-/* cc ×Ô¶¨ÒåµÄ±êÇ©. */
+ï»¿
+/* cc ï¿½Ô¶ï¿½ï¿½ï¿½Ä±ï¿½Ç©. */
 
 .icon-little
 {
@@ -332,7 +332,7 @@
     filter: Alpha(Opacity=50);
 }
 
-/*BPMNÐÂ°æÁ÷³ÌÉè¼ÆÆ÷Ïà¹ØÍ¼±êÑùÊ½¶¨Òå ¿ªÊ¼£¬added by liuxc£¬2015-10-8*/
+/*BPMNï¿½Â°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ê¼ï¿½ï¿½added by liuxcï¿½ï¿½2015-10-8*/
 .icon-flowtree
 {
     background: url('../../../Admin/CCBPMDesigner/Img/FlowTree.png') center 0 no-repeat;
@@ -474,7 +474,7 @@
     -o-background-size: cover;
     background-size: cover;
 }
-/*BPMNÐÂ°æÁ÷³ÌÉè¼ÆÆ÷Ïà¹ØÍ¼±êÑùÊ½¶¨Òå ½áÊø*/
+/*BPMNï¿½Â°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½*/
 .icon-property
 {
     background: url('icons/property.png') no-repeat;
@@ -503,22 +503,22 @@
 {
     background: url('icons/copy.png') no-repeat;
 }
-/*Éµ¹Ï±íµ¥°´Å¥ÑùÊ½*/
+/*Éµï¿½Ï±ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ê½*/
 .icon-expimp
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/ExpImp.png') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/ExpImp.png') no-repeat;
 }
 .icon-hidden
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/HiddenField.png') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/HiddenField.png') no-repeat;
 }
 .icon-groupbar
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/GroupBar.png') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/GroupBar.png') no-repeat;
 }
 .icon-dtl
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/Dtl.png') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/Dtl.png') no-repeat;
 }
 .icon-closecol
 {
@@ -526,22 +526,22 @@
 }
 .icon-attachment
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/Attachment.png') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/Attachment.png') no-repeat;
 }
 .icon-frame
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/Frame.gif') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/Frame.gif') no-repeat;
 }
 .icon-event
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/event.png') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/event.png') no-repeat;
 }
 .icon-dts
 {
-    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/DTS.gif') no-repeat;
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/DTS.gif') no-repeat;
 }
 
 .icon-Components
 {
-    background: url('/WF/Img/Components.png') no-repeat;
+    background: url('../../../Img/Components.png') no-repeat;
 }

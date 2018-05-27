@@ -1,7 +1,8 @@
 ﻿<head>
     <title>驰骋工作流</title>
    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
@@ -34,15 +35,47 @@
         //执行导入.
         function Imp() {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-            handler.AddUrlData(); //增加参数属性.
+            //获取URL参数
+            var queryString = document.location.search.substr(1);
+            var URL = Handler + "?DoType=DtlImpByExcel_Imp";
+            if (queryString.length > 0)
+                URL = URL + "&" + queryString;
+            var fileValue = $("#File_Upload").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("提示", "没有选择从表模板。");
+                return;
+            }
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".xls") {
+                $.messager.alert("提示", "上传的文件必须是excel文件。");
+                return;
+            }
+
+            //提交数据
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: URL,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                },
+                success: function (data) {
+                        alert(data);
+                        return;
+                   
+                }
+            });
+
 
             //怎么增加文件？
-            var data = handler.DoMethodReturnString("DtlImpByExcel_Imp");
+            //var data = handler.DoMethodReturnString("DtlImpByExcel_Imp");
 
-            alert(data);
+           // alert(data);
 
-            return;
+            //return;
         }
 
         //下载指定格式的模版.
@@ -56,7 +89,7 @@
     </script>
 </head>
 <body>
-	<form id="cc" action="" >
+	<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post" >
 		 
         <fieldset>
 
@@ -65,7 +98,7 @@
 
 
         第1步:点击本机文件：
-        <input type=file id="F1" name="F1" />   
+        <input type=file id="File_Upload" name="File_Upload" />   
         <br />
         <br />
 

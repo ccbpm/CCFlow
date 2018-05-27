@@ -2,139 +2,143 @@
 <NewDataSet>
   <WF_Flow>
     <No>074</No>
-    <FK_FlowSort>07</FK_FlowSort>
     <Name>测试表单字段类型流程</Name>
-    <IsOK>1</IsOK>
+    <FK_FlowSort>07</FK_FlowSort>
+    <FK_FlowSortText>单元测试-用例流程</FK_FlowSortText>
+    <SysType />
     <FlowRunWay>0</FlowRunWay>
     <RunObj />
-    <IsCanStart>1</IsCanStart>
-    <IsMD5>0</IsMD5>
     <Note />
-    <TitleRole />
+    <RunSQL />
+    <NumOfBill>0</NumOfBill>
+    <NumOfDtl>0</NumOfDtl>
     <FlowAppType>0</FlowAppType>
+    <ChartType>1</ChartType>
+    <IsCanStart>1</IsCanStart>
+    <IsStartInMobile>1</IsStartInMobile>
+    <AvgDay>0</AvgDay>
+    <IsFullSA>0</IsFullSA>
+    <IsMD5>0</IsMD5>
+    <Idx>0</Idx>
     <TimelineRole>0</TimelineRole>
-    <DataStoreModel>1</DataStoreModel>
+    <Paras>@StartNodeX=139@StartNodeY=59@EndNodeX=274@EndNodeY=355</Paras>
     <PTable />
+    <Draft>0</Draft>
+    <DataStoreModel>1</DataStoreModel>
+    <TitleRole />
     <FlowMark />
+    <FlowEventEntity />
     <HistoryFields />
     <IsGuestFlow>0</IsGuestFlow>
     <BillNoFormat />
     <FlowNoteExp />
+    <DRCtrlType>0</DRCtrlType>
+    <StartLimitRole>0</StartLimitRole>
+    <StartLimitPara />
+    <StartLimitAlert />
+    <StartLimitWhen>0</StartLimitWhen>
+    <StartGuideWay>0</StartGuideWay>
+    <StartGuideLink />
+    <StartGuideLab />
+    <StartGuidePara1 />
+    <StartGuidePara2 />
+    <StartGuidePara3 />
+    <IsResetData>0</IsResetData>
+    <IsLoadPriData>0</IsLoadPriData>
+    <IsDBTemplate>0</IsDBTemplate>
     <IsBatchStart>0</IsBatchStart>
     <BatchStartFields />
-    <StartGuideWay>0</StartGuideWay>
-    <StartGuidePara />
-    <CFlowWay>0</CFlowWay>
-    <CFlowPara />
-    <RunSQL />
-    <NumOfBill>0</NumOfBill>
-    <NumOfDtl>0</NumOfDtl>
-    <AvgDay>0</AvgDay>
-    <Idx>0</Idx>
-    <Paras>@StartNodeX=139@StartNodeY=59@EndNodeX=274@EndNodeY=355</Paras>
-    <DRCtrlType>0</DRCtrlType>
+    <IsAutoSendSubFlowOver>0</IsAutoSendSubFlowOver>
+    <Ver />
+    <DType>0</DType>
+    <FlowDeleteRole>0</FlowDeleteRole>
+    <AtPara />
+    <DTSWay>0</DTSWay>
+    <DTSDBSrc />
+    <DTSBTable />
+    <DTSBTablePK />
+    <DTSTime>0</DTSTime>
+    <DTSSpecNodes />
+    <DTSField>0</DTSField>
+    <DTSFields />
   </WF_Flow>
   <WF_Node>
     <NodeID>7401</NodeID>
-    <SendLab>发送</SendLab>
-    <SendJS />
-    <JumpWayLab>跳转</JumpWayLab>
-    <JumpWay>0</JumpWay>
-    <SaveLab>保存</SaveLab>
-    <SaveEnable>1</SaveEnable>
-    <ThreadLab>子线程</ThreadLab>
-    <ThreadEnable>0</ThreadEnable>
-    <ReturnLab>退回</ReturnLab>
-    <ReturnRole>2</ReturnRole>
-    <CCLab>抄送</CCLab>
-    <CCRole>0</CCRole>
-    <ShiftLab>移交</ShiftLab>
-    <ShiftEnable>1</ShiftEnable>
-    <DelLab>删除</DelLab>
-    <DelEnable>0</DelEnable>
-    <EndFlowLab>结束流程</EndFlowLab>
-    <EndFlowEnable>0</EndFlowEnable>
-    <HungLab>挂起</HungLab>
-    <HungEnable>0</HungEnable>
-    <PrintDocLab>打印单据</PrintDocLab>
-    <PrintDocEnable>0</PrintDocEnable>
-    <TrackLab>轨迹</TrackLab>
-    <TrackEnable>1</TrackEnable>
-    <SelectAccepterLab>接受人</SelectAccepterLab>
-    <SelectAccepterEnable>0</SelectAccepterEnable>
-    <SearchLab>查询</SearchLab>
-    <SearchEnable>0</SearchEnable>
-    <WorkCheckLab>审核</WorkCheckLab>
-    <WorkCheckEnable>0</WorkCheckEnable>
-    <BatchLab>批处理</BatchLab>
-    <BatchEnable>0</BatchEnable>
-    <AskforLab>加签</AskforLab>
-    <AskforEnable>0</AskforEnable>
-    <SelectorModel>0</SelectorModel>
-    <SelectorP1 />
-    <SelectorP2 />
-    <SelectorDBShowWay>0</SelectorDBShowWay>
     <Name>开始节点</Name>
+    <Tip />
     <Step>1</Step>
-    <FK_Flow>074</FK_Flow>
-    <CheckNodes />
-    <DeliveryWay>0</DeliveryWay>
-    <IsTask>1</IsTask>
-    <IsRM>1</IsRM>
-    <IsBackTracking>0</IsBackTracking>
-    <IsGuestNode>0</IsGuestNode>
-    <FocusField />
-    <DeliveryParas />
-    <WhoExeIt>0</WhoExeIt>
-    <FormType>0</FormType>
-    <FormUrl>http://</FormUrl>
-    <NodeFrmID />
-    <TurnToDeal>0</TurnToDeal>
-    <TurnToDealDoc />
-    <ReadReceipts>0</ReadReceipts>
-    <IsEnableTaskPool>0</IsEnableTaskPool>
-    <DTFrom>2013-12-28 17:32</DTFrom>
-    <DTTo>2013-12-28 17:32</DTTo>
-    <SaveModel>0</SaveModel>
-    <CancelRole>0</CancelRole>
-    <BatchRole>0</BatchRole>
-    <BatchParas />
-    <RunModel>0</RunModel>
-    <ThreadKillRole>0</ThreadKillRole>
-    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <ICON />
+    <NodeWorkType>1</NodeWorkType>
     <SubThreadType>0</SubThreadType>
-    <SubFlowStartWay>0</SubFlowStartWay>
-    <SubFlowStartParas />
-    <AutoJumpRole0>0</AutoJumpRole0>
-    <AutoJumpRole1>0</AutoJumpRole1>
-    <AutoJumpRole2>0</AutoJumpRole2>
-    <WhenNoWorker>0</WhenNoWorker>
-    <JumpSQL />
-    <WarningDays>0</WarningDays>
-    <DeductDays>1</DeductDays>
-    <DeductCent>2</DeductCent>
-    <MaxDeductCent>10</MaxDeductCent>
-    <SwinkCent>0.1</SwinkCent>
+    <FK_Flow>074</FK_Flow>
+    <IsGuestNode>0</IsGuestNode>
+    <FlowName>测试表单字段类型流程</FlowName>
+    <FrmAttr />
+    <IsBUnit>0</IsBUnit>
+    <FWCSta>0</FWCSta>
+    <FWC_H>300</FWC_H>
+    <FWCOrderModel>0</FWCOrderModel>
+    <TimeLimit>2</TimeLimit>
+    <TWay>0</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>0</CHWay>
+    <IsEval>0</IsEval>
     <OutTimeDeal>0</OutTimeDeal>
     <DoOutTime />
-    <DoOutTimeCond />
-    <CHWay>0</CHWay>
-    <Workload>0</Workload>
-    <IsEval>0</IsEval>
-    <NodeWorkType>1</NodeWorkType>
-    <FlowName>测试表单字段类型流程</FlowName>
-    <FK_FlowSort>01</FK_FlowSort>
-    <FK_FlowSortT>线性流程</FK_FlowSortT>
-    <FrmAttr />
+    <FWCNodeName />
     <Doc />
+    <IsTask>1</IsTask>
+    <ReturnRole>0</ReturnRole>
+    <ReturnReasonsItems />
+    <ReturnAlert />
+    <DeliveryWay>4</DeliveryWay>
+    <IsExpSender>1</IsExpSender>
+    <CancelRole>0</CancelRole>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <WhenNoWorker>0</WhenNoWorker>
+    <DeliveryParas />
+    <NodeFrmID />
+    <CCRole>0</CCRole>
+    <CCWriteTo>0</CCWriteTo>
+    <DelEnable>0</DelEnable>
+    <SaveModel>0</SaveModel>
     <IsCanRpt>1</IsCanRpt>
     <IsCanOver>0</IsCanOver>
     <IsSecret>0</IsSecret>
     <IsCanDelFlow>0</IsCanDelFlow>
+    <ThreadKillRole>0</ThreadKillRole>
+    <TodolistModel>0</TodolistModel>
+    <TeamLeaderConfirmRole>0</TeamLeaderConfirmRole>
+    <TeamLeaderConfirmDoc />
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <IsBackTracking>0</IsBackTracking>
+    <IsRM>1</IsRM>
     <IsHandOver>0</IsHandOver>
     <PassRate>100</PassRate>
-    <FLRole>0</FLRole>
-    <FJOpen>0</FJOpen>
+    <RunModel>0</RunModel>
+    <BlockModel>0</BlockModel>
+    <BlockExp />
+    <BlockAlert />
+    <WhoExeIt>0</WhoExeIt>
+    <ReadReceipts>0</ReadReceipts>
+    <CondModel>0</CondModel>
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <SFActiveFlows />
+    <BatchRole>0</BatchRole>
+    <BatchListCount>12</BatchListCount>
+    <BatchParas />
+    <PrintDocEnable>0</PrintDocEnable>
+    <FormType>0</FormType>
+    <FormUrl>http://</FormUrl>
+    <TurnToDeal>0</TurnToDeal>
+    <TurnToDealDoc />
     <NodePosType>0</NodePosType>
     <IsCCFlow>0</IsCCFlow>
     <HisStas />
@@ -147,119 +151,92 @@
     <GroupStaNDs>@7401@7499</GroupStaNDs>
     <X>200</X>
     <Y>150</Y>
+    <FocusField />
+    <JumpToNodes />
+    <RefOneFrmTreeType />
     <AtPara />
-    <CCCtrlWay>0</CCCtrlWay>
-    <CCSQL />
-    <CCTitle />
-    <CCDoc />
-    <FWCSta>0</FWCSta>
-    <FWCType>0</FWCType>
-    <FWC_X>5</FWC_X>
-    <FWC_Y>5</FWC_Y>
-    <FWC_H>300</FWC_H>
-    <FWC_W>400</FWC_W>
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartParas />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
   </WF_Node>
   <WF_Node>
     <NodeID>7499</NodeID>
-    <SendLab>发送</SendLab>
-    <SendJS />
-    <JumpWayLab>跳转</JumpWayLab>
-    <JumpWay>0</JumpWay>
-    <SaveLab>保存</SaveLab>
-    <SaveEnable>1</SaveEnable>
-    <ThreadLab>子线程</ThreadLab>
-    <ThreadEnable>0</ThreadEnable>
-    <ReturnLab>退回</ReturnLab>
-    <ReturnRole>2</ReturnRole>
-    <CCLab>抄送</CCLab>
-    <CCRole>0</CCRole>
-    <ShiftLab>移交</ShiftLab>
-    <ShiftEnable>1</ShiftEnable>
-    <DelLab>删除</DelLab>
-    <DelEnable>0</DelEnable>
-    <EndFlowLab>结束流程</EndFlowLab>
-    <EndFlowEnable>0</EndFlowEnable>
-    <HungLab>挂起</HungLab>
-    <HungEnable>0</HungEnable>
-    <PrintDocLab>打印单据</PrintDocLab>
-    <PrintDocEnable>0</PrintDocEnable>
-    <TrackLab>轨迹</TrackLab>
-    <TrackEnable>1</TrackEnable>
-    <SelectAccepterLab>接受人</SelectAccepterLab>
-    <SelectAccepterEnable>0</SelectAccepterEnable>
-    <SearchLab>查询</SearchLab>
-    <SearchEnable>0</SearchEnable>
-    <WorkCheckLab>审核</WorkCheckLab>
-    <WorkCheckEnable>0</WorkCheckEnable>
-    <BatchLab>批处理</BatchLab>
-    <BatchEnable>0</BatchEnable>
-    <AskforLab>加签</AskforLab>
-    <AskforEnable>0</AskforEnable>
-    <SelectorModel>0</SelectorModel>
-    <SelectorP1 />
-    <SelectorP2 />
-    <SelectorDBShowWay>0</SelectorDBShowWay>
     <Name>结束节点</Name>
+    <Tip />
     <Step>99</Step>
-    <FK_Flow>074</FK_Flow>
-    <CheckNodes />
-    <DeliveryWay>0</DeliveryWay>
-    <IsTask>1</IsTask>
-    <IsRM>1</IsRM>
-    <IsBackTracking>0</IsBackTracking>
-    <IsGuestNode>0</IsGuestNode>
-    <FocusField />
-    <DeliveryParas />
-    <WhoExeIt>0</WhoExeIt>
-    <FormType>0</FormType>
-    <FormUrl>http://</FormUrl>
-    <NodeFrmID />
-    <TurnToDeal>0</TurnToDeal>
-    <TurnToDealDoc />
-    <ReadReceipts>0</ReadReceipts>
-    <IsEnableTaskPool>0</IsEnableTaskPool>
-    <DTFrom>2013-12-28 17:32</DTFrom>
-    <DTTo>2013-12-28 17:32</DTTo>
-    <SaveModel>0</SaveModel>
-    <CancelRole>0</CancelRole>
-    <BatchRole>0</BatchRole>
-    <BatchParas />
-    <RunModel>0</RunModel>
-    <ThreadKillRole>0</ThreadKillRole>
-    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <ICON />
+    <NodeWorkType>0</NodeWorkType>
     <SubThreadType>0</SubThreadType>
-    <SubFlowStartWay>0</SubFlowStartWay>
-    <SubFlowStartParas />
-    <AutoJumpRole0>0</AutoJumpRole0>
-    <AutoJumpRole1>0</AutoJumpRole1>
-    <AutoJumpRole2>0</AutoJumpRole2>
-    <WhenNoWorker>0</WhenNoWorker>
-    <JumpSQL />
-    <WarningDays>0</WarningDays>
-    <DeductDays>1</DeductDays>
-    <DeductCent>2</DeductCent>
-    <MaxDeductCent>10</MaxDeductCent>
-    <SwinkCent>0.1</SwinkCent>
+    <FK_Flow>074</FK_Flow>
+    <IsGuestNode>0</IsGuestNode>
+    <FlowName>测试表单字段类型流程</FlowName>
+    <FrmAttr />
+    <IsBUnit>0</IsBUnit>
+    <FWCSta>0</FWCSta>
+    <FWC_H>300</FWC_H>
+    <FWCOrderModel>0</FWCOrderModel>
+    <TimeLimit>2</TimeLimit>
+    <TWay>0</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>0</CHWay>
+    <IsEval>0</IsEval>
     <OutTimeDeal>0</OutTimeDeal>
     <DoOutTime />
-    <DoOutTimeCond />
-    <CHWay>0</CHWay>
-    <Workload>0</Workload>
-    <IsEval>0</IsEval>
-    <NodeWorkType>0</NodeWorkType>
-    <FlowName>测试表单字段类型流程</FlowName>
-    <FK_FlowSort>01</FK_FlowSort>
-    <FK_FlowSortT>线性流程</FK_FlowSortT>
-    <FrmAttr />
+    <FWCNodeName />
     <Doc />
+    <IsTask>1</IsTask>
+    <ReturnRole>2</ReturnRole>
+    <ReturnReasonsItems />
+    <ReturnAlert />
+    <DeliveryWay>0</DeliveryWay>
+    <IsExpSender>1</IsExpSender>
+    <CancelRole>0</CancelRole>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <WhenNoWorker>0</WhenNoWorker>
+    <DeliveryParas />
+    <NodeFrmID />
+    <CCRole>0</CCRole>
+    <CCWriteTo>0</CCWriteTo>
+    <DelEnable>0</DelEnable>
+    <SaveModel>0</SaveModel>
     <IsCanRpt>1</IsCanRpt>
     <IsCanOver>0</IsCanOver>
     <IsSecret>0</IsSecret>
     <IsCanDelFlow>0</IsCanDelFlow>
+    <ThreadKillRole>0</ThreadKillRole>
+    <TodolistModel>0</TodolistModel>
+    <TeamLeaderConfirmRole>0</TeamLeaderConfirmRole>
+    <TeamLeaderConfirmDoc />
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <IsBackTracking>0</IsBackTracking>
+    <IsRM>1</IsRM>
     <IsHandOver>0</IsHandOver>
     <PassRate>100</PassRate>
-    <FLRole>0</FLRole>
-    <FJOpen>0</FJOpen>
+    <RunModel>0</RunModel>
+    <BlockModel>0</BlockModel>
+    <BlockExp />
+    <BlockAlert />
+    <WhoExeIt>0</WhoExeIt>
+    <ReadReceipts>0</ReadReceipts>
+    <CondModel>0</CondModel>
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <SFActiveFlows />
+    <BatchRole>0</BatchRole>
+    <BatchListCount>12</BatchListCount>
+    <BatchParas />
+    <PrintDocEnable>0</PrintDocEnable>
+    <FormType>0</FormType>
+    <FormUrl>http://</FormUrl>
+    <TurnToDeal>0</TurnToDeal>
+    <TurnToDealDoc />
     <NodePosType>2</NodePosType>
     <IsCCFlow>0</IsCCFlow>
     <HisStas />
@@ -272,90 +249,115 @@
     <GroupStaNDs>@7401@7499</GroupStaNDs>
     <X>200</X>
     <Y>250</Y>
+    <FocusField />
+    <JumpToNodes />
+    <RefOneFrmTreeType />
     <AtPara />
-    <CCCtrlWay>0</CCCtrlWay>
-    <CCSQL />
-    <CCTitle />
-    <CCDoc />
-    <FWCSta>0</FWCSta>
-    <FWCType>0</FWCType>
-    <FWC_X>5</FWC_X>
-    <FWC_Y>5</FWC_Y>
-    <FWC_H>300</FWC_H>
-    <FWC_W>400</FWC_W>
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartParas />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
   </WF_Node>
   <WF_Direction>
-    <MyPK>7401_7499_0</MyPK>
+    <MyPK>074_7401_7499</MyPK>
     <FK_Flow>074</FK_Flow>
     <Node>7401</Node>
     <ToNode>7499</ToNode>
-    <DirType>0</DirType>
     <IsCanBack>0</IsCanBack>
     <Dots />
   </WF_Direction>
   <Sys_MapData>
     <No>ND7401</No>
     <Name>开始节点</Name>
+    <FormEventEntity />
     <EnPK />
-    <PTable>ND7401</PTable>
+    <PTable>ND74Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
     <Dtls />
     <FrmW>900</FrmW>
     <FrmH>1200</FrmH>
     <TableCol>4</TableCol>
     <TableWidth>600</TableWidth>
-    <DBURL>0</DBURL>
     <Tag />
-    <FrmType>0</FrmType>
     <FK_FrmSort />
     <FK_FormTree />
+    <FrmType>0</FrmType>
+    <FrmTypeText>傻瓜表单</FrmTypeText>
     <AppType>1</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
     <Note />
     <Designer />
     <DesignerUnit />
     <DesignerContact />
-    <AtPara />
     <Idx>100</Idx>
     <GUID />
-    <FormRunType>1</FormRunType>
-    <URL />
-    <SearchKeys />
-    <FK_Flow />
-    <IsSearchKey>0</IsSearchKey>
-    <DTSearchWay>0</DTSearchWay>
-    <DTSearchKey />
-    <ParentMapData />
+    <Ver>2018-05-27 17:10:54</Ver>
+    <FlowCtrls />
+    <AtPara>@IsHaveCA=0</AtPara>
   </Sys_MapData>
   <Sys_MapData>
     <No>ND7499</No>
     <Name>结束节点</Name>
+    <FormEventEntity />
     <EnPK />
-    <PTable>ND7499</PTable>
+    <PTable>ND74Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
     <Dtls />
     <FrmW>900</FrmW>
     <FrmH>1200</FrmH>
     <TableCol>4</TableCol>
     <TableWidth>600</TableWidth>
-    <DBURL>0</DBURL>
     <Tag />
-    <FrmType>0</FrmType>
     <FK_FrmSort />
     <FK_FormTree />
+    <FrmType>0</FrmType>
+    <FrmTypeText>傻瓜表单</FrmTypeText>
     <AppType>1</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
     <Note />
     <Designer />
     <DesignerUnit />
     <DesignerContact />
-    <AtPara />
     <Idx>100</Idx>
     <GUID />
-    <FormRunType>1</FormRunType>
-    <URL />
-    <SearchKeys />
-    <FK_Flow />
-    <IsSearchKey>0</IsSearchKey>
-    <DTSearchWay>0</DTSearchWay>
-    <DTSearchKey />
-    <ParentMapData />
+    <Ver>2018-05-27 17:10:54</Ver>
+    <FlowCtrls />
+    <AtPara>@IsHaveCA=0</AtPara>
+  </Sys_MapData>
+  <Sys_MapData>
+    <No>ND74Rpt</No>
+    <Name>测试表单字段类型流程</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>ND74Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>800</TableWidth>
+    <Tag />
+    <FK_FrmSort />
+    <FK_FormTree />
+    <FrmType>1</FrmType>
+    <FrmTypeText>自由表单</FrmTypeText>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2018-05-27 17:12:42</Ver>
+    <FlowCtrls />
+    <AtPara>@MaxLeft=0@MaxEnd=79.19@MaxRight=0@IsHaveCA=0@MaxTop=0</AtPara>
   </Sys_MapData>
   <Sys_MapAttr>
     <MyPK>ND7401_CDT</MyPK>
@@ -366,6 +368,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -376,15 +379,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag>1</Tag>
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_Emps</MyPK>
@@ -395,6 +405,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -405,15 +416,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_FID</MyPK>
@@ -424,6 +442,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -434,15 +453,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_FK_Dept</MyPK>
@@ -453,25 +479,33 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
+    <MaxLen>100</MaxLen>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_FK_NY</MyPK>
@@ -482,6 +516,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -492,15 +527,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_MyNum</MyPK>
@@ -511,6 +553,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -521,15 +564,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_OID</MyPK>
@@ -540,6 +590,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -550,15 +601,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>2</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_PRI</MyPK>
@@ -569,6 +627,7 @@
     <UIContralType>1</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>1</LGType>
+    <LGTypeText>枚举</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -579,15 +638,22 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>1</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>174.76</X>
     <Y>56.19</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_RDT</MyPK>
@@ -598,6 +664,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -608,15 +675,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag>1</Tag>
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_Rec</MyPK>
@@ -627,6 +701,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -637,15 +712,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7401_Title</MyPK>
@@ -656,6 +738,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>251</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -666,15 +749,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>1</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>174.83</X>
     <Y>54.4</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2149</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7499_CDT</MyPK>
@@ -685,6 +775,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -695,15 +786,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag>1</Tag>
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2151</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7499_Emps</MyPK>
@@ -714,6 +812,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -724,15 +823,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2151</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7499_FID</MyPK>
@@ -743,6 +849,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -753,15 +860,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2151</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7499_FK_Dept</MyPK>
@@ -772,25 +886,33 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
+    <MaxLen>100</MaxLen>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2151</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7499_OID</MyPK>
@@ -801,6 +923,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -811,15 +934,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>2</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2151</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7499_RDT</MyPK>
@@ -830,6 +960,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -840,15 +971,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag>1</Tag>
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2151</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND7499_Rec</MyPK>
@@ -859,6 +997,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -869,363 +1008,59 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2151</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FK_Dept</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FK_Dept</KeyOfEn>
-    <Name>隶属部门</Name>
-    <DefVal />
-    <UIContralType>1</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>100</MaxLen>
-    <UIBindKey>BP.Port.Depts</UIBindKey>
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FK_NY</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FK_NY</KeyOfEn>
-    <Name>年月</Name>
-    <DefVal />
-    <UIContralType>1</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>7</MaxLen>
-    <UIBindKey>BP.Pub.NYs</UIBindKey>
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FlowDaySpan</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FlowDaySpan</KeyOfEn>
-    <Name>跨度(天)</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>8</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>1</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FlowEmps</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FlowEmps</KeyOfEn>
-    <Name>参与人</Name>
+    <MyPK>ND74Rpt_AtPara</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>AtPara</KeyOfEn>
+    <Name>参数</Name>
     <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>1000</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>1</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FlowEnder</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FlowEnder</KeyOfEn>
-    <Name>结束人</Name>
-    <DefVal />
-    <UIContralType>1</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey>BP.Port.Emps</UIBindKey>
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FlowEnderRDT</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FlowEnderRDT</KeyOfEn>
-    <Name>结束时间</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FlowEndNode</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FlowEndNode</KeyOfEn>
-    <Name>结束节点</Name>
-    <DefVal>0</DefVal>
-    <UIContralType>0</UIContralType>
-    <MyDataType>2</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FlowStarter</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FlowStarter</KeyOfEn>
-    <Name>发起人</Name>
-    <DefVal />
-    <UIContralType>1</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey>BP.Port.Emps</UIBindKey>
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_FlowStartRDT</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>FlowStartRDT</KeyOfEn>
-    <Name>发起时间</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_OID</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>OID</KeyOfEn>
-    <Name>WorkID</Name>
-    <DefVal>0</DefVal>
-    <UIContralType>0</UIContralType>
-    <MyDataType>2</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
+    <MaxLen>4000</MaxLen>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>2</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_Title</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>Title</KeyOfEn>
-    <Name>标题</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>251</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>200</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>1</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>174.83</X>
-    <Y>54.4</Y>
-    <GUID />
-    <Tag />
-    <EditType>0</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74MyRpt_WFState</MyPK>
-    <FK_MapData>ND74MyRpt</FK_MapData>
-    <KeyOfEn>WFState</KeyOfEn>
-    <Name>流程状态</Name>
-    <DefVal />
-    <UIContralType>1</UIContralType>
-    <MyDataType>2</MyDataType>
-    <LGType>1</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>1000</MaxLen>
-    <UIBindKey>WFState</UIBindKey>
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_BillNo</MyPK>
@@ -1236,6 +1071,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1246,15 +1082,22 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_CDT</MyPK>
@@ -1265,6 +1108,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1275,73 +1119,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag>1</Tag>
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74Rpt_CFlowNo</MyPK>
-    <FK_MapData>ND74Rpt</FK_MapData>
-    <KeyOfEn>CFlowNo</KeyOfEn>
-    <Name>延续流程编号</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>3</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>1</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND74Rpt_CWorkID</MyPK>
-    <FK_MapData>ND74Rpt</FK_MapData>
-    <KeyOfEn>CWorkID</KeyOfEn>
-    <Name>延续流程WorkID</Name>
-    <DefVal>0</DefVal>
-    <UIContralType>0</UIContralType>
-    <MyDataType>2</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>0</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_Emps</MyPK>
@@ -1352,6 +1145,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1362,15 +1156,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FID</MyPK>
@@ -1381,6 +1182,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1391,15 +1193,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FK_Dept</MyPK>
@@ -1407,9 +1216,10 @@
     <KeyOfEn>FK_Dept</KeyOfEn>
     <Name>隶属部门</Name>
     <DefVal />
-    <UIContralType>1</UIContralType>
+    <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1420,15 +1230,22 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FK_NY</MyPK>
@@ -1436,9 +1253,10 @@
     <KeyOfEn>FK_NY</KeyOfEn>
     <Name>年月</Name>
     <DefVal />
-    <UIContralType>1</UIContralType>
+    <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1449,25 +1267,33 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FlowDaySpan</MyPK>
     <FK_MapData>ND74Rpt</FK_MapData>
     <KeyOfEn>FlowDaySpan</KeyOfEn>
     <Name>跨度(天)</Name>
-    <DefVal />
+    <DefVal>0</DefVal>
     <UIContralType>0</UIContralType>
-    <MyDataType>8</MyDataType>
+    <MyDataType>3</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1478,15 +1304,22 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>1</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FlowEmps</MyPK>
@@ -1497,6 +1330,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1507,15 +1341,22 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>1</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FlowEnder</MyPK>
@@ -1523,28 +1364,36 @@
     <KeyOfEn>FlowEnder</KeyOfEn>
     <Name>结束人</Name>
     <DefVal />
-    <UIContralType>1</UIContralType>
+    <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey>BP.Port.Emps</UIBindKey>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FlowEnderRDT</MyPK>
@@ -1555,6 +1404,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1565,15 +1415,22 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FlowEndNode</MyPK>
@@ -1584,6 +1441,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1594,15 +1452,59 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND74Rpt_FlowNote</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>FlowNote</KeyOfEn>
+    <Name>流程信息</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FlowStarter</MyPK>
@@ -1610,28 +1512,36 @@
     <KeyOfEn>FlowStarter</KeyOfEn>
     <Name>发起人</Name>
     <DefVal />
-    <UIContralType>1</UIContralType>
+    <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
-    <LGType>2</LGType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey>BP.Port.Emps</UIBindKey>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_FlowStartRDT</MyPK>
@@ -1642,6 +1552,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1652,15 +1563,59 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND74Rpt_GUID</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>GUID</KeyOfEn>
+    <Name>GUID</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_MyNum</MyPK>
@@ -1671,6 +1626,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1681,15 +1637,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_OID</MyPK>
@@ -1700,6 +1663,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1710,25 +1674,70 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>2</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND74Rpt_PEmp</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>PEmp</KeyOfEn>
+    <Name>调起子流程的人员</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_PFlowNo</MyPK>
     <FK_MapData>ND74Rpt</FK_MapData>
     <KeyOfEn>PFlowNo</KeyOfEn>
-    <Name>父流程流程编号</Name>
+    <Name>父流程编号</Name>
     <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1739,15 +1748,59 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>1</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND74Rpt_PNodeID</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>PNodeID</KeyOfEn>
+    <Name>父流程启动的节点</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_PRI</MyPK>
@@ -1758,6 +1811,7 @@
     <UIContralType>1</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>1</LGType>
+    <LGTypeText>枚举</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1768,15 +1822,96 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>174.76</X>
     <Y>56.19</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND74Rpt_PrjName</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>PrjName</KeyOfEn>
+    <Name>项目名称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND74Rpt_PrjNo</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>PrjNo</KeyOfEn>
+    <Name>项目编号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_PWorkID</MyPK>
@@ -1787,6 +1922,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1797,15 +1933,22 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_RDT</MyPK>
@@ -1816,6 +1959,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1826,15 +1970,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag>1</Tag>
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_Rec</MyPK>
@@ -1845,6 +1996,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1855,15 +2007,22 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_Title</MyPK>
@@ -1874,6 +2033,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
     <UIWidth>251</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1884,15 +2044,59 @@
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>1</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>358</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>174.83</X>
     <Y>54.4</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>1078</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND74Rpt_WFSta</MyPK>
+    <FK_MapData>ND74Rpt</FK_MapData>
+    <KeyOfEn>WFSta</KeyOfEn>
+    <Name>状态</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <LGTypeText>枚举</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>1000</MaxLen>
+    <UIBindKey>WFSta</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <GroupID>2157</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND74Rpt_WFState</MyPK>
@@ -1903,6 +2107,7 @@
     <UIContralType>1</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>1</LGType>
+    <LGTypeText>枚举</LGTypeText>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
@@ -1913,131 +2118,156 @@
     <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <IDX>999</IDX>
-    <GroupID>360</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <Tip />
     <ColSpan>1</ColSpan>
+    <GroupID>2159</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
   </Sys_MapAttr>
   <Sys_GroupField>
-    <OID>358</OID>
+    <OID>2149</OID>
     <Lab>开始节点</Lab>
-    <EnName>ND7401</EnName>
+    <FrmID>ND7401</FrmID>
+    <CtrlType />
+    <CtrlID />
     <Idx>1</Idx>
     <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>2151</OID>
+    <Lab>结束节点</Lab>
+    <FrmID>ND7499</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>2157</OID>
+    <Lab>基础信息</Lab>
+    <FrmID>ND74Rpt</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>2159</OID>
+    <Lab>流程信息</Lab>
+    <FrmID>ND74Rpt</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>2</Idx>
+    <GUID />
+    <AtPara />
   </Sys_GroupField>
   <Sys_FrmLine>
-    <MyPK>0af28370-bb44-4730-8d38-280d88df4e1f</MyPK>
+    <MyPK>11638039-4fce-4dfd-8620-1be116cc1566</MyPK>
     <FK_MapData>ND7401</FK_MapData>
-    <X>5</X>
-    <Y>5</Y>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>1bdba150-a4be-4fff-86ae-51674f0ee314</MyPK>
-    <FK_MapData>ND7401</FK_MapData>
-    <X>5</X>
-    <Y>5</Y>
-    <X1>81.82</X1>
-    <Y1>40</Y1>
-    <X2>81.82</X2>
-    <Y2>480.91</Y2>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>5c3119e5-6840-489a-90e9-3735a6f97481</MyPK>
-    <FK_MapData>ND7401</FK_MapData>
-    <X>5</X>
-    <Y>5</Y>
-    <X1>81.82</X1>
-    <Y1>481.82</Y1>
-    <X2>720</X2>
-    <Y2>481.82</Y2>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>83d514e9-7210-4c56-9ad1-f72a8438c844</MyPK>
-    <FK_MapData>ND7401</FK_MapData>
-    <X>5</X>
-    <Y>5</Y>
     <X1>158.82</X1>
     <Y1>41.82</Y1>
     <X2>158.82</X2>
     <Y2>482.73</Y2>
+    <X>5</X>
+    <Y>5</Y>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>ad01fa77-0681-476f-81db-d8d30d7ce9e8</MyPK>
+    <MyPK>4c827712-e6a1-467e-8be5-1aa7a646fc49</MyPK>
     <FK_MapData>ND7401</FK_MapData>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
     <X>5</X>
     <Y>5</Y>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>cc9a82b7-6448-4d88-bc1b-04cb0ce9f9f0</MyPK>
+    <MyPK>7ce8643f-834d-4ba3-b737-e132b9efa685</MyPK>
     <FK_MapData>ND7401</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>481.82</Y1>
+    <X2>720</X2>
+    <Y2>481.82</Y2>
     <X>5</X>
     <Y>5</Y>
-    <X1>719.09</X1>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>9e4bbbd0-2b35-4102-87fd-2921b2a5e95a</MyPK>
+    <FK_MapData>ND7401</FK_MapData>
+    <X1>81.82</X1>
     <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>482.73</Y2>
+    <X2>81.82</X2>
+    <Y2>480.91</Y2>
+    <X>5</X>
+    <Y>5</Y>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>d976e12a-0286-491e-a7e9-43bddc9315d5</MyPK>
+    <MyPK>bbaffe0c-ebe5-4773-b8ff-1a2fb5e2766b</MyPK>
     <FK_MapData>ND7401</FK_MapData>
-    <X>0</X>
-    <Y>0</Y>
     <X1>88</X1>
     <Y1>280</Y1>
     <X2>724</X2>
     <Y2>280</Y2>
+    <X>0</X>
+    <Y>0</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>c806e974-f014-40fb-8c10-04459bfbbc87</MyPK>
+    <FK_MapData>ND7401</FK_MapData>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>482.73</Y2>
+    <X>5</X>
+    <Y>5</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>f06294da-1810-4c86-8d81-2fe0554edb17</MyPK>
+    <FK_MapData>ND7401</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>40.91</Y1>
+    <X2>717.91</X2>
+    <Y2>40.91</Y2>
+    <X>5</X>
+    <Y>5</Y>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLab>
-    <MyPK>Lab20140209163536_1</MyPK>
-    <FK_MapData>ND7401</FK_MapData>
-    <Text>可@编@辑@类</Text>
-    <X>114</X>
-    <Y>133</Y>
-    <FontSize>11</FontSize>
-    <FontColor>#FF000000</FontColor>
-    <FontName>Portable User Interface</FontName>
-    <FontStyle>Normal</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-    <GUID />
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>Lab20140209163536_2</MyPK>
+    <MyPK>1b564c31-78dd-4609-a59f-a550b88bcd08</MyPK>
     <FK_MapData>ND7401</FK_MapData>
     <Text>不@可@编@辑@类</Text>
     <X>118</X>
@@ -2052,22 +2282,7 @@
     <GUID />
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>Lab20140209163536_3</MyPK>
-    <FK_MapData>ND7401</FK_MapData>
-    <Text>优先级</Text>
-    <X>109.05</X>
-    <Y>58.1</Y>
-    <FontSize>11</FontSize>
-    <FontColor>#FF000000</FontColor>
-    <FontName>Portable User Interface</FontName>
-    <FontStyle>Normal</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-    <GUID />
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>Lab20140209163536_4</MyPK>
+    <MyPK>4bb1b990-20d8-4009-be48-01eba3f9c6fa</MyPK>
     <FK_MapData>ND7401</FK_MapData>
     <Text>字段类型测试</Text>
     <X>294.67</X>
@@ -2081,23 +2296,34 @@
     <IsItalic>0</IsItalic>
     <GUID />
   </Sys_FrmLab>
-  <Sys_FrmImg>
-    <MyPK>ImgYYYY0209163536_1</MyPK>
+  <Sys_FrmLab>
+    <MyPK>5944573e-190a-482e-83e0-a2fcfcb30711</MyPK>
     <FK_MapData>ND7401</FK_MapData>
-    <ImgAppType>0</ImgAppType>
-    <X>577.26</X>
-    <Y>3.45</Y>
-    <H>40</H>
-    <W>137</W>
-    <ImgURL>/ccform;component/Img/LogoBig.png</ImgURL>
-    <ImgPath>/CCFormDesigner;component/Img/Logo/CCFlow/LogoBig.png</ImgPath>
-    <LinkURL>http://ccflow.org</LinkURL>
-    <LinkTarget>_blank</LinkTarget>
+    <Text>可@编@辑@类</Text>
+    <X>114</X>
+    <Y>133</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
     <GUID />
-    <Tag0 />
-    <SrcType>0</SrcType>
-    <IsEdit>1</IsEdit>
-    <Name />
-    <EnPK />
-  </Sys_FrmImg>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>d78bd9db-4acd-4a83-9468-33966a1032fa</MyPK>
+    <FK_MapData>ND7401</FK_MapData>
+    <Text>优先级</Text>
+    <X>109.05</X>
+    <Y>58.1</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
 </NewDataSet>

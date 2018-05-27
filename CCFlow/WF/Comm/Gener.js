@@ -44,6 +44,9 @@ function GetPKVal() {
     if (val == undefined || val == "")
         val = GetQueryString("PKVal");
 
+    if (val == undefined || val == "")
+        val = GetQueryString("PK");
+
     if (val == "null" || val == "" || val == undefined)
         return null;
 

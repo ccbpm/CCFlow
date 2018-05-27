@@ -583,9 +583,12 @@
 
                         windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, ""); //去掉左右空格.
 
+                        alert(windowtext);
+
+
                         var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
                         var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
-                        var xiuNodename = '修改名称：<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
+                        var xiuNodename = '修改名称:<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
                         var spanaa = $("#lab" + activeId + " span").html();
 
                         labAlert(xiuNodename);
@@ -602,6 +605,10 @@
                                   var windowtext = $("#window" + activeId).text();
                                   var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
                                   var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(\"" + activeId + "\")");
+
+                                  windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
+
+
                                   var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
                                   var spanaa = $("#window" + activeId + " span").html();
 
@@ -734,6 +741,9 @@
         //修改节点名称
         function saveNodeName(activeId) {
             var text = document.getElementById("TB_" + activeId).value; //新修改的值.
+
+            //alert(text);
+
             var node = new Entity("BP.WF.Node", activeId);
             node.Name = text;
             node.Update();

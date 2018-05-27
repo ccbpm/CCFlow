@@ -71,145 +71,137 @@
             *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
             */
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Imp_Init&FK_MapData=" + frmID + "&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Imp_Init");
 
-                    if (data.indexOf("err@") > -1) {
-                        alert(data);
-                        return;
-                    }
 
-                    data = JSON.parse(data);
 
-                    //02.从节点表单导入
-                    var nodes = data["WF_Node"] || [];
-                    var ulHtml = '';
-                    for (var i = 0; i < nodes.length; i++) {
-                        var node = nodes[i];
+            if (data.indexOf("err@") > -1) {
+                alert(data);
+                return;
+            }
 
-                        if (node.NodeID == nodeID)
-                            continue;
-                        ulHtml += '<li><input id="nd' + node.NodeID + '" type="radio" name="node" class="btn btn-default" data-nodeid=' + node.NodeID + '><label for="nd' + node.NodeID + '">ID:' + node.NodeID + ' - ' + node.Name + '<label/></li>'
-                    }
+            data = JSON.parse(data);
 
-                    $('#ulNodeFrmImp').html(ulHtml);
+            //02.从节点表单导入
+            var nodes = data["WF_Node"] || [];
+            var ulHtml = '';
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
 
-                    //03.从表单库导入
-                    var treedata = data["Sys_FormTree"],
+                if (node.NodeID == nodeID)
+                    continue;
+                ulHtml += '<li><input id="nd' + node.NodeID + '" type="radio" name="node" class="btn btn-default" data-nodeid=' + node.NodeID + '><label for="nd' + node.NodeID + '">ID:' + node.NodeID + ' - ' + node.Name + '<label/></li>'
+            }
+
+            $('#ulNodeFrmImp').html(ulHtml);
+
+            //03.从表单库导入
+            var treedata = data["Sys_FormTree"],
                         rootdata = $.grep(treedata, function (item) {
                             return item.ParentNo == "0";
                         })[0];
 
-                    //构建树节点数据
-                    var root = {};
-                    root.text = rootdata.Name;
-                    root.state = "open";
-                    root.children = [];
-                    $.grep(treedata, function (item) {
-                        //选出一级节点
-                        return item.ParentNo == "1";
-                    }).forEach(function (folder) {
-                        //构建node开始
-                        var node = {};
-                        node.text = folder.Name;
-                        node.state = "closed";
-                        node.children = [];
-                        $.grep(data["Sys_MapData"], function (map) {
-                            //选出当前节点的二级节点
-                            return map.FK_FormTree == folder.No;
+            //构建树节点数据
+            var root = {};
+            root.text = rootdata.Name;
+            root.state = "open";
+            root.children = [];
+            $.grep(treedata, function (item) {
+                //选出一级节点
+                return item.ParentNo == "1";
+            }).forEach(function (folder) {
+                //构建node开始
+                var node = {};
+                node.text = folder.Name;
+                node.state = "closed";
+                node.children = [];
+                $.grep(data["Sys_MapData"], function (map) {
+                    //选出当前节点的二级节点
+                    return map.FK_FormTree == folder.No;
 
-                        }).forEach(function (frm) {
-                            node.children.push({
-                                text: frm.Name,
-                                id: frm.No
-                            });
-                        });
-                        //构建node结束
-                        root.children.push(node);
+                }).forEach(function (frm) {
+                    node.children.push({
+                        text: frm.Name,
+                        id: frm.No
                     });
+                });
+                //构建node结束
+                root.children.push(node);
+            });
 
-                    $('#ulLib').tree({
-                        data: [root],
-                        onSelect: function (node) {
-                            if (node.children == undefined) {
-                                btnFrmLib.disabled = "";
-                                selFrmNode.value = node.id;
-                            } else {
-                                btnFrmLib.disabled = "disabled";
-                            }
-                        }
-                    });
+            $('#ulLib').tree({
+                data: [root],
+                onSelect: function (node) {
+                    if (node.children == undefined) {
+                        btnFrmLib.disabled = "";
+                        selFrmNode.value = node.id;
+                    } else {
+                        btnFrmLib.disabled = "disabled";
+                    }
+                }
+            });
 
-                    //04.从外部数据源导入
-                    var srcdata = data["SFDBSrcs"],
+            //04.从外部数据源导入
+            var srcdata = data["SFDBSrcs"],
                         tableHtml = "";
 
-                    tableHtml += "<table class='Table' cellSpacing='0' cellPadding='0'  border='0' style='width:100%'>";
-                    tableHtml += "<tr><td class='GroupTitle'>第1步：请选择数据源</td></tr>";
-                    tableHtml += "<tr><td valign='top' nowrap>";
-                    tableHtml += "<ul class='navlist'>";
-                    srcdata.forEach(function (item) {
-                        tableHtml += "<li><div><a href='javascript:GoToStep2(\"" + item.No + "\")'><span class='nav'>" + item.No + "  -  " + item.Name + "</span></a></div></li>";
-                    });
-                    tableHtml += "</ul>";
-                    tableHtml += "</td></tr>";
-                    tableHtml += "</table>";
-                    $("#srclayout").html(tableHtml);
+            tableHtml += "<table class='Table' cellSpacing='0' cellPadding='0'  border='0' style='width:100%'>";
+            tableHtml += "<tr><td class='GroupTitle'>第1步：请选择数据源</td></tr>";
+            tableHtml += "<tr><td valign='top' nowrap>";
+            tableHtml += "<ul class='navlist'>";
+            srcdata.forEach(function (item) {
+                tableHtml += "<li><div><a href='javascript:GoToStep2(\"" + item.No + "\")'><span class='nav'>" + item.No + "  -  " + item.Name + "</span></a></div></li>";
+            });
+            tableHtml += "</ul>";
+            tableHtml += "</td></tr>";
+            tableHtml += "</table>";
+            $("#srclayout").html(tableHtml);
 
-                    //05.从其他流程导入
-                    var treedata = data["WF_FlowSort"],
+            //05.从其他流程导入
+            var treedata = data["WF_FlowSort"],
                         rootdata = $.grep(treedata, function (item) {
                             return item.ParentNo == "0";
                         })[0];
 
-                    //构建树节点数据
-                    var root = {};
-                    root.text = rootdata.Name;
-                    root.state = "open";
-                    root.children = [];
-                    $.grep(treedata, function (item) {
-                        //选出一级节点
-                        return item.ParentNo == "99";
-                    }).forEach(function (folder) {
-                        //构建node开始
-                        var node = {};
-                        node.text = folder.Name;
-                        node.state = "closed";
-                        node.children = [];
-                        $.grep(data["WF_Flow"], function (map) {
-                            //选出当前节点的二级节点
-                            return map.FK_FlowSort == folder.No;
+            //构建树节点数据
+            var root = {};
+            root.text = rootdata.Name;
+            root.state = "open";
+            root.children = [];
+            $.grep(treedata, function (item) {
+                //选出一级节点
+                return item.ParentNo == "99";
+            }).forEach(function (folder) {
+                //构建node开始
+                var node = {};
+                node.text = folder.Name;
+                node.state = "closed";
+                node.children = [];
+                $.grep(data["WF_Flow"], function (map) {
+                    //选出当前节点的二级节点
+                    return map.FK_FlowSort == folder.No;
 
-                        }).forEach(function (frm) {
-                            node.children.push({
-                                text: frm.Name,
-                                id: frm.No
-                            });
-                        });
-                        //构建node结束
-                        root.children.push(node);
+                }).forEach(function (frm) {
+                    node.children.push({
+                        text: frm.Name,
+                        id: frm.No
                     });
+                });
+                //构建node结束
+                root.children.push(node);
+            });
 
-                    $('#ul1').tree({
-                        data: [root],
-                        onSelect: function (node) {
-                            if (node.children == undefined) {
-                                Btn_Flows.disabled = "";
-                                $("#HD_FlowID").val(node.id);
-                            } else {
-                                Btn_Flows.disabled = "disabled";
-                            }
-
-
-
-                        }
-                    });
-
-
+            $('#ul1').tree({
+                data: [root],
+                onSelect: function (node) {
+                    if (node.children == undefined) {
+                        Btn_Flows.disabled = "";
+                        $("#HD_FlowID").val(node.id);
+                    } else {
+                        Btn_Flows.disabled = "disabled";
+                    }
                 }
             });
 
@@ -283,6 +275,8 @@
             var name = $("input").val();
             formData.append("file", $("#localXmlFile")[0].files[0]);
             formData.append("name", name);
+          
+
             $.ajax({
                 url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 type: 'POST',

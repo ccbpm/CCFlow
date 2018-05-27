@@ -126,14 +126,14 @@ namespace BP.WF.HttpHandler
         {
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
             fl.StartLimitRole = (StartLimitRole)this.GetRequestValInt("StartLimitRole");
-            fl.StartLimitPara =this.GetRequestVal("StartLimitPara");
+            fl.StartLimitPara = this.GetRequestVal("StartLimitPara");
             fl.StartLimitAlert = this.GetRequestVal("StartLimitAlert");
             fl.Update();
             return "保存成功.";
         }
         #endregion 发起限制.
 
-        
+
 
         #region 节点属性（列表）的操作
         /// <summary>
@@ -354,25 +354,25 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //获得数据表列.
-            SFDBSrc src = new SFDBSrc(  this.GetRequestVal("FK_DBSrc") );
-            DataTable dtColms = src.GetColumns(  this.GetRequestVal("TableName"));
-            dtColms.TableName="Cols";
+            SFDBSrc src = new SFDBSrc(this.GetRequestVal("FK_DBSrc"));
+            DataTable dtColms = src.GetColumns(this.GetRequestVal("TableName"));
+            dtColms.TableName = "Cols";
 
-            if (SystemConfig.AppCenterDBType== DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dtColms.Columns["NO"].ColumnName = "No";
                 dtColms.Columns["NAME"].ColumnName = "Name";
             }
-            
+
             ds.Tables.Add(dtColms);
 
             //属性列表.
-            MapAttrs attrs = new MapAttrs(  "ND"+int.Parse(this.FK_Flow)+"Rpt" );
+            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
             DataTable dtAttrs = attrs.ToDataTableStringField("Sys_MapAttr");
             ds.Tables.Add(dtAttrs);
 
             //转化成json,返回.
-            return BP.Tools.Json.DataSetToJson(ds,false);
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         public string DTSBTableExt_Save()
         {
@@ -391,7 +391,7 @@ namespace BP.WF.HttpHandler
             foreach (MapAttr attr in attrs)
             {
                 int val = this.GetRequestValInt("CB_" + attr.KeyOfEn);
-                if (val==0 )
+                if (val == 0)
                     continue;
 
                 string refField = this.GetRequestVal("DDL_" + attr.KeyOfEn);
@@ -406,12 +406,12 @@ namespace BP.WF.HttpHandler
                 ywStr += "@" + refField + "@,";
             }
 
-        //    BP.Web.Controls.RadioBtn rb = this.Pub1.GetRadioBtnByID("rb_workId");
+            //    BP.Web.Controls.RadioBtn rb = this.Pub1.GetRadioBtnByID("rb_workId");
 
             int pkModel = this.GetRequestValInt("PKModel");
 
-            string  ddl_key =  this.GetRequestVal("DDL_OID");
-            if (pkModel==0)
+            string ddl_key = this.GetRequestVal("DDL_OID");
+            if (pkModel == 0)
             {
                 if (ywStr.Contains("@" + ddl_key + "@"))
                 {
@@ -433,7 +433,7 @@ namespace BP.WF.HttpHandler
             }
 
             if (err != "")
-                return "err@"+err;
+                return "err@" + err;
 
             lcStr = lcStr.Replace("@", "");
             ywStr = ywStr.Replace("@", "");
@@ -455,7 +455,7 @@ namespace BP.WF.HttpHandler
 
             return "设置成功.";
         }
-        #endregion 
+        #endregion
 
         #region 前置导航
         /// <summary>
@@ -573,18 +573,19 @@ namespace BP.WF.HttpHandler
         /// 流程轨迹查看权限
         /// </summary>
         /// <returns></returns>
-        public string TruckViewPower_Init() { 
+        public string TruckViewPower_Init()
+        {
             if (DataType.IsNullOrEmpty(FK_Flow))
-                {
-                    throw new Exception("流程编号为空");
-                    return "err@流程编号为空";
-                }
-                else
-                {
-                    BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
-                    en.Retrieve();
-                    return en.ToJson();
-                }
+            {
+                throw new Exception("流程编号为空");
+                return "err@流程编号为空";
+            }
+            else
+            {
+                BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
+                en.Retrieve();
+                return en.ToJson();
+            }
         }
         #endregion 流程轨迹查看权限save
 
@@ -595,7 +596,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TruckViewPower_Save()
         {
-            try {
+            try
+            {
                 BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
                 en.Retrieve();
 
@@ -603,10 +605,11 @@ namespace BP.WF.HttpHandler
                 en.Save();  //执行保存.
                 return "保存成功";
             }
-            catch {
+            catch
+            {
                 return "err@保存失败";
             }
-            
+
         }
         #endregion 流程轨迹查看权限save
 
@@ -631,7 +634,7 @@ namespace BP.WF.HttpHandler
             string flowNo = this.FK_Flow;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
             //检查流程编号
-            if (DataType.IsNullOrEmpty(flowNo)==false)
+            if (DataType.IsNullOrEmpty(flowNo) == false)
             {
                 Flow fl = new Flow(flowNo);
                 FK_FlowSort = fl.FK_FlowSort;
@@ -652,7 +655,7 @@ namespace BP.WF.HttpHandler
             ht.Add("FK_Flow", flow.No);
             ht.Add("FlowName", flow.Name);
             ht.Add("FK_FlowSort", flow.FK_FlowSort);
-            ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name );
+            ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
             return BP.Tools.Json.ToJson(ht);
         }
         #endregion 数据导入.
@@ -677,7 +680,7 @@ namespace BP.WF.HttpHandler
             dtIcon.Columns.Add("Name");
             foreach (string str in strs)
             {
-                string fileName = str.Substring(str.LastIndexOf("\\")+1);
+                string fileName = str.Substring(str.LastIndexOf("\\") + 1);
                 fileName = fileName.Substring(0, fileName.LastIndexOf("."));
 
                 DataRow dr = dtIcon.NewRow();

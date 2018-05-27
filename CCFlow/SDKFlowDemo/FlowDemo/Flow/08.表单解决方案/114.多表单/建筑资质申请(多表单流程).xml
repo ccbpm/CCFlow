@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@401@499</GroupStaNDs>
-    <X>241</X>
-    <Y>68</Y>
+    <X>49</X>
+    <Y>62</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@402</GroupStaNDs>
-    <X>122</X>
-    <Y>172</Y>
+    <X>148</X>
+    <Y>252</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@401@499</GroupStaNDs>
-    <X>240</X>
-    <Y>303</Y>
+    <X>256</X>
+    <Y>397</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -803,8 +803,8 @@
     <MyPK>004_363_92_2</MyPK>
     <Name>此流程为一个节点多个独立表单实例，您可以在节点上右键点绑定表单功能查看到当前节点要绑定的表单。</Name>
     <FK_Flow>004</FK_Flow>
-    <X>363</X>
-    <Y>92</Y>
+    <X>381</X>
+    <Y>89</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>004_365_127_3</MyPK>

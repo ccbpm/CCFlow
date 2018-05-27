@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1301@1399</GroupStaNDs>
-    <X>105</X>
-    <Y>83</Y>
+    <X>128</X>
+    <Y>139</Y>
     <FocusField>项目介绍:@XiangMuJieShao</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1301@1399</GroupStaNDs>
-    <X>104</X>
-    <Y>208</Y>
+    <X>324</X>
+    <Y>317</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />

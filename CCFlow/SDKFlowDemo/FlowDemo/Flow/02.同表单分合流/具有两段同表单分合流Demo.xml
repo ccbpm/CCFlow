@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@4501@4503@4599</GroupStaNDs>
-    <X>208</X>
-    <Y>136</Y>
+    <X>279</X>
+    <Y>62</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@4502@4504</GroupStaNDs>
-    <X>205</X>
-    <Y>221</Y>
+    <X>428</X>
+    <Y>202</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@4502@4504</GroupStaNDs>
-    <X>387</X>
-    <Y>301</Y>
+    <X>386</X>
+    <Y>397</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@4501@4503@4599</GroupStaNDs>
-    <X>572</X>
-    <Y>301</Y>
+    <X>583</X>
+    <Y>491</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -588,8 +588,8 @@
     <MyPK>045_294_168_1</MyPK>
     <Name>具有两段分合流的同表单分合流。</Name>
     <FK_Flow>045</FK_Flow>
-    <X>294</X>
-    <Y>168</Y>
+    <X>539</X>
+    <Y>147</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>4501</FK_Node>

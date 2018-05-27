@@ -444,8 +444,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@4402@4404</GroupStaNDs>
-    <X>386</X>
-    <Y>302</Y>
+    <X>399</X>
+    <Y>413</Y>
     <FocusField>我的本月计划:@WoDeBenYueJiHua</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -542,8 +542,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@4401@4403@4499</GroupStaNDs>
-    <X>572</X>
-    <Y>301</Y>
+    <X>596</X>
+    <Y>302</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -589,8 +589,8 @@
     <MyPK>044_294_168_1</MyPK>
     <Name>具有两段分合流的同表单分合流。</Name>
     <FK_Flow>044</FK_Flow>
-    <X>294</X>
-    <Y>168</Y>
+    <X>355</X>
+    <Y>169</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>4401</FK_Node>

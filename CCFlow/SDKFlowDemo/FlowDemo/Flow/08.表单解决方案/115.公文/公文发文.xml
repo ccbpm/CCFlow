@@ -151,8 +151,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@15001@15007</GroupStaNDs>
-    <X>194</X>
-    <Y>57</Y>
+    <X>52</X>
+    <Y>67</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -249,8 +249,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@15004</GroupStaNDs>
-    <X>247</X>
-    <Y>138</Y>
+    <X>143</X>
+    <Y>200</Y>
     <FocusField>部门负责人:@BuMenFuZeRen</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -347,8 +347,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@15005</GroupStaNDs>
-    <X>297</X>
-    <Y>217</Y>
+    <X>318</X>
+    <Y>303</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -445,8 +445,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@15006</GroupStaNDs>
-    <X>356</X>
-    <Y>299</Y>
+    <X>443</X>
+    <Y>402</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -543,8 +543,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@15001@15007</GroupStaNDs>
-    <X>418</X>
-    <Y>379</Y>
+    <X>569</X>
+    <Y>511</Y>
     <FocusField>派送:@PaiSong</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -590,36 +590,29 @@
     <MyPK>150_274_53_1</MyPK>
     <Name>发文拟稿，可以打开本地文档，打开模板、套红模板、修订留痕模式等</Name>
     <FK_Flow>150</FK_Flow>
-    <X>274</X>
-    <Y>53</Y>
+    <X>228</X>
+    <Y>84</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>150_356_135_2</MyPK>
     <Name>部门审核，修订</Name>
     <FK_Flow>150</FK_Flow>
-    <X>356</X>
-    <Y>135</Y>
+    <X>230</X>
+    <Y>166</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>150_380_207_3</MyPK>
     <Name>增加红头</Name>
     <FK_Flow>150</FK_Flow>
-    <X>380</X>
-    <Y>207</Y>
+    <X>227</X>
+    <Y>327</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>150_429_290_4</MyPK>
     <Name>最后修订，盖章，接受修订</Name>
     <FK_Flow>150</FK_Flow>
-    <X>429</X>
-    <Y>290</Y>
-  </WF_LabNote>
-  <WF_LabNote>
-    <MyPK>150_492_370_5</MyPK>
-    <Name>派送</Name>
-    <FK_Flow>150</FK_Flow>
-    <X>492</X>
-    <Y>370</Y>
+    <X>534</X>
+    <Y>348</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>15001</FK_Node>

@@ -272,8 +272,8 @@
     <MyPK>149_252_148_1</MyPK>
     <Name>收文登记，增加附件</Name>
     <FK_Flow>149</FK_Flow>
-    <X>252</X>
-    <Y>148</Y>
+    <X>349</X>
+    <Y>157</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>149_319_287_2</MyPK>

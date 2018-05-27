@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@5701@5702@5703</GroupStaNDs>
-    <X>207</X>
-    <Y>174</Y>
+    <X>99</X>
+    <Y>226</Y>
     <FocusField>审核意见:@SH1_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@5701@5702@5703</GroupStaNDs>
-    <X>208</X>
-    <Y>261</Y>
+    <X>392</X>
+    <Y>299</Y>
     <FocusField>审核意见:@SH2_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@5799</GroupStaNDs>
-    <X>206</X>
-    <Y>347</Y>
+    <X>210</X>
+    <Y>450</Y>
     <FocusField>审核意见:@BA_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -482,8 +482,8 @@
     <MyPK>057_303_122_1</MyPK>
     <Name>处理人就是提交人跳转-有2个节点的情况,测试是否可以自动跳转到最后一个步骤。</Name>
     <FK_Flow>057</FK_Flow>
-    <X>303</X>
-    <Y>122</Y>
+    <X>384</X>
+    <Y>115</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>5701</FK_Node>

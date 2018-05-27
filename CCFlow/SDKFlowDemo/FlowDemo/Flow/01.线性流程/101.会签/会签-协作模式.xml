@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@20301@20302@20304</GroupStaNDs>
-    <X>75</X>
-    <Y>75</Y>
+    <X>62</X>
+    <Y>92</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@20301@20302@20304</GroupStaNDs>
-    <X>164</X>
-    <Y>211</Y>
+    <X>225</X>
+    <Y>192</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@20303</GroupStaNDs>
-    <X>490</X>
-    <Y>94</Y>
+    <X>513</X>
+    <Y>87</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@20301@20302@20304</GroupStaNDs>
-    <X>483</X>
-    <Y>275</Y>
+    <X>476</X>
+    <Y>289</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />

@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@7102@7103</GroupStaNDs>
-    <X>202</X>
-    <Y>177</Y>
+    <X>151</X>
+    <Y>210</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@7102@7103</GroupStaNDs>
-    <X>425</X>
-    <Y>246</Y>
+    <X>434</X>
+    <Y>310</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@7199</GroupStaNDs>
-    <X>198</X>
-    <Y>308</Y>
+    <X>154</X>
+    <Y>442</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -483,8 +483,8 @@
     <Name>第一个节点批量发起，请参考流程属性设置。
 第二个节点批量审核，请参考节点属性设置。</Name>
     <FK_Flow>071</FK_Flow>
-    <X>402</X>
-    <Y>123</Y>
+    <X>374</X>
+    <Y>117</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>7101</FK_Node>

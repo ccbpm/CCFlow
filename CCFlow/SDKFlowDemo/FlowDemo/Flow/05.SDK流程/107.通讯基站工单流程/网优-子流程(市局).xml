@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2602</GroupStaNDs>
-    <X>295</X>
-    <Y>217</Y>
+    <X>407</X>
+    <Y>249</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2601@2699</GroupStaNDs>
-    <X>205</X>
-    <Y>299</Y>
+    <X>309</X>
+    <Y>392</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />

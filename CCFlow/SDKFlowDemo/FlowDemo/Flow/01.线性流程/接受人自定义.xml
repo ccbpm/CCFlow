@@ -49,7 +49,7 @@
     <IsBatchStart>0</IsBatchStart>
     <BatchStartFields />
     <IsAutoSendSubFlowOver>0</IsAutoSendSubFlowOver>
-    <Ver>2017-11-13 12:03:15</Ver>
+    <Ver>2018-05-27 19:29:56</Ver>
     <DType>1</DType>
     <FlowDeleteRole>0</FlowDeleteRole>
     <AtPara />
@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@17001</GroupStaNDs>
-    <X>112</X>
-    <Y>59</Y>
+    <X>108</X>
+    <Y>111</Y>
     <FocusField>项目名称:@XMMC</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@17002@17003@17004@17005</GroupStaNDs>
-    <X>264</X>
-    <Y>58</Y>
+    <X>248</X>
+    <Y>226</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@17002@17003@17004@17005</GroupStaNDs>
-    <X>417</X>
-    <Y>56</Y>
+    <X>410</X>
+    <Y>108</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@17002@17003@17004@17005</GroupStaNDs>
-    <X>546</X>
-    <Y>53</Y>
+    <X>545</X>
+    <Y>217</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@17002@17003@17004@17005</GroupStaNDs>
-    <X>710</X>
-    <Y>55</Y>
+    <X>729</X>
+    <Y>110</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -910,7 +910,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2018-05-27 17:07:49</Ver>
+    <Ver>2018-05-27 19:29:56</Ver>
     <FlowCtrls />
     <AtPara>@MaxLeft=81.55@MaxEnd=481.82@MaxRight=720@IsHaveCA=0@MaxTop=8.27</AtPara>
   </Sys_MapData>
@@ -5020,7 +5020,7 @@
   </Sys_GroupField>
   <Sys_GroupField>
     <OID>477</OID>
-    <Lab>项目附件</Lab>
+    <Lab>核准</Lab>
     <FrmID>ND17005</FrmID>
     <CtrlType>Ath</CtrlType>
     <CtrlID>ND17005_Ath1</CtrlID>

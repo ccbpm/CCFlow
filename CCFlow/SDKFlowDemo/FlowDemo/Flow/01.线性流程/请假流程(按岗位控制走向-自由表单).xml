@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@201</GroupStaNDs>
-    <X>280</X>
-    <Y>40</Y>
+    <X>302</X>
+    <Y>66</Y>
     <FocusField>请假原因:@QingJiaYuanYin</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@202@206</GroupStaNDs>
-    <X>290</X>
-    <Y>176</Y>
+    <X>312</X>
+    <Y>277</Y>
     <FocusField>审核意见:@ZJL_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@203@204@205@207</GroupStaNDs>
-    <X>430</X>
-    <Y>158</Y>
+    <X>532</X>
+    <Y>200</Y>
     <FocusField>请假原因:@QingJiaYuanYin</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@203@204@205@207</GroupStaNDs>
-    <X>122</X>
-    <Y>436</Y>
+    <X>66</X>
+    <Y>539</Y>
     <FocusField>部门负责人审批:@BM_CheckNote</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@203@204@205@207</GroupStaNDs>
-    <X>423</X>
-    <Y>297</Y>
+    <X>563</X>
+    <Y>395</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -639,8 +639,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@202@206</GroupStaNDs>
-    <X>277</X>
-    <Y>344</Y>
+    <X>181</X>
+    <Y>396</Y>
     <FocusField>审核意见:@ZJL_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -737,8 +737,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@203@204@205@207</GroupStaNDs>
-    <X>281</X>
-    <Y>451</Y>
+    <X>331</X>
+    <Y>564</Y>
     <FocusField>审核意见:@ZJL_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -835,8 +835,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@299</GroupStaNDs>
-    <X>146</X>
-    <Y>153</Y>
+    <X>88</X>
+    <Y>168</Y>
     <FocusField>部门负责人审批:@BM_CheckNote</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -1016,43 +1016,43 @@
     <MyPK>002_106_247_7</MyPK>
     <Name>以表单的字段值做为方向条件。</Name>
     <FK_Flow>002</FK_Flow>
-    <X>106</X>
-    <Y>247</Y>
+    <X>45</X>
+    <Y>319</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>002_128_327_1</MyPK>
     <Name>小于10天</Name>
     <FK_Flow>002</FK_Flow>
-    <X>128</X>
-    <Y>327</Y>
+    <X>92</X>
+    <Y>421</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>002_208_287_3</MyPK>
     <Name>大于等于10天</Name>
     <FK_Flow>002</FK_Flow>
-    <X>208</X>
-    <Y>287</Y>
+    <X>182</X>
+    <Y>254</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>002_225_111_2</MyPK>
     <Name>基层路线</Name>
     <FK_Flow>002</FK_Flow>
-    <X>225</X>
-    <Y>111</Y>
+    <X>117</X>
+    <Y>100</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>002_344_123_4</MyPK>
     <Name>中层路线</Name>
     <FK_Flow>002</FK_Flow>
-    <X>344</X>
-    <Y>123</Y>
+    <X>350</X>
+    <Y>135</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>002_413_109_5</MyPK>
     <Name>高层路线</Name>
     <FK_Flow>002</FK_Flow>
-    <X>413</X>
-    <Y>109</Y>
+    <X>504</X>
+    <Y>118</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>002_676_63_6</MyPK>

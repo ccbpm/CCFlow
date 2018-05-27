@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@12001</GroupStaNDs>
-    <X>88</X>
-    <Y>52</Y>
+    <X>55</X>
+    <Y>80</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@12003</GroupStaNDs>
-    <X>287</X>
-    <Y>274</Y>
+    <X>264</X>
+    <Y>296</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@12005</GroupStaNDs>
-    <X>597</X>
-    <Y>383</Y>
+    <X>557</X>
+    <Y>434</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -639,8 +639,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@12006@12007</GroupStaNDs>
-    <X>779</X>
-    <Y>409</Y>
+    <X>702</X>
+    <Y>522</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -737,8 +737,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@12006@12007</GroupStaNDs>
-    <X>181</X>
-    <Y>355</Y>
+    <X>32</X>
+    <Y>380</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -800,8 +800,8 @@
     <MyPK>120_168_67_1</MyPK>
     <Name>自由流程，就是开始节点或者，中间的指定节点，可以自己定义流程运行的步骤，定义流程运行的人员。</Name>
     <FK_Flow>120</FK_Flow>
-    <X>168</X>
-    <Y>67</Y>
+    <X>315</X>
+    <Y>189</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>12001</FK_Node>

@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@16702</GroupStaNDs>
-    <X>268</X>
-    <Y>154</Y>
+    <X>218</X>
+    <Y>290</Y>
     <FocusField>@MZ_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@16701@16703</GroupStaNDs>
-    <X>527</X>
-    <Y>159</Y>
+    <X>532</X>
+    <Y>183</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -596,7 +596,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2018-05-27 17:13:24</Ver>
+    <Ver>2018-05-27 19:33:35</Ver>
     <FlowCtrls />
     <AtPara>@MaxLeft=0@MaxEnd=595.93@MaxRight=0@IsHaveCA=0@MaxTop=0</AtPara>
   </Sys_MapData>

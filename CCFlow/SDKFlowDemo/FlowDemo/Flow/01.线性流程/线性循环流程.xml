@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@301@304</GroupStaNDs>
-    <X>123</X>
-    <Y>38</Y>
+    <X>399</X>
+    <Y>75</Y>
     <FocusField>文件内容:@WenJianNeiRong</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@302</GroupStaNDs>
-    <X>123</X>
-    <Y>120</Y>
+    <X>124</X>
+    <Y>180</Y>
     <FocusField>文件内容:@WenJianNeiRong</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@303</GroupStaNDs>
-    <X>121</X>
-    <Y>237</Y>
+    <X>124</X>
+    <Y>325</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@301@304</GroupStaNDs>
-    <X>314</X>
-    <Y>161</Y>
+    <X>618</X>
+    <Y>325</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@399</GroupStaNDs>
-    <X>120</X>
-    <Y>346</Y>
+    <X>124</X>
+    <Y>481</Y>
     <FocusField>主任审核:@ZhuRenShenHe</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -640,22 +640,22 @@
     <MyPK>003_184_194_1</MyPK>
     <Name>不同意发布</Name>
     <FK_Flow>003</FK_Flow>
-    <X>184</X>
-    <Y>194</Y>
+    <X>368</X>
+    <Y>320</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>003_194_256_2</MyPK>
     <Name>在三角形内可以无限的循环，满足了条件后，就跳出这个循环  循环的轨迹会被覆盖，痕迹将会记录在流程报告里。</Name>
     <FK_Flow>003</FK_Flow>
-    <X>194</X>
-    <Y>256</Y>
+    <X>324</X>
+    <Y>406</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>003_99_282_3</MyPK>
     <Name>同意发布</Name>
     <FK_Flow>003</FK_Flow>
-    <X>99</X>
-    <Y>282</Y>
+    <X>143</X>
+    <Y>395</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>301</FK_Node>

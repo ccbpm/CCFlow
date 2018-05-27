@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2802</GroupStaNDs>
-    <X>244</X>
-    <Y>241</Y>
+    <X>387</X>
+    <Y>394</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2803</GroupStaNDs>
-    <X>371</X>
-    <Y>243</Y>
+    <X>559</X>
+    <Y>253</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2899</GroupStaNDs>
-    <X>124</X>
-    <Y>242</Y>
+    <X>145</X>
+    <Y>343</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -562,8 +562,8 @@
     <MyPK>028_287_171_3</MyPK>
     <Name>人力资源部路线</Name>
     <FK_Flow>028</FK_Flow>
-    <X>287</X>
-    <Y>171</Y>
+    <X>462</X>
+    <Y>203</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>028_328_65_4</MyPK>

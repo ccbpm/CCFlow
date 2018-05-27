@@ -376,8 +376,8 @@
     <MyPK>129_179_54_1</MyPK>
     <Name>自定义表单开发演示</Name>
     <FK_Flow>129</FK_Flow>
-    <X>179</X>
-    <Y>54</Y>
+    <X>290</X>
+    <Y>98</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>12901</FK_Node>

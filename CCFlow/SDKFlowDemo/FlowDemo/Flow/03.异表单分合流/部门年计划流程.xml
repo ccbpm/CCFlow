@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@901@999</GroupStaNDs>
-    <X>265</X>
-    <Y>44</Y>
+    <X>264</X>
+    <Y>91</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@902</GroupStaNDs>
-    <X>105</X>
-    <Y>167</Y>
+    <X>23</X>
+    <Y>265</Y>
     <FocusField>本年度总结:@BenNianDuZongJie</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@903</GroupStaNDs>
-    <X>257</X>
-    <Y>170</Y>
+    <X>253</X>
+    <Y>203</Y>
     <FocusField>本年度总结:@BenNianDuZongJie</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@904</GroupStaNDs>
-    <X>413</X>
-    <Y>165</Y>
+    <X>502</X>
+    <Y>270</Y>
     <FocusField>本年度总结:@BenNianDuZongJie</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@901@999</GroupStaNDs>
-    <X>257</X>
-    <Y>346</Y>
+    <X>264</X>
+    <Y>515</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />

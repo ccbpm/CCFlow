@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2301@2399</GroupStaNDs>
-    <X>212</X>
-    <Y>137</Y>
+    <X>111</X>
+    <Y>99</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2302</GroupStaNDs>
-    <X>208</X>
-    <Y>218</Y>
+    <X>395</X>
+    <Y>213</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@2301@2399</GroupStaNDs>
-    <X>212</X>
-    <Y>300</Y>
+    <X>211</X>
+    <Y>388</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -376,22 +376,22 @@
     <MyPK>023_299_288_1</MyPK>
     <Name>张海城接受反馈</Name>
     <FK_Flow>023</FK_Flow>
-    <X>299</X>
-    <Y>288</Y>
+    <X>239</X>
+    <Y>304</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>023_300_118_2</MyPK>
     <Name>张海城发起</Name>
     <FK_Flow>023</FK_Flow>
-    <X>300</X>
-    <Y>118</Y>
+    <X>298</X>
+    <Y>93</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>023_312_205_3</MyPK>
     <Name>周朋审核</Name>
     <FK_Flow>023</FK_Flow>
-    <X>312</X>
-    <Y>205</Y>
+    <X>260</X>
+    <Y>204</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>2301</FK_Node>

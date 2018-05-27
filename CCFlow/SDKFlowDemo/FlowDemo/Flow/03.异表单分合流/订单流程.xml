@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@13901@13902@13903@13904@13905@13906</GroupStaNDs>
-    <X>75</X>
-    <Y>56</Y>
+    <X>47</X>
+    <Y>159</Y>
     <FocusField>备注:@BZ</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@13901@13902@13903@13904@13905@13906</GroupStaNDs>
-    <X>270</X>
-    <Y>99</Y>
+    <X>354</X>
+    <Y>103</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@13901@13902@13903@13904@13905@13906</GroupStaNDs>
-    <X>157</X>
-    <Y>232</Y>
+    <X>257</X>
+    <Y>289</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@13901@13902@13903@13904@13905@13906</GroupStaNDs>
-    <X>154</X>
-    <Y>365</Y>
+    <X>340</X>
+    <Y>486</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@13901@13902@13903@13904@13905@13906</GroupStaNDs>
-    <X>356</X>
-    <Y>240</Y>
+    <X>591</X>
+    <Y>251</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -639,8 +639,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@13901@13902@13903@13904@13905@13906</GroupStaNDs>
-    <X>359</X>
-    <Y>370</Y>
+    <X>672</X>
+    <Y>453</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -716,8 +716,8 @@
     <MyPK>139_83_159_1</MyPK>
     <Name>如果客户需要发票就启用这个分支</Name>
     <FK_Flow>139</FK_Flow>
-    <X>83</X>
-    <Y>159</Y>
+    <X>63</X>
+    <Y>239</Y>
   </WF_LabNote>
   <Sys_MapData>
     <No>ND13901</No>

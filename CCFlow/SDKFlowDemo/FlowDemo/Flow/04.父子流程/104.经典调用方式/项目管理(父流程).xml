@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1103</GroupStaNDs>
-    <X>157</X>
-    <Y>178</Y>
+    <X>79</X>
+    <Y>221</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1199</GroupStaNDs>
-    <X>200</X>
-    <Y>325</Y>
+    <X>221</X>
+    <Y>413</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -376,8 +376,8 @@
     <MyPK>011_268_179_1</MyPK>
     <Name>在实施项目过程中有n次发起施工流程，n次发起催款流程.</Name>
     <FK_Flow>011</FK_Flow>
-    <X>268</X>
-    <Y>179</Y>
+    <X>279</X>
+    <Y>142</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>011_362_50_2</MyPK>

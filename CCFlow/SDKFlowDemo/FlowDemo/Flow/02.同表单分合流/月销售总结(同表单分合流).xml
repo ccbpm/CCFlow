@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@501@599</GroupStaNDs>
-    <X>284</X>
-    <Y>107</Y>
+    <X>217</X>
+    <Y>105</Y>
     <FocusField>发起说明:@FaQiShuoMing</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@502</GroupStaNDs>
-    <X>283</X>
-    <Y>253</Y>
+    <X>127</X>
+    <Y>301</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@501@599</GroupStaNDs>
-    <X>284</X>
-    <Y>386</Y>
+    <X>383</X>
+    <Y>416</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -398,8 +398,8 @@
     <MyPK>005_335_169_1</MyPK>
     <Name>发起节点可以有n个人接受，每个人处理完后就发送到汇总节点。</Name>
     <FK_Flow>005</FK_Flow>
-    <X>335</X>
-    <Y>169</Y>
+    <X>306</X>
+    <Y>213</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>501</FK_Node>

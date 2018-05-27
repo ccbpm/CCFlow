@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1001</GroupStaNDs>
-    <X>206</X>
-    <Y>30</Y>
+    <X>303</X>
+    <Y>58</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1002</GroupStaNDs>
-    <X>78</X>
-    <Y>121</Y>
+    <X>38</X>
+    <Y>173</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1003</GroupStaNDs>
-    <X>81</X>
-    <Y>248</Y>
+    <X>26</X>
+    <Y>303</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1004</GroupStaNDs>
-    <X>201</X>
-    <Y>121</Y>
+    <X>303</X>
+    <Y>188</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1005</GroupStaNDs>
-    <X>202</X>
-    <Y>245</Y>
+    <X>292</X>
+    <Y>293</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -639,8 +639,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1006</GroupStaNDs>
-    <X>338</X>
-    <Y>125</Y>
+    <X>578</X>
+    <Y>187</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -737,8 +737,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1007</GroupStaNDs>
-    <X>339</X>
-    <Y>242</Y>
+    <X>566</X>
+    <Y>346</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -835,8 +835,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1008</GroupStaNDs>
-    <X>202</X>
-    <Y>346</Y>
+    <X>138</X>
+    <Y>549</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -933,8 +933,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@1099</GroupStaNDs>
-    <X>202</X>
-    <Y>429</Y>
+    <X>454</X>
+    <Y>484</Y>
     <FocusField>考察内容:@KaoChaNeiRong</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -1274,8 +1274,8 @@
     <MyPK>010_346_57_1</MyPK>
     <Name>异表单分合流的另外一种形式，子线程中有多个节点。</Name>
     <FK_Flow>010</FK_Flow>
-    <X>346</X>
-    <Y>57</Y>
+    <X>733</X>
+    <Y>74</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>1001</FK_Node>
@@ -1363,8 +1363,8 @@
     <Tag />
     <FK_FrmSort />
     <FK_FormTree />
-    <FrmType>0</FrmType>
-    <FrmTypeText>傻瓜表单</FrmTypeText>
+    <FrmType>1</FrmType>
+    <FrmTypeText>自由表单</FrmTypeText>
     <AppType>1</AppType>
     <DBSrc>local</DBSrc>
     <BodyAttr />
@@ -1374,7 +1374,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2018-05-27 17:10:22</Ver>
+    <Ver>2018-05-27 19:05:08</Ver>
     <FlowCtrls />
     <AtPara>@MaxLeft=81.55@MaxEnd=481.82@MaxRight=720@IsHaveCA=0@MaxTop=9.27</AtPara>
   </Sys_MapData>

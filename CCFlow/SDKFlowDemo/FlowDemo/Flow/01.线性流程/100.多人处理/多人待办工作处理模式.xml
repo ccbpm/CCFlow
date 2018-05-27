@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11701</GroupStaNDs>
-    <X>318</X>
-    <Y>53</Y>
+    <X>196</X>
+    <Y>61</Y>
     <FocusField>申请内容:@SQNR</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11702</GroupStaNDs>
-    <X>101</X>
-    <Y>198</Y>
+    <X>70</X>
+    <Y>272</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11703</GroupStaNDs>
-    <X>320</X>
-    <Y>383</Y>
+    <X>304</X>
+    <Y>401</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11704@11705@11706</GroupStaNDs>
-    <X>257</X>
-    <Y>202</Y>
+    <X>292</X>
+    <Y>162</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11704@11705@11706</GroupStaNDs>
-    <X>403</X>
-    <Y>203</Y>
+    <X>485</X>
+    <Y>224</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -639,8 +639,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11704@11705@11706</GroupStaNDs>
-    <X>571</X>
-    <Y>199</Y>
+    <X>658</X>
+    <Y>277</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />

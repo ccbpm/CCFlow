@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@3302</GroupStaNDs>
-    <X>199</X>
-    <Y>220</Y>
+    <X>423</X>
+    <Y>205</Y>
     <FocusField>工作报告:@Rpt</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@3399</GroupStaNDs>
-    <X>201</X>
-    <Y>379</Y>
+    <X>410</X>
+    <Y>418</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -482,8 +482,8 @@
     <MyPK>033_284_95_1</MyPK>
     <Name>具有质量考核流程, 关于质量考核请参考设计手册.</Name>
     <FK_Flow>033</FK_Flow>
-    <X>284</X>
-    <Y>95</Y>
+    <X>221</X>
+    <Y>79</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>3301</FK_Node>

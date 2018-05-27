@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@15801@15802</GroupStaNDs>
-    <X>271</X>
-    <Y>304</Y>
+    <X>306</X>
+    <Y>425</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -390,15 +390,15 @@
     <MyPK>158_275_123_1</MyPK>
     <Name>在流程属性设置发起前置导航，设置的是按照表单列表。</Name>
     <FK_Flow>158</FK_Flow>
-    <X>275</X>
+    <X>372</X>
     <Y>123</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>158_309_286_2</MyPK>
     <Name>显示有数据的表单，因为没有数据的表单，就是不被显示的表单。</Name>
     <FK_Flow>158</FK_Flow>
-    <X>309</X>
-    <Y>286</Y>
+    <X>400</X>
+    <Y>372</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>15801</FK_Node>

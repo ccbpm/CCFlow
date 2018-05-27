@@ -49,7 +49,7 @@
     <IsBatchStart>0</IsBatchStart>
     <BatchStartFields />
     <IsAutoSendSubFlowOver>0</IsAutoSendSubFlowOver>
-    <Ver />
+    <Ver>2018-05-27 19:50:02</Ver>
     <DType>0</DType>
     <FlowDeleteRole>0</FlowDeleteRole>
     <AtPara />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11602</GroupStaNDs>
-    <X>430</X>
-    <Y>117</Y>
+    <X>389</X>
+    <Y>153</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -263,7 +263,7 @@
     <Name>处长审核</Name>
     <Tip />
     <Step>3</Step>
-    <ICON />
+    <ICON>审核.png</ICON>
     <NodeWorkType>0</NodeWorkType>
     <SubThreadType>0</SubThreadType>
     <FK_Flow>116</FK_Flow>
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11603</GroupStaNDs>
-    <X>226</X>
-    <Y>192</Y>
+    <X>63</X>
+    <Y>231</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11604</GroupStaNDs>
-    <X>227</X>
-    <Y>287</Y>
+    <X>338</X>
+    <Y>292</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@11601@11605</GroupStaNDs>
-    <X>225</X>
-    <Y>395</Y>
+    <X>208</X>
+    <Y>442</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -740,7 +740,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2018-05-27 17:11:06</Ver>
+    <Ver>2018-05-27 19:50:02</Ver>
     <FlowCtrls />
     <AtPara>@IsHaveCA=0</AtPara>
   </Sys_MapData>

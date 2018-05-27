@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@5001@5003@5099</GroupStaNDs>
-    <X>200</X>
-    <Y>138</Y>
+    <X>123</X>
+    <Y>89</Y>
     <FocusField>填写要求:@TianXieYaoQiu</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@5002</GroupStaNDs>
-    <X>198</X>
-    <Y>219</Y>
+    <X>306</X>
+    <Y>162</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -443,8 +443,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@5004</GroupStaNDs>
-    <X>384</X>
-    <Y>298</Y>
+    <X>371</X>
+    <Y>409</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -541,8 +541,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@5001@5003@5099</GroupStaNDs>
-    <X>562</X>
-    <Y>300</Y>
+    <X>613</X>
+    <Y>499</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />

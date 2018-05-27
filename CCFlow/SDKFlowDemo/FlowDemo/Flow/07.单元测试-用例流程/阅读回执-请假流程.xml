@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@3601</GroupStaNDs>
-    <X>203</X>
-    <Y>138</Y>
+    <X>162</X>
+    <Y>106</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@3602</GroupStaNDs>
-    <X>200</X>
-    <Y>221</Y>
+    <X>366</X>
+    <Y>265</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -346,7 +346,7 @@
     <ShowSheets />
     <GroupStaNDs>@3699</GroupStaNDs>
     <X>200</X>
-    <Y>300</Y>
+    <Y>408</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -376,22 +376,22 @@
     <MyPK>036_276_207_1</MyPK>
     <Name>自动阅读回执</Name>
     <FK_Flow>036</FK_Flow>
-    <X>276</X>
-    <Y>207</Y>
+    <X>294</X>
+    <Y>195</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>036_281_287_2</MyPK>
     <Name>由上一节点表单字段决定是否回执</Name>
     <FK_Flow>036</FK_Flow>
-    <X>281</X>
-    <Y>287</Y>
+    <X>357</X>
+    <Y>439</Y>
   </WF_LabNote>
   <WF_LabNote>
     <MyPK>036_295_57_3</MyPK>
     <Name>此流程为了测试已读回执在单元测试类库中有对应的测试案例</Name>
     <FK_Flow>036</FK_Flow>
-    <X>295</X>
-    <Y>57</Y>
+    <X>323</X>
+    <Y>51</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>3601</FK_Node>

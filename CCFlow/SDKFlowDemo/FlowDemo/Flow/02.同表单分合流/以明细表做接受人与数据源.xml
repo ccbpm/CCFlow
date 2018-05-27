@@ -149,8 +149,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@6901@6999</GroupStaNDs>
-    <X>129</X>
-    <Y>58</Y>
+    <X>130</X>
+    <Y>87</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -247,8 +247,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@6902</GroupStaNDs>
-    <X>234</X>
-    <Y>195</Y>
+    <X>339</X>
+    <Y>181</Y>
     <FocusField>任务完成情况:@RenWuWanChengQingKuang</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -345,8 +345,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@6901@6999</GroupStaNDs>
-    <X>333</X>
-    <Y>332</Y>
+    <X>500</X>
+    <Y>296</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />

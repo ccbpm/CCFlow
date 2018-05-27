@@ -14436,23 +14436,4 @@
     <IsItalic>0</IsItalic>
     <GUID />
   </Sys_FrmLab>
-  <Sys_FrmEvent>
-    <MyPK>ND101_SaveAfter</MyPK>
-    <FK_Event>SaveAfter</FK_Event>
-    <FK_MapData>ND101</FK_MapData>
-    <FK_Node>0</FK_Node>
-    <DoType>3</DoType>
-    <DoDoc>/DataUser/Do.aspx?DoType=SetHeJi</DoDoc>
-    <MsgOK />
-    <MsgError />
-    <MsgCtrl>0</MsgCtrl>
-    <MsgCtrlText>不发送</MsgCtrlText>
-    <MailEnable>1</MailEnable>
-    <MailTitle />
-    <MailDoc />
-    <SMSEnable>0</SMSEnable>
-    <SMSDoc />
-    <MobilePushEnable>1</MobilePushEnable>
-    <AtPara />
-  </Sys_FrmEvent>
 </NewDataSet>

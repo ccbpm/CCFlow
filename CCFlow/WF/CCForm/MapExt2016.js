@@ -68,7 +68,7 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt, dbSrc, dbType) {
             var dataObj;
             //URL 获取数据源
             if (dbType == 1) {
-                dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+                dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
                 dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
                 //JQuery 获取数据源
@@ -418,7 +418,7 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt, dbSrc,dbType) {
     var dataObj;
     //URL 获取数据源
     if (dbType == 1) {
-        dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
         //JQuery 获取数据源
@@ -467,7 +467,7 @@ function DDLAnsc(e, ddlChild, fk_mapExt, dbSrc, dbType, param) {
     var dataObj = "";
     //Url获取数据源
     if (dbType == 1) {
-        dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
         //JQuery 获取数据源
@@ -557,7 +557,7 @@ function FullM2M(key, fk_mapExt, dbSrc, dbType) {
     var url = GetLocalWFPreHref();
     var dataObj;
     if (dbType == 1) {
-        dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
         //JQuery 获取数据源
@@ -608,7 +608,7 @@ function FullDtl(key, fk_mapExt, dbSrc, dbType) {
     var url = GetLocalWFPreHref();
     var dataObj;
     if (dbType == 1) {
-        dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
         //JQuery 获取数据源
@@ -657,7 +657,7 @@ function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt, dbSrc, dbType) {
     var url = GetLocalWFPreHref();
     var dataObj;
     if (dbType == 1) {
-        dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
         //JQuery 获取数据源
@@ -703,7 +703,7 @@ function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt, dbSrc, dbType) 
 
     var dataObj;
     if (dbType == 1) {
-        dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
         //JQuery 获取数据源
@@ -759,7 +759,7 @@ function FullCtrl(e, ctrlIdBefore, fk_mapExt, dbSrc, dbType) {
 
     var dataObj;
     if (dbType == 1) {
-        dbSrc = DealSQL(getDocOfSQLDeal(dbSrc), e, kvs);
+        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
         //JQuery 获取数据源
@@ -983,16 +983,6 @@ function GetLocalWFPreHref() {
     return url;
 }
 
-
-function getDocOfSQLDeal(dbSrc) {
-    var webUser = new WebUser();
-    dbSrc = dbSrc.replace("WebUser.No", webUser.No);
-    dbSrc = dbSrc.replace("@WebUser.Name", webUser.Name);
-    dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
-    dbSrc = dbSrc.replace("@WebUser.FK_DeptName", webUser.FK_DeptName);
-    dbSrc = dbSrc.replace("@WebUser.FK_Dept", webUser.FK_Dept);
-    return dbSrc;
-}
 
 function DealSQL(dbSrc, key, kvs) {
 

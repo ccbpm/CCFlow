@@ -151,8 +151,8 @@
                     //生成内容.
                     html += GenerGroupContext(groupObj, data);
 
+                    //过滤attrs
                     var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
-
 
 
                     var isDrawTR = true; //是否需要话tr ?
@@ -161,7 +161,6 @@
                         var mapAttr = mapAttrs[j];
                         if (mapAttr.UIVisible == 0)
                             continue;
-
 
                         if (mapAttr.ColSpan <= 1 && mapAttr.UIContralType == "1") { //外键.
 
@@ -269,7 +268,7 @@
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
 
 
-                                html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control' style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+                                html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control' style='width:160px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
 
                                 if (isDrawTR == false) {
                                     html += "</tr>";
@@ -330,7 +329,6 @@
                                 }
 
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-
 
                                 if (mapAttr.UIContralType == 2) {
                                     var ses = new Entities("BP.Sys.SysEnums");
@@ -781,10 +779,15 @@
                         var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;' leftMargin='0' topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
                         return "<tr><td colspan=4 style='width:100%;height:" + h + "px;' id='FWC' >" + frameUrl + "</td></tr>";
                     case "Dtl":
+
                         var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupEn.CtrlID });
+
+                        // alert(dtl[0].H);
+                        // alert(dtl.H);
+
                         if (dtl.length == 1) {
                             var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageParam.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
-                            var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl[0].H + "'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                            var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                             return "<tr><td colspan=4 id='TD" + dtl[0].No + "'>" + frameUrl + "</td></tr>";
                         } else {
                             html = "<tr><td colspan=4 style='width:100%;height:200px;' > 从表[" + groupEn.CtrlID + "]丢失</td></tr>";

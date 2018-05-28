@@ -1812,7 +1812,7 @@ namespace CCFlow.WF.UC
               "<script language='JavaScript' src='" + CCFlowAppPath + "WF/Scripts/jquery-1.7.2.min.js' ></script>");
 
                 this.Page.RegisterClientScriptBlock("b7",
-             "<script language='JavaScript' src='" + CCFlowAppPath + "WF/CCForm/MapExt.js' defer='defer' type='text/javascript' ></script>");
+             "<script language='JavaScript' src='" + CCFlowAppPath + "WF/CCForm/MapExt2016.js' defer='defer' type='text/javascript' ></script>");
 
                 this.Page.RegisterClientScriptBlock("y7",
             "<script language='JavaScript' src='" + CCFlowAppPath + "DataUser/JSLibData/" + enName + ".js' ></script>");

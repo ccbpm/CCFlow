@@ -424,13 +424,12 @@ function InitMapAttrOfCtrl(mapAttr) {
             if (mapAttr.AtPara.indexOf("@RBShowModel=3") == -1)
                 RBShowModel = 0;
             return InitRBShowContent(frmData, mapAttr, defValue, RBShowModel, enableAttr);
-
         }
 
         /*if (mapAttr.UIIsEnable == 1)
-            enableAttr = "";
+        enableAttr = "";
         else
-            enableAttr = "disabled='disabled'";
+        enableAttr = "disabled='disabled'";
 
         return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         */
@@ -444,7 +443,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             enableAttr = "disabled='disabled'";
 
         // alert(mapAttr.KeyOfEn);
-        return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:125px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -453,7 +452,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             enableAttr = "disabled='disabled'";
         }
 
-        return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     //AppMoney  AppRate
@@ -464,7 +463,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

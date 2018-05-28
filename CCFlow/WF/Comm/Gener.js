@@ -1923,3 +1923,61 @@ function FormatDate(now, mask) {
         }
     });
 }
+
+//表达式的替换.
+function DealExp(expStr, webUser) {
+    if (webUser == null || webUser == undefined)
+        webUser = new WebUser();
+
+    //替换表达式常用的用户信息
+    expStr = expStr.replace('@WebUse.No', webUser.No);
+    expStr = expStr.replace('@WebUse.Name', webUser.Name);
+    expStr = expStr.replace('@WebUse.FK_Dept', webUser.FK_Dept);
+    expStr = expStr.replace('@WebUse.DeptName', webUser.DeptName);
+    expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+
+    //替换表单上的数据信息
+    expStr = expStr.subString(expStr.indexOf("?") + 1);
+    alert(expStr);
+    if (expStr.length == 0)
+        return expStr;
+    var newExpStrs = expStr;
+    $.each(newExpStrs.split("&"), function (i, o) {
+        var param = o.split("=");
+        if (param.length == 2) {
+            //判断字段类型获取对应的值
+            var keyText = GetValueByDocumentID(param[0]);
+            expStr = expStr.replace(param[1], keyText);
+        }
+    });
+
+    
+    return expStr;
+}
+
+//获取字段的值
+function GetValueByDocumentID(key) {
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        return ctrl.val();
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        return ctrl.val(); 
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        var isChecked = ctrl.is(":checked");
+        if (isChecked == true)
+            return 1;
+        return 0;
+ 
+    }
+
+    ctrl = $("#RB_" + key);
+    if (ctrl.length > 0) {
+       return  $("input:radio[name='RB_" + key + "']:checked").val();
+    }
+}

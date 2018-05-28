@@ -410,7 +410,7 @@ function GenerPageKVs() {
 
 
 /* 自动填充 */
-function DDLFullCtrl(e, ddlChild, fk_mapExt, dbSrc) {
+function DDLFullCtrl(e, ddlChild, fk_mapExt, dbSrc,dbType) {
 
     GenerPageKVs();
     var url = GetLocalWFPreHref();
@@ -691,7 +691,7 @@ function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt, dbSrc, dbType) {
             var fullDDLID = dataObj.Head[i][k];
 
             //alert(fullDDLID);
-            FullCtrlDDLDB(key, fullDDLID, beforeID, endId, fk_mapExt);
+            FullCtrlDDLDB(key, fullDDLID, beforeID, endId, fk_mapExt, dbSrc, dbType);
         }
     }
 

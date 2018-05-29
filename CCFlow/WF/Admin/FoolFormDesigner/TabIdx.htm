@@ -1,60 +1,140 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>驰骋工作流</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>设置tab键顺序</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" /><link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script> 
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" /><link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
+      
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js" ></script>
+
     <style type="text/css">
-        .style1
+        body
         {
-            width: 105px;
-        }
-        #Text4
-        {
-            width: 447px;
-        }
-        #TB_Addr
-        {
-            width: 450px;
+            margin: 0 auto;
+            /*color: #000;
+            line-height: 20px;
+            font-family: 宋体;
+            text-align: center;
+            width: 90%;*/
         }
     </style>
-
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
-
-    <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../../Scripts/config.js"></script>
-
-    <script type="text/javascript" language="javascript" >
-        //页面启动函数.
+    <base target="_self" />
+    <script type="text/javascript">
+        //页面启动函数
         $(function () {
+            var ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", GetQueryString("FK_MapData"), "UIVisible", "1", "Idx");
 
-            //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
+            if (ens.length > 0) {
+                for (var i = 0; i < ens.length; i++) {
+                    var en = ens[i];
+                    var addRow = "";
+                    var rowNo = i + 1;
 
-            var url = window.location.href;
+                    addRow = "<tr class=" + rowNo + "><td>" + rowNo + "</td>";
+                    addRow += "<td>" + en.KeyOfEn + "</td>";
+                    addRow += "<td>" + en.Name + "</td>";
+                    addRow += "<td>" + en.Idx + "</td>";
+                    addRow += "<td><a href='javascript:void(0);' onclick='doUp(parseInt(this.id))' id='"+rowNo+"'><img src='../../Img/Btn/Up.GIF' border=0></a></td>";
+                    addRow += "<td><a href='javascript:void(0);' onclick = 'doDown(parseInt(this.id))'  id='" + rowNo + "'><img src='../../Img/Btn/Down.gif' border=0></a></td>";
 
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                alert('该功能尚未完成');
-                return;
+                    addRow += "</tr>";
+
+                    $("#Table1 tr:last").after(addRow);
+                }
             }
         });
+        //获取行对象的函数
+        function getRowEn(paramNo) {
+            var KeyOfEn = $("table tr:eq(" + paramNo + ") td:eq(1)").text();
+            var MyPK = GetQueryString("FK_MapData") + "_" + KeyOfEn;
+            var en = new Entity("BP.Sys.MapAttr", MyPK);
+            return en;
+        }
+        //向上移动
+        function doUp(paramNo) {
+            //最顶端,直接返回
+            if (paramNo == 1) {
+                return;
+            }
+            //获取当前行对象
+            var nowRowEn = getRowEn(paramNo);
+            var nowIdx = nowRowEn.Idx;
+            //获取上一行对象
+            var lastRowEn = getRowEn(paramNo - 1);
+
+            //将当前行上移
+            nowRowEn.Idx = lastRowEn.Idx;
+            nowRowEn.Update();
+            //将上一行下移
+            lastRowEn.Idx = nowIdx;
+            lastRowEn.Update();
+
+            window.location.href = window.location.href;
+        }
+        //向下移动
+        function doDown(paramNo) {
+            //获取表的总行数(-1去掉表头)
+            allRowNums = $("#Table1").find("tr").length - 1;
+            //最底端,直接返回
+            if (paramNo == allRowNums) {
+                return;
+            }
+            //alert(Number.isInteger(paramNo));
+            //获取当前行对象
+            var nowRowEn = getRowEn(paramNo);
+            var nowIdx = nowRowEn.Idx;
+            //获取下一行对象
+            var nextRowEn = getRowEn(paramNo + 1);
+
+            //将当前行下移
+            nowRowEn.Idx = nextRowEn.Idx;
+            nowRowEn.Update();
+
+            //将下一行上移
+            nextRowEn.Idx = nowIdx;
+            nextRowEn.Update();
+
+            window.location.href = window.location.href;
+        }
     </script>
 </head>
-<body  >
-
-<form id="cc">
- 
- <h3> 正在加载，请稍后。。。</h3>
-
-</form>
-
+<body onkeypress="Esc();" class="easyui-layout"  topmargin="0" leftmargin="0" >
+<form method="post" action="" id="form1">
+<div">
+        
+    <table id ="Table1" width='100%'>
+        <caption>
+            正确的调整好Tab键的顺序,可以方便用户数据录入.</caption>
+        <tr>
+            <th>
+                IDX
+            </th>
+            <th>
+                字段
+            </th>
+            <th>
+                描述
+            </th>
+            <th>
+                顺序号
+            </th>
+            <th>
+                移动
+            </th>
+            <th>
+                移动
+            </th>
+        </tr>
+    </table>
+    </div>
+    </form>
 </body>
 </html>

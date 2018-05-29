@@ -25,6 +25,7 @@ function AtParaToJson(json) {
 }
 
 
+
 function GetPKVal() {
 
     var val = this.GetQueryString("OID"); 
@@ -173,9 +174,13 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
         alert('@在绑定[' + ddlCtrlID + ']错误，Name列名' + nameCol + '不存在,无法行程期望的下拉框value. ');
         return;
     }
-    
+
     for (var i = 0; i < json.length; i++) {
-        $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
+
+        if (json[i][noCol] == undefined)
+            $("#" + ddlCtrlID).append("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");
+        else
+            $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
     }
 
     //设置选中的值.
@@ -1532,9 +1537,11 @@ var DBAccess = (function () {
 
         if (dbType == undefined) {
             dbType = 0; //默认为sql.
+
             if (dbSrc.length <= 20) {
                 dbType = 2; //可能是一个方法名称.
             }
+
             if (dbSrc.indexOf('/') != -1) {
                 dbType = 1; //是一个url.
             }
@@ -1926,6 +1933,7 @@ function FormatDate(now, mask) {
 
 //表达式的替换.
 function DealExp(expStr, webUser) {
+
     if (webUser == null || webUser == undefined)
         webUser = new WebUser();
 
@@ -1936,20 +1944,48 @@ function DealExp(expStr, webUser) {
     expStr = expStr.replace('@WebUse.DeptName', webUser.DeptName);
     expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
 
-    //替换表单上的数据信息
-    expStr = expStr.subString(expStr.indexOf("?") + 1);
-    alert(expStr);
-    if (expStr.length == 0)
+    if (expStr.indexOf('@') == -1)
         return expStr;
-    var newExpStrs = expStr;
-    $.each(newExpStrs.split("&"), function (i, o) {
-        var param = o.split("=");
-        if (param.length == 2) {
-            //判断字段类型获取对应的值
-            var keyText = GetValueByDocumentID(param[0]);
-            expStr = expStr.replace(param[1], keyText);
-        }
-    });
+
+//    var objs = document.all;
+//    var length1;
+//    for (var i = 0; i < objs.length; i++) {
+//        var obj = objs[i].tagName;
+//        if (obj == null)
+//            continue;
+//        if (obj.id == null)
+//            continue;
+//        if (obj == "body" || obj == "BODY") {
+//            length1 = i + 1;
+//            break;
+//        }
+    //    }
+
+//    var tags = document.getElementsByTagName('*');
+//    for (var i = 0; i < length; i++) {
+//    }
+//    for (var i = 0; i < tags.length; i++) {
+//    }
+//    for (var i = 0; i < length; i++) {
+//    }
+
+//    //替换表单上的数据信息
+//    expStr = expStr.substring(expStr.indexOf("?") + 1);
+//    alert(expStr);
+//    if (expStr.length == 0)
+//        return expStr;
+//    var newExpStrs = expStr;
+
+//    $.each(newExpStrs.split("&"), function (i, o) {
+//        var param = o.split("=");
+
+//        if (param.length == 2) {
+//            //判断字段类型获取对应的值
+//            var keyText = GetValueByDocumentID( param[1].replace("@", "") );
+
+//            expStr = expStr.replace(param[1], keyText);
+//        }
+//    });
 
     
     return expStr;
@@ -1957,6 +1993,7 @@ function DealExp(expStr, webUser) {
 
 //获取字段的值
 function GetValueByDocumentID(key) {
+
     var ctrl = $("#TB_" + key);
     if (ctrl.length > 0) {
         return ctrl.val();

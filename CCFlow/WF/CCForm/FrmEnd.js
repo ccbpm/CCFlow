@@ -400,7 +400,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
                 }
                 break;
-            case "DDLFullCtrl": // 自动填充其他的控件..  先不做
+            case "DDLFullCtrl": // 自动填充其他的控件..
 
                 var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
                 if (ddlOper.length == 0)

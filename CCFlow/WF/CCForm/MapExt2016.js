@@ -107,7 +107,8 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt, dbSrc, dbType) {
     }
 }
 
-function FullIt(oldValue, tbid, fk_mapExt, dbSrc, dbType) {
+//填充其他的控件.
+function FullIt(selectVal, tbid, fk_mapExt, dbSrc, dbType) {
 
     if (oid == null)
         oid = GetQueryString('OID');
@@ -115,20 +116,30 @@ function FullIt(oldValue, tbid, fk_mapExt, dbSrc, dbType) {
     if (oid == null)
         oid = GetQueryString('WorkID');
 
-    if (oid == null)
+    if (oid == null) {
         oid = 0;
+        return;
+    }
+
+
+    //获得对象.
+    var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
+
+    //生成关键字.
+    GenerPageKVs();
 
     //执行填充主表的控件.
-    FullCtrl(oldValue, tbid, fk_mapExt, dbSrc, dbType);
+    FullCtrl(selectVal, tbid, mapExt);
 
-    //执行个性化填充下拉框.
-    FullCtrlDDL(oldValue, tbid, fk_mapExt, dbSrc, dbType);
+    //执行个性化填充下拉框，比如填充ddl下拉框的范围.
+    FullCtrlDDL(selectVal, tbid, mapExt);
+    return;
 
     //执行填充从表.
-    FullDtl(oldValue, fk_mapExt, dbSrc, dbType);
+    FullDtl(selectVal, fk_mapExt, dbSrc, dbType);
 
-    //执行m2m 关系填充.
-    FullM2M(oldValue, fk_mapExt, dbSrc, dbType);
+    ////执行m2m 关系填充.
+    //FullM2M(oldValue, fk_mapExt, dbSrc, dbType);
 }
 function openDiv(e, tbID) {
 
@@ -261,7 +272,7 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
         //$(ctrl).val("");
         setValForPopval(ctrl.id, dtlWin, "");
 
-        //为表单元素反填值
+        //为表单元素反填值。
         var returnValSetObj = frames["iframePopModalForm"].window.pageSetData;
         var returnValObj = frames["iframePopModalForm"].window.returnVal;
 
@@ -407,42 +418,12 @@ function GenerPageKVs() {
     }
     return kvs;
 }
-
+ 
 
 /* 自动填充 */
-function DDLFullCtrl(e, ddlChild, fk_mapExt, dbSrc,dbType) {
+function DDLFullCtrl(selectVal, ddlChild, fk_mapExt, dbSrc, dbType) {
 
-    GenerPageKVs();
-    var url = GetLocalWFPreHref();
-
-    var dataObj;
-    //URL 获取数据源
-    if (dbType == 1) {
-        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
-        dataObj = DBAccess.RunDBSrc(dbSrc, 1);
-
-        //JQuery 获取数据源
-    } else if (dbType == 2) {
-        dataObj = DBAccess.RunDBSrc(dbSrc, 2);
-    } else {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-        handler.AddPara("Key", e);
-        handler.AddPara("FK_MapExt", fk_mapExt);
-        handler.AddPara("KVs", kvs);
-        var data = handler.DoMethodReturnString("HandlerMapExt");
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            return;
-        }
-        dataObj = eval("(" + data + ")"); //转换为json对象 
-    }
-
-    for (var i in dataObj.Head) {
-        if (typeof (i) == "function")
-            continue;
-        FullIt(e, ddlChild, fk_mapExt);
-        return;
-    }
+    FullIt(selectVal, ddlChild, fk_mapExt,dbSrc, dbType);
 }
 
 /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
@@ -547,59 +528,6 @@ function DDLAnsc(e, ddlChild, fk_mapExt, dbSrc, dbType, param) {
         $("#" + ddlChild).change();
 
     }
-
-
-}
-
-
-function FullM2M(key, fk_mapExt, dbSrc, dbType) {
-    GenerPageKVs();
-    var url = GetLocalWFPreHref();
-    var dataObj;
-    if (dbType == 1) {
-        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
-        dataObj = DBAccess.RunDBSrc(dbSrc, 1);
-
-        //JQuery 获取数据源
-    } else if (dbType == 2) {
-        dataObj = DBAccess.RunDBSrc(dbSrc, 2);
-    } else {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-        handler.AddPara("Key", e);
-        handler.AddPara("FK_MapExt", fk_mapExt);
-        handler.AddPara("KVs", kvs);
-        handler.AddPara("DoTypeExt", "ReqM2MFullList");
-        handler.AddPara("OID", oid);
-        var data = handler.DoMethodReturnString("HandlerMapExt");
-        if (data == "")
-            return;
-
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            return;
-        }
-        dataObj = eval("(" + data + ")"); //转换为json对象 	
-    }
-    for (var i in dataObj.Head) {
-        if (typeof (i) == "function")
-            continue;
-
-        for (var k in dataObj.Head[i]) {
-            var fullM2M = dataObj.Head[i][k];
-            var frm = document.getElementById('F' + fullM2M);
-            if (frm == null)
-                continue;
-
-            var src = frm.src;
-            var idx = src.indexOf("&Key");
-            if (idx == -1)
-                src = src + '&Key=' + key + '&FK_MapExt=' + fk_mapExt;
-            else
-                src = src.substring(0, idx) + '&Key=' + key + '&FK_MapExt=' + fk_mapExt;
-            frm.src = src;
-        }
-    }
-
 }
 
 //填充明细.
@@ -607,7 +535,9 @@ function FullDtl(key, fk_mapExt, dbSrc, dbType) {
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     var dataObj;
+
     if (dbType == 1) {
+
         dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
@@ -652,49 +582,29 @@ function FullDtl(key, fk_mapExt, dbSrc, dbType) {
 
 }
 
-function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt, dbSrc, dbType) {
-    GenerPageKVs();
-    var url = GetLocalWFPreHref();
-    var dataObj;
-    if (dbType == 1) {
-        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
-        dataObj = DBAccess.RunDBSrc(dbSrc, 1);
+function FullCtrlDDL(selectVal, ctrlIdBefore, mapExt) {
 
-        //JQuery 获取数据源
-    } else if (dbType == 2) {
-        dataObj = DBAccess.RunDBSrc(dbSrc, 2);
-    } else {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-        handler.AddPara("Key", e);
-        handler.AddPara("FK_MapExt", fk_mapExt);
-        handler.AddPara("KVs", kvs);
-        handler.AddPara("DoTypeExt", "ReqDDLFullList");
-        var data = handler.DoMethodReturnString("HandlerMapExt");
-        if (data == "")
-            return;
+    if (mapExt.Tag == "" || mapExt.Tag ==null)
+        return; 
 
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            return;
-        }
-        dataObj = eval("(" + data + ")"); //转换为json对象 	
-    }
+     
 
     var beforeID = ctrlIdBefore.substring(0, ctrlIdBefore.indexOf('DDL_'));
     var endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
 
-    for (var i in dataObj.Head) {
-        if (typeof (i) == "function")
-            continue;
+    var dbSrcs = map.Tag.splite('$'); //获得集合.
+    for (var i = 0; i < dbSrcs.length; i++) {
 
-        for (var k in dataObj.Head[i]) {
-            var fullDDLID = dataObj.Head[i][k];
+        var dbSrc = dbSrcs[i];
 
-            //alert(fullDDLID);
-            FullCtrlDDLDB(key, fullDDLID, beforeID, endId, fk_mapExt, dbSrc, dbType);
-        }
+        var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':')+1);
+        var src = dbSrc.substring(dbSrc.indexOf(':'));
+
+        var db = GenerDB(src, selectVal); //获得数据源.
+
+        //重新绑定下拉框.
+        GenerBindDDL(ctrlID, db);
     }
-
 }
 
 function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt, dbSrc, dbType) {
@@ -738,13 +648,29 @@ function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt, dbSrc, dbType) 
     $.each(dataObj.Head, function (idx, item) {
         $("*[id$=" + id + "]").append("<option value='" + item.No + "'>" + item.Name + "</option");
     });
-
 }
 
-//文本框自动填充
-function FullCtrl(e, ctrlIdBefore, fk_mapExt, dbSrc, dbType) {
-    e = escape(e);
-    GenerPageKVs();
+function GenerDB(dbSrc, selectVal) {
+
+
+    //处理sql，url参数.
+    dbSrc = dbSrc.replace(/~/g, "'");
+
+    dbSrc = dbSrc.replace('@Key', selectVal);
+
+    dbSrc = DealExp(dbSrc);
+    dbSrc = DealSQL(dbSrc, selectVal, kvs);
+
+    //获取数据源.
+    dataObj = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+    return dataObj;
+}
+
+
+//主表数据的填充.
+function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
+
+    selectVal = escape(selectVal);
 
     var beforeID = null;
     var endId = null;
@@ -757,51 +683,34 @@ function FullCtrl(e, ctrlIdBefore, fk_mapExt, dbSrc, dbType) {
         endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
     }
 
-    var dataObj;
-    if (dbType == 1) {
-        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
-        dataObj = DBAccess.RunDBSrc(dbSrc, 1);
+    var dataObj = GenerDB(mapExt.Doc, selectVal);
 
-        //JQuery 获取数据源
-    } else if (dbType == 2) {
-        dataObj = DBAccess.RunDBSrc(dbSrc, 2);
-    } else {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-        handler.AddPara("Key", e);
-        handler.AddPara("FK_MapExt", fk_mapExt);
-        handler.AddPara("KVs", kvs);
-        handler.AddPara("DoTypeExt", "ReqCtrl");
-        var data = handler.DoMethodReturnString("HandlerMapExt");
-        if (data.indexOf("err@") >= 0) {
-            alert(data);
-            return;
-        }
-        dataObj = eval("(" + data + ")"); //转换为json对象 	
+
+   // alert(dataObj);
+    if (dataObj.length == 0) {
+      //  alert('系统错误不应该查询不到数据:'+dbSrc);
+        return;
     }
 
-    for (var i in dataObj.Head) {
-        if (typeof (i) == "function")
-            continue;
+    var data = dataObj[0]; //获得这一行数据.
 
-        for (var k in dataObj.Head[i]) {
-            if (k == 'No' || k == 'Name')
-                continue;
+    //遍历属性，给属性赋值.
+    for (var key in data) {
 
-            //  alert(k + ' val= ' + dataObj.Head[i][k]);
+        var val = data[key];
 
-            $("#" + beforeID + 'TB_' + k).val(dataObj.Head[i][k]);
-            $("#" + beforeID + 'TB_' + k + endId).val(dataObj.Head[i][k]);
+        $("#" + beforeID + 'TB_' + key).val(val);
+        $("#" + beforeID + 'TB_' + key + endId).val(val);
 
-            $("#" + beforeID + 'DDL_' + k).val(dataObj.Head[i][k]);
-            $("#" + beforeID + 'DDL_' + k + endId).val(dataObj.Head[i][k]);
+        $("#" + beforeID + 'DDL_' + key).val(val);
+        $("#" + beforeID + 'DDL_' + key + endId).val(val);
 
-            if (dataObj.Head[i][k] == '1') {
-                $("#" + beforeID + 'CB_' + k).attr("checked", true);
-                $("#" + beforeID + 'CB_' + k + endId).attr("checked", true);
-            } else {
-                $("#" + beforeID + 'CB_' + k).attr("checked", false);
-                $("#" + beforeID + 'CB_' + k + endId).attr("checked", false);
-            }
+        if (val == '1') {
+            $("#" + beforeID + 'CB_' + key).attr("checked", true);
+            $("#" + beforeID + 'CB_' + key + endId).attr("checked", true);
+        } else {
+            $("#" + beforeID + 'CB_' + key).attr("checked", false);
+            $("#" + beforeID + 'CB_' + key + endId).attr("checked", false);
         }
     }
 }
@@ -986,14 +895,18 @@ function GetLocalWFPreHref() {
 
 function DealSQL(dbSrc, key, kvs) {
 
+    dbSrc = dbSrc.replace(/~/g, "'");
+
     dbSrc = dbSrc.replace(/@Key/g, key);
     dbSrc = dbSrc.replace(/@Val/g, key);
+
     var oid = GetQueryString("OID");
     if (oid != null) {
         dbSrc = dbSrc.replace("@OID", oid);
     }
 
     if (kvs != null && kvs != "" && dbSrc.indexOf("@") >= 0) {
+
         var strs = kvs.split("[~]", -1);
         for (var i = 0; i < strs.length; i++) {
             var s = strs[i];
@@ -1007,7 +920,8 @@ function DealSQL(dbSrc, key, kvs) {
     }
 
     if (dbSrc.indexOf("@") >= 0) {
-
+        alert('系统配置错误有一些变量没有找到:'+dbSrc);
     }
+
     return dbSrc;
 }

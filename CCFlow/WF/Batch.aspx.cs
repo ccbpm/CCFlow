@@ -411,7 +411,7 @@ namespace CCFlow.WF
                 this.Page.RegisterClientScriptBlock("s81",
               "<script language='JavaScript' src='" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/jquery-1.4.1.min.js' ></script>");
                 this.Page.RegisterClientScriptBlock("b81",
-             "<script language='JavaScript' src='" + BP.WF.Glo.CCFlowAppPath + "WF/CCForm/MapExt.js' defer='defer' type='text/javascript' ></script>");
+             "<script language='JavaScript' src='" + BP.WF.Glo.CCFlowAppPath + "WF/CCForm/MapExt2016.js' defer='defer' type='text/javascript' ></script>");
                 this.Pub1.Add("<div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none;cursor: pointer;align:left'></div>");
                 this.Page.RegisterClientScriptBlock("dCd",
     "<script language='JavaScript' src='" + BP.WF.Glo.CCFlowAppPath + "DataUser/JSLibData/" + this.FK_MapData + ".js' ></script>");

@@ -197,7 +197,7 @@
                                 //跨三列，并且单行.
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='width:99%;margin:3px;' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -209,7 +209,7 @@
                                 //跨三列，并且单行.
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=3><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
+                                html += "<td ColSpan=3><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -219,7 +219,7 @@
                                 //跨4列，并且多行. 是大块文本的情况.
                                 var uiHeight = mapAttr.UIHeight;
                                 html += "<tr>";
-                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'  type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
+                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' style='width:100%;height:" + uiHeight + "px;' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'  type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;
@@ -281,7 +281,7 @@
                             if (mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) {
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control' style='width:120px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control' style='width:100%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;

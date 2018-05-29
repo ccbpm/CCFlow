@@ -961,25 +961,77 @@ var Entity = (function () {
         },
         SetPKVal: function (pkVal) {
             self.pkval = pkVal;
+
             this["MyPK"] = pkval;
             this["OID"] = pkval;
             this["WorkID"] = pkval;
             this["NodeID"] = pkval;
             this["No"] = pkval;
+
+            if (jsonString != null) {
+                jsonString["MyPK"] = pkval;
+                jsonString["OID"] = pkval;
+                jsonString["WorkID"] = pkval;
+                jsonString["NodeID"] = pkval;
+                jsonString["No"] = pkval;
+            }
+
         },
         GetPKVal: function () {
 
-            var val = this["MyPK"];
+            var val = null;
+
+
+            if (jsonString != null) {
+                val = jsonString["MyPK"];
+                if (val == undefined || val == "")
+                    val = jsonString["OID"];
+                if (val == undefined || val == "")
+                    val = jsonString["WorkID"];
+                if (val == undefined || val == "")
+                    val = jsonString["NodeID"];
+                if (val == undefined || val == "")
+                    val = jsonString["No"];
+                if (val == undefined || val == "")
+                    val = this.pkval;
+
+                if (val == undefined || val == "" || val == null) {
+                } else {
+                    return val;
+                }
+            }
+
+            if (self != null) {
+                val = self["MyPK"];
+                if (val == undefined || val == "")
+                    val = self["OID"];
+                if (val == undefined || val == "")
+                    val = self["WorkID"];
+                if (val == undefined || val == "")
+                    val = self["NodeID"];
+                if (val == undefined || val == "")
+                    val = self["No"];
+                if (val == undefined || val == "")
+                    val = this.pkval;
+
+                if (val == undefined || val == "" || val == null) {
+                } else {
+                    return val;
+                }
+            }
+
             if (val == undefined || val == "")
-                var val = this["OID"];
+                val = this["MyPK"];
             if (val == undefined || val == "")
-                var val = this["WorkID"];
+                val = this["OID"];
             if (val == undefined || val == "")
-                var val = this["NodeID"];
+                val = this["WorkID"];
             if (val == undefined || val == "")
-                var val = this["No"];
+                val = this["NodeID"];
             if (val == undefined || val == "")
-                var val = this.pkval;
+                val = this["No"];
+            if (val == undefined || val == "")
+                val = this.pkval;
 
             return val;
         },
@@ -989,6 +1041,10 @@ var Entity = (function () {
 
             var pkavl = this.GetPKVal();
 
+            if (pkavl == null || pkavl == "") {
+                alert('[' + this.enName + ']没有给主键赋值无法执行查询.');
+                return;
+            }
 
             //  alert(self.GetPKVal()); 
 

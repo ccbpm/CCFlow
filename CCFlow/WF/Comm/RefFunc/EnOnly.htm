@@ -660,9 +660,6 @@
                     return;
                 }
 
-                //  alert(defVal);
-
-
                 $.each(data, function (i, obj) {
                     operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
                 });
@@ -744,12 +741,8 @@
             if (pkval == null || pkval == "") {
 
                 en.CopyForm();
-
-                if (en.Insert() == 0)
-                    return;
-
+                en.Insert();
                 var pkval = en.GetPKVal();
-
 
                 url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
                 window.location.href = url; //刷新.

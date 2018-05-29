@@ -146,7 +146,8 @@
 
     function FullDtl() {
         var myPK = GetQueryString('MyPK');
-        var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL';
+        var DBType = $("#DDL_DBType").val();
+        var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType='+DBType;
         window.location.href = url;
         return;
     }
@@ -155,7 +156,8 @@
     function FullDDL() {
 
         var myPK = GetQueryString('MyPK');
-        var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL';
+        var DBType = $("#DDL_DBType").val();
+        var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType=' + DBType;
         window.location.href = url;
         return;
     }

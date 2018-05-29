@@ -600,7 +600,7 @@ function FullCtrlDDL(selectVal, ctrlIdBefore, mapExt) {
         var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':')+1);
         var src = dbSrc.substring(dbSrc.indexOf(':'));
 
-        var db = GenerDB(src, selectVal); //获得数据源.
+        var db = GenerDB(src, selectVal,mapExt.DBType); //获得数据源.
 
         //重新绑定下拉框.
         GenerBindDDL(ctrlID, db);
@@ -650,7 +650,7 @@ function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt, dbSrc, dbType) 
     });
 }
 
-function GenerDB(dbSrc, selectVal) {
+function GenerDB(dbSrc, selectVal,dbType) {
 
 
     //处理sql，url参数.
@@ -662,7 +662,7 @@ function GenerDB(dbSrc, selectVal) {
     dbSrc = DealSQL(dbSrc, selectVal, kvs);
 
     //获取数据源.
-    dataObj = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+    dataObj = DBAccess.RunDBSrc(dbSrc, dbType);
     return dataObj;
 }
 
@@ -683,7 +683,7 @@ function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
         endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
     }
 
-    var dataObj = GenerDB(mapExt.Doc, selectVal);
+    var dataObj = GenerDB(mapExt.Doc, selectVal,mapExt.DBType);
 
 
    // alert(dataObj);

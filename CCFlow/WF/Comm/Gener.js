@@ -1988,30 +1988,3 @@ function DealExp(expStr, webUser) {
     return expStr;
 }
 
-//获取字段的值
-function GetValueByDocumentID(key) {
-
-    var ctrl = $("#TB_" + key);
-    if (ctrl.length > 0) {
-        return ctrl.val();
-    }
-
-    ctrl = $("#DDL_" + key);
-    if (ctrl.length > 0) {
-        return ctrl.val(); 
-    }
-
-    ctrl = $("#CB_" + key);
-    if (ctrl.length > 0) {
-        var isChecked = ctrl.is(":checked");
-        if (isChecked == true)
-            return 1;
-        return 0;
- 
-    }
-
-    ctrl = $("#RB_" + key);
-    if (ctrl.length > 0) {
-       return  $("input:radio[name='RB_" + key + "']:checked").val();
-    }
-}

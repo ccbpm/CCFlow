@@ -17,6 +17,16 @@
         $(function () {
 
             $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            var dbType = GetQueryString("DBType");
+            $("#Lab_1").html("执行的SQL");
+            $("#Lab_2").html("<a href=\"javascript:ShowHidden('sqlexp')\">填充SQL帮助:</a>");
+            if (dbType == "1") {
+                $("#Lab_1").html("执行的URL");
+                $("#Lab_2").html("<a href=\"javascript:ShowHidden('urlexp')\">填充URL帮助:</a>");
+            }
+            if (dbType == "2") {
+                $("#Lab_1").html("执行的SFTable");
+            }
 
             $.ajax({
                 type: 'post',
@@ -76,8 +86,8 @@
 <caption>为文本框填充其它控件 - 从表 </caption>
 
 <tr style="border-width:0px;" >
-<td colspan="3" style="border-width:0px;" > 执行的SQL
-<a href="javascript:ShowHidden('sqlexp')"  >填充SQL帮助: </a>
+<td colspan="3" style="border-width:0px;" ><label id="Lab_1">执行的SQL</label> 
+<a href="javascript:ShowHidden('sqlexp')"  ><label id="Lab_2">填充SQL帮助: </label></a>
 
 <div id='sqlexp'  style='color:Gray; display:none'>
 <ul>
@@ -89,7 +99,15 @@
  <li><img alt="" src="../Img/TBCtrlFull.png" /></li>
  </ul>
 </div>
-
+<div id='urlexp'  style='color:Gray; display:none'>
+<ul>
+ <li>1. 设置一个查询的API接口，该接口返回一个结果集，用于自动填充当前从表. </li>
+ <li>2. 该接口URL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+ <li>3. 接口URL返回的列与该从表字段名称保持一致，就可以完成控件数据的自动填充。</li>
+ <li>4. 比如:/jflow-web/WF/DemoTest/ProcessRequest.do?DoType=ReqResumeByKey&FK_Student=@Key </li>
+ <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
+ <li><img alt="" src="../Img/TBCtrlFull.png" /></li>
+ </ul>
  </td>
 </tr>
 

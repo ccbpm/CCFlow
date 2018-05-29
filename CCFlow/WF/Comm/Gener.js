@@ -1979,7 +1979,7 @@ function DealExp(expStr, webUser) {
             }
 
         }else if(obj == "select"){
-             NodeValue = objs[i].value;
+            NodeValue = decodeURI(objs[i].value);
         }
         expStr = expStr.replace("@" + NodeID.substring(NodeID.indexOf("_")+1),NodeValue);
 

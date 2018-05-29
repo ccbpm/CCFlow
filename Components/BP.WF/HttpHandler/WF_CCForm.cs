@@ -191,7 +191,7 @@ namespace BP.WF.HttpHandler
             // key = "周";
             switch (me.ExtType)
             {
-                case BP.Sys.MapExtXmlList.ActiveDDL: // 动态填充ddl。
+                case BP.Sys.MapExtXmlList.ActiveDDL: // 动态填充ddl.
                     sql = this.DealSQL(me.DocOfSQLDeal, key);
                     if (sql.Contains("@") == true)
                     {
@@ -336,6 +336,14 @@ namespace BP.WF.HttpHandler
             sql = sql.Replace("@key", key);
             sql = sql.Replace("@Val", key);
             sql = sql.Replace("@val", key);
+            sql = sql.Replace("@val", key);
+
+            sql = sql.Replace("\n", "");
+            sql = sql.Replace("\n", "");
+            sql = sql.Replace("\n", "");
+            sql = sql.Replace("\n", "");
+            sql = sql.Replace("\n", "");
+
 
             sql = sql.Replace("@WebUser.No", WebUser.No);
             sql = sql.Replace("@WebUser.Name", WebUser.Name);
@@ -378,6 +386,8 @@ namespace BP.WF.HttpHandler
         private string dealSQL = "";
         public string JSONTODT(DataTable dt)
         {
+         //  return BP.Tools.Json.ToJson(dt);
+
             if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.Informix
                      || BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle) && dealSQL != null)
             {

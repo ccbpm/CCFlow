@@ -5679,6 +5679,225 @@ namespace BP.WF
 
             return objs;
         }
+
+        public static void CopyDataFromParentFlow(string pFlowNo,Int64 pFID, Int64 pWorkID, Work currEnt)
+        {
+            //#region copy 首先从父流程的NDxxxRpt copy.
+            //Int64 pWorkIDReal = 0;
+            //Flow pFlow = new Flow(pFlowNo);
+            //string pOID = "";
+            //if (DataType.IsNullOrEmpty(PFIDStr) == true || PFIDStr == "0")
+            //    pOID = PWorkID.ToString();
+            //else
+            //    pOID = PFIDStr;
+
+            //string sql = "SELECT * FROM " + pFlow.PTable + " WHERE OID=" + pOID;
+            //DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            //if (dt.Rows.Count != 1)
+            //    throw new Exception("@不应该查询不到父流程的数据[" + sql + "], 可能的情况之一,请确认该父流程的调用节点是子线程，但是没有把子线程的FID参数传递进来。");
+
+            //wk.Copy(dt.Rows[0]);
+            //rpt.Copy(dt.Rows[0]);
+
+            ////设置单号为空.
+            //wk.SetValByKey("BillNo", "");
+            //rpt.BillNo = "";
+            //#endregion copy 首先从父流程的NDxxxRpt copy.
+
+            //#region 从调用的节点上copy.
+            //BP.WF.Node fromNd = new BP.WF.Node(int.Parse(PNodeIDStr));
+            //Work wkFrom = fromNd.HisWork;
+            //wkFrom.OID = PWorkID;
+            //if (wkFrom.RetrieveFromDBSources() == 0)
+            //    throw new Exception("@父流程的工作ID不正确，没有查询到数据" + PWorkID);
+            ////wk.Copy(wkFrom);
+            ////rpt.Copy(wkFrom);
+            //#endregion 从调用的节点上copy.
+
+            //#region 获取web变量.
+            //foreach (string k in paras.Keys)
+            //{
+            //    if (k == "OID")
+            //        continue;
+
+            //    wk.SetValByKey(k, paras[k]);
+            //    rpt.SetValByKey(k, paras[k]);
+            //}
+            //#endregion 获取web变量.
+
+            //#region 特殊赋值.
+            //wk.OID = newOID;
+            //rpt.OID = newOID;
+
+            //// 在执行copy后，有可能这两个字段会被冲掉。
+            //if (CopyFormWorkID != null)
+            //{
+            //    /*如果不是 执行的从已经完成的流程copy.*/
+
+            //    wk.SetValByKey(StartWorkAttr.PFlowNo, PFlowNo);
+            //    wk.SetValByKey(StartWorkAttr.PNodeID, PNodeID);
+            //    wk.SetValByKey(StartWorkAttr.PWorkID, PWorkID);
+
+            //    rpt.SetValByKey(GERptAttr.PFlowNo, PFlowNo);
+            //    rpt.SetValByKey(GERptAttr.PNodeID, PNodeID);
+            //    rpt.SetValByKey(GERptAttr.PWorkID, PWorkID);
+
+            //    //忘记了增加这句话.
+            //    rpt.SetValByKey(GERptAttr.PEmp, WebUser.No);
+
+            //    //要处理单据编号 BillNo .
+            //    if (this.BillNoFormat != "")
+            //    {
+            //        rpt.SetValByKey(GERptAttr.BillNo, BP.WF.WorkFlowBuessRole.GenerBillNo(this.BillNoFormat, rpt.OID, rpt, this.PTable));
+
+            //        //设置单据编号.
+            //        wk.SetValByKey(GERptAttr.BillNo, rpt.BillNo);
+            //    }
+
+            //    rpt.SetValByKey(GERptAttr.FID, 0);
+            //    rpt.SetValByKey(GERptAttr.FlowStartRDT, BP.DA.DataType.CurrentDataTime);
+            //    rpt.SetValByKey(GERptAttr.FlowEnderRDT, BP.DA.DataType.CurrentDataTime);
+            //    rpt.SetValByKey(GERptAttr.MyNum, 0);
+            //    rpt.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
+            //    rpt.SetValByKey(GERptAttr.FlowStarter, emp.No);
+            //    rpt.SetValByKey(GERptAttr.FlowEnder, emp.No);
+            //    rpt.SetValByKey(GERptAttr.FlowEndNode, this.StartNodeID);
+            //    rpt.SetValByKey(GERptAttr.FK_Dept, emp.FK_Dept);
+            //    rpt.SetValByKey(GERptAttr.FK_NY, DataType.CurrentYearMonth);
+
+            //    if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
+            //        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.Name);
+
+            //    if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
+            //        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No);
+
+            //    if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
+            //        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No + "," + emp.Name);
+
+            //}
+
+            //if (rpt.EnMap.PhysicsTable != wk.EnMap.PhysicsTable)
+            //    wk.Update(); //更新工作节点数据.
+            //rpt.Update(); // 更新流程数据表.
+            //#endregion 特殊赋值.
+
+            //#region 复制其他数据..
+            ////复制明细。
+            //MapDtls dtls = wk.HisMapDtls;
+            //if (dtls.Count > 0)
+            //{
+            //    MapDtls dtlsFrom = wkFrom.HisMapDtls;
+            //    int idx = 0;
+            //    if (dtlsFrom.Count == dtls.Count)
+            //    {
+            //        foreach (MapDtl dtl in dtls)
+            //        {
+            //            if (dtl.IsCopyNDData == false)
+            //                continue;
+
+            //            //new 一个实例.
+            //            GEDtl dtlData = new GEDtl(dtl.No);
+
+            //            //检查该明细表是否有数据，如果没有数据，就copy过来，如果有，就说明已经copy过了。
+            //            //  sql = "SELECT COUNT(OID) FROM "+dtlData.EnMap.PhysicsTable+" WHERE RefPK="+wk.OID;
+
+            //            //删除以前的数据.
+            //            sql = "DELETE FROM " + dtlData.EnMap.PhysicsTable + " WHERE RefPK=" + wk.OID;
+            //            DBAccess.RunSQL(sql);
+
+
+            //            MapDtl dtlFrom = dtlsFrom[idx] as MapDtl;
+
+            //            GEDtls dtlsFromData = new GEDtls(dtlFrom.No);
+            //            dtlsFromData.Retrieve(GEDtlAttr.RefPK, PWorkID);
+            //            foreach (GEDtl geDtlFromData in dtlsFromData)
+            //            {
+            //                dtlData.Copy(geDtlFromData);
+            //                dtlData.RefPK = wk.OID.ToString();
+            //                if (this.No == PFlowNo)
+            //                {
+            //                    dtlData.InsertAsNew();
+            //                }
+            //                else
+            //                {
+            //                    if (this.StartLimitRole == WF.StartLimitRole.OnlyOneSubFlow)
+            //                        dtlData.SaveAsOID(geDtlFromData.OID); //为子流程的时候，仅仅允许被调用1次.
+            //                    else
+            //                        dtlData.InsertAsNew();
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
+            ////复制附件数据。
+            //if (wk.HisFrmAttachments.Count > 0)
+            //{
+            //    if (wkFrom.HisFrmAttachments.Count > 0)
+            //    {
+            //        int toNodeID = wk.NodeID;
+
+            //        //删除数据。
+            //        DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + toNodeID + "' AND RefPKVal='" + wk.OID + "'");
+            //        FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + PNodeIDStr, PWorkID.ToString());
+
+            //        foreach (FrmAttachmentDB athDB in athDBs)
+            //        {
+            //            FrmAttachmentDB athDB_N = new FrmAttachmentDB();
+            //            athDB_N.Copy(athDB);
+            //            athDB_N.FK_MapData = "ND" + toNodeID;
+            //            athDB_N.RefPKVal = wk.OID.ToString();
+            //            athDB_N.FK_FrmAttachment = athDB_N.FK_FrmAttachment.Replace("ND" + PNodeIDStr,
+            //              "ND" + toNodeID);
+
+            //            if (athDB_N.HisAttachmentUploadType == AttachmentUploadType.Single)
+            //            {
+            //                /*如果是单附件.*/
+            //                athDB_N.MyPK = athDB_N.FK_FrmAttachment + "_" + wk.OID;
+            //                if (athDB_N.IsExits == true)
+            //                    continue; /*说明上一个节点或者子线程已经copy过了, 但是还有子线程向合流点传递数据的可能，所以不能用break.*/
+            //                athDB_N.Insert();
+            //            }
+            //            else
+            //            {
+            //                athDB_N.MyPK = athDB_N.UploadGUID + "_" + athDB_N.FK_MapData + "_" + wk.OID;
+            //                athDB_N.Insert();
+            //            }
+            //        }
+            //    }
+            //}
+            //#endregion 复制表单其他数据.
+
+            //#region 复制独立表单数据.
+            ////求出来被copy的节点有多少个独立表单.
+            //FrmNodes fnsFrom = new Template.FrmNodes(fromNd.NodeID);
+            //if (fnsFrom.Count != 0)
+            //{
+            //    //求当前节点表单的绑定的表单.
+            //    FrmNodes fns = new Template.FrmNodes(nd.NodeID);
+            //    if (fns.Count != 0)
+            //    {
+            //        //开始遍历当前绑定的表单.
+            //        foreach (FrmNode fn in fns)
+            //        {
+            //            foreach (FrmNode fnFrom in fnsFrom)
+            //            {
+            //                if (fn.FK_Frm != fnFrom.FK_Frm)
+            //                    continue;
+
+            //                BP.Sys.GEEntity geEnFrom = new GEEntity(fnFrom.FK_Frm);
+            //                geEnFrom.OID = PWorkID;
+            //                if (geEnFrom.RetrieveFromDBSources() == 0)
+            //                    continue;
+
+            //                //执行数据copy , 复制到本身. 
+            //                geEnFrom.CopyToOID(wk.OID);
+            //            }
+            //        }
+            //    }
+            //}
+            //#endregion 复制独立表单数据.
+        }
         /// <summary>
         /// 创建WorkID
         /// </summary>

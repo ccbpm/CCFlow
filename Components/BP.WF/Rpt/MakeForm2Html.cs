@@ -1338,19 +1338,29 @@ namespace BP.WF
                 string tempFile = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\" + mapData.No + ".htm";
                 if (System.IO.File.Exists(tempFile) == true)
                 {
-                   
+
                 }
                 else
                 {
-                    if (mapData.HisFrmType == FrmType.FoolForm)
+                    if (gwf != null)
+                    {
+                        Node nd = new Node(gwf.FK_Node);
+
+                        if (nd.HisFormType == NodeFormType.FreeForm)
+                            mapData.HisFrmType = FrmType.FreeFrm;
+                        else
+                            mapData.HisFrmType = FrmType.FoolForm;
+                    }
+
+                    if (mapData.HisFrmType == FrmType.FreeFrm)
                     {
                         docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\indexFool.htm");
-                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo);
+                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo);
                     }
                     else
                     {
                         docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\indexFree.htm");
-                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo);
+                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo);
                     }
                 }
 

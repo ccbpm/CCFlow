@@ -940,8 +940,11 @@ namespace BP.WF.Template
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
                 //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
 
-                //map.AddTBFloat(MapDtlAttr.H, 150, "高度", false, false);
-                //map.AddTBFloat(MapDtlAttr.W, 200, "宽度", false, false);
+                //用于控制傻瓜表单.
+                map.AddTBFloat(MapDtlAttr.H, 350, "高度", true, false);
+                map.SetHelperAlert(MapDtlAttr.H, "对傻瓜表单有效");
+
+              //  map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
 
                 //map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
                 //map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
@@ -951,8 +954,9 @@ namespace BP.WF.Template
                 map.SetHelperAlert(MapDtlAttr.FilterSQLExp, "格式为:WFState=1 过滤WFState=1的数据");
 
                 //列自动计算表达式.
-                map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
-                map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
+               //map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
+                //map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
+
 
                 //要显示的列.
                 map.AddTBString(MapDtlAttr.ShowCols, null, "显示的列", true, false, 0, 500, 20, true);

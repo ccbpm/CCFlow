@@ -1947,47 +1947,44 @@ function DealExp(expStr, webUser) {
     if (expStr.indexOf('@') == -1)
         return expStr;
 
-//    var objs = document.all;
-//    var length1;
-//    for (var i = 0; i < objs.length; i++) {
-//        var obj = objs[i].tagName;
-//        if (obj == null)
-//            continue;
-//        if (obj.id == null)
-//            continue;
-//        if (obj == "body" || obj == "BODY") {
-//            length1 = i + 1;
-//            break;
-//        }
-    //    }
+    var objs = document.all;
+    var length1;
+    for (var i = 0; i < objs.length; i++) {
 
-//    var tags = document.getElementsByTagName('*');
-//    for (var i = 0; i < length; i++) {
-//    }
-//    for (var i = 0; i < tags.length; i++) {
-//    }
-//    for (var i = 0; i < length; i++) {
-//    }
+        var obj = objs[i].tagName;
+        if (obj == null)
+            continue;
 
-//    //替换表单上的数据信息
-//    expStr = expStr.substring(expStr.indexOf("?") + 1);
-//    alert(expStr);
-//    if (expStr.length == 0)
-//        return expStr;
-//    var newExpStrs = expStr;
+        //把标签名转换为小写
+        obj = obj.toLowerCase();
+        if (obj != "input" && obj != "select")
+            continue;
+        //获取节点的ID 和值
+        var NodeID = objs[i].getAttribute("id");
+        if (NodeID == null)
+            continue;
+         var NodeType = objs[i].getAttribute("type");
+         var NodeValue ="";
+        if(obj != "input" && (NodeType=="text" || NodeType=="radio" ||NodeType=="checkbox")){
+            NodeValue = objs[i].value;
+           if(NodeType=="checkbox"){
+                NodeValue = 0;
+                var isChecked = NodeID.is(":checked");
+                if (isChecked == true)
+                 NodeValue = 1;
+            }
+             if(NodeType=="radio"){
+                var nodeName = objs[i].getAttribute("name");
+                NodeValue = $("input:radio[name='" + nodeName + "']:checked").val();
+            }
 
-//    $.each(newExpStrs.split("&"), function (i, o) {
-//        var param = o.split("=");
+        }else if(obj == "select"){
+             NodeValue = objs[i].value;
+        }
+        expStr = expStr.replace("@" + NodeID.substring(NodeID.indexOf("_")+1),NodeValue);
 
-//        if (param.length == 2) {
-//            //判断字段类型获取对应的值
-//            var keyText = GetValueByDocumentID( param[1].replace("@", "") );
-
-//            expStr = expStr.replace(param[1], keyText);
-//        }
-//    });
-
-    
+        
+     }
     return expStr;
 }
 

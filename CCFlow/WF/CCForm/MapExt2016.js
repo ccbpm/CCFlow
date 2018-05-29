@@ -2,7 +2,7 @@
 var oldValue = "";
 var oid;
 var highlightindex = -1;
-function DoAnscToFillDiv(sender, e, tbid, fk_mapExt, dbSrc, dbType) {
+function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
     openDiv(sender, tbid);
 
     var myEvent = window.event || arguments[0];
@@ -56,59 +56,35 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt, dbSrc, dbType) {
             oldValue = strs[0];
 
             // 填充.
-            FullIt(oldValue, tbid, fk_mapExt, dbSrc, dbType);
+            FullIt(oldValue, tbid, fk_mapExt);
             highlightindex = -1;
         }
     }
     else {
-        if (e != oldValue) {
+        if (selectVal != oldValue) {
             $("#divinfo").empty();
-            var url = GetLocalWFPreHref();
+            //获得对象.
+            var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
+            var dataObj = GenerDB(mapExt.Doc, selectVal,mapExt.DBType);
 
-            var dataObj;
-            //URL 获取数据源
-            if (dbType == 1) {
-                dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
-                dataObj = DBAccess.RunDBSrc(dbSrc, 1);
-
-                //JQuery 获取数据源
-            } else if (dbType == 2) {
-                dataObj = DBAccess.RunDBSrc(dbSrc, 2);
-            } else {
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-                handler.AddPara("Key", e);
-                handler.AddPara("FK_MapExt", fk_mapExt);
-                handler.AddPara("KVs", kvs);
-                var data = handler.DoMethodReturnString("HandlerMapExt");
-                if (data.indexOf('err@') >= 0) {
-                    alert(data);
-                    $("#divinfo").hide();
-                    return;
-                }
-
-                if (data == "") {
-                    $("#divinfo").hide();
-                    return;
-                }
-                dataObj = eval("(" + data + ")"); //转换为json对象 
+            if (dataObj.length == 0) {
+              $("#divinfo").hide();
+                return;
             }
 
+            $.each(dataObj, function (idx, item) {
+               $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + item.No + "','" + tbid + "','" + fk_mapExt + "','" + dbSrc + "','" + dbType + "');\" value='" + item.No + "'>" + item.No + '|' + item.Name + "</div>");           
+             });
 
-            highlightindex = -1;
-            if (dataObj.Head.length == 0) {
-                $("#divinfo").hide();
-            }
+      
+            oldValue = selectVal;
 
-            $.each(dataObj.Head, function (idx, item) {
-                $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + item.No + "','" + tbid + "','" + fk_mapExt + "','" + dbSrc + "','" + dbType + "');\" value='" + item.No + "'>" + item.No + '|' + item.Name + "</div>");
-            });
-            oldValue = e;
         }
     }
 }
 
 //填充其他的控件.
-function FullIt(selectVal, tbid, fk_mapExt, dbSrc, dbType) {
+function FullIt(selectVal, tbid, fk_mapExt) {
 
     if (oid == null)
         oid = GetQueryString('OID');
@@ -133,10 +109,9 @@ function FullIt(selectVal, tbid, fk_mapExt, dbSrc, dbType) {
 
     //执行个性化填充下拉框，比如填充ddl下拉框的范围.
     FullCtrlDDL(selectVal, tbid, mapExt);
-    return;
 
     //执行填充从表.
-    FullDtl(selectVal, fk_mapExt, dbSrc, dbType);
+    FullDtl(selectVal, fk_mapExt, mapExt);
 
     ////执行m2m 关系填充.
     //FullM2M(oldValue, fk_mapExt, dbSrc, dbType);
@@ -421,14 +396,16 @@ function GenerPageKVs() {
  
 
 /* 自动填充 */
-function DDLFullCtrl(selectVal, ddlChild, fk_mapExt, dbSrc, dbType) {
+function DDLFullCtrl(selectVal, ddlChild, fk_mapExt) {
 
-    FullIt(selectVal, ddlChild, fk_mapExt,dbSrc, dbType);
+    FullIt(selectVal, ddlChild, fk_mapExt);
 }
 
 /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
-function DDLAnsc(e, ddlChild, fk_mapExt, dbSrc, dbType, param) {
-    if (e == null || e == "") {
+function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
+    
+    //1.初始值为空或者NULL时，相关联的字段没有数据显示
+    if (selectVal == null || selectVal == "") {
         $("#" + ddlChild).empty();
         //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
         $("#" + ddlChild).append("<option value='' selected='selected' >无数据</option");
@@ -440,48 +417,26 @@ function DDLAnsc(e, ddlChild, fk_mapExt, dbSrc, dbType, param) {
     }
 
     GenerPageKVs();
-    var url = GetLocalWFPreHref();
+
+    var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
+
+     //处理参数问题
     if (param != undefined) {
         kvs = '';
     }
-
-    var dataObj = "";
-    //Url获取数据源
-    if (dbType == 1) {
-        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
-        dataObj = DBAccess.RunDBSrc(dbSrc, 1);
-
-        //JQuery 获取数据源
-    } else if (dbType == 2) {
-        dataObj = DBAccess.RunDBSrc(dbSrc, 2);
-
-        //SQL 获取数据源
-    } else {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-        handler.AddPara("Key", e);
-        handler.AddPara("FK_MapExt", fk_mapExt);
-        handler.AddPara("KVs", kvs);
-        if (param != undefined) {
-            for (var pro in param) {
-                if (pro == 'DoType')
-                    continue;
-                handler.AddPara(pro, param[pro]);
-            }
+    var dbSrc = mapExt.Doc;
+    if (param != undefined) {
+        for (var pro in param) {
+            if (pro == 'DoType')
+                continue;
+            dbSrc = dbSrc.replace("@" + pro, param[pro]) ;
         }
-        var data = handler.DoMethodReturnString("HandlerMapExt");
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            return;
-        }
-        dataObj = eval("(" + data + ")"); //转换为json对象.
     }
 
+    var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType); //获得数据源.
 
     // 这里要设置一下获取的外部数据.
-    // var seleValOfOld = $("#" + ddlChild).selectedindex;
-    // alert(seleValOfOld);
     // 获取原来选择值.
-
     var oldVal = null;
     var ddl = document.getElementById(ddlChild);
     var mylen = ddl.options.length - 1;
@@ -492,9 +447,11 @@ function DDLAnsc(e, ddlChild, fk_mapExt, dbSrc, dbType, param) {
         mylen--;
     }
 
+    //清空级联字段
     $("#" + ddlChild).empty();
 
-    if (data == "" || dataObj == null) {
+    //查询数据为空时为级联字段赋值
+    if (dataObj == null||dataObj.length==0) {
         //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
         $("#" + ddlChild).append("<option value='' selected='selected' >无数据</option");
         var chg = $("#" + ddlChild).attr("onchange");
@@ -505,8 +462,8 @@ function DDLAnsc(e, ddlChild, fk_mapExt, dbSrc, dbType, param) {
         return;
     }
 
-
-    $.each(dataObj.Head, function (idx, item) {
+    //不为空的时候赋值
+    $.each(dataObj, function (idx, item) {
         $("#" + ddlChild).append("<option value='" + item.No + "'>" + item.Name + "</option");
     });
 
@@ -531,8 +488,26 @@ function DDLAnsc(e, ddlChild, fk_mapExt, dbSrc, dbType, param) {
 }
 
 //填充明细.
-function FullDtl(key, fk_mapExt, dbSrc, dbType) {
-    GenerPageKVs();
+function FullDtl(selectVal, fk_mapExt, mapExt) {
+//    if (mapExt.Tag1 == "" || mapExt.Tag1 == null)
+//        return;
+//    var dbSrcs = mapExt.Tag1.split('$'); //获得集合.
+//    for (var i = 0; i < dbSrcs.length; i++) {
+
+//        var dbSrc = dbSrcs[i];
+//        if (dbSrc == "" || dbSrc.length == 0)
+//            continue;
+//        var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':'));
+//        var src = dbSrc.substring(dbSrc.indexOf(':') + 1);
+
+//        var db = GenerDB(src, selectVal, mapExt.DBType); //获得数据源.
+
+//        //重新绑定下拉框.
+//        GenerBindDDL("DDL_" + ctrlID, db);
+//    }
+
+    var dbType = mapExt.DBType;
+    var dbSrc = mapExt.Tag1;
     var url = GetLocalWFPreHref();
     var dataObj;
 
@@ -546,7 +521,7 @@ function FullDtl(key, fk_mapExt, dbSrc, dbType) {
         dataObj = DBAccess.RunDBSrc(dbSrc, 2);
     } else {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-        handler.AddPara("Key", e);
+        handler.AddPara("Key", selectVal);
         handler.AddPara("FK_MapExt", fk_mapExt);
         handler.AddPara("KVs", kvs);
         handler.AddPara("DoTypeExt", "ReqDtlFullList");
@@ -573,7 +548,7 @@ function FullDtl(key, fk_mapExt, dbSrc, dbType) {
             var src = frm.src;
             var idx = src.indexOf("&Key");
             if (idx == -1)
-                src = src + '&Key=' + key + '&FK_MapExt=' + fk_mapExt;
+                src = src + '&Key=' + selectVal + '&FK_MapExt=' + fk_mapExt;
             else
                 src = src.substring(0, idx) + '&ss=d&Key=' + key + '&FK_MapExt=' + fk_mapExt;
             frm.src = src;
@@ -585,70 +560,27 @@ function FullDtl(key, fk_mapExt, dbSrc, dbType) {
 function FullCtrlDDL(selectVal, ctrlIdBefore, mapExt) {
 
     if (mapExt.Tag == "" || mapExt.Tag ==null)
-        return; 
-
-     
+        return;    
 
     var beforeID = ctrlIdBefore.substring(0, ctrlIdBefore.indexOf('DDL_'));
     var endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
 
-    var dbSrcs = map.Tag.splite('$'); //获得集合.
+    var dbSrcs = mapExt.Tag.split('$'); //获得集合.
     for (var i = 0; i < dbSrcs.length; i++) {
 
         var dbSrc = dbSrcs[i];
-
-        var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':')+1);
-        var src = dbSrc.substring(dbSrc.indexOf(':'));
+        if (dbSrc == "" || dbSrc.length == 0)
+            continue;
+        var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':'));
+        var src = dbSrc.substring(dbSrc.indexOf(':')+1);
 
         var db = GenerDB(src, selectVal,mapExt.DBType); //获得数据源.
 
         //重新绑定下拉框.
-        GenerBindDDL(ctrlID, db);
+        GenerBindDDL("DDL_"+ctrlID, db);
     }
 }
 
-function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt, dbSrc, dbType) {
-    GenerPageKVs();
-    var url = GetLocalWFPreHref();
-
-    var dataObj;
-    if (dbType == 1) {
-        dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
-        dataObj = DBAccess.RunDBSrc(dbSrc, 1);
-
-        //JQuery 获取数据源
-    } else if (dbType == 2) {
-        dataObj = DBAccess.RunDBSrc(dbSrc, 2);
-    } else {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-        handler.AddPara("Key", e);
-        handler.AddPara("FK_MapExt", fk_mapExt);
-        handler.AddPara("KVs", kvs);
-        handler.AddPara("DoTypeExt", "ReqDDLFullListDB");
-        handler.AddPara("MyDDL", ddlID);
-        var data = handler.DoMethodReturnString("HandlerMapExt");
-        if (data.indexOf("err@") >= 0) {
-            alert(data);
-            return;
-        }
-        dataObj = eval("(" + data + ")"); //转换为json对象 	
-    }
-
-    endID = endID.replace('_', '');
-    if (endID != parseInt(endID)) {
-        endID = "";
-    } else {
-        endID = "_" + endID;
-    }
-    var id = ctrlIdBefore + "DDL_" + ddlID + "" + endID;
-    $("*[id$=" + id + "]").empty();
-    //$("#" + id).empty();
-    var dataObj = eval("(" + data + ")"); //转换为json对象 
-
-    $.each(dataObj.Head, function (idx, item) {
-        $("*[id$=" + id + "]").append("<option value='" + item.No + "'>" + item.Name + "</option");
-    });
-}
 
 function GenerDB(dbSrc, selectVal,dbType) {
 
@@ -717,7 +649,7 @@ function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
 
 var itemStyle = 'padding:2px;color: #000000;background-color:white;width:100%;border-bottom: 1px solid #336699;';
 var itemStyleOfS = 'padding:2px;color: #000000;background-color:green;width:100%';
-function ItemClick(sender, val, tbid, fk_mapExt, dbSrc, dbType) {
+function ItemClick(sender, val, tbid, fk_mapExt) {
 
     $("#divinfo").empty();
     $("#divinfo").css("display", "none");
@@ -727,7 +659,7 @@ function ItemClick(sender, val, tbid, fk_mapExt, dbSrc, dbType) {
     $("#" + tbid).val(oldValue);
 
     // 填充.
-    FullIt(oldValue, tbid, fk_mapExt, dbSrc, dbType);
+    FullIt(oldValue, tbid, fk_mapExt);
 }
 
 function MyOver(sender) {

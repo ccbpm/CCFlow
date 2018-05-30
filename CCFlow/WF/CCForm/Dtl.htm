@@ -913,8 +913,6 @@
 
         //选项 导入导出功能.
 		function Option(impModel) {
-
-         
          
 		    if (impModel == 0) {
 		        alert("请配置导入方式。");
@@ -930,9 +928,12 @@
 		    //excel模式导入方式
 		    if (impModel == 2) {
 		        var url = window.location.href;
-		        url = url.replace('Dtl.htm', 'DtlOpt.htm');
-
+		        url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
+		      //  url = url.replace('Dtl.htm', 'DtlOpt.htm');
 		    }
+
+		  //  alert(impModel);
+
 
 		    //SQL\JSON导入方式
 		    if (impModel == 3) {

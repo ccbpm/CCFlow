@@ -49,7 +49,7 @@
             var index = fileValue.lastIndexOf('.');
             var fileExt = fileValue.substring(index);
             if (fileExt.toLowerCase() != ".xls") {
-                $.messager.alert("提示", "上传的文件必须是excel文件。");
+                $.messager.alert("提示", "首先,确认您上传的Excel文件,其次此版本仅支持97-2003版的Excel,所以你要确认你上传的文件后缀名为xls");
                 return;
             }
 

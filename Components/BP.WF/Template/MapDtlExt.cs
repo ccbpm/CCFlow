@@ -957,13 +957,11 @@ namespace BP.WF.Template
                //map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
                 //map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
 
-
                 //要显示的列.
                 map.AddTBString(MapDtlAttr.ShowCols, null, "显示的列", true, false, 0, 500, 20, true);
                 map.SetHelperAlert(MapDtlAttr.ShowCols, "默认为空,全部显示,如果配置了就按照配置的计算,格式为:field1,field2");
                 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
-
                 #endregion 基础信息.
 
                 #region 导入导出填充.
@@ -973,7 +971,10 @@ namespace BP.WF.Template
                 //导入模式.
                 map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", true, true, MapDtlAttr.ImpModel,
                     "@0=不导入@1=按配置模式导入@2=按照xls文件模版导入");
-                map.SetHelperAlert(MapDtlAttr.ImpModel, "您需要在相关功能里设置相对应的导入模式设置.");
+
+                string strs = "如果是按照xls导入,请做一个从表ID.xls的模版文件放在:/DataUser/DtlTemplate/ 下面. 目前仅仅支持xls文件.";
+                map.SetHelperAlert(MapDtlAttr.ImpModel, strs);
+
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false,true);

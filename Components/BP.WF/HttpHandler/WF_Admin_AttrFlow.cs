@@ -458,35 +458,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 前置导航
-        /// <summary>
-        /// 前置导航
-        /// </summary>
-        /// <returns></returns>
-        public string StartGuide_Init()
-        {
-            BP.WF.Flow en = new BP.WF.Flow();
-            en.No = this.FK_Flow;
-            en.RetrieveFromDBSources();
-
-            BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
-
-
-            if (fns.Count > 2)
-            {
-                en.Row.Add("nodesCount", "true");
-            }
-            else
-            {
-                en.Row.Add("nodesCount", "false");
-            }
-
-            en.Row.Add("userId", BP.Web.WebUser.SID);
-            //en.Row = ht;
-            return en.ToJson();
-
-        }
-        #endregion
+       
 
         #region 前置导航save
         /// <summary>

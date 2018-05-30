@@ -434,6 +434,54 @@ namespace BP.WF.HttpHandler
             src.Delete();
             return "删除成功..";
         }
+
+        //javaScript 脚本上传
+        public string javaScriptImp_Done()
+        {
+            HttpFileCollection files = context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的流程模版。";
+            string fileName = files[0].FileName;
+            string savePath = BP.Sys.SystemConfig.PathOfDataUser + "JSLibData" + "\\" + fileName;
+
+            //存在文件则删除
+            if (System.IO.Directory.Exists(savePath) == true)
+                System.IO.Directory.Delete(savePath);
+
+            files[0].SaveAs(savePath);
+
+            return "脚本" + fileName + "导入成功";
+        }
+
+        /**
+         * 获取已知目录下的文件列表
+         * @return
+         */
+        public string javaScriptFiles(){
+		String savePath = BP.Sys.SystemConfig.PathOfDataUser+"JSLibData";
+
+         DirectoryInfo di = new DirectoryInfo(savePath);
+        //找到该目录下的文件 
+        FileInfo[] fileList = di.GetFiles();
+
+	    if(fileList==null||fileList.Length==0)
+	    	return "";
+	    DataTable dt = new DataTable();
+	    dt.Columns.Add("FileName");
+	    dt.Columns.Add("ChangeTime");
+	    foreach(FileInfo file in fileList){
+	    	DataRow dr = dt.NewRow();
+            dr["FileName"] = file.Name;
+            dr["ChangeTime"] = file.LastAccessTime.ToString();
+			
+			dt.Rows.Add(dr);
+	    }
+	    return BP.Tools.Json.ToJson(dt);
+			
+	}
         #endregion        
     }
+
+
+   
 }

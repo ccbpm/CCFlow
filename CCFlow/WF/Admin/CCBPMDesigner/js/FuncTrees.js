@@ -130,6 +130,20 @@ functrees.push({
 });
 
 //4.系统维护 系统维护管理员菜单 需要翻译
+var Nodes = [{
+    Type: "Service", ServiceMethod: "GetTreeJson_AdminMenu", ColId: "No", ColParentId: "ParentNo", ColName: "Name", ColUrl: "Url", RootParentId: "AdminMenu"
+    , Defines: [{
+        IconCls: "icon-accept"
+    }]
+}];
+if (plant != "CCFlow") {
+    Nodes = [{
+        Type: "Service", ServiceMethod: "GetTreeJson_AdminMenu", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", ColUrl: "URL", RootParentId: "AdminMenu"
+	    , Defines: [{
+	        IconCls: "icon-accept"
+	    }]
+    }];
+}
 functrees.push({
     Id: "sysTree",
     Name: "系统",
@@ -137,12 +151,7 @@ functrees.push({
     AttrCols: ["URL"],
     Nodes: [{
         Type: "Node", Id: "AdminMenu", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
-        Nodes: [{
-            Type: "Service", ServiceMethod: "GetTreeJson_AdminMenu", ColId: "No", ColParentId: "ParentNo", ColName: "Name", ColUrl: "Url", RootParentId: "AdminMenu"
-            , Defines: [{
-                IconCls: "icon-accept"
-            }]
-        }]
+        Nodes: Nodes
     }]
 });
 
@@ -243,8 +252,9 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
             }
 
             var re = $.parseJSON(data);
-            
+
             //将所有获取的数据转换为Node
+
             var roots = Find(re, nd.ColParentId, nd.RootParentId);
 
             //此处如果是惰性加载时，非第一次加载，要去除第一次加载时生成的Nodes
@@ -818,7 +828,7 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
         exp += ",'" + oFuncTree.Id + "'";
         exp += ");";
 
-       // alert(exp);
+        // alert(exp);
 
         CalculateJS(exp);
         return;

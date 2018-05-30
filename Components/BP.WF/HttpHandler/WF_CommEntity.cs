@@ -576,8 +576,8 @@ namespace BP.WF.HttpHandler
             {
                 //是否是空白记录.
                 bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
-                if (DataType.IsNullOrEmpty(this.PKVal) == true)
-                    return "err@主键数据丢失，不能初始化En.htm";
+                //if (DataType.IsNullOrEmpty(this.PKVal) == true)
+                //    return "err@主键数据丢失，不能初始化En.htm";
 
                 //初始化entity.
                 string enName = this.EnName;
@@ -599,10 +599,15 @@ namespace BP.WF.HttpHandler
 
                 //获得描述.
                 Map map = en.EnMap;
+
                 string pkVal = this.PKVal;
 
-                en.PKVal = pkVal;
-                en.RetrieveFromDBSources();
+                if (isBlank == false)
+                {
+                    en.PKVal = pkVal;
+                    en.RetrieveFromDBSources();
+                }
+                
 
                 //定义容器.
                 DataSet ds = new DataSet();

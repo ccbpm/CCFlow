@@ -370,9 +370,9 @@ namespace BP.WF
             //如果启用了对方已读，就不能撤销.
             if (nd.CancelDisWhenRead == true)
             {
-                int i = DBAccess.RunSQLReturnValInt("SELECT IsRead FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
-                if (i == 1)
-                    return "err@对方已经打开了该工作您不能执行撤销.";
+                int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node ,0);
+                if (i >= 1)
+                    return "err@当前待办已经有["+i+"]个工作人员打开了该工作,您不能执行撤销.";
             }
 
 

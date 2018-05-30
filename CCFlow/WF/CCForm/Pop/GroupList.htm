@@ -16,136 +16,136 @@
         var selectedEles = null;
         var mapExt = null;
 
-		function loadEntities(mapExt) {
-			selectedEles = new Entities("BP.Sys.FrmEleDBs");
+        function loadEntities(mapExt) {
+            selectedEles = new Entities("BP.Sys.FrmEleDBs");
             selectedEles.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
-		}
+        }
 
-		$(function () {
+        $(function () {
 
-		    $("#Msg").html("正在加载,请稍后......");
+            $("#Msg").html("正在加载,请稍后......");
 
-		    var mypk = GetQueryString("FK_MapExt");
-		    mapExt = new Entity("BP.Sys.MapExt", mypk);
-
-
-		    var srcOfGroup = mapExt.Tag1; //分组.
-		    var srcOfEntitis = mapExt.Tag2; //实体.
-
-		    var groups = DBAccess.RunDBSrc(srcOfGroup, mapExt.DBType); //分组.
-		    var entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
-
-		    var html = "<table style='width:100%;' >";
-
-		    var isRB = true;
-		    if (mapExt.GetPara('SelectType') == 1)
-		        isRB = false;
-
-		    //获得已经选择的集合.
-		    loadEntities(mapExt);
-
-		    for (var i = 0; i < groups.length; i++) {
-		        var group = groups[i];
-
-		        html += "<tr>";
-		        html += "<th colspan=3>";
-
-		        if (isRB == true)
-		            html += "" + group.Name;
-		        else
-		            html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "'  /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
-
-		        html += "</th>";
-		        html += "</tr>";
+            var mypk = GetQueryString("FK_MapExt");
+            mapExt = new Entity("BP.Sys.MapExt", mypk);
 
 
-		        var myNum = -1;
-		        for (var idx = 0; idx < entities.length; idx++) {
+            var srcOfGroup = mapExt.Tag1; //分组.
+            var srcOfEntitis = mapExt.Tag2; //实体.
 
-		            en = entities[idx];
+            var groups = DBAccess.RunDBSrc(srcOfGroup, mapExt.DBType); //分组.
+            var entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
 
-		            var myidx = 0;
-		            var oOfEn;
-		            for (var obj in en) {
-		                if (myidx == 2) {
-		                    oOfEn = obj;
-		                    break;
-		                }
-		                myidx++;
-		            }
+            var html = "<table style='width:100%;' >";
 
-		            myidx = 0;
-		            var oOfGroup;
-		            for (var obj in en) {
-		                if (myidx == 0) {
-		                    oOfGroup = obj;
-		                    break;
-		                }
-		                myidx++;
-		            }
+            var isRB = true;
+            if (mapExt.GetPara('SelectType') == 1)
+                isRB = false;
 
-		            if (en[oOfEn] != group[oOfGroup])
-		                continue;
+            //获得已经选择的集合.
+            loadEntities(mapExt);
 
-		            var isHave = false;
-		            for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+            for (var i = 0; i < groups.length; i++) {
+                var group = groups[i];
 
-		                var ele = selectedEles[iEle];
-		                if (ele == null || ele == undefined)
-		                    continue;
+                html += "<tr>";
+                html += "<th colspan=3>";
 
-		                if (ele.Tag1 == en.No) {
-		                    isHave = true;
-		                    break;
-		                }
-		            }
+                if (isRB == true)
+                    html += "" + group.Name;
+                else
+                    html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "'  /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
 
-		            var lab = en.Name;
-					var checked = "";
-		            if (isHave) {
-		                lab = "<font color=green>" + en.Name + "</font>";
-						checked = "checked";
-					}
+                html += "</th>";
+                html += "</tr>";
 
-		            myNum++;
-		            if (myNum == 0)
-		                html += "<TR>";
 
-		            if (isRB == true)
-		                html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='RB_" + en.No + "'>" + lab + "</label></td>";
-		            else
-		                html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                var myNum = -1;
+                for (var idx = 0; idx < entities.length; idx++) {
 
-		            if (myNum == 2) {
-		                html += "</tr>";
-		                myNum = -1;
-		            }
-		        }
+                    en = entities[idx];
 
-		        if (idx == 1) {
-		            html += "<td colspan=2></td>";
-		            html += "</tr>";
-		        }
+                    var myidx = 0;
+                    var oOfEn;
+                    for (var obj in en) {
+                        if (myidx == 2) {
+                            oOfEn = obj;
+                            break;
+                        }
+                        myidx++;
+                    }
 
-		        if (idx == 2) {
-		            html += "<td></td>";
-		            html += "</tr>";
-		        }
+                    myidx = 0;
+                    var oOfGroup;
+                    for (var obj in en) {
+                        if (myidx == 0) {
+                            oOfGroup = obj;
+                            break;
+                        }
+                        myidx++;
+                    }
 
-		    }
-		    html += "</table>";
+                    if (en[oOfEn] != group[oOfGroup])
+                        continue;
 
-		    $("#Msg").html("");
-		    $("#Msg").html(html);
-		});
-       
+                    var isHave = false;
+                    for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+
+                        var ele = selectedEles[iEle];
+                        if (ele == null || ele == undefined)
+                            continue;
+
+                        if (ele.Tag1 == en.No) {
+                            isHave = true;
+                            break;
+                        }
+                    }
+
+                    var lab = en.Name;
+                    var checked = "";
+                    if (isHave) {
+                        lab = "<font color=green>" + en.Name + "</font>";
+                        checked = "checked";
+                    }
+
+                    myNum++;
+                    if (myNum == 0)
+                        html += "<TR>";
+
+                    if (isRB == true)
+                        html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='RB_" + en.No + "'>" + lab + "</label></td>";
+                    else
+                        html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+
+                    if (myNum == 2) {
+                        html += "</tr>";
+                        myNum = -1;
+                    }
+                }
+
+                if (idx == 1) {
+                    html += "<td colspan=2></td>";
+                    html += "</tr>";
+                }
+
+                if (idx == 2) {
+                    html += "<td></td>";
+                    html += "</tr>";
+                }
+
+            }
+            html += "</table>";
+
+            $("#Msg").html("");
+            $("#Msg").html(html);
+        });
+
         //选择与取消选择.
         function CheckAll(checked, no) {
 
             $("input[name='" + no + "']").each(function () {
                 this.checked = checked;
             });
-         
+
         }
 
         //保存.
@@ -154,10 +154,14 @@
             //获得存储的值.
             var selectVals = [];
 
+            //获得存储的text
+            var selectValTexts = [];
+
             //获得选择的数据.
             var selectType = mapExt.GetPara("SelectType");
             if (selectType == "0") {  //单选.
                 selectVals.push($("input[name='RB']:checked").val());
+                selectValTexts.push($("input[name='RB']:checked").siblings().text());
             } else {
 
                 var cbs = $("input[type='checkbox']:checked");
@@ -166,6 +170,8 @@
                     if (this.id.indexOf('CB_') == -1)
                         return true;
                     selectVals.push(this.value);
+
+                    selectValTexts.push($(this).siblings().text());
                 });
             }
 
@@ -197,7 +203,7 @@
             //loadEntities();
 
             //parent.CloseBootstrapDialog();
-			return selectVals;
+            return selectValTexts;
 
             //插入新选择的数据.
             //获得已经选择的集合.
@@ -207,43 +213,43 @@
             //执行返回,并关闭窗口.
         }
 
-		// 新增
-		function selectedElements(entities, selectedArray) {
-			var array = [];
-			$.each(selectedArray, function (i, e) {
-				if (typeof e === "undefined") {
-					return true;
-				}
-				var exists = false;
-				$.each(entities, function (n, o) {
-					if (o.Tag1 == e) {
-						exists = true;
-						return false;
-					}
-				});
-				if (!exists) {
-					array.push(e);
-				}
-			});
-			return array;
-		}
-		// 删除
-		function canceledElements(entities, selectedArray) {
-			if (!$.isArray(selectedArray)) {
-				return;
-			}
-			var array = [];
-			$.each(entities, function (i, o) {
-				var value = o.Tag1;
-				var t = selectedArray.filter(function (e) {
-					return e == value;
-				});
-				if (t.length == 0) {
-					array.push(value);
-				}
-			});
-			return array;
-		}
+        // 新增
+        function selectedElements(entities, selectedArray) {
+            var array = [];
+            $.each(selectedArray, function (i, e) {
+                if (typeof e === "undefined") {
+                    return true;
+                }
+                var exists = false;
+                $.each(entities, function (n, o) {
+                    if (o.Tag1 == e) {
+                        exists = true;
+                        return false;
+                    }
+                });
+                if (!exists) {
+                    array.push(e);
+                }
+            });
+            return array;
+        }
+        // 删除
+        function canceledElements(entities, selectedArray) {
+            if (!$.isArray(selectedArray)) {
+                return;
+            }
+            var array = [];
+            $.each(entities, function (i, o) {
+                var value = o.Tag1;
+                var t = selectedArray.filter(function (e) {
+                    return e == value;
+                });
+                if (t.length == 0) {
+                    array.push(value);
+                }
+            });
+            return array;
+        }
     </script>
 </head>
 <body>

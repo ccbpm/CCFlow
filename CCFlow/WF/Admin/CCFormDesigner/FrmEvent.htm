@@ -136,9 +136,10 @@
             if ($(o).val() == "7") {
 
                 document.getElementById("TB_DoDoc").disabled = "disabled";
-                document.getElementById("DDL_DoDoc").disabled = "false";
+                $("#DDL_DoDoc").show();
+                document.getElementById("DDL_DoDoc").disabled = "";
 				//$("#TB_DoDoc").hide();
-				//$("#DDL_DoDoc").show();
+				//
 			} else {
 				$("#TB_DoDoc").show();
 				$("#DDL_DoDoc").hide();

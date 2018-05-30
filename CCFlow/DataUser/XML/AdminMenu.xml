@@ -18,6 +18,8 @@
   <Item No="004" ParentNo="AdminMenu" Name="二级管理员" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps"  />
   <Item No="005" ParentNo="AdminMenu" Name="工具箱" For="admin" Url="../../Comm/MethodLink.htm"  />
   <Item No="010" ParentNo="AdminMenu" Name="修改密码" For="" Url="../../Setting/ChangePassword.htm"  />
+  <Item No="020" ParentNo="AdminMenu" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
+  
 
   <Item No="501" ParentNo="AdminMenu" Name="岗位维护" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
   <Item No="502" ParentNo="AdminMenu" Name="部门台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Depts"  />

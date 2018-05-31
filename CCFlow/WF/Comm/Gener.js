@@ -1628,7 +1628,7 @@ var DBAccess = (function () {
             if (str == null || str == undefined)
                 return null;
 
-            return JSON.prease(str);
+            return JSON.parse(str);
         }
         //@谢 如何执行一个方法,
         //   alert("@没有处理执行方法。"); RunFunctionReturnJSON

@@ -252,8 +252,8 @@
                             tr += "<td colspan='6' class='GroupTitle' nowrap >";
 
                             //分组的下移、上移按钮
-                            var btnDown = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnDown('" + dtGroups[i].EnName + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
-                            var btnUp = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnUp('" + dtGroups[i].EnName + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
+                            var btnDown = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
+                            var btnUp = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnUp('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
                             if (dtGroups.length == 1) {
 
                             }
@@ -268,7 +268,7 @@
                                 tr += btnDown;
                             }
 
-                            tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].EnName + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
+                            tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
                             tr += "</td></tr>";
                             $("#t1").append(tr);
 
@@ -355,8 +355,8 @@
                                 attrIdx += 1; //记录当前分组的个数，与idx不一样。
 
                                 //字段的上移与下移的按钮
-                                var attrDown = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnDown('" + dtGroups[i].EnName + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
-                                var attrUp = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnUp('" + dtGroups[i].EnName + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
+                                var attrDown = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnDown('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
+                                var attrUp = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnUp('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
                                 if (attrIdx == 1) {//如果是第一个，只显示下移
                                     tda += attrDown;
                                 }
@@ -373,7 +373,7 @@
                                 }
 
                                 //定义下拉框备用
-                                var ddl = "<select name='#DDLID#' onchange=\"javascript:From_GroupChange('" + dtGroups[i].EnName + "','" + rows_Attrs[j].KeyOfEn + "')\" id='" + rows_Attrs[j].KeyOfEn + "'>";
+                                var ddl = "<select name='#DDLID#' onchange=\"javascript:From_GroupChange('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "')\" id='" + rows_Attrs[j].KeyOfEn + "'>";
                                 dtGroups.forEach(function (item, index) {
                                     if (item == dtGroups[i]) {
                                         ddl += "<option value='" + item.OID + "' selected = 'selected'>" + item.Lab + "</option>";

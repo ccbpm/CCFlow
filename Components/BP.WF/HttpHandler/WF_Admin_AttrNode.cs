@@ -826,7 +826,7 @@ namespace BP.WF.HttpHandler
                     rowIdx++;
                 }
 
-                return "1@重置成功！";
+                return "重置成功！";
             }
             catch (Exception ex)
             {
@@ -953,7 +953,7 @@ namespace BP.WF.HttpHandler
                             qo.DoQuery();
 
                             if (groups.Count <= 0)
-                                return "";
+                                return "err@请重置顺序";
 
                             foreach (GroupField item in groups)
                             {
@@ -1013,11 +1013,10 @@ namespace BP.WF.HttpHandler
                             qo.addOrderByDesc(MapAttrAttr.Idx);
                             qo.DoQuery();
 
-                            //如果为0，说明所有字段的数序都是一样的，当前字段就设置为第一个序号
+                            //如果为0，说明所有字段的数序都是一样的，需要重置顺序
                             if (attrs.Count <= 0)
                             {
-                                att.Idx = 0;
-                                att.Update();
+                                return "err@请重置顺序";
 
                             }
                             foreach (MapAttr item in attrs)
@@ -1101,7 +1100,7 @@ namespace BP.WF.HttpHandler
                             qo.DoQuery();
 
                             if (groups.Count <= 0)
-                                return "";
+                                return "err@请重置顺序";
 
                             foreach (GroupField item in groups)
                             {
@@ -1162,8 +1161,9 @@ namespace BP.WF.HttpHandler
                             qo.addOrderBy(MapAttrAttr.Idx);
                             qo.DoQuery();
 
+                            //如果为0，说明表单顺序都是一样的，需要重置顺序
                             if (attrs.Count <= 0)
-                                return "";
+                                return "err@请重置顺序";
 
                             foreach (MapAttr item in attrs)
                             {

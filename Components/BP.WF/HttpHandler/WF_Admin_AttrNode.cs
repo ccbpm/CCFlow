@@ -785,7 +785,8 @@ namespace BP.WF.HttpHandler
         {
             foreach (DataRow row in rows)
             {
-                if (Equals(row[field], value))
+                int rw = int.Parse(row[field].ToString());
+                if (rw==int.Parse(value.ToString()))
                     return true;
             }
 
@@ -1012,9 +1013,13 @@ namespace BP.WF.HttpHandler
                             qo.addOrderByDesc(MapAttrAttr.Idx);
                             qo.DoQuery();
 
+                            //如果为0，说明所有字段的数序都是一样的，当前字段就设置为第一个序号
                             if (attrs.Count <= 0)
-                                return "";
+                            {
+                                att.Idx = 0;
+                                att.Update();
 
+                            }
                             foreach (MapAttr item in attrs)
                             {
                                 newIdx = item.Idx;

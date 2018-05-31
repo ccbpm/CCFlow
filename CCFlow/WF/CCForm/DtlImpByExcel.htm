@@ -39,6 +39,7 @@
             var URL = Handler + "?DoType=DtlImpByExcel_Imp";
             if (queryString.length > 0)
                 URL = URL + "&" + queryString;
+
             var fileValue = $("#File_Upload").val();
             //必须要选择文件
             if (fileValue == "") {
@@ -62,17 +63,17 @@
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
                 },
                 success: function (data) {
-                        alert(data);
-                        return;
+                    alert(data);
+                    window.close();
+
+                    return;
                 }
             });
 
 
             //怎么增加文件？
             //var data = handler.DoMethodReturnString("DtlImpByExcel_Imp");
-
            // alert(data);
-
             //return;
         }
 

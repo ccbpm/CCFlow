@@ -65,18 +65,28 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
             $("#divinfo").empty();
             //获得对象.
             var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
-            var dataObj = GenerDB(mapExt.Doc, selectVal,mapExt.DBType);
+            var dataObj = GenerDB(mapExt.Doc, selectVal, mapExt.DBType);
 
             if (dataObj.length == 0) {
-              $("#divinfo").hide();
+                $("#divinfo").hide();
                 return;
             }
 
             $.each(dataObj, function (idx, item) {
-               $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + item.No + "','" + tbid + "','" + fk_mapExt + "','" + dbSrc + "','" + dbType + "');\" value='" + item.No + "'>" + item.No + '|' + item.Name + "</div>");           
-             });
 
-      
+                var no = item.No;
+                if (no == undefined)
+                    no = item.NO;
+
+                var name = item.Name;
+                if (name == undefined)
+                    name = item.NAME;
+
+
+                $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "','" + dbSrc + "','" + dbType + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
+            });
+
+
             oldValue = selectVal;
 
         }
@@ -188,11 +198,11 @@ function SetEleValByName(eleName, val) {
                         break;
                 }
                 break;
-            //下拉框 
+            //下拉框   
             case "SELECT":
                 $(ele).val(val);
                 break;
-            //文本区域 
+            //文本区域   
             case "TEXTAREA":
                 $(ele).val(val);
                 break;
@@ -393,7 +403,7 @@ function GenerPageKVs() {
     }
     return kvs;
 }
- 
+
 
 /* 自动填充 */
 function DDLFullCtrl(selectVal, ddlChild, fk_mapExt) {
@@ -403,7 +413,7 @@ function DDLFullCtrl(selectVal, ddlChild, fk_mapExt) {
 
 /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
 function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
-    
+
     //1.初始值为空或者NULL时，相关联的字段没有数据显示
     if (selectVal == null || selectVal == "") {
         $("#" + ddlChild).empty();
@@ -420,7 +430,7 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
 
     var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
 
-     //处理参数问题
+    //处理参数问题
     if (param != undefined) {
         kvs = '';
     }
@@ -429,7 +439,7 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
         for (var pro in param) {
             if (pro == 'DoType')
                 continue;
-            dbSrc = dbSrc.replace("@" + pro, param[pro]) ;
+            dbSrc = dbSrc.replace("@" + pro, param[pro]);
         }
     }
 
@@ -439,6 +449,13 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
     // 获取原来选择值.
     var oldVal = null;
     var ddl = document.getElementById(ddlChild);
+
+    if (ddl == null) {
+        alert(ddlChild + "丢失,或者该字段被删除.");
+        return;
+    }
+
+
     var mylen = ddl.options.length - 1;
     while (mylen >= 0) {
         if (ddl.options[mylen].selected) {
@@ -451,7 +468,7 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
     $("#" + ddlChild).empty();
 
     //查询数据为空时为级联字段赋值
-    if (dataObj == null||dataObj.length==0) {
+    if (dataObj == null || dataObj.length == 0) {
         //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
         $("#" + ddlChild).append("<option value='' selected='selected' >无数据</option");
         var chg = $("#" + ddlChild).attr("onchange");
@@ -464,7 +481,21 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
 
     //不为空的时候赋值
     $.each(dataObj, function (idx, item) {
-        $("#" + ddlChild).append("<option value='" + item.No + "'>" + item.Name + "</option");
+
+        //  alert(item[idx][1]);
+        //console.log(item);
+        //return;
+
+        var no = item.No;
+        if (no == undefined)
+            no = item.NO;
+
+        var name = item.Name;
+        if (name == undefined)
+            name = item.NAME;
+
+        $("#" + ddlChild).append("<option value='" + no + "'>" + name + "</option");
+
     });
 
     var isInIt = false;
@@ -489,22 +520,22 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
 
 //填充明细.
 function FullDtl(selectVal, fk_mapExt, mapExt) {
-//    if (mapExt.Tag1 == "" || mapExt.Tag1 == null)
-//        return;
-//    var dbSrcs = mapExt.Tag1.split('$'); //获得集合.
-//    for (var i = 0; i < dbSrcs.length; i++) {
+    //    if (mapExt.Tag1 == "" || mapExt.Tag1 == null)
+    //        return;
+    //    var dbSrcs = mapExt.Tag1.split('$'); //获得集合.
+    //    for (var i = 0; i < dbSrcs.length; i++) {
 
-//        var dbSrc = dbSrcs[i];
-//        if (dbSrc == "" || dbSrc.length == 0)
-//            continue;
-//        var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':'));
-//        var src = dbSrc.substring(dbSrc.indexOf(':') + 1);
+    //        var dbSrc = dbSrcs[i];
+    //        if (dbSrc == "" || dbSrc.length == 0)
+    //            continue;
+    //        var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':'));
+    //        var src = dbSrc.substring(dbSrc.indexOf(':') + 1);
 
-//        var db = GenerDB(src, selectVal, mapExt.DBType); //获得数据源.
+    //        var db = GenerDB(src, selectVal, mapExt.DBType); //获得数据源.
 
-//        //重新绑定下拉框.
-//        GenerBindDDL("DDL_" + ctrlID, db);
-//    }
+    //        //重新绑定下拉框.
+    //        GenerBindDDL("DDL_" + ctrlID, db);
+    //    }
 
     var dbType = mapExt.DBType;
     var dbSrc = mapExt.Tag1;
@@ -559,11 +590,8 @@ function FullDtl(selectVal, fk_mapExt, mapExt) {
 
 function FullCtrlDDL(selectVal, ctrlIdBefore, mapExt) {
 
-    if (mapExt.Tag == "" || mapExt.Tag ==null)
-        return;    
-
-    var beforeID = ctrlIdBefore.substring(0, ctrlIdBefore.indexOf('DDL_'));
-    var endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
+    if (mapExt.Tag == "" || mapExt.Tag == null)
+        return;
 
     var dbSrcs = mapExt.Tag.split('$'); //获得集合.
     for (var i = 0; i < dbSrcs.length; i++) {
@@ -572,17 +600,17 @@ function FullCtrlDDL(selectVal, ctrlIdBefore, mapExt) {
         if (dbSrc == "" || dbSrc.length == 0)
             continue;
         var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':'));
-        var src = dbSrc.substring(dbSrc.indexOf(':')+1);
+        var src = dbSrc.substring(dbSrc.indexOf(':') + 1);
 
-        var db = GenerDB(src, selectVal,mapExt.DBType); //获得数据源.
+        var db = GenerDB(src, selectVal, mapExt.DBType); //获得数据源.
 
         //重新绑定下拉框.
-        GenerBindDDL("DDL_"+ctrlID, db);
+        GenerBindDDL("DDL_" + ctrlID, db);
     }
 }
 
 
-function GenerDB(dbSrc, selectVal,dbType) {
+function GenerDB(dbSrc, selectVal, dbType) {
 
 
     //处理sql，url参数.
@@ -602,25 +630,14 @@ function GenerDB(dbSrc, selectVal,dbType) {
 //主表数据的填充.
 function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
 
-    selectVal = escape(selectVal);
+    //selectVal = escape(selectVal);
 
-    var beforeID = null;
-    var endId = null;
-    // 根据ddl 与 tb 不同。 
-    if (ctrlIdBefore.indexOf('DDL_') > 1) {
-        beforeID = ctrlIdBefore.substring(0, ctrlIdBefore.indexOf('DDL_'));
-        endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
-    } else {
-        beforeID = ctrlIdBefore.substring(0, ctrlIdBefore.indexOf('TB_'));
-        endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
-    }
+    var dataObj = GenerDB(mapExt.Doc, selectVal, mapExt.DBType);
 
-    var dataObj = GenerDB(mapExt.Doc, selectVal,mapExt.DBType);
+    // alert(dataObj);
 
-
-   // alert(dataObj);
     if (dataObj.length == 0) {
-      //  alert('系统错误不应该查询不到数据:'+dbSrc);
+        //  alert('系统错误不应该查询不到数据:'+dbSrc);
         return;
     }
 
@@ -631,18 +648,14 @@ function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
 
         var val = data[key];
 
-        $("#" + beforeID + 'TB_' + key).val(val);
-        $("#" + beforeID + 'TB_' + key + endId).val(val);
+        $("#TB_" + key).val(val);
 
-        $("#" + beforeID + 'DDL_' + key).val(val);
-        $("#" + beforeID + 'DDL_' + key + endId).val(val);
+        $("#DDL_" + key).val(val);
 
         if (val == '1') {
-            $("#" + beforeID + 'CB_' + key).attr("checked", true);
-            $("#" + beforeID + 'CB_' + key + endId).attr("checked", true);
+            $("#CB_" + key).attr("checked", true);
         } else {
-            $("#" + beforeID + 'CB_' + key).attr("checked", false);
-            $("#" + beforeID + 'CB_' + key + endId).attr("checked", false);
+            $("#CB_" + key).attr("checked", false);
         }
     }
 }
@@ -852,7 +865,7 @@ function DealSQL(dbSrc, key, kvs) {
     }
 
     if (dbSrc.indexOf("@") >= 0) {
-        alert('系统配置错误有一些变量没有找到:'+dbSrc);
+        alert('系统配置错误有一些变量没有找到:' + dbSrc);
     }
 
     return dbSrc;

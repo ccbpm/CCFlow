@@ -46,7 +46,7 @@ function SelfUrl_Done(mapExt) {
 }
 
 //树干叶子模式.
-function PopBranchesAndLeaf(mapExt) {
+function PopBranchesAndLeaf(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
@@ -74,6 +74,8 @@ function PopBranchesAndLeaf(mapExt) {
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+    if (frmEleDBs.length == 0 && val != "")
+        frmEleDBs = [{ "Tag1": "", "Tag2": val}];
     var initJsonData = [];
     $.each(frmEleDBs, function (i, o) {
         initJsonData.push({
@@ -169,7 +171,7 @@ function ValSetter(tag4, key) {
 }
 
 //树干模式.
-function PopBranches(mapExt) {
+function PopBranches(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
@@ -195,7 +197,7 @@ function PopBranches(mapExt) {
     var title = mapExt.GetPara("Title");
     var oid = GetPKVal();
     //初始加载
-    Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
+    Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, val);
     //这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
@@ -218,7 +220,7 @@ function PopBranches(mapExt) {
                             nodeText = node.Name + ",";
                         });
                         //重新加载
-                        Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
+                        Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, null);
                         if (nodeText != null)
                             $("#TB_" + mapExt.AttrOfOper).val(nodeText.substring(0, nodeText.length - 1));
                         // 单选复制当前表单
@@ -265,10 +267,12 @@ function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2) {
     }
 }
 //刷新
-function Refresh_Mtags(FK_MapData, AttrOfOper, oid) {
+function Refresh_Mtags(FK_MapData, AttrOfOper, oid, val) {
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
     var initJsonData = [];
+    if (frmEleDBs.length == 0 && val != null && val != "")
+        frmEleDBs = [{ "Tag1": "", "Tag2": val}];
     $.each(frmEleDBs, function (i, o) {
         initJsonData.push({
             "No": o.Tag1,

@@ -1568,7 +1568,9 @@ namespace BP.WF
                     {
                         /*如果发现了，当前人员包含处理人集合. */
                         this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, "自动跳转,(处理人就是提交人)", ndFrom);
+                        this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, nd, skipWork, null);
                         ndFrom = nd;
+                        this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess, nd, skipWork, null, this.HisMsgObjs);
                         continue;
                     }
 
@@ -1599,7 +1601,9 @@ namespace BP.WF
                     if (isHave == true)
                     {
                         this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, "自动跳转.(处理人已经出现过)", ndFrom);
+                        this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, nd, skipWork, null);
                         ndFrom = nd;
+                        this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess, nd, skipWork, null, this.HisMsgObjs);
                         continue;
                     }
 
@@ -1746,7 +1750,9 @@ namespace BP.WF
                         #endregion
 
                         this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, "自动跳转.(处理人与上一步相同)", ndFrom);
+                        this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, nd, wk, null);
                         ndFrom = nd;
+                        this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess, nd, wk, null, this.HisMsgObjs);
                         continue;
                     }
 

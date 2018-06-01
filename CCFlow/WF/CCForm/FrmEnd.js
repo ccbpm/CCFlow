@@ -136,10 +136,12 @@ function AfterBindEn_DealMapExt(frmData) {
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "PopBranchesAndLeaf": //树干叶子模式.
-                PopBranchesAndLeaf(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                PopBranchesAndLeaf(mapExt,val); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;
             case "PopBranches": //树干简单模式.
-                PopBranches(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                PopBranches(mapExt,val); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;
             case "PopGroupList": //分组模式.
                 PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.

@@ -79,11 +79,13 @@
 
         //下载指定格式的模版.
         function DownTemplate() {
-
-            var url = "/DataUser/DtlTemplete/" + GetQueryString("EnsName") + ".xls";
+            if (plant == "JFlow") {
+                var url = basePath + "DataUser/DtlTemplete/" + GetQueryString("EnsName") + ".xls";
+            }
+            else {
+                var url = "/DataUser/DtlTemplete/" + GetQueryString("EnsName") + ".xls";
+            }
             WinOpen(url);
-
-            //                string file = this.Request.PhysicalApplicationPath + "DataUser\\DtlTemplete\\" + this.FK_MapDtl + ".xlsx";
         }
     </script>
 </head>

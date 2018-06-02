@@ -279,16 +279,9 @@ namespace CCFlow.WF.MapDef
                     MapAttr mattrDelete = new MapAttr(md.No, this.KeyOfEn);
                     mattrDelete.Delete();
 
-                    //增加判断是否是WebService绑定DDL控件字段，如果是，则同步删除对应的隐藏字段T
-                    if (!string.IsNullOrWhiteSpace(mattrDelete.UIBindKey))
-                    {
-                        SFTable st = new SFTable(mattrDelete.UIBindKey);
-                        if (st.IsExits && st.SrcType == SrcType.WebServices)
-                        {
-                            mattrDelete = new MapAttr(this.FK_MapData, this.KeyOfEn + "T");
-                            mattrDelete.Delete();
-                        }
-                    }
+                    mattrDelete.UIBindKey = md.No + "_" + this.KeyOfEn + "T";
+                    if (mattrDelete.RetrieveFromDBSources() != 0)
+                        mattrDelete.Delete();
                 }
 
             }

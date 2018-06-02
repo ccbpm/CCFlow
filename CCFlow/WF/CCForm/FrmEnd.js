@@ -219,6 +219,10 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "BindFunction": //控件绑定函数.
 
+              //  alert(mapExt.AttrOfOper);
+               // alert(DynamicBind(mapExt, "TB_"));
+
+
                 if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
                     $('#TB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "TB_"));
                     break;

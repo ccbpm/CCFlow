@@ -57,6 +57,10 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可
 UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';
 UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 
+--更新日期长度.
+UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6
+UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7
+
 
 -- 2016.11.18 升级维护附件属性.;
 DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.FrmAttachmentExt';

@@ -49,7 +49,7 @@
     <IsBatchStart>0</IsBatchStart>
     <BatchStartFields />
     <IsAutoSendSubFlowOver>0</IsAutoSendSubFlowOver>
-    <Ver>2017-11-12 19:05:37</Ver>
+    <Ver>2018-05-30 20:51:14</Ver>
     <DType>1</DType>
     <FlowDeleteRole>0</FlowDeleteRole>
     <AtPara />
@@ -165,7 +165,7 @@
     <Name>总经理审批</Name>
     <Tip />
     <Step>2</Step>
-    <ICON />
+    <ICON>审核.png</ICON>
     <NodeWorkType>0</NodeWorkType>
     <SubThreadType>0</SubThreadType>
     <FK_Flow>002</FK_Flow>
@@ -891,23 +891,23 @@
     <AtPara />
   </WF_Cond>
   <WF_Cond>
-    <MyPK>201_299_Dir_Stas</MyPK>
+    <MyPK>3518</MyPK>
     <CondType>2</CondType>
-    <DataFrom>1</DataFrom>
+    <DataFrom>0</DataFrom>
     <FK_Flow>002</FK_Flow>
     <NodeID>201</NodeID>
     <FK_Node>201</FK_Node>
-    <FK_Attr />
-    <AttrKey />
-    <AttrName />
+    <FK_Attr>ND2Rpt_ZJL_Note</FK_Attr>
+    <AttrKey>ZJL_Note</AttrKey>
+    <AttrName>审核意见</AttrName>
     <FK_Operator>=</FK_Operator>
-    <OperatorValue>@07@08@09@10@11@</OperatorValue>
+    <OperatorValue />
     <OperatorValueT />
     <ToNodeID>299</ToNodeID>
     <ConnJudgeWay>0</ConnJudgeWay>
     <ConnJudgeWayText>or</ConnJudgeWayText>
-    <MyPOID>403</MyPOID>
-    <PRI>2</PRI>
+    <MyPOID>3519</MyPOID>
+    <PRI>0</PRI>
     <CondOrAnd>0</CondOrAnd>
     <Note />
     <AtPara />
@@ -1199,7 +1199,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2018-05-27 17:07:56</Ver>
+    <Ver>2018-06-02 10:43:20</Ver>
     <FlowCtrls />
     <AtPara>@MaxLeft=82@MaxEnd=633@MaxRight=720@IsHaveCA=0@MaxTop=3</AtPara>
   </Sys_MapData>
@@ -1230,7 +1230,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2018-05-27 17:07:56</Ver>
+    <Ver>2018-05-30 20:51:14</Ver>
     <FlowCtrls />
     <AtPara>@MaxLeft=81.55@MaxEnd=359@MaxRight=724@IsHaveCA=0@MaxTop=7.27</AtPara>
   </Sys_MapData>
@@ -1461,7 +1461,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -1572,7 +1572,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -1831,7 +1831,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -1868,7 +1868,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -1943,7 +1943,7 @@
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
     <UIWidth>547</UIWidth>
-    <UIHeight>90</UIHeight>
+    <UIHeight>101</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>4000</MaxLen>
     <UIBindKey>1</UIBindKey>
@@ -1957,8 +1957,8 @@
     <IsSupperText>0</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
-    <X>165</X>
-    <Y>132</Y>
+    <X>162</X>
+    <Y>127</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -1979,7 +1979,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2090,7 +2090,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2201,7 +2201,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2460,7 +2460,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2497,7 +2497,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2608,7 +2608,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2793,7 +2793,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2830,7 +2830,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -2941,7 +2941,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3200,7 +3200,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3237,7 +3237,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3348,7 +3348,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3533,7 +3533,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3570,7 +3570,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3681,7 +3681,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3940,7 +3940,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -3977,7 +3977,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -4088,7 +4088,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -4199,7 +4199,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -4310,7 +4310,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -4569,7 +4569,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -4606,7 +4606,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -4717,7 +4717,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -4902,7 +4902,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5013,7 +5013,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5050,7 +5050,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5161,7 +5161,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5420,7 +5420,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5457,7 +5457,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5568,7 +5568,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5753,7 +5753,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5864,7 +5864,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -5901,7 +5901,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6012,7 +6012,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6271,7 +6271,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6308,7 +6308,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6419,7 +6419,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6604,7 +6604,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6715,7 +6715,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6752,7 +6752,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -6863,7 +6863,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -7122,7 +7122,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -7159,7 +7159,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -7270,7 +7270,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -7529,7 +7529,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -7566,7 +7566,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -7677,7 +7677,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -7936,7 +7936,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -8084,7 +8084,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -8491,7 +8491,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -8528,7 +8528,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>120</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -8639,7 +8639,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>20</MaxLen>
@@ -8898,7 +8898,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>500</MaxLen>
@@ -8952,6 +8952,46 @@
     <IntKey>2</IntKey>
     <Lang>CH</Lang>
   </Sys_Enum>
+  <Sys_MapExt>
+    <MyPK>BindFunction_ND201_QingJiaShiJianCong_blur</MyPK>
+    <FK_MapData>ND201</FK_MapData>
+    <ExtType>BindFunction</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>QingJiaShiJianCong</AttrOfOper>
+    <AttrsOfActive />
+    <Doc>DateDiffExt()</Doc>
+    <Tag>blur</Tag>
+    <Tag1>求时间差</Tag1>
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <H>500</H>
+    <W>400</W>
+    <DBType>0</DBType>
+    <FK_DBSrc />
+    <PRI>0</PRI>
+    <AtPara />
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>BindFunction_ND201_QingJiaShiJianDao_blur</MyPK>
+    <FK_MapData>ND201</FK_MapData>
+    <ExtType>BindFunction</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>QingJiaShiJianDao</AttrOfOper>
+    <AttrsOfActive />
+    <Doc>DateDiffExt()</Doc>
+    <Tag>blur</Tag>
+    <Tag1>求时间差</Tag1>
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <H>500</H>
+    <W>400</W>
+    <DBType>0</DBType>
+    <FK_DBSrc />
+    <PRI>0</PRI>
+    <AtPara />
+  </Sys_MapExt>
   <Sys_GroupField>
     <OID>1361</OID>
     <Lab>填写请假申请单</Lab>
@@ -9170,6 +9210,19 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
+    <MyPK>12E29FDA-F748-903C-6387-4BAE5D5BADBF</MyPK>
+    <FK_MapData>ND201</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>40</Y1>
+    <X2>81.82</X2>
+    <Y2>240</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
     <MyPK>15601b77-3624-4be4-a56c-c74bb5e2606b</MyPK>
     <FK_MapData>ND205</FK_MapData>
     <X1>81.82</X1>
@@ -9248,12 +9301,12 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>1d5fb3ab-a404-4653-b374-1c2d93a644e4</MyPK>
+    <MyPK>1F2FC6A6-64C1-2A09-5FD1-D07DC46F0436</MyPK>
     <FK_MapData>ND201</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
+    <X1>81.82</X1>
+    <Y1>237.82</Y1>
+    <X2>720</X2>
+    <Y2>237.82</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -9378,6 +9431,19 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
+    <MyPK>3AABAF21-1261-6CE6-B6F2-2600C96FB729</MyPK>
+    <FK_MapData>ND201</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>40.91</Y1>
+    <X2>717.91</X2>
+    <Y2>40.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
     <MyPK>3ada8918-4703-4b81-aa0c-ecb5156a23d2</MyPK>
     <FK_MapData>ND299</FK_MapData>
     <X1>719.09</X1>
@@ -9436,19 +9502,6 @@
     <Y1>84</Y1>
     <X2>602</X2>
     <Y2>84</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>3efd5b7a-4adb-4506-aab9-8e9d1feb4763</MyPK>
-    <FK_MapData>ND201</FK_MapData>
-    <X1>81.82</X1>
-    <Y1>40</Y1>
-    <X2>81.82</X2>
-    <Y2>240</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -9592,19 +9645,6 @@
     <Y1>40</Y1>
     <X2>719.09</X2>
     <Y2>357</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>6639046e-564a-46e1-a4cc-83f659fc4b44</MyPK>
-    <FK_MapData>ND201</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -9761,19 +9801,6 @@
     <Y1>84</Y1>
     <X2>602</X2>
     <Y2>84</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>8c0d2c95-2dad-4a17-9d37-de9a00755123</MyPK>
-    <FK_MapData>ND201</FK_MapData>
-    <X1>81.82</X1>
-    <Y1>237.82</Y1>
-    <X2>720</X2>
-    <Y2>237.82</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -10106,6 +10133,19 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
+    <MyPK>CFFF8897-38EA-9B1D-45E2-74F4C56A9CC3</MyPK>
+    <FK_MapData>ND201</FK_MapData>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>241</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
     <MyPK>d0008281-2861-43d4-a6ae-dae5b2fe6c9f</MyPK>
     <FK_MapData>ND299</FK_MapData>
     <X1>83.36</X1>
@@ -10164,19 +10204,6 @@
     <Y1>84</Y1>
     <X2>602</X2>
     <Y2>84</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>d4b98eb3-66ce-423c-9d48-3201402828c9</MyPK>
-    <FK_MapData>ND201</FK_MapData>
-    <X1>719.09</X1>
-    <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>241</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -10268,6 +10295,19 @@
     <Y1>40</Y1>
     <X2>81.82</X2>
     <Y2>362</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>E7547345-874E-5173-732D-55669B2FBB87</MyPK>
+    <FK_MapData>ND201</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -10424,7 +10464,7 @@
     <FK_MapData>ND201</FK_MapData>
     <Text>请假时间从</Text>
     <X>92.27</X>
-    <Y>92.2</Y>
+    <Y>94.96</Y>
     <FontSize>11</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -10529,7 +10569,7 @@
     <FK_MapData>ND201</FK_MapData>
     <Text>请假天数</Text>
     <X>543</X>
-    <Y>96.38</Y>
+    <Y>99.14</Y>
     <FontSize>11</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -10784,7 +10824,7 @@
     <FK_MapData>ND201</FK_MapData>
     <Text>请假类型</Text>
     <X>546</X>
-    <Y>57.38</Y>
+    <Y>60.14</Y>
     <FontSize>11</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -10889,7 +10929,7 @@
     <FK_MapData>ND201</FK_MapData>
     <Text>请假时间到</Text>
     <X>312</X>
-    <Y>96.38</Y>
+    <Y>99.14</Y>
     <FontSize>11</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -11024,7 +11064,7 @@
     <FK_MapData>ND201</FK_MapData>
     <Text>请@假@原@因</Text>
     <X>114</X>
-    <Y>143.38</Y>
+    <Y>146.14</Y>
     <FontSize>11</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -11189,7 +11229,7 @@
     <FK_MapData>ND201</FK_MapData>
     <Text>发起时间</Text>
     <X>313.64</X>
-    <Y>58.55</Y>
+    <Y>61.31</Y>
     <FontSize>11</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -11308,8 +11348,8 @@
     <MyPK>bdeb0027-c449-48ed-805c-097c78bc321e</MyPK>
     <FK_MapData>ND201</FK_MapData>
     <Text>济南驰骋信息技术有限公司&amp;nbsp;-&amp;nbsp;请假申请单</Text>
-    <X>92.15</X>
-    <Y>10.15</Y>
+    <X>103.09</X>
+    <Y>15.91</Y>
     <FontSize>23</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -11564,7 +11604,7 @@
     <FK_MapData>ND201</FK_MapData>
     <Text>发起人</Text>
     <X>103.48</X>
-    <Y>58.46</Y>
+    <Y>61.22</Y>
     <FontSize>11</FontSize>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>

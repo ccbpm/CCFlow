@@ -1,26 +1,7 @@
-﻿
-//文本框内容变化.
-function Test_DDL_Onchange() {
-
-   var val=   $("#DDL_FYLX").val();
-   alert('Test_DDL_Onchange：被激活了,选择的值为:' + val);
-    
+﻿function Test()
+{
+  alert('ss');
 }
-
-//文本框内容变化.
-function Test_CB_click() {
-    var val = $("#TB_WenBenBianHuaShiJian").val();
-    alert('Test_CB_click：被激活了, 内容为:' + val);
-}
-
-
-//文本框内容变化.
-function Test_Onchange() {
-    var val = $("#TB_WenBenBianHuaShiJian").val();
-    alert('Test_Onchange：被激活了.内容为:'+val );
-}
-
-
 function datedifference(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式  
     var dateSpan,
             tempDate,

@@ -93,11 +93,11 @@
                 alert('请选择一个表单');
                 return;
             }
-
-            var node = new Entity("BP.WF.Node");
-            node.NodeID = GetQueryString("FK_Node");
+            var FK_Node = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", FK_Node);
+            node.NodeID = FK_Node;
             var i = node.RetrieveFromDBSources();
-
+            
             //更新节点表单类型.
             node.FormType = FormType.RefOneFrmTree;
             node.NodeFrmID = selectFrm; //选择的表单

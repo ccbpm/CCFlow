@@ -145,7 +145,10 @@ namespace BP.WF.HttpHandler
                     Node nd = new Node(this.FK_Node);
                     nd.RepareMap( nd.HisFlow);
                 }
-
+                //清空缓存
+                MapData mymd = new MapData(fk_mapData);
+                mymd.RepairMap();
+                BP.Sys.SystemConfig.DoClearCash();
                 return "执行成功.";
             }
             catch (Exception ex)
@@ -169,7 +172,10 @@ namespace BP.WF.HttpHandler
                         Node nd = new Node(this.FK_Node);
                         nd.RepareMap(nd.HisFlow);
                     }
-
+                    //清空缓存
+                    MapData mymd = new MapData(fk_mapData);
+                    mymd.RepairMap();
+                    BP.Sys.SystemConfig.DoClearCash();
                     return "执行成功.";
                 }
                 catch (Exception newex)
@@ -231,6 +237,10 @@ namespace BP.WF.HttpHandler
                     Node nd = new Node(int.Parse(fk_node));
                     nd.RepareMap(nd.HisFlow);
                 }
+                //清空缓存
+                MapData mymd = new MapData(fromMapData);
+                mymd.RepairMap();
+                BP.Sys.SystemConfig.DoClearCash();
                 return "执行成功.";
             }
             catch(Exception ex)

@@ -83,7 +83,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
                     name = item.NAME;
 
 
-                $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "','" + dbSrc + "','" + dbType + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
+                $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
             });
 
 

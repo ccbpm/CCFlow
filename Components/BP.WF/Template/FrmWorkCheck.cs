@@ -201,6 +201,10 @@ namespace BP.WF.Template
         /// 协作模式下操作员显示顺序
         /// </summary>
         public const string FWCOrderModel = "FWCOrderModel";
+        /// <summary>
+        /// 审核意见显示模式()
+        /// </summary>
+        public const string FWCMsgShow = "FWCMsgShow";
     }
     /// <summary>
     /// 审核组件
@@ -208,6 +212,9 @@ namespace BP.WF.Template
     public class FrmWorkCheck : Entity
     {
         #region 属性
+        /// <summary>
+        /// 节点编号
+        /// </summary>
         public string No
         {
             get
@@ -710,6 +717,12 @@ namespace BP.WF.Template
                 //协作模式下审核人显示顺序. add for yantai zongheng.
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", true, true,
                   FrmWorkCheckAttr.FWCOrderModel, "@0=按审批时间先后排序@1=按照接受人员列表先后顺序(官职大小)");
+
+                //for tianye , 多人审核的时候，不让其看到其他人的意见.
+                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCMsgShow, 0, "审核意见显示方式", true, true,
+                  FrmWorkCheckAttr.FWCMsgShow, "@0=都显示@1=仅显示自己的意见");
+
+
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 this._enMap = map;

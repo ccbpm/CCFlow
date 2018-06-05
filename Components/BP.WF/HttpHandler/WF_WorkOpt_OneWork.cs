@@ -41,8 +41,10 @@ namespace BP.WF.HttpHandler
             DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID);
             ds.Tables.Add(dt);
 
-            #region  父子流程数据存储到这里.
 
+         
+
+            #region  父子流程数据存储到这里.
             Hashtable ht = new Hashtable();
             foreach (DataRow dr in dt.Rows)
             {
@@ -110,6 +112,13 @@ namespace BP.WF.HttpHandler
                 gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID);
 
                 ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
+            }
+
+            //把节点审核配置信息.
+            if (this.FK_Node != 0)
+            {
+                FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
             }
 
             //返回结果.

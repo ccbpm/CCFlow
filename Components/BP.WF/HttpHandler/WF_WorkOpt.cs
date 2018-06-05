@@ -703,6 +703,7 @@ namespace BP.WF.HttpHandler
             if (Web.WebUser.No == null)
                 return "err@登录信息丢失,请重新登录.";
 
+
             #region 定义变量.
             FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
             FrmWorkCheck frmWorkCheck = null;

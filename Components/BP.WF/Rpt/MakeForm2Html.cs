@@ -821,31 +821,31 @@ namespace BP.WF
             sb.Append(" <table style='width:950px;height:auto;' >");
 
             #region 生成头部信息.
-            sb.Append("<tr>");
+            //sb.Append("<tr>");
 
-            sb.Append("<td colspan=4 >");
+            //sb.Append("<td colspan=4 >");
 
-            sb.Append("<table border=0 style='width:950px;'>");
+            //sb.Append("<table border=0 style='width:950px;'>");
 
-            sb.Append("<tr  style='border:0px;' >");
+           sb.Append("<tr  style='border:0px;' >");
 
-            sb.Append("<td>");
-            sb.Append("<img src='icon.png' style='height:100px;border:0px;' />");
-            sb.Append("</td>");
+            //sb.Append("<td>");
+            //sb.Append("<img src='icon.png' style='height:100px;border:0px;' />");
+            //sb.Append("</td>");
 
-            sb.Append("<td>");
-            sb.Append("<br><h2><b>" + frmName + "</b></h2>");
-            sb.Append("</td>");
+           sb.Append("<td  colspan=4>");
+           sb.Append("<br><h2><b>" + frmName + "</b></h2>");
+           sb.Append("</td>");
 
-            sb.Append("<td>");
-            sb.Append(" <img src='QR.png' style='height:100px;'  />");
-            sb.Append("</td>");
+            //sb.Append("<td>");
+            //sb.Append(" <img src='QR.png' style='height:100px;'  />");
+            //sb.Append("</td>");
 
             sb.Append("</tr>");
-            sb.Append("</table>");
+            //sb.Append("</table>");
 
-            sb.Append("</td>");
-            sb.Append("</tr>");
+            //sb.Append("</td>");
+            //sb.Append("</tr>");
             #endregion 生成头部信息.
 
             GroupFields gfs = new GroupFields(frmID);
@@ -1280,7 +1280,7 @@ namespace BP.WF
 
                 #region 生成二维码.
                 /*说明是图片文件.*/
-                string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
+               // string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
                 string billUrl = SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
 
                 string qrUrl = SystemConfig.HostURL + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo="+flowNo;
@@ -1298,7 +1298,7 @@ namespace BP.WF
                 qrc.QRCodeVersion = 7;
                 qrc.QRCodeErrorCorrect = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ERROR_CORRECTION.M;
                 System.Drawing.Bitmap btm = qrc.Encode(qrUrl, System.Text.Encoding.UTF8);
-                btm.Save(pathQR);
+              //  btm.Save(pathQR);
                 #endregion
 
                 #region 定义变量做准备.
@@ -1325,7 +1325,7 @@ namespace BP.WF
 
                 string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
                 WaterImageManage wim = new WaterImageManage();
-                wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "\\ShuiYin.png");
+             //   wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "\\ShuiYin.png");
                 #endregion
 
                 //生成 表单的 html.

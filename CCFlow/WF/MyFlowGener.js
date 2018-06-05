@@ -469,7 +469,7 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
                     data = DBAccess.RunDBSrc(selectStatement, 1);
                 //JavaScript获取外部数据源
                 if (srcType == 6)
-                    data = DBAccess.RunDBSrc(selectStatement, 2);
+                    data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
             }
         }
 

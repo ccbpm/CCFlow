@@ -91,6 +91,8 @@ function figure_MapAttr_Template(mapAttr) {
     var eleHtml = $('<div>' + ele + '</div>');
 
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
+
+
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
 
     return eleHtml;
@@ -264,11 +266,13 @@ function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
         });
     }
     else {
+
         if (isBold == 1) {
             ele.css('font-weight', 'bold');
         }
+
         if (isItalic == 1) {
-            ele.css('font-style', 'italic')
+            ele.css('font-style', 'italic');
         }
     }
 }
@@ -280,7 +284,7 @@ function figure_Template_Label(frmLab) {
     eleHtml = $(eleHtml);
     var text = frmLab.Text == null ? "" : frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
-    eleHtml.css('position', 'absolute').css('top', frmLab.Y - 10).css('left', frmLab.X).css('font-size', frmLab.FontSize)
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y - 5).css('left', frmLab.X).css('font-size', frmLab.FontSize)
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;

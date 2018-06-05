@@ -1631,6 +1631,12 @@ namespace BP.Sys
                 DBAccess.RunSQL(sql);
             }
 
+            //为日期类型固定宽度.
+            if (this.MyDataType == DataType.AppDate)
+                this.UIWidth = 125;
+            if (this.MyDataType == DataType.AppDateTime)
+                this.UIWidth = 145;
+
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeUpdate()

@@ -591,7 +591,6 @@ namespace BP.WF
                         continue;
 
                     if (paras.ContainsKey(k))
-                        //  continue;
                         paras[k] = BP.Sys.Glo.Request.QueryString[k];
                     else
                         paras.Add(k, BP.Sys.Glo.Request.QueryString[k]);
@@ -603,7 +602,14 @@ namespace BP.WF
 
             //从草稿里看看是否有新工作？
             StartWork wk = (StartWork)nd.HisWork;
-            wk.ResetDefaultVal();
+            try
+            {
+                wk.ResetDefaultVal();
+            }
+            catch (Exception ex)
+            {
+                wk.ResetDefaultVal();
+            }
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
 

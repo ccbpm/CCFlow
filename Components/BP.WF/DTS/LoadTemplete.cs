@@ -134,7 +134,7 @@ namespace BP.WF.DTS
                     continue;
 
                 FlowSort fs = new FlowSort();
-                fs.No = dir.Name.Substring(0, 2);
+                fs.No = dir.Name.Substring(0, 3);
                 fs.Name = dir.Name.Substring(3);
                 fs.ParentNo = fsRoot.No;
                 fs.Insert();
@@ -145,7 +145,7 @@ namespace BP.WF.DTS
                     BP.DA.Log.DefaultLogWriteLineInfo("@开始调度流程模板文件:" + filePath);
 
                     Flow myflow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
-                    msg += "\t\n@流程:" + myflow.Name + "装载成功。";
+                    msg += "\t\n@流程:[" + myflow.Name + "]装载成功。";
 
                     System.IO.FileInfo info = new System.IO.FileInfo(filePath);
                     myflow.Name = info.Name.Replace(".xml", "");

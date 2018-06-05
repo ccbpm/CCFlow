@@ -35,238 +35,247 @@
 
         function InitPage() {
 
-            var param = {
-                DoType: "WorkCheck_Init",
-                FK_Flow: fk_flow,
-                FK_Node: nodeid,
-                WorkID: workid,
-                FID: fid,
-                IsReadonly: isReadonly
-            };
+//            var param = {
+//                DoType: "WorkCheck_Init",
+//                FK_Flow: fk_flow,
+//                FK_Node: nodeid,
+//                WorkID: workid,
+//                FID: fid,
+//                IsReadonly: isReadonly
+//            };
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            // handler.AddPara("FK_Flow",);
+            var data = handler.DoMethodReturnString("WorkCheck_Init");
 
-            Handler_AjaxQueryData(param, function (data) {
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
+            init = eval('(' + data + ')');
+            wcDesc = init.wcDesc[0];
+            tks = init.Tracks;
+            aths = init.Aths;
+            SignType = init.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
 
-                if (data.indexOf('err@') != -1) {
-                    alert(data);
-                    return;
+            var html = '';
+
+            if (tks.length == 0) {
+                html += '<tr style="background-color: #E2F6FB">';
+                html += '<td>&nbsp;</td>';
+                html += '</tr>';
+                html += '<tr>';
+                html += '<td style="word-wrap: break-word;line-height:30px;min-height:100px;">&nbsp;</td>';
+                html += '</tr>';
+            }
+
+            $.each(tks, function () {
+
+                var subaths = GetSubAths(this.NodeID);
+
+                if (wcDesc.FWCMsgShow == "1" && this.NodeID == nodeid && this.IsDoc==false) {
+                    return true;
                 }
 
-                //  alert(data);
-                init = eval('(' + data + ')');
-                wcDesc = init.wcDesc[0];
-                tks = init.Tracks;
-                aths = init.Aths;
-                SignType = init.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
+                //                    if (wcDesc.FWCShowModel == 0) {
+                //                        //表格模式
+                //                        html += '<tr style="background-color: #E2F6FB">';
+                //                        html += '<td>' + this.NodeName + '</td>';
+                //                        html += '</tr>';
+                //                        html += '<tr>';
+                //                    }
 
-                var html = '';
+                //自由模式
+                html += "<tr>";
 
-                if (tks.length == 0) {
-                    html += '<tr style="background-color: #E2F6FB">';
-                    html += '<td>&nbsp;</td>';
-                    html += '</tr>';
-                    html += '<tr>';
-                    html += '<td style="word-wrap: break-word;line-height:30px;min-height:100px;">&nbsp;</td>';
-                    html += '</tr>';
+                var tdWidth = "120px";
+                if (isMobile == "1")
+                    tdWidth = "20%;";
+
+                html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
+
+                var nodeName = this.NodeName;
+                nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
+                html += nodeName;
+                html += "</td>";
+
+                //审核意见
+                if (this.IsDoc && isReadonly == false) {
+
+                    html += "<td>";
+
+                    //html += "<div style='float:left'>" + wcDesc.FWCOpLabel + "</div>";
+                    //html += "<div style='float:left'><a href=\"javascript:TBHelp('ND" + nodeid + "')\"><img src='../Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>";
+                    //html += "<div style='float:left'></div>";
+
+                    if (wcDesc.FWCAth == 1) {
+                        html += "<div style='float:right' id='uploaddiv' onmouseover='UploadFileChange(this)'></div>";
+                    }
+
+                    html += "<div style='float:left;width:100%;'>";
+                    var msg = this.Msg;
+                    if (msg == null)
+                        msg = "同意";
+
+                    while (msg.indexOf('<BR>') >= 0) {
+                        msg = msg.replace('<BR>', '\t\n');
+                    }
+
+                    html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height='60px';this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
+                    html += msg;
+                    html += "</textarea>";
+
+                    //   var ss = "CheckItems";
+
+                    //加入常用短语.
+                    html += "<br>";
+                    html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
+                    html += "<option value=''>常用短语</option>";
+                    html += "<option value='同意'>同意</option>";
+                    html += "<option value='同意办理'>同意办理</option>";
+                    html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
+                    html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
+                    html += "<option value='不同意'>不同意</option>";
+                    html += "</select><font color=Gray>内容不要超过2000字</font>";
+                    html += "</div>";
+                    html += "</td>";
+                }
+                else {
+
+                    html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
+
+
+                    html += '<font color=green>' + this.Msg + '</font>';
+
+
+
+                    html += '</td>';
                 }
 
-                $.each(tks, function () {
-                    var subaths = GetSubAths(this.NodeID);
+                html += '</tr>';
 
-                    //                    if (wcDesc.FWCShowModel == 0) {
-                    //                        //表格模式
-                    //                        html += '<tr style="background-color: #E2F6FB">';
-                    //                        html += '<td>' + this.NodeName + '</td>';
-                    //                        html += '</tr>';
-                    //                        html += '<tr>';
-                    //                    }
+                //附件
+                if (subaths.length > 0) {
+                    var tdid = this.IsDoc ? ("id='aths_" + this.NodeID + "'") : "";
 
-                    //自由模式
+                    html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
+                    html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
+                    html += "<b>附件：</b>&nbsp;" + subaths;
+                    html += "</td>";
+                    html += "</tr>";
+                }
+
+                //输出签名,没有签名的要求.
+                if (SignType == null || SignType == undefined) {
+
+                    var rdt = this.RDT.substring(0, 16);
+
+                    if (rdt == "") {
+                        var dt = new Date();
+                        rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
+                    }
+
+                    //签名，日期.
                     html += "<tr>";
+                    html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
 
-                    var tdWidth = "120px";
-                    if (isMobile == "1")
-                        tdWidth = "20%;";
+                    if (wcDesc.SigantureEnabel == "0")
+                        html += GetUserSmallIcon(this.EmpFrom, this.EmpFromT);
+                    else
+                        html += GetUserSiganture(this.EmpFrom, this.EmpFromT);
 
-                    html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
+                    html += "</div>";
 
-                    var nodeName = this.NodeName;
-                    nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
-                    html += nodeName;
+
+                    html += "<div style='float:right'> ";
+                    html += "<font color='Gray'>日期:</font>" + rdt;
+                    html += "</div>";
                     html += "</td>";
 
-                    //审核意见
-                    if (this.IsDoc && isReadonly == false) {
+                    html += "</tr>";
 
-                        html += "<td>";
+                } else {
 
-                        //html += "<div style='float:left'>" + wcDesc.FWCOpLabel + "</div>";
-                        //html += "<div style='float:left'><a href=\"javascript:TBHelp('ND" + nodeid + "')\"><img src='../Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>";
-                        //html += "<div style='float:left'></div>";
+                    for (var idx = 0; idx < SignType.length; idx++) {
 
-                        if (wcDesc.FWCAth == 1) {
-                            html += "<div style='float:right' id='uploaddiv' onmouseover='UploadFileChange(this)'></div>";
-                        }
-
-                        html += "<div style='float:left;width:100%;'>";
-                        var msg = this.Msg;
-                        if (msg == null)
-                            msg = "同意";
-
-                        while (msg.indexOf('<BR>') >= 0) {
-                            msg = msg.replace('<BR>', '\t\n');
-                        }
-
-                        html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height='60px';this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
-                        html += msg;
-                        html += "</textarea>";
-
-                        //   var ss = "CheckItems";
-
-                        //加入常用短语.
-                        html += "<br>";
-                        html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
-                        html += "<option value=''>常用短语</option>";
-                        html += "<option value='同意'>同意</option>";
-                        html += "<option value='同意办理'>同意办理</option>";
-                        html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
-                        html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
-                        html += "<option value='不同意'>不同意</option>";
-                        html += "</select><font color=Gray>内容不要超过2000字</font>";
-                        html += "</div>";
-                        html += "</td>";
-                    }
-                    else {
-
-                        html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
-                        html += '<font color=green>' + this.Msg + '</font>';
-                        html += '</td>';
-                    }
-
-                    html += '</tr>';
-
-                    //附件
-                    if (subaths.length > 0) {
-                        var tdid = this.IsDoc ? ("id='aths_" + this.NodeID + "'") : "";
-
-                        html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
-                        html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
-                        html += "<b>附件：</b>&nbsp;" + subaths;
-                        html += "</td>";
-                        html += "</tr>";
-                    }
-
-                    //输出签名,没有签名的要求.
-                    if (SignType == null || SignType == undefined) {
+                        var st = SignType[idx];
+                        if (st.No != this.EmpFrom)
+                            continue;
 
                         var rdt = this.RDT.substring(0, 16);
 
-                        if (rdt == "") {
-                            var dt = new Date();
-                            rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
-                        }
 
-                        //签名，日期.
-                        html += "<tr>";
-                        html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+                        if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
 
-                        if (wcDesc.SigantureEnabel == "0")
-                            html += GetUserSmallIcon(this.EmpFrom, this.EmpFromT);
-                        else
-                            html += GetUserSiganture(this.EmpFrom, this.EmpFromT);
-
-                        html += "</div>";
-
-
-                        html += "<div style='float:right'> ";
-                        html += "<font color='Gray'>日期:</font>" + rdt;
-                        html += "</div>";
-                        html += "</td>";
-
-                        html += "</tr>";
-
-                    } else {
-
-                        for (var idx = 0; idx < SignType.length; idx++) {
-
-                            var st = SignType[idx];
-                            if (st.No != this.EmpFrom)
-                                continue;
-
-                            var rdt = this.RDT.substring(0, 16);
-
-
-                            if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
-
-                                html += "<tr>";
-                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                            html += "<tr>";
+                            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                                     + GetUserSmallIcon(this.EmpFrom, this.EmpFromT) + '</div>'
                                     + "<div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                                html += "</tr>";
-                                break;
-                            }
+                            html += "</tr>";
+                            break;
+                        }
 
-                            if (st.SignType == 1) {
-                                html += "<tr>";
-                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                        if (st.SignType == 1) {
+                            html += "<tr>";
+                            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                                     + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
                                     + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                                html += "</tr>";
-                                break;
-                            }
+                            html += "</tr>";
+                            break;
+                        }
 
-                            if (st.SignType == 2) {
+                        if (st.SignType == 2) {
 
-                                html += "<tr>";
-                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                            html += "<tr>";
+                            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                                     + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
                                     + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                                html += "</tr>";
-                                //  alert('电子签名的逻辑尚未编写.');
-                                break;
-                            }
+                            html += "</tr>";
+                            //  alert('电子签名的逻辑尚未编写.');
+                            break;
+                        }
 
-                            //如果是图片密码签名.
-                            if (st.SignType == 3) {
+                        //如果是图片密码签名.
+                        if (st.SignType == 3) {
 
-                                isCanSend = false; //设置不可以发送.
-                                html += "<tr>";
-                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+                            isCanSend = false; //设置不可以发送.
+                            html += "<tr>";
+                            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
 
-                                html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
+                            html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
 
-                                html += "</div>";
+                            html += "</div>";
 
-                                html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                                html += "</tr>";
-                                break;
-                            }
+                            html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
+                            html += "</tr>";
+                            break;
                         }
                     }
-
-                    // GenerSiganture(SignType);
-
-                });
-
-                //如果是只读的,是多人处理模式,就把已经审核过的人员信息输出出来.
-                if (isReadonly == 1) {
                 }
 
-                $("#tbTracks").append(html);
+                // GenerSiganture(SignType);
 
-                if ($("#WorkCheck_Doc").length > 0) {
-                    if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {
-                        SaveWorkCheck();
-                    }
+            });
+
+            //如果是只读的,是多人处理模式,就把已经审核过的人员信息输出出来.
+            if (isReadonly == 1) {
+            }
+
+            $("#tbTracks").append(html);
+
+            if ($("#WorkCheck_Doc").length > 0) {
+                if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {
+                    SaveWorkCheck();
                 }
+            }
 
-                $("textarea").trigger("keydown");
+            $("textarea").trigger("keydown");
 
-                if ($("#uploaddiv").length > 0) {
-                    AddUploadify("uploaddiv");
-                }
+            if ($("#uploaddiv").length > 0) {
+                AddUploadify("uploaddiv");
+            }
 
-            }, this);
         }
 
         function SetDocVal() {

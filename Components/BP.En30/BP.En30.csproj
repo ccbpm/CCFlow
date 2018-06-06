@@ -210,6 +210,9 @@
     <Compile Include="Sys\FrmUI\SFTable.cs" />
     <Compile Include="Sys\FrmUI\MapFrameExt.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFSQL.cs" />
+    <Compile Include="Sys\MapExtXml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Sys\MapFrame.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -370,7 +373,6 @@
     <Compile Include="Sys\RptTemplate.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\EnsAppXml.cs" />
     <Compile Include="Sys\EnsAppGroupXml.cs" />
     <Compile Include="Sys\FieldGroupXml.cs" />
     <Compile Include="Sys\GEDtl.cs" />
@@ -423,11 +425,8 @@
     <Compile Include="Sys\GENoName.cs" />
     <Compile Include="Sys\MapDtl.cs" />
     <Compile Include="Sys\GEEntity.cs" />
-    <Compile Include="Sys\MapExtXml.cs" />
     <Compile Include="Sys\MapExt.cs" />
-    <Compile Include="Sys\InputCheckXml.cs" />
     <Compile Include="Sys\ExpFucnXml.cs" />
-    <Compile Include="Sys\XML\TBEventXml.cs" />
     <Compile Include="Sys\FrmLine.cs" />
     <Compile Include="Sys\FrmLab.cs" />
     <Compile Include="Sys\FrmLink.cs" />

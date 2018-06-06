@@ -28,80 +28,56 @@
             GenerBindEnumKey("DDL_BillFileType", "BillFileType", 0);
             GenerBindEnumKey("DDL_BillOpenModel", "BillOpenModel", 0);
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Bill_Init&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var nodeID = GetQueryString("FK_Node");
+            var ens = new Entities("BP.WF.Template.BillTemplates");
+            ens.Retrieve("NodeID", nodeID);
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var fk_BillTemplate = GetQueryString("FK_BillTemplate");
+            var currBill = null;
 
-                    data = JSON.parse(data);
+            //生成列表.
+            //增加处理.
+            for (var i = 0; i < ens.length; i++) {
 
-                    var fk_BillTemplate = GetQueryString("FK_BillTemplate");
-                    var currBill = null;
+                var en = ens[i];
 
-                    //生成列表.
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-
-                        if (fk_BillTemplate == data[i].No) {
-                            currBill = data[i];
-                        }
-
-                        var newRow = "";
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + data[i].No + "</td>";
-                        newRow += "<td>" + data[i].Name + "</td>";
-                        newRow += "<td>" + data[i].QRModelText + "</td>";
-
-                        newRow += "<td><a href='" + Handler + "?DoType=Bill_Download&No=" + data[i].No + "'>" + data[i].TempFilePath + "</td>";
-
-                        newRow += "<td>";
-                        //newRow += "<a href=\"javascript:Edit('" + data[i].No + "')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
-                        newRow += "<a href=\"javascript:Delete('" + data[i].No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
-                        newRow += "</td>";
-
-                        newRow += "</tr>";
-
-                        $("#Table1 tr:last").after(newRow);
-                    }
-
-                    //调用公共类库的方法:执行批量主表赋值
-                    if (currBill != null)
-                        GenerFullAllCtrlsVal(currBill);
-
+                if (fk_BillTemplate == en.No) {
+                    currBill = en;
                 }
-            });
+
+                var newRow = "";
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + en.No + "</td>";
+                newRow += "<td>" + en.Name + "</td>";
+                newRow += "<td>" + en.QRModelText + "</td>";
+
+                newRow += "<td><a href='" + Handler + "?DoType=Bill_Download&No=" + en.No + "'>" + en.TempFilePath + "</td>";
+
+                newRow += "<td>";
+                newRow += "<a href=\"javascript:Delete('" + en.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "</td>";
+
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+            }
+
+            //调用公共类库的方法:执行批量主表赋值
+            if (currBill != null)
+                GenerFullAllCtrlsVal(currBill);
+
         }
 
         function Delete(no) {
 
-            if (window.confirm('您确定要删除吗？') == false)
+            if (window.confirm('您确定要删除['+no+']吗？') == false)
                 return;
 
-            $.ajax({
-                data: null,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Bill_Delete&FK_BillTemplate=" + no + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var en = new Entity("BP.WF.Template.BillTemplate");
+            en.SetPKVal(no);
+            en.Delete();
 
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            window.location.href = window.location.href;
         }
 
         function Edit(no) {
@@ -119,13 +95,7 @@
                 alert('请输入报表名称');
                 return;
             }
-
-//            var file = document.getElementById("bill").value;
-//            if (file == "") {
-//                alert('请选择文件');
-//                return;
-//            }
-
+             
             $.ajax({
                 url: Handler + "?DoType=Bill_Save&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
                 type: 'POST',
@@ -139,7 +109,6 @@
                         alert(data);
                         return;
                     }
-                    alert(data);
                     window.location.href = window.location.href;
                     return;
                 }
@@ -150,6 +119,7 @@
 
             document.getElementById("TB_No").value = "";
             document.getElementById("TB_Name").value = "";
+
         }
     </script>
 </head>

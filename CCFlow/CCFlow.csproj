@@ -62,7 +62,6 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\RefDLL\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
@@ -109,10 +108,6 @@
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\RefDLL\Office12\Office.dll</HintPath>
-    </Reference>
-    <Reference Include="Silverlight.DataSetConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\RefDLL\Silverlight.DataSetConnector.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.DirectoryServices" />
@@ -921,7 +916,6 @@
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral.htm" />
@@ -5687,7 +5681,6 @@
     <Content Include="WF\Todolist.htm" />
     <Content Include="WF\UC\Pub.ascx" />
     <Content Include="WF\UC\UCEn.ascx" />
-    <Content Include="WF\UC\WFRpt.ascx" />
     <Content Include="WF\WebOffice\AttachOffice.aspx" />
     <Content Include="WF\WebOffice\OfficeServices.ashx" />
     <Content Include="WF\WebOffice\OfficeView.aspx" />
@@ -5701,7 +5694,6 @@
     <Content Include="WF\WorkOpt\CC.aspx" />
     <Content Include="WF\WorkOpt\CC.htm" />
     <Content Include="WF\WorkOpt\CCCheckNote.aspx" />
-    <Content Include="WF\WorkOpt\CCFlowAPI.asmx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.htm" />
     <Content Include="WF\WorkOpt\DeleteFlowInstance.htm" />
@@ -6560,10 +6552,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx.designer.cs">
       <DependentUpon>BatchEdit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx.cs">
-      <DependentUpon>CCForm.asmx</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
@@ -7480,13 +7468,6 @@
     <Compile Include="WF\UC\UCEn.ascx.designer.cs">
       <DependentUpon>UCEn.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\UC\WFRpt.ascx.cs">
-      <DependentUpon>WFRpt.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\WFRpt.ascx.designer.cs">
-      <DependentUpon>WFRpt.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WebOffice\AttachOffice.aspx.cs">
       <DependentUpon>AttachOffice.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7559,9 +7540,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\CCCheckNote.aspx.designer.cs">
       <DependentUpon>CCCheckNote.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CCFlowAPI.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx.cs">
       <DependentUpon>DealSubThreadReturnToHL.aspx</DependentUpon>
@@ -7730,11 +7708,6 @@
       <Project>{8E48D1DF-CEED-4F0C-B863-3359B2A99134}</Project>
       <Name>BP.Demo</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="WF\WorkOpt\CCFlowAPI.resx">
-      <DependentUpon>CCFlowAPI.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

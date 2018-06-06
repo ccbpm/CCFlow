@@ -238,9 +238,9 @@ namespace BP.Sys
 
             SysEnum se = (SysEnum)this.GetEntityByKey(SysEnumAttr.IntKey, def);
             if (se == null)
-                sql += " END " + key + "Text";
+                sql += " END \"" + key + "Text\"";
             else
-                sql += " WHEN NULL THEN '" + se.Lab + "' END " + key + "TEXT";
+                sql += " WHEN NULL THEN '" + se.Lab + "' END \"" + key + "Text\"";
 
             Cash.AddObj("ESQL" + enName + mTable + key + "_" + enumKey, Depositary.Application, sql);
             return sql;
@@ -259,9 +259,9 @@ namespace BP.Sys
 
             SysEnum se = (SysEnum)this.GetEntityByKey(SysEnumAttr.IntKey, def);
             if (se == null)
-                sql += " END " + key + "Text";
+                sql += " END \"" + key + "Text\"";
             else
-                sql += " WHEN NULL THEN '" + se.Lab + "' END " + key + "TEXT";
+                sql += " WHEN NULL THEN '" + se.Lab + "' END \"" + key + "Text\"";
 
             // Cash.AddObj("ESQL" + enName + key + "_" + enumKey, Depositary.Application, sql);
             return sql;

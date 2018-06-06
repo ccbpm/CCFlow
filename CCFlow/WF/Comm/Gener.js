@@ -202,6 +202,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
 /*绑定枚举值.*/
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 
+
     $.ajax({
 
         type: 'post',
@@ -210,7 +211,16 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
         dataType: 'html',
         success: function (data) {
 
+
             data = JSON.parse(data);
+
+            if (data.length == 0) {
+                alert('没有找到枚举值:' + enumKey);
+                return;
+            }
+
+
+
             //绑定枚举值.
             GenerBindDDL(ctrlDDLId, data, "IntKey", "Lab", selectVal);
             return;

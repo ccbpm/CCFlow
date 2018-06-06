@@ -39,26 +39,5 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         protected void Page_Load(object sender, EventArgs e)
         {
         }
-        public void ShowExtMenu()
-        {
-            this.Add("\t\n<div id='tabsJ'  align='center'>");
-            MapExtXmls fss = new MapExtXmls();
-            fss.RetrieveAll();
-
-            this.AddUL();
-            foreach (MapExtXml fs in fss)
-            {
-                if (this.ExtType == fs.No)
-                {
-                    // this.Lab = fs.Name;
-                    this.AddLiB("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + fs.No, "<span>" + fs.Name + "</span>");
-                }
-                else
-                    this.AddLi("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + fs.No, "<span>" + fs.Name + "</span>");
-            }
-            this.AddLi("<a href='MapExt.aspx?FK_MapData=" + this.FK_MapData + "'><span>帮助</span></a>");
-            this.AddULEnd();
-            this.AddDivEnd();
-        }
     }
 }

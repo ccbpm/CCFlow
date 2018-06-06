@@ -23,7 +23,7 @@ namespace BP.Pub
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
-                string file = SystemConfig.PathOfCyclostyleFile + dr["URL"].ToString() + ".rtf";
+                string file = SystemConfig.PathOfCyclostyleFile + dr["URL"].ToString();
                 msg += RepBill.RepairBill(file);
             }
             PubClass.ResponseWriteBlueMsg(msg);
@@ -33,6 +33,7 @@ namespace BP.Pub
             string msg = "";
             string docs;
 
+            file = file.Replace(".rtf.rtf", ".rtf");
             // 读取文件。
             try
             {
@@ -1065,6 +1066,8 @@ namespace BP.Pub
         /// <param name="isOpen">要打开的url用于生成二维码</param>
         public void MakeDoc(string cfile, string path, string file, string replaceVals, bool isOpen, string billUrl=null)
         {
+            cfile = cfile.Replace(".rtf.rtf", ".rtf"); 
+
             string str = Cash.GetBillStr(cfile, false).Substring(0);
             if (this.HisEns.Count == 0)
                 if (this.HisGEEntity == null)

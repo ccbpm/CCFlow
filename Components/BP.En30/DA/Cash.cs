@@ -61,9 +61,14 @@ namespace BP.DA
         }
         public static string GetBillStr(string cfile, bool isCheckCash)
         {
+            cfile = cfile.Replace(".rtf.rtf", ".rtf"); 
+
             string val = Bill_Cash[cfile] as string;
             if (isCheckCash == true)
                 val = null;
+
+
+
 
             if (val == null)
             {
@@ -137,6 +142,8 @@ namespace BP.DA
         }
         public static string[] GetBillParas_Gener(string cfile, Attrs attrs)
         {
+            cfile = cfile.Replace(".rtf.rtf", ".rtf"); 
+
             //  Attrs attrs = en.EnMap.Attrs;
             string[] paras = new string[300];
             string Billstr = Cash.GetBillStr(cfile, true);

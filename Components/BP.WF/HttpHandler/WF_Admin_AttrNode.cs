@@ -151,20 +151,6 @@ namespace BP.WF.HttpHandler
 
 
         #region  单据模版维护
-        public string Bill_Init()
-        {
-            //增加上单据模版集合.
-            BillTemplates bills = new BillTemplates();
-            bills.Retrieve(BillTemplateAttr.NodeID, this.FK_Node);
-            return bills.ToJson();
-
-            //DataSet ds = new DataSet();
-            //DataTable dt = bills.ToDataTableField("WF_BillTemplate");
-            //ds.Tables.Add(dt);
-            ////传递来的变量.
-            //string fk_template = this.GetRequestVal("FK_BillTemplate");
-            //return BP.Tools.Json.DataSetToJson(ds);
-        }
         public string Bill_Save()
         {
             BillTemplate bt = new BillTemplate();
@@ -197,27 +183,20 @@ namespace BP.WF.HttpHandler
             
             return "保存成功.";
         }
-        public string Bill_Delete()
-        {
-            BillTemplate bt = new BillTemplate();
-            bt.No = this.GetRequestVal("FK_BillTemplate");
-            bt.Delete();
-
-            return "删除成功.";
-        }
+        /// <summary>
+        /// 下载文件.
+        /// </summary>
         public void Bill_Download()
         {
-            string no = context.Request["No"].ToString();
-            string sql = "select TempFilePath from WF_BillTemplate where No = '" + no + "'";
-            string MyFilePath = BP.DA.DBAccess.RunSQLReturnVal(sql).ToString();   
+            BillTemplate en = new BillTemplate(this.No);
+            string MyFilePath =en.TempFilePath; 
             HttpResponse response = context.Response;
 
             response.Clear();
             response.Buffer = true;
             response.Charset = "utf-8";
-            response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", MyFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
+            response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
             response.ContentEncoding = System.Text.Encoding.UTF8;
-            //response.ContentType = "application/ms-excel";
             response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
             response.End();
         }

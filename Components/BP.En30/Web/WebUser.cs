@@ -707,7 +707,7 @@ namespace BP.Web
                 string val = GetSessionByKey("No", null);
                 if (val == null)
                     return GetValFromCookie("No", null, true);
-                return null;
+                return val;
             }
         }
         public static string GetValFromCookie(string valKey, string isNullAsVal, bool isChinese)

@@ -666,7 +666,7 @@ namespace BP.WF
 
                 #region 升级表单树
                 // 首先检查是否升级过.
-                sql = "SELECT * FROM Sys_FormTree WHERE No = '0'";
+                sql = "SELECT * FROM Sys_FormTree WHERE No = '1'";
                 DataTable formTree_dt = DBAccess.RunSQLReturnTable(sql);
                 if (formTree_dt.Rows.Count == 0)
                 {

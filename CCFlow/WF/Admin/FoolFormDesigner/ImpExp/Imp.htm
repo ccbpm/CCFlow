@@ -110,7 +110,7 @@
             root.children = [];
             $.grep(treedata, function (item) {
                 //选出一级节点
-                return item.ParentNo == "1";
+                return item.ParentNo == rootdata.No;
             }).forEach(function (folder) {
                 //构建node开始
                 var node = {};

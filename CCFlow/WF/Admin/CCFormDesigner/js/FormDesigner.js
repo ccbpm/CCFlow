@@ -493,6 +493,21 @@ function Show_HidenField_Panel() {
         }
     }, this);
 }
+
+function Show_ModleField_Panel() {
+    var url = "../FoolFormDesigner/Template/Fields.htm?FK_MapData=" + CCForm_FK_MapData + "&s=" + Math.random();
+    OpenEasyUiDialog(url, 'FrmHiddenField', '模板字段', 600, 394, 'icon-new', true, function (scope) {
+        var win = document.getElementById(dgId).contentWindow;
+        var frmVal = win.GetFrmInfo();
+
+        if (frmVal.Name == null || frmVal.Name.length == 0) {
+            $.messager.alert('错误', '字段名称不能为空。', 'error');
+        }
+    }, this);
+
+
+}
+
 //打开窗体
 function CCForm_ShowDialog(url, title, w, h) {
 

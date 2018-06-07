@@ -520,10 +520,13 @@
     <Content Include="WF\Search.htm" />
     <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\TodolistAdv.htm" />
+    <Content Include="WF\WorkOpt\CCAdv.htm" />
+    <Content Include="WF\WorkOpt\DBTemplate.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
     <Content Include="WF\WorkOpt\Packup.htm" />
+    <Content Include="WF\WorkOpt\PackupPrintPDF.htm" />
     <Content Include="WF\WorkOpt\PrintDocQRGuide.htm" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
@@ -5702,14 +5705,7 @@
     <Content Include="WF\WebOffice\OfficeView.aspx" />
     <Content Include="WF\WebOffice\TempLate.aspx" />
     <Content Include="WF\WorkOpt\Accepter.htm" />
-    <Content Include="WF\WorkOpt\AllotTask.aspx" />
-    <Content Include="WF\WorkOpt\Askfor.aspx" />
-    <Content Include="WF\WorkOpt\Askfor.htm" />
-    <Content Include="WF\WorkOpt\AskForRe.aspx" />
-    <Content Include="WF\WorkOpt\AskForRe.htm" />
-    <Content Include="WF\WorkOpt\CC.aspx" />
     <Content Include="WF\WorkOpt\CC.htm" />
-    <Content Include="WF\WorkOpt\CCCheckNote.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.htm" />
     <Content Include="WF\WorkOpt\DeleteFlowInstance.htm" />
@@ -5720,10 +5716,7 @@
     <Content Include="WF\WorkOpt\FTC.aspx" />
     <Content Include="WF\WorkOpt\Handler.ashx" />
     <Content Include="WF\WorkOpt\HungUp.aspx" />
-    <Content Include="WF\WorkOpt\OneWork\Ath.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
-    <Content Include="WF\WorkOpt\OneWork\CH.aspx" />
-    <Content Include="WF\WorkOpt\OneWork\CH.htm" />
     <Content Include="WF\WorkOpt\OneWork\Chart.htm" />
     <Content Include="WF\WorkOpt\OneWork\FlowBBS.htm" />
     <Content Include="WF\WorkOpt\OneWork\FlowBBSReplay.htm" />
@@ -5759,8 +5752,10 @@
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\StopFlow.aspx" />
+    <Content Include="WF\WorkOpt\SubFlow.htm" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
+    <Content Include="WF\WorkOpt\ToNodes.htm" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
     <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
     <Content Include="WF\WorkOpt\UnSend.aspx" />
@@ -5770,7 +5765,6 @@
     <Content Include="WF\WorkOpt\WorkCheck.htm" />
     <Content Include="WF\WFRpt.htm" />
     <Content Include="WF\StartGuide.htm" />
-    <Content Include="WF\WorkOpt\AllotTask.htm" />
     <Content Include="WF\MyFlowFoolTruck.htm" />
     <Content Include="WF\WorkOpt\FlowSkip.htm" />
     <Content Include="WF\TodolistOfAuth.htm" />
@@ -7506,41 +7500,6 @@
     <Compile Include="WF\WebOffice\TempLate.aspx.designer.cs">
       <DependentUpon>TempLate.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\AllotTask.aspx.cs">
-      <DependentUpon>AllotTask.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\AllotTask.aspx.designer.cs">
-      <DependentUpon>AllotTask.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Askfor.aspx.cs">
-      <DependentUpon>Askfor.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Askfor.aspx.designer.cs">
-      <DependentUpon>Askfor.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\AskForRe.aspx.cs">
-      <DependentUpon>AskForRe.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\AskForRe.aspx.designer.cs">
-      <DependentUpon>AskForRe.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CC.aspx.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CC.aspx.designer.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CCCheckNote.aspx.cs">
-      <DependentUpon>CCCheckNote.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CCCheckNote.aspx.designer.cs">
-      <DependentUpon>CCCheckNote.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx.cs">
       <DependentUpon>DealSubThreadReturnToHL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7578,20 +7537,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\HungUp.aspx.designer.cs">
       <DependentUpon>HungUp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\Ath.aspx.cs">
-      <DependentUpon>Ath.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\Ath.aspx.designer.cs">
-      <DependentUpon>Ath.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\CH.aspx.cs">
-      <DependentUpon>CH.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\CH.aspx.designer.cs">
-      <DependentUpon>CH.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

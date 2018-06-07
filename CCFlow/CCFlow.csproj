@@ -7641,9 +7641,9 @@
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Components\BP.Web.Controls30\BP.Web.Controls30.csproj">
-      <Project>{B04D173B-69F6-4BF3-8EA4-8DB2FC7F33F4}</Project>
-      <Name>BP.Web.Controls30</Name>
+    <ProjectReference Include="..\Components\BP.GPM\BP.GPM.csproj">
+      <Project>{3AE8C44B-7DBA-4312-A775-57172697FAA7}</Project>
+      <Name>BP.GPM</Name>
     </ProjectReference>
     <ProjectReference Include="..\Components\BP.WF\BP.WF.csproj">
       <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>

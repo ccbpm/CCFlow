@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3AE8C44B-7DBA-4312-A775-57172697FAA7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BP.GPM</RootNamespace>
+    <AssemblyName>BP.GPM</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dev2Interface.cs" />
+    <Compile Include="GPM\DTSGenerDir.cs" />
+    <Compile Include="GPM\DTS\OrgInit_NameOfPath.cs" />
+    <Compile Include="GPM\DTS\InitMenu.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GPM\DTS\ClearData.cs" />
+    <Compile Include="Glo.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\Analyze.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\CacheItem.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\ConstVars.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\ErrCodeEnum.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\ICacheProvider.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\JSTicket.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\Keys.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\RequestHelper.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\ResultPackage.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\SignPackage.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\SignPackageHelper.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\SimpleCacheProvider.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\TimeStamp.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\TokenResult.cs" />
+    <Compile Include="Plugins\DINGTalk\DDSDK\Urls.cs" />
+    <Compile Include="Plugins\DINGTalk\DingDing.cs" />
+    <Compile Include="Plugins\DINGTalk\DingFlowMessage.cs" />
+    <Compile Include="Plugins\DINGTalk\DingModel.cs" />
+    <Compile Include="Plugins\DINGTalk\DingTalk_Message.cs" />
+    <Compile Include="Plugins\DINGTalk\WeinXinModel.cs" />
+    <Compile Include="Plugins\DINGTalk\WeiXin.cs" />
+    <Compile Include="Plugins\DINGTalk\WeiXinMessage.cs" />
+    <Compile Include="Plugins\DINGTalk\WXBizMsgCrypt.cs" />
+    <Compile Include="Plugins\DTS\OrgInit_Ding.cs" />
+    <Compile Include="Plugins\DTS\OrgInit_DingIcreMent.cs" />
+    <Compile Include="Plugins\DTS\OrgInit_DingUserIcon.cs" />
+    <Compile Include="Plugins\DTS\OrgInit_WeiXinUserIcon.cs" />
+    <Compile Include="Plugins\Utility\HttpWebResponseUtility.cs" />
+    <Compile Include="UserVar.cs" />
+    <Compile Include="GPM\AppSort.cs" />
+    <Compile Include="GPM\GPMEmp.cs" />
+    <Compile Include="GPM\Group\UserMenu.cs" />
+    <Compile Include="GPM\Group\GroupEmp.cs" />
+    <Compile Include="GPM\Group\Group.cs" />
+    <Compile Include="GPM\Group\GroupStation.cs" />
+    <Compile Include="GPM\Group\GroupMenu.cs" />
+    <Compile Include="GPM\Station\StationMenu.cs" />
+    <Compile Include="GPM\UserData\DeptManager.cs" />
+    <Compile Include="GPM\PerSetting.cs" />
+    <Compile Include="GPM\UserData\EmpMenu.cs" />
+    <Compile Include="GPM\UserData\EmpApp.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GPM\Menu.cs" />
+    <Compile Include="GPM\App.cs" />
+    <Compile Include="Utility\CommonDbOperator.cs" />
+    <Compile Include="Utility\Crypto.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ccflow\Components\BP.En30\BP.En30.csproj">
+      <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
+      <Name>BP.En30</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

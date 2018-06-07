@@ -54,7 +54,7 @@
 
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
-                newRow += "<td><a href='BindFunctionEntity.htm?&FK_Event=" + en.Tag + "&MyPK=" + en.MyPK + "&FK_Node=" + en.FK_Node + "'>" + en.Tag + "</a></td>";
+                newRow += "<td><a href='BindFunctionEntity.htm?&FK_Event=" + en.Tag + "&FK_MapData=" + en.FK_MapData + "&MyPK=" + en.MyPK + "&KeyOfEn=" + en.AttrOfOper + "'>" + en.Tag + "</a></td>";
                 newRow += "<td>" + en.Doc + "</td>";
                 newRow += "<td>" + en.Tag1 + "</td>";
                 newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";

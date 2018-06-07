@@ -19,15 +19,10 @@
             en.ExtType = "BindFunction";
             en.AttrOfOper = GetQueryString("KeyOfEn");
             en.Tag = GetQueryString("FK_Event");
-
-          //  document.getElementById("table1").title = en.Tag + " - 事件";
-
             en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
             var i = en.RetrieveFromDBSources();
 
-
             $("#Btn_Save").attr("value", "保存:" + GetQueryString("FK_Event")+"事件");
-
 
             GenerFullAllCtrlsVal(en);
 
@@ -55,14 +50,11 @@
             en.Delete();
 
             alert("删除成功.");
-
             window.location.href = window.location.href;
         }
 
         function Save() {
-
             var en = new Entity("BP.Sys.MapExt");
-
             en.CopyURL();
             en.CopyForm();
 
@@ -70,23 +62,23 @@
             en.ExtType = "BindFunction";
             en.AttrOfOper = GetQueryString("KeyOfEn");
             en.Tag = GetQueryString("FK_Event");
-            if (en.Tag == "") {
+            if (en.Tag1 == "") {
                 alert("函数名不能为空.");
                 return;
             }
 
             en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
-          var i=   en.Save();
+            var i = en.Save();
 
             alert("保存成功...");
-
-            window.location.href = window.location.href;
-
-            //window.location.href = "BindFunction.htm?FK_MapData=" + en.FK_MapData;
+            BackTo();
+            //window.location.href = window.location.href;
         }
 
         function BackTo() {
-            window.location.href = "BindFunction.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            var FK_MapData = GetQueryString("FK_MapData");
+            var AttrOfOper = GetQueryString("KeyOfEn");
+            window.location.href = "BindFunction.htm?FK_MapData=" + FK_MapData + "&KeyOfEn=" + AttrOfOper;
         }
     </script>
     
@@ -113,10 +105,8 @@
     </table>  
 
     <input type="button" value="Save" id="Btn_Save" onclick="Save();" />
-    <input type="button" value="Delete" id="Btn_Delete" name="Btn_Delete" onclick="Delete();" />
-    <input type="button" value="Back" id="Back" name="Back" onclick="BackTo();" />
-
-    
+    <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="Delete();" />
+    <input type="button" value="返回" id="Back" name="Back" onclick="BackTo();" />    
     </form>
 </body>
 </html>

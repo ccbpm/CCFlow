@@ -154,6 +154,7 @@ namespace BP.WF.HttpHandler
         {
             string isQuanPin = this.GetRequestVal("IsQuanPin");
             string name = this.GetRequestVal("TB_Name");
+
             //表单No长度最大100，因有前缀CCFrm_，因此此处设置最大94，added by liuxc,2017-9-25
             string str = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(isQuanPin, "1"), true, 94);
 
@@ -178,7 +179,6 @@ namespace BP.WF.HttpHandler
             DataTable tables = src.GetTables(true);
             tables.TableName = "Tables";
             ds.Tables.Add(tables);
-
             return BP.Tools.Json.ToJson(ds);
 
         }

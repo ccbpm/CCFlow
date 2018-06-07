@@ -814,10 +814,10 @@ namespace BP.WF
             float x = 0;
 
             //生成表头.
-
             string frmName = mapData.Name;
             if (SystemConfig.AppSettings["CustomerNo"] == "TianYe")
                 frmName = "";
+
             sb.Append(" <table style='width:950px;height:auto;' >");
 
             #region 生成头部信息.
@@ -1275,7 +1275,6 @@ namespace BP.WF
                 {
                     return "err@读写文件出现权限问题，请联系管理员解决。" + ex.Message;
                 }
-
                 #endregion 准备目录文件.
 
                 #region 生成二维码.

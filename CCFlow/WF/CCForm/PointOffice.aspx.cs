@@ -8,7 +8,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.Sys;
 using System.Data;
-using System.Web.Script.Serialization;
 using BP.DA;
 
 
@@ -211,8 +210,8 @@ namespace CCFlow.WF.CCForm
                 dic.Add(drow);
             }
 
-            JavaScriptSerializer jss = new JavaScriptSerializer();
-            string result = jss.Serialize(dic);
+            //JavaScriptSerializer jss = new JavaScriptSerializer();
+            string result = BP.Tools.Json.ToJson(dic); // jss.Serialize(dic);
 
             Response.Clear();
             Response.Write(result);

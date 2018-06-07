@@ -1652,7 +1652,7 @@ namespace CCFlow.WF.UC
                     loadWebSignJs.Attributes["type"] = "text/javascript";
                     loadWebSignJs.Attributes["src"] = "/WF/Activex/GDCASign/Loadwebsign.js";
                     Page.Header.Controls.Add(loadWebSignJs);
-                    ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/GDCASign/main.js");
+                  //  ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/GDCASign/main.js");
                 }
 
                 if (!DataType.IsNullOrEmpty(attr.Para_SiganField))
@@ -1703,7 +1703,7 @@ namespace CCFlow.WF.UC
                     loadWebSignJs.Attributes["type"] = "text/javascript";
                     loadWebSignJs.Attributes["src"] = "/WF/Activex/Sign/Loadwebsign.js";
                     Page.Header.Controls.Add(loadWebSignJs);
-                    ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/Sign/main.js");
+                 //   ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/Sign/main.js");
                 }
 
                 if (!DataType.IsNullOrEmpty(attr.Para_SiganField))

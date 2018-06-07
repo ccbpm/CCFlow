@@ -687,7 +687,16 @@ namespace BP.WF
                     wk.SetValByKey(GERptAttr.FK_NY, BP.DA.DataType.CurrentYearMonth);
                     wk.SetValByKey(GERptAttr.FK_Dept, emp.FK_Dept);
                     wk.FID = 0;
-                    wk.DirectInsert();
+
+                    try
+                    {
+                        wk.DirectInsert();
+                    }
+                    catch
+                    {
+                        wk.CheckPhysicsTable();
+                        wk.DirectInsert();
+                    }
 
                     //设置参数.
                     foreach (string k in paras.Keys)

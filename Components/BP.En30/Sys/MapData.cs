@@ -2346,6 +2346,13 @@ namespace BP.Sys
 
             MapData mdNew = new MapData(fk_mapdata);
             mdNew.RepairMap();
+
+            if (mdNew.No.IndexOf("ND") == 0)
+            {
+                mdNew.FK_FrmSort = "";
+                mdNew.FK_FormTree = "";
+            }
+
             mdNew.Update();
             return mdNew;
         }

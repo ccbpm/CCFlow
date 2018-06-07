@@ -154,6 +154,63 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls30\BitmapCutter.Core\API\Callback.cs" />
+    <Compile Include="Controls30\BitmapCutter.Core\API\Cutter.cs" />
+    <Compile Include="Controls30\BitmapCutter.Core\API\Helper.cs" />
+    <Compile Include="Controls30\BitmapCutter.Core\HttpHandler\BitmapScissors.cs" />
+    <Compile Include="Controls30\CHART\CodeFile1.cs" />
+    <Compile Include="Controls30\Comm\AdminTools.cs" />
+    <Compile Include="Controls30\Comm\Comm.cs" />
+    <Compile Include="Controls30\Comm\Help.cs" />
+    <Compile Include="Controls30\Comm\Item.cs" />
+    <Compile Include="Controls30\Comm\MasterPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls30\Comm\UCBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls30\Comm\UCBase2.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls30\Comm\UCBase3.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls30\Comm\WebPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls30\Comm\WebPageAdmin.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls30\Comm\WebPageSession.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls30\Comm\Xml\CfgMenu.cs" />
+    <Compile Include="Controls30\Comm\Xml\RelationalMapping.cs" />
+    <Compile Include="Controls30\CTL\BPHyperLink.cs" />
+    <Compile Include="Controls30\CTL\BPImage.cs" />
+    <Compile Include="Controls30\CTL\BPRadioButtonList.cs" />
+    <Compile Include="Controls30\CTL\Btn.cs" />
+    <Compile Include="Controls30\CTL\CBL.cs" />
+    <Compile Include="Controls30\CTL\DatePicker.cs" />
+    <Compile Include="Controls30\CTL\DDL.cs" />
+    <Compile Include="Controls30\CTL\ImageBtn.cs" />
+    <Compile Include="Controls30\CTL\ImgEn.cs" />
+    <Compile Include="Controls30\CTL\Lab.cs" />
+    <Compile Include="Controls30\CTL\LB.cs" />
+    <Compile Include="Controls30\CTL\LineChart.cs" />
+    <Compile Include="Controls30\CTL\LinkBtn.cs" />
+    <Compile Include="Controls30\CTL\PubClass.cs" />
+    <Compile Include="Controls30\CTL\RadioBtn.cs" />
+    <Compile Include="Controls30\CTL\TB.cs" />
+    <Compile Include="Controls30\CTL\TBExt.cs" />
+    <Compile Include="Controls30\CTL\TextArea.cs" />
+    <Compile Include="Controls30\Glo.cs" />
+    <Compile Include="Controls30\NamesOfCheckBtn.cs" />
+    <Compile Include="Controls30\NextPreviouRec.cs" />
+    <Compile Include="Controls30\WebFile.cs" />
+    <Compile Include="Controls30\Xml\FrmPopVal.cs" />
+    <Compile Include="Controls30\Xml\GroupXml.cs" />
+    <Compile Include="Controls30\Xml\MainMenuXml.cs" />
     <Compile Include="DA\AtPara.cs" />
     <Compile Include="DA\DBAccessOfMSSQL1.cs" />
     <Compile Include="DA\DBAccessOfOracle2.cs" />

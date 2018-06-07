@@ -107,10 +107,10 @@ namespace BP.Rpt
                 if (title.Contains("@") == false)
                     return title;
 
-                foreach (string key in Glo.Request.QueryString)
-                {
-                    title = title.Replace("@" + key, Glo.Request.QueryString[key]);
-                }
+                //foreach (string key in Glo.Request.QueryString)
+                //{
+                //    title = title.Replace("@" + key, Glo.Request.QueryString[key]);
+                //}
 
                 if (title.Contains("@") == false)
                     return title;

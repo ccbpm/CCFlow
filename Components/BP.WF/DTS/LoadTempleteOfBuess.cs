@@ -57,9 +57,9 @@ namespace BP.WF.DTS
 
             //创建root.
             SysFormTree root = new SysFormTree();
-            root.No = "0";
+            root.No = "1";
             root.Name = "表单库";
-            root.ParentNo = "-1";
+            root.ParentNo = "0";
             root.Insert();
 
             string frmPath = SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Form\\";

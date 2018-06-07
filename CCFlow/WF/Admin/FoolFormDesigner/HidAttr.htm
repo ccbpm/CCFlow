@@ -7,6 +7,8 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
 
       <script type="text/javascript">
           /* ESC Key Down */
@@ -44,66 +46,59 @@
 
               var fk_mapData = GetQueryString("FK_MapData");
 
-              //初始化表格.
-              $.ajax({
-                  type: 'post',
-                  async: true,
-                  url: Handler + "?DoType=HidAttr&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
-                  dataType: 'html',
-                  success: function (data) {
+              var mapAttrs = new Entities("BP.Sys.MapAttrs");
+              mapAttrs.Retrieve("FK_MapData", fk_mapData, "UIVisible", 0);
 
-                      data = JSON.parse(data);
+              var idx = 0;
+              //增加处理.
+              for (var i = 0; i < mapAttrs.length; i++) {
 
-                      var idx = 0;
-                      //增加处理.
-                      for (var i = 0; i < data.length; i++) {
+                  var mapAttr = mapAttrs[i];
 
-                          //屏蔽掉不需要显示的.
-                          var keyOfEn = data[i].KeyOfEn;
-                          switch (keyOfEn) {
-                              case "BatchID":
-                              case "OID":
-                              case "FID":
-                              case "FK_NY":
-                              case "RefPK":
-                              case "Emps":
-                              case "FK_Dept":
-                              case "WFState":
-                              case "RDT":
-                              case "MyNum":
-                              case "Rec":
-                              case "CDT":
-                                  continue;
-                              default:
-                                  break;
-                          }
-
-                          var dataType = data[i].MyDataType;
-                          var name = data[i].Name;
-                          var myPK = data[i].MyPK;
-
-                          var editLink = "";
-
-
-                          switch (data[i].LGType) {
-                              case 0:
-                                  editLink = "<a href=\"javascript:Edit('" + fk_mapData + "','" + myPK + "','" + dataType + "')\"''>" + name + "</a>";
-                                  break;
-                              case 1:
-                                  editLink = "<a href=\"javascript:EditEnum('" + fk_mapData + "','" + myPK + "','" + dataType + "')\"''>" + name + "</a>";
-                                  break;
-                              default:
-                                  editLink = "<a href=\"javascript:EditTable('" + fk_mapData + "','" + myPK + "','" + dataType + "')\"''>" + name + "</a>";
-                                  break;
-                          }
-
-                          idx++;
-                          var newRow = "<tr ><td class=Idx>" + idx + "</td><td>" + keyOfEn + "</td><td>" + editLink + "</td><td>" + data[i].LGTypeText + "</td> <td>" + data[i].MyDataType + "</td> </tr>";
-
-                          $("#Table1 tr:last").after(newRow);
-                      }
+                  //屏蔽掉不需要显示的.
+                  var keyOfEn = mapAttr.KeyOfEn;
+                  switch (keyOfEn) {
+                      case "BatchID":
+                      case "OID":
+                      case "FID":
+                      case "FK_NY":
+                      case "RefPK":
+                      case "Emps":
+                      case "FK_Dept":
+                      case "WFState":
+                      case "RDT":
+                      case "MyNum":
+                      case "Rec":
+                      case "CDT":
+                          continue;
+                      default:
+                          break;
                   }
-              });
+
+                  var dataType = mapAttr.MyDataType;
+                  var name = mapAttr.Name;
+                  var myPK = mapAttr.MyPK;
+
+                  var editLink = "";
+
+
+                  switch (mapAttr.LGType) {
+                      case 0:
+                          editLink = "<a href=\"javascript:Edit('" + fk_mapData + "','" + myPK + "','" + dataType + "')\"''>" + name + "</a>";
+                          break;
+                      case 1:
+                          editLink = "<a href=\"javascript:EditEnum('" + fk_mapData + "','" + myPK + "','" + dataType + "')\"''>" + name + "</a>";
+                          break;
+                      default:
+                          editLink = "<a href=\"javascript:EditTable('" + fk_mapData + "','" + myPK + "','" + dataType + "')\"''>" + name + "</a>";
+                          break;
+                  }
+
+                  idx++;
+                  var newRow = "<tr ><td class=Idx>" + idx + "</td><td>" + keyOfEn + "</td><td>" + editLink + "</td><td>" + mapAttr.LGTypeText + "</td> <td>" + mapAttr.MyDataType + "</td> </tr>";
+
+                  $("#Table1 tr:last").after(newRow);
+              }
           }
 </script>
 <base target="_self" />

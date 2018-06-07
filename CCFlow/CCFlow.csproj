@@ -491,8 +491,22 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="WF\Data\XML\XmlDB.xml" />
+    <Content Include="WF\Do.htm" />
+    <Content Include="WF\Done.htm" />
+    <Content Include="WF\GetTask.htm" />
+    <Content Include="WF\HuiQianList.htm" />
     <Content Include="WF\Img\Runing.png" />
+    <Content Include="WF\MyFlowFool2017.js" />
+    <Content Include="WF\MyFlowFoolTrack2016.js" />
     <Content Include="WF\MyFlowFree2017.js" />
+    <Content Include="WF\MyFlowGener.htm" />
+    <Content Include="WF\MyFlowGener.js" />
+    <Content Include="WF\MyFlowSelfForm.htm" />
+    <Content Include="WF\MyFlowSelfForm.js" />
+    <Content Include="WF\MyFlowTree.htm" />
+    <Content Include="WF\MyFlowTree2017.js" />
+    <Content Include="WF\MyFlowTreeReadonly.htm" />
+    <Content Include="WF\Port.htm" />
     <Content Include="WF\RptDfine\Flowlist.htm" />
     <Content Include="WF\RptDfine\FlowSearch.htm" />
     <Content Include="WF\RptDfine\Default.htm" />
@@ -503,7 +517,9 @@
     <Content Include="WF\RptSearch\Left.htm" />
     <Content Include="WF\RptSearch\DistributedOfMy.htm" />
     <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-en.js" />
+    <Content Include="WF\Search.htm" />
     <Content Include="WF\StartGuideEntities.htm" />
+    <Content Include="WF\TodolistAdv.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
@@ -5825,8 +5841,6 @@
     <None Include="WF\Scripts\jBox\Skins\Blue\OneNote 目录.onetoc2" />
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-16x16.psd" />
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
-    <Content Include="WF\WinOpen.master" />
-    <Content Include="WF\WinOpenEUI.Master" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -7491,20 +7505,6 @@
     </Compile>
     <Compile Include="WF\WebOffice\TempLate.aspx.designer.cs">
       <DependentUpon>TempLate.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WinOpen.master.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WinOpen.master.designer.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WinOpenEUI.Master.cs">
-      <DependentUpon>WinOpenEUI.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WinOpenEUI.Master.designer.cs">
-      <DependentUpon>WinOpenEUI.Master</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\AllotTask.aspx.cs">
       <DependentUpon>AllotTask.aspx</DependentUpon>

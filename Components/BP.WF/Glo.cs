@@ -1036,16 +1036,6 @@ namespace BP.WF
             #endregion 注册枚举类型
 
             #region 3, 执行基本的 sql
-            if (isInstallFlowDemo == false)
-            {
-                SysFormTree frmSort = new SysFormTree();
-                frmSort.No = "01";
-                frmSort.Name = "表单类别1";
-                frmSort.ParentNo = "0";
-                if (frmSort.IsExits == false)
-                    frmSort.Insert();
-            }
-
             //删除这个数据, 没有找到，初始化这些数据失败的原因.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_DeptStation");
 

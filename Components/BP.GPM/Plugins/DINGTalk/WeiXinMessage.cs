@@ -19,6 +19,10 @@ namespace BP.EAI.Plugins.WXin
         /// <returns>发送消息结果</returns>
         public static MessageErrorModel PostMsgOfText(WX_Msg_Text msgText)
         {
+            return null;
+
+            /*
+
             string url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + msgText.Access_Token;
             try
             {
@@ -45,6 +49,7 @@ namespace BP.EAI.Plugins.WXin
             {
             }
             return null;
+             * */
         }
 
         /// <summary>
@@ -102,6 +107,8 @@ namespace BP.EAI.Plugins.WXin
         /// <returns></returns>
         public static MessageErrorModel PostEmpWorksMsgOfNews(long WorkID, string sender)
         {
+            return null;
+            /*
             //企业应用必须存在
             string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
             if (agentId != null)
@@ -155,6 +162,7 @@ namespace BP.EAI.Plugins.WXin
                 return WeiXinMessage.PostMsgOfNews(wxMsg);
             }
             return null;
+             * */
         }
     }
 }

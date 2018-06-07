@@ -73,32 +73,34 @@ namespace BP.EAI.Plugins.WXin
         /// </summary>
         private void WriteLog(string strMemo)
         {
-            if (!Directory.Exists(System.Web.HttpContext.Current.Server.MapPath(@"logs\")))
-            {
-                Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(@"logs\"));
-            }
-            string filename = System.Web.HttpContext.Current.Server.MapPath(@"logs/" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt");
-            StreamWriter sr = null;
-            try
-            {
-                if (!File.Exists(filename))
-                {
-                    sr = File.CreateText(filename);
-                }
-                else
-                {
-                    sr = File.AppendText(filename);
-                }
-                sr.WriteLine(strMemo);
-            }
-            catch
-            {
-            }
-            finally
-            {
-                if (sr != null)
-                    sr.Close();
-            }
+            return;
+
+            //if (!Directory.Exists(System.Web.HttpContext.Current.Server.MapPath(@"logs\")))
+            //{
+            //    Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(@"logs\"));
+            //}
+            //string filename = System.Web.HttpContext.Current.Server.MapPath(@"logs/" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt");
+            //StreamWriter sr = null;
+            //try
+            //{
+            //    if (!File.Exists(filename))
+            //    {
+            //        sr = File.CreateText(filename);
+            //    }
+            //    else
+            //    {
+            //        sr = File.AppendText(filename);
+            //    }
+            //    sr.WriteLine(strMemo);
+            //}
+            //catch
+            //{
+            //}
+            //finally
+            //{
+            //    if (sr != null)
+            //        sr.Close();
+            //}
         }
         #endregion
 

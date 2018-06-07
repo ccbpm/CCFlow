@@ -100,6 +100,7 @@ namespace BP.GPM
         /// 是否启用
         /// </summary>
         public const string IsEnable = "IsEnable";
+        public const string OpenWay = "OpenWay";
         /// <summary>
         /// 标记
         /// </summary>
@@ -361,7 +362,7 @@ namespace BP.GPM
                // map.AddTBString(MenuAttr.FK_App, null, "系统", true, false, 0, 3900, 20, true);
                 map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?",true,true);
-                map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true, BarAttr.OpenWay,"@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddDDLSysEnum(MenuAttr.OpenWay, 0, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
                 map.AddTBString(MenuAttr.Flag, null, "标记", true, false, 0, 500, 20, true);
 
                 map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);

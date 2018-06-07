@@ -59,6 +59,7 @@ namespace BP.GPM
         /// 备注
         /// </summary>
         public const string AppRemark = "AppRemark";
+        public const string OpenWay = "OpenWay";
     }
     /// <summary>
     /// 系统
@@ -107,7 +108,7 @@ namespace BP.GPM
             }
             set
             {
-                this.SetValByKey(InfoPushAttr.ICON, value);
+                this.SetValByKey("ICON", value);
             }
         }
         /// <summary>
@@ -299,7 +300,7 @@ namespace BP.GPM
                 map.AddTBString(AppAttr.PwdControl, null, "密码控件", true, false, 0, 100, 100);
                 map.AddDDLSysEnum(AppAttr.ActionType, 0, "提交类型", true, true, AppAttr.ActionType, "@0=GET@1=POST");
                 map.AddDDLSysEnum(AppAttr.SSOType, 0, "登录方式", true, true, AppAttr.SSOType, "@0=SID验证@1=连接@2=表单提交@3=不传值");
-                map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true, BarAttr.OpenWay,
+                map.AddDDLSysEnum(AppAttr.OpenWay, 0, "打开方式", true, true, AppAttr.OpenWay,
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
                 map.AddTBInt(AppAttr.Idx, 0, "显示顺序", true, false);

@@ -14,6 +14,9 @@ namespace BP.GPM
         /// 序号
         /// </summary>
         public const string Idx = "Idx";
+
+        public const string ByEmpAttr = "ByEmpAttr";
+        
     }
     /// <summary>
     /// 权限组
@@ -58,7 +61,7 @@ namespace BP.GPM
                 map.AddTBInt(GroupAttr.Idx, 0, "显示顺序", true, false);
 
                 map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
-                    GroupEmpAttr.FK_Group, ByEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员");
+                    GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员");
 
                 map.AttrsOfOneVSM.Add(new GroupStations(), new Stations(),
                     GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位");

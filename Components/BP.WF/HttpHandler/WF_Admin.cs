@@ -357,23 +357,29 @@ namespace BP.WF.HttpHandler
             #endregion 节点方向条件模版.
 
             #region 表单扩展设置.
+
+            string add = "+";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                add = "||";
+             
             if (templateType == "DDLFullCtrl")
-                sql = "SELECT MyPK, '下拉框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='DDLFullCtrl'";
+                sql = "SELECT MyPK, '下拉框:'" + add + " a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='DDLFullCtrl'";
 
             if (templateType == "ActiveDDL")
-                sql = "SELECT MyPK, '下拉框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='ActiveDDL'";
+                sql = "SELECT MyPK, '下拉框:'" + add + " a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='ActiveDDL'";
 
             //显示过滤.
             if (templateType == "AutoFullDLL")
-                sql = "SELECT MyPK, '下拉框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='AutoFullDLL'";
+                sql = "SELECT MyPK, '下拉框:'" + add + " a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='AutoFullDLL'";
 
             //文本框自动填充..
             if (templateType == "TBFullCtrl")
-                sql = "SELECT MyPK, '文本框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='TBFullCtrl'";
+                sql = "SELECT MyPK, '文本框:'" + add + " a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='TBFullCtrl'";
 
             //自动计算.
             if (templateType == "AutoFull")
-                sql = "SELECT MyPK, 'ID:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='AutoFull'";
+                sql = "SELECT MyPK, 'ID:'" + add + " a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='AutoFull'";
             #endregion 表单扩展设置.
 
             #region 节点属性的模版.

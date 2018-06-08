@@ -9,7 +9,9 @@ DataFactory = function () {
 }
 
 jQuery(function ($) {
+
     Application = new DataFactory();
+
 });
 //公共方法
 ccflow.common = function () {

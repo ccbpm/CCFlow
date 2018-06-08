@@ -19,7 +19,7 @@ function winOpen(menuNo) {
     strTimeKey += date.getHours(); //HH
     strTimeKey += date.getMinutes(); //MM
     strTimeKey += date.getSeconds(); //SS
-    var val = window.showModalDialog("../WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.GPM.Menus&PK=" + menuNo + "&T=" + strTimeKey, "属性", "dialogWidth=800px;dialogHeight=460px;dialogTop=140px;dialogLeft=260px");
+    var val = window.showModalDialog("../../WF/Comm/En.htm?EnName=BP.GPM.Menu&PK=" + menuNo + "&T=" + strTimeKey, "属性", "dialogWidth=800px;dialogHeight=460px;dialogTop=140px;dialogLeft=260px");
     if (isModelWindow) {
         LoadGrid();
     } else {

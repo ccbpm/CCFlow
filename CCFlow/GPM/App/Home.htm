@@ -24,7 +24,7 @@
                                 <span class="clear">
                                     <span class="block m-t-xs" style="font-size:20px;">
                                        
-                                        <strong class="font-bold"><img src="../WF/Style/skin/images/logow.png"/></strong>
+                                        <strong class="font-bold"><img src="../../WF/Style/skin/images/logow.png"/></strong>
                                     </span>
                                 </span>
                             </a>
@@ -34,11 +34,24 @@
                     <li>
                         <a href="#">
                             <i class="icon iconfont icon-huaban"></i>
-                            <span class="nav-label">基础功能</span>
+                            <span class="nav-label">组织结构管理</span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level in" >
-                        <li><a href="/WF/Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i>发起</a></li>
+                      
+                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Depts" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>部门台帐</a></li>
+                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.GPMEmps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>人员台帐</a></li>
+                        <li><a href="../Organization.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i>组织结构</a></li>
+                        <li><a href="../ManagerDept.aspx" class="J_menuItem"><i class="icon iconfont icon-faqi"></i>二级管理员</a></li>
+                    <!--    <li><a href="../ManagerDept.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>二级管理员</a></li>-->
+
+                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.StationTypes" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>岗位类型</a></li>
+                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Stations" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>岗位</a></li>
+                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Dutys" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>职务</a></li>
+                        <li><a href="../StationToDeptEmp.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>岗位对应人员</a></li>
+
+
+<!--
                         <li><a href="/WF/Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>待办<label class="label label-warning pull-right"  id="Todolist_EmpWorks" ></label></a></li>
                         <li><a href="/WF/Runing.htm " class="J_menuItem"><i class="icon iconfont icon-zaitu-"></i>在途 <label class="label label-info pull-right" id="Todolist_Runing" ></label> </a></li>
                         <li><a href="/WF/Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i>我发起的</a></li>
@@ -46,77 +59,27 @@
                         <li><a href="/WF/RptSearch/DistributedOfMy.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i>我的流程分布</a></li>
                         <li><a href="/WF/Search.htm" class="J_menuItem"><i class="icon iconfont icon-liuchengdingyi"></i>我的流程</a></li>
                         <li><a href="/WF/RptDfine/Flowlist.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i>单流程查询</a></li>
-                        <li><a href="/WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>综合查询</a></li>
+                        <li><a href="/WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>综合查询</a></li>-->
+
                         </ul>
                     </li>
 
                     <!-- song . ------------------------------->
                       <li>
-                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">物资管理</span><span class="fa arrow"></span></a>
+                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">菜单权限管理</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
 
-                        <li><a href="/AppF5/TaskList.htm?TaskType=0" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i>任务池(矿级)</a></li>
-                        <li><a href="/AppF5/TaskList.htm?TaskType=1" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i>任务池(厂级)</a></li>
+                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Apps" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>系统列表</a></li>
 
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.WuZis" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 台帐<label id="Label9" class="label label-danger pull-right"></label></a></li>
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.WZLB1s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 大类<label id="Label11" class="label label-danger pull-right"></label></a></li>
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.WZLB2s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 小类<label id="Label12" class="label label-danger pull-right"></label></a></li>
-
+                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Groups" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>权限组</a></li>
+                        <li><a href="../AppMenuToEmp.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>按菜单分配</a></li>
+                        <li><a href="../EmpForMenus.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>按菜单分配</a></li>
+                        <li><a href="../StationForMenus.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>按岗位分配</a></li>
+                        <li><a href="../EmpGroupForMenus.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>按权限组分配</a></li>
+                         
                         </ul>
                     </li>
-
-                    <!-- wudi . ------------------------------->
-                     <li>
-                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">润滑脂-设备管理-wudi</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.Autos" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 设备台帐<label id="Label7" class="label label-danger pull-right"></label></a></li>
-                             <li><a href="/WF/Comm/Batch.htm?EnsName=BP.F5.Autos" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 设备批处理<label id="Label8" class="label label-danger pull-right"></label></a></li>
-                        </ul>
-                    </li>
-
-                    <!-- sunyan . ------------------------------->
-                    <li>
-                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">采购管理-sunyan</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                        <li><a href="/AppF5/PrintCaiGouList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i>批量打印采购申请单</a></li>
-
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.Suppliers" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 供应商台帐<label id="Label6" class="label label-danger pull-right"></label></a></li>
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.CGLB1s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 采购大类<label id="Label3" class="label label-danger pull-right"></label></a></li>
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.CGLB2s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 采购类别<label id="Label5" class="label label-danger pull-right"></label></a></li>
-                        </ul>
-                    </li>
-
-
-                    <!-- tmx . ------------------------------->
-                    <li>
-                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">设备维修-tmx</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.SheBeis" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i>设备台帐<label id="Label2" class="label label-danger pull-right"></label></a></li>
-                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.SBLBs" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 设备类别<label id="Label4" class="label label-danger pull-right"></label></a></li>
-                        </ul>
-                    </li>
-
-
-                    <li>
-                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">共享任务</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                             <li><a href="/WF/TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 共享任务<label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
-                        <li><a href="/WF/TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i> 申请下来的任务<label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="icon iconfont icon-xitongguanli"></i> <span class="nav-label">流程高级功能</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                        <li><a href="/WF/Draft.htm" class="J_menuItem"><i class="icon iconfont icon-caogao"></i>我的草稿</a></li>
-                        <li><a href="/WF/CC.htm" class="J_menuItem"><i class="icon iconfont icon-guanjianzi"></i>抄送</a></li>
-                        <li><a href="/WF/Focus.htm" class="J_menuItem"><i class="icon iconfont icon-wodeguanzhu"></i>我的关注</a></li>
-                        <li><a href="/WF/TodolistOfAuth.htm" class="J_menuItem"><i class="icon iconfont icon-qy_bdfw_6"></i>授权待办</a></li>
-                        <li><a href="/WF/Batch.htm" class="J_menuItem"><i class="icon iconfont icon-piliangchuli"></i>批处理</a></li>
-                        <li><a href="/WF/GetTask.htm" class="J_menuItem"><i class="icon iconfont icon-buliangquhui"></i>取回审批</a></li>
-                        <li><a href="/WF/HungUpList.htm" class="J_menuItem"><i class="icon iconfont icon-guaqi"></i>挂起的工作</a></li>
-                        <li><a href="/WF/Setting/Default.htm" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i>我的设置</a></li>
-                        </ul>
-                    </li>
+                     
                    
                 </ul>
             </div>

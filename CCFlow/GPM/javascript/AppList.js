@@ -43,7 +43,7 @@ function LoadGrid() {
                 columns: [[
                        { field: 'No', title: '编号', width: 60 },
                        { field: 'Name', title: '名称', width: 200, formatter: function (value, rec) {
-                           var url = "../WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.GPM.Apps&PK=" + rec.No
+                           var url = "../../WF/Comm/En.htm?EnsName=BP.GPM.Apps&PK=" + rec.No
                            + "&No=" + rec.No
                            + "&AppModel=" + rec.AppModel
                            + "&FK_AppSort=" + rec.FK_AppSort

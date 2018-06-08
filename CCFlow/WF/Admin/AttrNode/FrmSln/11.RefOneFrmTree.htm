@@ -20,7 +20,7 @@
     <script  type="text/javascript">
         var nodeFrmID = "";
         $(function () {
-            
+
             InitBar(FormType.RefOneFrmTree);
 
             var html = "";
@@ -40,13 +40,17 @@
 
             //根据表单类别的默认值，初始加载默认的表单
             var sortNo = $("#DDL_FrmTree").val();
+            if (sortNo != null && sortNo != "") {
+                //获取表单库中的所有表单
+                var frms = new Entities("BP.Sys.MapDatas");
+                frms.Retrieve("FK_FormTree", sortNo);
+                //绑定表单
+                GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
+            }
 
-            //获取表单库中的所有表单
-            var frms = new Entities("BP.Sys.MapDatas");
-            frms.Retrieve("FK_FormTree", sortNo);
-             
-            //绑定表单
-            GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
+            
+
+            
             nodeFrmID = node.NodeFrmID;
 
             //表单库的表单.

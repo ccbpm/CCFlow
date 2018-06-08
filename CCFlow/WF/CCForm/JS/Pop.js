@@ -246,12 +246,14 @@ function Delete_FrmEleDBs(FK_MapData, keyOfEn, oid) {
         frmEleDB.MyPK = obj.MyPK
         frmEleDB.Delete();
     });
+    $("#TB_" + keyOfEn).val('');
 }
 //删除数据.
 function Delete_FrmEleDB(keyOfEn, oid, No) {
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
     frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + No;
     frmEleDB.Delete();
+    $("#TB_" + keyOfEn).val('');
 }
 //设置值.
 function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2) {

@@ -647,16 +647,68 @@ function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
     for (var key in data) {
 
         var val = data[key];
+        var valID = $("#TB_" + key);
 
-        $("#TB_" + key).val(val);
-
-        $("#DDL_" + key).val(val);
-
-        if (val == '1') {
-            $("#CB_" + key).attr("checked", true);
-        } else {
-            $("#CB_" + key).attr("checked", false);
+        if (valID.length > 0) {
+            valID.val(val);
+            continue;
         }
+       
+
+        if (valID.length == 0)
+            valID = $("#DDL_" + key);
+
+        if (valID.length > 0) {
+            valID.val(val);
+            continue;
+        }
+
+        if (valID.length == 0)
+            valID = $("#CB_" + key);  
+
+        if (valID.length > 0) {
+            if (val == '1') {
+                valID.attr("checked", true);
+            } else {
+                valID.attr("checked", false);
+
+            }
+            continue;
+        }
+
+        //获取表单中所有的字段
+        if (valID.length == 0) {
+            var tbs = $('input');
+            $.each(tbs, function (i, tb) {
+                var name = $(tb).attr("id");
+                if (name.toUpperCase().indexOf(key) >= 0) {
+                    if (name.indexOf("TB_") == 0)
+                        $("#" + name).val(val);
+                    if (name.indexOf("CB_")) {
+                        if (val == '1') {
+                            $("#" + name).attr("checked", true);
+                        } else {
+                            $("#" + name).attr("checked", false);
+
+                        }
+                    }
+                    return false;
+                }
+            });
+
+            var selects = $('select');
+            $.each(selects, function (i, select) {
+                var name = $(select).attr("id");
+                if (name.toUpperCase().indexOf(key) >= 0) {
+                    $("#" + name).val(val);
+                    return false;
+                }
+            });
+
+        }
+
+
+
     }
 }
 

@@ -31,6 +31,14 @@ namespace BP.WF.Template
                 return this.GetValIntByKey(FrmNodeAttr.FK_Node);
             }
         }
+
+        public int FK_Flow
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmNodeAttr.FK_Flow);
+            }
+        }
         #endregion
 
         #region 基本属性
@@ -80,6 +88,7 @@ namespace BP.WF.Template
 
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
+                map.AddTBInt(FrmNodeAttr.FK_Flow, 0, "流程ID", true, true);
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
@@ -152,24 +161,24 @@ namespace BP.WF.Template
         #region 表单元素权限.
         public string DoDtls()
         {
-            return "../../Admin/Sln/Dtls.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Node + "&DoType=Field";
+            return "../../Admin/Sln/Dtls.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
         public string DoFields()
         {
-            return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Node + "&DoType=Field";
+            return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
         public string DoAths()
         {
-            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Node + "&DoType=Field";
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
 
         public string DoCopyFromNode()
         {
-            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Node + "&DoType=Field";
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
         public string DoSelfSln()
         {
-            return "../../Admin/Sln/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Node + "&DoType=Field";
+            return "../../Admin/Sln/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
         public string DoEnableRole()
         {

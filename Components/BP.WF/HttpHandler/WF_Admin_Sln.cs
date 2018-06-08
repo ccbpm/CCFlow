@@ -516,7 +516,7 @@ namespace BP.WF.HttpHandler
                 {
                     foreach (FieldsAttrs fieldsAttrs in fieldsAttrsList)
                     {
-                        if (attr.KeyOfEn != fieldsAttrs.KeyOfEn)
+                        if (!attr.KeyOfEn .Equals(fieldsAttrs.KeyOfEn))
                             continue;
 
                         if (currND.HisFormType == NodeFormType.RefOneFrmTree)

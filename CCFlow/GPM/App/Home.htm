@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>驰骋工作流程管理系统</title>
+    <!-- <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
+    <link href="/WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="/WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="/WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden">
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close"><i class="fa fa-times-circle"></i>
+            </div>
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs" style="font-size:20px;">
+                                       
+                                        <strong class="font-bold"><img src="../WF/Style/skin/images/logow.png"/></strong>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="logo-element">驰骋</div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon iconfont icon-huaban"></i>
+                            <span class="nav-label">基础功能</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level in" >
+                        <li><a href="/WF/Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i>发起</a></li>
+                        <li><a href="/WF/Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>待办<label class="label label-warning pull-right"  id="Todolist_EmpWorks" ></label></a></li>
+                        <li><a href="/WF/Runing.htm " class="J_menuItem"><i class="icon iconfont icon-zaitu-"></i>在途 <label class="label label-info pull-right" id="Todolist_Runing" ></label> </a></li>
+                        <li><a href="/WF/Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i>我发起的</a></li>
+                        <li><a href="/WF/Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i>我审批的</a></li>
+                        <li><a href="/WF/RptSearch/DistributedOfMy.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i>我的流程分布</a></li>
+                        <li><a href="/WF/Search.htm" class="J_menuItem"><i class="icon iconfont icon-liuchengdingyi"></i>我的流程</a></li>
+                        <li><a href="/WF/RptDfine/Flowlist.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i>单流程查询</a></li>
+                        <li><a href="/WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>综合查询</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- song . ------------------------------->
+                      <li>
+                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">物资管理</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+
+                        <li><a href="/AppF5/TaskList.htm?TaskType=0" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i>任务池(矿级)</a></li>
+                        <li><a href="/AppF5/TaskList.htm?TaskType=1" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i>任务池(厂级)</a></li>
+
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.WuZis" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 台帐<label id="Label9" class="label label-danger pull-right"></label></a></li>
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.WZLB1s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 大类<label id="Label11" class="label label-danger pull-right"></label></a></li>
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.WZLB2s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 小类<label id="Label12" class="label label-danger pull-right"></label></a></li>
+
+                        </ul>
+                    </li>
+
+                    <!-- wudi . ------------------------------->
+                     <li>
+                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">润滑脂-设备管理-wudi</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.Autos" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 设备台帐<label id="Label7" class="label label-danger pull-right"></label></a></li>
+                             <li><a href="/WF/Comm/Batch.htm?EnsName=BP.F5.Autos" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 设备批处理<label id="Label8" class="label label-danger pull-right"></label></a></li>
+                        </ul>
+                    </li>
+
+                    <!-- sunyan . ------------------------------->
+                    <li>
+                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">采购管理-sunyan</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                        <li><a href="/AppF5/PrintCaiGouList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i>批量打印采购申请单</a></li>
+
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.Suppliers" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 供应商台帐<label id="Label6" class="label label-danger pull-right"></label></a></li>
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.CGLB1s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 采购大类<label id="Label3" class="label label-danger pull-right"></label></a></li>
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.CGLB2s" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 采购类别<label id="Label5" class="label label-danger pull-right"></label></a></li>
+                        </ul>
+                    </li>
+
+
+                    <!-- tmx . ------------------------------->
+                    <li>
+                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">设备维修-tmx</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.SheBeis" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i>设备台帐<label id="Label2" class="label label-danger pull-right"></label></a></li>
+                             <li><a href="/WF/Comm/Search.htm?EnsName=BP.F5.SBLBs" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 设备类别<label id="Label4" class="label label-danger pull-right"></label></a></li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">共享任务</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                             <li><a href="/WF/TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i> 共享任务<label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
+                        <li><a href="/WF/TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i> 申请下来的任务<label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="icon iconfont icon-xitongguanli"></i> <span class="nav-label">流程高级功能</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                        <li><a href="/WF/Draft.htm" class="J_menuItem"><i class="icon iconfont icon-caogao"></i>我的草稿</a></li>
+                        <li><a href="/WF/CC.htm" class="J_menuItem"><i class="icon iconfont icon-guanjianzi"></i>抄送</a></li>
+                        <li><a href="/WF/Focus.htm" class="J_menuItem"><i class="icon iconfont icon-wodeguanzhu"></i>我的关注</a></li>
+                        <li><a href="/WF/TodolistOfAuth.htm" class="J_menuItem"><i class="icon iconfont icon-qy_bdfw_6"></i>授权待办</a></li>
+                        <li><a href="/WF/Batch.htm" class="J_menuItem"><i class="icon iconfont icon-piliangchuli"></i>批处理</a></li>
+                        <li><a href="/WF/GetTask.htm" class="J_menuItem"><i class="icon iconfont icon-buliangquhui"></i>取回审批</a></li>
+                        <li><a href="/WF/HungUpList.htm" class="J_menuItem"><i class="icon iconfont icon-guaqi"></i>挂起的工作</a></li>
+                        <li><a href="/WF/Setting/Default.htm" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i>我的设置</a></li>
+                        </ul>
+                    </li>
+                   
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i class="fa fa-bars"></i> </a>
+                    
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+
+                    <li><a href="/WF/Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i>发起</a></li>
+                        <li><a href="/WF/Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>待办<label class="label label-warning pull-right"  id="Label1" ></label></a></li>
+
+                       
+                        <li><a href='/WF/Setting/Default.htm' title="设置个人信息." class="J_menuItem"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
+                        <li>
+                        	<a href="Login.htm?DoType=Out"><i class="icon iconfont icon-tuichu fred fz18"></i>退出</a> 
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row J_mainContent" id="content-main">
+                <iframe id="J_iframe" width="100%" height="100%" src="/WF/Start.htm" frameborder="0"
+                    data-id="../Start.htm" seamless></iframe>
+            </div>
+        </div>
+        <!--右侧部分结束-->
+    </div>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/WF/Style/skin/js/appnew.js?v=4.1.0"></script>
+    <script type="text/javascript" src="/WF/Style/skin/js/index.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var data = handler.DoMethodReturnString("Home_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
+
+            var flowNo = GetQueryString("FK_Flow");
+
+            if (flowNo != null) {
+                window.open('/WF/MyFlow.htm?FK_Flow=' + flowNo);
+                return;
+            }
+            return;
+        });
+    </script>
+</body>
+</html>

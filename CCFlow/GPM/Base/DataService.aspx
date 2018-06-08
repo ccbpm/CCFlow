@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DataService.aspx.cs" Inherits="GMP2.GPM.DataService" %>

@@ -322,11 +322,13 @@ namespace BP.GPM
                 RefMethod rm = new RefMethod();
                 rm.Title = "编辑菜单";
                 rm.ClassMethodName = this.ToString() + ".DoMenu";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "查看可访问该系统的人员";
                 rm.ClassMethodName = this.ToString() + ".DoWhoCanUseApp";
+
                 //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -338,7 +340,7 @@ namespace BP.GPM
                 rm.Title = "第二连接";
                 //rm.Title = "第二连接：登录方式为不传值、连接不设置用户名密码转为第二连接。";
                 rm.ClassMethodName = this.ToString() + ".About";
-                map.AddRefMethod(rm);
+               // map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -471,8 +473,10 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoRef()
         {
-            PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No + "&IsRef=1", 500, 700);
-            return null;
+            return "../../../GPM/WhoCanUseApp.aspx?FK_App=" + this.No;
+
+           // PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No + "&IsRef=1", 500, 700);
+            //return null;
         }
         /// <summary>
         /// 查看可以访问的人员
@@ -480,8 +484,11 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoWhoCanUseApp()
         {
-            PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No, 500, 700);
-            return null;
+            return "../../../GPM/WhoCanUseApp.aspx?FK_App=" + this.No;
+
+
+          //  PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No, 500, 700);
+            //return null;
         }
         /// <summary>
         /// 打开菜单
@@ -489,11 +496,15 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoMenu()
         {
-            PubClass.WinOpen("/GPM/AppMenu.aspx?FK_App=" + this.No, 800, 500);
-            //  PubClass.WinOpen("/Comm/RefFunc/EntityTree.aspx?EnsName=BP.GPM.Menus&FK_Tem=" + this.No, 500, 700);
-            return null;
-        }
+            return "../../../GPM/AppMenu.htm?FK_App=" + this.No;
 
+            //PubClass.WinOpen("/GPM/AppMenu.aspx?FK_App=" + this.No, 800, 500);
+            //  PubClass.WinOpen("/Comm/RefFunc/EntityTree.aspx?EnsName=BP.GPM.Menus&FK_Tem=" + this.No, 500, 700);
+            // return null;
+        }
+        /// <summary>
+        /// 刷新数据.
+        /// </summary>
         public void RefData()
         {
             //删除数据.

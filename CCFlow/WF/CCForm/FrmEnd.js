@@ -106,6 +106,95 @@
 
 }
 
+// 处理流程绑定表单字段权限的问题
+function SetFilesAuth(FK_Node, Fk_Flow, FK_MapData) {
+    var frmSlns = new Entities("BP.WF.Template.FrmFields", "FK_Node", FK_Node, "FK_MapData", FK_MapData);
+    if (frmSlns == null || frmSlns.length == 0)
+        return;
+    for (var i = 0; i < frmSlns.length; i++) {
+        var frmSln = frmSlns[i];
+        var keyOfEn = frmSln.KeyOfEn;
+        var myPk = FK_MapData + "_" + keyOfEn;
+        var mapAttr = new Entity("BP.Sys.MapAttr", myPk);
+        //checkbox复选框
+        if (mapAttr.MyDataType == 4) {
+            delFile(frmSln, $("#CB_" + keyOfEn), keyOfEn);
+
+            //初始值
+            if (frmSln.DefVal != null && frmSln.DefVal == 1)
+                $("#CB_" + keyOfEn).attr("checked", "checked");
+            else
+                $("#CB_" + keyOfEn).attr("checked", "");
+
+            continue;
+        }
+        //外部数据源
+        if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1) {
+            delFile(frmSln, $("#DDL_" + keyOfEn), keyOfEn);
+
+            if (frmSln.DefVal != null && frmSln.DefVal != "")
+                $("#DDL_" + keyOfEn).val(frmSln.DefVal);
+
+            continue;
+
+        }
+        //外键类型.
+        if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+            delFile(frmSln, $("#DDL_" + keyOfEn), keyOfEn);
+
+            if (frmSln.DefVal != null && frmSln.DefVal != "")
+                $("#DDL_" + keyOfEn).val(frmSln.DefVal);
+            continue;
+
+        }
+        //枚举类型.
+        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
+            //单选按钮
+            if (mapAttr.UIContralType == 3) {
+                frmSln.UIVisible == 0 ? $('input[name=RB_' + keyOfEn + ']').hide() : $('input[name=RB_' + keyOfEn + ']').show()
+
+                //是否可用
+                frmSln.UIIsEnable == 0 ? $('input[name=RB_' + keyOfEn + ']').attr("disabled", "disabled") : $('input[name=RB_' + keyOfEn + ']').attr("disabled", "");
+
+                //是否必填
+                //var showSpan = '<span style="color:red" class="mustInput" data-keyofen="' + keyOfEn + '">*</span>' ;
+                //frmSln.IsNotNull==1?fileId.append(showSpan):fileId.append("");
+                if (frmSln.DefVal != null && frmSln.DefVal != "")
+                    document.getElementById("RB_" + keyOfEn + "_" + frmSln.DefVal).checked = true;
+            } else {
+                delFile(frmSln, $("#DDL_" + keyOfEn), keyOfEn);
+                if (frmSln.DefVal != null && frmSln.DefVal != "")
+                    $("#DDL_" + keyOfEn).val(frmSln.DefVal);
+            }
+
+            continue;
+        }
+
+        //其余为文本框显示
+        delFile(frmSln, $("#TB_" + keyOfEn), keyOfEn);
+        if (frmSln.DefVal != null && frmSln.DefVal != "")
+            $("#TB_" + keyOfEn).val(frmSln.DefVal);
+        $("#TB_" + keyOfEn).attr("onblur", frmSln.RegularExp);
+
+    }
+
+
+}
+
+function delFile(frmSln, fileId, KeyOfEn) {
+    frmSln.UIVisible == 0 ? fileId.hide() : fileId.show();
+
+    //是否可用
+    frmSln.UIIsEnable == 0 ? fileId.attr("disabled", "disabled") : fileId.attr("disabled", "");
+
+    //是否必填
+    if (frmSln.IsNotNull == 1) {
+        var showSpan = '<span style="color:red" class="mustInput" data-keyofen="' + KeyOfEn + '">*</span>';
+        fileId.after(showSpan);
+    }
+
+}
+
 //处理 MapExt 的扩展. 工作处理器，独立表单都要调用他.
 function AfterBindEn_DealMapExt(frmData) {
 

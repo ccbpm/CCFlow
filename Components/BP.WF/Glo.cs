@@ -4961,7 +4961,6 @@ namespace BP.WF
                 {
                     //替换掉特殊字符
                     KeyWord = KeyWord.Replace(key,"");
-                    break;
                 }
             }
             return KeyWord;

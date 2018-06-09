@@ -809,6 +809,10 @@ function figure_MapAttr_Template(mapAttr) {
         else if (mapAttr.LGType == 2) {
             f.CCForm_Shape = "DropDownListTable";
         }
+        //外部数据源
+        else if (mapAttr.LGType == 0) {
+            f.CCForm_Shape = "DropDownListTable";
+        }
     } else if (mapAttr.UIContralType == 2) {//复选框
         f = new Figure("TextBox");
         f.CCForm_Shape = "TextBoxBoolean";

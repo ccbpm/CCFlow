@@ -115,7 +115,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     }
 
     /***************** 外部数据源 *****************************/
-    if (mapAttr.LGType == 1 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+    if (mapAttr.LGType == 0 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
         eleHtml = "<select  style='padding:0px;'  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
         return eleHtml;
     }

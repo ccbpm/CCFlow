@@ -1353,6 +1353,10 @@ function GenerWorkNode() {
                         //alert("把表单设置为只读.");
                         SetFrmReadonly();
                         //alert('ssssssssssss');
+                    } else if (frmNode.FrmSln == 2) {
+                        /* 自定义方案。 修改字段权限*/
+                        SetFilesAuth(node.NodeID, node.FK_Flow, flowData.Sys_MapData[0].No);   //位置 CCForm/FrmEnd.js
+
                     }
                 }
             }

@@ -6,17 +6,16 @@
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+
     <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+
      <base target="_self" /> 
-    <link href="/WF/Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
 
     <script language="javascript" type="text/javascript" >
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
+      
 
         //页面启动函数.
         $(function () {
@@ -31,54 +30,32 @@
         //初始化数据.
         function InitPage() {
 
-          //  var fk_mapData = GetQueryString("FK_MapData");
+            var ens = new Entities("BP.Demo.BPFramework.Students");
+            ens.RetrieveAll();
+             
+             //循环班级.
+            for (var i = 0; i < ens.length; i++) {
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=StudentList_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+                var en = ens[i];
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+                var newRow = "";
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + en.No + "</td>";
+                newRow += "<td>" + en.Name + "</td>";
+                newRow += "<td>" + en.Tel + "</td>";
+                newRow += "<td>" + en.Email + "</td>";
+                newRow += "<td>" + en.Addr + "</td>";
 
-                    data = JSON.parse(data);
+                newRow += "<td>";
+                newRow += "<a href=\"javascript:Edit('" + en.No + "')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
+                newRow += "<a href=\"javascript:Delete('" + en.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "</td>";
 
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
+                newRow += "</tr>";
 
-                        var en = data[i];
-
-                        var newRow = "";
-
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + en.No + "</td>";
-                        newRow += "<td>" + en.Name + "</td>";
-                        newRow += "<td>" + en.Tel + "</td>";
-                        newRow += "<td>" + en.Email + "</td>";
-                        newRow += "<td>" + en.Addr + "</td>";
-
-                        newRow += "<td>";
-                        newRow += "<a href=\"javascript:Edit('" + en.No + "')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
-                        newRow += "<a href=\"javascript:Delete('" + en.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
-                        newRow += "</td>";
-
-                        newRow += "</tr>";
-
-                        $("#Table1 tr:last").after(newRow);
-                    }
-                }
-            });
+                $("#Table1 tr:last").after(newRow);
+            }
         }
 
         function Delete(no) {
@@ -86,25 +63,11 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            //删除学生.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=StudentList_Delete&No=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var en = new Entity("BP.Demo.BPFramework.Student");
+            en.SetPKVal(no);
+            en.Delete();
 
-                    $("#Msg").html(data);
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    alert(data);
-                    window.location.href = window.location.href;
-                }
-            });
+            window.location.href = window.location.href;
         }
 
         function Edit(no) {

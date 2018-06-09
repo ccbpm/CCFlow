@@ -88,9 +88,7 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
                     case "Student_Save": //保存实体demo.
                         msg = this.Student_Save();
                         break;
-                    case "Student_Delete": //删除.
-                        msg = this.Student_Delete();
-                        break;
+                
                     case "StudentList_Init": //获取学生列表。
                         msg = this.StudentList_Init();
                         break;
@@ -199,24 +197,7 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
             return en.ToJson();
         }
         /// <summary>
-        /// 删除
-        /// </summary>
-        /// <returns></returns>
-        public string Student_Delete()
-        {
-            BP.Demo.BPFramework.Student stu = new BP.Demo.BPFramework.Student();
-            if (this.No != null)
-            {
-                stu.No = this.No;
-                stu.Delete();
-                return "删除成功...";
-            }
-            else
-            {
-                return "err@删除失败...";
-            }
-
-        }
+      
         #endregion 学生实体 操作.
 
 

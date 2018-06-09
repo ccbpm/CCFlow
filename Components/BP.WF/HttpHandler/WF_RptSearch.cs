@@ -129,16 +129,20 @@ namespace BP.WF.HttpHandler
         public string KeySearch_Query()
         {
             string keywords = this.GetRequestVal("TB_KeyWords");
+            //对输入的关键字进行验证
+            keywords = Glo.CheckKeyWord(keywords);
+            if (Glo.CheckKeyWordInSql(keywords))
+                return "@err:请输入正确字符！";
 
-            string sql = "";
-            sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.FID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState ";
-            sql += " FROM WF_GenerWorkFlow A ";
-            sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
-            sql += " AND A.Emps LIKE '@%" + WebUser.No + "%' ";
-            sql += " AND A.TodoEmps LIKE '@%" + WebUser.No + "%' ";
-            sql += " AND A.WFState!=0 ";
+            Paras ps = new Paras();
+            ps.SQL = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.FID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState "
+                    + " FROM WF_GenerWorkFlow A "
+                    + " WHERE A.Title LIKE '%" + keywords + "%' "
+                    + " AND (A.Emps LIKE '@%" + WebUser.No + "%' "
+                    + " or A.TodoEmps LIKE '%" + WebUser.No + "%') "
+                    + " AND A.WFState!=0 ";
 
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "WF_GenerWorkFlow";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)

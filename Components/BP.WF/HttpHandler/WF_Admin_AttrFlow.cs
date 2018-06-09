@@ -116,13 +116,6 @@ namespace BP.WF.HttpHandler
         #endregion APICodeFEE_Init.
 
         #region 发起限制.
-        public string Limit_Init()
-        {
-            BP.WF.Flow fl = new BP.WF.Flow();
-            fl.No = this.FK_Flow;
-            fl.RetrieveFromDBSources();
-            return fl.ToJson();
-        }
         public string Limit_Save()
         {
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
@@ -133,8 +126,6 @@ namespace BP.WF.HttpHandler
             return "保存成功.";
         }
         #endregion 发起限制.
-
-
 
         #region 节点属性（列表）的操作
         /// <summary>

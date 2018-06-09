@@ -4942,6 +4942,52 @@ namespace BP.WF
             ps.Add("ReceiveID", sendToEmpNo);
             BP.DA.DBAccess.RunSQL(ps);
         }
+
+        private const string StrRegex = @"-|;|,|/|(|)|[|]|}|{|%|@|*|!|'|`|~|#|$|^|&|.|?";
+        private const string StrKeyWord = @"select|insert|delete|from|count(|drop table|update|truncate|asc(|mid(|char(|xp_cmdshell|exec master|netlocalgroup administrators|:|net user|""|or|and";
+        /// <summary>
+        /// 检查KeyWord是否包涵特殊字符
+        /// </summary>
+        /// <param name="_sWord">需要检查的字符串</param>
+        /// <returns></returns>
+        public static string CheckKeyWord(string KeyWord)
+        {
+            //特殊符号
+            string[] strRegx = StrRegex.Split('|');
+            //特殊符号 的注入情况
+            foreach (string key in strRegx)
+            {
+                if (KeyWord.IndexOf(key) >= 0)
+                {
+                    //替换掉特殊字符
+                    KeyWord = KeyWord.Replace(key,"");
+                    break;
+                }
+            }
+            return KeyWord;
+        }
+        /// <summary>
+        /// 检查_sword是否包涵SQL关键字
+        /// </summary>
+        /// <param name="_sWord">需要检查的字符串</param>
+        /// <returns>存在SQL注入关键字时返回 true，否则返回 false</returns>
+        public static bool CheckKeyWordInSql(string _sWord)
+        {
+            bool result = false;
+            //Sql注入de可能关键字
+            string[] patten1 = StrKeyWord.Split('|');
+            //Sql注入的可能关键字 的注入情况
+            foreach (string sqlKey in patten1)
+            {
+                if (_sWord.IndexOf(" " + sqlKey) >= 0 || _sWord.IndexOf(sqlKey + " ") >= 0)
+                {
+                    //只要存在一个可能出现Sql注入的参数,则直接退出
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
         #endregion 其他方法。
     }
 }

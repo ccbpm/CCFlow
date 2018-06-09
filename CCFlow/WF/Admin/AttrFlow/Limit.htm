@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
 	<script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <!-- ccbpm -->
 	<script type="text/javascript" src="../../Scripts/config.js"></script>
 	<script type="text/javascript" src="../../Comm/Gener.js"></script>
 
@@ -23,13 +24,6 @@
 		//全局变量
 		var FK_Flow; 	//流程id
 		var _StartLimitRole; //限制规则枚举（JSON)
-
-		/* ESC Key Down */
-		function Esc() {
-			if (event.keyCode === 27)
-				window.close();
-			return true;
-		}
 
 		//页面启动函数.
 		$(function () {
@@ -44,19 +38,7 @@
 		function InitPage() {
 
 		    var fk_flow = GetQueryString("FK_Flow");
-
-		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
-
-		    handler.AddPara("FK_Flow", fk_flow);
-
-		    var data = handler.DoMethodReturnString("Limit_Init");
-
-		    if (data.indexOf("err@") == 0) {
-		        alert(data);
-		        return;
-		    }
-
-		    data = JSON.parse(data);
+		    var data = new Entity("BP.WF.Flow", fk_flow);
 
 		    var _StartLimitRole = data.StartLimitRole;
 

@@ -1,6 +1,5 @@
 <%@ Page Language="c#" Inherits="CCFlow.Web.Comm.GroupEnsNum" CodeBehind="Group.aspx.cs" %>
 
-<%@ Register TagPrefix="cc1" Namespace="BP.Web.Controls" Assembly="BP.Web.Controls" %>
 <%@ Register TagPrefix="uc1" TagName="UCSys" Src="UC/UCSys.ascx" %>
 <%@ Register Src="UC/ToolBar.ascx" TagName="ToolBar" TagPrefix="uc2" %>
 <%@ Register Src="UC/UCGraphics.ascx" TagName="UCGraphics" TagPrefix="uc3" %>

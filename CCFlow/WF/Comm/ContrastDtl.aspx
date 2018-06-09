@@ -1,7 +1,6 @@
 <%@ Page Language="c#" Inherits="CCFlow.Web.WF.Comm.UIContrastDtl" CodeBehind="ContrastDtl.aspx.cs" %>
 
 <%@ Register TagPrefix="uc1" TagName="UCSys" Src="UC/UCSys.ascx" %>
-<%@ Register TagPrefix="cc1" Namespace="BP.Web.Controls" Assembly="BP.Web.Controls" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <html>
 <head id="Head1" runat="server">

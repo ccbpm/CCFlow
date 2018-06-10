@@ -120,8 +120,6 @@
     <Content Include="DataUser\XML\Menu.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="GPM\AppList.aspx" />
-    <Content Include="GPM\AppMenu.aspx" />
     <Content Include="GPM\AppMenuToEmp.aspx" />
     <Content Include="GPM\App\Home.htm" />
     <Content Include="GPM\App\Login.htm" />
@@ -184,7 +182,6 @@
     <Content Include="GPM\jquery\jquery.min.js" />
     <Content Include="GPM\jquery\locale\easyui-lang-zh_CN.js" />
     <Content Include="GPM\ManagerDept.aspx" />
-    <Content Include="GPM\Organization.aspx" />
     <Content Include="GPM\Pub.ascx" />
     <Content Include="GPM\Siganture.htm" />
     <Content Include="GPM\SQLScript\CCIM.sql" />
@@ -625,7 +622,6 @@
     <Content Include="WF\Data\XML\Ens\EnsAppXml\WF.xml" />
     <Content Include="WF\Data\XML\Ens\GlobalKeyVal.xml" />
     <Content Include="WF\Data\XML\Ens\Search.xml" />
-    <Content Include="WF\Data\XML\EnumInfo.xml" />
     <Content Include="WF\Data\XML\Enum\Map.xml" />
     <Content Include="WF\Data\XML\Enum\WFV4.xml" />
     <Content Include="WF\Data\XML\EventList.xml" />
@@ -639,7 +635,6 @@
     <Content Include="WF\Data\XML\SysDataType.xml" />
     <Content Include="WF\Data\XML\TaoHong.xml" />
     <Content Include="WF\Data\XML\UserTools.xml" />
-    <Content Include="WF\Data\XML\WebConfigDesc.xml" />
     <Content Include="WF\Data\XML\WFAdmin.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -6036,20 +6031,6 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GPM\AppList.aspx.cs">
-      <DependentUpon>AppList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\AppList.aspx.designer.cs">
-      <DependentUpon>AppList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\AppMenu.aspx.cs">
-      <DependentUpon>AppMenu.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\AppMenu.aspx.designer.cs">
-      <DependentUpon>AppMenu.aspx</DependentUpon>
-    </Compile>
     <Compile Include="GPM\AppMenuToEmp.aspx.cs">
       <DependentUpon>AppMenuToEmp.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6116,13 +6097,6 @@
     </Compile>
     <Compile Include="GPM\ManagerDept.aspx.designer.cs">
       <DependentUpon>ManagerDept.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Organization.aspx.cs">
-      <DependentUpon>Organization.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Organization.aspx.designer.cs">
-      <DependentUpon>Organization.aspx</DependentUpon>
     </Compile>
     <Compile Include="GPM\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
@@ -7920,6 +7894,7 @@
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
+    <Folder Include="DataUser\XML\Enum\" />
     <Folder Include="SDKFlowDemo\SDK\F129\" />
     <Folder Include="WF\Admin\RptDfine\Img\" />
     <Folder Include="WF\RptDfine\Img\" />
@@ -7959,7 +7934,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>30362</DevelopmentServerPort>
+          <DevelopmentServerPort>1579</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

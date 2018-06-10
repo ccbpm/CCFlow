@@ -453,14 +453,14 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp + "\\WF\\Data\\XML\\";
+                return PathOfWebApp + SystemConfig.AppSettings["DataDirPath"] + "\\Data\\XML\\";
             }
         }
         public static string PathOfAppUpdate
         {
             get
             {
-                return PathOfWebApp + "\\WF\\Data\\AppUpdate\\";
+                return PathOfWebApp + SystemConfig.AppSettings["DataDirPath"] + "\\Data\\AppUpdate\\";
             }
         }
         public static string PathOfCyclostyleFile

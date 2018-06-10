@@ -83,23 +83,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("Stations", stas);
             }
 
-            if (SystemConfig.OSModel == OSModel.OneOne)
-            {
-                BP.Port.EmpStations des = new BP.Port.EmpStations();
-                des.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Emp, WebUser.No);
-
-                string depts = "";
-                string stas = "";
-
-                foreach (BP.Port.EmpStation item in des)
-                {
-                    BP.Port.Station sta = new Station(item.FK_Station);
-                    stas += sta.Name + "、";
-                }
-
-                ht.Add("Depts", emp.FK_DeptText);
-                ht.Add("Stations", stas);
-            }
+           
 
             BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
             ht.Add("Tel", wfemp.Tel);

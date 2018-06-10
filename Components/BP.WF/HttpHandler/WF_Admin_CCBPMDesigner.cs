@@ -272,101 +272,53 @@ namespace BP.WF.HttpHandler
 
             string rootid = this.GetRequestVal("rootid");// context.Request.QueryString["rootid"];
 
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
+
+            BP.GPM.Depts depts = new BP.GPM.Depts();
+            depts.Retrieve(BP.GPM.DeptAttr.ParentNo, rootid);
+            BP.GPM.Stations sts = new BP.GPM.Stations();
+            sts.RetrieveAll();
+            BP.GPM.DeptStations dss = new BP.GPM.DeptStations();
+            dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, rootid);
+            BP.GPM.DeptEmps des = new BP.GPM.DeptEmps();
+            des.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, rootid);
+            BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
+            dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, rootid);
+            BP.GPM.Station stt = null;
+            BP.GPM.Emp emp = null;
+            List<string> inemps = new List<string>();
+
+            foreach (BP.GPM.Dept dept in depts)
             {
-                BP.Port.Depts depts = new BP.Port.Depts();
-                depts.Retrieve(BP.Port.DeptAttr.ParentNo, rootid, BP.Port.DeptAttr.Name);
-                BP.Port.Stations sts = new BP.Port.Stations();
-                sts.RetrieveAll();
-                BP.Port.Emps emps = new BP.Port.Emps();
-                emps.Retrieve(BP.Port.EmpAttr.FK_Dept, rootid, BP.Port.EmpAttr.Name);
-                BP.Port.EmpStations empsts = new BP.Port.EmpStations();
-                empsts.RetrieveAll();
-
-                BP.Port.EmpStations ess = null;
-                List<string> insts = new List<string>();
-                List<BP.Port.Emp> inemps = new List<BP.Port.Emp>();
-
                 //增加部门
-                foreach (BP.Port.Dept dept in depts)
+                dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+            }
+
+            //增加部门岗位
+            foreach (BP.GPM.DeptStation ds in dss)
+            {
+                stt = sts.GetEntityByKey(ds.FK_Station) as BP.GPM.Station;
+
+                if (stt == null) continue;
+
+                dt.Rows.Add(ds.FK_Station, rootid, stt.Name, "STATION");
+            }
+
+            //增加没有岗位的人员
+            foreach (BP.GPM.DeptEmp de in des)
+            {
+                if (dess.GetEntityByKey(BP.GPM.DeptEmpStationAttr.FK_Emp, de.FK_Emp) == null)
                 {
-                    dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
-                }
+                    if (inemps.Contains(de.FK_Emp))
+                        continue;
 
-                //增加岗位
-                foreach (BP.Port.Emp emp in emps)
-                {
-                    ess = new BP.Port.EmpStations();
-                    ess.Retrieve(BP.Port.EmpStationAttr.FK_Emp, emp.No);
-
-                    foreach (BP.Port.EmpStation es in ess)
-                    {
-                        if (insts.Contains(es.FK_Station))
-                            continue;
-
-                        insts.Add(es.FK_Station);
-                        dt.Rows.Add(es.FK_Station, rootid, es.FK_StationT, "STATION");
-                    }
-
-                    if (ess.Count == 0)
-                        inemps.Add(emp);
-                }
-
-                //增加没有岗位的人员
-                foreach (BP.Port.Emp emp in inemps)
-                {
-                    dt.Rows.Add(emp.No, rootid, emp.Name, "EMP");
+                    inemps.Add(de.FK_Emp);
                 }
             }
-            else
+
+            foreach (string inemp in inemps)
             {
-                BP.GPM.Depts depts = new BP.GPM.Depts();
-                depts.Retrieve(BP.GPM.DeptAttr.ParentNo, rootid);
-                BP.GPM.Stations sts = new BP.GPM.Stations();
-                sts.RetrieveAll();
-                BP.GPM.DeptStations dss = new BP.GPM.DeptStations();
-                dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, rootid);
-                BP.GPM.DeptEmps des = new BP.GPM.DeptEmps();
-                des.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, rootid);
-                BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
-                dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, rootid);
-                BP.GPM.Station stt = null;
-                BP.GPM.Emp emp = null;
-                List<string> inemps = new List<string>();
-
-                foreach (BP.GPM.Dept dept in depts)
-                {
-                    //增加部门
-                    dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
-                }
-
-                //增加部门岗位
-                foreach (BP.GPM.DeptStation ds in dss)
-                {
-                    stt = sts.GetEntityByKey(ds.FK_Station) as BP.GPM.Station;
-
-                    if (stt == null) continue;
-
-                    dt.Rows.Add(ds.FK_Station, rootid, stt.Name, "STATION");
-                }
-
-                //增加没有岗位的人员
-                foreach (BP.GPM.DeptEmp de in des)
-                {
-                    if (dess.GetEntityByKey(BP.GPM.DeptEmpStationAttr.FK_Emp, de.FK_Emp) == null)
-                    {
-                        if (inemps.Contains(de.FK_Emp))
-                            continue;
-
-                        inemps.Add(de.FK_Emp);
-                    }
-                }
-
-                foreach (string inemp in inemps)
-                {
-                    emp = new BP.GPM.Emp(inemp);
-                    dt.Rows.Add(emp.No, rootid, emp.Name, "EMP");
-                }
+                emp = new BP.GPM.Emp(inemp);
+                dt.Rows.Add(emp.No, rootid, emp.Name, "EMP");
             }
 
             return BP.Tools.Json.ToJson(dt);

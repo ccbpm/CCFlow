@@ -85,13 +85,13 @@ namespace BP.Port
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织编号", true, false, 0, 100, 100);
 
                 
-                //如果是一人一部门多岗位,就启动这个映射.
-                if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-                {
-                    //岗位人员.
-                    map.AttrsOfOneVSM.Add(new EmpStations(), new Emps(), EmpStationAttr.FK_Station, EmpStationAttr.FK_Emp,
-                      DeptAttr.Name, DeptAttr.No, "人员");
-                }
+                ////如果是一人一部门多岗位,就启动这个映射.
+                //if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
+                //{
+                //    //岗位人员.
+                //    map.AttrsOfOneVSM.Add(new EmpStations(), new Emps(), EmpStationAttr.FK_Station, EmpStationAttr.FK_Emp,
+                //      DeptAttr.Name, DeptAttr.No, "人员");
+                //}
 
                 this._enMap = map;
                 return this._enMap;

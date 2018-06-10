@@ -15,7 +15,6 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_CCFormDesigner : BP.WF.HttpHandler.DirectoryPageBase
     {
-
         /// <summary>
         /// 初始化表单
         /// </summary>

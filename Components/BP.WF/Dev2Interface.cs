@@ -887,38 +887,7 @@ namespace BP.WF
                 return fls;
             }
 
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                string sql = "";
-                // 按岗位计算.
-                sql += "SELECT A.FK_Flow FROM WF_Node A,WF_NodeStation B WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND B.FK_Station IN (" + BP.Web.WebUser.HisStationsStr + ")";
-                sql += " UNION  "; //按指定的人员计算.
-                sql += "SELECT FK_Flow FROM WF_Node WHERE NodePosType=0 AND ( WhoExeIt=0 OR WhoExeIt=2 ) AND NodeID IN ( SELECT FK_Node FROM WF_NodeEmp WHERE FK_Emp='" + userNo + "' ) ";
-                sql += " UNION  "; // 按部门计算.
-                sql += "SELECT A.FK_Flow FROM WF_Node A,WF_NodeDept B WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND B.FK_Dept IN (" + BP.Web.WebUser.HisDeptsStr + ") ";
-
-                //// 采用新算法.
-                //if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                //    sql = "SELECT FK_Flow FROM V_FlowStarter WHERE FK_Emp='" + userNo + "'";
-                //else
-                //    sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
-
-                Flows fls = new Flows();
-                BP.En.QueryObject qo = new BP.En.QueryObject(fls);
-                qo.AddWhereInSQL("No", sql);
-                qo.addAnd();
-                qo.AddWhere(FlowAttr.IsCanStart, true);
-                if (WebUser.IsAuthorize)
-                {
-                    /*如果是授权状态*/
-                    qo.addAnd();
-                    WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
-                    qo.AddWhereIn("No", wfEmp.AuthorFlows);
-                }
-                qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
-                qo.DoQuery();
-                return fls;
-            }
+           
             throw new Exception("@未判断的类型。");
         }
         /// <summary>
@@ -986,38 +955,6 @@ namespace BP.WF
                 }
 
                 return dt;
-            }
-
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                string sql = "";
-                // 按岗位计算.
-                sql += "SELECT A.FK_Flow FROM WF_Node A,WF_NodeStation B WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND B.FK_Station IN (" + BP.Web.WebUser.HisStationsStr + ")";
-                sql += " UNION  "; //按指定的人员计算.
-                sql += "SELECT FK_Flow FROM WF_Node WHERE NodePosType=0 AND ( WhoExeIt=0 OR WhoExeIt=2 ) AND NodeID IN ( SELECT FK_Node FROM WF_NodeEmp WHERE FK_Emp='" + userNo + "' ) ";
-                sql += " UNION  "; // 按部门计算.
-                sql += "SELECT A.FK_Flow FROM WF_Node A,WF_NodeDept B WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND B.FK_Dept IN (" + BP.Web.WebUser.HisDeptsStr + ") ";
-
-                //// 采用新算法.
-                //if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                //    sql = "SELECT FK_Flow FROM V_FlowStarter WHERE FK_Emp='" + userNo + "'";
-                //else
-                //    sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
-
-                Flows fls = new Flows();
-                BP.En.QueryObject qo = new BP.En.QueryObject(fls);
-                qo.AddWhereInSQL("No", sql);
-                qo.addAnd();
-                qo.AddWhere(FlowAttr.IsCanStart, true);
-                if (WebUser.IsAuthorize)
-                {
-                    /*如果是授权状态*/
-                    qo.addAnd();
-                    WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
-                    qo.AddWhereIn("No", wfEmp.AuthorFlows);
-                }
-                qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
-                return qo.DoQueryToTable();
             }
 
             throw new Exception("@未判断的类型。");
@@ -3110,22 +3047,16 @@ namespace BP.WF
         public static string Port_Login(string userNo, string userName = null, string deptNo = null, string deptName = null,
             string authNo = null, string authName = null)
         {
-            if (userName == null)
-            {
-                /* 仅仅传递了人员编号，就按照人员来取.*/
-                BP.Port.Emp emp = new BP.Port.Emp();
-                emp.No = userNo;
-                emp.RetrieveFromDBSources();
 
-                WebUser.SignInOfGener(emp);
-                WebUser.IsWap = false;
-                WebUser.Auth = ""; //设置授权人为空.
-                return Port_GetSID(userNo);
-            }
+            /* 仅仅传递了人员编号，就按照人员来取.*/
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = userNo;
+            emp.RetrieveFromDBSources();
 
-            //执行登录.
-            BP.Web.WebUser.SignInOfGener2017(userNo, userName, deptNo, deptName, null, null);
-            return null;
+            WebUser.SignInOfGener(emp);
+            WebUser.IsWap = false;
+            WebUser.Auth = ""; //设置授权人为空.
+            return Port_GetSID(userNo);
         }
         /// <summary>
         /// 注销当前登录

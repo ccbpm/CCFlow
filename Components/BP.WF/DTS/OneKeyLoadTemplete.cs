@@ -136,16 +136,6 @@ namespace BP.WF.DTS
                     item.DirectInsert(); //插入数据.
                 }
             }
-
-            //EmpStations.
-            EmpStations ess = new EmpStations();
-            ess.ClearTable();
-            dt = ds.Tables["Port_EmpStation"];
-            ess = QueryObject.InitEntitiesByDataTable(ess, dt, null) as EmpStations;
-            foreach (EmpStation item in ess)
-            {
-                item.DirectInsert(); //插入数据.
-            }
             #endregion 2 组织结构.
 
             #region 3 恢复系统数据.

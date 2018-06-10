@@ -470,9 +470,6 @@
     <Compile Include="Port\Dept.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\EmpStation.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Port\Station.cs">
       <SubType>Code</SubType>
     </Compile>

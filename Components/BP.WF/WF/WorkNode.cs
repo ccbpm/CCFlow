@@ -937,48 +937,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 判断一人多部门的情况
-        /// <summary>
-        /// HisDeptOfUse
-        /// </summary>
-        private Dept _HisDeptOfUse = null;
-        /// <summary>
-        /// HisDeptOfUse
-        /// </summary>
-        public Dept HisDeptOfUse
-        {
-            get
-            {
-                if (_HisDeptOfUse == null)
-                {
-                    //找到全部的部门。
-                    Depts depts;
-                    if (this.HisWork.Rec == this.Execer)
-                        depts = WebUser.HisDepts;
-                    else
-                        depts = this.HisWork.RecOfEmp.HisDepts;
-
-                    if (depts.Count == 0)
-                    {
-                        throw new Exception("您没有给[" + this.HisWork.Rec + "]设置部门。");
-                    }
-
-                    if (depts.Count == 1) /* 如果全部的部门只有一个，就返回它。*/
-                    {
-                        _HisDeptOfUse = (Dept)depts[0];
-                        return _HisDeptOfUse;
-                    }
-
-                    if (_HisDeptOfUse == null)
-                    {
-                        /* 如果还没找到，就返回第一个部门。 */
-                        _HisDeptOfUse = depts[0] as Dept;
-                    }
-                }
-                return _HisDeptOfUse;
-            }
-        }
-        #endregion
 
         #region 条件
         private Conds _HisNodeCompleteConditions = null;

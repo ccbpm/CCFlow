@@ -52,84 +52,7 @@ namespace BP.Port
                 }
             }
         }
-        /// <summary>
-        /// 工作岗位集合。
-        /// </summary>
-        public Stations HisStations
-        {
-
-            get
-            {
-                if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-                {
-                    //获得数据.
-                    var v = DataType.GetPortalInterfaceSoapClientInstance();
-                    DataTable dt = v.GetEmpHisStations(this.No);
-
-                    //设置查询.
-                    Stations ens = new Stations();
-                    QueryObject.InitEntitiesByDataTable(ens, dt, null);
-                    return ens;
-                }
-                else
-                {
-                    EmpStations sts = new EmpStations();
-                    QueryObject qo = new QueryObject(sts);
-                    qo.AddWhere(EmpStationAttr.FK_Emp, this.No);
-                    qo.DoQuery();
-
-                    Stations ens = new Stations();
-                    foreach (EmpStation en in sts)
-                    {
-                        ens.AddEntity(new Station(en.FK_Station));
-                    }
-                    return ens;
-                }
-            }
-        }
-        /// <summary>
-        /// 部门集合。
-        /// </summary>
-        public Depts HisDepts
-        {
-            get
-            {
-                if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-                {
-                    //获得数据.
-                    var v = DataType.GetPortalInterfaceSoapClientInstance();
-                    DataTable dt = v.GetEmpHisDepts(this.No);
-
-                    //设置查询.
-                    Depts depts = new Depts();
-                    QueryObject.InitEntitiesByDataTable(depts, dt, null);
-                    return depts;
-                }
-                else
-                {
-                    if (SystemConfig.OSModel == OSModel.OneOne)
-                    {
-                        Depts depts = new Depts();
-                        depts.AddEntity(new Dept(this.FK_Dept));
-                        return depts;
-                    }
-                    else
-                    {
-                        BP.GPM.DeptEmps sts = new BP.GPM.DeptEmps();
-                        QueryObject qo = new QueryObject(sts);
-                        qo.AddWhere(BP.GPM.DeptEmpAttr.FK_Emp, this.No);
-                        qo.DoQuery();
-                        Depts ens = new Depts();
-                        foreach (BP.GPM.DeptEmp en in sts)
-                        {
-                            ens.AddEntity(new Dept(en.FK_Dept));
-                        }
-                        return ens;
-                    }
-                }
-
-            }
-        }
+       
         /// <summary>
         /// 部门编号
         /// </summary>
@@ -343,14 +266,6 @@ namespace BP.Port
 
                 map.AddSearchAttr(EmpAttr.FK_Dept);
 
-                #region 增加多对多属性
-                if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-                {
-                    map.AttrsOfOneVSM.Add(new EmpStations(), new Stations(), EmpStationAttr.FK_Emp,
-                        EmpStationAttr.FK_Station, DeptAttr.Name, DeptAttr.No, "岗位权限");
-                }
-                #endregion
-
 
 
                 this._enMap = map;
@@ -370,15 +285,7 @@ namespace BP.Port
         #region 重写方法
         protected override bool beforeDelete()
         {
-            // 删除该人员的岗位，如果是视图就有可能抛出异常。
-            try
-            {
-                EmpStations ess = new EmpStations();
-                ess.Delete(EmpStationAttr.FK_Emp, this.No);
-            }
-            catch
-            {
-            }
+           
             return base.beforeDelete();
         }
         #endregion 重写方法

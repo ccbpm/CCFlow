@@ -165,7 +165,6 @@ namespace BP.Web
                 ps.Add("Depts", strs);
                 ps.Add("No", em.No);
                 BP.DA.DBAccess.RunSQL(ps);
-                WebUser.HisDeptsStr = strs;
 
                 dt = ws.GetEmpHisStations(em.No);
                 strs = BP.DA.DBAccess.GenerWhereInPKsString(dt);
@@ -174,14 +173,11 @@ namespace BP.Web
                 ps.Add("Stas", strs);
                 ps.Add("No", em.No);
                 BP.DA.DBAccess.RunSQL(ps);
-                WebUser.HisStationsStr = strs;
             }
             #endregion 解决部门的问题.
 
             WebUser.FK_Dept = em.FK_Dept;
             WebUser.FK_DeptName = em.FK_DeptText;
-            WebUser.HisDepts = null;
-            WebUser.HisStations = null;
             if (IsRecSID)
             {
                 //判断是否视图，如果为视图则不进行修改 
@@ -230,105 +226,6 @@ namespace BP.Web
                     authNo = "";
                 cookie.Values.Add("Auth", authNo); //授权人.
 
-                if (authName == null)
-                    authName = "";
-                cookie.Values.Add("AuthName", authName); //授权人名称..
-
-                System.Web.HttpContext.Current.Response.AppendCookie(cookie);
-            }
-        }
-        /// <summary>
-        /// 用户登录
-        /// </summary>
-        /// <param name="userNo">用户编号</param>
-        /// <param name="userName">用户名称</param>
-        /// <param name="deptNo">部门编号</param>
-        /// <param name="deptName">名称</param>
-        /// <param name="authNo">授权人编号</param>
-        /// <param name="authName">名称</param>
-        public static void SignInOfGener2017(string userNo, string userName = null, string deptNo = null, string deptName = null,
-            string authNo = null, string authName = null)
-        {
-            if (System.Web.HttpContext.Current == null)
-                SystemConfig.IsBSsystem = false;
-            else
-                SystemConfig.IsBSsystem = true;
-
-            WebUser.No = userNo;
-            WebUser.Name = userName;
-            if (DataType.IsNullOrEmpty(authNo) == false)
-            {
-                WebUser.Auth = authNo; //被授权人，实际工作的执行者.
-                WebUser.AuthName = authName;
-            }
-            else
-            {
-                WebUser.Auth = null;
-                WebUser.AuthName = null;
-            }
-
-
-            //登录模式？
-            BP.Web.WebUser.UserWorkDev = Web.UserWorkDev.PC;
-
-            #region 解决部门的问题.
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
-            {
-                if (DataType.IsNullOrEmpty(deptNo) == true)
-                {
-                    string sql = "";
-                    if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-                        sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + userNo + "'";
-                    else
-                        sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + userNo + "'";
-
-                    deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
-                    if (DataType.IsNullOrEmpty(deptNo) == true)
-                    {
-                        throw new Exception("@登录人员(" + userNo + "," + userName + ")没有维护部门...");
-                    }
-                    else
-                    {
-                        //调用接口更改所在的部门.
-                        // WebUser.ChangeMainDept(em.No, deptNo);
-                    }
-                }
-            }
-            #endregion 解决部门的问题.
-
-            WebUser.FK_Dept = deptNo;
-            WebUser.FK_DeptName = deptName;
-            WebUser.HisDepts = null;
-            WebUser.HisStations = null;
-
-            if (BP.Sys.SystemConfig.IsBSsystem)
-            {
-                //System.Web.HttpContext.Current.Response.Cookies.Clear();
-                HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
-                if (hc != null)
-                    BP.Sys.Glo.Request.Cookies.Remove("CCS");
-
-                HttpCookie cookie = new HttpCookie("CCS");
-
-                //设置过期时间. 默认为500分钟.
-              //  cookie.Expires = DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute);
-
-                cookie.Values.Add("No", userNo);
-                cookie.Values.Add("Name", HttpUtility.UrlEncode(userName));
-
-                cookie.Values.Add("FK_Dept", deptNo);
-                cookie.Values.Add("FK_DeptName", HttpUtility.UrlEncode(deptName));
-
-                if (System.Web.HttpContext.Current.Session != null)
-                {
-                    cookie.Values.Add("Token", System.Web.HttpContext.Current.Session.SessionID);
-                    cookie.Values.Add("SID", System.Web.HttpContext.Current.Session.SessionID);
-                }
-
-                if (authNo == null)
-                    authNo = "";
-
-                cookie.Values.Add("Auth", authNo); //授权人.
                 if (authName == null)
                     authName = "";
                 cookie.Values.Add("AuthName", authName); //授权人名称..
@@ -935,77 +832,6 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("HisSts", value);
-            }
-        }
-        public static Depts HisDepts
-        {
-            get
-            {
-                object obj = null;
-                obj = GetSessionByKey("HisDepts", obj);
-                if (obj == null)
-                {
-                    Depts sts = WebUser.HisEmp.HisDepts;
-                    SetSessionByKey("HisDepts", sts);
-                    return sts;
-                }
-                return obj as Depts;
-            }
-            set
-            {
-                SetSessionByKey("HisDepts", value);
-            }
-        }
-        /// <summary>
-        /// 部门s
-        /// </summary>
-        public static string HisDeptsStr
-        {
-            get
-            {
-                string val = GetValFromCookie("HisDeptsStr", "", true);
-                if (val == null)
-                {
-                    val = BP.DA.DBAccess.RunSQLReturnVal("SELECT Depts FROM WF_Emp WHERE No='" + WebUser.No + "'") as string;
-                    if (val == null)
-                        val = "";
-                    SetSessionByKey("HisDeptsStr", val);
-                }
-                return val;
-            }
-            set
-            {
-                SetSessionByKey("HisDeptsStr", value);
-
-                //Paras ps = new Paras();
-                //ps.SQL = "UPDATE WF_Emp SET Depts=" + SystemConfig.AppCenterDBVarStr + "Depts WHERE No=" + SystemConfig.AppCenterDBVarStr + "No ";
-                //ps.Add("Depts", value);
-                //ps.Add("No", WebUser.NoOfRel);
-                //BP.DA.DBAccess.RunSQL(ps);
-            }
-        }
-        /// <summary>
-        /// 岗位s
-        /// </summary>
-        public static string HisStationsStr
-        {
-            get
-            {
-                string val = GetValFromCookie("HisStationsStr", null, true);
-                if (val == null)
-                {
-                    val = BP.DA.DBAccess.RunSQLReturnVal("SELECT Stas FROM WF_Emp WHERE No='" + WebUser.No + "'") as string;
-
-                    if (val == null)
-                        val = "";
-                    SetSessionByKey("HisStationsStr", val);
-                }
-                return val;
-            }
-            set
-            {
-                SetSessionByKey("HisStationsStr", value);
-
             }
         }
         /// <summary>

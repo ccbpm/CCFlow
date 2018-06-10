@@ -703,20 +703,6 @@ namespace BP.WF.Template
                     strs += this.OperatorValueT.ToString();
 
                     string strs1 = "";
-                    if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                    {
-                        BP.Port.EmpStations sts = new BP.Port.EmpStations(this.SpecOper);
-                        foreach (BP.Port.EmpStation st in sts)
-                        {
-                            if (strs.Contains("@" + st.FK_Station + "@"))
-                            {
-                                this.MsgOfCond = "@以岗位判断方向，条件为true：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + st.FK_Station + st.FK_StationT;
-                                return true;
-                            }
-                            strs1 += st.FK_Station + "-" + st.FK_StationT;
-                        }
-                    }
-
                     if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
                     {
                         BP.GPM.DeptEmpStations sts = new BP.GPM.DeptEmpStations();

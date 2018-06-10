@@ -155,6 +155,14 @@ namespace BP.En
                 return this.GenerNewNoByKey("No");
             }
 		}
+        /// <summary>
+        /// 生成编号
+        /// </summary>
+        /// <returns></returns>
+        public string GenerNewEntityNo()
+        {
+            return this.GenerNewNoByKey("No");
+        }
 		/// <summary>
 		/// 按 No 查询。
 		/// </summary>

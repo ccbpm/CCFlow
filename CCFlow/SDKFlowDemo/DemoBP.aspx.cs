@@ -721,10 +721,10 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     /// </summary>
     public void EnttiyMM()
     {
-        BP.Port.EmpStation en = new BP.Port.EmpStation();
-        en.FK_Emp = "zhangsan";
-        en.FK_Station = "01";
-        en.Insert();
+        //BP.Port.EmpStation en = new BP.Port.EmpStation();
+        //en.FK_Emp = "zhangsan";
+        //en.FK_Station = "01";
+        //en.Insert();
     }
     /// <summary>
     /// 与文件相关的操作.

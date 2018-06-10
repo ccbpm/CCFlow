@@ -38,6 +38,7 @@
 		function InitPage() {
 
 		    var fk_flow = GetQueryString("FK_Flow");
+
 		    var data = new Entity("BP.WF.Flow", fk_flow);
 
 		    var _StartLimitRole = data.StartLimitRole;

@@ -113,17 +113,17 @@ namespace CCFlow.Web.Comm.Port
             else
                 deptId = "'" + deptId + "'";
 
-            string filter_dept="";
-            
-            if (BP.Sys.SystemConfig.OSModel  == BP.Sys.OSModel.OneOne)
-              filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select No from Port_Emp where FK_Dept in ({0}))", deptId);
+            string filter_dept = "";
+
+            if (BP.Sys.SystemConfig.OSModel == BP.Sys.OSModel.OneOne)
+                filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select No from Port_Emp where FK_Dept in ({0}))", deptId);
             else
                 filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmp where FK_Dept in ({0}))", deptId);
 
 
-            string filter_station="";
-            if (BP.Sys.SystemConfig.OSModel  == BP.Sys.OSModel.OneOne)
-              filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from  Port_EmpStation  where FK_Station='{0}')", stationId);
+            string filter_station = "";
+            if (BP.Sys.SystemConfig.OSModel == BP.Sys.OSModel.OneOne)
+                filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from  Port_EmpStation  where FK_Station='{0}')", stationId);
             else
                 filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmpStation where FK_Station='{0}')", stationId);
 

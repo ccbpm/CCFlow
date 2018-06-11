@@ -69,6 +69,7 @@ function DistributeRight(model) {
 function GetTemplatePanel(node) {
     if (node) {
         Application.data.getTemplateData(node.id, curModel, function (js, scope) {
+
             if (js) {
                 var panel = document.getElementById('templatePanel');
                 panel.innerHTML = '正在加载 ......';

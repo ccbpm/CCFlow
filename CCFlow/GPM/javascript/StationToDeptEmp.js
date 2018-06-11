@@ -138,6 +138,7 @@ function hasPower(ck) {
         return false;
     }  //为空
 }
+
 //全选
 function CheckedAll() {
     var checkedSta = false;
@@ -163,9 +164,12 @@ function CheckedAll() {
 
 //初始化
 $(function () {
+
     $("#pageloading").show();
+
     //加载岗位
     LoadStationTypeTree();
+
     //部门树
     Application.data.getOrganizationTreeForAdmin("0", function (scorp) {
         var pushData = eval('(' + scorp + ')');

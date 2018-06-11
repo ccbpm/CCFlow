@@ -18,6 +18,13 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class GPMPage : DirectoryPageBase
     {
+
+
+        public string StationToDeptEmp_Init()
+        {
+            return "";
+        }
+
         /// <summary>
         /// 处理系统编辑菜单.
         /// </summary>

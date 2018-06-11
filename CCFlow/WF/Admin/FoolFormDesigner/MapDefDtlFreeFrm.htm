@@ -72,9 +72,13 @@
             alert(msg);
         }
 
+        //主表存储表为数据库表时，从表的字段也不能自动创建
         function AddF(fk_mapdata) {
-
+            var mapDtl = new Entity("BP.Sys.MapDtl", fk_mapdata);
+            var mapData = new Entity("BP.Sys.MapData", mapDtl.FK_MapData);
             var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&s=' + Math.random();
+            if (mapData != null && mapData.PTableModel == 2)
+                url = 'FieldTypeListChoseOneField.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&s=' + Math.random();
             OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });

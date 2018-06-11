@@ -29,19 +29,19 @@
                 return;
             }
 
+
             document.title = '按岗位设置权限:' + user.Name;
 
             //绑定岗位树.
             BindStationTree();
 
             //绑定部门树.
-            BindDeptTree();
+            GenerBindEntities("DDL_DeptTree", "BP.Port.Depts", user.FK_Dept);
             return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
             var data = handler.DoMethodReturnString("StationToDeptEmp_Init");
             alert(data);
-
 
         });
 
@@ -53,33 +53,56 @@
             var stations = new Entities("BP.GPM.Stations");
             stations.RetrieveAll();
 
+            var html = "<table border=0 >";
+            for (var i = 0; i < stationTypes.length; i++) {
+
+                var type = stationTypes[i];
+
+                html += "<tr><th>" + type.Name + "</th></tr>";
+
+                html += "<tr><td>";
+
+                for (var idx = 0; idx < stations.length; idx++) {
+
+                    var sta = stations[idx];
+
+                    if (sta.FK_StationType != type.No)
+                        continue;
+
+                    html += "<a href=\"javascript:BindEmpByStation('" + sta.No + "')\">" + sta.Name + "</a><br/>";
+                }
+
+                html += "</td></tr>";
+            }
+
+            html += "</table>";
+
+            $("#StasList").html(html);
         }
 
-        function BindDeptTree() {
+        //当前选择的岗位编号.
+        var currStationNo = null;
+        var currDeptNo = null;
 
-            //   var depts = new Entities("BP.Port.Detps");
-            // depts.RetrieveAll();
+
+        //显示人员.
+        function BindEmpByStation(staNo) {
+            currStationNo = staNo;
+            GenerEmps(staNo, currDeptNo);
         }
+
+
         
         //生成页面.
-        function GenerEmps() {
-
-            var selected = $('#StationsTree').tree('getSelected'); //获得选择的岗位.
-            if (selected == false || selected == null || selected == undefined) {
-                alert('请选择岗位！');
-                return;
-            }
-
-            var staNo = selected.id;
-
-            var deptTree = $('#DDL_DeptTree').combotree('tree'); //获得选择的部门.
-            var treeChecked = deptTree.tree('getSelected');
-            if (treeChecked == false) {
-                alert('请选择部门！');
-                return;
-            }
-
-            var deptNo = deptTree.id;
+        function GenerEmps(staNo, deptNo) {
+           
+//            var deptTree = $('#DDL_DeptTree').combotree('tree'); //获得选择的部门.
+//            var treeChecked = deptTree.tree('getSelected');
+//            if (treeChecked == false) {
+//                alert('请选择部门！');
+//                return;
+//            }
+          //  var deptNo = deptTree.id;
 
             //获得已经选择的人员.
             var empsOfSelected = new Entities("BP.Port.DeptEmpStations");
@@ -201,6 +224,8 @@
         <div style="width: 100%; height: 100%; overflow: auto;">
             <ul id="StationsTree" class="easyui-tree-line" data-options="animate:false,dnd:false">
             </ul>
+
+            <div id="StasList"></div>
         </div>
     </div>
     <div data-options="region:'center'" style="overflow: hidden;">
@@ -211,7 +236,10 @@
             <!--<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Save('1');">清空保存</a>-->
             <input type="checkbox" id="CB_ViewModel" onclick="GetTemplatePanel()" />显示已选
             | 选择部门：<select id="DDL_DeptTree" class="easyui-combotree" style="width: 260px;">
-            </select>
+              </select>
+
+             <!-- <select id="Select1" class="easyui-combotree" style="width: 260px;">
+              </select>-->
         </div>
         <div style="overflow: auto; height: 95%;">
             <div id="templatePanel">

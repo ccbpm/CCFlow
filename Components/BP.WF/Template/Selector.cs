@@ -235,6 +235,9 @@ namespace BP.WF.Template
                     uac.IsUpdate = true;
                     uac.IsView = true;
                 }
+
+                uac.IsUpdate = true;
+                
                 return uac;
             }
         }

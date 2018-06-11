@@ -31,13 +31,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AppMenu_Init()
         {
-            BP.GPM.App app = new BP.GPM.App();
-            app.No = "CCFlowBPM";
-            if (app.RetrieveFromDBSources() == 0)
-            {
-                BP.GPM.App.InitBPMMenu();
-                app.Retrieve();
-            }
+            //BP.GPM.App app = new BP.GPM.App();
+            //app.No = "CCFlowBPM";
+            //if (app.RetrieveFromDBSources() == 0)
+            //{
+            //    BP.GPM.App.InitBPMMenu();
+            //    app.Retrieve();
+            //}
             return "";
         }
 

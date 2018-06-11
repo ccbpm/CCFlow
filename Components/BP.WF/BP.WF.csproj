@@ -552,10 +552,6 @@
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BP.GPM\BP.GPM.csproj">
-      <Project>{3AE8C44B-7DBA-4312-A775-57172697FAA7}</Project>
-      <Name>BP.GPM</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

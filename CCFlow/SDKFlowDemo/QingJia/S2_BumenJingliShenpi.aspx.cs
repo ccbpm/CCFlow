@@ -157,7 +157,7 @@ namespace CCFlow.SDKFlowDemo.QingJia
 
         protected void Btn_Track_Click(object sender, EventArgs e)
         {
-            BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow, this.WorkID, this.FID);
+          //  BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow, this.WorkID, this.FID);
         }
         /// <summary>
         /// 退回操作
@@ -167,7 +167,7 @@ namespace CCFlow.SDKFlowDemo.QingJia
         protected void Btn_Return_Click(object sender, EventArgs e)
         {
             // 这里调用这个接口，就是转向退回功能部件。
-            BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow,this.FK_Node, this.WorkID, this.FID);
+          //  BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow,this.FK_Node, this.WorkID, this.FID);
         }
     }
 }

@@ -132,12 +132,12 @@ namespace CCFlow.SDKFlowDemo.QingJia
 
         protected void Btn_Track_Click(object sender, EventArgs e)
         {
-            BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow, this.WorkID, this.FID);
+         //   BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow, this.WorkID, this.FID);
         }
 
         protected void Btn_Return_Click(object sender, EventArgs e)
         {
-            BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+          //  BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
         }
     }
 }

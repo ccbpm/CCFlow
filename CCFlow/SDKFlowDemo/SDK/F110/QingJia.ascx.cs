@@ -87,7 +87,7 @@ namespace CCFlow.App.F001
         /// <param name="e"></param>
         protected void Btn_Return_Click(object sender, EventArgs e)
         {
-            BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+           // BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
         }
         /// <summary>
         /// 轨迹
@@ -96,7 +96,7 @@ namespace CCFlow.App.F001
         /// <param name="e"></param>
         protected void Btn_Track_Click(object sender, EventArgs e)
         {
-            BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow,   this.WorkID, this.FID);
+           // BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow,   this.WorkID, this.FID);
         }
         /// <summary>
         /// 抄送
@@ -105,7 +105,7 @@ namespace CCFlow.App.F001
         /// <param name="e"></param>
         protected void Btn_CC_Click(object sender, EventArgs e)
         {
-            BP.WF.Dev2Interface.UI_Window_CC(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+          //  BP.WF.Dev2Interface.UI_Window_CC(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
         }
     }
 }

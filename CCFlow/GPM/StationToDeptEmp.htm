@@ -36,13 +36,10 @@
             BindStationTree();
 
             //绑定部门树.
+           
             GenerBindEntities("DDL_DeptTree", "BP.Port.Depts", user.FK_Dept);
             return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-            var data = handler.DoMethodReturnString("StationToDeptEmp_Init");
-            alert(data);
-
+            
         });
 
         function BindStationTree() {
@@ -54,11 +51,12 @@
             stations.RetrieveAll();
 
             var html = "<table border=0 >";
+            
             for (var i = 0; i < stationTypes.length; i++) {
 
                 var type = stationTypes[i];
 
-                html += "<tr><th>" + type.Name + "</th></tr>";
+                html += "<tr><th><span style='float:left'>" + type.Name + "</span></th></tr>";
 
                 html += "<tr><td>";
 
@@ -87,7 +85,7 @@
 
         //显示人员.
         function BindEmpByStation(staNo) {
-            currStationNo = staNo;
+            currStationNo = staNo; 
             GenerEmps(staNo, currDeptNo);
         }
 
@@ -102,34 +100,63 @@
 //                alert('请选择部门！');
 //                return;
 //            }
-          //  var deptNo = deptTree.id;
-
+            //  var deptNo = deptTree.id;
+            deptNo = document.getElementById("DDL_DeptTree").value;
             //获得已经选择的人员.
-            var empsOfSelected = new Entities("BP.Port.DeptEmpStations");
+            var empsOfSelected = new Entities("BP.GPM.DeptEmpStations");
+            
             empsOfSelected.Retrieve("FK_Dept", deptNo, "FK_Station", staNo);
 
 
             //获得该部门下人员集合.
-            var emps = new Entities("BP.Port.DeptEmps");
-            emps.Retrieve("FK_Dept", deptNo);
+            var emps = new Entities("BP.GPM.DeptEmps");
+            //emps.Retrieve("FK_Dept", deptNo);
+            emps.RetrieveAll();
 
+            //获取部门
+            var depts = new Entities("BP.GPM.Depts");
+            depts.RetrieveAll();
 
+            
             //把人员呈现出来.
-            var html = "<h3>" + deptTree.text + "</h3>";
+            var html ="";
+            for (var i = 0; i < depts.length; i++) {
+                var cc = depts[i];
+                html += "<h3>" + cc.Name + "</h3>";
+                var checked = 'checked=false';
+                for (var idx = 0; idx < emps.length; idx++) {
+
+                    var emp = emps[idx];
+                    //判断是否选中.
+                    for (var idc = 0; idc < empsOfSelected.length; idc++) {
+
+                        if (empsOfSelected.FK_Emp == emp.FK_Em) {
+                            checked = 'checked=true';
+                        }
+                    }
+                    if (cc.No == emp.FK_Dept)
+                    {
+
+                        html += "<label><input type=checkbox  id='CB_"+emp.FK_Emp+"' "+checked+" />" + emp.FK_Emp + "</label>";
+                    }
+                }
+            }
+            
             for (var i = 0; i < emps.length; i++) {
+
                 var emp = emps[i];
 
-                var checked = 'checkec=false';
+                var checked = 'checked=false';
 
                 //判断是否选中.
-                for (var idx = 0; idx < empsOfSelected.length; idx++) {
+                for (var idc = 0; idc < empsOfSelected.length; idc++) {
 
                     if (empsOfSelected.FK_Emp == emp.FK_Em) {
-                        checked = 'checkec=true';
+                        checked = 'checked=true';
                     }
                 }
 
-                html += "<label><input type=checkbox  id='CB_"+emp.FK_Emp+"' "+checked+" />" + emp.FK_Emp + "</label>";
+                //html += "<label><input type=checkbox  id='CB_"+emp.FK_Emp+"' "+checked+" />" + emp.FK_Emp + "</label>";
             }
 
             $("#templatePanel").html(html);
@@ -202,6 +229,8 @@
                 en.Insert();  //插入到数据库》
             }
         }
+
+
     </script>
 
     <style type="text/css">
@@ -218,7 +247,7 @@
     </style>
 </head>
 <body class="easyui-layout">
-    <div id="pageloading" style="filter: alpha(opacity=80); opacity:0.80;">
+    <!--<div id="pageloading" style="filter: alpha(opacity=80); opacity:0.80;">-->
     </div>
     <div data-options="region:'west',split:true" style="width: 300px; padding: 1px; overflow: hidden;">
         <div style="width: 100%; height: 100%; overflow: auto;">
@@ -235,7 +264,7 @@
             <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save-save'" onclick="Save('0')">保存</a>
             <!--<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Save('1');">清空保存</a>-->
             <input type="checkbox" id="CB_ViewModel" onclick="GetTemplatePanel()" />显示已选
-            | 选择部门：<select id="DDL_DeptTree" class="easyui-combotree" style="width: 260px;">
+            | 选择部门：<select id="DDL_DeptTree"  style="width: 260px;">
               </select>
 
              <!-- <select id="Select1" class="easyui-combotree" style="width: 260px;">
@@ -249,3 +278,4 @@
     </div>
 </body>
 </html>
+    

@@ -1080,7 +1080,6 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\采购.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\销售.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
-    <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.aspx" />
@@ -1135,7 +1134,6 @@
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
-    <Content Include="WF\Admin\SimulationRun.aspx" />
     <Content Include="WF\Admin\XAP\DoPort.htm" />
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
     <Content Include="WF\AutoTodolist.aspx" />
@@ -5943,8 +5941,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MasterPage.master" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt.master" />
     <Content Include="WF\Admin\FoolFormDesigner\WinOpen.master" />
-    <Content Include="WF\Admin\Handler.ashx" />
-    <Content Include="WF\Admin\WinOpen.master" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
@@ -6806,13 +6802,6 @@
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\DoPort.aspx.cs">
-      <DependentUpon>DoPort.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\DoPort.aspx.designer.cs">
-      <DependentUpon>DoPort.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6941,22 +6930,12 @@
     <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\SimulationRun.aspx.cs">
-      <DependentUpon>SimulationRun.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\SimulationRun.aspx.designer.cs">
-      <DependentUpon>SimulationRun.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Sln\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -6981,13 +6960,6 @@
     </Compile>
     <Compile Include="WF\Admin\UC\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\WinOpen.master.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\WinOpen.master.designer.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\XAP\DoPort.aspx.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>

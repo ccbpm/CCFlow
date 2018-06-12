@@ -406,7 +406,6 @@ namespace BP.WF.HttpHandler
                 sqls.AddEntity(en);
             }
 
-
             return sqls.ToJson();
         }
     }

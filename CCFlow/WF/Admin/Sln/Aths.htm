@@ -55,16 +55,28 @@
 
         //编辑附件的原始属性.
         function EditFJYuanShi(fk_mapdata, ath) {
-            var url = 'Attachment.aspx?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
-            WinShowModalDialog(url, 'ss');
-            window.location.href = window.location.href;
+            var pk = fk_mapdata + '_' + ath;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PK=' + pk;
+            WinOpen(url);
         }
 
         //编辑附件在该节点权限.
         function EditFJ(fk_node, fk_mapdata, ath) {
-            var url = 'Attachment.aspx?FK_Node=' + fk_node + '&FK_MapData=' + fk_mapdata + '&Ath=' + ath;
-            WinShowModalDialog(url, 'ss');
+            var mypk = fk_mapdata + '_' + ath + '_' + fk_node;
+            var en = new Entity("BP.Sys.FrmUI.FrmAttachmentExt");
+            en.SetPKVal(mypk);
+            if (en.IsExits() == false) {
+                en.SetPKVal(fk_mapdata + '_' + ath);
+                en.RetrieveFromDBSources(); //查询
+
+                en.SetPKVal(mypk);
+                en.FK_Node = fk_node;
+                en.MyPK = mypk;
+                en.Insert();
+            }
             window.location.href = window.location.href;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + fk_mapdata + '&PK=' + mypk + '&FK_Node=' + fk_node;
+            WinOpen(url);
         }
 
         //删除附件的权限控制.
@@ -72,9 +84,11 @@
 
             if (confirm('您确定要删除该控件在当前节点的权限控制吗？') == false)
                 return;
-            var url = 'Sln.aspx?DoType=DeleteFJ&FK_Node=' + fk_node + '&FK_MapData=' + fk_mapdata + '&Ath=' + ath;
-            alert(url);
-            WinShowModalDialog(url, 'ss');
+            var mypk = fk_mapdata + '_' + ath + '_' + fk_node;
+            var en = new Entity("BP.Sys.FrmUI.FrmAttachmentExt");
+            en.MyPK = mypk;
+            en.Delete();
+            alert("删除成功!");
             window.location.href = window.location.href;
         }
 
@@ -83,8 +97,8 @@
 <body onkeypress="Esc();">
     <table id="Table1" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
         <tr>
-            <td colspan="6">
-                节点-表单-明细表权限
+            <td colspan="7">
+                节点-表单-多附件权限
             </td>
         </tr>
         <tr>

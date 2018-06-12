@@ -9,22 +9,14 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
-
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
     
     <base target="_self" />
     <script type="text/javascript">
 
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
-
         //初始化页面函数.....
         $(function () {
+
             //显示和隐藏说明
             var shuoming = "<p><font color=green>如果您不想等待，想节省掉安装的时间，可以不执行此安装操作！<br />然后，可以到jflow程序包根目录：【环境部署及设计文档/数据库安装脚本】的目录下,<br />获取您需要的jflow数据库脚本，导入到您的数据库中即可。<br /></font></p>";
             if (plant == "JFlow")

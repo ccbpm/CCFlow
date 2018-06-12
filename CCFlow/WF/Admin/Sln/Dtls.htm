@@ -53,13 +53,13 @@
             });
         });
 
-        //编辑Dtl的原始属性.
+        //编辑从表的原始属性.
         function EditDtlYuanShi(fk_mapdata, dtlKey) {
-            var url = 'MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlKey + '&DoType=Edit';
-            WinOpen(url, 'ss');
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PK=' + dtlKey;
+            WinOpen(url);
         }
 
-        //编辑附件在该节点权限.
+        //编辑从表在该节点权限.
         function EditDtl(fk_node, fk_mapdata, dtlNo) {
         
             var mypk = dtlNo + '_' + fk_Node;
@@ -75,7 +75,7 @@
                 en.No = mypk;
                 en.Insert();
             }
-
+            window.location.href = window.location.href;
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
 
             WinOpen(url);
@@ -84,13 +84,15 @@
             //window.location.href = window.location.href;
         }
 
-        //删除附件的权限控制.
+        //删除从表在节点中的权限控制.
         function DeleteDtl(fk_node, fk_mapdata, dtl) {
             if (confirm('您确定要删除该控件在当前节点的权限控制吗？') == false)
                 return;
-            var url = 'Sln.aspx?DoType=DeleteDtl&FK_Node=' + fk_node + '&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtl;
-            alert(url);
-            WinShowModalDialog(url, 'ss');
+            var mypk = dtl + '_' + fk_node;
+            var en = new Entity("BP.WF.Template.MapDtlExt");
+            en.No = mypk;
+            en.Delete();
+            alert("删除成功!");
             window.location.href = window.location.href;
         }
     </script>

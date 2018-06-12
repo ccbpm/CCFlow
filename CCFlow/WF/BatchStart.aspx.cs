@@ -73,6 +73,7 @@ namespace CCFlow.WF
             this.Master.Page.Title = "批量发起：" + fl.Name;
 
             this.Pub2.AddTable("class='Table' cellpadding='0' cellspacing='0' border='0' style='width:98%'");
+
             #region 输出标题.
             this.Pub2.AddTR();
             this.Pub2.AddTDTitle("style='width:60px'", "序");

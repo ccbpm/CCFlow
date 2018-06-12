@@ -75,7 +75,7 @@ function InitBar(key) {
 
     html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
 
-    html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
+ //   html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
 
     html += "<input type=button onclick='Help()' value='我需要帮助' /></div>";
 

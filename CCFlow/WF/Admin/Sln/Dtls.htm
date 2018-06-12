@@ -18,6 +18,7 @@
         var fk_flow;
         var fk_Node;
         $(function () {
+
             frmID = GetQueryString("FK_MapData");
             fk_flow = GetQueryString("FK_Flow");
             fk_Node = GetQueryString("FK_Node");
@@ -60,9 +61,27 @@
 
         //编辑附件在该节点权限.
         function EditDtl(fk_node, fk_mapdata, dtlNo) {
-            var url = 'MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlNo + '&FK_Node=' + fk_node;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+        
+            var mypk = dtlNo + '_' + fk_Node;
+            var en = new Entity("BP.WF.Template.MapDtlExt");
+            en.SetPKVal(mypk);
+            if (en.IsExits() == false) {
+
+                en.SetPKVal(dtlNo);
+                en.RetrieveFromDBSources(); //查询.
+
+                en.SetPKVal(mypk);
+                en.FK_Node = fk_Node; //设置FK_Node.
+                en.No = mypk;
+                en.Insert();
+            }
+
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
+
+            WinOpen(url);
+
+            //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            //window.location.href = window.location.href;
         }
 
         //删除附件的权限控制.

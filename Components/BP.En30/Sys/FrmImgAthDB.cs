@@ -329,6 +329,11 @@ namespace BP.Sys
         public FrmImgAthDBs()
         {
         }
+
+        public FrmImgAthDBs(string fk_mapdata)
+        {
+            this.Retrieve(FrmImgAthDBAttr.FK_MapData, fk_mapdata);
+        }
         /// <summary>
         /// 剪切图片附件数据存储s
         /// </summary>

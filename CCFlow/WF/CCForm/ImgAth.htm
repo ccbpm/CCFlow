@@ -146,6 +146,11 @@
                     AddImgLisenerEvent();
                 }
             }, this);
+            //给父窗体赋值
+            ImgAthSrc();
+            //关闭窗体
+            parent.$("#eudlg").dialog("close");
+
         }
 
         //初始化图片
@@ -207,7 +212,8 @@
 
         //返回图片路径
         function ImgAthSrc() {
-            return $("#HD_ImgAthSrc").val();
+            var imgSrc = $("#HD_ImgAthSrc").val();
+            $("#imgSrc", window.parent.document).attr("value", imgSrc);
         }
     </script>
     <style type="text/css">

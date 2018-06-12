@@ -46,6 +46,10 @@ function GenerFreeFrm(wn) {
         $('#CCForm').append(createdFigure);
     }
     //循环 图片附件
+    if (flowData.Sys_FrmImgAth.length > 0) {
+        var imgSrc = "<input type='hidden' id='imgSrc'/>";
+        $('#CCForm').append(imgSrc);
+    }
     for (var i in flowData.Sys_FrmImgAth) {
         var frmImgAth = flowData.Sys_FrmImgAth[i];
         var createdFigure = figure_Template_ImageAth(frmImgAth);
@@ -426,8 +430,9 @@ function ImgAth(url, athMyPK) {
 
     }, null, null, function () {
         //关闭也切换图片
-        var win = document.getElementById(dgId).contentWindow;
-        var imgSrc = win.ImgAthSrc();
+        //var obj = document.getElementById(dgId);
+        //var win =(obj.contentWindow || obj.contentDocument); 
+        var imgSrc = $("#imgSrc").val();
         document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc);
     });
 }
@@ -456,7 +461,7 @@ function figure_Template_ImageAth(frmImageAth) {
         var fieldSet = $("<fieldset></fieldset>");
         var length = $("<legend></legend>");
         var a = $("<a></a>");
-        var url = "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+        var url = "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + flowData.Sys_MapData[0].No + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
 
         a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
         length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');

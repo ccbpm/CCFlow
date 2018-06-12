@@ -933,6 +933,23 @@ namespace BP.Sys
                 return obj;
             }
         }
+
+        // <summary>
+        /// 图片附件记录
+        /// </summary>
+        public FrmImgAthDBs FrmImgAthDB
+        {
+            get
+            {
+                FrmImgAthDBs obj = this.GetRefObject("FrmImgAthDBs") as FrmImgAthDBs;
+                if (obj == null)
+                {
+                    obj = new FrmImgAthDBs(this.No);
+                    this.SetRefObject("FrmImgAthDBs", obj);
+                }
+                return obj;
+            }
+        }
         /// <summary>
         /// 单选按钮
         /// </summary>

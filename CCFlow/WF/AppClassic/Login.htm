@@ -40,9 +40,7 @@
     <script type="text/javascript" language="javascript" >        
     //页面启动函数.
 
-
         layui.use(['form', 'layer'], function () {
-
 
             //从后台获取当前登录会话的信息.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
@@ -79,14 +77,14 @@
                 var data = handler.DoMethodReturnString("Login_Submit");
 
                 if (data.indexOf('err@') == 0) {
-
                     layer.msg(data, { time: 3000, icon: 2 });
-
-                } else {
-                    layer.msg(data, { time: 10, icon: 1 }, function () {
-                        location.href = 'Home.htm';
-                    });
+                    return;
                 }
+
+                layer.msg(data, { time: 10, icon: 1 }, function () {
+                    location.href = 'Home.htm';
+                });
+
             })
         });
         

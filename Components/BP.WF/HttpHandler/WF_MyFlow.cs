@@ -647,9 +647,7 @@ namespace BP.WF.HttpHandler
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 if (gwf.WFState == WFState.Askfor)
-                {
                     isAskForOrHuiQian = true;
-                }
 
                 /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮. */
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)

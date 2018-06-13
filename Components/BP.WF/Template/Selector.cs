@@ -257,7 +257,6 @@ namespace BP.WF.Template
             this.NodeID = nodeid;
             this.Retrieve();
         }
-
         /// <summary>
         /// 重写基类方法
         /// </summary>

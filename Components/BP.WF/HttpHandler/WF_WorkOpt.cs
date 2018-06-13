@@ -289,6 +289,7 @@ namespace BP.WF.HttpHandler
                             endSql = " AND B.No NOT LIKE '18099%' ";
 
                         Selector sa = new Selector(this.FK_Node);
+                        //启用搜索范围限定.
                         if (sa.IsEnableStaRange == true || sa.IsEnableDeptRange == true)
                         {
                             sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' " + endSql;
@@ -2036,6 +2037,7 @@ namespace BP.WF.HttpHandler
             wk.Retrieve();
 
             Selector select = new Selector(toNodeID);
+
             if (select.SelectorModel == SelectorModel.GenerUserSelecter)
             {
                 return "url@AccepterOfGener.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID;

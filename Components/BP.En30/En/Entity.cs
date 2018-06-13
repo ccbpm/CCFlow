@@ -1073,9 +1073,10 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("无效"))
+                if (ex.Message.Contains("无效") || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
+
                     if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable) == false)
                         return Retrieve(); //让其在查询一遍.
                 }

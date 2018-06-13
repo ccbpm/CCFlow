@@ -1125,7 +1125,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\List.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.aspx" />
@@ -6867,13 +6866,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.designer.cs">
       <DependentUpon>InputCheck.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\List.aspx.cs">
-      <DependentUpon>List.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\List.aspx.designer.cs">
-      <DependentUpon>List.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.aspx.cs">
       <DependentUpon>PageLoadFull.aspx</DependentUpon>

@@ -24,20 +24,19 @@
             	<div class="col-xs-6">默认密码：123</div>
             	<div class="col-xs-6 ">
                 <a href="../Admin/CCBPMDesigner/Login.htm"  class="pull-right">流程设计器</a>
-                <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
+                <a href="http://ccbpm.mydoc.io" target="_blank" class="pull-right">帮助文档&nbsp;&nbsp;</a>
                 </div>
             </div>
               
         </div>
    </div>
   
-   <script src="../Style/skin/layui/layui.js" type="text/javascript"></script>
-   
+    <script src="../Style/skin/layui/layui.js" type="text/javascript"></script>
     <script src="../Scripts/jquery/jquery.min.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >        
+    <script type="text/javascript" language="javascript" >
     //页面启动函数.
 
         layui.use(['form', 'layer'], function () {
@@ -59,6 +58,7 @@
 
 
             var form = layui.form, layer = layui.layer, $ = layui.jquery;
+
             form.on('submit(formDemo)', function (data) {
 
                 var userNo = $("#TB_UserNo").val();

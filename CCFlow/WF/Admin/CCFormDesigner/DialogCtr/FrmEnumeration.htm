@@ -88,6 +88,7 @@
             var v = window.confirm("您确定要删除枚举值[" + key + "]吗？");
             if (v == false)
                 return;
+
             //检查该枚举值是否被其他表单字段引用.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("UIBindKey", key);

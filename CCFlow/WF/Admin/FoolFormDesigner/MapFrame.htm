@@ -78,28 +78,20 @@
           }
           //删除
           function Delete() {
+
               var name = $("#TB_Name").val();
               if (window.confirm('您确定要删除[' + name + ']吗？') == false)
                   return false;
 
               var mypk = $("#TB_MyPK").val();
 
-              $.ajax({
-                  type: 'post',
-                  async: true,
-                  url: Handler + "?DoType=MapFrame_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&MyPK=" + mypk + "&m=" + Math.random(),
-                  dataType: 'html',
-                  success: function (data) {
-                      if (data.indexOf("err@") >= 0) {
-                          alert(data);
-                          return;
-                      }
-                      alert("数据"+data);
-                      window.close();
-                      return;
-                  }
-              });
+              var en = new Entity("BP.Sys.MapFrame");
+              en.SetPKVal(mypk);
+              en.MyPK = mypk;
+              en.Delete();
+              this.close();
           }
+
       </script>
 </head>
 <body>

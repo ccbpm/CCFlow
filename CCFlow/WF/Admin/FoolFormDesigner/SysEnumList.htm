@@ -40,85 +40,68 @@
 
              var fk_mapData = GetQueryString("FK_MapData");
 
-             //初始化表格.
-             $.ajax({
-                 type: 'post',
-                 async: true,
-                 url: Handler + "?DoType=SysEnumList_Init&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
-                 dataType: 'html',
-                 success: function (data) {
+             var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
+             sysEnumMains.RetrieveAll();
 
-                     if (data.indexOf('err@') == 0) {
-                         alert(data);
-                         return;
-                     }
+             var fields =null; // = data["Fields"];
+             var numEnum = 0;
 
-                     data = JSON.parse(data);
+             //增加处理.
+             for (var i = 0; i < sysEnumMains.length; i++) {
 
-                     //获取两个实体.
-                     var sysEnumMains = data["SysEnumMains"];
-                     var fields = data["Fields"];
+                 var sysEnumMain = sysEnumMains[i];
 
-                     var numEnum = 0;
+                 //如果需要字段从集合里选择，排除没有的字段.
+                 if (fields != null) {
 
-                     //增加处理.
-                     for (var i = 0; i < sysEnumMains.length; i++) {
+                     var isHave = false; //是否存在.
+                     for (var idx = 0; idx < fields.length; idx++) {
 
-                         var sysEnumMain = sysEnumMains[i];
+                         var field = fields[idx];
 
-                         //如果需要字段从集合里选择，排除没有的字段.
-                         if (fields != null) {
-
-                             var isHave = false; //是否存在.
-                             for (var idx = 0; idx < fields.length; idx++) {
-
-                                 var field = fields[idx];
-
-                                 if (field.FType.indexOf('int') == -1) {
-                                     continue;
-                                 }
-
-                                 if (field.FName != sysEnumMain.No) {
-                                     continue;
-                                 }
-
-                                 isHave = true;
-                                 break;
-                             }
-                             if (isHave == false)
-                                 continue;
+                         if (field.FType.indexOf('int') == -1) {
+                             continue;
                          }
 
-                         numEnum++;
+                         if (field.FName != sysEnumMain.No) {
+                             continue;
+                         }
 
-                         var newRow = "";
-                         newRow += "<tr>";
-                         newRow += "<td class=Idx>" + i + "</td>";
-
-                         if (fk_mapData != null)
-                             newRow += "<td><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
-                         else
-                             newRow += "<td>" + sysEnumMain.No + "</td>";
-
-                         newRow += "<td>" + sysEnumMain.Name + "</td>";
-
-                         //newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
-                         //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
-
-                         newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
-                         newRow += "<td><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
-
-                         newRow += "</tr>";
-
-                         $("#Table1 tr:last").after(newRow);
+                         isHave = true;
+                         break;
                      }
-
-                     if (numEnum == 0) {
-                         alert('错误:已经没有可以用的字段.');
-                     }
-
+                     if (isHave == false)
+                         continue;
                  }
-             });
+
+                 numEnum++;
+
+                 var newRow = "";
+                 newRow += "<tr>";
+                 newRow += "<td class=Idx>" + i + "</td>";
+
+                 if (fk_mapData != null)
+                     newRow += "<td><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                 else
+                     newRow += "<td>" + sysEnumMain.No + "</td>";
+
+                 newRow += "<td>" + sysEnumMain.Name + "</td>";
+
+                 //newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
+                 //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
+
+                 newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                 newRow += "<td><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
+
+                 newRow += "</tr>";
+
+                 $("#Table1 tr:last").after(newRow);
+             }
+
+             if (numEnum == 0) {
+                 alert('错误:已经没有可以用的字段.');
+             }
+
          }
 
          function AddFrm(enumID, fk_mapdata) {

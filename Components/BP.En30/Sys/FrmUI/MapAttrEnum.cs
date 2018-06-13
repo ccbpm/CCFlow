@@ -218,7 +218,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoSysEnum()
         {
-            return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.aspx?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
+            return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
         }
         /// <summary>
         /// 设置自动填充

@@ -8,12 +8,14 @@
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
   <!--  <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>-->
 
     <script src="../js/FormDesignerService.js" type="text/javascript"></script>
+
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript" > </script>
 	<script src="../../../Comm/Gener.js" type="text/javascript"></script>
+
     <script language="javascript" type="text/javascript">
 
 		closeWhileEscUp();
@@ -105,6 +107,7 @@
         $(function () {
 
             var enumKey = GetQueryString('EnumKey');
+
             if (enumKey == null) {
                 NewEnum();
                 return;
@@ -112,26 +115,10 @@
 
             //获得枚举值.
             var enumKey = GetQueryString('EnumKey'); // $.trim($("#TB_KeyOfEn").val());
+            var enumMain = new Entity("BP.Sys.SysEnumMain", enumKey);
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=EnumerationNew_GetEnum&EnumKey=" + enumKey + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            Edit(enumMain.No, enumMain.Name, enumMain.CfgVal);
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    data = JSON.parse(data);
-
-                    Edit(data.No, data.Name, data.CfgVal);
-
-                }
-            });
         });
 
         function NewEnum() {
@@ -205,6 +192,7 @@
         //执行保存.
         function SaveEnum() {
 
+            //组织数据.
             var name = $("#TB_EnumName").val();
             var keyofEn = $("#TB_EnumKey").val();
 
@@ -218,36 +206,71 @@
                 return;
             }
 
+            //删除现在的枚举值.
+            var se = new Entity("BP.Sys.SysEnum");
+            se.Delete("EnumKey", keyofEn);
+
             var strs = '';
             for (var i = 0; i < 20; i++) {
                 var v = $("#TB" + i).val();
                 if (v == '' || v == null)
                     continue;
-                strs += '@' + i + '=' + v;
+                
+                strs += '@' + i + '=' + v; //该变量用于保存sys_EnumMain .
+
+                //创建实例.
+                var se = new Entity("BP.Sys.SysEnum");
+
+                //给实体的各个属性赋值.
+                se.EnumKey = keyofEn;
+                se.Label = v;
+                se.IntKey = i;
+                se.Lang = "CH";
+                se.MyPK = se.EnumKey + '_CH_' + se.IntKey;
+                se.SetPKVal(se.MyPK);
+                se.Insert();
             }
 
             //alert('将要保存' + strs + "  name=" + name + " keyofEn=" + keyofEn);
-
-            // 定义参数，让其保存到数据库里。
+            //定义参数，让其保存到数据库里。
 
             var doType = GetQueryString("DoType");
-
             if (doType == null || doType == undefined) {
                 doType = "FrmEnumeration_NewEnum";
             }
 
-            var param = {
-                action: "DoType",
-                DoType: doType,
-                EnumName: name,
-                EnumKey: keyofEn,
-                Vals: strs
-            };
+            var en = new Entity("BP.Sys.SysEnumMain");
+            en.SetPKVal(keyofEn);
+            en.No = keyofEn;
 
-            $.post(Handler, param, function (data) {
-                alert(data);
-                window.close();
-            });
+            if (doType == "FrmEnumeration_NewEnum") {
+                var i = en.RetrieveFromDBSources();
+                if (i == 1) {
+                    alert('枚举值已经存在');
+                    return;
+                }
+
+                en.CfgVal = strs;
+                en.Lang = "CH";
+                en.Name = name;
+                en.Insert();
+
+            } else {
+
+                en.Retrieve();
+                en.Name = name;
+                en.CfgVal = strs;
+                en.Update();
+
+            }
+
+
+
+            // var data = en.DoMethodReturnString("SaveEnum", strs);
+            //alert(data);
+
+            var url = '?EnumKey=' + keyofEn + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
+            window.location.href = url;
         }
     </script>
 </head>

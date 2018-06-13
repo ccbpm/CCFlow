@@ -906,7 +906,8 @@ var Entity = (function () {
             return result;
         },
 
-        Delete: function () {
+        Delete: function (key1, val1, key2, val2) {
+
             var self = this;
             //var params = getParams(self);
             var params = getParams1(this);
@@ -915,7 +916,7 @@ var Entity = (function () {
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + this.GetPKVal() + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + this.GetPKVal() + "&Key1="+key1+"&Val1="+val1+"&Key2="+key2+"&Val2="+val2+"&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
                 success: function (data) {
@@ -1100,7 +1101,6 @@ var Entity = (function () {
 
             var data = getParams1(self);
 
-
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1126,13 +1126,21 @@ var Entity = (function () {
             return result;
         },
 
-        DoMethodReturnString: function (methodName) {
+        DoMethodReturnString: function (methodName, myparams) {
 
-            //            var params = [];
-            //            $.each(arguments, function (i, o) {
-            //                if (i > 0)
-            //                    params.push(o);
-            //            });
+                        var params = [];
+                        $.each(arguments, function (i, o) {
+                            if (i > 0)
+                                params.push(o);
+                        });
+
+
+            var pkavl = this.GetPKVal();
+            if (pkavl == null || pkavl == "") {
+                alert('[' + this.enName + ']没有给主键赋值无法执行查询.');
+                return;
+            }
+
 
             var self = this;
             var string;
@@ -1140,7 +1148,7 @@ var Entity = (function () {
                 type: 'post',
                 async: false,
                 data: arguments,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkavl + "&MethodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     string = data;

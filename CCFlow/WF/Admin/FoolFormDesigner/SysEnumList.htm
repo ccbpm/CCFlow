@@ -164,6 +164,7 @@
         function Edit(enumKey,name,cfgKeys) {
 
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&CfgKeys=' + cfgKeys + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
+
             OpenEasyUiDialog(url, "eudlgframe", "修改枚举值", 600, 400, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -180,25 +181,11 @@
             if (v == false)
                 return;
 
-            // 定义参数，让其保存到数据库里。
-            var param = {
-                DoType: "SysEnumList_Del",
-                EnumKey: key
-            };
+            //执行删除.
+            var enumMain = new Entity("BP.Sys.SysEnumMain", key);
+            enumMain.Delete();
 
-            $.post(Handler, param, function (data) {
-
-                if (data.indexOf('err@') == 0) {
-                    alert(data);
-                    return;
-                }
-
-                alert(data);
-
-                window.location.href = window.location.href;
-                // LoadGridData(1, 6);
-
-            });
+            window.location.href = window.location.href;
         }
 
         function Ref(key) {

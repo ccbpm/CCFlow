@@ -1872,6 +1872,10 @@ namespace BP.WF.HttpHandler
             DataTable dt = sftable.GenerData();
             return BP.Tools.Json.ToJson(dt);
         }
+        /// <summary>
+        /// 获得一个实体的数据
+        /// </summary>
+        /// <returns></returns>
         public string EnsData()
         {
             Entities ens = ClassFactory.GetEns(this.EnsName);

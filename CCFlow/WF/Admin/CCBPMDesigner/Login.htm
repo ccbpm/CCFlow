@@ -20,6 +20,7 @@
                 // return;
             }
 
+
             $("body").keydown(function () {
                 if (event.keyCode == 13) {
                     event.cancelBubble = true;
@@ -28,9 +29,8 @@
                 }
             });
 
-         //   if (plant == "JFlow") {
-                document.getElementById("SLLink").style.display = "none";
-           // }
+
+         //   document.getElementById("SLLink").style.display = "none";
 
             $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录/自动升级做准备.</font>");
 
@@ -45,6 +45,7 @@
             document.title = data.SysName;
 
             //执行更新检查..
+            handler.AddUrlData();
             data = handler.DoMethodReturnString(doType);
 
             if (data.indexOf('err@') == 0) {
@@ -62,7 +63,7 @@
 
             document.getElementById("Btn_Login").disabled = false;
 
-            $("#Msg").html("<font color=green>" + data+ "</font>");
+            $("#Msg").html("<font color=green>" + data + "</font>");
 
         });
 

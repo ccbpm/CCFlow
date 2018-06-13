@@ -181,11 +181,29 @@
             if (v == false)
                 return;
 
+            //检查该枚举值是否被其他表单字段引用.
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("UIBindKey", key);
+
+            var info = '';
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                info += "\t\n" + i + ",表单编号:" + attr.FK_MapData + " , 字段:" + attr.KeyOfEn + ", 名称:" + attr.Name;
+            }
+
+            if (info != '') {
+
+                info = "如下表单引用了该字段您不能删除:" + info;
+                alert(info);
+                return;
+            }
+
             //执行删除.
             var enumMain = new Entity("BP.Sys.SysEnumMain", key);
             enumMain.Delete();
 
             window.location.href = window.location.href;
+
         }
 
         function Ref(key) {

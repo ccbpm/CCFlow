@@ -71,7 +71,7 @@
 
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
 
-                handler.AddPara("TB_UserNo", encodeURIComponent(userNo));
+                handler.AddPara("TB_UserNo", userNo);
                 handler.AddPara("TB_Pass", userPass);
 
                 var data = handler.DoMethodReturnString("Login_Submit");

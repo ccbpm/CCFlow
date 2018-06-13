@@ -5148,7 +5148,7 @@ namespace BP.WF
 
             if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.HuiQianLeader)
             {
-                if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == true)
+                if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ","+BP.Web.WebUser.Name+";" ) == true)
                 {
                     /*当前人是组长，检查是否可以可以发送,检查自己是否是最后一个人 ？*/
                     string todoEmps = ""; //记录没有处理的人.

@@ -538,6 +538,18 @@
     <Content Include="WF\Admin\Cond\CondPRI.htm" />
     <Content Include="WF\Admin\Cond\CondStation.htm" />
     <Content Include="WF\Admin\Cond\StandAloneFrm.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\FieldTypeListChoseOneField.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\FrmSln.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Glo.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldDone.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDef.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapFrameDefPage.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFGuide1.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTableEditData.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\TabIdx.htm" />
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
     <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
     <Content Include="WF\Admin\RptDfine\DeptPower.aspx" />
@@ -1129,7 +1141,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\TabIdx.aspx" />
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Pub.ascx" />
@@ -5938,9 +5949,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MasterPage.master" />
-    <Content Include="WF\Admin\FoolFormDesigner\Rpt.master" />
-    <Content Include="WF\Admin\FoolFormDesigner\WinOpen.master" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
@@ -6895,40 +6903,12 @@
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx.designer.cs">
       <DependentUpon>WordFrm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MasterPage.master.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MasterPage.master.designer.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Rpt.master.cs">
-      <DependentUpon>Rpt.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Rpt.master.designer.cs">
-      <DependentUpon>Rpt.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\TabIdx.aspx.cs">
-      <DependentUpon>TabIdx.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\TabIdx.aspx.designer.cs">
-      <DependentUpon>TabIdx.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.master.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.master.designer.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

@@ -33,7 +33,6 @@ namespace BP.WF.HttpHandler
         {
             return BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
         }
-
         /// <summary>
         /// 
         /// </summary>

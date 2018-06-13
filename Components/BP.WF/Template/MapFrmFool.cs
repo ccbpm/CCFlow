@@ -684,14 +684,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/CCFormDesigner/FrmEvent.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
         }
-        /// <summary>
-        /// 导出
-        /// </summary>
-        /// <returns></returns>
-        public string DoMapExt()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/List.aspx?FK_MapData=" + this.No + "&T=sd";
-        }
+    
         /// <summary>
         /// 导出表单
         /// </summary>

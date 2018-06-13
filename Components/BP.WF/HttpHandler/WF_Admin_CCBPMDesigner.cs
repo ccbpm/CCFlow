@@ -423,6 +423,29 @@ namespace BP.WF.HttpHandler
             if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
                 return "url@../DBInstall.htm";
 
+            //是否需要自动登录
+            string userNo=this.GetRequestVal("UserNo");
+            string sid=this.GetRequestVal("SID");
+
+            if (sid != null && userNo != null)
+            {
+                /*  */
+                try
+                {
+                    string str = BP.WF.Glo.UpdataCCFlowVer();
+
+                    BP.WF.Dev2Interface.Port_Login(userNo, sid);
+                    if (this.FK_Flow == null)
+                        return "url@Default.htm?UserNo=" + userNo + "&Key=" + DateTime.Now.ToBinary();
+                    else
+                        return "url@Designer.htm?UserNo=" + userNo + "&FK_Flow=" + this.FK_Flow + "&Key=" + DateTime.Now.ToBinary();
+                }
+                catch (Exception ex)
+                {
+                    return "err@登录失败";
+                }
+            }
+
             try
             {
                 // 执行升级
@@ -431,7 +454,6 @@ namespace BP.WF.HttpHandler
                     str = "ccbpm 准备完毕,欢迎登录,当前小版本号为:" + BP.WF.Glo.Ver;
 
                 return str;
-
                 //Hashtable ht = new Hashtable();
                 //ht.Add("Msg", str);
                 //ht.Add("Title", SystemConfig.SysName);

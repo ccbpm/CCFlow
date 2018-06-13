@@ -84,9 +84,7 @@ namespace BP.Sys
             // 检查这个类型是否被使用？
             MapAttrs attrs = new MapAttrs();
             QueryObject qo = new QueryObject(attrs);
-            qo.AddWhere(MapAttrAttr.MyDataType, (int)FieldTypeS.Enum);
-            qo.addAnd();
-            qo.AddWhere(MapAttrAttr.KeyOfEn, this.No);
+            qo.AddWhere(MapAttrAttr.UIBindKey, this.No);
             int i = qo.DoQuery();
             if (i == 0)
             {
@@ -103,6 +101,12 @@ namespace BP.Sys
                 throw new Exception(msg);
             }
             return base.beforeDelete();
+        }
+        /// <summary>
+        /// 插入之前处理.
+        /// </summary>
+        protected override void afterInsert()
+        {
         }
         /// <summary>
         /// Map

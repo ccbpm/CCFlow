@@ -733,7 +733,6 @@ namespace BP.WF.HttpHandler
             en.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             en.RetrieveFromDBSources();
             return en.ToJson();
-
         }
         public string EditFExtContral_Save()
         {
@@ -814,56 +813,7 @@ namespace BP.WF.HttpHandler
             mf.Save(); //执行保存.
             return "保存成功..";
         }
-        /// <summary>
-        /// 框架信息删除.
-        /// </summary>
-        /// <returns></returns>
-        public string MapFrame_Delete()
-        {
-            MapFrame dtl = new MapFrame();
-            dtl.MyPK = this.MyPK;
-            dtl.Delete();
-            return "操作成功..." + this.MyPK;
-        }
-
-        /// <summary>
-        /// 枚举值列表
-        /// </summary>
-        /// <returns></returns>
-        public string SysEnumList_Init()
-        {
-            SysEnumMains ses = new SysEnumMains();
-            ses.RetrieveAll();
-
-            //增加到列表里.
-            DataSet ds = new DataSet();
-            ds.Tables.Add(ses.ToDataTableField("SysEnumMains"));
-
-            int pTableModel = 0;
-            MapDtl dtl = new MapDtl();
-            dtl.No = this.FK_MapData;
-            if (dtl.RetrieveFromDBSources() == 1)
-            {
-                pTableModel = dtl.PTableModel;
-            }
-            else
-            {
-                MapData md = new MapData();
-                md.No = this.FK_MapData;
-                md.RetrieveFromDBSources();
-                pTableModel = md.PTableModel;
-            }
-
-            if (pTableModel == 2)
-            {
-                DataTable dt = MapData.GetFieldsOfPTableMode2(this.FK_MapData);
-                dt.TableName = "Fields";
-                ds.Tables.Add(dt);
-            }
-
-            return BP.Tools.Json.ToJson(ds);
-        }
-
+        
         #region SFList 外键表列表.
         /// <summary>
         /// 删除

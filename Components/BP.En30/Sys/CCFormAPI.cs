@@ -1506,7 +1506,7 @@ namespace BP.Sys
                 sem.Name = enumLab;
                 sem.CfgVal = cfg;
                 sem.Lang = lang;
-                sem.Insert();
+                sem.DirectInsert();
             }
             else
             {

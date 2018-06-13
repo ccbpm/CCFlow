@@ -95,6 +95,29 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
+
+                #region 首先判断参数删除. @fanleiwei 
+                string key1 = this.GetRequestVal("Key1");
+                string key2 = this.GetRequestVal("Key2");
+                string val1 = this.GetRequestVal("Val1");
+                string val2 = this.GetRequestVal("Val2");
+
+                if (key1.Equals("undefined") == false)
+                {
+                    int num = 0;
+                    if (key2.Equals("undefined") == false)
+                    {
+                        num = en.Delete(key1, val1, key2, val2);
+                    }
+                    else
+                    {
+                        num = en.Delete(key1, val1);
+                    }
+                    return num.ToString();
+                }
+                #endregion 首先判断参数删除.
+
+
                 if (en.PKCount != 1)
                 {
                     /*多个主键的情况. 遍历属性，循环赋值.*/
@@ -285,7 +308,10 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-        
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <returns></returns>
         public string Entity_DoMethodReturnString()
         {
             //创建类实体.
@@ -1507,6 +1533,14 @@ namespace BP.WF.HttpHandler
 
 
         #region 实体集合的保存.
+        /// <summary>
+        /// 实体集合的删除
+        /// </summary>
+        /// <returns></returns>
+        public string Entities_Delete()
+        {
+            return "err@该方法没有完成，请使用Entiy_Delete. 可以按照条件删除.";
+        }
         /// <summary>
         /// 初始化
         /// </summary>

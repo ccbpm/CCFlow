@@ -94,15 +94,6 @@ namespace BP.WF.HttpHandler
             return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
         }
         
-        public string HiddenFieldDelete()
-        {
-            string records = GetRequestVal("records");
-            string FK_MapData = GetRequestVal("FK_MapData");
-            MapAttr mapAttrs = new MapAttr();
-            int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
-            return result.ToString();
-        }
-        
         /// <summary>
         /// 创建隐藏字段.
         /// </summary>
@@ -349,6 +340,9 @@ namespace BP.WF.HttpHandler
 
                 FrmLines lines = new FrmLines(this.FK_MapData);
                 ds.Tables.Add(lines.ToDataTableField("Sys_FrmLine"));
+
+                BP.Sys.FrmUI.MapFrameExts mapFrameExts = new BP.Sys.FrmUI.MapFrameExts(this.FK_MapData);
+                ds.Tables.Add(mapFrameExts.ToDataTableField("Sys_MapFrame"));
 
                 //组织节点组件信息.
                 string sql = "";

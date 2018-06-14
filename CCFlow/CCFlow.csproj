@@ -5954,6 +5954,7 @@
     <Content Include="WF\Admin\Port\Handler.ashx" />
     <Content Include="WF\Admin\Sln\Handler.ashx" />
     <Content Include="WF\Admin\Cond\Handler.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\WinOpen.Master" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
     <Content Include="WF\Comm\Handler.ashx" />
@@ -6710,6 +6711,12 @@
     </Compile>
     <Compile Include="WF\Admin\Cond\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.Master.cs">
+      <DependentUpon>WinOpen.Master</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.Master.designer.cs">
+      <DependentUpon>WinOpen.Master</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Port\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

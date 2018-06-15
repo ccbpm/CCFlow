@@ -20,6 +20,7 @@
         var nodeID = 0;
         var fk_flow = "";
         $(function () {
+
             InitBar(FormType.SheetTree);
             var html = "";
             //获取节点属性
@@ -33,20 +34,36 @@
 
             if (node.FormType == FormType.DisableIt) {
                 document.getElementById("RB_tab").checked = true;
-            } 
+            }
+
+            var ens = new Entities("BP.WF.Template.FrmNodes");
+            ens.Retrieve("FK_Node", nodeID);
+
+            var num = ens.length - 1;
+            if (num == -1)
+                num = 0;
+
+
+            var html = "共有：<font color=red><b>" + num + "</b></font>个表单被绑定.";
+
+            $("#InfoBind").html(html);
 
         });
 
         //绑定/取消绑定
         function BindFrms() {
             var url = "../../Sln/BindFrmsDtl.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow + "&DoType=SelectedFrm";
-            OpenEasyUiDialogExt(url, '绑定表单树', 800, 500, false);
+            OpenEasyUiDialogExt(url, '绑定表单树', 900, 500, false, true);
+        }
+
+        function Ref() {
+            window.location.href = window.location.href;
         }
 
         //设置表单字段控件权限
         function BindAttrs() {
             var url = "../../Sln/BindFrms.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow;
-            OpenEasyUiDialogExt(url, '绑定列表', 800, 500, false);
+            OpenEasyUiDialogExt(url, '绑定列表', 900, 500, false, true);
         }
 
         function Save() {
@@ -76,29 +93,66 @@
 
 <div id="bar"> </div>
 
-<fieldset>
-    <legend>呈现风格</legend>
-    <input type="radio"  value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label  for="RB_tree" >表单树 </label>
-    <input type="radio"  value="1" id="RB_tab"  name="SheetTreeModel" /> <label  for="RB_tab" >Tab标签页 </label>
+
+<table style="width:100%;">
+<tr>
 
 
-</fieldset>
 
-
+<td valign=top> 
 <fieldset>
     <legend>绑定表单</legend>
     <ul>
     <li>  <a href="javascript:BindFrms()" >绑定/取消绑定表单</a> </li>
+        <li>设置该节点上需要绑定那些表单。</li>
+    <li>这些表单在从表单库里选择。</li>
+    <li><div id="InfoBind"></div></li>
+
     </ul>
+     
+
 </fieldset>
+</td>
 
 
+<td valign=top> 
 <fieldset>
     <legend>设定每个表单的权限</legend>
     <ul>
     <li>  <a href="javascript:BindAttrs()" >设置表单字段控件权限</a></li>
+    <li>设置表单权限。</li>
+    <li>可以控制那些表单可以显示，那些表单主键类型。</li>
     </ul>
 </fieldset>
+
+</td>
+
+
+
+<td valign=top> 
+<fieldset>
+    <legend>呈现风格</legend>
+
+    <ul>
+    <li>
+    <input type="radio"  value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label  for="RB_tree" >表单树 </label></li>
+
+    <li>
+    <input type="radio"  value="1" id="RB_tab"  name="SheetTreeModel" /> <label  for="RB_tab" >Tab标签页 </label>
+    </li>
+
+    <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
+
+    </ul>
+</fieldset>
+</td>
+
+
+</tr>
+</table>
+
+
+
 
 
 <fieldset>

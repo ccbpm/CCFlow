@@ -7,48 +7,47 @@
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         //绑定流程所有节点
         function InitFlowNodes(FK_Flow, FK_Node) {
 
-            var param = {
-                DoType: "BindForm_GenderFlowNode",
-                FK_Node: FK_Node
-            };
-            Handler_AjaxQueryData(param, function (data, scope) {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
 
-                //提示错误.
-                if (data.indexOf('err@') == 0) {
-                    alert(data);
-                    return;
-                }
+            var pushData =new Entities("BP.WF.Nodes");
+            pushData.Retrieve("FK_Flow",node.FK_Flow);
 
-                //转化数据.
-                var pushData = eval('(' + data + ')');
-                var objSelect = document.getElementById("lbFlowNodes");
-                if (pushData.length > 0) {
 
-                    $.each(pushData, function (index, val) {
-                        var varItem = new Option("[" + val.NodeID + "]" + val.Name, val.NodeID);
-                        if (FK_Node && FK_Node == val.NodeID) {
-                            varItem.selected = "selected";
-                        }
-                        objSelect.options.add(varItem);
-                    });
+            var objSelect = document.getElementById("lbFlowNodes");
 
-                }
-                $("#pageloading").hide();
-            }, this);
+            if (pushData.length > 0) {
+
+                $.each(pushData, function (index, val) {
+                    var varItem = new Option("[" + val.NodeID + "]" + val.Name, val.NodeID);
+                    if (FK_Node && FK_Node == val.NodeID) {
+                        varItem.selected = "selected";
+                    }
+                    objSelect.options.add(varItem);
+                });
+
+            }
+            $("#pageloading").hide();
         }
         //绑定表单库
         function InitFormTree(FK_Flow, FK_Node) {
+
             var param = {
                 DoType: "BindForm_GenerForms",
                 FK_Flow: FK_Flow,
                 FK_Node: FK_Node
             };
+
             Handler_AjaxQueryData(param, function (data, scope) {
                 var pushData = eval('(' + data + ')');
                 //加载表单库
@@ -76,6 +75,7 @@
         }
 
         function GetCheckedFrms() {
+
             var frms = new Array();
             var nodes = $('#formTree').tree('getChecked');
             if (nodes.length > 0) {
@@ -113,7 +113,6 @@
                 return;
             }
 
-            //http://localhost:30362/WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=&FK_MapData=ND17001&t=2017-11-21 16:59&s=0.8992852238616559
             $('#copyfrmdlg').dialog('open');
             var param = {
                 DoType: "BindForm_GetFlowNodeDropList",

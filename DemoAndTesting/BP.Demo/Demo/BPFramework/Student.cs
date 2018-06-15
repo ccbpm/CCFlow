@@ -264,12 +264,15 @@ namespace BP.Demo.BPFramework
                 map.AddTBString(StudentAttr.PWD, null, "登录密码", true, false, 0, 200, 70);
                 //map.AddTBString("shuoming", null, "说明", true, false, 0, 200, 70);
 
-                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
+                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, false);
                 map.AddTBInt(StudentAttr.Age, 0, "年龄", true, false);
                 map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
                 map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
                 map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
-                map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
+
+                map.AddTBString(StudentAttr.Note, null, "地址", true, false, 0, 200, 100, true);
+             //   map.AddTBString("LXR", null, "联系人", true, false, 0, 200, 100, true);
+              //  map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
 
                 //枚举字段
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
@@ -285,6 +288,8 @@ namespace BP.Demo.BPFramework
                 // 枚举字段 - 整治面貌.
                 map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
                     "@0=少先队员@1=团员@2=党员");
+
+                map.AddHidden("XB", " = ", "0");
 
                 map.AddMyFile("简历");
 
@@ -321,6 +326,14 @@ namespace BP.Demo.BPFramework
                 rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
 
+                //不带有参数的方法.
+                rm = new RefMethod();
+                rm.Title = "发起xx流程";
+                rm.ClassMethodName = this.ToString() + ".DoStartFlow";
+                rm.IsCanBatch = true; //是否可以批处理？
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -346,6 +359,11 @@ namespace BP.Demo.BPFramework
         #endregion 重写基类方法
 
         #region 方法
+        public string DoStartFlow()
+        {
+            return "";
+
+        }
         /// <summary>
         /// 带有参数的方法:缴纳班费
         /// 说明：都要返回string类型.

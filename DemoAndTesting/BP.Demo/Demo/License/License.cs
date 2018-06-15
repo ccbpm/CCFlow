@@ -201,7 +201,7 @@ namespace BP.Demo.License
             get
             {
                 string str= this.GetValStrByKey(LicenseAttr.ZJCode);
-                if (string.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return "无";
                 return str;
             }

@@ -86,7 +86,7 @@ namespace BP.Demo.YS
             get
             {
                 string s= this.GetValStringByKey(ProjectAttr.Doc);
-                if (string.IsNullOrEmpty(s) == true)
+                if (DataType.IsNullOrEmpty(s) == true)
                     s = "";
                 return s;
             }

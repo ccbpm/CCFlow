@@ -24,7 +24,7 @@ namespace BP.Demo.FlowEvent
         /// </summary>
         public override string FlowMark
         {
-            get { return "001";   }
+            get { return "001,002";   }
         }
         #endregion 属性.
 
@@ -44,6 +44,8 @@ namespace BP.Demo.FlowEvent
         /// <returns></returns>
         public override string SendWhen()
         {
+          //  throw new            Exception("222");
+
             if (SystemConfig.CustomerNo != "CCFlow")
                 return null;
 
@@ -77,13 +79,10 @@ namespace BP.Demo.FlowEvent
         /// <returns>return null 不刷新，任何数据，都会刷新数据.</returns>
         public override string FrmLoadBefore()
         {
-
             //throw new Exception("sssssssssssssss");
             return "执行成功.";
-
             //return base.FrmLoadBefore();
         }
-
         /// <summary>
         /// 保存后执行的事件
         /// </summary>
@@ -106,6 +105,7 @@ namespace BP.Demo.FlowEvent
         /// </summary>
         public void ND01_SaveAfter()
         {
+
             if (DBAccess.IsExitsObject("ND101Dtl1") == false)
                 return;
 

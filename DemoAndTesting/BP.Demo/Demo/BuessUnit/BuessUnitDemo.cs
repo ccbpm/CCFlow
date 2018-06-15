@@ -23,8 +23,9 @@ namespace BP.Demo.BuessUnit
         }
         public override string DoIt()
         {
-           // this.WorkID;
 
+
+            // this.WorkID;
             BP.DA.Log.DebugWriteInfo("BuessUnitDemo业务单元已经被执行:WorkID=" + this.WorkID);
             return base.DoIt();
         }

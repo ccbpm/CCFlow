@@ -100,14 +100,14 @@
 <td> <select name="DDL_FrmType" id="DDL_FrmType"   onchange="FrmTypeChange()" />  </td>
 <td>根据自己的业务场景需要选择相应的表单类型. </td>
 </tr>
-
+<!--
 <tr>
 <td class="Idx" > 2 </td>
 <td > 数据源类型</td>
 <td> <select name="DDL_DBSrc" id="DDL_DBSrc" />  </td>
 <td>该表单要创建到那个数据源上？</td>
 </tr>
-
+-->
 <tr>
 <td class="Idx" > 3 </td>
 <td > 节点位置</td>
@@ -118,14 +118,14 @@
 <tr>
 <td class="Idx" > 4 </td>
 <td > 表单名称</td>
-<td><input type="text" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" /> </td>
+<td><input type="text" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" style=" width:100%;" /> </td>
 <td>表单的名称，允许重复，允许多个表单映射到一张表上。</td>
 </tr>
 
 <tr>
 <td class="Idx" > 5 </td>
 <td >表单编号(必须是字母或者下划线组合)</td>
-<td><input type="text" id="TB_No" name="TB_No" /> </td>
+<td><input type="text" id="TB_No" name="TB_No" style=" width:100%;" /> </td>
 <td > 
 <input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked=true  onclick="GenerPinYin()" /><label for="RB_ZZMM_0" onclick="GenerPinYin()" >全拼</label>
 <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1"  onclick="GenerPinYin()" /><label for="RB_ZZMM_1" onclick="GenerPinYin()" >简拼</label>
@@ -153,7 +153,7 @@
 <tr>
 <td class="Idx" > 7 </td>
 <td > <div id="PTableName" >自定义存储表  </div> </td>
-<td><input type="text" id="TB_PTable" name="TB_PTable" /> </td>
+<td><input type="text" id="TB_PTable" name="TB_PTable" style=" width:100%;" /> </td>
 <td > 
 <div id="PTableDesc" >数据要存储到那个表里？</div>
 </td>
@@ -248,19 +248,18 @@
 
                 try {
 
-                //表单库增加表单节点
-                if (typeof window.parent.AppendFrmToFormTree != "undefined") {
-                    var sort = $("#HD_FK_FormTree").val();
-                    window.parent.AppendFrmToFormTree(sort, no, name);
-                }
+                    //表单库增加表单节点
+                    if (typeof window.parent.AppendFrmToFormTree != "undefined") {
+                        var sort = $("#HD_FK_FormTree").val();
+                        window.parent.AppendFrmToFormTree(sort, no, name);
+                    }
 
-                if (typeof window.parent.TabCloseByTitle != "undefined") {
-                    //需要延时关闭，不可立即关闭。
-                    setTimeout("window.parent.TabCloseByTitle('新建表单')", 1000);
-                }
+                    if (typeof window.parent.TabCloseByTitle != "undefined") {
+                        //需要延时关闭，不可立即关闭。
+                        setTimeout("window.parent.TabCloseByTitle('新建表单')", 1000);
+                    }
 
-                }catch(e)
-                {
+                } catch (e) {
 
                 }
 

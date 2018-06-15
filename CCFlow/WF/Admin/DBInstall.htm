@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>驰骋工作流程引擎设计器 - 系统登录</title>
+    <title>驰骋工作流程引擎-系统安装</title>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     
     <base target="_self" />
     <script type="text/javascript">
@@ -22,16 +23,29 @@
             if (plant == "JFlow")
                 $("#shuoming").html(shuoming);
 
-            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>驰骋工作流引擎ccbpm , 正在为安装做准备.</font>");
+
+            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue >驰骋工作流引擎ccbpm , 正在为安装做准备.</font>");
             document.getElementById("Btn_Submit").disabled = 'disabled';
 
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
             var data = handler.DoMethodReturnString("DBInstall_Init"); //执行方法，返回执行结果.
 
-
             if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>安装准备失败：<br>" + data + "</font> .");
+
+                var html = "安装准备失败:";
+
+                html += " <a href='http://ccbpm.mydoc.io/?v=5404&t=296303' target=_blank >修改数据库配置信息.</a>";
+
+                //                html += "<ul style='text-align:left'>";
+                //                html += "<li>准备一个空白的数据库.</li>";
+                //                html += "<li>配置数据库连接.</li>";
+                //                html += "<li>.net版本请打开 web.config 的 AppCenterDSN 节点, 配置数据库类型与连接字符串. </li>";
+                //                html += "<li>java版本请打开 \\jflow-web\\src\\main\\resources\\jflow.properties 文件, AppCenterDSN 配置项,修改相应的配置信息. </li>";
+                //                html += "<li>python版本在开发中. </li>";
+                //                html += "</ul>";
+
+                $("#Msg").html(html + "<font color=red><br>" +data + "</font> .");
                 return;
             }
 
@@ -57,15 +71,20 @@
         //执行安装.
         function DoInstall() {
 
-            var valT = GetRadioValue("DemoType"); //
-            var val = GetRadioValue("RB_OSModel"); //
+            var osRunModel = GetRadioValue("RB_OSRunModel"); //
+            if (osRunModel == null) {
+                alert('请您选择您要安装的模式,是否需要安装GPM ? ');
+                return;
+            }
 
-            if (val == "0")
-                val = "组织结构为OneOne模式(一人一部门多岗位)";
-            else
-                val = "组织结构为OneMore模式(一人多部门多岗位)";
 
-            if (confirm('将要执行模式【' + val + '】的安装您确认吗？') == false)
+            var demoType = GetRadioValue("DemoType"); //
+            if (demoType == null) {
+                alert('请您选择安装模式,是否需要 Demo ? ');
+                return;
+            }
+             
+            if (confirm('将要安装您确认吗？') == false)
                 return;
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在安装，请稍候, 您可以登录官方网站了解关于更多的产品信息. http://ccflow.org http://jflow.cn , 购买ccbpm服务/授权:0531-82374939,18660153393 </font>");
@@ -75,7 +94,7 @@
 
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-            handler.AddPara("DemoType", valT);
+            handler.AddPara("DemoType", demoType);
             var data = handler.DoMethodReturnString("DBInstall_Submit"); //执行方法，返回执行结果.
 
             //处理执行结果.
@@ -111,7 +130,7 @@
 </tr>
 
 <tr>
-<th>当前数据库安装类型(如果要修改数据库类型请修改 web.config AppCenterDSNType 设置。).</th>
+<th>当前数据库安装类型, <a href="http://ccbpm.mydoc.io/?v=5404&t=296303" target=_blank >修改数据库配置信息.</a></th>
 </tr>
 
 <tr>
@@ -127,17 +146,27 @@
 </td>
 </tr>
 
-
+<!--
 <tr>
-<th>组织结构的运行模式,手工修改 web.config 中的 OSModel 进行配置. </th>
+<th>组织结构的运行模式,我们已经不再提供对OneOne的模式支持.</th>
 </tr>
 
 <tr>
 <td>
+<input id="RB_OSModel_1" type="radio" name="RB_OSModel" disabled="false"  value="1" checked=true  /><label for="RB_OSModel_1">OneMore一个人多部门多岗位</label>
+</td>
+</tr>-->
 
-<!--
-<input id="RB_OSModel_0" type="radio" name="RB_OSModel" disabled="false"  value="0"  /><label for="RB_OSModel_0">OneOne模式一个人一个部门多岗位</label> -->
-<input id="RB_OSModel_1" type="radio" name="RB_OSModel" disabled="false"  value="1"  /><label for="RB_OSModel_1">OneMore一个人多部门多岗位</label>
+
+<tr>
+<th>是否安装GPM系统?.</th>
+</tr>
+
+<tr>
+<td>
+<label><input id="RB_OSRunModel_0" type="radio" name="RB_OSRunModel"   value="0"  />我想集成我自己的开发框架,集成自己的组织结构,仅仅想使用流程引擎与表单引擎.</label>
+<br />
+<label><input id="RB_OSRunModel_1" type="radio" name="RB_OSRunModel"  value="1"  />我想让ccbpm为我提供组织结构管理、菜单,权限组管理.</label>
 
 </td>
 </tr>
@@ -168,6 +197,7 @@
 
 </div>
 <input type="button" value="接受ccbpm的GPL开源协议并执行安装" id="Btn_Submit"  onclick="DoInstall()" />
+<a href="https://baike.baidu.com/item/GPL/2357903?fr=aladdin" target=_blank >什么是GPL开源协议?</a>
 </div>
 
 

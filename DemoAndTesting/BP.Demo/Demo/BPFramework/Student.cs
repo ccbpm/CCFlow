@@ -381,7 +381,16 @@ namespace BP.Demo.BPFramework
 
             BP.Pub.RTFEngine en = new Pub.RTFEngine();
 
-            en.HisGEEntity = this; //当前的实体.
+
+            Student stu = new Student(this.No);
+
+            en.HisGEEntity = stu; //当前的实体.
+
+            //增加从表.
+            BP.Demo.Resumes dtls=new Resumes();
+            dtls.Retrieve(ResumeAttr.RefPK,stu.No);
+            en.AddDtlEns(dtls);
+
 
             string saveTo=BP.Sys.SystemConfig.PathOfTemp; // \\DataUser\\Temp\\
             string billFileName = this.No+"StuTest.doc";

@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>新建学生</title>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+
+    <script type="text/javascript" language="javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+        });
+
+        function Save() {
+
+
+            var frmData = $("#cc").serialize();
+
+            alert('要保存的表单数据:'+frmData);
+
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: "Handler.ashx?DoType=StudentV1_Save&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data);
+                    window.location.href = 'StudentList.htm';
+                    return;
+                }
+            });
+          
+        }
+    </script>
+
+</head>
+<body>
+
+<form id="cc">
+<table>
+<caption>数据采集</caption>
+<tr>
+<td>学号 </td>
+<td><input type=text id="TB_No" name="TB_No" /></td>
+
+<td>姓名 </td>
+<td><input type=text id="TB_Name" name="TB_Name" /></td>
+</tr>
+
+
+<tr>
+<td>性别 </td>
+<td><input type=radio  id="RB_XB_1" name="RB_XB" value="1"  /> <label for="RB_XB_1">男</label> <input type=radio value="0" id="RB_XB_0" name="RB_XB"  /> <label for="RB_XB_0">女</label> </td>
+
+<td>是否贫困学生？ </td>
+<td><input type="checkbox"  id="CB_IsPK" value="1" name="CB_IsPK" /> </td>
+</tr>
+
+
+<tr>
+<td>地址 </td>
+<td colspan=3><input type=text id="TB_Addr" name="TB_Addr" /></td>
+</tr>
+
+</table>
+
+<input type=button  value="保存" id="Btn_Save"  onclick="Save()" />
+
+</form>
+
+<fieldset>
+<legend>该页面为:StudentV1.htm</legend>
+<ul>
+<li>演示了如何copy数据到entity里面. </li>
+</ul>
+</fieldset>
+
+
+</body>
+</html>

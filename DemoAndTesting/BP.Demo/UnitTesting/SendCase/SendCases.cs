@@ -115,7 +115,7 @@ namespace BP.UnitTesting.SendCase
             if (gwf.StarterName != WebUser.Name)
                 throw new Exception("@当前 StarterName 错误应当是:" + WebUser.Name + ",现在是:" + gwf.StarterName);
 
-            if (string.IsNullOrEmpty(gwf.Title))
+            if (DataType.IsNullOrEmpty(gwf.Title))
                 throw new Exception("@ Title 错误, 不能为空. ");
 
             GenerWorkerLists wls = new GenerWorkerLists();

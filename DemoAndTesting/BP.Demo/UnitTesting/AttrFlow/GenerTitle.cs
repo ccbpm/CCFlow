@@ -100,11 +100,11 @@ namespace BP.UnitTesting.AttrFlow
 
             #region 检查标题是否符合预期.
             //title = DBAccess.RunSQLReturnString("SELECT Title FROM WF_GenerWorkFlow where WorkID=" + workID);
-            //if (string.IsNullOrEmpty(title))
+            //if (DataType.IsNullOrEmpty(title))
             //    throw new Exception("@标题没有生成 在 WF_GenerWorkFlow中没有找到.");
 
             title = DBAccess.RunSQLReturnString("SELECT Title FROM " + fl.PTable + " where OID=" + workID);
-            if (string.IsNullOrEmpty(title))
+            if (DataType.IsNullOrEmpty(title))
                 throw new Exception("@标题没有生成， 在 PTable中没有找到.");
             #endregion
 
@@ -113,11 +113,11 @@ namespace BP.UnitTesting.AttrFlow
 
             #region 检查标题是否符合预期.
             title = DBAccess.RunSQLReturnString("SELECT Title FROM WF_GenerWorkFlow where WorkID=" + workID);
-            if (string.IsNullOrEmpty(title))
+            if (DataType.IsNullOrEmpty(title))
                 throw new Exception("@标题没有生成 在 WF_GenerWorkFlow中没有找到.");
 
             title = DBAccess.RunSQLReturnString("SELECT Title FROM " + fl.PTable + " WHERE OID=" + workID);
-            if (string.IsNullOrEmpty(title))
+            if (DataType.IsNullOrEmpty(title))
                 throw new Exception("@标题没有生成， 在 PTable中没有找到.");
             #endregion 
 

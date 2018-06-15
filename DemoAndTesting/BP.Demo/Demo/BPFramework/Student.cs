@@ -323,6 +323,7 @@ namespace BP.Demo.BPFramework
                 rm.Title = "注销学籍";
                 rm.Warning = "您确定要注销吗？";
                 rm.ClassMethodName = this.ToString() + ".DoZhuXiao";
+                rm.IsForEns = true;
                 rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
 
@@ -333,6 +334,22 @@ namespace BP.Demo.BPFramework
                 rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
 
+
+                //不带有参数的方法.
+                rm = new RefMethod();
+                rm.Title = "打印学生证";
+                rm.ClassMethodName = this.ToString() + ".DoPrintStuLicence";
+                rm.IsCanBatch = true; //是否可以批处理？
+                map.AddRefMethod(rm);
+
+
+                ////不带有参数的方法.
+                //rm = new RefMethod();
+                //rm.Title = "批量打印学生证";
+                //rm.ClassMethodName = this.ToString() + ".EnsMothed";
+                ////rm.IsForEns = true; //是否可以批处理？
+                //rm.RefMethodType = RefMethodType.FuncBacthEntities; //是否可以批处理？
+                //map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -359,6 +376,24 @@ namespace BP.Demo.BPFramework
         #endregion 重写基类方法
 
         #region 方法
+        public string DoPrintStuLicence()
+        {
+
+            BP.Pub.RTFEngine en = new Pub.RTFEngine();
+
+            en.HisGEEntity = this; //当前的实体.
+
+            string saveTo=BP.Sys.SystemConfig.PathOfTemp; // \\DataUser\\Temp\\
+            string billFileName = this.No+"StuTest.doc";
+
+            //要生成的数据.
+            en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\StudentDemo.rtf", saveTo, billFileName, null, false);
+
+            string url = "/DataUser/Temp/" + billFileName;
+
+            string info = "单据生成成功:<a href='" + url + "' >打印</a>，<a href='/SDKFlowDemo/App/PrintJoin.aspx'>拼接打印</a>";
+            return info;
+        }
         public string DoStartFlow()
         {
             return "";

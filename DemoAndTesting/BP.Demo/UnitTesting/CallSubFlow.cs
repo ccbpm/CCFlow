@@ -164,11 +164,11 @@ namespace BP.UnitTesting
                             throw new Exception("@应当是  WebUser.No, 现在是:" + val);
                         break;
                     case GERptAttr.FlowStartRDT:
-                        if (string.IsNullOrEmpty(val))
+                        if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@应当不能为空,现在是:" + val);
                         break;
                     case GERptAttr.Title:
-                        if (string.IsNullOrEmpty(val))
+                        if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@不能为空title" + val);
                         break;
                     case GERptAttr.WFState:
@@ -331,11 +331,11 @@ namespace BP.UnitTesting
                     //        throw new Exception("@应当是  WebUser.No, 现在是:" + val);
                     //    break;
                     case GERptAttr.FlowStartRDT:
-                        if (string.IsNullOrEmpty(val))
+                        if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@应当不能为空,现在是:" + val);
                         break;
                     case GERptAttr.Title:
-                        if (string.IsNullOrEmpty(val))
+                        if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@不能为空title" + val);
                         break;
                     case GERptAttr.WFState:

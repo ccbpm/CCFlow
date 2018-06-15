@@ -262,19 +262,19 @@ namespace BP.UnitTesting.SendCase
                                 throw new Exception("@不应当不等于:" + item.FK_Emp);
                             break;
                         case WorkAttr.MyNum:
-                            if (string.IsNullOrEmpty(val))
+                            if (DataType.IsNullOrEmpty(val))
                                 throw new Exception("@不应当为空:" + dc.ColumnName);
                             break;
                         case WorkAttr.RDT:
-                            if (string.IsNullOrEmpty(val))
+                            if (DataType.IsNullOrEmpty(val))
                                 throw new Exception("@ RDT 不应当为空:" + dc.ColumnName);
                             break;
                         case WorkAttr.CDT:
-                            if (string.IsNullOrEmpty(val))
+                            if (DataType.IsNullOrEmpty(val))
                                 throw new Exception("@ CDT 不应当为空:" + dc.ColumnName);
                             break;
                         case WorkAttr.Emps:
-                            if (string.IsNullOrEmpty(val) || val.Contains(item.FK_Emp) == false)
+                            if (DataType.IsNullOrEmpty(val) || val.Contains(item.FK_Emp) == false)
                                 throw new Exception("@ Emps 不应当为空，或者不包含发起人.");
                             break;
                         default:
@@ -341,7 +341,7 @@ namespace BP.UnitTesting.SendCase
                             throw new Exception("@ PWorkID 应当是 '0' 现在是:" + val);
                         break;
                     case GERptAttr.Title:
-                        if (string.IsNullOrEmpty(val))
+                        if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@ Title 不应当是空 " + val);
                         break;
                     case GERptAttr.WFState:
@@ -992,7 +992,7 @@ namespace BP.UnitTesting.SendCase
             if (dt.Rows[0][GERptAttr.FlowEnder].ToString() != "zhoupeng")
                 throw new Exception("@应该是 zhoupeng 是 FlowEnder .");
 
-               if ( string.IsNullOrEmpty(dt.Rows[0][GERptAttr.Title].ToString()) )
+               if ( DataType.IsNullOrEmpty(dt.Rows[0][GERptAttr.Title].ToString()) )
                             throw new Exception("@流程走完后标题丢失了");
 
             if (dt.Rows[0][GERptAttr.FlowStarter].ToString() != "zhoupeng")

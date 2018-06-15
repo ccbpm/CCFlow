@@ -98,7 +98,7 @@ namespace BP.UnitTesting.ReturnCase
                 switch (dc.ColumnName)
                 {
                     case GERptAttr.Title:
-                        if (string.IsNullOrEmpty(val))
+                        if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@退回后流程标题丢失了");
                         break;
                     case GERptAttr.FID:
@@ -138,7 +138,7 @@ namespace BP.UnitTesting.ReturnCase
                             throw new Exception("@应当是 " + startUser + ", 现在是:" + val);
                         break;
                     case GERptAttr.FlowStartRDT:
-                        if (string.IsNullOrEmpty(val))
+                        if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@应当不能为空,现在是:" + val);
                         break;
                     case GERptAttr.WFState:

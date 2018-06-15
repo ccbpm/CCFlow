@@ -101,7 +101,7 @@ namespace BP.UnitTesting.NodeAttr
                 if (gwl.DTOfHungUp.Length < 10)
                     throw new Exception("@挂起日期没有写入");
 
-                if (string.IsNullOrEmpty(gwl.DTOfUnHungUp) == false)
+                if (DataType.IsNullOrEmpty(gwl.DTOfUnHungUp) == false)
                     throw new Exception("@解除挂起日期应当为空,现在是：" + gwl.DTOfUnHungUp);
 
                 if (gwl.HungUpTimes != 1)

@@ -722,7 +722,7 @@ namespace BP.UnitTesting.SendCase
             if (dt.Rows[0][GERptAttr.FlowEnder].ToString() != "zhanghaicheng")
                 throw new Exception("@应该是 zhanghaicheng 是 FlowEnder .");
 
-               if ( string.IsNullOrEmpty(dt.Rows[0][GERptAttr.Title].ToString()) )
+               if ( DataType.IsNullOrEmpty(dt.Rows[0][GERptAttr.Title].ToString()) )
                             throw new Exception("@流程走完后标题丢失了");
 
             if (dt.Rows[0][GERptAttr.FlowStarter].ToString() != "zhanghaicheng")

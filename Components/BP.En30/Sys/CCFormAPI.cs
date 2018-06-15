@@ -1095,6 +1095,10 @@ namespace BP.Sys
             BP.DA.DBAccess.RunSQLs(sqls);
             #endregion 删除没有替换下来的 PKs, 说明这些都已经被删除了.
 
+            //清空缓存
+            MapData mymd = new MapData(fk_mapdata);
+            mymd.RepairMap();
+            BP.Sys.SystemConfig.DoClearCash();
         }
 
         /// <summary>

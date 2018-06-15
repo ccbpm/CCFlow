@@ -242,6 +242,7 @@ namespace BP.WF
                 Map map = new Map("WF_GenerFH", "分合流程控制");
                 
                 map.AddTBIntPK(GenerFHAttr.FID, 0, "流程ID", true, true);
+                map.AddTBIntPK("OID", 0, "OID", true, true);
 
                 map.AddTBString(GenerFHAttr.Title, null, "标题", true, false, 0, 4000, 10);
                 map.AddTBString(GenerFHAttr.GroupKey, null, "分组主键", true, false, 0, 3000, 10);

@@ -335,6 +335,10 @@ namespace BP.Port
 
 
         #region 方法测试代码.
+        /// <summary>
+        /// 测试
+        /// </summary>
+        /// <returns></returns>
         public string ResetPass()
         {
             return "执行成功.";

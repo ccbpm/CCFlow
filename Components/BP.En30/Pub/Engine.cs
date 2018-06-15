@@ -1064,11 +1064,14 @@ namespace BP.Pub
         /// <param name="file">生成文件</param>
         /// <param name="isOpen">是否用IE打开？</param>
         /// <param name="isOpen">要打开的url用于生成二维码</param>
-        public void MakeDoc(string cfile, string path, string file, string replaceVals, bool isOpen, string billUrl=null)
+        public void MakeDoc(string templateRtfFile, string path, string file, string replaceVals, bool isOpen, string billUrl=null)
         {
-            cfile = cfile.Replace(".rtf.rtf", ".rtf"); 
+            templateRtfFile = templateRtfFile.Replace(".rtf.rtf", ".rtf");
+            
+            if (System.IO.Directory.Exists(path) == false)
+                System.IO.Directory.CreateDirectory(path);
 
-            string str = Cash.GetBillStr(cfile, false).Substring(0);
+            string str = Cash.GetBillStr(templateRtfFile, false).Substring(0);
             if (this.HisEns.Count == 0)
                 if (this.HisGEEntity == null)
                     throw new Exception("@您没有为报表设置数据源...");
@@ -1087,9 +1090,9 @@ namespace BP.Pub
             string error = "";
             string[] paras = null;
             if (this.HisGEEntity != null)
-                paras = Cash.GetBillParas(cfile, ensStrs, this.HisGEEntity);
+                paras = Cash.GetBillParas(templateRtfFile, ensStrs, this.HisGEEntity);
             else
-                paras = Cash.GetBillParas(cfile, ensStrs, this.HisEns);
+                paras = Cash.GetBillParas(templateRtfFile, ensStrs, this.HisEns);
 
             this.TempFilePath = path + file;
             try
@@ -1155,7 +1158,7 @@ namespace BP.Pub
                         }
                     }
                     catch (Exception ex)
-                    {
+                    { 
                         error += "@替换主表标记取参数[" + para + "]出现错误：有以下情况导致此错误;1你用Text取值时间，此属性不是外键。2,类无此属性。3,该字段是明细表字段但是丢失了明细表标记.<br>更详细的信息：<br>" + ex.Message;
                         if (SystemConfig.IsDebug)
                             throw new Exception(error);
@@ -1384,8 +1387,8 @@ namespace BP.Pub
                 {  // 异常可能与单据的配置有关系。
                     try
                     {
-                        this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + cfile;
-                        str = Cash.GetBillStr(cfile, false);
+                        this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + templateRtfFile;
+                        str = Cash.GetBillStr(templateRtfFile, false);
                         string s = RepBill.RepairBill(this.CyclostyleFilePath);
                         msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题。@" + s;
                     }
@@ -1449,12 +1452,15 @@ namespace BP.Pub
             this._HisEns = null;
         }
         /// <summary>
-        /// 修复线
+        /// 传入的是单个实体
         /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-
-
+        /// <param name="en"></param>
+        public RTFEngine(Entity en)
+        {
+            this._EnsDataDtls = null;
+            this._HisEns = null;
+            this.HisGEEntity = en;
+        }
         #endregion
     }
 

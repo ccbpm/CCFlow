@@ -404,10 +404,12 @@ namespace BP.WF.HttpHandler
             try
             {
                 DBAccess.TestIsConnection();
+
+                
             }
             catch (Exception ex)
             {
-                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties. @异常信息:" + ex.Message;
+                return "err@异常信息:" + ex.Message;
             }
 
 

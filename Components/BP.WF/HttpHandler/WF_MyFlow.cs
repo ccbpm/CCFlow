@@ -1806,13 +1806,10 @@ namespace BP.WF.HttpHandler
                             continue;
                         break;
                     case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
-                       
 
                         frms = frms.Trim();
-
                         frms = frms.Replace(" ", "");
                         frms = frms.Replace(" ", "");
-
 
                         if (frms.Contains(",") == false)
                         {
@@ -1832,6 +1829,14 @@ namespace BP.WF.HttpHandler
 
                     case FrmEnableRole.BySQL: // 按照SQL的方式.
                         string mysql = frmNode.FrmEnableExp.Clone() as string;
+
+                        if (DataType.IsNullOrEmpty(mysql) == true)
+                        {
+                            MapData FrmMd = new MapData(frmNode.FK_Frm);
+                            return "err@表单" + frmNode.FK_Frm + ",[" + FrmMd.Name + "]在节点[" + frmNode.FK_Node + "]启用方式按照sql启用但是您没有给他设置sql表达式.";
+                        }
+
+
                         mysql = mysql.Replace("@OID", this.WorkID.ToString());
                         mysql = mysql.Replace("@WorkID", this.WorkID.ToString());
 

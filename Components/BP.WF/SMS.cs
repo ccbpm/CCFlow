@@ -532,6 +532,7 @@ namespace BP.WF
             }
         }
         #endregion
+
         /// <summary>
         /// 发送邮件
         /// </summary>
@@ -580,6 +581,15 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 插入之前要做的事情. 
+        /// return false 标识不插入数据.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeInsert()
+        {
+            return false;
+        }
+        /// <summary>
         /// 插入之后执行的方法.
         /// </summary>
         protected override void afterInsert()
@@ -618,8 +628,6 @@ namespace BP.WF
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-
-
                             soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo, this.MobileInfo, tag);
                             break;
                         default:

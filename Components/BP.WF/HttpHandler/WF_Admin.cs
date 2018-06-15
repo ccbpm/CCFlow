@@ -267,7 +267,7 @@ namespace BP.WF.HttpHandler
         public string DBInstall_Init()
         {
             if (DBAccess.TestIsConnection() == false)
-                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties.";
+                return "err@数据库连接配置错误.";
 
             if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == true)
                 return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";

@@ -1233,8 +1233,6 @@ namespace BP.WF
             //生成拼音，以方便关键字查找.
             BP.WF.DTS.GenerPinYinForEmp pinyin = new DTS.GenerPinYinForEmp();
             pinyin.Do();
-             
-
 
             #region 执行补充的sql, 让外键的字段长度都设置成100.
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET maxlen=100 WHERE LGType=2 AND MaxLen<100");
@@ -1264,6 +1262,8 @@ namespace BP.WF
                 }
             }
             #endregion 如果是第一次运行，就执行检查。
+
+             
 
         }
         /// <summary>

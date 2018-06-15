@@ -11,13 +11,19 @@ namespace CCFlow.SDKFlowDemo.App
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //空白文本
-            string tempDoc = BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\demo.rtf";
-            //输出文本
-            string outDoc = BP.Sys.SystemConfig.PathOfTemp + "\\StuTestMain.doc";
+            string docs = "";
+            string[] fls = System.IO.Directory.GetFiles(BP.Sys.SystemConfig.PathOfTemp);
+            foreach (string fl in fls)
+            {
+                if (fl.Contains("StuTest.doc") == false)
+                    continue;
 
-            BP.WF.PrintJoin.InsertMerge(tempDoc, BP.Sys.SystemConfig.PathOfTemp, outDoc);
-            this.Response.Redirect("/DataUser/Temp/StuTestMain.doc", true);
+                docs += BP.DA.DataType.ReadTextFile(fl);
+                System.IO.File.Delete(fl);
+            }
+
+            BP.DA.DataType.WriteFile(BP.Sys.SystemConfig.PathOfTemp + "\\T.doc", docs);
+            this.Response.Redirect("/DataUser/Temp/T.doc", true);
         }
 
     }

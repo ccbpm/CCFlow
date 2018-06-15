@@ -294,9 +294,7 @@
     <Content Include="GPM\themes\icons\xitongleibie.png" />
     <Content Include="GPM\WhoCanUseApp.aspx" />
     <Content Include="GPM\WhoCanViewInfoPush.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentV1.htm" />
+    <Content Include="SDKFlowDemo\App\PrintJoin.aspx" />
     <Content Include="SDKFlowDemo\Default.htm" />
     <Content Include="SDKFlowDemo\DemoEmpSelecter.htm" />
     <Content Include="SDKFlowDemo\readme.txt" />
@@ -329,121 +327,6 @@
     <Content Include="Default.aspx" />
     <Content Include="Default.htm" />
     <Content Include="Global.asax" />
-    <Content Include="SDKFlowDemo\App\DictList.aspx" />
-    <Content Include="SDKFlowDemo\App\DictList.htm" />
-    <Content Include="SDKFlowDemo\App\DictListWelcome.htm" />
-    <Content Include="SDKFlowDemo\App\Port\Bottom.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\base.css" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\basic.css" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\bg_top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\bg_top2.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\common.css" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\sz.png" />
-    <Content Include="SDKFlowDemo\App\Port\Default.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Img\bgimage.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\bgimage01.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\bg_top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\BJ.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\btlogin.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\denglu.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\dl.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Key.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li1.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li2.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li3.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li4.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li5.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\login.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\login1.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\LoginBJ.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Batch.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bbtj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bbtj.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjcx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjtj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjzltj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bmwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\CC.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\CC.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\dbjtj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Down.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Emps.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Emps.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\EmpWorks.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\EmpWorks.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\FuncBar.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\GetTask.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\GetTask.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gncx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gncx.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gnlb.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gnlb.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\grxx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gwwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\HungUp.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\HungUp.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\jdown.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\jtop.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\lccx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\lxba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\mun_6.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\mun_8.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\pcl.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\pxlb.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Rili.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Ruing.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Ruing.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\rywh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\scxx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Search.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Search.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\SearchKey.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Setting.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Setting.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Sharing.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\shouqi.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\shouqi.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\sjlxsp.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\sjys.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\splc.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\spxm.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\ssba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Start.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Start.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Switch.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xmba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtdh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtsz.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzdq.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzlc.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzsj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xztj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\ysba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zbph.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zhankai.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zhankai.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zzwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zzwh.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\repeatimage.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\text.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\tm2.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\TopLeft.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\TopRight.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\bottom.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\cz.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\dl.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\dy.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\Exit.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\Head_bg.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\top_line.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Left.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Login.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\SysManager.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Top.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Welcome.aspx" />
     <Content Include="SDKFlowDemo\AuthorDemo.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx" />
@@ -503,7 +386,6 @@
     <Content Include="SDKFlowDemo\TestCase\iframePage.aspx" />
     <Content Include="SDKFlowDemo\TestCond.aspx" />
     <Content Include="SDKFlowDemo\TestCondOfFlowOver.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\WinOpen.Master" />
     <Content Include="SDKFlowDemo\Comm\Site.Master" />
     <Content Include="SDKFlowDemo\GuestApp\Site.Master" />
     <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
@@ -514,7 +396,6 @@
     <Content Include="SDKFlowDemo\SDK\F118\Serv.ashx" />
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx" />
     <Content Include="WF\Admin\AttrFlow\AddOneFrmToNodes.htm" />
     <Content Include="WF\Admin\AttrFlow\API.htm" />
     <Content Include="WF\Admin\AttrFlow\APICode.htm" />
@@ -6152,68 +6033,12 @@
       <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SDKFlowDemo\App\DictList.aspx.cs">
-      <DependentUpon>DictList.aspx</DependentUpon>
+    <Compile Include="SDKFlowDemo\App\PrintJoin.aspx.cs">
+      <DependentUpon>PrintJoin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="SDKFlowDemo\App\DictList.aspx.designer.cs">
-      <DependentUpon>DictList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Bottom.aspx.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Bottom.aspx.designer.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\SysManager.aspx.cs">
-      <DependentUpon>SysManager.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\SysManager.aspx.designer.cs">
-      <DependentUpon>SysManager.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Top.aspx.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Top.aspx.designer.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\WinOpen.Master.cs">
-      <DependentUpon>WinOpen.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\Port\WinOpen.Master.designer.cs">
-      <DependentUpon>WinOpen.Master</DependentUpon>
+    <Compile Include="SDKFlowDemo\App\PrintJoin.aspx.designer.cs">
+      <DependentUpon>PrintJoin.aspx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\AuthorDemo.aspx.cs">
       <DependentUpon>AuthorDemo.aspx</DependentUpon>
@@ -6228,9 +6053,6 @@
     </Compile>
     <Compile Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx.designer.cs">
       <DependentUpon>DemoEmps.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx.cs">
       <DependentUpon>Cell2D.aspx</DependentUpon>
@@ -6714,6 +6536,7 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.Master.cs">
       <DependentUpon>WinOpen.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.Master.designer.cs">
       <DependentUpon>WinOpen.Master</DependentUpon>

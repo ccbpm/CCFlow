@@ -14,7 +14,7 @@ namespace BP.WF
     {
         #region 基本属性
         /// <summary>
-        /// 地税编号
+        /// FID
         /// </summary>
         public const string FID = "FID";
         /// <summary>
@@ -252,7 +252,7 @@ namespace BP.WF
                 map.AddTBDate(GenerFHAttr.RDT, null, "RDT", true, false);
 
                 //RefMethod rm = new RefMethod();
-                //rm.Title = "工作报告";  // "工作报告";
+                //rm.Title = "工作报告";  // "工作报告" ;
                 //rm.ClassMethodName = this.ToString() + ".DoRpt";
                 //rm.Icon = "../WF/Img/Btn/doc.gif";
                 //map.AddRefMethod(rm);

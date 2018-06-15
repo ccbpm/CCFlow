@@ -1250,10 +1250,6 @@ namespace BP.WF
 
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "DELETE FROM WF_GenerFH WHERE FID=" + dbstr + "FID";
-            ps.Add(GenerFHAttr.FID, this.WorkID);
-            DBAccess.RunSQL(ps);
-
             if (1 == 2)
             {
                 // 是否删除流程注册表的数据？

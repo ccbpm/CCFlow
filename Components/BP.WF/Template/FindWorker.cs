@@ -230,37 +230,27 @@ namespace BP.WF.Template
                 string strs = town.HisNode.DeliveryParas;
                 if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStarter)
                 {
-                    /*找开始节点的处理人员. */
-                    //strs = int.Parse(this.fl.No) + "01";
-                    //ps = new Paras();
-                    //ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
-                    //ps.Add("FK_Node", int.Parse(strs));
-
-                    //if (currWn.HisNode.HisRunModel == RunModel.SubThread)
-                    //    ps.Add("OID", currWn.HisWork.FID);
-                    //else
-                    //    ps.Add("OID", this.WorkID);
-
-
-                    dt = DBAccess.RunSQLReturnTable("SELECT Starter No, StarterName Name FROM WF_GenerWorkFlow WHERE WorkID=" + this.currWn.HisWork.FID + " OR WorkID=" + this.WorkID);
+                    Int64 myworkid = this.currWn.WorkID;
+                    if (this.currWn.HisWork.FID != 0)
+                        myworkid = this.currWn.HisWork.FID;
+                    dt = DBAccess.RunSQLReturnTable("SELECT Starter No, StarterName Name FROM WF_GenerWorkFlow WHERE WorkID=" + myworkid);
                     if (dt.Rows.Count == 1)
                         return dt;
-                    else
-                    {
-                        /* 有可能当前节点就是第一个节点，那个时间还没有初始化数据，就返回当前人. */
-                        if (this.currWn.HisNode.IsStartNode)
-                        {
-                            DataRow dr = dt.NewRow();
-                            dr[0] = BP.Web.WebUser.No;
-                            dt.Rows.Add(dr);
-                            return dt;
-                        }
 
-                        if (dt.Rows.Count == 0)
-                            throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）无法找到开始节点的工作人员。");
-                        else
-                            return dt;
+                    /* 有可能当前节点就是第一个节点，那个时间还没有初始化数据，就返回当前人. */
+                    if (this.currWn.HisNode.IsStartNode)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr[0] = BP.Web.WebUser.No;
+                        dt.Rows.Add(dr);
+                        return dt;
                     }
+
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）无法找到开始节点的工作人员。");
+                    else
+                        return dt;
+
                 }
 
                 // 首先从本流程里去找。

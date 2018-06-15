@@ -88,7 +88,7 @@ namespace BP.WF.Template
 
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
-                map.AddTBInt(FrmNodeAttr.FK_Flow, 0, "流程ID", true, true);
+                map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程(编号)", true, true, 0, 4, 20);
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);

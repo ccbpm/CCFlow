@@ -30,20 +30,6 @@ namespace BP.WF.HttpHandler
 
         #region 绑定流程表单
         /// <summary>
-        /// 获取流程所有节点
-        /// </summary>
-        /// <returns></returns>
-        public string BindForm_GenderFlowNode()
-        {
-            Node nd = new Node(this.FK_Node);
-
-            //规范做法.
-            Nodes nds = new Nodes(nd.FK_Flow);
-            return nds.ToJson();
-
-        }
-
-        /// <summary>
         /// 获取所有节点，复制表单
         /// </summary>
         /// <returns></returns>
@@ -182,10 +168,17 @@ namespace BP.WF.HttpHandler
 
             //根节点
             BP.WF.Template.FlowFormTree root = new BP.WF.Template.FlowFormTree();
-            root.No = "00";
-            root.ParentNo = "0";
             root.Name = "表单库";
+            int i = root.Retrieve(FlowFormTreeAttr.ParentNo, 0);
+            if (i != 0)
+            {
+                root.Name = "表单库";
+                root.No = "1";
+                root.NodeType = "root";
+                root.Insert();
+            }
             root.NodeType = "root";
+
             appendFormTrees.AddEntity(root);
 
             foreach (SysFormTree formTree in formTrees)
@@ -193,12 +186,14 @@ namespace BP.WF.HttpHandler
                 //已经添加排除
                 if (appendFormTrees.Contains("No", formTree.No) == true)
                     continue;
+
                 //根节点排除
                 if (formTree.ParentNo.Equals("0"))
                 {
                     root.No = formTree.No;
                     continue;
                 }
+
                 //文件夹
                 BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
                 nodeFolder.No = formTree.No;

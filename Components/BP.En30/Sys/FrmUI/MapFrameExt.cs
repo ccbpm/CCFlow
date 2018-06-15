@@ -126,6 +126,14 @@ namespace BP.Sys.FrmUI
         {
         }
         /// <summary>
+        /// 框架s
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        public MapFrameExts(string frmID)
+        {
+            this.Retrieve(MapFrameAttr.FK_MapData, frmID);
+        }
+        /// <summary>
         /// 得到它的 Entity
         /// </summary>
         public override Entity GetNewEntity

@@ -861,7 +861,6 @@ namespace BP.WF.HttpHandler
                     //如果是累加表单.
                     if (nd.HisFormType == NodeFormType.FoolTruck)
                     {
-
                         DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
                   this.FID, BP.Web.WebUser.No, this.GetRequestVal("FromWorkOpt"));
 
@@ -869,7 +868,6 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 #endregion 特殊判断.适应累加表单
-
 
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
@@ -1161,14 +1159,55 @@ namespace BP.WF.HttpHandler
             {
                 //保存主表数据.
                 GEEntity en = new GEEntity(this.EnsName);
-                en.OID = this.RefOID;
+
+
+                #region 求出 who is pk 值.
+                Int64 pk = this.RefOID;
+                if (pk == 0)
+                    pk = this.OID;
+                if (pk == 0)
+                    pk = this.WorkID;
+
+                if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
+                {
+                    /*说明是流程调用它， 就要判断谁是表单的PK.*/
+                    FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                    switch (fn.WhoIsPK)
+                    {
+                        case WhoIsPK.FID:
+                            pk = this.FID;
+                            if (pk == 0)
+                                throw new Exception("@没有接收到参数FID");
+                            break;
+                        case WhoIsPK.PWorkID: /*父流程ID*/
+                            pk = this.PWorkID;
+                            if (pk == 0)
+                                throw new Exception("@没有接收到参数PWorkID");
+                            break;
+                        case WhoIsPK.OID:
+                        default:
+                            break;
+                    }
+
+                    if (fn.FrmSln == 2)
+                    {
+                        /*如果是不可以编辑*/
+                        return "err@不可以,该表单不允许编辑..";
+                    }
+                }
+                #endregion  求who is PK.
+
+                en.OID = pk;
+
+
                 int i = en.RetrieveFromDBSources();
 
                 en.ResetDefaultVal();
 
                 en = BP.Sys.PubClass.CopyFromRequest(en, context.Request) as GEEntity;
 
-                en.OID = this.RefOID;
+
+                en.OID = pk;
 
                 // 处理表单保存前事件.
                 MapData md = new MapData(this.EnsName);

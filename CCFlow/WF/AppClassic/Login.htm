@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link href="../Style/skin/css/login.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+     <script type="text/javascript" language="javascript">
+         document.onkeydown = function (e) {
+             e = e || window.event;
+             if (e.keyCode == 13) {
+
+                 Login();
+                 return false;
+                 //this.forms["Form1"].submit();
+                 //return false;
+             }
+         }
+     </script>
 </head>
 <body class="login-bg">
 <div class="login-box">
@@ -61,32 +74,37 @@
 
             form.on('submit(formDemo)', function (data) {
 
-                var userNo = $("#TB_UserNo").val();
-                var userPass = $("#TB_Pass").val();
-
-                if (userNo == "" || userPass == "") {
-                    layer.msg('请输入用户名与密码');
-                    return false;
-                }
-
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
-
-                handler.AddPara("TB_UserNo", userNo);
-                handler.AddPara("TB_Pass", userPass);
-
-                var data = handler.DoMethodReturnString("Login_Submit");
-
-                if (data.indexOf('err@') == 0) {
-                    layer.msg(data, { time: 3000, icon: 2 });
-                    return;
-                }
-
-                layer.msg(data, { time: 10, icon: 1 }, function () {
-                    location.href = 'Home.htm';
-                });
+                Login();
 
             })
         });
+
+        function Login() {
+
+            var userNo = $("#TB_UserNo").val();
+            var userPass = $("#TB_Pass").val();
+
+            if (userNo == "" || userPass == "") {
+                layer.msg('请输入用户名与密码');
+                return false;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+
+            handler.AddPara("TB_UserNo", userNo);
+            handler.AddPara("TB_Pass", userPass);
+
+            var data = handler.DoMethodReturnString("Login_Submit");
+
+            if (data.indexOf('err@') == 0) {
+                layer.msg(data, { time: 3000, icon: 2 });
+                return;
+            }
+
+            layer.msg(data, { time: 10, icon: 1 }, function () {
+                location.href = 'Home.htm';
+            });
+        }
         
         </script>
 </body>

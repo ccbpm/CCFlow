@@ -13,6 +13,14 @@
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript">
+
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                Login();
+                return false;
+            }
+        }
      
         //初始化页面函数.....
         $(function () {
@@ -88,6 +96,9 @@
             alert(data);
         }
     </script>
+       <script type="text/javascript" language="javascript">
+        
+     </script>
 </head>
 
 <body class="login-bg">

@@ -471,6 +471,8 @@ namespace BP.GPM
                 rm.HisAttrs.AddTBString("pass2", null, "再次输入", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
+
+
                 this._enMap = map;
                 return this._enMap;
             }

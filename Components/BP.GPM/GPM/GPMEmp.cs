@@ -375,6 +375,14 @@ namespace BP.GPM
 
 
 
+                //节点绑定部门. 节点绑定部门.
+                map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.GPM.Depts(),
+                   BP.GPM.DeptEmpAttr.FK_Emp,
+                   BP.GPM.DeptEmpAttr.FK_Dept, "多部门", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
+
+
+
                 this._enMap = map;
                 return this._enMap;
             }

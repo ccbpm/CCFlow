@@ -134,7 +134,7 @@ namespace BP.GPM
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
 
                 //比如:\\驰骋集团\\南方分公司\\财务部
-                map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, false, 0, 300, 30,true);
+                map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
 
                 // 01,0101,010101.
@@ -178,6 +178,16 @@ namespace BP.GPM
                 rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("Name", null, "部门名称", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
+
+
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new DeptStations(), new Stations(),
+                    DeptStationAttr.FK_Dept,
+                    DeptStationAttr.FK_Station, "对应岗位(平铺)", StationAttr.FK_StationType);
+
+                map.AttrsOfOneVSM.AddGroupListModel(new DeptStations(), new Stations(),
+                  DeptStationAttr.FK_Dept,
+                  DeptStationAttr.FK_Station, "对应岗位(树)", StationAttr.FK_StationType);
 
 
                 this._enMap = map;
@@ -227,7 +237,6 @@ namespace BP.GPM
         /// </summary>
         public void GenerNameOfPath()
         {
-
             string name = this.Name;
 
             //根目录不再处理

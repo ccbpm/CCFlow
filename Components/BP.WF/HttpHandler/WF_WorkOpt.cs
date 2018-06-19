@@ -537,7 +537,7 @@ namespace BP.WF.HttpHandler
             {
                 string mysql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND (IsPass=0 OR IsPass=-1) AND FK_Emp!='" + BP.Web.WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
-                    return "info@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
+                    return "close@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
             }
 
             //判断当前节点的会签类型.

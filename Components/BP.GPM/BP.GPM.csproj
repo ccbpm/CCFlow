@@ -90,7 +90,7 @@
     <Compile Include="GPM\Group\Group.cs" />
     <Compile Include="GPM\Group\GroupStation.cs" />
     <Compile Include="GPM\Group\GroupMenu.cs" />
-    <Compile Include="GPM\Station\StationMenu.cs" />
+    <Compile Include="GPM\StationMenu.cs" />
     <Compile Include="GPM\UserData\DeptManager.cs" />
     <Compile Include="GPM\PerSetting.cs" />
     <Compile Include="GPM\UserData\EmpMenu.cs" />
@@ -98,8 +98,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPM\Menu.cs" />
     <Compile Include="GPM\App.cs" />
-    <Compile Include="Utility\CommonDbOperator.cs" />
-    <Compile Include="Utility\Crypto.cs" />
+    <Compile Include="CommonDbOperator.cs" />
+    <Compile Include="Crypto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\ccflow\Components\BP.En30\BP.En30.csproj">

@@ -61,6 +61,8 @@ namespace BP.WF.Port
 			{
 				UAC uac = new UAC();
 				uac.OpenForSysAdmin();
+                uac.IsDelete = false;
+                uac.IsInsert = false;
 				return uac;
 			}
 		}

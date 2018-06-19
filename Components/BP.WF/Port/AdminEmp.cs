@@ -286,62 +286,13 @@ namespace BP.WF.Port
                 rm.ClassMethodName = this.ToString() + ".DoSetPassword";
                // rm.Icon = "../../WF/Img/Btn/Copy.GIF";
                 map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "测试";
-                rm.HisAttrs.AddTBString("wenben", null, "文本", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBInt("shuzi", 0, "数字", true, false);
-                rm.HisAttrs.AddTBDate("riqi", null, "日期", true, false);
-                rm.HisAttrs.AddTBDate("riqishijian", null, "日期时间", true, false);
-                rm.HisAttrs.AddBoolen("boolen", false, "Boolen");
-                rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
-                rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
-                rm.ClassMethodName = this.ToString() + ".DoTest";
-                map.AddRefMethod(rm);
-
-
-
-                rm = new RefMethod();
-                rm.Title = "测试Boolen";
-                rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
-
-              //  rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
-           //     rm.HisAttrs.AddBoolen("boolenField", false, "Boolen字段测试");
-             //   rm.HisAttrs.AddTBInt("intType", 0, "数字", true, false);
-
-                rm.ClassMethodName = this.ToString() + ".DoTestBoolen";
-                map.AddRefMethod(rm);
+                 
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-
-        //,string isOK, int wfstate, string fk_emp
-        public string DoTestBoolen(string intType )
-        {
-            return " WFState=" + intType;
-           // return "boolen=" + boolen + " intType=" + intType;
-        }
-
-        //,string isOK, int wfstate, string fk_emp
-        public string DoTest(string wenben, int shuzi, string riqi, string dateTime, bool boolen, int meiJu, string waiJian)
-        {
-            string str="";
-            str += "@text=" + wenben;
-            str += "@int=" + shuzi;
-            str += "@data=" + riqi;
-            str += "@dateTime=" + dateTime;
-            str += "@boolen=" + boolen;
-            str += "@meiJu=" + meiJu;
-            str += "@waiJian=" + waiJian;
-            //str += "isOK=" + isOK;
-            //str += "wfstate=" + wfstate;
-            //str += "fk_emp=" + fk_emp;
-            return str;
-        }
 
         #region 方法
         protected override bool beforeUpdateInsertAction()
@@ -376,7 +327,6 @@ namespace BP.WF.Port
                     BP.DA.DBAccess.RunSQL("UPDATE WF_FlowSort SET OrgNo='0' WHERE OrgNo NOT IN (SELECT RootOfDept FROM WF_Emp WHERE UserType=1 )");
                 }
             }
-
             return base.beforeUpdateInsertAction();
         }
         #endregion

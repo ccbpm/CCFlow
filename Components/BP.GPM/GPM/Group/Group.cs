@@ -57,7 +57,7 @@ namespace BP.GPM
 
                 map.AddTBStringPK(GroupAttr.No, null, "编号", true, true, 3, 3, 3);
                 map.AddTBString(GroupAttr.Name, null, "名称", true, false, 0, 300, 20);
-                map.AddTBString(GroupAttr.ParentNo, null, "父亲节编号", false, false, 0, 3, 20);
+             //   map.AddTBString(GroupAttr.ParentNo, null, "父亲节编号", true, true, 0, 100, 20);
                 map.AddTBInt(GroupAttr.Idx, 0, "显示顺序", true, false);
 
                 map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),

@@ -14,14 +14,6 @@ namespace BP.GPM
         /// 岗位类型
         /// </summary>
         public const string FK_StationType = "FK_StationType";
-        /// <summary>
-        /// 素质要求
-        /// </summary>
-        public const string Makings = "Makings";
-        /// <summary>
-        /// 职责要求
-        /// </summary>
-        public const string DutyReq = "DutyReq";
         /// 隶属组织
         /// </summary>
         public const string OrgNo = "OrgNo";
@@ -89,8 +81,10 @@ namespace BP.GPM
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
-                map.AddTBStringDoc(StationAttr.DutyReq, null, "职责要求", true, false, true);
-                map.AddTBStringDoc(StationAttr.Makings, null, "素质要求", true, false, true);
+                
+                //map.AddTBStringDoc(StationAttr.DutyReq, null, "职责要求", true, false, true);
+                //map.AddTBStringDoc(StationAttr.Makings, null, "素质要求", true, false, true);
+
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
                 map.AddSearchAttr(StationAttr.FK_StationType);
                 this._enMap = map;

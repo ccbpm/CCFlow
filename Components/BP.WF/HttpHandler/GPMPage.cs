@@ -59,6 +59,23 @@ namespace BP.WF.HttpHandler
         #endregion
 
 
+        #region 组织结构维护.
+        /// <summary>
+        /// 初始化组织结构维护.
+        /// </summary>
+        /// <returns></returns>
+        public string Organization_Init()
+        {
+
+            BP.GPM.Depts depts = new GPM.Depts();
+            depts.RetrieveAll();
+
+            return depts.ToJsonOfTree();
+
+        }
+        #endregion 组织结构维护.
+
+
 
         public string StationToDeptEmp_Init()
         {

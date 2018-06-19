@@ -111,8 +111,6 @@ function InitPage() {
             }
         }
 
-
-
         //协作发送.
         if (at == ActionType.TeampUp) {
 

@@ -751,9 +751,11 @@
 
             en.pkval = pkval;
             en.RetrieveFromDBSources();
+            en.SetPKVal(pkval);
 
             en.CopyForm();
             en.pkval = pkval;
+            en.SetPKVal(pkval);
 
             var info = en.Update();
             if (info != 1) {

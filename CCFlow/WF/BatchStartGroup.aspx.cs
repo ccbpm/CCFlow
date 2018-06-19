@@ -360,7 +360,7 @@ namespace CCFlow.WF
                 switch (btn.ID)
                 {
                     case NamesOfBtn.Insert: //数据导出
-                        this.Response.Redirect("UIEn.aspx?EnName=" + this.HisEn.ToString(), true);
+                        this.Response.Redirect("En.htm?EnName=" + this.HisEn.ToString(), true);
                         return;
                     case NamesOfBtn.Excel: //数据导出
                         Entities ens = this.HisEns;
@@ -420,7 +420,7 @@ namespace CCFlow.WF
         }
         private bool Btn_New_ButtonClick(object sender, EventArgs e)
         {
-            this.WinOpen("./RefFunc/UIEn.aspx?EnName=" + this.HisEn.ToString());
+            this.WinOpen("./RefFunc/En.htm?EnName=" + this.HisEn.ToString());
             this.SetDGData();
             return false;
         }

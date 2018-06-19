@@ -25,14 +25,20 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 构造方法
+        /// <summary>
+        /// 权限控制
+        /// </summary>
         public override UAC HisUAC
         {
             get
             {
                 UAC uac = new UAC();
+                //if (Web.WebUser.No.Equals("admin"))
+                //{
                 uac.IsUpdate = true;
-                uac.IsDelete = false;
+                uac.IsDelete = true;
                 uac.IsInsert = false;
+                //}
                 return uac;
             }
         }
@@ -99,6 +105,15 @@ namespace BP.Sys.FrmUI
             }
         }
         #endregion
+
+        protected override void afterDelete()
+        {
+            //删除分组信息.
+            GroupField gf = new GroupField();
+            gf.Delete(GroupFieldAttr.CtrlID,this.MyPK);
+
+            base.afterDelete();
+        }
 
         protected override bool beforeUpdateInsertAction()
         {

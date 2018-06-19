@@ -289,6 +289,7 @@ namespace BP.GPM
                 map.EnDesc = "系统";
                 map.EnType = EnType.Sys;
 
+
                 map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 20);
                 map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 20);
 
@@ -370,12 +371,19 @@ namespace BP.GPM
 
         protected override bool beforeUpdate()
         {
-            //系统类别
-            AppSort appSort = new AppSort(this.FK_AppSort);
-            Menu menu = new Menu(this.RefMenuNo);
-            menu.Name = this.Name;
-            menu.ParentNo = appSort.RefMenuNo;
-            menu.Update();
+          
+
+            if (DataType.IsNullOrEmpty(this.RefMenuNo) == false)
+            {
+                //系统类别
+                AppSort appSort = new AppSort(this.FK_AppSort);
+
+                Menu menu = new Menu(this.RefMenuNo);
+                menu.Name = this.Name;
+                menu.ParentNo = appSort.RefMenuNo;
+                menu.Update();
+            }
+
             return base.beforeUpdate();
         }
 

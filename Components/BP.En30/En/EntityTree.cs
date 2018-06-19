@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections;
 using BP.DA;
 
@@ -310,6 +311,102 @@ namespace BP.En
 	/// </summary>
     abstract public class EntitiesTree : Entities
     {
+        #region 转化为树结构的tree.
+        private StringBuilder appendMenus = null;
+        private StringBuilder appendMenuSb = null;
+        /// <summary>
+        /// 转化为json树
+        /// </summary>
+        /// <returns></returns>
+        public string ToJsonOfTree(string rootNo="0")
+        {
+            appendMenus = new StringBuilder();
+            appendMenuSb = new StringBuilder();
+            EntityTree root = this.GetEntityByKey(EntityTreeAttr.ParentNo, rootNo) as EntityTree;
+            if (root == null)
+                throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
+
+            appendMenus.Append("[{");
+            appendMenus.Append("'id':'" + root.No + "',");
+            appendMenus.Append("'pid':'" + root.ParentNo + "',");
+            appendMenus.Append("'text':'" + root.Name + "'");
+           // appendMenus.Append(IsPermissionsNodes(ens, dms, root.No));
+
+            // 增加它的子级.
+            appendMenus.Append(",'children':");
+            AddChildren(root, this);
+            appendMenus.Append(appendMenuSb);
+            appendMenus.Append("}]");
+
+            return ReplaceIllgalChart(appendMenus.ToString());
+        }
+        public void AddChildren(EntityTree parentEn, EntitiesTree ens)
+        {
+            appendMenus.Append(appendMenuSb);
+            appendMenuSb.Clear();
+
+            appendMenuSb.Append("[");
+            foreach (EntityTree item in ens)
+            {
+                if (item.ParentNo != parentEn.No)
+                    continue;
+
+                appendMenuSb.Append("{'id':'" + item.No + "','pid':'"+item.ParentNo+"','text':'" + item.Name + "','state':'closed'");
+                //appendMenuSb.Append(IsPermissionsNodes(ens, dms, item.No));
+                EntityTree treeNode = item as EntityTree;
+                // 增加它的子级.
+                appendMenuSb.Append(",'children':");
+                AddChildren(item, ens);
+                appendMenuSb.Append("},");
+            }
+            if (appendMenuSb.Length > 1)
+                appendMenuSb = appendMenuSb.Remove(appendMenuSb.Length - 1, 1);
+            appendMenuSb.Append("]");
+            appendMenus.Append(appendMenuSb);
+            appendMenuSb.Clear();
+        }
+        public string ReplaceIllgalChart(string s)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, j = s.Length; i < j; i++)
+            {
+
+                char c = s[i];
+                switch (c)
+                {
+                    case '\"':
+                        sb.Append("\\\"");
+                        break;
+                    case '\\':
+                        sb.Append("\\\\");
+                        break;
+                    case '/':
+                        sb.Append("\\/");
+                        break;
+                    case '\b':
+                        sb.Append("\\b");
+                        break;
+                    case '\f':
+                        sb.Append("\\f");
+                        break;
+                    case '\n':
+                        sb.Append("\\n");
+                        break;
+                    case '\r':
+                        sb.Append("\\r");
+                        break;
+                    case '\t':
+                        sb.Append("\\t");
+                        break;
+                    default:
+                        sb.Append(c);
+                        break;
+                }
+            }
+            return sb.ToString();
+        }
+        #endregion 转化为树结构的tree.
+
         /// <summary>
         /// 查询他的子节点
         /// </summary>

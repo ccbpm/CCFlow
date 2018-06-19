@@ -11,6 +11,7 @@ namespace GMP2.GPM
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+           // BP.GPM.DeptEmpStation
             //Emps emps = new Emps();
             //emps.RetrieveAll("No");
             //lbEmp.Items.Clear();

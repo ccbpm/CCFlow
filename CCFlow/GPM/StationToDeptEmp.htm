@@ -13,8 +13,7 @@
     <script src="jquery/easytemplate.js" type="text/javascript"></script>
   <!--  <script src="javascript/AppData.js" type="text/javascript"></script>
     <script src="javascript/StationToDeptEmp.js" type="text/javascript"></script>-->
-    
-
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引入新版本的类库. -->
     <script src="../WF/Scripts/config.js" type="text/javascript"></script>
     <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
@@ -29,7 +28,6 @@
                 return;
             }
 
-
             document.title = '按岗位设置权限:' + user.Name;
 
             //绑定岗位树.
@@ -39,7 +37,6 @@
            
             GenerBindEntities("DDL_DeptTree", "BP.Port.Depts", user.FK_Dept);
             return;
-            
         });
 
         function BindStationTree() {
@@ -50,7 +47,7 @@
             var stations = new Entities("BP.GPM.Stations");
             stations.RetrieveAll();
 
-            var html = "<table border=0 >";
+            var html = "<table border=0 style='width:100%;' >";
             
             for (var i = 0; i < stationTypes.length; i++) {
 
@@ -63,7 +60,6 @@
                 for (var idx = 0; idx < stations.length; idx++) {
 
                     var sta = stations[idx];
-
                     if (sta.FK_StationType != type.No)
                         continue;
 
@@ -85,78 +81,68 @@
 
         //显示人员.
         function BindEmpByStation(staNo) {
-            currStationNo = staNo; 
+            currStationNo = staNo;
+
+            if (currDeptNo == null) {
+                currDeptNo = $('#DDL_DeptTree').val();
+            }
+
             GenerEmps(staNo, currDeptNo);
         }
 
+        //显示人员.
+        function BindEmpByDept() {
 
+            currDeptNo = $('#DDL_DeptTree').val();
+            
+            GenerEmps(currStationNo, currDeptNo);
+        }
         
         //生成页面.
         function GenerEmps(staNo, deptNo) {
-           
-//            var deptTree = $('#DDL_DeptTree').combotree('tree'); //获得选择的部门.
-//            var treeChecked = deptTree.tree('getSelected');
-//            if (treeChecked == false) {
-//                alert('请选择部门！');
-//                return;
-//            }
-            //  var deptNo = deptTree.id;
-            deptNo = document.getElementById("DDL_DeptTree").value;
+
             //获得已经选择的人员.
             var empsOfSelected = new Entities("BP.GPM.DeptEmpStations");
-            
             empsOfSelected.Retrieve("FK_Dept", deptNo, "FK_Station", staNo);
-
 
             //获得该部门下人员集合.
             var emps = new Entities("BP.GPM.DeptEmps");
-            //emps.Retrieve("FK_Dept", deptNo);
-            emps.RetrieveAll();
+            emps.Retrieve("FK_Dept", deptNo);
 
-            //获取部门
-            var depts = new Entities("BP.GPM.Depts");
-            depts.RetrieveAll();
-
-            
-            //把人员呈现出来.
-            var html ="";
-            for (var i = 0; i < depts.length; i++) {
-                var cc = depts[i];
-                html += "<h3>" + cc.Name + "</h3>";
-                var checked = 'checked=false';
-                for (var idx = 0; idx < emps.length; idx++) {
-
-                    var emp = emps[idx];
-                    //判断是否选中.
-                    for (var idc = 0; idc < empsOfSelected.length; idc++) {
-
-                        if (empsOfSelected.FK_Emp == emp.FK_Em) {
-                            checked = 'checked=true';
-                        }
-                    }
-                    if (cc.No == emp.FK_Dept)
-                    {
-
-                        html += "<label><input type=checkbox  id='CB_"+emp.FK_Emp+"' "+checked+" />" + emp.FK_Emp + "</label>";
-                    }
-                }
+            if (emps.length == 0) {
+                alert('该部门下没有人员');
+                return;
             }
-            
-            for (var i = 0; i < emps.length; i++) {
 
-                var emp = emps[i];
+            $("#templatePanel").html();
 
-                var checked = 'checked=false';
+
+            var dept = new Entity("BP.Port.Dept", deptNo);
+            var html = "<h3>" + dept.Name + " 共有(" + emps.length + ")个成员.</h3>";
+
+            var station = new Entity("BP.Port.Station", staNo);
+            html += "<h3> 岗位:" + station.Name + " </h3>";
+
+            for (var idx = 0; idx < emps.length; idx++) {
+
+                var emp = emps[idx];
+
+                var myemp = new Entity('BP.Port.Emp', emp.FK_Emp);
+                var checked = "";
+
+                var label = myemp.Name;
 
                 //判断是否选中.
                 for (var idc = 0; idc < empsOfSelected.length; idc++) {
 
                     if (empsOfSelected.FK_Emp == emp.FK_Em) {
                         checked = 'checked=true';
+
+                        label = "<font color=green>" + label + "</font>";
+                        break;
                     }
                 }
-
-                //html += "<label><input type=checkbox  id='CB_"+emp.FK_Emp+"' "+checked+" />" + emp.FK_Emp + "</label>";
+                html += "&nbsp;<label><input type=checkbox name='cbgroup' id='" + emp.FK_Emp + "' " + checked + " />" + label + "</label>";
             }
 
             $("#templatePanel").html(html);
@@ -170,7 +156,8 @@
             var ckbAll = document.getElementById("ckbAllText");
             var selected = $('#StationsTree').tree('getSelected');
             //岗位如果没有选择项就返回
-            if (!selected) return;
+            if (!selected) 
+                return;
 
             if (ckbAll.innerHTML == "全选") {
                 checkedSta = true;
@@ -187,29 +174,26 @@
             }
         }
 
-
         //保存选择项
         function Save() {
 
-            var selected = $('#StationsTree').tree('getSelected'); //获得选择的岗位.
-            if (selected == false || selected == null || selected == undefined) {
-                alert('请选择岗位！');
+            if (currDeptNo == null || currStationNo == null) {
+                alert('没有选择数据');
                 return;
             }
 
-            var deptTree = $('#DDL_DeptTree').combotree('tree'); //获得选择的部门.
-            var treeChecked = deptTree.tree('getSelected');
-            if (treeChecked == false) {
-                alert('请选择部门！');
-                return;
-            }
 
             //创建一个实体.
-            var en = new Entity("BP.Port.DeptEmpStation");
-            var stationNo = selected.id;
-            var dept = treeChecked.id;
+            var myen = new Entity("BP.GPM.DeptEmpStation");
+            myen.Delete("FK_Dept", currDeptNo, "FK_Station", currStationNo); //删除现有的数据.
 
-            var ckgroup = document.getElementsByName("ckgroup");
+            var en = new Entity("BP.GPM.DeptEmpStation");
+
+            //获得分组
+            var ckgroup = document.getElementsByName("cbgroup");
+
+            var num = 0;
+
             //获取选择项
             for (var i = 0; i < ckgroup.length; i++) {
 
@@ -217,34 +201,28 @@
                     continue;
 
                 var empNo = ckgroup[i].id;
-                var pkVal = dept + "_" + empNo + '_' + selected.id;
+
+                var pkVal = currDeptNo + "_" + empNo + '_' + currStationNo;
+
+                //this.MyPK = this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station;
+                //alert(pkVal);
 
                 en.SetPKVal(pkVal);
-                if (en.IsExits() == true)
-                    continue; //判断是否存在.
-
-                en.FK_Station = stationNo;
+                en.MyPK = pkVal;
+                en.FK_Station = currStationNo;
                 en.FK_Emp = empNo;
-                en.FK_Dept = dept;
+                en.FK_Dept = currDeptNo;
                 en.Insert();  //插入到数据库》
+                num++;
             }
+
+            alert('一共[' + num + ']保存成功.');
+
+            // alert('保存成功.');
         }
-
-
     </script>
 
-    <style type="text/css">
-        #templatePanel
-        {
-            height: 280px;
-            margin: 20px 20px 20px 20px;
-            margin-bottom: 40px;
-        }
-        #ckbAll
-        {
-            margin-left:20px;
-        }
-    </style>
+    
 </head>
 <body class="easyui-layout">
     <!--<div id="pageloading" style="filter: alpha(opacity=80); opacity:0.80;">-->
@@ -254,24 +232,26 @@
             <ul id="StationsTree" class="easyui-tree-line" data-options="animate:false,dnd:false">
             </ul>
 
-            <div id="StasList"></div>
+            <div id="StasList" ></div>
         </div>
     </div>
     <div data-options="region:'center'" style="overflow: hidden;">
         <div style="padding: 0px; background: #fafafa; width: 100%;">
-            <a href="#" class="easyui-linkbutton" data-options="plain:true"><b><span id="curModelText" style="color: Red;">选择按人员分配权限</span></b></a>
+            
+            <!--<a href="#" class="easyui-linkbutton" data-options="plain:true"><b><span id="curModelText" >选择按人员分配权限</span></b></a>-->
+
             <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'" onclick="CheckedAll()"><span id="ckbAllText">全选</span></a> 
             <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save-save'" onclick="Save('0')">保存</a>
             <!--<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Save('1');">清空保存</a>-->
             <input type="checkbox" id="CB_ViewModel" onclick="GetTemplatePanel()" />显示已选
-            | 选择部门：<select id="DDL_DeptTree"  style="width: 260px;">
+            | 选择部门：<select id="DDL_DeptTree"   onchange="BindEmpByDept()" style="width: 260px;">
               </select>
 
              <!-- <select id="Select1" class="easyui-combotree" style="width: 260px;">
               </select>-->
         </div>
         <div style="overflow: auto; height: 95%;">
-            <div id="templatePanel">
+            <div id="templatePanel" style=" margin:10px;">
             </div>
             <br />
         </div>

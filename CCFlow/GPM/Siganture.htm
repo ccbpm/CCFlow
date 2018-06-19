@@ -5,6 +5,10 @@
     <!--<script type="text/javascript" src="../Scripts/config.js"></script>-->
     <script type="text/javascript" src="./jquery/jquery.min.js"></script>
     <script src="javascript/QueryString.js" type="text/javascript"></script>
+
+      <!-- 引入新版本的类库. -->
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
 </head>
 <body>
     <fieldset>
@@ -37,19 +41,19 @@
 
              var empNo = GetQueryString("EmpNo");
 
-             //初始化
-             $.ajax({
-                 // url: Handler + "?DoType=Siganture_Init",
-                 url: "Handler.ashx?DoType=Siganture_Init&EmpNo=" + empNo,
-                 dataType: "json",
-                 success: function (data) {
-                     var img = document.getElementById("sigimg");
-                  //   alert(data);
+             var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+             handler.AddPara("EmpNo", empNo);
+             var data = handler.DoMethodReturnString("Siganture_Init");
 
-                     var url = '/DataUser/Siganture/' + data[0].No + '.jpg';
-                     img.src = url;
-                 }
-             });
+             if (data.indexOf('err@') == 0) {
+                 alert(data);
+                 return;
+             }
+
+             var img = document.getElementById("sigimg");
+
+             var url = '/DataUser/Siganture/' + data[0].No + '.jpg';
+             img.src = url;
 
          });
 
@@ -57,7 +61,8 @@
 
              //  var url = Handler + "?DoType=Siganture_Save";
              var empNo = GetQueryString("EmpNo");
-             var url = "Handler.ashx?DoType=Siganture_Save&EmpNo="+empNo;
+             var url = "Handler.ashx?DoType=Siganture_Save&EmpNo=" + empNo;
+
 
              var xhr = new XMLHttpRequest();
              xhr.open('post', url, true);

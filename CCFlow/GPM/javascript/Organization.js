@@ -1,4 +1,12 @@
-﻿function replaceTrim(val) {//去除空格
+﻿
+
+//加载菜单
+function LoadDeptTree() {
+    Application.data.getOrganizationTreeForAdmin(0, showDeptTreeCallBack, this);
+}
+
+
+function replaceTrim(val) {//去除空格
     return val.replace(/[ ]/g, "");
 }
 
@@ -38,6 +46,7 @@ function hasAuthority() {
 }
 //新增部门  
 function append(deptSort) {
+
     if (hasAuthority()) {
         Application.data.appendData(deptSort, curNodeId, function (js, scope) {
             if (js == "false") {
@@ -105,6 +114,7 @@ function EmpFloatNode(v) {
 }
 //查看部门信息
 function checkDeptInfo() {
+
     if (hasAuthority()) {
         Application.data.checkDeptInfo(curNodeId, function (js, scope) {
             if (js != "false") {
@@ -628,6 +638,7 @@ function ReplaceBelongDept() {
         }
     });
 }
+
 //密码重置
 function modifyPwd() {
     if (hasAuthority()) {
@@ -1256,22 +1267,6 @@ function LoadDataGridAdmin(pageNumber, pageSize) {
     }, this);
 }
 
-//加载菜单
-function LoadDeptTree() {
-    Application.data.getOrganizationTreeForAdmin(0, showDeptTreeCallBack, this);
-}
-
-//初始化
-$(function () {
-    deptInfoDialogClose();
-    $('#deptEmpDialog').dialog("close");
-    $('#empInfo').dialog("close");
-    $('#connecteEmp').dialog("close");
-    empBelongDeptDialogClose();
-    $("#pageloading").show();
-    //加载菜单
-    LoadDeptTree();
-});
 //窗体操作
 function deptInfoDialogClose() {
     $('#deptInfoDialog').dialog("close");

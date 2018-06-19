@@ -987,6 +987,7 @@ namespace GMP2.GPM
             EntityTree root = ens.GetEntityByKey(EntityTreeAttr.ParentNo, rootNo) as EntityTree;
             if (root == null)
                 throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
+
             appendMenus.Append("[{");
             appendMenus.Append("'id':'" + root.No + "'");
             appendMenus.Append(",'text':'" + root.Name + "'");

@@ -14,6 +14,11 @@ namespace BP.GPM
         /// 排序字段
         /// </summary>
         public const string Idx = "Idx";
+        /// <summary>
+        /// 组织机构编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
+
     }
 	/// <summary>
     ///  岗位类型
@@ -75,6 +80,8 @@ namespace BP.GPM
                 map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 2, 2, 2);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
                 map.AddTBInt(StationTypeAttr.Idx, 0, "顺序", true, false);
+                map.AddTBString(StationTypeAttr.OrgNo, null, "组织机构编号", true, false, 0, 50, 20);
+
                 this._enMap = map;
                 return this._enMap;
             }

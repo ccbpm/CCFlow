@@ -170,9 +170,9 @@ namespace BP.GPM
                 map.AddMyPK();
                 map.AddTBString(DeptEmpAttr.FK_Emp, null, "操作员", false, false, 1, 50, 1);
                 map.AddTBString(DeptEmpAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
+
                 map.AddTBString(DeptEmpAttr.FK_Duty, null, "职务", false, false, 0, 50, 1);
                 map.AddTBInt(DeptEmpAttr.DutyLevel, 0, "职务级别", false, false);
-
                 map.AddTBString(DeptEmpAttr.Leader, null, "领导", false, false, 0, 50, 1);
 
                 this._enMap = map;

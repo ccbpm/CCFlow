@@ -273,6 +273,17 @@
                 }
             }
 
+
+            //如果有主键，就设置主键不可以编辑.
+            var pkval = GetPKVal();
+
+            if (pkval != null ) {
+
+                //获取当前主键字段是否可以编辑?
+                $("#TB_No").attr("disabled", true);
+                $("#TB_MyPK").attr("disabled", 'disabled');
+                $("#TB_NodeID").attr("disabled", 'disabled');
+            }
         }
 
         //解析表单字段 MapAttr.
@@ -418,6 +429,10 @@
             }
 
             html += "</table>";
+
+
+          
+
             return html;
         }
 
@@ -727,6 +742,7 @@
         }
 
         function Save() {
+
             this.Update();
         }
 
@@ -736,12 +752,31 @@
             url = url.substring(0, url.indexOf("?"));
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
-            var pkval = GetPKVal();
 
+            var pkval = GetPKVal();
             if (pkval == null || pkval == "") {
 
                 en.CopyForm();
+
+                //有编号列.
+                if (en.No != undefined) {
+
+                    //获取当前主键字段是否可以编辑?
+                    var val = $("#TB_No").prop("disabled");
+
+                    //主键是可以别用户自定义的 zhangsan.
+                    if (val == false) {
+                        if (en.IsExits() == true) {
+                            alert('编号为[' + en.No + ']的数据已经存在.');
+                            return;
+                        }
+                    }
+
+                }
+
                 en.Insert();
+
+
                 var pkval = en.GetPKVal();
 
                 url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");

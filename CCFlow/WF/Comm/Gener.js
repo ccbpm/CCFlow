@@ -916,7 +916,7 @@ var Entity = (function () {
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + this.GetPKVal() + "&Key1="+key1+"&Val1="+val1+"&Key2="+key2+"&Val2="+val2+"&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + this.GetPKVal() + "&Key1=" + key1 + "&Val1=" + val1 + "&Key2=" + key2 + "&Val2=" + val2 + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
                 success: function (data) {
@@ -1128,11 +1128,11 @@ var Entity = (function () {
 
         DoMethodReturnString: function (methodName, myparams) {
 
-                        var params = [];
-                        $.each(arguments, function (i, o) {
-                            if (i > 0)
-                                params.push(o);
-                        });
+            var params = [];
+            $.each(arguments, function (i, o) {
+                if (i > 0)
+                    params.push(o);
+            });
 
 
             var pkavl = this.GetPKVal();
@@ -1166,6 +1166,7 @@ var Entity = (function () {
         DoMethodReturnJSON: function (methodName, params) {
 
             var jsonString = this.DoMethodReturnString(methodName, params);
+
 
             if (jsonString.indexOf("err@") != -1) {
                 alert(jsonString);
@@ -1883,8 +1884,9 @@ var HttpHandler = (function () {
             var jsonString = this.DoMethodReturnString(methodName);
 
             if (jsonString.indexOf("err@") == 0) {
-                alert('请查看控制台:' + jsonString);
-                // console.log(jsonString);
+                alert(jsonString);
+                //alert('请查看控制台(DoMethodReturnJSON):' + jsonString);
+                console.log(jsonString);
                 return jsonString;
             }
 

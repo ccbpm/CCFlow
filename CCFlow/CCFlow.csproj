@@ -329,12 +329,6 @@
     <Content Include="Global.asax" />
     <Content Include="SDKFlowDemo\AuthorDemo.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell3DLeft.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell3DTop.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithRequest.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithUserContral.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\HTMLPage1.htm" />
     <Content Include="SDKFlowDemo\BPFramework\EasyUI\DemoUserListExt.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\EasyUI\DeptEmpTree.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx" />
@@ -342,8 +336,6 @@
     <Content Include="SDKFlowDemo\BPFramework\Output\DemoUserList.aspx" />
     <Content Include="SDKFlowDemo\ccflow.js" />
     <Content Include="SDKFlowDemo\CCFormTester.asmx" />
-    <Content Include="SDKFlowDemo\Comm\Track.ascx" />
-    <Content Include="SDKFlowDemo\Comm\Track.aspx" />
     <Content Include="SDKFlowDemo\DemoBatchUrl.aspx" />
     <Content Include="SDKFlowDemo\DemoBP.aspx" />
     <Content Include="SDKFlowDemo\DemoComm.htm" />
@@ -386,7 +378,6 @@
     <Content Include="SDKFlowDemo\TestCase\iframePage.aspx" />
     <Content Include="SDKFlowDemo\TestCond.aspx" />
     <Content Include="SDKFlowDemo\TestCondOfFlowOver.aspx" />
-    <Content Include="SDKFlowDemo\Comm\Site.Master" />
     <Content Include="SDKFlowDemo\GuestApp\Site.Master" />
     <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
     <Content Include="SDKFlowDemo\SDK\F018\Serv18.ashx" />
@@ -433,17 +424,12 @@
     <Content Include="WF\Admin\FoolFormDesigner\TabIdx.htm" />
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
     <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
-    <Content Include="WF\Admin\RptDfine\DeptPower.aspx" />
-    <Content Include="WF\Admin\RptDfine\Do.aspx" />
-    <Content Include="WF\Admin\RptDfine\Frm_ColsChose.aspx" />
-    <Content Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx" />
-    <Content Include="WF\Admin\RptDfine\Pub.ascx" />
+    <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
+    <Content Include="WF\Admin\RptDfine\Default.htm" />
     <Content Include="WF\Admin\RptDfine\S0_RptList.htm" />
     <Content Include="WF\Admin\RptDfine\S2ColsChose.htm" />
     <Content Include="WF\Admin\RptDfine\S3ColsLabel.htm" />
     <Content Include="WF\Admin\RptDfine\S5SearchCond.htm" />
-    <Content Include="WF\Admin\RptDfine\S5_SearchCond.aspx" />
-    <Content Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
     <Content Include="WF\Admin\AttrFlow\Limit.htm" />
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
@@ -452,6 +438,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\Designer.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.js" />
     <Content Include="WF\Admin\FoolFormDesigner\GuideSFTableAttr.htm" />
+    <Content Include="WF\Admin\RptDfine\S8_RptExportTemplate.htm" />
     <Content Include="WF\Admin\Sln\Aths.htm" />
     <Content Include="WF\Admin\Sln\BindFrms.htm" />
     <Content Include="WF\Admin\Sln\BindFrmsDtl.htm" />
@@ -1456,7 +1443,6 @@
     <Content Include="WF\Comm\UC\UCGraphics.ascx" />
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\UC\UIEn.ascx" />
-    <Content Include="WF\Comm\UIEn.aspx" />
     <Content Include="WF\Comm\Sys\Holiday.htm" />
     <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
@@ -5822,7 +5808,6 @@
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <Content Include="WF\Admin\RptDfine\Handler.ashx" />
-    <Content Include="WF\Admin\RptDfine\RptGuide.Master" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
@@ -6054,41 +6039,6 @@
     <Compile Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx.designer.cs">
       <DependentUpon>DemoEmps.aspx</DependentUpon>
     </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx.cs">
-      <DependentUpon>Cell2D.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx.designer.cs">
-      <DependentUpon>Cell2D.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell3DLeft.aspx.cs">
-      <DependentUpon>Cell3DLeft.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell3DLeft.aspx.designer.cs">
-      <DependentUpon>Cell3DLeft.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell3DTop.aspx.cs">
-      <DependentUpon>Cell3DTop.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell3DTop.aspx.designer.cs">
-      <DependentUpon>Cell3DTop.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithRequest.aspx.cs">
-      <DependentUpon>DemoRegUserWithRequest.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithRequest.aspx.designer.cs">
-      <DependentUpon>DemoRegUserWithRequest.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithUserContral.aspx.cs">
-      <DependentUpon>DemoRegUserWithUserContral.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithUserContral.aspx.designer.cs">
-      <DependentUpon>DemoRegUserWithUserContral.aspx</DependentUpon>
-    </Compile>
     <Compile Include="SDKFlowDemo\BPFramework\EasyUI\DemoUserListExt.aspx.cs">
       <DependentUpon>DemoUserListExt.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6127,27 +6077,6 @@
     <Compile Include="SDKFlowDemo\CCFormTester.asmx.cs">
       <DependentUpon>CCFormTester.asmx</DependentUpon>
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Comm\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Comm\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Comm\Track.ascx.cs">
-      <DependentUpon>Track.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Comm\Track.ascx.designer.cs">
-      <DependentUpon>Track.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Comm\Track.aspx.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Comm\Track.aspx.designer.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\DemoBatchUrl.aspx.cs">
       <DependentUpon>DemoBatchUrl.aspx</DependentUpon>
@@ -6544,64 +6473,8 @@
     <Compile Include="WF\Admin\Port\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\RptDfine\DeptPower.aspx.cs">
-      <DependentUpon>DeptPower.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\DeptPower.aspx.designer.cs">
-      <DependentUpon>DeptPower.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.cs">
-      <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.designer.cs">
-      <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx.cs">
-      <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx.designer.cs">
-      <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\RptDfine\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\RptGuide.Master.cs">
-      <DependentUpon>RptGuide.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\RptGuide.Master.designer.cs">
-      <DependentUpon>RptGuide.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\S5_SearchCond.aspx.cs">
-      <DependentUpon>S5_SearchCond.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\S5_SearchCond.aspx.designer.cs">
-      <DependentUpon>S5_SearchCond.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.cs">
-      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.designer.cs">
-      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -7205,13 +7078,6 @@
     </Compile>
     <Compile Include="WF\Comm\UC\UIEn.ascx.designer.cs">
       <DependentUpon>UIEn.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UIEn.aspx.cs">
-      <DependentUpon>UIEn.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UIEn.aspx.designer.cs">
-      <DependentUpon>UIEn.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
     <Compile Include="WF\Do.aspx.cs">

@@ -381,7 +381,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoRptExportTemplate(string rptMark)
         {
-            return "../../Admin/RptDfine/S8_RptExportTemplate.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No)+"Rpt" + rptMark;
+            return "../../Admin/RptDfine/S8_RptExportTemplate.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No)+"Rpt" + rptMark;
         }
         /// <summary>
         /// 重置设置.

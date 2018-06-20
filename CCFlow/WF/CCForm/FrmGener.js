@@ -143,14 +143,14 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
         projectName = "";
     }
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
-    if (typeof ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog) === "function") {
-        ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog)(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
+    if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
+        OpenBootStrapModal(url, "editSubGrid", '编辑', 1000, 450, "icon-property", true, function () { }, null, function () {
             if (typeof InitPage === "function") {
                 InitPage.call();
             } else {
                 alert("请手动刷新表单");
             }
-        });
+        }, "editSubGridDiv");
     } else {
         window.open(url);
     }
@@ -738,20 +738,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框  
+            //下拉框   
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
 
-            //对于复选下拉框获取值得方法  
-            //                if ($('[data-id=' + name + ']').length > 0) { 
-            //                    var val = $(disabledEle).val().join(','); 
-            //                    formArrResult.push(name + '=' + val); 
-            //                } else { 
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val()); 
-            //                } 
-            //                break; 
-            //文本区域  
+            //对于复选下拉框获取值得方法   
+            //                if ($('[data-id=' + name + ']').length > 0) {  
+            //                    var val = $(disabledEle).val().join(',');  
+            //                    formArrResult.push(name + '=' + val);  
+            //                } else {  
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
+            //                }  
+            //                break;  
+            //文本区域   
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;

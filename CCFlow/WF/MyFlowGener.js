@@ -77,14 +77,14 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
         projectName = basePath;
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
 
-    if (typeof ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog) === "function") {
-        ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", false, null, null, function () {
+    if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
+        ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", true, function () { }, null, function () {
             if (typeof InitPage === "function") {
                 InitPage.call();
             } else {
                 alert("请手动刷新表单");
             }
-        });
+        }, "div_editSubGrid");
     } else {
         window.open(url);
     }

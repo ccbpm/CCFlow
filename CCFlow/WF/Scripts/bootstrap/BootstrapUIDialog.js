@@ -1,4 +1,4 @@
-﻿function OpenBootStrapModal(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dlgClosedFunc) {
+﻿function OpenBootStrapModal(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dlgClosedFunc, divId) {
     ///<summary>使用EasyUiDialog打开一个页面</summary>
     ///<param name="url" type="String">页面链接</param>
     ///<param name="iframeId" type="String">嵌套url页面的iframe的id，在okBtnFunc中，可以通过document.getElementById('eudlgframe').contentWindow获取该页面，然后直接调用该页面的方法，比如获取选中值</param>
@@ -16,10 +16,18 @@
 
     if (dlg.length == 0) {
         isTheFirst = true;
-        var divDom = $("<div class='modal fade' data-backdrop='true' aria-hidden='true'></div>");
-        divDom.attr("id", "bootStrapdlg");
+        var divDom = $("<div class='modal fade' data-backdrop='static'></div>");
+        //divDom.attr("id", "bootStrapdlg");
+        if (divId != null && divId != "")
+            divDom.attr("id", divId);
+        else
+            divDom.attr("id", "bootStrapdlg");
         $(document.body).append(divDom);
-        dlg = $('#bootStrapdlg');
+
+        if (divId != null && divId != "")
+            dlg = $('#' + divId);
+        else
+            dlg = $('#bootStrapdlg');
     }
 
     if (dlg.length == 1) {
@@ -66,7 +74,7 @@
 
     if (typeof window.doCloseDialog != "function") {
         window.doCloseDialog = function () {
-            $('#bootStrapdlg').modal('hide');
+            dlg.modal('hide');
         };
         // 当弹出框未获得焦点时触发
         $(document).bind("keyup", function (e) {
@@ -84,7 +92,7 @@
         var modalFooter = $("<div class='modal-footer'></div>");
         var footerClose = $("<button type='button' class='btn' data-dismiss='modal'>关闭</button>");
         footerClose.click(function () {
-            $('#bootStrapdlg').modal('hide');
+            dlg.modal('hide');
 
         });
         var footerOK = $("<button type='button' class='btn'>确定</button>");
@@ -92,7 +100,7 @@
             if (okBtnFunc(okBtnFuncArgs) == false) {
                 return;
             }
-            $('#bootStrapdlg').modal('hide');
+            dlg.modal('hide');
         });
         //添加确定和关闭按钮
         modalFooter.append(footerClose);
@@ -103,10 +111,10 @@
     }
 
     //关闭事件
-    $('#bootStrapdlg').off('hide.bs.modal');
-    $('#bootStrapdlg').on('hide.bs.modal', function () {
+    dlg.off('hide.bs.modal');
+    dlg.on('hide.bs.modal', function () {
         /*防止缓存，切换页面不能显示问题*/
-        $("#bootStrapdlg").remove();
+        dlg.remove();
         // 关闭时清空edit状态为add
         dlg.find("iframe").attr('src', '');
         if (dlgClosedFunc) {
@@ -114,7 +122,7 @@
         }
     });
 
-    $('#bootStrapdlg').modal().show();
+    dlg.modal().show();
     return "bootStrapdlg";
 }
 

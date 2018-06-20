@@ -89,13 +89,9 @@ function PopBranchesAndLeaf(mapExt, val) {
     var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+            OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
-                //单选清空数据
-                if (selectType == "0") {
-                    //清空数据
-                    Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
-                }
+
                 var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     var selectedRows = iframe.contentWindow.selectedRows;
@@ -111,7 +107,7 @@ function PopBranchesAndLeaf(mapExt, val) {
                 }
             }, null, function () {
 
-            });
+            }, "div_" + iframeId);
             return;
         }
         //OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
@@ -203,13 +199,9 @@ function PopBranches(mapExt, val) {
     var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+            OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
-                //单选清空数据
-                if (selectType == "0") {
-                    //清空数据
-                    Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
-                }
+
                 var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     var nodes = iframe.contentWindow.GetCheckNodes();
@@ -231,7 +223,7 @@ function PopBranches(mapExt, val) {
                 }
             }, null, function () {
 
-            });
+            }, "div_" + iframeId);
             return;
         }
     });
@@ -286,63 +278,75 @@ function Refresh_Mtags(FK_MapData, AttrOfOper, oid, val) {
 
 /******************************************  表格查询 **********************************/
 function PopTableSearch(mapExt) {
+    var target = $("#TB_" + mapExt.AttrOfOper);
+    target.hide();
 
-    var tb = $("#TB_" + mapExt.AttrOfOper);
-    if (tb.length == 0) {
-        mapExt.Delete(); //把他删除掉.
-        return;
-    }
+    var width = target.width();
+    var height = target.height();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    container.height(height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
 
-    //设置文本框只读.
-    //tb.attr('readonly', 'true');
-    // tb.attr('disabled', 'true');
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
+            console.log("unselect: " + JSON.stringify(record));
+        }
+    });
 
-    //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
-    tb.bind("click", function () { PopTableSearch_Done(mapExt) });
-}
+    var width = mapExt.W;
+    var height = mapExt.H;
+    var iframeId = mapExt.MyPK + mapExt.FK_MapData;
+    var title = mapExt.GetPara("Title");
+    var oid = GetPKVal();
 
-function PopTableSearch_Done(mapExt) {
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
 
-    //获得主键.
-    var pkval = GetPKVal();
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+    debugger
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
 
-    //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
-    var url = "";
 
-    var host = window.location.href;
+    //解项羽 这里需要相对路径.
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
 
-    if (host.indexOf('MyFlow') == -1)
-        url = 'Pop/TableSearch.htm?MyPK=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
-    else
-        url = './CCForm/Pop/TableSearch.htm?MyPK=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+    container.on("dblclick", function () {
+        if (window.parent && window.parent.OpenBootStrapModal) {
+            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+                var selectType = mapExt.GetPara("SelectType");
 
-    if (window.parent && window.parent.OpenBootStrapModal) {
-        window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function (){
-            var selectType = mapExt.GetPara("SelectType");
-            var iframe = document.getElementById("eudlgframe");
-            if (iframe) {
-                var selectedRows = iframe.contentWindow.selectedRows;
-                var rowText = "";
-                if ($.isArray(selectedRows)) {
-                    rowText = selectedRows[0].Name + ",";
+                var iframe = document.getElementById(iframeId);
+                if (iframe) {
+                    var selectedRows = iframe.contentWindow.selectedRows;
+                    if ($.isArray(selectedRows)) {
+                        var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
+                        mtags.mtags("loadData", selectedRows);
+                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        // 单选复制当前表单
+                        if (selectType == "0" && selectedRows.length == 1) {
+                            ValSetter(mapExt.Tag4, selectedRows[0].No);
+                        }
+                    }
                 }
-                if (rowText != null)
-                    $("#TB_" + mapExt.AttrOfOper).val(rowText.substring(0, rowText.length - 1));
 
-                // 单选复制当前表单
-                if (selectType == "0" && selectedRows.length == 1) {
-                    ValSetter(mapExt.Tag4, selectedRows[0].No);
-                }
+            }, null, function () {
 
-            }
-
-        }, null, function () {
-
-          });
-        return;
-    }
+            }, "div_" + iframeId);
+            return;
+        }
+    });
 }
-
 
 /******************************************  分组列表 **********************************/
 
@@ -376,7 +380,7 @@ function PopGroupList_Done(mapExt) {
         url = 'CCForm/Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
     if (window.parent && window.parent.OpenBootStrapModal) {
-        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", true, function () {
+        OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", true, function () {
             var iframe = document.getElementById("eudlgframe");
             if (iframe) {
                 var savefn = iframe.contentWindow.Save;
@@ -392,7 +396,7 @@ function PopGroupList_Done(mapExt) {
             }
         }, null, function () {
 
-        });
+        }, "eudlgframeDiv");
         return;
     }
 }

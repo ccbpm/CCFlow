@@ -294,7 +294,7 @@ function PopTableSearch(mapExt) {
     }
 
     //设置文本框只读.
-    tb.attr('readonly', 'true');
+    //tb.attr('readonly', 'true');
     // tb.attr('disabled', 'true');
 
     //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
@@ -312,16 +312,33 @@ function PopTableSearch_Done(mapExt) {
     var host = window.location.href;
 
     if (host.indexOf('MyFlow') == -1)
-        url = 'Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+        url = 'Pop/TableSearch.htm?MyPK=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
     else
-        url = './CCForm/Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+        url = './CCForm/Pop/TableSearch.htm?MyPK=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
     if (window.parent && window.parent.OpenBootStrapModal) {
-        window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", false, function () { }, null, function () {
+        window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function (){
+            var selectType = mapExt.GetPara("SelectType");
+            var iframe = document.getElementById("eudlgframe");
+            if (iframe) {
+                var selectedRows = iframe.contentWindow.selectedRows;
+                var rowText = "";
+                if ($.isArray(selectedRows)) {
+                    rowText = selectedRows[0].Name + ",";
+                }
+                if (rowText != null)
+                    $("#TB_" + mapExt.AttrOfOper).val(rowText.substring(0, rowText.length - 1));
 
-            // location = location;
+                // 单选复制当前表单
+                if (selectType == "0" && selectedRows.length == 1) {
+                    ValSetter(mapExt.Tag4, selectedRows[0].No);
+                }
 
-        });
+            }
+
+        }, null, function () {
+
+          });
         return;
     }
 }

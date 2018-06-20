@@ -271,7 +271,6 @@ namespace BP.WF
             // 删除数据.
             if (wn.HisNode.IsStartNode)
             {
-                DBAccess.RunSQL("DELETE FROM WF_GenerFH WHERE FID=" + this.WorkID);
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID);
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + nd.NodeID);
             }
@@ -642,7 +641,6 @@ namespace BP.WF
             // 删除数据.
             if (wn.HisNode.IsStartNode)
             {
-                DBAccess.RunSQL("DELETE FROM WF_GenerFH WHERE FID=" + this.WorkID);
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID);
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + nd.NodeID);
             }
@@ -773,11 +771,7 @@ namespace BP.WF
             // 记录日志..
             WorkNode wn = new WorkNode(wk, nd);
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, "");
-
-            // 删除分合流记录。
-            if (nd.IsStartNode)
-                DBAccess.RunSQL("DELETE FROM WF_GenerFH WHERE FID=" + this.WorkID);
-
+ 
             //删除上一个节点的数据。
             foreach (Node ndNext in nd.HisToNodes)
             {
@@ -803,7 +797,6 @@ namespace BP.WF
 
             //设置当前节点。
             BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=1");
-            BP.DA.DBAccess.RunSQL("UPDATE WF_GenerFH SET FK_Node=" + gwf.FK_Node + " WHERE FID=" + this.WorkID);
 
             // 设置当前节点的状态.
             Node cNode = new Node(gwf.FK_Node);
@@ -883,10 +876,7 @@ namespace BP.WF
             // 记录日志..
             WorkNode wn = new WorkNode(wk, nd);
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, "");
-
-            // 删除分合流记录。
-            if (nd.IsStartNode)
-                DBAccess.RunSQL("DELETE FROM WF_GenerFH WHERE FID=" + this.WorkID);
+ 
 
             //删除上一个节点的数据。
             foreach (Node ndNext in nd.HisToNodes)
@@ -911,8 +901,6 @@ namespace BP.WF
                     wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
             }
 
-            //设置当前节点。            
-            BP.DA.DBAccess.RunSQL("UPDATE WF_GenerFH SET FK_Node=" + gwf.FK_Node + " WHERE FID=" + this.WorkID);
 
             // 设置当前节点的状态.
             Node cNode = new Node(gwf.FK_Node);
@@ -963,7 +951,6 @@ namespace BP.WF
             gwf.Update();
 
             BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
-            BP.DA.DBAccess.RunSQL("UPDATE WF_GenerFH SET FK_Node=" + gwf.FK_Node + " WHERE FID=" + this.WorkID);
 
             ShiftWorks fws = new ShiftWorks();
             fws.Delete(ShiftWorkAttr.FK_Node, wn.HisNode.NodeID.ToString(),

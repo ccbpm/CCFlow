@@ -367,8 +367,6 @@ namespace BP.WF
                         "WorkID", this.WorkID);
                     DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + dbStr + "WorkID",
                         "WorkID", this.WorkID);
-                    DBAccess.RunSQL("DELETE FROM WF_GenerFH WHERE FID=" + dbStr + "WorkID",
-                        "WorkID", this.WorkID);
                 }
                 DeleteToNodesData(nd.HisToNodes);
             }

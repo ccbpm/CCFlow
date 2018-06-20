@@ -1294,8 +1294,7 @@ namespace BP.WF.Template
                 ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-                ps.SQL = "UPDATE WF_GenerFH SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE FID=" + SystemConfig.AppCenterDBVarStr + "OID";
-                DBAccess.RunSQLs(sql);
+               
             }
             Emp emp1 = new Emp("admin");
             BP.Web.WebUser.SignInOfGener(emp1);
@@ -1346,9 +1345,7 @@ namespace BP.WF.Template
 
                 ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
-
-                ps.SQL = "UPDATE WF_GenerFH SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE FID=" + SystemConfig.AppCenterDBVarStr + "OID";
-                DBAccess.RunSQLs(sql);
+ 
             }
             Emp emp1 = new Emp("admin");
             BP.Web.WebUser.SignInOfGener(emp1);

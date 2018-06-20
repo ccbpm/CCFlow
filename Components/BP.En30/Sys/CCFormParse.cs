@@ -434,7 +434,7 @@ namespace BP.Sys
         }
         public static void SaveButton(string fk_mapdata, JsonData control, JsonData properties, string pks,string ctrlID)
         {
-            FrmBtn btn = new FrmBtn();
+            FrmBtn btn = new FrmBtn(ctrlID);
             btn.MyPK = ctrlID;
             btn.FK_MapData = fk_mapdata;
 
@@ -444,7 +444,7 @@ namespace BP.Sys
             btn.X = float.Parse( vector[0].ToJson());
             btn.Y = float.Parse(vector[1].ToJson());
             btn.IsEnable = true;
-            for (int iProperty = 0; iProperty < properties.Count; iProperty++)
+            /*for (int iProperty = 0; iProperty < properties.Count; iProperty++)
             {
                 JsonData property = properties[iProperty];
                 if (property == null || !property.Keys.Contains("property") || property["property"] == null)
@@ -469,7 +469,7 @@ namespace BP.Sys
                     default:
                         break;
                 }
-            }
+            }*/
             if (pks.Contains("@" + btn.MyPK + "@") == true)
                 btn.DirectUpdate();
             else
@@ -478,7 +478,7 @@ namespace BP.Sys
 
         public static void SaveHyperLink(string fk_mapdata,JsonData control, JsonData properties, string pks, string ctrlID)
         {
-            FrmLink link = new FrmLink();
+            FrmLink link = new FrmLink(ctrlID);
             link.MyPK = ctrlID;
             link.FK_MapData = fk_mapdata;
             //坐标
@@ -500,9 +500,9 @@ namespace BP.Sys
                 switch (propertyLink)
                 {
                     case "primitives.0.str":
-                    case "SingleText":
-                        link.Text  = valLink == null ? "" : valLink.ToString();
-                        break;
+                    //case "SingleText":
+                    //    link.Text  = valLink == null ? "" : valLink.ToString();
+                    //    break;
                     case "primitives.0.style.fillStyle":
                         link.FontColor = valLink == null ? "#FF000000" : valLink.ToString();
                         fontStyle.Append(string.Format("color:{0};", link.FontColor));
@@ -531,12 +531,12 @@ namespace BP.Sys
                     case "FontColor":
                         link.FontColor = valLink == null ? "" : valLink.ToString();
                         continue;
-                    case "URL":
-                        link.URL = valLink == null ? "" : valLink.ToString();
-                        continue;
-                    case "WinOpenModel":
-                        link.Target = valLink == null ? "_blank" : valLink.ToString();
-                        continue;
+                    //case "URL":
+                     //   link.URL = valLink == null ? "" : valLink.ToString();
+                     //   continue;
+                    //case "WinOpenModel":
+                     ///   link.Target = valLink == null ? "_blank" : valLink.ToString();
+                    //    continue;
                     default:
                         break;
                 }

@@ -1264,7 +1264,7 @@ function GenerWorkNode() {
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
-               // console.log(data);
+                // console.log(data);
                 return;
             }
 
@@ -1305,6 +1305,15 @@ function GenerWorkNode() {
             //发送旁边下拉框 edit by zhoupeng 放到这里是为了解决加载不同步的问题.
             InitToNodeDDL(flowData);
 
+            if (node.FormType == 11) {
+                //获得配置信息.
+                var frmNode = flowData["FrmNode"];
+                if (frmNode) {
+                    frmNode = frmNode[0];
+                    if (frmNode.FrmSln == 1)
+                        pageData.IsReadonly = 1
+                }
+            }
             //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
 
             if (node.FormType == 5) {
@@ -1339,8 +1348,7 @@ function GenerWorkNode() {
             //单表单加载后执行.
             CCFormLoaded();
 
-            //装载表单数据与修改表单元素风格.
-            LoadFrmDataAndChangeEleStyle(flowData);
+           
 
             //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
             if (node.FormType == 11) {
@@ -1360,6 +1368,14 @@ function GenerWorkNode() {
                     }
                 }
             }
+
+            Common.MaxLengthError();
+
+            //处理下拉框级联等扩展信息
+            AfterBindEn_DealMapExt(flowData);
+
+            //装载表单数据与修改表单元素风格.
+            LoadFrmDataAndChangeEleStyle(flowData);
 
             //初始化Sys_MapData
             var h = flowData.Sys_MapData[0].FrmH;
@@ -1413,10 +1429,7 @@ function GenerWorkNode() {
 
             }
 
-            Common.MaxLengthError();
-
-            //处理下拉框级联等扩展信息
-            AfterBindEn_DealMapExt(flowData);
+           
 
             //给富文本创建编辑器
             if (document.BindEditorMapAttr) {

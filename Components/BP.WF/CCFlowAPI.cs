@@ -592,7 +592,8 @@ namespace BP.WF
                     if (myds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                    if(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey) != null)
+                      myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }
                 #endregion End把外键表加入DataSet
 

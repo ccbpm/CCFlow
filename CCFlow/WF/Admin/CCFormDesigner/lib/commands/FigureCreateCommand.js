@@ -49,10 +49,16 @@ FigureCreateCommand.prototype = {
             switch (createFigureName) {
 
                 case CCForm_Controls.Label:
-                case CCForm_Controls.Button:
-                case CCForm_Controls.HyperLink:
                 case CCForm_Controls.Image:
                     createdFigure.CCForm_MyPK = Util.NewGUID();
+                    break;
+                case CCForm_Controls.Button:
+                    createdFigure.CCForm_MyPK = Util.NewGUID();
+                    this.ButtonCreate(createdFigure, this.x, this.y);
+                    break;
+                case CCForm_Controls.HyperLink:
+                    createdFigure.CCForm_MyPK = Util.NewGUID();
+                    this.HyperLinkCreate(createdFigure, this.x, this.y);
                     break;
                 case CCForm_Controls.TextBox:
                 case CCForm_Controls.TextBoxInt:
@@ -93,11 +99,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件               
-                //case CCForm_Controls.FrmCheck: // 审核组件.               
-                //case CCForm_Controls.FlowChart: //轨迹图.               
-                //case CCForm_Controls.SubFlowDtl: //子流程.               
-                //case CCForm_Controls.ThreadDtl: //子线城.               
+                //case CCForm_Controls.FrmCheck: //审核组件                
+                //case CCForm_Controls.FrmCheck: // 审核组件.                
+                //case CCForm_Controls.FlowChart: //轨迹图.                
+                //case CCForm_Controls.SubFlowDtl: //子流程.                
+                //case CCForm_Controls.ThreadDtl: //子线城.                
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -142,6 +148,32 @@ FigureCreateCommand.prototype = {
         else { //redo
             throw "Not implemented";
         }
+    },
+    ButtonCreate: function (createdFigure, x, y) {
+        // 定义参数，让其保存到数据库里。
+        var btn = new Entity("BP.Sys.FrmBtn");
+        btn.MyPK = createdFigure.CCForm_MyPK;
+        btn.FK_MapData = CCForm_FK_MapData;
+        btn.Text = "Btn";
+        btn.EventType = 2;
+        btn.EventContext = "";
+        btn.X = x;
+        btn.Y = y;
+        btn.Insert();
+
+    },
+
+    HyperLinkCreate: function (createdFigure, x, y) {
+        // 定义参数，让其保存到数据库里。
+        var frmLink = new Entity("BP.Sys.FrmLink");
+        frmLink.MyPK = createdFigure.CCForm_MyPK;
+        frmLink.FK_MapData = CCForm_FK_MapData;
+        frmLink.Target = "_blank";
+        frmLink.Text = '我的超链接';
+        frmLink.X = x;
+        frmLink.Y = y;
+        frmLink.Insert();
+
     },
     /**创建数据字段**/
     DataFieldCreate: function (createdFigure, x, y) {
@@ -611,7 +643,7 @@ TransFormDataField.prototype = {
         //change text  //设置控件上的ID文本.
         var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
         if (figureText != null && createdFigure.CCForm_Shape == "TextBoxBoolean") {//除了复选框，其余的都不写TEXT
-           if (this.dataArrary.Name != null)
+            if (this.dataArrary.Name != null)
                 figureText.setTextStr(this.dataArrary.Name);
             //if (this.dataArrary.No != null)
             //    figureText.setTextStr(this.dataArrary.No);
@@ -740,12 +772,12 @@ TransFormDataField.prototype = {
     },
     /**创建控件对应的标签**/
     LabelCreateForFigure: function () {
-       var defaultVals=CCForm_Control_DefaultPro[this.figure.CCForm_Shape];
+        var defaultVals = CCForm_Control_DefaultPro[this.figure.CCForm_Shape];
 
-       var x = this.x - defaultVals.DefaultWidth / 2;
-       var y = this.y;//- defaultVals.DefaultHeight / 2;
+        var x = this.x - defaultVals.DefaultWidth / 2;
+        var y = this.y; //- defaultVals.DefaultHeight / 2;
         //计算位移
-       var moveX = (this.dataArrary.Name.length * 12);
+        var moveX = (this.dataArrary.Name.length * 12);
         x = x - moveX;
         y = y - 15;
         //假如X,Y <5px 会靠边看不到，设置为5px;
@@ -794,21 +826,21 @@ TransFormDataField.prototype = {
                     propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
                     var ctrlLab = '控件属性';
                     switch (createdFigure.CCForm_Shape) {
-                    case "Dtl":
-                        ctrlLab = '从表/明细表属性';
-                        break;
-                    case "AthMulti":
-                        ctrlLab = '多附件属性';
-                        break;
-                    case "AthSingle":
-                        ctrlLab = '单附件属性';
-                        break;
-                    case "TextBoxStr":
-                        ctrlLab = '控件属性-文本框';
-                        break;
-                    default:
-                        ctrlLab = '控件属性' + createdFigure.CCForm_Shape;
-                        break;
+                        case "Dtl":
+                            ctrlLab = '从表/明细表属性';
+                            break;
+                        case "AthMulti":
+                            ctrlLab = '多附件属性';
+                            break;
+                        case "AthSingle":
+                            ctrlLab = '单附件属性';
+                            break;
+                        case "TextBoxStr":
+                            ctrlLab = '控件属性-文本框';
+                            break;
+                        default:
+                            ctrlLab = '控件属性' + createdFigure.CCForm_Shape;
+                            break;
                     }
 
                     //push property
@@ -821,26 +853,26 @@ TransFormDataField.prototype = {
                         var defVal = propertys[i].DefVal ? propertys[i].DefVal : "";
 
                         switch (defVal) {
-                        case "No": // 编号
-                            defVal = this.dataArrary.No;
-                            break;
-                        case "Name": // 名称
-                            defVal = this.dataArrary.Name;
-                            break;
-                        case "FieldText": // 字段中文名
-                            defVal = this.dataArrary.Name;
-                            break;
-                        case "KeyOfEn": // 字段名.
-                            if (createdFigure.CCForm_Shape == "RadioButton") {
-                                this.dataArrary.KeyOfEn = "";
-                            }
-                            defVal = this.dataArrary.KeyOfEn;
-                            break;
-                        case "UIBindKey": // 绑定的外键.
-                            defVal = this.dataArrary.UIBindKey;
-                            break;
-                        default:
-                            break;
+                            case "No": // 编号
+                                defVal = this.dataArrary.No;
+                                break;
+                            case "Name": // 名称
+                                defVal = this.dataArrary.Name;
+                                break;
+                            case "FieldText": // 字段中文名
+                                defVal = this.dataArrary.Name;
+                                break;
+                            case "KeyOfEn": // 字段名.
+                                if (createdFigure.CCForm_Shape == "RadioButton") {
+                                    this.dataArrary.KeyOfEn = "";
+                                }
+                                defVal = this.dataArrary.KeyOfEn;
+                                break;
+                            case "UIBindKey": // 绑定的外键.
+                                defVal = this.dataArrary.UIBindKey;
+                                break;
+                            default:
+                                break;
                         }
 
                         //替换系统值
@@ -881,7 +913,7 @@ TransFormDataField.prototype = {
 }
 
 function CrateRB(createdFigure, dataArrary) {
-   //把主键给他.
+    //把主键给他.
     if (this.dataArrary.KeyOfEn != null)
         createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
     if (this.dataArrary.No != null)

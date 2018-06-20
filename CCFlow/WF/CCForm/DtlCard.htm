@@ -31,6 +31,7 @@
 
         //生成主表数据
         function InitMainTable() {
+            var isReadonly = getQueryString("IsReadonly");
             //获得mapdtl实体的基本信息.
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             hand.AddUrlData();
@@ -53,7 +54,7 @@
             var th = $("<th></th>");
             var rowShowModel = sys_MapDtl.EditModel;
             //有新增权限，添加按钮
-            if (sys_MapDtl.IsInsert == 1) {
+            if (sys_MapDtl.IsInsert == 1&& sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
                 th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(" + rowShowModel + ")' /></th>");
             }
             th.css('width', '30px');
@@ -106,7 +107,8 @@
                     var optionDelete = $("<img src='../Img/Btn/Delete.png' onclick='deleteRow(" + dataObj.OID + ")' class='delRow' titile='删除' style='cursor:pointer;'/>");
                     optionTD.append(optionDelete);
                 }
-                tbodyTr.append(optionTD);
+                if(sys_MapDtl.IsReadonly == "0" && isReadonly != "1")
+                    tbodyTr.append(optionTD);
 
                 //点击行展开行后的内容
                 var tbodyExpTr = $('<tr></tr>');

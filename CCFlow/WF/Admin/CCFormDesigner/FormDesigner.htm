@@ -11,6 +11,11 @@
     <script type="text/javascript" src="./assets/javascript/json2.js"></script>
     <script type="text/javascript" src="./assets/javascript/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
+     <!-- 基本控件 -->
+     <script src="../../Scripts/config.js" type="text/javascript" > </script>
+     <script src="../../Scripts/QueryString.js" type="text/javascript" > </script>
+     <script src="../../Comm/Gener.js" type="text/javascript" > </script>
+     
     <script type="text/javascript" src="./lib/dashed.js"></script>
     <script type="text/javascript" src="./lib/canvasprops.js"></script>
     <script type="text/javascript" src="./lib/style.js"></script>
@@ -66,8 +71,6 @@
     <link rel="stylesheet" media="screen" type="text/css" href="./assets/css/colorPicker_new.css" />
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-     <script src="../../Scripts/config.js" type="text/javascript" > </script>
-     <script src="../../Scripts/QueryString.js" type="text/javascript" > </script>
     <script src="js/FormDesignerService.js" type="text/javascript"></script>
     <script src="js/FormDesigner.js" type="text/javascript"></script>
     <!--[if IE]>
@@ -109,7 +112,7 @@
 
                     mapData = JSON.parse(data);
 
-                    document.title = mapData.Name +" - CCForm H5表单设计.";
+                    document.title = mapData.Name + " - CCForm H5表单设计.";
 
                 }
             });
@@ -121,7 +124,7 @@
             }
         });
 
-         
+
         function closeDlg() {
             $("#eudlg").dialog("close");
         }
@@ -143,18 +146,19 @@
             CCForm_ShowDialog(url, '重置表单', 300, 200);
             return;
         }
-        
+
 
         function FoolFormDesigner() {
 
             var url = "../../Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
             CCForm_ShowDialog(url, '傻瓜表单设计器');
+            Save(true);
             return;
         }
 
         function Mobile() {
             var url = "../../Admin/AttrNode/SortingMapAttrs.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&FK_Flow=" + GetDateString();
-            CCForm_ShowDialog(url, '手机表单设计器',900,600);
+            CCForm_ShowDialog(url, '手机表单设计器', 900, 600);
             return;
         }
         //然浏览器最大化.
@@ -220,12 +224,13 @@
             <img src="Img/toolbar/hidenF.png" id="HField" border="0" width="16" height="16" alt="" />
             <label for="HField" class="toolbarText">隐藏字段</label>
         </a>
-
+        
          <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none;" href="javascript:Show_ModleField_Panel();" title="显示模板字段">
-            <img src="Img/Form.png" id="ModleField" border="0" width="16" height="16" alt="" />
+            <img src="Img/toolbar/From.png" id="ModleField" border="0" width="16" height="16" alt="" />
             <label for="ModleField" class="toolbarText">模板字段</label>
         </a>
+
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
             <input type="checkbox" onclick="ShowGrid();" checked="checked" id="gridCheckbox" title="显示网格" style="vertical-align: middle;" />

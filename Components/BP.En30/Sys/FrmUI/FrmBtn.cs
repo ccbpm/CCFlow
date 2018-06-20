@@ -53,9 +53,9 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(FrmBtnAttr.IsEnable, 0, "是否起用", false, false);
 
                 map.AddTBInt(FrmBtnAttr.UAC, 0, "控制类型", false, false);
-                map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", true, false, 0, 3900, 20);
+                map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", false, false, 0, 3900, 20);
 
-                map.AddTBInt(FrmBtnAttr.EventType, 0, "事件类型", false, false);
+                map.AddDDLSysEnum(FrmBtnAttr.EventType, 0, "事件类型", true, true, FrmBtnAttr.EventType, "@0=禁用@1=执行URL@2=执行CCFromRef.js");
                 map.AddTBString(FrmBtnAttr.EventContext, null, "事件内容", true, false, 0, 3900, 20);
 
                 map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);

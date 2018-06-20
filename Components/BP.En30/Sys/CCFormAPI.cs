@@ -1241,6 +1241,10 @@ namespace BP.Sys
             DataTable Sys_FrmImgAth = md.FrmImgAths.ToDataTableField("Sys_FrmImgAth");
             ds.Tables.Add(Sys_FrmImgAth);
 
+            //FrmImgAthDBs 上传图片信息
+            DataTable Sys_FrmImgAthDB = md.FrmImgAthDB.ToDataTableField("Sys_FrmImgAthDB");
+            ds.Tables.Add(Sys_FrmImgAthDB);
+
             return ds;
         }
         public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata)

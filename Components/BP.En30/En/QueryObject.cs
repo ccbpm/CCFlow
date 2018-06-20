@@ -1114,7 +1114,7 @@ namespace BP.En
                                
 
                                 if (top == 0)
-                                    sql = "SELECT * FROM ( SELECT  " + pk + " " + map.PhysicsTable + " " + this._orderBy + "   ) WHERE ROWNUM <=" + pageSize;
+                                    sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " " + this._orderBy + "   ) WHERE ROWNUM <=" + pageSize;
                                 else
                                     sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " " + this._orderBy + ") ";
                             }

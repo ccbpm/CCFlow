@@ -48,7 +48,7 @@ figureSets["basic"] = {
         { figureFunction: null, name: "Poiner", image: "Poiner.png", CNName: "指针" },
         { figureFunction: null, name: CCForm_Controls.Line, image: "Line.png", CNName: "直线" },
         { figureFunction: "Label", name: CCForm_Controls.Label, image: "Label.png", CNName: "文字" },
-     //   { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png", CNName: "按钮" },
+        { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png", CNName: "按钮" },
         { figureFunction: "HyperLink", name: CCForm_Controls.HyperLink, image: "HyperLink.png", CNName: "超链接" },
         { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png", CNName: "图片" }
 

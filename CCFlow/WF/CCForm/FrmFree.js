@@ -663,9 +663,35 @@ function figure_Template_Btn(frmBtn) {
     var eventType = frmBtn.EventType;
     if (eventType == 0) {//禁用
         btnHtml.attr('disabled', 'disabled').css('background', 'gray');
-    } else if (eventType == 5 || eventType == 6) {//运行Exe文件. 运行JS
-        btnHtml.attr('onclick', doc);
+    } else if (eventType == 1) {//运行URL
+        $.each(frmData.Sys_MapAttr, function (i, obj) {
+            if (doc.indexOf('@' + obj.KeyOfEn) > 0) {
+                //替换
+                //url=  url.replace(new RegExp(/(：)/g), ':');
+                //先这样吧
+                doc = doc.replace('@' + obj.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
+            }
+        });
+        var OID = GetQueryString("OID");
+        if (OID == undefined || OID == "");
+        OID = GetQueryString("WorkID");
+        var FK_Node = GetQueryString("FK_Node");
+        var FK_Flow = GetQueryString("FK_Flow");
+        var webUser = new WebUser();
+        var userNo = webUser.No;
+        var SID = webUser.SID;
+        if (SID == undefined)
+            SID = "";
+        if (doc.indexOf("?") == -1)
+            doc = doc + "?1=1";
+        doc = doc + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+        btnHtml.attr('onclick', "window.open('" + doc + "')");
 
+
+    } else {//运行JS
+        if (doc.indexOf("(") == -1)
+            doc = doc + "()";
+        btnHtml.attr('onclick', doc);
     }
     eleHtml.append(btnHtml);
     //别的一些属性先不加
@@ -706,6 +732,20 @@ function figure_Template_HyperLink(frmLin) {
             url = url.replace('@' + obj.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
         }
     });
+
+    var OID = GetQueryString("OID");
+    if (OID == undefined || OID == "");
+    OID = GetQueryString("WorkID");
+    var FK_Node = GetQueryString("FK_Node");
+    var FK_Flow = GetQueryString("FK_Flow");
+    var webUser = new WebUser();
+    var userNo = webUser.No;
+    var SID = webUser.SID;
+    if (SID == undefined)
+        SID = "";
+    if (url.indexOf("?") == -1)
+        url = url + "?1=1";
+    url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
 
     var eleHtml = '<span></span>';
     eleHtml = $(eleHtml);

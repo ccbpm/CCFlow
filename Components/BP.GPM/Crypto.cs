@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Text;
 using BP.DA;
 
-
 namespace BP.GPM.Utility
 {
     /// <summary>

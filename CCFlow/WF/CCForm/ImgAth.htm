@@ -69,34 +69,41 @@
                 }
             }
             
-            //上传
-            $.ajaxFileUpload({
-                url: 'Handler.ashx?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&ImgAth=' + ImgAth + '&MyPK=' + MyPK + '&zoomW=' + zoomW + '&zoomH=' + zoomH,
-                secureuri: false,
-                type: "post",
-                fileElementId: 'fileImagAth',
-                dataType: 'json',
-                success: function (data, status) {
-                    if (data.err) {
-                        alert(data.err);
+ 
+
+            var formData = new FormData();
+            var name = $("input").val();
+            formData.append("file", $("#fileImagAth")[0].files[0]);
+            formData.append("name", name);
+          
+
+            $.ajax({
+                url: Handler + '?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&ImgAth=' + ImgAth + '&MyPK=' + MyPK + '&zoomW=' + zoomW + '&zoomH=' + zoomH,
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                dataType: 'html',
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
                         return;
                     }
-                    var fileFullName = data.SourceImage;
-                    $("#myImage").attr("src", fileFullName);
-                    $("#imgCut").attr("src", fileFullName);
-                    $("#HD_ImgAthSrc").val(fileFullName);
-                    $("#HD_SImgAthSrc").val(fileFullName);
-                    var jcrop_api = $.Jcrop("#myImage");
-                    if (jcrop_api) {
-                        jcrop_api.setImage(fileFullName);
-                    }
-                    AddImgLisenerEvent();
+
+                    //alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.location.href = window.location.href;
                 },
-                error: function (data, status, e) {
-                    alert(e);
+                error: function (data) {
+                    alert("系统错误:" + data);
+                    return;
                 }
             });
-            return false;
         }
 
         //确认剪切
@@ -148,6 +155,7 @@
             }, this);
             //给父窗体赋值
             ImgAthSrc();
+            //window.parent.location.href = window.parent.location.href;
             //关闭窗体
             parent.$("#eudlg").dialog("close");
 
@@ -163,10 +171,10 @@
                 }
                 var dataObj = eval("(" + data + ")"); //转换为json对象 
                 if (dataObj.length > 0) {
-                    var fileFullName = dataObj[0].FileFullName;
+                    var fileFullName = basePath + dataObj[0].FileFullName;
                     var fileName = dataObj[0].FileName;
                     var fileExts = dataObj[0].FileExts;
-                    fileName = "/DataUser/ImgAth/Upload/" + fileName + "." + fileExts;
+                    fileName = basePath + "/DataUser/ImgAth/Upload/" + fileName + "." + fileExts;
 
                     $("#myImage").attr("src", fileName);
                     $("#imgCut").attr("src", fileFullName);
@@ -253,6 +261,8 @@
     </style>
 </head>
 <body>
+
+	<form action="" enctype="multipart/form-data" method="post">
     <table style="width:100%; height:430px;">
         <tr>
             <td rowspan="2">
@@ -294,5 +304,6 @@
     <input type="hidden" id="h" value="0" />
     <input type="hidden" id="HD_ImgAthSrc" value="/DataUser/ImgAth/Data/ND101ImgAth1_0.png" />
     <input type="hidden" id="HD_SImgAthSrc" value="/DataUser/ImgAth/Data/ND101ImgAth1_0.png" />
+    </form>
 </body>
 </html>

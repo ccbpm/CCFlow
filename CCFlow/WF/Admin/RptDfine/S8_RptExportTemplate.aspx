@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="S8_RptExportTemplate.aspx.cs"
     Inherits="CCFlow.WF.MapDef.Rpt.S8_RptExportTemplate" %>
 
-<%@ Register Assembly="BP.Web.Controls" Namespace="BP.Web.Controls" TagPrefix="cc1" %>
+<%@ Register Assembly="BP.En30" Namespace="BP.En30" TagPrefix="cc1" %>
 <%@ Import Namespace="System.IO" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -22,6 +22,7 @@
         }
     </style>
     <script type="text/javascript">
+
         var rptNo = getQueryStringByName('RptNo');
         var flowNo = getQueryStringByName('FK_Flow');
         var md = getQueryStringByName('FK_MapData');

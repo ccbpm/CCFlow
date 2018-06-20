@@ -64,51 +64,49 @@
         });
 
         function InitPage() {
-            var rptNo = unescape(GetQueryString("RptNo"));
-            var flowNo = unescape(GetQueryString("FK_Flow"));
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=S3ColsLabel_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf("@") == 0) {
-                        alert(data);
-                        return;
-                    }
-                    var jsData = JSON.parse(data);
-                    //var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
-                    //console.info(Sys_MapAttr);
-                    //输出列.
-                    for (var i = 0; i < jsData.length; i++) {
-
-                        var attr = jsData[i];
 
 
-                        var str = "<tr>";
-                        str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
-                        //判断是否string
-                        if (attr.MyDataType == 1 || attr.MyDataType == '1') {
-                            str += "<td  nowrap ><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a><input type='hidden' value='" + attr.KeyOfEn + "'/></td>";
-                        }else{
-                            str += "<td  nowrap >" + attr.KeyOfEn + "<input type='hidden' value='" + attr.KeyOfEn + "'></input></td>";
-                        }
-                        str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:130px;' /></td>";
-                        str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
-                        str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a>";
-                        str += "</td>";
-                        str += "</tr>";
-                        $("table").append(str);
-                    }
 
-                    $(".up").linkbutton({
-                        iconCls: 'icon-up'
-                    });
-                    $(".down").linkbutton({
-                        iconCls: 'icon-down'
-                    });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_RptDfine");
+            handler.AddPara("RptNo", GetQueryString("RptNo"));
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            var data = handler.DoMethodReturnString("S3ColsLabel_Init");
+
+
+            if (data.indexOf("@") == 0) {
+                alert(data);
+                return;
+            }
+            var jsData = JSON.parse(data);
+            //var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
+            //console.info(Sys_MapAttr);
+            //输出列.
+            for (var i = 0; i < jsData.length; i++) {
+
+                var attr = jsData[i];
+
+
+                var str = "<tr>";
+                str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
+                //判断是否string
+                if (attr.MyDataType == 1 || attr.MyDataType == '1') {
+                    str += "<td  nowrap ><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a><input type='hidden' value='" + attr.KeyOfEn + "'/></td>";
+                } else {
+                    str += "<td  nowrap >" + attr.KeyOfEn + "<input type='hidden' value='" + attr.KeyOfEn + "'></input></td>";
                 }
+                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:130px;' /></td>";
+                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
+                str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a>";
+                str += "</td>";
+                str += "</tr>";
+                $("table").append(str);
+            }
+
+            $(".up").linkbutton({
+                iconCls: 'icon-up'
+            });
+            $(".down").linkbutton({
+                iconCls: 'icon-down'
             });
         }
 
@@ -118,6 +116,7 @@
             var rptNo = GetQueryString("RptNo");
             var str = "";
             var i = 0;
+
 
             //获取数据列表
             $("#table1").find("tr").each(function () {
@@ -129,6 +128,8 @@
                 }
                 i++;
             });
+
+
             $.ajax({
                 type: 'post',
                 async: true,

@@ -8,8 +8,6 @@ using System.Reflection;
 using System.Security;
 using BP.DA;
 
-
-
 namespace BP.GPM.Utility
 {
     /// <summary>

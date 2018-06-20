@@ -618,7 +618,8 @@ namespace BP.WF.HttpHandler
             ht.Add("IsImp", uac.IsImp); //是否可以导入?
 
             ht.Add("EnDesc", en.EnDesc); //描述?
-            ht.Add("EnName", en.ToString() ); //类名?
+            ht.Add("EnName", en.ToString()); //类名?
+
 
             //把map信息放入
             ht.Add("PhysicsTable", map.PhysicsTable);
@@ -626,8 +627,8 @@ namespace BP.WF.HttpHandler
             ht.Add("CodeLength", map.CodeLength);
 
             //查询条件.
-            if (map.IsShowSearchKey==true)
-               ht.Add("IsShowSearchKey", 1);
+            if (map.IsShowSearchKey == true)
+                ht.Add("IsShowSearchKey", 1);
             else
                 ht.Add("IsShowSearchKey", 0);
 
@@ -646,6 +647,9 @@ namespace BP.WF.HttpHandler
         {
             //获得
             Entities ens = ClassFactory.GetEns(this.EnsName);
+            if (ens == null)
+                return "err@类名错误:" + this.EnsName;
+
             Entity en = ens.GetNewEntity;
             Map map = ens.GetNewEntity.EnMapInTime;
 

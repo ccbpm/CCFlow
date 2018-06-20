@@ -1614,7 +1614,8 @@ namespace BP.En
                     mattr.DefValReal = item.DefaultValOfReal;
 
                     mattr.UIIsEnable = item.UIIsReadonly;
-                    if (item.MyFieldType == FieldType.Normal)
+
+                    if (item.MyFieldType == FieldType.Normal || item.MyFieldType == FieldType.PK )
                     {
                         if (item.MyDataType == DataType.AppInt ||
                             item.MyDataType == DataType.AppFloat ||
@@ -1625,6 +1626,12 @@ namespace BP.En
                             mattr.UIIsEnable = !item.UIIsReadonly;
                         }
                     }
+
+                    //if (item.MyFieldType == FieldType.Normal && item.MyDataType == DataType.AppString)
+                    //{
+                    //    mattr.UIIsEnable = !item.UIIsReadonly;
+                    //}
+
 
                     if (item.UIIsLine == true)
                         mattr.ColSpan = 3;

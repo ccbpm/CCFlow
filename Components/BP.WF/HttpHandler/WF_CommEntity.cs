@@ -300,7 +300,12 @@ namespace BP.WF.HttpHandler
                     en.ResetDefaultVal();
 
                     en.SetValByKey("RefPKVal", this.RefPKVal);
+
+                    //自动生成一个编号.
+                    if (en.EnMap.IsAutoGenerNo == true)
+                        en.SetValByKey("No", en.GenerNewNoByKey("No"));
                 }
+
 
                 //定义容器.
                 DataSet ds = new DataSet();
@@ -621,6 +626,9 @@ namespace BP.WF.HttpHandler
                 //把权限加入参数里面.
                 if (en.HisUAC.IsInsert)
                     md.SetPara("IsInsert", "1");
+
+                //附件类型.
+                md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType );
 
                 if (isBlank == true)
                 {

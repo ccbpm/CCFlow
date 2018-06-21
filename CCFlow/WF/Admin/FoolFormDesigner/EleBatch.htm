@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>执行批量操作</title>
+    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript">
+        
+        var keyofen = GetQueryString('KeyOfEn');
+        //从url参数中截取出流程编号
+        var fk_mapdata = GetQueryString('FK_MapData');
+        var fk_flow = fk_mapdata.substring(2, 5);
+        //声明一个行对象数组,用于初始化表格数据
+        var enArr = new Array();
+
+        /*
+        获取实体对象方法
+        1.从WF_Node表中获取所有当前流程所包含的节点
+        2.通过第一步获取的节点NodeId加上ND标识作为参数从Sys_MapData表中取出节点对应No和Name,组成对象,放入数组;
+        3.根据批量操作的不同(copy\update\delete),拿生成的数组与Sys_MapAttr表中对应项进行比较,过滤掉数组中相应的元素,求的不同的操作对应的不同数组;
+        */
+        function getEns(para) {
+            
+            //获取流程对应的所有节点
+            var nodes = new Entities("BP.WF.Nodes", "FK_Flow", fk_flow);
+
+            if (nodes.length == 0) {
+                return "";
+            }
+            for (var j = 0; j < nodes.length; j++) {
+                //组装查询MapData的No
+                var mapdataon = ("ND" + nodes[j].NodeID);
+                //获取MapData对象,(目的是从中取出节点名称和编号等)
+               // if (mapdataon == fk_mapdata) //去掉当前节点,因为当前节点为操作的原数据.不应该出现在列表中.
+                 //   continue;
+                var en = new Entity('BP.Sys.MapData', mapdataon);
+                if (en != null) {
+                    var rowObj = {};
+                    rowObj.No = en.No;
+                    rowObj.Name = en.Name;
+                    enArr.push(rowObj);
+                }
+            }
+
+            var mapattrs = new Entities("BP.Sys.MapAttrs", "KeyOfEn", keyofen);            
+            switch(para)
+            {
+                case "copy":
+
+                    for (var i = 0; i < mapattrs.length; i++) {
+                        var en = mapattrs[i];
+                        for (var m in enArr) {
+                            if (en.FK_MapData == enArr[m].No) {
+                                delete enArr[m];
+                            }
+                        }
+                    }
+                    break;
+                case "update":
+                    var tempArr = new Array();
+                    for (var i = 0; i < mapattrs.length; i++) {
+                        var en = mapattrs[i];
+                        for (var m in enArr) {
+                            if (en.FK_MapData == enArr[m].No && en.FK_MapData != fk_mapdata) {
+                                tempArr.push(enArr[m]);
+                            }
+                        }
+                    }
+                    enArr = [];
+                    enArr = tempArr;
+                    break;
+                case "delete":
+                    var tempArr = new Array();
+                    for (var i = 0; i < mapattrs.length; i++) {
+                        var en = mapattrs[i];
+                        for (var m in enArr) {
+                            if (en.FK_MapData == enArr[m].No) {
+                                tempArr.push(enArr[m]);
+                            }
+                        }
+                    }
+                    enArr = [];
+                    enArr = tempArr;
+                    break;
+                default:
+                    break;
+            }
+
+            return enArr;
+        }
+
+        /*
+        生成表方法
+        1.调用获取实体对象方法,获得实体数组
+        2.根据数组对象,动态生成行插入到列表中
+        */
+        function generTable(para) {
+            //隐藏说明性质的DIV标签
+            $('#tip').hide();
+
+            getEns(para);
+
+            //用html标对en对象属性进行包装
+            var htmlObj = new Object();
+            var htmlArr = new Array();
+            if (enArr.length > 0) {
+                for (var index in enArr) {
+                    var htmlObj = new Object();
+                    htmlObj.col1 = "<input type='checkbox' name='' " + "id='" + enArr[index].No + "'>" + "<label for=''>" + enArr[index].No + "</label>"
+                    htmlObj.col2 = enArr[index].Name;
+                    htmlArr.push(htmlObj);
+                }
+            }
+            //先清除行,防止多次点击的重复添加;
+            $("#Table1 tr").eq(1).nextAll().remove();
+            //增加行
+            for (var i = 0; i < htmlArr.length; i++) {
+                //var en = data[i];
+                var newRow = "";
+
+                newRow = "<tr><td>" + htmlArr[i].col1 + "</td>";
+                newRow += "<td>" + htmlArr[i].col2 + "</td>";
+                newRow += "<td>" + "" + "</td>";
+
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+            }
+            //清空全局变量enArr;
+            enArr = [];
+            //修改按钮id属性
+            $('input[name="batch"]').attr('id', para);
+
+        }
+        /*
+        执行批量处理
+        1.获取页面上所选的多选框
+        2.根据批量操作的类型不同(copy\update\delete),对表Sys_MapAttr行进行操作
+        3.完成后重新调用生成表方法,以便用户的进一步操作
+        */
+        function runBatch(para) {
+            //获取所有已选的checkbox的id组成数组
+            var idArr = new Array();
+            $.each($('input:checkbox:checked'), function () {
+                idArr.push($(this).attr('id'));
+            });
+
+            if (idArr.length == 0) {
+                return;
+            }
+            switch (para) {
+                case "copy":
+                    for (var index in idArr) {
+                        var mattr = new Entity('BP.Sys.MapAttr', fk_mapdata + '_' + keyofen);
+                        mattr.FK_MapData = idArr[index];
+                        mattr.Insert();
+                    }
+                    break;
+                case "update":
+                    for (var index in idArr) {
+                        var mattrOld = new Entity('BP.Sys.MapAttr', idArr[index] + '_' + keyofen);
+                        var gID = mattrOld.GroupID;
+                        var mattr = new Entity('BP.Sys.MapAttr', fk_mapdata + '_' + keyofen);
+                        mattr.FK_MapData = idArr[index];
+                        mattr.GroupID = gID;
+                        mattr.Update();
+                    }
+                    break;
+                case "delete":
+                    for (var index in idArr) {
+                        var mattr = new Entity('BP.Sys.MapAttr', idArr[index] + '_' + keyofen);
+                        mattr.Delete();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            generTable(para);
+        }
+    </script>
+</head>
+<body>
+    <form method="post" action="" id="form1">
+    <div>
+        <div class="easyui-layout">
+            <div title="批量操作" style="width: 200px;">
+                <ul class='navlist'>
+                    <li>
+                        <div>
+                            <a id="copy" href="javascript:void(0);" onclick="generTable(this.id)"><span class="nav">
+                                批量复制</span></a>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <a id="update" href="javascript:void(0);" onclick="generTable(this.id)"><span class="nav">
+                                批量更新</span></a>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <a id="delete" href="javascript:void(0);" onclick="generTable(this.id)"><span class="nav">
+                                批量删除</span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-options="region:'center'">
+            <table id="Table1" class='Table1' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>
+                <tr>
+                    <td class='GroupTitle' colspan='3'>
+                        批量更新:
+                    </td>
+                </tr>
+                <tr>
+                    <td class='GroupTitle' style='width: 140px'>
+                        表单ID
+                    </td>
+                    <td class='GroupTitle' style='width: 140px'>
+                        名称
+                    </td>
+                    <td class='GroupTitle' nowrap>
+                        操作
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <br />
+            <input type="button" id="temp" name="batch" value="批量执行"  onclick="runBatch(this.id)"/>            
+        </div>
+        <div id="tip" data-options="region:'center'">
+            <div style='width: 100%'>
+                <div class='easyui-panel' title='表单元素的批量处理' data-options="iconCls:'icon-tip',fit:true"
+                    style='height: auto; padding: 10px'>
+                    仅用节点表单，它包括如下几种处理方式<br />
+                    1，批量更新元素属性。<br />
+                    2，批量增加。<br />
+                    3、批量删除。
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

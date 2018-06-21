@@ -80,6 +80,11 @@ namespace BP.WF.HttpHandler
             FrmAttachments aths = new FrmAttachments(this.FK_MapData);
             ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
 
+
+            //加入扩展属性.
+            MapExts  MapExts = new MapExts(this.FK_MapData);
+            ds.Tables.Add(MapExts.ToDataTableField("Sys_MapExt"));
+
             // 检查组件的分组是否完整?
             foreach (GroupField item in gfs)
             {

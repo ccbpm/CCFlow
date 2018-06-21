@@ -29,6 +29,7 @@
 
    <script type="text/javascript">
        var global = window;
+       var curNodeId = "";
        global.selectedNodes = [];
        global.selectedRows = [];
        //初始化
@@ -41,10 +42,12 @@
            $("#pageloading").show();
 
            //加载菜单
-           //LoadDeptTree();
-           LoadDeptTreeV2();
+           LoadDeptTree();
+           //LoadDeptTreeV2();
 
        });
+
+       var nodeId = "";
        function LoadDeptTreeV2() {
 
            //var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
@@ -53,8 +56,6 @@
            ens.RetrieveAll();
            var pushData = createJsonToTree(ens, "0");
            var jsonTree = pushData;
-
-           alert("1111" + pushData);
 
            $('#appTree').treeview({
                data: jsonTree,         // 数据源
@@ -69,6 +70,7 @@
                    if (selectNodes) { //子节点不为空，则选中所有子节点
                        $('#appTree').treeview('checkNode', [selectNodes, { silent: true}]);
                    }
+
                },
                onNodeUnchecked: function (event, node) {
                    var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
@@ -77,20 +79,62 @@
                    }
                },
                onNodeSelected: function (event, node) {
-                   //var selectNodes = $('#appTree').treeview('getselected');
-                   
+                   nodeId = node.nodeId;
+                   curNodeId = $('#appTree').treeview('getNode', node.nodeId).id;
                    var tree = $('#appTree');
                    if (node.state.expanded) {
-                    //处于展开状态则折叠  
-                    tree.treeview('collapseNode', node.nodeId);
+                       //处于展开状态则折叠  
+                       tree.treeview('collapseNode', node.nodeId);
                    } else {
-                   //展开  
-                     tree.treeview('expandNode', node.nodeId);
+                       //展开  
+                       tree.treeview('expandNode', node.nodeId);
                    }
                }
            });
-
+         
            $("#pageloading").hide();
+       }
+       function checkDeptInfo2() {
+
+           //部门基本信息
+           var depts = new Entities("BP.GPM.Depts");
+           depts.Retrieve("No", curNodeId);
+           //部门岗位
+           var deptStations = new Entities("BP.GPM.DeptStations");
+           deptStations.Retrieve("FK_Dept", curNodeId);
+           //岗位集合
+           var stationTypes = new Entities("BP.GPM.StationTypes");
+           stationTypes.RetrieveAll();
+
+           var stations = new Entities("BP.GPM.Stations");
+           stations.RetrieveAll();
+
+           if (depts.length==0) {
+               alert("请选择部门"); 
+           }else
+           {
+               for (var i = 0; i < depts.length; i++) {
+                   $("#dept_No").val(depts[i].No);
+                   $("#dept_Name").val(depts[i].Name);
+                   $("#dept_Leader").val(depts[i].Leader);
+
+                   //初始化上级部门
+                   $("#DDL_ParentDept").val(depts[i].ParentNo);
+                   
+               }
+               $('#deptInfoDialog').dialog({
+                   title: "编辑部门",
+                   width: 500,
+                   height: 500,
+                   closed: false,
+                   modal: true,
+                   iconCls: 'icon-rights',
+                   resizable: true
+               });
+           }
+           
+           
+           //checkDeptInfoV2(curNodeId);
        }
 
        //树形结构转换
@@ -166,6 +210,7 @@
            return ts;
        }
        
+
    </script>
     <style type="text/css">
     .tableLabel
@@ -185,7 +230,7 @@
     <div data-options="region:'west',split:true" style="width: 350px; padding: 1px; overflow: hidden;">
         <div class="easyui-panel" style="padding: 1px; background-color: #F4F4F4; border: 0px;
             height: 30px; width: auto;">
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="checkDeptInfo()" data-options="plain:true,iconCls:'icon-edit'">编辑</a> 
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="checkDeptInfo2()" data-options="plain:true,iconCls:'icon-edit'">编辑</a> 
             <a href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#addNewDept',iconCls:'icon-new'">新建</a>
             <div id="addNewDept" style="width: 10px;">
                 <div data-options="iconCls:'icon-add'" onclick="append('peer')">同级</div>
@@ -317,7 +362,9 @@
                     <input id="dept_Leader" style="width: 200px" class="easyui-validatebox" type="text" name="deptLeader" />
                 </div>
                 <div style="margin-top:20px;">
-                    上级部门：<input id="DDL_ParentDept" class="easyui-combotree" style="width: 200px;" />
+                    上级部门：
+                    <!-- <input id="DDL_ParentDept" style="width: 200px" class="easyui-validatebox" type="text" name="DDL_ParentDept" /> -->
+                    <input id="Text1" class="easyui-combotree" style="width: 200px;" />
                 </div>
             </div>
             <div title="部门岗位" data-options="iconCls:'icon-2'" style="overflow: auto;">

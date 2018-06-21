@@ -4559,6 +4559,25 @@ namespace BP.WF
         #endregion
 
         #region  公共方法
+        /// <summary>
+        /// 创建索引
+        /// </summary>
+        /// <returns></returns>
+        public string CreateIndex()
+        {
+            // 为track表创建索引.  FID, WorkID
+            string ptable="ND"+int.Parse(this.PTable)+"Track";
+
+
+
+           // DBAccess.CreatIndex(DBUrlType.AppCenterDSN, ptable, "my");
+
+            return "流程["+this.No+"."+this.Name+"]索引创建成功.";
+        }
+        /// <summary>
+        /// 删除数据.
+        /// </summary>
+        /// <returns></returns>
         public string DoDelData()
         {
             #region 删除独立表单的数据.
@@ -6272,6 +6291,8 @@ namespace BP.WF
             this.DoOrderDown(FlowAttr.FK_FlowSort, this.FK_FlowSort, FlowAttr.Idx);
         }
         #endregion
+
+         
     }
     /// <summary>
     /// 流程集合

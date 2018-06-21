@@ -193,6 +193,7 @@
     <Compile Include="DTS\ToImplement\RelFlowTemplateToSubInc.cs" />
     <Compile Include="DTS\DeletTempFiles.cs" />
     <Compile Include="DTS\Tool_Repair.cs" />
+    <Compile Include="DTS\CreateIndex.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\AppACE.cs">
       <SubType>Code</SubType>

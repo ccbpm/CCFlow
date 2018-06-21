@@ -41,12 +41,13 @@
             //根据表单类别的默认值，初始加载默认的表单
             var sortNo = $("#DDL_FrmTree").val();
 
-            //获取表单库中的所有表单
-            var frms = new Entities("BP.Sys.MapDatas");
-            frms.Retrieve("FK_FormTree", sortNo);
-
-            //绑定表单
-            GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
+            if (sortNo != null && sortNo != "") {
+                //获取表单库中的所有表单
+                var frms = new Entities("BP.Sys.MapDatas");
+                frms.Retrieve("FK_FormTree", sortNo);
+                //绑定表单
+                GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
+            }
             nodeFrmID = node.NodeFrmID;
 
             //表单库的表单.
@@ -94,8 +95,9 @@
                 return;
             }
 
-            var node = new Entity("BP.WF.Node");
-            node.NodeID = GetQueryString("FK_Node");
+            var FK_Node = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", FK_Node);
+            node.NodeID = FK_Node;
             var i = node.RetrieveFromDBSources();
 
             //更新节点表单类型.

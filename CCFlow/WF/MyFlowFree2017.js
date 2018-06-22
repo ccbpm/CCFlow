@@ -488,7 +488,7 @@ function figure_Template_ImageAth(frmImageAth) {
     //获取数据
     if (flowData.Sys_FrmImgAthDB) {
         $.each(flowData.Sys_FrmImgAthDB, function (i, obj) {
-            if (obj.FK_FrmImgAth == frmImageAth.MyPK) {
+            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
                 imgSrc = basePath + obj.FileFullName;
             }
         });

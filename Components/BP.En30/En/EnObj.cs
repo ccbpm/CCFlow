@@ -270,7 +270,13 @@ namespace BP.En
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
-                string v = attr.DefaultValOfReal as string;
+                string v = this.GetValStringByKey(attr.Key, null);  // this._row[key] as string;
+
+                //含有特定值时取消重新设定默认值
+                if (v !=null)
+                    continue;
+
+                v = attr.DefaultValOfReal as string;
                 if (v == null)
                     continue;
 

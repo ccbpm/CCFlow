@@ -282,7 +282,7 @@ function GenerFrm() {
             if (isReadonly != "1") {
 
                 Common.MaxLengthError();
-
+                debugger
                 //处理下拉框级联等扩展信息
                 AfterBindEn_DealMapExt(frmData);
             }
@@ -318,7 +318,8 @@ function GenerFrm() {
                         $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
                 }
 
-                if (mapAttr.UIIsEnable == "0") {
+                //只读或者属性为不可编辑时设置
+                if (mapAttr.UIIsEnable == "0" ||  pageData.IsReadonly=="1") {
 
                     $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
                     $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);

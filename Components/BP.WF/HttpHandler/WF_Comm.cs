@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
@@ -611,6 +612,8 @@ namespace BP.WF.HttpHandler
             //把权限信息放入.
             UAC uac = en.HisUAC;
             ht.Add("IsUpdata", uac.IsUpdate);
+
+
             ht.Add("IsInsert", uac.IsInsert);
             ht.Add("IsDelete", uac.IsDelete);
             ht.Add("IsView", uac.IsView);
@@ -725,6 +728,15 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             ds.Tables.Add(dtAttrs); //把描述加入.
 
+            //定义Sys_MapData.
+            MapData md = new MapData();
+            md.No = this.EnsName.Substring(0,this.EnsName.Length-1);
+            md.Name = map.EnDesc;
+
+            //附件类型.
+            md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType);
+
+            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
@@ -813,17 +825,20 @@ namespace BP.WF.HttpHandler
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
-                /*if (map.DTSearchWay == DTSearchWay.ByDate)
+                //按日期查询
+                if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
                     qo.addAnd();
                     qo.addLeftBracket();
+                    dtFrom += " 00:00:00";
+                    dtTo += " 23:59:59";
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
                     qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
                     qo.addRightBracket();
-                }*/
+                }
 
-                if (map.DTSearchWay == DTSearchWay.ByDateTime ||map.DTSearchWay == DTSearchWay.ByDate)
+                if (map.DTSearchWay == DTSearchWay.ByDateTime)
                 {
                     //取前一天的24：00
                     if (dtFrom.Trim().Length == 10) //2017-09-30
@@ -1071,17 +1086,21 @@ namespace BP.WF.HttpHandler
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
-                /*if (map.DTSearchWay == DTSearchWay.ByDate)
+                if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
                     qo.addAnd();
                     qo.addLeftBracket();
+                    //设置开始查询时间
+                    dtFrom += " 00:00:00";
+                    //结束查询时间
+                    dtTo += " 23:59:59";
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
                     qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
                     qo.addRightBracket();
-                }*/
+                }
 
-                if (map.DTSearchWay == DTSearchWay.ByDateTime || map.DTSearchWay == DTSearchWay.ByDate)
+                if (map.DTSearchWay == DTSearchWay.ByDateTime )
                 {
                     //取前一天的24：00
                     if (dtFrom.Trim().Length == 10) //2017-09-30
@@ -2115,6 +2134,144 @@ namespace BP.WF.HttpHandler
             ht.Add("DeptNo", GuestUser.DeptNo);
             ht.Add("DeptName", GuestUser.DeptName);
             return BP.Tools.Json.ToJson(ht);
+        }
+
+
+        /// <summary>
+        /// 实体Entity 文件上传
+        /// </summary>
+        /// <returns></returns>
+
+        public string EntityAth_Upload()
+        {
+            HttpFileCollection files = context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的文件。";
+            //获取保存文件信息的实体
+
+            string enName = this.EnName;
+            Entity en = null;
+
+            //是否是空白记录.
+            bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
+            if (isBlank == true)
+                return "err@请先保存实体信息然后再上传文件";
+            else
+                en = ClassFactory.GetEn(this.EnName);
+
+            if (en == null)
+                return "err@参数类名不正确.";
+            en.PKVal = this.PKVal;
+            int i = en.RetrieveFromDBSources();
+            if (i == 0)
+                return "err@数据[" + this.EnName + "]主键为[" + en.PKVal + "]不存在，或者没有保存。";
+
+            //获取文件的名称
+            string fileName = files[0].FileName;
+            if (fileName.IndexOf("\\") >= 0)
+                fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+            fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
+            //文件后缀
+            string ext = System.IO.Path.GetExtension(files[0].FileName);
+
+            //文件大小
+            float size = files[0].ContentLength/1024;
+
+            //保存位置
+            string filepath = "";
+
+            //如果是天业集团则保存在ftp服务器上
+            if (SystemConfig.CustomerNo.Equals("TianYe"))
+            {
+                string guid = DBAccess.GenerGUID();
+
+                //把文件临时保存到一个位置.
+                string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
+                try
+                {
+                    files[0].SaveAs(temp);
+                }
+                catch (Exception ex)
+                {
+                    System.IO.File.Delete(temp);
+                    files[0].SaveAs(temp);
+                }
+
+                /*保存到fpt服务器上.*/
+                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+                if (ftpconn == null)
+                    return "err@FTP服务器连接失败";
+
+                string ny = DateTime.Now.ToString("yyyy_MM");
+
+                //判断目录年月是否存在.
+                if (ftpconn.DirectoryExist(ny) == false)
+                    ftpconn.CreateDirectory(ny);
+                ftpconn.SetCurrentDirectory(ny);
+
+                //判断目录是否存在.
+                if (ftpconn.DirectoryExist("Helper") == false)
+                    ftpconn.CreateDirectory("Helper");
+
+                //设置当前目录，为操作的目录。
+                ftpconn.SetCurrentDirectory("Helper");
+
+                //把文件放上去.
+                ftpconn.PutFile(temp, guid + "." + ext);
+                ftpconn.Close();
+
+                //删除临时文件
+                System.IO.File.Delete(temp);
+
+                //设置路径.
+                filepath = ny + "//Helper//" + guid + "." + ext;
+                
+            }
+            else
+            {
+
+                string savePath = BP.Sys.SystemConfig.PathOfDataUser + "ensName";
+
+                if (System.IO.Directory.Exists(savePath) == false)
+                    System.IO.Directory.CreateDirectory(savePath);
+
+                filepath = savePath + "\\" + fileName + "." + ext;
+                //存在文件则删除
+                if (System.IO.Directory.Exists(filepath) == true)
+                    System.IO.Directory.Delete(filepath);
+
+                FileInfo info = new FileInfo(filepath);
+
+                files[0].SaveAs(filepath);
+            }
+            //获取上传文件的信息
+            foreach (Attr attr in en.EnMap.Attrs)
+            {
+                //文件名
+                if (attr.Key.Equals("MyFileName"))
+                    en.SetValByKey(attr.Key, fileName);
+
+                //保存路径
+                if (attr.Key.Equals("MyFilePath"))
+                    en.SetValByKey(attr.Key, filepath);
+                //文件后缀名
+                if (attr.Key.Equals("MyFileExt"))
+                    en.SetValByKey(attr.Key, ext);
+
+                //文件大小
+                if (attr.Key.Equals("MyFileSize"))
+                    en.SetValByKey(attr.Key, size);
+
+                //文件保存的网络路径
+                if (attr.Key.Equals("WebPath"))
+                    en.SetValByKey(attr.Key, filepath);
+            }
+
+
+            en.Update();
+            return "文件保存成功";
         }
     }
 }

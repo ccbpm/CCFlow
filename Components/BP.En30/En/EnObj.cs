@@ -718,7 +718,9 @@ namespace BP.En
         /// <returns></returns>
         public string GetValStrByKey(string key)
         {
+            if(this.Row.GetValByKey(key)!=null)
             return this.Row.GetValByKey(key).ToString();
+            return "";
         }
         public string GetValStrByKey(string key, string isNullAs)
         {

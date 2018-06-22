@@ -185,11 +185,10 @@
                 multiSelect: false,    //多选
                 onNodeChecked: function (event, node) {
                     var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
-                    if (selectNodes) { //子节点不为空，则选中所有子节点
+                    if (selectNodes.length>0) { //子节点不为空，则选中所有子节点
                         $('#tree').treeview('checkNode', [selectNodes, { silent: true}]);
                         saveCheckNodes(selectNodes, 1);
                     }
-
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
                     en[GetQueryString("AttrOfMInMM")] = node.id;
@@ -203,7 +202,7 @@
                 onNodeUnchecked: function (event, node) {
 
                     var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
-                    if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                    if (selectNodes.length>0) { //子节点不为空，则取消选中所有子节点
                         $('#tree').treeview('uncheckNode', [selectNodes, { silent: true}]);
                         deleteCheckNodes(selectNodes, 1);
                     }
@@ -211,7 +210,7 @@
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
                     en[GetQueryString("AttrOfMInMM")] = node.id;
-                    en.Delete();
+                    en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), node.id);
                     //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
                 },
                 onNodeSelected: function (event, node) {
@@ -335,9 +334,7 @@
                         }
                     }
                 }
-            } else {
-                ts.push(node.nodeId);
-            }
+            } 
             return ts;
         }
 
@@ -383,6 +380,8 @@
                     en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
                 else
                     en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
+
+                en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), en[GetQueryString("AttrOfMInMM")]);
                 en.Delete();
             }
         }

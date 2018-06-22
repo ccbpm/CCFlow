@@ -2384,7 +2384,10 @@ namespace BP.En
 				case "MyPK":
 				case "No":
 				case "ID":
-					string pk = this.GetValStrByKey(this.PK);
+                    //自动生成的MYPK，插入前获取主键
+                    this.beforeUpdateInsertAction();
+					string pk = this.GetValStrByKey(this.PK);   
+                    
 					if (pk == "" || pk == null)
 					{
 						this.Insert();

@@ -138,8 +138,9 @@
             }
             //清空全局变量enArr;
             enArr = [];
-            //修改按钮id属性
-            $('input[name="batch"]').attr('id', para);
+            //修改按钮id属性和名称
+            var bName = document.getElementById(para).innerText;
+            $('input[name="batch"]').attr('id', para).attr('value',"执行[" + bName + "]操作");
 
         }
         /*
@@ -220,7 +221,7 @@
             <table id="Table1" class='Table1' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>
                 <tr>
                     <td class='GroupTitle' colspan='3'>
-                        批量更新:
+                        选择批量操作的节点:
                     </td>
                 </tr>
                 <tr>

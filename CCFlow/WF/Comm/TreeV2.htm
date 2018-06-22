@@ -89,6 +89,35 @@
            }
        }
 
+       //创建下级节点.
+       function DoMyCreateSubNode(no) {
+
+           var enName = GetEnName();
+           var en = new Entity(enName, no);
+           var treeEn = en.DoMethodReturnString("DoMyCreateSubNode");
+
+           var no = treeEn.No;
+           var name = treeEn.Name;
+           var parentNo = treeEn.ParentNo;
+
+           //把节点绑定到树上. todo
+       }
+
+       //创建同级节点.
+       function DoMyCreateSubNode(no) {
+
+           var enName = GetEnName();
+           var en = new Entity(enName, no);
+           var treeEn = en.DoMethodReturnString("DoMyCreateSameLevelNode");
+
+           var no = treeEn.No;
+           var name = treeEn.Name;
+           var parentNo = treeEn.ParentNo;
+
+           //把节点绑定到树上. todo
+
+       }
+
        function DoUp(no) {
            var enName = GetEnName();
            var en = new Entity(enName, no);

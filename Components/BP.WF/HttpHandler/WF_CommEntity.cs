@@ -315,6 +315,9 @@ namespace BP.WF.HttpHandler
                 md.No = this.EnName;
                 md.Name = map.EnDesc;
 
+                //附件类型.
+                md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType);
+
                 #region 加入权限信息.
                 //把权限加入参数里面.
                 if (en.HisUAC.IsInsert)
@@ -663,6 +666,9 @@ namespace BP.WF.HttpHandler
                 dtM.Columns.Add("Icon");
                 dtM.Columns.Add("IsCanBatch");
                 dtM.Columns.Add("RefAttrKey");
+                //判断Func是否有参数
+                dtM.Columns.Add("FunPara");
+               
 
                 RefMethods rms = map.HisRefMethods;
                 foreach (RefMethod item in rms)
@@ -696,6 +702,11 @@ namespace BP.WF.HttpHandler
                     dr["Icon"] = item.Icon;
                     dr["IsCanBatch"] = item.IsCanBatch;
                     dr["GroupName"] = item.GroupName;
+                    Attrs attrs = item.HisAttrs;
+                    if(attrs.Count ==0)
+                        dr["FunPara"] = "false";
+                    else
+                        dr["FunPara"] = "true";
 
                     dtM.Rows.Add(dr); //增加到rows.
                 }
@@ -1067,6 +1078,7 @@ namespace BP.WF.HttpHandler
             return "err@设置的默认分组[" + key + "]不能是普通字段.";
         }
         #endregion 分组数据.
+
 
     }
 }

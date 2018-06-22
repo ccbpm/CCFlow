@@ -20,6 +20,8 @@
                 return;
             }
 
+            var ensName = GetQueryString("EnsName");
+
             if (ensName == null || ensName == undefined) {
                 $("#Msg").html("必要的参数EnsName没有传入.");
                 return;
@@ -56,7 +58,6 @@
             ht.Add("IsView", uac.IsView);
             ht.Add("IsExp", uac.IsExp); //是否可以导出?
             ht.Add("IsImp", uac.IsImp); //是否可以导入? */
-
        }
 
        function BindTree() {
@@ -66,9 +67,52 @@
            handler.AddUrlData();  //增加参数.
            //获得map基本信息.
            var treeJson = handler.DoMethodReturnJSON("Tree_Init");
-
            //绑定树结构.
+       }
+
+       function Del(no, name) {
+
+           if (confirm('您确认要删除[' + name + ']吗？') == false)
+               return;
+
+           var enName = GetEnName();
+           var en = new Entity(enName, no);
+
+           try {
+
+               en.Delete();
+
+               //需要从节点上去掉.
+
+           } catch (e) {
+               alert(e);
+           }
+       }
+
+       function DoUp(no) {
+           var enName = GetEnName();
+           var en = new Entity(enName, no);
+           en.DoMethodReturnString("DoUp");
+           // 执行节点移动.
+
+       }
+       function DoDown(no) {
+           var enName = GetEnName();
+           var en = new Entity(enName, no);
+           en.DoMethodReturnString("DoDown");
+           // 执行节点移动.
+       }
+
+       function Edit(no) {
+           var url = "En.htm?EnName=" + GetEnName() + "&No=" + no;
+           WinOpen(url);
+       }
         
+       //获得enName.
+       function GetEnName() {
+
+           var ensName = GetQueryString("EnsName");
+           return ensName.substring(0, ensName.length - 1);
        }
     </script>
 </head>
@@ -78,6 +122,8 @@
 
 <br />
 <center> <img src='../Img/loading.gif' />正在加载，请稍后。。。 </center>
+
+
 </form>
 
 </body>

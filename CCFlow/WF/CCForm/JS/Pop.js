@@ -313,7 +313,7 @@ function PopTableSearch(mapExt) {
             "Name": o.Tag2
         });
     });
-    debugger
+    
     $("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
 
 

@@ -425,7 +425,7 @@
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
-                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",\"" + rm.FunPara + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
@@ -437,16 +437,21 @@
 
             return html;
         }
-        function OPenFun(url, warning, title, w, h) {
-            if (warning == "null" || warning == "")
-                warning = "确定要执行吗？";
-            else {
-                warning = warning.replace(/,\s+/g, ",");
-                warning = warning.replace(/\s+/g, "\r\n");
-            }
-            if (confirm("\"" + warning + "\"")) {
+        function OPenFun(url, warning, title, w, h, FunPara) {
+            if (FunPara == true || FunPara == "true")
                 OpenEasyUiDialogExt(url, title, 540, 450, false);
+            else {
+                if (warning == "null" || warning == "")
+                    warning = "确定要执行吗？";
+                else {
+                    warning = warning.replace(/,\s+/g, ",");
+                    warning = warning.replace(/\s+/g, "\r\n");
+                }
+                if (confirm("\"" + warning + "\"")) {
+                    OpenEasyUiDialogExt(url, title, 540, 450, false);
+                }
             }
+            
         }
 
         function OpenIt(url, title, w, h) {

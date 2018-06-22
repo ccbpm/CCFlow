@@ -1433,15 +1433,10 @@ function GenerWorkNode() {
 
             //给富文本创建编辑器
             if (document.BindEditorMapAttr) {
-
-                var editor = document.activeEditor = UE.getEditor('editor', {
-                    autoHeightEnabled: false,
-                    emotionLocalization: true,
-                    elementPathEnabled: false,
-                    maximumWords: document.BindEditorMapAttr.MaxLen,
-                    toolbars: [[
-             'cleardoc', 'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'fontfamily', 'fontsize', 'formatmatch', 'indent', 'date', 'time'
-        ]]
+                //给富文本 创建编辑器
+                var editor = document.activeEditor = UM.getEditor('editor', {
+                    'autoHeightEnabled': false,
+                    'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                 });
 
                 if (editor) {

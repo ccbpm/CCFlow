@@ -320,6 +320,22 @@
                     });
             }
 
+            sysMapData = mapdata["Sys_MapData"][0];
+            sysMapData = new Entity("BP.Sys.MapData", sysMapData); //把他转化成entity.
+
+             var entityAthType = sysMapData.GetPara("BPEntityAthType");
+             if (entityAthType == 1 || entityAthType == 2) {
+                 //加入操作下载文件
+                 columns.push({
+                     field: '_operate',
+                     title: '操作',
+                     width: 80,
+                     align:'center',
+                     formatter: formatOper,
+
+                     
+                 });
+             }
 
             var data = mapdata["DT"];
             $('#dg').datagrid({
@@ -416,9 +432,6 @@
                 else
                     data.originalRows = [];
             }
-            // var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);  
-            //var end = start + parseInt(opts.pageSize);  
-            //data.rows = (data.originalRows.slice(start, end));  
             return data;
         }
 
@@ -525,6 +538,35 @@
             var user = new WebUser();
             var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
             OpenEasyUiDialogExt(url, '设置', 800, 500, true);
+        }
+
+        function formatOper(val,rowData,index){
+            var pkval = rowData["No"];
+            if (pkval == undefined) {
+                pkval = rowData["OID"];
+            }
+            if (pkval == undefined) {
+                pkval = rowData["MyPK"];
+            }
+            if (pkval == undefined) {
+                pkval = rowData["WorkID"];
+            }
+            if (pkval == undefined) {
+                pkval = rowData["NodeID"];
+            }
+            
+            return "<a href='#' onclick='downLoadFile(\""+pkval+"\")'>下载</a>";  
+        }
+
+        function downLoadFile(PKVal){
+            if (plant == "CCFlow")
+                window.open( '../CCForm/DownFile.aspx?DoType=EntityFile_Load&DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnsName"));
+            else {
+                var currentPath = window.document.location.href;
+                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                Url = 'EntityFileLoad.do?DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnsName");
+                window.location.href = Url;
+            }
         }
 
     </script>

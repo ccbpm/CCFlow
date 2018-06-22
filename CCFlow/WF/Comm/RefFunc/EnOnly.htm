@@ -429,6 +429,18 @@
                 }
             }
 
+            //如果MapData中具有文件上传的权限，解析设置   0 无 1 单附件上传 2 多附件上传
+            var entityAthType = mapData.GetPara("BPEntityAthType");
+            if (entityAthType == 1 || entityAthType == 2) {
+                html += "<tr>";
+                html += "<td class='FDesc' style='width:20%;'>附件上传</td>";
+                html += "<td colspan=3>";
+                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white' />";
+                html += "</td>";
+                html += "</tr>";
+
+            }
+
             html += "</table>";
 
 
@@ -779,6 +791,11 @@
 
 
                 var pkval = en.GetPKVal();
+                //保存实体后文件上传
+                var entityAthType = mapData.GetPara("BPEntityAthType")
+                if (entityAthType == 1 || entityAthType == 2)
+                    uploadFile(pkval);
+
 
                 url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
                 window.location.href = url; //刷新.
@@ -797,11 +814,58 @@
             if (info != 1) {
                 alert('更新错误:' + info);
             }
+            //保存实体后文件上传
+            var entityAthType = mapData.GetPara("BPEntityAthType")
+            if (entityAthType == 1 || entityAthType == 2)
+                uploadFile(pkval);
 
              url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
             window.location.href = window.location.href; //刷新.
         }
 
+        //文件上传
+        function uploadFile(pkval) {
+            var fileObj = document.getElementById("File_Upload").files[0]; // js 获取文件对象
+            if (fileObj == null || (fileObj) == "undefined" || fileObj.size <= 0) {
+                alert("请选择上传的文件.");
+                return;
+            }
+            //form表单序列话
+
+            var formData = new FormData();
+            var name = $("input").val();
+            formData.append("file", fileObj);
+            formData.append("name", name);
+            //获取发送请求时的参数
+            var queryString = document.location.search.substr(1);
+
+            //URL 路径
+            var URL = "/WF/Comm/Handler.ashx?DoType=EntityAth_Upload";
+
+            if (queryString != null && queryString.length > 0)
+                URL += "&" + queryString;
+
+
+            $.ajax({
+                url: URL,
+                type: 'POST',
+                data: formData,
+                async: false,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
+                },
+                success: function (responseStr) {
+                },
+                error: function (responseStr) {
+                    console.log("error");
+                }
+            });
+
+        }
         function Delete() {
 
 

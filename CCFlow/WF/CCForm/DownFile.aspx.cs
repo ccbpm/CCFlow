@@ -11,6 +11,7 @@ using BP.Sys;
 using BP.DA;
 using BP.WF.Template;
 using BP.WF;
+using BP.En;
 using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Security.Cryptography;
@@ -140,6 +141,7 @@ namespace CCFlow.WF.CCForm
         }
         #endregion 属性.
 
+        //附件文件下载
         protected void Page_Load(object sender, EventArgs e)
         {
             this.Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
@@ -199,7 +201,69 @@ namespace CCFlow.WF.CCForm
                 this.WinClose();
                 return;
             }
+            else if (this.DoType == "EntityFile_Load")
+            {
+                EntityFile_Load(sender,e);
+
+                this.WinClose();
+                return;
+            }
            
+        }
+
+
+        //实体文件下载
+        protected void EntityFile_Load(object sender, EventArgs e)
+        {
+
+            //根据EnsName获取Entity
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+            en.PKVal = this.DelPKVal;
+            int i = en.RetrieveFromDBSources();
+            if (i == 0)
+                return ;
+            //获取使用的客户 TianYe集团保存在FTP服务器上
+            if (SystemConfig.CustomerNo.Equals("TianYe"))
+            {
+                string filePath = (string)en.GetValByKey("MyFilePath");
+                string fileName = (string)en.GetValByKey("MyFileName");
+                //临时存储位置
+                string tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + en.GetValByKey("MyFileExt");
+                try
+                {
+                    if (System.IO.File.Exists(tempFile) == true)
+                        System.IO.File.Delete(tempFile);
+                }
+                catch
+                {
+                    //  tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
+                }
+
+                //连接FTP服务器
+                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
+                conn.Close();
+
+                PubClass.DownloadFile(tempFile, fileName);
+                //删除临时文件
+                System.IO.File.Delete(tempFile);
+            }
+            else
+            {
+                HttpContext.Current.Response.Charset = "GB2312";
+                string fileName  = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileName"));
+                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName);
+                HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
+                HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
+
+                HttpContext.Current.Response.WriteFile((string)en.GetValByKey("MyFilePath"));
+                HttpContext.Current.Response.End();
+                HttpContext.Current.Response.Close();
+
+            }   
+
         }
 
         void btn_DownLoad_Zip(object sender, EventArgs e)

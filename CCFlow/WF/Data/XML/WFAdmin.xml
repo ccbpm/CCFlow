@@ -30,7 +30,7 @@
     <OneWork222 No="NDRpt" CH="流程报表" />
      <OneWork1 No="OP" CH="发起历史记录" />
 
-   <RptFlow1 No="Home_My" CH="主页" URL="Home.aspx?DoType=My"   ICON="/WF/Img/Btn/Home.gif" />
+    <RptFlow1 No="Home_My" CH="主页" URL="Home.aspx?DoType=My"   ICON="/WF/Img/Btn/Home.gif" />
     <RptFlow No="Search_My" CH="我参与的流程" URL="Search.aspx?DoType=My"   ICON="/WF/Img/Table.gif" />
     <RptFlow No="Search_Dept" CH="部门流程"   URL="Search.aspx?DoType=Dept"   ICON="/WF/Img/Table.gif"  />
 

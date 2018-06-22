@@ -278,11 +278,12 @@
             var pkval = GetPKVal();
 
             if (pkval != null ) {
-
                 //获取当前主键字段是否可以编辑?
                 $("#TB_No").attr("disabled", true);
                 $("#TB_MyPK").attr("disabled", 'disabled');
                 $("#TB_NodeID").attr("disabled", 'disabled');
+                $("#TB_WorkID").attr("disabled", 'disabled');
+                $("#TB_OID").attr("disabled", 'disabled');
             }
         }
 

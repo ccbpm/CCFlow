@@ -13,8 +13,6 @@
 		<meta content="JavaScript" name="vs_defaultClientScript" />
 		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema" />
 		<script language="JavaScript" src="./Comm/JScript.js" type="text/javascript"></script>
-		<script language="JavaScript" src="./Comm/Menu.js" type="text/javascript"></script>
-		<script language="JavaScript" src="./Comm/ShortKey.js" type="text/javascript"></script>
 		<script language="javascript" type="text/javascript">
 		    function ShowEn(url, wName, h, w) {
 		        var s = "dialogWidth=" + parseInt(w) + "px;dialogHeight=" + parseInt(h) + "px;resizable:yes";

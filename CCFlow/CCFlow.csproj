@@ -1349,30 +1349,9 @@
     <Content Include="WF\Comm\JS\TBHelpDiv.js" />
     <Content Include="WF\Comm\JS\Tree.js" />
     <Content Include="WF\Comm\JS\TreeEns.js" />
-    <Content Include="WF\Comm\Menu.js" />
-    <Content Include="WF\Comm\Port\ChangePass.aspx" />
-    <Content Include="WF\Comm\Port\ChangePass.gif" />
-    <Content Include="WF\Comm\Port\Close.gif" />
-    <Content Include="WF\Comm\Port\DeptTree.aspx" />
-    <Content Include="WF\Comm\Port\ErrorPage.aspx" />
-    <Content Include="WF\Comm\Port\Exit.aspx" />
-    <Content Include="WF\Comm\Port\HelpOfActiveX.htm" />
-    <Content Include="WF\Comm\Port\InfoPage.aspx" />
-    <Content Include="WF\Comm\Port\SearchDepts.ashx" />
-    <Content Include="WF\Comm\Port\SearchUsers.ashx" />
-    <Content Include="WF\Comm\Port\SelectDepts_Jq.aspx" />
-    <Content Include="WF\Comm\Port\SelectDepts_Lazyload.aspx" />
-    <Content Include="WF\Comm\Port\SelectUser_Jq.aspx" />
-    <Content Include="WF\Comm\Port\ToErrorPage.aspx" />
     <Content Include="WF\Comm\readme.txt" />
-    <Content Include="WF\Comm\Rpt2DBA.aspx" />
-    <Content Include="WF\Comm\Rpt2DBADtl.aspx" />
-    <Content Include="WF\Comm\Rpt2DBAs.aspx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Pie.htm" />
-    <Content Include="WF\Comm\SelectMVals.aspx" />
-    <Content Include="WF\Comm\SelfAttrs.aspx" />
-    <Content Include="WF\Comm\ShortKey.js" />
     <Content Include="WF\Comm\Style\BG_Title.png" />
     <Content Include="WF\Comm\Style\btnBG.gif" />
     <Content Include="WF\Comm\Style\CommStyle.css" />
@@ -1419,7 +1398,6 @@
     <Content Include="WF\Comm\Sys\CfgMenu.xml" />
     <Content Include="WF\Comm\Sys\DBRpt.htm" />
     <Content Include="WF\Comm\Sys\EnsAppCfg.aspx" />
-    <Content Include="WF\Comm\Sys\EnsCfg.aspx" />
     <Content Include="WF\Comm\Sys\EnsDataIO.aspx" />
     <Content Include="WF\Comm\Sys\EnumList.aspx" />
     <Content Include="WF\Comm\Sys\Handler.ashx" />
@@ -1430,13 +1408,9 @@
     <Content Include="WF\Comm\Sys\Img\View.png" />
     <Content Include="WF\Comm\Sys\Img\WS.png" />
     <Content Include="WF\Comm\Sys\Pub.ascx" />
-    <Content Include="WF\Comm\Sys\TestCash.aspx" />
-    <Content Include="WF\Comm\Sys\TestHost.aspx" />
-    <Content Include="WF\Comm\Sys\UserTools.aspx" />
     <Content Include="WF\Comm\Sys\WinOpen.Master" />
     <Content Include="WF\Comm\Tree.aspx" />
     <Content Include="WF\Comm\TreeEns.aspx" />
-    <Content Include="WF\Comm\TreeGrade.aspx" />
     <Content Include="WF\Comm\UC\Pub.ascx" />
     <Content Include="WF\Comm\UC\RptSingle.ascx" />
     <Content Include="WF\Comm\UC\ToolBar.ascx" />
@@ -5825,7 +5799,6 @@
     <Content Include="WF\CCForm\WinOpen.master" />
     <Content Include="WF\Comm\Handler.ashx" />
     <None Include="WF\Comm\JS\Calendar\jquery.bitmapcutter.js.bak" />
-    <Content Include="WF\Comm\MasterPage.master" />
     <None Include="WF\Comm\Style\Img\Tabs\Thumbs.db" />
     <Content Include="WF\Comm\Sys\FuncLib.htm" />
     <Content Include="WF\Comm\Sys\EnumList.htm" />
@@ -6814,120 +6787,8 @@
     <Compile Include="WF\Comm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\MasterPage.master.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\MasterPage.master.designer.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\ChangePass.aspx.cs">
-      <DependentUpon>ChangePass.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\ChangePass.aspx.designer.cs">
-      <DependentUpon>ChangePass.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\DeptTree.aspx.cs">
-      <DependentUpon>DeptTree.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\DeptTree.aspx.designer.cs">
-      <DependentUpon>DeptTree.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\DT2Json.cs" />
-    <Compile Include="WF\Comm\Port\ErrorPage.aspx.cs">
-      <DependentUpon>ErrorPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\ErrorPage.aspx.designer.cs">
-      <DependentUpon>ErrorPage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\Exit.aspx.cs">
-      <DependentUpon>Exit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\Exit.aspx.designer.cs">
-      <DependentUpon>Exit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\InfoPage.aspx.cs">
-      <DependentUpon>InfoPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\InfoPage.aspx.designer.cs">
-      <DependentUpon>InfoPage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SearchDepts.ashx.cs">
-      <DependentUpon>SearchDepts.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SearchUsers.ashx.cs">
-      <DependentUpon>SearchUsers.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SelectDepts_Jq.aspx.cs">
-      <DependentUpon>SelectDepts_Jq.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SelectDepts_Jq.aspx.designer.cs">
-      <DependentUpon>SelectDepts_Jq.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SelectDepts_Lazyload.aspx.cs">
-      <DependentUpon>SelectDepts_Lazyload.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SelectDepts_Lazyload.aspx.designer.cs">
-      <DependentUpon>SelectDepts_Lazyload.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SelectUser_Jq.aspx.cs">
-      <DependentUpon>SelectUser_Jq.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\SelectUser_Jq.aspx.designer.cs">
-      <DependentUpon>SelectUser_Jq.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Port\ToErrorPage.aspx.cs">
-      <DependentUpon>ToErrorPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Port\ToErrorPage.aspx.designer.cs">
-      <DependentUpon>ToErrorPage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Rpt2DBA.aspx.cs">
-      <DependentUpon>Rpt2DBA.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Rpt2DBA.aspx.designer.cs">
-      <DependentUpon>Rpt2DBA.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Rpt2DBADtl.aspx.cs">
-      <DependentUpon>Rpt2DBADtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Rpt2DBADtl.aspx.designer.cs">
-      <DependentUpon>Rpt2DBADtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Rpt2DBAs.aspx.cs">
-      <DependentUpon>Rpt2DBAs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Rpt2DBAs.aspx.designer.cs">
-      <DependentUpon>Rpt2DBAs.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Rpt\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\SelectMVals.aspx.cs">
-      <DependentUpon>SelectMVals.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\SelectMVals.aspx.designer.cs">
-      <DependentUpon>SelectMVals.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\SelfAttrs.aspx.cs">
-      <DependentUpon>SelfAttrs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\SelfAttrs.aspx.designer.cs">
-      <DependentUpon>SelfAttrs.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Sys\AdminTools.aspx.cs">
       <DependentUpon>AdminTools.aspx</DependentUpon>
@@ -6949,13 +6810,6 @@
     </Compile>
     <Compile Include="WF\Comm\Sys\EnsAppCfg.aspx.designer.cs">
       <DependentUpon>EnsAppCfg.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnsCfg.aspx.cs">
-      <DependentUpon>EnsCfg.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnsCfg.aspx.designer.cs">
-      <DependentUpon>EnsCfg.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Sys\EnsDataIO.aspx.cs">
       <DependentUpon>EnsDataIO.aspx</DependentUpon>
@@ -6981,27 +6835,6 @@
     <Compile Include="WF\Comm\Sys\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\Sys\TestCash.aspx.cs">
-      <DependentUpon>TestCash.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\TestCash.aspx.designer.cs">
-      <DependentUpon>TestCash.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\TestHost.aspx.cs">
-      <DependentUpon>TestHost.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\TestHost.aspx.designer.cs">
-      <DependentUpon>TestHost.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\UserTools.aspx.cs">
-      <DependentUpon>UserTools.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\UserTools.aspx.designer.cs">
-      <DependentUpon>UserTools.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Sys\WinOpen.Master.cs">
       <DependentUpon>WinOpen.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7022,13 +6855,6 @@
     </Compile>
     <Compile Include="WF\Comm\TreeEns.aspx.designer.cs">
       <DependentUpon>TreeEns.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\TreeGrade.aspx.cs">
-      <DependentUpon>TreeGrade.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\TreeGrade.aspx.designer.cs">
-      <DependentUpon>TreeGrade.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\UC\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

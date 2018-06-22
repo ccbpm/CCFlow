@@ -4566,13 +4566,11 @@ namespace BP.WF
         public string CreateIndex()
         {
             // 为track表创建索引.  FID, WorkID
-            string ptable="ND"+int.Parse(this.PTable)+"Track";
+            string ptable = "ND" + int.Parse(this.PTable) + "Track";
 
+            // DBAccess.CreatIndex(DBUrlType.AppCenterDSN, ptable, "my");
 
-
-           // DBAccess.CreatIndex(DBUrlType.AppCenterDSN, ptable, "my");
-
-            return "流程["+this.No+"."+this.Name+"]索引创建成功.";
+            return "流程[" + this.No + "." + this.Name + "]索引创建成功.";
         }
         /// <summary>
         /// 删除数据.

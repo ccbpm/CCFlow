@@ -811,9 +811,30 @@ function figure_Template_Image(frmImage) {
     return eleHtml;
 }
 
-//初始化 IMAGE附件   L4418  问下周总
+
+//初始化 IMAGE附件
 function figure_Template_ImageAth(frmImageAth) {
-    return "";
+    var isEdit = frmImageAth.IsEdit;
+    var eleHtml = $("<div></div>");
+    var img = $("<img/>");
+
+    var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
+    //获取数据
+    if (frmData.Sys_FrmImgAthDB) {
+        $.each(frmData.Sys_FrmImgAthDB, function (i, obj) {
+            if (obj.FK_FrmImgAth == frmImageAth.MyPK) {
+                imgSrc = basePath + obj.FileFullName;
+            }
+        });
+    }
+    //设计属性
+    img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
+    img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Data/Img/LogH.PNG'");
+    img.css('width', frmImageAth.W).css('height', frmImageAth.H).css('padding', "0px").css('margin', "0px").css('border-width', "0px");
+    //不可编辑
+    eleHtml.append(img);
+    eleHtml.css('position', 'absolute').css('top', frmImageAth.Y).css('left', frmImageAth.X);
+    return eleHtml;
 }
 
 //初始化 附件

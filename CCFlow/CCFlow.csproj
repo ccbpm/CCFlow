@@ -473,11 +473,12 @@
     <Content Include="WF\Comm\RefFunc\BranchesEUI.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2Dot.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotStationModel.htm" />
-    <Content Include="WF\Comm\RefFunc\Dtl2018.htm" />
-    <Content Include="WF\Comm\RefFunc\En2018.css" />
-    <Content Include="WF\Comm\RefFunc\En2018.htm" />
+    <Content Include="WF\Comm\RefFunc\Dtl.htm" />
+    <Content Include="WF\Comm\RefFunc\En.css" />
+    <Content Include="WF\Comm\RefFunc\En.htm" />
     <Content Include="WF\Comm\RefFunc\EnOnly.htm" />
     <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.htm" />
+    <Content Include="WF\Comm\UC\ToolBar.ascx" />
     <Content Include="WF\Comm\UC\UCEn.ascx" />
     <Content Include="WF\Data\Install\DemoData.xml" />
     <Content Include="WF\Data\Install\Informix.sql" />
@@ -1412,9 +1413,6 @@
     <Content Include="WF\Comm\Tree.aspx" />
     <Content Include="WF\Comm\TreeEns.aspx" />
     <Content Include="WF\Comm\UC\Pub.ascx" />
-    <Content Include="WF\Comm\UC\RptSingle.ascx" />
-    <Content Include="WF\Comm\UC\ToolBar.ascx" />
-    <Content Include="WF\Comm\UC\UCGraphics.ascx" />
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\UC\UIEn.ascx" />
     <Content Include="WF\Comm\Sys\Holiday.htm" />
@@ -6863,13 +6861,6 @@
     <Compile Include="WF\Comm\UC\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\UC\RptSingle.ascx.cs">
-      <DependentUpon>RptSingle.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\RptSingle.ascx.designer.cs">
-      <DependentUpon>RptSingle.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\UC\ToolBar.ascx.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6883,13 +6874,6 @@
     </Compile>
     <Compile Include="WF\Comm\UC\UCEn.ascx.designer.cs">
       <DependentUpon>UCEn.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCGraphics.ascx.cs">
-      <DependentUpon>UCGraphics.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCGraphics.ascx.designer.cs">
-      <DependentUpon>UCGraphics.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\UC\UCSys.ascx.cs">
       <DependentUpon>UCSys.ascx</DependentUpon>

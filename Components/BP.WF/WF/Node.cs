@@ -1827,7 +1827,7 @@ namespace BP.WF
         {
             get
             {
-#warning 2012-01-24修订,没有自动计算出来属性。
+//#warning 2012-01-24修订,没有自动计算出来属性。
                 switch (this.HisRunModel)
                 {
                     case RunModel.Ordinary:

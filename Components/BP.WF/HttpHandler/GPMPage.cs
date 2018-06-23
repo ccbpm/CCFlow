@@ -74,7 +74,7 @@ namespace BP.WF.HttpHandler
             BP.GPM.Depts depts = new GPM.Depts();
             depts.RetrieveAll();
 
-            return depts.ToJsonOfTree(depts, "0");
+            return depts.ToJsonOfTree("0");
 
         }
 
@@ -162,7 +162,7 @@ namespace BP.WF.HttpHandler
 
 
 
-        #endregion 组织结构维护.
+      //  #endregion 组织结构维护.
 
 
 

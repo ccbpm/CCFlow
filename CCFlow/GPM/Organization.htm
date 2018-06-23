@@ -42,16 +42,21 @@
            $("#pageloading").show();
 
            //加载菜单
-           LoadDeptTree();
-           //LoadDeptTreeV2();
+           //LoadDeptTree();
+           LoadDeptTreeV2();
 
        });
 
        var nodeId = "";
        function LoadDeptTreeV2() {
 
-           //var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-           //var pushData = handler.DoMethodReturnJSON("Organization_Init");
+           var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+           //var pushData1 = handler.DoMethodReturnJSON("Organization_Init");
+
+
+           var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+           //var pushData2 = handler.DoMethodReturnJSON("LoadDatagridDeptEmp");
+
            var ens = new Entities("BP.GPM.Depts");
            ens.RetrieveAll();
            var pushData = createJsonToTree(ens, "0");
@@ -89,6 +94,8 @@
                        //展开  
                        tree.treeview('expandNode', node.nodeId);
                    }
+
+                   LoadDataGridAdmin(1, 20);
                }
            });
          
@@ -108,7 +115,7 @@
 
            var stations = new Entities("BP.GPM.Stations");
            stations.RetrieveAll();
-
+           
            if (depts.length==0) {
                alert("请选择部门"); 
            }else
@@ -230,7 +237,7 @@
     <div data-options="region:'west',split:true" style="width: 350px; padding: 1px; overflow: hidden;">
         <div class="easyui-panel" style="padding: 1px; background-color: #F4F4F4; border: 0px;
             height: 30px; width: auto;">
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="checkDeptInfo2()" data-options="plain:true,iconCls:'icon-edit'">编辑</a> 
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="checkDeptInfo()" data-options="plain:true,iconCls:'icon-edit'">编辑</a> 
             <a href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#addNewDept',iconCls:'icon-new'">新建</a>
             <div id="addNewDept" style="width: 10px;">
                 <div data-options="iconCls:'icon-add'" onclick="append('peer')">同级</div>
@@ -402,7 +409,7 @@
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="EmpBlongToDept()">确定</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="empBelongDeptDialogClose();">关闭</a>
         </div>
-        <ul id="deptBelongTree" class="easyui-tree"></ul>
+        <ul id="deptBelongTree" class="easyui-tree"><li>1111</li></ul>
     </div>
     <div id="empInfo" class="easyui-dialog">
         <div style="width: auto; height: 25px; margin-top: 0px; text-align: left; background-color: #F4F4F4;

@@ -535,8 +535,10 @@ function glEmp() {
 }
 
 //人员添加归属部门
-function EmpBlongToDept() {
-    var node = $('#deptBelongTree').tree('getSelected');
+function EmpBlongToDept(node) {
+    
+    //var node = $('#deptBelongTree').tree('getSelected');
+    var node1 = $('#appTree').treeview('getNode', node.nodeId);
     if (node) {
         var saveModel = $("#HD_EmpsFrom").val();
         //启用人员绑定部门
@@ -1211,7 +1213,7 @@ function LoadDataGridAdmin(pageNumber, pageSize) {
                 pageList: [20, 30, 40, 50],
                 columns: [[
                        { checkbox: true },
-                       { field: 'NO', title: '账号', sortable: true, align: 'left', width: 160 },
+                       { field: 'NO', title: '账号11', sortable: true, align: 'left', width: 160 },
                        { field: 'NAME', title: '姓名', sortable: true, width: 120, align: 'center' },
                        { field: 'EMPNO', title: '员工工号', sortable: true, width: 160, align: 'center' },
                        { field: 'TEL', title: '电话', sortable: true, width: 160, align: 'center' },

@@ -22,7 +22,7 @@
 
             $("#Msg").html("正在加载请稍候....");
 
-            var fk_bill = GetQueryString("FK_BillNo");
+            var fk_bill = GetQueryString("FK_Bill");
             var nodeID = GetQueryString("FK_Node");
             var workID = GetQueryString("WorkID");
             var flowNo = GetQueryString("FK_Flow");
@@ -40,15 +40,19 @@
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
                 window.location.href = url;
+                $("#Msg").html("");
                 return;
             }
 
+            //如果包含多个打印模板
             var ens = JSON.parse(data);
 
             var html = "<ul>";
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                html += "<li ><a href='?FK_Bill="+en.No+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&WorkID="+workID+"'>" + en.Name + "</li>";
+                //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
+                html += "<li><a href='javascript:void(0);' onclick=WinOpen('" + "?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "')>" + en.Name + "</li>";
+               
             }
             html += "</ul>";
 

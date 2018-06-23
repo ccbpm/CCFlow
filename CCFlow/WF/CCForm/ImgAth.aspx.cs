@@ -141,9 +141,7 @@ namespace CCFlow.WF.CCForm
             string sourceFilePath = Server.MapPath(SourceFile);
             string objectFile = Server.MapPath(ObjectFile);
             if (System.IO.File.Exists(sourceFilePath))
-            {
                 System.IO.File.Copy(sourceFilePath, objectFile, true);
-            }
         }
 
         protected void btnImaeSave_Click(object sender, EventArgs e)

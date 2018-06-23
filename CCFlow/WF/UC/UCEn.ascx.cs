@@ -2899,7 +2899,7 @@ namespace CCFlow.WF.UC
                                 paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
                             }
 
-                            src = "/WF/WorkOpt/ThreadDtl.aspx?1=2" + paras;
+                            src = "/WF/WorkOpt/ThreadDtl.htm?1=2" + paras;
                             if (src.Contains("UserNo") == false)
                                 src += "&UserNo=" + WebUser.No;
                             if (src.Contains("SID") == false)

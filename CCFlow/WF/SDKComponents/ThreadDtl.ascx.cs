@@ -66,11 +66,9 @@ namespace CCFlow.WF.SDKComponents
         protected void Page_Load(object sender, EventArgs e)
         {
             Node nd = new Node(this.FK_Node);
-            Work wk = nd.HisWork;
-            wk.OID = this.WorkID;
-            wk.Retrieve();
             if (nd.HisNodeWorkType == NodeWorkType.WorkHL || nd.HisNodeWorkType == NodeWorkType.WorkFHL)
             {
+
             }
             else
             {

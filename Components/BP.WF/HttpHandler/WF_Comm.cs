@@ -19,6 +19,21 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Comm : DirectoryPageBase
     {
+        #region 树的实体.
+        /// <summary>
+        /// 获得树的结构
+        /// </summary>
+        /// <returns></returns>
+        public string Tree_Init()
+        {
+            EntitiesTree ens = ClassFactory.GetEns(this.EnsName) as EntitiesTree;
+            ens.RetrieveAll();
+
+            return ens.ToJsonOfTree();
+        }
+
+        #endregion 树的实体
+
         /// <summary>
         /// 页面功能实体
         /// </summary>

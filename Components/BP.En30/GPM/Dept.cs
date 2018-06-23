@@ -135,6 +135,7 @@ namespace BP.GPM
 
                 //比如:\\驰骋集团\\南方分公司\\财务部
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
+
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
 
                 // 01,0101,010101.
@@ -196,6 +197,26 @@ namespace BP.GPM
         }
         #endregion
 
+        /// <summary>
+        /// 创建下级节点.
+        /// </summary>
+        /// <returns></returns>
+        public string DoMyCreateSubNode()
+        {
+            Entity en = this.DoCreateSubNode();
+            return en.ToJson();
+        }
+
+        /// <summary>
+        /// 创建同级节点.
+        /// </summary>
+        /// <returns></returns>
+        public string DoMyCreateSameLevelNode()
+        {
+            Entity en = this.DoCreateSameLevelNode();
+            return en.ToJson();
+        }
+
         public string DoSameLevelDept(string no,string name)
         {
             Dept en = new Dept();
@@ -206,7 +227,7 @@ namespace BP.GPM
             en.Name = name;
             en.ParentNo = this.ParentNo;
             en.Insert();
-
+             
             return "增加成功..";
         }
         public string DoSubDept(string no, string name)
@@ -300,7 +321,7 @@ namespace BP.GPM
         }
     }
     /// <summary>
-    ///得到集合
+    ///部门集合
     /// </summary>
     public class Depts : EntitiesTree
     {

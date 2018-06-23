@@ -293,7 +293,7 @@ namespace BP.En
         public string DoUp()
         {
             this.DoOrderUp(EntityTreeAttr.ParentNo, this.ParentNo, EntityTreeAttr.Idx);
-            return null;
+            return "执行成功.";
         }
         /// <summary>
         /// 下移
@@ -302,7 +302,7 @@ namespace BP.En
         public string DoDown()
         {
             this.DoOrderDown(EntityTreeAttr.ParentNo, this.ParentNo, EntityTreeAttr.Idx);
-            return null;
+            return "执行成功.";
         }
         #endregion
     }

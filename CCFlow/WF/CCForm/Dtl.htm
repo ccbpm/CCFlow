@@ -437,6 +437,9 @@
                       threadTr.append(snTh);
                       $.each(sys_mapAttr, function (i, mapAttrObj) {
                           var th = $('<th></th>');
+                          if (mapAttrObj.MyDataType == 8)
+                              th = $('<th data-coltype="Money"></th>');
+                           
                           th.text(mapAttrObj.Name);
                           th.data(mapAttrObj);
                           th.css('width', mapAttrObj.UIWidth);
@@ -533,7 +536,7 @@
 
                   //为PageData.DBDtl 赋值
                   $.each(dbDtl, function (i, objRow) {
-                      pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
+                     pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
                   });
 
                   var dtlDataOption = {
@@ -856,10 +859,20 @@
 		 */
 		function doStatistics(exp, name, template) {
 			if (exp == "Sum") {	// 和
-				var sum = 0;
-				$(":input[name=" + name + "]").each(function (i, e) {
-					sum += parseFloat($(e).val());
-				});
+			    var sum = 0;
+			    //判断值是否含有小数
+			    var flag = false;
+			    $(":input[name=" + name + "]").each(function (i, e) {
+			        sum += parseFloat($(e).val());
+			        if ($(e).val().indexOf('.') >= 0)
+			            flag = true;
+			    });
+			    if (flag) {
+			        if (!/\./.test(sum))
+			            sum += '.00';
+                    //防止出现相加小数位数不正确的情况
+			        sum.toFixed(2);
+			    }
 				template.val(sum);
 			} else if (exp == "Avg") {	// 平均数
 				var sum = 0;
@@ -1162,7 +1175,8 @@
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input style='text-align:right;' onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                           
+                            eleHtml += "<input style='text-align:right;'    onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo');clearNoNum(this)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
                         }
                     }
                 }
@@ -1172,7 +1186,7 @@
                    mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
                 }
             } else {
-                var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn, mapAttr.MyDataType);
                 if (value == undefined) {
                     value = '';
                 } else {
@@ -1181,6 +1195,7 @@
             }
             eleHtml = $(eleHtml);
             eleHtml.val(defValue);
+
             //eleHtml.css('min-width', mapAttr.UIWidth);
             //eleHtml.css('width', '100%');
             eleHtml.css('width', mapAttr.UIWidth);
@@ -1875,7 +1890,7 @@
     }
 
     //填充默认数据
-    function ConvertDefVal(workNodeData, defVal, keyOfEn) {
+    function ConvertDefVal(workNodeData, defVal, keyOfEn,myDataType) {
 
         //计算URL传过来的表单参数@TXB_Title=事件测试
         var pageParams = getQueryString();
@@ -1908,6 +1923,10 @@
         if (result != undefined && typeof (result) == 'string') {
             //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
         }
+
+        if (myDataType == 8)
+            if (!/\./.test(result))
+                result += '.00';  
         return result = unescape(result);
     }
 

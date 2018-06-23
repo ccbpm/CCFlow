@@ -282,7 +282,7 @@ function GenerFrm() {
             if (isReadonly != "1") {
 
                 Common.MaxLengthError();
-                debugger
+                //debugger
                 //处理下拉框级联等扩展信息
                 AfterBindEn_DealMapExt(frmData);
             }
@@ -297,6 +297,9 @@ function GenerFrm() {
                 var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (mapAttr.MyDataType == 8)
+                        if (!/\./.test(defValue))
+                            defValue += '.00';  
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }
 

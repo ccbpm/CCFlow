@@ -504,7 +504,7 @@ Common.CustomPagePlug = function (operation) {
             countUrl: '',
             countParam: {},
             listUrl: '',
-            listParam:{},
+            listParam: {},
             ////渲染完TABLE执行的函数的参数
             RenderOverParam: {},
             //渲染完TABLE执行的函数
@@ -573,7 +573,7 @@ Common.CustomPagePlug = function (operation) {
             //return;
         }
         //初始化
-        _this.Load($(val.parentElement.parentElement).data());//GoToPage
+        _this.Load($(val.parentElement.parentElement).data()); //GoToPage
 
         var value = $("#" + _this.InitData.DivId + " .pagination-panel input").val();
         var currentPageIndex = 0;
@@ -697,6 +697,12 @@ Common.CustomPagePlug = function (operation) {
                         if ($(headers[i]).data != undefined && $(headers[i]).data().colname != undefined && obje[$(headers[i]).data().colname] != undefined) {
                             if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "date") {//类型是日期的TD
                                 html += "<td>" + _this.DateFromMSJsonString(obje[$(headers[i]).data().colname]) + "</td>"
+                            } else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Money") {
+                                var defValue = obje[$(headers[i]).data().colname];
+                                if (!/\./.test(defValue))
+                                    defValue += '.00';
+
+                                html += "<td>" + defValue + "</td>"
                             }
                             else if ($(headers[i]).data().opeation != undefined) {//存在操作按钮的TD
                                 //添加字符截取功能
@@ -707,7 +713,7 @@ Common.CustomPagePlug = function (operation) {
                                     html += "<td> <a onclick=" + $(headers[i]).data().opeation + ">" + obje[$(headers[i]).data().colname] + "</a></td>"
                                 }
                             }
-                                //是否把TITLE放上去
+                            //是否把TITLE放上去
                             else if ($(headers[i]).data().title != undefined) {
                                 if ($(headers[i]).data().title != undefined) {
                                     var title = $(headers[i]).data().title;
@@ -739,7 +745,7 @@ Common.CustomPagePlug = function (operation) {
                             html += ('<td><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
                             html += "</tr>";
                         }
-                            //自定义内容
+                        //自定义内容
                         else if ($(headers[i]).data().custom != undefined && $(headers[i]).data().customcontent != undefined) {
 
                             var tmp = '';
@@ -778,8 +784,8 @@ Common.CustomPagePlug = function (operation) {
             //改变一下父窗体中IFRAME的高度
             //当列表被嵌在id=dayReporFrame的IFRAME里时，初始完页面后对父页面中的IFRAME设置高度
             /*if (parent.document.getElementById('dayReporFrame') != null) {
-                var bodyHeight = $('body').height() + 30;
-                $(parent.document.getElementById('dayReporFrame')).height(bodyHeight);
+            var bodyHeight = $('body').height() + 30;
+            $(parent.document.getElementById('dayReporFrame')).height(bodyHeight);
             }*/
             //绑定完成的回调函数
             if (_this.InitData.RenderOverFun != null && typeof (_this.InitData.RenderOverFun) == 'function') {
@@ -816,7 +822,7 @@ Common.CustomPagePlug = function (operation) {
             success: function (Counts) {
                 Counts = JSON.parse(Counts).DTCout[0].Count;
                 //如果是ALL就把PAGESIZE设成PAGECOUNT+1 为了解决首次加载默认显示全部 
-                if ($('#' + DivId + ' .pagination-panel label select').val() == '-1' || _this.InitData.PageSize==-1) {
+                if ($('#' + DivId + ' .pagination-panel label select').val() == '-1' || _this.InitData.PageSize == -1) {
                     _this.InitData.PageSize = Counts + 1;
                 }
                 //初始化
@@ -876,7 +882,7 @@ Common.CustomPagePlug = function (operation) {
         $(_this.InitData.DivId).data.PageSize = _this.InitData.PageSize;
         _this.InitPlan(_this.InitData.DivId);
     };
- 
+
     //将dataObj的每个属性依次赋值给divObj的data() 上 divObj是HTML元素即可
     PageData.prototype.SetDataToDivData = function (divObj, dataObj) {
         for (var property in dataObj) {

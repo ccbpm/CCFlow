@@ -60,7 +60,7 @@ namespace BP.WF.HttpHandler
 
         public string getUTF8ToString(string param)
         {
-            return HttpUtility.UrlDecode(Request[param], System.Text.Encoding.UTF8);
+            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
         }
 
         #region 组织结构维护.

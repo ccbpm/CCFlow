@@ -58,6 +58,10 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        public string getUTF8ToString(string param)
+        {
+            return HttpUtility.UrlDecode(Request[param], System.Text.Encoding.UTF8);
+        }
 
         #region 组织结构维护.
         /// <summary>
@@ -70,9 +74,94 @@ namespace BP.WF.HttpHandler
             BP.GPM.Depts depts = new GPM.Depts();
             depts.RetrieveAll();
 
-            return depts.ToJsonOfTree();
+            return depts.ToJsonOfTree(depts, "0");
 
         }
+
+        /// <summary>
+        /// 获取该部门的所有人员
+        /// </summary>
+        /// <returns></returns>
+        public string LoadDatagridDeptEmp()// qin  gai 分页
+        {
+            string deptNo = getUTF8ToString("deptNo");
+            if (string.IsNullOrEmpty(deptNo))
+            {
+                return "{ total: 0, rows: [] }";
+            }
+            string orderBy = getUTF8ToString("orderBy");
+
+
+            string searchText = getUTF8ToString("searchText");
+            string addQue = "";
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                addQue = "  AND (pe.No like '%" + searchText + "%' or pe.Name like '%" + searchText + "%') ";
+            }
+
+            string pageNumber = getUTF8ToString("pageNumber");
+            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+            //每页多少行
+            string pageSize = getUTF8ToString("pageSize");
+            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+
+            string sql = "(select pe.*,pd.name FK_DutyText from port_emp pe left join port_duty pd on pd.no = pe.fk_duty where pe.no in (select fk_emp from Port_DeptEmp where fk_dept='" + deptNo + "') "
+                + addQue + " ) dbSo ";
+
+
+            return DBPaging(sql, iPageNumber, iPageSize, "No", orderBy);
+
+        }
+
+        /// <summary>
+        /// 以下算法只包含 oracle mysql sqlserver 三种类型的数据库 qin
+        /// </summary>
+        /// <param name="dataSource">表名</param>
+        /// <param name="pageNumber">当前页</param>
+        /// <param name="pageSize">当前页数据条数</param>
+        /// <param name="key">计算总行数需要</param>
+        /// <param name="orderKey">排序字段</param>
+        /// <returns></returns>
+        public string DBPaging(string dataSource, int pageNumber, int pageSize, string key, string orderKey)
+        {
+            string sql = "";
+            string orderByStr = "";
+
+            if (!string.IsNullOrEmpty(orderKey))
+                orderByStr = " ORDER BY " + orderKey;
+
+            switch (DBAccess.AppCenterDBType)
+            {
+                case DBType.Oracle:
+                    int beginIndex = (pageNumber - 1) * pageSize + 1;
+                    int endIndex = pageNumber * pageSize;
+
+                    sql = "SELECT * FROM ( SELECT A.*, ROWNUM RN " +
+                        "FROM (SELECT * FROM  " + dataSource + orderByStr + ") A WHERE ROWNUM <= " + endIndex + " ) WHERE RN >=" + beginIndex;
+                    break;
+                case DBType.MSSQL:
+                    sql = "SELECT TOP " + pageSize + " * FROM " + dataSource + " WHERE " + key + " NOT IN  ("
+                    + "SELECT TOP (" + pageSize + "*(" + pageNumber + "-1)) " + key + " FROM " + dataSource + " )" + orderByStr;
+                    break;
+                case DBType.MySQL:
+                    pageNumber -= 1;
+                    sql = "select * from  " + dataSource + orderByStr + " limit " + pageNumber + "," + pageSize;
+                    break;
+                default:
+                    throw new Exception("暂不支持您的数据库类型.");
+            }
+
+            DataTable DTable = DBAccess.RunSQLReturnTable(sql);
+
+            int totalCount = DBAccess.RunSQLReturnCOUNT("select " + key + " from " + dataSource);
+
+            return DataTableConvertJson.DataTable2Json(DTable, totalCount);
+        }
+        #endregion
+
+
+
+
         #endregion 组织结构维护.
 
 

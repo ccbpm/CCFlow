@@ -373,19 +373,28 @@ namespace BP.GPM
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "人员部门集合";
+                rm.ClassMethodName = this.ToString() + ".DoEmpDepts";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.GPM.Depts(),
                    BP.GPM.DeptEmpAttr.FK_Emp,
-                   BP.GPM.DeptEmpAttr.FK_Dept, "多部门", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
-
-
+                   BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        public string DoEmpDepts()
+        {
+            return "../../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
         }
 
         public string DoSinger()

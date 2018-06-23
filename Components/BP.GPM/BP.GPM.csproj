@@ -48,12 +48,13 @@
   <ItemGroup>
     <Compile Include="Dev2Interface.cs" />
     <Compile Include="GPM\DTSGenerDir.cs" />
-    <Compile Include="GPM\DTS\OrgInit_NameOfPath.cs" />
-    <Compile Include="GPM\DTS\InitMenu.cs">
+    <Compile Include="DTS\OrgInit_NameOfPath.cs" />
+    <Compile Include="DTS\InitMenu.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GPM\DTS\ClearData.cs" />
+    <Compile Include="DTS\ClearData.cs" />
     <Compile Include="Glo.cs" />
+    <Compile Include="GPM\StationExt.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\Analyze.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\CacheItem.cs" />
@@ -85,11 +86,11 @@
     <Compile Include="UserVar.cs" />
     <Compile Include="GPM\AppSort.cs" />
     <Compile Include="GPM\GPMEmp.cs" />
-    <Compile Include="GPM\Group\UserMenu.cs" />
-    <Compile Include="GPM\Group\GroupEmp.cs" />
-    <Compile Include="GPM\Group\Group.cs" />
-    <Compile Include="GPM\Group\GroupStation.cs" />
-    <Compile Include="GPM\Group\GroupMenu.cs" />
+    <Compile Include="GPM\UserMenu.cs" />
+    <Compile Include="GPM\GroupEmp.cs" />
+    <Compile Include="GPM\Group.cs" />
+    <Compile Include="GPM\GroupStation.cs" />
+    <Compile Include="GPM\GroupMenu.cs" />
     <Compile Include="GPM\StationMenu.cs" />
     <Compile Include="GPM\UserData\DeptManager.cs" />
     <Compile Include="GPM\PerSetting.cs" />
@@ -107,6 +108,7 @@
       <Name>BP.En30</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

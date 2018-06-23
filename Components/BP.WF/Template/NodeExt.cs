@@ -366,7 +366,6 @@ namespace BP.WF.Template
                 //节点业务类型.
                 map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
 
-
                 ////为宝旺达，增加业务类型.
                 //if ( this.PKVal!=null )
                 //{

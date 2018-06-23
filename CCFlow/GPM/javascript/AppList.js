@@ -1,7 +1,7 @@
 ﻿var toolbar = [{ 'text': '新建', 'iconCls': 'icon-new', 'handler': 'addApp' }, { 'text': '编辑系统菜单', 'iconCls': 'icon-config', 'handler': 'EditMenus'}];
 
 function addApp() {
-    var url = "../WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.GPM.Apps";
+    var url = "../WF/Comm/RefFunc/Ens.htm?EnsName=BP.GPM.Apps";
     window.showModalDialog(url, "属性", "dialogWidth=800px;dialogHeight=500px;dialogTop=140px;dialogLeft=260px");
     LoadGrid();
 }

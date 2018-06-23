@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace CCFlow.WF.Rpt
+namespace CCFlow.WF.RptDfine.UC
 {
-    public partial class Contrast : System.Web.UI.Page
+    public partial class Pub : BP.Web.UC.UCBase3
     {
         protected void Page_Load(object sender, EventArgs e)
         {

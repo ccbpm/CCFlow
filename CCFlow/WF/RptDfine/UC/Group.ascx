@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="uc1" TagName="UCSys" Src="../../Comm/UC/UCSys.ascx" %>
 <%@ Register Src="ToolBar.ascx" TagName="ToolBar" TagPrefix="uc2" %>
 <%@ Register Src="../../Comm/UC/UCGraphics.ascx" TagName="ucgraphics" TagPrefix="uc3" %>
-<%@ Register Src="../../Pub.ascx" TagName="Pub" TagPrefix="uc4" %>
+<%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc4" %>
 <style type="text/css">
     .MyTable
     {

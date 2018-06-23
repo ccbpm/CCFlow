@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Search.ascx.cs" Inherits="CCFlow.WF.Rpt.Search" %>
-<%@ Register Src="../../Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
+<%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <%@ Register Src="ToolBar.ascx" TagName="ToolBar" TagPrefix="uc2" %>
 <%@ Register Src="../../Comm/UC/UCSys.ascx" TagName="UCSys" TagPrefix="uc3" %>
 <script language="javascript" type="text/javascript">

@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="SearchAdv.ascx.cs" Inherits="CCFlow.WF.Rpt.SearchAdv" %>
 <%@ Register Assembly="BP.Web.Controls" Namespace="BP.Web.Controls" TagPrefix="cc1" %>
-<%@ Register Src="../../Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
+<%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <%@ Register Src="../../Comm/UC/UCSys.ascx" TagName="UCSys" TagPrefix="uc3" %>
 <link href="../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
 <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />

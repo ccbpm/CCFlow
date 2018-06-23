@@ -19,7 +19,7 @@ namespace CCFlow.WF.Rpt {
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.Pub Pub1;
+        protected global::CCFlow.WF.RptDfine.UC.Pub Pub1;
         
         /// <summary>
         /// Pub2 控件。
@@ -28,7 +28,7 @@ namespace CCFlow.WF.Rpt {
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.Pub Pub2;
+        protected global::CCFlow.WF.RptDfine.UC.Pub Pub2;
         
         /// <summary>
         /// hiddenAttrKey 控件。
@@ -136,6 +136,6 @@ namespace CCFlow.WF.Rpt {
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.Pub Pub3;
+        protected global::CCFlow.WF.RptDfine.UC.Pub Pub3;
     }
 }

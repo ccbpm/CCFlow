@@ -28,7 +28,7 @@ namespace CCFlow.WF.Rpt.UC {
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.Pub Left;
+        protected global::CCFlow.WF.RptDfine.UC.Pub Left;
         
         /// <summary>
         /// Right 控件。
@@ -37,6 +37,6 @@ namespace CCFlow.WF.Rpt.UC {
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.Pub Right;
+        protected global::CCFlow.WF.RptDfine.UC.Pub Right;
     }
 }

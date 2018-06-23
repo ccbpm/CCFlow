@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="D3.ascx.cs" Inherits="CCFlow.WF.Rpt.UC.D3" %>
 <%@ Register Src="ToolBar.ascx" TagName="ToolBar" TagPrefix="uc1" %>
-<%@ Register Src="../../Pub.ascx" TagName="Pub" TagPrefix="uc2" %>
+<%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc2" %>
 <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" />
 <script type="text/javascript" language="JavaScript">
     //  事件.

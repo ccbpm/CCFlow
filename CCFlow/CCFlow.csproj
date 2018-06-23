@@ -301,7 +301,6 @@
     <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
-    <Content Include="SDKFlowDemo\SDK\SDKComponents\F159\S15901.aspx" />
     <Content Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx" />
     <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.htm" />
     <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx" />
@@ -358,20 +357,6 @@
     <Content Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx" />
     <Content Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx" />
     <Content Include="SDKFlowDemo\QingJia\S4_RenShi.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F018\Apply.ascx" />
-    <Content Include="SDKFlowDemo\SDK\F018\S018.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F110\QingJia.ascx" />
-    <Content Include="SDKFlowDemo\SDK\F110\S11001.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F111\DocRelease.ascx" />
-    <Content Include="SDKFlowDemo\SDK\F111\S11101.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F114\S11401.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F114\S11402.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F114\S11403.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F115\S11501.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F116\S11601.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F118\S11801.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F131\S131.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F137\QingJia.aspx" />
     <Content Include="SDKFlowDemo\SDK\Info.aspx" />
     <Content Include="SDKFlowDemo\SDK\Readme.txt" />
     <Content Include="SDKFlowDemo\TestCase\BatchSelfFrm.aspx" />
@@ -380,11 +365,6 @@
     <Content Include="SDKFlowDemo\TestCondOfFlowOver.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Site.Master" />
     <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
-    <Content Include="SDKFlowDemo\SDK\F018\Serv18.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F114\Serv.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F115\Serv.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F116\Serv.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F118\Serv.ashx" />
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
     <Content Include="WF\Admin\AttrFlow\AddOneFrmToNodes.htm" />
@@ -467,7 +447,33 @@
     <Content Include="WF\AppClassic\Top.htm" />
     <Content Include="WF\AppClassic\Welcome.htm" />
     <Content Include="WF\AppClassic\Login.htm" />
+    <Content Include="WF\Batch.htm" />
+    <Content Include="WF\BatchStart.htm" />
+    <Content Include="WF\CCForm\Ath.htm" />
+    <Content Include="WF\CCForm\Ath.js" />
+    <Content Include="WF\CCForm\AthImg.htm" />
+    <Content Include="WF\CCForm\AttachmentUpload.js" />
+    <Content Include="WF\CCForm\DownFile.aspx" />
+    <Content Include="WF\CCForm\DtlCard.htm" />
+    <Content Include="WF\CCForm\DtlFrm.htm" />
+    <Content Include="WF\CCForm\DtlFrm.js" />
+    <Content Include="WF\CCForm\DtlImp.htm" />
+    <Content Include="WF\CCForm\DtlImpByExcel.htm" />
+    <Content Include="WF\CCForm\DtlImpByJSON.htm" />
+    <Content Include="WF\CCForm\DtlOpt.htm" />
     <Content Include="WF\CCForm\DtlReadonly.htm" />
+    <Content Include="WF\CCForm\JS\mselector.css" />
+    <Content Include="WF\CCForm\JS\mselector.js" />
+    <Content Include="WF\CCForm\JS\mtags.js" />
+    <Content Include="WF\CCForm\JS\MultipleChoiceSearch.js" />
+    <Content Include="WF\CCForm\JS\MultipleChoiceSmall.js" />
+    <Content Include="WF\CCForm\JS\Pop.js" />
+    <Content Include="WF\CCForm\Pop\Branches.htm" />
+    <Content Include="WF\CCForm\Pop\BranchesAndLeaf.htm" />
+    <Content Include="WF\CCForm\Pop\BranchesAndLeafEasyui.htm" />
+    <Content Include="WF\CCForm\Pop\GroupList.htm" />
+    <Content Include="WF\CCForm\Pop\Simple.htm" />
+    <Content Include="WF\CCForm\Pop\TableSearch.htm" />
     <Content Include="WF\Comm\RefFunc\Branches.htm" />
     <Content Include="WF\Comm\RefFunc\BranchesAndLeaf.htm" />
     <Content Include="WF\Comm\RefFunc\BranchesEUI.htm" />
@@ -536,11 +542,15 @@
     <Content Include="WF\MyFlowTree2017.js" />
     <Content Include="WF\MyFlowTreeReadonly.htm" />
     <Content Include="WF\Port.htm" />
+    <Content Include="WF\RptDfine\Batch.htm" />
+    <Content Include="WF\RptDfine\Contrast.htm" />
     <Content Include="WF\RptDfine\Flowlist.htm" />
     <Content Include="WF\RptDfine\FlowSearch.htm" />
     <Content Include="WF\RptDfine\Default.htm" />
+    <Content Include="WF\RptDfine\Pub.ascx" />
     <Content Include="WF\RptDfine\Single.Master" />
     <Content Include="WF\RptDfine\SiteEUI.Master" />
+    <Content Include="WF\RptDfine\UC\Pub.ascx" />
     <Content Include="WF\RptSearch\Default.htm" />
     <Content Include="WF\RptSearch\KeySearch.htm" />
     <Content Include="WF\RptSearch\Left.htm" />
@@ -557,6 +567,7 @@
     <Content Include="WF\WorkOpt\Packup.htm" />
     <Content Include="WF\WorkOpt\PackupPrintPDF.htm" />
     <Content Include="WF\WorkOpt\PrintDocQRGuide.htm" />
+    <Content Include="WF\WorkOpt\Pub.ascx" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
@@ -1015,15 +1026,9 @@
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\XAP\DoPort.htm" />
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
-    <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\AutoTodolist.htm" />
-    <Content Include="WF\Batch.aspx" />
-    <Content Include="WF\BatchSelfDeal.aspx" />
-    <Content Include="WF\BatchStart.aspx" />
-    <Content Include="WF\BatchStartGroup.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\AttachmentFix.htm" />
-    <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
     <Content Include="WF\CCForm\Frm.htm" />
     <Content Include="WF\CCForm\CCFormAPI.asmx" />
     <Content Include="WF\CCForm\Do.aspx" />
@@ -1054,7 +1059,6 @@
     <Content Include="WF\CCForm\MapExt2016.js" />
     <Content Include="WF\CCForm\PointOffice.aspx" />
     <Content Include="WF\CCForm\Pub.ascx" />
-    <Content Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx" />
     <Content Include="WF\Comm\MethodLink.htm" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
     <Content Include="WF\Comm\Charts\css\Style.css" />
@@ -1416,7 +1420,6 @@
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\UC\UIEn.ascx" />
     <Content Include="WF\Comm\Sys\Holiday.htm" />
-    <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\HungUpList.htm" />
@@ -1676,10 +1679,6 @@
     <Content Include="WF\Img\yaoshi.jpg" />
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\PortDemo.htm" />
-    <Content Include="WF\Pub.ascx" />
-    <Content Include="WF\RptDfine\Attachment.aspx" />
-    <Content Include="WF\RptDfine\Contrast.aspx" />
-    <Content Include="WF\RptDfine\ContrastSingle.aspx" />
     <Content Include="WF\RptDfine\D3.aspx" />
     <Content Include="WF\RptDfine\Group.aspx" />
     <Content Include="WF\RptDfine\GroupDtl.aspx" />
@@ -1689,7 +1688,6 @@
     <Content Include="WF\RptDfine\SearchEUI.aspx" />
     <Content Include="WF\RptDfine\SearchEUIReadOnly.aspx" />
     <Content Include="WF\RptDfine\SelectMVals.aspx" />
-    <Content Include="WF\RptDfine\UC\Contrast.ascx" />
     <Content Include="WF\RptDfine\UC\D3.ascx" />
     <Content Include="WF\RptDfine\UC\Group.ascx" />
     <Content Include="WF\RptDfine\UC\Search.ascx" />
@@ -5550,30 +5548,11 @@
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shCoreEclipse.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeDefault.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeEclipse.css" />
-    <Content Include="WF\SDKComponents\AccSite.Master" />
-    <Content Include="WF\SDKComponents\Base\SDKBase.aspx" />
-    <Content Include="WF\SDKComponents\Base\SDKData.js" />
-    <Content Include="WF\SDKComponents\CCFlowSDK.js" />
-    <Content Include="WF\SDKComponents\CSSTab.css" />
-    <Content Include="WF\SDKComponents\DocMainAth.ascx" />
-    <Content Include="WF\SDKComponents\DocMultiAth.ascx" />
-    <Content Include="WF\SDKComponents\FrmCheck.ascx" />
-    <Content Include="WF\SDKComponents\FTC.ascx" />
-    <Content Include="WF\SDKComponents\Readme.txt" />
-    <Content Include="WF\SDKComponents\ShowMsg.aspx" />
     <Content Include="WF\SDKComponents\Site.Master" />
-    <Content Include="WF\SDKComponents\SubFlowDtl.ascx" />
-    <Content Include="WF\SDKComponents\Templelte\StartSubFlow.ascx" />
     <Content Include="WF\SDKComponents\ThreadDtl.ascx" />
-    <Content Include="WF\SDKComponents\Toolbar.ascx" />
-    <Content Include="WF\SDKComponents\TrackChart.ascx" />
-    <Content Include="WF\SDKComponents\TrackList.ascx" />
-    <Content Include="WF\SDKComponents\TruakOnly.ascx" />
     <Content Include="WF\RptSearch\Search.htm" />
     <Content Include="WF\SendOverClose.htm" />
     <Content Include="WF\Start.htm" />
-    <Content Include="WF\StartGuide.aspx" />
-    <Content Include="WF\StartGuideEntities.aspx" />
     <Content Include="WF\Style\BlankTitle.JPG" />
     <Content Include="WF\Style\Frm\jquery.idTabs.min.js" />
     <Content Include="WF\Style\Frm\jquery.min.js" />
@@ -5710,7 +5689,6 @@
     <Content Include="WF\WorkOpt\Forward.htm" />
     <Content Include="WF\WorkOpt\FTC.aspx" />
     <Content Include="WF\WorkOpt\Handler.ashx" />
-    <Content Include="WF\WorkOpt\HungUp.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
     <Content Include="WF\WorkOpt\OneWork\Chart.htm" />
     <Content Include="WF\WorkOpt\OneWork\FlowBBS.htm" />
@@ -6224,132 +6202,12 @@
     <Compile Include="SDKFlowDemo\QingJia\Site1.Master.designer.cs">
       <DependentUpon>Site1.Master</DependentUpon>
     </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F018\Apply.ascx.cs">
-      <DependentUpon>Apply.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F018\Apply.ascx.designer.cs">
-      <DependentUpon>Apply.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F018\S018.aspx.cs">
-      <DependentUpon>S018.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F018\S018.aspx.designer.cs">
-      <DependentUpon>S018.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F018\Serv18.ashx.cs">
-      <DependentUpon>Serv18.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F110\QingJia.ascx.cs">
-      <DependentUpon>QingJia.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F110\QingJia.ascx.designer.cs">
-      <DependentUpon>QingJia.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F110\S11001.aspx.cs">
-      <DependentUpon>S11001.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F110\S11001.aspx.designer.cs">
-      <DependentUpon>S11001.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F111\DocRelease.ascx.cs">
-      <DependentUpon>DocRelease.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F111\DocRelease.ascx.designer.cs">
-      <DependentUpon>DocRelease.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F111\S11101.aspx.cs">
-      <DependentUpon>S11101.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F111\S11101.aspx.designer.cs">
-      <DependentUpon>S11101.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F114\S11401.aspx.cs">
-      <DependentUpon>S11401.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F114\S11401.aspx.designer.cs">
-      <DependentUpon>S11401.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F114\S11402.aspx.cs">
-      <DependentUpon>S11402.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F114\S11402.aspx.designer.cs">
-      <DependentUpon>S11402.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F114\S11403.aspx.cs">
-      <DependentUpon>S11403.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F114\S11403.aspx.designer.cs">
-      <DependentUpon>S11403.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F114\Serv.ashx.cs">
-      <DependentUpon>Serv.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F115\S11501.aspx.cs">
-      <DependentUpon>S11501.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F115\S11501.aspx.designer.cs">
-      <DependentUpon>S11501.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F115\Serv.ashx.cs">
-      <DependentUpon>Serv.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F116\S11601.aspx.cs">
-      <DependentUpon>S11601.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F116\S11601.aspx.designer.cs">
-      <DependentUpon>S11601.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F116\Serv.ashx.cs">
-      <DependentUpon>Serv.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F118\S11801.aspx.cs">
-      <DependentUpon>S11801.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F118\S11801.aspx.designer.cs">
-      <DependentUpon>S11801.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F118\Serv.ashx.cs">
-      <DependentUpon>Serv.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F131\S131.aspx.cs">
-      <DependentUpon>S131.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F131\S131.aspx.designer.cs">
-      <DependentUpon>S131.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F137\QingJia.aspx.cs">
-      <DependentUpon>QingJia.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\F137\QingJia.aspx.designer.cs">
-      <DependentUpon>QingJia.aspx</DependentUpon>
-    </Compile>
     <Compile Include="SDKFlowDemo\SDK\Info.aspx.cs">
       <DependentUpon>Info.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SDKFlowDemo\SDK\Info.aspx.designer.cs">
       <DependentUpon>Info.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\SDKComponents\F159\S15901.aspx.cs">
-      <DependentUpon>S15901.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\SDKComponents\F159\S15901.aspx.designer.cs">
-      <DependentUpon>S15901.aspx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx.cs">
       <DependentUpon>S16001.aspx</DependentUpon>
@@ -6614,48 +6472,6 @@
     <Compile Include="WF\Admin\XAP\DoPort.aspx.designer.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\AutoTodolist.aspx.cs">
-      <DependentUpon>AutoTodolist.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\AutoTodolist.aspx.designer.cs">
-      <DependentUpon>AutoTodolist.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Batch.aspx.cs">
-      <DependentUpon>Batch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Batch.aspx.designer.cs">
-      <DependentUpon>Batch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\BatchSelfDeal.aspx.cs">
-      <DependentUpon>BatchSelfDeal.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\BatchSelfDeal.aspx.designer.cs">
-      <DependentUpon>BatchSelfDeal.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\BatchStart.aspx.cs">
-      <DependentUpon>BatchStart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\BatchStart.aspx.designer.cs">
-      <DependentUpon>BatchStart.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\BatchStartGroup.aspx.cs">
-      <DependentUpon>BatchStartGroup.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\BatchStartGroup.aspx.designer.cs">
-      <DependentUpon>BatchStartGroup.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\AttachmentUploadImg.aspx.cs">
-      <DependentUpon>AttachmentUploadImg.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\AttachmentUploadImg.aspx.designer.cs">
-      <DependentUpon>AttachmentUploadImg.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
       <DependentUpon>CCFormAPI.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -6673,6 +6489,13 @@
     </Compile>
     <Compile Include="WF\CCForm\DocMainAth.aspx.designer.cs">
       <DependentUpon>DocMainAth.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\CCForm\DownFile.aspx.cs">
+      <DependentUpon>DownFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\CCForm\DownFile.aspx.designer.cs">
+      <DependentUpon>DownFile.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\FilesView.aspx.cs">
       <DependentUpon>FilesView.aspx</DependentUpon>
@@ -6732,13 +6555,6 @@
     </Compile>
     <Compile Include="WF\CCForm\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx.cs">
-      <DependentUpon>ReturnValTBFullCtrl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx.designer.cs">
-      <DependentUpon>ReturnValTBFullCtrl.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\WinOpen.master.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
@@ -6890,49 +6706,28 @@
       <DependentUpon>UIEn.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
-    <Compile Include="WF\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\RptDfine\Pub.ascx.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\RptDfine\Pub.ascx.designer.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\RptDfine\UC\Pub.ascx.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\RptDfine\UC\Pub.ascx.designer.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\RptSearch\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\MyFlow.ashx.cs">
       <DependentUpon>MyFlow.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\Attachment.aspx.cs">
-      <DependentUpon>Attachment.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\Attachment.aspx.designer.cs">
-      <DependentUpon>Attachment.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\Contrast.aspx.cs">
-      <DependentUpon>Contrast.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\Contrast.aspx.designer.cs">
-      <DependentUpon>Contrast.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\ContrastSingle.aspx.cs">
-      <DependentUpon>ContrastSingle.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\ContrastSingle.aspx.designer.cs">
-      <DependentUpon>ContrastSingle.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\RptDfine\D3.aspx.cs">
       <DependentUpon>D3.aspx</DependentUpon>
@@ -7014,13 +6809,6 @@
     <Compile Include="WF\RptDfine\SiteEUI.Master.designer.cs">
       <DependentUpon>SiteEUI.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\RptDfine\UC\Contrast.ascx.cs">
-      <DependentUpon>Contrast.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\Contrast.ascx.designer.cs">
-      <DependentUpon>Contrast.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\RptDfine\UC\D3.ascx.cs">
       <DependentUpon>D3.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7056,75 +6844,12 @@
     <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\SDKComponents\AccSite.Master.cs">
-      <DependentUpon>AccSite.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\AccSite.Master.designer.cs">
-      <DependentUpon>AccSite.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\Base\SDKBase.aspx.cs">
-      <DependentUpon>SDKBase.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\Base\SDKBase.aspx.designer.cs">
-      <DependentUpon>SDKBase.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\DocMainAth.ascx.cs">
-      <DependentUpon>DocMainAth.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\DocMainAth.ascx.designer.cs">
-      <DependentUpon>DocMainAth.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\DocMultiAth.ascx.cs">
-      <DependentUpon>DocMultiAth.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\DocMultiAth.ascx.designer.cs">
-      <DependentUpon>DocMultiAth.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\FrmCheck.ascx.cs">
-      <DependentUpon>FrmCheck.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\FrmCheck.ascx.designer.cs">
-      <DependentUpon>FrmCheck.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\FTC.ascx.cs">
-      <DependentUpon>FTC.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\FTC.ascx.designer.cs">
-      <DependentUpon>FTC.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\ShowMsg.aspx.cs">
-      <DependentUpon>ShowMsg.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\ShowMsg.aspx.designer.cs">
-      <DependentUpon>ShowMsg.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\SDKComponents\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\SDKComponents\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\SubFlowDtl.ascx.cs">
-      <DependentUpon>SubFlowDtl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\SubFlowDtl.ascx.designer.cs">
-      <DependentUpon>SubFlowDtl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\Templelte\StartSubFlow.ascx.cs">
-      <DependentUpon>StartSubFlow.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\Templelte\StartSubFlow.ascx.designer.cs">
-      <DependentUpon>StartSubFlow.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\ThreadDtl.ascx.cs">
       <DependentUpon>ThreadDtl.ascx</DependentUpon>
@@ -7133,50 +6858,8 @@
     <Compile Include="WF\SDKComponents\ThreadDtl.ascx.designer.cs">
       <DependentUpon>ThreadDtl.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\SDKComponents\Toolbar.ascx.cs">
-      <DependentUpon>Toolbar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\Toolbar.ascx.designer.cs">
-      <DependentUpon>Toolbar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackChart.ascx.cs">
-      <DependentUpon>TrackChart.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackChart.ascx.designer.cs">
-      <DependentUpon>TrackChart.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackList.ascx.cs">
-      <DependentUpon>TrackList.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackList.ascx.designer.cs">
-      <DependentUpon>TrackList.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TruakOnly.ascx.cs">
-      <DependentUpon>TruakOnly.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TruakOnly.ascx.designer.cs">
-      <DependentUpon>TruakOnly.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Setting\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\StartGuide.aspx.cs">
-      <DependentUpon>StartGuide.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\StartGuide.aspx.designer.cs">
-      <DependentUpon>StartGuide.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\StartGuideEntities.aspx.cs">
-      <DependentUpon>StartGuideEntities.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\StartGuideEntities.aspx.designer.cs">
-      <DependentUpon>StartGuideEntities.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\UC\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
@@ -7247,13 +6930,6 @@
     <Compile Include="WF\WorkOpt\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\HungUp.aspx.cs">
-      <DependentUpon>HungUp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\HungUp.aspx.designer.cs">
-      <DependentUpon>HungUp.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -7263,6 +6939,13 @@
     </Compile>
     <Compile Include="WF\WorkOpt\PrintDoc.aspx.designer.cs">
       <DependentUpon>PrintDoc.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\Pub.ascx.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\WorkOpt\Pub.ascx.designer.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\SelectNode.aspx.cs">
       <DependentUpon>SelectNode.aspx</DependentUpon>

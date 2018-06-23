@@ -29,7 +29,16 @@ namespace BP.WF.HttpHandler
         public string PrintDoc_Init()
         {
             BillTemplates templetes = new BillTemplates();
-            templetes.Retrieve(BillTemplateAttr.NodeID, this.FK_Node);
+            string billNo = this.GetRequestVal("FK_Bill");
+            if (billNo == null)
+            {
+                templetes.Retrieve(BillTemplateAttr.NodeID, this.FK_Node);
+            }
+            else
+            {
+                templetes.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.No, billNo);
+            }
+
             if (templetes.Count == 0)
                 return "err@当前节点上没有绑定单据模板。";
 
@@ -45,7 +54,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="func"></param>
         /// <returns></returns>
-        public string PrintDoc_Done(string billTemplateNo=null)
+        public string PrintDoc_Done(string billTemplateNo = null)
         {
 
             if (billTemplateNo == null)
@@ -146,7 +155,7 @@ namespace BP.WF.HttpHandler
                 paths = file.Split('_');
                 path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
 
-                string billUrl = "url@"+BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
+                string billUrl = "url@" + BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
 
                 if (func.HisBillFileType == BillFileType.PDF)
                     billUrl = billUrl.Replace(".doc", ".pdf");
@@ -213,7 +222,7 @@ namespace BP.WF.HttpHandler
 
                 //在线WebOffice打开
                 if (func.BillOpenModel == BillOpenModel.WebOffice)
-                    return "url@../WebOffice/PrintOffice.aspx?MyPK="+bill.MyPK;
+                    return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
                 return billUrl;
             }
             catch (Exception ex)
@@ -277,7 +286,7 @@ namespace BP.WF.HttpHandler
 
                 Node nd = new Node(nodeID);
                 Work wk = nd.HisWork;
-                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null,true);
+                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null, true);
             }
             catch (Exception ex)
             {
@@ -697,7 +706,7 @@ namespace BP.WF.HttpHandler
             {
                 //计算警告日期。
                 // 增加小时数. 考虑到了节假日.
-                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0,0, nd.TWay);
+                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, 0, nd.TWay);
             }
             gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
             #endregion 计算会签时间.
@@ -783,7 +792,7 @@ namespace BP.WF.HttpHandler
             //执行会签,写入日志.
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian,
                 ActionType.HuiQian, "执行会签", null);
-            
+
             string str = "";
             if (nd.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
@@ -800,7 +809,7 @@ namespace BP.WF.HttpHandler
             {
                 int toNodeID = this.GetRequestValInt("ToNode");
                 if (toNodeID == 0)
-                    return "Send@["+nd.Name+"]会签成功执行.";
+                    return "Send@[" + nd.Name + "]会签成功执行.";
 
                 Node toND = new Node(toNodeID);
                 //如果到达的节点是按照接受人来选择,就转向接受人选择器.
@@ -866,7 +875,7 @@ namespace BP.WF.HttpHandler
 
             return "";
         }
-        
+
         #endregion 会签
 
         #region 审核组件.
@@ -933,7 +942,7 @@ namespace BP.WF.HttpHandler
             if (this.GetRequestVal("IsReadonly") != null && this.GetRequestVal("IsReadonly").Equals("1"))
                 isReadonly = true;
 
-          //  Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
+            //  Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
             DataTable nodeEmps = new DataTable();
             FrmWorkCheck fwc = null;
             DataTable dt = null;
@@ -998,7 +1007,7 @@ namespace BP.WF.HttpHandler
              * 用于处理在审核列表中屏蔽临时的保存的审核信息.
              * */
             string checkerPassed = ",";
-            if (gwf.WFState!= WFState.Complete)
+            if (gwf.WFState != WFState.Complete)
             {
                 string sql = "SELECT FK_Emp FROM WF_Generworkerlist where workid=" + this.WorkID + " AND IsPass=1 AND FK_Node=" + this.FK_Node;
                 DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(sql);
@@ -1127,16 +1136,16 @@ namespace BP.WF.HttpHandler
                     if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                         wcDesc.HisFrmWorkCheckType == FWCType.Check || (
                                         (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)
-                                        && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) 
-                                        || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog 
+                                        && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+                                        || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog
                                         && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
                                         ))
                     {
                         bool isLast = true;
                         foreach (Track tk1 in tks)
                         {
-                            if (tk1.HisActionType == tk.HisActionType 
-                                && tk1.NDFrom == tk.NDFrom 
+                            if (tk1.HisActionType == tk.HisActionType
+                                && tk1.NDFrom == tk.NDFrom
                                 && tk1.RDT.CompareTo(tk.RDT) > 0)
                             {
                                 isLast = false;
@@ -1225,7 +1234,7 @@ namespace BP.WF.HttpHandler
                                     row["Msg"] = mysubtk.MsgHtml;
                                     row["EmpFrom"] = mysubtk.EmpFrom;
                                     row["EmpFromT"] = mysubtk.EmpFromT;
-                                    row["RDT"] = mysubtk.RDT ;
+                                    row["RDT"] = mysubtk.RDT;
                                     row["IsDoc"] = false;
                                     row["ParentNode"] = tk.NDFrom;
                                     row["T_NodeIndex"] = idx++;
@@ -1241,11 +1250,11 @@ namespace BP.WF.HttpHandler
                         }
                     }
                     #endregion
-                  
+
                 }
 
-                #warning 处理审核信息,删除掉他
-                if (tkDoc != null && 1==2 )
+#warning 处理审核信息,删除掉他
+                if (tkDoc != null && 1 == 2)
                 {
                     //判断可编辑审核信息是否处于最后一条，不处于最后一条，则将其移到最后一条
                     DataRow rdoc = tkDt.Select("IsDoc=True")[0];
@@ -1305,7 +1314,7 @@ namespace BP.WF.HttpHandler
                         row["IsDoc"] = true;
 
                         row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
-                        if (row["Msg"].ToString().Equals("") )
+                        if (row["Msg"].ToString().Equals(""))
                             row["RDT"] = "";
 
                     }
@@ -1400,7 +1409,7 @@ namespace BP.WF.HttpHandler
              * */
 
             //如果有 SignType 列就获得签名信息.
-            if (SystemConfig.CustomerNo == "TianYe" )
+            if (SystemConfig.CustomerNo == "TianYe")
             {
                 string tTable = "ND" + int.Parse(FK_Flow) + "Track";
                 string sql = "SELECT distinct a.No, a.SignType, a.EleID FROM Port_Emp a, " + tTable + " b WHERE (A.No='" + WebUser.No + "') OR B.ActionType=22 AND a.No=b.EmpFrom AND B.WorkID=" + this.WorkID;
@@ -1415,9 +1424,9 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtTrack);
             }
 
-            string str= BP.Tools.Json.ToJson(ds);
-           //用于jflow数据输出格式对比.
-          //  DataType.WriteFile("c:\\WorkCheck_Init_ccflow.txt", str);
+            string str = BP.Tools.Json.ToJson(ds);
+            //用于jflow数据输出格式对比.
+            //  DataType.WriteFile("c:\\WorkCheck_Init_ccflow.txt", str);
             return str;
         }
         /// <summary>
@@ -1637,9 +1646,9 @@ namespace BP.WF.HttpHandler
                 }
                 return "ok";
             }
-            catch(Exception e)
-            { 
-            return "err@" + e.Message;
+            catch (Exception e)
+            {
+                return "err@" + e.Message;
             }
         }
         #endregion
@@ -1879,7 +1888,7 @@ namespace BP.WF.HttpHandler
             {
                 if (DataType.IsNullOrEmpty(empStr) == true)
                     continue;
-                
+
                 BP.GPM.Emp emp = new GPM.Emp(empStr);
 
                 CCList cc = new CCList();
@@ -1893,7 +1902,7 @@ namespace BP.WF.HttpHandler
 
             return "";
         }
-       
+
         /// <summary>
         /// 抄送发送.
         /// </summary>
@@ -2411,7 +2420,7 @@ namespace BP.WF.HttpHandler
             string[] vals = this.GetRequestVal("ReturnToNode").Split('@');
             int toNodeID = int.Parse(vals[0]);
 
-            string toEmp   =  vals[1];
+            string toEmp = vals[1];
             string reMesage = this.GetRequestVal("ReturnInfo");
 
             bool isBackBoolen = false;
@@ -2419,7 +2428,7 @@ namespace BP.WF.HttpHandler
             if (isBack == "1")
                 isBackBoolen = true;
 
-            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID,toEmp, reMesage, isBackBoolen);
+            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, toEmp, reMesage, isBackBoolen);
         }
         #endregion
 

@@ -1498,6 +1498,14 @@ namespace BP.WF.HttpHandler
                 md.SetPara("IsDelete", "1");
             #endregion 加入权限信息.
 
+            #region 判断主键是否为自增长
+            Entity en = dtls.GetNewEntity;
+            if(en.EnMap.IsAutoGenerNo)
+                md.SetPara("IsNewRow", "0");
+            else
+                md.SetPara("IsNewRow", "1");
+            #endregion
+
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
             #region 字段属性.
@@ -1597,6 +1605,7 @@ namespace BP.WF.HttpHandler
                 foreach (Entity item in dtls)
                 {
                     string pkval = item.PKVal.ToString();
+
                     foreach (Attr attr in map.Attrs)
                     {
                         if (attr.IsRefAttr == true)
@@ -1641,12 +1650,11 @@ namespace BP.WF.HttpHandler
                     item.Update(); //执行更新.
                 }
                 #endregion  查询出来实体数据.
-
                 #region 保存新加行.
- 
-               
+
+
                 string valValue = "";
-               
+
 
                 foreach (Attr attr in map.Attrs)
                 {
@@ -1685,32 +1693,31 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
                 }
-                if (en.IsBlank == false)
-                {
-                    if (en.IsNoEntity)
-                    {
-                        if (en.EnMap.IsAutoGenerNo)
-                            en.SetValByKey("No", en.GenerNewNoByKey("No"));
-                    }
 
-                    try
+                if (en.IsNoEntity)
+                {
+                    if (en.EnMap.IsAutoGenerNo)
+                        en.SetValByKey("No", en.GenerNewNoByKey("No"));
+                }
+
+                try
+                {
+                    if (en.PKVal.ToString() == "0")
                     {
-                        if (en.PKVal.ToString() == "0")
-                        {
-                        }
-                        else
-                        {
-                            en.Insert();
-                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        //异常处理..
-                        Log.DebugWriteInfo(ex.Message);
-                        //msg += "<hr>" + ex.Message;
+                        en.Insert();
                     }
-                }   
-               
+                }
+                catch (Exception ex)
+                {
+                    //异常处理..
+                    Log.DebugWriteInfo(ex.Message);
+                    //msg += "<hr>" + ex.Message;
+                }
+              
+
 
                 #endregion 保存新加行.
 

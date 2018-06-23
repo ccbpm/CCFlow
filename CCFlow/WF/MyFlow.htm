@@ -20,9 +20,6 @@
             var num = str.indexOf("?")
             str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
 
-            //  var url = Handler + "MyFlow.ashx?DoType=MyFlow_Init&" + str + "&m=" + Math.random();
-            var url = MyFlow + "?DoType=MyFlow_Init&" + str + "&m=" + Math.random();
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyFlow_Init");

@@ -96,13 +96,12 @@
             var empNo = GetQueryString("FK_Emp");
             var deptNo = GetQueryString("FK_Dept");
 
-
             //该人员在当前部门下的所有岗位集合.
             var ens = new Entities("BP.GPM.DeptEmpStations");
             ens.Retrieve("FK_Emp", empNo, "FK_Dept", deptNo, "FK_Station", staNo);
 
-
             var en = new Entity("BP.GPM.DeptEmpStation");
+
             if (ens.length == 0) {
                 en.FK_Dept = deptNo;
                 en.FK_Emp = empNo;

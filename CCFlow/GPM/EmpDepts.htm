@@ -31,8 +31,8 @@
             html += "<tr>";
             html += "<th>部门编号</th>";
             html += "<th>部门名称</th>";
+            html += "<th></th>";
             html += "<th>岗位s</th>";
-
             html += "<th>操作</th>";
             html += "</tr>";
 
@@ -46,7 +46,17 @@
 
                 //求部门名称.
                 var dept = new Entity("BP.Port.Dept", en.FK_Dept);
-                html += "<td>" + dept.Name + "</td>";
+
+                if (emp.FK_Dept == dept.No) {
+                    html += "<td><b>" + dept.Name + "</b></td>";
+                    html += "<td> - </td>";
+                }
+                else {
+                    html += "<td>" + dept.Name + "</td>";
+                    html += "<td><a href=\"javascript:SetMainDept('"+dept.No+"','"+empNo+"')\">设置主部门</a></td>";
+                }
+
+
 
                 //求岗位集合.
 
@@ -54,7 +64,7 @@
                 dess.Retrieve("FK_Emp", empNo, "FK_Dept", dept.No);
 
                 if (dess.length == 0) {
-                    html += "<td>无岗位-<a href=\"javascript:AddStation('" + dept.No + "','"+empNo+"')\">增加</a></td>";
+                    html += "<td>无岗位-<a href=\"javascript:AddStation('" + dept.No + "','" + empNo + "')\">增加</a></td>";
                 } else {
 
                     var staNames = "";
@@ -77,6 +87,16 @@
             $("#Msg").html(html);
 
         });
+
+        //设置主部门
+        function SetMainDept(deptNo,empNo) {
+
+            var emp = new Entity("BP.Port.Emp", empNo);
+            emp.FK_Dept = deptNo;
+            emp.Update();
+            window.location.href = window.location.href;
+          
+        }
 
         //设置岗位.
         function AddStation(deptNo, empNo) {

@@ -17,7 +17,7 @@
 <%
     string fk_mapdata = this.Request.QueryString["FK_MapData"];
 
-    if (DataType.IsNullOrEmpty(fk_mapdata))
+    if (BP.DA.DataType.IsNullOrEmpty(fk_mapdata))
         fk_mapdata = "ND101";
         
     BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs(fk_mapdata);

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="子线程信息" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_WorkOpt_ThreadDtl" Codebehind="ThreadDtl.aspx.cs" %>
+﻿<%@ Page Title="子线程信息" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_WorkOpt_ThreadDtl" Codebehind="ThreadDtl.aspx.cs" %>
 <%@ Register src="../SDKComponents/ThreadDtl.ascx" tagname="ThreadDtl" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>

@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="选择节点转向" Language="C#" MasterPageFile="../SDKComponents/Site.Master" AutoEventWireup="true" CodeBehind="ToNodes.aspx.cs"
  Inherits="CCFlow.Plug_in.CCFlow.WF.WorkOpt.UIToNodes" %>
-<%@ Register src="../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
+<%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../Comm/Style/Table.css" rel="stylesheet" type="text/css" />

@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WorkOpt.WF_WorkOpt_PrintDoc" Codebehind="PrintDoc.aspx.cs" %>
-<%@ Register src="../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WorkOpt.WF_WorkOpt_PrintDoc" Codebehind="PrintDoc.aspx.cs" %>
+<%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../Scripts/CreateControl.js" type="text/javascript"></script>
@@ -33,7 +33,6 @@
                                 }
                             }
                         }
-
 
 
                         json_data = { "WorkID": "<%=this.WorkID %>", "FK_Flow": "<%=this.FK_Flow %>", "FK_Node": "<%=this.FK_Node %>", "DoType": "5" };

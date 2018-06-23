@@ -7,6 +7,8 @@
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+
     <style type="text/css">
         #TB_Doc
         {
@@ -27,22 +29,18 @@
 
             var btn = $("#Btn_Press");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Press&FK_Flow=" + GetQueryString('FK_Flow') + '&WorkID=' + GetQueryString('WorkID') + '&FID=' + GetQueryString('FID') + "&Msg=" +encodeURI(msg) + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("Msg", encodeURI(msg));
+            var data = handler.DoMethodReturnString("Press");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    alert(data);
-                    window.close();
-                }
-            });
+            alert(data);
+            window.close();
         }
 
         //取消退回

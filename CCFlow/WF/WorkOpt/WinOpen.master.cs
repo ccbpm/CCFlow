@@ -10,44 +10,44 @@ using BP.Sys;
 
 namespace CCFlow.WF.WorkOpt
 {
-public partial class WF_WorkOpt_WinOpen : System.Web.UI.MasterPage
-{
-    public string WorkID
+    public partial class WF_WorkOpt_WinOpen : System.Web.UI.MasterPage
     {
-        get
+        public string WorkID
         {
-            return this.Request.QueryString["WorkID"];
+            get
+            {
+                return this.Request.QueryString["WorkID"];
+            }
         }
-    }
-    public string FK_Node
-    {
-        get
+        public string FK_Node
         {
-            return this.Request.QueryString["FK_Node"];
+            get
+            {
+                return this.Request.QueryString["FK_Node"];
+            }
         }
-    }
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        this.Page.Title = "工作选项";
-        this.Page.RegisterClientScriptBlock("s",
-    "<link href='../../Comm/Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            this.Page.Title = "工作选项";
+            this.Page.RegisterClientScriptBlock("s",
+        "<link href='../../Comm/Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");
 
-        WorkOptXmls xmls = new WorkOptXmls();
-        xmls.RetrieveAll();
+            WorkOptXmls xmls = new WorkOptXmls();
+            xmls.RetrieveAll();
 
-        this.Pub1.Add("\t\n<div id='tabsJ'  align='center'>");
-        this.Pub1.Add("\t\n<ul>");
-        foreach (BP.WF.XML.WorkOptXml item in xmls)
-        {
-            string url = item.URL;
-            url = url.Replace("~", "&");
-            url = url.Replace("@WorkID", this.WorkID);
-            url = url.Replace("@FK_Node", this.FK_Node);
-            this.Pub1.AddLi("<a href=\"" + url + "\" ><span>" + item.Name + "</span></a>");
+            this.Pub1.Add("\t\n<div id='tabsJ'  align='center'>");
+            this.Pub1.Add("\t\n<ul>");
+            foreach (BP.WF.XML.WorkOptXml item in xmls)
+            {
+                string url = item.URL;
+                url = url.Replace("~", "&");
+                url = url.Replace("@WorkID", this.WorkID);
+                url = url.Replace("@FK_Node", this.FK_Node);
+                this.Pub1.AddLi("<a href=\"" + url + "\" ><span>" + item.Name + "</span></a>");
+            }
+            this.Pub1.Add("\t\n</ul>");
+            this.Pub1.Add("\t\n</div>");
         }
-        this.Pub1.Add("\t\n</ul>");
-        this.Pub1.Add("\t\n</div>");
     }
-}
 
 }

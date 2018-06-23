@@ -37,7 +37,7 @@ namespace CCFlow.WF.WorkOpt {
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.Pub Pub1;
+        protected global::CCFlow.WF.WorkOpt.Pub Pub1;
         
         /// <summary>
         /// Btn_Save 控件。

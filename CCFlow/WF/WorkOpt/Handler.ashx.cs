@@ -23,8 +23,6 @@ namespace CCFlow.WF.WorkOpt
         {
             get
             {
-                
-
                 return typeof(BP.WF.HttpHandler.WF_WorkOpt);
             }
         }

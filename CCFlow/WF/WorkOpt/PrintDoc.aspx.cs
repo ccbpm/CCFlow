@@ -219,6 +219,7 @@ namespace CCFlow.WF.WorkOpt
 
                         rtf.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
                     }
+
                     //把审核日志表加入里面去.
                     Paras ps = new BP.DA.Paras();
                     ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";

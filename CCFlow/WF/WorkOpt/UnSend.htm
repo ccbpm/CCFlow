@@ -24,20 +24,21 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
             var flowNo = GetQueryString("FK_Flow");
             if(flowNo.indexOf("'")>=0)
-            flowNo = flowNo.substring(0,flowNo.length-1);
+                flowNo = flowNo.substring(0, flowNo.length - 1);
+
             handler.AddPara("flowNo", flowNo);
             handler.AddPara("WorkID", GetQueryString("WorkID"));
+
             var data = handler.DoMethodReturnString("AccepterOfGener_UnSend");
-            if (data.indexOf("@error") == 0)
+            if (data.indexOf("@error") == 0) {
                 alert(data);
+            }
             else {
                 if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                     window.parent.close();
                 }
                 window.close();
             }
-               
-               
             $("#showMsg").html("");
         }
     </script>

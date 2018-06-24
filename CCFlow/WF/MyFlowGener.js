@@ -1824,23 +1824,26 @@ function CheckFWC() {
 }
 
 
-//停止流程.
+//结束流程.
 function DoStop(msg, flowNo, workid) {
 
     if (confirm('您确定要执行 [' + msg + '] ?') == false)
         return;
 
-    var para = 'DoType=MyFlow_StopFlow&FK_Flow=' + flowNo + '&WorkID=' + workid;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("MyFlow_StopFlow");
+    alert(msg);
 
-    AjaxService(para, function (msg, scope) {
+    if (msg.indexOf('err@') == 0)
+        return;
 
-        alert(msg);
-        if (msg.indexOf('err@') == 0) {
-            return;
-        } else {
-            window.close();
-        }
-    });
+    if (window.parent != null) {
+        //@袁丽娜 如何刷新父窗口.
+        //window.parent.ref
+    }
+    window.close();
+
 }
 
 
@@ -1875,6 +1878,7 @@ function DoDelSubFlow(fk_flow, workid) {
 
 //公共方法
 function AjaxService(param, callback, scope, levPath) {
+
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据

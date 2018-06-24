@@ -8,26 +8,19 @@
         function Load() {
 
             var url = window.location.href;
-
-            if (plant == "CCFlow") {
-
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-
-            } else {
+         
 
                 var msg = "";
                 msg += "流程设计错误<br>";
                 msg += "1. 当前节点到达的节点有多个. <br>";
                 msg += "2. 当前的节点属性的方向条件控制规则是按照连接线来控制.<br>";
                 msg += "3. 但是到达的节点中有接受人规则是按照本步骤来选择的,所以您需要在本节点设置为按照下拉框来选择到达节点.<br>";
+                msg += "3. ccflow有该功能，我们在2018年6月停止了该功能的支持,要想恢复请参考旧版本.<br>";
                 alert(msg);
 
                 msg = msg.replace('\t\n', "<br>");
 
                 document.getElementById("Msg").innerHTML = msg;
-            }
         }
     </script>
 </head>
@@ -38,6 +31,7 @@
     
 <br />
 <div id="Msg" > <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。</div> 
+
 
 </form>
 

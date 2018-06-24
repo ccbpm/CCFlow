@@ -515,6 +515,9 @@
     <Content Include="WF\Search.htm" />
     <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\TodolistAdv.htm" />
+    <Content Include="WF\WorkOpt\AllotTask.htm" />
+    <Content Include="WF\WorkOpt\Askfor.htm" />
+    <Content Include="WF\WorkOpt\AskForRe.htm" />
     <Content Include="WF\WorkOpt\CCAdv.htm" />
     <Content Include="WF\WorkOpt\DBTemplate.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
@@ -522,6 +525,7 @@
     <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
     <Content Include="WF\WorkOpt\Packup.htm" />
     <Content Include="WF\WorkOpt\PackupPrintPDF.htm" />
+    <Content Include="WF\WorkOpt\PrintDoc.htm" />
     <Content Include="WF\WorkOpt\PrintDocQRGuide.htm" />
     <Content Include="WF\WorkOpt\Pub.ascx" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
@@ -5673,14 +5677,19 @@
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.htm" />
+    <Content Include="WF\WorkOpt\SelectNode.htm" />
+    <Content Include="WF\WorkOpt\SelectUser.htm" />
     <Content Include="WF\WorkOpt\StartGuide.htm" />
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\SubFlow.htm" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
+    <Content Include="WF\WorkOpt\ThreadDtl.htm" />
     <Content Include="WF\WorkOpt\ToNodes.htm" />
+    <Content Include="WF\WorkOpt\TransferCustom.htm" />
+    <Content Include="WF\WorkOpt\UnSend.htm" />
     <Content Include="WF\WorkOpt\ViewWorkNodeFrm.htm" />
-    <Content Include="WF\WorkOpt\WinOpen.master" />
+    <Content Include="WF\WorkOpt\WebOffice.htm" />
     <Content Include="WF\WorkOpt\WorkCheck.htm" />
     <Content Include="WF\WFRpt.htm" />
     <Content Include="WF\StartGuide.htm" />
@@ -5692,6 +5701,7 @@
     <Content Include="WF\WorkOpt\AccepterGener.htm" />
     <Content Include="WF\WorkOpt\HuiQian.htm" />
     <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
+    <Content Include="WF\WorkOpt\WorkCheck.js" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
@@ -5757,6 +5767,7 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="WF\Setting\Handler.ashx" />
+    <Content Include="WF\WorkOpt\WinOpen.Master" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
@@ -6110,6 +6121,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\WinOpen.Master.cs">
+      <DependentUpon>WinOpen.Master</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\WinOpen.Master.designer.cs">
+      <DependentUpon>WinOpen.Master</DependentUpon>
     </Compile>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
     <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
@@ -6765,13 +6782,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\ThreadDtl.aspx.designer.cs">
       <DependentUpon>ThreadDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WinOpen.master.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WinOpen.master.designer.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

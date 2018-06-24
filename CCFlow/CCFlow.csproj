@@ -120,69 +120,6 @@
     <Content Include="DataUser\XML\Menu.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="GPM\AppMenuToEmp.aspx" />
-    <Content Include="GPM\App\Home.htm" />
-    <Content Include="GPM\App\Login.htm" />
-    <Content Include="GPM\App\Top.htm" />
-    <Content Include="GPM\Base\DataService.aspx" />
-    <Content Include="GPM\DBInstall.aspx" />
-    <Content Include="GPM\Default.aspx" />
-    <Content Include="GPM\Dev2Interface.asmx" />
-    <Content Include="GPM\EmpAppMenu.aspx" />
-    <Content Include="GPM\EmpForMenus.aspx" />
-    <Content Include="GPM\EmpGroupForMenus.aspx" />
-    <Content Include="GPM\Exit.aspx" />
-    <Content Include="GPM\Images\Banal.jpg" />
-    <Content Include="GPM\Images\bird.png" />
-    <Content Include="GPM\Images\folder.gif" />
-    <Content Include="GPM\Images\func.gif" />
-    <Content Include="GPM\Images\Group.png" />
-    <Content Include="GPM\Images\logo.png" />
-    <Content Include="GPM\Images\Menu.png" />
-    <Content Include="GPM\Images\Menu\application.png" />
-    <Content Include="GPM\Images\Menu\archive.png" />
-    <Content Include="GPM\Images\Menu\collaboration.png" />
-    <Content Include="GPM\Images\Menu\credit_card.png" />
-    <Content Include="GPM\Images\Menu\customers.png" />
-    <Content Include="GPM\Images\Menu\desktop_2.png" />
-    <Content Include="GPM\Images\Menu\feed.png" />
-    <Content Include="GPM\Images\Menu\forward.png" />
-    <Content Include="GPM\Images\Menu\my_account.png" />
-    <Content Include="GPM\Images\Menu\shipping.png" />
-    <Content Include="GPM\Images\Menu\sitemap.png" />
-    <Content Include="GPM\Images\Menu\sysset.png" />
-    <Content Include="GPM\Images\Menu\user1.png" />
-    <Content Include="GPM\Images\Menu\window.png" />
-    <Content Include="GPM\Images\Station.png" />
-    <Content Include="GPM\Images\User.png" />
-    <Content Include="GPM\Img\btlogin.png" />
-    <Content Include="GPM\Img\cc.png" />
-    <Content Include="GPM\Img\ico_sina_weibo.gif" />
-    <Content Include="GPM\Img\ico_sina_weibo.gif.txt" />
-    <Content Include="GPM\Img\ico_tx_weibo.gif" />
-    <Content Include="GPM\Img\logo\ccPort.jpg" />
-    <Content Include="GPM\Img\yaoshi.jpg" />
-    <Content Include="GPM\javascript\AppData.js" />
-    <Content Include="GPM\javascript\AppList.js" />
-    <Content Include="GPM\javascript\AppMenuToEmp.js" />
-    <Content Include="GPM\javascript\CC.MessageLib.js" />
-    <Content Include="GPM\javascript\EmpForMenus.js" />
-    <Content Include="GPM\javascript\EmpGroupForMenus.js" />
-    <Content Include="GPM\javascript\LeftMenu.js" />
-    <Content Include="GPM\javascript\ManagerDept.js" />
-    <Content Include="GPM\javascript\Organization.js" />
-    <Content Include="GPM\javascript\QueryString.js" />
-    <Content Include="GPM\javascript\StationForMenus.js" />
-    <Content Include="GPM\javascript\StationToDeptEmp.js" />
-    <Content Include="GPM\javascript\SystemMenus.js" />
-    <Content Include="GPM\javascript\WhoCanUseApp.js" />
-    <Content Include="GPM\jquery\easytemplate.js" />
-    <Content Include="GPM\jquery\jquery-1.7.2.min.js" />
-    <Content Include="GPM\jquery\jquery.easyui.min.js" />
-    <Content Include="GPM\jquery\jquery.min.js" />
-    <Content Include="GPM\jquery\locale\easyui-lang-zh_CN.js" />
-    <Content Include="GPM\ManagerDept.aspx" />
-    <Content Include="GPM\Pub.ascx" />
     <Content Include="GPM\Siganture.htm" />
     <Content Include="GPM\SQLScript\CCIM.sql" />
     <Content Include="GPM\SQLScript\CCIM_MSSQL.sql" />
@@ -194,9 +131,6 @@
     <Content Include="GPM\SQLScript\Oracle_GPM_VIEW.sql" />
     <Content Include="GPM\SQLScript\Port_Inc_CH.sql" />
     <Content Include="GPM\SQLScript\Port_Inc_CH_BPM.sql" />
-    <Content Include="GPM\StationForMenus.aspx" />
-    <Content Include="GPM\StationToDeptEmp.aspx" />
-    <Content Include="GPM\SystemLoginLog.aspx" />
     <Content Include="GPM\themes\default\accordion.css" />
     <Content Include="GPM\themes\default\calendar.css" />
     <Content Include="GPM\themes\default\combo.css" />
@@ -292,8 +226,6 @@
     <Content Include="GPM\themes\icons\up.gif" />
     <Content Include="GPM\themes\icons\xitong.png" />
     <Content Include="GPM\themes\icons\xitongleibie.png" />
-    <Content Include="GPM\WhoCanUseApp.aspx" />
-    <Content Include="GPM\WhoCanViewInfoPush.aspx" />
     <Content Include="SDKFlowDemo\App\PrintJoin.aspx" />
     <Content Include="SDKFlowDemo\Default.htm" />
     <Content Include="SDKFlowDemo\DemoEmpSelecter.htm" />
@@ -390,18 +322,42 @@
     <Content Include="WF\Admin\Cond\CondPRI.htm" />
     <Content Include="WF\Admin\Cond\CondStation.htm" />
     <Content Include="WF\Admin\Cond\StandAloneFrm.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\DtlSetting\ColAutoExp.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\DtlSetting\DtlImp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeListChoseOneField.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FrmSln.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Glo.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Exp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldDone.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDef.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MapFrameDefPage.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\Branches.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\BranchesAndLeaf.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\BranchesAndLeafLazyLoad.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\EntitisList.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\GroupList.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\SelfUrl.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\TableList.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\PopSetting\TableSearch.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFGuide1.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFTableEditData.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\Default.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF0.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF1.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF2.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF3.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF4.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF5.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF6_Handler.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SF7_JQuery.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\SFTable.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable\Welcome.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\TabIdx.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Template\Fields.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Template\FieldsGroup.htm" />
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
     <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
@@ -5683,11 +5639,9 @@
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.htm" />
     <Content Include="WF\WorkOpt\DeleteFlowInstance.htm" />
-    <Content Include="WF\WorkOpt\DTC.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
     <Content Include="WF\WorkOpt\FoolFrmTrack.htm" />
     <Content Include="WF\WorkOpt\Forward.htm" />
-    <Content Include="WF\WorkOpt\FTC.aspx" />
     <Content Include="WF\WorkOpt\Handler.ashx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
     <Content Include="WF\WorkOpt\OneWork\Chart.htm" />
@@ -5719,21 +5673,13 @@
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.htm" />
-    <Content Include="WF\WorkOpt\SelectNode.aspx" />
-    <Content Include="WF\WorkOpt\SelectUser.aspx" />
     <Content Include="WF\WorkOpt\StartGuide.htm" />
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
-    <Content Include="WF\WorkOpt\StopFlow.aspx" />
     <Content Include="WF\WorkOpt\SubFlow.htm" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
-    <Content Include="WF\WorkOpt\ToNodes.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.htm" />
-    <Content Include="WF\WorkOpt\TransferCustom.aspx" />
-    <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
-    <Content Include="WF\WorkOpt\UnSend.aspx" />
     <Content Include="WF\WorkOpt\ViewWorkNodeFrm.htm" />
-    <Content Include="WF\WorkOpt\WebOffice.aspx" />
     <Content Include="WF\WorkOpt\WinOpen.master" />
     <Content Include="WF\WorkOpt\WorkCheck.htm" />
     <Content Include="WF\WFRpt.htm" />
@@ -5746,9 +5692,6 @@
     <Content Include="WF\WorkOpt\AccepterGener.htm" />
     <Content Include="WF\WorkOpt\HuiQian.htm" />
     <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
-    <Content Include="WF\WorkOpt\StopFlow.htm" />
-    <Content Include="GPM\Handler.ashx" />
-    <Content Include="GPM\WinOpen.master" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
@@ -5761,7 +5704,6 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
-    <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
@@ -5849,122 +5791,6 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\AppMenuToEmp.aspx.cs">
-      <DependentUpon>AppMenuToEmp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\AppMenuToEmp.aspx.designer.cs">
-      <DependentUpon>AppMenuToEmp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Base\DataService.aspx.cs">
-      <DependentUpon>DataService.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Base\DataService.aspx.designer.cs">
-      <DependentUpon>DataService.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\DBInstall.aspx.cs">
-      <DependentUpon>DBInstall.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\DBInstall.aspx.designer.cs">
-      <DependentUpon>DBInstall.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Dev2Interface.asmx.cs">
-      <DependentUpon>Dev2Interface.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpAppMenu.aspx.cs">
-      <DependentUpon>EmpAppMenu.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpAppMenu.aspx.designer.cs">
-      <DependentUpon>EmpAppMenu.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\EmpForMenus.aspx.cs">
-      <DependentUpon>EmpForMenus.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpForMenus.aspx.designer.cs">
-      <DependentUpon>EmpForMenus.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\EmpGroupForMenus.aspx.cs">
-      <DependentUpon>EmpGroupForMenus.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpGroupForMenus.aspx.designer.cs">
-      <DependentUpon>EmpGroupForMenus.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Exit.aspx.cs">
-      <DependentUpon>Exit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\ManagerDept.aspx.cs">
-      <DependentUpon>ManagerDept.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\ManagerDept.aspx.designer.cs">
-      <DependentUpon>ManagerDept.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\StationForMenus.aspx.cs">
-      <DependentUpon>StationForMenus.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\StationForMenus.aspx.designer.cs">
-      <DependentUpon>StationForMenus.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\StationToDeptEmp.aspx.cs">
-      <DependentUpon>StationToDeptEmp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\StationToDeptEmp.aspx.designer.cs">
-      <DependentUpon>StationToDeptEmp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\SystemLoginLog.aspx.cs">
-      <DependentUpon>SystemLoginLog.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\SystemLoginLog.aspx.designer.cs">
-      <DependentUpon>SystemLoginLog.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\WhoCanUseApp.aspx.cs">
-      <DependentUpon>WhoCanUseApp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\WhoCanUseApp.aspx.designer.cs">
-      <DependentUpon>WhoCanUseApp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\WhoCanViewInfoPush.aspx.cs">
-      <DependentUpon>WhoCanViewInfoPush.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\WhoCanViewInfoPush.aspx.designer.cs">
-      <DependentUpon>WhoCanViewInfoPush.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\WinOpen.master.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\WinOpen.master.designer.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDKFlowDemo\App\PrintJoin.aspx.cs">
@@ -6906,26 +6732,12 @@
     <Compile Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx.designer.cs">
       <DependentUpon>DealSubThreadReturnToHL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\DTC.aspx.cs">
-      <DependentUpon>DTC.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\DTC.aspx.designer.cs">
-      <DependentUpon>DTC.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\FHLFlow.aspx.cs">
       <DependentUpon>FHLFlow.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\WorkOpt\FHLFlow.aspx.designer.cs">
       <DependentUpon>FHLFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\FTC.aspx.cs">
-      <DependentUpon>FTC.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\FTC.aspx.designer.cs">
-      <DependentUpon>FTC.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -6947,68 +6759,12 @@
     <Compile Include="WF\WorkOpt\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\SelectNode.aspx.cs">
-      <DependentUpon>SelectNode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SelectNode.aspx.designer.cs">
-      <DependentUpon>SelectNode.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SelectUser.aspx.cs">
-      <DependentUpon>SelectUser.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SelectUser.aspx.designer.cs">
-      <DependentUpon>SelectUser.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\StopFlow.aspx.cs">
-      <DependentUpon>StopFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\StopFlow.aspx.designer.cs">
-      <DependentUpon>StopFlow.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\ThreadDtl.aspx.cs">
       <DependentUpon>ThreadDtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\WorkOpt\ThreadDtl.aspx.designer.cs">
       <DependentUpon>ThreadDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ToNodes.aspx.cs">
-      <DependentUpon>ToNodes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ToNodes.aspx.designer.cs">
-      <DependentUpon>ToNodes.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TransferCustom.aspx.cs">
-      <DependentUpon>TransferCustom.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TransferCustom.aspx.designer.cs">
-      <DependentUpon>TransferCustom.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TransferCustomSimple.aspx.cs">
-      <DependentUpon>TransferCustomSimple.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TransferCustomSimple.aspx.designer.cs">
-      <DependentUpon>TransferCustomSimple.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\UnSend.aspx.cs">
-      <DependentUpon>UnSend.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\UnSend.aspx.designer.cs">
-      <DependentUpon>UnSend.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WebOffice.aspx.cs">
-      <DependentUpon>WebOffice.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WebOffice.aspx.designer.cs">
-      <DependentUpon>WebOffice.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\WinOpen.master.cs">
       <DependentUpon>WinOpen.master</DependentUpon>

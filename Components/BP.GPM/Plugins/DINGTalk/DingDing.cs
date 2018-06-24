@@ -12,9 +12,7 @@ using BP.Sys;
 using BP.En;
 using BP.EAI.Plugins.DINGTalk;
 using BP.EAI.Plugins.DDSDK;
-using BP.GPM.DTS;
 using BP.DA;
-
 
 namespace BP.EAI.Plugins
 {
@@ -314,7 +312,6 @@ namespace BP.EAI.Plugins
 
                                 //增加人员
                                 emp.No = userInfo.userid;
-                                emp.EmpNo = userInfo.jobnumber;
                                 emp.Name = userInfo.name;
                                 emp.FK_Dept = deptMentInfo.id;
                                 emp.Tel = userInfo.mobile;
@@ -442,7 +439,6 @@ namespace BP.EAI.Plugins
 
                             //增加人员
                             emp.No = userInfo.userid;
-                            emp.EmpNo = userInfo.jobnumber;
                             emp.Name = userInfo.name;
                             emp.FK_Dept = deptMentInfo.id;
                             emp.Tel = userInfo.mobile;
@@ -482,9 +478,7 @@ namespace BP.EAI.Plugins
                         //部门岗位
                         DeptStation deptStation = new DeptStation();
                         int iDeptStation = deptStation.Delete(DeptStationAttr.FK_Dept, gpm_Dept.No);
-                        //部门职位
-                        DeptDuty deptDuty = new DeptDuty();
-                        int iDeptDuty = deptDuty.Delete(DeptDutyAttr.FK_Dept, gpm_Dept.No);
+                        
                         //部门人员岗位
                         DeptEmpStation deptEmpStation = new DeptEmpStation();
                         int iDeptEmpStation = deptEmpStation.Delete(DeptEmpStationAttr.FK_Dept, gpm_Dept.No);
@@ -496,7 +490,6 @@ namespace BP.EAI.Plugins
                         dt.Delete();
                         append.Append("\r\n删除部门：" + gpm_Dept.Name + " 部门全路径：" + gpm_Dept.NameOfPath);
                         append.Append("\r\n        部门岗位 " + iDeptStation + " 条记录");
-                        append.Append("\r\n        部门职位 " + iDeptDuty + " 条记录");
                         append.Append("\r\n        部门人员岗位 " + iDeptEmpStation + " 条记录");
                         append.Append("\r\n        部门人员 " + iDeptEmp + " 条记录");
                     }
@@ -733,8 +726,6 @@ namespace BP.EAI.Plugins
                 list.Add("department", listArrary);
                 list.Add("mobile", emp.Tel);
                 list.Add("email", emp.Email);
-                list.Add("jobnumber", emp.EmpNo);
-                list.Add("position", emp.FK_DutyText);
 
                 string str = BP.Tools.FormatToJson.ToJson_FromDictionary(list);
                 str = new HttpWebResponseUtility().HttpResponsePost_Json(url, str);
@@ -774,9 +765,8 @@ namespace BP.EAI.Plugins
                 list.Add("userid", emp.No);
                 list.Add("name", emp.Name);
                 list.Add("email", emp.Email);
-                list.Add("jobnumber", emp.EmpNo);
                 list.Add("mobile", emp.Tel);
-                list.Add("position", emp.FK_DutyText);
+                list.Add("position","");
                 //钉钉根据此从其他部门删除或增加到其他部门
                 if (deptIds != null && deptIds.Count > 0)
                 {
@@ -882,7 +872,6 @@ namespace BP.EAI.Plugins
             DeptEmp deptEmp = new DeptEmp();
             deptEmp.FK_Dept = "1";
             deptEmp.FK_Emp = "admin";
-            deptEmp.DutyLevel = 0;
             deptEmp.DirectInsert();
         }
     }

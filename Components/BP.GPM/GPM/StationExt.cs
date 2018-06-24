@@ -71,8 +71,6 @@ namespace BP.GPM
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
                 map.AddSearchAttr(StationAttr.FK_StationType);
 
-
-
                 //岗位绑定菜单
                 map.AttrsOfOneVSM.AddBranches(new StationMenus(), new BP.GPM.Menus(),
                    BP.GPM.StationMenuAttr.FK_Station,

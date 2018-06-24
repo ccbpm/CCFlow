@@ -370,7 +370,11 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
                 map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
                 map.AddMyFile("图标");  //附件.
-                
+
+                map.AddSearchAttr(MenuAttr.FK_App);
+                map.AddSearchAttr(MenuAttr.MenuType);
+                map.AddSearchAttr(MenuAttr.OpenWay);
+
 
                 //map.AddDDLSysEnum(AppAttr.CtrlWay, 1, "控制方式", true, true, AppAttr.CtrlWay,
                 //    "@0=游客@1=所有人员@2=按岗位@3=按部门@4=按人员@5=按SQL");
@@ -382,6 +386,18 @@ namespace BP.GPM
                 //    DeptAttr.Name, DeptAttr.No, "可访问的部门");
                 //map.AttrsOfOneVSM.Add(new ByEmps(), new Emps(), ByStationAttr.RefObj, ByEmpAttr.FK_Emp,
                 //    EmpAttr.Name, EmpAttr.No, "可访问的人员");
+
+
+                //可以访问的权限组.
+                map.AttrsOfOneVSM.Add(new GroupMenus(), new Groups(),
+                    GroupMenuAttr.FK_Menu, GroupMenuAttr.FK_Group, EmpAttr.Name, EmpAttr.No, "权限组");
+
+
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),
+                   EmpMenuAttr.FK_Menu,
+                   EmpMenuAttr.FK_Emp, "绑定人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                 
 
                 this._enMap = map;
                 return this._enMap;

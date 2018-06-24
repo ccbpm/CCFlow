@@ -4241,6 +4241,7 @@ namespace BP.WF
         public static string Flow_DoFlowOver(string flowNo, Int64 workID, string msg)
         {
             WorkFlow wf = new WorkFlow(flowNo, workID);
+
             Node nd = new Node(wf.HisGenerWorkFlow.FK_Node);
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
             rpt.OID = workID;
@@ -4258,9 +4259,7 @@ namespace BP.WF
         /// <returns>执行强制结束流程</returns>
         public static string Flow_DoFlowOverByCoercion(string flowNo, int nodeid, Int64 workID, Int64 fid, string msg)
         {
-
             WorkFlow wf = new WorkFlow(flowNo, workID);
-
             Node currND = new Node(nodeid);
 
             Flow fl = new Flow(flowNo);

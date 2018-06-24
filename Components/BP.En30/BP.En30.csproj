@@ -393,12 +393,10 @@
     <Compile Include="Sys\EventBase.cs" />
     <Compile Include="Sys\EventDemo.cs" />
     <Compile Include="GPM\Dept.cs" />
-    <Compile Include="GPM\DeptDuty.cs" />
     <Compile Include="GPM\DeptEmp.cs" />
     <Compile Include="GPM\DeptEmpStation.cs" />
     <Compile Include="GPM\DeptSearchScorp.cs" />
     <Compile Include="GPM\DeptStation.cs" />
-    <Compile Include="GPM\Duty.cs" />
     <Compile Include="GPM\Emp.cs" />
     <Compile Include="GPM\Station.cs" />
     <Compile Include="GPM\StationType.cs" />

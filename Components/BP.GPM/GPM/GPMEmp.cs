@@ -48,20 +48,6 @@ namespace BP.GPM
             }
         }
         /// <summary>
-        /// 员工编号
-        /// </summary>
-        public string EmpNo
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.EmpNo);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.EmpNo, value);
-            }
-        }
-        /// <summary>
         /// 拼音
         /// </summary>
         public string PinYin
@@ -106,35 +92,6 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.FK_Dept, value);
             }
         }
-        /// <summary>
-        /// 职务
-        /// </summary>
-        public string FK_Duty
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.FK_Duty);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.FK_Duty, value);
-            }
-        }
-        /// <summary>
-        /// 职务
-        /// </summary>
-        public string FK_DutyText
-        {
-            get
-            {
-                string fk_Duty = this.GetValStrByKey(EmpAttr.FK_Duty);
-                if (DataType.IsNullOrEmpty(fk_Duty))
-                    return "";
-                Duty duty = new Duty();
-                duty.RetrieveByAttr(DutyAttr.No, fk_Duty);
-                return duty.Name;
-            }
-        }
         public string FK_DeptText
         {
             get
@@ -162,60 +119,6 @@ namespace BP.GPM
             set
             {
                 this.SetValByKey(EmpAttr.Email, value);
-            }
-        }
-        /// <summary>
-        /// 部门描述
-        /// </summary>
-        public string DeptDesc
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.DeptDesc);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.DeptDesc, value);
-            }
-        }
-        /// <summary>
-        /// 岗位描述
-        /// </summary>
-        public string StaDesc
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.StaDesc);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.StaDesc, value);
-            }
-        }
-        /// <summary>
-        /// 部门数量
-        /// </summary>
-        public int NumOfDept
-        {
-            get
-            {
-                return this.GetValIntByKey(EmpAttr.NumOfDept);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.NumOfDept, value);
-            }
-        }
-
-        public string Leader
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.Leader);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.Leader, value);
             }
         }
         /// <summary>
@@ -287,21 +190,8 @@ namespace BP.GPM
         /// 操作员
         /// </summary>
         /// <param name="no">编号</param>
-        public GPMEmp(string no)
+        public GPMEmp(string no):base(no)
         {
-            this.No = no.Trim();
-            if (this.No.Length == 0)
-                throw new Exception("@要查询的操作员编号为空。");
-            try
-            {
-                this.Retrieve();
-            }
-            catch (Exception ex)
-            {
-                int i = this.RetrieveFromDBSources();
-                if (i == 0)
-                    throw new Exception("@用户或者密码错误：[" + no + "]，或者帐号被停用。@技术信息(从内存中查询出现错误)：ex1=" + ex.Message);
-            }
         }
         public override UAC HisUAC
         {
@@ -325,8 +215,7 @@ namespace BP.GPM
                 Map map = new Map();
 
                 #region 基本属性
-                map.EnDBUrl =
-                    new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
+                map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
                 map.PhysicsTable = "Port_Emp"; // 要物理表。
                 map.Java_SetDepositaryOfMap( Depositary.Application);    //实体map的存放位置.
                 map.Java_SetDepositaryOfEntity( Depositary.Application); //实体存放位置
@@ -337,35 +226,28 @@ namespace BP.GPM
                 #region 字段
                 /*关于字段属性的增加 */
                 map.AddTBStringPK(EmpAttr.No, null, "登陆账号", true, false, 1, 50, 50);
-                map.AddTBString(EmpAttr.EmpNo, null, "职工编号", true, false, 0, 50, 50);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
-
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
-
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), true);
-
-                //map.AddTBString(EmpAttr.FK_Dept, null, "当前部门", false, false, 0, 50, 50);
-                map.AddTBString(EmpAttr.FK_Duty, null, "当前职务", false, false, 0, 20, 10);
-                map.AddTBString(EmpAttr.Leader, null, "当前领导", true, true, 0, 50, 1);
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
-                map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132);
-                map.AddTBString(EmpAttr.StaDesc, null, "岗位描述", true, false, 0, 300, 132);
-
-                map.AddTBString(EmpAttr.DeptDesc, null, "部门描述", true, false, 0, 300, 132,true);
-                map.AddTBInt(EmpAttr.NumOfDept, 0, "部门数量", true, false);
-
-                map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132);
+                map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132,true);
+                map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
 
                 // 0=不签名 1=图片签名, 2=电子签名.
                 map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true,true, EmpAttr.SignType,
                     "@0=不签名@1=图片签名@2=电子签名");
+
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
 
                 map.AddSearchAttr(EmpAttr.SignType);
 
+                //节点绑定部门. 节点绑定部门.
+                map.AttrsOfOneVSM.AddBranches(new EmpMenus(), new BP.GPM.Menus(),
+                   BP.GPM.EmpMenuAttr.FK_Emp,
+                   BP.GPM.EmpMenuAttr.FK_Menu, "人员菜单", EmpAttr.Name, EmpAttr.No, "0");
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "设置图片签名";
@@ -374,12 +256,10 @@ namespace BP.GPM
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "人员部门集合";
+                rm.Title = "部门岗位";
                 rm.ClassMethodName = this.ToString() + ".DoEmpDepts";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.GPM.Depts(),
@@ -399,7 +279,7 @@ namespace BP.GPM
 
         public string DoSinger()
         {
-            return "/GPM/Siganture.htm?EmpNo="+this.No;
+            return "../../../GPM/Siganture.htm?EmpNo=" + this.No;
         }
 
         public static GPMEmp GenerData(GPMEmp en)
@@ -443,8 +323,8 @@ namespace BP.GPM
                     depts += "@" + dept.NameOfPath;
             }
 
-            en.DeptDesc = depts;
-            en.StaDesc = stas;
+            //en.DeptDesc = depts;
+            //en.StaDesc = stas;
             return en;
         }
 

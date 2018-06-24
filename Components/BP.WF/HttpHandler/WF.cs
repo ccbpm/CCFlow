@@ -638,9 +638,10 @@ namespace BP.WF.HttpHandler
         public string Runing_OpenFrm()
         {
             int nodeID = this.FK_Node;
+            GenerWorkFlow gwf = null;
             if (nodeID == 0)
             {
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                gwf = new GenerWorkFlow(this.WorkID);
                 nodeID = gwf.FK_Node;
             }
 
@@ -664,7 +665,19 @@ namespace BP.WF.HttpHandler
             Flow fl = new Flow(this.FK_Flow);
             Int64 workid = 0;
             if (nd.HisRunModel == RunModel.SubThread)
-                workid = tk.FID;
+            {
+                if (tk.FID == 0)
+                {
+                    if (gwf == null)
+                        gwf = new GenerWorkFlow(this.WorkID);
+
+                    workid = gwf.FID;
+                }
+                else
+                {
+                    workid = tk.FID;
+                }
+            }
             else
                 workid = tk.WorkID;
 
@@ -674,6 +687,9 @@ namespace BP.WF.HttpHandler
 
             if (fid > 0)
                 workid = fid;
+
+            if (workid == 0)
+                workid = this.WorkID;
 
             string urlExt = "";
             DataTable ndrpt = DBAccess.RunSQLReturnTable("SELECT PFlowNo,PWorkID FROM " + fl.PTable + " WHERE OID=" + workid);

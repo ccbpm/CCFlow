@@ -636,6 +636,24 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 删除流程
+        /// </summary>
+        /// <returns></returns>
+        public string MyFlow_DeleteFlowByReal()
+        {
+            try
+            {
+                string str = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID);
+                if (str == "" || str == null)
+                    return "流程成功结束";
+                return str;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
         /// 工具栏
         /// </summary>
         /// <returns></returns>
@@ -848,7 +866,7 @@ namespace BP.WF.HttpHandler
 
                 if (btnLab.EndFlowEnable && this.currND.IsStartNode == false )
                 {
-                    toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"DoStop('" + btnLab.EndFlowLab + "','"+this.FK_Flow+"','"+this.WorkID+"');\" />";
+                    toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"javascript:DoStop('" + btnLab.EndFlowLab + "','"+this.FK_Flow+"','"+this.WorkID+"');\" />";
                 }
 
                 if (btnLab.PrintDocEnable )

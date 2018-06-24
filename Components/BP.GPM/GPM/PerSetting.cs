@@ -122,6 +122,7 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("GPM_PerSetting");
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;

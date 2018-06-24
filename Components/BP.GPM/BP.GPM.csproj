@@ -46,13 +46,10 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dev2Interface.cs" />
-    <Compile Include="GPM\DTSGenerDir.cs" />
-    <Compile Include="DTS\OrgInit_NameOfPath.cs" />
-    <Compile Include="DTS\InitMenu.cs">
+    <Compile Include="Crypto.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\ClearData.cs" />
+    <Compile Include="Dev2Interface.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GPM\StationExt.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
@@ -83,7 +80,6 @@
     <Compile Include="Plugins\DTS\OrgInit_DingUserIcon.cs" />
     <Compile Include="Plugins\DTS\OrgInit_WeiXinUserIcon.cs" />
     <Compile Include="Plugins\Utility\HttpWebResponseUtility.cs" />
-    <Compile Include="UserVar.cs" />
     <Compile Include="GPM\AppSort.cs" />
     <Compile Include="GPM\GPMEmp.cs" />
     <Compile Include="GPM\UserMenu.cs" />
@@ -92,15 +88,12 @@
     <Compile Include="GPM\GroupStation.cs" />
     <Compile Include="GPM\GroupMenu.cs" />
     <Compile Include="GPM\StationMenu.cs" />
-    <Compile Include="GPM\UserData\DeptManager.cs" />
     <Compile Include="GPM\PerSetting.cs" />
-    <Compile Include="GPM\UserData\EmpMenu.cs" />
-    <Compile Include="GPM\UserData\EmpApp.cs" />
+    <Compile Include="UserData\EmpMenu.cs" />
+    <Compile Include="UserData\EmpApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPM\Menu.cs" />
     <Compile Include="GPM\App.cs" />
-    <Compile Include="CommonDbOperator.cs" />
-    <Compile Include="Crypto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\ccflow\Components\BP.En30\BP.En30.csproj">

@@ -70,14 +70,17 @@ namespace BP.GPM
                    GroupEmpAttr.FK_Group,
                    GroupEmpAttr.FK_Emp, "人员(树)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
-
                 //map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
                 // GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
-
-
                 map.AttrsOfOneVSM.Add(new GroupStations(), new Stations(),
-                    GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位");
+                    GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
+                    
+
+                map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.GPM.Stations(),
+                  GroupStationAttr.FK_Group,
+                  GroupStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
+
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new GroupMenus(), new BP.GPM.Menus(),

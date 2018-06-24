@@ -14,7 +14,6 @@ namespace BP.EAI.Plugins.DDSDK
         /// 票据的值  
         /// </summary>  
         public static String Value { get; set; }
-
         /// <summary>  
         /// 票据的开始时间  
         /// </summary>  

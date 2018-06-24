@@ -234,7 +234,6 @@
     <Compile Include="HttpHandler\CCMobile_CCForm.cs" />
     <Compile Include="HttpHandler\WF_Setting.cs" />
     <Compile Include="HttpHandler\WF_FlowFormTree.cs" />
-    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_DtlSetting.cs" />
     <Compile Include="HttpHandler\WF_Admin_Sln.cs" />
     <Compile Include="HttpHandler\WF_Admin_Cond.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />

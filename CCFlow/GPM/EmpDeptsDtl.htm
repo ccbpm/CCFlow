@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>人员-部门列表</title>
-    <script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="jquery/jquery.easyui.min.js"></script>
+ <script type="text/javascript" src="../WF/Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
     <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引入新版本的类库. -->
     <script src="../WF/Scripts/config.js" type="text/javascript"></script>
@@ -30,7 +30,6 @@
             //所有的岗位s
             var stations = new Entities("BP.GPM.Stations");
             stations.RetrieveAll();
-
 
 
             var html = "<table border=0 style='width:100%;'>";

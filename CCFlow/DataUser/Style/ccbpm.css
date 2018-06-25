@@ -406,8 +406,8 @@ select {
 textarea,iframe[src*="Ath.htm"] {
     margin-top:6px !important;
     border-radius: 5px !important;
-    border: #2884fa 1px solid;
-    /*margin: 0px 10px;*/
+    /* border: #2884fa 1px solid;
+    margin: 0px 10px;*/
     line-height: 15px !important;
     padding-left: 6px !important;
     margin: 4px 0px !important;

@@ -2294,6 +2294,33 @@ namespace BP.WF
                 msg += "@检查质量考核点完成.";
                 #endregion
 
+
+                #region 检查如果是合流节点必须不能是由上一个节点指定接受人员。 @dudongliang 需要翻译.
+                foreach (Node nd in nds)
+                {
+                    //如果是合流节点.
+                    if (nd.HisNodeWorkType == NodeWorkType.WorkHL || nd.HisNodeWorkType == NodeWorkType.WorkFHL)
+                    {
+                        if (nd.HisDeliveryWay == DeliveryWay.BySelected)
+                            msg += "@错误:节点ID:" + nd.NodeID + " 名称:" + nd.Name + "是合流或者分合流节点，但是该节点设置的接收人规则为由上一步指定，这是错误的，应该为自动计算而非每个子线程人为的选择.";
+                    }
+
+                    //子线程节点
+                    if (nd.HisNodeWorkType == NodeWorkType.SubThreadWork)
+                    {
+                        if (nd.CondModel == CondModel.ByUserSelected)
+                        {
+                            Nodes toNodes = nd.HisToNodes;
+                            if (toNodes.Count == 1)
+                            {
+                                //msg += "@错误:节点ID:" + nd.NodeID + " 名称:" + nd.Name + " 错误当前节点为子线程，但是该节点的到达.";
+                            }
+                        }
+                    }
+                }
+                #endregion 检查如果是合流节点必须不能是由上一个节点指定接受人员。
+
+
                 msg += "@流程报表检查完成...";
 
                 // 检查流程.

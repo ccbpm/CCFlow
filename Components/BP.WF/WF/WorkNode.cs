@@ -2619,48 +2619,6 @@ namespace BP.WF
             ps.Add("FK_Node", toNode.NodeID);
             #endregion 删除到达节点的子线程如果有，防止退回信息垃圾数据问题，如果退回处理了这个部分就不需要处理了.
 
-            #region GenerFH
-            //GenerFH fh = new GenerFH();
-            //fh.FID = this.WorkID;
-            //if (this.HisNode.IsStartNode || fh.IsExits == false)
-            //{
-            //    try
-            //    {
-            //        fh.Title = this.HisWork.GetValStringByKey(StartWorkAttr.Title);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
-            //        attr.FK_MapData = "ND" + this.HisNode.NodeID;
-            //        attr.HisEditType = BP.En.EditType.UnDel;
-            //        attr.KeyOfEn = "Title";
-            //        int i = attr.Retrieve(MapAttrAttr.FK_MapData, attr.FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn);
-            //        if (i == 0)
-            //        {
-            //            attr.KeyOfEn = "Title";
-            //            attr.Name = "标题"; // "流程标题";
-            //            attr.MyDataType = BP.DA.DataType.AppString;
-            //            attr.UIContralType = UIContralType.TB;
-            //            attr.LGType = FieldTypeS.Normal;
-            //            attr.UIVisible = true;
-            //            attr.UIIsEnable = true;
-            //            attr.UIIsLine = true;
-            //            attr.MinLen = 0;
-            //            attr.MaxLen = 200;
-            //            attr.Idx = -100;
-            //            attr.Insert();
-            //        }
-            //        fh.Title = this.Execer + "-" + this.ExecerName + " @ " + DataType.CurrentDataTime + " ";
-            //    }
-            //    fh.RDT = DataType.CurrentData;
-            //    fh.FID = this.WorkID;
-            //    fh.FK_Flow = this.HisNode.FK_Flow;
-            //    fh.FK_Node = this.HisNode.NodeID;
-            //    fh.GroupKey = this.Execer;
-            //    fh.WFState = 0;
-            //    fh.Save();
-            //}
-            #endregion GenerFH
 
             #region 产生下一步骤的工作人员
             // 发起.
@@ -3306,19 +3264,12 @@ namespace BP.WF
             }
             #endregion FID
 
-            //  GenerFH myfh = new GenerFH(fid);
 
-            /* 已经有FID，说明：以前已经有分流或者合流节点。*/
-            /*
-             * 以下处理的是没有流程到达此位置
-             * 说明是第一次到这个节点上来了.
-             * 比如：一条流程:
-             * A分流-> B普通-> C合流
-             * 从B 到C 中, B中有N 个线程，在之前他是第一个到达C.
-             */
-
-            // 初试化他们的工作人员．
-            current_gwls = this.Func_GenerWorkerLists(this.town);
+            // 先查询一下是否有人员，在合流节点上，如果没有就让其初始化人员. 
+            current_gwls = new GenerWorkerLists();
+            current_gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisWork.FID,GenerWorkerListAttr.FK_Node, toNode.NodeID );
+            if (current_gwls.Count == 0)
+                current_gwls = this.Func_GenerWorkerLists(this.town);// 初试化他们的工作人员．
 
             string FK_Emp = "";
             string toEmpsStr = "";
@@ -3343,7 +3294,6 @@ namespace BP.WF
 
             #region 设置父流程状态 设置当前的节点为:
            
-
             Work mainWK = town.HisWork;
             mainWK.OID = this.HisWork.FID;
             mainWK.RetrieveFromDBSources();
@@ -3414,7 +3364,6 @@ namespace BP.WF
             #endregion 设置父流程状态
 
             this.addMsg("InfoToHeLiu", "@流程已经运行到合流节点[" + toNode.Name + "]。@您的工作已经发送给如下人员[" + toEmpsStr + "]，@您是第一个到达此节点的处理人.");
-
 
             #region 处理国机的需求, 把最后一个子线程的主表数据同步到合流节点的Rpt里面去.(不是很合理) 2015.12.30
             Work towk = town.HisWork;
@@ -7524,7 +7473,7 @@ namespace BP.WF
             #endregion 复制主表数据.
 
             // 产生合流汇总明细表数据.
-          //  this.GenerHieLiuHuiZhongDtlData_2013(nd);
+            //this.GenerHieLiuHuiZhongDtlData_2013(nd);
 
             #endregion 处理合流节点表单数据
 

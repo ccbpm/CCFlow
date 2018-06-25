@@ -50,6 +50,9 @@
         }
         //预览手机端
         function Form_View(FK_MapData, FK_Flow) {
+            alert('该功能未开放');
+            return;
+
             var url = '../../../CCMobile/Frm.aspx?FK_MapData=' + FK_MapData + '&IsTest=1&WorkID=0&FK_Node=999999';
             OpenDialogAndCloseRefresh(url, "预览手机端表单", 600, 550, "icon-edit", function () { });
         }
@@ -60,24 +63,22 @@
         //重置字段顺序
         function From_ReSet(FK_MapData) {
             var reSet = confirm("是否确定要重置字段顺序？");
-            if (reSet) {
-                $.ajax({
-                    type: 'post',
-                    async: true,
-                    url: Handler + "?DoType=SortingMapAttrs_ReSet&FK_MapData=" + FK_MapData + "&m=" + Math.random(),
-                    dataType: 'html',
-                    success: function (data) {
-                        if (data.indexOf('err') >= 0) {
-                            var message = data.split('@')[1];
-                            $.messager.alert('错误提示', message, 'error');
-                        }
-                        else {
-                            $.messager.alert('提示', '重置成功！', 'info');
-                            window.location.reload();
-                        }
-                    }
-                });
+            if (reSet == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+
+            var data = handler.DoMethodReturnString("SortingMapAttrs_ReSet");
+
+            if (data.indexOf('err') >= 0) {
+                var message = data.split('@')[1];
+                $.messager.alert('错误提示', message, 'error');
+                return;
             }
+
+            $.messager.alert('提示', '重置成功！', 'info');
+            window.location.reload();
         }
         //保存需要在手机端显示的字段
         function From_Save(FK_MapData) {
@@ -85,442 +86,428 @@
             $("input[type=checkbox]:checked").each(function (key, value) {
                 arr[key] = $(value).val();
             });
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SortingMapAttrs_From_Save&FK_MapData=" + FK_MapData + "&attrs=" + arr.join(',') + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err') >= 0) {
-                        var message = data.split('@')[1];
-                        $.messager.alert('错误提示', message, 'error');
-                    }
-                    else {
-                        $.messager.alert('提示', '保存成功！', 'info');
-                        window.location.reload();
-                    }
-                }
-            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("FK_MapData", FK_MapData);
+            handler.AddPara("attrs", arr.join(','));
+            var data = handler.DoMethodReturnString("SortingMapAttrs_From_Save");
+
+            if (data.indexOf('err') >= 0) {
+                var message = data.split('@')[1];
+                $.messager.alert('错误提示', message, 'error');
+                return;
+            }
+
+            $.messager.alert('提示', '保存成功！', 'info');
+            window.location.reload();
         }
         //字段分组
-        function From_GroupChange(FK_MapData, EnName) {
+        function From_GroupChange(FK_MapData, keyOfEn) {
             //获取对象
-            var op = document.getElementById(EnName);
+            var op = document.getElementById(keyOfEn);
             //获取GroupID
             var groupID = op.options[op.selectedIndex].value;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SortingMapAttr_GroupChange&FK_MapData=" + FK_MapData + "&KeyOfEn=" + EnName + "&GroupID=" + groupID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err') >= 0) {
-                        var message = data.split('@')[1];
-                        $.messager.alert('错误提示', message, 'error');
-                    }
-                    else {
-                        window.location.reload();
-                    }
-                }
-            });
+            var mypkOfAttr = FK_MapData + '_' + keyOfEn; //主键
+
+            var mapattr = new Entity("BP.Sys.MapAttr", mypkOfAttr);
+            mapattr.GroupID = groupID;
+            mapattr.Update();
+             
+            window.location.reload();
+
         }
         //字段或分组下移
-        function btnDown(EnName, mypk, type, groupID) {
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SortingMapAttrs_Down&EnsName=" + EnName + "&MyPK=" + mypk + "&Type=" + type + "&GroupID=" + groupID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err') >= 0) {
-                        var message = data.split('@')[1];
-                        $.messager.alert('错误提示', message, 'error');
-                    }
-                    else {
-                        window.location.reload();
-                    }
-                }
-            });
+        function btnDown(EnName, keyOfEn, type, groupID) {
+
+            if (type == 'attr') {
+                var mapAttr = new Entity("BP.Sys.MapAttr", EnName + '_' + keyOfEn);
+                mapAttr.DoMethodReturnString("DoUp");
+            }
+
+            if (type == 'group') {
+                var mapAttr = new Entity("BP.Sys.GroupField", keyOfEn);
+                mapAttr.DoMethodReturnString("DoUp");
+            }
+
+            window.location.reload();
         }
         //字段或分组上移
-        function btnUp(EnName, mypk, type, groupID) {
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SortingMapAttrs_Up&EnsName=" + EnName + "&MyPK=" + mypk + "&Type=" + type + "&GroupID=" + groupID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err') >= 0) {
-                        var message = data.split('@')[1];
-                        $.messager.alert('错误提示', message, 'error');
-                    }
-                    else {
-                        window.location.reload();
-                    }
-                }
-            });
+        function btnUp(EnName, refKey, type, groupID) {
+            if (type == 'attr') {
+                var mapAttr = new Entity("BP.Sys.MapAttr", EnName + '_' + refKey);
+                mapAttr.DoMethodReturnString("DoDown");
+            }
+
+            if (type == 'group') {
+                var mapAttr = new Entity("BP.Sys.GroupField", refKey);
+                mapAttr.DoMethodReturnString("DoDown");
+            }
+
+            window.location.reload();
+ 
         }
         //复制到其他节点
         function BtnCopy() {
+
             var v = $('#pub1_lbNodes').val();
             var FK_MapData = GetQueryString("FK_MapData");
             if (!v) {
                 alert('请选择将此排序复制到的节点！');
                 return false;
             }
-            else {
-                $.ajax({
-                    type: 'post',
-                    async: true,
-                    url: Handler + "?DoType=SortingMapAttrs_Copy&FK_MapData=" + FK_MapData + "&NodeIDs=" + v + "&m=" + Math.random(),
-                    dataType: 'html',
-                    success: function (data) {
-                        if (data.indexOf('err') >= 0) {
-                            var message = data.split('@')[1];
-                            $.messager.alert('错误提示', message, 'error');
-                        }
-                        else {
-                            $.messager.alert('提示', '复制成功！', 'info');
-                        }
-                    }
-                });
-            };
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("FK_MapData", FK_MapData);
+            handler.AddPara("NodeIDs", v);
+            var data = handler.DoMethodReturnString("SortingMapAttrs_Copy");
+
+            if (data.indexOf('err') >= 0) {
+                var message = data.split('@')[1];
+                $.messager.alert('错误提示', message, 'error');
+                return;
+            }
+
+            $.messager.alert('提示', '复制成功！', 'info');
         }
     </script>
 
     <script type="text/javascript">
+
         $(function () {
             InitPage();
         });
 
-        function InitPage(){
+        function InitPage() {
+
             var FK_MapData = GetQueryString("FK_MapData");
             var FK_Flow = GetQueryString("FK_Flow");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SortingMapAttrs_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("SortingMapAttrs_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+            var dtGroups = data.dtGroups; //分组数据
+            var trdtl = data.TRDtl; //明细表，用于判断当前是否是子表，用于排列页面的分组显示
+            var dtNodes = data.dtNodes; //节点数据，用于复制分组、字段排序的信息
+            if (dtGroups) {
+
+                /********1、构建面板******/
+                var mapdata = $.grep(data.mapdatas, function (item) {
+                    return item.No == FK_MapData;
+                });
+
+
+                $('#p').panel({
+                    width: '100%',
+                    style: 'padding:5px;',
+                    title: mapdata[0].Name + '[' + mapdata[0].No + ']字段排序',
+                    iconCls: 'icon-tip',
+                    fit: true
+
+                });
+                //1.1 在面板里添加表格
+                var htmlstr = ""
+                htmlstr += "<table id='t1' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%'>";
+//                htmlstr += "<tr>";
+//                htmlstr += "<td class='GroupTitle' style='width: 40px; text-align: center'>序</td>";
+//                htmlstr += "<td class='GroupTitle' style='width: 100px;'>字段名称</td>";
+//                htmlstr += "<td class='GroupTitle' style='width: 160px;'>中文描述</td>";
+//                htmlstr += "<td class='GroupTitle' style='width: 160px;'>字段分组</td>";
+//                htmlstr += "<td class='GroupTitle' style='width: 160px;'>字段排序</td>";
+//                htmlstr += "<td class='GroupTitle' nowrap>是否显示</td>";
+//                htmlstr += "</tr>";
+                htmlstr += "</table>";
+
+                $("#p").append(htmlstr);
+
+                //1.1.1在表格里添加分组
+                for (var i = 0, length = dtGroups.length; i < length; i++) {
+                    //1.1.1-01、当前分组标题行tr
+                    var tr = "<tr>";
+                    tr += "<td colspan='6' class='GroupTitle' nowrap >";
+
+                    //分组的下移、上移按钮
+                    var btnDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
+                    var btnUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
+
+                    if (dtGroups.length == 1) {
+                    }
+                    else if (i == 0) {//如果是第一个，只显示下移
+                        tr += btnDown;
+                    }
+                    else if (dtGroups[i].Idx == dtGroups.length) { //如果是最后一个，只显示上移
+                        tr += btnUp;
+                    }
+                    else {
+                        tr += btnUp;
+                        tr += btnDown;
                     }
 
-                    data = JSON.parse(data);
-                    var dtGroups = data.dtGroups; //分组数据
-                    var trdtl = data.TRDtl; //明细表，用于判断当前是否是子表，用于排列页面的分组显示
-                    var dtNodes = data.dtNodes; //节点数据，用于复制分组、字段排序的信息
-                    if (dtGroups) {
+                    tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
+                    tr += "</td></tr>";
+                    $("#t1").append(tr);
 
-                        /********1、构建面板******/
-                        var mapdata = $.grep(data.mapdatas, function (item) {
-                            return item.No == FK_MapData;
+                    //1.1.1-02、当前分组每个字段一行（循环）
+                    var rows_Attrs = $.grep(data.dtAttrs, function (item) {
+                        return item.FK_MapData == FK_MapData && item.GroupID == dtGroups[i].OID;
+                    });
+
+                    //如果是明细表
+                    if (dtGroups[i].CtrlType == "Dtl") {
+                        //获取明细表信息
+                        var groupOfDtls = $.grep(data.dtDtls, function (item) {
+                            //TODO 做好筛选条件
+                            return item.No == dtGroups[i].CtrlID;
                         });
+                        //重新生成明细表表头
+                        var table = "";
+                        table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
+                        table += "<tbody>";
+//                        table += "<tr>";
+//                        table += "<td class='GroupTitle' style='width:40px;text-align:center'>序</td>";
+//                        table += "<td class='GroupTitle' style='width:100px;'>明细表编号</td>";
+//                        table += "<td class='GroupTitle' style='width:160px;'>中文名称</td>";
+//                        table += "<td class='GroupTitle' style='width:120px;'>字段分组</td>";
+//                        table += "<td class='GroupTitle' nowrap=''>字段排序</td>";
+//                        table += "</tr>";
 
-
-                        $('#p').panel({
-                            width: '100%',
-                            style: 'padding:5px;',
-                            title: mapdata[0].Name + '[' + mapdata[0].No + ']字段排序',
-                            iconCls: 'icon-tip',
-                            fit: true
-
+                        //明细表字段，进入单独页面设计
+                        groupOfDtls.forEach(function (item, index) {
+                            table += "<tr>";
+                            table += "<td style='text-align:center'>1</td>";
+                            table += "<td nowrap=''><a href=\"javascript:EditDtl('" + FK_MapData + "','" + item.No + "')\">" + item.No + "</a></td>";
+                            table += "<td nowrap=''>" + item.Name + "</td>";
+                            table += "<td nowrap=''>&nbsp;</td>";
+                            table += "<td valign='top' nowrap=''>&nbsp;&nbsp;<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + item.No + "&amp;t=20170825185859310892' target='_self' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-sheet'' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-sheet l-btn-icon-left'>字段排序</span></span></a>";
+                            table += "</td>";
+                            table += "</tr>";
                         });
-                        //1.1 在面板里添加表格
-                        var htmlstr = ""
-                        htmlstr += "<table id='t1' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%'>";
-                        htmlstr += "<tr>";
-                        htmlstr += "<td class='GroupTitle' style='width: 40px; text-align: center'>序</td>";
-                        htmlstr += "<td class='GroupTitle' style='width: 100px;'>字段名称</td>";
-                        htmlstr += "<td class='GroupTitle' style='width: 160px;'>中文描述</td>";
-                        htmlstr += "<td class='GroupTitle' style='width: 160px;'>字段分组</td>";
-                        htmlstr += "<td class='GroupTitle' style='width: 160px;'>字段排序</td>";
-                        htmlstr += "<td class='GroupTitle' nowrap>是否显示</td>";
-                        htmlstr += "</tr>";
-                        htmlstr += "</table>";
+                        table += "</tbody></table>";
+                        tr = "<tr><td colspan='6' npwrap>" + table + "</td></tr>";
+                        $("#t1").append(tr);
+                        continue;
+                    }
+                    //多附件
+                    if (dtGroups[i].CtrlType == "Ath") {
+                        //1.1.1-03、当前分组多附件行（循环）
+                        var groupOfAthMents = $.grep(data.athMents, function (item) {
+                            //TODO 做好筛选条件
+                            return item.MyPK == dtGroups[i].CtrlID;
+                        });
+                        //重新生成多附件表头
+                        var table = "";
+                        table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
+//                        table += "<tbody><tr>";
+//                        table += "<td class='GroupTitle' style='width:40px;text-align:center'>序</td>";
+//                        table += "<td class='GroupTitle' style='width:100px;'>多附件编号</td>";
+//                        table += "<td class='GroupTitle' style='width:160px;'>中文名称</td>";
+//                        table += "<td class='GroupTitle' style='width:120px;'>字段分组</td>";
+//                        table += "<td class='GroupTitle' nowrap=''>字段排序</td>";
+//                        table += "</tr>";
 
-                        $("#p").append(htmlstr);
+                        //多附件字段，字段可不调整，只可调整顺序
+                        groupOfAthMents.forEach(function (item, index) {
+                            table += "<tr>";
+                            table += "<td style='text-align:center'>1</td>";
+                            table += "<td nowrap=''>" + item.MyPK + "</td>";
+                            table += "<td nowrap=''>" + item.Name + "</td>";
+                            table += "<td nowrap=''>&nbsp;</td>";
+                            table += "<td valign='top' nowrap=''>&nbsp;";
+                            table += "</td>";
+                            table += "</tr>";
+                        });
+                        table += "</tbody></table>";
+                        tr = "<tr><td colspan='6' npwrap>" + table + "</td></tr>";
+                        $("#t1").append(tr);
+                        continue;
 
-                        //1.1.1在表格里添加分组
-                        for (var i = 0, length = dtGroups.length; i < length; i++) {
-                            //1.1.1-01、当前分组标题行tr
-                            var tr = "<tr>";
-                            tr += "<td colspan='6' class='GroupTitle' nowrap >";
+                    }
+                    //添加字段数据
+                    var attrIdx = 0;
+                    for (var j = 0, len = rows_Attrs.length; j < len; j++) {
+                        if (rows_Attrs[j].GroupID != dtGroups[i].OID)
+                            continue;
 
-                            //分组的下移、上移按钮
-                            var btnDown = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
-                            var btnUp = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnUp('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
-                            if (dtGroups.length == 1) {
+                        var tda = "";
+                        attrIdx += 1; //记录当前分组的个数，与idx不一样。
 
-                            }
-                            else if (i == 0) {//如果是第一个，只显示下移
-                                tr += btnDown;
-                            }
-                            else if (dtGroups[i].Idx == dtGroups.length) {//如果是最后一个，只显示上移
-                                tr += btnUp;
-                            }
-                            else {
-                                tr += btnUp;
-                                tr += btnDown;
-                            }
-
-                            tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
-                            tr += "</td></tr>";
-                            $("#t1").append(tr);
-
-                            //1.1.1-02、当前分组每个字段一行（循环）
-                            var rows_Attrs = $.grep(data.dtAttrs, function (item) {
-                                return item.FK_MapData == FK_MapData && item.GroupID == dtGroups[i].OID;
-                            });
-                            //如果是明细表
-                            if (dtGroups[i].CtrlType == "Dtl") {
-                                //获取明细表信息
-                                var groupOfDtls = $.grep(data.dtDtls, function (item) {
-                                    //TODO 做好筛选条件
-                                    return item.No == dtGroups[i].CtrlID;
-                                });
-                                //重新生成明细表表头
-                                var table = "";
-                                table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
-                                table += "<tbody><tr>";
-                                table += "<td class='GroupTitle' style='width:40px;text-align:center'>序</td>";
-                                table += "<td class='GroupTitle' style='width:100px;'>明细表编号</td>";
-                                table += "<td class='GroupTitle' style='width:160px;'>中文名称</td>";
-                                table += "<td class='GroupTitle' style='width:120px;'>字段分组</td>";
-                                table += "<td class='GroupTitle' nowrap=''>字段排序</td>";
-                                table += "</tr>";
-
-                                //明细表字段，进入单独页面设计
-                                groupOfDtls.forEach(function (item, index) {
-                                    table += "<tr>";
-                                    table += "<td style='text-align:center'>1</td>";
-                                    table += "<td nowrap=''><a href=\"javascript:EditDtl('" + FK_MapData + "','" + item.No + "')\">" + item.No + "</a></td>";
-                                    table += "<td nowrap=''>" + item.Name + "</td>";
-                                    table += "<td nowrap=''>&nbsp;</td>";
-                                    table += "<td valign='top' nowrap=''>&nbsp;&nbsp;<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + item.No + "&amp;t=20170825185859310892' target='_self' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-sheet'' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-sheet l-btn-icon-left'>字段排序</span></span></a>";
-                                    table += "</td>";
-                                    table += "</tr>";
-                                });
-                                table += "</tbody></table>";
-                                tr = "<tr><td colspan='6' npwrap>" + table + "</td></tr>";
-                                $("#t1").append(tr);
-                                continue;
-                            }
-                            //多附件
-                            if (dtGroups[i].CtrlType == "Ath") {
-                                //1.1.1-03、当前分组多附件行（循环）
-                                var groupOfAthMents = $.grep(data.athMents, function (item) {
-                                    //TODO 做好筛选条件
-                                    return item.MyPK == dtGroups[i].CtrlID;
-                                });
-                                //重新生成多附件表头
-                                var table = "";
-                                table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
-                                table += "<tbody><tr>";
-                                table += "<td class='GroupTitle' style='width:40px;text-align:center'>序</td>";
-                                table += "<td class='GroupTitle' style='width:100px;'>多附件编号</td>";
-                                table += "<td class='GroupTitle' style='width:160px;'>中文名称</td>";
-                                table += "<td class='GroupTitle' style='width:120px;'>字段分组</td>";
-                                table += "<td class='GroupTitle' nowrap=''>字段排序</td>";
-                                table += "</tr>";
-
-                                //多附件字段，字段可不调整，只可调整顺序
-                                groupOfAthMents.forEach(function (item, index) {
-                                    table += "<tr>";
-                                    table += "<td style='text-align:center'>1</td>";
-                                    table += "<td nowrap=''>" + item.MyPK + "</td>";
-                                    table += "<td nowrap=''>" + item.Name + "</td>";
-                                    table += "<td nowrap=''>&nbsp;</td>";
-                                    table += "<td valign='top' nowrap=''>&nbsp;";
-                                    table += "</td>";
-                                    table += "</tr>";
-                                });
-                                table += "</tbody></table>";
-                                tr = "<tr><td colspan='6' npwrap>" + table + "</td></tr>";
-                                $("#t1").append(tr);
-                                continue;
-
-                            }
-                            //添加字段数据
-                            var attrIdx = 0;
-                            for (var j = 0, len = rows_Attrs.length; j < len; j++) {
-                                if (rows_Attrs[j].GroupID != dtGroups[i].OID)
-                                    continue;
-
-                                var tda = "";
-                                attrIdx += 1; //记录当前分组的个数，与idx不一样。
-
-                                //字段的上移与下移的按钮
-                                var attrDown = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnDown('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
-                                var attrUp = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnUp('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
-                                if (attrIdx == 1) {//如果是第一个，只显示下移
-                                    tda += attrDown;
-                                }
-                                else if (attrIdx == rows_Attrs.length) {//如果是最后一个，只显示上移
-                                    tda += attrUp;
-                                }
-                                else {
-                                    tda += attrUp;
-                                    tda += attrDown;
-                                }
-
-                                if (rows_Attrs.length == 1) {
-                                    tda = "";
-                                }
-
-                                //定义下拉框备用
-                                var ddl = "<select name='#DDLID#' onchange=\"javascript:From_GroupChange('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "')\" id='" + rows_Attrs[j].KeyOfEn + "'>";
-                                dtGroups.forEach(function (item, index) {
-                                    if (item == dtGroups[i]) {
-                                        ddl += "<option value='" + item.OID + "' selected = 'selected'>" + item.Lab + "</option>";
-                                    }
-                                    else {
-                                        ddl += "<option value='" + item.OID + "'>" + item.Lab + "</option>";
-                                    }
-
-                                });
-                                ddl += "</select>";
-
-                                //是否显示checkbox
-                                var cbox = "";
-                                if (rows_Attrs[j].IsEnableInAPP == "1")
-                                    cbox = "<input type='checkbox' name='CB_" + rows_Attrs[j].KeyOfEn + "' value='" + rows_Attrs[j].KeyOfEn + "' checked=true />";
-                                else
-                                    cbox = "<input type='checkbox' name='CB_" + rows_Attrs[j].KeyOfEn + "'  value='" + rows_Attrs[j].KeyOfEn + "' />";
-                                //字段行tr
-                                tr = "";
-                                //TODO 拼接html
-                                tr += "<tr>";
-                                tr += "<td style='text-align:center' >" + (j + 1) + "</td>"; //序号
-                                tr += "<td  nowrap='nowrap' ><a href=\"javascript:ShowEditWindow('" + rows_Attrs[j].Name + "','../FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&FK_MapData=" + FK_MapData + "&MyPK=" + rows_Attrs[j].MyPK + "&FType=1&GroupField=0')\">" + rows_Attrs[j].KeyOfEn + "</a></td>";
-                                tr += "<td  nowrap='nowrap' >" + rows_Attrs[j].Name + "</td>"; //名称
-                                tr += "<td >";
-                                tr += ddl.replace("#DDLID#", rows_Attrs[j].KeyOfEn); //分组字段
-                                tr += "</td>";
-                                tr += "<td nowrap='nowrap' >" + tda + "</td>"; //字段排序
-                                tr += "<td>";
-                                tr += cbox; //是否显示在手机端
-                                tr += "</td>";
-                                tr += "</tr>";
-                                $("#t1").append(tr);
-                            }
-                            //TODO构建html
-
-                            //1.1.1-05、按钮行
-                            var groupOfBtns = $.grep(data.btns, function (item) {
-                                //TODO 做好筛选条件
-                                return item.FK_MapData == dtGroups[i].CtrlID;
-                            });
-                            //按钮行html，暂时没有开发
-
-                            //1.1.1-00、如果此分组下没有字段，则显示无字段消息，不能判断dtl
-                            if (rows_Attrs.length == 0) {
-                                // 该分组下面没有任何字段
-                                tr = "<tr><td colspan='6' style='color:red' nowrap='nowrap' >&nbsp;&nbsp;@该分组下面没有任何字段或控件</td>";
-                                $("#t1").append(tr);
-
-                            }
+                        //字段的上移与下移的按钮
+                        var attrDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
+                        var attrUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
+                        if (attrIdx == 1) {//如果是第一个，只显示下移
+                            tda += attrDown;
                         }
-                        //1.1.2 如果含有未分组字段，则显示在下方
-                        var dtNoGroupAttrs = data.dtNoGroupAttrs;
-                        if (dtNoGroupAttrs.length > 0) {
-                            //01、分组行
-                            tr = "<tr><td colspan='6' class='GroupTitle' nowrap=''>&nbsp;&nbsp;未分组字段</td></tr>";
-                            $("#t1").append(tr);
-                            for (j = 0, len = dtNoGroupAttrs.length; j < len; j++) {
-
-                                //定义下拉框备用
-                                var ddl = "<select name='#DDLID#' onchange=\"javascript:From_GroupChange('" + dtNoGroupAttrs[j].FK_MapData + "','" + dtNoGroupAttrs[j].KeyOfEn + "')\" id='" + dtNoGroupAttrs[j].KeyOfEn + "'>";
-                                ddl += "<option value='0' selected = 'selected'>请选择</option>";
-                                dtGroups.forEach(function (item, index) {
-                                    ddl += "<option value='" + item.OID + "'>" + item.Lab + "</option>";
-
-                                });
-                                ddl += "</select>";
-                                //是否显示checkbox
-                                var cbox = "";
-                                if (dtNoGroupAttrs[j].IsEnableInAPP == "1")
-                                    cbox = "<input type='checkbox' name='CB_" + dtNoGroupAttrs[j].KeyOfEn + "' value='" + dtNoGroupAttrs[j].KeyOfEn + "' checked=true />";
-                                else
-                                    cbox = "<input type='checkbox' name='CB_" + dtNoGroupAttrs[j].KeyOfEn + "' value='" + dtNoGroupAttrs[j].KeyOfEn + "' />";
-                                //字段行tr
-                                tr = "";
-                                tr += "<tr>";
-                                tr += "<td style='text-align:center'>" + (j + 1) + "</td>";
-                                tr += "<td nowrap=''><a href=\"javascript:ShowEditWindow('" + dtNoGroupAttrs[j].Name + "','../FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&amp;FK_MapData=" + FK_MapData + "&amp;MyPK=" + dtNoGroupAttrs[j].MyPK + "&amp;FType=1&amp;GroupField=0')\">" + dtNoGroupAttrs[j].KeyOfEn + "</a></td>";
-                                tr += "<td nowrap=''>" + dtNoGroupAttrs[j].Name + "</td>";
-                                tr += "<td>";
-                                tr += ddl.replace("#DDLID#", dtNoGroupAttrs[j].KeyOfEn);
-                                tr += "</td>";
-                                tr += "<td nowrap=''>&nbsp;</td>";
-                                tr += "<td>";
-                                tr += cbox;
-                                tr += "</td>";
-                                tr += "</tr>";
-                                $("#t1").append(tr);
-                            }
-                        }
-                        //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
-                        var backHtml = "";
-                        if (trdtl[0].tdDtl) {
-                            backHtml = "<tr><td colspan=6>";
-                            backHtml += "<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
-
-                            //新建分组
-                            backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].No + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
-                            //保存
-                            backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].No + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;margin-botton:0.5em\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
-                            backHtml += "</td></tr>";
+                        else if (attrIdx == rows_Attrs.length) {//如果是最后一个，只显示上移
+                            tda += attrUp;
                         }
                         else {
-                            backHtml += "<tr><td colspan='6' npwrap>";
-                            backHtml += "<table  class='Table'  border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
-                            backHtml += "<tr><td>";
-                            //重置
-                            backHtml += "<a href='#' onclick=From_ReSet('" + trdtl[0].FK_MapData + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-reload l-btn-icon-left'>智能重置顺序</span></span></a>";
-
-                            //预览
-                            backHtml += "<a href='#' onclick=Form_View('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;margin-botton:0.5em\"> <span class='l-btn-left'><span class='l-btn-text icon-search l-btn-icon-left'>预览</span></span></a>";
-                            //复制排序
-                            backHtml += "<a href='#' onclick=Form_Copy('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-copy l-btn-icon-left'>复制排序</span></span></a>";
-
-                            //新建分组
-                            backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].FK_MapData + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
-
-                            //保存
-                            backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].FK_MapData + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;margin-botton:0.5em\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
-                            backHtml += "</td>";
-
-                            backHtml += "</tr>";
-                            backHtml += "</table>";
-                            backHtml += "</td></tr>";
+                            tda += attrUp;
+                            tda += attrDown;
                         }
-                        $("#t1").append(backHtml);
-                        $("#t1").append("</table>");
 
-                        //用于复制到其他节点
-                        //将当前流程的节点显示出来，用于用户选择节点，然后进行复制分组、字段排序
-                        if (dtNodes) {
-                            var nodesHtml = "<select size='4' name='pub1$lbNodes' multiple='multiple' id='pub1_lbNodes' style='border-style:None;width:100%;Height:100%;'>";
-                            for (var i = 0; i < dtNodes.length; i++) {
-                                if (("ND" + dtNodes[i].NodeID) == FK_MapData) {
-                                    nodesHtml += "<option value='" + dtNodes[i].NodeID + "' disabled='disabled'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
-                                }
-                                else {
-                                    nodesHtml += "<option value='" + dtNodes[i].NodeID + "'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
-                                }
+                        if (rows_Attrs.length == 1) {
+                            tda = "";
+                        }
+
+                        //定义下拉框备用
+                        var ddl = "<select name='#DDLID#' onchange=\"javascript:From_GroupChange('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "')\" id='" + rows_Attrs[j].KeyOfEn + "'>";
+                        dtGroups.forEach(function (item, index) {
+
+                            if (item.CtrlType != '')
+                                return true;
+
+                            if (item == dtGroups[i]) {
+                                ddl += "<option value='" + item.OID + "' selected = 'selected'>" + item.Lab + "</option>";
                             }
-                            nodesHtml += "</select>";
+                            else {
+                                ddl += "<option value='" + item.OID + "'>" + item.Lab + "</option>";
+                            }
 
-                            $('#nodes_panel').html([nodesHtml].join(''));
-                        }
+                        });
+                        ddl += "</select>";
+
+                        //是否显示checkbox
+                        var cbox = "";
+                        if (rows_Attrs[j].IsEnableInAPP == "1")
+                            cbox = "<label><input type='checkbox' name='CB_" + rows_Attrs[j].KeyOfEn + "' value='" + rows_Attrs[j].KeyOfEn + "' checked=true />是否显示</label>";
+                        else
+                            cbox = "<label><input type='checkbox' name='CB_" + rows_Attrs[j].KeyOfEn + "'  value='" + rows_Attrs[j].KeyOfEn + "' />是否显示</label>";
+                        //字段行tr
+                        tr = "";
+                        //TODO 拼接html
+                        tr += "<tr>";
+                        tr += "<td style='text-align:center' >" + (j + 1) + "</td>"; //序号
+                        tr += "<td  nowrap='nowrap' ><a href=\"javascript:ShowEditWindow('" + rows_Attrs[j].Name + "','../FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&FK_MapData=" + FK_MapData + "&MyPK=" + rows_Attrs[j].MyPK + "&FType=1&GroupField=0')\">" + rows_Attrs[j].KeyOfEn + "</a></td>";
+                        tr += "<td  nowrap='nowrap' >" + rows_Attrs[j].Name + "</td>"; //名称
+                        tr += "<td >";
+                        tr += ddl.replace("#DDLID#", rows_Attrs[j].KeyOfEn); //分组字段
+                        tr += "</td>";
+                        tr += "<td nowrap='nowrap' >" + tda + "</td>"; //字段排序
+                        tr += "<td>";
+                        tr += cbox; //是否显示在手机端
+                        tr += "</td>";
+                        tr += "</tr>";
+                        $("#t1").append(tr);
+                    }
+
+                    //TODO构建html
+
+                    //1.1.1-05、按钮行
+                    var groupOfBtns = $.grep(data.btns, function (item) {
+                        //TODO 做好筛选条件
+                        return item.FK_MapData == dtGroups[i].CtrlID;
+                    });
+                    //按钮行html，暂时没有开发
+
+                    //1.1.1-00、如果此分组下没有字段，则显示无字段消息，不能判断dtl
+                    if (rows_Attrs.length == 0) {
+                        // 该分组下面没有任何字段
+                        tr = "<tr><td colspan='6' style='color:red' nowrap='nowrap' >&nbsp;&nbsp;@该分组下面没有任何字段或控件</td>";
+                        $("#t1").append(tr);
+
                     }
                 }
-            });
+                //1.1.2 如果含有未分组字段，则显示在下方
+                var dtNoGroupAttrs = data.dtNoGroupAttrs;
+                if (dtNoGroupAttrs.length > 0) {
+                    //01、分组行
+                    tr = "<tr><td colspan='6' class='GroupTitle' nowrap=''>&nbsp;&nbsp;未分组字段</td></tr>";
+                    $("#t1").append(tr);
+                    for (j = 0, len = dtNoGroupAttrs.length; j < len; j++) {
+
+                        //定义下拉框备用
+                        var ddl = "<select name='#DDLID#' onchange=\"javascript:From_GroupChange('" + dtNoGroupAttrs[j].FK_MapData + "','" + dtNoGroupAttrs[j].KeyOfEn + "')\" id='" + dtNoGroupAttrs[j].KeyOfEn + "'>";
+                        ddl += "<option value='0' selected = 'selected'>请选择</option>";
+                        dtGroups.forEach(function (item, index) {
+                            ddl += "<option value='" + item.OID + "'>" + item.Lab + "</option>";
+
+                        });
+                        ddl += "</select>";
+                        //是否显示checkbox
+                        var cbox = "";
+                        if (dtNoGroupAttrs[j].IsEnableInAPP == "1")
+                            cbox = "<input type='checkbox' name='CB_" + dtNoGroupAttrs[j].KeyOfEn + "' value='" + dtNoGroupAttrs[j].KeyOfEn + "' checked=true />";
+                        else
+                            cbox = "<input type='checkbox' name='CB_" + dtNoGroupAttrs[j].KeyOfEn + "' value='" + dtNoGroupAttrs[j].KeyOfEn + "' />";
+                        //字段行tr
+                        tr = "";
+                        tr += "<tr>";
+                        tr += "<td style='text-align:center'>" + (j + 1) + "</td>";
+                        tr += "<td nowrap=''><a href=\"javascript:ShowEditWindow('" + dtNoGroupAttrs[j].Name + "','../FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&amp;FK_MapData=" + FK_MapData + "&amp;MyPK=" + dtNoGroupAttrs[j].MyPK + "&amp;FType=1&amp;GroupField=0')\">" + dtNoGroupAttrs[j].KeyOfEn + "</a></td>";
+                        tr += "<td nowrap=''>" + dtNoGroupAttrs[j].Name + "</td>";
+                        tr += "<td>";
+                        tr += ddl.replace("#DDLID#", dtNoGroupAttrs[j].KeyOfEn);
+                        tr += "</td>";
+                        tr += "<td nowrap=''>&nbsp;</td>";
+                        tr += "<td>";
+                        tr += cbox;
+                        tr += "</td>";
+                        tr += "</tr>";
+                        $("#t1").append(tr);
+                    }
+                }
+                //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
+                var backHtml = "";
+                if (trdtl[0].tdDtl) {
+                    backHtml = "<tr><td colspan=6>";
+                    backHtml += "<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
+
+                    //新建分组
+                    backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].No + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
+                    //保存
+                    backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].No + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;margin-botton:0.5em\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
+                    backHtml += "</td></tr>";
+                }
+                else {
+                    backHtml += "<tr><td colspan='6' npwrap>";
+                    backHtml += "<table  class='Table'  border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
+                    backHtml += "<tr><td>";
+                    //重置
+                    backHtml += "<a href='#' onclick=From_ReSet('" + trdtl[0].FK_MapData + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-reload l-btn-icon-left'>智能重置顺序</span></span></a>";
+
+                    //预览
+                    backHtml += "<a href='#' onclick=Form_View('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;margin-botton:0.5em\"> <span class='l-btn-left'><span class='l-btn-text icon-search l-btn-icon-left'>预览</span></span></a>";
+                    //复制排序
+                    backHtml += "<a href='#' onclick=Form_Copy('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-copy l-btn-icon-left'>复制排序</span></span></a>";
+
+                    //新建分组
+                    backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].FK_MapData + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
+
+                    //保存
+                    backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].FK_MapData + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;margin-botton:0.5em\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
+                    backHtml += "</td>";
+
+                    backHtml += "</tr>";
+                    backHtml += "</table>";
+                    backHtml += "</td></tr>";
+                }
+                $("#t1").append(backHtml);
+                $("#t1").append("</table>");
+
+                //用于复制到其他节点
+                //将当前流程的节点显示出来，用于用户选择节点，然后进行复制分组、字段排序
+                if (dtNodes) {
+                    var nodesHtml = "<select size='4' name='pub1$lbNodes' multiple='multiple' id='pub1_lbNodes' style='border-style:None;width:100%;Height:100%;'>";
+                    for (var i = 0; i < dtNodes.length; i++) {
+                        if (("ND" + dtNodes[i].NodeID) == FK_MapData) {
+                            nodesHtml += "<option value='" + dtNodes[i].NodeID + "' disabled='disabled'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
+                        }
+                        else {
+                            nodesHtml += "<option value='" + dtNodes[i].NodeID + "'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
+                        }
+                    }
+                    nodesHtml += "</select>";
+
+                    $('#nodes_panel').html([nodesHtml].join(''));
+                }
+            }
         }
     </script>
 </head>

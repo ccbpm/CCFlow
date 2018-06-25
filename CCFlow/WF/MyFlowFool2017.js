@@ -645,7 +645,7 @@ function Ele_ImgAth(frmImageAth) {
         var fieldSet = $("<fieldset></fieldset>");
         var length = $("<legend></legend>");
         var a = $("<a></a>");
-        var url = "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+        var url = "./CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
 
         a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
         length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');

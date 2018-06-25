@@ -147,7 +147,6 @@ namespace CCFlow.WF.CCForm
             this.Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
             this.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
 
-
             if (this.DoType == "Down")
             {
                 FrmAttachmentDB downDB = new FrmAttachmentDB();
@@ -211,7 +210,6 @@ namespace CCFlow.WF.CCForm
            
         }
 
-
         //实体文件下载
         protected void EntityFile_Load(object sender, EventArgs e)
         {
@@ -261,9 +259,7 @@ namespace CCFlow.WF.CCForm
                 HttpContext.Current.Response.WriteFile((string)en.GetValByKey("MyFilePath"));
                 HttpContext.Current.Response.End();
                 HttpContext.Current.Response.Close();
-
-            }   
-
+            }
         }
 
         void btn_DownLoad_Zip(object sender, EventArgs e)
@@ -316,8 +312,9 @@ namespace CCFlow.WF.CCForm
                 (new FastZip()).CreateZip(zipFile, tempPath, true, "");
                 //删除临时文件夹
                 System.IO.Directory.Delete(tempPath, true);
+
                 //显示出下载超链接
-               // BP.Web.Controls.BPHyperLink hLink = (BP.Web.Controls.BPHyperLink)this.Pub1.FindControl("H_LINK_Btn");
+                //BP.Web.Controls.BPHyperLink hLink = (BP.Web.Controls.BPHyperLink)this.Pub1.FindControl("H_LINK_Btn");
                 
                 //BP.PubClass.DownloadFile(zipFile, this.WorkID + ".zip");
             }

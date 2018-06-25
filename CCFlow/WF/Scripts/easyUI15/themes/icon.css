@@ -545,3 +545,8 @@
 {
     background: url('/WF/Img/Components.png') no-repeat;
 }
+
+.icon-telephone
+{
+    background: url('../../../Img/telephone.png') no-repeat;
+}

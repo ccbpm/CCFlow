@@ -1330,12 +1330,32 @@
                 if (mypk == null || mypk == "undefined")
                     mypk = GetQueryString("FK_Node");
 
+                if (mypk == null || mypk == undefined) {
+                    alert('非节点表单');
+                    return;
+                }
+
                 var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk;
+                OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
+                    window.location.href = window.location.href;
+                });
+            }
+
+            function MobileFrm() {
+
+                var nodeID = GetQueryString("FK_Node");
+                var flowNo = GetQueryString("FK_Flow");
+
+
+                //var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk;
+                var url = '../AttrNode/SortingMapAttrs.htm?FK_Flow='+GetQueryString("FK_Flow")+'&FK_Node='+GetQueryString('FK_Node')+'&FK_MapData=' + GetQueryString("FK_MapData");
 
                 OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;
                 });
             }
+
+            
 
             //新增从表.
             function NewMapDtl() {
@@ -1557,10 +1577,12 @@
                                 新建附件组件
                             </a> <a href="javascript:NewFrame();" class="easyui-linkbutton"
                                     data-options="plain:true,iconCls:'icon-frame'">新建框架</a>
-
                           
 
-                            <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
+                            <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton" id="FrmNodeComponent" data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
+
+                            <a href="javascript:MobileFrm();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-telephone'">手机表单</a>
+
                         </div>
                     </div>
                     <div class="panel layout-panel layout-panel-center" style="left: 0px; top: 36px; width:100%;">

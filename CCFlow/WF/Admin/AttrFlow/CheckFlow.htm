@@ -22,16 +22,26 @@
             var en = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
             var data = en.DoMethodReturnString("DoCheck");
 
-            data = data.replace("@", "<BR>@");
-            data = data.replace("@警告", "<label style='color:yellow;'>@警告</label>");
-            data = data.replace("@错误", "<label style='color:red ;'>@错误</label>");
-
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
 
-            $("#Msg").html(data);
+            var tips = data.split("@");
+            //第一个元素为空,删除掉
+            delete(tips[0]);
+            html = "<ul>";
+            for (index in tips) {
+                tip = tips[index];
+                html += "<li style='list-style-type:none;'>" + tip + "</li>";
+            }
+            html += "<ul>";
+
+            html = html.replace(/>信息:/g, "><font style='font-weight:bold;'>信息:</font>");
+            html = html.replace(/>警告:/g, "><font style='font-weigth:bold; color:red;'>警告:</font>");
+            html = html.replace(/>错误:/g, "><font style='font-weight:bold; color:red ;'>错误:</font>");
+
+            $("#Msg").html(html);
             return;
 
         });

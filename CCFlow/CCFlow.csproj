@@ -120,6 +120,11 @@
     <Content Include="DataUser\XML\Menu.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="GPM\EmpDepts.htm" />
+    <Content Include="GPM\EmpDeptsDtl.htm" />
+    <Content Include="GPM\Home.htm" />
+    <Content Include="GPM\Login.htm" />
+    <Content Include="GPM\Organization.htm" />
     <Content Include="GPM\Siganture.htm" />
     <Content Include="GPM\SQLScript\CCIM.sql" />
     <Content Include="GPM\SQLScript\CCIM_MSSQL.sql" />
@@ -308,9 +313,85 @@
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
     <Content Include="WF\Admin\AttrFlow\Imp.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\0.ByStation.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\1.ByDept.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\10.ByStationAndEmpDept.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\100.ByCCFlowBPM.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\11.BySpecNodeEmpStation.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\12.BySQLAsSubThreadEmpsAndData.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\13.ByDtlAsSubThreadEmps.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\14.ByStationOnly.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\15.ByFEEp.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\16.BySetDeptAsSubthread.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\17.BySQLTemplate.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\18.ByFromEmpToEmp.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\2.BySQL.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\3.ByBindEmp.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\4.BySelected.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\5.ByPreviousNodeFormEmpsField.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\6.ByPreviousNodeEmp.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\7.ByStarter.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\8.BySpecNodeEmp.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\9.ByDeptAndStation.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\AdvSetting.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\DDLBar.js" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\Default.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\NodeDeptGroup.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\NodeEmpGroup.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\NodeStationGroup.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\StationGroup.htm" />
+    <Content Include="WF\Admin\AttrNode\Action.htm" />
+    <Content Include="WF\Admin\AttrNode\ActionDtl.htm" />
+    <Content Include="WF\Admin\AttrNode\ActionHelp.htm" />
+    <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
+    <Content Include="WF\Admin\AttrNode\Bill.htm" />
+    <Content Include="WF\Admin\AttrNode\Billing.htm" />
+    <Content Include="WF\Admin\AttrNode\BlockModel.htm" />
+    <Content Include="WF\Admin\AttrNode\CanCancelNodes.htm" />
+    <Content Include="WF\Admin\AttrNode\CanReturnNodes.htm" />
+    <Content Include="WF\Admin\AttrNode\CCRole.htm" />
+    <Content Include="WF\Admin\AttrNode\CheckFrm.htm" />
+    <Content Include="WF\Admin\AttrNode\CHOvertimeRole.htm" />
+    <Content Include="WF\Admin\AttrNode\CHRole.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\0.FoolForm.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\1.FreeForm.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\10.FoolTruck.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\100.DisableIt.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\11.RefOneFrmTree.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\2.SelfForm.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\3.SDKForm.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\4.SLForm.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\5.SheetTree.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\6.SheetAutoTree.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\7.WebOffice.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\8.ExcelForm.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\9.WordForm.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\DDLBar.js" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\Default.htm" />
+    <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
+    <Content Include="WF\Admin\AttrNode\Img\Doc.png" />
+    <Content Include="WF\Admin\AttrNode\Img\FreeFrm.png" />
+    <Content Include="WF\Admin\AttrNode\Img\RefOneFrmTree.png" />
+    <Content Include="WF\Admin\AttrNode\Img\SDKFrm.png" />
+    <Content Include="WF\Admin\AttrNode\Img\SelfFrm.png" />
+    <Content Include="WF\Admin\AttrNode\Img\Tab.png" />
+    <Content Include="WF\Admin\AttrNode\Img\Tree.png" />
+    <Content Include="WF\Admin\AttrNode\NodeAppType.htm" />
+    <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.htm" />
+    <Content Include="WF\Admin\AttrNode\NodeYGFlow.htm" />
+    <Content Include="WF\Admin\AttrNode\NodeYGFlowDtl.htm" />
+    <Content Include="WF\Admin\AttrNode\PushMessage.htm" />
+    <Content Include="WF\Admin\AttrNode\PushMessageEntity.htm" />
+    <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.htm" />
+    <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
+    <Content Include="WF\Admin\AttrNode\TodolistModel.htm" />
+    <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
+    <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
+    <Content Include="WF\Admin\CCFlowEnum.js" />
     <Content Include="WF\Admin\CCFormDesigner\FrmEvent.htm" />
     <Content Include="WF\Admin\CCFormDesigner\ResetFrm.htm" />
     <Content Include="WF\Admin\Cond\CondByFrm.htm" />
+    <Content Include="WF\Admin\Cond\CondByFrmSelectFKData.htm" />
     <Content Include="WF\Admin\Cond\CondByPara.htm" />
     <Content Include="WF\Admin\Cond\CondBySQL.htm" />
     <Content Include="WF\Admin\Cond\CondBySQLTemplate.htm" />
@@ -321,9 +402,19 @@
     <Content Include="WF\Admin\Cond\ConditionSubFlow.htm" />
     <Content Include="WF\Admin\Cond\CondPRI.htm" />
     <Content Include="WF\Admin\Cond\CondStation.htm" />
+    <Content Include="WF\Admin\Cond\SelectStation.htm" />
     <Content Include="WF\Admin\Cond\StandAloneFrm.htm" />
+    <Content Include="WF\Admin\DBInstall.htm" />
+    <Content Include="WF\Admin\DoType.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Action.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\AttachmentFix.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\AttachmentSortSetting.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\CreateSFGuide.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\DoFunc.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\DtlSetting\ColAutoExp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\DtlSetting\DtlImp.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\EleBatch.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeListChoseOneField.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FrmSln.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Glo.js" />
@@ -418,18 +509,30 @@
     <Content Include="WF\CCForm\DtlImpByJSON.htm" />
     <Content Include="WF\CCForm\DtlOpt.htm" />
     <Content Include="WF\CCForm\DtlReadonly.htm" />
+    <Content Include="WF\CCForm\FrmFool.js" />
+    <Content Include="WF\CCForm\FrmFoolReadonly.htm" />
+    <Content Include="WF\CCForm\FrmFoolReadonly.js" />
+    <Content Include="WF\CCForm\FrmFree.js" />
+    <Content Include="WF\CCForm\FrmGener.htm" />
+    <Content Include="WF\CCForm\FrmGener.js" />
+    <Content Include="WF\CCForm\FrmReadme.txt" />
+    <Content Include="WF\CCForm\FrmSingle.htm" />
     <Content Include="WF\CCForm\JS\mselector.css" />
     <Content Include="WF\CCForm\JS\mselector.js" />
     <Content Include="WF\CCForm\JS\mtags.js" />
     <Content Include="WF\CCForm\JS\MultipleChoiceSearch.js" />
     <Content Include="WF\CCForm\JS\MultipleChoiceSmall.js" />
     <Content Include="WF\CCForm\JS\Pop.js" />
+    <Content Include="WF\CCForm\PopFullCtrl.htm" />
+    <Content Include="WF\CCForm\PopVal.htm" />
     <Content Include="WF\CCForm\Pop\Branches.htm" />
     <Content Include="WF\CCForm\Pop\BranchesAndLeaf.htm" />
     <Content Include="WF\CCForm\Pop\BranchesAndLeafEasyui.htm" />
     <Content Include="WF\CCForm\Pop\GroupList.htm" />
     <Content Include="WF\CCForm\Pop\Simple.htm" />
     <Content Include="WF\CCForm\Pop\TableSearch.htm" />
+    <Content Include="WF\CCForm\Port.htm" />
+    <Content Include="WF\CCForm\Print.htm" />
     <Content Include="WF\Comm\RefFunc\Branches.htm" />
     <Content Include="WF\Comm\RefFunc\BranchesAndLeaf.htm" />
     <Content Include="WF\Comm\RefFunc\BranchesEUI.htm" />
@@ -530,9 +633,6 @@
     <Content Include="WF\WorkOpt\Pub.ascx" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
-    <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
-    <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
-    <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\BusinessRuleTask.png" />
@@ -991,15 +1091,11 @@
     <Content Include="WF\CCForm\AttachmentFix.htm" />
     <Content Include="WF\CCForm\Frm.htm" />
     <Content Include="WF\CCForm\CCFormAPI.asmx" />
-    <Content Include="WF\CCForm\Do.aspx" />
-    <Content Include="WF\CCForm\DocMainAth.aspx" />
     <Content Include="WF\CCForm\Dtl.htm" />
     <Content Include="WF\CCForm\FilesView.aspx" />
-    <Content Include="WF\CCForm\FileUpload.aspx" />
     <Content Include="WF\CCForm\FrmExcel.aspx" />
     <Content Include="WF\CCForm\FrmVSTO.aspx" />
     <Content Include="WF\CCForm\FrmWord.aspx" />
-    <Content Include="WF\CCForm\ImgAth.aspx" />
     <Content Include="WF\CCForm\ImgAth\ajaxfileupload.js" />
     <Content Include="WF\CCForm\ImgAth\css\images\generate.png" />
     <Content Include="WF\CCForm\ImgAth\css\images\indicator.gif" />
@@ -1015,7 +1111,6 @@
     <Content Include="WF\CCForm\ImgAth\js\jquery.bitmapcutter.js" />
     <Content Include="WF\CCForm\ImgAth\js\jquery1.4.2.min.js" />
     <Content Include="WF\CCForm\Img\loading.gif" />
-    <Content Include="WF\CCForm\MapExt.js" />
     <Content Include="WF\CCForm\MapExt2016.js" />
     <Content Include="WF\CCForm\PointOffice.aspx" />
     <Content Include="WF\CCForm\Pub.ascx" />
@@ -6124,6 +6219,7 @@
     </Compile>
     <Compile Include="WF\WorkOpt\WinOpen.Master.cs">
       <DependentUpon>WinOpen.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\WorkOpt\WinOpen.Master.designer.cs">
       <DependentUpon>WinOpen.Master</DependentUpon>
@@ -6150,27 +6246,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx.cs">
-      <DependentUpon>SepcFiledsSepcUsers.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx.designer.cs">
-      <DependentUpon>SepcFiledsSepcUsers.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx.cs">
-      <DependentUpon>SepcFiledsSepcUsersDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx.designer.cs">
-      <DependentUpon>SepcFiledsSepcUsersDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.cs">
-      <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.designer.cs">
-      <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -6319,20 +6394,6 @@
       <DependentUpon>CCFormAPI.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WF\CCForm\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\DocMainAth.aspx.cs">
-      <DependentUpon>DocMainAth.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\DocMainAth.aspx.designer.cs">
-      <DependentUpon>DocMainAth.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\CCForm\DownFile.aspx.cs">
       <DependentUpon>DownFile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6346,13 +6407,6 @@
     </Compile>
     <Compile Include="WF\CCForm\FilesView.aspx.designer.cs">
       <DependentUpon>FilesView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\FileUpload.aspx.cs">
-      <DependentUpon>FileUpload.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\FileUpload.aspx.designer.cs">
-      <DependentUpon>FileUpload.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\FrmExcel.aspx.cs">
       <DependentUpon>FrmExcel.aspx</DependentUpon>
@@ -6377,13 +6431,6 @@
     </Compile>
     <Compile Include="WF\CCForm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\ImgAth.aspx.cs">
-      <DependentUpon>ImgAth.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\ImgAth.aspx.designer.cs">
-      <DependentUpon>ImgAth.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\PointOffice.aspx.cs">
       <DependentUpon>PointOffice.aspx</DependentUpon>

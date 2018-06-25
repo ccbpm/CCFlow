@@ -301,31 +301,7 @@ caption
     border-right-style: none;
     border-left-style: none;
 }
-
-.BigDoc
-{
-}
-
-/* 内部标签风格 */
-fieldset
-{
-    border-style: 1;
-    border-width: 1px;
-    border-color: #D8D8D8;
-    margin: 5px;
-    table-layout: auto;
-    padding: 2px;
-    text-align: left;
-}
-
-legend
-{
-    color: green;
-    font-style: inherit;
-    font-weight: bold;
-    margin-bottom: 0px;
-    margin-top: 0px;
-}
+ 
  
 #bottomToolBar {
 display:block;
@@ -427,8 +403,6 @@ select {
     height: 29px;
 }
 
- 
-
 textarea,iframe[src*="Ath.htm"] {
     margin-top:6px !important;
     border-radius: 5px !important;
@@ -497,7 +471,6 @@ display:none;
     border:1px solid #2884fa !important;
 
 }
-
 
         /*提示框的CSS 设置*/
 .popover-title {

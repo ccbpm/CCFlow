@@ -226,24 +226,8 @@ namespace CCFlow.WF
                         rm.EmpsExt += "<strike><font color=red>(" + BP.WF.Glo.DealUserInfoShowModel(wl.FK_Emp, wl.FK_EmpText) + "</font></strike>&nbsp;&nbsp;";
                 }
                 rm.Save();
-
-                if (WebUser.IsWap)
-                {
-                    this.Pub1.Clear();
-                    this.Pub1.AddFieldSet("提示信息");
-                    this.Pub1.Add("<br>&nbsp;&nbsp;任务分配成功，特别提示：当下一次流程发送时系统会按照您设置的路径进行智能投递。");
-                    this.Pub1.AddUL();
-                    this.Pub1.AddLi("<a href='./WAP/Home.aspx' ><img src='/WF/Img/Home.gif' border=0/>主页</a>");
-                    this.Pub1.AddLi("<a href='./WAP/Start.aspx' ><img src='/WF/Img/Start.gif' border=0/>发起</a>");
-                    this.Pub1.AddLi("<a href='./WAP/Runing.aspx' ><img src='/WF/Img/Runing.gif' border=0/>待办</a>");
-                    this.Pub1.AddULEnd();
-                    this.Pub1.AddFieldSetEnd();
-                }
-                else
-                {
+ 
                     this.ToMsg("任务分配成功!!!", "Info");
-                    //this.WinCloseWithMsg("任务分配成功。");
-                }
             }
             catch (Exception ex)
             {

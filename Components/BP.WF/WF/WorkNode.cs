@@ -3264,7 +3264,6 @@ namespace BP.WF
             }
             #endregion FID
 
-
             // 先查询一下是否有人员，在合流节点上，如果没有就让其初始化人员. 
             current_gwls = new GenerWorkerLists();
             current_gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisWork.FID,GenerWorkerListAttr.FK_Node, toNode.NodeID );

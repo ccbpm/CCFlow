@@ -21,7 +21,7 @@
   <Item No="004" GroupNo="System" Name="二级管理员" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.AdminEmps"  />
   <Item No="005" GroupNo="System" Name="工具箱" For="admin" Url="../../Comm/MethodLink.htm"  />
   <Item No="010" GroupNo="System" Name="修改密码" For="admin" Url="../../Setting/ChangePassword.htm"  />
-  <Item No="020" ParentNo="AdminMenu" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
+  <Item No="020" GroupNo="System" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
   
 
   <Group No="Org" Name="组织结构" />

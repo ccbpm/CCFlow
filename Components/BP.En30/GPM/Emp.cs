@@ -281,18 +281,15 @@ namespace BP.GPM
 
                 #region 字段
                 /*关于字段属性的增加 */
-                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 50, 50);
+                map.AddTBStringPK(EmpAttr.No, null, "登陆账号", true, false, 1, 50, 50);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
-
-                //map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
-
-                map.AddTBString(EmpAttr.FK_Dept, null, "当前部门", false, false, 0, 50, 50);
+                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), true);
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
-                map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132);
-                map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132);
+                map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
+                map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
 
                 // 0=不签名 1=图片签名, 2=电子签名.
                 map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,

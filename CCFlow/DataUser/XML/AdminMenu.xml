@@ -9,21 +9,36 @@
   3, 如果 For="" 标识所有的管理员都可以使用.
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
   系统维护管理员菜单 @于庆海 需要翻译
+  
   -->
 
   <!-- 所有的人都可以维护组织结构. -->
-  <Item No="001" ParentNo="AdminMenu" Name="SQL配置模版设置" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates"  />
-  <Item No="002" ParentNo="AdminMenu" Name="节假日设置" For="admin" Url="../../Comm/Sys/Holiday.htm"  />
-  <Item No="003" ParentNo="AdminMenu" Name="表结构"    For="admin" Url="../../Comm/Sys/SystemClass.htm"  />
-  <Item No="004" ParentNo="AdminMenu" Name="二级管理员" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps"  />
-  <Item No="005" ParentNo="AdminMenu" Name="工具箱" For="admin" Url="../../Comm/MethodLink.htm"  />
-  <Item No="010" ParentNo="AdminMenu" Name="修改密码" For="" Url="../../Setting/ChangePassword.htm"  />
+  
+  <Group No="System" Name="系统管理" />
+  <Item No="001" GroupNo="System" Name="SQL配置模版设置" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates"  />
+  <Item No="002" GroupNo="System" Name="节假日设置" For="admin" Url="../../Comm/Sys/Holiday.htm"  />
+  <Item No="003" GroupNo="System" Name="表结构"    For="admin" Url="../../Comm/Sys/SystemClass.htm"  />
+  <Item No="004" GroupNo="System" Name="二级管理员" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.AdminEmps"  />
+  <Item No="005" GroupNo="System" Name="工具箱" For="admin" Url="../../Comm/MethodLink.htm"  />
+  <Item No="010" GroupNo="System" Name="修改密码" For="admin" Url="../../Setting/ChangePassword.htm"  />
   <Item No="020" ParentNo="AdminMenu" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
   
 
-  <Item No="501" ParentNo="AdminMenu" Name="岗位维护" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
-  <Item No="502" ParentNo="AdminMenu" Name="部门台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Depts"  />
-  <Item No="503" ParentNo="AdminMenu" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Emps"  />
-  <Item No="504" ParentNo="AdminMenu" Name="组织结构维护" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps"  />
+  <Group No="Org" Name="组织结构" />
+  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Stations"  />
+  <Item No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Depts"  />
+  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Emps"  />
+  <Item No="504" GroupNo="Org" Name="组织结构维护" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.AdminEmps"  />
+
+  <Group No="GPM" Name="菜单权限" />
+  <Item No="501" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="GPM" Name="系统台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="GPM" Name="权限组菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="GPM" Name="人员菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="GPM" Name="菜单树" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+
 
 </NewDataSet>

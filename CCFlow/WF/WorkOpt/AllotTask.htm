@@ -14,11 +14,11 @@
         $(function () {
 
             var workID = GetQueryString("WorkID");
-            var nodeID = GetQueryString("FK_Node");
-
+            var FK_Node = GetQueryString("FK_Node");
+            
             var gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID, "IsEnable", 1);
-
+            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node, "IsEnable", 1);
+            
             var html = "";
             html += "<ul>";
             for (var i = 0; i < gwls.length; i++) {
@@ -38,29 +38,39 @@
         function Save() {
 
             var workID = GetQueryString("WorkID");
-            var nodeID = GetQueryString("FK_Node");
+            var FK_Node = GetQueryString("FK_Node");
 
             //更新集合s
             var gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID, "IsEnable", 1);
+            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node, "IsEnable", 1);
+            
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];
                 var gwl = new Entity("BP.WF.GenerWorkerList", gwl);
 
                 //是否启用?
-                var isEnable = false;
-                if (gwl.IsEnable == 1)
-                    isEnable = true;
+//                var isEnable = false;
+//                if (gwl.IsEnable == 1)
+//                    isEnable = true;
 
-                var cb = $("#CB_" + gwl.FK_Emp);
-
-                if (cb.checked != isEnable) {
-                    gwl.IsEnable = isEnable;
-                    gwl.Update(); //执行更新.
-                }
+                var cbId = "#CB_" + gwl.FK_Emp;
+                $.each($('input:checkbox:checked'), function () {
+                    if ($(this).attr('id') == gwl.FK_Emp) {
+                        gwl.IsEnable = "1";
+                        gwl.Update(); //执行更新.
+                    } else {
+                        gwl.IsEnable = "0";
+                        gwl.Update(); //执行更新.
+                    }
+                });
+//                var cb = $("#CB_" + gwl.FK_Emp);
+//                if (cb.checked != isEnable) {
+//                    gwl.IsEnable = isEnable;
+//                    gwl.Update(); //执行更新.
+//                }
             }
-
+           
 
 
             //保存状态与路径.
@@ -68,23 +78,24 @@
 
             var rm = new Entity("BP.WF.RememberMe");
             rm.FK_Emp = webUser.No;
-            rm.FK_Node = nodeID;
+            rm.FK_Node = FK_Node;
             rm.SetPKVal(rm.FK_Node + "_" + rm.FK_Emp);
             rm.MyPK = rm.FK_Node + "_" + rm.FK_Emp;
 
             var obj = "";
             var objExt = "";
-
+            
             //重新查询一次, 生成两个变量.
-            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID, "IsEnable", 1);
+            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node, "IsEnable", 1);
+          
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];
                 if (gwl.IsEnable == 0)
                     continue;
 
-                obj += wl.FK_Emp + "@";
-                objExt += wl.FK_EmpText + "&nbsp;&nbsp;";
+                obj += gwl.FK_Emp + "@";
+                objExt += gwl.FK_EmpText + "&nbsp;&nbsp;";
             }
             rm.Objs = obj;
             rm.ObjsExt = objExt;
@@ -97,9 +108,9 @@
 
                 emps += gwl.FK_Emp + "@";
 
-                var empInfo = gwf.FK_Emp + "," + gwf.FK_EmpText;
+                var empInfo = gwl.FK_Emp + "," + gwl.FK_EmpText;
 
-                if (obj.indexOf(wl.FK_Emp) != -1)
+                if (obj.indexOf(gwl.FK_Emp) != -1)
                     empExts += "<font color=green>" + empInfo + "</font>&nbsp;&nbsp;";
                 else
                     empExts += "<strike><font color=red>(" + empInfo + "</font></strike>&nbsp;&nbsp;";
@@ -109,6 +120,7 @@
             rm.EmpsExt = empExts;
 
             rm.Save(); //执行保存.
+            alert("分配成功");
         }
     </script>
 </head>

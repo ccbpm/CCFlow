@@ -2322,9 +2322,9 @@ namespace BP.WF
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
                 if (WebUser.IsWap)
-                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
                 else
-                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"javascript:WinOpen('./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"javascript:WinOpen('./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
             }
 
             //if (WebUser.IsWap == false)

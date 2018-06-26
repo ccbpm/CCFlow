@@ -4,7 +4,7 @@
     <title></title>
     <link rel="stylesheet" type="text/css" href="themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="themes/icon.css" />
-    <script type="text/javascript" src="../WF/Scripts/jquery/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
     <script src="../WF/Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
     <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
@@ -12,11 +12,6 @@
     <!-- 引入新版本的类库. -->
     <script src="../WF/Scripts/config.js" type="text/javascript"></script>
     <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
-
-    <script src="javascript/CC.MessageLib.js" type="text/javascript"></script>
-    <script src="javascript/AppData.js" type="text/javascript"></script>
-    <script src="javascript/Organization.js" type="text/javascript"></script>
-
 
     <script src="../WF/Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
     <link href="../WF/Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
@@ -35,11 +30,14 @@
        global.selectedRows = [];
        //初始化
        $(function () {
-           deptInfoDialogClose();
+           //deptInfoDialogClose();
+           $('#deptInfoDialog').dialog("close");
            $('#deptEmpDialog').dialog("close");
            $('#empInfo').dialog("close");
            $('#connecteEmp').dialog("close");
-           empBelongDeptDialogClose();
+           //empBelongDeptDialogClose();
+           $('#empDepts_Panel').dialog("close");
+
            $("#pageloading").show();
 
            //加载菜单
@@ -51,13 +49,9 @@
        var nodeId = "";
        function LoadDeptTreeV2() {
 
-           var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-           //var pushData1 = handler.DoMethodReturnJSON("Organization_Init");
-
-
-           var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-           //var pushData2 = handler.DoMethodReturnJSON("LoadDatagridDeptEmp");
-
+           //var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+           //var pushData1 = handler.DoMethodReturnString("Organization_Init");
+           
            var ens = new Entities("BP.GPM.Depts");
            ens.RetrieveAll();
            var pushData = createJsonToTree(ens, "0");
@@ -88,6 +82,7 @@
                    nodeId = node.nodeId;
                    curNodeId = $('#appTree').treeview('getNode', node.nodeId).id;
                    var tree = $('#appTree');
+                   LoadDataGridAdmin(1, 2000);
                    if (node.state.expanded) {
                        //处于展开状态则折叠  
                        tree.treeview('collapseNode', node.nodeId);
@@ -96,12 +91,94 @@
                        tree.treeview('expandNode', node.nodeId);
                    }
 
-                   LoadDataGridAdmin(1, 20);
                }
            });
          
            $("#pageloading").hide();
        }
+       //加载人员列表
+       function LoadDataGridAdmin(pageNumber, pageSize) {
+           var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+           handler.AddPara("deptNo", curNodeId);
+           handler.AddPara("orderBy", "Idx");
+           handler.AddPara("searchText", searchText);
+           handler.AddPara("pageNumber", pageNumber);
+           handler.AddPara("pageSize", pageSize);
+           var pushData2 = handler.DoMethodReturnString("LoadDatagridDeptEmp_Init");
+           var pushData = eval('(' + pushData2 + ')');
+
+           $('#empAppGrid').datagrid('loadData', { total: 0, rows: [] }); //清空下方DateGrid
+
+           var searchText = $('#searchText').val();
+           if (true) {
+               $('#empAppGrid').datagrid({
+                   data: pushData,
+                   width: 'auto',
+                   rownumbers: true,
+                   pagination: true,
+                   singleSelect: true,
+                   selectOnCheck: false,
+                   loadMsg: '数据加载中......',
+                   pageNumber: pageNumber,
+                   pageSize: pageSize,
+                   pageList: [20, 30, 40, 50],
+                   columns: [[
+                { checkbox: true },
+                { field: 'NO', title: '账号11', sortable: true, align: 'left', width: 160 },
+                { field: 'NAME', title: '姓名', sortable: true, width: 120, align: 'center' },
+                { field: 'EMPNO', title: '员工工号', sortable: true, width: 160, align: 'center' },
+                { field: 'TEL', title: '电话', sortable: true, width: 160, align: 'center' },
+                { field: 'EMAIL', title: '邮箱', sortable: true, width: 160, align: 'center' }
+              
+
+                ]],
+                   onClickRow: function (rowIndex, rowData) {
+                       FK_Emp = rowData.NO;
+                   },
+                   onDblClickRow: function (rowIndex, rowData) {
+                       $('#empInfo').dialog({
+                           title: "人员信息",
+                           width: 680,
+                           height: 500,
+                           closed: false,
+                           modal: true,
+                           iconCls: 'icon-edit',
+                           resizable: true
+                       });
+                       FK_Emp = rowData.NO;
+
+                       //初始化
+                       initializeEmpTabs();
+                   },
+                   onRowContextMenu: function (e, rowIndex, rowData) {
+                       e.preventDefault();
+
+                       if (!rowData) return;
+
+                       $("#empAppGrid").datagrid('selectRow', rowIndex);
+                       $("#mEmp").menu('show', {
+                           left: e.pageX,
+                           top: e.pageY
+                       });
+                   }
+               });
+
+               //分页
+               var pg = $("#empAppGrid").datagrid("getPager");
+               if (pg) {
+                   $(pg).pagination({
+                       onRefresh: function (pageNumber, pageSize) {
+                           LoadDataGridAdmin(pageNumber, pageSize);
+                       },
+                       onSelectPage: function (pageNumber, pageSize) {
+                           LoadDataGridAdmin(pageNumber, pageSize);
+                       }
+                   });
+               }
+           }
+       }
+
+
        function checkDeptInfo2() {
 
            //部门基本信息

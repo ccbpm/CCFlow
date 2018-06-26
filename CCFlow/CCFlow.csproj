@@ -542,7 +542,12 @@
     <Content Include="WF\Comm\RefFunc\En.css" />
     <Content Include="WF\Comm\RefFunc\En.htm" />
     <Content Include="WF\Comm\RefFunc\EnOnly.htm" />
+    <Content Include="WF\Comm\Sys\JavaScriptImp.htm" />
+    <Content Include="WF\Comm\Sys\SearchSetting.htm" />
     <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.htm" />
+    <Content Include="WF\Comm\Sys\SystemClass.htm" />
+    <Content Include="WF\Comm\Sys\SystemClassCheck.htm" />
+    <Content Include="WF\Comm\Sys\SystemClassField.htm" />
     <Content Include="WF\Comm\UC\ToolBar.ascx" />
     <Content Include="WF\Comm\UC\UCEn.ascx" />
     <Content Include="WF\Data\Install\DemoData.xml" />
@@ -1071,7 +1076,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapFrame.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pub.ascx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.htm" />
@@ -1410,8 +1414,6 @@
     <Content Include="WF\Comm\JS\Tree.js" />
     <Content Include="WF\Comm\JS\TreeEns.js" />
     <Content Include="WF\Comm\readme.txt" />
-    <Content Include="WF\Comm\Rpt\Handler.ashx" />
-    <Content Include="WF\Comm\Rpt\Pie.htm" />
     <Content Include="WF\Comm\Style\BG_Title.png" />
     <Content Include="WF\Comm\Style\btnBG.gif" />
     <Content Include="WF\Comm\Style\CommStyle.css" />
@@ -1453,22 +1455,14 @@
     <Content Include="WF\Comm\Style\Title0.gif" />
     <Content Include="WF\Comm\Style\Title1.gif" />
     <Content Include="WF\Comm\Style\titleBig.jpg" />
-    <Content Include="WF\Comm\Sys\AdminTools.aspx" />
-    <Content Include="WF\Comm\Sys\Cash.aspx" />
     <Content Include="WF\Comm\Sys\CfgMenu.xml" />
     <Content Include="WF\Comm\Sys\DBRpt.htm" />
-    <Content Include="WF\Comm\Sys\EnsAppCfg.aspx" />
-    <Content Include="WF\Comm\Sys\EnsDataIO.aspx" />
-    <Content Include="WF\Comm\Sys\EnumList.aspx" />
-    <Content Include="WF\Comm\Sys\Handler.ashx" />
     <Content Include="WF\Comm\Sys\Img\MySQL.png" />
     <Content Include="WF\Comm\Sys\Img\Oracle.png" />
     <Content Include="WF\Comm\Sys\Img\SQLServer.png" />
     <Content Include="WF\Comm\Sys\Img\Table.png" />
     <Content Include="WF\Comm\Sys\Img\View.png" />
     <Content Include="WF\Comm\Sys\Img\WS.png" />
-    <Content Include="WF\Comm\Sys\Pub.ascx" />
-    <Content Include="WF\Comm\Sys\WinOpen.Master" />
     <Content Include="WF\Comm\Tree.aspx" />
     <Content Include="WF\Comm\TreeEns.aspx" />
     <Content Include="WF\Comm\UC\Pub.ascx" />
@@ -5769,7 +5763,6 @@
     <Content Include="WF\WorkOpt\OneWork\OneWork.htm" />
     <Content Include="WF\WorkOpt\OneWork\OP.htm" />
     <Content Include="WF\WorkOpt\Press.htm" />
-    <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.htm" />
     <Content Include="WF\WorkOpt\SelectNode.htm" />
@@ -6338,13 +6331,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx.designer.cs">
       <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx.cs">
-      <DependentUpon>WordFrm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx.designer.cs">
-      <DependentUpon>WordFrm.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -6490,61 +6476,6 @@
     </Compile>
     <Compile Include="WF\Comm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Rpt\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\AdminTools.aspx.cs">
-      <DependentUpon>AdminTools.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\AdminTools.aspx.designer.cs">
-      <DependentUpon>AdminTools.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\Cash.aspx.cs">
-      <DependentUpon>Cash.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\Cash.aspx.designer.cs">
-      <DependentUpon>Cash.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnsAppCfg.aspx.cs">
-      <DependentUpon>EnsAppCfg.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnsAppCfg.aspx.designer.cs">
-      <DependentUpon>EnsAppCfg.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnsDataIO.aspx.cs">
-      <DependentUpon>EnsDataIO.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnsDataIO.aspx.designer.cs">
-      <DependentUpon>EnsDataIO.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnumList.aspx.cs">
-      <DependentUpon>EnumList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\EnumList.aspx.designer.cs">
-      <DependentUpon>EnumList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\WinOpen.Master.cs">
-      <DependentUpon>WinOpen.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\WinOpen.Master.designer.cs">
-      <DependentUpon>WinOpen.Master</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Tree.aspx.cs">
       <DependentUpon>Tree.aspx</DependentUpon>
@@ -6808,13 +6739,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\PrintDoc.aspx.cs">
-      <DependentUpon>PrintDoc.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\PrintDoc.aspx.designer.cs">
-      <DependentUpon>PrintDoc.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

@@ -6,7 +6,7 @@ Inherits="CCFlow.WF.WF_FHLFlow" Codebehind="FHLFlow.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
-    <link href="../Comm/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     
 <script type="text/javascript">
     //然浏览器最大化.

@@ -223,7 +223,6 @@
     <Compile Include="DA\DBAccessOfMSSQL2.cs" />
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
-    <Compile Include="GPM\DeptType.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Pub\ConfigEns.cs" />
     <Compile Include="Pub\Day.cs" />
@@ -395,7 +394,6 @@
     <Compile Include="GPM\Dept.cs" />
     <Compile Include="GPM\DeptEmp.cs" />
     <Compile Include="GPM\DeptEmpStation.cs" />
-    <Compile Include="GPM\DeptSearchScorp.cs" />
     <Compile Include="GPM\DeptStation.cs" />
     <Compile Include="GPM\Emp.cs" />
     <Compile Include="GPM\Station.cs" />

@@ -107,7 +107,7 @@
         
            var html = "";
            html += "<table style='width:95%;'>";
-           html += "<caption ><a href=\"javascript:EditDept('"+dept.No+"')\" >"+dept.Name+" </a> - <a href='javascript:EditEmp()'>新建人员</a></caption>";
+           html += "<caption ><a href=\"javascript:EditDept('" + dept.No + "')\" >" + dept.Name + " </a> - <a href='javascript:EditEmp()'>新建人员</a> -  <a href='javascript:RefEmps()'>关联兼职</a>  </caption>";
            html += "<tr>";
            html += "<th>序</th>";
            html += "<th>编号</th>";
@@ -195,15 +195,16 @@
                return;
            }
 
-           
-               var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&No=' + no;
-               WinOpen(url);
-
+           var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&No=' + no;
+           WinOpen(url);
        }
 
        function RefEmps() {
 
-           var url = '../WF/Comm/En.htm?EnName=BP.GPM.Dept&No=' + deptNo;
+           var url = "../WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.GPM.Dept&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Dept&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&No=" + deptNo + "&PKVal=" + deptNo + "&s=0.13113811473063341";
+
+           //  RefEmps
+           //   var url = '../WF/Comm/En.htm?EnName=BP.GPM.Dept&No=' + deptNo;
            WinOpen(url);
        }
 

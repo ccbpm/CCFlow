@@ -497,6 +497,7 @@
     <Compile Include="Xml\OnlineHelper.cs" />
     <Compile Include="PortalInterface.cs" />
     <Compile Include="Xml\MsgType.cs" />
+    <Compile Include="Xml\AdminMenuGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -155,7 +155,6 @@ namespace CCFlow.WF.CCForm
                         {
 
                             byte[] fileBytes = File.ReadAllBytes(filePath);
-
                             File.WriteAllBytes(fileSave, fileBytes);
 
                         }
@@ -194,10 +193,8 @@ namespace CCFlow.WF.CCForm
             else
             {
                 RenderPic(DoType);
-
             }
         }
-
         /// <summary>
         /// 添加图片
         /// </summary>

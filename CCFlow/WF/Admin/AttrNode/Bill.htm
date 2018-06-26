@@ -54,7 +54,7 @@
                 newRow += "<td><a href='" + Handler + "?DoType=Bill_Download&No=" + en.No + "'>" + en.TempFilePath + "</td>";
 
                 newRow += "<td>";
-                newRow += "<a href=\"javascript:Delete('" + en.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "<a href=\"javascript:Delete('" + en.No + "')\"><img src='" + basePath + "/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
 
                 newRow += "</tr>";
@@ -174,7 +174,7 @@
                     模版文件:<br>符合规范的rtf格式文件.
                 </td>
                 <td>
-                    <input type="file" name="bill"  style=" width:60%;"  />
+                    <input id="bill" type="file" name="bill"  style=" width:60%;"  />
                 </td>
             </tr>
             <tr>

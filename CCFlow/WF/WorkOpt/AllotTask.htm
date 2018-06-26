@@ -83,9 +83,15 @@
 
             var obj = "";
             var objExt = "";
-            
-            //重新查询一次, 生成两个变量.
-            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node, "IsEnable", 1);
+
+            //查询出来数据.
+            gwls = new Entities("BP.WF.GenerWorkerLists");
+            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID);
+
+            //有可能是分河流.
+            if (gwls.length == 0)
+                gwls.Retrieve("FID", workID, "FK_Node", nodeID);
+
           
             for (var i = 0; i < gwls.length; i++) {
 

@@ -24,8 +24,6 @@ function AtParaToJson(json) {
     return jsObj;
 }
 
-
-
 function GetPKVal() {
 
     var val = this.GetQueryString("OID"); 
@@ -1134,13 +1132,11 @@ var Entity = (function () {
                     params.push(o);
             });
 
-
             var pkavl = this.GetPKVal();
             if (pkavl == null || pkavl == "") {
                 alert('[' + this.enName + ']没有给主键赋值无法执行查询.');
                 return;
             }
-
 
             var self = this;
             var string;
@@ -1167,14 +1163,16 @@ var Entity = (function () {
 
             var jsonString = this.DoMethodReturnString(methodName, params);
 
-
             if (jsonString.indexOf("err@") != -1) {
                 alert(jsonString);
                 return jsonString;
             }
 
             try {
-                jsonString = JSON.parse(jsonString);
+
+                jsonString = ToJson(jsonString);
+
+                //jsonString = JSON.parse(jsonString);
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
                 alert(jsonString);
@@ -1393,6 +1391,7 @@ var Entities = (function () {
     Entities.prototype = {
         constructor: Entities,
         loadData: function () {
+
             var self = this;
 
             if (self.ensName == null || self.ensName == "" || self.ensName == "") {
@@ -1406,10 +1405,12 @@ var Entities = (function () {
                 url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf("err@") != -1) {
                         alert(data);
                         return;
                     }
+
                     try {
                         jsonString = JSON.parse(data);
                         if ($.isArray(jsonString)) {
@@ -1481,18 +1482,18 @@ var Entities = (function () {
             this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {
-//            var params = [];
-//            $.each(arguments, function (i, o) {
-//                if (i > 0)
-//                    params.push(o);
-//            });
+            //            var params = [];
+            //            $.each(arguments, function (i, o) {
+            //                if (i > 0)
+            //                    params.push(o);
+            //            });
 
             var self = this;
             var string;
             $.ajax({
                 type: 'post',
                 async: false,
-                data:arguments,
+                data: arguments,
                 url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
@@ -1509,6 +1510,7 @@ var Entities = (function () {
         },
 
         DoMethodReturnJSON: function (methodName, params) {
+
             var jsonString = this.DoMethodReturnString(methodName, params);
 
             if (jsonString.indexOf("err@") != -1) {
@@ -1517,7 +1519,9 @@ var Entities = (function () {
             }
 
             try {
-                jsonString = JSON.parse(jsonString);
+                jsonString = ToJson(jsonString);
+
+                //jsonString = JSON.parse(jsonString);
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
                 alert(jsonString);
@@ -1542,7 +1546,9 @@ var Entities = (function () {
                         return;
                     }
                     try {
-                        jsonString = JSON.parse(data);
+
+                        jsonString = ToJson(data);
+
                         if ($.isArray(jsonString)) {
                             self.length = jsonString.length;
                             $.extend(self, jsonString);
@@ -1564,6 +1570,19 @@ var Entities = (function () {
     return Entities;
 
 })();
+
+
+function ToJson(data) {
+
+    try {
+        data = JSON.parse(data);
+        return data;
+    } catch (e) {
+        return eval(data);
+    }
+     
+}
+ 
 
 var DBAccess = (function () {
 
@@ -1883,15 +1902,19 @@ var HttpHandler = (function () {
 
             var jsonString = this.DoMethodReturnString(methodName);
 
+
             if (jsonString.indexOf("err@") == 0) {
                 alert(jsonString);
+
                 //alert('请查看控制台(DoMethodReturnJSON):' + jsonString);
                 console.log(jsonString);
                 return jsonString;
             }
 
             try {
-                jsonString = JSON.parse(jsonString);
+                jsonString = ToJson(jsonString);
+
+                //jsonString = JSON.parse(jsonString);
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
                 alert(jsonString);

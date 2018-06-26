@@ -1120,11 +1120,30 @@ namespace BP.WF.HttpHandler
         public string GetTreeJson_AdminMenu()
         {
             //查询全部.
+            AdminMenuGroups groups = new AdminMenuGroups();
+            groups.RetrieveAll();
+
             AdminMenus menus = new AdminMenus();
             menus.RetrieveAll();
 
             // 定义容器.
             AdminMenus newMenus = new AdminMenus();
+
+            foreach (AdminMenuGroup menu in groups)
+            {
+                //是否可以使用？
+                if (menu.IsCanUse(WebUser.No) == false)
+                    continue;
+
+                AdminMenu newMenu = new AdminMenu();
+                newMenu.No = menu.No;
+                newMenu.Name = menu.Name;
+                newMenu.GroupNo = "0";
+                newMenu.For = menu.For;
+                newMenu.Url = "";
+                newMenus.Add(newMenu);
+            }
+
             foreach (AdminMenu menu in menus)
             {
                 //是否可以使用？
@@ -1138,11 +1157,12 @@ namespace BP.WF.HttpHandler
             {
                 AdminMenu menu = new AdminMenu();
                 menu.No = "1";
-                menu.ParentNo = "AdminMenu";
+                menu.GroupNo = "0";
                 menu.Name = "无权限";
                 menu.Url = "";
                 newMenus.Add(menu);
             }
+            DataTable dt = newMenus.ToDataTable();
             return BP.Tools.Json.ToJson(newMenus.ToDataTable());
         }
 

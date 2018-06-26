@@ -148,10 +148,12 @@ functrees.push({
     Id: "sysTree",
     Name: "系统",
     ServiceCount: 1,
-    AttrCols: ["URL"],
+    AttrCols: ["Url"],
     Nodes: [{
-        Type: "Node", Id: "AdminMenu", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
-        Nodes: Nodes
+        Type: "Service", ServiceMethod: "GetTreeJson_AdminMenu", ColId: "No", ColParentId: "GroupNo", ColName: "Name", ColUrl: "Url", RootParentId: "0", ColDefine: "No"
+        , Defines: [{
+            Value: "System", Opened: true
+        }]
     }]
 });
 

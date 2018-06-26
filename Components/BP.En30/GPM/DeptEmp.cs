@@ -106,8 +106,9 @@ namespace BP.GPM
                 map.EnDesc = "部门人员信息";  
                 
                 map.AddMyPK();
-                map.AddTBString(DeptEmpAttr.FK_Emp, null, "操作员", false, false, 1, 50, 1);
                 map.AddTBString(DeptEmpAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
+                map.AddDDLEntities(DeptEmpAttr.FK_Emp, null, "操作员", new BP.Port.Emps(), false);
+
 
                 this._enMap = map;
                 return this._enMap;

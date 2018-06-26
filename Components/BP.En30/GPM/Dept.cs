@@ -181,6 +181,12 @@ namespace BP.GPM
                 map.AddRefMethod(rm);
 
 
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new DeptEmps(), new BP.Port.Emps(),
+                   DeptEmpAttr.FK_Dept,
+                   DeptEmpAttr.FK_Emp, "对应人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
+
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new DeptStations(), new Stations(),
                     DeptStationAttr.FK_Dept,
@@ -189,7 +195,7 @@ namespace BP.GPM
                 map.AttrsOfOneVSM.AddGroupListModel(new DeptStations(), new Stations(),
                   DeptStationAttr.FK_Dept,
                   DeptStationAttr.FK_Station, "对应岗位(树)", StationAttr.FK_StationType);
-
+                 
 
                 this._enMap = map;
                 return this._enMap;

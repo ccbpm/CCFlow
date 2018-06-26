@@ -979,7 +979,12 @@ namespace BP.WF.HttpHandler
             string AttrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
 
             dtSelected.Columns[attrOfMInMM].ColumnName = "No";
+
+            if (dtSelected.Columns.Contains(attrOfMInMM + "Text") == false)
+                return "err@MM实体类字段属性需要按照外键属性编写:" + dot2DotEnsName + " - " + attrOfMInMM;
+
             dtSelected.Columns[attrOfMInMM + "Text"].ColumnName = "Name";
+
             dtSelected.Columns.Remove(AttrOfOneInMM);
             ds.Tables.Add(dtSelected); //已经选择的数据.
             #endregion 生成选择的数据.

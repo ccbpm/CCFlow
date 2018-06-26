@@ -35,12 +35,7 @@ namespace CCFlow.Web.Comm
                 case "SearchExp":
                     this.SearchExp();
                     break;
-				case "DelGradeEns":
-					Entity enGrade = BP.En.ClassFactory.GetEns(this.EnsName).GetNewEntity;
-					enGrade.PKVal = this.RefPK;
-					enGrade.Delete();
-					this.WinClose();
-					return;
+				 
 				case "DownFile":
 					Entity enF = BP.En.ClassFactory.GetEn(this.EnName);
 					enF.PKVal = this.Request.QueryString["PK"];

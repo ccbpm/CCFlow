@@ -12,23 +12,25 @@
 	<script src="../../Style/skin/layui/layer.js" type="text/javascript"></script>
 	<script type="text/javascript" language="javascript" >
 		//枚举值
-		if (typeof DayOfWeek == "undefined") {
-		var DayOfWeek = {}
+	    if (typeof DayOfWeek == "undefined") {
+	        var DayOfWeek = {}
 
-			DayOfWeek.Sunday = 0,
+	        DayOfWeek.Sunday = 0,
 
 			DayOfWeek.Monday = 1,
- 
+
 			DayOfWeek.Tuesday = 2,
-		   
+
 			DayOfWeek.Wednesday = 3,
-		
+
 			DayOfWeek.Thursday = 4,
 
 			DayOfWeek.Friday = 5,
 
 			DayOfWeek.Saturday = 6
-		}
+	    }
+
+
 		$(function () {
 			//系统设置
 			var gloVar = new Entity("BP.Sys.GloVar");
@@ -115,7 +117,7 @@
 	   
 	</script>
 </head>
-<body  onload="ToURL()" >
+<body  >
 
 <form id="cc">
 <center>

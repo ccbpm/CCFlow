@@ -58,11 +58,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        public string getUTF8ToString(string param)
-        {
-            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
-        }
-
+        
         #region 组织结构维护.
         /// <summary>
         /// 初始化组织结构维护.
@@ -70,39 +66,44 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Organization_Init()
         {
+            //BP.GPM.Depts depts = new GPM.Depts();
+            //depts.RetrieveAll();
 
-            BP.GPM.Depts depts = new GPM.Depts();
-            depts.RetrieveAll();
+            //return depts.ToJsonOfTree("0");
 
-            return depts.ToJsonOfTree("0");
-
+            return "";
         }
 
         /// <summary>
         /// 获取该部门的所有人员
         /// </summary>
         /// <returns></returns>
-        public string LoadDatagridDeptEmp()// qin  gai 分页
+        /// 
+        public string LoadDatagridDeptEmp_Init()
         {
-            string deptNo = getUTF8ToString("deptNo");
+            string deptNo = this.GetRequestVal("deptNo");
             if (string.IsNullOrEmpty(deptNo))
             {
                 return "{ total: 0, rows: [] }";
             }
-            string orderBy = getUTF8ToString("orderBy");
+            string orderBy = this.GetRequestVal("orderBy");
 
 
-            string searchText = getUTF8ToString("searchText");
+            string searchText = this.GetRequestVal("searchText");
+            if (!DataType.IsNullOrEmpty(searchText))
+            {
+                searchText.Trim();
+            }
             string addQue = "";
             if (!string.IsNullOrEmpty(searchText))
             {
                 addQue = "  AND (pe.No like '%" + searchText + "%' or pe.Name like '%" + searchText + "%') ";
             }
 
-            string pageNumber = getUTF8ToString("pageNumber");
+            string pageNumber = this.GetRequestVal("pageNumber");
             int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
             //每页多少行
-            string pageSize = getUTF8ToString("pageSize");
+            string pageSize = this.GetRequestVal("pageSize");
             int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
             string sql = "(select pe.*,pd.name FK_DutyText from port_emp pe left join port_duty pd on pd.no = pe.fk_duty where pe.no in (select fk_emp from Port_DeptEmp where fk_dept='" + deptNo + "') "

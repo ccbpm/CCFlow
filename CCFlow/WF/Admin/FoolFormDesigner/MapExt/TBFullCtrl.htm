@@ -156,12 +156,51 @@
 			</div>
 		 </td>
 	</tr>
+
 	<tr> 
 		<td colspan="2" style="width:100%;"> 
 			<textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:95%;" > </textarea> 
 		</td>
 	</tr>
 
+
+      <!-- 填充其他数据控件的数据源 -->
+    <tr>
+        <th colspan="4">
+            <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
+            <div id="tabsT" style="color: Gray; display: none">
+                <ul>
+                    <li>该数据源可以为空</li>
+                    <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
+                    <li>数据源必须包含@Key变量，并且当前模式为单选。</li>
+                    <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng FROM Port_Dept WHERE No='@Key'</li>                        
+                </ul>
+            </div>
+        </th>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+        </td>
+    </tr>
+
+    <!-- 数据列名与中文意思对照 -->
+    <tr>
+        <th colspan="2">
+            <a href="javascript:ShowHidden('tab6')">数据列名与中文意思对照</a>
+            <div id="tab6" style="color: Gray; display: none">
+                <ul>
+                    <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.</li>
+                    <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+                </ul>
+            </div>
+        </th>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <input id="TB_Tag3" name="TB_Tag3" style="width: 100%;" />
+        </td>
+    </tr>
 	<tr>
 		<td colspan=2 >
 		

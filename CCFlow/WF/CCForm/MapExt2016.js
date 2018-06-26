@@ -66,25 +66,37 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
             //获得对象.
             var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
             var dataObj = GenerDB(mapExt.Doc, selectVal, mapExt.DBType);
-
-            if (dataObj.length == 0) {
+            if ($.isEmptyObject(dataObj)) {
                 $("#divinfo").hide();
                 return;
             }
 
-            $.each(dataObj, function (idx, item) {
+            var columns = mapExt.Tag3;
+           
+            //普通No、Name展示
+            if (columns == null || columns == "") {
+                $.each(dataObj, function (idx, item) {
 
-                var no = item.No;
-                if (no == undefined)
-                    no = item.NO;
+                    var no = item.No;
+                    if (no == undefined)
+                        no = item.NO;
 
-                var name = item.Name;
-                if (name == undefined)
-                    name = item.NAME;
+                    var name = item.Name;
+                    if (name == undefined)
+                        name = item.NAME;
 
 
-                $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
-            });
+                    $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
+                });
+
+            //datagrid 展示
+
+            } else {
+               
+                showDataGrid(sender, tbid, dataObj, columns, mapExt); 
+
+            }
+            
 
 
             oldValue = selectVal;
@@ -92,6 +104,97 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
         }
     }
 }
+
+function showDataGrid(sender, tbid, dataObj, columns,mapExt) {
+    $("#divinfo").append(" <table id='viewGrid'></table>");
+    //取消DIV的宽度
+    document.getElementById("divinfo").style.width="";
+
+    var searchTableColumns = [{
+         //title: 'Number',//标题  可不加  
+        formatter: function (value, row, index) {  
+            return index+1;  
+        }  
+
+    }];
+            
+    //显示列的中文名称.
+    if (typeof columns == "string") {
+        $.each(columns.split(","), function (i, o) {
+            var exp = o.split("=");
+            var field;
+            var title;
+            if (exp.length == 1) {
+                field = title = exp[0];
+            } else if (exp.length == 2) {
+                field = exp[0];
+                title = exp[1];
+            }
+            if (!isLegalName(field)) {
+                return true;
+            }
+            searchTableColumns.push({
+                field: field,
+                title: title
+
+            });
+        });
+        var options = {
+            striped: true,
+            cache: false,
+            showHeader:true,
+            sortOrder: "asc",
+            strictSearch: true,
+            minimumCountColumns: 2,
+            highlightSelected: true,
+            clickToSelect: true,
+            singleSelect: true,
+            sortable: false,
+            cardView: false,
+            detailView: false,
+            uniqueId: "No",
+            columns: searchTableColumns
+        };
+        options.onClickRow = function (row, element) {
+            $("#divinfo").empty();
+            $("#divinfo").css("display", "none");
+            highlightindex = -1;
+            $("#" + tbid).val(row.No);
+          
+            var dataObj = [row];
+
+            var tag4 = mapExt.Tag4;
+            if (tag4 != null && tag4 != "") {
+                //包含有填充其他数据控件的数据源时
+                dataObj = GenerDB(tag4, JSON.stringify(row), mapExt.DBType);
+            }
+            //填充主表数据源
+            TableFullCtrl(dataObj)
+
+            //填充其他数据源
+            //执行个性化填充下拉框，比如填充ddl下拉框的范围.
+            if(mapExt.Tag!=null && mapExt.Tag!="")
+            FullCtrlDDL(row.No, tbid, mapExt);
+
+            //执行填充从表.
+            if (mapExt.Tag1 != null && mapExt.Tag1 != "")
+            FullDtl(row.No, mapExt.MyPK, mapExt);
+
+        };
+        $('#viewGrid').bootstrapTable(options);
+        $('#viewGrid').bootstrapTable("load", dataObj);
+    }
+   
+  
+}
+
+function isLegalName(name) {
+    if (!name) {
+        return false;
+    }
+    return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+}
+
 
 //填充其他的控件.
 function FullIt(selectVal, tbid, fk_mapExt) {
@@ -630,14 +733,15 @@ function GenerDB(dbSrc, selectVal, dbType) {
 //主表数据的填充.
 function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
 
-    //selectVal = escape(selectVal);
-
     var dataObj = GenerDB(mapExt.Doc, selectVal, mapExt.DBType);
 
-    // alert(dataObj);
+    TableFullCtrl(dataObj);
+}
 
-    if (dataObj.length == 0) {
-        //  alert('系统错误不应该查询不到数据:'+dbSrc);
+function TableFullCtrl(dataObj) {
+
+    if ($.isEmptyObject(dataObj)) {
+         // alert('系统错误不应该查询不到数据:'+dbSrc);
         return;
     }
 
@@ -681,6 +785,8 @@ function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
             var tbs = $('input');
             $.each(tbs, function (i, tb) {
                 var name = $(tb).attr("id");
+                if (name == null || name == undefined)
+                    return false;
                 if (name.toUpperCase().indexOf(key) >= 0) {
                     if (name.indexOf("TB_") == 0)
                         $("#" + name).val(val);
@@ -916,9 +1022,9 @@ function DealSQL(dbSrc, key, kvs) {
         }
     }
 
-    if (dbSrc.indexOf("@") >= 0) {
-        alert('系统配置错误有一些变量没有找到:' + dbSrc);
-    }
+    //if (dbSrc.indexOf("@") >= 0) {
+     //   alert('系统配置错误有一些变量没有找到:' + dbSrc);
+    //}
 
     return dbSrc;
 }

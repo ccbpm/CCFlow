@@ -441,8 +441,8 @@ namespace BP.Sys
             //坐标
             JsonData style = control["style"];
             JsonData vector = style["gradientBounds"];
-            //btn.X = float.Parse( vector[0].ToJson());
-            //btn.Y = float.Parse(vector[1].ToJson());
+            btn.X = float.Parse( vector[0].ToJson());
+            btn.Y = float.Parse(vector[1].ToJson());
             btn.IsEnable = true;
             /*for (int iProperty = 0; iProperty < properties.Count; iProperty++)
             {

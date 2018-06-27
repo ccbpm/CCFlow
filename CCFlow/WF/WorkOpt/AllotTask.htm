@@ -13,18 +13,18 @@
     <script type="text/javascript" language="javascript" >
 
         var gwls = null;
-        $(function () {
+        var workID = GetQueryString("WorkID");
+        var FK_Node = GetQueryString("FK_Node");
 
-            var workID = GetQueryString("WorkID");
-            var nodeID = GetQueryString("NodeID");
+        $(function () {
 
             //查询出来数据.
             gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID);
+            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node);
 
             //有可能是分河流.
             if (gwls.length == 0)
-                gwls.Retrieve("FID", workID, "FK_Node", nodeID);
+                gwls.Retrieve("FID", workID, "FK_Node", FK_Node);
 
             var html = "";
             html += "<ul>";
@@ -86,11 +86,11 @@
 
             //查询出来数据.
             gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID);
+            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node);
 
             //有可能是分河流.
             if (gwls.length == 0)
-                gwls.Retrieve("FID", workID, "FK_Node", nodeID);
+                gwls.Retrieve("FID", workID, "FK_Node", FK_Node);
           
             for (var i = 0; i < gwls.length; i++) {
 

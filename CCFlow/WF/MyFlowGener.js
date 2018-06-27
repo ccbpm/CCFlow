@@ -1347,7 +1347,7 @@ function GenerWorkNode() {
 
             //单表单加载后执行.
             CCFormLoaded();
-           
+
 
             //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
             if (node.FormType == 11) {
@@ -1365,13 +1365,19 @@ function GenerWorkNode() {
                         SetFilesAuth(node.NodeID, node.FK_Flow, flowData.Sys_MapData[0].No);   //位置 CCForm/FrmEnd.js
 
                     }
+
+                   if (frmNode.FrmSln != 1)
+                   //处理下拉框级联等扩展信息
+                   AfterBindEn_DealMapExt(flowData);
                 }
+            } else {
+               //处理下拉框级联等扩展信息
+               AfterBindEn_DealMapExt(flowData);
             }
 
             Common.MaxLengthError();
 
-            //处理下拉框级联等扩展信息
-            AfterBindEn_DealMapExt(flowData);
+
 
             //装载表单数据与修改表单元素风格.
             LoadFrmDataAndChangeEleStyle(flowData);
@@ -1428,7 +1434,7 @@ function GenerWorkNode() {
 
             }
 
-           
+
 
             //给富文本创建编辑器
             if (document.BindEditorMapAttr) {

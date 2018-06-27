@@ -35,8 +35,8 @@
 
             //初始话下拉列表值
             if (node.DeliveryWay == DeliveryWay.ByPreviousNodeFormEmpsField) {
-                if (paras != null && paras != "")
-                    $("#RB_ByPreviousNodeFormEmpsField").val(paras);
+                if (node.DeliveryParas != null && node.DeliveryParas != "")
+                    $("#RB_ByPreviousNodeFormEmpsField").val(node.DeliveryParas);
             }
 
         });

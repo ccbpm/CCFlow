@@ -5597,8 +5597,6 @@
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shCoreEclipse.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeDefault.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeEclipse.css" />
-    <Content Include="WF\SDKComponents\Site.Master" />
-    <Content Include="WF\SDKComponents\ThreadDtl.ascx" />
     <Content Include="WF\RptSearch\Search.htm" />
     <Content Include="WF\SendOverClose.htm" />
     <Content Include="WF\Start.htm" />
@@ -5771,7 +5769,6 @@
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\SubFlow.htm" />
-    <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ThreadDtl.htm" />
     <Content Include="WF\WorkOpt\ToNodes.htm" />
     <Content Include="WF\WorkOpt\TransferCustom.htm" />
@@ -6665,20 +6662,6 @@
     <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\SDKComponents\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\ThreadDtl.ascx.cs">
-      <DependentUpon>ThreadDtl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\ThreadDtl.ascx.designer.cs">
-      <DependentUpon>ThreadDtl.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Setting\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -6746,13 +6729,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ThreadDtl.aspx.cs">
-      <DependentUpon>ThreadDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ThreadDtl.aspx.designer.cs">
-      <DependentUpon>ThreadDtl.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

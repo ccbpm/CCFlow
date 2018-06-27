@@ -10,21 +10,20 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript"   src="../Scripts/config.js" ></script>
     <script type="text/javascript"   src="../Comm/Gener.js" ></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
+
+        var workID = GetQueryString("WorkID");
+        var nodeID = GetQueryString("FK_Node");
 
         var gwls = null;
-        var workID = GetQueryString("WorkID");
-        var FK_Node = GetQueryString("FK_Node");
-
         $(function () {
-
             //查询出来数据.
             gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node);
+            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID);
 
-            //有可能是分河流.
+            //有可能是分合流.
             if (gwls.length == 0)
-                gwls.Retrieve("FID", workID, "FK_Node", FK_Node);
+                gwls.Retrieve("FID", workID, "FK_Node", nodeID);
 
             var html = "";
             html += "<ul>";
@@ -32,9 +31,9 @@
 
                 var gwl = gwls[i];
                 if (gwl.IsEable == 1)
-                    html += "<li><label><input checked='checked' type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
+                    html += "<li style='list-style-type:none;'><label><input checked='checked' type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
                 else
-                    html += "<li><label><input type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
+                    html += "<li style='list-style-type:none;'><label><input type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
             }
 
             html += "</ul>";
@@ -43,41 +42,33 @@
         });
 
         function Save() {
+            //获取所有未选中checkbox
+            var notChecked = $("input:checkbox").not("input:checked");
 
-            for (var i = 0; i < gwls.length; i++) {
-
-                var gwl = gwls[i];
-                var gwl = new Entity("BP.WF.GenerWorkerList", gwl);
-
-                //是否启用?
-                //                var isEnable = false;
-                //                if (gwl.IsEnable == 1)
-                //                    isEnable = true;
-
-                var cbId = "#CB_" + gwl.FK_Emp;
-                $.each($('input:checkbox:checked'), function () {
-                    if ($(this).attr('id') == gwl.FK_Emp) {
-                        gwl.IsEnable = "1";
-                        gwl.Update(); //执行更新.
-                    } else {
-                        gwl.IsEnable = "0";
-                        gwl.Update(); //执行更新.
-                    }
+            /*
+            这里因为wf_GenerWorkerList为多主键(WorkID\FK_Node\FK_Emp),使用一下方法获取对象报错
+            var newgwl = new Entity("BP.WF.GenerWorkerList");
+            newgwl.Retrieve();//报错
+            所有就先获取集合,然后在通过集合的对象进行实例化了,如下
+            */
+            gwls = new Entities("BP.WF.GenerWorkerLists");
+            if (notChecked.size() != 0) {
+                $.each(notChecked, function () {
+                    gwls.Retrieve("WorkID", workID, "FK_Node", nodeID, "FK_Emp", $(this).attr('id'));
+                    var newgwl = new Entity("BP.WF.GenerWorkerList", gwls[0]);
+                    newgwl.IsEnable = "0";
+                    newgwl.Update();
                 });
-                //                var cb = $("#CB_" + gwl.FK_Emp);
-                //                if (cb.checked != isEnable) {
-                //                    gwl.IsEnable = isEnable;
-                //                    gwl.Update(); //执行更新.
-                //                }
             }
-           
+
+
 
             //保存状态与路径.
             var webUser = new WebUser();
 
             var rm = new Entity("BP.WF.RememberMe");
             rm.FK_Emp = webUser.No;
-            rm.FK_Node = FK_Node;
+            rm.FK_Node = nodeID;
             rm.SetPKVal(rm.FK_Node + "_" + rm.FK_Emp);
             rm.MyPK = rm.FK_Node + "_" + rm.FK_Emp;
 
@@ -86,12 +77,13 @@
 
             //查询出来数据.
             gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", workID, "FK_Node", FK_Node);
+            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID);
 
-            //有可能是分河流.
+            //有可能是分合流.
             if (gwls.length == 0)
-                gwls.Retrieve("FID", workID, "FK_Node", FK_Node);
-          
+                gwls.Retrieve("FID", workID, "FK_Node", nodeID);
+
+
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];

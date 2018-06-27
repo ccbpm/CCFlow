@@ -3311,16 +3311,25 @@ namespace BP.WF
             // 产生合流汇总从表数据.
             this.GenerHieLiuHuiZhongDtlData_2013(toNode);
 
+            //设置当前子线程已经通过.
+            ps = new Paras();
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=1  WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND IsPass=0";
+            ps.Add("WorkID", this.WorkID);
+            ps.Add("FID", this.HisWork.FID);
+            DBAccess.RunSQL(ps);
+
             /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
-            string sql1 = "";
-            // "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + this.HisNode.NodeID + " AND FID=" + this.HisWork.FID;
-            // string sql1 = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE  IsPass=0 AND FID=" + this.HisWork.FID;
+            string mysql = "";
 
 #warning 对于多个分合流点可能会有问题。
-            sql1 = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsEnable=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
-            decimal numAll1 = (decimal)DBAccess.RunSQLReturnValInt(sql1);
-            decimal passRate1 = 1 / numAll1 * 100;
-            if (toNode.PassRate <= passRate1)
+            mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsEnable=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
+            decimal numAll = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+
+            mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
+            decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+
+            decimal passRate = numPassed / numAll * 100;
+            if (toNode.PassRate <= passRate)
             {
                 /* 这时已经通过,可以让主线程看到待办. */
                 ps = new Paras();
@@ -3354,12 +3363,7 @@ namespace BP.WF
             ps.Add("WorkID", this.HisWork.FID);
             DBAccess.RunSQL(ps);
 
-            //设置当前子线程已经通过.
-            ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=1  WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND IsPass=0";
-            ps.Add("WorkID", this.WorkID);
-            ps.Add("FID", this.HisWork.FID);
-            DBAccess.RunSQL(ps);
+          
             #endregion 设置父流程状态
 
             this.addMsg("InfoToHeLiu", "@流程已经运行到合流节点[" + toNode.Name + "]。@您的工作已经发送给如下人员[" + toEmpsStr + "]，@您是第一个到达此节点的处理人.");
@@ -6608,7 +6612,8 @@ namespace BP.WF
                 /*如果是子线程*/
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + this.town.HisNode.NodeID);
                 //删除子线程数据.
-                DBAccess.RunSQL("DELETE FROM " + this.town.HisWork.EnMap.PhysicsTable + " WHERE FID=" + this.WorkID);
+                if (BP.DA.DBAccess.IsExitsObject(this.town.HisWork.EnMap.PhysicsTable) == true)
+                    DBAccess.RunSQL("DELETE FROM " + this.town.HisWork.EnMap.PhysicsTable + " WHERE FID=" + this.WorkID);
             }
             #endregion 如果是分流点下同表单发送失败再次发送就出现错误
 

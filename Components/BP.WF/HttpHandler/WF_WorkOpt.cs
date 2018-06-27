@@ -21,6 +21,18 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_WorkOpt : DirectoryPageBase
     {
+
+        /// <summary>
+        /// 删除子线程
+        /// </summary>
+        /// <returns></returns>
+        public string ThreadDtl_DelSubFlow()
+        {
+            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+            return "删除成功";
+
+        }
+
         #region 打印 rtf
         /// <summary>
         /// 初始化
@@ -235,7 +247,6 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion
-
 
         /// <summary>
         /// 页面功能实体

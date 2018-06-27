@@ -32,7 +32,11 @@
     </style>
     <script type="text/javascript">
         var mapExt = null;
-
+        //查询条件集合
+        var condtionsArry = [];
+        //查询条件，按照条件字段长度排序后
+        var condtionFieldsArry = [];
+        
         //初始化页面
         $(function () {
 
@@ -45,14 +49,16 @@
 
             var webUser = new WebUser();
 
-            //设置查询提示.
-            var tip = mapExt.GetPara("SearchTip");
-
             //单选还是多选
             global.selectType = mapExt.GetPara("SelectType");
 
+            //设置查询提示.
+            var tip = mapExt.GetPara("SearchTip");
             $("#TB_Key").attr("placeholder", tip);
 
+            //设置查询条件
+            InitQueryParameters();
+           
             //如果单选
             mapExt.ShowCheckBox = selectType == "0" ? false : true;
 
@@ -79,7 +85,7 @@
             });
 
             global.searchTableColumns = [];
-            
+
             global.searchTableColumns.push({
                 field: "_checkbox",
                 checkbox: true,
@@ -91,7 +97,7 @@
                     }
                 }
             });
-           
+            var columns = mapExt.Tag;
             //显示列的中文名称.
             if (typeof columns == "string") {
                 $.each(columns.split(","), function (i, o) {
@@ -171,11 +177,9 @@
             }
 
             $('#viewGrid').bootstrapTable(options);
-            // search
+
             $("#TB_Key").on("keyup", function () {
-                var keyWord = $(this).val();
-                var gridUrl = replaceAll(mapExt.Tag1, "@Key", keyWord);
-                loadViewGrid(gridUrl);
+                InputKeyWordData();
             });
 
             if (tableUrl.indexOf("@Key") > -1) {
@@ -187,10 +191,8 @@
 
         //查询列表、展示列表
         function loadViewGrid(gridUrl) {
-            var global = window;
-            var columns = mapExt.Tag;
-           
-             $('#viewGrid').bootstrapTable("showColumn", "_checkbox");
+            var global = window;         
+            /* $('#viewGrid').bootstrapTable("showColumn", "_checkbox");
            
             var searchTableColumns = [{
                 field: "_checkbox",
@@ -203,7 +205,7 @@
                         }
                     }
                 }
-            }];
+            }];*/
 
   
 
@@ -235,14 +237,196 @@
             return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
         }
 
-       
+        function InitQueryParameters() {
+            //$Para=Dept#Label=所在班级#ListURL=/DataUser/Handler.ashx?DoType=DtlImpReqAll
+            var condtions = mapExt.Tag1;
+            if (condtions == "")
+                return;
 
+            //组合查询条件数组
+            var tempArry = condtions.split("$");
+            $.each(tempArry, function (i, obj) {
+                CondtionArryPush(obj);
+            });
+
+            //复制查询条件，排序
+            condtionFieldsArry = jQuery.extend(true, [], condtionsArry);
+            //利用js中的sort方法  
+            condtionFieldsArry.sort(function (a, b) {
+                return b.FieldKey.length - a.FieldKey.length;
+            });
+            //生成查询条件控件
+            CreateCondtionCtrls();
+        }
+
+        //添加查询条件到数组
+        function CondtionArryPush(condtion) {
+            if (condtion == "") {
+                return;
+            }
+            var paras = condtion.split("#");
+            if (paras.length != 3) {
+                return;
+            }
+
+            var item = {};
+            var paraKey = "", labelText = "";
+            var ctrType = "Date", ctrValue = "";
+            $.each(paras, function (j, para) {
+                if (para.indexOf("Para=") > -1) {
+                    paraKey = para.replace("Para=", "");
+                }
+                if (para.indexOf("Label=") > -1) {
+                    labelText = para.replace("Label=", "");
+                }
+                if (para.indexOf("ListURL=") > -1) {
+                    ctrValue = para.replace("ListURL=", "");
+                    ctrType = "ListURL";
+                }
+                if (para.indexOf("ListSQL=") > -1) {
+                    ctrValue = para.replace("ListSQL=", "");
+                    ctrType = "ListSQL";
+                }
+                if (para.indexOf("EnumKey=") > -1) {
+                    ctrValue = para.replace("EnumKey=", "");
+                    ctrType = "EnumKey";
+                }
+                if (para.indexOf("DefVal=") > -1) {
+                    ctrValue = para.replace("DefVal=", "");
+                }
+            });
+            item.CtrlType = ctrType;
+            item.FieldKey = paraKey;
+            item.Label = labelText;
+            item.Val = ctrValue;
+            condtionsArry.push(item);
+        }
+
+        //根据条件数组生成查询控件
+        function CreateCondtionCtrls() {
+            //生成查询条件控件
+            var searchPanel = $("#Search_Div");
+            var groupItems = $.grep(condtionsArry, function (condtion) {
+                return condtion.CtrlType == "ListURL" || condtion.CtrlType == "ListSQL" || condtion.CtrlType == "EnumKey";
+            });
+                //CreateGroupPanel(groupItems);
+           
+            //关键字后面的查询条件
+            var noFirstRow = false;
+            $.each(condtionsArry, function (i, condtion) {
+                //第一行条件个数
+                var countRow = 3;
+                //如果不是第一行，条件的个数
+                if (noFirstRow == true) {
+                    countRow = 4;
+                }
+                if (i != 0 && !(i % countRow)) {
+                    searchPanel.append("<br/><br/>");
+                    noFirstRow = true;
+                }
+
+                //排除已创建分组条件
+                var groupField = $("#HD_GroupField").val();
+                if (groupField != "" && condtion.FieldKey == groupField) {
+                    return;
+                }
+
+                var label = $("<label>" + condtion.Label + "</label>");
+                label.addClass("searchpanellabel");
+                searchPanel.append(label);
+                switch (condtion.CtrlType) {
+                    case "ListURL":
+                    case "ListSQL":
+                        var dbTyep = condtion.CtrlType == "ListSQL" ? 0 : 1;
+                        var select = $("<select class='form-control' style='display:inline;width:120px;'></select>");
+                        select.attr("id", condtion.FieldKey);
+                        select.attr("name", condtion.FieldKey);
+                        searchPanel.append(select);
+                        var ifcData = DBAccess.RunDBSrc(condtion.Val, dbTyep);
+                        if (ifcData && ifcData.length > 0) {
+                            var oKeys = [];
+                            for (var key in ifcData[0]) {
+                                oKeys.push(key);
+                            }
+                            GenerBindDDL(condtion.FieldKey, ifcData, oKeys[0], oKeys[1], "");
+                            $("#" + condtion.FieldKey).change(function () {
+                                InputKeyWordData();
+                            });
+                        }
+                        break;
+                    case "EnumKey":
+                        var select = $("<select class='form-control' style='display:inline;width:120px;'></select>");
+                        select.attr("id", condtion.FieldKey);
+                        select.attr("name", condtion.FieldKey);
+                        searchPanel.append(select);
+                        GenerBindEnumKey(condtion.FieldKey, condtion.Val, "");
+                        $("#" + condtion.FieldKey).change(function () {
+                            InputKeyWordData();
+                        });
+                        break;
+                    default:
+                        var defVal = condtion.Val;
+                        defVal = defVal.replace('<br/>', '');
+                        defVal = defVal.replace('@Now', "(new Date())");
+                        defVal = new Date(eval(defVal));
+                        defVal = FormatDate(defVal, "yyyy-MM-dd");
+                        var inputDate = $("<input type='text'class='form-control' style='display:inline;width:120px;'/>");
+                        inputDate.attr("id", condtion.FieldKey);
+                        inputDate.attr("name", condtion.FieldKey);
+                        inputDate.val(defVal);
+                        searchPanel.append(inputDate);
+                        $("#" + condtion.FieldKey).datepicker({
+                            language: "zh-CN",
+                            autoclose: true,
+                            startView: 0,
+                            format: "yyyy-mm-dd",
+                            clearBtn: true,
+                            todayBtn: false,
+                            endDate: new Date()
+                        }).on('changeDate', function (ev) {
+                            InputKeyWordData();
+                        });
+                        return;
+                }
+            });
+           
+        }
+
+        //输入关键字进行查询
+        function InputKeyWordData() {
+            var data = null;
+            var UserNo = GetQueryString("UserNo");
+            var RefPKVal = GetQueryString("RefPKVal");
+            var keyWord = $("#TB_Key").val();
+            var dbSrc = mapExt.Tag2;
+            var reg = new RegExp("@Key", "g");
+            dbSrc = dbSrc.replace(reg, keyWord);
+            $.each(condtionFieldsArry, function (i, obj) {
+                var regC = new RegExp("@" + obj.FieldKey, "g");
+                var value = $("#" + obj.FieldKey).val();
+                if (value == null || value == "null") value = "";
+                dbSrc = dbSrc.replace(regC, value);
+                if (mapExt.DBType == 0) {
+                    if (dbSrc.indexOf("where") == -1)
+                        dbSrc = dbSrc + "Where 1=1";
+                    if (value != "" )
+                        dbSrc = dbSrc + " and " + obj.FieldKey + "=" + value;
+                }
+            });
+            loadViewGrid(dbSrc);
+            //data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+
+            //$("#jsonDataTable").html("");
+            //if (data && data.length > 0) {
+            //    InitTableByData(data);
+           // }
+        }
 
         function addSelectedData(globalSelectedRows, selectedRows) {
             if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
                 return;
             }
-            $.each(selectedRows, function (i, o) {
+          $.each(selectedRows, function(i, o) {
                 var sel = $.grep(globalSelectedRows, function (obj) {
                     return obj.No == o.No;
                 });
@@ -304,17 +488,22 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-9 col-sm-9">
-                        <div class="pull-center search search-margin">
-                            <input class="form-control" type="text" placeholder="" id="TB_Key">
+                    <div class="col-md-9 col-sm-9" style="width:99%">
+                        <div class="pull-center search search-margin" id="Search_Div" style="width:100%">
+                            <label>关键字</label>
+                            <input class="form-control" style="display:inline;width:240px;" type="text" placeholder="" id="TB_Key">
+                             
                         </div>
+                       
+                           
+                        
                     </div>
                 </div>
             </div>
         </div>
         <div class="row row-margin-top">
-            <div class="col-md-4 col-sm-4" id="viewGrid_Panel">
-                <table id="viewGrid"></table>
+            <div class="col-md-4 col-sm-4" id="viewGrid_Panel" style="width:99%">
+                <table id="viewGrid" style></table>
             </div>
         </div>
     </div>

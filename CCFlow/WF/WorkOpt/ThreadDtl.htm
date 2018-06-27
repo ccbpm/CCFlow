@@ -15,6 +15,8 @@
 
     <script type="text/javascript" language="javascript" >
 
+        var node = null; //公共变量.
+
         $(function () {
             //   alert(html);
             $("#Msg").html('在重构过程中...');
@@ -22,19 +24,19 @@
             var nodeID = GetQueryString("FK_Node");
             var workID = GetQueryString("WorkID");
 
-            var node = new Entity("BP.WF.Node", nodeID);
+            node = new Entity("BP.WF.Node", nodeID);
 
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
             gwfs.Retrieve("FID", workID);
 
             var html = "<table>";
+            html+="<caption>子线程信息</caption>";
             html += "<tr>";
             html += "<th>标题</th>";
             html += "<th>停留节点</th>";
             html += "<th>状态</th>";
             html += "<th>处理人</th>";
             html += "<th>发起日期</th>";
-            html += "<th>状态</th>";
             html += "</tr>";
 
             for (var i = 0; i < gwfs.length; i++) {
@@ -42,17 +44,79 @@
                 var gwf = gwfs[i];
 
                 html += "<tr>";
-                html += "<td>" + gwf.Title + "</td>";
-                html += "<td>" + gwf.NodeName + "</td>";
-                html += "<td>" + gwf.WFStateText + "</td>";
-                html += "<td>" + gwf.TodoEmps + "</td>";
-                html += "<td>" + gwf.RDT + "</td>";
+                html += "<th>" + gwf.Title + "</th>";
+                html += "<th>" + gwf.NodeName + "</th>";
+                html += "<th>" + gwf.WFStateText + "</th>";
+                html += "<th>" + gwf.TodoEmps + "</th>";
+                html += "<th>" + gwf.RDT + "</th>";
+                html += "</tr>";
+
+
+                html += "<tr>";
+                html += "<td colspan=5 > " + GenerHtml(gwf) + " </td>";
                 html += "</tr>";
             }
 
             $("#Msg").html(html);
 
         })
+
+        function GenerHtml(gwf) {
+
+            //该子线程下面的 generworkerlist.
+            var gwls = new Entities("BP.WF.GenerWorkerLists");
+            gwls.Retrieve("WorkID", gwf.WorkID, "IsEnable", 1);
+
+            var strs = "<table style='width:100%;'>";
+
+            strs += "<tr>";
+            strs += "<td>序</td>";
+            strs += "<td>节点</td>";
+            strs += "<td>处理人</td>";
+            strs += "<td>名称</td>";
+            strs += "<td>部门</td>";
+            strs += "<td>状态</td>";
+            strs += "<td>应完成日期</td>";
+            strs += "<td>实际完成日期</td>";
+            strs += "<td></td>";
+            strs += "</tr>";
+
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+
+                strs += "<tr>";
+                strs += "<td>" + i + "</td>";
+                strs += "<td>" + gwl.FK_NodeText + "</td>";
+                strs += "<td>" + gwl.FK_Emp + "</td>";
+                strs += "<td>" + gwl.FK_EmpText + "</td>";
+                strs += "<td>" + gwl.FK_DeptT + "</td>";
+
+                if (gwl.IsPass == 1) {
+
+                    strs += "<td>已完成</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>" + gwl.RDT + "</td>";
+
+                    if (node.ThreadKillRole == 1)
+                        strs += "<td><a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../../Img/Btn/Delete.gif' border=0/>终止</a></td>";
+                    else
+                        strs += "<td></td>"
+
+                } else {
+                    strs += "<td>未完成</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td></td>";
+
+                    strs += "<td><a href=\"javascript:WinOpen('FHLFlow.aspx?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "','po9')\">打开</a></td>";
+                }
+                strs += "<tr>";
+            }
+
+            strs += "</table>";
+            return strs;
+
+        }
 
     </script>
 </head>

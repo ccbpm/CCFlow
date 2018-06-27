@@ -1241,7 +1241,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return "../../Admin/FoolFormDesigner/Action.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
+            return "../../Admin/FoolFormDesigner/ActionForDtl.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
         public string HidAttr()
         {

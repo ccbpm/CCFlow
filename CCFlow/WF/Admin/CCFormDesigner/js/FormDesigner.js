@@ -906,17 +906,13 @@ function figure_Template_Label(frmLab) {
     f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
     f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT, frmLab.FontWeight));
     f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, fontColor));
-
-
     //var t2 = new Text(labelText, frmLab.X +  FigureDefaults.radiusSize / 2, frmLab.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     var labelText = frmLab.Text.replace(new RegExp(/@/g), "\n");
     labelText = labelText.replace(new RegExp(/&nbsp;/g), " ");
     var x = (frmLab.FontSize * getXByteLen(labelText)) / 4 + frmLab.X;
-    var y = ((frmLab.FontSize + 5) * getYByteLen(labelText)) / 2 + frmLab.Y;
-
-    var t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
     
-    y = ((frmLab.FontSize + t2.lineSpacing) * getYByteLen(labelText)) / 2 + frmLab.Y;
+    //修改表单设计偏移的问题
+    y = (frmLab.FontSize * getYByteLen(labelText)) / 2 + frmLab.Y;
     t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
     
     t2.style.fillStyle = fontColor//frmLab.FontColor;
@@ -958,9 +954,11 @@ function figure_Template_Btn(frmBtn) {
 
     var x = frmBtn.X;
     var y = frmBtn.Y;
+
     var p = new Path();
     var hShrinker = 12;
     var vShrinker = 15;
+
     var l1 = new Line(new Point(x + hShrinker, y + vShrinker),
         new Point(x + FigureDefaults.segmentSize - hShrinker, y + vShrinker));
 
@@ -1001,17 +999,25 @@ function figure_Template_Btn(frmBtn) {
     p.addPrimitive(c4);
     f.addPrimitive(p);
 
+
     var t2 = new Text(frmBtn.Text, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentShortSize / 2 + FigureDefaults.corner, FigureDefaults.textFont, FigureDefaults.textSize);
+    //修改偏移的问题
+   // x = t2.getNormalWidth() / 2 + frmBtn.X;
+    //y = t2.getNormalHeight() / 2 + frmBtn.Y;
+    //t2 = new Text(frmBtn.Text, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
+
     t2.style.fillStyle = FigureDefaults.textColor;
 
     f.addPrimitive(t2);
+    
+   
 
     f.finalise();
     return f;
 }
 
 //初始化单选按钮
-function figure_Template_Rb(frmRb) {
+function figure_Template_Rb(frmRb ) {
     //需要初始化3个东西  1个TextBox 1个 Label
     var f = new Figure("RadioButton");
     f.CCForm_Shape = "RadioButton";
@@ -1116,7 +1122,14 @@ function figure_Template_HyperLink(frmLin) {
 
     var x = frmLin.X;
     var y = frmLin.Y;
+  
     var t2 = new Text(frmLin.Text, x + FigureDefaults.radiusSize / 2, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    
+    //修改偏移的问题
+    x = t2.getNormalWidth() / 2 + x;
+    y = t2.getNormalHeight() / 2 + y;
+    
+    t2 = new Text(frmLin.Text, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = "#0000ff";
     t2.underlined = true;
 

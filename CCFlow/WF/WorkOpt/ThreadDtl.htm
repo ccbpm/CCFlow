@@ -43,12 +43,12 @@
 
                 var gwf = gwfs[i];
 
-                html += "<tr>";
-                html += "<th>" + gwf.Title + "</th>";
-                html += "<th>" + gwf.NodeName + "</th>";
-                html += "<th>" + gwf.WFStateText + "</th>";
-                html += "<th>" + gwf.TodoEmps + "</th>";
-                html += "<th>" + gwf.RDT + "</th>";
+                html += "<tr class=Sum >";
+                html += "<td>" + gwf.Title + "</td>";
+                html += "<td>" + gwf.NodeName + "</td>";
+                html += "<td>" + gwf.WFStateText + "</td>";
+                html += "<td>" + gwf.TodoEmps + "</td>";
+                html += "<td>" + gwf.RDT + "</td>";
                 html += "</tr>";
 
 
@@ -69,12 +69,11 @@
 
             var strs = "<table style='width:100%;'>";
 
-            strs += "<tr>";
+            strs += "<tr >";
             strs += "<td>序</td>";
             strs += "<td>节点</td>";
             strs += "<td>处理人</td>";
             strs += "<td>名称</td>";
-            strs += "<td>部门</td>";
             strs += "<td>状态</td>";
             strs += "<td>应完成日期</td>";
             strs += "<td>实际完成日期</td>";
@@ -90,7 +89,6 @@
                 strs += "<td>" + gwl.FK_NodeText + "</td>";
                 strs += "<td>" + gwl.FK_Emp + "</td>";
                 strs += "<td>" + gwl.FK_EmpText + "</td>";
-                strs += "<td>" + gwl.FK_DeptT + "</td>";
 
                 if (gwl.IsPass == 1) {
 
@@ -99,23 +97,60 @@
                     strs += "<td>" + gwl.RDT + "</td>";
 
                     if (node.ThreadKillRole == 1)
-                        strs += "<td><a href=\"javascript:DoDelSubFlow('"+gwl.FK_Flow+"','" + gwl.WorkID + "')\"><img src='../../Img/Btn/Delete.gif' border=0/>终止</a></td>";
+                        strs += "<td><a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>终止</a></td>";
                     else
-                        strs += "<td></td>"
+                        strs += "<td>无</td>";
 
                 } else {
+
                     strs += "<td>未完成</td>";
                     strs += "<td>" + gwl.SDT + "</td>";
-                    strs += "<td></td>";
+                    strs += "<td>无</td>";
 
-                    strs += "<td><a href=\"javascript:WinOpen('FHLFlow.aspx?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "','po9')\">打开</a></td>";
+                    strs += "<td><a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">打开表单</a>";
+                    strs += " - <a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >退回</a></td>";
                 }
                 strs += "<tr>";
             }
 
             strs += "</table>";
             return strs;
+        }
 
+        function OpenFrm(workID, fid, flowNo, nodeID) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+
+            handler.AddPara("FromWorkOpt", "1");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FID", fid);
+
+            var data = handler.DoMethodReturnString("Runing_OpenFrm");
+
+            data = data.replace('url@./CCForm', 'url@../CCForm');
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                //alert(data);
+
+                //window.location.href = data;
+                window.open(data);
+                return;
+            }
+
+            alert(data);
         }
 
         //删除子线城.

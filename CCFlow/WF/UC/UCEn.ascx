@@ -1,4 +1,3 @@
-<%@ Register TagPrefix="cc1" Namespace="BP.Web.Controls" Assembly="BP.Web.Controls" %>
 <%@ Control Language="c#" Inherits="CCFlow.WF.UC.UCEn" CodeBehind="UCEn.ascx.cs" %>
 <script language="javascript" type="text/javascript">
     var kvs = null;

@@ -1341,20 +1341,7 @@ function srcProperty() {
     //todo:数据源属性修改后，在树上的结节信息的相应变更逻辑
     addTab(srcNode.id, srcNode.text, url, srcNode.iconCls);
 }
-
-//数据源表属性
-function srcTableProperty() {
-    var srcTableNode = $('#formTree').tree('getSelected');
-    if (!srcTableNode || srcTableNode.attributes.TTYPE != 'SRCTABLE') {
-        $.messager.alert('错误', '请选择数据源表！', 'error');
-        return;
-    }
-
-    var url = '../FoolFormDesigner/Do.htm?DoType=EditSFTable&RefNo=' + srcTableNode.id + '&t=' + Math.random();
-    //OpenEasyUiDialog(url, "euiframeid", srcTableNode.text + ' 属性', 800, 495, 'icon-edit');
-    //todo:数据源表属性修改后，在树上的结节信息的相应变更逻辑
-    addTab(srcTableNode.id, srcTableNode.text, url, srcTableNode.iconCls);
-}
+ 
 
 //数据源表数据查看/编辑
 function srcTableData() {

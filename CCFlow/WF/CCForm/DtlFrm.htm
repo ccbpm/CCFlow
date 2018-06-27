@@ -407,9 +407,10 @@
         }
 
         function closeIt() {
-
+            debugger
             if (typeof ((parent && parent.doCloseDialog) || doCloseDialog) === "function") {
                 ((parent && parent.doCloseDialog) || doCloseDialog)();
+                window.parent.$('#editSubGridDiv').modal('hide');
             } else {
                 window.close();
             }

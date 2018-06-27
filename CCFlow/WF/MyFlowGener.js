@@ -84,7 +84,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
             } else {
                 alert("请手动刷新表单");
             }
-        }, "div_editSubGrid");
+        }, "editSubGridDiv");
     } else {
         window.open(url);
     }

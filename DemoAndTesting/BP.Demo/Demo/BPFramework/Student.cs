@@ -219,10 +219,19 @@ namespace BP.Demo.BPFramework
             get
             {
                 UAC uac = new UAC();
-                uac.IsDelete = true;
-                uac.IsUpdate = true;
-                uac.IsInsert = true;
-                uac.IsView = true;
+                if (BP.Web.WebUser.No == "admin")
+                {
+
+                    uac.IsDelete = true;
+                    uac.IsUpdate = true;
+                    uac.IsInsert = true;
+                    uac.IsView = true;
+                }
+                else
+                {
+                    uac.IsView = true;
+                }
+                
                 return uac;
             }
         }

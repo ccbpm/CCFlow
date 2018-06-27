@@ -34,54 +34,45 @@
             var event = GetQueryString("Event");
             var eventSort = "Node";
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Action_Init&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&EventSort=" + eventSort + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            //事件类型.
+            var eventLists = [
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            { No:"WorkArrive",Name:"工作到达",IsHaveMsg:1,Note:'到达当前的工作的时候.'},
+            { No:"SendWhen",Name:"当节点发送前",IsHaveMsg:0,Note:'发送前事件，可以抛出异常阻止流程向下发送.'},
+            { No:"SendSuccess",Name:"节点发送成功时",IsHaveMsg:1,Note:'成功的事件.'},
+            { No:"SendError",Name:"节点发送失败时",IsHaveMsg:0,Note:'失败后的处理业务.'},
+            { No:"ReturnBefore",Name:"当节点退回前",IsHaveMsg:0,Note:'退回前的业务逻辑，可以抛出异常阻止退回.'},
+            { No:"ReturnAfter",Name:"当节点退回后",IsHaveMsg:1,Note:'退回后的业务逻辑.'},
+            { No:"UndoneBefore",Name:"当节点撤销发送前",IsHaveMsg:0,Note:'可以抛出异常阻止撤销动作.'},
+            { No:"UndoneAfter",Name:"当节点撤销发送后",IsHaveMsg:1,Note:'.'},
+            { No:"WhenReadWork",Name:"工作打开后",IsHaveMsg:0,Note:'打开工作的时候，就是接受人阅读的时候.'}
+            ]
 
-                    //  alert(data);
+            var html = "<div title='sss' style='padding:10px; overflow:auto' data-options=''>";
 
-                    data = JSON.parse(data);
+            html += "<ul class='navlist' >";
+            for (i = 0; i < eventLists.length; i++) {
 
-                    //                    //事件实体类对应. Sys_FrmEvent 表.
-                    //                    var frmEvents = data["FrmEvents"];
+                var eventList = eventLists[i];
+                var msg = "";
+                if (eventList.IsHaveMsg == 1)
+                    msg = "<img src='../../Img/Msg.png' />";
+                //   alert(JSON.stringify(eventList));
+                if (event == eventList.No)
+                    html += "<li title='" + (eventList.Note || "") + "'><a target='_self' href='Action.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&Event=" + eventList.No + "' ><b>" + eventList.Name + msg + "</b></a></li>";
+                else
+                    html += "<li title='" + (eventList.Note || "") + "'><a target='_self' href='Action.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&Event=" + eventList.No + "' >" + eventList.Name + msg + "</a></li>";
+            }
 
-                    //事件类型.
-                    var eventLists = data["EventLists"];
+            html += "</ul>";
+            html += "</div>";
 
-                    var html = "<div title='sss' style='padding:10px; overflow:auto' data-options=''>";
+            var div = document.getElementById("left");
+            div.innerHTML = html;
 
-                    html += "<ul class='navlist' >";
-                    for (i = 0; i < eventLists.length; i++) {
+            //显示内容.
+            ShowDoc();
 
-                        var eventList = eventLists[i];
-                        var msg = "";
-                        if (eventList.IsHaveMsg == 1)
-                            msg = "<img src='../../Img/Msg.png' />";
-                        //   alert(JSON.stringify(eventList));
-                        if (event == eventList.No)
-                            html += "<li title='" + (eventList.Note || "") + "'><a target='_self' href='Action.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&Event=" + eventList.No + "' ><b>" + eventList.CH + msg + "</b></a></li>";
-                        else
-                            html += "<li title='" + (eventList.Note || "") + "'><a target='_self' href='Action.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&Event=" + eventList.No + "' >" + eventList.CH + msg + "</a></li>";
-                    }
-
-                    html += "</ul>";
-                    html += "</div>";
-
-                    var div = document.getElementById("left");
-                    div.innerHTML = html;
-
-                    //显示内容.
-                    ShowDoc();
-                }
-            });
         });
 
         function ShowDoc() {
@@ -99,10 +90,7 @@
 
             var frm = document.getElementById("myFrm");
             frm.src = url;
-
-            //  "ActionDtl.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + fk_event;
         }
-
     </script>
 </head>
 <body class="easyui-layout" >

@@ -15,16 +15,16 @@
   <Item No="SaveBefore"  CH="当表单保存前" EN="When the node before saving"  EventType="Frm"      EventDesc="可以执行一些数据完整性检查。" />
   <Item No="SaveAfter" CH="当表单保存后" EN="When the node saved" EventType="Frm" EventDesc="可以做相应的业务逻辑处理。"/>
 
-  <!-- 节点事件类型 -->
-  <Item No="WorkArrive" CH="工作到达" EN="" EventType="Node" IsHaveMsg="1"  Note="工作发送到当前节点的时候,触发的事件,一般用于设置消息。" />
-  <Item No="SendWhen" CH="当节点发送前" EN="When a node is sent" EventType="Node" IsHaveMsg="0" />
-  <Item No="SendSuccess" CH="节点发送成功时" EN="Node has a successful" EventType="Node"  IsHaveMsg="1" />
-  <Item No="SendError" CH="节点发送失败时" EN="Node fails to send"  EventType="Node" IsHaveMsg="0" />
-  <Item No="ReturnBefore" CH="当节点退回前" EN="When the node before returning" EventType="Node"  IsHaveMsg="0" />
-  <Item No="ReturnAfter" CH="当节点退回后" EN="When the node returned after" EventType="Node" IsHaveMsg="1" />
-  <Item No="UndoneBefore" CH="当节点撤销发送前" EN="When a node before sending cancellation" EventType="Node" IsHaveMsg="0" />
-  <Item No="UndoneAfter" CH="当节点撤销发送后" EN="When the node after sending cancellation" EventType="Node" IsHaveMsg="1" />
-  <Item No="WhenReadWork" CH="工作打开后" EN="工作打开后" EventType="Node" IsHaveMsg="0" />
+  <!-- 节点事件类型(可以删除了.) -->
+  <Item No="WorkArrive" CH="工作到达"  EventType="Node" IsHaveMsg="1"  Note="工作发送到当前节点的时候,触发的事件,一般用于设置消息。" />
+  <Item No="SendWhen" CH="当节点发送前"  EventType="Node" IsHaveMsg="0" />
+  <Item No="SendSuccess" CH="节点发送成功时"  EventType="Node"  IsHaveMsg="1" />
+  <Item No="SendError" CH="节点发送失败时"  EventType="Node" IsHaveMsg="0" />
+  <Item No="ReturnBefore" CH="当节点退回前"  EventType="Node"  IsHaveMsg="0" />
+  <Item No="ReturnAfter" CH="当节点退回后" EventType="Node" IsHaveMsg="1" />
+  <Item No="UndoneBefore" CH="当节点撤销发送前"  EventType="Node" IsHaveMsg="0" />
+  <Item No="UndoneAfter" CH="当节点撤销发送后" EventType="Node" IsHaveMsg="1" />
+  <Item No="WhenReadWork" CH="工作打开后" EventType="Node" IsHaveMsg="0" />
 
 
   <!-- 流程事件类型 -->

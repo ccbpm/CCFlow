@@ -73,6 +73,13 @@ INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('001
 INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0017','团子','123','山东.济南.高新区','888900892','s004@ccflow.org','006',8,1);
 
 
+DELETE FROM Demo_KeMu;
+INSERT INTO Demo_KeMu(No,Name) VALUES('001','语文');
+INSERT INTO Demo_KeMu(No,Name) VALUES('002','数学');
+INSERT INTO Demo_KeMu(No,Name) VALUES('003','英语');
+INSERT INTO Demo_KeMu(No,Name) VALUES('004','体育');
+INSERT INTO Demo_KeMu(No,Name) VALUES('005','信息科学');
+
 
 DELETE FROM Demo_StudentKeMu;
 INSERT INTO Demo_StudentKeMu(FK_Student,FK_KeMu) VALUES('0001','001');

@@ -5,36 +5,26 @@ DELETE FROM Port_Emp;
 DELETE FROM Port_DeptEmpStation;
 DELETE FROM Port_DeptEmp;
 DELETE FROM Port_StationType;
-
--- 职务 ;
-DELETE FROM Port_Duty;
-INSERT INTO Port_Duty (No,Name) VALUES('01','董事长') ;
-INSERT INTO Port_Duty (No,Name) VALUES('02','总经理');
-INSERT INTO Port_Duty (No,Name) VALUES('03','科长');
-INSERT INTO Port_Duty (No,Name) VALUES('04','科员');
-INSERT INTO Port_Duty (No,Name) VALUES('05','分公司总经理');
-INSERT INTO Port_Duty (No,Name) VALUES('20','其他');
-
  
  
 -- Port_Dept ;
 DELETE FROM Port_Dept;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('100','集团总部','0','zhoupeng',0)   ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1001','集团市场部','100','zhanghaicheng',1)  ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1002','集团研发部','100','qifenglin',1)  ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1003','集团服务部','100','zhanghaicheng',1)  ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1004','集团财务部','100','yangyilei',1)  ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1005','集团人力资源部','100','liping',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1060','南方分公司','100','wangwenying',0) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1061',   '市场部','1060','ranqingxin',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1062',    '财务部','1060','randun',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1063',    '销售部','1060','randun',1) ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('100','集团总部','0')   ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1001','集团市场部','100')  ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1002','集团研发部','100')  ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1003','集团服务部','100')  ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1004','集团财务部','100')  ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1005','集团人力资源部','100') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1060','南方分公司','100') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1061',   '市场部','1060') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1062',    '财务部','1060') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1063',    '销售部','1060') ;
 
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1070','北方分公司','100','lining',0) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1071','市场部','1070','lichao',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1072','财务部','1070','linyangyang',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1073','销售部','1070','tianyi',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1099','外来单位','100','Guest',1)  ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1070','北方分公司','100') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1071','市场部','1070') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1072','财务部','1070') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1073','销售部','1070') ;
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1099','外来单位','100')  ;
 
 
 -- Port_StationType ;
@@ -90,30 +80,7 @@ INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('liyan','李言','1
 -- 外来单位人员
 INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('Guest','外来人员','123','1099','0531-82374939','Guest@ccflow.org')  ;
 
-
--- 预制部门与职务的对应.;
-
-DELETE FROM Port_DeptDuty;
-
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('100', '01');
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('100', '02');
-   -- 市场部
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1001','03');  
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1001','04');  
-   -- 研发部
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1002','03');  
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1002','04'); 
-   -- 客服部
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1003','03');  
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1003','04');  
-   -- 财务部
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1004','03');  
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1004','04');  
-   -- 人力资源
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1005','03');  
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1005','04');
-   -- 外来单位
-INSERT INTO Port_DeptDuty (FK_Dept,FK_Duty) VALUES ('1099','20');
+ 
 
 
 --==== 增加部门与岗位对应.;
@@ -143,28 +110,28 @@ INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1099','12');
  
 -- Port_DeptEmp 人员与部门的对应 ;
 DELETE FROM Port_DeptEmp;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('100_zhoupeng','zhoupeng','100','02',10,'zhoupeng') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('100_zhoupeng','zhoupeng','100') ;
 
 -- 市场部 ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1001_zhanghaicheng','zhanghaicheng','1001','03',20,'zhoupeng') ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1001_zhangyifan','zhangyifan','1001','04',20,'zhanghaicheng') ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1001_zhoushengyu','zhoushengyu','1001','04',20,'zhanghaicheng') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1001_zhanghaicheng','zhanghaicheng','1001') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1001_zhangyifan','zhangyifan','1001') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1001_zhoushengyu','zhoushengyu','1001') ;
 
 -- 研发部 ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1002_qifenglin','qifenglin','1002','03',20,'zhoupeng') ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1002_zhoutianjiao','zhoutianjiao','1002','04',20,'qifenglin') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1002_qifenglin','qifenglin','1002') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1002_zhoutianjiao','zhoutianjiao','1002') ;
 
 -- 服务部经理 ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1003_guoxiangbin','guoxiangbin','1003','03',20,'zhoupeng') ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1003_fuhui',            'fuhui','1003','04',20,'guoxiangbin') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1003_guoxiangbin','guoxiangbin','1003') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1003_fuhui',            'fuhui','1003') ;
 
 -- 财务部 ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1004_yangyilei','yangyilei','1004','03',20,'zhoupeng') ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1004_guobaogeng','guobaogeng','1004','04',20,'yangyilei') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1004_yangyilei','yangyilei','1004') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1004_guobaogeng','guobaogeng','1004') ;
 
 -- 人力资源部 ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1005_liping','liping','1005','03',20,'zhoupeng') ;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,FK_Duty,DutyLevel,Leader) VALUES('1005_liyan','liyan','1005','04',20,'liping') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1005_liping','liping','1005') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1005_liyan','liyan','1005') ;
 
 -- Port_DeptEmpStation 人员与岗位的对应 ;
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('100_zhoupeng_01','100','zhoupeng','01')  ;
@@ -182,18 +149,13 @@ INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1002_zh
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1003_guoxiangbin_04','1003','guoxiangbin','04');
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1003_fuhui_09',      '1003','fuhui','09') ; 
 
-
 -- 财务部;
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1004_yangyilei_05','1004','yangyilei','05')   ;
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1004_guobaogeng_10','1004','guobaogeng','10')  ;
 
--- 人和资源部;
+-- 人力资源部;
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1005_liping_06','1005','liping','06')  ;
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1005_liyan_11','1005','liyan','11')  ;
 
 -- 外来单位人员;
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1099_Guest_12','1005','Guest','12') ;
-
- 
-
- 

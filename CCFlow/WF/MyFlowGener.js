@@ -846,7 +846,7 @@ function Send(isHuiQian) {
 
 function execSend(toNodeID) {
 
-    //先设置按钮等不可用
+    //先设置按钮等不可用.
     setToobarDisiable();
 
     $.ajax({
@@ -857,7 +857,6 @@ function execSend(toNodeID) {
         dataType: 'html',
         success: function (data) {
 
-
             if (data.indexOf('err@') == 0) { //发送时发生错误
                 $('#Message').html(data.substring(4, data.length));
                 $('#MessageDiv').modal().show();
@@ -865,20 +864,29 @@ function execSend(toNodeID) {
                 return;
             }
 
+            if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL 
+                var url = data;
+                url = url.replace('TurnUrl@', '');
+                window.location.href = url;
+                return;
+            }
+
+
             if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
 
                 if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
 
                     //求出来 url里面的FK_Node=xxxx 
                     var params = data.split("&");
+
                     for (var i = 0; i < params.length; i++) {
                         if (params[i].indexOf("ToNode") == -1)
                             continue;
-                        else {
-                            toNodeID = params[i].split("=")[1];
-                            break;
-                        }
+
+                        toNodeID = params[i].split("=")[1];
+                        break;
                     }
+
                     //   var toNode = new Entity("BP.WF.Node",toNodeID)
                     initModal("sendAccepter", toNodeID);
                     $('#returnWorkModal').modal().show();
@@ -1601,7 +1609,7 @@ function InitToolBar() {
 
     // 为啥要注释 else MyFlow = "MyFlow.do";
     if (plant == "CCFlow")
-         MyFlow = "MyFlow.ashx";
+        MyFlow = "MyFlow.ashx";
 
     //else
     //MyFlow = "MyFlow.do";
@@ -1713,7 +1721,6 @@ function InitToolBar() {
 
             //            if ($('[name=Delete]').length > 0) {
             //                var onclickFun = $('[name=Delete]').attr('onclick');
-
             //                if (onclickFun != undefined) {
             //                    if (plant == 'CCFlow') {
             //                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));

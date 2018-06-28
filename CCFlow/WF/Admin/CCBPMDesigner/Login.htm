@@ -30,7 +30,7 @@
                 // window.location.href = '../XAP/Designer.htm';
                 // return;
             }
-             
+
             $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录/自动升级做准备.</font>");
 
             document.getElementById("Btn_Login").disabled = 'disabled';
@@ -59,6 +59,13 @@
             }
 
             document.getElementById("Btn_Login").disabled = false;
+            $("body").keydown(function () {
+                if (event.keyCode == 13) {
+                    event.cancelBubble = true;
+                    event.returnValue = false;
+                    Login();
+                }
+            });
 
             $("#Msg").html("<font color=green>" + data + "</font>");
 

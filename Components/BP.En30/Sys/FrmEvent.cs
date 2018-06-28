@@ -225,7 +225,7 @@ namespace BP.Sys
         /// <summary>
         /// 执行类型
         /// </summary>
-        public const string DoType = "DoType";
+        public const string EventDoType = "EventDoType";
         /// <summary>
         /// 执行内容
         /// </summary>
@@ -489,22 +489,22 @@ namespace BP.Sys
         {
             get
             {
-                return (EventDoType)this.GetValIntByKey(FrmEventAttr.DoType);
+                return (EventDoType)this.GetValIntByKey(FrmEventAttr.EventDoType);
             }
             set
             {
-                this.SetValByKey(FrmEventAttr.DoType, (int)value);
+                this.SetValByKey(FrmEventAttr.EventDoType, (int)value);
             }
         }
         public int HisDoTypeInt
         {
             get
             {
-                return this.GetValIntByKey(FrmEventAttr.DoType);
+                return this.GetValIntByKey(FrmEventAttr.EventDoType);
             }
             set
             {
-                this.SetValByKey(FrmEventAttr.DoType, value);
+                this.SetValByKey(FrmEventAttr.EventDoType, value);
             }
         }
         #endregion
@@ -788,7 +788,7 @@ namespace BP.Sys
                 map.AddTBString(FrmEventAttr.FK_MapData, null, "FK_MapData", true, true, 0, 100, 10);
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
-                map.AddTBInt(FrmEventAttr.DoType, 0, "事件类型", true, true);
+                map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件类型", true, true);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
 
                 map.AddTBString(FrmEventAttr.MsgOK, null, "成功执行提示", true, true, 0, 400, 10);
@@ -797,7 +797,6 @@ namespace BP.Sys
                 #region 消息设置. 如下属性放入了节点参数信息了.
                 map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,
                     "@0=不发送@1=按设置的下一步接受人自动发送（默认）@2=由本节点表单系统字段(IsSendEmail,IsSendSMS)来决定@3=由SDK开发者参数(IsSendEmail,IsSendSMS)来决定", true);
-
 
 
                 map.AddBoolean(FrmEventAttr.MailEnable, true, "是否启用邮件发送？(如果启用就要设置邮件模版，支持ccflow表达式。)", true, true, true);

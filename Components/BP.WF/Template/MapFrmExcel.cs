@@ -525,10 +525,7 @@ namespace BP.WF.Template
 		{
 			return "../../Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
 		}
-		public string DoExcelFrm()
-		{
-			return "../../Admin/FoolFormDesigner/MapExt/ExcelFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=ExcelFrm&RefNo=";
-		}
+		 
 		public string DoPageLoadFull()
 		{
 			return "../../Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";

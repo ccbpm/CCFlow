@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20180613;
+        public static int Ver = 20180614;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -143,7 +143,6 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
-
             /*
              * 升级版本记录:
              * 20150330: 优化发起列表的效率, by:zhoupeng.
@@ -172,6 +171,17 @@ namespace BP.WF
             string msg = "";
             try
             {
+                #region 升级事件.
+                if (DBAccess.IsExitsTableCol("Sys_FrmEvent", "DoType") == true)
+                {
+                    BP.Sys.FrmEvent fe = new FrmEvent();
+                    fe.CheckPhysicsTable();
+
+                    DBAccess.RunSQL("UPDATE Sys_FrmEvent SET EventDoType=DoType  ");
+                    DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent   DROP COLUMN	DoType  ");
+                }
+                #endregion
+
                 #region 修复丢失的发起人.
                 Flows fls = new Flows();
                 fls.RetrieveAll();

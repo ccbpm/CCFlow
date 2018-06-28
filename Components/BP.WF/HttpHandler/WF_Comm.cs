@@ -169,9 +169,8 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
 
-
                 //返回数据.
-               // return en.ToJson(false);
+                //return en.ToJson(false);
 
                 return en.Update().ToString(); //返回影响行数.
             }

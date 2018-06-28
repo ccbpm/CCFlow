@@ -789,6 +789,8 @@ namespace BP.Sys
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
                 map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件类型", true, true);
+              //  map.AddTBInt(FrmEventAttr.DoType, 0, "事件类型", true, true);
+
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
 
                 map.AddTBString(FrmEventAttr.MsgOK, null, "成功执行提示", true, true, 0, 400, 10);

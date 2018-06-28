@@ -286,19 +286,7 @@ function DesignMyRptNew() {
 
 	});
 }
-
-//报表设计
-function DesignMyRpt() {
-
-	var flowId = Number(CCBPM_Data_FK_Flow);
-	flowId = String(flowId);
-	url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Rpt.MapRptExts&PKVal=ND" + flowId + "MyRpt&Lang=CH&SID=" + GetQueryString('SID') + "&UserNo=" + GetQueryString('UserNo');
-	if (window.parent) {
-		window.parent.addTab(CCBPM_Data_FK_Flow + "Rpt", "设计报表" + CCBPM_Data_FK_Flow, url);
-	} else {
-		WinOpen(url);
-	}
-}
+ 
 
 //连线右键
 function Line_MenusFuns(item, cId) {

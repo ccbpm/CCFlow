@@ -3,7 +3,7 @@ html,body{height:100%;}
 {
     width: 100%;
     height: 100%;
-    background: rgb(210, 210, 210);
+    background: rgb(252, 252, 252);
 }
 
 .process-step{position: absolute; cursor: move; min-width: 100px; line-height: 28px}

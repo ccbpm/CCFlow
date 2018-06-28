@@ -231,6 +231,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
     }
 
     if (oNode.Type == "Service") {
+
         var params = { action: oNode.ServiceMethod };
 
         if (oNode.MethodParams) {
@@ -248,6 +249,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
         }
 
         ajaxService(params, function (data, nd) {
+
             if (data.indexOf('err@') != -1) {
                 alert(data);
                 return;

@@ -433,6 +433,8 @@
     <Content Include="WF\Admin\CCBPMDesigner\Img\warning.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\welcome.jpg" />
     <Content Include="WF\Admin\CCBPMDesigner\js\browserReady.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\CCBPMDesignerData.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\Left.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\bootstrap\css\bootstrap-ie6.css" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\bootstrap\css\bootstrap-ie6.min%281%29.css" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\bootstrap\css\bootstrap-responsive.css" />

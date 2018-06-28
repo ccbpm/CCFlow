@@ -109,9 +109,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="clientaccesspolicy.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="DataUser\InstancePacketOfData\Template\index.htm" />
     <Content Include="DataUser\InstancePacketOfData\Template\icon.png" />
     <Content Include="DataUser\InstancePacketOfData\Template\ShuiYin.png" />
@@ -250,9 +247,6 @@
       <LastGenOutput>Reference1.cs</LastGenOutput>
     </Content>
     <Content Include="Service References\CloundWS\WS.disco" />
-    <Content Include="crossdomain.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="DataUser\AppCoder\CCFlowWebService.asmx" />
     <Content Include="DataUser\AppCoder\DataInterface.asmx" />
     <Content Include="DataUser\AppCoder\FrmEventHandle.aspx" />
@@ -261,7 +255,6 @@
     <Content Include="DataUser\IndustrialAutomationWorkflowAPI.asmx" />
     <Content Include="DataUser\PortalInterface.asmx" />
     <Content Include="Default.aspx" />
-    <Content Include="Default.htm" />
     <Content Include="Global.asax" />
     <Content Include="SDKFlowDemo\AuthorDemo.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx" />
@@ -6557,11 +6550,6 @@
     <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />

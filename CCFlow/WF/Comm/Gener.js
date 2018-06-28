@@ -334,10 +334,11 @@ function GenerChangeParentValue(data) {
 
 /*为页面的所有字段属性赋值. */
 function GenerFullAllCtrlsVal(data) {
-
+    if (data == null)
+        return;
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
     var json = data;
-    if (data.length == 1)
+    if ($.isArray(data) &&data.length>0)
         json = data[0];
 
     var unSetCtrl = "";
@@ -1641,12 +1642,12 @@ var DBAccess = (function () {
             }
         }
 
-        if (dbSrc.indexOf('@') != -1) {
+        /*if (dbSrc.indexOf('@') != -1) {
             //val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
             var alt = "如果关键字有多个，可以使用.  /myword/g 作为通配符替换。  ";
             alert("数据源参数没有替换" + dbSrc + " \t\n" + alt);
             return;
-        }
+        }*/
 
 
         //执行的SQL

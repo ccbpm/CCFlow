@@ -186,7 +186,7 @@
                 tableUrl = replaceAll(treeUrl, "@Key", "");
             }
 
-            loadViewGrid(tableUrl);
+            InputKeyWordData();
         });
 
         //查询列表、展示列表
@@ -287,6 +287,10 @@
                     ctrValue = para.replace("ListSQL=", "");
                     ctrType = "ListSQL";
                 }
+                if (para.indexOf("ListFuncName=") > -1) {
+                    ctrValue = para.replace("ListFuncName=", "");
+                    ctrType = "ListFuncName";
+                }
                 if (para.indexOf("EnumKey=") > -1) {
                     ctrValue = para.replace("EnumKey=", "");
                     ctrType = "EnumKey";
@@ -337,12 +341,12 @@
                 switch (condtion.CtrlType) {
                     case "ListURL":
                     case "ListSQL":
-                        var dbTyep = condtion.CtrlType == "ListSQL" ? 0 : 1;
+                    case "ListFuncName":
                         var select = $("<select class='form-control' style='display:inline;width:120px;'></select>");
                         select.attr("id", condtion.FieldKey);
                         select.attr("name", condtion.FieldKey);
                         searchPanel.append(select);
-                        var ifcData = DBAccess.RunDBSrc(condtion.Val, dbTyep);
+                        var ifcData = DBAccess.RunDBSrc(condtion.Val, mapeExt.DBType);
                         if (ifcData && ifcData.length > 0) {
                             var oKeys = [];
                             for (var key in ifcData[0]) {
@@ -399,6 +403,7 @@
             var RefPKVal = GetQueryString("RefPKVal");
             var keyWord = $("#TB_Key").val();
             var dbSrc = mapExt.Tag2;
+            dbSrc = dbSrc.replace(/~/g, "'");
             var reg = new RegExp("@Key", "g");
             dbSrc = dbSrc.replace(reg, keyWord);
             $.each(condtionFieldsArry, function (i, obj) {

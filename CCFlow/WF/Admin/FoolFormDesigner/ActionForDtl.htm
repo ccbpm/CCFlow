@@ -3,16 +3,7 @@
 <head>
     <title>从表事件 </title>
     <script type="text/javascript">
-        //删除.
-        function Del(mypk, nodeid) {
-            if (mypk == '') {
-                alert("默认发送不允许删除，您可以修改。");
-                return;
-            }
-            if (window.confirm('您确定要删除吗?') == false)
-                return;
-            window.location.href = 'ActionForDtl.htm?MyPK=' + mypk + '&DoType=Del&FK_Node=' + nodeid;
-        }
+      
     </script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -44,7 +35,6 @@
         //页面启动函数.
         $(function () {
 
-
             //从表事件.
             var ens = new Entities("BP.Sys.FrmEvents");
             ens.Retrieve("FK_MapData", GetQueryString("FK_MapData"));
@@ -55,10 +45,9 @@
 
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
-                newRow += "<td><a href='ActionForDtlEntity.htm?&FK_Event=" + en.FK_Event + "&MyPK=" + en.MyPK + "&FK_Node=" + en.FK_Node + "'>" + en.FK_Event + "</a></td>";
-                newRow += "<td>" + PushWayText(en.FK_Event, en.MailPushWay) + "</td>";
-                newRow += "<td>" + en.MailTitle + "</td>";
-                newRow += "<td>" + PushWayText(en.FK_Event, en.SMSPushWay) + "</td>";
+                newRow += "<td><a href='ActionForDtlEntity.htm?&FK_Event=" + en.FK_Event + "&MyPK=" + en.MyPK + "&FK_MapData="+en.FK_MapData+"&FK_Node=" + en.FK_Node + "'>" + en.FK_Event + "</a></td>";
+                newRow += "<td>" + PushWayText(en.FK_Event, en.EventDoType) + "</td>";
+                newRow += "<td>" + en.DoDoc + "</td>";
                 newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
                 newRow += "</tr>";
@@ -68,17 +57,17 @@
         });
 
 
-        function PushWayText(EventListOfNode, PushWay) {
+        function PushWayText(EventListOfNode, doType) {
 
-            var ret = { "DtlSaveBefore": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"],
-                "DtlSaveEnd": ["不发送", "发送给下一个节点的所有接受人", "向指定的字段发送", "其他节点的处理人"],
-                "DtlItemSaveBefore": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人"],
-                "DtlItemSaveAfter": ["不发送", "撤销工作后通知的节点接受人", "向指定的字段发送", "其他节点的处理人"],
-                "DtlItemDelBefore": ["不发送", "流程结束通知的所有流程的参与人", "向指定的字段发送", "其他节点的处理人"],
-                "DtlItemDelAfter": ["不发送", "流程删除后通知所有流程的参与人", "向指定的字段发送", "其他节点的处理人"]
+            var ret = { "DtlSaveBefore": ["不发送", "发送给当前节点的所有处理人", "从表保存之前", "其他节点的处理人"],
+                "DtlSaveEnd": ["不发送", "发送给下一个节点的所有接受人", "从表保存之后", "其他节点的处理人"],
+                "DtlItemSaveBefore": ["不发送", "发送给被退回的节点处理人", "从表的行保存之前", "其他节点的处理人"],
+                "DtlItemSaveAfter": ["不发送", "撤销工作后通知的节点接受人", "从表的行保存之后", "其他节点的处理人"],
+                "DtlItemDelBefore": ["不发送", "流程结束通知的所有流程的参与人", "从表的行删除之前", "其他节点的处理人"],
+                "DtlItemDelAfter": ["不发送", "流程删除后通知所有流程的参与人", "从表的行删除之后", "其他节点的处理人"]
             };
 
-            return ret[EventListOfNode][PushWay];
+            return ret[EventListOfNode][doType];
         }
 
         function Delete(myPK) {
@@ -96,10 +85,25 @@
             var url = 'ActionForDtlEntity.htm?FK_Node=' + GetQueryString('FK_Node');
             url += '&FK_Flow=' + GetQueryString('FK_Flow');
             url += '&FK_Event=' + eventType;
+            url += '&FK_MapData=' + GetQueryString('FK_MapData');
             url += '&tk=' + Math.random();
 
             window.location.href = url;
         }
+
+          //删除.
+        function Del(mypk) {
+         
+            if (window.confirm('您确定要删除吗?') == false)
+                return;
+
+            var eventEn = new Entity("BP.Sys.FrmEvent",mypk);
+            eventEn.SetPKVal(mypk);
+            eventEn.Delete();
+
+            window.location.href = window.location.href;
+        }
+
     </script>
  
     
@@ -119,7 +123,7 @@
                 <th> 序 </th>
                 <th> 标记 </th>
                 <th>事件名称 </th>
-                <th> 执行类型 </th>
+                <!--<th> 执行类型 </th>-->
                 <th> 内容 </th>
                 <th>操作 </th>
             </tr>

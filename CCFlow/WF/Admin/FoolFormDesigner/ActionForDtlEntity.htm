@@ -9,15 +9,6 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <base target="_self" />
     <script type="text/javascript">
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
-        function WinOpen(url, name) {
-            window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
-            //window.open(url, 'xx');
-        }
         /*隐藏与显示.*/
         function ShowHidden(ctrlID) {
 
@@ -39,274 +30,120 @@
 
         //初始化数据.
         function InitPage() {
+
+            var fk_eventType = GetQueryString("FK_Event");
+            var fk_MapData = GetQueryString("FK_MapData");
+
             // 设置标签
-            $("#eventtype").html(GetQueryString("FK_Event"));
-            $("label[for='RB_Email_1']").html(_GetText(GetQueryString("FK_Event")));
-            $("label[for='RB_SMS_1']").html(_GetText(GetQueryString("FK_Event")));
+            $("#Title").html(fk_eventType);
 
-            //初始化 01 02 03
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("PushMsgEntity_Init");
+            //组织事件的主键.
+            var mypk = fk_MapData + "_" + fk_eventType;
 
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
+            var eventEn = new Entity("BP.Sys.FrmEvent");
+            eventEn.SetPKVal(mypk);
+            eventEn.RetrieveFromDBSources();
 
-            data = JSON.parse(data);
-            var frmfields = data.FrmFields;
-            var nodes = data.Nodes;
-            var en = data.PushMsgEntity[0];
+            GenerFullAllCtrlsVal(eventEn); //给实体赋值.
 
-            //01.填充下拉
-            for (var i = 0, len = frmfields.length; i < len; i++) {
-                var f = frmfields[i];
-                var oVal = f.KeyOfEn;
-                var oText = f.KeyOfEn + "  ; " + f.Name;
-                $("#DDL_SMS_Fields").append("<option value='" + oVal + "' >" + oText + "</option>");
-                $("#DDL_Email_Fields").append("<option value='" + oVal + "' >" + oText + "</option>");
-            }
-
-            //02.节点列表
-            for (i = 0, len = nodes.length; i < len; i++) {
-                var n = nodes[i];
-                $("#SMS_Nodes").append("<input id='CB_SMS_" + n.NodeID + "' type='checkbox' name='CB_SMS_" + n.NodeID + "' /><label>" + n.Name + "</label>");
-                $("#Email_Nodes").append("<input id='CB_Email_" + n.NodeID + "' type='checkbox' name='CB_Email_" + n.NodeID + "' /><label>" + n.Name + "</label>");
-            }
-
-            //03.实体初始化 （如果有）
-            if (en.MyPK != "") {
-                $("input:radio[name='RB_SMS']").eq(en.SMSPushWay).attr("checked", true);
-                $("input:radio[name='RB_Email']").eq(en.MailPushWay).attr("checked", true);
-                $("#DDL_SMS_Fields").val(en.SMSField);
-                $("#DDL_Email_Fields").val(en.MailAddress);
-                $("#TB_SMS").val(en.SMSDoc);
-                $("#TB_Email_Title").val(en.MailTitle);
-                $("#TB_Email_Doc").val(en.MailDoc);
-                var smsnodes = en.SMSNodes;
-                var mailnodes = en.MailNodes;
-                if (smsnodes != "") {
-                    var ns = smsnodes.split(",");
-                    for (i = 0, len = ns.length; i < len; i++) {
-                        if (ns[i] != "") {
-                            document.getElementById("CB_SMS_" + ns[i]).checked = true;
-                        }
-                    }
-                }
-                if (mailnodes != "") {
-                    var ns = mailnodes.split(",");
-                    for (i = 0, len = ns.length; i < len; i++) {
-                        if (ns[i] != "") {
-                            document.getElementById("CB_Email_" + ns[i]).checked = true;
-                        }
-                    }
-                }
-            }
-            else {
-                $("#DDL_SMS_Fields option:first").attr("selected", "selected");
-                $("#DDL_Email_Fields option:first").attr("selected", "selected");
-            }
         }
 
-        //页面初始化调用
-        function _GetText(EventListOfNode) {
+        //删除.
+        function Delete() {
 
-            var ret = { "WorkArrive": "发送给当前节点的所有处理人",
-                "SendSuccess": "发送给下一个节点的所有接受人",
-                "ReturnAfter": "发送给被退回的节点处理人",
-                "UndoneAfter": "撤销工作后通知的节点接受人",
-                "FlowOverAfter": "流程结束通知的所有流程的参与人",
-                "AfterFlowDel": "流程删除后通知所有流程的参与人"
-            };
-            return ret[EventListOfNode];
+            if (confirm('您确定要删除吗？') == true)
+                return;
 
+            var fk_eventType = GetQueryString("FK_Event");
+            var fk_MapData = GetQueryString("FK_MapData");
+             
+
+            //组织事件的主键.
+            var mypk = fk_MapData + "_" + fk_eventType;
+
+            var eventEn = new Entity("BP.Sys.FrmEvent");
+            eventEn.SetPKVal(mypk);
+            eventEn.RetrieveFromDBSources();
+            eventEn.Delete();
+
+            Back();
         }
 
         function Save() {
 
-            //初始化 01 02 03
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            handler.AddUrlData();
-            handler.AddFormData();
+            var fk_eventType = GetQueryString("FK_Event");
+            var fk_MapData = GetQueryString("FK_MapData");
 
-            var data = handler.DoMethodReturnString("PushMsg_Save");
-            if (data.indexOf('err@') >= 0) {
-                alert(data);
-                return;
-            }
+            //组织事件的主键.
+            var mypk = fk_MapData + "_" + fk_eventType;
 
-            alert(data);
+            var eventEn = new Entity("BP.Sys.FrmEvent");
+            eventEn.SetPKVal(mypk);
+
+            var i = eventEn.RetrieveFromDBSources();
+
+            eventEn.FK_Event = fk_eventType;
+            eventEn.FK_MapData = fk_MapData;
+
+            eventEn.EventDoType = $("#DDL_EventDoType").val();
+            eventEn.DoDoc = $("#TB_DoDoc").val();
+
+            if (i == 0)
+                eventEn.Insert(); //保存.
+            else
+                eventEn.Update(); //保存.
+
             Back();
         }
 
-
         function Back() {
-
             var url = '';
-            /* if (window.confirm('您想使用新版本的设置吗？') == true)
-            url = 'ActionForDtl.aspx?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
-            else */
-            url = 'ActionForDtl.htm?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
-
+            url = 'ActionForDtl.htm?FK_MapData=' + GetQueryString("FK_MapData") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
             window.location.href = url;
         }
     </script>
 </head>
-<body onkeypress="Esc();" style="font-size: smaller">
+<body >
     <form id="cc">
-    <div>
-        <table style="width: 100%">
-            <caption>
-                <div style="float: left">
-                    <span id="eventtype"></span> - 消息实体</div>
-                <div style="float: right">
-                    <a href="http://ccbpm.mydoc.io" target="_blank">帮助</a>
-                </span>
-            </caption>
-            <tr>
-                <td>
-                    <fieldset>
-                        <legend>启用短信设置</legend>
+       
                         <table style="width: 100%;">
+                        <caption > <div id='Title' ></div> </caption>
                             <tr>
-                                <td colspan="2">
-                                    <input id="RB_SMS_0" type="radio" name="RB_SMS" value="0"
-                                        checked="checked" /><label for="RB_SMS_0">不发送</label>
+                                <td >事件类型
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <input id="RB_SMS_1" type="radio" name="RB_SMS" value="1" /><label
-                                        for="RB_SMS_1"></label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 200px;">
-                                    <input id="RB_SMS_2" type="radio" name="RB_SMS" value="2" /><label
-                                        for="RB_SMS_2">表单上的字段作为接受对象</label>
-                                </td>
-                                <td>
-                                    <select name="DDL_SMS_Fields" id="DDL_SMS_Fields" class="frmfields">
+                                <td >
+                                <select name="DDL_EventDoType" id="DDL_EventDoType" class="frmfields">
+
+                                <option selected="selected" value="0">禁用</option>
+	<option value="1">执行存储过程</option>
+	<option value="2">执行SQL语句</option>
+	<option value="3">执行URL</option>
+	<option value="4">WebServices(未完成)</option>
+	<option value="5">执行ddl文件的类与方法</option>
+	<option value="6">EventBase类</option>
+	<option value="7">业务单元</option>
+
                                     </select>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <input id="RB_SMS_3" type="radio" name="RB_SMS" value="3" /><label for="RB_SMS_3">其他节点的处理人</label>
-                                </td>
-                                <td id="SMS_Nodes">
-                                    
+                                <td colspan="2">
+                                   要执行的内容
                                 </td>
                             </tr>
+
                             <tr>
-                                <td colspan="2">
-                                    <fieldset style="border: 0px;">
-                                        <legend><a href="javascript:ShowHidden('sms')">短信发送内容模版:</a></legend>
-                                        <div id="sms" style="display: none; color: Gray">
-                                            <ul>
-                                                <li>cc会根据不同的事件设置不同的信息模版。</li>
-                                                <li>这些模版都是标准的提示，如果您要需要个性化的提示请修改该模版。</li>
-                                                <li>该参数支持cc表达式。</li>
-                                                <li>您可以使用@符号来编写您所需要的内容。</li>
-                                                <li>对于信息提示有两个系统参数分别是{Title}流程标题， {URL} 打开流程的连接。</li>
-                                                <li>cc在生成消息的时候会根据模版把信息替换下来，发送给用户。</li>
-                                                <li>最新格式的cc字段表达式为: <font color="red">@+字段名+分号</font> 比如 @QingJiaLeiXing; </li>
-                                            </ul>
-                                        </div>
-                                    </fieldset>
-                                    <textarea name="TB_SMS" rows="3" cols="20" id="TB_SMS"
-                                        style="width: 95%;">
-有新工作{{Title}}需要您处理, 发送人:@WebUser.No, @WebUser.Name,打开{Url} .</textarea>
+                                <td colspan=2>
+     <textarea name="TB_DoDoc" rows="12" cols="20" id="TB_DoDoc"  style="width: 100%;">
+	 </textarea>
+
                                 </td>
                             </tr>
                         </table>
-                    </fieldset>
-                    <!--------   邮件提醒.   -------------------------->
-                    <fieldset>
-                        <legend>启用邮件提醒</legend>
-                        <table style="width: 100%;">
-                            <tr>
-                                <td colspan="2">
-                                    <input id="RB_Email_0" type="radio" name="RB_Email"
-                                        value="0" checked="checked" /><label for="RB_Email_0">不发送</label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <input id="RB_Email_1" type="radio" name="RB_Email"
-                                        value="1" /><label for="RB_Email_1"></label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input id="RB_Email_2" type="radio" name="RB_Email"
-                                        value="2" /><label for="RB_Email_2">表单上的字段作为邮件</label>
-                                </td>
-                                <td>
-                                    选择一个字段:<select name="DDL_Email_Fields" id="DDL_Email_Fields" class="frmfields">
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input id="RB_Email_3" type="radio" name="RB_Email"
-                                        value="3" /><label for="RB_Email_3">其他节点的处理人</label>
-                                </td>
-                                <td id="Email_Nodes">
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 200px;">
-                                    <fieldset style="border: 0px;">
-                                        <legend><a href="javascript:ShowHidden('titeemail')">邮件标题模版:</a></legend>
-                                        <div id="titeemail" style="display: none; color: Gray">
-                                            <ul>
-                                                <li>该参数支持cc表达式。</li>
-                                                <li>您可以使用@符号来编写您所需要的内容。</li>
-                                                <li>最新格式的cc字段表达式为:<font color="red"> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
-                                            </ul>
-                                        </div>
-                                    </fieldset>
-                                </td>
-                                <td>
-                                    <input name="TB_Email_Title" type="text" value="新工作{{Title}},发送人@WebUser.No,@WebUser.Name"
-                                        id="TB_Email_Title" style="width: 500px;" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <fieldset style="border: 0px;">
-                                        <legend><a href="javascript:ShowHidden('st2ate')">邮件内容模版:</a></legend>
-                                        <div id="st2ate" style="display: none; color: Gray">
-                                            <ul>
-                                                <li>该参数支持cc表达式。</li>
-                                                <li>您可以使用@符号来编写您所需要的内容。</li>
-                                                <li>最新格式的cc字段表达式为:<font color="red"> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
-                                            </ul>
-                                        </div>
-                                    </fieldset>
-                                </td>
-                                <td>
-                                    <textarea name="TB_Email_Doc" rows="3" cols="20" id="TB_Email_Doc"
-                                        style="width: 500px;">
-	
-您好:	
-    有新工作{{Title}}需要您处理, 点击这里打开工作报告{Url} .	
-致! 	
-    @WebUser.No, @WebUser.Name	
-    @RDT</textarea>
-                                </td>
-                            </tr>
-                        </table>
-                    </fieldset>
                     <input type="button" name="Btn_Save" value="保存" id="Btn_Save" onclick="Save();"/>
+                    <input type="button" name="Btn_Delete" value="删除" id="Btn_Delete" onclick="Delete();"/>
                     <input type="button" name="Btn_Back" value="返回" id="Btn_Back" onclick="Back();"/>
-                </td>
-            </tr>
-        </table>
-    </div>
+
     </form>
 </body>
 </html>

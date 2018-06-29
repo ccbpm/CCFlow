@@ -18,7 +18,6 @@ namespace BP.WF.Port.SubInc
         /// 组织编号
         /// </summary>
         public const string OrgNo = "OrgNo";
-
     }
 	/// <summary>
 	/// 岗位

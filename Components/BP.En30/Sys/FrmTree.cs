@@ -21,6 +21,10 @@ namespace BP.Sys
         /// 是否是目录
         /// </summary>
         public const string IsDir = "IsDir";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     ///  独立表单树
@@ -59,15 +63,15 @@ namespace BP.Sys
         /// <summary>
         /// 父节点编号
         /// </summary>
-        public string ParentNo
+        public string OrgNo
         {
             get
             {
-                return this.GetValStringByKey(FrmTreeAttr.ParentNo);
+                return this.GetValStringByKey(FrmTreeAttr.OrgNo);
             }
             set
             {
-                this.SetValByKey(FrmTreeAttr.ParentNo, value);
+                this.SetValByKey(FrmTreeAttr.OrgNo, value);
             }
         }
         #endregion 属性.
@@ -107,6 +111,7 @@ namespace BP.Sys
                 map.AddTBStringPK(FrmTreeAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(FrmTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(FrmTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
+                map.AddTBString(FrmTreeAttr.OrgNo, null, "组织编号", false, false, 0, 100, 30);
 
                 map.AddTBInt(FrmTreeAttr.IsDir, 0, "是否是目录?", false, false);
                 map.AddTBInt(FrmTreeAttr.Idx, 0, "Idx", false, false);

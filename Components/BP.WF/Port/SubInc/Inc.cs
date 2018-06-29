@@ -82,16 +82,31 @@ namespace BP.WF.Port
                 map.Java_SetDepositaryOfMap( Depositary.Application);    // Map 的存放位置.
 
                 map.AdjunctType = AdjunctType.None;
+                map.EnType = EnType.View; //独立组织是一个视图.
 
                 map.AddTBStringPK(IncAttr.No, null, "编号", true, false, 1, 30, 40);
-                map.AddTBString(IncAttr.Name, null,"名称", true, false, 0, 60, 200);
                 map.AddTBString(IncAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
+                map.AddTBString(IncAttr.Name, null,"名称", true, false, 0, 60, 200,true);
+
+                RefMethod rm = new RefMethod();
+                rm.Title = "设置二级管理员";
+                rm.Warning = "设置为子公司后，系统就会在流程树上分配一个目录节点.";
+                rm.ClassMethodName = this.ToString() + ".SetSubInc";
+                rm.HisAttrs.AddTBString("No", null, "子公司管理员编号", true, false, 0, 100, 100);
+                map.AddRefMethod(rm);
                 
                 this._enMap = map;
                 return this._enMap;
             }
 		}
 		#endregion
+
+        public string SetSubInc(string userNo)
+        {
+            BP.WF.Port.SubInc.Dept dept = new WF.Port.SubInc.Dept(this.No);
+            return dept.SetSubInc(userNo);
+        }
+
 	}
 	/// <summary>
 	///独立组织集合

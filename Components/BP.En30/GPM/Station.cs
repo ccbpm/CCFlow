@@ -76,7 +76,9 @@ namespace BP.GPM
                 map.Java_SetEnType(EnType.Admin);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetDepositaryOfEntity( Depositary.Application);
+
                 map.Java_SetCodeStruct("4");
+                map.IsAutoGenerNo = true;
 
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);

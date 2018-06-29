@@ -106,6 +106,10 @@ namespace BP.WF.Port.SubInc
             fs.No = "Inc" + this.No;
             if (fs.RetrieveFromDBSources() != 0)
             {
+                fs.OrgNo = this.No;
+                fs.Update();
+
+
                 //AdminEmp ae = new AdminEmp();
                 //int i = ae.Retrieve(AdminEmpAttr.RootOfFlow, "Inc" + this.No);
                 //if (i == 0)
@@ -136,7 +140,6 @@ namespace BP.WF.Port.SubInc
             ad.UseSta = 1;
             ad.Update();
 
-
             //设置流程树权限.
             fs.Name = this.Name;
             fs.ParentNo = "00";
@@ -151,7 +154,7 @@ namespace BP.WF.Port.SubInc
             {
                 ft.Name = this.Name;
                 ft.ParentNo = "1";
-                // ft.OrgNo = this.No;
+                 ft.OrgNo = this.No;
                 ft.Idx = 999;
                 ft.Insert();
             }
@@ -159,12 +162,12 @@ namespace BP.WF.Port.SubInc
             {
                 ft.Name = this.Name;
                 ft.ParentNo = "1";
-                //  ft.OrgNo = this.No;
+                 ft.OrgNo = this.No;
                 ft.Idx = 999;
                 ft.Update();
             }
 
-            return "设置成功,["+ad.No+","+ad.Name+"]重新登录就可以看到.";
+            return "设置成功,[" + ad.No + "," + ad.Name + "]重新登录就可以看到.";
         }
 	}
 	/// <summary>

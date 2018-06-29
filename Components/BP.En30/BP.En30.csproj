@@ -224,6 +224,9 @@
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
     <Compile Include="OverrideFile.cs" />
+    <Compile Include="Port\Current.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Pub\ConfigEns.cs" />
     <Compile Include="Pub\Day.cs" />
     <Compile Include="References\LitJSON\IJsonWrapper.cs" />
@@ -401,7 +404,6 @@
     <Compile Include="Pub\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\Current.cs" />
     <Compile Include="Web\GuestUser.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1563,64 +1563,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 发送后转向处理规则
-        public string TurnToDeal_Init()
-        {
-
-            BP.WF.Node nd = new BP.WF.Node();
-            nd.NodeID = this.FK_Node;
-            nd.RetrieveFromDBSources();
-
-            Hashtable ht = new Hashtable();
-            ht.Add(NodeAttr.TurnToDeal, (int)nd.HisTurnToDeal);
-            ht.Add(NodeAttr.TurnToDealDoc, nd.TurnToDealDoc);
-
-            return BP.Tools.Json.ToJsonEntityModel(ht);
-        }
-        #endregion
-
-        #region 发送后转向处理规则Save
-        /// <summary>
-        /// 前置导航save
-        /// </summary>
-        /// <returns></returns>
-        public string TurnToDeal_Save()
-        {
-            try
-            {
-                int nodeID = int.Parse(this.FK_Node.ToString());
-                BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
-                BP.WF.Node nd = new BP.WF.Node(nodeID);
-
-                int val = this.GetRequestValInt("TurnToDeal");
-
-                //遍历页面radiobutton
-                if (0 == val)
-                {
-                    nd.HisTurnToDeal = BP.WF.TurnToDeal.CCFlowMsg;
-                }
-                else if (1 == val)
-                {
-                    nd.HisTurnToDeal = BP.WF.TurnToDeal.SpecMsg;
-                    nd.TurnToDealDoc = this.GetRequestVal("TB_SpecMsg");
-                }
-                else
-                {
-                    nd.HisTurnToDeal = BP.WF.TurnToDeal.SpecUrl;
-                    nd.TurnToDealDoc = this.GetRequestVal("TB_SpecURL");
-                }
-                //执行保存操作
-                nd.Update();
-
-                return "保存成功";
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-        #endregion
-
         #region 特别控件特别用户权限
         public string SepcFiledsSepcUsers_Init()
         {
@@ -1657,7 +1599,6 @@ namespace BP.WF.HttpHandler
         #region 批量发起规则设置
         public string BatchStartFields_Init()
         {
-
             int nodeID = int.Parse(this.FK_Node.ToString());
             //获取节点字段集合
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
@@ -1680,7 +1621,6 @@ namespace BP.WF.HttpHandler
         #region 批量发起规则设置save
         public string BatchStartFields_Save()
         {
-
             int nodeID = int.Parse(this.FK_Node.ToString());
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
             BP.WF.Node nd = new BP.WF.Node(nodeID);
@@ -1716,13 +1656,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 发送阻塞模式
-        public string BlockModel_Init()
-        {
-            BP.WF.Node nd = new BP.WF.Node();
-            nd.NodeID = this.FK_Node;
-            nd.RetrieveFromDBSources();
-            return nd.ToJson();
-        }
         public string BlockModel_Save()
         {
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
@@ -1765,7 +1698,6 @@ namespace BP.WF.HttpHandler
         #region 可以撤销的节点
         public string CanCancelNodes_Init()
         {
-
             BP.WF.Node mynd = new BP.WF.Node();
             mynd.NodeID = this.FK_Node;
             mynd.RetrieveFromDBSources();
@@ -1806,7 +1738,6 @@ namespace BP.WF.HttpHandler
             return "设置成功.";
         }
         #endregion
-
 
         #region 可以退回的节点
         public string CanReturnNodes_Init()

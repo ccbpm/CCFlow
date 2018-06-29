@@ -1507,7 +1507,7 @@ namespace BP.WF.HttpHandler
                             myurl += "&PWorkID=" + this.WorkID;
 
                         myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
-                        return "url@" + myurl;
+                        return "TurnUrl@" + myurl;
                     case TurnToDeal.TurnToByCond:
                         //TurnTos tts = new TurnTos(this.FK_Flow);
                         //if (tts.Count == 0)

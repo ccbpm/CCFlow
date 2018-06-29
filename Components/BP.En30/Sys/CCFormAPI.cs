@@ -243,6 +243,11 @@ namespace BP.Sys
                     attr.LGType = FieldTypeS.Normal;
                     break;
             }
+
+            //frmID设置字段所属的分组
+            GroupField groupField = new GroupField();
+            groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
+            attr.GroupID = groupField.OID;
             attr.Save();
 
             //如果是普通的字段, 这个属于外部数据类型,或者webservices类型.
@@ -319,6 +324,11 @@ namespace BP.Sys
                     rb.Save();
                 }
             }
+            //frmID设置字段所属的分组
+            GroupField groupField = new GroupField();
+            groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
+            ma.GroupID = groupField.OID;
+
             ma.Save();
         }
         /// <summary>
@@ -344,6 +354,12 @@ namespace BP.Sys
             ma.MyDataType = mydataType;
             ma.X = x;
             ma.Y = y;
+
+            //frmID设置字段所属的分组
+            GroupField groupField = new GroupField();
+            groupField.Retrieve(GroupFieldAttr.FrmID, frmID, GroupFieldAttr.CtrlType, "");
+            ma.GroupID = groupField.OID;
+
             ma.Insert();
         }
         public static void NewEnumField(string fk_mapdata, string field, string fieldDesc, string enumKey, UIContralType ctrlType,
@@ -364,6 +380,12 @@ namespace BP.Sys
             ma.LGType = FieldTypeS.Enum;
             ma.UIContralType = ctrlType;
             ma.UIBindKey = enumKey;
+
+            //frmID设置字段所属的分组
+            GroupField groupField = new GroupField();
+            groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
+            ma.GroupID = groupField.OID;
+
             ma.Insert();
 
             if (ma.UIContralType != UIContralType.RadioBtn)

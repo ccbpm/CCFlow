@@ -455,7 +455,7 @@
                 }
                 //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
                 var backHtml = "";
-                if (trdtl[0].tdDtl) {
+                if (trdtl[0].tdDtl=="1") {
                     backHtml = "<tr><td colspan=6>";
                     backHtml += "<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
 

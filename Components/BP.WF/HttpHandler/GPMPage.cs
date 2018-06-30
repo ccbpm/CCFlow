@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -19,6 +20,27 @@ namespace BP.WF.HttpHandler
     public class GPMPage : DirectoryPageBase
     {
         #region 签名.
+        /// <summary>
+        /// 图片签名初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Siganture_Init()
+        {
+            if (BP.Web.WebUser.NoOfRel == null)
+                return "err@登陆信息丢失";
+            Hashtable ht = new Hashtable();
+            ht.Add("No", BP.Web.WebUser.No);
+            ht.Add("Name",BP.Web.WebUser.Name);
+            ht.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
+            ht.Add("FK_DeptName", BP.Web.WebUser.FK_DeptName);
+            return BP.Tools.Json.ToJson(ht);
+        }
+
+        /// <summary>
+        /// 签名保存
+        /// </summary>
+        /// <returns></returns>
+
         public string Siganture_Save()
         {
             HttpPostedFile f = context.Request.Files[0];

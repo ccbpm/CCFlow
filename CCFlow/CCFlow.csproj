@@ -752,10 +752,8 @@
     <Content Include="WF\Comm\Sys\SystemClassField.htm" />
     <Content Include="WF\Comm\Tree.htm" />
     <Content Include="WF\Comm\TreeV2.htm" />
-    <Content Include="WF\Comm\UC\RptSingle.ascx" />
     <Content Include="WF\Comm\UC\ToolBar.ascx" />
-    <Content Include="WF\Comm\UC\UCEn.ascx" />
-    <Content Include="WF\Comm\UC\UCGraphics.ascx" />
+    <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\emotion.css" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\emotion.js" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\images\0.gif" />
@@ -831,14 +829,12 @@
     <Content Include="WF\Comm\umeditor1.2.3-utf8\umeditor.min.js" />
     <Content Include="WF\Data\FlowFields.txt" />
     <Content Include="WF\Data\ImpTableField.txt" />
-    <Content Include="WF\Data\Install\DemoData.xml" />
     <Content Include="WF\Data\Install\Informix.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitPublicData.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitView_Ora.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitView_SQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
-    <Content Include="WF\Data\Install\V_KM_DocTree.sql" />
     <Content Include="WF\Data\SysFields.txt" />
     <Content Include="WF\Data\Sys\FieldKeys.txt" />
     <Content Include="WF\Data\Templete\SysFields.txt" />
@@ -2687,8 +2683,6 @@
     <Content Include="WF\Comm\Tree.aspx" />
     <Content Include="WF\Comm\TreeEns.aspx" />
     <Content Include="WF\Comm\UC\Pub.ascx" />
-    <Content Include="WF\Comm\UC\UCSys.ascx" />
-    <Content Include="WF\Comm\UC\UIEn.ascx" />
     <Content Include="WF\Comm\Sys\Holiday.htm" />
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\Focus.htm" />
@@ -6796,8 +6790,6 @@
     <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.svg" />
     <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.ttf" />
     <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.woff" />
-    <None Include="WF\Data\Install\License_CH.rtf" />
-    <None Include="WF\Data\Install\License_EH.rtf" />
     <None Include="WF\Img\FileType\Thumbs.db" />
     <Content Include="WF\MyFlow.ashx" />
     <Content Include="WF\RptDfine\Handler.ashx" />
@@ -7508,13 +7500,6 @@
     <Compile Include="WF\Comm\UC\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\UC\RptSingle.ascx.cs">
-      <DependentUpon>RptSingle.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\RptSingle.ascx.designer.cs">
-      <DependentUpon>RptSingle.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\UC\ToolBar.ascx.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7522,33 +7507,12 @@
     <Compile Include="WF\Comm\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\UC\UCEn.ascx.cs">
-      <DependentUpon>UCEn.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCEn.ascx.designer.cs">
-      <DependentUpon>UCEn.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCGraphics.ascx.cs">
-      <DependentUpon>UCGraphics.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCGraphics.ascx.designer.cs">
-      <DependentUpon>UCGraphics.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\UC\UCSys.ascx.cs">
       <DependentUpon>UCSys.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Comm\UC\UCSys.ascx.designer.cs">
       <DependentUpon>UCSys.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UIEn.ascx.cs">
-      <DependentUpon>UIEn.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UIEn.ascx.designer.cs">
-      <DependentUpon>UIEn.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
     <Compile Include="WF\Handler.ashx.cs">

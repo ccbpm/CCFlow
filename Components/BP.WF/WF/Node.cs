@@ -2068,20 +2068,7 @@ namespace BP.WF
                 return (ThreadKillRole)this.GetValIntByKey(NodeAttr.ThreadKillRole);
             }
         }
-        /// <summary>
-        /// 是否保密步骤
-        /// </summary>
-        public bool IsSecret
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.IsSecret);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.IsSecret, value);
-            }
-        }
+        
         /// <summary>
         /// 完成通过率
         /// </summary>
@@ -2121,28 +2108,8 @@ namespace BP.WF
             }
         }
 
-        public bool IsCanOver
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.IsCanOver);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.IsCanOver, value);
-            }
-        }
-        public bool IsCanRpt
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.IsCanRpt);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.IsCanRpt, value);
-            }
-        }
+        
+      
         /// <summary>
         /// 是否可以移交
         /// </summary>
@@ -2579,10 +2546,6 @@ namespace BP.WF
                 map.AddTBInt(BtnAttr.DelEnable, 0, "删除规则", true, true);
                 map.AddTBInt(NodeAttr.SaveModel, 0, "保存模式", true, true);
 
-
-                map.AddTBInt(NodeAttr.IsCanRpt, 1, "是否可以查看工作报告?", true, true);
-                map.AddTBInt(NodeAttr.IsCanOver, 0, "是否可以终止流程", true, true);
-                map.AddTBInt(NodeAttr.IsSecret, 0, "是否是保密步骤", true, true);
                 map.AddTBInt(NodeAttr.IsCanDelFlow, 0, "是否可以删除流程", true, true);
 
                 map.AddTBInt(NodeAttr.ThreadKillRole, 0, "子线程删除方式", true, true);

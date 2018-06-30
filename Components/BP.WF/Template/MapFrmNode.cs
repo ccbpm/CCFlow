@@ -231,24 +231,24 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "字段维护";
-                rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
-                rm.Visable = true;
-                rm.Target = "_blank";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "字段维护";
+                //rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
+                //rm.Visable = true;
+                //rm.Target = "_blank";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "批量修改字段"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "批量修改字段"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
@@ -648,7 +648,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoEvent()
         {
-            return "../../Admin/CCFormDesigner/FrmEvent.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
+            return "../../Admin/CCFormDesigner/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
         }
       
         /// <summary>

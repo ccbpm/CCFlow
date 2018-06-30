@@ -28,26 +28,6 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
-        #region 执行父类的重写方法.
-        /// <summary>
-        /// 默认执行的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
-        {
-            switch (this.DoType)
-            {
-                case "DtlFieldUp": //字段上移
-                    return "执行成功.";
-                default:
-                    break;
-            }
-
-            //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
-        }
-        #endregion 执行父类的重写方法.
-
         #region xxx 界面 .
         /// <summary>
         ///  初始化sf0. @于庆海，新方法.

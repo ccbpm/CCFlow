@@ -58,14 +58,7 @@ namespace BP.WF.Template
         /// 通过率
         /// </summary>
         public const string PassRate = "PassRate";
-        /// <summary>
-        /// 是否可以设置流程完成
-        /// </summary>
-        public const string IsCanOver = "IsCanOver";
-        /// <summary>
-        /// 是否是保密步骤
-        /// </summary>
-        public const string IsSecret = "IsSecret";
+      
      //   public const string IsCCNode = "IsCCNode";
         public const string IsCCFlow = "IsCCFlow";
         public const string HisStas = "HisStas";
@@ -95,10 +88,6 @@ namespace BP.WF.Template
         public const string IsRM = "IsRM";
         public const string FormType = "FormType";
         public const string FormUrl = "FormUrl";
-        /// <summary>
-        /// 是否可以查看工作报告
-        /// </summary>
-        public const string IsCanRpt = "IsCanRpt";
         /// <summary>
         /// 发送之前的信息提示
         /// </summary>

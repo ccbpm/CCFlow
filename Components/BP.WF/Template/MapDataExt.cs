@@ -1369,7 +1369,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoEvent()
         {
-            return "../../Admin/CCFormDesigner/FrmEvent.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
+            return "../../Admin/CCFormDesigner/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
         }
        
         /// <summary>

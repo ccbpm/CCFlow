@@ -22,55 +22,25 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
-
             //初始化groupID.
             var nodeID = GetQueryString("FK_Node");
-            var flowNo = GetQueryString("FK_Flow");
 
+            //绑定事件类型.
             GenerBindEnumKey("DDL_EventDoType", "EventDoType", "0");
             $("#DDL_EventDoType").trigger("change");
-
-            var fk_Event = GetQueryString("FK_Event");
-
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("ActionDtl_Init");
+
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
 
-            data = JSON.parse(data);
-
-            // 业务单元
-            var buess = data["BuessUnits"];
-            GenerBindDDL("DDL_Doc", buess, "No", "Name", "");
-
-            var ens = data["FrmEvents"];
-
-            for (var i = 0; i < ens.length; i++) {
-
-                var en = ens[i];
-
-                var newRow = "<tr>";
-                newRow = "<tr ><td class=Idx>" + i + "</td>";
-                newRow += "<td>" + GetDoType(en.DoType) + "</td>";
-                newRow += "<td>" + en.DoDoc + "</td>";
-                newRow += "<td>" + en.MsgOK + "</td>";
-                newRow += "<td>" + en.MsgError + "</td>";
-                newRow += "<td>";
-                newRow += "<a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
-                newRow += "</td>";
-                newRow += "</tr>";
-
-                $("#Table1 tr:last").after(newRow);
-            }
-
-            //  document.getElementById('Table1').caption = "事件类:" + nodeID;
-
-            //事件类型.
-            //var eventLists = data["EventLists"];
+           // 业务单元
+           var BuessUnits = JSON.parse(data);    
+            GenerBindDDL("DDL_Doc", BuessUnits, "No", "Name", "");
 
         });
 
@@ -96,83 +66,79 @@
 
         function Save() {
 
+            var en = new Entity("BP.Sys.FrmEvent");
+            en.CopyForm();
+            en.FK_Node = GetQueryString("FK_Node");
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            handler.AddUrlData();
-            handler.AddFormData();
-            var data = handler.DoMethodReturnString("ActionDtl_Save");
-            if (data.indexOf('err@') >= 0) {
-                alert(data);
-                return;
+            //如果是业务单元.
+            if (en.EventDoType == 6) {
+                en.DoDoc = $("#DDL_DoDoc").val();
+            } else {
+                en.DoDoc = $("#TB_Doc").val();
             }
-            alert(data);
 
-            window.location.href = window.location.href;
-            return;
-        }
-
-        function Delete(mypk) {
-
-            if (confirm('您确定要删除吗？') == false)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            handler.AddUrlData();
-            handler.AddFormData();
-            handler.AddPara("MyPK", mypk);
-
-            var data = handler.DoMethodReturnString("ActionDtl_Delete");
-
-            if (data.indexOf('err@') >= 0) {
-                alert(data);
+            if (en.DoDoc == "") {
+                alert('设置执行内容.');
                 return;
             }
 
-            alert(data);
+            en.SetPKVal( en.FK_Event + Math.random() );
+            en.Insert();
+            Back();
 
-            window.location.href = window.location.href;
+            //window.location.href = window.location.href;
             return;
         }
-		function doChangeContent(o) {
-			if ($(o).val() == "7") {
-				$("#TB_Doc").hide();
-				$("#DDL_Doc").show();
-			} else {
-				$("#TB_Doc").show();
-				$("#DDL_Doc").hide();
-			}
-		}
+
+        function doChangeContent(o) {
+            if ($(o).val() == "7") {
+                $("#TB_Doc").hide();
+                $("#DDL_Doc").show();
+            } else {
+                $("#TB_Doc").show();
+                $("#DDL_Doc").hide();
+            }
+        }
+
+        function Back() {
+            var url = "Action.htm?FK_Node=" + GetQueryString("FK_Node");
+            window.location.href = url;
+        }
     </script>
 </head>
 <body>
 <form id="cc">
-<table style="width:90%;" id="Table1" >
-<caption>设置的事件列表</caption>
-<tr>
-<th>IDX</th>
-<th>类型</th>
-<th>内容</th>
-<th>成功提示</th>
-<th>失败提示</th>
-<th>操作</th>
-</tr>
-</table>
 
 <table style="width:80%;" id="Table2">
+
 <caption> 新增事件 </caption>
+
 <tr>
-<td>内容类型</td>
+<td>事件类型</td>
+<td><select id="DDL_FK_Event" name="DDL_FK_Event" >
+<option value="WorkArrive">  工作到达</option>
+<option value="SendWhen"  selected="selected"  >  当节点发送前</option>
+<option value="SendSuccess">  节点发送成功时</option>
+<option value="SendError">  节点发送失败时</option>
+<option value="ReturnBefore">  当节点退回前</option>
+<option value="ReturnAfter">  当节点退回后</option>
+<option value="UndoneBefore">  当节点撤销发送前</option>
+<option value="UndoneAfter">  当节点撤销发送后</option>
+<option value="WhenReadWork">  工作打开后</option>
+</select></td>
+</tr>
+
+<tr>
+<td>执行内容类型</td>
 <td><select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)"></select></td>
 </tr>
 
 <tr>
-<td>内容</td>
+<td>执行内容</td>
 <td>
 
 <textarea id="TB_Doc" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
-
 <select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
-
 </td>
 </tr>
 
@@ -197,6 +163,8 @@
 </table>
 
 <input id="Btn_Save"  name="Btn_Save" value="保存" onclick="Save();"  type="button"  />
+<input id="Button1"  name="Button1" value="返回" onclick="Back();"  type="button"  />
+
 
 
 </form>

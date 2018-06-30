@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 using BP.Sys;
 using BP.Web;
 
-public partial class SDKFlows_WinOpen :BP.Web.MasterPage
+public partial class SDKFlows_WinOpen : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {

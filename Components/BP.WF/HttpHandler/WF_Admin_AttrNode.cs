@@ -51,21 +51,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ActionDtl_Init()
         {
-            DataSet ds = new DataSet();
-
-            //事件实体.
-            FrmEvents ndevs = new FrmEvents();
-            string fk_Event = this.GetRequestVal("FK_Event"); //发送成功，失败标记.
-
-            if (this.FK_Node == 0)
-                ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_MapData, this.FK_MapData);
-            else
-                ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_Node, this.FK_Node);
-
-
-            DataTable dt = ndevs.ToDataTableField("FrmEvents");
-            ds.Tables.Add(dt);
-
             //业务单元集合.
             DataTable dtBuess = new DataTable();
             dtBuess.Columns.Add("No", typeof(string));
@@ -80,45 +65,7 @@ namespace BP.WF.HttpHandler
                 dtBuess.Rows.Add(dr);
             }
 
-            ds.Tables.Add(dtBuess);
-
-            return BP.Tools.Json.ToJson(ds);
-        }
-        /// <summary>
-        /// 执行删除
-        /// </summary>
-        /// <returns></returns>
-        public string ActionDtl_Delete()
-        {
-            //事件实体.
-            FrmEvent en = new FrmEvent();
-            en.MyPK = this.MyPK;
-            en.Delete();
-            return "删除成功.";
-        }
-        public string ActionDtl_Save()
-        {
-            //事件实体.
-            FrmEvent en = new FrmEvent();
-
-            en.FK_Node = this.FK_Node;
-            en.FK_Event = this.GetRequestVal("FK_Event"); //事件类型.
-            en.HisDoTypeInt = this.GetValIntFromFrmByKey("EventDoType"); //执行类型.
-            en.MyPK = this.FK_Node + "_" + en.FK_Event + "_" + en.HisDoTypeInt; //组合主键.
-            en.RetrieveFromDBSources();
-
-            en.MsgOKString = this.GetValFromFrmByKey("MsgOK"); //成功的消息.
-            en.MsgErrorString = this.GetValFromFrmByKey("MsgError"); //失败的消息.
-
-            //执行内容.
-            if (en.HisDoType == EventDoType.BuessUnit)
-                en.DoDoc = this.GetValFromFrmByKey("DDL_Doc");
-            else
-                en.DoDoc = this.GetValFromFrmByKey("TB_Doc");
-
-            en.Save();
-
-            return "保存成功.";
+            return BP.Tools.Json.ToJson(dtBuess);
         }
         #endregion 事件基类.
 

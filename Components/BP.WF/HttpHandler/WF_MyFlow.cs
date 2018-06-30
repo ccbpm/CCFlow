@@ -151,7 +151,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 if (_currNode == null)
-                    _currNode = new Node(this.FK_Node);
+                    _currNode = new Node(this.FK_Node);                 
                 return _currNode;
             }
         }

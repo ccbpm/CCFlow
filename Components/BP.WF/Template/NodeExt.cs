@@ -361,13 +361,11 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.FocusField, null, "焦点字段", true, false, 0, 50, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17932");
                 map.AddDDLSysEnum(NodeAttr.SaveModel, 0, "保存方式", true, true);
                 map.SetHelperUrl(NodeAttr.SaveModel, "http://ccbpm.mydoc.io/?v=5404&t=17934");
-
                 map.AddBoolean(NodeAttr.IsGuestNode, false, "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true);
-
-
 
                 //节点业务类型.
                 map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
+                map.AddTBInt("FWCSta", 0, "节点状态", false, false);
 
                 ////为宝旺达，增加业务类型.
                 //if ( this.PKVal!=null )
@@ -383,8 +381,6 @@ namespace BP.WF.Template
                 //    }
                 //    // map.AddTBString("NodeAppType", null, "业务类型枚举", true, false, 0, 50, 10, true);
                 //}
-
-
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义参数", true, false, 0, 500, 10, true);
                 #endregion  基础属性
 
@@ -434,19 +430,18 @@ namespace BP.WF.Template
                 #endregion 分合流子线程属性
 
                 #region 自动跳转规则
-                map.AddBoolean(NodeAttr.AutoJumpRole0, false, "处理人就是发起人", true, true, false);
+                map.AddBoolean(NodeAttr.AutoJumpRole0, false, "处理人就是发起人", true, true, true);
                 map.SetHelperUrl(NodeAttr.AutoJumpRole0, "http://ccbpm.mydoc.io/?v=5404&t=17949"); //增加帮助
 
-                map.AddBoolean(NodeAttr.AutoJumpRole1, false, "处理人已经出现过", true, true, false);
-                map.AddBoolean(NodeAttr.AutoJumpRole2, false, "处理人与上一步相同", true, true, false);
-                map.AddBoolean(NodeAttr.WhenNoWorker, false, "(是)找不到人就跳转,(否)提示错误.", true, true, false);
-
+                map.AddBoolean(NodeAttr.AutoJumpRole1, false, "处理人已经出现过", true, true, true);
+                map.AddBoolean(NodeAttr.AutoJumpRole2, false, "处理人与上一步相同", true, true, true);
+                map.AddBoolean(NodeAttr.WhenNoWorker, false, "(是)找不到人就跳转,(否)提示错误.", true, true, true);
                 //         map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "找不到处理人处理规则",
                 //true, true, NodeAttr.WhenNoWorker, "@0=提示错误@1=自动转到下一步");
+
                 #endregion
 
                 #region  功能按钮状态
-
                 map.AddTBString(BtnAttr.SendLab, "发送", "发送按钮标签", true, false, 0, 50, 10);
                 map.SetHelperUrl(BtnAttr.SendLab, "http://ccbpm.mydoc.io/?v=5404&t=16219");
                 map.AddTBString(BtnAttr.SendJS, "", "按钮JS函数", true, false, 0, 999, 10);
@@ -611,157 +606,9 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
 
-
-
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
-
-                #region 考核属性
-                // // 考核属性
-                // map.AddTBFloat(NodeAttr.TimeLimit, 0, "限期(天)", true, false); //"限期(天)".
-                // map.AddTBFloat(NodeAttr.TSpanHour, 8, "小时", true, false); //"限期(天)".
-
-                // map.AddTBFloat(NodeAttr.WarningDay, 0, "工作预警(天)", true, false);    // "警告期限(0不警告)"
-                // map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
-                // map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
-                // map.AddTBFloat(NodeAttr.TCent, 1, "扣分(每延期1小时)", true, false); //"扣分(每延期1天扣)"
-
-                // //map.AddTBFloat(NodeAttr.MaxDeductCent, 0, "最高扣分", true, false);   //"最高扣分"
-                // //map.AddTBFloat(NodeAttr.SwinkCent, float.Parse("0.1"), "工作得分", true, false); //"工作得分".
-                // //map.AddTBString(NodeAttr.FK_Flows, null, "flow", false, false, 0, 100, 10);
-
-                // map.AddDDLSysEnum(NodeAttr.CHWay, 0, "考核方式", true, true, NodeAttr.CHWay,"@0=不考核@1=按时效@2=按工作量");
-
-                //// map.AddTBFloat(NodeAttr.Workload, 0, "工作量(单位:小时)", true, false);
-
-                // // 是否质量考核点？
-                // map.AddBoolean(NodeAttr.IsEval, false, "是否质量考核点", true, true, true);
-
-
-                // // 去掉了, 移动到 主题功能界面处理了.
-                // map.AddDDLSysEnum(NodeAttr.OutTimeDeal, 0, "超时处理", true, true, NodeAttr.OutTimeDeal,
-                // "@0=不处理@1=自动向下运动@2=自动跳转指定的节点@3=自动移交给指定的人员@4=向指定的人员发消息@5=删除流程@6=执行SQL");
-                // map.AddTBString(NodeAttr.DoOutTime, null, "处理内容", true, false, 0, 300, 10, true);
-                // map.AddTBString(NodeAttr.DoOutTimeCond, null, "执行超时条件", true, false, 0, 100, 10, true);
-                // map.SetHelperUrl(NodeAttr.OutTimeDeal, "http://ccbpm.mydoc.io/?v=5404&t=18001");
-                #endregion 考核属性
-
-                #region 审核组件属性, 此处变更了BP.Sys.FrmWorkCheck 也要变更.
-                // BP.Sys.FrmWorkCheck
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
-                    true, true, FrmWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
-                map.SetHelperUrl(FrmWorkCheckAttr.FWCSta, "http://ccbpm.mydoc.io/?v=5404&t=17936");
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "显示方式",
-                    true, true, FrmWorkCheckAttr.FWCShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
-                map.SetHelperUrl(FrmWorkCheckAttr.FWCShowModel, "http://ccbpm.mydoc.io/?v=5404&t=17937");
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCType, (int)FWCType.Check, "工作方式", true, true,
-                    FrmWorkCheckAttr.FWCType, "@0=审核组件@1=日志组件@2=周报组件@3=月报组件");
-                map.SetHelperUrl(FrmWorkCheckAttr.FWCType, "http://ccbpm.mydoc.io/?v=5404&t=17938");
-                // add by stone 2015-03-19. 如果为空，就去节点名称显示到步骤里.
-                map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
-
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCAth, (int)FWCAth.None, "附件上传", true, true,
-                   FrmWorkCheckAttr.FWCAth, "@0=不启用@1=多附件@2=单附件(暂不支持)@3=图片附件(暂不支持)");
-                map.SetHelperAlert(FrmWorkCheckAttr.FWCAth,
-                    "在审核期间，是否启用上传附件？启用什么样的附件？注意：附件的属性在节点表单里配置。"); //使用alert的方式显示帮助信息.
-
-                map.AddBoolean(FrmWorkCheckAttr.FWCTrackEnable, true, "轨迹图是否显示？", true, true, false);
-                map.AddBoolean(FrmWorkCheckAttr.FWCListEnable, true, "历史审核信息是否显示？(否,仅出现意见框)", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.SigantureEnabel, false, "使用图片签名(在信息填写底部显示文字Or图片签名)？", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
-
-
-                map.AddTBString(FrmWorkCheckAttr.FWCOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
-                map.AddTBString(FrmWorkCheckAttr.FWCDefInfo, "同意", "默认审核信息", true, false, 0, 50, 10);
-
-                //map.AddTBFloat(FrmWorkCheckAttr.FWC_X, 5, "位置X", true, false);
-                //map.AddTBFloat(FrmWorkCheckAttr.FWC_Y, 5, "位置Y", true, false);
-
-                // 高度与宽度, 如果是自由表单就不要变化该属性.
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_H, 300, "高度", true, false);
-                map.SetHelperAlert(FrmWorkCheckAttr.FWC_H, "如果是自由表单就不要变化该属性,为0，则标识为100%,应用的组件模式."); //增加帮助
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_W, 400, "宽度", true, false);
-                map.SetHelperAlert(FrmWorkCheckAttr.FWC_W, "如果是自由表单就不要变化该属性,为0，则标识为100%,应用的组件模式."); //增加帮助
-
-                map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式化字段", true, false, 0, 50, 200, true);
-
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
-
-                #endregion 审核组件属性.
-
-                #region 公文按钮 del by zhoupeng. 按照新昌的标准修改.
-                //map.AddTBString(BtnAttr.OfficeOpenLab, "打开本地", "打开本地标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeOpenLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeOpenEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeOpenTemplateLab, "打开模板", "打开模板标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeOpenTemplateLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeOpenTemplateEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeSaveLab, "保存", "保存标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeSaveLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeSaveEnable, true, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeAcceptLab, "接受修订", "接受修订标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeAcceptLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeAcceptEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeRefuseLab, "拒绝修订", "拒绝修订标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeRefuseLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeRefuseEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeOverLab, "套红", "套红按钮标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeOverLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeOverEnable, false, "是否启用", true, true);
-
-
-                //map.AddTBString(BtnAttr.OfficePrintLab, "打印", "打印按钮标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficePrintLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficePrintEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeSealLab, "签章", "签章按钮标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeSealLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeSealEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeDownLab, "下载", "下载按钮标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeDownLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeDownEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.OfficeInsertFlowLab, "插入流程", "插入流程标签", true, false, 0, 50, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeInsertFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeInsertFlowEnable, false, "是否启用", true, true);
-
-                //map.AddBoolean(BtnAttr.OfficeNodeInfo, false, "是否记录节点信息", true, true);
-                //map.AddBoolean(BtnAttr.OfficeReSavePDF, false, "是否该自动保存为PDF", true, true);
-
-
-                //map.AddBoolean(BtnAttr.OfficeIsMarks, true, "是否进入留痕模式", true, true);
-                //map.AddTBString(BtnAttr.OfficeTemplate, "", "指定文档模板", true, false, 0, 100, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeTemplate, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-
-                //map.AddBoolean(BtnAttr.OfficeMarksEnable, true, "是否查看用户留痕", true, true, true);
-
-                //map.AddBoolean(BtnAttr.OfficeIsParent, true, "是否使用父流程的文档", true, true);
-
-                //map.AddBoolean(BtnAttr.OfficeTHEnable, false, "是否自动套红", true, true);
-                //map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 200, 10);
-                //map.SetHelperUrl(BtnAttr.OfficeTHTemplate, "http://ccbpm.mydoc.io/?v=5404&t=17998");
- 
-
-                //map.AddTBString(BtnAttr.OfficeDownLab, "下载", "下载按钮标签", true, false, 0, 50, 10);
-                //map.AddBoolean(BtnAttr.OfficeIsDown, false, "是否启用", true, true);
-                #endregion
-
-                #region 移动设置.
-                map.AddDDLSysEnum(NodeAttr.MPhone_WorkModel, 0, "手机工作模式", true, true, NodeAttr.MPhone_WorkModel, "@0=原生态@1=浏览器@2=禁用");
-                map.AddDDLSysEnum(NodeAttr.MPhone_SrcModel, 0, "手机屏幕模式", true, true, NodeAttr.MPhone_SrcModel, "@0=强制横屏@1=强制竖屏@2=由重力感应决定");
-
-                map.AddDDLSysEnum(NodeAttr.MPad_WorkModel, 0, "平板工作模式", true, true, NodeAttr.MPad_WorkModel, "@0=原生态@1=浏览器@2=禁用");
-                map.AddDDLSysEnum(NodeAttr.MPad_SrcModel, 0, "平板屏幕模式", true, true, NodeAttr.MPad_SrcModel, "@0=强制横屏@1=强制竖屏@2=由重力感应决定");
-                map.SetHelperUrl(NodeAttr.MPhone_WorkModel, "http://bbs.ccflow.org/showtopic-2866.aspx");
-                #endregion 移动设置.
+               
 
                 //节点工具栏,主从表映射.
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
@@ -774,7 +621,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "接收人规则";
-                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/Sender.png";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/Sender.png";
                 rm.ClassMethodName = this.ToString() + ".DoAccepterRoleNew";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -796,16 +643,16 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "父子流程";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/SubFlows.png";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/SubFlows.png";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlow";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
                 rm.ClassMethodName = this.ToString() + ".DoCond";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -995,14 +842,12 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "抄送人规则";
                 rm.GroupName = "实验中的功能";
-                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/CC.png";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
                 rm.ClassMethodName = this.ToString() + ".DoCCer";  //要执行的方法名.
                 rm.RefMethodType = RefMethodType.RightFrameOpen; // 功能类型
                 map.AddRefMethod(rm);
 
                 #endregion 实验中的功能
-
-                 
 
 
                 this._enMap = map;

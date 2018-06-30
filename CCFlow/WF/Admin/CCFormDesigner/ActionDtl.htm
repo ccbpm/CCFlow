@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>事件</title>
+     <meta charset="UTF-8"/>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var frmID = GetQueryString("FK_MapData");
+
+            //绑定事件类型.
+            GenerBindEnumKey("DDL_EventDoType", "EventDoType", "0");
+            $("#DDL_EventDoType").trigger("change");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("ActionDtl_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+           // 业务单元
+           var BuessUnits = JSON.parse(data);    
+            GenerBindDDL("DDL_Doc", BuessUnits, "No", "Name", "");
+
+        });
+
+        function GetDoType(doType) {
+
+            var cfg = "@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类@7=业务单元";
+
+            var cfgs = cfg.split('@');
+
+            for (var i = 0; i < cfgs.length; i++) {
+                var vss = cfgs[i];
+                if (vss.indexOf('=') == -1)
+                    continue;
+
+                var vals = vss.split('=');
+
+                if (vals[0] == doType)
+                    return vals[1];
+            }
+
+            return doType+'ss';
+        }
+
+        function Save() {
+
+            var en = new Entity("BP.Sys.FrmEvent");
+            en.CopyForm();
+            en.FK_MapData = GetQueryString("FK_MapData");
+
+            //如果是业务单元.
+            if (en.EventDoType == 6) {
+                en.DoDoc = $("#DDL_DoDoc").val();
+            } else {
+                en.DoDoc = $("#TB_Doc").val();
+            }
+
+            if (en.DoDoc == "") {
+                alert('设置执行内容.');
+                return;
+            }
+
+            en.SetPKVal( en.FK_Event + Math.random() );
+            en.Insert();
+            Back();
+
+            //window.location.href = window.location.href;
+            return;
+        }
+
+        function doChangeContent(o) {
+            if ($(o).val() == "7") {
+                $("#TB_Doc").hide();
+                $("#DDL_Doc").show();
+            } else {
+                $("#TB_Doc").show();
+                $("#DDL_Doc").hide();
+            }
+        }
+
+        function Back() {
+            var url = "Action.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+<form id="cc">
+
+<table style="width:80%;" id="Table2">
+
+<caption> 新增事件 </caption>
+
+
+<tr>
+<td>事件类型</td>
+<td><select id="DDL_FK_Event" name="DDL_FK_Event" >
+<option value="FrmLoadBefore">  节点表单载入前</option>
+<option value="FrmLoadAfter"  selected="selected"  >  节点表单载入后</option>
+<option value="SaveBefore">  当表单保存前</option>
+<option value="SaveAfter">  当表单保存后</option>
+</select></td>
+</tr>
+
+<tr>
+<td>执行内容类型</td>
+<td><select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)"></select></td>
+</tr>
+
+<tr>
+<td>执行内容</td>
+<td>
+
+<textarea id="TB_Doc" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
+<select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
+</td>
+</tr>
+
+<tr>
+<td colspan=1>
+执行成功信息提示(可为空)
+</td>
+<td colspan=1>
+ <input type=text  id="MsgOK" name="MsgOK" />
+</td>
+</tr>
+
+<tr>
+<td colspan=1>
+执行失败时提示(可为空)
+</td>
+
+<td>
+ <input type=text  id="MsgError"  name="MsgError" />
+</td>
+</tr>
+</table>
+
+<input id="Btn_Save"  name="Btn_Save" value="保存" onclick="Save();"  type="button"  />
+<input id="Button1"  name="Button1" value="返回" onclick="Back();"  type="button"  />
+
+
+
+</form>
+
+</body>
+</html>

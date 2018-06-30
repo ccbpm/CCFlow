@@ -1,14 +1,7 @@
 ﻿<?xml version="1.0" standalone="yes" ?>
 <NewDataSet>
 
-  <!-- 参数列表  -->
-  <CondType No="Cond" CH="表单条件"    />
-  <CondType No="CondStation" CH="岗位条件" />
-  <CondType No="CondDept" CH="部门条件"  />
-  <CondType No="CondBySQL" CH="SQL条件" />
-  <CondType No="CondByUrl" CH="URL条件" />
-  <CondType No="CondByPara" CH="开发者参数" />
-  <CondType No="CondPRI" CH="方向优先级计算设置" />
+   
   
   <!--此处的Truck、Track的No不要改了，改的话，要搜索整个解决方案中CurrTab=Truck与CurrTab=Track的地方，全部改掉-->
   <OneWork No="Frm" CH="查看表单"  UrlCCFlow="FrmGuide.htm" UrlJFlow="FrmGuide.htm"  />

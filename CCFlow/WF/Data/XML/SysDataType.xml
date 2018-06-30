@@ -22,7 +22,6 @@
   <CCMenu No="-1" Name="全部" Desc="" />
   <CCMenu No="0" Name="已读" Desc="" />
   <CCMenu No="1" Name="未读" Desc="" />
-  <CCMenu11 No="2" Name="删除" Desc="" />
 
 </DS>
 

@@ -14,7 +14,6 @@ using BP.Sys;
 using BP.Port;
 using BP.WF.Rpt;
 using BP;
-using BP.Web.Comm;
 
 namespace CCFlow.WF.Rpt
 {

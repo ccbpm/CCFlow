@@ -12,7 +12,6 @@ using BP.Web;
 using BP.Sys;
 using BP.Port;
 using BP;
-using BP.Web.Comm;
 namespace CCFlow.WF.Rpt
 {
     public partial class WF_Rpt_Search : BP.Web.WebPage

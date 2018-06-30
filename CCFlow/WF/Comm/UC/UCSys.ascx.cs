@@ -23,7 +23,6 @@ namespace CCFlow.WF.Comm.UC
     using BP.Web.UC;
     using BP.Sys.XML;
     using BP.Port;
-    using BP.Web.Comm;
     using BP;
     using CCFlow.Web.Comm;
     using System.Collections.Generic;
@@ -50,7 +49,7 @@ namespace CCFlow.WF.Comm.UC
                 strs += "<img src='../Img/FileType/" + file.MyFileExt.Replace(".", "") + ".gif' border=0 /><a href='" + path + file.MyFilePath + "' target='_blank' >" + file.MyFileName + file.MyFileExt + "</a>&nbsp;";
                 if (file.Rec == WebUser.No)
                 {
-                    strs += "<a title='打开它' href=\"javascript:DoAction('../Comm/Do.aspx?ActionType=" + (int)ActionType.DeleteFile + "&OID=" + file.OID + "&EnsName=" + enName + "&PK=" + pk + "','删除文件《" + file.MyFileName + file.MyFileExt + "》')\" ><img src='" + path + "../Img/Btn/delete.gif' border=0 alt='删除此附件' /></a>&nbsp;";
+                   // strs += "<a title='打开它' href=\"javascript:DoAction('../Comm/Do.aspx?ActionType=" + (int)ActionType.DeleteFile + "&OID=" + file.OID + "&EnsName=" + enName + "&PK=" + pk + "','删除文件《" + file.MyFileName + file.MyFileExt + "》')\" ><img src='" + path + "../Img/Btn/delete.gif' border=0 alt='删除此附件' /></a>&nbsp;";
                 }
             }
             return strs;
@@ -756,126 +755,7 @@ namespace CCFlow.WF.Comm.UC
             this.Add("</Table>");
 
         }
-        // public void GenerOutlookMenuV2(string cate)
-        public void GenerOutlookMenuV2(string cate)
-        {
-            if (cate == null)
-                cate = "01";
-
-            this.Controls.Clear();
-            DataSet ds = new DataSet();
-            ds.ReadXml(SystemConfig.PathOfXML + "Menu.xml");
-            DataTable dt = ds.Tables[0];
-            DataTable dtl = dt.Clone();
-            DataTable dtCate = dt.Clone();
-
-            //DataTable dtl = dt.Clone();
-            foreach (DataRow dr in dt.Rows)
-            {
-                string ForUser = dr["ForUser"].ToString().Trim();
-                switch (ForUser)
-                {
-                    case "SysAdmin":
-                        //if (WebUser.HisUserType != UserType.SysAdmin)
-                        //    continue;
-                        break;
-                    case "AppAdmin":
-                        //if (WebUser.HisUserType == UserType.AppAdmin
-                        //    || WebUser.HisUserType == UserType.SysAdmin)
-                        //{
-                        //}
-                        //else
-                        //    continue;
-                        break;
-                    default:
-                        break;
-                }
-                string no = dr["No"].ToString().Trim();
-                if (no.Trim().Length == 2)
-                {
-                    DataRow dr2 = dtCate.NewRow();
-                    dr2["No"] = dr["No"];
-                    dr2["Name"] = dr[BP.Web.WebUser.SysLang];
-                    dr2["Url"] = dr["Url"];
-                    dr2["Desc"] = dr["Desc"];
-                    dr2["Img"] = dr["Img"];
-                    dtCate.Rows.Add(dr2);
-                    continue;
-                }
-
-                if (no.Substring(0, 2) == cate)
-                {
-                    DataRow dr1 = dtl.NewRow();
-                    dr1["No"] = dr["No"];
-                    dr1["Name"] = dr[BP.Web.WebUser.SysLang];
-                    dr1["Url"] = dr["Url"];
-                    dr1["Desc"] = dr["Desc"];
-                    dr1["Img"] = dr["Img"];
-                    dtl.Rows.Add(dr1);
-                }
-            }
-
-
-            this.Add("<TABLE   class='MainTable'  >");
-
-            int i = 0;
-            foreach (DataRow dr in dtCate.Rows)
-            {
-                i++;
-                string no = dr["No"].ToString();
-                string name = dr[BP.Web.WebUser.SysLang].ToString();
-                string url = dr["Url"].ToString();
-                string img = dr["Img"].ToString();
-                string desc = dr["Desc"].ToString(); //描述数据
-
-                if (img.Trim().Length != 5)
-                    name = "<img src='" + img + "' border=0 />" + name;
-
-                string srcp = "window.location.href='LeftOutlook.aspx?cate=" + no + "'";
-                /*他是目录数据。*/
-                if (cate == no)
-                {
-                    /* 当前要选择他。*/
-                    this.Add("<TR  >");
-                    this.Add("<TD class='TDM_Selected' nowrap=true title='" + dr["DESC"].ToString() + "' ><b>" + name + "</b></TD>");
-                    this.AddTREnd();
-
-                    /*如果遇到了当前要选择的菜单。*/
-                    this.Add("<TR height='100%' >");
-                    this.Add("<TD calss='TDItemTable'  height='100%'  >");
-                    this.Add("<Table   class='ItemTable'  cellpadding='0' cellspacing='0' style='border-collapse: collapse' >");
-                    foreach (DataRow itemdr in dtl.Rows)
-                    {
-                        string no1 = itemdr["No"].ToString();
-                        string name1 = itemdr[BP.Web.WebUser.SysLang].ToString();
-                        string url1 = itemdr["Url"].ToString();
-                        string img1 = itemdr["Img"].ToString();
-                        string desc1 = itemdr["Desc"].ToString(); //描述数据
-
-                        if (img1.Trim().Length != 5)
-                            name1 = "<img src='" + img1 + "' border=0 />" + name1;
-
-                        this.Add("<TR  >");
-                        this.Add("<TD onclick=\"Javascript:WinOpen('" + url1 + "','mainfrm' )\" onmouseover=\"javascript:ItemOver(this);\" onmouseout=\"javascript:ItemOut(this);\" class='Item' title='" + desc1 + "'  >");
-                        this.Add(name1);
-                        this.Add("</TD>");
-                        this.AddTREnd();
-                    }
-
-                    this.Add("</Table>");
-                    this.Add("</TD>");
-                    this.AddTREnd();
-                }
-                else
-                {
-                    this.Add("<TR >");
-                    this.Add("<TD class='TDM' nowrap=true title='" + dr["DESC"].ToString() + "' onclick=\"" + srcp + "\" >" + name + "</TD>");
-                    this.AddTREnd();
-                }
-            }
-
-            this.Add("</TABLE>");
-        }
+       
         //		public void ClearViewState()
         public void ClearViewState()
         {
@@ -1520,116 +1400,7 @@ namespace CCFlow.WF.Comm.UC
 
         }
         //		public void DataPanel(Entities ens, string ctrlId, string key, ShowWay sh)
-        public void DataPanel(Entities ens, string ctrlId, string key, ShowWay sh)
-        {
-            switch (sh)
-            {
-                case ShowWay.Cards:
-                    this.DataPanelCards(ens, ctrlId, key, true);
-                    break;
-                case ShowWay.List:
-                    this.DataPanelCards(ens, ctrlId, key, false);
-                    break;
-                case ShowWay.Dtl:
-                    this.DataPanelDtl(ens, ctrlId, key);
-                    break;
-            }
-
-        }
-        //		public void DataPanelDtl(Entities ens, string ctrlId , string colName, string urlAttrKey, string colUrl  )
-        public void DataPanelDtl(Entities ens, string ctrlId, string colName, string urlAttrKey, string colUrl)
-        {
-            this.Controls.Clear();
-            Entity myen = ens.GetNewEntity;
-            string pk = myen.PK;
-            string clName = myen.ToString();
-            Attrs attrs = myen.EnMap.Attrs;
-            Attrs selectedAttrs = myen.EnMap.GetChoseAttrs(ens);
-
-            string appPath = this.Request.ApplicationPath;
-            // 生成标题
-            this.Add("<TABLE  style='border-collapse: collapse' bordercolor='#111111' >");
-            this.Add("<TR >");
-            this.Add("<TH  nowrap >序</TH>");
-            this.Add("<TH nowrap >" + colName + "</TH>");
-
-            foreach (Attr attrT in selectedAttrs)
-            {
-                if (attrT.UIVisible == false)
-                    continue;
-
-                this.Add("<TD  nowrap >" + attrT.Desc + "</TD>");
-            }
-            this.AddTREnd();
-
-            int idx = 0;
-            string style = WebUser.Style;
-            foreach (Entity en in ens)
-            {
-                #region 处理keys
-                string url = "";
-                foreach (Attr attr in attrs)
-                {
-                    switch (attr.UIContralType)
-                    {
-                        case UIContralType.TB:
-                            if (attr.IsPK)
-                                url += "&" + attr.Key + "=" + en.GetValStringByKey(attr.Key);
-                            break;
-                        case UIContralType.DDL:
-                            url += "&" + attr.Key + "=" + en.GetValStringByKey(attr.Key);
-                            break;
-                    }
-                }
-                #endregion
-
-                this.Add("<TR  onmouseover=\"TROver(this,'" + this.Page.Request.ApplicationPath + "','" + ctrlId + "', '" + clName + "', '" + url + "');\" onmouseout='TROut(this)' ondblclick=\" WinOpen('../Comm/En.htm?EnName=" + en.ToString() + "&PK=" + en.GetValByKey(pk) + url + "')\" >");
-                idx++;
-                this.Add("<TD  class='Idx' nowrap >" + idx + "</TD>");
-                this.Add("<TD  class='No'  nowrap ><a href='" + colUrl + en.GetValStringByKey(urlAttrKey) + "' target='_blank'> " + colName + "</a></TD>");
-
-                foreach (Attr attr in selectedAttrs)
-                {
-                    if (attr.UIVisible == false)
-                        continue;
-
-                    if (attr.UIContralType == UIContralType.DDL)
-                        this.Add("<TD  nowrap >" + en.GetValRefTextByKey(attr.Key) + "&nbsp;</TD>");
-                    else
-                    {
-                        string str = en.GetValStringByKey(attr.Key);
-                        switch (attr.MyDataType)
-                        {
-                            case DataType.AppBoolean:
-                                if (str == "1")
-                                    this.AddTD("是&nbsp;");
-                                else
-                                    this.AddTD("否&nbsp;");
-                                break;
-                            case DataType.AppDate:
-                            case DataType.AppDateTime:
-                                this.AddTD(str);
-                                break;
-                            case DataType.AppString:
-                                if (attr.UIHeight != 0)
-                                    this.AddTDDoc(str, str);
-                                else
-                                    this.AddTD(str);
-                                break;
-                            case DataType.AppDouble:
-                            case DataType.AppFloat:
-                            case DataType.AppMoney:
-                                this.AddTDNum(str);
-                                break;
-                            default:
-                                throw new Exception("sdfasdfsd");
-                        }
-                    }
-                }
-                this.AddTREnd();
-            }
-            this.Add("</TABLE>");
-        }
+       
         public void DataPanelDtlCheckBox(Entities ens)
         {
             this.Controls.Clear();
@@ -1699,33 +1470,7 @@ namespace CCFlow.WF.Comm.UC
 
 
                 urlExt = "\"javascript:ShowEn('./RefFunc/En.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "', 'cd','" + cfg.WinCardH + "','" + cfg.WinCardW + "');\"";
-
-
-                switch ((UIRowStyleGlo)cfg.UIRowStyleGlo)
-                {
-                    case UIRowStyleGlo.None:
-                        if (cfg.IsEnableDouclickGlo)
-                            this.AddTR("ondblclick=" + urlExt);
-                        else
-                            this.AddTR();
-                        break;
-                    case UIRowStyleGlo.Mouse:
-                        if (cfg.IsEnableDouclickGlo)
-                            this.AddTRTX("ondblclick=" + urlExt);
-                        else
-                            this.AddTRTX();
-                        break;
-                    case UIRowStyleGlo.Alternately:
-                    case UIRowStyleGlo.MouseAndAlternately:
-                        if (cfg.IsEnableDouclickGlo)
-                            is1 = this.AddTR(is1, "ondblclick=" + urlExt);
-                        else
-                            is1 = this.AddTR(is1);
-                        break;
-                    default:
-                        throw new Exception("@目前还没有提供。");
-                }
-
+                 
 
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_" + en.PKVal;
@@ -1871,30 +1616,7 @@ namespace CCFlow.WF.Comm.UC
                 #endregion
 
                 urlExt = "\"javascript:ShowEn('../Comm/En.htm?EnName=" + en.ToString() + "&PKVal=" + en.GetValByKey(pk) + url + "&inlayer=1', 'cd','" + cfg.WinCardH + "','" + cfg.WinCardW + "');\"";
-                switch ((UIRowStyleGlo)cfg.UIRowStyleGlo)
-                {
-                    case UIRowStyleGlo.None:
-                        if (cfg.IsEnableDouclickGlo)
-                            this.AddTR("ondblclick=" + urlExt);
-                        else
-                            this.AddTR();
-                        break;
-                    case UIRowStyleGlo.Mouse:
-                        if (cfg.IsEnableDouclickGlo)
-                            this.AddTRTX("ondblclick=" + urlExt);
-                        else
-                            this.AddTRTX();
-                        break;
-                    case UIRowStyleGlo.Alternately:
-                    case UIRowStyleGlo.MouseAndAlternately:
-                        if (cfg.IsEnableDouclickGlo)
-                            is1 = this.AddTR(is1, "ondblclick=" + urlExt);
-                        else
-                            is1 = this.AddTR(is1);
-                        break;
-                    default:
-                        throw new Exception("@目前还没有提供。");
-                }
+                
 
                 idx++;
                 this.AddTDIdx(idx);

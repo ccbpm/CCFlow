@@ -12,7 +12,6 @@ using BP.Sys;
 using BP.En;
 using BP.Web;
 using BP.DA;
-using BP.Web.Comm;
 using BP;
 namespace CCFlow.Web.Comm
 {
@@ -21,13 +20,7 @@ namespace CCFlow.Web.Comm
 	/// </summary>
 	public partial class Do : BP.Web.WebPage
 	{
-		public ActionType GetActionType
-		{
-			get
-			{
-				return (ActionType)int.Parse(this.Request.QueryString["ActionType"]);
-			}
-		}
+	 
 		protected void Page_Load(object sender, System.EventArgs e)
 		{
 			switch (this.DoType)
@@ -60,30 +53,6 @@ namespace CCFlow.Web.Comm
 					return;
 				default:
 					break;
-			}
-			switch (this.GetActionType)
-			{
-				case ActionType.DeleteFile:
-					SysFileManager sysfile = new SysFileManager(int.Parse(this.Request.QueryString["OID"]));
-					sysfile.Delete();
-					break;
-				case ActionType.PrintEnBill:
-					string className = this.Request.QueryString["MainEnsName"];
-					Entity en = ClassFactory.GetEns(className).GetNewEntity;
-					try
-					{
-						en.PKVal = this.Request.QueryString["PK"];
-						en.Retrieve();
-					}
-					catch
-					{
-						en.PKVal = this.Request.QueryString[en.PK];
-						en.Retrieve();
-					}
-					//this.GenerRptByPeng(en);
-					break;
-				default:
-					throw new Exception("do error" + this.GetActionType);
 			}
 
 			this.WinClose();

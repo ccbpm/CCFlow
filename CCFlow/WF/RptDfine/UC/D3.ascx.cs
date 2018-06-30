@@ -13,7 +13,6 @@ using BP.Sys;
 using BP.Port;
 using BP.WF.Data;
 using BP;
-using BP.Web.Comm;
 
 namespace CCFlow.WF.Rpt.UC
 {

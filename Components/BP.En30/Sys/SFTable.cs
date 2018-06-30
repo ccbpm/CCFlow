@@ -834,7 +834,7 @@ namespace BP.Sys
         public string DoEdit()
         {
             if (this.IsClass)
-                return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.aspx?EnsName=" + this.No;
+                return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
             else
                 return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
         }

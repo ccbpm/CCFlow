@@ -94,7 +94,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEdit()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.aspx?EnsName=" + this.No;
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
         }
         /// <summary>
         /// 执行删除.

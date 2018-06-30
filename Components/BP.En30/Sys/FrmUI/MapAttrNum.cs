@@ -240,7 +240,6 @@ namespace BP.Sys.FrmUI
         public string DoAutoFull()
         {
             return "../../Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
-            //return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + KeyOfEnthis.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 设置开窗返回值
@@ -273,7 +272,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoInputCheck()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK) + "&DoType=New&ExtType=InputCheck";
+            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK) + "&DoType=New&ExtType=InputCheck";
         }
         /// <summary>
         /// 扩展控件

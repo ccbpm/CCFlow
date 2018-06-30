@@ -154,18 +154,11 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls30\BitmapCutter.Core\API\Callback.cs" />
-    <Compile Include="Controls30\BitmapCutter.Core\API\Cutter.cs" />
-    <Compile Include="Controls30\BitmapCutter.Core\API\Helper.cs" />
-    <Compile Include="Controls30\BitmapCutter.Core\HttpHandler\BitmapScissors.cs" />
     <Compile Include="Controls30\CHART\CodeFile1.cs" />
     <Compile Include="Controls30\Comm\AdminTools.cs" />
     <Compile Include="Controls30\Comm\Comm.cs" />
     <Compile Include="Controls30\Comm\Help.cs" />
     <Compile Include="Controls30\Comm\Item.cs" />
-    <Compile Include="Controls30\Comm\MasterPage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Controls30\Comm\UCBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -176,12 +169,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls30\Comm\WebPage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls30\Comm\WebPageAdmin.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls30\Comm\WebPageSession.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls30\Comm\Xml\CfgMenu.cs" />

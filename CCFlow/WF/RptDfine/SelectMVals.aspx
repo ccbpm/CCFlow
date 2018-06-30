@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.Rpt.Comm_SelectMValsWF" Codebehind="SelectMVals.aspx.cs" %>
-<%@ Register src="../UC/Pub.ascx" tagname="Pub" tagprefix="uc1" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="Single.master" AutoEventWireup="true" Inherits="CCFlow.WF.Rpt.Comm_SelectMValsWF" Codebehind="SelectMVals.aspx.cs" %>
+<%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server"  >
 <script type="text/javascript">
     function SelectAll() {

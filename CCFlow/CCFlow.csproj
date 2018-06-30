@@ -830,9 +830,6 @@
     <Content Include="WF\Comm\umeditor1.2.3-utf8\umeditor.js" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\umeditor.min.js" />
     <Content Include="WF\Data\FlowFields.txt" />
-    <Content Include="WF\Data\HelpDesc\InitScript.txt" />
-    <Content Include="WF\Data\HelpDesc\MapExt_CH.txt" />
-    <Content Include="WF\Data\HelpDesc\MapExt_EN.txt" />
     <Content Include="WF\Data\ImpTableField.txt" />
     <Content Include="WF\Data\Install\DemoData.xml" />
     <Content Include="WF\Data\Install\Informix.sql" />
@@ -842,17 +839,6 @@
     <Content Include="WF\Data\Install\SQLScript\InitView_SQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
     <Content Include="WF\Data\Install\V_KM_DocTree.sql" />
-    <Content Include="WF\Data\JSLib\onblur\01.校验手机号码.js" />
-    <Content Include="WF\Data\JSLib\onblur\02.校验用户姓名：只能输入1-30个以字母开头的字串.js" />
-    <Content Include="WF\Data\JSLib\onblur\04.校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-” .js" />
-    <Content Include="WF\Data\JSLib\onblur\05.校验密码：只能输入6-20个字母、数字、下划线.js" />
-    <Content Include="WF\Data\JSLib\onblur\06.校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串.js" />
-    <Content Include="WF\Data\JSLib\onblur\07.校验邮政编码.js" />
-    <Content Include="WF\Data\JSLib\onblur\08.校验Email.js" />
-    <Content Include="WF\Data\JSLib\onchange\readme.txt" />
-    <Content Include="WF\Data\JSLib\ondblclick\readme.txt" />
-    <Content Include="WF\Data\JSLib\onkeypress\01.只能输入0-9 .js" />
-    <Content Include="WF\Data\JSLib\onkeyup\readme.txt" />
     <Content Include="WF\Data\SysFields.txt" />
     <Content Include="WF\Data\Sys\FieldKeys.txt" />
     <Content Include="WF\Data\Templete\SysFields.txt" />
@@ -6695,8 +6681,6 @@
     <Content Include="WF\Style\Tools.xml" />
     <Content Include="WF\Style\Verify.js" />
     <Content Include="WF\Todolist.htm" />
-    <Content Include="WF\UC\Pub.ascx" />
-    <Content Include="WF\UC\UCEn.ascx" />
     <Content Include="WF\WebOffice\AttachOffice.aspx" />
     <Content Include="WF\WebOffice\OfficeServices.ashx" />
     <Content Include="WF\WebOffice\OfficeView.aspx" />
@@ -7707,20 +7691,6 @@
     </Compile>
     <Compile Include="WF\Setting\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\UC\UCEn.ascx.cs">
-      <DependentUpon>UCEn.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\UC\UCEn.ascx.designer.cs">
-      <DependentUpon>UCEn.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\WebOffice\AttachOffice.aspx.cs">
       <DependentUpon>AttachOffice.aspx</DependentUpon>

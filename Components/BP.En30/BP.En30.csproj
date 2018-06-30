@@ -155,10 +155,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls30\CHART\CodeFile1.cs" />
-    <Compile Include="Controls30\Comm\AdminTools.cs" />
-    <Compile Include="Controls30\Comm\Comm.cs" />
-    <Compile Include="Controls30\Comm\Help.cs" />
-    <Compile Include="Controls30\Comm\Item.cs" />
     <Compile Include="Controls30\Comm\UCBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -171,33 +167,62 @@
     <Compile Include="Controls30\Comm\WebPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Controls30\Comm\Xml\CfgMenu.cs" />
-    <Compile Include="Controls30\Comm\Xml\RelationalMapping.cs" />
-    <Compile Include="Controls30\CTL\BPHyperLink.cs" />
-    <Compile Include="Controls30\CTL\BPImage.cs" />
-    <Compile Include="Controls30\CTL\BPRadioButtonList.cs" />
-    <Compile Include="Controls30\CTL\Btn.cs" />
-    <Compile Include="Controls30\CTL\CBL.cs" />
-    <Compile Include="Controls30\CTL\DatePicker.cs" />
-    <Compile Include="Controls30\CTL\DDL.cs" />
-    <Compile Include="Controls30\CTL\ImageBtn.cs" />
-    <Compile Include="Controls30\CTL\ImgEn.cs" />
-    <Compile Include="Controls30\CTL\Lab.cs" />
-    <Compile Include="Controls30\CTL\LB.cs" />
-    <Compile Include="Controls30\CTL\LineChart.cs" />
-    <Compile Include="Controls30\CTL\LinkBtn.cs" />
-    <Compile Include="Controls30\CTL\PubClass.cs" />
-    <Compile Include="Controls30\CTL\RadioBtn.cs" />
-    <Compile Include="Controls30\CTL\TB.cs" />
-    <Compile Include="Controls30\CTL\TBExt.cs" />
-    <Compile Include="Controls30\CTL\TextArea.cs" />
+    <Compile Include="Controls30\CTL\BPHyperLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\BPImage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\BPRadioButtonList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\Btn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\CBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\DatePicker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\DDL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\ImageBtn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\ImgEn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\Lab.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\LB.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\LineChart.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\LinkBtn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\PubClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\RadioBtn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\TB.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\TBExt.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls30\CTL\TextArea.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controls30\Glo.cs" />
     <Compile Include="Controls30\NamesOfCheckBtn.cs" />
-    <Compile Include="Controls30\NextPreviouRec.cs" />
-    <Compile Include="Controls30\WebFile.cs" />
-    <Compile Include="Controls30\Xml\FrmPopVal.cs" />
-    <Compile Include="Controls30\Xml\GroupXml.cs" />
-    <Compile Include="Controls30\Xml\MainMenuXml.cs" />
     <Compile Include="DA\AtPara.cs" />
     <Compile Include="DA\DBAccessOfMSSQL1.cs" />
     <Compile Include="DA\DBAccessOfOracle2.cs" />
@@ -283,7 +308,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\ExtContral.cs" />
-    <Compile Include="Sys\XML\SQLList.cs" />
     <Compile Include="Sys\FrmUI\FrmAttachmentExt.cs" />
     <Compile Include="Sys\FrmUI\MapAttrEnum.cs" />
     <Compile Include="Sys\FrmUI\MapAttrString.cs" />
@@ -294,6 +318,36 @@
     <Compile Include="Sys\FormEventBaseDtl.cs" />
     <Compile Include="Sys\ChMulTone.cs" />
     <Compile Include="Sys\MapDataTemplate.cs" />
+    <Compile Include="Sys\XML\ActiveAttr.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\AttrDesc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\EnumInfoXml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\GlobalKeyVal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\Search.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\RegularExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\RegularExpressionDtl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\SQLList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\XmlEn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\XML\XmlMenu.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="Tools\DataSet2Json.cs" />
     <Compile Include="DA\EnumDA.cs" />
@@ -378,7 +432,6 @@
     <Compile Include="En\EntityTree.cs" />
     <Compile Include="En\EntitySimpleTree.cs" />
     <Compile Include="Tools\WFSealData.cs" />
-    <Compile Include="Sys\XML\XmlMenu.cs" />
     <Compile Include="Sys\EventBase.cs" />
     <Compile Include="Sys\EventDemo.cs" />
     <Compile Include="GPM\Dept.cs" />
@@ -416,7 +469,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\EnsAppGroupXml.cs" />
-    <Compile Include="Sys\FieldGroupXml.cs" />
     <Compile Include="Sys\GEDtl.cs" />
     <Compile Include="Sys\GroupField.cs" />
     <Compile Include="Sys\MapData.cs" />
@@ -445,9 +497,6 @@
     <Compile Include="En\SqlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\XML\XmlEn.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Port\Emp.cs" />
     <Compile Include="Web\PageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -465,7 +514,6 @@
     <Compile Include="Sys\MapDtl.cs" />
     <Compile Include="Sys\GEEntity.cs" />
     <Compile Include="Sys\MapExt.cs" />
-    <Compile Include="Sys\ExpFucnXml.cs" />
     <Compile Include="Sys\FrmLine.cs" />
     <Compile Include="Sys\FrmLab.cs" />
     <Compile Include="Sys\FrmLink.cs" />
@@ -476,10 +524,6 @@
     <Compile Include="Sys\FrmBtn.cs" />
     <Compile Include="Sys\FrmAttachmentDB.cs" />
     <Compile Include="Sys\SFTable.cs" />
-    <Compile Include="Sys\XML\RegularExpression.cs" />
-    <Compile Include="Sys\XML\RegularExpressionDtl.cs" />
-    <Compile Include="Sys\XML\WebConfig.cs" />
-    <Compile Include="Sys\XML\EnumInfoXml.cs" />
     <Compile Include="Sys\CField.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -495,21 +539,7 @@
     <Compile Include="Sys\UserRegedit.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\XML\ActiveAttr.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\AttrDesc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\PanelEns.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\ShortKey.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\GroupTitle.cs" />
     <Compile Include="Sys\SysDocFile.cs" />
-    <Compile Include="Sys\XML\GlobalKeyVal.cs" />
     <Compile Include="Sys\SysEnumMain.cs" />
     <Compile Include="Sys\EnCfg.cs" />
     <Compile Include="Sys\UserLog.cs" />

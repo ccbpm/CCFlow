@@ -325,12 +325,6 @@
     <Compile Include="Template\AccepterRole.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Template\XML\ModeSortXml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Template\XML\ModeXml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Template\NodeDept.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -474,29 +468,18 @@
     <Compile Include="Xml\AdminMenu.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Xml\CCMenu.cs" />
-    <Compile Include="Xml\DefVal.cs" />
-    <Compile Include="Xml\EventSource.cs">
+    <Compile Include="Dev2InterfaceAnonymous.cs" />
+    <Compile Include="PortalInterface.cs" />
+    <Compile Include="Xml\AdminMenuGroup.cs" />
+    <Compile Include="Xml\EventList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Xml\SysDataType.cs" />
-    <Compile Include="Xml\Toolbar.cs" />
-    <Compile Include="Xml\Tool.cs" />
-    <Compile Include="Xml\EventList.cs" />
-    <Compile Include="Xml\FeatureSet.cs" />
-    <Compile Include="Xml\CondTypeXml.cs" />
-    <Compile Include="Xml\WorkOpt.cs" />
-    <Compile Include="Xml\WorkOptDtl.cs" />
-    <Compile Include="Xml\EventListDtl.cs" />
-    <Compile Include="Template\XML\FrmEventXml.cs" />
-    <Compile Include="Xml\OneWorkXml.cs" />
-    <Compile Include="Xml\DBSrc.cs" />
-    <Compile Include="Xml\RptXml.cs" />
-    <Compile Include="Dev2InterfaceAnonymous.cs" />
-    <Compile Include="Xml\OnlineHelper.cs" />
-    <Compile Include="PortalInterface.cs" />
-    <Compile Include="Xml\MsgType.cs" />
-    <Compile Include="Xml\AdminMenuGroup.cs" />
+    <Compile Include="Xml\EventListDtl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xml\OneWorkXml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -550,6 +533,7 @@
       <Name>BP.En30</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

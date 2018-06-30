@@ -787,7 +787,11 @@
 
                 }
 
-                en.Insert();
+                var info = en.Insert();
+                if (info != 1) {
+                    alert('更新错误:' + info);
+                    return;
+                }
 
 
                 var pkval = en.GetPKVal();
@@ -813,6 +817,7 @@
             var info = en.Update();
             if (info != 1) {
                 alert('更新错误:' + info);
+                return;
             }
             //保存实体后文件上传
             var entityAthType = mapData.GetPara("BPEntityAthType")

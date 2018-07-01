@@ -208,24 +208,26 @@ namespace BP.WF.HttpHandler
             conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID, toNodeID);
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
 
+            string noteIn = "'FID','PRI','PNodeID','PrjNo', 'PrjName', 'FK_NY','FlowDaySpan', 'MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID'";
+
             //增加字段集合.
             string sql = "";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
-                sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
+                sql += " AND KeyOfEn Not IN ("+noteIn+") ";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT KeyOfEn as No, CONCAT(KeyOfEn,' - ', Name ) as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
-                sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
+                sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
             else
             {
                 sql = "SELECT KeyOfEn as No, KeyOfEn+' - '+Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
-                sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
+                sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
 
@@ -348,20 +350,6 @@ namespace BP.WF.HttpHandler
             }
 
             return "保存成功!!";
-        }
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <returns></returns>
-        public string CondByFrm_Delete()
-        {
-            Cond deleteCond = new Cond();
-            deleteCond.MyPK = this.MyPK;
-            int i = deleteCond.Delete();
-            if (i == 1)
-                return "删除成功..";
-
-            return "无可删除的数据.";
         }
         #endregion 方向条件 Frm 模版
 

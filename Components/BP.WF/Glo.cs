@@ -1050,19 +1050,11 @@ namespace BP.WF
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_DeptStation");
 
             string sqlscript = "";
-            if (Glo.OSModel == BP.Sys.OSModel.OneOne)
-            {
-                /*如果是OneOne模式*/
-                sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_WorkFlow.sql";
-                BP.DA.DBAccess.RunSQLScript(sqlscript);
-            }
-
-            if (Glo.OSModel == BP.Sys.OSModel.OneMore)
-            {
+            
                 /*如果是OneMore模式*/
                 sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
-            }
+             
             #endregion 修复
 
             #region 4, 创建视图与数据.
@@ -1098,7 +1090,7 @@ namespace BP.WF
             else
             {
                 FlowSort fs = new FlowSort();
-                fs.No = "01";
+                fs.No = "1";
                 fs.ParentNo = "0";
                 fs.Name = "流程树";
                 fs.DirectInsert();
@@ -1175,18 +1167,11 @@ namespace BP.WF
                 BP.Web.WebUser.SignInOfGener(emp);
                 BP.Sys.Glo.WriteLineInfo("开始装载模板...");
                 string msg = "";
-                if (demoType == 0)
-                {
+               
                     //装载数据模版.
                     BP.WF.DTS.LoadTemplete l = new BP.WF.DTS.LoadTemplete();
                     msg = l.Do() as string;
-                }
-                else
-                {
-                    //装载数据模版.
-                    BP.WF.DTS.LoadTempleteOfBuess l2 = new BP.WF.DTS.LoadTempleteOfBuess();
-                    msg = l2.Do() as string;
-                }
+               
 
                 BP.Sys.Glo.WriteLineInfo("装载模板完成。开始修复视图...");
 
@@ -1205,7 +1190,7 @@ namespace BP.WF
 
                 FlowSort fs = new FlowSort();
                 fs.Name = "流程树";
-                fs.No = "01";
+                fs.No = "1";
                 fs.TreeNo = "01";
                 fs.IsDir = true;
                 fs.ParentNo = "0";

@@ -442,10 +442,6 @@
             }
 
             html += "</table>";
-
-
-          
-
             return html;
         }
 
@@ -867,7 +863,6 @@
         }
         function Delete() {
 
-
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
@@ -924,15 +919,14 @@
 <body class="easyui-layout">
 	
 	<div class="easyui-layout" data-options="region:'center'" border="false">
-        
 		
             <div class="easyui-layout" data-options="fit:true">
                 <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false" style="height: 30px;padding: 2px; background-color: #E0ECFF">
                     <a id="Btn_New" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
                     <a id="Btn_Save" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
                     <a id="Btn_Delete" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
-                   
                 </div>
+
                 <div data-options="region:'center',noheader:true,border:false" style="margin:0px">
                    <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin:0px;padding:0px;overflow:auto">
              

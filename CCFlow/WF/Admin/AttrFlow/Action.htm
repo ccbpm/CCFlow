@@ -2,14 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-     <title>节点-事件</title>
+
+     <title>流程-事件</title>
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -17,7 +16,6 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-     
 
     <script type="text/javascript">
         //页面启动函数.
@@ -26,13 +24,13 @@
             $("#Msg").html("正在加载,请稍后......");
 
             //初始化groupID.
-            var frmID = GetQueryString("FK_MapData");
+            var flowNo = GetQueryString("FK_Flow");
 
             var ens = new Entities("BP.Sys.FrmEvents");
-            ens.Retrieve("FK_MapData", frmID);
+            ens.Retrieve("FK_Flow", flowNo);
 
             var html = "<table style='width:98%;'>";
-            html += "<caption><img src='../../Img/Event.png' />表单事件 </caption>";
+            html += "<caption><img src='../../Img/Event.png' />流程事件 </caption>";
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>事件标记</th>";
@@ -61,7 +59,7 @@
         });
 
         function New() {
-            var url = "ActionDtl.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            var url = "ActionDtl.htm?FK_Flow=" + GetQueryString("FK_Flow");
             window.location.href = url;
         }
 
@@ -76,12 +74,14 @@
             return;
         }
         function GetActionTypeName(type) {
+
             //事件类型.
             var eventLists = [
-            { No: "FrmLoadBefore", Name: "节点表单载入前" },
-            { No: "FrmLoadAfter", Name: "节点表单载入后" },
-            { No: "SaveBefore", Name: "当表单保存前" },
-            { No: "SaveAfter", Name: "当表单保存后" }
+            { No: "FlowOnCreateWorkID", Name: "创建工作ID后", IsHaveMsg: 1, Note: '到达当前的工作的时候.' },
+            { No: "FlowOverBefore", Name: "流程结束前", IsHaveMsg: 0, Note: '发送前事件，可以抛出异常阻止流程向下发送.' },
+            { No: "FlowOverAfter", Name: "流程结束后", IsHaveMsg: 1, Note: '成功的事件.' },
+            { No: "BeforeFlowDel", Name: "流程删除前", IsHaveMsg: 0, Note: '失败后的处理业务.' },
+            { No: "AfterFlowDel", Name: "流程删除后", IsHaveMsg: 0, Note: '退回前的业务逻辑，可以抛出异常阻止退回.' }
             ]
 
             for (var i = 0; i < eventLists.length; i++) {
@@ -120,8 +120,8 @@
      <div id="Msg"></div>
      
      <br />
-     <input type=button value="+新建事件"  onclick="javascript:New()" />
-     <input type=button value="什么是事件？"  onclick="javascript:Help()" />
+     <input type=button value="+新建流程事件"  onclick="javascript:New()" />
+     <input type=button value="什么是流程事件？"  onclick="javascript:Help()" />
 
 
 	</form>

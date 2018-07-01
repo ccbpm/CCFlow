@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
 	<title>发起限制规则</title>
-	<link href="../../../WF/Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 	<style type="text/css">
 		.input
 		{
@@ -11,7 +11,6 @@
 			height: 20px;
 		}
 	</style>
-	<script type="text/javascript" src="../../Comm/JScript.js"></script>
 	<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
 	<script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
@@ -111,76 +110,81 @@
 		}
 
 		function Save(parameters) {
-			//debugger;
-			//获取控件值
-			var startLimitRole = "", startLimitPara = "";
-			var xzgz = $("input[name=xzgz]:checked")[0].id; //$("input[type=radio][name=xzgz]:checked")[0].id
-			alert(xzgz);
-			switch (xzgz) {
-				case "RB_None":
-					startLimitRole ="0";
-					break;
-				case "RB_ByTime":
-					var DDL_ByTime = parseInt($("#DDL_ByTime").val());
-					switch (DDL_ByTime) {
-						case 0:
-							startLimitRole = "1";
-							break;
-						case 1:
-							startLimitRole = "2";
-							break;
-						case 2:
-							startLimitRole = "3";
-							break;
-						case 3:
-							startLimitRole = "4";
-							break;
-						case 4:
-							startLimitRole = "5";
-							break;
-					}
-					startLimitPara = $("#TB_ByTimePara").val();
-					break;
-				case "RB_OnlyOneSubFlow":
-					startLimitRole = "9";
-					break;
-				case "RB_ColNotExit":
-					startLimitRole = "6";
-					startLimitPara = $("#TB_ColNotExit_Fields").val();
-					break;
-				case "RB_SQL":
-					var DDL_SQL = $("#DDL_SQL").val();
-					startLimitRole = DDL_SQL == 0 ? "7" : "8";
-					startLimitPara = $("#TB_SQL_Para").val();
-					break;
-				default:
-					break;
-			}
+		    //debugger;
+		    //获取控件值
+		    var startLimitRole = "", startLimitPara = "";
+		    var xzgz = $("input[name=xzgz]:checked")[0].id; //$("input[type=radio][name=xzgz]:checked")[0].id
+		    alert(xzgz);
+		    switch (xzgz) {
+		        case "RB_None":
+		            startLimitRole = "0";
+		            break;
+		        case "RB_ByTime":
+		            var DDL_ByTime = parseInt($("#DDL_ByTime").val());
+		            switch (DDL_ByTime) {
+		                case 0:
+		                    startLimitRole = "1";
+		                    break;
+		                case 1:
+		                    startLimitRole = "2";
+		                    break;
+		                case 2:
+		                    startLimitRole = "3";
+		                    break;
+		                case 3:
+		                    startLimitRole = "4";
+		                    break;
+		                case 4:
+		                    startLimitRole = "5";
+		                    break;
+		            }
+		            startLimitPara = $("#TB_ByTimePara").val();
+		            break;
+		        case "RB_OnlyOneSubFlow":
+		            startLimitRole = "9";
+		            break;
+		        case "RB_ColNotExit":
+		            startLimitRole = "6";
+		            startLimitPara = $("#TB_ColNotExit_Fields").val();
+		            break;
+		        case "RB_SQL":
+		            var DDL_SQL = $("#DDL_SQL").val();
+		            startLimitRole = DDL_SQL == 0 ? "7" : "8";
+		            startLimitPara = $("#TB_SQL_Para").val();
+		            break;
+		        default:
+		            break;
+		    }
 
-			//保存到服务器
-			$.ajax({
-			    type: 'post',
-			    async: true,
-			    dataType: 'html',
-			    url: Handler + "?DoType=Limit_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
-			    data: {
-			        StartLimitRole: startLimitRole,
-			        StartLimitPara: startLimitPara,
-			        StartLimitAlert: $("#TB_Alert").val()
-			    },
-			    dataType: 'html',
-			    success: function (data) {
+		    //保存到服务器
+		    $.ajax({
+		        type: 'post',
+		        async: true,
+		        dataType: 'html',
+		        url: Handler + "?DoType=Limit_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
+		        data: {
+		            StartLimitRole: startLimitRole,
+		            StartLimitPara: startLimitPara,
+		            StartLimitAlert: $("#TB_Alert").val()
+		        },
+		        dataType: 'html',
+		        success: function (data) {
 
-			        if (data.indexOf("err@") == 0) {
-			            alert(data);
-			            return;
-			        }
+		            if (data.indexOf("err@") == 0) {
+		                alert(data);
+		                return;
+		            }
 
-			        alert(data);
-			        window.location.href = window.location.href;
-			    }
-			});
-			//alert($("input[type='radio'][name='xzgz'][checked='true']")[0].id);
+		            alert(data);
+		            window.location.href = window.location.href;
+		        }
+		    });
+		    //alert($("input[type='radio'][name='xzgz'][checked='true']")[0].id);
+		}
+
+		function Help() {
+		    var url = "http://ccbpm.mydoc.io";
+		    window.open(url);
 		}
 	</script>
 </head>
@@ -190,15 +194,6 @@
 			发起限制规则
 		</caption>
 		<tr>
-			<td valign="top" style="width: 20%;">
-				<fieldset>
-					<legend>填写帮助</legend>
-					<ul>
-						<li>发起限制，根据不同的应用场景来设置的发起频率的限制规则。</li>
-						<li>比如：纳税人注销流程只能一个纳税人注销一次，不允许多次注销，发起多次，就是违反也正常的业务逻辑。。</li>
-					</ul>
-				</fieldset>
-			</td>
 			<td valign="top">
 				<fieldset>
 					<legend>
@@ -322,8 +317,10 @@
 		</tr>
 		<tr>
 			<td colspan="2" style="text-align: center;">
-				<button class="easyui-linkbutton" id="Btn_Save" onclick="Save()">
-					保存</button>
+				<input type=button id="Btn_Save" value="保存" onclick="Save()" />
+				<input type=button id="Button1" value="我需要帮助" onclick="Help()" />
+
+					 
 			</td>
 		</tr>
 	</table>

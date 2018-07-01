@@ -598,8 +598,10 @@ namespace BP.WF.HttpHandler
         /// <returns>运行中的流程</returns>
         public string Runing_Init()
         {
-            WF_App_ACE page = new WF_App_ACE(context);
-            return page.Runing_Init();
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_GenerRuning();
+
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 执行撤销
@@ -820,8 +822,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Todolist_Init()
         {
-            WF_App_ACE en = new WF_App_ACE(context);
-            return en.Todolist_Init();
+            string fk_node = this.GetRequestVal("FK_Node");
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node);
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 获得授权人的待办.

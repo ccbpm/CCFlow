@@ -195,9 +195,6 @@
     <Compile Include="DTS\Tool_Repair.cs" />
     <Compile Include="DTS\CreateIndex.cs" />
     <Compile Include="Glo.cs" />
-    <Compile Include="HttpHandler\AppACE.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -248,7 +245,7 @@
     <Compile Include="Port\SubInc\Emp.cs" />
     <Compile Include="Port\SubInc\StationType.cs" />
     <Compile Include="Port\SubInc\Inc.cs" />
-    <Compile Include="Rpt\db\MapRpt.cs">
+    <Compile Include="Rpt\MapRpt.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Rpt\MakeForm2Html.cs" />

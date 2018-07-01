@@ -257,8 +257,6 @@
     <Content Include="Global.asax" />
     <Content Include="SDKFlowDemo\AuthorDemo.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\EasyUI\DemoUserListExt.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\EasyUI\DeptEmpTree.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Output\DemoTurnPage.aspx" />
     <Content Include="SDKFlowDemo\BPFramework\Output\DemoUserList.aspx" />
@@ -279,7 +277,6 @@
     <Content Include="SDKFlowDemo\GuestApp\Top.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Welcome.aspx" />
     <Content Include="SDKFlowDemo\GuestFlow\Login.aspx" />
-    <Content Include="SDKFlowDemo\LitJSON\help.htm" />
     <Content Include="SDKFlowDemo\MyForm.aspx" />
     <Content Include="SDKFlowDemo\Pub.ascx" />
     <Content Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx" />
@@ -296,6 +293,8 @@
     <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
+    <Content Include="WF\Admin\AttrFlow\Action.htm" />
+    <Content Include="WF\Admin\AttrFlow\ActionDtl.htm" />
     <Content Include="WF\Admin\AttrFlow\AddOneFrmToNodes.htm" />
     <Content Include="WF\Admin\AttrFlow\API.htm" />
     <Content Include="WF\Admin\AttrFlow\APICode.htm" />
@@ -487,6 +486,8 @@
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2x2.png" />
     <Content Include="WF\Admin\CCBPMDesigner\viewFlowShort.htm" />
     <Content Include="WF\Admin\CCFlowEnum.js" />
+    <Content Include="WF\Admin\CCFormDesigner\Action.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\ActionDtl.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Button.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\basic\HyperLink.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Img.png" />
@@ -7040,20 +7041,6 @@
     </Compile>
     <Compile Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx.designer.cs">
       <DependentUpon>DemoEmps.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\EasyUI\DemoUserListExt.aspx.cs">
-      <DependentUpon>DemoUserListExt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\EasyUI\DemoUserListExt.aspx.designer.cs">
-      <DependentUpon>DemoUserListExt.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\EasyUI\DeptEmpTree.aspx.cs">
-      <DependentUpon>DeptEmpTree.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\EasyUI\DeptEmpTree.aspx.designer.cs">
-      <DependentUpon>DeptEmpTree.aspx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx.cs">
       <DependentUpon>DemoJZOut.aspx</DependentUpon>

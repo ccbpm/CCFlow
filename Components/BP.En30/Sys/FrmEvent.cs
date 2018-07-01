@@ -219,6 +219,10 @@ namespace BP.Sys
         /// </summary>
         public const string FK_MapData = "FK_MapData";
         /// <summary>
+        /// 流程编号
+        /// </summary>
+        public const string FK_Flow = "FK_Flow";
+        /// <summary>
         /// 节点ID
         /// </summary>
         public const string FK_Node = "FK_Node";
@@ -785,7 +789,8 @@ namespace BP.Sys
                 map.AddMyPK();
 
                 map.AddTBString(FrmEventAttr.FK_Event, null, "事件名称", true, true, 0, 400, 10);
-                map.AddTBString(FrmEventAttr.FK_MapData, null, "FK_MapData", true, true, 0, 100, 10);
+                map.AddTBString(FrmEventAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 10);
+                map.AddTBString(FrmEventAttr.FK_Flow, null, "流程编号", true, true, 0, 100, 10);
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
                 map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件类型", true, true);

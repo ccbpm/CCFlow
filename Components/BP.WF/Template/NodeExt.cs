@@ -641,12 +641,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "父子流程";
-                rm.Icon = "../../WF/Admin/AttrNode/Img/SubFlows.png";
-                rm.ClassMethodName = this.ToString() + ".DoSubFlow";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+           
 
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
@@ -677,12 +672,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "延续子流程"; // "调用事件接口";
-                rm.ClassMethodName = this.ToString() + ".DoYGFlows";
-                //  rm.Icon = "../../WF/Img/Event.png";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+            
                 #endregion 基础功能.
 
                 #region 字段相关功能（不显示在菜单里）
@@ -781,6 +771,26 @@ namespace BP.WF.Template
                 rm.GroupName = "表单设置";
                 map.AddRefMethod(rm);
                 #endregion 表单设置.
+
+                #region 父子流程.
+
+                rm = new RefMethod();
+                rm.Title = "父子流程";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/SubFlows.png";
+                rm.ClassMethodName = this.ToString() + ".DoSubFlow";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "父子流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "延续子流程"; // "调用事件接口";
+                rm.ClassMethodName = this.ToString() + ".DoYGFlows";
+                //  rm.Icon = "../../WF/Img/Event.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "父子流程";
+                map.AddRefMethod(rm);
+                #endregion 父子流程.
+
 
                 #region 考核.
 
@@ -1159,7 +1169,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBill()
         {
-            return "../../Admin/AttrNode/Bill.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/Bill.htm?FK_Node="+this.NodeID+"&NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
         
         

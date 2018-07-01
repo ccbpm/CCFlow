@@ -831,11 +831,8 @@ namespace BP.WF.HttpHandler
             cond.HisCondType = CondType.Dir;
             cond.FK_Node = FK_MainNode;
 
-
-
             cond.ToNodeID = ToNodeID;
             cond.Update();
-
 
             return "保存成功..";
         }
@@ -848,7 +845,6 @@ namespace BP.WF.HttpHandler
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
-
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             Cond deleteCond = new Cond();

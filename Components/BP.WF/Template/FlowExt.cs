@@ -509,70 +509,6 @@ namespace BP.WF.Template
 
                 #endregion 流程设置.
 
-                #region 实验中的功能
-
-                rm = new RefMethod();
-                rm.Title = "流程轨迹表单";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoBindFlowExt()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "批量设置节点";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
-                rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "轨迹查看权限";
-                rm.Icon = "../../WF/Img/Setting.png";
-                rm.ClassMethodName = this.ToString() + ".DoTruckRight()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "数据源管理(如果新增数据源后需要关闭重新打开)";
-                rm.ClassMethodName = this.ToString() + ".DoDBSrc";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                //设置相关字段.
-                rm.RefAttrKey = FlowAttr.DTSDBSrc;
-                rm.RefAttrLinkLabel = "数据源管理";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Target = "_blank";
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "一键设置审核组件工作模式";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 第2个节点以后的节点表单都指向第2个节点表单.  \t\n  2, 结束节点都设置为只读模式. ";
-                rm.GroupName = "实验中的功能";
-                rm.ClassMethodName = this.ToString() + ".DoSetFWCModel()";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "删除NDxxxRpt表,多余字段.";
-                rm.ClassMethodName = this.ToString() + ".DoDeleteFields()";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "删除NDxxxRpt表,数据为null的多余字段.";
-                rm.ClassMethodName = this.ToString() + ".DoDeleteFieldsIsNull()";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
-
-                #endregion 实验中的功能
 
                 #region 流程模版管理.
                 rm = new RefMethod();
@@ -816,6 +752,74 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 流程监控.
 
+
+
+                #region 实验中的功能
+
+                rm = new RefMethod();
+                rm.Title = "流程轨迹表单";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
+                rm.ClassMethodName = this.ToString() + ".DoBindFlowExt()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "批量设置节点";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "轨迹查看权限";
+                rm.Icon = "../../WF/Img/Setting.png";
+                rm.ClassMethodName = this.ToString() + ".DoTruckRight()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "数据源管理(如果新增数据源后需要关闭重新打开)";
+                rm.ClassMethodName = this.ToString() + ".DoDBSrc";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
+                //设置相关字段.
+                rm.RefAttrKey = FlowAttr.DTSDBSrc;
+                rm.RefAttrLinkLabel = "数据源管理";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "一键设置审核组件工作模式";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 第2个节点以后的节点表单都指向第2个节点表单.  \t\n  2, 结束节点都设置为只读模式. ";
+                rm.GroupName = "实验中的功能";
+                rm.ClassMethodName = this.ToString() + ".DoSetFWCModel()";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "删除NDxxxRpt表,多余字段.";
+                rm.ClassMethodName = this.ToString() + ".DoDeleteFields()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "删除NDxxxRpt表,数据为null的多余字段.";
+                rm.ClassMethodName = this.ToString() + ".DoDeleteFieldsIsNull()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                #endregion 实验中的功能
+
+
                 //rm = new RefMethod();
                 //rm.Title = "执行流程数据表与业务表数据手工同步"; 
                 //rm.ClassMethodName = this.ToString() + ".DoBTableDTS";
@@ -999,7 +1003,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return "../../Admin/AttrNode/Action.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrFlow/Action.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
        
         /// <summary>

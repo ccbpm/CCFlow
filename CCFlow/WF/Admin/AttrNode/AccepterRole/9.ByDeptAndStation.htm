@@ -47,12 +47,20 @@
             document.getElementById("dept").innerHTML = html;
         });
 
-        function OpenStation() {
+        function OpenStation11() {
             var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
             var nodeID = GetQueryString("FK_Node");
             url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
             OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
         }
+
+        function OpenStation() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+        }
+
+
 
         function OpenNew() {
             var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
@@ -85,8 +93,8 @@
 <td style="width:50%;"  valign=top > 
     <h5>设置岗位</h5>
     <ul>
-        <li> <a href="javascript:OpenStation()"> 设置与更改岗位(新)</a>  </li>
-        <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位</a>  </li>
+        <li> <a href="javascript:OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
+        <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
     </ul>
 </td>
 

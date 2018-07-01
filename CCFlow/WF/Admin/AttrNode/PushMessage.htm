@@ -100,6 +100,11 @@
 
             window.location.href = url;
         }
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
+
     </script>
  
     
@@ -110,11 +115,7 @@
     <div style="margin:8px">
         <table id="Table1" style="width: 100%">
             <caption>
-                <div style="float: left">
-                    消息事件</div>
-                <div style="float: right">
-                    <a href="http://ccbpm.mydoc.io" target="_blank">帮助</a>
-                </div>
+               消息事件
             </caption>
             <tr>
                 <th> 序 </th>
@@ -142,6 +143,9 @@
                     </li>
                 </ul>
             </div>
+
+               <input type=button value="我需要帮助" onclick="Help()" />
+
         </fieldset>
     </div>
     </form>

@@ -8,8 +8,9 @@
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
      <base target="_self" />
-    <link href="../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
     </script>
     <script language="javascript" type="text/javascript" >
@@ -19,28 +20,27 @@
                 window.close();
             return true;
         }
+
         function LogAs(fk_emp, empName) {
+
             if (window.confirm('您确定要以[' + empName + ']授权方式登陆处理工作吗？') == false)
                 return;
-            $.ajax({
-                type: 'post',
-                async: false,
-                url: Handler + "?DoType=LoginAs&No=" + fk_emp + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (msg) {
-                    if (msg.indexOf('err') == 0) {
-                        alert('授权登录失败!');
-                    }
-                    else {
-                        parent.location.reload();
-                        //top.location.href = '../WF/App/Classic/index.jsp';
-                        top.location.href = './Todolist.htm';
-                        //window.open('Todolist.htm');
-                    }
-                }
-            });
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("No", fk_emp);
+            var data = handler.DoMethodReturnString("LoginAs");
+
+            if (msg.indexOf('err') == 0) {
+                alert('授权登录失败!');
+                return;
+            }
+
+            parent.location.reload();
+            //top.location.href = '../WF/App/Classic/index.jsp';
+            top.location.href = './Todolist.htm';
+            //window.open('Todolist.htm');
         }
+
         //页面启动函数.
         $(function () {
 
@@ -55,135 +55,131 @@
         function InitPage() {
 
             var fk_node = GetQueryString("FK_Node");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Node", fk_node);
+            var data = handler.DoMethodReturnString("Load_Author");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Load_Author&FK_Node=" + fk_node + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    data = JSON.parse(data);
-                    var timeKey = "ss";
-                    var newRow = ""; //tab标签
-                    var conMenu = ""; //待办列表
-                    for (var i = 0; i < data.length; i++) {
-                        if (i == 0) {
-                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\" class='hover'>" + data[i].NAME + "的待办</li>";
-                            conMenu += "<div id='con_menu_" + (i + 1) + "' class='hover'>";
-                        }
-                        else {
-                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\">" + data[i].NAME + "的待办</li>";
-                            conMenu += "<div id='con_menu_" + (i + 1) + "'  style='display:none'>";
-                        }
+            data = JSON.parse(data);
 
-                        //生成对应授权人的待办列表的top
-                        conMenu += "<table id='Table" + (i + 1) + "' width='100%'  cellspacing='0' cellpadding='0' align='left'>";
-                        conMenu += "<tr class='centerTitle'>";
-                        conMenu += "<th>序</th><th>优先级</th><th>标题</th><th>流程</th><th>节点</th><th>发起人</th>";
-                        conMenu += "<th>发起日期</th><th>接受日期</th><th>应完成日期</th><th>状态</th><th>类型</th><th>备注</th>";
-                        conMenu += "</tr>";
+            var timeKey = "ss";
+            var newRow = ""; //tab标签
+            var conMenu = ""; //待办列表
+            for (var i = 0; i < data.length; i++) {
+                if (i == 0) {
+                    newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\" class='hover'>" + data[i].NAME + "的待办</li>";
+                    conMenu += "<div id='con_menu_" + (i + 1) + "' class='hover'>";
+                }
+                else {
+                    newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\">" + data[i].NAME + "的待办</li>";
+                    conMenu += "<div id='con_menu_" + (i + 1) + "'  style='display:none'>";
+                }
 
-                        //输出待办详细信息
-                        $.ajax({
-                            type: 'post',
-                            async: false,
-                            url: Handler + "?DoType=Todolist_Author&FK_Node=" + fk_node + "&No=" + data[i].NO + "&m=" + Math.random(),
-                            dataType: 'html',
-                            success: function (msg) {
-                                msg = JSON.parse(msg);
+                //生成对应授权人的待办列表的top
+                conMenu += "<table id='Table" + (i + 1) + "' width='100%'  cellspacing='0' cellpadding='0' align='left'>";
+                conMenu += "<tr class='centerTitle'>";
+                conMenu += "<th>序</th><th>优先级</th><th>标题</th><th>流程</th><th>节点</th><th>发起人</th>";
+                conMenu += "<th>发起日期</th><th>接受日期</th><th>应完成日期</th><th>状态</th><th>类型</th><th>备注</th>";
+                conMenu += "</tr>";
 
-                                for (var j = 0; j < msg.length; j++) {
-                                    var title = msg[j].TITLE;
-                                    var isRead = msg[j].ISREAD;
-                                    var flowNo = msg[j].FK_FLOW;
-                                    var flowName = msg[j].FLOWNAME;
-                                    var nodeName = msg[j].NODENAME;
-                                    var starterName = msg[j].STARTERNAME;
-                                    var pri = msg[j].PRI;
-                                    var nodeID = msg[j].FK_NODE;
-                                    var fid = msg[j].FID;
-                                    var workID = msg[j].WORKID;
-                                    var paras = msg[j].PARAS;
-                                    var cdt = getNowFormatDate();
+                //输出待办详细信息
+                $.ajax({
+                    type: 'post',
+                    async: false,
+                    url: Handler + "?DoType=Todolist_Author&FK_Node=" + fk_node + "&No=" + data[i].NO + "&m=" + Math.random(),
+                    dataType: 'html',
+                    success: function (msg) {
+                        msg = JSON.parse(msg);
 
-                                    conMenu += "<tr > <td>" + (j + 1) + "</td>"; //序号
-                                    conMenu += "<td><img class=Icon src='../WF/Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
-                                    var url = "";
-                                    if (isRead == 0) {
-                                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_UnRead.png' />" + title + "</a>";
-                                    } else {
-                                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_Read.png' />" + title + "</a>";
-                                    }
+                        for (var j = 0; j < msg.length; j++) {
+                            var title = msg[j].TITLE;
+                            var isRead = msg[j].ISREAD;
+                            var flowNo = msg[j].FK_FLOW;
+                            var flowName = msg[j].FLOWNAME;
+                            var nodeName = msg[j].NODENAME;
+                            var starterName = msg[j].STARTERNAME;
+                            var pri = msg[j].PRI;
+                            var nodeID = msg[j].FK_NODE;
+                            var fid = msg[j].FID;
+                            var workID = msg[j].WORKID;
+                            var paras = msg[j].PARAS;
+                            var cdt = getNowFormatDate();
 
-                                    conMenu += "<td>" + url + "</td>"; //标题
-                                    conMenu += "<td>" + flowName + "</td>"; //流程类别
-                                    conMenu += "<td>" + nodeName + "</td>"; //节点名称
-                                    conMenu += "<td>" + starterName + "</td>"; //发起人
-
-
-                                    conMenu += "<td>" + msg[j].RDT + "</td>"; //发起时间
-                                    conMenu += "<td>" + msg[j].ADT + "</td>"; //接受时间
-                                    conMenu += "<td>" + msg[j].SDT + "</td>"; //应完成时间
-                                    //判断流程是否逾期
-                                    if (cdt > msg[j].SDT && msg[j].WFSTATE == 2) {
-                                        conMenu += "<td><img src='../WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
-                                    }
-                                    else {
-                                        conMenu += "<td><img src='../WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
-                                    }
-                                    //待办的状态.
-                                    switch (msg[j].WFSTATE) {
-                                        case 1:
-                                            conMenu += "<td>草稿</td>";
-                                            break;
-                                        case 2:
-                                            conMenu += "<td>待办</td>";
-                                            break;
-                                        case 3: //已完成.
-                                            break;
-                                        case 4:
-                                            conMenu += "<td>挂起</td>";
-                                            break;
-                                        case 5:
-                                            conMenu += "<td>退回</td>";
-                                            break;
-                                        case 6:
-                                            conMenu += "<td>转发</td>";
-                                            break;
-                                        case 7:
-                                            conMenu += "<td>删除</td>";
-                                            break;
-                                        case 8:
-                                            conMenu += "<td>加签</td>";
-                                            break;
-                                        case 11:
-                                            conMenu += "<td>加签回复</td>";
-                                            break;
-                                        default:
-                                            conMenu += "<td>其他</td>";
-                                            break;
-                                    }
-                                    //备注
-                                    conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FLOWNOTE + "'>" + msg[j].FLOWNOTE + "</div></td>";
-                                    conMenu += "</tr>";
-                                }
+                            conMenu += "<tr > <td>" + (j + 1) + "</td>"; //序号
+                            conMenu += "<td><img class=Icon src='../WF/Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
+                            var url = "";
+                            if (isRead == 0) {
+                                url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_UnRead.png' />" + title + "</a>";
+                            } else {
+                                url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_Read.png' />" + title + "</a>";
                             }
-                        });
-                        conMenu += "</table>";
-                        conMenu += "</div>";
+
+                            conMenu += "<td>" + url + "</td>"; //标题
+                            conMenu += "<td>" + flowName + "</td>"; //流程类别
+                            conMenu += "<td>" + nodeName + "</td>"; //节点名称
+                            conMenu += "<td>" + starterName + "</td>"; //发起人
+
+
+                            conMenu += "<td>" + msg[j].RDT + "</td>"; //发起时间
+                            conMenu += "<td>" + msg[j].ADT + "</td>"; //接受时间
+                            conMenu += "<td>" + msg[j].SDT + "</td>"; //应完成时间
+                            //判断流程是否逾期
+                            if (cdt > msg[j].SDT && msg[j].WFSTATE == 2) {
+                                conMenu += "<td><img src='../WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
+                            }
+                            else {
+                                conMenu += "<td><img src='../WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
+                            }
+                            //待办的状态.
+                            switch (msg[j].WFSTATE) {
+                                case 1:
+                                    conMenu += "<td>草稿</td>";
+                                    break;
+                                case 2:
+                                    conMenu += "<td>待办</td>";
+                                    break;
+                                case 3: //已完成.
+                                    break;
+                                case 4:
+                                    conMenu += "<td>挂起</td>";
+                                    break;
+                                case 5:
+                                    conMenu += "<td>退回</td>";
+                                    break;
+                                case 6:
+                                    conMenu += "<td>转发</td>";
+                                    break;
+                                case 7:
+                                    conMenu += "<td>删除</td>";
+                                    break;
+                                case 8:
+                                    conMenu += "<td>加签</td>";
+                                    break;
+                                case 11:
+                                    conMenu += "<td>加签回复</td>";
+                                    break;
+                                default:
+                                    conMenu += "<td>其他</td>";
+                                    break;
+                            }
+                            //备注
+                            conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FLOWNOTE + "'>" + msg[j].FLOWNOTE + "</div></td>";
+                            conMenu += "</tr>";
+                        }
                     }
-                    //显示tab标签
-                    $('#Tab_Menu').html([
+                });
+                conMenu += "</table>";
+                conMenu += "</div>";
+            }
+            //显示tab标签
+            $('#Tab_Menu').html([
                         newRow
                     ].join(''));
-                    //显示待办列表
-                    $('#Div_Content').html([
+            //显示待办列表
+            $('#Div_Content').html([
                         conMenu
                     ].join(''));
-                }
-            });
         }
+
         //获取当前时间
         function getNowFormatDate() {
             var date = new Date();

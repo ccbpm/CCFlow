@@ -39,6 +39,7 @@
 	        for (var i = 0; i < ens.length; i++) {
 	            var en = ens[i];
 	            html += "<tr>";
+	            html += "<td class=Idx>" + (i+1) + "</td>";
 	            html += "<td>" + en.FK_FlowText + "</td>";
 	          //  html += "<td>" + en.YGWorkWayText + "</td>";
 	            html += "<td><a href=\"javascript:Edit('" + en.OID + "');\" >编辑</a></td>";
@@ -84,31 +85,41 @@
             //window.location.href = url;
 
         }
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
     </script>
 </head>
 <body>
 	<table id="Table1" style="width: 100%">
 		
-        <caption>延续子流程 <a href="javascript:AddGroup()">增加集团子流程</a>|<a href="javascript:AddOrg()">增加本组织子流程</a></caption>
+        <caption>延续子流程</caption>
 
         <tr>
+        <th>序</th>
         <th>流程名称</th>
         <th>编辑</th>
         <th>删除</th>
         </tr>
-		 
 	</table>
+
+    <br />
+
+    <input type=button value="增加集团子流程" onclick="AddGroup()" />
+    <input type=button value="增加本组织子流程" onclick="AddOrg()" />
+    <input type=button value="我需要帮助" onclick="Help()" />
 
 
 	<div id="Msg">
 	</div>
-
+<!--
     <fieldset>
 					<legend>填写帮助</legend>
 					<ul>
 						<li>延续流程就是当前的子流程.</li>
 						<li>延续流程是子流程的一种,该子流程只能被发起一次.</li>
 					</ul>
-				</fieldset>
+				</fieldset>-->
 </body>
 </html>

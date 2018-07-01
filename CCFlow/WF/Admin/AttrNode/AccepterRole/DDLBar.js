@@ -12,7 +12,7 @@ function InitBar(key) {
 
 
    // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
-    var html = "<div style='' >访问规则: ";
+    var html = "<div style='padding:5px' >访问规则: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
@@ -66,22 +66,20 @@ function InitBar(key) {
         html += "<option value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
     }
-
-
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-   // html += "<input type=button onclick='SaveAndClose()' value='保存&关闭' />";
-
     html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
+    html += "<input type=button onclick='Help()' value='我需要帮助' />";
+    html += "</div>";
 
- //   html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
-
-    html += "<input type=button onclick='Help()' value='我需要帮助' /></div>";
 
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+
+
+
 }
 
 function OldVer() {

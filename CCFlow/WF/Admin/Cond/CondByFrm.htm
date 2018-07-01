@@ -130,7 +130,6 @@
             handler.AddPara("FK_MainNode", fk_mainNode);
             handler.AddPara("FK_Node", fk_Node);
 
-
             var data = handler.DoMethodReturnString("CondByFrm_Save");
 
             if (data.indexOf('err@') == 0) {
@@ -151,32 +150,12 @@
         }
 
         //执行删除..
-        function Delete( mypk ) {
-
+        function Delete(mypk) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByFrm_Delete&MyPK=" + mypk + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
-
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
-                    window.location.href = window.location.href;
-                }
-            });
+            var en = new Entity("BP.WF.Template.Cond", mypk);
+            en.Delete();
+            window.location.href = window.location.href;
         }
 
         //当字段选择的时候.
@@ -265,7 +244,7 @@
 <td style="width:20%;">选择表单字段: </td>
 <td>
 <select id="DDL_Fields" name="DDL_Fields" style="width:400px;"  onchange="changeCond(this)" ></select>
-<br>提示:如果没有您期望的字段,请在流程设计器中检查一下流程.
+<a href="javascript:alert('提示:如果没有您期望的字段,请在流程设计器中检查一下流程.')">为什么没有我要的字段？</a>
  </td>
 </tr>
 

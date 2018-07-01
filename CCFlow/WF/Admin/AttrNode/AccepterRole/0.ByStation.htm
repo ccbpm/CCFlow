@@ -24,7 +24,7 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "<table style='width:100%;' >";
+            var html = "<table style='width:60%;' >";
             html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
             var idx = 0;
             for (var i = 0; i < ens.length; i++) {
@@ -36,7 +36,7 @@
                 html += "<td>" + en.FK_StationText + "</td>";
                 
                 idx++;
-                if (idx == 4) {
+                if (idx == 7) {
                     idx = 0;
                     html += "</tr>";
                 }
@@ -105,7 +105,7 @@
         <legend>设置岗位</legend>
         <ul>
             <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
-            <li> <a href="javascript:OpenNew()" >设置/更改岗位</a> </li>
+            <li> <a href="javascript:OpenNew()" >设置/更改岗位（左右树结构）</a> </li>
             <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a>
             </li>
         </ul>

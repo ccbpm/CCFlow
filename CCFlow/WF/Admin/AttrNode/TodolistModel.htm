@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8" />
     <title>多人处理规则</title>
-     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <meta charset="UTF-8" />
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -30,18 +30,27 @@
 
             var node = new Entity("BP.WF.Node", nodeID);
 
-
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(node);
 
             $("#Msg").html("");
 
         });
+
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
     </script>
 </head>
 <body>
 <form id="cc">
 <div id="Msg"></div>
+
+<table>
+<caption>多人处理规则</caption>
+<tr>
+<td>
 <fieldset>
 <legend> <input type="radio" value="0"  id="RB_TodolistModel_0" name="RB_TodolistModel" /> <label for="RB_TodolistModel_0">抢办模式 </label> </legend>
 <ul >
@@ -102,45 +111,34 @@
   </select> </li>
 
 <li>内容(对于按照SQL方式填写才有效)：<input type="text" id="TB_TeamLeaderConfirmDoc" name="TB_TeamLeaderConfirmDoc" /> </li>
-
-
 </ul>
-
 </fieldset>
+</td>
+</tr>
+
+</table>
 
 <input type="button" id="Btn_Save"  value="保存" onclick="Save()" />
+    <input type=button value="我需要帮助" onclick="Help()" />
+
 
 <script type="text/javascript">
 
     function Save() {
 
         var nodeID = GetQueryString("FK_Node");
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+        handler.AddFormData();
+        handler.AddPara("FK_Node", nodeID);
+        var data = handler.DoMethodReturnString("TodolistModel_Save");
 
-        // var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-        // alert(CheckBoxIDs);
-
-        var frmData = $("#cc").serialize();
-
-
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=TodolistModel_Save&FK_Node=" + nodeID + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-
-                if (data.indexOf('err@') >= 0) {
-                    alert(data);
-                    return;
-                }
-
-                alert(data);
-
-                window.location.href = window.location.href;
-                return;
-            }
-        });
+        if (data.indexOf('err@') >= 0) {
+            alert(data);
+            return;
+        }
+        alert(data);
+        window.location.href = window.location.href;
+        return;
     }
 </script>
 

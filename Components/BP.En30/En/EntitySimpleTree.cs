@@ -117,6 +117,54 @@ namespace BP.En
         }
         #endregion
 
+
+        #region 可让子类调用的方法
+        /// <summary>
+        /// 新建同级节点
+        /// </summary>
+        /// <returns></returns>
+        public EntityTree DoCreateSameLevelNode()
+        {
+            EntityTree en = this.CreateInstance() as EntityTree;
+            en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
+            en.Name = "新建节点" + en.No;
+            en.ParentNo = this.ParentNo;
+            en.Insert();
+            return en;
+        }
+        /// <summary>
+        /// 新建子节点
+        /// </summary>
+        /// <returns></returns>
+        public EntityTree DoCreateSubNode()
+        {
+            EntityTree en = this.CreateInstance() as EntityTree;
+            en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
+            en.Name = "新建节点" + en.No;
+            en.ParentNo = this.No;
+            en.Insert();
+            return en;
+        }
+        /// <summary>
+        /// 上移
+        /// </summary>
+        /// <returns></returns>
+        public string DoUp()
+        {
+            this.DoOrderUp(EntityTreeAttr.ParentNo, this.ParentNo, EntityTreeAttr.Idx);
+            return "执行成功.";
+        }
+        /// <summary>
+        /// 下移
+        /// </summary>
+        /// <returns></returns>
+        public string DoDown()
+        {
+            this.DoOrderDown(EntityTreeAttr.ParentNo, this.ParentNo, EntityTreeAttr.Idx);
+            return "执行成功.";
+        }
+        #endregion
+
     }
 	/// <summary>
     /// 树实体s

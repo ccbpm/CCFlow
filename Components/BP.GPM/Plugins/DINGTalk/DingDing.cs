@@ -274,7 +274,6 @@ namespace BP.EAI.Plugins
                     rootDept.No = rootDepartMent.id;
                     rootDept.Name = rootDepartMent.name;
                     rootDept.ParentNo = "0";
-                    rootDept.Idx = deptIdx;
                     rootDept.DirectInsert();
 
 
@@ -288,7 +287,6 @@ namespace BP.EAI.Plugins
                             dept.No = deptMentInfo.id;
                             dept.Name = deptMentInfo.name;
                             dept.ParentNo = deptMentInfo.parentid;
-                            dept.Idx = deptIdx++;
                             dept.DirectInsert();
                         }
 
@@ -400,7 +398,6 @@ namespace BP.EAI.Plugins
                             dept.No = deptMentInfo.id;
                             dept.Name = deptMentInfo.name;
                             dept.ParentNo = deptMentInfo.parentid;
-                            dept.Idx = deptIdx;
                             dept.DirectInsert();
                             append.Append("\r\n新增部门：" + deptMentInfo.id + " - " + deptMentInfo.name);
                         }
@@ -647,11 +644,7 @@ namespace BP.EAI.Plugins
                 {
                     list.Add("parentid", dept.ParentNo);
                 }
-                //大于零才可以
-                if (dept.Idx > 0)
-                {
-                    list.Add("order", dept.Idx);
-                }
+               
                 string str = BP.Tools.FormatToJson.ToJson_FromDictionary(list);
                 str = new HttpWebResponseUtility().HttpResponsePost_Json(url, str);
                 Ding_Post_ReturnVal postVal = FormatToJson.ParseFromJson<Ding_Post_ReturnVal>(str);

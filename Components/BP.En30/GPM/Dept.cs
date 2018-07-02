@@ -19,7 +19,7 @@ namespace BP.GPM
     /// <summary>
     /// 部门
     /// </summary>
-    public class Dept : EntityTree
+    public class Dept : EntitySimpleTree
     {
         #region 属性
         /// <summary>
@@ -115,16 +115,7 @@ namespace BP.GPM
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
 
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
-
-                // 01,0101,010101.
-                map.AddTBString(DeptAttr.TreeNo, null, "树编号", false, false, 0, 100, 30);
                  
-
-                //顺序号.
-                map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
-
-                //是否是目录
-                map.AddTBInt(DeptAttr.IsDir, 0, "是否是目录", true, true);
 
                 //  map.AddDDLEntities(DeptAttr. null, "部门类型", new DeptTypes(), true);
 
@@ -304,7 +295,7 @@ namespace BP.GPM
     /// <summary>
     ///部门集合
     /// </summary>
-    public class Depts : EntitiesTree
+    public class Depts : EntitiesSimpleTree
     {
         /// <summary>
         /// 得到一个新实体

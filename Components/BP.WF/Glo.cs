@@ -519,19 +519,15 @@ namespace BP.WF
                 #endregion
 
                 #region 检查必要的升级。
-                //部门
-                BP.Port.Dept d = new BP.Port.Dept();
-                d.CheckPhysicsTable();
-
                 FrmWorkCheck fwc = new FrmWorkCheck();
                 fwc.CheckPhysicsTable();
-
 
                 Flow myfl = new Flow();
                 myfl.CheckPhysicsTable();
 
                 Node nd = new Node();
                 nd.CheckPhysicsTable();
+
                 //Sys_SFDBSrc
                 SFDBSrc sfDBSrc = new SFDBSrc();
                 sfDBSrc.CheckPhysicsTable();

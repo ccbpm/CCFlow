@@ -12,6 +12,18 @@ namespace BP.GPM
     public class DeptAttr : EntityTreeAttr
     {
         /// <summary>
+        /// 部门负责人
+        /// </summary>
+        public const string Leader = "Leader";
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public const string Tel = "Tel";
+        /// <summary>
+        ///外部联系人
+        /// </summary>
+        public const string In_Out = "In_Out";
+        /// <summary>
         /// 单位全名
         /// </summary>
         public const string NameOfPath = "NameOfPath";
@@ -19,7 +31,7 @@ namespace BP.GPM
     /// <summary>
     /// 部门
     /// </summary>
-    public class Dept : EntitySimpleTree
+    public class Dept : EntityTree
     {
         #region 属性
         /// <summary>
@@ -48,6 +60,31 @@ namespace BP.GPM
             set
             {
                 this.SetValByKey(DeptAttr.ParentNo, value);
+            }
+        }
+        /// <summary>
+        /// 领导
+        /// </summary>
+        public string Leader
+        {
+            get
+            {
+                return this.GetValStrByKey(DeptAttr.Leader);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.Leader, value);
+            }
+        }
+        public int In_Out
+        {
+            get
+            {
+                return this.GetValIntByKey(DeptAttr.In_Out);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.In_Out, value);
             }
         }
         private Depts _HisSubDepts = null;
@@ -115,8 +152,19 @@ namespace BP.GPM
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
 
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
-                 
 
+                // 01,0101,010101.
+                map.AddTBString(DeptAttr.TreeNo, null, "树编号", false, false, 0, 100, 30);
+
+                //部门领导.
+                map.AddTBString(DeptAttr.Leader, null, "领导", false, false, 0, 100, 30);
+                map.AddTBString(DeptAttr.Tel, null, "联系电话", false, false, 0, 100, 30);
+                //顺序号.
+                map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
+
+                //是否是目录
+                map.AddTBInt(DeptAttr.IsDir, 0, "是否是目录", true, true);
+                map.AddTBInt(DeptAttr.In_Out, 0, "外部联系人", false, false);
                 //  map.AddDDLEntities(DeptAttr. null, "部门类型", new DeptTypes(), true);
 
                 RefMethod rm = new RefMethod();
@@ -136,7 +184,7 @@ namespace BP.GPM
                 rm.Title = "增加同级部门";
                 rm.ClassMethodName = this.ToString() + ".DoSameLevelDept";
                 rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, false, 0, 100, 100); 
+                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -161,7 +209,7 @@ namespace BP.GPM
                 map.AttrsOfOneVSM.AddGroupListModel(new DeptStations(), new Stations(),
                   DeptStationAttr.FK_Dept,
                   DeptStationAttr.FK_Station, "对应岗位(树)", StationAttr.FK_StationType);
-                 
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -189,7 +237,7 @@ namespace BP.GPM
             return en.ToJson();
         }
 
-        public string DoSameLevelDept(string no,string name)
+        public string DoSameLevelDept(string no, string name)
         {
             Dept en = new Dept();
             en.No = no;
@@ -199,7 +247,7 @@ namespace BP.GPM
             en.Name = name;
             en.ParentNo = this.ParentNo;
             en.Insert();
-             
+
             return "增加成功..";
         }
         public string DoSubDept(string no, string name)
@@ -295,7 +343,7 @@ namespace BP.GPM
     /// <summary>
     ///部门集合
     /// </summary>
-    public class Depts : EntitiesSimpleTree
+    public class Depts : EntitiesTree
     {
         /// <summary>
         /// 得到一个新实体

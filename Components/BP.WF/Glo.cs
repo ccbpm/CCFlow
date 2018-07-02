@@ -450,9 +450,7 @@ namespace BP.WF
 
                 BP.WF.Template.NodeSheet nodeSheet = new BP.WF.Template.NodeSheet();
                 nodeSheet.CheckPhysicsTable();
-                // 升级手机应用. 2014-08-02.
-                sql = "UPDATE WF_Node SET MPhone_WorkModel=0,MPhone_SrcModel=0,MPad_WorkModel=0,MPad_SrcModel=0 WHERE MPhone_WorkModel IS NULL";
-                BP.DA.DBAccess.RunSQL(sql);
+                
                 #endregion 基础数据更新.
 
                 #region 把节点的toolbarExcel, word 信息放入mapdata

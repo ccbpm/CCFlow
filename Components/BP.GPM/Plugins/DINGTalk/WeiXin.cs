@@ -145,6 +145,38 @@ namespace BP.EAI.Plugins.WXin
             }
             return false;
         }
+        /// <summary>
+        /// 获取指定部门下  指定手机号的人员
+        /// </summary>
+        /// <param name="FK_Dept">部门编号</param>
+        /// <param name="Tel">手机号</param>
+        /// <returns></returns>
+        public UserInfoBelongDept GetUserListByDeptIDAndTel(string FK_Dept, string Tel = null)
+        {
+            string access_token = getAccessToken();
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token= " + access_token + "&department_id=" + FK_Dept + "&status=0";
+            try
+            {
+                string str = new HttpWebResponseUtility().HttpResponseGet(url);
+                UsersBelongDept users = FormatToJson.ParseFromJson<UsersBelongDept>(str);
+
+                //指定人员
+                if (Tel != null)
+                {
+                    foreach (UserInfoBelongDept user in users.userlist)
+                    {
+                        if (user.mobile == Tel)
+                            return user;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex.Message);
+            }
+            return null;
+        }
 
         /// <summary>
         /// 获取部门集合

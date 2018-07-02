@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3AE8C44B-7DBA-4312-A775-57172697FAA7}</ProjectGuid>
+    <ProjectGuid>{507A6498-9001-4674-A90A-719F3818940A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BP.GPM</RootNamespace>
@@ -46,12 +46,14 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonDbOperator.cs" />
     <Compile Include="Crypto.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Dev2Interface.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GPM\StationExt.cs" />
+    <Compile Include="GPM\SystemLoginLog.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\Analyze.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\CacheItem.cs" />
@@ -89,19 +91,20 @@
     <Compile Include="GPM\GroupMenu.cs" />
     <Compile Include="GPM\StationMenu.cs" />
     <Compile Include="GPM\PerSetting.cs" />
+    <Compile Include="UserData\DeptManager.cs" />
     <Compile Include="UserData\EmpMenu.cs" />
     <Compile Include="UserData\EmpApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPM\Menu.cs" />
     <Compile Include="GPM\App.cs" />
+    <Compile Include="UserVar.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ccflow\Components\BP.En30\BP.En30.csproj">
+    <ProjectReference Include="..\BP.En30\BP.En30.csproj">
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

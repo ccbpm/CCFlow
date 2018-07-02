@@ -113,9 +113,15 @@
     <Content Include="DataUser\InstancePacketOfData\Template\ShuiYin.png" />
     <Content Include="DataUser\Style\ccbpm.css" />
     <Content Include="DataUser\Style\dtl.css" />
-    <Content Include="DataUser\XML\Menu.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="DataUser\XML\AdminMenu.xml" />
+    <Content Include="DataUser\XML\BarOfTop.xml" />
+    <Content Include="DataUser\XML\BarOfTopOfDoc.xml" />
+    <Content Include="DataUser\XML\CCOAMobileMenu.xml" />
+    <Content Include="DataUser\XML\DBSrc.xml" />
+    <Content Include="DataUser\XML\DefaultNewNodeAttr.xml" />
+    <Content Include="DataUser\XML\InitFlowSort.xml" />
+    <Content Include="DataUser\XML\RegularExpression.xml" />
+    <Content Include="DataUser\XML\TempleteSheetOfStartNode.xml" />
     <Content Include="GPM\EmpDepts.htm" />
     <Content Include="GPM\EmpDeptsDtl.htm" />
     <Content Include="GPM\Home.htm" />
@@ -7678,7 +7684,6 @@
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
-    <Folder Include="DataUser\XML\Enum\" />
     <Folder Include="SDKFlowDemo\SDK\F129\" />
   </ItemGroup>
   <ItemGroup>

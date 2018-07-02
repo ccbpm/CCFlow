@@ -42,7 +42,7 @@
             var toNodeID = GetQueryString("ToNodeID");
 
             //求出来 frmID .
-           // var flow = new Entity("BP.WF.Flow", fk_flow);
+            // var flow = new Entity("BP.WF.Flow", fk_flow);
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
@@ -157,7 +157,6 @@
             en.Delete();
             window.location.href = window.location.href;
         }
-
         //当字段选择的时候.
         function changeCond(c) {
 
@@ -231,19 +230,17 @@
             $('#eudlg').dialog('close');
             $("#TB_Val").val(data[0]);
             $("#TB_Text").val(data[1]);
-
         } 
-         
     </script>
 </head>
 <body onkeypress="Esc();">
 
 <form id="cc" > 
-<table  style="width:90%;">
+<table  style="width:99%;">
 <tr>
 <td style="width:20%;">选择表单字段: </td>
 <td>
-<select id="DDL_Fields" name="DDL_Fields" style="width:400px;"  onchange="changeCond(this)" ></select>
+<select id="DDL_Fields" name="DDL_Fields" onchange="changeCond(this)" ></select>
 <a href="javascript:alert('提示:如果没有您期望的字段,请在流程设计器中检查一下流程.')">为什么没有我要的字段？</a>
  </td>
 </tr>
@@ -275,7 +272,7 @@
 </tr>
 </table>
 
-<table id="Table1" name="Table1"  style="width:90%;">
+<table id="Table1" name="Table1"  style="width:99%;">
 <tr>
 <th>序</th>
 <th>字段的英文名</th>

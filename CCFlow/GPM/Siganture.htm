@@ -37,37 +37,42 @@
 
             //  var url = Handler + "?DoType=Siganture_Save";
             var empNo = GetQueryString("EmpNo");
-            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-            handler.AddPara("EmpNo", empNo);
-            var data = handler.DoMethodReturnString("Siganture_Save");
+//            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+//            handler.AddPara("EmpNo", empNo);
+//            
+//            var data = handler.DoMethodReturnString("Siganture_Save");
 
-            if (data.indexOf('err@')==0) {
-                alert(data);
-                return;
-            }
-            alert(data);
-            window.location.href = window.location.href;
+//            
+//            
+//            
+//            if (data.indexOf('err@')==0) {
+//                alert(data);
+//                return;
+//            }
+//            alert(data);
+            //            window.location.href = window.location.href;
 
-//            var url = "Handler.ashx?DoType=Siganture_Save&EmpNo=" + empNo;
-//            var xhr = new XMLHttpRequest();
-//            xhr.open('post', url, true);
-//            var formData = new FormData();
-//            formData.append('file', myfile.files[0]);
-//            xhr.send(formData);
+            Handler = "../WF/Setting/Handler.ashx";
+            var url = Handler + "?DoType=Siganture_Save&EmpNo=" + empNo;
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', url, true);
+            var formData = new FormData();
+            formData.append('file', myfile.files[0]);
+            xhr.send(formData);
 
             //上传结束回掉函数
-//            xhr.onload = function () {
+            xhr.onload = function () {
 
-//                if (this.responseText.indexOf('err@') == 0) {
-//                    alert(responseText);
-//                    return;
-//                }
-//                alert(this.responseText);
-//                window.location.href = window.location.href;
-//                //location.reload();
-            //}
+                if (this.responseText.indexOf('err@') == 0) {
+                    alert(responseText);
+                    return;
+                }
+                alert(this.responseText);
+                window.location.href = window.location.href;
+                //location.reload();
+            }
         }
-	</script>
+    </script>
 
 </head>
 <body>

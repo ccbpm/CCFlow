@@ -442,7 +442,7 @@
                            
                           th.text(mapAttrObj.Name);
                           th.data(mapAttrObj);
-                          th.css('width', mapAttrObj.UIWidth);
+                          th.css('width', mapAttrObj.UIWidth+4);
                           th.data().colname = mapAttrObj.KeyOfEn;
                           if (mapAttrObj.UIVisible == 1) {
                               threadTr.append(th);
@@ -824,12 +824,12 @@
 							children.first().width(width - 5);
 						}
 						if (hi == 0) {
-							td.width(width + 1);
+							td.width(16);
 						} else if (hi + 1 == headerCount) {
 							// 最后一列
 							td.width(40);
 						} else {
-							td.width(width + 1);
+							td.width(width);
 						}
 					});
 				})(hi, headerCount, width);

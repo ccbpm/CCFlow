@@ -162,11 +162,12 @@ function showDataGrid(sender, tbid, dataObj, columns,mapExt) {
             $("#" + tbid).val(row.No);
           
             var dataObj = [row];
-
-            var tag4 = mapExt.Tag4;
-            if (tag4 != null && tag4 != "") {
+            var dbSrc = mapExt.Tag4;
+            if (dbSrc == null || dbSrc == "")
+                dbSrc = mapExt.Doc;
+            if (dbSrc != null && dbSrc != "") {
                 //包含有填充其他数据控件的数据源时
-                dataObj = GenerDB(tag4, JSON.stringify(row), mapExt.DBType);
+                dataObj = GenerDB(dbSrc, JSON.stringify(row), mapExt.DBType);
             }
             //填充主表数据源
             TableFullCtrl(dataObj)
@@ -733,7 +734,10 @@ function GenerDB(dbSrc, selectVal, dbType) {
 //主表数据的填充.
 function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
 
-    var dataObj = GenerDB(mapExt.Doc, selectVal, mapExt.DBType);
+    var dbSrc = mapExt.Tag4;
+    if (dbSrc == null || dbSrc == "")
+        dbSrc = mapExt.Doc;
+    var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType);
 
     TableFullCtrl(dataObj);
 }

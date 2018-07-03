@@ -970,7 +970,7 @@ namespace BP.Sys
         /// 获得该数据源的数据
         /// </summary>
         /// <returns></returns>
-        public DataTable GenerData()
+        public DataTable GenerData_bak()
         {
             string sql = "";
             DataTable dt = null;
@@ -1000,7 +1000,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string GenerDataOfJson()
         {
-            return BP.Tools.Json.ToJson(this.GenerData());
+            return BP.Tools.Json.ToJson(this.GenerHisDataTable);
         }
 
         /// <summary>
@@ -1008,7 +1008,7 @@ namespace BP.Sys
         /// </summary>
         public void InitDataTable()
         {
-            DataTable dt = this.GenerData();
+            DataTable dt = this.GenerHisDataTable;
 
             string sql = "";
             if (dt.Rows.Count == 0)

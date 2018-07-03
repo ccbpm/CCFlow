@@ -1511,9 +1511,7 @@ namespace BP.Sys
         public string GenerHisFKData()
         {
             SFTable sf = new SFTable(this.UIBindKey);
-            DataTable dt= sf.GenerData();
-
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.Json.ToJson(sf.GenerHisDataTable);
         }
     
         /// <summary>

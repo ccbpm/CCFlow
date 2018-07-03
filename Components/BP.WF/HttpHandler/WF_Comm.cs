@@ -1948,7 +1948,7 @@ namespace BP.WF.HttpHandler
         public string SFTable()
         {
             SFTable sftable = new SFTable(this.GetRequestVal("SFTable") );
-            DataTable dt = sftable.GenerData();
+            DataTable dt = sftable.GenerHisDataTable;
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

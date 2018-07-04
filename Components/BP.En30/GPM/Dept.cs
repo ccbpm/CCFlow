@@ -20,10 +20,6 @@ namespace BP.GPM
         /// </summary>
         public const string Tel = "Tel";
         /// <summary>
-        ///外部联系人
-        /// </summary>
-        public const string In_Out = "In_Out";
-        /// <summary>
         /// 单位全名
         /// </summary>
         public const string NameOfPath = "NameOfPath";
@@ -74,17 +70,6 @@ namespace BP.GPM
             set
             {
                 this.SetValByKey(DeptAttr.Leader, value);
-            }
-        }
-        public int In_Out
-        {
-            get
-            {
-                return this.GetValIntByKey(DeptAttr.In_Out);
-            }
-            set
-            {
-                this.SetValByKey(DeptAttr.In_Out, value);
             }
         }
         private Depts _HisSubDepts = null;
@@ -150,22 +135,11 @@ namespace BP.GPM
 
                 //比如:\\驰骋集团\\南方分公司\\财务部
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
-
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
 
-                // 01,0101,010101.
-                map.AddTBString(DeptAttr.TreeNo, null, "树编号", false, false, 0, 100, 30);
-
-                //部门领导.
-                map.AddTBString(DeptAttr.Leader, null, "领导", false, false, 0, 100, 30);
-                map.AddTBString(DeptAttr.Tel, null, "联系电话", false, false, 0, 100, 30);
                 //顺序号.
                 map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
 
-                //是否是目录
-                map.AddTBInt(DeptAttr.IsDir, 0, "是否是目录", true, true);
-                map.AddTBInt(DeptAttr.In_Out, 0, "外部联系人", false, false);
-                //  map.AddDDLEntities(DeptAttr. null, "部门类型", new DeptTypes(), true);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "重置该部门一下的部门路径";

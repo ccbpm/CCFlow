@@ -22,6 +22,13 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_FoolFormDesigner_ImpExp()
+        {
+        }
+
         #region 导入
         /// <summary>
         /// 初始化 导入的界面 .

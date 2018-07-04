@@ -46,6 +46,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public CCMobile_RptSearch()
+        {
+        }
 
         #region 关键字查询.
         /// <summary>

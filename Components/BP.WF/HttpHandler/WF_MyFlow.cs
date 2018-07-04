@@ -617,6 +617,13 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_MyFlow()
+        {
+        }
         /// <summary>
         /// 删除流程.
         /// </summary>

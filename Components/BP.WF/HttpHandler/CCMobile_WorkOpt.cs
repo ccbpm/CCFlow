@@ -27,7 +27,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public CCMobile_WorkOpt()
+        {
+        }
         /// <summary>
         /// 打包下载
         /// </summary>

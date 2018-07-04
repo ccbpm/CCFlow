@@ -33,6 +33,12 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Comm_Sys()
+        {
+        }
+        /// <summary>
         /// 函数库
         /// </summary>
         /// <returns></returns>

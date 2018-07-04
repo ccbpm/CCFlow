@@ -29,6 +29,14 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_AppClassic()
+        {
+        }
+
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法

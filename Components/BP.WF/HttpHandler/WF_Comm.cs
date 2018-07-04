@@ -11,7 +11,6 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using System.Text;
 
 namespace BP.WF.HttpHandler
 {
@@ -25,90 +24,12 @@ namespace BP.WF.HttpHandler
         /// 获得树的结构
         /// </summary>
         /// <returns></returns>
-        /// 
-
-
-        /// <summary>
-        /// 初始化树
-        /// </summary>
-        /// <returns></returns>
         public string Tree_Init()
         {
-            //EntitiesTree ens = ClassFactory.GetEns(this.EnsName) as EntitiesTree;
-            //ens.RetrieveAll();
-            Entities ens = this.HisEn.GetNewEntities;
-            ens.RetrieveAll(EntityTreeAttr.Idx);
-            TansEntitiesToGenerTree(ens, "0");
-            return appendMenus.ToString();// ens.ToJsonOfTree();
-        }
-        StringBuilder appendMenus = new StringBuilder();
-        StringBuilder appendMenuSb = new StringBuilder();
-        public void TansEntitiesToGenerTree(Entities ens, string rootNo)
-        {
-            EntityTree root = ens.GetEntityByKey(EntityTreeAttr.ParentNo, rootNo) as EntityTree;
-            //if (root == null)
-            //    throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
-            //if (root.No.Equals(rootNo))
-            //    throw new Exception("@根节点编号不能与父节点编号相同：No=" + rootNo);
-            appendMenus.Append("[{");
-            appendMenus.Append("\"id\":\"" + rootNo + "\"");
-            appendMenus.Append(",\"text\":\"" + root.Name + "\"");
+            EntitiesTree ens = ClassFactory.GetEns(this.EnsName) as EntitiesTree;
+            ens.RetrieveAll();
 
-            // 增加它的子级.
-            appendMenus.Append(",\"children\":");
-            AddChildren(root, ens);
-            appendMenus.Append(appendMenuSb);
-            appendMenus.Append("}]");
-        }
-
-        public void AddChildren(EntityTree parentEn, Entities ens)
-        {
-            appendMenus.Append(appendMenuSb);
-            appendMenuSb.Clear();
-
-            appendMenuSb.Append("[");
-            foreach (EntityTree item in ens)
-            {
-                if (item.ParentNo != parentEn.No)
-                    continue;
-
-                appendMenuSb.Append("{\"id\":\"" + item.No + "\",\"text\":\"" + item.Name + "\",\"state\":\"closed\"");
-                EntityTree treeNode = item as EntityTree;
-                // 增加它的子级.
-                appendMenuSb.Append(",\"children\":");
-                AddChildren(item, ens);
-                appendMenuSb.Append("},");
-            }
-            if (appendMenuSb.Length > 1)
-                appendMenuSb = appendMenuSb.Remove(appendMenuSb.Length - 1, 1);
-            appendMenuSb.Append("]");
-            appendMenus.Append(appendMenuSb);
-            appendMenuSb.Clear();
-        }
-
-        /// <summary>
-        /// 新建同级目录
-        /// </summary>
-        /// <returns></returns>
-        public string DoMyCreateSameLevelNode()
-        {
-            String nodeNo = GetRequestVal("nodeNo");
-            EntityTree treeNode = this.HisEn as EntityTree;
-            treeNode.RetrieveByAttr(EntityTreeAttr.No, nodeNo);
-            EntityTree enTree = treeNode.DoCreateSameLevelNode();
-            return "{No:'" + enTree.No + "',Name:'" + enTree.Name+ "'}";
-        }
-
-         /// <summary>
-        /// 新建下级目录
-        /// </summary>
-        /// <returns></returns>
-        public String DoMyCreateSubNode(){
-            string nodeNo = GetRequestVal("nodeNo");
-            EntityTree treeNode = this.HisEn as EntityTree;
-            treeNode.RetrieveByAttr(EntityTreeAttr.No,nodeNo);
-            EntityTree enTree = treeNode.DoCreateSubNode();
-            return "{No:'"+ enTree.No +"',Name:'" + enTree.Name+ "'}";
+            return ens.ToJsonOfTree();  
         }
 
         /// <summary>
@@ -168,67 +89,18 @@ namespace BP.WF.HttpHandler
         #endregion 树的实体
 
         /// <summary>
-        /// 实体集合
-        /// </summary>
-        public Entities _HisEns = null;
-        public Entities HisEns
-        {
-            get
-            {
-                if (this.EnsName != null)
-                {
-                    if (this._HisEns == null)
-                    {
-                        _HisEns = BP.En.ClassFactory.GetEns(this.EnsName.Replace("#", ""));
-                    }
-                }
-                return _HisEns;
-            }
-        }
-        /// <summary>
-        /// 单个实体
-        /// </summary>
-        private Entity _HisEn = null;
-        public Entity HisEn
-        {
-            get
-            {
-                if (_HisEn == null)
-                {
-                    if (this.HisEns == null)
-                    {
-                        _HisEn = BP.En.ClassFactory.GetEn(this.EnsName.Replace("#", ""));
-                        if (this._HisEn == null)
-                            throw new Exception("在此项目中没有找到命名空间及符合的类：" + this.EnsName);
-                    }
-                    else
-                        _HisEn = this.HisEns.GetNewEntity;
-
-                    EntityTree enTree = _HisEn as EntityTree;
-                    if (enTree == null)
-                    {
-                        if (_HisEn.IsNoEntity)
-                            throw new Exception("传入的实体必须继承于EntityTree;本次传入" + this.EnsName + "继承于：NoEntity。");
-                        else if (_HisEn.IsOIDEntity)
-                            throw new Exception("传入的实体必须继承于EntityTree;本次传入" + this.EnsName + "继承于：OIDEntity。");
-                        else if (_HisEn.IsMIDEntity)
-                            throw new Exception("传入的实体必须继承于EntityTree;本次传入" + this.EnsName + "继承于：MIDEntity。");
-                        else
-                            throw new Exception("传入的实体必须继承于EntityTree。");
-                    }
-                }
-                return _HisEn;
-            }
-        }
-
-       
-        /// <summary>
         /// 页面功能实体
         /// </summary>
         /// <param name="mycontext"></param>
         public WF_Comm(HttpContext mycontext)
         {
             this.context = mycontext;
+        }
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Comm()
+        {
         }
 
         #region 统计分析组件.
@@ -2305,11 +2177,22 @@ namespace BP.WF.HttpHandler
             string httpHandlerName = this.GetRequestVal("HttpHandlerName");
             string methodName = this.GetRequestVal("DoMethod");
 
-            BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(System.Type.GetType(httpHandlerName),this.context) 
-                as BP.WF.HttpHandler.DirectoryPageBase;
-
-            en.context = this.context;
-            return en.DoMethod(en, methodName);
+            var type=System.Type.GetType(httpHandlerName);
+            if (type == null)
+            {
+                BP.WF.HttpHandler.DirectoryPageBase obj = ClassFactory.GetHandlerPage(httpHandlerName) as BP.WF.HttpHandler.DirectoryPageBase;
+                if (obj == null)
+                    return "err@页面处理类名[" + httpHandlerName + "],没有获取到，请检查拼写错误？";
+                obj.context = this.context;
+                return obj.DoMethod(obj, methodName);
+            }
+            else
+            {
+                BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(type, this.context)
+                    as BP.WF.HttpHandler.DirectoryPageBase;
+                en.context = this.context;
+                return en.DoMethod(en, methodName);
+            }
         }
         /// <summary>
         /// 当前登录人员信息

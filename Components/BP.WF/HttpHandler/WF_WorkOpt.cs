@@ -257,6 +257,12 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_WorkOpt()
+        {
+        }
+        /// <summary>
         /// 打包下载
         /// </summary>
         /// <returns></returns>

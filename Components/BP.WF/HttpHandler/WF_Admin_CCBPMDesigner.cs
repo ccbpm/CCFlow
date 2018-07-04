@@ -58,6 +58,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_CCBPMDesigner()
+        {
+        }
 
         /// <summary>
         /// 下载流程模版

@@ -490,6 +490,12 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_CCForm()
+        {
+        }
+        /// <summary>
         /// 默认执行的方法
         /// </summary>
         /// <returns></returns>

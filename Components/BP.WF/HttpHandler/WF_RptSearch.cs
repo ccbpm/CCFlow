@@ -28,6 +28,13 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_RptSearch()
+        {
+        }
+
         #region 流程分布.
         public string DistributedOfMy_Init()
         {

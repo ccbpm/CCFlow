@@ -28,6 +28,13 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_FoolFormDesigner_SFTable()
+        {
+        }
+
         #region xxx 界面 .
         /// <summary>
         ///  初始化sf0. @于庆海，新方法.

@@ -42,6 +42,14 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_RptDfine()
+        {
+        }
+
         /// <summary>
         /// 流程列表
         /// </summary>

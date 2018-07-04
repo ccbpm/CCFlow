@@ -539,7 +539,7 @@ namespace BP.En
             return null;
         }
 
-        #region 获取en
+        #region 获取 en
         private static Hashtable Htable_En;
         /// <summary>
         /// 得到一个实体
@@ -548,7 +548,6 @@ namespace BP.En
         /// <returns>En</returns>
         public static Entity GetEn(string className)
         {
-
             //判断标记初始化实体.
             if (className.Contains(".") == false)
             {
@@ -580,11 +579,6 @@ namespace BP.En
             }
             object tmp = Htable_En[className];
             return (tmp as Entity);
-
-            //   object tmp = Htable_En[className];
-            // Entity myen = tmp as Entity;
-            //myen = myen.CreateInstance();
-            //return (tmp as Entity);
         }
         #endregion
 
@@ -777,6 +771,36 @@ namespace BP.En
         }
         #endregion
 
+
+        #region 获取 HandlerBase
+        private static Hashtable Htable_HandlerPage;
+        /// <summary>
+        /// 得到一个实体
+        /// </summary>
+        /// <param name="className">类名称</param>
+        /// <returns>En</returns>
+        public static object GetHandlerPage(string className)
+        {
+
+            if (Htable_HandlerPage == null)
+            {
+                Htable_HandlerPage = new Hashtable();
+                string cl = "BP.WF.HttpHandler.DirectoryPageBase";
+                ArrayList al = ClassFactory.GetObjects(cl);
+                foreach (Object en in al)
+                {
+                    string key = string.Empty;
+                    if (null == en || DataType.IsNullOrEmpty(key = en.ToString()))
+                        continue;
+
+                    if (Htable_HandlerPage.ContainsKey(key) == false)
+                        Htable_HandlerPage.Add(key, en);
+                   
+                }
+            }
+            return Htable_HandlerPage[className];
+        }
+        #endregion
 
        
 

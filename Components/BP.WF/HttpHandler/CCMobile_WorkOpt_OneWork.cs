@@ -26,7 +26,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-       
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public CCMobile_WorkOpt_OneWork()
+        {
+        }
 
         #region xxx 界面 .
         public string TimeBase_Init()

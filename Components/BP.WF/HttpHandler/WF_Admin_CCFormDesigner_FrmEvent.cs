@@ -24,6 +24,13 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_CCFormDesigner_FrmEvent()
+        {
+        }
 
         #region 事件基类.
         /// <summary>

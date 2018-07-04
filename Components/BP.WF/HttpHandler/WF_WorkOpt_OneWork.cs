@@ -28,7 +28,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_WorkOpt_OneWork()
+        {
+        }
         /// <summary>
         /// 时间轴
         /// </summary>

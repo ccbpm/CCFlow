@@ -35,6 +35,13 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_CCFormDesigner()
+        {
+        }
+
+        /// <summary>
         /// 创建枚举类型字段
         /// </summary>
         /// <returns></returns>

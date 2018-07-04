@@ -21,6 +21,14 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Comm_RefFunc()
+        {
+        }
+
+
         #region Dot2DotTreeDeptEmpModel.htm（部门人员选择）
 
         /// <summary>

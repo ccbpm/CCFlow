@@ -27,6 +27,13 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+         /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_Cond()
+        {
+        }
+
         #region 方向优先级.
         /// <summary>
         /// 初始化

@@ -37,7 +37,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin()
+        {
+        }
 
         #region 测试页面.
         /// <summary>
@@ -277,7 +282,8 @@ namespace BP.WF.HttpHandler
             ht.Add("DBType", SystemConfig.AppCenterDBType.ToString()); //数据库类型.
             ht.Add("Ver", BP.WF.Glo.Ver); //版本号.
 
-            return BP.Tools.Json.ToJsonEntityModel(ht);
+            return BP.Tools.Json.ToJson(ht);
+
         }
         public string DBInstall_Submit()
         {

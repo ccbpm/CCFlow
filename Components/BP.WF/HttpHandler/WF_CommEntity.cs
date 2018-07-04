@@ -27,6 +27,13 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_CommEntity()
+        {
+        }
+
         #region 从表.
         /// <summary>
         /// 初始化

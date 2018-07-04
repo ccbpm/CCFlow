@@ -234,7 +234,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_FoolFormDesigner()
+        {
+        }
         /// <summary>
         /// 转拼音
         /// </summary>

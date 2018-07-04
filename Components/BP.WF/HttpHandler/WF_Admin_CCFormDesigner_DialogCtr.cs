@@ -26,6 +26,13 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_CCFormDesigner_DialogCtr()
+        {
+        }
+
+        /// <summary>
         /// 获取隐藏字段
         /// </summary>
         /// <returns></returns>

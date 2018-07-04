@@ -27,7 +27,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public CCMobile_CCForm()
+        {
+        }
         public string HandlerMapExt()
         {
             WF_CCForm en = new WF_CCForm(this.context);

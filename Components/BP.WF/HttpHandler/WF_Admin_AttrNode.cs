@@ -25,6 +25,13 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_AttrNode()
+        {
+        }
+
         #region 事件基类.
         /// <summary>
         /// 事件类型

@@ -44,6 +44,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_FoolFormDesigner_MapExt()
+        {
+        }
         #endregion 执行父类的重写方法.
 
         #region AutoFullDtlField 自动计算 a*b  功能界面 .

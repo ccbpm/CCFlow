@@ -27,6 +27,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_Sln()
+        {
+        }
 
         #region 绑定流程表单
         /// <summary>

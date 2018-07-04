@@ -90,7 +90,6 @@
     <Compile Include="GPM\GroupMenu.cs" />
     <Compile Include="GPM\StationMenu.cs" />
     <Compile Include="GPM\PerSetting.cs" />
-    <Compile Include="UserData\DeptManager.cs" />
     <Compile Include="UserData\EmpMenu.cs" />
     <Compile Include="UserData\EmpApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

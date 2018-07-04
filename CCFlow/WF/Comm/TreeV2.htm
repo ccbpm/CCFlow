@@ -32,40 +32,16 @@
                 return;
             }
 
-            //$("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-            //初始化工具栏.
-            //InitToolbar();
-
-            //绑定数据.
-            BindTree();
+            //加载菜单树  绑定数据.
+            LoadBindTree();
 
             $("#Msg").html("");
         });
 
-        function InitToolbar() {
-
-            //创建处理器.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            handler.AddUrlData();  //增加参数.
-            //获得map基本信息.
-            mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
-
-            document.title = mapBase.EnDesc;
-           
-           //获得权限, 生成toolbar.
-            var IsUpdata = uac.IsUpdate;
-
-            /*
-            ht.Add("IsUpdata", uac.IsUpdate);
-            ht.Add("IsInsert", uac.IsInsert);
-            ht.Add("IsDelete", uac.IsDelete);
-            ht.Add("IsView", uac.IsView);
-            ht.Add("IsExp", uac.IsExp); //是否可以导出?
-            ht.Add("IsImp", uac.IsImp); //是否可以导入? */
-       }
-
-       function BindTree() {
+       //加载菜单树  绑定数据.
+       function LoadBindTree() {
 
            //创建处理器.
            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
@@ -96,8 +72,8 @@
            if (node) {
                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
                handler.AddPara("nodeNo", node.id);
-               var js = handler.DoMethodReturnString("DoMyCreateSameLevelNode");
-               var pushData = eval('(' + js + ')');
+               var data = handler.DoMethodReturnString("DoMyCreateSameLevelNode");
+               var pushData = eval('(' + data + ')');
                var parentNode = $('#enTree').tree('getParent', node.target);
                $('#enTree').tree('append', {
                     parent: (parentNode ? parentNode.target : null),
@@ -118,8 +94,8 @@
            if (node) {
                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
                handler.AddPara("nodeNo", node.id);
-               var js = handler.DoMethodReturnString("DoMyCreateSubNode");
-               var pushData = eval('(' + js + ')');
+               var data = handler.DoMethodReturnString("DoMyCreateSubNode");
+               var pushData = eval('(' + data + ')');
                $('#enTree').tree('append', {
                    aprent: (node ? node.target : null),
                    data: [{
@@ -135,44 +111,76 @@
 
        //修改
        function Edit(no) {
-           var url = "En.htm?EnName=" + GetEnName() + "&No=" + no;
-           WinOpen(url);
+           var node = $('#enTree').tree('getSelected');
+           if (node) {
+               var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+               handler.AddPara("nodeNo", node.id);
+
+               var url = "En.htm?EnName=" + GetEnName() + "&No=" + node.id;
+
+               WinOpen(url, "编辑", "height=900, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+               
+               
+               var data = handler.DoMethodReturnString("DoMyCreateSubNode");
+               if (data != "") {
+                   $('#enTree').tree('update', { target: node.target, text: data });
+               }
+           } else {
+               $.messager.alert('提示', '请选择节点!', 'info');
+           }
+           
+
        }
         
        //删除
        function Del(no, name) {
-
-           if (confirm('您确认要删除[' + name + ']吗？') == false)
+           var node = $('#enTree').tree('getSelected');
+           if (confirm('您确认要删除[ ' + node.text + ' ]吗？') == false)
                return;
+           
+           if (node) {
+               //删除
+               var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+               handler.AddPara("nodeNo", node.id);
+               var data = handler.DoMethodReturnString("Del");
+               if (data.indexOf('err@') == 0) {
+                   alert(data);
+                   return;
+               }
 
-           var enName = GetEnName();
-           var en = new Entity(enName, no);
-
-           try {
-
-               en.Delete();
-
-               //需要从节点上去掉.
-
-
-           } catch (e) {
-               alert(e);
+               $('#enTree').tree('remove', node.target);
+               alert(data);
+           } else {
+               $.messager.alert('提示', '请选择节点。', 'info');
            }
        }
 
-
-       function DoUp(no) {
-           var enName = GetEnName();
-           var en = new Entity(enName, no);
-           en.DoMethodReturnString("DoUp");
-           // 执行节点移动.
-
+       // 执行节点移动. 上移
+       function DoUp() {
+           var node = $('#enTree').tree('getSelected');
+           if (node) {
+               var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+               handler.AddPara("nodeNo", node.id);
+               var data = handler.DoMethodReturnString("DoUp");
+               LoadBindTree();
+               $('#enTree').tree('expandAll');
+           } else {
+               $.messager.alert('提示', '请选择节点。', 'info');
+           }
        }
-       function DoDown(no) {
-           var enName = GetEnName();
-           var en = new Entity(enName, no);
-           en.DoMethodReturnString("DoDown");
-           // 执行节点移动.
+
+       // 执行节点移动. 下移
+       function DoDown() {
+           var node = $('#enTree').tree('getSelected');
+           if (node) {
+               var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+               handler.AddPara("nodeNo", node.id);
+               var data = handler.DoMethodReturnString("DoDown");
+               LoadBindTree();
+               $('#enTree').tree('expandAll');
+           } else {
+               $.messager.alert('提示', '请选择节点。', 'info');
+           }
        }
 
        

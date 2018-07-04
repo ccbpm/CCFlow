@@ -238,10 +238,10 @@ namespace BP.WF.HttpHandler
                 {
                     case StartGuideWay.BySQLOne:
                     case StartGuideWay.BySystemUrlOneEntity:
-                        josnData = BP.Tools.FormatToJson.ToJson(dt);
+                        josnData = BP.Tools.Json.ToJson(dt);
                         break;
                     case StartGuideWay.BySQLMulti:
-                        josnData = BP.Tools.FormatToJson.ToJson(dt);
+                        josnData = BP.Tools.Json.ToJson(dt);
                         break;
                     default:
                         break;

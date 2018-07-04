@@ -352,7 +352,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tools\Cryptography.cs" />
-    <Compile Include="Tools\DataSet2Json.cs" />
     <Compile Include="DA\EnumDA.cs" />
     <Compile Include="DA\Cash.cs">
       <SubType>Code</SubType>
@@ -369,6 +368,9 @@
     </Compile>
     <Compile Include="Tools\chs2py.cs" />
     <Compile Include="Tools\CRC32Helper.cs" />
+    <Compile Include="Tools\DataSet2Json.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tools\Entitis2Json.cs">
       <SubType>Code</SubType>
     </Compile>

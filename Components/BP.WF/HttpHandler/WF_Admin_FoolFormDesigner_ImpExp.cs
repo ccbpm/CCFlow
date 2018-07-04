@@ -309,7 +309,7 @@ namespace BP.WF.HttpHandler
             ens = new SysEnums(MapAttrAttr.LGType);
             ds.Tables.Add(ens.ToDataTableField("EnumsLGType"));
 
-            return BP.Tools.FormatToJson.ToJson(ds);
+            return BP.Tools.Json.ToJson(ds);
 
         }
 

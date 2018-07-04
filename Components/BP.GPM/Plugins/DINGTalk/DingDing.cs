@@ -606,7 +606,7 @@ namespace BP.EAI.Plugins
                 //list.Add("order", "1");
                 list.Add("createDeptGroup", "true");
 
-                string str = BP.Tools.FormatToJson.ToJson_FromDictionary(list);
+                string str = BP.Tools.Json.ToJson(list);
                 str = new HttpWebResponseUtility().HttpResponsePost_Json(url, str);
                 CreateDepartMent_PostVal postVal = FormatToJson.ParseFromJson<CreateDepartMent_PostVal>(str);
 

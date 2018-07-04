@@ -1017,10 +1017,8 @@ namespace BP.WF.HttpHandler
                 dt.Columns["NO"].ColumnName = "NO";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["NO"].ColumnName = "NO";
-
-
             }
-            return BP.Tools.FormatToJson.ToJson(dt);
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 当前登陆人是否有授权

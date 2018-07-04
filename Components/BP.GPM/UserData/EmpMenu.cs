@@ -207,7 +207,7 @@ namespace BP.GPM
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
                 map.EnDesc = "人员菜单功能";
-                map.EnType = EnType.Sys;
+                map.EnType = EnType.View;
 
                 map.AddMyPK();
 

@@ -79,7 +79,7 @@ namespace BP.GPM
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
                 map.EnDesc = "权限组人员";
-                map.EnType = EnType.Sys;
+                map.EnType = EnType.App;
 
                 map.AddTBStringPK(GroupEmpAttr.FK_Group, null, "权限组", true, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(GroupEmpAttr.FK_Emp, null, "人员", new Emps(), true);

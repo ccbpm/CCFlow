@@ -18,7 +18,7 @@ namespace BP.GPM
         {
             get
             { 
-                OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 0);
+                OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 1);
                 return os;  
             }
         }
@@ -148,21 +148,20 @@ namespace BP.GPM
 
             #region 6, 创建视图。
             
-            if (DBAccess.IsExitsObject("V_GPM_EmpGroup"))
-                BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
+            //if (DBAccess.IsExitsObject("V_GPM_EmpGroup"))
+            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
 
-            if (DBAccess.IsExitsObject("V_GPM_EmpGroupMenu"))
-                BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroupMenu");
+            //if (DBAccess.IsExitsObject("V_GPM_EmpGroupMenu"))
+            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroupMenu");
 
-            if (DBAccess.IsExitsObject("V_GPM_EmpStationMenu"))
-                BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpStationMenu");
+            //if (DBAccess.IsExitsObject("V_GPM_EmpStationMenu"))
+            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpStationMenu");
 
-            if (DBAccess.IsExitsObject("V_GPM_EmpMenu_GPM"))
-                BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu_GPM");
+            //if (DBAccess.IsExitsObject("V_GPM_EmpMenu_GPM"))
+            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu_GPM");
 
-             if (DBAccess.IsExitsObject("V_GPM_EmpMenu"))
-                BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu");
-
+            // if (DBAccess.IsExitsObject("V_GPM_EmpMenu"))
+            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu");
             
 
             sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
@@ -194,8 +193,7 @@ namespace BP.GPM
 
             //删除数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM GPM_EmpApp");
-            BP.DA.DBAccess.RunSQL("DELETE FROM GPM_EmpMenu");
-
+         //   BP.DA.DBAccess.RunSQL("DELETE FROM GPM_EmpMenu");
 
             foreach (Emp emp in emps)
             {

@@ -450,13 +450,6 @@ namespace BP.En
         public EntitiesTree()
         {
         }
-        /// <summary>
-        /// 查询全部
-        /// </summary>
-        /// <returns></returns>
-        public override int RetrieveAll()
-        {
-            return base.RetrieveAll("TreeNo");
-        }
+      
     }
 }

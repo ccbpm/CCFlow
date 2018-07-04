@@ -12,14 +12,6 @@ namespace BP.GPM
     public class DeptAttr : EntityTreeAttr
     {
         /// <summary>
-        /// 部门负责人
-        /// </summary>
-        public const string Leader = "Leader";
-        /// <summary>
-        /// 联系电话
-        /// </summary>
-        public const string Tel = "Tel";
-        /// <summary>
         /// 单位全名
         /// </summary>
         public const string NameOfPath = "NameOfPath";
@@ -56,20 +48,6 @@ namespace BP.GPM
             set
             {
                 this.SetValByKey(DeptAttr.ParentNo, value);
-            }
-        }
-        /// <summary>
-        /// 领导
-        /// </summary>
-        public string Leader
-        {
-            get
-            {
-                return this.GetValStrByKey(DeptAttr.Leader);
-            }
-            set
-            {
-                this.SetValByKey(DeptAttr.Leader, value);
             }
         }
         private Depts _HisSubDepts = null;
@@ -135,11 +113,14 @@ namespace BP.GPM
 
                 //比如:\\驰骋集团\\南方分公司\\财务部
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
-                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
 
+                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
+              
                 //顺序号.
                 map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
 
+                //是否是目录
+                map.AddTBInt(DeptAttr.IsDir, 0, "是否是目录", true, true);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "重置该部门一下的部门路径";

@@ -133,7 +133,7 @@ namespace BP.GPM
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
                 map.EnDesc = "管理员与系统权限";
-                map.EnType = EnType.Sys;
+                map.EnType = EnType.App;
 
                 map.AddMyPK();
 

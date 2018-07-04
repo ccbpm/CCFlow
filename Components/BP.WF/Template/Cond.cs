@@ -1082,11 +1082,11 @@ namespace BP.WF.Template
                 map.AddMyPK();
                 map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);
                 //map.AddDDLSysEnum(CondAttr.CondType, 0, "条件类型", true, false, CondAttr.CondType,"@0=节点完成条件@1=流程完成条件@2=方向条件");
-
                 map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);
                 map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 60, 20);
                 map.AddTBInt(CondAttr.NodeID, 0, "发生的事件MainNode", true, true);
                 map.AddTBInt(CondAttr.FK_Node, 0, "节点ID", true, true);
+
                 map.AddTBString(CondAttr.FK_Attr, null, "属性", true, true, 0, 80, 20);
                 map.AddTBString(CondAttr.AttrKey, null, "属性键", true, true, 0, 60, 20);
                 map.AddTBString(CondAttr.AttrName, null, "中文名称", true, true, 0, 500, 20);

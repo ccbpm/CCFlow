@@ -143,32 +143,7 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.FK_Duty, value);
             }
         }
-        /// <summary>
-        /// 职务
-        /// </summary>
-        public string FK_DutyText
-        {
-            get
-            {
-                string fk_Duty = this.GetValStrByKey(EmpAttr.FK_Duty);
-                if (string.IsNullOrEmpty(fk_Duty))
-                    return "";
-                Duty duty = new Duty();
-                duty.RetrieveByAttr(DutyAttr.No, fk_Duty);
-                return duty.Name;
-            }
-        }
-        public string Leader
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.Leader);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.Leader, value);
-            }
-        }
+         
         /// <summary>
         /// 主要的部门。
         /// </summary>

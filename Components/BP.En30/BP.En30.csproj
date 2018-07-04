@@ -235,9 +235,6 @@
     <Compile Include="DA\DBAccessOfMSSQL2.cs" />
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
-    <Compile Include="GPM\DeptDuty.cs" />
-    <Compile Include="GPM\DeptSearchScorp.cs" />
-    <Compile Include="GPM\Duty.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>

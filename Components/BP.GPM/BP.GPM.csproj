@@ -53,7 +53,6 @@
     <Compile Include="Dev2Interface.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GPM\StationExt.cs" />
-    <Compile Include="GPM\SystemLoginLog.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\Analyze.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\CacheItem.cs" />

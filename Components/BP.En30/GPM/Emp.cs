@@ -13,17 +13,9 @@ namespace BP.GPM
     {
         #region 基本属性
         /// <summary>
-        /// 员工编号
-        /// </summary>
-        public const string EmpNo = "EmpNo";
-        /// <summary>
         /// 部门
         /// </summary>
         public const string FK_Dept = "FK_Dept";
-        /// <summary>
-        /// 职务
-        /// </summary>
-        public const string FK_Duty = "FK_Duty";
         /// <summary>
         /// 密码
         /// </summary>
@@ -48,12 +40,7 @@ namespace BP.GPM
         /// 拼音
         /// </summary>
         public const string PinYin = "PinYin";
-        /// <summary>
-        /// 领导
-        /// </summary>
-        public const string Leader = "Leader";
         #endregion
-
         /// <summary>
         /// 签字类型
         /// </summary>
@@ -115,35 +102,6 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.PinYin, value);
             }
         }
-        /// <summary>
-        /// 员工编号
-        /// </summary>
-        public string EmpNo
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.EmpNo);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.EmpNo, value);
-            }
-        }
-        /// <summary>
-        /// 职务
-        /// </summary>
-        public string FK_Duty
-        {
-            get
-            {
-                return this.GetValStrByKey(EmpAttr.FK_Duty);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.FK_Duty, value);
-            }
-        }
-         
         /// <summary>
         /// 主要的部门。
         /// </summary>
@@ -323,12 +281,9 @@ namespace BP.GPM
                 #region 字段
                 /*关于字段属性的增加 */
                 map.AddTBStringPK(EmpAttr.No, null, "登陆账号", true, false, 1, 50, 50);
-                map.AddTBString(EmpAttr.EmpNo, null, "职工编号", true, false, 0, 50, 50);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
 
-                map.AddTBString(EmpAttr.FK_Duty, null, "当前职务", false, false, 0, 20, 10);
-                map.AddTBString(EmpAttr.Leader, null, "当前领导", false, false, 0, 50, 1);
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), true);
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);

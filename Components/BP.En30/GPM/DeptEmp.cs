@@ -19,18 +19,6 @@ namespace BP.GPM
         /// 人员
         /// </summary>
         public const string FK_Emp = "FK_Emp";
-        /// <summary>
-        /// 职务
-        /// </summary>
-        public const string FK_Duty = "FK_Duty";
-        /// <summary>
-        /// 职务级别
-        /// </summary>
-        public const string DutyLevel = "DutyLevel";
-        /// <summary>
-        /// 它的领导
-        /// </summary>
-        public const string Leader = "Leader";
         #endregion
     }
     /// <summary>
@@ -80,57 +68,7 @@ namespace BP.GPM
                 SetValByKey(DeptEmpAttr.FK_Dept, value);
                 this.MyPK = this.FK_Dept + "_" + this.FK_Emp;
             }
-        }
-        public string FK_DutyT
-        {
-            get
-            {
-                return this.GetValRefTextByKey(DeptEmpAttr.FK_Duty);
-            }
-        }
-        /// <summary>
-        ///职务
-        /// </summary>
-        public string FK_Duty
-        {
-            get
-            {
-                return this.GetValStringByKey(DeptEmpAttr.FK_Duty);
-            }
-            set
-            {
-                SetValByKey(DeptEmpAttr.FK_Duty, value);
-                this.MyPK = this.FK_Dept + "_" + this.FK_Duty + "_" + this.FK_Emp;
-            }
-        }
-        /// <summary>
-        /// 领导
-        /// </summary>
-        public string Leader
-        {
-            get
-            {
-                return this.GetValStringByKey(DeptEmpAttr.Leader);
-            }
-            set
-            {
-                SetValByKey(DeptEmpAttr.Leader, value);
-            }
-        }
-        /// <summary>
-        /// 职务类别
-        /// </summary>
-        public int DutyLevel
-        {
-            get
-            {
-                return this.GetValIntByKey(DeptEmpAttr.DutyLevel);
-            }
-            set
-            {
-                this.SetValByKey(DeptEmpAttr.DutyLevel, value);
-            }
-        }
+        } 
         #endregion
 
         #region 扩展属性

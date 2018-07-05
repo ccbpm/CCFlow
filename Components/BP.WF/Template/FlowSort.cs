@@ -35,11 +35,7 @@ namespace BP.WF.Template
             }
             set
             {
-                //超级用户必须是admin.
-                if (BP.Web.WebUser.No == "admin")
-                    this.SetValByKey(FlowSortAttr.OrgNo, "0");
-                else
-                    this.SetValByKey(FlowSortAttr.OrgNo, value);
+                this.SetValByKey(FlowSortAttr.OrgNo, value);
             }
         }
         #endregion 属性.

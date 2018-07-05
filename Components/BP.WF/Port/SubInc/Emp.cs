@@ -346,7 +346,7 @@ namespace BP.WF.Port.SubInc
             Emp.FK_Dept = WebUser.FK_Dept;
             Emp.RootOfDept = WebUser.FK_Dept;
             Emp.UserType = 1;
-            Emp.Insert();
+            Emp.Save();
 
             return "增加成功,请关闭当前窗口查询到该子公司人员，设置他的权限。";
 

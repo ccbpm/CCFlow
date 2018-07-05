@@ -106,9 +106,10 @@ namespace BP.WF.Port.SubInc
             fs.No = "Inc" + this.No;
             if (fs.RetrieveFromDBSources() != 0)
             {
+                return "err@该组织结构已经设置过您不能在设置.";
+
                 fs.OrgNo = this.No;
                 fs.Update();
-
 
                 //AdminEmp ae = new AdminEmp();
                 //int i = ae.Retrieve(AdminEmpAttr.RootOfFlow, "Inc" + this.No);

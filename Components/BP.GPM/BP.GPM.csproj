@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{507A6498-9001-4674-A90A-719F3818940A}</ProjectGuid>
+    <ProjectGuid>{3AE8C44B-7DBA-4312-A775-57172697FAA7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BP.GPM</RootNamespace>
@@ -70,6 +70,7 @@
     <Compile Include="Plugins\DINGTalk\DDSDK\TokenResult.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\Urls.cs" />
     <Compile Include="Plugins\DINGTalk\DingDing.cs" />
+    <Compile Include="Plugins\DINGTalk\DingFlowMessage.cs" />
     <Compile Include="Plugins\DINGTalk\DingModel.cs" />
     <Compile Include="Plugins\DINGTalk\DingTalk_Message.cs" />
     <Compile Include="Plugins\DINGTalk\WeinXinModel.cs" />

@@ -16,9 +16,19 @@
     <base target="_self" />
     <script type="text/javascript">
 
+        function ToNew() {
+
+            if (confirm('您要使用新版本吗？')) {
+                var url = window.location.href;
+                url = url.replace('Condition.htm', 'List.htm');
+                window.location.href = url;
+                return;
+            }
+        }
 
         //初始化页面函数.....
         $(function () {
+
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
@@ -128,6 +138,8 @@
 							<option value="CondByPara">按开发者参数计算</option>
 							<option value="CondByUrl">按Url条件计算</option>
 						</select>
+
+                        <input type=button value="新版本"   onclick="ToNew()" />
 					</div>
 					<div id="container" data-options="region:'center',title:' '" style="overflow-y:hidden;">
 						<iframe id="context" scrolling="yes" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>

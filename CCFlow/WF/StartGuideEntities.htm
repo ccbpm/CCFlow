@@ -1,17 +1,16 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
     <title>驰骋工作流</title>
-    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
+    <meta charset="UTF-8">
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="./Scripts/config.js"></script>
     <script type="text/javascript" src="./Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >
+
         //页面启动函数.
         var str = location.href; //取得整个地址栏
         var num = str.indexOf("?");
@@ -29,8 +28,8 @@
             var url = MyFlow + "?DoType=StartGuide_Init&" + str + "&m=" + Math.random();
             //执行加载
             StartGuide_Init(url, FK_Flow, FK_Node, WorkID);
-
         });
+
         //关键字查询
         function KeyOfSearch() {
             //获取要查询的关键字
@@ -39,8 +38,10 @@
             //执行查询
             StartGuide_Init(url, FK_Flow, FK_Node, WorkID);
         }
+
         //发起
         function SendMulit() {
+
             //获取选中的checkbox
             var rdVal = "";
             var cbVal = "";
@@ -63,17 +64,17 @@
                     //出现异常，提示错误
                     if (data.indexOf('err@') == 0) {
                         alert(data);
+                        return;
                     }
-                    else {
-                        //跳转
-                        var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
-                        window.location.href = href;
-                    }
+                    //跳转
+                    var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
+                    window.location.href = href;
                 }
             });
         }
         //加载方法
         function StartGuide_Init(url, FK_Flow, FK_Node, WorkID) {
+
             $.ajax({
                 type: 'post',
                 async: true,
@@ -86,79 +87,84 @@
                     var _Html = "";
                     //判断是否出现异常
                     if (data.indexOf('err@') == 0) {
+
                         _Html += "<tr><td>";
                         _Html += "" + data + "";
                         _Html += "</td></tr>";
+
+                        $('#dataList').html([_Html].join(''));
+                        return;
                     }
-                    else {
-                        //循环取出来的数据
-                        for (var i in data) {
-                            var key; var Name;
-                            var thHtml = "<tr><th>Idx</th>";
-                            //如果是第一行，先生成table列名
-                            if (i < 1) {
-                                for (var k in data[i]) {
-                                    if (k == "NO" || k == "No") {//No这一列，不显示
-                                        key = data[i][k];
-                                    }
-                                    else if (k == "NAME" || k == "Name") {
-                                        Name = data[i][k];
-                                        thHtml += "<th>NAME</th>";
-                                    }
-                                    else {
-                                        thHtml += "<th>" + k + "</th>";
-                                    }
-                                }
-                                _Html += thHtml + "</tr>";
-                            }
-                            //添加要显示的数据
-                            _Html += "<tr>";
 
-                            //如果是SQL多条模式，增加勾选框
-                            if (StartGuideWay == "BySQLMulti") {
-                                if (data[i]["NO"] == null || data[i]["NO"] == '' || data[i]["NO"] == undefined || data[i]["NO"] == "undefined")
-                                    _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["No"] + "' id='" + data[i]["No"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
-                                else
-                                    _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
-                            }
-                            else {
-                                _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
-                            }
-
-                            //根据sql查询的列名，依次显示，并对应列名
-                            for (var v in data[i]) {
-                                if (v == "NO" || v == "No") {//此处No列不显示
-                                    key = data[i][v];
+                    //循环取出来的数据
+                    for (var i in data) {
+                        var key; var Name;
+                        var thHtml = "<tr><th>Idx</th>";
+                        //如果是第一行，先生成table列名
+                        if (i < 1) {
+                            for (var k in data[i]) {
+                                if (k == "NO" || k == "No") {//No这一列，不显示
+                                    key = data[i][k];
                                 }
-                                else if (v == "NAME" || v == "Name") {
-                                    if (key.length < 0)//如果No没有在Name列之前，就去读josn中指定的对象值
-                                        key = data[i]["NO"];
-                                    if (key == null || key == '' || key == undefined || key == "undefined")
-                                        key = data[i]["No"];
-                                    _Html += "<td nowrap>";
-                                    //如果是SQL多条模式，去掉超链接
-                                    if (StartGuideWay == "BySQLMulti") {
-                                        _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
-                                    }
-                                    else {
-                                        _Html += "   <a href='" + href + "&KeyNo=" + key + "' target='_self'>";
-                                        _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
-                                        _Html += "</a>";
-                                    }
-                                    _Html += "</td>";
+                                else if (k == "NAME" || k == "Name") {
+                                    Name = data[i][k];
+                                    thHtml += "<th>NAME</th>";
                                 }
                                 else {
-                                    _Html += "<td nowrap> " + data[i][v] + "</td>"; //显示其他列
+                                    thHtml += "<th>" + k + "</th>";
                                 }
                             }
-
-                            _Html += "</tr>";
+                            _Html += thHtml + "</tr>";
                         }
+                        //添加要显示的数据
+                        _Html += "<tr>";
+
+                        //如果是SQL多条模式，增加勾选框
+                        if (StartGuideWay == "BySQLMulti") {
+                            if (data[i]["NO"] == null || data[i]["NO"] == '' || data[i]["NO"] == undefined || data[i]["NO"] == "undefined")
+                                _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["No"] + "' id='" + data[i]["No"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                            else
+                                _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                        }
+                        else {
+                            _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
+                        }
+
+                        //根据sql查询的列名，依次显示，并对应列名
+                        for (var v in data[i]) {
+                            if (v == "NO" || v == "No") {//此处No列不显示
+                                key = data[i][v];
+                            }
+                            else if (v == "NAME" || v == "Name") {
+
+                                if (key.length < 0)//如果No没有在Name列之前，就去读josn中指定的对象值
+                                    key = data[i]["NO"];
+                                if (key == null || key == '' || key == undefined || key == "undefined")
+                                    key = data[i]["No"];
+                                _Html += "<td nowrap>";
+                                //如果是SQL多条模式，去掉超链接
+                                if (StartGuideWay == "BySQLMulti") {
+                                    _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                                }
+                                else {
+                                    _Html += "   <a href='" + href + "&KeyNo=" + key + "' target='_self'>";
+                                    _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                                    _Html += "</a>";
+                                }
+                                _Html += "</td>";
+                            }
+                            else {
+                                _Html += "<td nowrap> " + data[i][v] + "</td>"; //显示其他列
+                            }
+                        }
+                        _Html += "</tr>";
                     }
+
                     //在容器中显示
                     $('#dataList').html([
                         _Html
                     ].join(''));
+
                     //如果是SQL多条模式，增加发送按钮
                     if (StartGuideWay == "BySQLMulti") {
                         var sendMultiHtml = "<tr><td><input type='button' name='pub_Send' value='发起' id='Btn_Send' onclick='SendMulit()'/></td></tr>";

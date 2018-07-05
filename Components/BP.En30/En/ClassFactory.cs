@@ -54,40 +54,6 @@ namespace BP.En
             BP.Sys.SystemConfig.IsBSsystem = false;
             return true;
         }
-        public static bool LoadConfig_del(string cfgFile)
-        {
-            try
-            {
-                BP.Sys.SystemConfig.CS_AppSettings.Clear();
-            }
-            catch
-            {
-            }
-            #region 加载 Web.Config 文件配置
-
-            if (!File.Exists(cfgFile))
-                throw new Exception("找不到配置文件[" + cfgFile + "]2");
-
-            DataSet ds = new DataSet();
-            ds.ReadXml(cfgFile);
-            DataTable dt = ds.Tables["add"];
-            foreach (DataRow dr in dt.Rows)
-            {
-                string key = dr["key"] as string;
-                if (key == null || key == "")
-                    continue;
-
-                string value = dr["value"] as string;
-                if (value == null || value == "")
-                    continue;
-
-                BP.Sys.SystemConfig.CS_AppSettings.Add(key, value);
-            }
-            // 增加特殊判断。
-          //  SystemConfig.AppCenterDSN = SystemConfig.AppCenterDSN.Replace("VisualFlowDesigner", "VisualFlow");
-            #endregion
-            return true;
-        }
         /// <summary>
         /// 加载web.config配置文件
         /// </summary>
@@ -771,6 +737,8 @@ namespace BP.En
         }
         #endregion
 
+        #endregion
+
 
         #region 获取 HandlerBase
         private static Hashtable Htable_HandlerPage;
@@ -781,7 +749,6 @@ namespace BP.En
         /// <returns>En</returns>
         public static object GetHandlerPage(string className)
         {
-
             if (Htable_HandlerPage == null)
             {
                 Htable_HandlerPage = new Hashtable();
@@ -795,15 +762,11 @@ namespace BP.En
 
                     if (Htable_HandlerPage.ContainsKey(key) == false)
                         Htable_HandlerPage.Add(key, en);
-                   
+
                 }
             }
             return Htable_HandlerPage[className];
         }
-        #endregion
-
-       
-
         #endregion
     }
 }

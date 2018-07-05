@@ -472,6 +472,7 @@ namespace BP.WF
                 //重设默认值.
                 wk.ResetDefaultVal();
 
+                //@樊雷伟 把这部分代码搬到jflow上去. CCFlowAPI. 114行出.
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
@@ -490,6 +491,9 @@ namespace BP.WF
                             continue;
                         wk.SetValByKey(k, System.Web.HttpContext.Current.Request.Form[k]);
                     }
+
+                    //更新到数据库里.
+                    wk.DirectUpdate();
                 }
 
                 // 执行表单事件..
@@ -500,7 +504,7 @@ namespace BP.WF
                 // 执行FEE事件.
                 string msgOfLoad = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
                     wk, null);
-                if (msgOfLoad != null)
+                if (msgOfLoad != null )
                     wk.RetrieveFromDBSources();
 
                 //执行装载填充.

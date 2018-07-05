@@ -2170,6 +2170,8 @@ namespace BP.WF.HttpHandler
         //执行方法.
         public string HttpHandler()
         {
+            //@樊雷伟 , 这个方法需要同步.
+
             //获得两个参数.
             string httpHandlerName = this.GetRequestVal("HttpHandlerName");
             string methodName = this.GetRequestVal("DoMethod");

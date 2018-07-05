@@ -13,34 +13,7 @@ using BP.DTS;
 
 namespace BP.WF.DTS
 {
-    public class CheckNodes :BP.DTS.DataIOEn
-    {
-        /// <summary>
-        /// 调度人员,岗位,部门
-        /// </summary>
-        public CheckNodes()
-        {
-            this.HisDoType = DoType.UnName;
-            this.Title = "修复节点信息";
-          //  this.HisRunTimeType = RunTimeType.UnName;
-            this.FromDBUrl = DBUrlType.AppCenterDSN;
-            this.ToDBUrl = DBUrlType.AppCenterDSN;
-        }
-        public override void Do()
-        {
-
-            //MDCheck md = new MDCheck();
-            //md.Do();
-
-            //执行调度部门。
-            //BP.Port.DTS.GenerDept gd = new BP.Port.DTS.GenerDept();
-            //gd.Do();
-
-            // 调度人员信息。
-            // Emp emp = new Emp(Web.WebUser.No);
-            // emp.DoDTSEmpDeptStation();
-        }
-    }
+    
 
     public class UserPort : DataIOEn2
     {

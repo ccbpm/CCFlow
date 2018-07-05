@@ -194,6 +194,7 @@
     <Compile Include="DTS\DeletTempFiles.cs" />
     <Compile Include="DTS\Tool_Repair.cs" />
     <Compile Include="DTS\CreateIndex.cs" />
+    <Compile Include="DTS\ReadEmailSendWork.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

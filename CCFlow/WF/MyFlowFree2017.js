@@ -233,7 +233,13 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     // 浮点类型. AppDouble  AppFloat
     if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var defVal = mapAttr.DefVal;
+        var bit;
+        if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+            bit = defVal.substring(defVal.indexOf(".") + 1).length;
+
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
         return eleHtml;
     }
 
@@ -245,7 +251,8 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     // 金额类型. AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');clearNoNum(this)" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+       
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
         return eleHtml;
     }
 

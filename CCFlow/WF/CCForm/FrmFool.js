@@ -442,8 +442,14 @@ function InitMapAttrOfCtrl(mapAttr) {
         if (mapAttr.UIIsEnable != 1)
             enableAttr = "disabled='disabled'";
 
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var defVal = mapAttr.DefVal;
+        var bit;
+        if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+            bit = defVal.substring(defVal.indexOf(".") + 1).length;
+
         // alert(mapAttr.KeyOfEn);
-        return "<input style='text-align:right;width:125px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:125px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -463,7 +469,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');clearNoNum(this)" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

@@ -1108,7 +1108,7 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppFloat:
-                        val = val + ", NVL( round(" + mainTable + attr.Field + ",4) ," +
+                        val = val + ", NVL( " + mainTable + attr.Field + " ," +
                             attr.DefaultVal.ToString() + ") AS  " + attr.Key;
                         break;
                     case DataType.AppBoolean:
@@ -1118,11 +1118,11 @@ namespace BP.En
                             val = val + ", NVL(" + mainTable + attr.Field + ",1) " + attr.Key;
                         break;
                     case DataType.AppDouble:
-                        val = val + ", NVL( round(" + mainTable + attr.Field + " ,4) ," +
+                        val = val + ", NVL( " + mainTable + attr.Field + " ," +
                             attr.DefaultVal.ToString() + ") " + attr.Key;
                         break;
                     case DataType.AppMoney:
-                        val = val + ", NVL( round(" + mainTable + attr.Field + ",4)," +
+                        val = val + ", NVL( " + mainTable + attr.Field + "," +
                             attr.DefaultVal.ToString() + ") " + attr.Key;
                         break;
                     case DataType.AppDate:
@@ -1422,8 +1422,8 @@ namespace BP.En
                     case DataType.AppMoney:
                         if (attr.IsNull)
                             val = val + "," + mainTable + attr.Field + " " + attr.Key;
-                        else //需要四舍五入.
-                            val = val + ", ISNULL( round(" + mainTable + attr.Field + ",4) ," + attr.DefaultVal.ToString() + ") AS  " + attr.Key;
+                        else //不处理
+                            val = val + ", ISNULL( " + mainTable + attr.Field + " ," + attr.DefaultVal.ToString() + ") AS  " + attr.Key;
                         break;
                     case DataType.AppBoolean:
                         if (attr.DefaultVal.ToString() == "0")
@@ -1511,7 +1511,7 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppFloat:
-                        val = val + ", IFNULL( round(" + mainTable + attr.Field + ",4) ," +
+                        val = val + ", IFNULL( " + mainTable + attr.Field + " ," +
                             attr.DefaultVal.ToString() + ") AS  " + attr.Key;
                         break;
                     case DataType.AppBoolean:
@@ -1522,11 +1522,11 @@ namespace BP.En
                                 attr.Key;
                         break;
                     case DataType.AppDouble:
-                        val = val + ", IFNULL( round(" + mainTable + attr.Field + " ,4) ," +
+                        val = val + ", IFNULL( " + mainTable + attr.Field + "  ," +
                             attr.DefaultVal.ToString() + ") " + attr.Key;
                         break;
                     case DataType.AppMoney:
-                        val = val + ", IFNULL( round(" + mainTable + attr.Field + ",4)," +
+                        val = val + ", IFNULL( " + mainTable + attr.Field + "," +
                             attr.DefaultVal.ToString() + ") " + attr.Key;
                         break;
                     case DataType.AppDate:
@@ -1631,7 +1631,7 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppFloat:
-                        val = val + ", NVL( ROUND(" + mainTable + attr.Field + ", 2 )," +
+                        val = val + ", NVL( " + mainTable + attr.Field + "," +
                             attr.DefaultVal.ToString() + ") AS  " + attr.Key;
                         break;
                     case DataType.AppBoolean:
@@ -1642,11 +1642,11 @@ namespace BP.En
                                 attr.Key;
                         break;
                     case DataType.AppDouble:
-                        val = val + ", NVL( ROUND(" + mainTable + attr.Field + ",4)," +
+                        val = val + ", NVL( " + mainTable + attr.Field + "," +
                             attr.DefaultVal.ToString() + ") AS " + attr.Key;
                         break;
                     case DataType.AppMoney:
-                        val = val + ", NVL( ROUND(" + mainTable + attr.Field + ",2)," +
+                        val = val + ", NVL( " + mainTable + attr.Field + "," +
                             attr.DefaultVal.ToString() + ") AS " + attr.Key;
                         break;
                     case DataType.AppDate:
@@ -2319,12 +2319,25 @@ namespace BP.En
                                     ps.Add(attr.Key, int.Parse(strInt));
                             }
                             break;
+                        //@YLN
                         case DataType.AppFloat:
                         case DataType.AppDouble:
-                            ps.Add(attr.Key, en.GetValFloatByKey(attr.Key, 0));
+                            //ps.Add(attr.Key, en.GetValFloatByKey(attr.Key, 0));
+                             string str = en.GetValStrByKey(attr.Key) as string;
+                             if (DataType.IsNullOrEmpty(str))
+                             {
+                                 if (IsEnableNull)
+                                     ps.Add(attr.Key, DBNull.Value);
+                                 else
+                                     ps.Add(attr.Key, 0);
+                             }
+                             else
+                             {
+                                 ps.Add(attr.Key, decimal.Parse(str));
+                             }
                             break;
                         case DataType.AppMoney:
-                            string str = en.GetValStrByKey(attr.Key) as string;
+                             str = en.GetValStrByKey(attr.Key) as string;
                             if (DataType.IsNullOrEmpty(str))
                             {
                                 if (IsEnableNull)

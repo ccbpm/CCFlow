@@ -593,7 +593,13 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     // 浮点类型. AppDouble  AppFloat
     if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
-        eleHtml += "<input class='form-control' style='text-align:right;' onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' name='TB_" + mapAttr.KeyOfEn + "'/>";
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var defVal = mapAttr.DefVal;
+        var bit;
+        if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+            bit = defVal.substring(defVal.indexOf(".") + 1).length;
+
+        eleHtml += "<input class='form-control' style='text-align:right;' onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' name='TB_" + mapAttr.KeyOfEn + "'/>";
         return eleHtml;
     }
 
@@ -606,7 +612,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     // 金额类型. AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        eleHtml += "<input class='form-control ' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo');clearNoNum(this)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' name='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        eleHtml += "<input class='form-control ' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' name='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
         return eleHtml;
     }
 

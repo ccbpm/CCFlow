@@ -721,9 +721,13 @@ function valitationBefore(o, validateType) {
 				flag = (!isNaN(value) && value % 1 === 0);
 			break;
 			case "float" :
-			case "money" :
-				flag = !isNaN(value);
-			break;
+			case "money":
+			    if (value.indexOf("-") == 0 && value.length == 1)
+			        break;
+			    else {
+			        flag = !isNaN(value);
+			        break;
+			    }
 		}
 		if (flag) {
 			$(o).data({
@@ -742,8 +746,12 @@ function valitationAfter(o, validateType) {
 			break;
 			case "float" :
 			case "money" :
-				flag = !isNaN(value);
-			break;
+			    if (value.indexOf("-") == 0 && value.length == 1)
+			        break;
+			    else {
+			        flag = !isNaN(value);
+			        break;
+			    }
 		}
         if (!flag) {
 			o.value = $(o).data().value;
@@ -753,6 +761,16 @@ function valitationAfter(o, validateType) {
 /**
  * 输入验证firfox, ff浏览器不支持execCommand()
  */
+
+function limitLength(obj, length) {
+   obj.value = obj.value.replace(/[^\d.-]/g, "");  //清除“数字”和“.”以外的字符 ;
+    if (length != null && length != "" && length != "undefined") {
+        if (obj.value.split('.')[1].length > length) {
+            obj.value = obj.value.substring(0, obj.value.length - 1);
+            obj.focus();
+        }
+    }
+}
 
 //类型为Money时输入设置
   function clearNoNum(obj){  

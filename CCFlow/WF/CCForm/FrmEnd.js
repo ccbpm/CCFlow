@@ -36,10 +36,10 @@
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-        if (mapAttr.MyDataType == 8) {
-            if (!/\./.test(val))
-                val += '.00';
-        }
+        //if (mapAttr.MyDataType == 8) {
+         //   if (!/\./.test(val))
+        //        val += '.00';
+        //}
         $('#TB_' + mapAttr.KeyOfEn).val(val);
 
         //文本框.

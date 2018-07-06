@@ -371,7 +371,13 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
     // AppDouble  AppFloat
     if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;'class='form-control'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var attrdefVal = mapAttr.DefVal;
+        var bit;
+        if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+            bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+
+        return "<input  value='" + defValue + "' style='text-align:right;width:125px;'class='form-control'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -387,7 +393,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
     //AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');clearNoNum(this)" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

@@ -19,7 +19,9 @@ function InitBar(optionKey) {
 
   //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
 
-    html += "<input  id='Btn_Help' type=button onclick='Help()' value='我需要帮助' />";
+    html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
+    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
@@ -53,12 +55,74 @@ function DFreeFrm() {
     OpenEasyUiDialogExt(url, '傻瓜表单设计器', 1100, 600, false);
 }
 
-
-
-function Help() {
+function HelpOnline() {
     var url = "http://ccbpm.mydoc.io";
     window.open(url);
 }
+
+function Help() {
+
+    var url = window.location.href;
+
+    var nodeID = GetQueryString("FK_Node");
+    var obj = document.getElementById("changBar");
+    var sele = obj.options;
+    var index = obj.selectedIndex;
+    var optionKey = optionKey = sele[index].value;
+
+    var roleName = "";
+    switch (parseInt(optionKey)) {
+        case FormType.FoolForm:
+            url = "0.FoolForm.htm";
+            break;
+        case FormType.FreeForm:
+            url = "1.FreeForm.htm";
+            break;
+        case FormType.SelfForm:
+            url = "2.SelfForm.htm";
+            break;
+        case FormType.SDKForm:
+            url = "3.SDKForm.htm";
+            break;
+        case FormType.SLForm:
+            url = "4.SLForm.htm";
+            break;
+        case FormType.SheetTree:
+            url = "5.SheetTree.htm";
+            break;
+        case FormType.SheetAutoTree:
+            url = "6.SheetAutoTree.htm";
+            break;
+        case FormType.WebOffice:
+            url = "7.WebOffice.htm";
+            break;
+        case FormType.ExcelForm:
+            url = "8.ExcelForm.htm";
+            break;
+        case FormType.WordForm:
+            url = "9.WordForm.htm";
+            break;
+        case FormType.FoolTruck:
+            url = "10.FoolTruck.htm";
+            break;
+        case FormType.RefOneFrmTree:
+            alert('该视频尚未提供');
+            return;
+            //  url = "11.RefOneFrmTree.htm";
+            break;
+        case FormType.DisableIt:
+            url = "100.DisableIt.htm";
+            break;
+        default:
+            url = "0.FoolForm.htm";
+            break;
+    }
+
+    //if (url.indexOf
+    //var url = "http://ccbpm.mydoc.io";
+    //window.open(url);
+}
+
 
 function changeOption() {
     var nodeID = GetQueryString("FK_Node");

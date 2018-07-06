@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3AE8C44B-7DBA-4312-A775-57172697FAA7}</ProjectGuid>
+    <ProjectGuid>{507A6498-9001-4674-A90A-719F3818940A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BP.GPM</RootNamespace>
@@ -53,35 +53,6 @@
     <Compile Include="Dev2Interface.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GPM\StationExt.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\Analyze.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\CacheItem.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ConstVars.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ErrCodeEnum.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ICacheProvider.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\JSTicket.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\Keys.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\RequestHelper.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ResultPackage.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\SignPackage.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\SignPackageHelper.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\SimpleCacheProvider.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\TimeStamp.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\TokenResult.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\Urls.cs" />
-    <Compile Include="Plugins\DINGTalk\DingDing.cs" />
-    <Compile Include="Plugins\DINGTalk\DingFlowMessage.cs" />
-    <Compile Include="Plugins\DINGTalk\DingModel.cs" />
-    <Compile Include="Plugins\DINGTalk\DingTalk_Message.cs" />
-    <Compile Include="Plugins\DINGTalk\WeinXinModel.cs" />
-    <Compile Include="Plugins\DINGTalk\WeiXin.cs" />
-    <Compile Include="Plugins\DINGTalk\WeiXinMessage.cs" />
-    <Compile Include="Plugins\DINGTalk\WXBizMsgCrypt.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_Ding.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_DingIcreMent.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_DingUserIcon.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_WeiXinUserIcon.cs" />
-    <Compile Include="Plugins\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="GPM\AppSort.cs" />
     <Compile Include="GPM\GPMEmp.cs" />
     <Compile Include="GPM\UserMenu.cs" />
@@ -102,6 +73,10 @@
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BP.WF\BP.WF.csproj">
+      <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
+      <Name>BP.WF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -215,6 +215,7 @@ namespace BP.WF.HttpHandler
             conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID, toNodeID);
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
 
+            //@樊雷伟, 这部分需要转换.
             string noteIn = "'FID','PRI','PNodeID','PrjNo', 'PrjName', 'FK_NY','FlowDaySpan', 'MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID'";
 
             //增加字段集合.

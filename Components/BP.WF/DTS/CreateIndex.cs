@@ -163,7 +163,7 @@ namespace BP.WF.DTS
             //    }
             //}
             //NewMail.Disconnect();
-            return "";
+            return "未完成";
         }
     }
 }

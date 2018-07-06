@@ -1062,6 +1062,8 @@ namespace BP.WF.HttpHandler
                     tk.Row.Add("T_NodeIndex", idx);
 
                     nd = nds.GetEntityByKey(tk.NDFrom) as Node;
+                    if (nd == null)
+                        continue;
 
                     fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
                     //求出主键

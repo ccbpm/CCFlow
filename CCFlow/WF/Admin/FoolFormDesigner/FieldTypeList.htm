@@ -122,6 +122,11 @@
             if (plant=="CCFlow")
                 name = encodeURIComponent(name);
 
+            //特殊判断系统字段.
+            if ( no.toUpperCase() == "BILLNO")
+                no = "BillNo";
+
+
             handler.AddPara("name", name);
             handler.AddPara("FType", fType);
             handler.AddPara("FK_MapData", fk_mapdata);

@@ -154,12 +154,20 @@
             var url = "../SettingTemplate.htm?TemplateType=CondBySQLTemplateTemplate&CondType=2&m=" + Math.random();
             WinOpen(url, 'ss');
         }
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('CondBySQLTemplate.htm', 'List.htm');
+            window.location.href = url;
+        }
     </script>
 </head>
 <body onkeypress="Esc();">
 
 <form id="cc" > 
 <table  style="width:90%;">
+<caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 方向条件-按照SQl</caption>
+
 <tr>
 <td style="width:20%;">选择一个SQL模版: </td>
 <td>
@@ -177,6 +185,7 @@
 
    <input type="button" value="保存" onclick="Save()"  />
    <input type="button" value="删除" onclick="Delete()"  />
+            <input type=button  onclick="Back()" value="返回" id="Button2" /> 
 
    <div style=" text-align:left">
    <h4> &nbsp; &nbsp; &nbsp; &nbsp;帮助</h4>

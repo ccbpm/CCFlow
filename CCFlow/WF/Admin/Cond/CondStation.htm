@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>方向条件-按照岗位计算</title>
-    <!-- 于庆海 -->
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
- 
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -53,7 +51,7 @@
 
             //获取已指定操作员的岗位条件
             operatorValues = operatorValue.split("@");
-            var operatorValueTs = operatorValueT.split("@"); 
+            var operatorValueTs = operatorValueT.split("@");
 
 
             ////根据用户的信息，判断是否启用那个设置工具。
@@ -68,7 +66,7 @@
                 var showCondition = InitStation(operatorValues);
                 document.getElementById("emps").innerHTML = showCondition[2];
                 document.getElementById("stations").innerHTML = "合计:(<font color=red>" + showCondition[0] + "</font>)条" + showCondition[1];
-                
+
 
             } else {
                 /*调用集团模式的.*/
@@ -84,13 +82,12 @@
                 var count = showCondition[0] + showConditionT[0];
                 document.getElementById("emps").innerHTML = showCondition[2] + showConditionT[2];
                 document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + showCondition[1] + showConditionT[1];
-
-
             }
 
             //TODO 条件参数
             var atpara = cond.AtPara;
             if (atpara != "") {
+
                 var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
                 document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
                 document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
@@ -104,16 +101,19 @@
                 $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
                 $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
             }
+
             //条件参数 end
             //end
-            var currCondStation = null
+            var currCondStation = null;
+
+
             //调用公共类库的方法:执行批量主表赋值
             if (currCondStation != null)
                 GenerFullAllCtrlsVal(currCondStation);
-
         }
 
         function InitStation(CheckStations) {
+
             var showCondition = new Array();
             var html = "";
             var emps = "";
@@ -122,7 +122,8 @@
                 if (CheckStations[i] != "") {
                     var en = new Entities("BP.GPM.Stations");
                     en.Retrieve("No", CheckStations[i]);
-                    html += "&nbsp;&nbsp;&nbsp;" + en[0].Name;
+
+                    html += "&nbsp;&nbsp;&nbsp;" + en.Name;
                     count++;
                     emps += CheckStations[i] + ",";
                 }
@@ -131,10 +132,11 @@
             showCondition[1] = html;
             showCondition[2] = emps;
             return showCondition;
-
         }
+
         //设置本组织岗位.
         function SetAdminStations() {
+
             var user = new WebUser();
                
             OpenNodStationGroup("",1);
@@ -149,8 +151,6 @@
             var user = new WebUser();
             OpenNodStationGroup(user.FK_Dept,3);
         }
-
-
 
         function OpenNodStationGroup(orgNo, selectType) {
             var emps = $("#emps").html();
@@ -232,7 +232,7 @@
         function getChidrenValue(data) {
             $('#win').window('close'); // close a window
             if (data[3] == "1") {
-                
+
                 document.getElementById("stations").innerHTML = "合计:(<font color=red>" + data[2] + "</font>)条" + data[1];
                 document.getElementById("emps").innerHTML = data[0];
             }
@@ -247,8 +247,8 @@
                 if (orgCount == null || orgCount == "") orgCount = 0;
                 if (data[2] == null || data[2] == "") data[2] = 0;
                 count = parseInt(orgCount) + parseInt(data[2]);
-                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + orgStations+data[1];
-                document.getElementById("emps").innerHTML =orgEmps+ data[0];
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + orgStations + data[1];
+                document.getElementById("emps").innerHTML = orgEmps + data[0];
             }
 
             if (data[3] == "3") {
@@ -259,13 +259,39 @@
                 var groupStations = $("#groupStations").html();
                 var groupEmps = $("#groupEmps").html();
                 var count = 0;
-                if (groupCount == null || groupCount == "") groupCount = 0;
-                if (data[2] == null || data[2] == "") data[2] = 0;
+
+                if (groupCount == null || groupCount == "")
+                    groupCount = 0;
+
+                if (data[2] == null || data[2] == "")
+                    data[2] = 0;
+
                 count = parseInt(groupCount) + parseInt(data[2]);
                 document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + groupStations + data[1];
                 document.getElementById("emps").innerHTML = groupEmps + data[0];
             }
-            
+
+            //获取URL参数
+            var nodeID = GetQueryString("FK_Node");
+            var FK_MainNode = GetQueryString("FK_MainNode");
+            var ToNodeID = GetQueryString("ToNodeID");
+
+            //条件属性.
+            var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
+            var cond = new Entity("BP.WF.Template.Cond");
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            cond.OperatorValue = data[0];
+            cond.OperatorValueT = data[1];
+            cond.Save();
+        }
+
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('CondStation.htm', 'List.htm');
+            window.location.href = url;
         }
     </script>
 
@@ -305,6 +331,12 @@
 </head>
 <body>
     <form action="/" method="post" id="cc">
+
+    <table style=" width:100%; "> 
+<caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 方向条件-按岗位</caption>
+    <tr>
+    <td> 
+ 
     <div>
          <div id="AdminModel">
             <fieldset >
@@ -331,6 +363,7 @@
         <div id="stations"></div>
 
         </fieldset>
+
         <label id="emps" style="display:none"></label>
         <label id="groupCount" style="display:none"></label>
         <label id="orgCount" style="display:none"></label>
@@ -359,8 +392,10 @@
             </span>
             <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled" style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
             <br />
-            <a class="btn" href="javascript:Btn_Save_Click();">保存</a>&nbsp;&nbsp; 
-            <a class="btn" href="javascript:Btn_Delete_Click();">删除</a>
+            <input type=button value="保存" onclick="Btn_Save_Click()" />
+            <input type=button value="删除" onclick="Btn_Delete_Click()" />
+            <input type=button value="返回" onclick="Back()" />
+
             
         </div>
     </div>
@@ -376,6 +411,12 @@
             
         
    </div>    
+
+
+      </td>
+    </tr>
+    <table> 
+
 
     </form>
 </body>

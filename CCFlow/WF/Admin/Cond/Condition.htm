@@ -109,16 +109,22 @@
 
             $('#context').attr('src', c.value + '.htm?' + paras);
 
-//            if (c.value == 'CondByFrm' || c.value == 'CondBySQL' || c.value == 'CondBySQLTemplate' || c.value == 'CondByUrl' || c.value == 'CondByPara')
-//                $('#context').attr('src', c.value + '.htm?' + paras);
-//            else
-//                $('#context').attr('src', c.value + '.aspx?' + paras);
+            //            if (c.value == 'CondByFrm' || c.value == 'CondBySQL' || c.value == 'CondBySQLTemplate' || c.value == 'CondByUrl' || c.value == 'CondByPara')
+            //                $('#context').attr('src', c.value + '.htm?' + paras);
+            //            else
+            //                $('#context').attr('src', c.value + '.aspx?' + paras);
         }
-		$(function () {
-			var bodyHeight = $("body").height();
-			var selHeight = $("#conditionSelector").height();
-			$("#container").height(bodyHeight - selHeight - 40);
-		});
+        $(function () {
+            var bodyHeight = $("body").height();
+            var selHeight = $("#conditionSelector").height();
+            $("#container").height(bodyHeight - selHeight - 40);
+        });
+       //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('CondByFrm.htm', 'List.htm');
+            window.location.href = url;
+        }
     </script>
     <base target="_self" />
 </head>

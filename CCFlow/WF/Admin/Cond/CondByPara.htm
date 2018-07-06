@@ -161,6 +161,12 @@
             var url = "../SettingTemplate.htm?TemplateType=CondByPara&CondType=2&m=" + Math.random();
             WinOpen(url, 'ss');
         }
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('CondByPara.htm', 'List.htm');
+            window.location.href = url;
+        }
     </script>
 </head>
 <body onkeypress="Esc();">
@@ -168,6 +174,7 @@
 <form id="cc" > 
 
 <table  style=" width:95%;">
+<caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 方向条件-开发者参数</caption>
 <tr>
 <td style="width:20%;">请输入参数</td>
 <td><textarea rows="1" cols="150" id="TB_Docs" name="TB_Docs" style=" width:95%;"  > </textarea> </td>
@@ -182,6 +189,7 @@
    <input type="button" value="加载模版" onclick="LoadTemplate()"  />
    <input type="button" value="保存" onclick="Save()"  />
    <input type="button" value="删除" onclick="Delete()"  />
+            <input type=button  onclick="Back()" value="返回" id="Button2" /> 
 
    <div style=" text-align:left">
    <h4> &nbsp; &nbsp; &nbsp; &nbsp;帮助</h4>

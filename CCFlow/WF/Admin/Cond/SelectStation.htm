@@ -110,13 +110,14 @@
                     emps += id + ",";
                     html += document.getElementById(id).innerHTML+ "&nbsp;&nbsp;";
                     i++;
-                   
                 }
             });
+
             data[0] = emps;
             data[1] = html;
             data[2] = i;
             data[3] = selectType;
+
             window.parent.window.getChidrenValue(data);
 
         }
@@ -158,6 +159,8 @@
 </head>
 <body>
     <input type="button" value='保存' onclick='Save();' id='Save' />
+            <input type=button  onclick="Back()" value="返回" id="Button2" /> 
+
     <div style="max-height:600px;overflow:auto;">
             <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%">
             </table>

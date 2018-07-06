@@ -67,12 +67,18 @@
             data[1] = Name;
             window.parent.window.getValue(data);
         }
-         
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('CondByFrm.htm', 'List.htm');
+            window.location.href = url;
+        }
     </script>
 </head>
 <body>
 
 <form id="cc" >  
+ 
  
 <div id="ens"  style="padding:10px;margin-bottom:10px">
 

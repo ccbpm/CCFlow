@@ -3,10 +3,8 @@
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>方向条件-表单字段条件</title>
-
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
-
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
@@ -18,12 +16,6 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
     <script type="text/javascript">
-
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
 
         var OperForString = null;
         var OperForNumber = null;
@@ -230,18 +222,25 @@
             $('#eudlg').dialog('close');
             $("#TB_Val").val(data[0]);
             $("#TB_Text").val(data[1]);
-        } 
+        }
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('CondByFrm.htm', 'List.htm');
+            window.location.href = url;
+        }
     </script>
 </head>
-<body onkeypress="Esc();">
+<body>
 
 <form id="cc" > 
 <table  style="width:99%;">
+<caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 按照表单的字段作为条件</caption>
 <tr>
 <td style="width:20%;">选择表单字段: </td>
 <td>
 <select id="DDL_Fields" name="DDL_Fields" onchange="changeCond(this)" ></select>
-<a href="javascript:alert('提示:如果没有您期望的字段,请在流程设计器中检查一下流程.')">为什么没有我要的字段？</a>
+<a href="javascript:alert('提示:\t\n1.如果没有您期望的字段,请在流程设计器中检查一下流程. \t\n2.检查流程后，节点表单字段才能汇总上来.')">  <img src='../../Img/Btn/Help.gif' > 为什么没有我要的字段？</a>
  </td>
 </tr>
 

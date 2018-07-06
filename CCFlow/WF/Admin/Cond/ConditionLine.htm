@@ -81,7 +81,7 @@
 
         function OpenCond(ele, toNodeID) {
 
-            var url = "Condition.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID + "&FK_Attr=" + GetQueryString("FK_Attr");
+            var url = "List.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID + "&FK_Attr=" + GetQueryString("FK_Attr");
             OpenUrlInRightFrame(ele, url);
         }
 
@@ -118,6 +118,12 @@
                  $('#context').attr('src', url + '&s=' + Math.random());
 
              }
+         }
+         //返回.
+         function Back() {
+             var url = window.location.href;
+             url = url.replace('CondByFrm.htm', 'List.htm');
+             window.location.href = url;
          }
     </script>
 </head>

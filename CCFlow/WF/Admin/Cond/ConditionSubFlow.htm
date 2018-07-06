@@ -20,6 +20,12 @@
                 return;
             }
         }
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('CondByFrm.htm', 'List.htm');
+            window.location.href = url;
+        }
     </script>
 </head>
 <body  onload="ToURL()" >

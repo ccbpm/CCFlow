@@ -288,7 +288,7 @@ function figure_Template_Label(frmLab) {
     eleHtml = $(eleHtml);
     var text = frmLab.Text == null ? "" : frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
-    eleHtml.css('position', 'absolute').css('top', frmLab.Y - 5).css('left', frmLab.X).css('font-size', frmLab.FontSize)
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y -5).css('left', frmLab.X).css('font-size', frmLab.FontSize)
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;

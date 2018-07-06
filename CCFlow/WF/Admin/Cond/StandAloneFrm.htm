@@ -257,11 +257,19 @@
             });
 
         }
+
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            url = url.replace('StandAloneFrm.htm', 'List.htm');
+            window.location.href = url;
+        }
     </script>
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
         <table style="width: 90%;">
+           <caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 按照独立表单做方向条件</caption>
             <tr>
                 <td style="width: 20%;">选择独立表单:</td>
                 <td>

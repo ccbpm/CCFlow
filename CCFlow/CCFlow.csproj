@@ -560,6 +560,7 @@
     <Content Include="WF\Admin\CCFormDesigner\Img\toolbar\property.png" />
     <Content Include="WF\Admin\CCFormDesigner\js\ControlsPropertys2016.js" />
     <Content Include="WF\Admin\CCFormDesigner\ResetFrm.htm" />
+    <Content Include="WF\Admin\Cond\List.htm" />
     <Content Include="WF\Admin\Cond\CondByFrm.htm" />
     <Content Include="WF\Admin\Cond\CondByFrmSelectFKData.htm" />
     <Content Include="WF\Admin\Cond\CondByPara.htm" />
@@ -760,6 +761,7 @@
     <Content Include="WF\Comm\Tree.htm" />
     <Content Include="WF\Comm\TreeV2.htm" />
     <Content Include="WF\Comm\UC\ToolBar.ascx" />
+    <Content Include="WF\Comm\UC\UCGraphics.ascx" />
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\emotion.css" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\emotion.js" />
@@ -7499,6 +7501,13 @@
     </Compile>
     <Compile Include="WF\Comm\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Comm\UC\UCGraphics.ascx.cs">
+      <DependentUpon>UCGraphics.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Comm\UC\UCGraphics.ascx.designer.cs">
+      <DependentUpon>UCGraphics.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\UC\UCSys.ascx.cs">
       <DependentUpon>UCSys.ascx</DependentUpon>

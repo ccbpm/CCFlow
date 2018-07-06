@@ -13,7 +13,11 @@
     <script type="text/javascript" language="javascript">
 
         var workID = GetQueryString("WorkID");
+
         var nodeID = GetQueryString("FK_Node");
+        if (nodeID == undefined || nodeID == null)
+            nodeID = GetQueryString("NodeID");
+
 
         var gwls = null;
         $(function () {

@@ -3652,11 +3652,9 @@ namespace BP.WF
         {
             get
             {
+                return OSModel.OneMore;
+
                 var model = BP.Sys.SystemConfig.GetValByKeyInt("OSModel", -1);
-
-                if (model == 0)
-                    throw new Exception("err@已经取消了对OneOne模式支持.");
-
                 return OSModel.OneMore;
 
                // OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 0);

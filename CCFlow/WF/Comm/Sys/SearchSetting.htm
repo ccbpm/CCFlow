@@ -32,25 +32,27 @@
                 en.SetPara("WinCardH", "600"); //是否启用相关功能列
 
                 en.SetPara("EditerType", 0); //是否启用相关功能列
-                en.SetPara("WinOpenUrl", ""); //是否启用相关功能列
-                en.Insert();
 
+                //打开url类型. 
+                en.SetPara("SearchUrlOpenType", "0"); //默认为打开En.htm
+                en.Url = "";
+                en.Insert();
             }
 
             var en = new Entity("BP.Sys.EnCfg");
             en.No = ensName;
             en.Retrieve();
 
-
             //赋值.
             GenerBindEnumKey("DDLPara_UIRowStyleGlo", "UIRowStyleGlo");
             GenerBindEnumKey("DDLPara_MoveToShowWay", "MoveToShowWay");
             GenerBindEnumKey("DDLPara_EditerType", "EditerType");
 
+            //双击行打开内容类型.
+            GenerBindEnumKey("DDLPara_SearchUrlOpenType", "SearchUrlOpenType", 0);
+
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
-
-           // alert(en);
 
         });
 
@@ -132,24 +134,36 @@
 <td>弹出窗口宽度</td>
 <td ><input name="TBPara_WinCardW" type="text"  id="TBPara_WinCardW" style="width:100%" /></td>
 </tr>
+
 <tr bgcolor='AliceBlue' >
 <td>WinCardH</td>
 <td>弹出窗口高度</td>
 <td ><input name="TBPara_WinCardH" type="text"  id="TBPara_WinCardH" style="width:100%" /></td>
 </tr>
+
 <tr bgcolor='white' >
 <td>EditerType</td>
 <td>大块文本编辑器</td>
 <td ><select name="DDLPara_EditerType" id="DDLPara_EditerType">
-	 
 </select></td>
 </tr>
 
+
+
 <tr bgcolor='AliceBlue' >
-<td>WinOpenUrl</td>
-<td>双击打开的URL(默认为卡片)</td>
-<td ><input name="TBPara_WinOpenUrl" type="text" value="" id="TBPara_WinOpenUrl" style="width:100%;" /></td>
+<td>UrlOpenType</td>
+<td>双击行打开内容</td>
+<td ><select name="DDLPara_SearchUrlOpenType" id="DDLPara_SearchUrlOpenType">
+</select></td>
 </tr>
+
+<tr  >
+<td>WinOpenUrl</td>
+<td>URL(当为自定义url的时候有效)</td>
+<td ><input name="TB_Url" type="text" value="" id="TB_Url" style="width:100%;" /></td>
+</tr>
+
+ 
 
 </table>
 

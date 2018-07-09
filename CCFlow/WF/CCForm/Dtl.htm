@@ -49,12 +49,7 @@
             saveRowCurrent: { count: 0, overCount: 0, saveAll: false, rowIndex: 0 },
             currentRowIndex: -1//如果该值有改变，就表明需要存盘，入库  -1 表示还未做操作  光标所在行
         };
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
+      
 
         //页面启动函数.
         $(function () {
@@ -98,7 +93,7 @@
                     
                       if (msg.indexOf('err@')==0)
                       {
-                         //alert(msg);
+                         alert(msg);
 						 console.log(msg);
                          return;
                       }

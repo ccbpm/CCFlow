@@ -4,7 +4,13 @@
   <Item Key="UIRowStyleGlo" Name="表格数据行风格(应用全局)"
   CH="@0=无风格@1=交替风格@2=鼠标移动@3=交替并鼠标移动"
   EN="" JP="" RU=""  />
+
+  <Item Key="SearchUrlOpenType" Name="双击行打开内容"
+CH="@0=En.htm@1=EnOnly.htm@2=自定义url"
+EN="" JP="" RU=""  />
+
   
+
   <Item Key="MoveToShowWay" Name="移动到"
   CH="@0=不显示@1=下拉列表0@2=平铺"
   EN="" JP="" RU=""  />

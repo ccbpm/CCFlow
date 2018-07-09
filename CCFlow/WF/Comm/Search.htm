@@ -449,15 +449,28 @@
             cfg.No = ensName;
             cfg.RetrieveFromDBSources();
 
+            //考虑兼容旧版本.
             var url = cfg.GetPara("WinOpenUrl");
-
-            if (url == "" || url == undefined) {
-                url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+            if (url && url.length >4)
+            {
+               cfg.Url=url;
+               cfg.Update();
             }
-            else {
+
+            url= cfg.Url;
+            var urlOpenType=cfg.GetPara("SearchUrlOpenType");
+
+            if (urlOpenType==0)
+                url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+
+            if (urlOpenType==1)
+                url = "./RefFunc/EnOnly.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
+
+            if (urlOpenType==2)
+            {
                 if (url.indexOf('?') == -1)
                     url = url + "?1=1";
-                url = url + "&EnsName=" + ensName + "&enName=" + enName + "&PKVal=" + pk + paras;
+                url = url + "&EnsName=" + ensName + "&EnName=" + enName + "&PKVal=" + pk + paras;
             }
 
             var windowW = cfg.GetPara("WinCardW");

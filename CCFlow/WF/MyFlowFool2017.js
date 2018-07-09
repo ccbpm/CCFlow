@@ -146,7 +146,6 @@ function GenerFoolFrm(wn) {
 
     $('#CCForm').html(html);
 
-
 }
 
 //解析表单字段 MapAttr.

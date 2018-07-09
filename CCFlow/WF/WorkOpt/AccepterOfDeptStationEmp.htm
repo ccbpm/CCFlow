@@ -1,0 +1,524 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>下一步接受人员列表</title>
+    <!--
+    1, 退回界面。
+    2，需要 FK_Flow, FK_Node,WorkID, FID.
+    3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        body {
+            background: transparent;
+        }
+        body div {
+           text-align: left;
+        }
+        #Message {
+            width: 100%;
+        }
+        #SelectEmp {
+          position: relative;
+          width:400px;
+          border-top: 0;
+          display: none;
+          margin-top:-7px;
+          /*border: solid 2px #3175af;*/
+        }
+        .addbg {
+            background: #CFCFCF;
+        }
+        #next
+        {
+            float:left;
+            position: relative;
+            width:600px;
+         }
+    </style>
+    <script type="text/javascript">
+        var param = {};
+        $(function () {
+
+            //初始化人员选择窗口
+            var selectEmpModalHtml = '<div class="modal fade" id="SelectEmpsModal">' +
+               '<div class="modal-dialog">'
+                   + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                      + '<div class="modal-header">'
+                          + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                           + '<h4 class="modal-title">接受人</h4>'
+                       + '</div>'
+                       + '<div class="modal-body">'
+                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                       + '</div>'
+                   + '</div><!-- /.modal-content -->'
+               + '</div><!-- /.modal-dialog -->'
+           + '</div>';
+
+            $('body').append($(selectEmpModalHtml));
+
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+
+            if (dept == null || dept == '' || dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+
+            if (dept == undefined) {
+                dept = "0";
+            }
+
+
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
+
+            //为天业集团做的特殊判断.
+            url = url.replace('=101&', '=10102&');
+
+            //   url = url.replace('=101&', '=10102&');
+
+            $('#iframeSelectEmpsForm').attr('src', url);
+
+            $('#Btn_SelectEmps').bind('click', function () { $('#SelectEmpsModal').modal().show(); });
+            //$("section").show();
+            $(".Msg").hide();
+
+            //$("#HelpInfo").hide();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("AccepterOfGener_Init");
+
+           // alert(data);
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                window.parent.close();
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                window.location.href = data.replace('url@', '');
+                return;
+            }
+
+            var sas = JSON.parse(data);
+            BindTable(sas);
+
+        });
+
+
+        function BindTable(sas) {
+
+            var isDel = true;
+            var toNodeID = GetQueryString("ToNode");
+            var sa = new Entity("BP.WF.Template.Selector", toNodeID);
+            if (sa.IsSimpleSelector == 1)
+                isDel = false;
+            
+            for (var i = 0; i < sas.length; i++) {
+                var sa = sas[i];
+                var row = "";
+                row += "<tr>";
+                row += "<td>" + (i+1) + "</td>";
+                //row += "<td>" + sa.FK_Emp + "</td>";
+                row += "<td>" + sa.EmpName + "</td>";
+                row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
+                if (isDel==true)
+                    row += "<td><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','" + sa.EmpName + "');\" >移除</a></td>";
+                else
+                    row += "<td> <a href=\"javascript:alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
+
+                row += "</tr>";
+
+                $("#Table1 tbody").append(row);
+            }
+        }
+
+        //得到行对象
+        function ClearTable() {
+
+            var table = $("#Table1");
+            var tbody = $("#Table1 tbody");
+            var trArr = $("#Table1 tbody tr");
+            for (var i = 0; i < trArr.length; i++) {
+
+                var tr = trArr[i];
+                console.info(tr.id);
+                if (tr.id == "title")
+                    continue;
+
+                tbody.empty();
+            }
+        }
+
+        function Ref() {
+            window.location.href = window.location.href;
+        }
+
+        function DeleteIt(empNo, empName) {
+
+            //            if (window.confirm('您确定要移除[' + empNo +' , '+ empName + ']') == false)
+            //                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("FK_Emp", empNo);
+
+            var data = handler.DoMethodReturnString("AccepterOfGener_Delete");
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                alert(data);
+                return;
+            }
+            window.location.href = window.location.href;
+            return;
+        }
+
+
+        //确定 执行下一步接受人员列表操作.
+        function AddEmps(isSend) {
+            var emps = this.document.getElementById("TB_Emps").value;
+            if (isSend == false && emps == "") {
+                alert('请输入接受人的人员ID,支持拼音查询.');
+                return;
+            }
+            AddEmpsExt(isSend, emps);
+        }
+
+        function AddEmpsExt(isSend, emps) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("AddEmps", emps);
+            var data = handler.DoMethodReturnString("AccepterOfGener_AddEmps");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                window.location.href = window.location.href;
+                return;
+            }
+
+            if (data.indexOf('info@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+                return;
+            }
+
+
+            //是否执行发送?
+            if (isSend == true) {
+                SendIt();
+                return;
+            }
+
+            ClearTable();
+
+            var gwls = JSON.parse(data);
+
+            BindTable(gwls);
+
+            document.getElementById("TB_Emps").value = "";
+            return;
+
+            $(".foot").hide();
+        }
+
+        function Send() {
+
+            var emps = this.document.getElementById("TB_Emps").value;
+            if (emps != "") {
+                this.AddEmps(true);
+                return;
+            }
+
+            SendIt();
+        }
+
+        function SendIt() {
+
+            var httphandler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            httphandler.AddUrlData();
+
+            $("#Btn_Send").attr("disabled", "disabled");
+            $("#Btn_Send").val("正在发送请稍候...");
+            $("#Btn_Close").attr("disabled", "disabled");
+            $("#Btn_SelectEmps").attr("disabled", "disabled");
+
+            var data = httphandler.DoMethodReturnString("AccepterOfGener_Send");
+
+            if (data.indexOf('err@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+
+                $("#Btn_Send").attr("disabled", false);
+                $("#Btn_Send").val("执行发送");
+                $("#Btn_Close").attr("disabled", false);
+                $("#Btn_SelectEmps").attr("disabled", false);
+                return;
+            }
+
+
+            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
+
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+
+
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>&nbsp;@');
+
+
+            data = data.replace('@', '<br/>@');
+            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+            $(".Msg").show();
+            $(".Msg").html(data);
+
+            $("#next").empty();
+
+
+            //隐藏table.
+            document.getElementById("Table1").style.display = "none";
+            document.getElementById("TB_Emps").style.display = "none";
+            document.getElementById("Btn_SelectEmps").style.display = "none";
+
+            //document.getElementById("Btn_AddEmps").style.display = "none";
+
+            var ctrl = document.getElementById("Btn_Send");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+
+            ctrl = document.getElementById("labInfo");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+
+            ctrl = document.getElementById("Btn_Close");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+        }
+
+        //取消移交
+        function CloseAll() {
+
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.close();
+            }
+            window.close();
+        }
+
+        //关闭model.
+        function CloseModel() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("");
+            } else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+                window.close();
+            }
+        }
+
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
+
+            $('#SelectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+
+            var val = frames["iframeSelectEmpsForm"].window.returnVal.No;
+
+            // alert(val);
+            AddEmpsExt(false, val)
+            //$('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
+        }
+    
+        //得到行对象
+        function getRowObj(obj) {
+            var i = 0;
+            while (obj.tagName.toLowerCase() != "tr") {
+                obj = obj.parentNode;
+                if (obj.tagName.toLowerCase() == "table")
+                    return null;
+            }
+            return obj;
+        }
+
+        //根据得到的行对象得到所在的行数 
+        function getRowNo(obj) {
+            var trObj = getRowObj(obj);
+            var trArr = trObj.parentNode.children;
+            for (var trNo = 0; trNo < trArr.length; trNo++) {
+                if (trObj == trObj.parentNode.children[trNo]) {
+                    alert(trNo + 1);
+                }
+            }
+        }
+ 
+        //事件
+        $(function () {
+            //人员选择
+            $("#TB_Emps").bind('input propertychange', function () {
+                //if (e.keyCode == 13) {
+
+                if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
+                    //alert("输入内容为空！");
+                    //return;
+                    $("#SelectEmp").hide().html("");
+                    return;
+                }
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+                handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+                handler.AddPara("WorkID", GetQueryString("WorkID"));
+                handler.AddPara("ToNode", GetQueryString("ToNode"));
+                handler.AddPara("TB_Emps", $("#TB_Emps").val());
+                var data = handler.DoMethodReturnString("AccepterOfGener_SelectEmps");
+
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+                //SelectEmp
+                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
+                data = JSON.parse(data);
+                //$("#SelectEmp").hide().html("");
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                }
+                $("#SelectEmp").show().html(html);
+
+            });
+        });
+
+        function selectAdd(No) {
+            $("#TB_Emps").val(No);
+        }
+
+        //鼠标事件
+        function getFocus(obj) {
+            $(".item").removeClass("addbg");
+            $(obj).addClass("addbg");
+        }
+
+        //选择下拉数据
+        function getCon(no) {
+
+            //  $("#TB_Emps").val(no);
+            $("#SelectEmp").hide().html("");
+            AddEmpsExt(false, no);
+        }
+
+        function Help() {
+            $("#HelpInfo").toggle();
+        }
+</script> 
+
+</head>
+<body>
+    <div class="Msg" style="text-align: left; display:none;"> <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
+
+    <table id="Table1" style="width:98%;" >
+   <!-- <caption>下一步接受人员列表</caption>-->
+    <thead>
+        <tr id="title">
+         <th style="width:40px;" >序号</th>
+         <!--<th>编号 </th>-->
+        <th style="width:60px;" >姓名</th>
+        <th >所在部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></th>
+        <th style="width:40px;" >操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>
+    <br />
+
+      <div>
+       
+        <input type="text" id="TB_Emps" name="TB_Emps"
+         title="查张三,您可输入: zs或zhangs或zhangsan";
+         placeholder="查张三,您可输入: zs或zhangs或zhangsan";
+         value='' style=" width:400px; "/> 
+        <input type="button" id="Btn_SelectEmps" value='选择人员'/>
+        <div id="SelectEmp"></div>
+             <!--<select id="SelectEmp"></select>-->
+         <br />
+         <div id="next">
+             <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
+             <input type="button" value="执行发送" onclick="Send();" id="Btn_Send"/>
+             <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
+
+             <a href="javascript:Help()" >查询帮助?</a>
+
+                 <div id="HelpInfo" >
+        <ul>
+        <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
+        <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
+        <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
+        </ul>
+        </div>
+
+         </div>
+
+         
+
+    
+
+    </div>
+
+
+<!--
+
+<section style="display: none;">
+    <div>
+        请选择要下一步接受人员列表的人：
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
+    </div>
+    <div>
+        下一步接受人员列表原因:
+        <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea><br/>
+    </div>
+    <div style="margin: 20px auto;">
+        <h5> 下一步接受人员列表模式:</h5>
+        <input type="radio" value="0" name="RB_Model" checked=checked checked=checked id="RB_Model_0"/> <label for="RB_Model_0">下一步接受人员列表后直接发送给下一步处理人</label>
+        <input type="radio" id="RB_Model_1" value="1" name="RB_Model"/> <label for="RB_Model_1">下一步接受人员列表后发送给我由我发送给下一步处理人</label>
+    </div>
+    <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
+        <input type=button value="确定" onclick="ReturnWork();"/>
+        <input type="button" id="" value="关闭" onclick="Close();"/>
+    </div>
+</section>-->
+
+</body>
+</html>

@@ -1166,6 +1166,7 @@ function checkAths() {
 
 //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
 function checkBlanks() {
+
     var checkBlankResult = true;
     //获取所有的列名 找到带* 的LABEL mustInput
     //var lbs = $('[class*=col-md-1] label:contains(*)');
@@ -1180,15 +1181,8 @@ function checkBlanks() {
 
         var keyofen = $(obj).data().keyofen;
         var ele = $('[id$=_' + keyofen + ']');
-
-        alert(JSON.stringify(ele));
-
         if (ele.length != 1)
             return;
-
-
-        alert(ele);
-
 
         switch (ele[0].tagName.toUpperCase()) {
             case "INPUT":

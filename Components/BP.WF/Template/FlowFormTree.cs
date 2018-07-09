@@ -94,9 +94,7 @@ namespace BP.WF.Template
                 map.AddTBStringPK(FlowFormTreeAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(FlowFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(FlowFormTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
-                map.AddTBString(FlowFormTreeAttr.TreeNo, null, "TreeNo", false, false, 0, 100, 30);
                 map.AddTBInt(FlowFormTreeAttr.Idx, 0, "Idx", false, false);
-                map.AddTBInt(FlowFormTreeAttr.IsDir, 0, "是否是目录?", false, false);
 
                 // 隶属的流程编号.
                 map.AddTBString(FlowFormTreeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);

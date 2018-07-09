@@ -121,8 +121,6 @@ namespace BP.GPM
                 root.FK_App = BP.Sys.SystemConfig.SysNo;
                 root.HisMenuType = MenuType.Root;
                 root.Idx = 0;
-                root.IsDir = true;
-                root.TreeNo = "01";
                 root.Insert();
             }
 
@@ -131,7 +129,6 @@ namespace BP.GPM
             sort1.Name = this.Name;
             sort1.HisMenuType = MenuType.AppSort;
             sort1.FK_App = "AppSort";
-            sort1.IsDir = true;
             sort1.Update();
 
             this.RefMenuNo = sort1.No;

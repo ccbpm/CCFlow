@@ -1158,8 +1158,6 @@ namespace BP.WF
                 FlowSort fs = new FlowSort();
                 fs.Name = "流程树";
                 fs.No = "1";
-                fs.TreeNo = "01";
-                fs.IsDir = true;
                 fs.ParentNo = "0";
                 fs.Insert();
 

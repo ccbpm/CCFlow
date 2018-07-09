@@ -119,8 +119,6 @@ namespace BP.GPM
                 //顺序号.
                 map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
 
-                //是否是目录
-                map.AddTBInt(DeptAttr.IsDir, 0, "是否是目录", true, true);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "重置该部门一下的部门路径";
@@ -133,7 +131,6 @@ namespace BP.GPM
                 rm.Warning = msg;
 
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "增加同级部门";

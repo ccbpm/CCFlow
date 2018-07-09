@@ -18,10 +18,6 @@ namespace BP.Sys
         /// </summary>
         public const string DBSrc = "DBSrc";
         /// <summary>
-        /// 是否是目录
-        /// </summary>
-        public const string IsDir = "IsDir";
-        /// <summary>
         /// 组织编号
         /// </summary>
         public const string OrgNo = "OrgNo";
@@ -32,20 +28,6 @@ namespace BP.Sys
     public class FrmTree : EntitySimpleTree
     {
         #region 属性.
-        /// <summary>
-        /// 是否是目录
-        /// </summary>
-        public bool IsDir
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FrmTreeAttr.IsDir);
-            }
-            set
-            {
-                this.SetValByKey(FrmTreeAttr.IsDir, value);
-            }
-        }
         /// <summary>
         /// 序号
         /// </summary>
@@ -112,8 +94,6 @@ namespace BP.Sys
                 map.AddTBString(FrmTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(FrmTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
                 map.AddTBString(FrmTreeAttr.OrgNo, null, "组织编号", false, false, 0, 100, 30);
-
-                map.AddTBInt(FrmTreeAttr.IsDir, 0, "是否是目录?", false, false);
                 map.AddTBInt(FrmTreeAttr.Idx, 0, "Idx", false, false);
 
                 this._enMap = map;

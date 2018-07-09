@@ -348,8 +348,6 @@ namespace BP.GPM
 
                 map.AddDDLEntities(MenuAttr.ParentNo, null, DataType.AppString, "父节点", new Menus(), "No", "Name", true);
                 //map.AddTBString(MenuAttr.ParentNo, null, "父节点编号", true, true, 0, 10, 10);
-                map.AddTBString(MenuAttr.TreeNo, null, "树编号", true, true, 0, 60, 400);
-                map.AddBoolean(MenuAttr.IsDir, false, "是否目录", true, true);
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
                 #endregion 与树有关的必备属性.
 

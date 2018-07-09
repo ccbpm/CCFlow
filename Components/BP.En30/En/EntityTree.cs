@@ -23,17 +23,9 @@ namespace BP.En
         /// </summary>
         public const string ParentNo = "ParentNo";
         /// <summary>
-        /// 树编号
-        /// </summary>
-        public const string TreeNo = "TreeNo";
-        /// <summary>
         /// 顺序号
         /// </summary>
         public const string Idx = "Idx";
-        /// <summary>
-        /// 是否是目录
-        /// </summary>
-        public const string IsDir = "IsDir";
         /// <summary>
         /// 控制参数
         /// </summary>
@@ -74,20 +66,6 @@ namespace BP.En
             set
             {
                 this.SetValByKey(EntityTreeAttr.No, value);
-            }
-        }
-        /// <summary>
-        /// 树结构编号
-        /// </summary>
-        public string TreeNo
-        {
-            get
-            {
-                return this.GetValStringByKey(EntityTreeAttr.TreeNo);
-            }
-            set
-            {
-                this.SetValByKey(EntityTreeAttr.TreeNo, value);
             }
         }
         /// <summary>
@@ -133,20 +111,6 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// 是否是目录
-        /// </summary>
-        public bool IsDir
-        {
-            get
-            {
-                return this.GetValBooleanByKey(EntityTreeAttr.IsDir);
-            }
-            set
-            {
-                this.SetValByKey(EntityTreeAttr.IsDir, value);
-            }
-        }
-        /// <summary>
         /// 顺序号
         /// </summary>
         public int Idx
@@ -160,17 +124,6 @@ namespace BP.En
                 this.SetValByKey(EntityTreeAttr.Idx, value);
             }
         }
-        /// <summary>
-        /// 级别
-        /// </summary>
-        public int Grade
-        {
-            get
-            {
-                return this.TreeNo.Length / 2;
-            }
-        }
-      
         #endregion
 
         #region 构造函数
@@ -256,8 +209,8 @@ namespace BP.En
             en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             en.Name = "新建节点" + en.No;
             en.ParentNo = this.ParentNo;
-            en.IsDir = false;
-            en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.ParentNo);
+          //  en.IsDir = false;
+           // en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.ParentNo);
             en.Insert();
             return en;
         }
@@ -271,19 +224,19 @@ namespace BP.En
             en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             en.Name = "新建节点" + en.No;
             en.ParentNo = this.No;
-            en.IsDir = false;
-            en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.No);
-            if (en.TreeNo.Substring(en.TreeNo.Length - 2) == "01")
-                en.TreeNo = this.TreeNo + "10";
+            //en.IsDir = false;
+            //en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.No);
+            //if (en.TreeNo.Substring(en.TreeNo.Length - 2) == "01")
+            //    en.TreeNo = this.TreeNo + "10";
             en.Insert();
 
-            // 设置此节点是目录
-            if (this.IsDir == false)
-            {
-                this.Retrieve();
-                this.IsDir = true;
-                this.Update();
-            }
+            //// 设置此节点是目录
+            //if (this.IsDir == false)
+            //{
+            //    this.Retrieve();
+            //    this.IsDir = true;
+            //    this.Update();
+            //}
             return en;
         }
         /// <summary>

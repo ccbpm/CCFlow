@@ -12,6 +12,7 @@
     <link href="../Scripts/EasyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../Scripts/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript" >
 
         //定义公共个变量.
@@ -26,12 +27,10 @@
 //            }
 
             var ensName = GetQueryString("EnsName");
-
             if (ensName == null || ensName == undefined) {
                 $("#Msg").html("必要的参数EnsName没有传入.");
                 return;
             }
-
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             //加载菜单树  绑定数据.
@@ -97,7 +96,7 @@
                var data = handler.DoMethodReturnString("DoMyCreateSubNode");
                var pushData = eval('(' + data + ')');
                $('#enTree').tree('append', {
-                   aprent: (node ? node.target : null),
+                   parent: (node ? node.target : null),
                    data: [{
                        id: pushData.No,
                        text: pushData.Name,
@@ -117,19 +116,12 @@
                handler.AddPara("nodeNo", node.id);
 
                var url = "En.htm?EnName=" + GetEnName() + "&No=" + node.id;
-
-               WinOpen(url, "编辑", "height=900, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
-               
-               
-               var data = handler.DoMethodReturnString("DoMyCreateSubNode");
-               if (data != "") {
-                   $('#enTree').tree('update', { target: node.target, text: data });
-               }
+               OpenEasyUiDialog(url, "eudlgframe", '编辑', 700, 600, "icon-property", true, null, null, null, function () {
+                   LoadBindTree();
+               });
            } else {
                $.messager.alert('提示', '请选择节点!', 'info');
            }
-           
-
        }
         
        //删除

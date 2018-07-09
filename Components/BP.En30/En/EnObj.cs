@@ -236,7 +236,7 @@ namespace BP.En
                     this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
                     continue;
                 }
-                else if (v.Equals("@WebUser.FK_DeptNameOfFull"))
+                else if (v.Equals("@WebUser.FK_DeptNameOfFull") || v.Equals("@WebUser.FK_DeptFullName"))
                 {
                     this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                     continue;

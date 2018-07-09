@@ -676,9 +676,9 @@ namespace BP.WF
                 {
                     /*没有升级过.增加根节点*/
                     SysFormTree formTree = new SysFormTree();
-                    formTree.No = "0";
+                    formTree.No = "1";
                     formTree.Name = "表单库";
-                    formTree.ParentNo = "";
+                    formTree.ParentNo = "0";
                     // formTree.TreeNo = "0";
                     formTree.Idx = 0;
                     formTree.IsDir = true;

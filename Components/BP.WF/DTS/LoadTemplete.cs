@@ -78,7 +78,7 @@ namespace BP.WF.DTS
                 SysFormTree fs = new SysFormTree();
                 fs.No = item.Name.Substring(0, 2);
                 fs.Name = item.Name.Substring(3);
-                fs.ParentNo = "0";
+                fs.ParentNo = "1";
                 fs.Idx = i++;
                 fs.Insert();
 

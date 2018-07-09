@@ -180,6 +180,10 @@ namespace BP.Sys
         /// </summary>
         public const string GroupTitle = "GroupTitle";
         /// <summary>
+        /// Url
+        /// </summary>
+        public const string Url = "Url";
+        /// <summary>
         /// 附件路径
         /// </summary>
         public const string FJSavePath = "FJSavePath";
@@ -350,10 +354,13 @@ namespace BP.Sys
 
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
                 map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, false, 0, 2000, 60);
+                map.AddTBString(EnCfgAttr.Url, null, "要打开的Url", true, false, 0, 500, 60);
+
                 map.AddTBString(EnCfgAttr.FJSavePath, null, "保存路径", true, false, 0, 100, 60);
                 map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, false, 0, 100, 60);
                 map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, false, 0, 200, 60);
                 map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
+
 
                 map.AddTBAtParas(3000);  //参数属性.
                 this._enMap = map;

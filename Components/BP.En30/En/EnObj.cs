@@ -273,7 +273,7 @@ namespace BP.En
                 string v = this.GetValStringByKey(attr.Key, null);  // this._row[key] as string;
 
                 //含有特定值时取消重新设定默认值
-                if (v !=null)
+                if (v !=null && v.Contains("@")==false)
                     continue;
 
                 v = attr.DefaultValOfReal as string;

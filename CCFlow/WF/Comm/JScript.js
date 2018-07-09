@@ -765,7 +765,7 @@ function valitationAfter(o, validateType) {
 function limitLength(obj, length) {
    obj.value = obj.value.replace(/[^\d.-]/g, "");  //清除“数字”和“.”以外的字符 ;
     if (length != null && length != "" && length != "undefined") {
-        if (obj.value.split('.')[1].length > length) {
+        if (obj.value.indexOf('.')>=0 && obj.value.split('.')[1].length > length) {
             obj.value = obj.value.substring(0, obj.value.length - 1);
             obj.focus();
         }

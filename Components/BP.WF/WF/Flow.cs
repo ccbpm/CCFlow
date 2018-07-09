@@ -4722,6 +4722,7 @@ namespace BP.WF
             string oldFlowName = dtFlow.Rows[0]["Name"].ToString();
 
             int oldFlowID = int.Parse(oldFlowNo);
+            int iOldFlowLength = oldFlowID.ToString().Length;
             string timeKey = DateTime.Now.ToString("yyMMddhhmmss");
 
             #region 根据不同的流程模式，设置生成不同的流程编号.
@@ -4889,12 +4890,12 @@ namespace BP.WF
                                     case "tonodeid":
                                     case "fk_node":
                                     case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;   
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                         val = fl.No;
@@ -4944,13 +4945,13 @@ namespace BP.WF
                                 {
                                     case "tonodeid":
                                     case "fk_node":
-                                    case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                    case "nodeid":                                        
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                         val = fl.No;
@@ -4978,12 +4979,12 @@ namespace BP.WF
                                     case "tonodeid":
                                     case "fk_node":
                                     case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                         val = fl.No;
@@ -5011,12 +5012,12 @@ namespace BP.WF
                                     case "tonodeid":
                                     case "fk_node":
                                     case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                         val = fl.No;
@@ -5048,12 +5049,12 @@ namespace BP.WF
                                         break;
                                     case "nodeid":
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5093,12 +5094,12 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                         val = fl.No;
@@ -5126,12 +5127,12 @@ namespace BP.WF
                                 {
                                     case "fk_node":
                                     case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                         val = fl.No;
@@ -5163,12 +5164,12 @@ namespace BP.WF
                                     case "tonodeid":
                                     case "fk_node":
                                     case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                         val = fl.No;
@@ -5223,12 +5224,12 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5260,12 +5261,12 @@ namespace BP.WF
                                 {
                                     case "fk_node":
                                     case "returnn":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5297,12 +5298,12 @@ namespace BP.WF
                                 {
                                     case "node":
                                     case "tonode":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5343,12 +5344,12 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5371,24 +5372,16 @@ namespace BP.WF
                                 string val = dr[dc.ColumnName] as string;
                                 if (val == null)
                                     continue;
-                                //  NodeAttr.NodeFrmID
+
                                 switch (dc.ColumnName.ToLower())
                                 {
-                                    case "nodefrmid":
-                                        if (val.Length == 5)
-                                            val = "ND" + flowID + val.Substring(3);
-                                        else if (val.Length == 6)
-                                            val = "ND" + flowID + val.Substring(4);
-                                        else if (val.Length == 7)
-                                            val = "ND" + flowID + val.Substring(5);
-                                        break;
                                     case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                     case "fk_flowsort":
@@ -5442,6 +5435,8 @@ namespace BP.WF
                             nd.NodeID = int.Parse(dr[NodeAttr.NodeID].ToString());
                             nd.RetrieveFromDBSources();
                             nd.FK_Flow = fl.No;
+                            //获取表单类别
+                            string formType = dr[NodeAttr.FormType].ToString();
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -5450,20 +5445,23 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "nodefrmid":
-                                        if (val.Length == 5)
-                                            val = "ND" + flowID + val.Substring(3);
-                                        else if (val.Length == 6)
-                                            val = "ND" + flowID + val.Substring(4);
-                                        else if (val.Length == 7)
-                                            val = "ND" + flowID + val.Substring(5);
+                                        //绑定表单库的表单11不需要替换表单编号
+                                        if (formType.Equals("11") == false)
+                                        {
+                                            int iFormTypeLength = iOldFlowLength + 2;
+                                            if (val.Length > iFormTypeLength)
+                                            {
+                                                val = "ND" + flowID + val.Substring(iFormTypeLength);
+                                            }
+                                        }
                                         break;
                                     case "nodeid":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     case "fk_flow":
                                     case "fk_flowsort":
@@ -5498,12 +5496,12 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5811,12 +5809,12 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5866,12 +5864,12 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;
@@ -5896,12 +5894,12 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            continue;
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
                                         break;
                                     default:
                                         break;

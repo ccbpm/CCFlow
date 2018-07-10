@@ -324,7 +324,7 @@ namespace BP.Demo.BPFramework
                 rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
                 rm.GroupName = "功能执行测试";
-                rm.IsCanBatch = true; //是否可以批处理？
+                rm.IsCanBatch = false; //是否可以批处理？
                 map.AddRefMethod(rm);
 
                 //不带有参数的方法.
@@ -340,7 +340,8 @@ namespace BP.Demo.BPFramework
                 rm = new RefMethod();
                 rm.Title = "发起xx流程";
                 rm.ClassMethodName = this.ToString() + ".DoStartFlow";
-                rm.IsCanBatch = true; //是否可以批处理？
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.IsCanBatch = false; //是否可以批处理？
                 map.AddRefMethod(rm);
 
 
@@ -414,7 +415,7 @@ namespace BP.Demo.BPFramework
         }
         public string DoStartFlow()
         {
-            return "";
+            return "/WF/MyFlow.htm?FK_Flow=001&FK_Studept="+this.No+"&StuName="+this.Name;
 
         }
         /// <summary>
@@ -434,7 +435,6 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoZhuXiao()
         {
-
             return "学号:" + this.No + ",姓名:" + this.Name + ",已经注销.";
         }
         /// <summary>

@@ -52,10 +52,8 @@ namespace BP.Demo.YS
                 map.AddTBStringPK(KMAttr.No, null, "±àºÅ", true, true, 1, 10, 20);
                 map.AddTBString(KMAttr.Name, null, "Ãû³Æ", true, false, 0, 100, 30);
                 map.AddTBString(KMAttr.ParentNo, null, "¸¸½ÚµãNo", false, false, 0, 100, 30);
-                map.AddTBString(KMAttr.TreeNo, null, "TreeNo", false, false, 0, 100, 30);
 
                 map.AddTBInt(KMAttr.Idx, 0, "Idx", false, false);
-                map.AddTBInt(KMAttr.IsDir, 0, "IsDir", false, false);
 
                 this._enMap = map;
                 return this._enMap;

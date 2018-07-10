@@ -79,8 +79,6 @@ namespace BP.Demo
                 map.AddTBStringPK(SortAttr.No, null, "编号", true, true, 4, 4, 4);
                 map.AddTBString(SortAttr.Name, null, "名称", true, true, 0, 200, 4);
                 map.AddTBString(SortAttr.ParentNo, null, "父编号", true, true, 0, 4, 4);
-                map.AddTBString(SortAttr.TreeNo, null, "树编号", true, true, 0, 60, 400);
-                map.AddTBInt(SortAttr.IsDir, 0, "是否是目录", true, true);
                 map.AddTBString(SortAttr.Abbr, null, "简称", true, true, 0, 60, 400);
                 map.AddTBInt(SortAttr.Idx, 0, "序号", true, true);
 

@@ -735,3 +735,25 @@ body table tr td {
 .errorInput {
     border-color: red;
 }
+
+
+
+
+
+/*杨玉慧  --临时增加  处理弹窗返回值得表单乱掉的问题*/
+
+.FContext div[id*=_mtags],.FContext div[id*=_mtags] .main-container {
+    width: 100% !important;
+    clear: both;
+}
+
+
+
+    .FContext div[id*=_mtags] .main-container {
+        height: auto !important;
+    }
+
+.ccflow-tag {
+    margin-right: 10px !important;
+}
+/*杨玉慧  --临时增加  处理弹窗返回值得表单乱掉的问题*/

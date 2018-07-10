@@ -1155,8 +1155,8 @@ namespace BP.WF.HttpHandler
         public string InitScript_Init()
         {
             try {
-                String webPath = HttpRuntime.AppDomainAppPath;
-                String filePath = webPath + @"\DataUser\JSLibData\" + this.FK_MapData + "_Self.js";
+                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = "";
                 if (!File.Exists(filePath)) {
                     content = "";
@@ -1176,8 +1176,8 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                String webPath = HttpRuntime.AppDomainAppPath;
-                String filePath = webPath + @"\DataUser\JSLibData\" + this.FK_MapData + "_Self.js";
+                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = this.context.Request.Params["JSDoc"];
 
                 //在应用程序当前目录下的File1.txt文件中追加文件内容，如果文件不存在就创建，默认编码
@@ -1195,8 +1195,8 @@ namespace BP.WF.HttpHandler
         public string InitScript_Delete()
         {
             try {
-                String webPath = HttpRuntime.AppDomainAppPath;
-                String filePath = webPath + @"\DataUser\JSLibData\" + this.FK_MapData + "_Self.js";
+                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
 
                 if (File.Exists(filePath))
                 {

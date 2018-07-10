@@ -3,35 +3,108 @@
 <head>
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >
-        function Load() {
+        //初始化页面函数.....
 
-            return;
+        //杨玉慧
+        $(function () {
+            Init();
+        });
 
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
+        function Init() {
 
-                alert('该功能已经取消，请使用默认JS页面 MyFrm_Self.js  放入到 /DataUser/JSLabData 约定的目录地下.');
+            var frmID = GetQueryString("FK_MapData");
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("InitScript_Init"); //执行方法，返回执行结果.
 
-            //    url = url.replace('.htm', '.jsp');
-              //  window.location.href = url;
-                return;
+            debugger
+
+            if (data.indexOf("err@") == 0) {
+                alert(data)
             }
+            else {
+                $('#TB_JSDoc').val(data);
+            }
+            return;
+        }
+
+        function Save() {
+            var frmID = GetQueryString("FK_MapData");
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            var jsDocVal=$("#TB_JSDoc").val();
+            handler.AddUrlData();
+            handler.AddPara("JSDoc", jsDocVal);
+            var data = handler.DoMethodReturnString("InitScript_Save"); //执行方法，返回执行结果.
+
+            debugger
+
+            alert(data);
+            return;
+        }
+
+        function Delete() {
+            var frmID = GetQueryString("FK_MapData");
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("InitScript_Delete"); //执行方法，返回执行结果.
+
+            debugger
+
+            alert(data);
+            return;
         }
     </script>
 </head>
 <body  onload="Load()" >
 
-<form id="cc">
+<!--<form id="cc">
 
- <h2> 该功能在重构过程中，您可以直接打开datauser\JSLibData\+FrmID+'_Self.js' 修改.</h2>
+    <h2> 该功能在重构过程中，您可以直接打开datauser\JSLibData\+FrmID+'_Self.js' 修改.</h2>
 
-</form>
+    <textarea id="">
+
+    </textarea>
+
+    <input type="button" />
+
+</form>-->
+
+    <form id="cc">
+        <fieldset>
+            <legend>自动计算</legend>
+            <table id="table" style="width: 100%;">
+                <tr>
+                    <td colspan="3">
+                        JS 脚本
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="width: 100%;">
+                        <textarea rows="20" name="TB_JSDoc" id="TB_JSDoc" style="width:100%;"> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                        <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
 
 </body>
 </html>

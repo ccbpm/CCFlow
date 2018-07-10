@@ -1181,37 +1181,41 @@ function checkBlanks() {
 
         var keyofen = $(obj).data().keyofen;
         var ele = $('[id$=_' + keyofen + ']');
-        if (ele.length != 1)
+        if (ele.length == 0)
             return;
 
-        switch (ele[0].tagName.toUpperCase()) {
-            case "INPUT":
-                if (ele.attr('type') == "text") {
-                    if (ele.val() == "") {
-                        checkBlankResult = false;
-                        ele.addClass('errorInput');
-                    } else {
-                        ele.removeClass('errorInput');
+        $.each(ele, function (i, obj) {
+            var eleM = $(obj);
+            switch (eleM[0].tagName.toUpperCase()) {
+                case "INPUT":
+                    if (eleM.attr('type') == "text") {
+                        if (eleM.val() == "") {
+                            checkBlankResult = false;
+                            eleM.addClass('errorInput');
+                        } else {
+                            eleM.removeClass('errorInput');
+                        }
                     }
-                }
-                break;
-            case "SELECT":
-                if (ele.val() == "" || ele.children('option:checked').text() == "*请选择") {
-                    checkBlankResult = false;
-                    ele.addClass('errorInput');
-                } else {
-                    ele.removeClass('errorInput');
-                }
-                break;
-            case "TEXTAREA":
-                if (ele.val() == "") {
-                    checkBlankResult = false;
-                    ele.addClass('errorInput');
-                } else {
-                    ele.removeClass('errorInput');
-                }
-                break;
-        }
+                    break;
+                case "SELECT":
+                    if (eleM.val() == "" || eleM.children('option:checked').text() == "*请选择") {
+                        checkBlankResult = false;
+                        eleM.addClass('errorInput');
+                    } else {
+                        eleM.removeClass('errorInput');
+                    }
+                    break;
+                case "TEXTAREA":
+                    if (eleM.val() == "") {
+                        checkBlankResult = false;
+                        eleM.addClass('errorInput');
+                    } else {
+                        eleM.removeClass('errorInput');
+                    }
+                    break;
+            }
+        });
+
     });
 
 

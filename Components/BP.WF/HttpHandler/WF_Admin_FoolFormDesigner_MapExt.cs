@@ -10,6 +10,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using System.IO;
 
 namespace BP.WF.HttpHandler
 {
@@ -1149,5 +1150,66 @@ namespace BP.WF.HttpHandler
         }
         #endregion PopFullCtrl 功能界面.
 
+
+        #region 杨玉慧  表单设计--表单属性   JS编程 
+        public string InitScript_Init()
+        {
+            try {
+                String webPath = HttpRuntime.AppDomainAppPath;
+                String filePath = webPath + @"\DataUser\JSLibData\" + this.FK_MapData + "_Self.js";
+                String content = "";
+                if (!File.Exists(filePath)) {
+                    content = "";
+                }
+                else {
+                    content = File.ReadAllText(filePath);
+                }
+                return content;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+
+        public string InitScript_Save()
+        {
+            try
+            {
+                String webPath = HttpRuntime.AppDomainAppPath;
+                String filePath = webPath + @"\DataUser\JSLibData\" + this.FK_MapData + "_Self.js";
+                String content = this.context.Request.Params["JSDoc"];
+
+                //在应用程序当前目录下的File1.txt文件中追加文件内容，如果文件不存在就创建，默认编码
+                File.WriteAllText(filePath, content);
+
+                return "保存成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+        }
+
+        public string InitScript_Delete()
+        {
+            try {
+                String webPath = HttpRuntime.AppDomainAppPath;
+                String filePath = webPath + @"\DataUser\JSLibData\" + this.FK_MapData + "_Self.js";
+
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+
+                return "删除成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion
     }
 }

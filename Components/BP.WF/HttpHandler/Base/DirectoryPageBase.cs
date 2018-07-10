@@ -556,7 +556,11 @@ namespace BP.WF.HttpHandler
 
                 string str = this.GetRequestVal("WorkID");
                 if (DataType.IsNullOrEmpty(str) == true)
+                {
                     str = this.GetRequestVal("PKVal");
+                    if (DataType.IsNumStr(str) == false)
+                        return 0;
+                }
 
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("OID");

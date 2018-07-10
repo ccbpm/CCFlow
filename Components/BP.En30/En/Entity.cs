@@ -3524,14 +3524,17 @@ namespace BP.En
 		#endregion
 
 		/// <summary>
-		/// 调度
+		/// 把entity的实体属性调度到en里面去.
 		/// </summary>
-		public MapData DTSMapToSys_MapData()
+		public MapData DTSMapToSys_MapData(string fk_mapdata=null)
 		{
+            if (fk_mapdata == null)
+                fk_mapdata = this.ClassIDOfShort;
+
+
 			Map map = this.EnMap;
 
 			//获得短的类名称.
-			string fk_mapdata = this.ClassIDOfShort;
 
 			#region 更新主表信息.
 			MapData md = new MapData();

@@ -51,6 +51,27 @@ namespace BP.WF.HttpHandler
             //如果是第一次进入，就执行旧版本的升级检查.
             if (this.IsFirst == true)
             {
+                #region  @fanleiwei @樊雷伟翻译.
+                if (this.FK_MapData.Contains("BP.") == true)
+                {
+                    /*如果是类的实体.*/
+                    Entities ens = ClassFactory.GetEns(this.FK_MapData);
+                    Entity en = ens.GetNewEntity;
+
+                    MapData mymd = new MapData();
+                    mymd.No = this.FK_MapData;
+                    int i = mymd.RetrieveFromDBSources();
+                    if (i == 0)
+                        en.DTSMapToSys_MapData(this.FK_MapData); //调度数据到
+
+                    mymd.RetrieveFromDBSources();
+                    mymd.HisFrmType = FrmType.FoolForm;
+                    mymd.Update();
+
+                }
+                #endregion  @fanleiwei @樊雷伟翻译. 注意下面两行也需要转换.
+
+
                 MapFrmFool cols = new MapFrmFool(this.FK_MapData);
                 cols.DoCheckFixFrmForUpdateVer();
                 return "url@Designer.htm?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;

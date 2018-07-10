@@ -849,11 +849,155 @@ namespace BP.WF.HttpHandler
 
         #region frmFree
         /// <summary>
+        /// 实体类的初始化
+        /// </summary>
+        /// <returns></returns>
+        public string FrmGener_Init_ForBPClass()
+        {
+            try
+            {
+
+
+                MapData md = new MapData(this.EnsName);
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+
+
+                #region 把主表数据放入.
+                string atParas = "";
+                Entities ens = ClassFactory.GetEns(this.EnsName);
+                Entity en = ens.GetNewEntity;
+                en.PKVal = this.PKVal;
+
+                if (en.RetrieveFromDBSources() == 0)
+                    en.Insert();
+
+                //把参数放入到 En 的 Row 里面。
+                if (DataType.IsNullOrEmpty(atParas) == false)
+                {
+                    AtPara ap = new AtPara(atParas);
+                    foreach (string key in ap.HisHT.Keys)
+                    {
+                        if (en.Row.ContainsKey(key) == true) //有就该变.
+                            en.Row[key] = ap.GetValStrByKey(key);
+                        else
+                            en.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                    }
+                }
+
+                if (BP.Sys.SystemConfig.IsBSsystem == true)
+                {
+                    // 处理传递过来的参数。
+                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    {
+                        en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    }
+                }
+
+                // 执行表单事件. FrmLoadBefore .
+                string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                    return "err@错误:" + msg;
+
+
+                //重设默认值.
+                en.ResetDefaultVal();
+
+                //执行装载填充.
+                MapExt me = new MapExt();
+                if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
+                {
+                    //执行通用的装载方法.
+                    MapAttrs attrs = new MapAttrs(this.EnsName);
+                    MapDtls dtls = new MapDtls(this.EnsName);
+                    en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                }
+
+                //执行事件
+                md.DoEvent(FrmEventList.SaveBefore, en, null);
+
+
+                //增加主表数据.
+                DataTable mainTable = en.ToDataTableField(md.No);
+                mainTable.TableName = "MainTable";
+
+                ds.Tables.Add(mainTable);
+                #endregion 把主表数据放入.
+
+                #region 把外键表加入DataSet
+                DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
+
+                MapExts mes = md.MapExts;
+
+                foreach (DataRow dr in dtMapAttr.Rows)
+                {
+                    string lgType = dr["LGType"].ToString();
+                    if (lgType.Equals("2") == false)
+                        continue;
+
+                    string UIIsEnable = dr["UIVisible"].ToString();
+                    if (UIIsEnable == "0")
+                        continue;
+
+                    //string lgType = dr[MapAttrAttr.LGType].ToString();
+                    //if (lgType == "0")
+                    //    continue
+
+                    string uiBindKey = dr["UIBindKey"].ToString();
+                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                    {
+                        string myPK = dr["MyPK"].ToString();
+                        /*如果是空的*/
+                        //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                    }
+
+                    // 检查是否有下拉框自动填充。
+                    string keyOfEn = dr["KeyOfEn"].ToString();
+                    string fk_mapData = dr["FK_MapData"].ToString();
+
+                    #region 处理下拉框数据范围. for 小杨.
+                    me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                    if (me != null)
+                    {
+                        string fullSQL = me.Doc.Clone() as string;
+                        fullSQL = fullSQL.Replace("~", ",");
+                        fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
+                        DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
+                        dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                        ds.Tables.Add(dt);
+                        continue;
+                    }
+                    #endregion 处理下拉框数据范围.
+
+                    // 判断是否存在.
+                    if (ds.Tables.Contains(uiBindKey) == true)
+                        continue;
+
+                    DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    if (dataTable != null)
+                        ds.Tables.Add(dataTable);
+                }
+                #endregion End把外键表加入DataSet
+
+                return BP.Tools.Json.DataSetToJson(ds, false);
+            }
+            catch (Exception ex)
+            {
+                GEEntity myen = new GEEntity(this.EnsName);
+                myen.CheckPhysicsTable();
+
+                BP.Sys.CCFormAPI.RepareCCForm(this.EnsName);
+                return "err@装载表单期间出现如下错误,ccform有自动诊断修复功能请在刷新一次，如果仍然存在请联系管理员. @" + ex.Message;
+            }
+        }
+        /// <summary>
         /// 执行数据初始化
         /// </summary>
         /// <returns></returns>
         public string FrmGener_Init()
         {
+            if (this.FK_MapData.Contains("BP.") == true)
+                return FrmGener_Init_ForBPClass();
+
             try
             {
                 #region 特殊判断 适应累加表单.

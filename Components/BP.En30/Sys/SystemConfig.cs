@@ -34,7 +34,6 @@ using IBM.Data;
 using IBM.Data.Informix;
 using BP.DA;
 
-
 namespace BP.Sys
 {
     /// <summary>
@@ -1263,17 +1262,35 @@ namespace BP.Sys
 
         #region dsn
         /// <summary>
+        /// 数据库连接.
+        /// </summary>
+        public static string _AppCenterDSN = null;
+        /// <summary>
         /// 数据库连接
         /// </summary>
         public static string AppCenterDSN
         {
             get
             {
-                return AppSettings["AppCenterDSN"];
+                if (_AppCenterDSN != null)
+                    return _AppCenterDSN;
+
+                string str = AppSettings["AppCenterDSN"];
+                if (DataType.IsNullOrEmpty(str) == false)
+                    return str;
+
+                str = AppSettings["AppCenterDSN.encryption"];
+
+                if (DataType.IsNullOrEmpty(str) == true)
+                    throw new Exception("err@没有配置数据库连接字符串.");
+
+                DecryptAndEncryptionHelper.decode decode = new DecryptAndEncryptionHelper.decode();
+                _AppCenterDSN = decode.decode_exe(str);
+                return _AppCenterDSN;
             }
             set
             {
-                AppSettings["AppCenterDSN"] = value;
+                _AppCenterDSN = value;
             }
         }
         public static string DBAccessOfOracle

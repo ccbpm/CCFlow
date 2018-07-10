@@ -740,7 +740,7 @@ body table tr td {
 
 
 
-/*杨玉慧  --临时增加  处理弹窗返回值得表单乱掉的问题*/
+/*杨玉慧  --临时增加  处理弹窗返回值得表单布局乱掉的问题*/
 
 .FContext div[id*=_mtags],.FContext div[id*=_mtags] .main-container {
     width: 100% !important;

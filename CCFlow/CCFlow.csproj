@@ -113,7 +113,9 @@
     <Content Include="DataUser\InstancePacketOfData\Template\ShuiYin.png" />
     <Content Include="DataUser\Style\ccbpm.css" />
     <Content Include="DataUser\Style\dtl.css" />
-    <Content Include="DataUser\XML\AdminMenu.xml" />
+    <Content Include="DataUser\XML\AdminMenu.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="DataUser\XML\BarOfTop.xml" />
     <Content Include="DataUser\XML\BarOfTopOfDoc.xml" />
     <Content Include="DataUser\XML\CCOAMobileMenu.xml" />
@@ -6747,6 +6749,8 @@
     <Content Include="WF\WorkOpt\HuiQian.htm" />
     <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
     <Content Include="WF\WorkOpt\WorkCheck.js" />
+    <Content Include="DataUser\Handler.ashx" />
+    <Content Include="DataUser\SFTableHandler.ashx" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
@@ -7013,6 +7017,9 @@
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="DataUser\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="DataUser\IndustrialAutomationWorkflowAPI.asmx.cs">
       <DependentUpon>IndustrialAutomationWorkflowAPI.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -7020,6 +7027,9 @@
     <Compile Include="DataUser\PortalInterface.asmx.cs">
       <DependentUpon>PortalInterface.asmx</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataUser\SFTableHandler.ashx.cs">
+      <DependentUpon>SFTableHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

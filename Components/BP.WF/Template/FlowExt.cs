@@ -490,6 +490,14 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
+                rm = new RefMethod();
+                rm.Title = "版本管理";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.ClassMethodName = this.ToString() + ".DoVer()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+               // rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
               
 
                 //rm = new RefMethod();
@@ -752,8 +760,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 流程监控.
 
-
-
                 #region 实验中的功能
 
                 rm = new RefMethod();
@@ -819,7 +825,6 @@ namespace BP.WF.Template
 
                 #endregion 实验中的功能
 
-
                 //rm = new RefMethod();
                 //rm.Title = "执行流程数据表与业务表数据手工同步"; 
                 //rm.ClassMethodName = this.ToString() + ".DoBTableDTS";
@@ -861,6 +866,8 @@ namespace BP.WF.Template
         #endregion
 
         #region 流程监控.
+
+         
         public string DoDataManger_Search()
         {
             return "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
@@ -993,6 +1000,10 @@ namespace BP.WF.Template
         public string DoAPICodeFEE()
         {
             return "../../Admin/AttrFlow/APICodeFEE.htm?FK_Flow=" + this.No;
+        }
+        public string DoVer()
+        {
+            return "../../Admin/AttrFlow/Ver.htm?FK_Flow=" + this.No;
         }
         #endregion 开发接口
 

@@ -1491,7 +1491,7 @@ namespace BP.Sys
         {
             this.DoOrderUp(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.Idx);
         }
-        public void DoUp()
+        public string DoUp()
         {
             this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
@@ -1502,6 +1502,7 @@ namespace BP.Sys
               //  attr.Idx = -1;
                 attr.Update("Idx",-1);
             }
+            return "执行成功";
         }
 
         /// <summary>
@@ -1517,7 +1518,7 @@ namespace BP.Sys
         /// <summary>
         /// 下移
         /// </summary>
-        public void DoDown()
+        public string DoDown()
         {
             this.DoOrderDown(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
@@ -1527,6 +1528,7 @@ namespace BP.Sys
             {
                 attr.Update("Idx", -1);
             }
+            return "执行成功";
         }
         /// <summary>
         /// 上移for 明细表.

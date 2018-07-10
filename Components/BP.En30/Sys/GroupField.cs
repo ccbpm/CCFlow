@@ -251,15 +251,15 @@ namespace BP.Sys
             BP.DA.DBAccess.RunSQL(sql);
             return base.beforeUpdate(); 
         }
-        public void DoDown()
+        public string DoDown()
         {
             this.DoOrderDown(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.Idx);
-            return;
+            return "执行成功";
         }
-        public void DoUp()
+        public string DoUp()
         {
             this.DoOrderUp(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.Idx);
-            return;
+            return "执行成功";
         }
         protected override bool beforeInsert()
         {

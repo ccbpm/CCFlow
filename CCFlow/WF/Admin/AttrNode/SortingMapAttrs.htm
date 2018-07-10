@@ -122,12 +122,12 @@
 
             if (type == 'attr') {
                 var mapAttr = new Entity("BP.Sys.MapAttr", EnName + '_' + keyOfEn);
-                mapAttr.DoMethodReturnString("DoUp");
+                mapAttr.DoMethodReturnString("DoDown");
             }
 
             if (type == 'group') {
                 var mapAttr = new Entity("BP.Sys.GroupField", keyOfEn);
-                mapAttr.DoMethodReturnString("DoUp");
+                mapAttr.DoMethodReturnString("DoDown");
             }
 
             window.location.reload();
@@ -136,12 +136,12 @@
         function btnUp(EnName, refKey, type, groupID) {
             if (type == 'attr') {
                 var mapAttr = new Entity("BP.Sys.MapAttr", EnName + '_' + refKey);
-                mapAttr.DoMethodReturnString("DoDown");
+                mapAttr.DoMethodReturnString("DoUp");
             }
 
             if (type == 'group') {
                 var mapAttr = new Entity("BP.Sys.GroupField", refKey);
-                mapAttr.DoMethodReturnString("DoDown");
+                mapAttr.DoMethodReturnString("DoUp");
             }
 
             window.location.reload();

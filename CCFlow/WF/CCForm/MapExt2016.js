@@ -614,11 +614,12 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
     }
     if (isInIt == false) {
         //此处修改，去掉直接选中上次的结果，避免错误数据的产生，edited by liuxc,2015-10-22
-        $("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
+        //$("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
         $("#" + ddlChild).val('');
         var chg = $("#" + ddlChild).attr("onchange");
         $("#" + ddlChild).change();
-
+        //增加默认选择第一条数据
+        ddl.options[0].selected = true;
     }
 }
 

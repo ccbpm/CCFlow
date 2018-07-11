@@ -6315,7 +6315,108 @@ namespace BP.WF
         }
         #endregion
 
-         
+        #region 版本管理.
+        /// <summary>
+        /// 创建新版本.
+        /// </summary>
+        /// <returns></returns>
+        public string VerCreateNew()
+        {
+            try
+            {
+                //生成模版.
+                string file = GenerFlowXmlTemplete();
+
+                Flow newFlow = Flow.DoLoadFlowTemplate(this.FK_FlowSort, file, ImpFlowTempleteModel.AsNewFlow);
+
+                newFlow.PTable = this.PTable;
+                newFlow.FK_FlowSort = ""; //不能显示流程树上.
+                newFlow.Name = this.Name;
+                newFlow.Ver = DataType.CurrentDataTime;
+                newFlow.IsCanStart = false; //不能发起.
+                newFlow.DirectUpdate();
+                return newFlow.No;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+            //DataSet ds = this.GenerFlowXmlTemplete();
+            //return "001";
+        }
+        /// <summary>
+        /// 设置当前的版本为新版本.
+        /// </summary>
+        /// <returns></returns>
+        public string VerSetCurrentVer()
+        {
+            string sql = "SELECT FK_FlowSort FROM WF_Flow WHERE PTable='" + this.PTable + "' AND FK_FlowSort!='' ";
+            string flowSort = DBAccess.RunSQLReturnStringIsNull(sql, "");
+            if (DataType.IsNullOrEmpty(flowSort) == true)
+                return "err@没有找到主版本,请联系管理员.";
+
+            sql = "UPDATE WF_Flow SET FK_FlowSort='',IsCanStart=0 WHERE PTable='" + this.PTable + "' ";
+            DBAccess.RunSQL(sql);
+
+            sql = "UPDATE WF_Flow SET FK_FlowSort='" + flowSort + "', IsCanStart=1 WHERE No='" + this.No + "' ";
+            DBAccess.RunSQL(sql);
+
+            return "info@设置成功.";
+        }
+        /// <summary>
+        /// 获得版本列表.
+        /// </summary>
+        /// <returns></returns>
+        public string VerGenerVerList()
+        {
+            //if (this.FK_FlowSort.Equals("") == true)
+            //    return "err@当前版本为分支版本，您无法管理，只有主版本才能管理。";
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Ver");  //版本号
+            dt.Columns.Add("No");    //内部编号
+            dt.Columns.Add("Name");  //流程名称.
+            dt.Columns.Add("IsRel"); //是否发布？
+            dt.Columns.Add("NumOfRuning"); //运行中的流程.
+            dt.Columns.Add("NumOfOK"); //运行完毕的流程.
+
+            //如果业务表是空的，就更新它.
+            string ptable = this.GetValStringByKey(FlowAttr.PTable);
+            if (DataType.IsNullOrEmpty(ptable) == true)
+            {
+                this.SetValByKey(FlowAttr.PTable, this.PTable);
+                this.DirectUpdate();
+            }
+
+            //获得所有的版本.
+           // string sql = "SELECT No,Name,Ver,FK_FlowSort FROM WF_Flow WHERE PTable='"+this.PTable+"'";
+            string sql = "SELECT No  FROM WF_Flow WHERE PTable='" + this.PTable + "'";
+            Flows fls = new Flows();
+            fls.RetrieveInSQL(sql);
+
+            foreach (Flow item in fls)
+            {
+                DataRow dr = dt.NewRow(); 
+                dr["Ver"] = item.Ver;
+                dr["No"] = item.No;
+                dr["Name"] = item.Name;
+
+                if (DataType.IsNullOrEmpty(item.FK_FlowSort) == true)
+                    dr["IsRel"] = "0";
+                else
+                    dr["IsRel"] = "1";
+
+                dr["NumOfRuning"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WORKID) FROM WF_GenerWorkFlow WHERE FK_FLOW='" + item.No + "' AND WFState=2");
+                dr["NumOfOK"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WORKID) FROM WF_GenerWorkFlow WHERE FK_FLOW='" + item.No + "' AND WFState=3");
+                dt.Rows.Add(dr);
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion 版本管理.
+
+
     }
     /// <summary>
     /// 流程集合

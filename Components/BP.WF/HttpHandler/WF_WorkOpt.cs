@@ -2211,7 +2211,10 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CustomerNo == "TianYe")
                 sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='00000001'  ORDER BY Idx ";
             else
-                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
+            {
+                //sql = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
+                sql = "SELECT A.No,A.Name, '" + fk_dept + "' as FK_Dept FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "'";
+            }
 
             DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmps.TableName = "Emps";

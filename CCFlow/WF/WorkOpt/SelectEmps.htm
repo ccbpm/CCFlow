@@ -35,12 +35,13 @@
 
             InitTreeData();
             bindTest();
-
         });
 
         //确定 人员选择
         function SelectEmps() {
+
             GetSelectedEmpsReturnVal();
+
             //No  是返回到别的页面的值
             if (returnVal.No == undefined || returnVal.No == '') {
                 alert("未选择人员");

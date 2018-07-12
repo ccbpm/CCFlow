@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="UTF-8"/>
+	<title>版本管理</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../Comm/JScript.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+	<script type="text/javascript" src="../../Scripts/config.js"></script>
+	<script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+	<base target="_self" />
+
+   <script type="text/javascript">
+
+	//页面启动函数.
+	$(function () {
+	    $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+	    InitPage();
+	    $("#Msg").html("");
+	});
+
+	//初始化数据.
+	function InitPage() {
+
+	    var flowNo = GetQueryString("FK_Flow");
+	    var en = new Entity("BP.WF.Flow", flowNo);
+
+	    var data = en.DoMethodReturnJSON("VerGenerVerList");
+
+	    var html = "";
+	    html += "<table style='width:100%;'>";
+	    html += "<caption>版本管理</caption>";
+	    html += "<tr>";
+	    html += "<th>版本号</th>";
+	    html += "<th>名称</th>";
+	    html += "<th>发布状态</th>";
+	    html += "<th>运行中数量</th>";
+	    html += "<th>完成数量</th>";
+	    html += "<th>删除</th>";
+	    html += "<th>操作</th>";
+	    html += "<th>编辑</th>";
+	    html += "</tr>";
+
+	    for (var i = 0; i < data.length; i++) {
+	        var item = data[i];
+
+	        html += "<tr>";
+	        html += "<td>" + item.Ver + "</td>";
+	        html += "<td>" + item.Name + "</td>";
+	        html += "<td>" + item.IsRel + "</td>";
+	        html += "<td>" + item.NumOfRuning + "</td>";
+	        html += "<td>" + item.NumOfOK + "</td>";
+	        html += "<td><a href=\"javascript:Del('" + item.No + "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
+
+            if (item.IsRel==0)
+                html += "<td><a href=\"javascript:SetCurrentVer('" + item.No + "')\">设置主版本</a></td>";
+            else
+                html += "<td>--</td>";
+
+            html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow="+item.No+"' target=_blank >编辑</a></td>";
+
+
+	        html += "</tr>";
+	    }
+	    html += "</table>";
+	    $("#docs").html(html);
+	}
+
+	function Del(no) {
+
+	    if (window.confirm('您确定要删除吗？') == false)
+	        return;
+
+	    var flowNo = GetQueryString("FK_Flow");
+	    var en = new Entity("BP.WF.Flow", flowNo);
+	    var data = en.DoMethodReturnString("DoDelete");
+
+	    alert(data);
+	    window.location.href = window.location.href;
+	}
+    //创建新版本.
+	function NewVer() {
+
+	    if (window.confirm('您确定要创建新版本吗？') == false)
+	        return;
+
+	    var flowNo = GetQueryString("FK_Flow");
+	    var en = new Entity("BP.WF.Flow", flowNo);
+	    var data = en.DoMethodReturnString("VerCreateNew");
+
+	    alert('版本创建成功');
+
+	    window.location.href = window.location.href;
+	}
+	function SetCurrentVer(no) {
+
+	    if (window.confirm('您确定要设置为当前版本？') == false)
+	        return;
+
+	    var en = new Entity("BP.WF.Flow", no);
+
+	    var data = en.DoMethodReturnString("VerSetCurrentVer");
+	    window.location.href = window.location.href;
+	}
+</script>
+</head>
+<body >
+	<div id="Msg"></div>
+
+	<div id="docs"></div>
+
+   <input type="button" value="新建版本" onclick="NewVer();" />
+
+</body>
+</html>

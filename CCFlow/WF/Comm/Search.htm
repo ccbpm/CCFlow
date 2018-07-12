@@ -271,9 +271,6 @@
 
 
             var mapdata = SearchData(pageIdx, pageSize);
-
-
-
             var attrs = mapdata["Attrs"];
 
             if (attrs == undefined) {
@@ -333,9 +330,7 @@
                      title: '操作',
                      width: 80,
                      align:'center',
-                     formatter: formatOper,
-
-                     
+                     formatter: formatOper
                  });
              }
 
@@ -442,6 +437,7 @@
         }
 
         function OpenEn(pk, paras) {
+
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
 
@@ -466,7 +462,13 @@
             if (urlOpenType==1)
                 url = "./RefFunc/EnOnly.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
 
-            if (urlOpenType==2)
+            if (urlOpenType == 2)
+                url = "../CCForm/FrmGener.htm?FK_MapData=" +GetQueryString("EnsName") + "&PKVal=" + pk;
+
+            if (urlOpenType == 3)
+                url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk;
+
+            if (urlOpenType==9)
             {
                 if (url.indexOf('?') == -1)
                     url = url + "?1=1";
@@ -506,12 +508,8 @@
                 }
             }
 
-
-
             OpenEasyUiDialog(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", true, null, null, null, function () {
                 window.location.href = localUrl;
-
-
             });
         }
 

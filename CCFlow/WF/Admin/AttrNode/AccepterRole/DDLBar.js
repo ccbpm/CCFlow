@@ -39,7 +39,7 @@ function InitBar(key) {
 
 
     if (isSatrtNode == false) {
-        html += "<option value=null disabled='disabled' >+按访问规则选项</option>";
+        html += "<option value=null disabled='disabled' >+按指定节点处理人</option>";
         html += "<option value=" + DeliveryWay.ByStarter + " >&nbsp;&nbsp;&nbsp;&nbsp;与开始节点处理人相同</option>";
         html += "<option value=" + DeliveryWay.ByPreviousNodeEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;与上一节点处理人相同</option>";
         html += "<option value=" + DeliveryWay.BySpecNodeEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;与指定节点处理人相同</option>";

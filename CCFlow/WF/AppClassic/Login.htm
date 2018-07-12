@@ -25,10 +25,10 @@
            <div class="login-form">
              <form id="Form1" >
                 <div class="form-group">
-                    <input type="text" id="TB_UserNo" name="TB_UserNo" placeholder="请输入账号" lay-verify="required"  class="form-control" />
+                    <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required"  class="form-control" />
                 </div>
                 <div class="form-group">
-                    <input type="password" id="TB_Pass" name="TB_Pass" placeholder="请输入密码" lay-verify="required"  class="form-control"  />
+                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required"  class="form-control"  />
                 </div>
                 <input type="button" class="btn btn-primary btn-block" value="操作员登录" lay-submit lay-filter="formDemo" />
 
@@ -65,9 +65,9 @@
 
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(data);
-            var userNo = document.getElementById("TB_UserNo").value;
+            var userNo = document.getElementById("TB_No").value;
             if (userNo == "")
-                document.getElementById("TB_Pass").value = "";
+                document.getElementById("TB_PW").value = "";
 
 
             var form = layui.form, layer = layui.layer, $ = layui.jquery;
@@ -81,8 +81,8 @@
 
         function Login() {
 
-            var userNo = $("#TB_UserNo").val();
-            var userPass = $("#TB_Pass").val();
+            var userNo = $("#TB_No").val();
+            var userPass = $("#TB_PW").val();
 
             if (userNo == "" || userPass == "") {
                 layer.msg('请输入用户名与密码');
@@ -91,8 +91,8 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
 
-            handler.AddPara("TB_UserNo", userNo);
-            handler.AddPara("TB_Pass", userPass);
+            handler.AddPara("TB_No", userNo);
+            handler.AddPara("TB_PW", userPass);
 
             var data = handler.DoMethodReturnString("Login_Submit");
 

@@ -78,16 +78,16 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
 
-            var userNo = $("#TB_UserNo").val();
-            var pass = $("#TB_Pass").val();
+            var userNo = $("#TB_No").val();
+            var pass = $("#TB_PW").val();
 
             if (userNo == "" || pass == "") {
                 $("#Msg").html("<font>请输入用户名，密码.</font>");
                 return;
             }
 
-            handler.AddPara("TB_UserNo", userNo);
-            handler.AddPara("TB_Pass", pass);
+            handler.AddPara("TB_No", userNo);
+            handler.AddPara("TB_PW", pass);
 
             var data = handler.DoMethodReturnString("Login_Submit");
 
@@ -116,10 +116,10 @@
            <div class="login-form">
              <form id="Form1" >
                 <div class="form-group">
-                    <input type="text" id="TB_UserNo" name="TB_UserNo" value="admin" placeholder="请输入账号" lay-verify="required"  class="form-control" />
+                    <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" lay-verify="required"  class="form-control" />
                 </div>
                 <div class="form-group">
-                    <input type="password" id="TB_Pass" name="TB_Pass" placeholder="请输入密码" lay-verify="required"  class="form-control"  />
+                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required"  class="form-control"  />
                 </div>
                 <input type="button" class="btn btn-primary btn-block" style=" background-color:Green;" value="管理员&二级管理员:登录" id="Btn_Login" onclick="Login();"   />
             <div class="row login-nav">

@@ -49,7 +49,7 @@
             GenerBindEnumKey("DDLPara_EditerType", "EditerType");
 
             //双击行打开内容类型.
-            GenerBindEnumKey("DDLPara_SearchUrlOpenType", "SearchUrlOpenType", 0);
+          //  GenerBindEnumKey("DDLPara_SearchUrlOpenType", "SearchUrlOpenType", 0);
 
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
@@ -68,10 +68,16 @@
             window.location.href = window.location.href;
         }
 
-            function ShowCols() {
-                var url = "SearchSettingCols.htm?EnsName=" + GetQueryString("EnsName");
-                window.location.href = url;
-            }
+        function ShowCols() {
+            var url = "SearchSettingCols.htm?EnsName=" + GetQueryString("EnsName");
+            window.location.href = url;
+        }
+
+        function StartFoolFormDesigner() {
+            var url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + GetQueryString("EnsName") + "&IsFirst=1";
+            WinOpen(url, "dd");
+            //window.location.href = url;
+        }
 
     </script>
 </head>
@@ -154,6 +160,11 @@
 <td>UrlOpenType</td>
 <td>双击行打开内容</td>
 <td ><select name="DDLPara_SearchUrlOpenType" id="DDLPara_SearchUrlOpenType">
+<option value="0"> En.htm 实体与实体相关功能编辑器 </option>
+<option value="1"> EnOnly.htm 实体编辑器 </option>
+<option value="2"> /CCForm/FrmGener.htm 傻瓜表单解析器 </option>
+<option value="3"> /CCForm/FrmGener.htm 自由表单解析器 </option>
+<option value="9"> 自定义URL </option>
 </select></td>
 </tr>
 
@@ -169,6 +180,8 @@
 
 <input type="button" value="保存"  onclick="Save()" />
 <input type="button" value="设置显示的列"  onclick="ShowCols()" />
+<input type="button" value="启动傻瓜表单设计器"  onclick="StartFoolFormDesigner()" />
+
 
 
 </body>

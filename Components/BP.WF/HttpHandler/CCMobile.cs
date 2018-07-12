@@ -63,8 +63,8 @@ namespace BP.WF.HttpHandler
 
         public string Login_Submit()
         {
-            string userNo = this.GetRequestVal("TB_UserNo");
-            string pass = this.GetRequestVal("TB_Pass");
+            string userNo = this.GetRequestVal("TB_No");
+            string pass = this.GetRequestVal("TB_PW");
 
             BP.Port.Emp emp = new Emp();
             emp.No = userNo;

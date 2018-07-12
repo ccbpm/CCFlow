@@ -311,8 +311,8 @@ namespace BP.WF.HttpHandler
 
         public string ReLoginSubmit()
         {
-            string userNo = this.GetValFromFrmByKey("TB_UserNo");
-            string password = this.GetValFromFrmByKey("TB_Pass");
+            string userNo = this.GetValFromFrmByKey("TB_No");
+            string password = this.GetValFromFrmByKey("TB_PW");
 
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = userNo;

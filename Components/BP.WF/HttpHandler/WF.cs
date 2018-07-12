@@ -961,11 +961,11 @@ namespace BP.WF.HttpHandler
         public string LoginSubmit()
         {
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = this.GetValFromFrmByKey("TB_UserNo");
+            emp.No = this.GetValFromFrmByKey("TB_No");
 
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
-            string pass = this.GetValFromFrmByKey("TB_Pass");
+            string pass = this.GetValFromFrmByKey("TB_PW");
             if (emp.Pass.Equals(pass) == false)
                 return "err@用户名或密码错误.";
 

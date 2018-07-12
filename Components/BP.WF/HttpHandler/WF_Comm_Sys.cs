@@ -398,7 +398,7 @@ namespace BP.WF.HttpHandler
                         src.DBName = string.Empty;
                     src.IP = this.GetRequestVal("TB_IP");
                     src.UserID = this.GetRequestVal("TB_UserID");
-                    src.Password = this.GetRequestVal("TB_Password");
+                    src.Password = this.GetRequestVal("TB_PWword");
                     break;
                 case DBSrcType.WebServices:
                     src.DBName = string.Empty;

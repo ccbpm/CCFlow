@@ -753,8 +753,14 @@ var Entity = (function () {
 
         var params = ["t=" + new Date().getTime()];
         $.each(jsonString, function (n, o) {
+
             if (typeof self[n] !== "function" && (self[n] != o || true)) {
-                params.push(n + "=" + self[n]);
+
+                if (self[n].indexOf('<script') != -1)
+                    params.push(n + "=aa");
+                else
+                    params.push(n + "=" + self[n]);
+
             }
         });
         return params.join("&");
@@ -1870,8 +1876,17 @@ var HttpHandler = (function () {
         getParams: function () {
             var params = [];
             $.each(parameters, function (key, value) {
+
+                if (value.indexOf('<script') != -1)
+                    value = '';      
+                                   
                 params.push(key + "=" + value);
+
             });
+
+
+
+
             return params.join("&");
         },
 

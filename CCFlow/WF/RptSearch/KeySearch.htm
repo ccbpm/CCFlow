@@ -20,7 +20,7 @@
     		 <div class="col-sm-12 form-inline pull-right"> 
     		 	<div class="form-group">
                       <label>关键字</label>
-                      <input name="TB_KeyWords"  type="text" id="TB_KeyWords" class="form-control"  />
+                      <input name="TB_KWds"  type="text" id="TB_KeyWords" class="form-control"  />
                  </div>
           
                   <div class="checkbox m-l m-r-xs">
@@ -96,14 +96,14 @@
 
         function Btn_Click() {
 
-            var key = $("#TB_KeyWords").val();
+            var key = $("#TB_KWds").val();
             if (key == null || key == undefined || key == "") {
                 alert("请输入关键字...");
                 return;
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
-            handler.AddPara("TB_KeyWords", key);
+            handler.AddPara("TB_KWds", key);
             var data = handler.DoMethodReturnString("KeySearch_Query");
 
             if (data.indexOf('err@') == 0) {

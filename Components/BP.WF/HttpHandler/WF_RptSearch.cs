@@ -135,7 +135,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string KeySearch_Query()
         {
-            string keywords = this.GetRequestVal("TB_KeyWords");
+            string keywords = this.GetRequestVal("TB_KWds");
             //对输入的关键字进行验证
             keywords = Glo.CheckKeyWord(keywords);
             if (Glo.CheckKeyWordInSql(keywords))

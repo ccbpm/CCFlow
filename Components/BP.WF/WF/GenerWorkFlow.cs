@@ -435,7 +435,6 @@ namespace BP.WF
             }
             set
             {
-                //@fanleiwei. 
                 string val = this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
                 if (val.Contains(value) == true)
                     return;

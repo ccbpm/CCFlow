@@ -51,7 +51,7 @@ namespace BP.WF.HttpHandler
             //如果是第一次进入，就执行旧版本的升级检查.
             if (this.IsFirst == true)
             {
-                #region  @fanleiwei @樊雷伟翻译.
+                #region 
                 if (this.FK_MapData.Contains("BP.") == true)
                 {
                     /*如果是类的实体.*/
@@ -69,7 +69,7 @@ namespace BP.WF.HttpHandler
                     mymd.Update();
 
                 }
-                #endregion  @fanleiwei @樊雷伟翻译. 注意下面两行也需要转换.
+                #endregion
 
 
                 MapFrmFool cols = new MapFrmFool(this.FK_MapData);

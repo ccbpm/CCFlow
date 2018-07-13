@@ -274,7 +274,7 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(SelectorAttr.NodeID, 0, "NodeID", true, true);
                 map.AddTBString(SelectorAttr.Name, null, "节点名称", true, true, 0, 100, 100);
-                //@樊雷伟翻译. @fanleiwei
+                
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "显示方式", true, true, SelectorAttr.SelectorModel,
                     "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与岗位的交集@7=自定义Url@8=使用通用部门岗位人员选择器");
 

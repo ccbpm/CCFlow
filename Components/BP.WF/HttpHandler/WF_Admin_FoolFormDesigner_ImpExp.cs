@@ -44,9 +44,12 @@ namespace BP.WF.HttpHandler
             if (this.FK_Flow != null )
             {
                 //加入节点表单. 如果没有流程参数.
-                 
-                sql = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow="+SystemConfig.AppCenterDBVarStr+"FK_Flow ORDER BY NODEID ";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql,"FK_Flow", this.FK_Flow);
+
+                Paras ps = new Paras();
+                ps.SQL = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow ORDER BY NODEID ";
+                ps.Add("FK_Flow", this.FK_Flow);
+                dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                
                 dt.TableName = "WF_Node";
 
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)

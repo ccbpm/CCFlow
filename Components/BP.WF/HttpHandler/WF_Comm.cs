@@ -169,7 +169,7 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
 
-                #region 首先判断参数删除. @fanleiwei 
+                #region 首先判断参数删除. 
                 string key1 = this.GetRequestVal("Key1");
                 string key2 = this.GetRequestVal("Key2");
                 string val1 = this.GetRequestVal("Val1");

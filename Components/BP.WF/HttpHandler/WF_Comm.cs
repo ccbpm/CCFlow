@@ -30,59 +30,6 @@ namespace BP.WF.HttpHandler
             ens.RetrieveAll();
             return ens.ToJsonOfTree();  
         }
-
-        ///// <summary>
-        ///// 根据编号获取节点文本
-        ///// </summary>
-        ///// <returns></returns>
-        //private string GetTreeNodeName()
-        //{
-        //    string nodeNo = GetRequestVal("nodeNo");
-        //    EntityTree treeNode = this.HisEn as EntityTree;
-        //    treeNode.RetrieveByAttr(EntityTreeAttr.No, nodeNo);
-
-        //    return treeNode.Name;
-        //}
-
-        ///// <summary>
-        ///// 删除
-        ///// </summary>
-        ///// <returns></returns>
-        //public string Del()
-        //{
-        //    string nodeNo = GetRequestVal("nodeNo");
-        //    EntityTree treeNode = this.HisEn as EntityTree;
-        //    treeNode.RetrieveByAttr(EntityTreeAttr.No, nodeNo);
-        //    try
-        //    {
-        //        treeNode.Delete();
-        //    }catch(Exception e)
-        //    {
-        //        return "err@删除失败";
-        //    }
-        //    return "删除成功";
-        //}
-
-        ///// <summary>
-        ///// 上移
-        ///// </summary>
-        //public void DoUp()
-        //{
-        //    string nodeNo = GetRequestVal("nodeNo");
-        //    EntityTree treeNode = this.HisEn as EntityTree;
-        //    treeNode.RetrieveByAttr(EntityTreeAttr.No, nodeNo);
-        //    treeNode.DoUp();
-        //}
-        ///// <summary>
-        ///// 下移
-        ///// </summary>
-        //public void DoDown()
-        //{
-        //    string nodeNo = GetRequestVal("nodeNo");
-        //    EntityTree treeNode = this.HisEn as EntityTree;
-        //    treeNode.RetrieveByAttr(EntityTreeAttr.No, nodeNo);
-        //    treeNode.DoDown();
-        //}
         #endregion 树的实体
 
         /// <summary>

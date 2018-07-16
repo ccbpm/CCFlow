@@ -3256,9 +3256,7 @@ namespace BP.WF
             }
             ndsstrs = ndsstrs.Substring(0, ndsstrs.Length - 1);
 
-            // 处理track表.
-            Track.CreateOrRepairTrackTable(flowId);
-
+             
             #region 插入字段。
             string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
 
@@ -6169,8 +6167,11 @@ namespace BP.WF
                 ds.ReadXml(file);
 
                 string nodeID = "ND" + int.Parse(this.No + "01");
-
                 BP.Sys.MapData.ImpMapData(nodeID, ds);
+
+                //创建track.
+                Track.CreateOrRepairTrackTable(this.No);
+
 
                 return this.No;
             }

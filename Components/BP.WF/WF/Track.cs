@@ -572,6 +572,7 @@ namespace BP.WF
             //删除主键.
             DBAccess.DropTablePK(ptable);
 
+
             // 删除主键.
             DBAccess.DropTablePK("WF_Track");
 
@@ -721,7 +722,7 @@ namespace BP.WF
                 Log.DefaultLogWriteLineError(ex.Message);
 
                 //创建track.
-                Track.CreateOrRepairTrackTable(this.FK_Flow);
+                //Track.CreateOrRepairTrackTable(this.FK_Flow);
                 throw ex;
             }
 

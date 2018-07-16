@@ -171,6 +171,15 @@ namespace BP.WF
             string msg = "";
             try
             {
+                #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
+                if (DBAccess.IsExitsObject("Port_Inc") == true)
+                {
+                    sql = "CREATE VIEW Port_Inc AS SELECT No,Name FROM Port_Dept WHERE (NAME LIKNE '%南方%' or NAME LIKNE '%北方%' ) ";
+                    DBAccess.RunSQL(sql);
+                }
+                #endregion 创建缺少的视图 Port_Inc.
+
+
                 #region 升级事件.
                 if (DBAccess.IsExitsTableCol("Sys_FrmEvent", "DoType") == true)
                 {

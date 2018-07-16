@@ -456,7 +456,7 @@
             url= cfg.Url;
             var urlOpenType=cfg.GetPara("SearchUrlOpenType");
 
-            if (urlOpenType==0)
+            if (urlOpenType == 0 || urlOpenType==undefined)
                 url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
 
             if (urlOpenType==1)

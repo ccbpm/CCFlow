@@ -131,6 +131,7 @@
                                 <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
                                 <li>发送后系统变量如下: </li>
                                 <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>
+                                <li>例如：您的请假申请单，已经提交给 @VarAcceptersName ，提交到：  @VarToNodeName , 请假了@QingJiaTianTianShu天.</li>
                             </ul>
                            
                         </div>
@@ -146,6 +147,7 @@
                                 <li>按照您定义的url转向，可处理较为复杂的业务逻辑处理。</li>
                                 <li>比如：URL为MyFlow.aspx页面或www.baidu.com。 </li>
                                 <li>该URL支持ccbpm参数形式，具体传值参考右侧帮助。 </li>
+                                <li>启动子流程实例: /WF/MyFlow.htm?FK_Flow=003&PFlowNo=002 </li>
                             </ul>
                         </div>
                         <input type="text" ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%"/>

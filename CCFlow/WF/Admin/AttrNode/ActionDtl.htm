@@ -104,6 +104,10 @@
             var url = "Action.htm?FK_Node=" + GetQueryString("FK_Node");
             window.location.href = url;
         }
+
+        function Help() {
+            WinOpen('ActionHelp.htm');
+        }
     </script>
 </head>
 <body>
@@ -134,7 +138,7 @@
 </tr>
 
 <tr>
-<td>执行内容</td>
+<td>执行内容<br>支持ccbpm表达式</td>
 <td>
 
 <textarea id="TB_Doc" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
@@ -164,6 +168,8 @@
 
 <input id="Btn_Save"  name="Btn_Save" value="保存" onclick="Save();"  type="button"  />
 <input id="Button1"  name="Button1" value="返回" onclick="Back();"  type="button"  />
+<input id="Button2"  name="Button1" value="帮助" onclick="Help();"  type="button"  />
+
 
 
 

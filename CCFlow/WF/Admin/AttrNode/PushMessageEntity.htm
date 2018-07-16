@@ -71,8 +71,8 @@
             //02.节点列表
             for (i = 0, len = nodes.length; i < len; i++) {
                 var n = nodes[i];
-                $("#SMS_Nodes").append("<input id='CB_SMS_" + n.NodeID + "' type='checkbox' name='CB_SMS_" + n.NodeID + "' /><label>" + n.Name + "</label>");
-                $("#Email_Nodes").append("<input id='CB_Email_" + n.NodeID + "' type='checkbox' name='CB_Email_" + n.NodeID + "' /><label>" + n.Name + "</label>");
+                $("#SMS_Nodes").append("<label><input id='CB_SMS_" + n.NodeID + "' type='checkbox' name='CB_SMS_" + n.NodeID + "' />" + n.Name + "</label>");
+                $("#Email_Nodes").append("<label><input id='CB_Email_" + n.NodeID + "' type='checkbox' name='CB_Email_" + n.NodeID + "' />" + n.Name + "</label>");
             }
 
             //03.实体初始化 （如果有）

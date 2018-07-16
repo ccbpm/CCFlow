@@ -1920,7 +1920,9 @@ namespace BP.WF
             foreach (string key in Htable_FlowFEE.Keys)
             {
                 FlowEventBase fee = Htable_FlowFEE[key] as FlowEventBase;
-                if ( fee.FlowMark == flowMark || fee.FlowMark.Contains(","+flowNo+",") == true)
+                if (fee.FlowMark.Equals(flowMark)
+                    || fee.FlowMark.IndexOf(flowNo + ",") == 0
+                    || fee.FlowMark.Contains("," + flowNo + ",") == true)
                     return fee;
             }
             return null;

@@ -81,7 +81,7 @@
 
             var html = "";
             if (mapBase.IsShowSearchKey == "1")
-                html += "<label for='TB_Key'>关键字</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "<label for='TB_Key'>关键字:</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
 
             if (mapBase.DTSearchWay != "0") {
 
@@ -111,7 +111,7 @@
 
                 var attr = attrs[i];
                 var str = "";
-                str += "<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+                str += "<label for='DDL_" + attr.Field + "'>" + attr.Name + " : </label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 str = $(str);
                 $("#toolbar").append(str); //设置基础信息.
             }

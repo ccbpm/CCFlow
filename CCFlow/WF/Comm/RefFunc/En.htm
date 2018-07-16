@@ -48,9 +48,11 @@
             var enName = GetQueryString("EnName");
             var type = GetQueryString("type");
             var pkVal = GetPKVal();
+            var isTree = GetQueryString("isTree");
+            var isReadonly = GetQueryString("isReadonly");
             httpHandler.AddPara("EnName", enName);
 
-            url = "../RefFunc/EnOnly.htm?EnName=" + enName + "&type=" + type + "&PKVal=" + pkVal + "&FromName=En";
+            url = "../RefFunc/EnOnly.htm?EnName=" + enName + "&type=" + type + "&PKVal=" + pkVal + "&FromName=En" + "&isTree=" +isTree+ "&isReadonly="+isReadonly;
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);
             }

@@ -27,7 +27,7 @@ namespace BP.WF.HttpHandler
         public string Tree_Init()
         {
             EntitiesTree ens = ClassFactory.GetEns(this.EnsName) as EntitiesTree;
-            ens.RetrieveAll();
+            ens.RetrieveAll(EntityTreeAttr.Idx);
             return ens.ToJsonOfTree();  
         }
         #endregion 树的实体

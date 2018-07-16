@@ -8,8 +8,7 @@
      
   3, 如果 For="" 标识所有的管理员都可以使用.
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
-  系统维护管理员菜单 @于庆海 需要翻译
-  
+  系统维护管理员菜单  
   -->
 
   <!-- 所有的人都可以维护组织结构. -->
@@ -23,22 +22,23 @@
   <Item No="020" GroupNo="System" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
   <Item No="001" GroupNo="System" Name="SQL配置模版设置" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates"  />
 
-
   <Group No="Org" Name="组织结构" />
-  <Item No="504" GroupNo="Org" Name="组织结构" For="" Url="../../../GPM/Organization.htm?EnsName=BP.WF.Port.SubInc.AdminEmps"  />
+  <Item No="504" GroupNo="Org" Name="组织结构" For="admin" Url="../../../GPM/Organization.htm"  />
+  <Item No="501" GroupNo="Org" Name="独立组织" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Incs"  />
+
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationTypes"  />
   <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Stations"  />
   <Item No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Depts"  />
   <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Emps"  />
 
   <Group No="GPM" Name="菜单权限" />
-  <Item No="501" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
-  <Item No="501" GroupNo="GPM" Name="系统台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
-  <Item No="501" GroupNo="GPM" Name="权限组菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
-  <Item No="501" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
-  <Item No="501" GroupNo="GPM" Name="人员菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
-  <Item No="501" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />
-  <Item No="501" GroupNo="GPM" Name="菜单树" For="" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />
+  <Item No="901" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
+  <Item No="902" GroupNo="GPM" Name="系统台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
+  <Item No="903" GroupNo="GPM" Name="权限组菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
+  <Item No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
+  <Item No="905" GroupNo="GPM" Name="人员菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
+  <Item No="906" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />
+  <Item No="907" GroupNo="GPM" Name="菜单树" For="" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />
 
   <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />

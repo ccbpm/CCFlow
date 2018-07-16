@@ -104,6 +104,7 @@
 }
 .datagrid-header .datagrid-cell span {
   font-size: 12px;
+  font-weight: bold;
 }
 .datagrid-cell-group {
   text-align: center;
@@ -201,11 +202,11 @@
 }
 .datagrid-header,
 .datagrid-td-rownumber {
-  background-color: #efefef;
+  background-color: #E0ECFF;
   background: -webkit-linear-gradient(top,#F9F9F9 0,#efefef 100%);
   background: -moz-linear-gradient(top,#F9F9F9 0,#efefef 100%);
   background: -o-linear-gradient(top,#F9F9F9 0,#efefef 100%);
-  background: linear-gradient(to bottom,#F9F9F9 0,#efefef 100%);
+  background: linear-gradient(to bottom,#F9F9F9 0,#E0ECFF 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#F9F9F9,endColorstr=#efefef,GradientType=0);
 }
@@ -223,13 +224,13 @@
 }
 .datagrid-toolbar,
 .datagrid-pager {
-  background: #F4F4F4;
+  background: #E0ECFF;
 }
 .datagrid-header,
 .datagrid-toolbar,
 .datagrid-pager,
 .datagrid-footer-inner {
-  border-color: #dddddd;
+  border-color: #95B8E7;
 }
 .datagrid-header td,
 .datagrid-body td,
@@ -242,7 +243,7 @@
   color: #000000;
 }
 .datagrid-row-alt {
-  background: #fafafa;
+  background: linear-gradient(to bottom,#e0ecff59 0,#e0ecff59 100%);
 }
 .datagrid-row-over,
 .datagrid-header td.datagrid-header-over {

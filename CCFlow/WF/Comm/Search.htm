@@ -81,7 +81,7 @@
 
             var html = "";
             if (mapBase.IsShowSearchKey == "1")
-                html += "<label for='TB_Key'>关键字</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
+                html += "<label for='TB_Key'>关键字</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
 
             if (mapBase.DTSearchWay != "0") {
 
@@ -90,12 +90,12 @@
                 if (mapBase.DTSearchWay == "1") {
                     //html += '<div class="form-group">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
                     //html += '</div>';
                 } else {
                     //html += '<div class="form-group">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' class='form-control' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
                     //html += '</div>';
                 }
             }
@@ -111,7 +111,7 @@
 
                 var attr = attrs[i];
                 var str = "";
-                str += "&nbsp;&nbsp;&nbsp;&nbsp;<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                str += "<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 str = $(str);
                 $("#toolbar").append(str); //设置基础信息.
             }

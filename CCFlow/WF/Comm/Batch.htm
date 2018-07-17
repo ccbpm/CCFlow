@@ -148,6 +148,15 @@
             operations += "<option value='all' >全部</option>";
 
             var ens = frmData[mapAttr.Field];
+
+            if (ens==null)
+            {
+              ens=[];
+              ens.push( { 'IntKey':0,'Lab':'否'});
+              ens.push( { 'IntKey':1,'Lab':'是'});
+            }
+
+
             for (var i = 0; i < ens.length; i++) {
 
                 var en = ens[i];

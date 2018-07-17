@@ -206,6 +206,19 @@ namespace BP.WF.HttpHandler
             emp.StartFlows = "";
             emp.Update();
 
+
+
+            try
+            {
+                string sql = "UPDATE Port_Emp Set fk_dept='"+deptNo+"' WHERE no='"+WebUser.No+"'";
+                DBAccess.RunSQL(sql);
+                BP.WF.Dev2Interface.Port_Login(WebUser.No);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             return "@执行成功,已经切换到｛" + BP.Web.WebUser.FK_DeptName + "｝部门上。";
         }
         #endregion

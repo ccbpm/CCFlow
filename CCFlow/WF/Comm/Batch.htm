@@ -208,8 +208,8 @@
         function SearchData() {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            //handler.AddPara("PageIdx", pageIdx);
-            //handler.AddPara("PageSize", pageSize);
+            //handler.AddPara("PageIdx",1);
+           // handler.AddPara("PageSiz", 500);
             handler.AddPara("DoWhat" ,"Batch");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
             //查询集合
@@ -542,14 +542,14 @@
                 windowH = 500;
 
             var localUrl = window.location.href;
-            var pager = $("#dg").datagrid('getPager').data("pagination").options;
-            var pageIndex = pager.pageNumber;
-            var pageSize = pager.pageSize;
+            //var pager = $("#dg").datagrid('getPager').data("pagination").options;
+            //var pageIndex = pager.pageNumber;
+            //var pageSize = pager.pageSize;
 
-            var localArr = new Array();
+           /* var localArr = new Array();
             localArr = localUrl.split("&");
             if (localArr.length == 1) {
-                localUrl = localUrl + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
+                localUrl = localUrl;
             } else {
                 for (var i = 0; i < localArr.length; i++) {
                     if (localArr[i].indexOf("PageIdx") != -1) {
@@ -564,10 +564,10 @@
                     localUrl += localArr[i];
                     if (i != localArr.length - 1) localUrl += "&";
                 }
-            }
+            }*/
 
             OpenEasyUiDialog(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", true, null, null, null, function () {
-                window.location.href = localUrl;
+                window.location.href = window.location.href;
 
 
             });

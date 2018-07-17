@@ -952,9 +952,11 @@ namespace BP.WF.HttpHandler
             //获得行数.
              ur.SetPara("RecCount", qo.GetCount());
              ur.Save();
-            
 
-            qo.DoQuery(en.PK,this.PageSize,this.PageIdx);
+             if (GetRequestVal("DoWhat").Equals("Batch"))
+                 qo.DoQuery(en.PK,500,1);
+             else
+                qo.DoQuery(en.PK,this.PageSize,this.PageIdx);
             #endregion 获得查询数据.
 
             DataTable mydt = ens.ToDataTableField();

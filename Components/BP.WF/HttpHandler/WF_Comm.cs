@@ -953,7 +953,7 @@ namespace BP.WF.HttpHandler
              ur.SetPara("RecCount", qo.GetCount());
              ur.Save();
 
-             if (GetRequestVal("DoWhat").Equals("Batch"))
+             if (GetRequestVal("DoWhat") != null && GetRequestVal("DoWhat").Equals("Batch"))
                  qo.DoQuery(en.PK,500,1);
              else
                 qo.DoQuery(en.PK,this.PageSize,this.PageIdx);

@@ -206,8 +206,6 @@ namespace BP.WF.HttpHandler
             emp.StartFlows = "";
             emp.Update();
 
-
-
             try
             {
                 string sql = "UPDATE Port_Emp Set fk_dept='"+deptNo+"' WHERE no='"+WebUser.No+"'";

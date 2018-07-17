@@ -93,15 +93,11 @@
                 html += mapBase.DTSearchLable;
 
                 if (mapBase.DTSearchWay == "1") {
-                    //html += '<div class="form-group">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
                     html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
-                    //html += '</div>';
                 } else {
-                    //html += '<div class="form-group">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' class='form-control' />";
                     html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />";
-                    //html += '</div>';
                 }
             }
 
@@ -202,18 +198,19 @@
             ur.FK_MapData = ensName;
             ur.SetPara("RecCount", count);
             var i = ur.Save();
-            var pager = $("#dg").datagrid('getPager').data("pagination").options;
-            var pageIndex = pager.pageNumber;
-            var pageSize = pager.pageSize;
-            window.location.href = "?EnsName=" + ensName + "&PageIdx=" + pageIndex + "&PageSize=" + pageSize;
+            //var pager = $("#dg").datagrid('getPager').data("pagination").options;
+            //var pageIndex = pager.pageNumber;
+            //var pageSize = pager.pageSize;
+            window.location.href = "?EnsName=" + ensName;
         }
 
         //获取查询数据
-        function SearchData(pageIdx, pageSize) {
+        function SearchData() {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            handler.AddPara("PageIdx", pageIdx);
-            handler.AddPara("PageSize", pageSize);
+            //handler.AddPara("PageIdx", pageIdx);
+            //handler.AddPara("PageSize", pageSize);
+            handler.AddPara("DoWhat" ,"Batch");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
             //查询集合
             var data = handler.DoMethodReturnString("Search_SearchIt");
@@ -236,15 +233,15 @@
         function BindTable() {
 
             //获得查询的基本信息, 实体属性 attrs, 实体数据.
-            var pageIdx = this.GetQueryString("PageIdx");
-            var pageSize = this.GetQueryString("PageSize");
+            //var pageIdx = this.GetQueryString("PageIdx");
+            //var pageSize = this.GetQueryString("PageSize");
 
-            if (pageIdx == "" || pageIdx == undefined)
-                pageIdx = "1";
-            if (pageSize == "" || pageSize == undefined)
-                pageSize = "10";
+            //if (pageIdx == "" || pageIdx == undefined)
+            //    pageIdx = "1";
+            //if (pageSize == "" || pageSize == undefined)
+             //   pageSize = "10";
 
-            var mapdata = SearchData(pageIdx, pageSize);
+            var mapdata = SearchData();
 
             var attrs = mapdata["Attrs"];
 
@@ -310,10 +307,10 @@
                 rownumbers: true,
                 striped: true,
                 singleSelect: false,
-                pagination: true,
+                pagination: false,
                 pagePosition: 'bottom',
                 toolbar: "#tb",
-                loadFilter: pagerFilter,
+                //loadFilter: pagerFilter,
                 checkOnSelect:false,
                 selectOnCheck:false,
                 onDblClickRow: function (index, rowData) {

@@ -1621,7 +1621,9 @@ namespace BP.En
                             item.MyDataType == DataType.AppFloat ||
                             item.MyDataType == DataType.AppDouble ||
                             item.MyDataType == DataType.AppMoney ||
-                            item.MyDataType == DataType.AppString)
+                            item.MyDataType == DataType.AppString ||
+                            item.MyDataType == DataType.AppDate ||
+                            item.MyDataType == DataType.AppDateTime)
                         {
                             mattr.UIIsEnable = !item.UIIsReadonly;
                         }

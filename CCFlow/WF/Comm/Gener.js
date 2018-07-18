@@ -1843,14 +1843,14 @@ var HttpHandler = (function () {
         AddFormData: function () {
             formData = $("form").serialize();
             //form表单序列化时调用了encodeURLComponent方法将数据编码了
-            formData = decodeURIComponent(formData, true);
+           // formData = decodeURIComponent(formData, true);
             if (formData.length > 0) {
                 var self = this;
                 $.each(formData.split("&"), function (i, o) {
                     var param = o.split("=");
                     if (param.length == 2 && validate(param[1])) {
                         (function (key, value) {
-                            self.AddPara(key, value);
+                            self.AddPara(key, decodeURIComponent(value, true));
                         })(param[0], param[1]);
                     }
                 });

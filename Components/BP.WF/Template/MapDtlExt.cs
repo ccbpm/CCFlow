@@ -1320,6 +1320,20 @@ namespace BP.WF.Template
             //更新分组标签.
             BP.Sys.GroupField gf = new GroupField();
             int i=gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
+            if (i == 0)
+            {
+                gf.CtrlID = this.No;
+                gf.CtrlType = "Dtl";
+                gf.FrmID = this.FK_MapData;
+                gf.Insert();
+            }
+
+            if (i > 1)
+            {
+                gf.Delete();
+                i = gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
+            }
+
             if (i == 1 && gf.Lab.Equals(this.Name) == false)
             {
                 gf.Lab = this.Name;

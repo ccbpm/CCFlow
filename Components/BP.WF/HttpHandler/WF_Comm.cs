@@ -1563,8 +1563,11 @@ namespace BP.WF.HttpHandler
             {
                 enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
                 // Sys_Enum
-                string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
-                DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                Paras ps = new Paras();
+                ps.SQL = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + SystemConfig.AppCenterDBVarStr + "enumKeys)";
+                ps.Add("EnumKeys" + enumKeys);
+                //string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                DataTable dtEnum = DBAccess.RunSQLReturnTable(ps);
                 dtEnum.TableName = "Sys_Enum";
 
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)

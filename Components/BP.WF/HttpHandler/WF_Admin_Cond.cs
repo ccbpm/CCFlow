@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 方向优先级.
 
-
+        Paras ps = new Paras();
         /// <summary>
         /// 初始化Init.
         /// </summary>
@@ -103,9 +103,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ConditionLine_Init()
         {
-            string sql = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" + this.FK_Node;
+            ps.SQL = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" +SystemConfig.AppCenterDBVarStr+ "Node";
+            ps.Add("Node", this.FK_Node);
+            //string sql = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" + this.FK_Node;
 
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.Columns[0].ColumnName = "NodeID";
             dt.Columns[1].ColumnName = "Name";
 
@@ -367,8 +369,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string StandAloneFrm_Init()
         {
-            string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + this.FK_Node;
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            ps.SQL = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node"; 
+            ps.Add("FK_Node",this.FK_Node);
+            //string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + this.FK_Node;
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Frms";
             dt.Columns[0].ColumnName = "No";
             dt.Columns[1].ColumnName = "Name";

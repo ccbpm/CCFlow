@@ -74,9 +74,10 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-
-                    string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
-                    string no = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr +"userNo";
+                    ps.Add("userNo", userNo);
+                    //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                     if (no == null)
                         return "err@用户名或者密码错误.";
 

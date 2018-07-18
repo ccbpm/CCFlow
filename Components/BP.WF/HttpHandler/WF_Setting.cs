@@ -157,8 +157,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ChangeDept_Init()
         {
-            string sql = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + BP.Web.WebUser.No + "'";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            Paras ps = new Paras();
+            ps.SQL = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FKps_Dept AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            ps.Add("FK_Emp",BP.Web.WebUser.No );
+            //string sql = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + BP.Web.WebUser.No + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {

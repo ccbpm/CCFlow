@@ -509,8 +509,12 @@ namespace BP.WF.HttpHandler
                     return "err@二级管理员用户没有设置流程树的权限..";
 
                 #region 检查是否有分类好的流程类别数据. for 中冶集团.
-                string sql = "SELECT count(No) FROM WF_FlowSort WHERE ParentNo='" + adminEmp.RootOfFlow + "' OR No='" + adminEmp.RootOfFlow + "'";
-                int num = DBAccess.RunSQLReturnValInt(sql, 0);
+                Paras ps = new Paras();
+                ps.SQL = "SELECT count(No) FROM WF_FlowSort WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo OR No=" + SystemConfig.AppCenterDBVarStr + "No";
+                ps.Add("ParentNo",adminEmp.RootOfFlow);
+                ps.Add("No", adminEmp.RootOfFlow);
+                //string sql = "SELECT count(No) FROM WF_FlowSort WHERE ParentNo='" + adminEmp.RootOfFlow + "' OR No='" + adminEmp.RootOfFlow + "'";
+                int num = DBAccess.RunSQLReturnValInt(ps, 0);
                 if (num == 0)
                     return "err@二级管理员用户没有设置流程树的权限..";
                 if (num == 1)
@@ -1339,15 +1343,20 @@ namespace BP.WF.HttpHandler
 
             FlowSort fs = new FlowSort();
             fs.No = fk_flowSort;
-
+            
             //检查是否有子流程？
-            string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
-            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+            Paras ps = new Paras();
+            ps.SQL = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort=" +SystemConfig.AppCenterDBVarStr +"fk_flowSort";
+            ps.Add("fk_flowSort", fk_flowSort);
+            //string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
+            if (DBAccess.RunSQLReturnValInt(ps) != 0)
                 return "err@该目录下有流程，您不能删除。";
 
             //检查是否有子目录？
-            sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
-            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+            ps.SQL = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo";
+            ps.Add("ParentNo", fk_flowSort);
+            //sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
+            if (DBAccess.RunSQLReturnValInt(ps) != 0)
                 return "err@该目录下有子目录，您不能删除。";
 
             fs.Delete();
@@ -1460,13 +1469,18 @@ namespace BP.WF.HttpHandler
             SysFormTree formTree = new SysFormTree(this.No);
 
             //检查是否有子类别？
-            string sql = "SELECT COUNT(*) FROM Sys_FormTree WHERE ParentNo='" + this.No + "'";
-            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+            Paras ps = new Paras();
+            ps.SQL = "SELECT COUNT(*) FROM Sys_FormTree WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo";
+            ps.Add("ParentNo",this.No);
+            //string sql = "SELECT COUNT(*) FROM Sys_FormTree WHERE ParentNo='" + this.No + "'";
+            if (DBAccess.RunSQLReturnValInt(ps) != 0)
                 return "err@该目录下有子类别，您不能删除。";
 
             //检查是否有表单？
-            sql = "SELECT COUNT(*) FROM Sys_MapData WHERE FK_FormTree='" + this.No + "'";
-            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+            ps.SQL = "SELECT COUNT(*) FROM Sys_MapData WHERE FK_FormTree=" + SystemConfig.AppCenterDBVarStr + "FK_FormTree";
+            ps.Add("FK_FormTree", this.No);
+            //sql = "SELECT COUNT(*) FROM Sys_MapData WHERE FK_FormTree='" + this.No + "'";
+            if (DBAccess.RunSQLReturnValInt(ps) != 0)
                 return "err@该目录下有表单，您不能删除。";
 
             formTree.Delete();

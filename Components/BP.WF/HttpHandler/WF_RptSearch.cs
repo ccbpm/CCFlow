@@ -41,9 +41,13 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //我发起的流程.
-            string sql = "";
-            sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
-            System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            Paras ps = new Paras();
+            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter=" + SystemConfig.AppCenterDBVarStr + "Starter GROUP BY FK_Flow, FlowName ";
+            ps.Add("Starter", BP.Web.WebUser.No);
+            
+            //string sql = "";
+            //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
+            System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Start";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -54,8 +58,10 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //待办.
-            sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
-            System.Data.DataTable dtTodolist = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp GROUP BY FK_Flow, FlowName ";
+            ps.Add("FK_Emp", BP.Web.WebUser.No);
+            //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
+            System.Data.DataTable dtTodolist = BP.DA.DBAccess.RunSQLReturnTable(ps);
             dtTodolist.TableName = "Todolist";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {

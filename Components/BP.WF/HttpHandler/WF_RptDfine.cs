@@ -94,15 +94,17 @@ namespace BP.WF.HttpHandler
             ht.Add("MyJoin", "我审批的流程");
 
             RptDfine rd = new RptDfine(this.FK_Flow);
-
+            Paras ps = new Paras();
             #region 增加本部门发起流程的查询.
             if (rd.MyDeptRole == 0)
             {
                 /*如果仅仅部门领导可以查看: 检查当前人是否是部门领导人.*/
                 if (DBAccess.IsExitsTableCol("Port_Dept", "Leader") == true)
                 {
-                    string sql = "SELECT Leader FROM Port_Dept WHERE No='" + BP.Web.WebUser.FK_Dept + "'";
-                    string strs = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    ps.SQL = "SELECT Leader FROM Port_Dept WHERE No='" + SystemConfig.AppCenterDBVarStr + "No";
+                    ps.Add("No", BP.Web.WebUser.FK_Dept);
+                    //string sql = "SELECT Leader FROM Port_Dept WHERE No='" + BP.Web.WebUser.FK_Dept + "'";
+                    string strs = DBAccess.RunSQLReturnStringIsNull(ps, null);
                     if (strs != null && strs.Contains(BP.Web.WebUser.No) == true)
                     {
                         ht.Add("MyDept", "我本部门发起的流程");

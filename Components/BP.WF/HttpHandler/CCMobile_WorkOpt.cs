@@ -168,8 +168,13 @@ namespace BP.WF.HttpHandler
             ht.Add("Title", gwf.Title);
 
             //计算出来曾经抄送过的人.
-            string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID;
-            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+            Paras ps = new Paras();
+            ps.SQL = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" +SystemConfig.AppCenterDBVarStr +"WorkID";
+            ps.Add("FK_Node",this.FK_Node);
+            ps.Add("WorkID",this.WorkID);
+            //string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID;
+            
+            DataTable mydt = DBAccess.RunSQLReturnTable(ps);
             string toAllEmps = "";
             foreach (DataRow dr in mydt.Rows)
                 toAllEmps += dr[0].ToString() + ",";

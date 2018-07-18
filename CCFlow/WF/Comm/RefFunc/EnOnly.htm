@@ -329,10 +329,10 @@
 
                 var lab = "";
                 if (attr.UIContralType == 0)
-                    lab = "<label for='TB_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='font-weight: normal;' >" + name + "</label>";
+                    lab = "<label for='TB_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
 
                 if (attr.UIContralType == 1)
-                    lab = "<label for='DDL_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "'  style='font-weight: normal;' >" + name + "</label>";
+                    lab = "<label for='DDL_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "'  style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
 
                 if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
                     lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "'  style='font-weight: normal;' >*</span>";
@@ -560,7 +560,7 @@
                     if (mapAttr.UIIsEnable == 0)
                         enableAttr = "disabled='disabled'";
 
-                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
+                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
                 }
 
                 //普通的大块文本.
@@ -575,7 +575,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input   class='form-control' " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
+                return "<input   class='form-control' " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
             }
 
             //时期时间类型.
@@ -587,7 +587,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input  type='text'  class='form-control'   style='width:120px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+                return "<input  type='text'  class='form-control'   style='width:150px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
             }
 
             // boolen 类型.
@@ -606,7 +606,7 @@
 
                 checkedStr = "";
 
-                return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "'   style='font-weight: normal;' >" + mapAttr.Name + "</label>";
+                return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "'   style='font-weight: normal;margin-bottom: 0px;' >" + mapAttr.Name + "</label>";
             }
 
             //枚举类型.

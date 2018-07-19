@@ -591,11 +591,11 @@ namespace BP.Web
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
                 return true;
 
-            string mysid = DBAccess.RunSQLReturnStringIsNull("SELECT SID FROM Port_Emp WHERE No='" + userNo + "'", null);
-            if (sid == mysid)
-                return true;
-            else
-                return false;
+            Paras paras = new Paras();
+            paras.SQL = "SELECT SID FROM Port_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
+            paras.Add("No",userNo);
+            string mysid = DBAccess.RunSQLReturnStringIsNull(paras, null);
+            return sid.Equals(mysid);
         }
         public static string NoOfRel
         {

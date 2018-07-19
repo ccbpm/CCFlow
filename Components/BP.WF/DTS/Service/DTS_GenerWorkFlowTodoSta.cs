@@ -10,12 +10,12 @@ using BP.Sys;
 namespace BP.WF.DTS
 {
     /// <summary>
-    /// 向预期的工作人员发送提醒消息 的摘要说明
+    /// 更新WF_GenerWorkerFlow.TodoSta状态. 
     /// </summary>
     public class DTS_GenerWorkFlowTodoSta : Method
     {
         /// <summary>
-        /// 向预期的工作人员发送提醒消息
+        /// 更新WF_GenerWorkerFlow.TodoSta状态.
         /// </summary>
         public DTS_GenerWorkFlowTodoSta()
         {

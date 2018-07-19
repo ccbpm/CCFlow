@@ -2346,7 +2346,7 @@ namespace BP.WF
                     dt.Rows.Add(dr);
                 }
                 if (dt.Rows.Count == 0)
-                    throw new Exception("没有获取到应该退回的节点列表.");
+                    throw new Exception("err@没有获取到应该退回的节点列表.");
                 return dt;
             }
 
@@ -2411,7 +2411,6 @@ namespace BP.WF
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
                             dt.Columns["ATPARA"].ColumnName = "AtPara"; //参数.
-
                         }
                         return dt;
                     }

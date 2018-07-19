@@ -21,7 +21,16 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_WorkOpt : DirectoryPageBase
     {
-
+        /// <summary>
+        /// 过程执行.
+        /// </summary>
+        /// <returns></returns>
+        public string ccbpmServices()
+        {
+            BP.WF.DTS.ccbpmServices en = new DTS.ccbpmServices();
+            en.Do();
+            return "执行成功，请检查:\\DataUser\\Log\\下面的执行信息。 ";
+        }
         /// <summary>
         /// 删除子线程
         /// </summary>
@@ -30,7 +39,6 @@ namespace BP.WF.HttpHandler
         {
             BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
             return "删除成功";
-
         }
 
         #region 打印 rtf

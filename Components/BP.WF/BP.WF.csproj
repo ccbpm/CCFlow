@@ -142,6 +142,7 @@
       <Name>System.EnterpriseServices</Name>
       <HintPath>..\..\WF\bin\System.EnterpriseServices.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web">
@@ -186,16 +187,17 @@
     <Compile Include="DTS\ToImplement\GenerPinYinForEmp.cs" />
     <Compile Include="DTS\ToImplement\GenerSubInc.cs" />
     <Compile Include="DTS\UpdatePort_EmpSigantureSta.cs" />
-    <Compile Include="DTS\DTS_GenerWorkFlowTimeSpan.cs" />
+    <Compile Include="DTS\Service\DTS_GenerWorkFlowTimeSpan.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
-    <Compile Include="DTS\DTS_DealDeferredWork.cs" />
-    <Compile Include="DTS\DTS_GenerWorkFlowTodoSta.cs" />
+    <Compile Include="DTS\Service\DTS_DealDeferredWork.cs" />
+    <Compile Include="DTS\Service\DTS_GenerWorkFlowTodoSta.cs" />
     <Compile Include="DTS\ToImplement\RelFlowTemplateToSubInc.cs" />
     <Compile Include="DTS\DeletTempFiles.cs" />
     <Compile Include="DTS\Tool_Repair.cs" />
     <Compile Include="DTS\CreateIndex.cs" />
     <Compile Include="DTS\ReadEmailSendWork.cs" />
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
+    <Compile Include="DTS\Service\ccbpmServices.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
@@ -296,7 +298,7 @@
     </Compile>
     <Compile Include="Template\FoolTruckNodeFrm.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
-    <Compile Include="DTS\Service\GenerTitle.cs" />
+    <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />
     <Compile Include="DTS\ClearRepLineLab.cs" />
     <Compile Include="DTS\UpTrack.cs" />

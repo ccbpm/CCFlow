@@ -1317,7 +1317,7 @@ namespace BP.WF.Template
             #region 检查填充的SQL是否符合要求.
             #endregion
 
-            //更新分组标签.
+            //更新分组标签.  @fanleiwei. 代码有变化.
             BP.Sys.GroupField gf = new GroupField();
             int i=gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
             if (i == 0)

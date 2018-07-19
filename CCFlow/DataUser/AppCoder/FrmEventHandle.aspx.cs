@@ -109,7 +109,7 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
             //string rec = en.GetValStrByKey("Rec");
 
             ////访问数据库案例。
-            //int result = BP.DA.DBAccess.RunSQL("DELETE WF_Emp WHERE 1=2 ");
+            //int result = BP.DA.DBAccess.RunSQL("DELETE FROM  WF_Emp WHERE 1=2 ");
             //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_Emp");
         }
         #endregion 当表单保存后.

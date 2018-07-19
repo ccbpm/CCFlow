@@ -6,11 +6,24 @@
     <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
     <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
-    
+        //页面启动函数.
+        $(function () {
+
+            $("#msg").html("正在执行ccbpm服务，请稍候.... 在执行的过程中ccbpm会把执行的过程与错误写入到 \datauser\Log\下面。");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+
+            var data = handler.DoMethodReturnString("ccbpmServices");
+
+            $("#msg").html(data);
+        });
     </script>
 </head>
 <body>
 
+<h3>
+<div  id="msg"></div>
+</h3>
 
 
 </body>

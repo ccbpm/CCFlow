@@ -173,10 +173,14 @@
             var Sys_GroupFields = frmData.Sys_GroupField;
             var mapAtrrs = frmData.Sys_MapAttr;
 
+
+            var tabIndex = GetQueryString("tabIndex");
+            
+             
             var tableWidth = 800; //  w - 40;
             var html = "";
             if (Sys_GroupFields.length > 1)
-                html = "<div class='easyui-tabs' >";
+                html = "<div id='tabDiv' class='easyui-tabs' >";
 
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
@@ -184,11 +188,14 @@
                 if (lab.indexOf(',') != -1) {
                     lab = lab.substring(0, lab.indexOf(','));
                 }
-                if (i == 0) {
-                    html += "<div title='" + lab + "' id='" + gf.OID + "' >";
-                } else {
+          
+                if (tabIndex != null && tabIndex != undefined && tabIndex==i) {
+                    html += "<div title='" + lab + "' data-options='selected:true' id='" + gf.OID + "'>";
+                }
+                else {
                     html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
                 }
+
                 html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
                 html += "</div>";
             }
@@ -209,7 +216,6 @@
 
             $.parser.parse("#CCFormTabs");
 
-           
 
             //原有的。
             //为 DISABLED 的 TEXTAREA 加TITLE 
@@ -768,8 +774,12 @@
             url = url.substring(0, url.indexOf("?"));
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
-
             var pkval = GetPKVal();
+
+            //获取选中的tab选项卡
+            var tab = $('#tabDiv').tabs('getSelected');
+            var index = $('#tabDiv').tabs('getTabIndex', tab);
+               
             if (pkval == null || pkval == "") {
 
                 en.CopyForm();
@@ -791,14 +801,15 @@
                 }
 
                 var info = en.Insert();
-                if (info != 1) {
+                if (info == 0) {
                     alert('更新错误:' + info);
                     return;
                 }
 
 
                 url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
-                window.location.href = url; //刷新.
+               
+                window.location.href = url+"&tabIndex="+index; //刷新.
                 return;
             }
 
@@ -811,13 +822,14 @@
             en.SetPKVal(pkval);
 
             var info = en.Update();
-            if (info != 1) {
+            if (info == 0) {
                 alert('更新错误:' + info);
                 return;
             }
 
-             url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
-            window.location.href = window.location.href; //刷新.
+            url = window.location.href;
+            url = url.replace("#", "");
+             window.location.href = url + "&tabIndex=" + index; //刷新.
         }
 
         //文件上传

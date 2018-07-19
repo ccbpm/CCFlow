@@ -1353,6 +1353,7 @@ namespace BP.WF.HttpHandler
                 return "err@该目录下有流程，您不能删除。";
 
             //检查是否有子目录？
+            ps = new Paras();
             ps.SQL = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo";
             ps.Add("ParentNo", fk_flowSort);
             //sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
@@ -1477,6 +1478,7 @@ namespace BP.WF.HttpHandler
                 return "err@该目录下有子类别，您不能删除。";
 
             //检查是否有表单？
+            ps = new Paras();
             ps.SQL = "SELECT COUNT(*) FROM Sys_MapData WHERE FK_FormTree=" + SystemConfig.AppCenterDBVarStr + "FK_FormTree";
             ps.Add("FK_FormTree", this.No);
             //sql = "SELECT COUNT(*) FROM Sys_MapData WHERE FK_FormTree='" + this.No + "'";

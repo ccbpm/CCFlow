@@ -357,15 +357,28 @@ namespace BP.WF.HttpHandler
             {
                 //获得最近的一个workid.
                 string trackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
-                string sql = "";
+                Paras ps = new Paras();
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID desc  ";
+                {
+                    ps.SQL = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom ORDER BY WorkID desc  ";
+                    ps.Add("NDTo", toNodeID);
+                    ps.Add("EmpFrom",WebUser.No);
+                }
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.EmpFrom='" + BP.Web.WebUser.No + "' AND A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                {
+                    ps.SQL = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom AND A.NDFrom=" + SystemConfig.AppCenterDBVarStr + "NDFrom AND A.NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom' ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                    ps.Add("EmpFrom", BP.Web.WebUser.No);
+                    ps.Add("NDFrom", this.FK_Node);
+                    ps.Add("NDTo", toNodeID);
+                }
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID  DESC limit 1,1 ";
-
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                {
+                    ps.SQL = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + SystemConfig.AppCenterDBVarStr + "NDFrom AND A.NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom ORDER BY WorkID  DESC limit 1,1 ";
+                    ps.Add("NDFrom", this.FK_Node);
+                    ps.Add("NDTo", toNodeID);
+                    ps.Add("EmpFrom", WebUser.No);
+                }
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count != 0)
                 {
                     string emps = dt.Rows[0]["Tag"].ToString();
@@ -432,7 +445,11 @@ namespace BP.WF.HttpHandler
         public string AccepterOfGener_Delete()
         {
             //删除指定的人员.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_SelectAccper WHERE WorkID=" + this.WorkID + " AND FK_Emp='" + this.FK_Emp + "'");
+            Paras ps = new Paras();
+            ps.SQL = "DELETE FROM WF_SelectAccper WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            ps.Add("WorkID", this.WorkID);
+            ps.AddFK_Emp();
+            BP.DA.DBAccess.RunSQL(ps);
             int toNodeID = this.GetRequestValInt("ToNode");
             //查询出来,已经选择的人员.
             SelectAccpers sas = new SelectAccpers();
@@ -452,8 +469,11 @@ namespace BP.WF.HttpHandler
                 if (nd.HisDeliveryWay == DeliveryWay.BySelected)
                 {
                     /* 仅仅设置一个,检查压入的人员个数.*/
-                    string sql = "SELECT count(WorkID) as Num FROM WF_SelectAccper WHERE FK_Node=" + toNodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
-                    int num = DBAccess.RunSQLReturnValInt(sql, 0);
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT count(WorkID) as Num FROM WF_SelectAccper WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND AccType=0";
+                    ps.Add("FK_Node", toNodeID);
+                    ps.Add("WorkID", this.WorkID);
+                    int num = DBAccess.RunSQLReturnValInt(ps, 0);
                     if (num == 0)
                         return "err@请指定下一步工作的处理人.";
                     Selector sr = new Selector(toNodeID);
@@ -645,12 +665,20 @@ namespace BP.WF.HttpHandler
                 GenerWorkerListAttr.FK_Node, this.FK_Node);
 
             //如果已经没有会签待办了,就设置当前人员状态为0.  增加这部分.
-            string sql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID='" + this.WorkID + "' AND IsPass=0 ";
-            if (DBAccess.RunSQLReturnValInt(sql) == 0)
+            Paras ps = new Paras();
+            ps.SQL = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=0 ";
+            ps.Add("FK_Node", this.FK_Node);
+            ps.Add("WorkID", this.WorkID);
+            if (DBAccess.RunSQLReturnValInt(ps) == 0)
             {
                 gwf.HuiQianTaskSta = HuiQianTaskSta.None; //设置为 None . 不能设置会签完成,不然其他的就没有办法处理了.
                 gwf.Update();
-                DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'");
+                ps = new Paras();
+                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                ps.Add("FK_Node", this.FK_Node);
+                ps.Add("WorkID", this.WorkID);
+                ps.AddFK_Emp();
+                DBAccess.RunSQL(ps);
             }
 
             //从待办里移除.
@@ -776,8 +804,12 @@ namespace BP.WF.HttpHandler
 
             if (gwf.HuiQianTaskSta == HuiQianTaskSta.None)
             {
-                string mysql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND (IsPass=0 OR IsPass=-1) AND FK_Emp!='" + BP.Web.WebUser.No + "'";
-                if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
+                Paras ps = new Paras();
+                ps.SQL = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND (IsPass=0 OR IsPass=-1) AND FK_Emp!=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                ps.Add("FK_Node",this.FK_Node);
+                ps.Add("WorkID",this.WorkID);
+                ps.AddFK_Emp();
+                if (DBAccess.RunSQLReturnValInt(ps, 0) == 0)
                     return "close@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
             }
 
@@ -1034,8 +1066,11 @@ namespace BP.WF.HttpHandler
             string checkerPassed = ",";
             if (gwf.WFState != WFState.Complete)
             {
-                string sql = "SELECT FK_Emp FROM WF_Generworkerlist where workid=" + this.WorkID + " AND IsPass=1 AND FK_Node=" + this.FK_Node;
-                DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(sql);
+                Paras ps = new Paras();
+                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist where workid=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node";
+                ps.Add("WorkID", this.WorkID);
+                ps.Add("FK_Node", this.FK_Node);
+                DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(ps);
                 foreach (DataRow dr in checkerPassedDt.Rows)
                 {
                     checkerPassed += dr["FK_Emp"] + ",";
@@ -1819,8 +1854,11 @@ namespace BP.WF.HttpHandler
             ht.Add("Title", gwf.Title);
 
             //计算出来曾经抄送过的人.
-            string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID;
-            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+            Paras ps = new Paras();
+            ps.SQL = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+            ps.Add("FK_Node",this.FK_Node);
+            ps.Add("WorkID",this.WorkID);
+            DataTable mydt = DBAccess.RunSQLReturnTable(ps);
             string toAllEmps = "";
             foreach (DataRow dr in mydt.Rows)
                 toAllEmps += dr[0].ToString() + ",";
@@ -2081,8 +2119,10 @@ namespace BP.WF.HttpHandler
             //获取节点中配置的流程删除规则
             if (this.FK_Node != 0)
             {
-                string sql = "SELECT wn.DelEnable FROM WF_Node wn WHERE wn.NodeID = " + this.FK_Node;
-                return DBAccess.RunSQLReturnValInt(sql) + "";
+                Paras ps = new Paras();
+                ps.SQL = "SELECT wn.DelEnable FROM WF_Node wn WHERE wn.NodeID = " + SystemConfig.AppCenterDBVarStr + "NodeID";
+                ps.Add("NodeID", this.FK_Node);
+                return DBAccess.RunSQLReturnValInt(ps) + "";
             }
 
             return "";
@@ -2502,8 +2542,11 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //获取模版.
-            string sql = "SELECT WorkID,Title,AtPara FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA LIKE '%@DBTemplate=1%'";
-            DataTable dtTemplate = DBAccess.RunSQLReturnTable(sql);
+            Paras ps = new Paras();
+            ps.SQL = "SELECT WorkID,Title,AtPara FROM WF_GenerWorkFlow WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow AND WFState=3 AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND ATPARA LIKE '%@DBTemplate=1%'";
+            ps.Add("FK_Flow", this.FK_Flow);
+            ps.Add("Starter", WebUser.No);
+            DataTable dtTemplate = DBAccess.RunSQLReturnTable(ps);
             dtTemplate.TableName = "DBTemplate";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -2522,16 +2565,26 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtTemplate);
 
             // 获取历史发起数据.
+            ps = new Paras();
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                sql = "SELECT TOP 30 WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' ORDER BY RDT ";
-
+            {
+                ps.SQL = "SELECT TOP 30 WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow AND WFState=3 AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND ATPARA NOT LIKE '%@DBTemplate=1%' ORDER BY RDT ";
+                ps.Add("FK_Flow", this.FK_Flow);
+                ps.Add("Starter", WebUser.No);
+            }
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' AND rownum<=30 ORDER BY RDT ";
-
+            {
+                ps.SQL = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow AND WFState=3 AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND ATPARA NOT LIKE '%@DBTemplate=1%' AND rownum<=30 ORDER BY RDT ";
+                ps.Add("FK_Flow", this.FK_Flow);
+                ps.Add("Starter", WebUser.No);
+            }
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                sql = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' ORDER BY RDT LIMIT 30";
-
-            DataTable dtHistroy = DBAccess.RunSQLReturnTable(sql);
+            {
+                ps.SQL = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow AND WFState=3 AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND ATPARA NOT LIKE '%@DBTemplate=1%' ORDER BY RDT LIMIT 30";
+                ps.Add("FK_Flow", this.FK_Flow);
+                ps.Add("Starter", WebUser.No);
+            }
+            DataTable dtHistroy = DBAccess.RunSQLReturnTable(ps);
             dtHistroy.TableName = "History";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {

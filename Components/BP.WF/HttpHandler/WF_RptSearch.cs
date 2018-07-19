@@ -58,6 +58,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //待办.
+            ps = new Paras();
             ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp GROUP BY FK_Flow, FlowName ";
             ps.Add("FK_Emp", BP.Web.WebUser.No);
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";

@@ -112,7 +112,10 @@ namespace BP.WF.HttpHandler
                 BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
                 if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
                 {
-                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID, 0).ToString();
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                    ps.Add("WorkID", this.WorkID);
+                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                     if (pWorkID == null || pWorkID == "0")
                         pWorkID = this.WorkID.ToString();
 
@@ -801,9 +804,11 @@ namespace BP.WF.HttpHandler
         public string HuiQianList_Init()
         {
             string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
-            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=90 AND B.FK_Emp='"+BP.Web.WebUser.No+"'";
-
-            DataTable dt=DBAccess.RunSQLReturnTable(sql);
+            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=90 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            Paras ps = new Paras();
+            ps.SQL = sql;
+            ps.AddFK_Emp();
+            DataTable dt=DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
@@ -1016,7 +1021,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Load_Author()
         {
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + BP.Web.WebUser.No + "'");
+            Paras ps = new Paras();
+            ps.SQL = "SELECT * FROM WF_EMP WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
+            ps.Add("AUTHOR", BP.Web.WebUser.No);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -1032,7 +1040,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string IsHaveAuthor()
         {
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + BP.Web.WebUser.No + "'");
+            Paras ps = new Paras();
+            ps.SQL = "SELECT * FROM WF_EMP WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
+            ps.Add("AUTHOR", BP.Web.WebUser.No);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             WFEmp em = new WFEmp();
             em.Retrieve(WFEmpAttr.Author, BP.Web.WebUser.No);
 

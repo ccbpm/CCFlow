@@ -595,8 +595,12 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //加载外键字段.
-            var sql = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData='" + this.FK_MapData + "' AND KeyOfEn!='" + this.KeyOfEn + "'";
-            DataTable dt=BP.DA.DBAccess.RunSQLReturnTable(sql);
+            Paras ps = new Paras();
+            ps.SQL = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND KeyOfEn!=" + SystemConfig.AppCenterDBVarStr + "KeyOfEn";
+            ps.Add("FK_MapData", this.FK_MapData);
+            ps.Add("KeyOfEn",this.KeyOfEn);
+            //var sql = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData='" + this.FK_MapData + "' AND KeyOfEn!='" + this.KeyOfEn + "'";
+            DataTable dt=BP.DA.DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Sys_MapAttr";
 
             dt.Columns[0].ColumnName = "No";
@@ -723,8 +727,12 @@ namespace BP.WF.HttpHandler
         public string RegularExpression_Init()
         {
             DataSet ds = new DataSet();
-            string sql = "SELECT * FROM Sys_MapExt WHERE AttrOfOper='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+            Paras ps = new Paras();
+            ps.SQL="SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
+            ps.Add("AttrOfOper",this.KeyOfEn);
+            ps.Add("FK_MapData",this.FK_MapData);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Sys_MapExt";
             ds.Tables.Add(dt);
 

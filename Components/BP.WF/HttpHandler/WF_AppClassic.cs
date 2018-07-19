@@ -133,8 +133,10 @@ namespace BP.WF.HttpHandler
                 if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
-                    string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
-                    string no = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "NikeName";
+                    ps.Add("NikeName", userNo);
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                     if (no == null)
                         return "err@用户名或者密码错误.";
 

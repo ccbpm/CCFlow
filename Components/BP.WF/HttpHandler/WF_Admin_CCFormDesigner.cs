@@ -353,13 +353,15 @@ namespace BP.WF.HttpHandler
 
                 //组织节点组件信息.
                 string sql = "";
-                sql += "select '轨迹图' Name,'FlowChart' No,FrmTrackSta Sta,FrmTrack_X X,FrmTrack_Y Y,FrmTrack_H H,FrmTrack_W  W from WF_Node WHERE nodeid=" + this.FK_Node;
-                sql += " union select '审核组件' Name, 'FrmCheck' No,FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node WHERE nodeid=" + this.FK_Node;
-                sql += " union select '子流程' Name,'SubFlowDtl' No,SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W from WF_Node  WHERE nodeid=" + this.FK_Node;
-                sql += " union select '子线程' Name, 'ThreadDtl' No,FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W W from WF_Node WHERE nodeid=" + this.FK_Node;
-                sql += " union select '流转自定义' Name,'FrmTransferCustom' No,FTCSta Sta,FTC_X X,FTC_Y Y,FTC_H H,FTC_W  W FROM WF_Node WHERE nodeid=" + this.FK_Node ;
-
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                sql += "select '轨迹图' Name,'FlowChart' No,FrmTrackSta Sta,FrmTrack_X X,FrmTrack_Y Y,FrmTrack_H H,FrmTrack_W  W from WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
+                sql += " union select '审核组件' Name, 'FrmCheck' No,FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
+                sql += " union select '子流程' Name,'SubFlowDtl' No,SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W from WF_Node  WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
+                sql += " union select '子线程' Name, 'ThreadDtl' No,FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W W from WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
+                sql += " union select '流转自定义' Name,'FrmTransferCustom' No,FTCSta Sta,FTC_X X,FTC_Y Y,FTC_H H,FTC_W  W FROM WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
+                Paras ps = new Paras();
+                ps.SQL = sql;
+                ps.Add("nodeid", this.FK_Node);
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 dt.TableName = "FigureCom";
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {

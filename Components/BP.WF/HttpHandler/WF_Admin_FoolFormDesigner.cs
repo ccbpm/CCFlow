@@ -350,8 +350,12 @@ namespace BP.WF.HttpHandler
             else
                 attr.Name = "枚举" + attr.UIBindKey;
 
-            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND ( CtrlType='' OR CtrlType IS NULL ) ORDER BY OID DESC ";
-            attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);
+            //paras参数
+            Paras ps = new Paras();
+            ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND ( CtrlType='' OR CtrlType IS NULL ) ORDER BY OID DESC ";
+            ps.Add("FrmID", this.FK_MapData);
+            //string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND ( CtrlType='' OR CtrlType IS NULL ) ORDER BY OID DESC ";
+            attr.GroupID = DBAccess.RunSQLReturnValInt(ps, 0);
             attr.Insert();
             return attr.MyPK;
         }
@@ -549,6 +553,8 @@ namespace BP.WF.HttpHandler
                 //return context.Request.QueryString["FK_SFDBSrc"];
             }
         }
+
+        
         private string _STable = null;
         public string STable
         {
@@ -783,13 +789,23 @@ namespace BP.WF.HttpHandler
                     FrmAttachment ath = new FrmAttachment(en.AthRefObj);
                     ath.IsVisable = false;
                     ath.Update();
-                    BP.DA.DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + this.FK_MapData + "' AND CtrlID='" + en.AthRefObj + "'");
+                    //paras参数
+                    Paras ps = new Paras();
+                    ps.SQL = "DELETE FROM Sys_GroupField WHERE FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND CtrlID=" + SystemConfig.AppCenterDBVarStr + "CtrlID";
+                    ps.Add("FrmID", this.FK_MapData);
+                    ps.Add("CtrlID", en.AthRefObj);
+                    BP.DA.DBAccess.RunSQL(ps);
 
                     FrmAttachments aths = new FrmAttachments(this.FK_MapData);
                     foreach (FrmAttachment item in aths)
                     {
-                        string sql = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%" + item.MyPK + "@%' AND FK_MapData='" + this.FK_MapData + "'";
-                        int num = DBAccess.RunSQLReturnValInt(sql);
+                        ps = new Paras();
+                        ps.SQL = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%" + SystemConfig.AppCenterDBVarStr + "AtPara@%' AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
+                        ps.Add("AtPara", item.MyPK);
+                        ps.Add("FK_MapData", this.FK_MapData);
+                       
+                        //string sql = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%" + item.MyPK + "@%' AND FK_MapData='" + this.FK_MapData + "'";
+                        int num = DBAccess.RunSQLReturnValInt(ps);
                         if (num == 0)
                         {
                             // 没有被引用.
@@ -918,8 +934,11 @@ namespace BP.WF.HttpHandler
             BP.Sys.CCFormAPI.SaveFieldSFTable(this.FK_MapData, this.KeyOfEn, null, this.GetRequestVal("SFTable"), 100, 100, 1);
 
             attr.Retrieve();
-            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
-            attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);
+            Paras ps = new Paras();
+            ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
+            ps.Add("FrmID",this.FK_MapData);
+            //string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
+            attr.GroupID = DBAccess.RunSQLReturnValInt(ps, 0);
             attr.Update();
 
             SFTable sf = new SFTable(attr.UIBindKey);
@@ -1043,9 +1062,12 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.CheckBok;
             else
                 attr.UIContralType = UIContralType.TB;
-
-            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
-            attr.GroupID  = DBAccess.RunSQLReturnValInt(sql, 0);
+            
+            Paras ps = new Paras();
+            ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND CtrlType='' OR CtrlType= NULL";
+            ps.Add("FrmID", this.FK_MapData);
+            //string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
+            attr.GroupID  = DBAccess.RunSQLReturnValInt(ps, 0);
 
             attr.Insert();
 
@@ -1072,7 +1094,10 @@ namespace BP.WF.HttpHandler
             int iGroupID = this.GroupField;
             try
             {
-                DataTable dt = DBAccess.RunSQLReturnTable("SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.FK_MapData + "' and (CtrlID is null or ctrlid ='') ORDER BY OID DESC ");
+                Paras ps = new Paras();
+                ps.SQL = "SELECT OID FROM Sys_GroupField WHERE FrmID=" + SystemConfig.AppCenterDBVarStr +"FrmID and (CtrlID is null or ctrlid ='') ORDER BY OID DESC ";
+                ps.Add("FrmID", this.FK_MapData);
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     iGroupID = int.Parse(dt.Rows[0][0].ToString());

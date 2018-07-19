@@ -262,7 +262,10 @@ namespace BP.WF.HttpHandler
                     if (athDesc.AthUploadWay == AthUploadWay.Interwork)
                     {
                         /*如果是协同，就让他是PWorkID. */
-                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + PKVal, 0).ToString();
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                        ps.Add("WorkID",PKVal);
+                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                         if (pWorkID == null || pWorkID == "0")
                             pWorkID = PKVal;
                         dbUpload.RefPKVal = pWorkID;

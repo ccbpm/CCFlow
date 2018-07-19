@@ -96,8 +96,10 @@ namespace BP.WF.HttpHandler
                 {
                     if (this.WorkID!=0)
                     {
-                        string sql = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID;
-                        _FK_Node = DBAccess.RunSQLReturnValInt(sql,0);
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                        ps.Add("WorkID",this.WorkID);
+                        _FK_Node = DBAccess.RunSQLReturnValInt(ps,0);
                     }
                     else
                     {

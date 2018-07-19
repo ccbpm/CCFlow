@@ -164,9 +164,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Home_Init_WorkCount()
         {
-            string sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+            Paras ps = new Paras();
+            ps.SQL = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + SystemConfig.AppCenterDBVarStr + "Emps%' GROUP BY TSpan";
+            ps.Add("Emps", WebUser.No);
+            //string sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
             DataSet ds = new DataSet();
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             ds.Tables.Add(dt);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -174,7 +177,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns[1].ColumnName = "Num";
             }
 
-            sql = "SELECT IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='TSpan'";
+            string sql = "SELECT IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='TSpan'";
             DataTable dt1 = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {

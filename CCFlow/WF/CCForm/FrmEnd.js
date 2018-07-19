@@ -609,3 +609,42 @@ function calculator(o) {
     })(targets, expression, o.AttrOfOper, o.MyPK, o.Doc);
     $(":input[name=TB_" + o.AttrOfOper + "]").attr("disabled", true);
 }
+
+function testExpression(exp) {
+    if (exp == null || typeof exp == "undefined" || typeof exp != "string") {
+        return false;
+    }
+    exp = exp.replace(/\s/g, "");
+    if (exp == "" || exp.length == 0) {
+        return false;
+    }
+    if (/[\+\-\*\/]{2,}/.test(exp)) {
+        return false;
+    }
+    if (/\(\)/.test(exp)) {
+        return false;
+    }
+    var stack = [];
+    for (var i = 0; i < exp.length; i++) {
+        var c = exp.charAt(i);
+        if (c == "(") {
+            stack.push("(");
+        } else if (c == ")") {
+            if (stack.length > 0) {
+                stack.pop();
+            } else {
+                return false;
+            }
+        }
+    }
+    if (stack.length != 0) {
+        return false;
+    }
+    if (/^[\+\-\*\/]|[\+\-\*\/]$/.test(exp)) {
+        return false;
+    }
+    if (/\([\+\-\*\/]|[\+\-\*\/]\)/.test(exp)) {
+        return false;
+    }
+    return true;
+}

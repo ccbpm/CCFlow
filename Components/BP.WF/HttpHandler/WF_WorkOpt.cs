@@ -366,7 +366,7 @@ namespace BP.WF.HttpHandler
                 }
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
-                    ps.SQL = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom AND A.NDFrom=" + SystemConfig.AppCenterDBVarStr + "NDFrom AND A.NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom' ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                    ps.SQL = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom AND A.NDFrom=" + SystemConfig.AppCenterDBVarStr + "NDFrom AND A.NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                     ps.Add("EmpFrom", BP.Web.WebUser.No);
                     ps.Add("NDFrom", this.FK_Node);
                     ps.Add("NDTo", toNodeID);

@@ -375,7 +375,7 @@ namespace BP.WF
             }
 
 
-            #region 如果是越轨流程状态 @du.
+            #region 如果是越轨流程状态 @fanleiwei.s
             string sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE WorkID="+this.WorkID+" AND IsPass=80";
             if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
             {
@@ -394,7 +394,7 @@ namespace BP.WF
             #endregion 如果是越轨流程状态 .
 
             if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwf.FK_Flow, gwf.FK_Node, this.WorkID, WebUser.No) == true)
-                return "err@您有处理当前工作的权限,可能您已经执行了撤销,请使用退回或者发送功能.";
+                return "info@您有处理当前工作的权限,可能您已经执行了撤销,请使用退回或者发送功能.";
 
 
             #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的.

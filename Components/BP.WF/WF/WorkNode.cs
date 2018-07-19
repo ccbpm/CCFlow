@@ -5837,6 +5837,12 @@ namespace BP.WF
             //如果是协作模式节点, 就判断当前的队列人员是否走完.
             if (this.TodolistModel == TodolistModel.Teamup)
             {
+                string todoEmps = this.HisGenerWorkFlow.TodoEmps;
+                todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
+                this.HisGenerWorkFlow.TodoEmps = todoEmps;
+                this.HisGenerWorkFlow.Update(GenerWorkFlowAttr.TodoEmps, todoEmps);
+
+
                 /* 如果是协作*/
                 if (this.DealTeamUpNode() == true)
                 {

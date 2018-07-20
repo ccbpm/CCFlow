@@ -777,9 +777,12 @@
             var pkval = GetPKVal();
 
             //获取选中的tab选项卡
-            var tab = $('#tabDiv').tabs('getSelected');
-            var index = $('#tabDiv').tabs('getTabIndex', tab);
-               
+            var index = 0;
+            if ($('#tabDiv').length == 1) {
+
+                var tab = $('#tabDiv').tabs('getSelected');
+                 index = $('#tabDiv').tabs('getTabIndex', tab);
+            }  
             if (pkval == null || pkval == "") {
 
                 en.CopyForm();

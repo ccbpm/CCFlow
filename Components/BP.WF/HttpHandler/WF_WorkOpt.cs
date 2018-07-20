@@ -448,7 +448,7 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "DELETE FROM WF_SelectAccper WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
             ps.Add("WorkID", this.WorkID);
-            ps.AddFK_Emp();
+            ps.AddFK_Emp(this.FK_Emp);
             BP.DA.DBAccess.RunSQL(ps);
             int toNodeID = this.GetRequestValInt("ToNode");
             //查询出来,已经选择的人员.

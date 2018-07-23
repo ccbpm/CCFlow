@@ -289,7 +289,7 @@
             //如果有主键，就设置主键不可以编辑.
             var pkval = GetPKVal();
 
-            if (pkval != null) {
+            if (pkval != null && pkval != 0) {
                 //获取当前主键字段是否可以编辑?
                 $("#TB_No").attr("disabled", true);
                 $("#TB_MyPK").attr("disabled", 'disabled');

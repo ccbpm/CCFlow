@@ -769,7 +769,7 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(ens);
 
             #region 关键字字段.
-            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length > 1)
+            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
             {
                 Attr attrPK = new Attr();
                 foreach (Attr attr in map.Attrs)

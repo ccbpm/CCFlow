@@ -101,7 +101,7 @@ namespace BP.WF.HttpHandler
                 /*如果仅仅部门领导可以查看: 检查当前人是否是部门领导人.*/
                 if (DBAccess.IsExitsTableCol("Port_Dept", "Leader") == true)
                 {
-                    ps.SQL = "SELECT Leader FROM Port_Dept WHERE No='" + SystemConfig.AppCenterDBVarStr + "No";
+                    ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
                     ps.Add("No", BP.Web.WebUser.FK_Dept);
                     //string sql = "SELECT Leader FROM Port_Dept WHERE No='" + BP.Web.WebUser.FK_Dept + "'";
                     string strs = DBAccess.RunSQLReturnStringIsNull(ps, null);

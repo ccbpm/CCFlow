@@ -58,7 +58,7 @@ namespace BP.WF.HttpHandler
 
                         if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
                         {
-                            if (attr.UIIsReadonly == false)
+                            if (attr.UIIsReadonly == true)
                                 continue;
 
                             string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key, null);
@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
 
                         if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
                         {
-                            if (attr.UIIsReadonly == false)
+                            if (attr.UIIsReadonly == true)
                                 continue;
 
                             val = this.GetValFromFrmByKey("TB_" + i + "_" + attr.Key, null);

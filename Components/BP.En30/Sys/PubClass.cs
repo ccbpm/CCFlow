@@ -1024,6 +1024,7 @@ namespace BP.Sys
                 {
                     continue;
                 }
+
                 msg += AddComment(en);
             }
             return msg;
@@ -1062,7 +1063,7 @@ namespace BP.Sys
                 switch (attr.MyFieldType)
                 {
                     case FieldType.PK:
-                        en.RunSQL("comment on column  " + en.EnMap.PhysicsTable + "." + attr.Field + " IS '" + attr.Desc + " - 主键'");
+                        en.RunSQL("comment on column  " + en.EnMap.PhysicsTable + "." + attr.Field + " IS '" + attr.Desc + "-主键'");
                         break;
                     case FieldType.Normal:
                         en.RunSQL("comment on column  " + en.EnMap.PhysicsTable + "." + attr.Field + " IS '" + attr.Desc + "'");
@@ -1154,7 +1155,6 @@ namespace BP.Sys
         }
         private static void AddColNote(Entity en, string table, string col, string note)
         {
-            return;
             try
             {
                 string sql = "execute  sp_dropextendedproperty 'MS_Description','user',dbo,'table','" + table + "','column'," + col;
@@ -1162,6 +1162,7 @@ namespace BP.Sys
             }
             catch (Exception ex)
             {
+
             }
 
             try
@@ -1179,12 +1180,9 @@ namespace BP.Sys
         /// <param name="en"></param>
         public static void AddCommentForTable_MS(Entity en)
         {
-            return;
 
             if (en.EnMap.EnType == EnType.View || en.EnMap.EnType == EnType.ThirdPartApp)
-            {
                 return;
-            }
 
             try
             {
@@ -1217,6 +1215,10 @@ namespace BP.Sys
 
                 switch (attr.MyFieldType)
                 {
+                    case FieldType.PK:
+                        AddColNote(en, en.EnMap.PhysicsTable, attr.Field, attr.Desc+"(主键)");
+                        //en.RunSQL("comment on table "+ en.EnMap.PhysicsTable+"."+attr.Field +" IS '"+en.EnDesc+"'");
+                        break;
                     case FieldType.Normal:
                         AddColNote(en, en.EnMap.PhysicsTable, attr.Field, attr.Desc);
                         //en.RunSQL("comment on table "+ en.EnMap.PhysicsTable+"."+attr.Field +" IS '"+en.EnDesc+"'");
@@ -1271,16 +1273,7 @@ namespace BP.Sys
             PubClass.AddComment(en);
 
             string msg = "";
-            //if (level == DBLevel.High)
-            //{
-            //    try
-            //    {
-            //        DBAccess.RunSQL("update pub_emp set AuthorizedAgent='1' WHERE AuthorizedAgent='0' ");
-            //    }
-            //    catch
-            //    {
-            //    }
-            //}
+          
             string table = en.EnMap.PhysicsTable;
             Attrs fkAttrs = en.EnMap.HisFKAttrs;
             if (fkAttrs.Count == 0)

@@ -116,6 +116,10 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
 
+                //if (en.HisUAC.IsDelete == false)
+                //    return "err@xx";
+
+
                 #region 首先判断参数删除. 
                 string key1 = this.GetRequestVal("Key1");
                 string key2 = this.GetRequestVal("Key2");
@@ -1505,7 +1509,7 @@ namespace BP.WF.HttpHandler
 
             #region 判断主键是否为自增长
             Entity en = dtls.GetNewEntity;
-            if(en.EnMap.IsAutoGenerNo)
+            if( en.IsNoEntity==true && en.EnMap.IsAutoGenerNo)
                 md.SetPara("IsNewRow", "0");
             else
                 md.SetPara("IsNewRow", "1");
@@ -1705,7 +1709,7 @@ namespace BP.WF.HttpHandler
 
                 if (en.IsNoEntity)
                 {
-                    if (en.EnMap.IsAutoGenerNo)
+                    if ( en.EnMap.IsAutoGenerNo)
                         en.SetValByKey("No", en.GenerNewNoByKey("No"));
                 }
 

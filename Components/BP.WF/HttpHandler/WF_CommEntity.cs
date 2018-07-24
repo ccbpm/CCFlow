@@ -309,7 +309,7 @@ namespace BP.WF.HttpHandler
                     en.SetValByKey("RefPKVal", this.RefPKVal);
 
                     //自动生成一个编号.
-                    if (en.EnMap.IsAutoGenerNo == true)
+                    if (en.IsNoEntity == true && en.EnMap.IsAutoGenerNo == true)
                         en.SetValByKey("No", en.GenerNewNoByKey("No"));
                 }
 

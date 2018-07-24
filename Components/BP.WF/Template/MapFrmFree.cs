@@ -265,7 +265,7 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
-                map.AddRefMethod(rm);
+               // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";

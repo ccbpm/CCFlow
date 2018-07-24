@@ -53,15 +53,20 @@
 	        html += "<td>" + item.IsRel + "</td>";
 	        html += "<td>" + item.NumOfRuning + "</td>";
 	        html += "<td>" + item.NumOfOK + "</td>";
-	        html += "<td><a href=\"javascript:Del('" + item.No + "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
 
-            if (item.IsRel==0)
-                html += "<td><a href=\"javascript:SetCurrentVer('" + item.No + "')\">设置主版本</a></td>";
-            else
-                html += "<td>--</td>";
+	        if (item.IsRel == 0) {
+	            html += "<td>--</td>";
+	            html += "<td><a href=\"javascript:SetCurrentVer('" + item.No + "')\">设置主版本</a></td>";
+	        }
+	        else {
+	            html += "<td><a href=\"javascript:Del('" + item.No + "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
+	            html += "<td>--</td>";
+	        }
 
-            html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow="+item.No+"' target=_blank >编辑</a></td>";
-
+	        if (item.IsRel == 0)
+	            html += "<td>-</td>";
+	        else
+	            html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow=" + item.No + "' target=_blank >编辑</a></td>";
 
 	        html += "</tr>";
 	    }

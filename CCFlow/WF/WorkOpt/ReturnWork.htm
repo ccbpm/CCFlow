@@ -34,9 +34,8 @@
     <script type="text/javascript">
         var pageData = {};
         $(function () {
-            //初始化页面退回信息
 
-
+            //初始化页面退回信息.
             pageData = {
                 FK_Node: GetQueryString('FK_Node'),
                 WorkID: GetQueryString('WorkID'),
@@ -49,47 +48,45 @@
                 $('#TB_Doc').val(pageData.Message);
             }
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=Return_Init&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
 
-                    if (data.indexOf('err@') == 0) {
-                        console.error("退回窗口错误信息" + data);
-                        alert(data);
-                        return;
-                    }
-                    var returnNodeArr = JSON.parse(data);
-                    var nodeListHtml = '';
+            var data = handler.DoMethodReturnString("Return_Init");
+            if (data.indexOf('err@') == 0) {
+                console.error("退回窗口错误信息" + data);
+                alert(data);
+                return;
+            }
 
-                    $.each(returnNodeArr, function (i, returnNode) {
+            var returnNodeArr = JSON.parse(data);
+            var nodeListHtml = '';
 
-                        if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') >= 0) {
-                            return true;
-                        }
+            $.each(returnNodeArr, function (i, returnNode) {
 
-                        nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
-                    });
-
-
-                    $('#DDL_Nodes').html(nodeListHtml);
-
-                    // $('#DDL_Nodes').html(DDL_NodesHtml);
-
-                    $('#DDL_Nodes').bind('change', SetIsBackTrackingDispaly);
-                    SetIsBackTrackingDispaly();
-
-                    $("section").show();
-                    $(".wait").hide();
+                if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') >= 0) {
+                    return true;
                 }
+
+                nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
             });
+
+
+            $('#DDL_Nodes').html(nodeListHtml);
+
+            // $('#DDL_Nodes').html(DDL_NodesHtml);
+
+            $('#DDL_Nodes').bind('change', SetIsBackTrackingDispaly);
+            SetIsBackTrackingDispaly();
+
+            $("section").show();
+            $(".wait").hide();
+
             Common.MaxLengthError();
         });
 
         function SetIsBackTrackingDispaly() {
+
+            // alert($('#DDL_Nodes option:checked').data().isbacktracking);
 
             if ($('#DDL_Nodes option:checked').data().isbacktracking == 0) {
                 $('#btnIsBackTracking').css('display', 'none');
@@ -104,6 +101,7 @@
                 $('#btnIsBackTracking').css('display', 'inline-block');
             }
         }
+
 
         //确定 退回 执行退回操作
         function ReturnWork(isBack) {

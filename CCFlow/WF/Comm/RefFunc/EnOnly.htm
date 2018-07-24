@@ -298,6 +298,27 @@
                 $("#TB_OID").attr("disabled", 'disabled');
             }
 
+            //如果传的参数里面有改字段，则需要给相应的字段赋值
+            var queryString = document.location.search.substr(1);
+            if (queryString.length > 0) {
+                var realVal = "";
+                $.each(queryString.split("&"), function (i, o) {
+                    var param = o.split("=");
+                    if (param.length == 2) {
+                        realVal = decodeURI(param[1]);
+                        $('#TB_' + param[0]).val(realVal);
+                        $('#DDL_' + param[0]).val(realVal);
+                        if (realVal == "1") {
+                            var obj = document.getElementById("CB_" + param[0])
+                            if (obj != null) 
+                                obj.checked = true;
+                        } 
+
+                    }
+                });
+            }
+
+
         }
 
         //解析表单字段 MapAttr.

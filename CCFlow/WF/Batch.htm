@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-     <meta charset="UTF-8"/>
     <title>驰骋工作流</title>
+     <meta charset="UTF-8"/>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="./Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
@@ -14,11 +14,11 @@
                 url = url.replace('.htm', '.aspx');
                 window.location.href = url;
                 return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
             }
+
+            url = url.replace('.htm', '.jsp');
+            window.location.href = url;
+            return;
         }
     </script>
 </head>

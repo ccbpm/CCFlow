@@ -1,7 +1,5 @@
 ﻿
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
-
-
 update sys_groupfield set frmID=enName where frmid is  null;
 
 UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%';
@@ -61,10 +59,9 @@ UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6
 UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7
 
--- 2016.07.20 升级明细表维护分组;
+-- 2018.07.24 ;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@DesignerNo=设计者,流程开发设计者信息');
-
 
 
 -- 2016.11.18 升级维护附件属性.;

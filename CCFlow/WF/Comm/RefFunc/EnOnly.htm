@@ -930,6 +930,19 @@
 
             var enName = GetQueryString("EnName");
             var en = new Entity(enName, GetPKVal());
+           
+
+            //删除相关的设置
+            var mapExts = new Entities("BP.Sys.MapExts");
+            mapExts.Retrieve("FK_MapData", en.FK_MapData, "AttrOfOper", en.KeyOfEn);
+            if (mapExts) {
+                for (var index = 0; index < mapExts.length; index++) {
+                    var mapExt = new Entity("BP.Sys.MapExt", mapExts[index].MyPK);
+                    mapExt.Delete();
+                }
+            }
+
+            en = new Entity(enName, GetPKVal());
             en.Delete();
 
             $("#Btns").html("");
@@ -937,6 +950,7 @@
             $("#CCFormTabs").html("删除成功..");
 
             alert("删除成功.");
+
             window.close();
             CloseIt();
         }

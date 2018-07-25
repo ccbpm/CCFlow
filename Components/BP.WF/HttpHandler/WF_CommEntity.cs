@@ -394,6 +394,7 @@ namespace BP.WF.HttpHandler
                 sys_MapAttrs.Columns.Remove(MapAttrAttr.GroupID);
                 sys_MapAttrs.Columns.Add("GroupID");
 
+
                 //sys_MapAttrs.Columns[MapAttrAttr.GroupID].DataType = typeof(string); //改变列类型.
 
                 //给字段增加分组.
@@ -416,6 +417,12 @@ namespace BP.WF.HttpHandler
                 }
                 ds.Tables.Add(sys_MapAttrs);
                 #endregion 字段属性.
+
+                #region 加入扩展属性.
+                MapExts mapExts = new MapExts(this.EnName+"s");
+                DataTable Sys_MapExt = mapExts.ToDataTableField("Sys_MapExt");
+                ds.Tables.Add(Sys_MapExt);
+                #endregion 加入扩展属性.
 
                 #region 把外键与枚举放入里面去.
 

@@ -24,7 +24,7 @@ namespace BP.Demo.FlowEvent
         /// </summary>
         public override string FlowMark
         {
-            get { return "001,002";   }
+            get { return "001,002,";   }
         }
         #endregion 属性.
 
@@ -44,10 +44,13 @@ namespace BP.Demo.FlowEvent
         /// <returns></returns>
         public override string SendWhen()
         {
-          //  throw new            Exception("222");
+
+          ///  throw new Exception("err@不符合流程发送条件。");
+
 
             if (SystemConfig.CustomerNo != "CCFlow")
                 return null;
+
 
             //相关的变量,
             // 当前的节点, 其他的变量请从 this.HisNode .
@@ -64,6 +67,9 @@ namespace BP.Demo.FlowEvent
                   //  this.JumpToNodeID = 103;
                    // this.JumpToEmps = "zhoupeng,liping";
                    // this.ND01_SaveAfter();
+                    
+                    //this.JumpToNodeID = 103;
+                    //this.JumpToEmps = "zhoupeng";
 
                     return "SendWhen事件已经执行成功。";
                 default:

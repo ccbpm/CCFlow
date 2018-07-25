@@ -69,6 +69,19 @@ namespace BP.Demo.BPFramework
         /// </summary>
         public const string ZZMM = "ZZMM";
         #endregion
+
+        /// <summary>
+        /// 片区
+        /// </summary>
+        public const string FK_PQ = "FK_PQ";
+        /// <summary>
+        /// 省份
+        /// </summary>
+        public const string FK_SF = "FK_SF";
+        /// <summary>
+        /// 城市
+        /// </summary>
+        public const string FK_City = "FK_City";
     }
     /// <summary>
     /// 学生
@@ -279,7 +292,13 @@ namespace BP.Demo.BPFramework
                 map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
                 map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
 
-                map.AddTBString(StudentAttr.Note, null, "地址", true, false, 0, 200, 100, true);
+                map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
+                map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
+                map.AddDDLEntities(StudentAttr.FK_City, null, "城市",new BP.CN.Citys(),true);
+
+                //map.AddTBString(StudentAttr.FK_SF, null, "地址", true, false, 0, 200, 100, true);
+                //map.AddTBString(StudentAttr, null, "地址", true, false, 0, 200, 100, true);
+
              //   map.AddTBString("LXR", null, "联系人", true, false, 0, 200, 100, true);
               //  map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
 
@@ -298,7 +317,7 @@ namespace BP.Demo.BPFramework
                 map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
                     "@0=少先队员@1=团员@2=党员");
 
-                map.AddHidden("XB", " = ", "0");
+               // map.AddHidden("XB", " = ", "0");
 
                 map.AddMyFile("简历");
 

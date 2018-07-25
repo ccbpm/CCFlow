@@ -24,7 +24,7 @@ namespace BP.Demo.FlowEvent
         /// </summary>
         public override string FlowMark
         {
-            get { return "189";   }
+            get { return ",189,";   }
         }
         #endregion  Ù–‘.
 

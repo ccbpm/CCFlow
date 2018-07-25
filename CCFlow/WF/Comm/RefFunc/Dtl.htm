@@ -75,8 +75,8 @@
             var url = "EnOnly.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 540, 450, "icon-edit", false, function () { }, null, function () {
-                
-                //location = location;
+
+                window.location.href = window.location.href
 
             });
         }

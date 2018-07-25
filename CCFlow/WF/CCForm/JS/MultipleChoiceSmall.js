@@ -66,7 +66,7 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
             "textField": textField,
             "multiple": true,
             "onSelect": function (p) {
-                $("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
+                $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
                 (function sel(n, KeyOfEn, FK_MapData) {
                     //保存选择的值.
                     SaveVal(FK_MapData, KeyOfEn, n);
@@ -74,7 +74,7 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
                 })(p[valueField], AttrOfOper, FK_MapData);
             },
             "onUnselect": function (p) {
-                $("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
+                $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
                 (function unsel(n, KeyOfEn) {
 
                     //删除选择的值.
@@ -84,16 +84,17 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
             }
         });
         cbx.combobox("loadData", data);
-        cbx.combobox({
-            onLoadSuccess: function (p) {
-                var frmEleDBs = getVals(mapExt.FK_MapData, AttrOfOper, pageData.WorkID);
-                for (var i = 0; i < frmEleDBs.length; i++) {
-                    var tag1 = frmEleDBs[i].Tag1;
-                    (function sel(tag1, KeyOfEn, FK_MapData) {
-                    })(p[valueField], AttrOfOper, FK_MapData);
-                }
+        if (mapAttr != null && mapAttr.UIIsEnable != 1) {
+            cbx.combobox('disable');
+        }
+        var tbVal = tb.val();
+        if (tbVal != "") {
+            var tbVals = tbVal.split(',');
+            for (var index = 0; index < tbVals.length; index++) {
+                cbx.combobox('select', tbVals[index]);
             }
-        });
+        }
+
 
     })(mapExt.AttrOfOper, data, mapExt.FK_MapData);
 }
@@ -101,7 +102,6 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
 //checkbox 模式.
 function MakeCheckBoxsModel(mapExt, data, mapAttr) {
-
     var textboxId = "TB_" + mapExt.AttrOfOper
     var textbox = $("#" + textboxId);
     textbox.css("visibility", "hidden");
@@ -192,9 +192,10 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
     }
 }
 
-function getVals(fk_mapData, eleID, keyOfEn) {
+function getVals(fk_mapData, eleID, refPKVal) {
     var groupId = "";
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", fk_mapData, "EleID", eleID, "RefPKVal", refPKVal);
     return frmEleDBs;
 
 }

@@ -515,6 +515,7 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
            // alert(e);
         }
 
+
         if (typeof fn == "function") {
             $.each(fn.call(), function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
@@ -1366,6 +1367,8 @@ function GenerWorkNode() {
             //单表单加载后执行.
             CCFormLoaded();
 
+            //装载表单数据与修改表单元素风格.
+            LoadFrmDataAndChangeEleStyle(flowData);
 
             //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
             if (node.FormType == 11) {
@@ -1378,11 +1381,7 @@ function GenerWorkNode() {
                         //alert("把表单设置为只读.");
                         SetFrmReadonly();
                         //alert('ssssssssssss');
-                    } else if (frmNode.FrmSln == 2) {
-                        /* 自定义方案。 修改字段权限*/
-                        SetFilesAuth(node.NodeID, node.FK_Flow, flowData.Sys_MapData[0].No);   //位置 CCForm/FrmEnd.js
-
-                    }
+                    } 
 
                    if (frmNode.FrmSln != 1)
                    //处理下拉框级联等扩展信息
@@ -1397,8 +1396,7 @@ function GenerWorkNode() {
 
 
 
-            //装载表单数据与修改表单元素风格.
-            LoadFrmDataAndChangeEleStyle(flowData);
+           
 
             //初始化Sys_MapData
             var h = flowData.Sys_MapData[0].FrmH;
@@ -1763,7 +1761,9 @@ function initModal(modalType, toNode) {
    + '</div>';
 
     $('body').append($(returnWorkModalHtml));
-
+    $("#returnWorkModal").on('hide.bs.modal', function () {
+        setToobarEnable();
+    });
     var modalIframeSrc = '';
     if (modalType != undefined) {
         switch (modalType) {

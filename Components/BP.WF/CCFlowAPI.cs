@@ -63,6 +63,44 @@ namespace BP.WF
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No,nd.Name);
 
+                //移除MapAttr
+                myds.Tables.Remove("Sys_MapAttr"); //移除.
+
+                 //获取表单的mapAttr
+                 //求出集合.
+                 MapAttrs mattrs = new MapAttrs(md.No);
+                 if (fk_node != null)
+                 {
+                     /*处理表单权限控制方案*/
+                     FrmNode frmNode = new FrmNode();
+                     int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, md.No, FrmNodeAttr.FK_Node, fk_node);
+                     if (count != 0 && frmNode.FrmSln != 0)
+                     {
+
+                         FrmFields fls = new FrmFields(md.No, frmNode.FK_Node);
+
+                         foreach (FrmField item in fls)
+                         {
+                             foreach (MapAttr attr in mattrs)
+                             {
+                                 if (attr.KeyOfEn != item.KeyOfEn)
+                                     continue;
+
+                                 if (item.IsSigan)
+                                     item.UIIsEnable = false;
+
+                                 attr.UIIsEnable = item.UIIsEnable;
+                                 attr.UIVisible = item.UIVisible;
+                                 attr.IsSigan = item.IsSigan;
+                                 attr.DefValReal = item.DefVal;
+                             }
+                         }
+                     }
+                 }
+
+                 DataTable Sys_MapAttr = mattrs.ToDataTableField("Sys_MapAttr");
+                 myds.Tables.Add(Sys_MapAttr);
+
                 //把流程信息表发送过去.
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = workID;

@@ -298,13 +298,20 @@
                 $("#TB_OID").attr("disabled", 'disabled');
             }
 
+            //获取
+            var refKey = GetQueryString("RefKey");
+            var refValue = GetQueryString("RefVal");
+            if (refKey && refValue) {
+                $("#TB_" + refKey).val(refValue);
+                $("#DDL_" + refKey).val(refValue);
+            }
             //如果传的参数里面有改字段，则需要给相应的字段赋值
             var queryString = document.location.search.substr(1);
             if (queryString.length > 0) {
                 var realVal = "";
                 $.each(queryString.split("&"), function (i, o) {
                     var param = o.split("=");
-                    if (param.length == 2) {
+                    if (param.length == 2 && param[0] != "RefKey" && param[0] != "RefVal") {
                         realVal = decodeURI(param[1]);
                         $('#TB_' + param[0]).val(realVal);
                         $('#DDL_' + param[0]).val(realVal);

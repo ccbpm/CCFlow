@@ -339,89 +339,100 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
                 map.SetHelperUrl(FlowAttr.TitleRole, "http://ccbpm.mydoc.io/?v=5404&t=17040");
 
-                //add  2013-08-30.
-                map.AddTBString(FlowAttr.BillNoFormat, null, "单据编号格式", true, false, 0, 50, 10, false);
-                map.SetHelperUrl(FlowAttr.BillNoFormat, "http://ccbpm.mydoc.io/?v=5404&t=17041");
-
-                // add 2014-10-19.
-                map.AddDDLSysEnum(FlowAttr.ChartType, (int)FlowChartType.Icon, "节点图形类型", true, true,
-                    "ChartType", "@0=几何图形@1=肖像图片");
 
                 map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");
 
-                map.AddBoolean(FlowAttr.IsStartInMobile, true, "是否可以在手机里启用？(如果发起表单特别复杂就不要在手机里启用了)", true, true, true);
-                map.SetHelperAlert(FlowAttr.IsStartInMobile, "用于控制手机端流程发起列表.");
-
-                map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据加密流程(MD5数据加密防篡改)", true, true, true);
-                map.SetHelperUrl(FlowAttr.IsMD5, "http://ccbpm.mydoc.io/?v=5404&t=17028");
                 map.AddBoolean(FlowAttr.IsFullSA, false, "是否自动计算未来的处理人？", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsFullSA, "http://ccbpm.mydoc.io/?v=5404&t=17034");
 
                 map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "为子流程时结束规则", true, true,
-                    FlowAttr.IsAutoSendSubFlowOver,"@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
+                    FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
                 map.AddBoolean(FlowAttr.IsGuestFlow, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
                 map.SetHelperUrl(FlowAttr.IsGuestFlow, "http://ccbpm.mydoc.io/?v=5404&t=17039");
 
-                //批量发起 add 2013-12-27. 
-                map.AddBoolean(FlowAttr.IsBatchStart, false, "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)", true, true, true);
-                map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 500, 10, true);
-                map.SetHelperUrl(FlowAttr.IsBatchStart, "http://ccbpm.mydoc.io/?v=5404&t=17047");
                 map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",
                   true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 map.SetHelperUrl(FlowAttr.FlowAppType, "http://ccbpm.mydoc.io/?v=5404&t=17035");
                 map.AddDDLSysEnum(FlowAttr.TimelineRole, (int)TimelineRole.ByNodeSet, "时效性规则",
                  true, true, FlowAttr.TimelineRole, "@0=按节点(由节点属性来定义)@1=按发起人(开始节点SysSDTOfFlow字段计算)");
                 map.SetHelperUrl(FlowAttr.TimelineRole, "http://ccbpm.mydoc.io/?v=5404&t=17036");
+
                 // 草稿
                 map.AddDDLSysEnum(FlowAttr.Draft, (int)DraftRole.None, "草稿规则",
                true, true, FlowAttr.Draft, "@0=无(不设草稿)@1=保存到待办@2=保存到草稿箱");
                 map.SetHelperUrl(FlowAttr.Draft, "http://ccbpm.mydoc.io/?v=5404&t=17037");
-
-                // 数据存储.
-                map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow,
-                    "数据存储", true, true, FlowAttr.DataStoreModel,
-                   "@0=数据轨迹模式@1=数据合并模式");
-                map.SetHelperUrl(FlowAttr.DataStoreModel, "http://ccbpm.mydoc.io/?v=5404&t=17038");
-
-
-                map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
-                map.SetHelperUrl(FlowAttr.PTable, "http://ccbpm.mydoc.io/?v=5404&t=17897");
 
                 // add for 华夏银行.
                 map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",
             true, true, FlowAttr.FlowDeleteRole,
             "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
 
-                //add 2013-05-22.
-                map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
-                //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");
-                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注的表达式", true, false, 0, 500, 10, true);
-                map.SetHelperUrl(FlowAttr.FlowNoteExp, "http://ccbpm.mydoc.io/?v=5404&t=17043");
-                map.AddTBString(FlowAttr.Note, null, "流程描述", true, false, 0, 100, 10, true);
 
                 map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
-
                 map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 300, 10, true);
+
+
+                //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
+                map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);
+                map.AddTBString(FlowAttr.Tester, null, "发起测试人", true, false, 0, 300, 10, true);
+
+                String sql = "SELECT No,Name FROM Sys_EnumMain WHERE No LIKE 'Flow_%' ";
+                map.AddDDLSQL("NodeAppType", null, "业务类型枚举(可为Null)", sql, true);
+
+                // add 2014-10-19.
+                map.AddDDLSysEnum(FlowAttr.ChartType, (int)FlowChartType.Icon, "节点图形类型", true, true,
+                    "ChartType", "@0=几何图形@1=肖像图片");
+
+                #endregion 基本属性。
+
+
+                #region 表单数据.
+
+                //批量发起 add 2013-12-27. 
+                map.AddBoolean(FlowAttr.IsBatchStart, false, "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)", true, true, true);
+                map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 500, 10, true);
+                map.SetHelperUrl(FlowAttr.IsBatchStart, "http://ccbpm.mydoc.io/?v=5404&t=17047");
+
+                //add 2013-05-22.
+                map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
 
                 //移动到这里 by zhoupeng 2016.04.08.
                 map.AddBoolean(FlowAttr.IsResetData, false, "是否启用开始节点数据重置按钮？", true, true, true);
                 map.AddBoolean(FlowAttr.IsLoadPriData, false, "是否自动装载上一笔数据？", true, true, true);
                 map.AddBoolean(FlowAttr.IsDBTemplate, true, "是否启用数据模版？", true, true, true);
+                map.AddBoolean(FlowAttr.IsStartInMobile, true, "是否可以在手机里启用？(如果发起表单特别复杂就不要在手机里启用了)", true, true, true);
+                map.SetHelperAlert(FlowAttr.IsStartInMobile, "用于控制手机端流程发起列表.");
 
-                //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
-                map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);
-                map.AddTBString(FlowAttr.Tester, null, "设置流程发起测试人", true, false, 0, 300, 10, true);
+                map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据加密流程(MD5数据加密防篡改)", true, true, true);
+                map.SetHelperUrl(FlowAttr.IsMD5, "http://ccbpm.mydoc.io/?v=5404&t=17028");
 
-                String sql = "SELECT No,Name FROM Sys_EnumMain WHERE No LIKE 'Flow_%' ";
-                map.AddDDLSQL("NodeAppType", null, "业务类型枚举", sql, true);
+                // 数据存储.
+                map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow, "数据存储", true, true, FlowAttr.DataStoreModel, "@0=数据轨迹模式@1=数据合并模式");
+                map.SetHelperUrl(FlowAttr.DataStoreModel, "http://ccbpm.mydoc.io/?v=5404&t=17038");
 
+                map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
+                map.SetHelperUrl(FlowAttr.PTable, "http://ccbpm.mydoc.io/?v=5404&t=17897");
+
+
+                //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");
+                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注的表达式", true, false, 0, 500, 10, true);
+                map.SetHelperUrl(FlowAttr.FlowNoteExp, "http://ccbpm.mydoc.io/?v=5404&t=17043");
+
+                //add  2013-08-30.
+                map.AddTBString(FlowAttr.BillNoFormat, null, "单据编号格式", true, false, 0, 50, 10, false);
+                map.SetHelperUrl(FlowAttr.BillNoFormat, "http://ccbpm.mydoc.io/?v=5404&t=17041");
+                #endregion 表单数据.
+
+                #region 开发者信息.
                 //map.AddTBString("NodeAppType", null, "业务类型枚举", true, false, 0, 50, 10, true);
                 map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, false, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, false, 0, 50, 10, false);
+                map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
+                #endregion 开发者信息.
 
-                #endregion 基本属性。
+
 
                 //查询条件.
                 map.AddSearchAttr(FlowAttr.FK_FlowSort);
@@ -485,7 +496,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "修改ICON"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoNodesICON";
-              //  rm.Icon = "../../WF/Img/Event.png";
+                //  rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -495,10 +506,10 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.ClassMethodName = this.ToString() + ".DoVer()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-               // rm.GroupName = "实验中的功能";
+                // rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
-              
+
 
                 //rm = new RefMethod();
                 //rm.Title = "与业务表数据同步"; // "抄送规则";
@@ -670,7 +681,7 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
-             //   rm.Icon = "../../WF/Img/Btn/Delete.gif";
+                //   rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Title = "按工作ID强制结束"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
                 rm.GroupName = "流程维护";
                 rm.ClassMethodName = this.ToString() + ".DoStopFlow";
@@ -699,7 +710,7 @@ namespace BP.WF.Template
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //rm.GroupName = "流程监控";
                 //map.AddRefMethod(rm);
-             
+
                 rm = new RefMethod();
                 rm.Title = "综合查询";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";

@@ -52,7 +52,11 @@
             var isReadonly = GetQueryString("isReadonly");
             httpHandler.AddPara("EnName", enName);
 
-            url = "../RefFunc/EnOnly.htm?EnName=" + enName + "&type=" + type + "&PKVal=" + pkVal + "&FromName=En" + "&isTree=" +isTree+ "&isReadonly="+isReadonly;
+            //获取URL的参数问题
+            var param = document.location.search.substr(1);
+
+
+            url = "../RefFunc/EnOnly.htm?" + param;
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);
             }

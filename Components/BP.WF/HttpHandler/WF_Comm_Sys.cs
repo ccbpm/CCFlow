@@ -24,6 +24,87 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Comm_Sys : DirectoryPageBase
     {
+
+        public string ImpData_Init()
+        {
+            return "";
+        }
+        /// <summary>
+        /// 执行导入
+        /// </summary>
+        /// <returns></returns>
+        public string ImpData_Done()
+        {
+
+            string errInfo="";
+
+            //从excel里面获得数据表.
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable("xxxx.excel", 0);
+            if (dt.Rows.Count==0)
+                return "err@无导入的数据";
+
+            //获得entity.
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en =ens.GetNewEntity;
+            if (en.IsNoEntity==false)
+                return "err@必须是EntityNo是实体";
+
+            string noColName = ""; //实体列的编号名称.
+            string nameColName = ""; //实体列的名字名称.
+
+            Attr attr=en.EnMap.GetAttrByKey("No");
+            noColName = attr.Desc; //
+
+            attr=en.EnMap.GetAttrByKey("Name");
+            nameColName = attr.Desc; //
+
+            //定义属性.
+            Attrs attrs = en.EnMap.Attrs;
+            int impWay=0;
+
+            #region 清空方式导入.
+            //清空方式导入.
+            if (impWay==0)
+            {
+                ens.ClearTable();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string no = dr[noColName].ToString();
+                    string name = dr[nameColName].ToString();
+
+                    EntityNoName myen = ens.GetNewEntity as EntityNoName;
+                    myen.No = no;
+                    if (myen.IsExits==true)
+                    {
+                        errInfo += "err@编号["+no+"]["+name+"]重复.";
+                        continue;
+                    }
+                    myen.Name = name;
+
+                    foreach (Attr  item in attrs)
+                    {
+                        if (item.Key == "No" || item.Key == "Name")
+                            continue;
+
+                        if (dt.Columns.Contains(item.Desc) == false)
+                            continue;
+
+                        string val = dr[item.Desc].ToString();
+
+                        en.SetValByKey(item.Key, val);
+                    }
+                    en.Insert(); //执行插入.
+                }
+            }
+
+
+            if (errInfo != "")
+                return errInfo;
+            #endregion 清空方式导入.
+
+            return "导入成功.";
+        }
+
         /// <summary>
         /// 页面功能实体
         /// </summary>

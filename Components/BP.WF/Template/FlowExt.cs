@@ -432,8 +432,6 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
                 #endregion 开发者信息.
 
-
-
                 //查询条件.
                 map.AddSearchAttr(FlowAttr.FK_FlowSort);
                 map.AddSearchAttr(FlowAttr.TimelineRole);
@@ -527,7 +525,6 @@ namespace BP.WF.Template
                 //map.AddRefMethod(rm);
 
                 #endregion 流程设置.
-
 
                 #region 流程模版管理.
                 rm = new RefMethod();
@@ -645,6 +642,20 @@ namespace BP.WF.Template
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
+
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.GroupName = "流程维护";
+                rm.Title = "删除指定日期范围内的流程";
+                rm.Warning = "您确定要删除吗？";
+                rm.Icon = "../../WF/Img/Btn/Delete.gif";
+                rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, true);
+                rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, true);
+                rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
+                rm.ClassMethodName = this.ToString() + ".DoDelFlows";
+                map.AddRefMethod(rm);
+
+
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Title = "按工作ID删除"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
@@ -667,17 +678,6 @@ namespace BP.WF.Template
 
 
 
-                //带有参数的方法.
-                rm = new RefMethod();
-                rm.GroupName = "流程维护";
-                rm.Title = "删除指定日期范围内的流程";
-                rm.Warning = "您确定要删除吗？";
-                rm.Icon = "../../WF/Img/Btn/Delete.gif";
-                rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, false);
-                rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, false);
-                rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
-                rm.ClassMethodName = this.ToString() + ".DoDelFlows";
-                map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();

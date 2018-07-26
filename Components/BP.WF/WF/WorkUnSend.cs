@@ -771,7 +771,7 @@ namespace BP.WF
             // 记录日志..
             WorkNode wn = new WorkNode(wk, nd);
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, "");
- 
+
             //删除上一个节点的数据。
             foreach (Node ndNext in nd.HisToNodes)
             {
@@ -803,36 +803,8 @@ namespace BP.WF
             Work cWork = cNode.HisWork;
             cWork.OID = this.WorkID;
             msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wk, null);
-            if (cNode.IsStartNode)
-            {
-                if (BP.Web.WebUser.IsWap)
-                {
-                    return "@撤消执行成功." + msg;
-                }
-                else
-                {
-                    if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功." + msg;
-                    else
-                        return "@撤消执行成功." + msg;
-                }
-            }
-            else
-            {
-                // 更新是否显示。
-                // DBAccess.RunSQL("UPDATE WF_ForwardWork SET IsRead=1 WHERE WORKID=" + this.WorkID + " AND FK_Node=" + cNode.NodeID);
-                if (BP.Web.WebUser.IsWap == false)
-                {
-                    if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功." + msg;
-                    else
-                        return "@撤消执行成功." + msg;
-                }
-                else
-                {
-                    return "@撤消执行成功." + msg;
-                }
-            }
+
+            return "@撤消执行成功." + msg;
         }
         /// <summary>
         /// 分合流的撤销发送.
@@ -1068,36 +1040,11 @@ namespace BP.WF
             // 记录日志..
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, "无");
 
-            if (wnPri.HisNode.IsStartNode)
-            {
-                if (BP.Web.WebUser.IsWap)
-                {
-                    return "@撤消执行成功." + msg;
-                }
-                else
-                {
-                    if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功." + msg;
-                    else
-                        return "@撤消执行成功." + msg;
-                }
-            }
-            else
-            {
-                // 更新是否显示。
-                //  DBAccess.RunSQL("UPDATE WF_ForwardWork SET IsRead=1 WHERE WORKID=" + this.WorkID + " AND FK_Node=" + wnPri.HisNode.NodeID);
-                if (BP.Web.WebUser.IsWap == false)
-                {
-                    if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功." + msg;
-                    else
-                        return "@撤消执行成功." + msg;
-                }
-                else
-                {
-                    return "@撤消执行成功." + msg;
-                }
-            }
+
+
+            return "@撤消执行成功." + msg;
+
+
         }
     }
 }

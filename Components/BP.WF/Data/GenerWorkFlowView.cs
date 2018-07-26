@@ -809,7 +809,7 @@ namespace BP.WF.Data
                 rm.Title = "修复该流程数据实例";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".RepairDataIt";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
 
@@ -820,7 +820,6 @@ namespace BP.WF.Data
                  
                 rm.ClassMethodName = this.ToString() + ".DoTest";
                 map.AddRefMethod(rm);
-
 
                 this._enMap = map;
                 return this._enMap;

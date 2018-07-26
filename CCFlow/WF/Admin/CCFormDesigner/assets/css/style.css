@@ -49,17 +49,31 @@ body{
 
 .actions{
     /*padding-left: 122px;*/
-    height: 36px;
-    background-image: url('../images/logo_background.png');
+    height: 28px;
+    /*background-image: url('../images/logo_background.jpg');
     background-repeat:repeat-x;
-    background-position: top left;
+    background-position: top left;*/
     /*border: 1px solid #E5E5E5;*/
     /*background-color: #F6F6F6;*/
     /*padding-top: 5px;*/
     /*overflow: hidden;*/
+    background-color:#E0ECFF;
+    background-image: -moz-linear-gradient(top, #E0ECFF, #a2c2f5);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#E0ECFF), to(#a2c2f5));
+      background-image: -webkit-linear-gradient(top, #E0ECFF, #a2c2f5);
+      background-image: -o-linear-gradient(top, #E0ECFF, #a2c2f5);
+      background-image: linear-gradient(to bottom, #E0ECFF, #a2c2f5);
+      background-repeat: repeat-x;
+      border-color: #252525;
+      filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe0ecff', endColorstr='#a2c2f5', GradientType=0)
+      border: 1px #d7edff solid; 
+      border-radius: 5px; 
+
+
     padding: 6px 4px 6px 10px;
     z-index: 2;
 }
+
 
 #editor{
     position: fixed;
@@ -506,7 +520,7 @@ body{
     vertical-align:middle;
     height:25px;
     width:142px;
-    background: #eae9e9;
+    background: #d9e3f1;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
@@ -537,7 +551,7 @@ body{
 }
 .navlist li div
 {
-    border:1px dashed #F6F6F6;
+    border:1px dashed #e0ecff;
     background-repeat:no-repeat !important;
     background-position:left;
     /*background-size:136px 26px; */

@@ -793,14 +793,22 @@
         function New() {
             var enName = GetQueryString("EnName");
             var fromName = GetQueryString("FromName");
-            var url = window.location.href;
-            url = url.substring(0, url.indexOf("?") + 1);
+            //获取选中的tab选项卡
+            var index = 0;
+            if ($('#tabDiv').length == 1) {
 
-            if (fromName == "")
-                url += "EnName=" + GetQueryString("EnName") + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal") + "&t=" + Math.random();
-            else url += "EnName=" + GetQueryString("EnName") + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal") + "&t=" + Math.random();
-            
+                var tab = $('#tabDiv').tabs('getSelected');
+                index = $('#tabDiv').tabs('getTabIndex', tab);
+            }
+
+            url = window.location.href;
+            url = url.replace("#", "");
+            url = replaceParamVal(url, "tabIndex", index);
+            url = replaceParamVal(url, "PKVal", "");
             window.location.href = url; //刷新.
+
+            var url = window.location.href;
+           
         }
 
         function Save() {
@@ -850,9 +858,14 @@
                 }
 
 
-                url += "?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
-               
-                window.location.href = url+"&tabIndex="+index; //刷新.
+                //url += "?EnName=" + GetQueryString("EnName") + "&=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
+
+                //window.location.href = url+"&tabIndex="+index; //刷新.
+                url = window.location.href;
+                url = url.replace("#", "");
+                url = replaceParamVal(url, "PKVal", en.GetPKVal());
+                url = replaceParamVal(url, "tabIndex", index);
+                window.location.href = url; //刷新.
                 return;
             }
 
@@ -869,10 +882,10 @@
                 alert('更新错误:' + info);
                 return;
             }
-
             url = window.location.href;
             url = url.replace("#", "");
-             window.location.href = url + "&tabIndex=" + index; //刷新.
+            url = replaceParamVal(url, "tabIndex", index);
+            window.location.href = url; ; //刷新.
         }
 
         //文件上传

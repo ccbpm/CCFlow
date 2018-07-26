@@ -36,10 +36,31 @@ namespace BP.WF.HttpHandler
         public string ImpData_Done()
         {
 
+            HttpFileCollection files = context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要导入的数据信息。";
+
             string errInfo="";
 
+            string ext = ".xls";
+            string fileName = System.IO.Path.GetFileName(files[0].FileName);
+            if (fileName.Contains(".xlsx"))
+                ext = ".xlsx";
+
+
+            //设置文件名
+            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
+
+            //文件存放路径
+            string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
+            files[0].SaveAs(filePath);
+
             //从excel里面获得数据表.
-            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable("xxxx.excel", 0);
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath);
+
+            //删除临时文件
+            System.IO.File.Delete(filePath);
+
             if (dt.Rows.Count==0)
                 return "err@无导入的数据";
 
@@ -60,7 +81,8 @@ namespace BP.WF.HttpHandler
 
             //定义属性.
             Attrs attrs = en.EnMap.Attrs;
-            int impWay=0;
+
+            int impWay = this.GetRequestValInt("ImpWay");
 
             #region 清空方式导入.
             //清空方式导入.
@@ -79,84 +101,129 @@ namespace BP.WF.HttpHandler
                         errInfo += "err@编号["+no+"]["+name+"]重复.";
                         continue;
                     }
+                   
                     myen.Name = name;
 
-                    //按照属性赋值.
-                    foreach (Attr item in attrs)
-                    {
-                        if (item.Key == "No" || item.Key == "Name")
-                            continue;
+                     en = ens.GetNewEntity;
 
-                        if (dt.Columns.Contains(item.Desc) == false)
-                            continue;
-
-                        //枚举处理.
-                        if (item.MyFieldType == FieldType.Enum)
-                        {
-                            string val = dr[item.Desc].ToString();
-
-                            SysEnum se = new SysEnum();
-                            int i= se.Retrieve(SysEnumAttr.EnumKey, attr.UIBindKey, SysEnumAttr.Lab, val);
-
-                            if (i == 0)
-                            {
-                                errInfo += "err@枚举[" + item.Key + "][" + attr.Desc + "]，值[" + val + "]不存在.";
-                                continue;
-                            }
-
-                            en.SetValByKey(item.Key, se.IntKey);
-                            continue;
-                        }
-
-                        //外键处理.
-                        if (item.MyFieldType == FieldType.FK)
-                        {
-                            string val = dr[item.Desc].ToString();
-                            Entity attrEn = item.HisFKEn;
-                            int i= attrEn.Retrieve("Name", val);
-                            if (i == 0)
-                            {
-                                errInfo += "err@外键["+item.Key+"]["+attr.Desc+"]，值["+val+"]不存在.";
-                                continue;
-                            }
-
-                            if (i != 1)
-                            {
-                                errInfo += "err@外键[" + item.Key + "][" + attr.Desc + "]，值[" + val + "]重复..";
-                                continue;
-                            }
-
-                            //把编号值给他.
-                            en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
-                            continue;
-                        }
-
-                        //boolen类型的处理..
-                        if (item.MyDataType == DataType.AppBoolean)
-                        {
-                            string val = dr[item.Desc].ToString();
-                            if (val == "是" || val == "有")
-                                en.SetValByKey(item.Key, 1);
-                            else
-                                en.SetValByKey(item.Key, 0);
-                            continue;
-                        }
-
-                        string myval = dr[item.Desc].ToString();
-                        en.SetValByKey(item.Key, myval);
-                    }
-
-                    en.Insert(); //执行插入.
+                    //给实体赋值
+                    errInfo += SetEntityAttrVal(dr, attrs, en, dt,0);
                 }
             }
 
+            #endregion 清空方式导入.
+
+
+            #region 更新方式导入
+            if (impWay == 1 || impWay == 2)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string no = dr[noColName].ToString();
+                    string name = dr[nameColName].ToString();
+
+                    EntityNoName myen = ens.GetNewEntity as EntityNoName;
+                    myen.No = no;
+                    if (myen.IsExits == true)
+                    {
+                        //给实体赋值
+                        errInfo += SetEntityAttrVal(dr, attrs, en, dt,1);
+                        continue;
+                    }
+                    myen.Name = name;
+
+                    //给实体赋值
+                    errInfo += SetEntityAttrVal(dr, attrs, en, dt,0);
+                }
+            }
+            #endregion
 
             if (errInfo != "")
                 return errInfo;
 
-            #endregion 清空方式导入.
-
             return "导入成功.";
+        }
+
+        private string SetEntityAttrVal(DataRow dr, Attrs attrs, Entity en, DataTable dt, int saveType)
+        {
+            string errInfo = "";
+            //按照属性赋值.
+            foreach (Attr item in attrs)
+            {
+                if (item.Key == "No" )
+                {
+                    en.SetValByKey(item.Key, dr[item.Desc].ToString());
+                    continue;
+                }
+                if(item.Key == "Name"){
+                    en.SetValByKey(item.Key, dr[item.Desc].ToString());
+                    continue;
+                }
+                    
+
+                if (dt.Columns.Contains(item.Desc) == false)
+                    continue;
+
+                //枚举处理.
+                if (item.MyFieldType == FieldType.Enum)
+                {
+                    string val = dr[item.Desc].ToString();
+
+                    SysEnum se = new SysEnum();
+                    int i = se.Retrieve(SysEnumAttr.EnumKey, item.UIBindKey, SysEnumAttr.Lab, val);
+
+                    if (i == 0)
+                    {
+                        errInfo += "err@枚举[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                        continue;
+                    }
+
+                    en.SetValByKey(item.Key, se.IntKey);
+                    continue;
+                }
+
+                //外键处理.
+                if (item.MyFieldType == FieldType.FK)
+                {
+                    string val = dr[item.Desc].ToString();
+                    Entity attrEn = item.HisFKEn;
+                    int i = attrEn.Retrieve("Name", val);
+                    if (i == 0)
+                    {
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                        continue;
+                    }
+
+                    if (i != 1)
+                    {
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]重复..";
+                        continue;
+                    }
+
+                    //把编号值给他.
+                    en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
+                    continue;
+                }
+
+                //boolen类型的处理..
+                if (item.MyDataType == DataType.AppBoolean)
+                {
+                    string val = dr[item.Desc].ToString();
+                    if (val == "是" || val == "有")
+                        en.SetValByKey(item.Key, 1);
+                    else
+                        en.SetValByKey(item.Key, 0);
+                    continue;
+                }
+
+                string myval = dr[item.Desc].ToString();
+                en.SetValByKey(item.Key, myval);
+            }
+            if (saveType == 0)
+                en.Insert(); //执行插入.
+            else
+                en.Update();
+            return errInfo;
         }
 
         /// <summary>

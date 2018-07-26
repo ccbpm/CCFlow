@@ -15,6 +15,9 @@
         //页面启动函数.
         $(function () {
 
+            alert('该功能尚未重置完成.');
+            return;
+
             //初始化groupID.
             var flowNo = GetQueryString("FK_Flow");
             var nodeID = GetQueryString("FK_Node");
@@ -25,11 +28,12 @@
                 url = url.replace('.htm', '.aspx');
                 window.location.href = url;
                 return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
             }
+
+            url = url.replace('.htm', '.jsp');
+            window.location.href = url;
+            return;
+
         });
     </script>
 </head>

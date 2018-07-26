@@ -10,7 +10,6 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
      <base target="_self" /> 
-    
     <script language="javascript" type="text/javascript" >
         /* ESC Key Down */
         function Esc() {
@@ -177,7 +176,7 @@
                 <fieldset>
                     <legend>
 
-<input id="RB_StartGuideWay_5" type="radio" name="RB_StartGuideWay" value="5"  /><label for="RB_StartGuideWay_5">从开始节点Copy数据(查询历史记录)</label>
+<input id="RB_StartGuideWay_5" type="radio" name="RB_StartGuideWay" value="5"  /><label for="RB_StartGuideWay_5">从历史发起的流程Copy数据(查询历史记录)</label>
                     </legend>
                       
                     <a href="javascript:ShowHidden('ByHistoryUrl')">请设置SQL</a>: 
@@ -185,7 +184,7 @@
                     <ul>
                     <li>用户希望出现一个历史发起的流程列表，选择一条流程并把该流程的数据copy到新建的流程上。</li>
                     <li>您需要在这里配置一个SQL, 并且该SQL必须有一个OID列。</li>
-                    <li>比如：SELECT  Title ,OID FROM ND1001 WHERE No LIKE '%@key%' OR Name LIKE '%@key%'</li>
+                    <li>比如：SELECT  Title ,OID FROM WF_GenerWorkFlow WHERE Title LIKE '%@Key%' AND FK_Flow='001' AND WFState=3 </li>
                     </ul>
                     </div>
 
@@ -371,11 +370,11 @@
      <!--   <td>
         </td>-->
             <td>
+                <input type="button"   id="Btn_Save" runat="server" value="保存" onclick="SaveEn()" />
                 <input type="button"   id="Button1" runat="server" value="我需要帮助" onclick="Help()" />
 
-                <input type="button"   id="Btn_Save" runat="server" value="保存" onclick="SaveEn()" />
-
                 | <span id="dtsbt"><a href="../TestFlow.htm?FK_Flow=flowNo&SID=userId&Lang=CH" target="_blank" >运行测试</a></span>
+
             </td>
         </tr>
     </table>

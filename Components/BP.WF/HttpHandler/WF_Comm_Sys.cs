@@ -81,7 +81,8 @@ namespace BP.WF.HttpHandler
                     }
                     myen.Name = name;
 
-                    foreach (Attr  item in attrs)
+                    //按照属性赋值.
+                    foreach (Attr item in attrs)
                     {
                         if (item.Key == "No" || item.Key == "Name")
                             continue;
@@ -89,10 +90,62 @@ namespace BP.WF.HttpHandler
                         if (dt.Columns.Contains(item.Desc) == false)
                             continue;
 
-                        string val = dr[item.Desc].ToString();
+                        //枚举处理.
+                        if (item.MyFieldType == FieldType.Enum)
+                        {
+                            string val = dr[item.Desc].ToString();
 
-                        en.SetValByKey(item.Key, val);
+                            SysEnum se = new SysEnum();
+                            int i= se.Retrieve(SysEnumAttr.EnumKey, attr.UIBindKey, SysEnumAttr.Lab, val);
+
+                            if (i == 0)
+                            {
+                                errInfo += "err@枚举[" + item.Key + "][" + attr.Desc + "]，值[" + val + "]不存在.";
+                                continue;
+                            }
+
+                            en.SetValByKey(item.Key, se.IntKey);
+                            continue;
+                        }
+
+                        //外键处理.
+                        if (item.MyFieldType == FieldType.FK)
+                        {
+                            string val = dr[item.Desc].ToString();
+                            Entity attrEn = item.HisFKEn;
+                            int i= attrEn.Retrieve("Name", val);
+                            if (i == 0)
+                            {
+                                errInfo += "err@外键["+item.Key+"]["+attr.Desc+"]，值["+val+"]不存在.";
+                                continue;
+                            }
+
+                            if (i != 1)
+                            {
+                                errInfo += "err@外键[" + item.Key + "][" + attr.Desc + "]，值[" + val + "]重复..";
+                                continue;
+                            }
+
+                            //把编号值给他.
+                            en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
+                            continue;
+                        }
+
+                        //boolen类型的处理..
+                        if (item.MyDataType == DataType.AppBoolean)
+                        {
+                            string val = dr[item.Desc].ToString();
+                            if (val == "是" || val == "有")
+                                en.SetValByKey(item.Key, 1);
+                            else
+                                en.SetValByKey(item.Key, 0);
+                            continue;
+                        }
+
+                        string myval = dr[item.Desc].ToString();
+                        en.SetValByKey(item.Key, myval);
                     }
+
                     en.Insert(); //执行插入.
                 }
             }
@@ -100,6 +153,7 @@ namespace BP.WF.HttpHandler
 
             if (errInfo != "")
                 return errInfo;
+
             #endregion 清空方式导入.
 
             return "导入成功.";

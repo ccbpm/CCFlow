@@ -1044,19 +1044,6 @@ namespace BP.WF.Data
 	/// </summary>
 	public class GenerWorkFlowViews : Entities
 	{
-		/// <summary>
-		/// 根据工作流程,工作人员 ID 查询出来他当前的能做的工作.
-		/// </summary>
-		/// <param name="flowNo">流程编号</param>
-		/// <param name="empId">工作人员ID</param>
-		/// <returns></returns>
-		public static DataTable QuByFlowAndEmp(string flowNo, int empId)
-		{
-			string sql="SELECT a.WorkID FROM WF_GenerWorkFlowView a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='"+empId.ToString()+"' AND a.FK_Flow='"+flowNo+"'";
-			return DBAccess.RunSQLReturnTable(sql);
-		}
-
-
 		#region 方法
 		/// <summary>
 		/// 得到它的 Entity 

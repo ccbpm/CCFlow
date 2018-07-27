@@ -187,7 +187,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -199,7 +199,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select id='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "'  name='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外部数据类型.
@@ -211,7 +211,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select id='DDL_"+pkval+"_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //添加文本框 ，日期控件等
@@ -225,13 +225,13 @@
                 {
                     var enableAttr = '';
                     if (mapAttr.UIIsEnable == 0)
-                        enableAttr = "disabled='disabled'"; 
+                        enableAttr = "disabled='disabled'";
 
-                    return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:23px;' type='text'  " + enableAttr + " />";
+                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:23px;' type='text'  " + enableAttr + " />";
                 }
 
                 //普通的大块文本.
-                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:"+mapAtt.UIWidth+"px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+                return "<textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:" + mapAtt.UIWidth + "px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
             }
 
             //日期类型.
@@ -242,7 +242,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input " + enableAttr + " value='" + defValue + "' style='width:80px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text' />";
+                return "<input class='form-control' " + enableAttr + " value='" + defValue + "' style='width:80px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text' />";
             }
 
             //时期时间类型.
@@ -254,7 +254,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input  type='text' value='" + defValue + "' style='width:120px;' " + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' />";
+                return "<input class='form-control'  type='text' value='" + defValue + "' style='width:120px;' " + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' />";
             }
 
             // boolen 类型.
@@ -273,7 +273,7 @@
 
                 checkedStr = "";
 
-                return "<input " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_"+pkval+"_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_"+pkval+"_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+                return "<input class='form-control' " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
 
             //枚举类型.
@@ -283,7 +283,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             // AppDouble  AppFloat
@@ -294,7 +294,7 @@
                     enableAttr = "disabled='disabled'";
 
                 // alert(mapAttr.KeyOfEn);
-                return "<input style='text-align:right;width:80px;' value='" + defValue + "'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+                return "<input class='form-control' style='text-align:right;width:80px;' value='" + defValue + "'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
             }
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -302,7 +302,7 @@
                 if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn=="NodeID" ) {
                     enableAttr = "disabled='disabled'";
                 }
-                return "<input style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+                return "<input class='form-control' style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
             }
 
             //AppMoney  AppRate
@@ -313,7 +313,7 @@
                 } else {
                     enableAttr = "disabled='disabled'";
                 }
-                return "<input style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+                return "<input class='form-control' style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
             }
 
             alert(mapAttr.Name + "的类型没有判断.");

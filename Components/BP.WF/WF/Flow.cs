@@ -2294,7 +2294,6 @@ namespace BP.WF
                 msg += "@检查质量考核点完成.";
                 #endregion
 
-
                 #region 检查如果是合流节点必须不能是由上一个节点指定接受人员。 @dudongliang 需要翻译.
                 foreach (Node nd in nds)
                 {
@@ -2328,6 +2327,10 @@ namespace BP.WF
 
                 //一直没有找到设置3列，自动回到四列的情况.
                 DBAccess.RunSQL("UPDATE Sys_MapAttr SET ColSpan=3 WHERE  UIHeight<=23 AND ColSpan=4");
+
+
+                //创建track.
+                Track.CreateOrRepairTrackTable(this.No);
 
                 //生成 V001 视图. del by stone 2016.03.27.
                 // CheckRptViewDel(nds);
@@ -2534,7 +2537,7 @@ namespace BP.WF
                         }
                     }
 
-                    if (!DataType.IsNullOrEmpty(xmlName))
+                    if (DataType.IsNullOrEmpty(xmlName)==false)
                     {
                         ds.WriteXml(xmlName);
                         isXmlLocked = false;
@@ -2547,18 +2550,6 @@ namespace BP.WF
                 BP.DA.Log.DefaultLogWriteLineError("流程模板文件备份错误:" + e.Message);
             }
         }
-
-        private string GenerBPMN2()
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append("");
-
-            sb.Append("");
-
-            return sb.ToString();
-        }
-
         public DataSet GetFlow(string path)
         {
             // 把所有的数据都存储在这里。
@@ -2627,8 +2618,7 @@ namespace BP.WF
             NodeReturns nrs = new NodeReturns();
             nrs.RetrieveInSQL(NodeReturnAttr.FK_Node, sqlin);
             ds.Tables.Add(nrs.ToDataTableField("WF_NodeReturn"));
-
-             
+           
 
             // 工具栏。
             NodeToolbars tools = new NodeToolbars();
@@ -2791,8 +2781,6 @@ namespace BP.WF
             ds.Tables.Add(frmevens.ToDataTableField("Sys_FrmEvent"));
             return ds;
         }
-
-
         public DataSet GetFlow2017(string path)
         {
             // 把所有的数据都存储在这里。
@@ -3255,11 +3243,9 @@ namespace BP.WF
                 ndsstrs += "'ND" + nd.NodeID + "',";
             }
             ndsstrs = ndsstrs.Substring(0, ndsstrs.Length - 1);
-
              
             #region 插入字段。
             string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
-
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT A.* FROM (" + sql + ") AS A ";

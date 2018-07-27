@@ -558,7 +558,6 @@ namespace BP.WF
                 throw new Exception("@日志数据丢失.." + sql);
             this.Row.LoadDataTable(dt, dt.Rows[0]);
         }
-
         /// <summary>
         /// 创建track.
         /// </summary>

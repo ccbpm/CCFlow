@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20130614;
+        public static int Ver = 20180615;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -172,9 +172,9 @@ namespace BP.WF
             try
             {
                 #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
-                if (DBAccess.IsExitsObject("Port_Inc") == true)
+                if (DBAccess.IsExitsObject("Port_Inc") == false)
                 {
-                    sql = "CREATE VIEW Port_Inc AS SELECT No,Name FROM Port_Dept WHERE (NAME LIKNE '%南方%' or NAME LIKNE '%北方%' ) ";
+                    sql = "CREATE VIEW Port_Inc AS SELECT * FROM Port_Dept WHERE (No='100' OR No='1060' OR No='1070') ";
                     DBAccess.RunSQL(sql);
                 }
                 #endregion 创建缺少的视图 Port_Inc.

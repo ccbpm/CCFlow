@@ -17,7 +17,7 @@ using BP.WF.Template;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
-    /// 页面功能实体
+    /// 页面功能实体g
     /// </summary>
     public class WF_WorkOpt : DirectoryPageBase
     {
@@ -2473,14 +2473,15 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Return_Init()
         {
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
-            if (dt.Rows.Count == 0)
+            try
             {
-                string errMsg = "err@获得可以退回的节点出错误，请反馈给系统管理员.@FK_Node=" + this.FK_Node + "@WorkID=" + this.WorkID + "@FID=" + this.FID;
-                BP.DA.Log.DebugWriteError(errMsg);
-                return errMsg;
+                DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
+                return BP.Tools.Json.ToJson(dt);
             }
-            return BP.Tools.Json.ToJson(dt);
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         /// <summary>
         /// 执行退回,返回退回信息.

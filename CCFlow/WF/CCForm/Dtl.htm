@@ -193,14 +193,16 @@
 
             var dtlName=GetQueryString("EnsName");
             var fk_node=GetQueryString("FK_Node");
-            var fk_flow=GetQueryString("FK_Flow");
+            var fk_flow = GetQueryString("FK_Flow");
 
+            var parentUrl = parent.location.href;
             var url = "CCForm/Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow;
-
+         
+            if (parentUrl.indexOf("CCForm") != -1) {
+                 url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow;
+            } 
 
             parent.OpenEasyUiDialogExt(url, '附件上传', 800, 500, false);
-
-
 
         }
 

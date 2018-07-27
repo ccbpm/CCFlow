@@ -39,7 +39,7 @@
             //扩展名
             var index = fileValue.lastIndexOf('.');
             var fileExt = fileValue.substring(index);
-            if (fileExt.toLowerCase() != ".xls") {
+            if (fileExt.toLowerCase() != ".xls" && fileExt.toLowerCase() != ".xlsx") {
                 $.messager.alert("提示", "所选不是excel文件，请重新选择。");
                 return;
             }

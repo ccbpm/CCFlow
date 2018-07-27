@@ -94,7 +94,7 @@ function figure_MapAttr_Template(mapAttr) {
 
     var eleHtml = $('<div>' + ele + '</div>');
 
-    eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
+    eleHtml.children(0).css('width', mapAttr.UIWidth);
 
 
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
@@ -239,7 +239,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
         return eleHtml;
     }
 
@@ -251,8 +251,8 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     // 金额类型. AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-       
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
         return eleHtml;
     }
 

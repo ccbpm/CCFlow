@@ -59,7 +59,7 @@ UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6
 UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7
 
--- 2018.07.24 ;
+-- 2018.07.24 ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@DesignerNo=设计者,流程开发设计者信息');
 
@@ -86,16 +86,10 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFrmFool','@No=�
 --新版本的流程属性,节点属性;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt','@NodeID=基本配置@SendLab=按钮权限,控制工作节点可操作按钮.@RunModel=运行模式,分合流,父子流程@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.');
-
-DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基本配置');
- 
+  
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDataExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDataExt','@No=基本属性@Designer=设计者信息');
 UPDATE Sys_MapData SET AppType=0 WHERE No NOT LIKE 'ND%';
-
-  
-
 
 -- 旧版本的流程属性;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeSheet';

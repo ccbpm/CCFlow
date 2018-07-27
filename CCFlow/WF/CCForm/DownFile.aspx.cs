@@ -252,7 +252,8 @@ namespace CCFlow.WF.CCForm
             {
                 HttpContext.Current.Response.Charset = "GB2312";
                 string fileName  = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileName"));
-                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName);
+                string fileExt = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileExt"));
+                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName+fileExt);
                 HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                 HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
 

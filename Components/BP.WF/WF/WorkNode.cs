@@ -7098,7 +7098,7 @@ namespace BP.WF
             t.EmpFrom = this.Execer;
             t.EmpFromT = this.ExecerName;
             t.FK_Flow = this.HisNode.FK_Flow;
-            t.Tag = tag;
+            t.Tag = tag + "@SendNode=" + this.HisNode.NodeID;            
 
             if (toNDid == 0)
             {
@@ -7114,7 +7114,7 @@ namespace BP.WF
             t.EmpToT = toEmpName;
             t.Msg = msg;
             t.FrmDB = frmDBJson; //表单数据Json.
-
+            
             switch (at)
             {
                 case ActionType.Forward:
@@ -7962,10 +7962,35 @@ namespace BP.WF
                 throw new Exception("@此节点是开始节点,没有上一步工作."); //此节点是开始节点,没有上一步工作.
 
             string sql = "";
-
+            int nodeid = 0;
             string truckTable = "ND" + int.Parse(this.HisNode.FK_Flow) + "Track";
-            sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID + " AND NDTo='" + this.HisNode.NodeID + "' AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC";
-            int nodeid = DBAccess.RunSQLReturnValInt(sql, 0);
+            sql = "SELECT NDFrom,Tag FROM " + truckTable + " WHERE WorkID=" + this.WorkID + " AND NDTo='" + this.HisNode.NodeID + "' AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC";
+            //首先获取实际发送节点，不存在时再使用from节点
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                nodeid = int.Parse(dt.Rows[0]["NDFrom"].ToString());
+                if (dt.Rows[0]["Tag"] != null && dt.Rows[0]["Tag"].ToString().Contains("SendNode=") == true)
+                {
+                    string tag = dt.Rows[0]["Tag"].ToString();
+                    string[] strs = tag.Split('@');
+                     foreach (string str in strs)
+                     {
+                         if (str == null || str == "" || str.Contains("SendNode=") == false)
+                             continue;
+                         string[] mystr = str.Split('=');
+                         if (mystr.Length == 2)
+                         {
+                             string sendNode = mystr[1];
+                             if (string.IsNullOrEmpty(sendNode) == false && sendNode.Equals("0") == false)
+                             {
+                                 nodeid = int.Parse(sendNode);
+                             }
+                         }
+                     }
+                }
+            }
+            
             if (nodeid == 0)
             {
                 switch (this.HisNode.HisRunModel)

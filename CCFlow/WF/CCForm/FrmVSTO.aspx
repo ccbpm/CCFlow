@@ -40,7 +40,7 @@
 			//string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
 			//string url = "excelform://-fromccflow,App=FrmExcel,UserNo=" + userNo + ",SID=" + sid + ",FK_Flow=" + flowNo + ",FK_Node=" + nodeID + ",FrmID=" + frmID + ",WorkID="+workID+",WSUrl="+urlWS;
 			///  string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
-			string urlOfFree = "Frm.aspx?IsFreeFrm=1" + this.RequestParas;
+			string urlOfFree = "Frm.htm?IsFreeFrm=1" + this.RequestParas;
 		
 		%>
 		<br />

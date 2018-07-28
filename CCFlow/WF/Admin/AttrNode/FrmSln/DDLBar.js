@@ -3,15 +3,22 @@ function InitBar(optionKey) {
 
     var html = "表单方案:";
     html += "<select id='changBar' onchange='changeOption()'>";
-    html += "<option value=" + FormType.FoolForm + ">0.内置傻瓜表单</option>";
-    html += "<option value=" + FormType.FreeForm + ">1.内置自由表单</option>";
-    html += "<option value=" + FormType.SelfForm + " >2.嵌入式表单</option>";
-    html += "<option value=" + FormType.RefOneFrmTree + " >3.绑定表单库的表单</option>";
-    html += "<option value=" + FormType.SheetTree + " >4.绑定多表单(表单树)</option>";
+
+    html += "<option value=null  disabled='disabled'>+内置表单</option>";
+    html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>";
+    html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
+    html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>";
+    html += "<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>";
+
+    html += "<option value=null  disabled='disabled'>+自定义表单</option>";
+    html += "<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
+    html += "<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>";
+
+
+    html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
+    html += "<option value=" + FormType.RefOneFrmTree + " >&nbsp;&nbsp;绑定表单库的表单</option>";
+    html += "<option value=" + FormType.SheetTree + " >&nbsp;&nbsp;绑定多表单(表单树)</option>";
    
-    html += "<option value=" + FormType.SDKForm + " >5.使用SDK表单(我自定义的表单)</option>";
-    html += "<option value=" + FormType.WebOffice + " >6.绑定公文表单</option>";
-    html += "<option value=" + FormType.FoolTruck + " >7.内置累加傻瓜模式表单</option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";

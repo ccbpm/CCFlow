@@ -39,4 +39,11 @@ function GetQueryString(name) {
 
 }
 
+//修改URL参数值
+function replaceParamVal(url, paramName, replaceWith) {
+    var re = eval('/(' + paramName + '=)([^&]*)/gi');
+    var nUrl = url.replace(re, paramName + '=' + replaceWith);
+    return nUrl;
+}
+
 

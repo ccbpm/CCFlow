@@ -75,8 +75,9 @@ namespace BP.WF.HttpHandler
 
             Attr attr=en.EnMap.GetAttrByKey("No");
             noColName = attr.Desc; //
-
-            attr=en.EnMap.GetAttrByKey("Name");
+            BP.En.Map map = en.EnMap;
+            String codeStruct = map.CodeStruct;
+            attr=map.GetAttrByKey("Name");
             nameColName = attr.Desc; //
 
             //定义属性.
@@ -94,6 +95,12 @@ namespace BP.WF.HttpHandler
                     string no = dr[noColName].ToString();
                     string name = dr[nameColName].ToString();
 
+                    //判断是否是自增序列，序列的格式
+                    if (!DataType.IsNullOrEmpty(codeStruct))
+                    {
+                        no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
+                    }
+
                     EntityNoName myen = ens.GetNewEntity as EntityNoName;
                     myen.No = no;
                     if (myen.IsExits==true)
@@ -107,7 +114,7 @@ namespace BP.WF.HttpHandler
                      en = ens.GetNewEntity;
 
                     //给实体赋值
-                    errInfo += SetEntityAttrVal(dr, attrs, en, dt,0);
+                    errInfo += SetEntityAttrVal(no,dr, attrs, en, dt,0);
                 }
             }
 
@@ -121,19 +128,23 @@ namespace BP.WF.HttpHandler
                 {
                     string no = dr[noColName].ToString();
                     string name = dr[nameColName].ToString();
-
+                    //判断是否是自增序列，序列的格式
+                    if (!DataType.IsNullOrEmpty(codeStruct))
+                    {
+                        no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
+                    }
                     EntityNoName myen = ens.GetNewEntity as EntityNoName;
                     myen.No = no;
                     if (myen.IsExits == true)
                     {
                         //给实体赋值
-                        errInfo += SetEntityAttrVal(dr, attrs, en, dt,1);
+                        errInfo += SetEntityAttrVal(no,dr, attrs, en, dt,1);
                         continue;
                     }
                     myen.Name = name;
 
                     //给实体赋值
-                    errInfo += SetEntityAttrVal(dr, attrs, en, dt,0);
+                    errInfo += SetEntityAttrVal(no,dr, attrs, en, dt,0);
                 }
             }
             #endregion
@@ -144,7 +155,7 @@ namespace BP.WF.HttpHandler
             return "导入成功.";
         }
 
-        private string SetEntityAttrVal(DataRow dr, Attrs attrs, Entity en, DataTable dt, int saveType)
+        private string SetEntityAttrVal(string no,DataRow dr, Attrs attrs, Entity en, DataTable dt, int saveType)
         {
             string errInfo = "";
             //按照属性赋值.
@@ -152,7 +163,7 @@ namespace BP.WF.HttpHandler
             {
                 if (item.Key == "No" )
                 {
-                    en.SetValByKey(item.Key, dr[item.Desc].ToString());
+                    en.SetValByKey(item.Key, no);
                     continue;
                 }
                 if(item.Key == "Name"){

@@ -516,6 +516,10 @@
 {
     background: url('../../../Admin/FoolFormDesigner/Img/MapExt/GroupBar.png') no-repeat;
 }
+.icon-checkGroup
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/CheckGroup.png') no-repeat;
+}
 .icon-dtl
 {
     background: url('../../../Admin/FoolFormDesigner/Img/MapExt/Dtl.png') no-repeat;

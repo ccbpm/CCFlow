@@ -1004,7 +1004,7 @@
             function GroupFieldFWCNew() {
 
                 var mapData = new Entity("BP.Sys.MapData", GetQueryString("FK_MapData"));
-                var val = prompt('请输入分组名称,比如:部门主管审核', mapData.Name);
+                var val = prompt('请输入分组名称,比如:' + mapData.Name, mapData.Name);
                 if (val == null || val == undefined)
                     return;
 
@@ -1017,8 +1017,13 @@
                 if (defVal == '' || defVal == null)
                     defVal = "";
 
+                var msg = "请输入分组前缀，比如您输入:" + defVal;
+                msg += "\t\n系统就会自动创建,如下三个审核字段到数据库里,并且设置了默认值.";
+                msg += "\t\n" + defVal + "_Checker审核人";
+                msg += "\t\n" + defVal + "_RDT 审核日期";
+                msg += "\t\n" + defVal + "_Note 审核意见";
 
-                var prix = prompt('请输入分组前缀,比如:输入BM,系统就会创建 BM_Checker,BM_RDT,BM_Note三个字段', defVal);
+                var prix = prompt(msg, defVal);
                 if (prix == null || prix == undefined)
                     return;
 
@@ -1566,8 +1571,7 @@
 
                                     
                              <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton"
-                                    data-options="plain:true,iconCls:'icon-groupbar'">新建审核分组</a>
-
+                                    data-options="plain:true,iconCls:'icon-checkGroup'">新建审核分组</a>
 
                                     
                                      <a href="javascript:NewMapDtl();"

@@ -387,7 +387,6 @@ namespace BP.WF.Template
 
                 #endregion 基本属性。
 
-
                 #region 表单数据.
 
                 //批量发起 add 2013-12-27. 
@@ -431,10 +430,6 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, false, 0, 50, 10, false);
                 map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
                 #endregion 开发者信息.
-
-                //查询条件.
-                map.AddSearchAttr(FlowAttr.FK_FlowSort);
-                map.AddSearchAttr(FlowAttr.TimelineRole);
 
                 #region 基本功能.
                 //map.AddRefMethod(rm);

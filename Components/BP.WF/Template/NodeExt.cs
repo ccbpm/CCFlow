@@ -438,7 +438,6 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.WhenNoWorker, false, "(是)找不到人就跳转,(否)提示错误.", true, true, true);
                 //         map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "找不到处理人处理规则",
                 //true, true, NodeAttr.WhenNoWorker, "@0=提示错误@1=自动转到下一步");
-
                 #endregion
 
                 #region  功能按钮状态

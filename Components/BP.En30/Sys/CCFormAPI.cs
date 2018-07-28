@@ -523,8 +523,9 @@ namespace BP.Sys
             GroupField gf = new GroupField();
             gf.Lab = groupName;
             gf.FrmID = frmID;
-            gf.FrmID = frmID;
-            gf.Insert();
+            int i=gf.Retrieve(GroupFieldAttr.Lab, groupName, GroupFieldAttr.FrmID, frmID);
+            if (i ==0)
+                gf.Insert();
 
             MapAttr attr = new MapAttr();
             attr.FK_MapData = frmID;

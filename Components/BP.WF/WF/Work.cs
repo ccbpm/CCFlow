@@ -138,6 +138,9 @@ namespace BP.WF
         }
 
         #region 基本属性(必须的属性)
+        /// <summary>
+        /// 主键
+        /// </summary>
         public override string PK
         {
             get
@@ -213,18 +216,6 @@ namespace BP.WF
                 this.SetValByKey(WorkAttr.Emps, value);
             }
         }
-        public override int RetrieveFromDBSources()
-        {
-            try
-            {
-                return base.RetrieveFromDBSources();
-            }
-            catch (Exception ex)
-            {
-                this.CheckPhysicsTable();
-                throw ex;
-            }
-        }
         public int RetrieveFID()
         {
             QueryObject qo = new QueryObject(this);
@@ -239,18 +230,6 @@ namespace BP.WF
                 }
             }
             return i;
-        }
-        public override int Retrieve()
-        {
-            try
-            {
-                return base.Retrieve();
-            }
-            catch (Exception ex)
-            {
-                this.CheckPhysicsTable();
-                throw ex;
-            }
         }
         /// <summary>
         /// 记录时间
@@ -346,7 +325,6 @@ namespace BP.WF
                 this.SetValByKey("RecText", value);
             }
         }
-       
         private Node _HisNode = null;
         /// <summary>
         /// 工作的节点.
@@ -446,39 +424,11 @@ namespace BP.WF
         }
         #endregion
 
-        #region Node.xml 要配置的信息.
-        /// <summary>
-        /// 产生本工作中所有的外键参数
-        /// 附加一些必要的属性.
-        /// </summary>
-        /// <returns></returns>
-        private string GenerParas_del()
-        {
-            string paras = "*WorkID" + this.OID + "*UserNo=" + this.Rec ;
-            foreach (Attr attr in this.EnMap.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.Normal)
-                    continue;
-
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                if (attr.MyFieldType == FieldType.NormalVirtual)
-                    continue;
-
-                if (attr.Key == WorkAttr.Rec
-                    || attr.Key == "OID"
-                    )
-                    continue;
-
-                paras += "*" + attr.Key + "=" + this.GetValStringByKey(attr.Key);
-            }
-            return paras;
-        }
-        
-        #endregion
-
         #region 需要子类写的方法
+        /// <summary>
+        /// 自动填充
+        /// </summary>
+        /// <param name="attr"></param>
         public void DoAutoFull(Attr attr)
         {
             if (this.OID == 0)
@@ -570,7 +520,6 @@ namespace BP.WF
             }
             return;
         }
-      
         #endregion
 
         #region  重写基类的方法。

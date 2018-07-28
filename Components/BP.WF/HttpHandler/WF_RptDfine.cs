@@ -193,6 +193,9 @@ namespace BP.WF.HttpHandler
                 if (this.SearchType == "MyJoin")
                     rd.DoReset(this.SearchType, "我审批的流程");
 
+                if(this.SearchType =="MyDept")
+                    rd.DoReset(this.SearchType, "本部门发起的流程");
+
                 if (this.SearchType == "Adminer")
                     rd.DoReset(this.SearchType, "高级查询");
 
@@ -249,6 +252,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("No", typeof(string));
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("Width", typeof(int));
+            dt.Columns.Add("UIContralType", typeof(int));
 
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
@@ -259,6 +263,7 @@ namespace BP.WF.HttpHandler
                 row["No"] = attr.KeyOfEn;
                 row["Name"] = attr.Name;
                 row["Width"] = attr.UIWidthInt;
+                row["UIContralType"] = attr.UIContralType;
 
                 if (attr.HisAttr.IsFKorEnum)
                     row["No"] = attr.KeyOfEn + "Text";
@@ -524,7 +529,7 @@ namespace BP.WF.HttpHandler
                     return "err@" + this.SearchType + "标记错误.";
             }
 
-
+ 
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
 
@@ -595,7 +600,7 @@ namespace BP.WF.HttpHandler
                     if (i == 1)
                     {
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@")
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
                             qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                         else
                             qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
@@ -604,7 +609,7 @@ namespace BP.WF.HttpHandler
 
                     qo.addOr();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@")
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
                         qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                     else
                         qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");

@@ -51,7 +51,6 @@ namespace BP.WF
 
                 Work wk = nd.HisWork;
                 wk.OID = workID;
-                 
                
                 wk.RetrieveFromDBSources();
                 wk.ResetDefaultVal();
@@ -76,9 +75,7 @@ namespace BP.WF
                      int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, md.No, FrmNodeAttr.FK_Node, fk_node);
                      if (count != 0 && frmNode.FrmSln != 0)
                      {
-
                          FrmFields fls = new FrmFields(md.No, frmNode.FK_Node);
-
                          foreach (FrmField item in fls)
                          {
                              foreach (MapAttr attr in mattrs)
@@ -260,13 +257,13 @@ namespace BP.WF
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
                 #region 增加 groupfields
-                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false 
-                    && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs)==false)
+                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
+                    && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
 
                     #region 处理字段分组排序.
                     //查询所有的分组, 如果是查看表单的方式，就不应该把当前的表单显示出来.
-                    string myFrmIDs = ""; 
+                    string myFrmIDs = "";
                     if (fromWorkOpt.Equals("1") == true)
                     {
                         if (gwf.WFState == WFState.Complete)
@@ -310,7 +307,7 @@ namespace BP.WF
                     foreach (DataRow dr in dtOrder.Rows)
                     {
                         string pkOID = dr[0].ToString();
-                        var mygf  =gfs.GetEntityByKey( pkOID);
+                        var mygf = gfs.GetEntityByKey(pkOID);
                         gfsNew.AddEntity(mygf); //把分组字段加入里面去.
                     }
 
@@ -319,18 +316,18 @@ namespace BP.WF
                     myds.Tables.Add(dtGF);
                     #endregion 处理字段分组排序.
 
-                    #region 处理 mapattrs 
+                    #region 处理 mapattrs
                     //求当前表单的字段集合.
                     MapAttrs attrs = new MapAttrs();
                     QueryObject qo = new QueryObject(attrs);
-                    qo.AddWhere(MapAttrAttr.FK_MapData,  "ND"+nd.NodeID);
+                    qo.AddWhere(MapAttrAttr.FK_MapData, "ND" + nd.NodeID);
                     qo.addOrderBy(MapAttrAttr.Idx);
                     qo.DoQuery();
 
                     //计算累加的字段集合.
                     MapAttrs attrsLeiJia = new MapAttrs();
                     qo = new QueryObject(attrsLeiJia);
-                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")" );
+                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
                     qo.addOrderBy(MapAttrAttr.Idx);
                     qo.DoQuery();
 
@@ -346,8 +343,7 @@ namespace BP.WF
                     myds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr")); //增加.
                     #endregion 处理mapattrs
 
-
-                   #region 把枚举放入里面去.
+                    #region 把枚举放入里面去.
                     myds.Tables.Remove("Sys_Enum");
 
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
@@ -560,13 +556,13 @@ namespace BP.WF
                   && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
 
-                    GERpt rpt =new GERpt("ND"+int.Parse(nd.FK_Flow)+"Rpt", workID); // nd.HisFlow.HisGERpt;
+                    GERpt rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID); // nd.HisFlow.HisGERpt;
                     rpt.ResetDefaultVal();
 
                     //rpt.Copy(wk); //加入后就出现了错误.
 
                     myds.Tables.Add(rpt.ToDataTableField("MainTable"));
-
+                    // myds.WriteXml("C:\\XX.xml");
                 }
                 else
                 {
@@ -577,7 +573,6 @@ namespace BP.WF
                 string sql = "";
                 DataTable dt = null;
                 #endregion
-                
 
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"] ;

@@ -45,7 +45,6 @@
            LoadDeptTreeV2();
        });
 
-       
 
        var nodeId = "";
        function LoadDeptTreeV2() {
@@ -150,7 +149,10 @@
                if (empNos.indexOf(',' + deptEmp.FK_Emp + ',') != -1)
                    continue;
 
-               var emp = new Entity("BP.GPM.Emp", deptEmp.FK_Emp);
+               var emp = new Entity("BP.GPM.Emp");
+               emp.SetPKVal(deptEmp.FK_Emp);
+               if (emp.RetrieveFromDBSources() == 0)
+                   continue;
 
                html += "<tr ondblclick=\"EditEmp('"+emp.No+"')\" >";
                html += "<td class='Idx' >" + num + "</td>";

@@ -375,7 +375,7 @@
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
-            handler.AddPara("TB_KeyWords", val);
+            handler.AddPara("TB_KWds", val);
 
             var data = handler.DoMethodReturnString("KeySearch_Query");
             if (data.indexOf('err@') == 0) {

@@ -128,7 +128,7 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
 
-            if (mapBase.IsInsert == "True") {
+            if (mapBase.IsInsert.toString().toLowerCase() == "true") {
                 $("#newWin").show();
             } else {
                 $("#newWin").hide();

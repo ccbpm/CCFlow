@@ -5244,7 +5244,7 @@ namespace BP.WF
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
-                                    case "returnn":
+                                    case "returnto":
                                         if (val.Length < iOldFlowLength)
                                         {
                                             //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理

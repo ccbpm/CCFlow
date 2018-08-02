@@ -157,7 +157,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            return "errInfo=" + errInfo + "_" + "count=" + count + "_successInfo=" + successInfo;
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split"+"successInfo=" + successInfo;
         }
 
         private string SetEntityAttrVal(string no,DataRow dr, Attrs attrs, Entity en, DataTable dt, int saveType)

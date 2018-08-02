@@ -207,7 +207,7 @@
 
             var msg = data.Msg;
             osModel = data.OSModel;
-            if (msg != "")
+            if (msg != ""&& msg!="0")
                 alert(msg);
 
             var content = createFrame('../../../DataUser/AppCoder/FlowDesignerWelcome.htm');
@@ -1847,7 +1847,7 @@ function TabCloseByTitle(TabTitle) {
         <div onclick="editEmp()" data-options="iconCls:'icon-edit'">编辑人员</div>
         <div onclick="deleteEmp()" data-options="iconCls:'icon-delete'">删除人员</div>
     </div>
-    <script src="js/normalize/js/classie.js"></script>
-    <script src="js/normalize/js/notificationFx.js"></script>
+    <script src="../CCFormDesigner/normalize/js/classie.js" type="text/javascript"></script>
+    <script src="../CCFormDesigner/normalize/js/notificationFx.js" type="text/javascript"></script>
 </body>
 </html>

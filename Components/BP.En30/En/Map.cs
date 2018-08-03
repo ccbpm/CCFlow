@@ -1820,10 +1820,6 @@ namespace BP.En
 		#region 与实体由关系的操作。
 
 		#region entityNoName
-		public void AddDDLEntities(string key, string defaultVal, string desc, EntitiesSimpleTree ens, bool uiIsEnable)
-		{
-			this.AddDDLEntities(key, key, defaultVal, DataType.AppString, desc, ens, "No", "Name", uiIsEnable);
-		}
 		public void AddDDLEntities(string key, string defaultVal, string desc, EntitiesTree ens, bool uiIsEnable)
 		{
 			this.AddDDLEntities(key, key, defaultVal, DataType.AppString, desc, ens, "No", "Name", uiIsEnable);
@@ -1943,10 +1939,6 @@ namespace BP.En
 		public void AddDDLEntitiesPK(string key, string defaultVal, string desc, EntitiesTree ens, bool uiIsEnable)
 		{
 			AddDDLEntitiesPK(key, key, defaultVal, desc, ens, uiIsEnable);
-		}
-		public void AddDDLEntitiesPK(string key, string defaultVal, string desc, EntitiesSimpleTree ens, bool uiIsEnable)
-		{
-			AddDDLEntitiesPK(key, key, defaultVal, DataType.AppString, desc, ens, "No", "Name", uiIsEnable);
 		}
 		#endregion
 

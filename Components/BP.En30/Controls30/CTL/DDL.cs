@@ -1303,7 +1303,7 @@ namespace BP.Web.Controls
                 return;
             }
 
-            EntitiesSimpleTree treeSimpEns = ens as EntitiesSimpleTree;
+            EntitiesTree treeSimpEns = ens as EntitiesTree;
             if (treeSimpEns != null)
             {
                 DataTable dt = ens.ToDataTableField();

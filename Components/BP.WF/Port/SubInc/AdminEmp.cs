@@ -256,9 +256,9 @@ namespace BP.WF.Port.SubInc
                 map.AddDDLSysEnum(AdminEmpAttr.UseSta, 3, "用户状态", true, true, AdminEmpAttr.UseSta, "@0=禁用@1=启用");
                 map.AddDDLSysEnum(AdminEmpAttr.UserType, 3, "用户状态", true, true, AdminEmpAttr.UserType, "@0=普通用户@1=管理员用户");
 
-                map.AddDDLEntities(AdminEmpAttr.RootOfFlow, null, "流程权限节点", new BP.WF.Template.FlowSorts(), true);
-                map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), true);
-                map.AddDDLEntities(AdminEmpAttr.RootOfDept, null, "组织结构权限节点", new BP.WF.Port.Incs(), true);
+                map.AddDDLEntities(AdminEmpAttr.RootOfFlow, null, "流程权限节点", new BP.WF.Template.FlowSorts(), false);
+                map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), false);
+                map.AddDDLEntities(AdminEmpAttr.RootOfDept, null, "组织结构权限节点", new BP.WF.Port.Incs(), false);
                  
                 map.AddTBMyNum();
 
@@ -285,30 +285,6 @@ namespace BP.WF.Port.SubInc
             }
         }
         #endregion
-
-        //,string isOK, int wfstate, string fk_emp
-        public string DoTestBoolen(string intType )
-        {
-            return " WFState=" + intType;
-           // return "boolen=" + boolen + " intType=" + intType;
-        }
-
-        //,string isOK, int wfstate, string fk_emp
-        public string DoTest(string wenben, int shuzi, string riqi, string dateTime, bool boolen, int meiJu, string waiJian)
-        {
-            string str="";
-            str += "@text=" + wenben;
-            str += "@int=" + shuzi;
-            str += "@data=" + riqi;
-            str += "@dateTime=" + dateTime;
-            str += "@boolen=" + boolen;
-            str += "@meiJu=" + meiJu;
-            str += "@waiJian=" + waiJian;
-            //str += "isOK=" + isOK;
-            //str += "wfstate=" + wfstate;
-            //str += "fk_emp=" + fk_emp;
-            return str;
-        }
 
         #region 方法
         protected override bool beforeUpdateInsertAction()

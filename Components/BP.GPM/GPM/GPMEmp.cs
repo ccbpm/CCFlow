@@ -322,9 +322,6 @@ namespace BP.GPM
                 if (depts.Contains("@" + dept.NameOfPath) == false)
                     depts += "@" + dept.NameOfPath;
             }
-
-            //en.DeptDesc = depts;
-            //en.StaDesc = stas;
             return en;
         }
 
@@ -332,10 +329,8 @@ namespace BP.GPM
         {
             //处理其他的数据.
             BP.GPM.GPMEmp.GenerData(this);
-
             return base.beforeUpdateInsertAction();
         }
-
         /// <summary>
         /// 向上移动
         /// </summary>

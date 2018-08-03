@@ -8,7 +8,7 @@ namespace BP.GPM
     /// <summary>
     /// 权限组
     /// </summary>
-    public class GroupAttr : EntitySimpleTreeAttr
+    public class GroupAttr : EntityTreeAttr
     {
         /// <summary>
         /// 序号

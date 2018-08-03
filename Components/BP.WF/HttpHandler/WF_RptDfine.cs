@@ -374,7 +374,7 @@ namespace BP.WF.HttpHandler
                                 }
                                 else
                                 {
-                                    EntitiesSimpleTree treeSimpEns = ens as EntitiesSimpleTree;
+                                    EntitiesTree treeSimpEns = ens as EntitiesTree;
 
                                     if (treeSimpEns != null)
                                     {

@@ -25,7 +25,7 @@ namespace BP.Sys
     /// <summary>
     ///  独立表单树
     /// </summary>
-    public class FrmTree : EntitySimpleTree
+    public class FrmTree : EntityTree
     {
         #region 属性.
         /// <summary>
@@ -115,7 +115,7 @@ namespace BP.Sys
         private void DeleteChild(string parentNo)
         {
             FrmTrees formTrees = new FrmTrees();
-            formTrees.RetrieveByAttr(FrmTreeAttr.ParentNo, parentNo);
+            formTrees.Retrieve(FrmTreeAttr.ParentNo, parentNo);
             foreach (FrmTree item in formTrees)
             {
                 MapData md = new MapData();
@@ -155,7 +155,7 @@ namespace BP.Sys
     /// <summary>
     /// 独立表单树
     /// </summary>
-    public class FrmTrees : EntitiesSimpleTree
+    public class FrmTrees : EntitiesTree
     {
         /// <summary>
         /// 独立表单树s

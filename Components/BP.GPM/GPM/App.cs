@@ -121,7 +121,7 @@ namespace BP.GPM
                 string url = this.GetValStrByKey(AppAttr.Url);
                 if (DataType.IsNullOrEmpty(url)) return "";
 
-                if (this.SSOType == "0")//SID验证
+                if (this.SSOType.Equals("0") )//SID验证
                 {
                     string SID = DBAccess.RunSQLReturnStringIsNull("SELECT SID FROM Port_Emp WHERE No='" + Web.WebUser.No + "'", null);
                     if (url.Contains("?"))
@@ -311,15 +311,6 @@ namespace BP.GPM
                 map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 500,true);
                 map.AddMyFile("ICON");
 
-                //map.AttrsOfOneVSM.Add(new ByStations(), new Stations(), ByStationAttr.RefObj,
-                //    ByStationAttr.FK_Station, StationAttr.Name, StationAttr.No, "可访问的岗位");
-
-                //map.AttrsOfOneVSM.Add(new ByDepts(), new Depts(), ByStationAttr.RefObj, 
-                //    ByDeptAttr.FK_Dept, DeptAttr.Name, DeptAttr.No, "可访问的部门");
-
-                //map.AttrsOfOneVSM.Add(new ByEmps(), new Emps(), ByStationAttr.RefObj, 
-                //    ByEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "可访问的人员");
-
                 RefMethod rm = new RefMethod();
                 rm.Title = "编辑菜单";
                 rm.ClassMethodName = this.ToString() + ".DoMenu";
@@ -372,7 +363,6 @@ namespace BP.GPM
         protected override bool beforeUpdate()
         {
           
-
             if (DataType.IsNullOrEmpty(this.RefMenuNo) == false)
             {
                 //系统类别
@@ -493,10 +483,6 @@ namespace BP.GPM
         public string DoWhoCanUseApp()
         {
             return "../../../GPM/WhoCanUseApp.aspx?FK_App=" + this.No;
-
-
-          //  PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No, 500, 700);
-            //return null;
         }
         /// <summary>
         /// 打开菜单
@@ -505,10 +491,6 @@ namespace BP.GPM
         public string DoMenu()
         {
             return "../../../GPM/AppMenu.htm?FK_App=" + this.No;
-
-            //PubClass.WinOpen("/GPM/AppMenu.aspx?FK_App=" + this.No, 800, 500);
-            //  PubClass.WinOpen("/Comm/RefFunc/EntityTree.aspx?EnsName=BP.GPM.Menus&FK_Tem=" + this.No, 500, 700);
-            // return null;
         }
         /// <summary>
         /// 刷新数据.
@@ -542,24 +524,6 @@ namespace BP.GPM
                 me.MyPK = this.No + "_" + me.FK_Emp;
                 me.Insert();
                 #endregion 初始化系统访问权限.
-
-                //#region 初始化菜单权限.
-                //foreach (Menu menu in menus)
-                //{
-                //    /* 把此人能看到的菜单 init 里面去。*/
-                //    if (Glo.IsCanDoIt(menu.No, menu.HisCtrlWay, emp.No) == false)
-                //        continue;
-
-                //    EmpMenu em = new EmpMenu();
-                //    em.Copy(menu);
-                //    em.FK_Emp = emp.No;
-                //    em.FK_Menu = menu.No;  //菜单编号.
-                //    em.FK_App = menu.FK_App; //系统编号
-
-                //    em.MyPK = menu.No + "_" + emp.No;
-                //    em.Insert();
-                //}
-                //#endregion 初始化菜单权限.
             }
         }
     }

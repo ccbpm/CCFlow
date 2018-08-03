@@ -46,7 +46,6 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonDbOperator.cs" />
     <Compile Include="Crypto.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -67,7 +66,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPM\Menu.cs" />
     <Compile Include="GPM\App.cs" />
-    <Compile Include="UserVar.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">

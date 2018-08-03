@@ -1392,10 +1392,6 @@ namespace BP.En
 		#endregion
 
         #region EntitiesSimpleTree
-        public void AddDDLEntities(string key, object defaultVal, string desc, EntitiesSimpleTree ens, bool uiIsEnable)
-        {
-            this.AddDDLEntities(key, key, defaultVal, DataType.AppString, desc, ens, "No", "Name", uiIsEnable);
-        }
         public void AddDDLEntities(string key, object defaultVal, string desc, EntitiesTree ens, bool uiIsEnable)
         {
             this.AddDDLEntities(key, key, defaultVal, DataType.AppString, desc, ens, "No", "Name", uiIsEnable);

@@ -25,7 +25,7 @@ namespace BP.WF.Template
     /// <summary>
     ///  独立表单树
     /// </summary>
-    public class SysFormTree : EntitySimpleTree
+    public class SysFormTree : EntityTree
     {
         #region 属性.
         /// <summary>
@@ -167,7 +167,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 独立表单树
     /// </summary>
-    public class SysFormTrees : EntitiesSimpleTree
+    public class SysFormTrees : EntitiesTree
     {
         /// <summary>
         /// 独立表单树s

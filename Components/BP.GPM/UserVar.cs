@@ -2,7 +2,8 @@ using System;
 using System.Collections;
 using BP.DA;
 using BP.En;
-namespace BP.Sys
+
+namespace BP.GPM
 {
     /// <summary>
     /// 用户变量

@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using BP.DA;
 
-namespace BP.GPM.Utility
+namespace BP.GPM
 {
     /// <summary>
     /// 加密类

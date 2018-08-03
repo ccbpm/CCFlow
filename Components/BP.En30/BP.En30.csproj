@@ -442,7 +442,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\EntityTree.cs" />
-    <Compile Include="En\EntitySimpleTree.cs" />
     <Compile Include="Tools\WFSealData.cs" />
     <Compile Include="Sys\EventBase.cs" />
     <Compile Include="Sys\EventDemo.cs" />

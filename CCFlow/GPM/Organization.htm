@@ -31,19 +31,17 @@
 
        //初始化
        $(function () {
-           //deptInfoDialogClose();
            $('#deptInfoDialog').dialog("close");
            $('#deptEmpDialog').dialog("close");
            $('#empInfo').dialog("close");
            $('#connecteEmp').dialog("close");
-           //empBelongDeptDialogClose();
            $('#empDepts_Panel').dialog("close");
            $("#pageloading").show();
 
            //加载菜单
-           //LoadDeptTree();
            LoadDeptTreeV2();
        });
+
 
 
        var nodeId = "";
@@ -57,9 +55,7 @@
            $('#appTree').treeview({
 
                data: jsonTree,         // 数据源
-               //showCheckbox: true,   //是否显示复选框
                highlightSelected: true,    //是否高亮选中
-               //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
                nodeIcon: 'glyphicon',
                emptyIcon: '',    //没有子节点的节点图标
                multiSelect: false,    //多选
@@ -76,11 +72,8 @@
                    }
                },
                onNodeSelected: function (event, node) {
-
-                    //alert(node);
-                    //alert( JSON.stringify( node) );
-                   
                    nodeId = node.nodeId;
+                   deptNo = node.id
                    BindEmps(node.id);
 
                    deptNo = $('#appTree').treeview('getNode', node.nodeId).id;
@@ -95,15 +88,15 @@
                    }
                }
            });
-         
+
            $("#pageloading").hide();
        }
-       
+
        //绑定人员.
        function BindEmps() {
 
-           var dept = new Entity("BP.GPM.Dept",deptNo);
-        
+           var dept = new Entity("BP.GPM.Dept", deptNo);
+
            var html = "";
            html += "<table style='width:95%;'>";
            html += "<caption ><a href=\"javascript:EditDept('" + dept.No + "')\" >" + dept.Name + " </a> - <a href='javascript:EditEmp()'>新建人员</a> -  <a href='javascript:RefEmps()'>关联兼职</a>  </caption>";
@@ -119,7 +112,7 @@
            html += "</tr>";
 
            var emps = new Entities("BP.GPM.Emps");
-           emps.Retrieve("FK_Dept", dept.No);
+           emps.Retrieve("FK_Dept", dept.No, "Idx");
 
 
            var empNos = ",";
@@ -128,12 +121,12 @@
                html += "<tr ondblclick=\"EditEmp('" + emp.No + "')\" >";
                html += "<td class='Idx' >" + i + "</td>";
                html += "<td>" + emp.No + "</td>";
-               html += "<td><a href=\"javascript:EditEmp('"+emp.No+"')\">" + emp.Name + "</a></td>";
+               html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                html += "<td>" + dept.Name + "</td>";
                html += "<td>" + emp.Email + "</td>";
                html += "<td>" + emp.Tel + "</td>";
                html += "<td><a href=\"javascript:Del('" + emp.No + "')\" ><img src='../WF/Img/Btn/Delete.gif'>删除</a></td>";
-               html += "<td><img src='../WF/Img/Btn/Up.gif' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
+               html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
                html += "</tr>";
                empNos += emp.No + ',';
            }
@@ -154,12 +147,11 @@
                if (emp.RetrieveFromDBSources() == 0)
                    continue;
 
-               html += "<tr ondblclick=\"EditEmp('"+emp.No+"')\" >";
+               html += "<tr ondblclick=\"EditEmp('" + emp.No + "')\" >";
                html += "<td class='Idx' >" + num + "</td>";
                html += "<td>" + emp.No + "</td>";
                html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                html += "<td>兼职</td>";
-               //html += "<td>" + emp.FK_DeptText + "</td>";
                html += "<td>" + emp.Email + "</td>";
                html += "<td>" + emp.Tel + "</td>";
                html += "<td><a href=\"javascript:Remove('" + emp.No + "')\" >移除<img src='../WF/Img/Btn/Delete.gif'></a></td>";
@@ -204,9 +196,6 @@
        function RefEmps() {
 
            var url = "../WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.GPM.Dept&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Dept&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&No=" + deptNo + "&PKVal=" + deptNo + "&s=0.13113811473063341";
-
-           //  RefEmps
-           //   var url = '../WF/Comm/En.htm?EnName=BP.GPM.Dept&No=' + deptNo;
            WinOpen(url);
        }
 
@@ -276,7 +265,7 @@
                var data = jsonArray[i];
                if (data.ParentNo == parentNo) {
                    var checked = false;
-                 
+
                    childList.push({
                        "id": data.No,
                        "text": data.Name,
@@ -322,16 +311,6 @@
     <div id="pageloading">
     </div>
     <div data-options="region:'west',split:true" style="width: 350px; padding: 1px; overflow: hidden;">
-      <!--  <div class="easyui-panel" style="padding: 1px; background-color: #F4F4F4; border: 0px;
-            height: 30px; width: auto;">
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="checkDeptInfo()" data-options="plain:true,iconCls:'icon-edit'">编辑</a> 
-            <a href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#addNewDept',iconCls:'icon-new'">新建</a>
-            <div id="addNewDept" style="width: 10px;">
-                <div data-options="iconCls:'icon-add'" onclick="append('peer')">同级</div>
-                <div data-options="iconCls:'icon-add'" onclick="append('son')">子级</div>
-            </div>
-            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-sum',plain:true" onclick="RefEmps()">关联人员</a>
-        </div>-->
         <div style="width: 100%; height: 95%; overflow: auto;">
             <ul id="appTree" class="easyui-tree-line" data-options="animate:false,dnd:false">
             </ul>

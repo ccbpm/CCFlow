@@ -277,7 +277,7 @@ namespace BP.En
             appendMenuSb = new StringBuilder();
             EntityTree root = this.GetEntityByKey(EntityTreeAttr.ParentNo, rootNo) as EntityTree;
             if (root == null)
-                throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
+               return "err@没有找到rootNo=" + rootNo + "的entity.";
 
             appendMenus.Append("[{");
             appendMenus.Append("'id':'" + root.No + "',");

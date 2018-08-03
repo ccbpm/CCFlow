@@ -116,7 +116,14 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddUrlData();  //增加参数.
             //获得map基本信息.
-            var pushData = handler.DoMethodReturnJSON("Tree_Init");
+            var pushData = handler.DoMethodReturnString("Tree_Init");
+            if (pushData.indexOf("err@") != -1) {
+                alert(pushData);
+                $("#enTree").append("<li>"+pushData.replace("err@","").replace("entity",this.GetQueryString("EnsName"))+"</li>");
+                return;
+            }
+
+            pushData = ToJson(pushData);
             //绑定树结构.
             // var pushData = eval('(' + treeJson + ')');
             //加载类别树

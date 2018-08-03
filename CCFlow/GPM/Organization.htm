@@ -22,7 +22,7 @@
     <script src="../WF/Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <link href="../WF/Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
     <script src="../WF/Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
-
+	<script src="../WF/Scripts/bootstrap/BootstrapUIDialog.js" type="text/javaScript"></script>
    <script type="text/javascript">
        var global = window;
        var deptNo = "";
@@ -142,10 +142,7 @@
                if (empNos.indexOf(',' + deptEmp.FK_Emp + ',') != -1)
                    continue;
 
-               var emp = new Entity("BP.GPM.Emp");
-               emp.SetPKVal(deptEmp.FK_Emp);
-               if (emp.RetrieveFromDBSources() == 0)
-                   continue;
+               var emp = new Entity("BP.GPM.Emp", deptEmp.FK_Emp);
 
                html += "<tr ondblclick=\"EditEmp('" + emp.No + "')\" >";
                html += "<td class='Idx' >" + num + "</td>";
@@ -178,25 +175,25 @@
 
        function EditDept(no) {
            var url = '../WF/Comm/En.htm?EnName=BP.GPM.Dept&No=' + no;
-           WinOpen(url);
+           OpenBootStrapModal(url, "eudlgframe", "编辑", '800', '500', "icon-edit", true, null, null);
        }
 
        function EditEmp(no) {
 
            if (no == undefined) {
                var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&FK_Dept=' + deptNo;
-               WinOpen(url);
+               OpenBootStrapModal(url, "eudlgframe", "新增", '800', '500', "icon-edit", true, null, null);
                return;
            }
 
            var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&No=' + no;
-           WinOpen(url);
+           OpenBootStrapModal(url, "eudlgframe", "编辑", '800', '500', "icon-edit", true, null, null);
        }
 
        function RefEmps() {
 
            var url = "../WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.GPM.Dept&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Dept&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&No=" + deptNo + "&PKVal=" + deptNo + "&s=0.13113811473063341";
-           WinOpen(url);
+           OpenBootStrapModal(url, "eudlgframe", "关联人员", '1000', '500', "icon-edit", true, null, null);
        }
 
        function Del(no) {

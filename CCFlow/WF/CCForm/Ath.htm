@@ -439,7 +439,8 @@
         }
 
         function setIframeHeight() {
-            $("#" + window.frameElement.getAttribute("id"), parent.document).height(Math.max($(document).height(), $("body").height()) + ($(".Idx").length * 2));
+            if(window.frameElement!=null)
+                $("#" + window.frameElement.getAttribute("id"), parent.document).height(Math.max($(document).height(), $("body").height()) + ($(".Idx").length * 2));
         }
         var realFileExts = "";
         function AddFileUpload(athDesc) {

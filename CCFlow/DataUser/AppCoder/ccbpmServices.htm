@@ -11,8 +11,15 @@
 
             $("#msg").html("正在执行ccbpm服务，请稍候.... 在执行的过程中ccbpm会把执行的过程与错误写入到 \datauser\Log\下面。");
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            /* 
 
+            打开该类文件BP.WF.HttpHandler.WF_WorkOpt，或者全局搜索ccbpmServices 定位到这个方法.
+            该方法解决了如下问题：
+                        
+            该类文件
+            */
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             var data = handler.DoMethodReturnString("ccbpmServices");
 
             $("#msg").html(data);

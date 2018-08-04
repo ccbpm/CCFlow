@@ -50,7 +50,7 @@ function PopBranchesAndLeaf(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
-    var width = target.width();
+    var width = target.outerWidth()();
     var height = target.height();
     var container = $("<div></div>");
     target.after(container);
@@ -83,7 +83,9 @@ function PopBranchesAndLeaf(mapExt, val) {
             "Name": o.Tag2
         });
     });
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
+    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
@@ -96,7 +98,6 @@ function PopBranchesAndLeaf(mapExt, val) {
                 if (iframe) {
                     var selectedRows = iframe.contentWindow.selectedRows;
                     if ($.isArray(selectedRows)) {
-                        var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
                         mtags.mtags("loadData", selectedRows);
                         $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
                         // 单选复制当前表单
@@ -171,7 +172,7 @@ function PopBranches(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
-    var width = target.width();
+    var width = target.outerWidth()();
     var height = target.height();
     var container = $("<div></div>");
     target.after(container);
@@ -209,12 +210,11 @@ function PopBranches(mapExt, val) {
                     if ($.isArray(nodes)) {
                         $.each(nodes, function (i, node) {
                             SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
-                            nodeText = node.Name + ",";
+                            
                         });
                         //重新加载
                         Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, null);
-                        if (nodeText != null)
-                            $("#TB_" + mapExt.AttrOfOper).val(nodeText.substring(0, nodeText.length - 1));
+                        
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
                             ValSetter(mapExt.Tag4, nodes[0].No);
@@ -273,7 +273,9 @@ function Refresh_Mtags(FK_MapData, AttrOfOper, oid, val) {
             "Name": o.Tag2
         });
     });
-    $("#" + AttrOfOper + "_mtags").mtags("loadData", initJsonData);
+    var mtags = $("#" + AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + AttrOfOper).val(mtags.mtags("getText"));
 }
 
 /******************************************  表格查询 **********************************/
@@ -281,7 +283,7 @@ function PopTableSearch(mapExt) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
-    var width = target.width();
+    var width = target.outerWidth()();
     var height = target.height();
     var container = $("<div></div>");
     target.after(container);
@@ -314,8 +316,9 @@ function PopTableSearch(mapExt) {
         });
     });
     
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
-
+    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
@@ -330,7 +333,6 @@ function PopTableSearch(mapExt) {
                 if (iframe) {
                     var selectedRows = iframe.contentWindow.selectedRows;
                     if ($.isArray(selectedRows)) {
-                        var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
                         mtags.mtags("loadData", selectedRows);
                         $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
                         // 单选复制当前表单

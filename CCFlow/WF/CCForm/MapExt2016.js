@@ -823,6 +823,11 @@ function TableFullCtrl(dataObj) {
     }
 }
 
+//隐藏自动填充的DIV
+function hiddenDiv() {
+    $("#divinfo").empty();
+    $("#divinfo").css("display", "none");
+}
 var itemStyle = 'padding:2px;color: #000000;background-color:white;width:100%;border-bottom: 1px solid #336699;';
 var itemStyleOfS = 'padding:2px;color: #000000;background-color:green;width:100%';
 function ItemClick(sender, val, tbid, fk_mapExt) {

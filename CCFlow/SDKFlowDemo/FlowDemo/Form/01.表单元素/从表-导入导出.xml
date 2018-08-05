@@ -3,7 +3,7 @@
   <Sys_GroupField>
     <OID>2867</OID>
     <Lab>基础信息</Lab>
-    <EnName>CCFrm_AAAAA</EnName>
+    <EnName>CCFrm_ExpImp</EnName>
     <Idx>1</Idx>
     <GUID />
     <CtrlType />
@@ -12,18 +12,18 @@
   </Sys_GroupField>
   <Sys_GroupField>
     <OID>2869</OID>
-    <Lab>CCFrm_AAAAADtl1</Lab>
-    <EnName>CCFrm_AAAAA</EnName>
+    <Lab>CCFrm_ExpImpDtl1</Lab>
+    <EnName>CCFrm_ExpImp</EnName>
     <Idx>2</Idx>
     <GUID />
     <CtrlType>Dtl</CtrlType>
-    <CtrlID>CCFrm_AAAAADtl1</CtrlID>
+    <CtrlID>CCFrm_ExpImpDtl1</CtrlID>
     <AtPara />
   </Sys_GroupField>
   <Sys_GroupField>
     <OID>2871</OID>
     <Lab>基础信息</Lab>
-    <EnName>CCFrm_AAAAADtl1</EnName>
+    <EnName>CCFrm_ExpImpDtl1</EnName>
     <Idx>1</Idx>
     <GUID />
     <CtrlType />
@@ -45,8 +45,8 @@
     <Lang>CH</Lang>
   </Sys_Enum>
   <Sys_MapData>
-    <No>CCFrm_AAAAA</No>
-    <Name>AAAAA</Name>
+    <No>CCFrm_ExpImp</No>
+    <Name>从表的导入导出</Name>
     <EnPK />
     <PTable>my_data_table</PTable>
     <Url />
@@ -117,8 +117,8 @@
     <FlowCtrls />
   </Sys_MapData>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAA_OID</mypk>
-    <FK_MapData>CCFrm_AAAAA</FK_MapData>
+    <mypk>CCFrm_ExpImp_OID</mypk>
+    <FK_MapData>CCFrm_ExpImp</FK_MapData>
     <Name>主键</Name>
     <KeyOfEn>OID</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -159,8 +159,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAA_RDT</mypk>
-    <FK_MapData>CCFrm_AAAAA</FK_MapData>
+    <mypk>CCFrm_ExpImp_RDT</mypk>
+    <FK_MapData>CCFrm_ExpImp</FK_MapData>
     <Name>更新时间</Name>
     <KeyOfEn>RDT</KeyOfEn>
     <MyDataType>7</MyDataType>
@@ -201,8 +201,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_OID</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_OID</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>主键</Name>
     <KeyOfEn>OID</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -243,8 +243,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_RenYuanBianHao</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_RenYuanBianHao</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>人员编号</Name>
     <KeyOfEn>RenYuanBianHao</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -285,8 +285,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_RefPK</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_RefPK</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>关联ID</Name>
     <KeyOfEn>RefPK</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -327,8 +327,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_MingChen</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_MingChen</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>名称</Name>
     <KeyOfEn>MingChen</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -369,8 +369,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_FID</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_FID</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>FID</Name>
     <KeyOfEn>FID</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -411,8 +411,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_XingBie</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_XingBie</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>性别</Name>
     <KeyOfEn>XingBie</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -453,8 +453,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_RDT</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_RDT</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>记录时间</Name>
     <KeyOfEn>RDT</KeyOfEn>
     <MyDataType>7</MyDataType>
@@ -495,8 +495,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_DianHua</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_DianHua</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>电话</Name>
     <KeyOfEn>DianHua</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -537,8 +537,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_Rec</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_Rec</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>记录人</Name>
     <KeyOfEn>Rec</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -579,8 +579,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_DeZhi</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_DeZhi</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>地址</Name>
     <KeyOfEn>DeZhi</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -621,8 +621,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_AAAAADtl1_Demo_BanJi</mypk>
-    <FK_MapData>CCFrm_AAAAADtl1</FK_MapData>
+    <mypk>CCFrm_ExpImpDtl1_Demo_BanJi</mypk>
+    <FK_MapData>CCFrm_ExpImpDtl1</FK_MapData>
     <Name>班级</Name>
     <KeyOfEn>Demo_BanJi</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -664,7 +664,7 @@
   </Sys_MapAttr>
   <Sys_FrmLab>
     <MyPK>83a7b67f-b047-47ed-ab09-f73bf073a072</MyPK>
-    <FK_MapData>CCFrm_AAAAA</FK_MapData>
+    <FK_MapData>CCFrm_ExpImp</FK_MapData>
     <Text>从表的导入导出</Text>
     <X>51</X>
     <Y>28.5</Y>
@@ -677,9 +677,9 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_MapDtl>
-    <No>CCFrm_AAAAADtl1</No>
-    <Name>CCFrm_AAAAADtl1</Name>
-    <FK_MapData>CCFrm_AAAAA</FK_MapData>
+    <No>CCFrm_ExpImpDtl1</No>
+    <Name>CCFrm_ExpImpDtl1</Name>
+    <FK_MapData>CCFrm_ExpImp</FK_MapData>
     <PTable>Demo_01Dtl1</PTable>
     <GroupField />
     <RefPK />

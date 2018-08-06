@@ -376,22 +376,22 @@ function figure_Template_Dtl(frmDtl, ext) {
     }
     eleHtml.append(eleIframe);
 
-	if (ext) {	// 表达式传入iframe(表达式为数组)
-		eleIframe.load(function () {
-			/*
-			var iframeExp = $(this).contents().find(":input[id=formExt]").val();
-			if (iframeExp == null || typeof iframeExp == "undefined" || iframeExp == "") {
-				iframeExp = "[]";
-			}
-			iframeExp = JSON.parse(iframeExp);
-			iframeExp.push(ext);
-			*/
-			$(this).contents().find(":input[id=formExt]").val(JSON.stringify(ext));
-			if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
-				this.contentWindow.parentStatistics(ext);
-			}
-		});
-	}
+    if (ext) {	// 表达式传入iframe(表达式为数组)
+        eleIframe.load(function () {
+            /*
+            var iframeExp = $(this).contents().find(":input[id=formExt]").val();
+            if (iframeExp == null || typeof iframeExp == "undefined" || iframeExp == "") {
+            iframeExp = "[]";
+            }
+            iframeExp = JSON.parse(iframeExp);
+            iframeExp.push(ext);
+            */
+            $(this).contents().find(":input[id=formExt]").val(JSON.stringify(ext));
+            if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+                this.contentWindow.parentStatistics(ext);
+            }
+        });
+    }
 
     //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
     var js = "";
@@ -447,7 +447,7 @@ function figure_MapAttr_Template(mapAttr) {
 
     var eleHtml = $('<div>' + ele + '</div>');
 
-    eleHtml.children(0).css('width', mapAttr.UIWidth);
+    eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
 
     return eleHtml;

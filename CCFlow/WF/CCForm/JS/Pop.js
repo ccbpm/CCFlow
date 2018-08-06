@@ -50,7 +50,7 @@ function PopBranchesAndLeaf(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
-    var width = target.outerWidth()();
+    var width = target.outerWidth();
     var height = target.height();
     var container = $("<div></div>");
     target.after(container);
@@ -172,7 +172,7 @@ function PopBranches(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
-    var width = target.outerWidth()();
+    var width = target.outerWidth();
     var height = target.height();
     var container = $("<div></div>");
     target.after(container);
@@ -283,7 +283,7 @@ function PopTableSearch(mapExt) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
 
-    var width = target.outerWidth()();
+    var width = target.outerWidth();
     var height = target.height();
     var container = $("<div></div>");
     target.after(container);

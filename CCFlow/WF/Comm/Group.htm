@@ -77,7 +77,6 @@
             mapBase = handler.DoMethodReturnJSON("Group_MapBaseInfo");
 
             document.title = mapBase.EnDesc;
-            $('#mainDiv').panel({ title: mapBase.EnDesc });
 
             if (mapBase.IsView == "false") {
                 alert("对不起，您没有查看的权限！");
@@ -391,14 +390,14 @@
                                 if (NumKey == AttrsOfNum[i].KeyOfEn)
                                     html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 else
-                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.aspx?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 break;
                             case "Up":
                             default:
                                 if (NumKey == AttrsOfNum[i].KeyOfEn)
                                     html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 else
-                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.aspx?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 break;
                         }
                     }
@@ -406,7 +405,7 @@
                         if (NumKey == AttrsOfNum[i].KeyOfEn)
                             html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
                         else
-                            html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.aspx?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
+                            html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
 
                     }
                 }
@@ -805,7 +804,7 @@
 </head>
 <body class="easyui-layout">
    <form  id="cc">
-        <div id="mainDiv" data-options="region:'center',title:'学生'" style="padding: 5px">
+        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:true" style="padding: 5px">
             <div class="easyui-layout"  data-options="fit:true">
                 <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 34px; background-color: #E0ECFF; line-height: 30px">
                      <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>

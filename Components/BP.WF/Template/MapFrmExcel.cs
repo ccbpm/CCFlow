@@ -384,7 +384,7 @@ namespace BP.WF.Template
 			if (this.No.Contains("ND") == true)
 				return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
 			else
-				return "../../Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
+                return "../../Admin/FoolFormDesigner/Do.htm&DoType=FWCShowError";
 		}
 		 
 		#endregion

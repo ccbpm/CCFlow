@@ -192,24 +192,28 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("V_GPM_EmpMenu");
+                Map map = new Map("GPM_EmpMenu");
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "人员菜单功能";
+                map.EnDesc = "人员菜单对应";
                 map.EnType = EnType.View;
 
-                map.AddMyPK();
+               // map.AddMyPK();
 
-                map.AddTBString(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 30, 20);
-                map.AddTBString(EmpMenuAttr.FK_Menu, null, "菜单功能", true, false, 0, 30, 20);
+                map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
+                map.AddDDLEntitiesPK(EmpMenuAttr.FK_Menu, null, "菜单功能",new BP.GPM.Menus(),true);
 
-                map.AddTBString(MenuAttr.Name, null, "菜单功能-名称", true, false, 0, 3900, 20);
-                map.AddTBString(MenuAttr.ParentNo, null, "ParentNo", true, false, 1, 30, 20);
-                map.AddTBString(AppAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
-                map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true,true, MenuAttr.MenuType,
-                    "@3=目录@4=功能@5=功能控制点");
-                map.AddTBString(MenuAttr.FK_App, null, "系统", true, false, 0, 30, 20);
-                map.AddMyFile("图标");
+                //map.AddDDLEntitiesPK(EmpMenuAttr.FK_Emp,null,"操作员",new 
+                //map.AddTBString(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 30, 20);
+                //map.AddTBString(EmpMenuAttr.FK_Menu, null, "菜单功能", true, false, 0, 30, 20);
+
+                //map.AddTBString(MenuAttr.Name, null, "菜单功能-名称", true, false, 0, 3900, 20);
+                //map.AddTBString(MenuAttr.ParentNo, null, "ParentNo", true, false, 1, 30, 20);
+                //map.AddTBString(AppAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
+                //map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true,true, MenuAttr.MenuType,
+                //    "@3=目录@4=功能@5=功能控制点");
+                //map.AddTBString(MenuAttr.FK_App, null, "系统", true, false, 0, 30, 20);
+                //map.AddMyFile("图标");
 
                 this._enMap = map;
                 return this._enMap;

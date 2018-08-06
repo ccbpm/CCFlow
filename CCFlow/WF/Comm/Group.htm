@@ -56,7 +56,7 @@
             //分析项目
             GroupAnalysis();
             //显示数据
-            Group_Search();
+            doPostBack();
             var groupCount = $('input[name="groupContent"]:checked').length;
             if (groupCount > 1)
                 $("#CB_IsShowPict").attr("disabled", "disabled");
@@ -377,7 +377,7 @@
                 // 分组数据
                 for (var i = 0; i < AttrsOfNum.length; i++) {
                     var lab = "";
-                    if (ur.Vals.indexOf(AttrsOfNum[i].Key + "=SUM") != -1) {
+                    if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=SUM") != -1) {
                         lab = "(合计)" + AttrsOfNum[i].Name;
                     }
                     else {

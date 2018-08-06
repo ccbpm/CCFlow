@@ -2764,6 +2764,9 @@ namespace BP.WF.HttpHandler
            
             dt.TableName = "Attrs";
 
+            //标注是否有分析项
+            bool IsExitAnalySis = false;
+
             foreach (Attr attr in map.Attrs)
             {
                 if (attr.IsPK || attr.IsNum == false)
@@ -2795,6 +2798,7 @@ namespace BP.WF.HttpHandler
                         dr["Checked"] = "true";
 
                     dt.Rows.Add(dr);
+                    IsExitAnalySis = true;
 
                     isHave = true;
                 }
@@ -2811,7 +2815,7 @@ namespace BP.WF.HttpHandler
                 // 根据状态 设置信息.
                 if (ur.Vals.IndexOf(attr.Key) != -1)
                     dtr["Checked"] = "true";
-
+                IsExitAnalySis = true;
                 dt.Rows.Add(dtr);
 
                 DataTable ddlDt = new DataTable();
@@ -2851,6 +2855,27 @@ namespace BP.WF.HttpHandler
                // if (ur.Vals.IndexOf("@" + attr.Key + "=LSXS") != -1)
                 
 
+            }
+
+             if(IsExitAnalySis == false){
+        	    //如果不存在分析项手动添加一个分析项
+        	     DataRow dtr = dt.NewRow();
+                 dtr["Field"] = "Group_Number";
+                 dtr["Name"] ="数量";
+                 dtr["Checked"] = "true";
+                 dt.Rows.Add(dtr);
+             
+                 DataTable ddlDt = new DataTable();
+                 ddlDt.TableName = "Group_Number";
+                 ddlDt.Columns.Add("No");
+                 ddlDt.Columns.Add("Name");
+                 ddlDt.Columns.Add("Selected");
+                 DataRow ddlDr = ddlDt.NewRow();
+                 ddlDr["No"] = "SUM";
+                 ddlDr["Name"] = "求和";
+                 ddlDr["Selected"] = "true";
+                 ddlDt.Rows.Add(ddlDr);
+                 ds.Tables.Add(ddlDt);
             }
             ds.Tables.Add(dt);
             return BP.Tools.Json.ToJson(ds);
@@ -2913,7 +2938,18 @@ namespace BP.WF.HttpHandler
                     continue;
                 string[] paras = ct.Split('=');
 
-                AttrsOfNum.Add(map.GetAttrByKey(paras[0]));
+                //判断paras[0]的类型
+                int dataType = 2;
+                if (paras[0].Equals("Group_Number"))
+                {
+                    AttrsOfNum.Add(new Attr("Group_Number", "Group_Number", 1, DataType.AppInt, false, "数量"));
+                }
+                else
+                {
+                    Attr attr = map.GetAttrByKey(paras[0]);
+                    AttrsOfNum.Add(attr);
+                    dataType = attr.MyDataType;
+                }
 
                 if (this.GetRequestVal("DDL_" + paras[0]) == null)
                 {
@@ -2926,20 +2962,37 @@ namespace BP.WF.HttpHandler
                     StateNumKey += paras[0] + "=Checked@"; // 记录状态
                     continue;
                 }
-                switch (paras[1])
+
+                if (paras[0].Equals("Group_Number"))
                 {
-                    case "SUM":
-                        groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
-                        break;
-                    case "AVG":
-                        groupKey += " round (AVG(" + paras[0] + "), 4)  " + paras[0] + ",";
-                        break;
-                    case "AMOUNT":
-                        groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
-                        break;
-                    default:
-                        throw new Exception("没有判断的情况.");
+                    groupKey += " count(*) " + paras[0] + ",";
                 }
+                else
+                {
+                    switch (paras[1])
+                    {
+                        case "SUM":
+                            if (dataType == 2)
+                                groupKey += " SUM(" + paras[0] + ")" + paras[0] + ",";
+                            else
+                                groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
+                            break;
+                        case "AVG":
+                            groupKey += " round (AVG(" + paras[0] + "), 4)  " + paras[0] + ",";
+                            break;
+                        case "AMOUNT":
+                            if (dataType == 2)
+                                groupKey += " SUM(" + paras[0] + ")" + paras[0] + ",";
+                            else
+                                groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
+                            break;
+                        default:
+                            throw new Exception("没有判断的情况.");
+                    }
+                    
+                }
+           
+                
 
 
             }
@@ -3113,7 +3166,8 @@ namespace BP.WF.HttpHandler
             if (orderByReq != null && (selectSQL.Contains(orderByReq) || groupKey.Contains(orderByReq)))
             {
                 orderby = " ORDER BY " + orderByReq;
-                if (this.GetRequestVal("OrderWay") != "Up")
+                string orderWay = this.GetRequestVal("OrderWay");
+                if (!DataType.IsNullOrEmpty(orderWay) && !orderWay.Equals("Up"))
                     orderby += " DESC ";
             }
 

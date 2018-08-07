@@ -49,6 +49,13 @@
 
         //初始化页面
         $(function () {
+            var groupCount = $('input[name="groupContent"]:checked').length;
+            if (groupCount > 1)
+                $("#CB_IsShowPict").attr("disabled", "disabled");
+
+            if (ur.IsPic == 1)
+                document.getElementById("CB_IsShowPict").checked = "checked";
+
             //初始化按钮
             InitToolbar();
             //显示内容
@@ -57,12 +64,7 @@
             GroupAnalysis();
             //显示数据
             doPostBack();
-            var groupCount = $('input[name="groupContent"]:checked').length;
-            if (groupCount > 1)
-                $("#CB_IsShowPict").attr("disabled", "disabled");
-
-            if (ur.IsPic == 1)
-                document.getElementById("CB_IsShowPict").checked = "checked";
+           
 
         });
 
@@ -658,8 +660,8 @@
                 if (AttrsOfNum[i].Name == null || AttrsOfNum[i].Name == "")
                     continue;
                 xml += "<dataset seriesname='" + AttrsOfNum[i].Name + "'  >";
-                for (var i = 0; i < groupSearch.length; i++) {
-                    xml += " <set value='" + groupSearch[i][AttrsOfNum[i].KeyOfEn] + "' />";
+                for (var j = 0; j < groupSearch.length; j++) {
+                    xml += " <set value='" + groupSearch[j][AttrsOfNum[i].KeyOfEn] + "' />";
                 }
                 xml += " </dataset>";
             }
@@ -721,8 +723,8 @@
                 if (AttrsOfNum[i].Name == null || AttrsOfNum[i].Name == "")
                     continue;
                 xml += "<dataset seriesname='" + AttrsOfNum[i].Name + "'  >";
-                for (var i = 0; i < groupSearch.length; i++) {
-                    xml += " <set value='" + groupSearch[i][AttrsOfNum[i].KeyOfEn] + "' />";
+                for (var j = 0; j < groupSearch.length; j++) {
+                    xml += " <set value='" + groupSearch[j][AttrsOfNum[i].KeyOfEn] + "' />";
                 }
                 xml += " </dataset>";
             }

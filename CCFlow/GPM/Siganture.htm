@@ -4,11 +4,12 @@
     <title></title>
     <!--<script type="text/javascript" src="../Scripts/config.js"></script>-->
     <script type="text/javascript" src="../WF/Scripts/jquery/jquery.min.js"></script>
+    <script src="../WF/Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
 
       <!-- 引入新版本的类库. -->
-    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
-    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
 
     <script type="text/javascript" language="javascript">
 
@@ -17,7 +18,7 @@
 
             var empNo = GetQueryString("EmpNo");
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
             handler.AddPara("EmpNo", empNo);
             var data = handler.DoMethodReturnString("Siganture_Init");
 
@@ -26,62 +27,79 @@
                 return;
             }
 
+            data = JSON.parse(data);
             var img = document.getElementById("sigimg");
 
-            var url = '/DataUser/Siganture/' + data[0].No + '.jpg';
+            var url = "";
+            if (plant == "CCFlow")
+                url = '/DataUser/Siganture/' + data.No + '.jpg';
+            else
+                url = basePath + 'DataUser/Siganture/' + data.No + '.jpg';
             img.src = url;
 
         });
 
         function Upload() {
+            if (File_Upload.files.length == 0) {
+                alert('请选择要上传的文件');
+                return;
+            }
 
-            //  var url = Handler + "?DoType=Siganture_Save";
+            var fileName = File_Upload.files[0].name;
+
+            //判断文件类型.
+            var fileExt = "bpm,jpg,jpeg,png,gif";
+            //获取文件的后缀名
+            var ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+            if (fileExt.indexOf(ext.toLowerCase()) == -1) {
+                alert("上传的文件必须是以图片格式:" + fileExt + "  类型, 现在类型是:" + ext);
+                return;
+            }
+
             var empNo = GetQueryString("EmpNo");
-//            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-//            handler.AddPara("EmpNo", empNo);
-//            
-//            var data = handler.DoMethodReturnString("Siganture_Save");
-
-//            
-//            
-//            
-//            if (data.indexOf('err@')==0) {
-//                alert(data);
-//                return;
-//            }
-//            alert(data);
-            //            window.location.href = window.location.href;
 
             Handler = "../WF/Setting/Handler.ashx";
+            if (plant != "CCFLow")
+                Handler = "../WF/Setting/ProcessRequest.do";
             var url = Handler + "?DoType=Siganture_Save&EmpNo=" + empNo;
-            var xhr = new XMLHttpRequest();
-            xhr.open('post', url, true);
-            var formData = new FormData();
-            formData.append('file', myfile.files[0]);
-            xhr.send(formData);
-
-            //上传结束回掉函数
-            xhr.onload = function () {
-
-                if (this.responseText.indexOf('err@') == 0) {
-                    alert(responseText);
-                    return;
+            //提交数据
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: url,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                },
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = window.location.href;
                 }
-                alert(this.responseText);
-                window.location.href = window.location.href;
-                //location.reload();
-            }
+            });
+
+
+        }
+
+        function IconImgErr(obj) {
+            if (plant == "CCFlow")
+                obj.src = '../../DataUser/Siganture/UnName.jpg';
+            else
+                obj.src = basePath + "DataUser/Siganture/UnName.jpg";
         }
     </script>
 
 </head>
 <body>
+	<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
         <h3>&nbsp;电子签名设置&nbsp;</h3>
         <hr />
         <p align="center">
-            <img id="sigimg"  width="120" height="30"   border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+            <img id="sigimg"  width="120" height="30"   border="1" onerror="" />
         </p>
-        上传<input type="file" name="myfile" id="myfile" />
+        上传<input type="file" name="File_Upload" id="File_Upload" />
             <input id="btn" type="button" value="确定" onclick="Upload()" /></br></br>
 
         <b>利用扫描仪设置步骤:</b>
@@ -98,6 +116,6 @@
         <!--<B>让系统自动为您创建（请选择字体）:</B><ul><li><a href='Siganture.htm?RefNo=Siganture&DoType=ST'>宋体</a></li> -->
         <!--<li><a href='Siganture.htm?RefNo=Siganture&DoType=LS'>隶书</a></li> 	-->
 
-     
+    </form> 
 </body>
 </html>

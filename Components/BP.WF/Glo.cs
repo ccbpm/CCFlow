@@ -198,8 +198,14 @@ namespace BP.WF
                 {
                     if (DBAccess.IsExitsObject(item.PTable) == false)
                         continue;
-
-                    DBAccess.RunSQL(" UPDATE "+item.PTable+" SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE "+item.PTable+".Oid=WF_GENERWORKFLOW.WORKID)");
+                    try
+                    {
+                        DBAccess.RunSQL(" UPDATE " + item.PTable + " SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE " + item.PTable + ".Oid=WF_GENERWORKFLOW.WORKID)");
+                    }
+                    catch (Exception ex)
+                    {
+                     //   GERpt rpt=new GERpt(
+                    }
                 }
                 #endregion 修复丢失的发起人.
 

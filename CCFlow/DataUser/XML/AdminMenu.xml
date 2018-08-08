@@ -37,7 +37,7 @@
   <Item No="903" GroupNo="GPM" Name="权限组菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
   <Item No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
   <Item No="905" GroupNo="GPM" Name="人员菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
-  <Item No="906" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />
+  <!--<Item No="906" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />-->
   <Item No="907" GroupNo="GPM" Name="菜单树" For="" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />
 
   <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 

@@ -246,7 +246,7 @@
             //日期类型.
             if (mapAttr.MyDataType == 6) {
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable == 0)
+                if (mapAttr.UIIsEnable == 1)
                     enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
                 else
                     enableAttr = "disabled='disabled'";
@@ -258,7 +258,7 @@
             if (mapAttr.MyDataType == 7) {
 
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable == 0)
+                if (mapAttr.UIIsEnable == 1)
                     enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
                 else
                     enableAttr = "disabled='disabled'";

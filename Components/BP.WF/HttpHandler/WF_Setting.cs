@@ -115,14 +115,6 @@ namespace BP.WF.HttpHandler
         {
             HttpPostedFile f = context.Request.Files[0];
 
-            //判断文件类型.
-            string fileExt = ",bpm,jpg,jpeg,png,gif,";
-            string ext = f.FileName.Substring(f.FileName.LastIndexOf('.') + 1).ToLower();
-            if (fileExt.IndexOf(ext + ",") == -1)
-            {
-                return "err@上传的文件必须是以图片格式:" + fileExt + "类型, 现在类型是:" + ext;
-            }
-
             try
             {
                 string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T" + WebUser.No + ".jpg";

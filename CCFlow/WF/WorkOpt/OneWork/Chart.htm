@@ -2,6 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>轨迹图</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/Raphael/raphael.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/designer.utility.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
 </head>
 <body>
     <style type="text/css">
@@ -12,12 +19,7 @@
             margin: 10px; /*border: 1px dashed #c0c0c0;*/
         }
     </style>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/Raphael/raphael.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/designer.utility.js" type="text/javascript"></script>
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+  
     <script type="text/javascript">
 
         var jdata;
@@ -95,46 +97,13 @@
                 return;
             }
 
-
-
             jdata = $.parseJSON(data);
 
             drawStart(jdata);
 
-
         });
 
-        function getMaxSize(nodes, dirs) {
-            /// <summary>获取所有节点坐标最大值</summary>
-            /// <param name="nodes" Type="Array">节点数组</param>
-            /// <param name="dirs" Type="Array">连线数组</param>
-            var xmax = 0;
-            var ymax = 0;
-            var ps, pss;
-
-            $.each(nodes, function () {
-                xmax = Math.max(xmax, this.X);
-                ymax = Math.max(ymax, this.Y);
-            });
-
-            $.each(dirs, function () {
-                if (this.DOTS && this.DOTS.length > 0) {
-                    ps = this.DOTS.split('@');
-
-                    for (var i = 0; i < ps.length; i++) {
-                        if (ps[i].length == 0) {
-                            continue;
-                        }
-
-                        pss = ps[i].split(',');
-                        xmax = Math.max(xmax, parseFloat(pss[0]));
-                        ymax = Math.max(ymax, parseFloat(pss[1]));
-                    }
-                }
-            });
-
-            return { X: xmax, Y: ymax };
-        }
+      
 
         function drawStart(datas) {
 
@@ -142,6 +111,7 @@
             /// <param name="datas" Type="Object">绘制的数据，包含flow/nodes/labels/dirs/tracks，均为Array</param>
 
             $('#holder').css('background-color', STYLE_CANVAS_COLOR);
+
             var width = $(document).width();
             var height = $(document).height();
             var max = getMaxSize(datas.WF_NODE, datas.WF_DIRECTION);
@@ -183,7 +153,7 @@
                         break;
                 }
 
-                //检测轨迹数据，如果有，则将该节点图标换成处理人头像，人名绘制于节点图标的右侧
+                //检测轨迹数据，如果有，则将该节点图标换成处理人头像，人名绘制于节点图标的右侧.
                 nodeTracks = getTracksByFromNode(datas.TRACK, this.ID);
                 if (nodeTracks.length > 0) {
                     nodeTrack = getTrackForCurrNode(nodeTracks);
@@ -261,7 +231,6 @@
                 //增加节点图片的鼠标滑过/移开效果
                 rNode.rIcon.hover(function () {
                     $('#tracktable').empty();
-
                     var node = rFlow.getNodeByRIconId(this.id);
                     if (node != null) {
                         node.rBorder.attr({ "stroke": STYLE_NODE_BORDER_COLOR_HOVER, "stroke-width": STYLE_NODE_BORDER_WIDTH_HOVER });
@@ -408,9 +377,11 @@
                     }
                 });
 
+
                 rNode.rIcon.drag(iconMove, iconDrag, iconUp);
 
                 rFlow.nodes.push(rNode);
+
             });
 
             //绘制节点的连线
@@ -442,6 +413,39 @@
                 rLabel.rText.attr({ "stroke": STYLE_LABEL_COLOR_FORE, "fill": getFillTextColor(STYLE_LABEL_COLOR_FORE), "font-size": STYLE_FONT_SIZE_LABEL, "text-anchor": "start" });
                 rLabel.rText.toFront();
             });
+        }
+
+        function getMaxSize(nodes, dirs) {
+
+            /// <summary>获取所有节点坐标最大值</summary>
+            /// <param name="nodes" Type="Array">节点数组</param>
+            /// <param name="dirs" Type="Array">连线数组</param>
+            var xmax = 0;
+            var ymax = 0;
+            var ps, pss;
+
+            $.each(nodes, function () {
+                xmax = Math.max(xmax, this.X);
+                ymax = Math.max(ymax, this.Y);
+            });
+
+            $.each(dirs, function () {
+                if (this.DOTS && this.DOTS.length > 0) {
+                    ps = this.DOTS.split('@');
+
+                    for (var i = 0; i < ps.length; i++) {
+                        if (ps[i].length == 0) {
+                            continue;
+                        }
+
+                        pss = ps[i].split(',');
+                        xmax = Math.max(xmax, parseFloat(pss[0]));
+                        ymax = Math.max(ymax, parseFloat(pss[1]));
+                    }
+                }
+            });
+
+            return { X: xmax, Y: ymax };
         }
 
         function getSubFlows(nodeId) {

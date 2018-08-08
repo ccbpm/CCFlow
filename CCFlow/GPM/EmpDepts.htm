@@ -114,9 +114,9 @@
             var empNo = GetQueryString("FK_Emp");
 
             var url = "../../../WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
+            if (plant != "CCFlow")
+                url = basePath + "WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
             window.location.href = url;
-            //WinOpen(url);
-            //OpenDialogAndCloseRefresh(url, '增加部门', 500, 400, null, null);
         }
 
         function Del(mypk) {

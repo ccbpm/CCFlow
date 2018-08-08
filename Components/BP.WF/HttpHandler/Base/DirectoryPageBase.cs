@@ -377,6 +377,7 @@ namespace BP.WF.HttpHandler
                     return null;
                 return str;
             }
+
         }
         /// <summary>
         /// 主键
@@ -796,6 +797,121 @@ namespace BP.WF.HttpHandler
         #endregion 父子流程相关的属性.
 
 
+        protected string ExportGroupExcel(System.Data.DataSet ds, string title,string paras)
+        {
+            DataTable dt = ds.Tables["GroupSearch"];
+            DataTable AttrsOfNum = ds.Tables["AttrsOfNum"];
+            DataTable AttrsOfGroup = ds.Tables["AttrsOfGroup"]; 
+
+            title = title.Trim();
+            string filename = title+"Ep" + title + ".xls";
+            string file = filename;
+            bool flag = true;
+            string filepath = BP.Sys.SystemConfig.PathOfTemp;
+
+            #region 参数及变量设置
+
+            if (Directory.Exists(filepath) == false)
+                Directory.CreateDirectory(filepath);
+
+
+
+            filename = filepath + filename;
+
+            //filename = HttpUtility.UrlEncode(filename);
+
+            FileStream objFileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter objStreamWriter = new StreamWriter(objFileStream, System.Text.Encoding.Unicode);
+            #endregion
+
+            #region 生成导出文件
+            try
+            {
+                objStreamWriter.WriteLine(Convert.ToChar(9) + title + Convert.ToChar(9));
+                string strLine = "序号" + Convert.ToChar(9);
+                //生成文件标题
+                foreach (DataRow attr in AttrsOfGroup.Rows)
+                {
+                    strLine = strLine + attr["Name"] + Convert.ToChar(9);
+                }
+                foreach (DataRow attr in AttrsOfNum.Rows)
+                {
+                    strLine = strLine + attr["Name"] + Convert.ToChar(9);
+                }
+
+                objStreamWriter.WriteLine(strLine);
+                strLine = "";
+                foreach (DataRow dr in dt.Rows)
+                {
+                    strLine = strLine + dr["IDX"] + Convert.ToChar(9);
+                    foreach (DataRow attr in AttrsOfGroup.Rows) {
+                        strLine = strLine + dr[attr["KeyOfEn"]+"T"] + Convert.ToChar(9);
+				      
+			        }
+			        foreach (DataRow attr in AttrsOfNum.Rows) {
+
+                        strLine = strLine + dr[attr["KeyOfEn"].ToString()] + Convert.ToChar(9);
+			        }
+
+                    objStreamWriter.WriteLine(strLine);
+                    strLine = "";
+                }
+
+                strLine = "汇总" + Convert.ToChar(9);
+                foreach (DataRow attr in AttrsOfGroup.Rows) {
+			
+			        strLine = strLine + "" + Convert.ToChar(9);
+		        }
+
+		        foreach (DataRow attr in AttrsOfNum.Rows) {
+			        double d =0;
+			        foreach(DataRow dtr in dt.Rows){
+				        d +=Double.Parse(dtr[attr["KeyOfEn"].ToString()].ToString());
+			        }
+			        if(paras.Contains(attr["KeyOfEn"]+"=AVG")){
+				        if(dt.Rows.Count!=0){
+                            d = Double.Parse((d / dt.Rows.Count).ToString("0.0000"));
+				        }
+					
+			        }
+			
+			        if(Int32.Parse(attr["MyDataType"].ToString()) == DataType.AppInt){
+				        if(paras.Contains(attr["KeyOfEn"]+"=AVG"))
+					        strLine = strLine + d + Convert.ToChar(9); 
+				        else
+					        strLine = strLine + (Int32)d + Convert.ToChar(9);
+			        }else{
+				       strLine = strLine + d + Convert.ToChar(9); ;
+			        }
+			
+		        }
+
+                objStreamWriter.WriteLine(strLine);
+                strLine = "";
+            }
+            catch
+            {
+                flag = false;
+            }
+            finally
+            {
+                objStreamWriter.Close();
+                objFileStream.Close();
+            }
+            #endregion
+
+            #region 删除掉旧的文件
+            //DelExportedTempFile(filepath);
+            #endregion
+
+            if (flag)
+            {
+                file = "/DataUser/Temp/" + file;
+               
+            }
+
+            return file;
+        }
         protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title)
         {
             string filename = title + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
@@ -858,15 +974,10 @@ namespace BP.WF.HttpHandler
                 string strLine = "";
 
                 //生成文件标题
-                foreach (Attr attrT in selectedAttrs)
+                //生成文件标题
+                foreach (DataColumn attr in dt.Columns)
                 {
-                    if (attrT.UIVisible == false)
-                        continue;
-
-                    if (attrT.Key == "MyNum")
-                        continue;
-
-                    strLine = strLine + attrT.Desc + Convert.ToChar(9);
+                    strLine = strLine + attr.ColumnName + Convert.ToChar(9);
                 }
 
                 objStreamWriter.WriteLine(strLine);

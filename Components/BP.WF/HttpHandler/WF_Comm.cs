@@ -3380,7 +3380,7 @@ namespace BP.WF.HttpHandler
             if (ds == null)
                 return "info@<img src='../Img/Warning.gif' /><b><font color=red> 您没有选择分析的数据</font></b>";
 
-            string filePath = "";// ExportGroupExcel(ds.Tables["GroupSearch"], en.EnDesc);
+            string filePath =  ExportGroupExcel(ds, en.EnDesc,ur.Vals);
 
 
             return filePath;

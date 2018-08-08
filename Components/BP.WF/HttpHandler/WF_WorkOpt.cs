@@ -381,9 +381,23 @@ namespace BP.WF.HttpHandler
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count != 0)
                 {
-                    string emps = dt.Rows[0]["Tag"].ToString();
-                    if (emps == "" || emps == null)
-                        emps = dt.Rows[0]["EmpTo"].ToString();
+                    string tag = dt.Rows[0]["Tag"].ToString();
+                    string emps = dt.Rows[0]["EmpTo"].ToString();
+                    if (tag != null && tag.Contains("EmpsAccepter=") == true)
+                    {
+                        string[] strs = tag.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (str == null || str == "" || str.Contains("EmpsAccepter=") == false)
+                                continue;
+                            string[] mystr = str.Split('=');
+                            if (mystr.Length == 2)
+                            {
+                                emps = mystr[1];
+                            }
+                        }
+                    }
+                        
 
                     if (emps.Contains(",") == true)
                     {

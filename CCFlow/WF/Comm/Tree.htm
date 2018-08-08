@@ -73,7 +73,7 @@
             var IsDelete = mapBase.IsDelete;
             var IsView = mapBase.IsView;
             //是否有新增权限，无，则新建同级、新建下级的功能隐藏
-            if (IsInsert == "False") {
+            if (IsInsert.toString().toLowerCase() == "false") {
                 $("#Create_Sample_Node").hide();
                 $("#Create_Sub_Node").hide();
                 $("#Create_Sample_Node_1").hide();
@@ -81,7 +81,7 @@
             }
 
             //是否有修改权限，无则修改、上移、下移的功能隐藏
-            if (IsUpdata == "False") {
+            if (IsUpdata.toString().toLowerCase() == "false") {
                 $("#Edit_Node").hide();
                 $("#Up_Node").hide();
                 $("#Down_Node").hide();
@@ -96,7 +96,7 @@
             }
 
             //是否有删除权限，无则删除功能隐藏
-            if (IsDelete == "False") {
+            if (IsDelete.toString().toLowerCase() == "false") {
                 $("#Delete_Node").hide();
                 $("#Delete_Node_1").hide();
             }

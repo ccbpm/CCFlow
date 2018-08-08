@@ -710,74 +710,90 @@ namespace BP.WF.HttpHandler
             if (num == 0)
                 return "err@没有查询到当前人员的工作列表数据.";
 
-            string fk_emp = this.GetRequestVal("AddEmps");
-            Emp emp = new Emp(fk_emp);
+            string empStrs = this.GetRequestVal("AddEmps");
+            if (DataType.IsNullOrEmpty(empStrs)==true)
+                return "err@您没有选择人员.";
 
-            //查查是否存在队列里？
-            num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
-                    GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
 
-            if (num == 1)
+            string err = "";
+
+            string[] emps=empStrs.Split(',');
+            foreach (string empStr in emps)
             {
-                return "err@人员[" + emp.No + "," + emp.Name + "]已经在队列里.";
+                if (DataType.IsNullOrEmpty(empStr) == true)
+                    continue;
+
+
+                Emp emp = new Emp(empStr);
+
+                //查查是否存在队列里？
+                num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
+                        GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
+
+                if (num == 1)
+                {
+                    err += " 人员[" + emp.No + "," + emp.Name + "]已经在队列里.";
+                    continue;
+                }
+
+                //查询出来其他列的数据.
+                gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
+                    GenerWorkerListAttr.WorkID, this.WorkID,
+                    GenerWorkerListAttr.FK_Node, this.FK_Node);
+
+                gwlOfMe.FK_Emp = emp.No;
+                gwlOfMe.FK_EmpText = emp.Name;
+                gwlOfMe.IsPassInt = -1; //设置不可以用.
+                gwlOfMe.FK_Dept = emp.FK_Dept;
+                gwlOfMe.FK_DeptT = emp.FK_DeptText; //部门名称.
+                gwlOfMe.IsRead = false;
+
+                #region 计算会签时间.
+                if (nd.HisCHWay == CHWay.None)
+                {
+                    gwlOfMe.SDT = "无";
+                }
+                else
+                {
+                    //给会签人设置应该完成日期. 考虑到了节假日.                
+                    DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
+                         nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
+                    //应完成日期.
+                    gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                }
+
+                //求警告日期.
+                DateTime dtOfWarning = DateTime.Now;
+                if (nd.WarningDay == 0)
+                {
+                    //  dtOfWarning = "无";
+                }
+                else
+                {
+                    //计算警告日期。
+                    // 增加小时数. 考虑到了节假日.
+                    dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, 0, nd.TWay);
+                }
+                gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
+                #endregion 计算会签时间.
+
+                gwlOfMe.Sender = BP.Web.WebUser.Name; //发送人为当前人.
+                gwlOfMe.IsHuiQian = true;
+                gwlOfMe.Insert(); //插入作为待办.
+
+                //发送消息.
+                BP.WF.Dev2Interface.Port_SendMsg(emp.No,
+                    "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+
+                if (gwf.TodoEmps.Contains(emp.Name + ";") == false)
+                    gwf.TodoEmps += emp.Name + ";";
             }
-
-
-            //查询出来其他列的数据.
-            gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
-                GenerWorkerListAttr.WorkID, this.WorkID,
-                GenerWorkerListAttr.FK_Node, this.FK_Node);
-
-            gwlOfMe.FK_Emp = emp.No;
-            gwlOfMe.FK_EmpText = emp.Name;
-            gwlOfMe.IsPassInt = -1; //设置不可以用.
-            gwlOfMe.FK_Dept = emp.FK_Dept;
-            gwlOfMe.FK_DeptT = emp.FK_DeptText; //部门名称.
-            gwlOfMe.IsRead = false;
-
-            #region 计算会签时间.
-            if (nd.HisCHWay == CHWay.None)
-            {
-                gwlOfMe.SDT = "无";
-            }
-            else
-            {
-                //给会签人设置应该完成日期. 考虑到了节假日.                
-                DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
-                     nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
-                //应完成日期.
-                gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
-            }
-
-            //求警告日期.
-            DateTime dtOfWarning = DateTime.Now;
-            if (nd.WarningDay == 0)
-            {
-                //  dtOfWarning = "无";
-            }
-            else
-            {
-                //计算警告日期。
-                // 增加小时数. 考虑到了节假日.
-                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, 0, nd.TWay);
-            }
-            gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
-            #endregion 计算会签时间.
-
-            gwlOfMe.Sender = BP.Web.WebUser.Name; //发送人为当前人.
-            gwlOfMe.IsHuiQian = true;
-            gwlOfMe.Insert(); //插入作为待办.
-
-            //发送消息.
-            BP.WF.Dev2Interface.Port_SendMsg(emp.No,
-                "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
-
-            if (gwf.TodoEmps.Contains(emp.Name + ";") == false)
-                gwf.TodoEmps += emp.Name + ";";
 
             gwf.Update();
+            if (err.Equals("")==true)
+                return "增加成功.";
 
-            return "增加成功.";
+            return "err@"+err;
         }
         #endregion
 

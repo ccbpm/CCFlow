@@ -64,7 +64,7 @@
             GroupAnalysis();
             //显示数据
             doPostBack();
-           
+
 
         });
 
@@ -499,7 +499,7 @@
                 if (noShowSum.indexOf("@" + AttrsOfNum[i].KeyOfEn + "@") != -1) {
                     var isHave = false;
                     for (var j = 0; j < ActiveAttr.length; j++) {
-                        if (ActiveAttr[j].AttrKey != AttrsOfNum[i].Key)
+                        if (ActiveAttr[j].AttrKey != AttrsOfNum[i].KeyOfEn)
                             continue;
 
                         isHave = true;
@@ -511,13 +511,13 @@
                         }
 
                         for (var k = 0; k < AttrsOfNum1.length; k++) {
-                            if (exp.indexOf("@" + AttrsOfNum1[k].Key + "@") != -1) {
+                            if (exp.indexOf("@" + AttrsOfNum1[k].KeyOfEn + "@") != -1) {
                                 d = 0;
                                 $.each(groupSearch, function (i, o) {
                                     d += parseFloat(o[AttrsOfNum1[k].KeyOfEn]);
                                 });
 
-                                exp = exp.replace("@" + AttrsOfNum1[k].Key + "@", d);
+                                exp = exp.replace("@" + AttrsOfNum1[k].KeyOfEn + "@", d);
                             }
                         }
 
@@ -525,7 +525,7 @@
                         handler.AddPara("Exp", exp);
                         var data = handler.DoMethodReturnString("ParseExpToDecimal");
                         //待定
-                        html += "<td class='TDNum' nowrap >" + data.toFixed(2) + "</td>";
+                        html += "<td class='TDNum' nowrap >" + data.toFixed(4) + "</td>";
                     }
 
                     if (isHave == false)
@@ -536,18 +536,18 @@
 
                 switch (AttrsOfNum[i].MyDataType) {
                     case 8:
-                        if (ur.Vals.indexOf(attr.Key + "=AMOUNT") != -1) {
+                        if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1) {
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(2) + "</td>";
+                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(2) + "</td>";
+                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
                         }
                         else {
                             d = 0;
@@ -555,13 +555,13 @@
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
 
-                            if (ur.Vals.indexOf(AttrsOfNum[i].Key + "=AVG") < 1)
-                                html += "<td class='TDNum' nowrap >" + d.toFixed(2) + "</td>";
+                            if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") < 1)
+                                html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
                             else {
                                 if (groupSearch.length == 0)
                                     html += "<td class='TDNum' nowrap ></td>";
                                 else
-                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(2) + "</td>";
+                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
                             }
                         }
                         break;
@@ -586,13 +586,13 @@
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
 
-                            if (ur.Vals.indexOf(AttrsOfNum[i].Key + "=AVG") < 1)
+                            if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") == -1)
                                 html += "<td class='TDNum' nowrap >" + d + "</td>";
                             else {
                                 if (groupSearch.length == 0)
                                     html += "<td class='TDNum' nowrap ></td>";
                                 else
-                                    html += "<td class='TDNum' nowrap >" + d / groupSearch.length + "</td>";
+                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
                             }
                         }
                         break;

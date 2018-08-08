@@ -257,7 +257,7 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// 重新设置默信息.
+        /// 重新设置默信息. @yuanlina 这里有问题，需要重构到jflow上去.
         /// </summary>
         public void ResetDefaultVal()
         {
@@ -270,16 +270,8 @@ namespace BP.En
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
-                if (attr.UIIsReadonly == false)
-                    continue;
-
-               // string v = this.GetValStringByKey(attr.Key, null);  // this._row[key] as string;
-
                string v = attr.DefaultValOfReal as string;
-               if (v == null)
-                   continue;
-
-                if ( v.Contains("@")==false)
+                if ( v==null || v.Contains("@")==false)
                     continue;
 
                 //if (attr.DefaultValOfReal.Contains("@") == false)

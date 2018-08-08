@@ -723,7 +723,6 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(empStr) == true)
                     continue;
 
-
                 Emp emp = new Emp(empStr);
 
                 //查查是否存在队列里？

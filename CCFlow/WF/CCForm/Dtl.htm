@@ -1663,13 +1663,13 @@
                     if (mapExt.Tag != "") {
                         /* 处理下拉框的选择范围的问题 */
                         var strs = mapExt.Tag.split('$');
-                        for (var str in strs) {
+                        for (var k = 0; k < strs.length; k++) {
                             var str = strs[k];
-                            if (str = "") {
+                            if (str == "") {
                                 continue;
                             }
 
-                            var myCtl = str.Split(':');
+                            var myCtl = str.split(':');
                             var ctlID = myCtl[0];
 
                             var ddlC1 = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
@@ -1684,8 +1684,8 @@
                                 continue;
 
                             //获取要填充 ddll 的SQL.
-                            var sql = myCtl[1].Replace("~", "'");
-                            sql = sql.Replace("@Key", txt);
+                            var sql = myCtl[1].replace("~", "'");
+                            sql = sql.replace("@Key", txt);
                             //sql = BP.WF.Glo.DealExp(sql, en, null);  怎么办
                         }
                     }
@@ -1838,8 +1838,8 @@
                             if (ddlOper.val() == "")
                                 continue;
 
-                            var sql = myCtl[1].Replace("~", "'");
-                            sql = sql.Replace("@Key", ddlOper.val());
+                            var sql = myCtl[1].replace("~", "'");
+                            sql = sql.replace("@Key", ddlOper.val());
 
                             var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5' }];
                             var operations = '';

@@ -884,8 +884,6 @@ namespace BP.WF.HttpHandler
             //把权限信息放入.
             UAC uac = en.HisUAC;
             ht.Add("IsUpdata", uac.IsUpdate);
-
-
             ht.Add("IsInsert", uac.IsInsert);
             ht.Add("IsDelete", uac.IsDelete);
             ht.Add("IsView", uac.IsView);

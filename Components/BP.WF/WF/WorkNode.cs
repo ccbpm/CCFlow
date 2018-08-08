@@ -866,7 +866,7 @@ namespace BP.WF
                     at = ActionType.ForwardHL;
                     break;
                 case NodeWorkType.SubThreadWork:
-                    at = ActionType.SubFlowForward;
+                    at = ActionType.SubThreadForward;
                     break;
                 default:
                     break;
@@ -878,8 +878,12 @@ namespace BP.WF
             if (this.HisWorkerLists.Count == 1)
             {
                 GenerWorkerList wl = this.HisWorkerLists[0] as GenerWorkerList;
+                this.AddToTrack(at, wl.FK_Emp, wl.FK_EmpText, wl.FK_Node, wl.FK_NodeText, null, this.ndFrom,null,null,wl.WorkID);
 
-                this.AddToTrack(at, wl.FK_Emp, wl.FK_EmpText, wl.FK_Node, wl.FK_NodeText, null, this.ndFrom);
+
+                //更新他的WorkID.
+                //DBAccess.RunSQL("UPDATE ");
+
             }
             else
             {
@@ -2385,76 +2389,24 @@ namespace BP.WF
             #endregion
 
         }
-        private void NodeSend_2X_GenerFH()
-        {
-            #region GenerFH
-            //GenerFH fh = new GenerFH();
-            //fh.FID = this.WorkID;
-            //if (this.HisNode.IsStartNode || fh.IsExits == false)
-            //{
-            //    try
-            //    {
-            //        fh.Title = this.HisWork.GetValStringByKey(StartWorkAttr.Title);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
-            //        attr.FK_MapData = "ND" + this.HisNode.NodeID;
-            //        attr.HisEditType = BP.En.EditType.UnDel;
-            //        attr.KeyOfEn = "Title";
-            //        int i = attr.Retrieve(MapAttrAttr.FK_MapData, attr.FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn);
-            //        if (i == 0)
-            //        {
-            //            attr.KeyOfEn = "Title";
-            //            attr.Name = "标题"; // "流程标题";
-            //            attr.MyDataType = BP.DA.DataType.AppString;
-            //            attr.UIContralType = UIContralType.TB;
-            //            attr.LGType = FieldTypeS.Normal;
-            //            attr.UIVisible = true;
-            //            attr.UIIsEnable = true;
-            //            attr.UIIsLine = true;
-            //            attr.MinLen = 0;
-            //            attr.MaxLen = 200;
-            //            attr.Idx = -100;
-            //            attr.Insert();
-            //        }
-            //        fh.Title = this.Execer + "-" + this.ExecerName + " @ " + DataType.CurrentDataTime + " ";
-            //    }
-            //    fh.RDT = DataType.CurrentData;
-            //    fh.FID = this.WorkID;
-            //    fh.FK_Flow = this.HisNode.FK_Flow;
-            //    fh.FK_Node = this.HisNode.NodeID;
-            //    fh.GroupKey = this.Execer;
-            //    fh.WFState = 0;
-            //    try
-            //    {
-            //        fh.DirectInsert();
-            //    }
-            //    catch
-            //    {
-            //        fh.DirectUpdate();
-            //    }
-            //}
-            #endregion GenerFH
-        }
+      
         /// <summary>
         /// 处理分流点向下发送 to 异表单.
         /// </summary>
         /// <returns></returns>
         private void NodeSend_24_UnSameSheet(Nodes toNDs)
         {
-            NodeSend_2X_GenerFH();
+            //NodeSend_2X_GenerFH();
 
             /*分别启动每个节点的信息.*/
             string msg = "";
 
             #region 查询出来当前流程节点数据，为子线程的节点copy数据所用。
             //查询出来上一个节点的附件信息来。
-            FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID,
-                       this.WorkID.ToString());
+            FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID,this.WorkID.ToString());
+
             //查询出来上一个Ele信息来。
-            FrmEleDBs eleDBs = new FrmEleDBs("ND" + this.HisNode.NodeID,
-                       this.WorkID.ToString());
+            FrmEleDBs eleDBs = new FrmEleDBs("ND" + this.HisNode.NodeID,this.WorkID.ToString());
             #endregion
 
             //定义系统变量.
@@ -2589,6 +2541,13 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, empIDs, empIDs, SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarAcceptersName, empNames, empNames, SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarToNodeIDs, toNodeIDs, toNodeIDs, SendReturnMsgType.SystemMsg);
+
+            //写入日志. @yuanlina
+            if (this.HisNode.IsStartNode==true)
+                this.AddToTrack(ActionType.Start, empIDs, empNames, this.HisNode.NodeID, this.HisNode.Name, msg);
+            else
+                this.AddToTrack(ActionType.Forward, empIDs, empNames, this.HisNode.NodeID, this.HisNode.Name, msg);
+
         }
         /// <summary>
         /// 产生分流点
@@ -7084,11 +7043,27 @@ namespace BP.WF
         /// <param name="toNDid">到节点</param>
         /// <param name="toNDName">到节点名称</param>
         /// <param name="msg">消息</param>
-        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom, string frmDBJson = null, string tag = null)
+        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom, string frmDBJson = null, string tag = null, Int64 workid=0)
         {
             Track t = new Track();
-            t.WorkID = this.HisWork.OID;
-            t.FID = this.HisWork.FID;
+            if (at == ActionType.SubThreadForward)
+            {
+                if (this.HisNode.HisRunModel == RunModel.FL)
+                {
+                    t.WorkID = 0;
+                    t.FID = this.HisWork.OID;
+                }
+                else
+                {
+                    t.WorkID = this.HisWork.OID;
+                    t.FID = this.HisWork.FID;
+                }
+            }
+            else
+            {
+                t.WorkID = this.HisWork.OID;
+                t.FID = this.HisWork.FID;
+            }
             t.RDT = DataType.CurrentDataTimess;
             t.HisActionType = at;
 
@@ -7143,11 +7118,11 @@ namespace BP.WF
             }
 
 
-            if (at == ActionType.SubFlowForward
+            if (at == ActionType.SubThreadForward
                 || at == ActionType.StartChildenFlow
                 || at == ActionType.Start
                 || at == ActionType.Forward
-                || at == ActionType.SubFlowForward
+                || at == ActionType.SubThreadForward
                 || at == ActionType.ForwardHL
                 || at == ActionType.FlowOver)
             {
@@ -7166,11 +7141,11 @@ namespace BP.WF
                 t.CheckPhysicsTable();
             }
 
-            if (at == ActionType.SubFlowForward
+            if (at == ActionType.SubThreadForward
               || at == ActionType.StartChildenFlow
               || at == ActionType.Start
               || at == ActionType.Forward
-              || at == ActionType.SubFlowForward
+              || at == ActionType.SubThreadForward
               || at == ActionType.ForwardHL
               || at == ActionType.FlowOver)
             {
@@ -7733,7 +7708,7 @@ namespace BP.WF
                 }
             }
             #endregion 复制Ele。
-
+            
 
         }
         /// <summary>
@@ -8003,11 +7978,11 @@ namespace BP.WF
                     case RunModel.SubThread:
                         sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
                                                                                        + " AND NDTo=" + this.HisNode.NodeID + " "
-                                                                                       + " AND ActionType=" + (int)ActionType.SubFlowForward + " ORDER BY RDT DESC";
+                                                                                       + " AND ActionType=" + (int)ActionType.SubThreadForward + " ORDER BY RDT DESC";
                         if (DBAccess.RunSQLReturnCOUNT(sql) == 0)
                             sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.HisWork.FID
                                                                                       + " AND NDTo=" + this.HisNode.NodeID + " "
-                                                                                      + " AND ActionType=" + (int)ActionType.SubFlowForward + " ORDER BY RDT DESC";
+                                                                                      + " AND ActionType=" + (int)ActionType.SubThreadForward + " ORDER BY RDT DESC";
 
                         break;
                     default:
@@ -8179,7 +8154,7 @@ namespace BP.WF
         public int GenerByWorkID(Flow flow, Int64 oid)
         {
             string table = "ND" + int.Parse(flow.No) + "Track";
-            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubFlowForward + " ) ORDER BY RDT";
+            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubThreadForward + " ) ORDER BY RDT";
             DataTable dt = DBAccess.RunSQLReturnTable(actionSQL);
 
             string nds = "";

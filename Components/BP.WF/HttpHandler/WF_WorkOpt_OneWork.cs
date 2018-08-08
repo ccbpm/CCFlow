@@ -446,6 +446,160 @@ namespace BP.WF.HttpHandler
         /// <param name="workid">工作编号</param>
         /// <param name="fid">父流程编号</param>
         /// <returns></returns>
+        public string Chart_Init()
+        {
+            string fk_flow = this.FK_Flow;
+            Int64 workid = this.WorkID;
+            Int64 fid = this.FID;
+
+
+            DataSet ds = new DataSet();
+            DataTable dt = null;
+            string json = string.Empty;
+            try
+            {
+                //获取流程信息
+                var sql = "SELECT No \"No\", Name \"Name\", Paras \"Paras\", ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_Flow";
+                ds.Tables.Add(dt);
+
+                //获取流程中的节点信息
+                sql = "SELECT NodeID \"ID\", Name \"Name\", ICON \"Icon\", X \"X\", Y \"Y\", NodePosType \"NodePosType\",RunModel \"RunModel\",HisToNDs \"HisToNDs\",TodolistModel \"TodolistModel\" FROM WF_Node WHERE FK_Flow='" +
+                    fk_flow + "' ORDER BY Step";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_Node";
+                ds.Tables.Add(dt);
+
+                //获取流程中的标签信息
+                sql = "SELECT MyPK \"MyPK\", Name \"Name\", X \"X\", Y \"Y\" FROM WF_LabNote WHERE FK_Flow='" + fk_flow + "'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_LabNote";
+                ds.Tables.Add(dt);
+
+                //获取流程中的线段方向信息
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_Direction";
+                ds.Tables.Add(dt);
+
+                if (workid != 0)
+                {
+                    //获取流程信息，added by liuxc,2016-10-26
+                    //sql =
+                    //    "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow wgwf WHERE wgwf.WorkID = " +
+                    //    workid;
+                    sql = "SELECT wgwf.Starter as \"Starter\","
+                          + "        wgwf.StarterName as \"StarterName\","
+                          + "        wgwf.RDT as \"RDT\","
+                          + "        wgwf.WFSta as \"WFSta\","
+                          + "        se.Lab  as   \"WFStaText\","
+                          + "        wgwf.WFState as \"WFState\","
+                          + "        wgwf.FID as \"FID\","
+                          + "        wgwf.PWorkID as \"PWorkID\","
+                          + "        wgwf.PFlowNo as \"PFlowNo\","
+                          + "        wgwf.PNodeID as \"PNodeID\","
+                          + "        wgwf.FK_Flow as \"FK_Flow\","
+                          + "        wgwf.FK_Node as \"FK_Node\","
+                          + "        wgwf.Title as \"Title\","
+                          + "        wgwf.WorkID as \"WorkID\","
+                          + "        wgwf.NodeName as \"NodeName\","
+                          + "        wf.Name  as   \"FlowName\""
+                          + " FROM   WF_GenerWorkFlow wgwf"
+                          + "        INNER JOIN WF_Flow wf"
+                          + "             ON  wf.No = wgwf.FK_Flow"
+                          + "        INNER JOIN Sys_Enum se"
+                          + "             ON  se.IntKey = wgwf.WFSta"
+                          + "             AND se.EnumKey = 'WFSta'"
+                          + " WHERE  wgwf.WorkID = {0}"
+                          + "        OR  wgwf.FID = {0}"
+                          + "        OR  wgwf.PWorkID = {0}"
+                          + " ORDER BY"
+                          + "        wgwf.RDT DESC";
+
+                    dt = DBAccess.RunSQLReturnTable(string.Format(sql, workid));
+                    dt.TableName = "FlowInfo";
+                    ds.Tables.Add(dt);
+
+                    //获取工作轨迹信息
+                    var trackTable = "ND" + int.Parse(fk_flow) + "Track";
+                    sql = "SELECT NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
+                          " WHERE WorkID=" +
+                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT ASC";
+
+                    dt = DBAccess.RunSQLReturnTable(sql);
+
+                    //判断轨迹数据中，最后一步是否是撤销或退回状态的，如果是，则删除最后2条数据
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.UnSend))
+                        {
+                            if (dt.Rows.Count > 1)
+                            {
+                                dt.Rows.RemoveAt(0);
+                                dt.Rows.RemoveAt(0);
+                            }
+                            else
+                            {
+                                dt.Rows.RemoveAt(0);
+                            }
+                        }
+                    }
+
+                    dt.TableName = "Track";
+                    ds.Tables.Add(dt);
+
+                    //获取预先计算的节点处理人，以及处理时间,added by liuxc,2016-4-15
+                    sql = "SELECT wsa.FK_Node as \"FK_Node\",wsa.FK_Emp as \"FK_Emp\",wsa.EmpName as \"EmpName\",wsa.TimeLimit as \"TimeLimit\",wsa.TSpanHour as \"TSpanHour\",wsa.ADT as \"ADT\",wsa.SDT as \"SDT\" FROM WF_SelectAccper wsa WHERE wsa.WorkID = " + workid;
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                   // dt.TableName = "POSSIBLE";
+                    dt.TableName = "Possible";
+                    ds.Tables.Add(dt);
+
+                    //获取节点处理人数据，及处理/查看信息
+                    sql = "SELECT wgw.FK_Emp as \"FK_Emp\",wgw.FK_Node as \"FK_Node\",wgw.FK_EmpText as \"FK_EmpText\",wgw.RDT as \"RDT\",wgw.IsRead as \"IsRead\",wgw.IsPass as \"IsPass\" FROM WF_GenerWorkerlist wgw WHERE wgw.WorkID = " +
+                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid));
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    dt.TableName = "DISPOSE";
+                    ds.Tables.Add(dt);
+                }
+                else
+                {
+                    var trackTable = "ND" + int.Parse(fk_flow) + "Track";
+                    sql = "SELECT NDFrom \"NDFrom\", NDTo \"NDTo\",ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\",EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
+                          " WHERE WorkID=0 ORDER BY RDT ASC";
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    dt.TableName = "TRACK";
+                    ds.Tables.Add(dt);
+                }
+
+                //for (int i = 0; i < ds.Tables.Count; i++)
+                //{
+                //    dt = ds.Tables[i];
+                //    dt.TableName = dt.TableName.ToUpper();
+                //    for (int j = 0; j < dt.Columns.Count; j++)
+                //    {
+                //        dt.Columns[j].ColumnName = dt.Columns[j].ColumnName.ToUpper();
+                //    }
+                //}
+
+                string str = BP.Tools.Json.DataSetToJson(ds);
+                //  DataType.WriteFile("c:\\GetFlowTrackJsonData_CCflow.txt", str);
+                return str;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+            return json;
+        }
+        /// <summary>
+        /// 获取流程的JSON数据，以供显示工作轨迹/流程设计
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="workid">工作编号</param>
+        /// <param name="fid">父流程编号</param>
+        /// <returns></returns>
         public string GetFlowTrackJsonData()
         {
             string fk_flow = this.FK_Flow;

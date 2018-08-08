@@ -349,7 +349,7 @@ namespace BP.WF
         /// <summary>
         /// 子线程前进
         /// </summary>
-        SubFlowForward=11,
+        SubThreadForward=11,
         /// <summary>
         /// 取回
         /// </summary>

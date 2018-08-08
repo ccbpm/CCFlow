@@ -337,7 +337,7 @@ namespace BP.WF
                     return "子流程调用";
                 case ActionType.StartChildenFlow:
                     return "子流程发起";
-                case ActionType.SubFlowForward:
+                case ActionType.SubThreadForward:
                     return "线程前进";
                 case ActionType.RebackOverFlow:
                     return "恢复已完成的流程";

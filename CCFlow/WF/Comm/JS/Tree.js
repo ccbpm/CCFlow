@@ -3,7 +3,7 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
     var enName = GetEnName();
     var en = new Entity(enName, nodeNo);
     var returnVal = "";
-    switch(dowhat){
+    switch (dowhat) {
         case "sample": //新建同级节点
             var sampleEn = en.DoMethodReturnString("DoMyCreateSameLevelNode");
             if (sampleEn.indexOf('err@') == 0) {
@@ -13,7 +13,7 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
             sampleEn = JSON.parse(sampleEn);
             returnVal = "{No:'" + sampleEn.No + "',Name:'" + sampleEn.Name + "'}";
             break;
-        case "children"://新建下级节点
+        case "children": //新建下级节点
             var subEn = en.DoMethodReturnString("DoMyCreateSubNode");
             if (subEn.indexOf('err@') == 0) {
                 alert(subEn);
@@ -22,21 +22,21 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
             subEn = JSON.parse(subEn);
             returnVal = "{No:'" + subEn.No + "',Name:'" + subEn.Name + "'}";
             break;
-        case "doup"://上移
+        case "doup": //上移
             en.DoMethodReturnString("DoUp");
-           
+
             break;
-        case "dodown"://下移
-           en.DoMethodReturnString("DoDown");
+        case "dodown": //下移
+            en.DoMethodReturnString("DoDown");
             break;
-        case "delete"://删除
+        case "delete": //删除
             en.Delete();
             break;
         default: break;
 
     }
     callback(returnVal);
-   
+
 }
 
 //创建同级目录
@@ -90,17 +90,31 @@ function EditNode(type) {
     var node = $('#enTree').tree('getSelected');
     if (node) {
         var enName = GetEnName();
-        if (enName == "" || enName==undefined) {
+        if (enName == "" || enName == undefined) {
             $.messager.alert('提示', '没有找到类名！', 'info');
             return;
         }
         var url = "";
         //编辑
         if (type == 0)
-            url = "En.htm?EnName=" + enName + "&PKVal=" + node.id;
+            url = "En.htm?EnName=" + enName + "&PKVal=" + node.id + "&isTree=1";
         else
-            url = "En.htm?EnName=" + enName + "&PKVal=" + node.id + "&isReadonly=1";
-        OpenEasyUiDialog(url, 'treeFrame', '编辑', 850, 650, null, null, null, null, null, function () {
+            url = "En.htm?EnName=" + enName + "&PKVal=" + node.id + "&isTree=1" + "&isReadonly=1";
+
+        var cfg = new Entity("BP.Sys.EnCfg");
+        cfg.No = GetQueryString("EnsName");
+        cfg.RetrieveFromDBSources();
+
+        var windowW = cfg.GetPara("WinCardW");
+        if (windowW == "" || windowW == undefined)
+            windowW = 700;
+
+        var windowH = cfg.GetPara("WinCardH");
+        if (windowH == "" || windowH == undefined)
+            windowH = 500;
+
+
+        OpenEasyUiDialog(url, 'treeFrame', '编辑', windowW, windowH, null, null, null, null, null, function () {
             var en = new Entity(enName, node.id);
             $('#enTree').tree('update', { target: node.target, text: en.Name });
 
@@ -144,31 +158,10 @@ function DoDown() {
     if (node) {
         treeNodeManage("dodown", node.id, function (js) {
             BindTree();
-           // $('#enTree').tree('expandAll');
+            // $('#enTree').tree('expandAll');
         }, this);
     } else {
         $.messager.alert('提示', '请选择节点。', 'info');
     }
 }
 
-//公共方法
-function queryData(param, callback, scope, method, showErrMsg) {
-    if (!method) method = 'GET';
-    $.ajax({
-        type: method, //使用GET或POST方法访问后台
-        dataType: "text", //返回json格式的数据
-        contentType: "application/json; charset=utf-8",
-        url: "Tree.aspx", //要访问的后台地址
-        data: param, //要发送的数据
-        async: false,
-        cache: false,
-        complete: function () { }, //AJAX请求完成时隐藏loading提示
-        error: function (XMLHttpRequest, errorThrown) {
-            callback(XMLHttpRequest);
-        },
-        success: function (msg) {//msg为返回的数据，在这里做数据绑定
-            var data = msg;
-            callback(data, scope);
-        }
-    });
-}

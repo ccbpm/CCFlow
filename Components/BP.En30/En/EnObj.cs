@@ -270,26 +270,28 @@ namespace BP.En
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
-                string v = this.GetValStringByKey(attr.Key, null);  // this._row[key] as string;
-
-                //含有特定值时取消重新设定默认值
-                if (v !=null && v.Contains("@")==false)
+                if (attr.UIIsReadonly == false)
                     continue;
 
-                v = attr.DefaultValOfReal as string;
-                if (v == null)
+               // string v = this.GetValStringByKey(attr.Key, null);  // this._row[key] as string;
+
+               string v = attr.DefaultValOfReal as string;
+               if (v == null)
+                   continue;
+
+                if ( v.Contains("@")==false)
                     continue;
 
-                if (attr.DefaultValOfReal.Contains("@") == false)
-                {
-                    //added by liuxc,2015-7-13,字符串类型的字段，如果有默认值的，按默认值填写值，比如审批意见默认为“同意”的等等
-                    if (attr.UITBShowType == Web.Controls.TBType.TB
-                        && attr.UIVisible
-                        && string.IsNullOrWhiteSpace(this.GetValByKey(attr.Key) as string)
-                        && !string.IsNullOrWhiteSpace(attr.DefaultValOfReal))
-                        this.SetValByKey(attr.Key, attr.DefaultVal);
-                    continue;
-                }
+                //if (attr.DefaultValOfReal.Contains("@") == false)
+                //{
+                //    //added by liuxc,2015-7-13,字符串类型的字段，如果有默认值的，按默认值填写值，比如审批意见默认为“同意”的等等
+                //    if (attr.UITBShowType == Web.Controls.TBType.TB
+                //        && attr.UIVisible
+                //        && string.IsNullOrWhiteSpace(this.GetValByKey(attr.Key) as string)
+                //        && !string.IsNullOrWhiteSpace(attr.DefaultValOfReal))
+                //        this.SetValByKey(attr.Key, attr.DefaultVal);
+                //    continue;
+                //}
 
                 string myval = this.GetValStrByKey(attr.Key);
 

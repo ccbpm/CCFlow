@@ -691,7 +691,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
     }
     src += "&r=q" + paras;
 
-    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + 800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
+    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
 
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);

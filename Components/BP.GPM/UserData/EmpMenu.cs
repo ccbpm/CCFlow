@@ -21,6 +21,10 @@ namespace BP.GPM
         /// </summary>
         public const string FK_Menu = "FK_Menu";
         /// <summary>
+        /// 是否选中.
+        /// </summary>
+        public const string IsChecked = "IsChecked";
+        /// <summary>
         /// 系统
         /// </summary>
         public const string FK_App = "FK_App";
@@ -31,17 +35,7 @@ namespace BP.GPM
     public class EmpMenu : EntityMM
     {
         #region 属性
-        public string CtrlObjs
-        {
-            get
-            {
-                return this.GetValStringByKey(MenuAttr.CtrlObjs);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.CtrlObjs, value);
-            }
-        }
+       
         public string FK_Emp
         {
             get
@@ -64,67 +58,7 @@ namespace BP.GPM
                 this.SetValByKey(EmpMenuAttr.FK_Menu, value);
             }
         }
-        public string Name
-        {
-            get
-            {
-                return this.GetValStringByKey(MenuAttr.Name);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.Name, value);
-            }
-        }
-        public CtrlWay HisCtrlWay
-        {
-            get
-            {
-                return (CtrlWay)this.GetValIntByKey(MenuAttr.CtrlWay);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.CtrlWay, (int)value);
-            }
-        }
-        /// <summary>
-        /// 功能
-        /// </summary>
-        public MenuType HisMenuType
-        {
-            get
-            {
-                return (MenuType)this.GetValIntByKey(MenuAttr.MenuType);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.MenuType, (int)value);
-            }
-        }
-        /// <summary>
-        /// 是否是ccSytem
-        /// </summary>
-        public int MenuType
-        {
-            get
-            {
-                return this.GetValIntByKey(MenuAttr.MenuType);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.MenuType, value);
-            }
-        }
-        public int Idx
-        {
-            get
-            {
-                return this.GetValIntByKey(MenuAttr.Idx);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.Idx, value);
-            }
-        }
+       
 
         public string FK_App
         {
@@ -137,33 +71,18 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.FK_App, value);
             }
         }
-        public string Img
+        /// <summary>
+        /// 是否选中
+        /// </summary>
+        public string IsChecked
         {
             get
             {
-                string s = this.GetValStringByKey("WebPath");
-                if (DataType.IsNullOrEmpty(s))
-                {
-                    if (this.HisMenuType == GPM.MenuType.Dir)
-                        return "../../Images/Btn/View.gif";
-                    else
-                        return "../../Images/Btn/Go.gif";
-                }
-                else
-                {
-                    return s;
-                }
-            }
-        }
-        public string Url
-        {
-            get
-            {
-                return this.GetValStringByKey(MenuAttr.Url);
+                return this.GetValStringByKey(EmpMenuAttr.IsChecked);
             }
             set
             {
-                this.SetValByKey(MenuAttr.Url, value);
+                this.SetValByKey(EmpMenuAttr.IsChecked, value);
             }
         }
         #endregion
@@ -200,19 +119,9 @@ namespace BP.GPM
 
 
                 map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
-                map.AddDDLEntitiesPK(EmpMenuAttr.FK_Menu, null, "菜单功能",new BP.GPM.Menus(),true);
-
-                //map.AddDDLEntitiesPK(EmpMenuAttr.FK_Emp,null,"操作员",new 
-                //map.AddTBString(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 30, 20);
-                //map.AddTBString(EmpMenuAttr.FK_Menu, null, "菜单功能", true, false, 0, 30, 20);
-
-                //map.AddTBString(MenuAttr.Name, null, "菜单功能-名称", true, false, 0, 3900, 20);
-                //map.AddTBString(MenuAttr.ParentNo, null, "ParentNo", true, false, 1, 30, 20);
-                //map.AddTBString(AppAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
-                //map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true,true, MenuAttr.MenuType,
-                //    "@3=目录@4=功能@5=功能控制点");
-                //map.AddTBString(MenuAttr.FK_App, null, "系统", true, false, 0, 30, 20);
-                //map.AddMyFile("图标");
+               // map.AddDDLEntitiesPK(EmpMenuAttr.FK_Menu, null, "菜单功能",new BP.GPM.Menus(),true);
+                map.AddTBStringPK(EmpMenuAttr.FK_Menu, null, "菜单", false, false, 0, 50, 20);
+                map.AddBoolean(EmpMenuAttr.IsChecked, true, "是否选中", true, true);
 
                 this._enMap = map;
                 return this._enMap;

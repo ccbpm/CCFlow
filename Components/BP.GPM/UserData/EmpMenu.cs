@@ -28,7 +28,7 @@ namespace BP.GPM
     /// <summary>
     /// 人员菜单功能
     /// </summary>
-    public class EmpMenu : EntityMyPK
+    public class EmpMenu : EntityMM
     {
         #region 属性
         public string CtrlObjs
@@ -198,7 +198,6 @@ namespace BP.GPM
                 map.EnDesc = "人员菜单对应";
                 map.EnType = EnType.App;
 
-               // map.AddMyPK();
 
                 map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
                 map.AddDDLEntitiesPK(EmpMenuAttr.FK_Menu, null, "菜单功能",new BP.GPM.Menus(),true);
@@ -224,7 +223,7 @@ namespace BP.GPM
     /// <summary>
     /// 人员菜单功能s
     /// </summary>
-    public class EmpMenus : EntitiesMyPK
+    public class EmpMenus : EntitiesMM
     {
         #region 构造
         /// <summary>

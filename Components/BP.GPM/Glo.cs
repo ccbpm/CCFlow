@@ -218,7 +218,7 @@ namespace BP.GPM
                     em.FK_Emp = emp.No;
                     em.FK_App = menu.FK_App;
                     em.FK_Menu = menu.No;
-                    em.MyPK = menu.No + "_" + emp.No;
+                    //    em.MyPK = menu.No + "_" + emp.No;
                     em.Insert();
                 }
                 #endregion

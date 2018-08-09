@@ -870,7 +870,7 @@ var Entity = (function () {
                     if (data.indexOf("err@") != -1) {
                         var err = data.replace('err@', '');
                         alert('更新异常:' + err + " \t\nEnName" + self.enName);
-                        return;
+                        return 0;
                     }
 
                     $.each(params, function (n, o) {

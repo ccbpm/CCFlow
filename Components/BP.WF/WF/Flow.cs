@@ -5594,6 +5594,7 @@ namespace BP.WF
                                 md.SetValByKey(dc.ColumnName, val);
                             }
                             md.Save();
+                            md.IntMapAttrs(); //初始化他的字段属性.
                         }
                         break;
                     case "Sys_MapExt":

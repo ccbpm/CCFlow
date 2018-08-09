@@ -1031,6 +1031,9 @@ namespace BP.Sys
         }
         public static string AddComment(Entity en)
         {
+            if (DBAccess.IsExitsObject(en.EnMap.PhysicsTable) == false)
+                return "实体表不存在.";
+
             try
             {
                 switch (en.EnMap.EnDBUrl.DBType)
@@ -1054,12 +1057,19 @@ namespace BP.Sys
         }
         public static void AddCommentForTable_Ora(Entity en)
         {
+           
+
             en.RunSQL("comment on table " + en.EnMap.PhysicsTable + " IS '" + en.EnDesc + "'");
             SysEnums ses = new SysEnums();
             foreach (Attr attr in en.EnMap.Attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
+
+                if (DBAccess.IsExitsTableCol(en.EnMap.PhysicsTable, attr.Field) == false)
+                    continue;
+
+
                 switch (attr.MyFieldType)
                 {
                     case FieldType.PK:
@@ -1094,6 +1104,8 @@ namespace BP.Sys
             MySql.Data.MySqlClient.MySqlConnection conn =
                 new MySql.Data.MySqlClient.MySqlConnection(BP.Sys.SystemConfig.AppCenterDSN);
             en.RunSQL("alter table " + conn.Database + "." + en.EnMap.PhysicsTable + " comment = '" + en.EnDesc + "'");
+
+
             //获取当前实体对应表的所有字段结构信息
             DataTable cols =
                 DBAccess.RunSQLReturnTable(

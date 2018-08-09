@@ -635,7 +635,6 @@ namespace BP.WF
                     //wl.GuestName = wl.GuestName;
                 }
 
-
                 wl.Insert();
                 this.HisWorkerLists.AddEntity(wl);
 
@@ -871,36 +870,48 @@ namespace BP.WF
                 default:
                     break;
             }
+            #endregion  求出日志类型，并加入变量中。
 
             //把工作的当时信息存入数据库.
-            string json = this.HisWork.ToJson();
+           // string json = this.HisWork.ToJson();
 
-            if (this.HisWorkerLists.Count == 1)
+            #region 如果是子线城前进.
+            if (at == ActionType.SubThreadForward)
             {
-                GenerWorkerList wl = this.HisWorkerLists[0] as GenerWorkerList;
-                this.AddToTrack(at, wl.FK_Emp, wl.FK_EmpText, wl.FK_Node, wl.FK_NodeText, null, this.ndFrom,null,null,wl.WorkID);
-
-
-                //更新他的WorkID.
-                //DBAccess.RunSQL("UPDATE ");
-
-            }
-            else
-            {
-                string info = "共(" + this.HisWorkerLists.Count + ")人接收\t\n";
-
                 string emps = "";
                 foreach (GenerWorkerList wl in this.HisWorkerLists)
                 {
-                    info += BP.WF.Glo.DealUserInfoShowModel(wl.FK_DeptT, wl.FK_EmpText) + "\t\n";
-
-                    emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
+                    this.AddToTrack(at, wl, "子线程",this.town.HisWork.OID);
                 }
-
                 //写入到日志.
-                this.AddToTrack(at, this.Execer, "多人接受(见信息栏)", town.HisNode.NodeID, town.HisNode.Name, info, this.ndFrom, null, emps);
             }
-            #endregion
+            #endregion 如果是子线城前进.
+
+            #region 如果是非子线城前进.
+            if (at != ActionType.SubThreadForward)
+            {
+                if (this.HisWorkerLists.Count == 1)
+                {
+                    GenerWorkerList wl = this.HisWorkerLists[0] as GenerWorkerList;
+                    this.AddToTrack(at, wl.FK_Emp, wl.FK_EmpText, wl.FK_Node, wl.FK_NodeText, null, this.ndFrom, null, null);
+                }
+                else
+                {
+                    string info = "共(" + this.HisWorkerLists.Count + ")人接收\t\n";
+
+                    string emps = "";
+                    foreach (GenerWorkerList wl in this.HisWorkerLists)
+                    {
+                        info += BP.WF.Glo.DealUserInfoShowModel(wl.FK_DeptT, wl.FK_EmpText) + "\t\n";
+
+                        emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
+                    }
+
+                    //写入到日志.
+                    this.AddToTrack(at, this.Execer, "多人接受(见信息栏)", town.HisNode.NodeID, town.HisNode.Name, info, this.ndFrom, null, emps);
+                }
+            }
+            #endregion 如果是非子线城前进.
 
             #region 把数据加入变量中.
             string ids = "";
@@ -6937,7 +6948,6 @@ namespace BP.WF
 
             this.rptGe.FlowStartRDT = DataType.CurrentDataTime;
             this.rptGe.FlowEnderRDT = DataType.CurrentDataTime;
-
         }
 
         /// <summary>
@@ -7037,33 +7047,24 @@ namespace BP.WF
         /// <summary>
         /// 增加日志
         /// </summary>
-        /// <param name="at">类型</param>
-        /// <param name="toEmp">到人员</param>
-        /// <param name="toEmpName">到人员名称</param>
-        /// <param name="toNDid">到节点</param>
-        /// <param name="toNDName">到节点名称</param>
-        /// <param name="msg">消息</param>
-        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom, string frmDBJson = null, string tag = null, Int64 workid=0)
+        /// <param name="at"></param>
+        /// <param name="gwl"></param>
+        /// <param name="msg"></param>
+        public void AddToTrack(ActionType at, GenerWorkerList gwl, string msg, Int64 subTreadWorkID)
         {
             Track t = new Track();
-            if (at == ActionType.SubThreadForward)
+
+            if (this.HisGenerWorkFlow.FID == 0)
             {
-                if (this.HisNode.HisRunModel == RunModel.FL)
-                {
-                    t.WorkID = 0;
-                    t.FID = this.HisWork.OID;
-                }
-                else
-                {
-                    t.WorkID = this.HisWork.OID;
-                    t.FID = this.HisWork.FID;
-                }
+                t.WorkID = subTreadWorkID;
+                t.FID = this.HisWork.OID;
             }
             else
             {
                 t.WorkID = this.HisWork.OID;
-                t.FID = this.HisWork.FID;
+                t.FID = this.HisGenerWorkFlow.FID;
             }
+
             t.RDT = DataType.CurrentDataTimess;
             t.HisActionType = at;
 
@@ -7073,7 +7074,106 @@ namespace BP.WF
             t.EmpFrom = this.Execer;
             t.EmpFromT = this.ExecerName;
             t.FK_Flow = this.HisNode.FK_Flow;
-            t.Tag = tag + "@SendNode=" + this.HisNode.NodeID;            
+
+       //     t.Tag = tag + "@SendNode=" + this.HisNode.NodeID;
+
+            t.NDTo = gwl.FK_Node;
+            t.NDToT = gwl.FK_NodeText;
+
+            t.EmpTo = gwl.FK_Emp;
+            t.EmpToT = gwl.FK_EmpText;
+            t.Msg = msg;
+            //t.FrmDB = frmDBJson; //表单数据Json.
+
+            switch (at)
+            {
+                case ActionType.Forward:
+                case ActionType.ForwardAskfor:
+                case ActionType.Start:
+                case ActionType.UnSend:
+                case ActionType.ForwardFL:
+                case ActionType.ForwardHL:
+                case ActionType.TeampUp:
+                    //判断是否有焦点字段，如果有就把它记录到日志里。
+                    if (this.HisNode.FocusField.Length > 1)
+                    {
+                        string exp = this.HisNode.FocusField;
+                        if (this.rptGe != null)
+                            exp = Glo.DealExp(exp, this.rptGe, null);
+                        else
+                            exp = Glo.DealExp(exp, this.HisWork, null);
+
+                        t.Msg += exp;
+                        if (t.Msg.Contains("@"))
+                            Log.DebugWriteError("@在节点(" + this.HisNode.NodeID + " ， " + this.HisNode.Name + ")焦点字段被删除了,表达式为:" + this.HisNode.FocusField + " 替换的结果为:" + t.Msg);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+
+            if (at == ActionType.SubThreadForward
+                || at == ActionType.StartChildenFlow
+                || at == ActionType.Start
+                || at == ActionType.Forward
+                || at == ActionType.SubThreadForward
+                || at == ActionType.ForwardHL
+                || at == ActionType.FlowOver)
+            {
+                if (this.HisNode.IsFL)
+                    at = ActionType.ForwardFL;
+                t.FrmDB = this.HisWork.ToJson();
+            }
+
+            try
+            {
+                // t.MyPK = t.WorkID + "_" + t.FID + "_"  + t.NDFrom + "_" + t.NDTo +"_"+t.EmpFrom+"_"+t.EmpTo+"_"+ DateTime.Now.ToString("yyMMddHHmmss");
+                t.Insert();
+            }
+            catch
+            {
+                t.CheckPhysicsTable();
+                t.Insert();
+            }
+
+            if (at == ActionType.SubThreadForward
+              || at == ActionType.StartChildenFlow
+              || at == ActionType.Start
+              || at == ActionType.Forward
+              || at == ActionType.SubThreadForward
+              || at == ActionType.ForwardHL
+              || at == ActionType.FlowOver)
+            {
+                this.HisGenerWorkFlow.Paras_LastSendTruckID = t.MyPK;
+            }
+        }
+        /// <summary>
+        /// 增加日志
+        /// </summary>
+        /// <param name="at">类型</param>
+        /// <param name="toEmp">到人员</param>
+        /// <param name="toEmpName">到人员名称</param>
+        /// <param name="toNDid">到节点</param>
+        /// <param name="toNDName">到节点名称</param>
+        /// <param name="msg">消息</param>
+        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom, string frmDBJson = null, string tag = null)
+        {
+            Track t = new Track();
+
+            t.WorkID = this.HisWork.OID;
+            t.FID = this.HisWork.FID;
+
+            t.RDT = DataType.CurrentDataTimess;
+            t.HisActionType = at;
+
+            t.NDFrom = ndFrom.NodeID;
+            t.NDFromT = ndFrom.Name;
+
+            t.EmpFrom = this.Execer;
+            t.EmpFromT = this.ExecerName;
+            t.FK_Flow = this.HisNode.FK_Flow;
+            t.Tag = tag + "@SendNode=" + this.HisNode.NodeID;
 
             if (toNDid == 0)
             {
@@ -7089,7 +7189,7 @@ namespace BP.WF
             t.EmpToT = toEmpName;
             t.Msg = msg;
             t.FrmDB = frmDBJson; //表单数据Json.
-            
+
             switch (at)
             {
                 case ActionType.Forward:

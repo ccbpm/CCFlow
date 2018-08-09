@@ -296,7 +296,7 @@ namespace BP.WF
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         myFrmIDs = myFrmIDs.Replace("'", "");
-                        sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + myFrmIDs + "'), Idx";
+                        sqlOrder += " ORDER BY INSTR(FrmID, '" + myFrmIDs + "'), Idx";
                     }
                     DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);
 

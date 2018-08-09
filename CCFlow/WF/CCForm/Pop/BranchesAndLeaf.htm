@@ -77,10 +77,10 @@
 				}
 				selectedRows = [];
 			}
-		    function loadSelectGrid(dbSrc, selectedRows) {
+		    function loadSelectGrid(dbSrc, selectedRows,dbType) {
 
 		        //获得json.
-		        var json = DBAccess.RunDBSrc(dbSrc);
+		        var json = DBAccess.RunDBSrc(dbSrc,dbType);
 
 		        //  alert(JSON.stringify(json));
 
@@ -162,7 +162,7 @@
 		    }
 		    function loadTree(treeUrl, treeClickUrl, rootNo, global) {
 
-		        var json = DBAccess.RunDBSrc(treeUrl); //执行url返回json.
+		        var json = DBAccess.RunDBSrc(treeUrl, global.dbType); //执行url返回json.
 
 		        var jsonTree = findChildren(json, rootNo);
 
@@ -179,7 +179,8 @@
 		            },
 		            onNodeSelected: function (event, data) {
 		                var myurl = replaceAll(treeClickUrl, "@Key", data.id);
-		                loadSelectGrid(myurl, global.selectedRows);
+		                myurl = replaceAll(myurl, "~", "'");
+		                loadSelectGrid(myurl, global.selectedRows, global.dbType);
 
 		            }
 		        });
@@ -218,35 +219,36 @@
 		        global.FK_MapData = mapExt.FK_MapData;
 		        global.AttrOfOper = mapExt.AttrOfOper;
 		        global.oid = GetQueryString("OID");
+		        global.dbType = mapExt.DBType;
 
 		        var searchUrl = mapExt.Tag1;    //查询
 		        var treeUrl = mapExt.Tag2;      //初始化树
 		        var treeClickUrl = mapExt.Tag3; //树选择.
-                
+
 		        if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
 		            alert('配置错误:查询数据源，初始化树的数据源，点击树节点返回数据的数据源，必须都不能为空。');
 		            return;
 		        }
 
-				global.selectType = mapExt.GetPara("SelectType");
+		        global.selectType = mapExt.GetPara("SelectType");
 
-				global.searchTableColumns = [];
-				if (selectType != "0") {
-					global.searchTableColumns.push({
-						field: "_checkbox",
-						checkbox: true,
-						formatter: function (value, row, index) {
-							if (row.checked) {
-								return {
-									"checked": true
-								};
-							}
-						}
-					});
-				}
+		        global.searchTableColumns = [];
+		        if (selectType != "0") {
+		            global.searchTableColumns.push({
+		                field: "_checkbox",
+		                checkbox: true,
+		                formatter: function (value, row, index) {
+		                    if (row.checked) {
+		                        return {
+		                            "checked": true
+		                        };
+		                    }
+		                }
+		            });
+		        }
 
 		        //显示列的中文名称.
-		        if (typeof mapExt.Tag == "string" && mapExt.Tag!=null && mapExt.Tag!="") {
+		        if (typeof mapExt.Tag == "string" && mapExt.Tag != null && mapExt.Tag != "") {
 
 		            $.each(mapExt.Tag.split(","), function (i, o) {
 		                var exp = o.split("=");
@@ -282,7 +284,8 @@
 		        $("#TB_Key").on("keyup", function () {
 
 		            var mySrc = replaceAll(searchUrl, "@Key", $(this).val());
-		            loadSelectGrid(mySrc, global.selectedRows);
+		            mySrc = replaceAll(mySrc, "~", "'");
+		            loadSelectGrid(mySrc, global.selectedRows, global.dbType);
 
 		        });
 
@@ -290,7 +293,7 @@
 		        loadTree(treeUrl, treeClickUrl, rootNo, global);
 
 		        // grid1
-				var options = {
+		        var options = {
 		            striped: true,
 		            cache: false,
 		            sortOrder: "asc",
@@ -304,30 +307,30 @@
 		            uniqueId: "No",
 		            columns: searchTableColumns
 		        };
-				if (selectType == "0") {
-					options.onClickRow = function (row, element) {
-						removeAllSelectedData();
-						addSelectedData(global.selectedRows, [row]);
-						loadViewGrid(global.selectedRows);
-					}
-				} else {
-					options.onCheck = function (row, element) {
-						addSelectedData(global.selectedRows, [row]);
-						loadViewGrid(global.selectedRows);
-					};
-					options.onUncheck = function (row, element) {
-						removeSelectedData(global.selectedRows, [row]);
-						loadViewGrid(global.selectedRows);
-					};
-					options.onCheckAll = function (rows) {
-						addSelectedData(global.selectedRows, rows);
-						loadViewGrid(global.selectedRows);
-					};
-					options.onUncheckAll = function (rows) {
-						removeSelectedData(global.selectedRows, rows);
-						loadViewGrid(global.selectedRows);
-					};
-				}
+		        if (selectType == "0") {
+		            options.onClickRow = function (row, element) {
+		                removeAllSelectedData();
+		                addSelectedData(global.selectedRows, [row]);
+		                loadViewGrid(global.selectedRows);
+		            }
+		        } else {
+		            options.onCheck = function (row, element) {
+		                addSelectedData(global.selectedRows, [row]);
+		                loadViewGrid(global.selectedRows);
+		            };
+		            options.onUncheck = function (row, element) {
+		                removeSelectedData(global.selectedRows, [row]);
+		                loadViewGrid(global.selectedRows);
+		            };
+		            options.onCheckAll = function (rows) {
+		                addSelectedData(global.selectedRows, rows);
+		                loadViewGrid(global.selectedRows);
+		            };
+		            options.onUncheckAll = function (rows) {
+		                removeSelectedData(global.selectedRows, rows);
+		                loadViewGrid(global.selectedRows);
+		            };
+		        }
 		        $('#selectGrid').bootstrapTable(options);
 
 		        // grid2

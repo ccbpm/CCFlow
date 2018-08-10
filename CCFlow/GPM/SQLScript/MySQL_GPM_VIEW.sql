@@ -21,6 +21,8 @@ WHERE a.FK_Group=b.FK_Group
 DROP VIEW IF EXISTS V_GPM_EmpMenu
 --GO-- 
 
+CREATE VIEW V_GPM_EmpMenu
+AS
 SELECT CONCAT(a.FK_Emp,'_',a.FK_Menu) as MyPK, a.FK_Emp, b.No as FK_Menu, b.* FROM 
    GPM_EmpMenu a,GPM_Menu b WHERE a.FK_Menu=b.No AND B.IsEnable=1
 UNION

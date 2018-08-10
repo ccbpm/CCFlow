@@ -18,6 +18,16 @@ SELECT a.FK_Group,a.FK_Emp,b.FK_Menu,b.IsChecked FROM V_GPM_EmpGroup a, GPM_Grou
 WHERE a.FK_Group=b.FK_Group
 --GO-- 
 
+
+--GO-- 
+--DROP VIEW V_GPM_EmpStationMenu
+--GO-- 
+CREATE VIEW V_GPM_EmpStationMenu
+AS
+SELECT b.FK_Station,a.FK_Emp,b.FK_Menu,b.IsChecked FROM Port_DeptEmpStation a,GPM_StationMenu b
+WHERE a.FK_Station = b.FK_Station
+
+
 DROP VIEW IF EXISTS V_GPM_EmpMenu
 --GO-- 
 

@@ -111,6 +111,23 @@
             alert(data);
 
         }
+
+        //获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.
+        function GetSelectedCheckIDs() {
+
+            var checkBoxIDs = "";
+            var arrObj = document.getElementsByTagName("input");
+
+            for (var i = 0, len = arrObj.length; i < len; i++) {
+
+                if (arrObj[i].type == 'checkbox') {
+                    if (arrObj[i].checked)
+                        checkBoxIDs += arrObj[i].id + ',';
+                }
+            }
+            return checkBoxIDs;
+        }
+
     </script>
     <base target="_self" /> 
 </head>

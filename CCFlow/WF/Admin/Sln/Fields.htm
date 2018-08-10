@@ -20,101 +20,97 @@
         var fk_flow;
         var fk_Node;
         $(function () {
-            frmID = GetQueryString("FK_MapData");
-            fk_flow = GetQueryString("FK_Flow");
-            fk_Node = GetQueryString("FK_Node");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Fields_Init&FK_Flow=" + fk_flow + "&FK_MapData=" + frmID + "&FK_Node=" + fk_Node + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Sln");
+            handler.AddUrlData();
 
-                    fieldsData = JSON.parse(data);
+            var data = handler.DoMethodReturnString("Fields_Init");
 
-                    var trStr = "";
-                    var UIVisible = true;
-                    var UIIsEnable = true;
-                    var IsSigan = true;
-                    var IsNotNull = true;
-                    var IsWriteToFlowTable = true;
-                    var IsWriteToGenerWorkFlow = true;
 
-                    for (var i = 0; i < fieldsData.length; i++) {
-                        fieldsData[i].IsChange = false;
-                        trStr += "<tr >";
-                        trStr += "<td class=Idx>" + (fieldsData[i].idx + 1) + "</td>";
-                        trStr += "<td>" + fieldsData[i].KeyOfEn + "</td>";
-                        trStr += "<td>" + fieldsData[i].Name + "</td>";
-                        trStr += "<td>" + fieldsData[i].LGTypeT + "</td>";
-                        trStr += "<td><input onkeydown='upischange(" + i + ");' id='" + i + "_" + fieldsData[i].KeyOfEn + "_RegularExp" + "' type='text' placeholder='输入有效的正则表达式' value='" + fieldsData[i].RegularExp + "'/></td>";
-                        trStr += "<td><input onkeydown='upischange(" + i + ");' id='" + i + "_" + fieldsData[i].KeyOfEn + "_DefVal" + "' type='text' placeholder='请输入默认值…' value='" + fieldsData[i].DefVal + "'/></td>";
-                        trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + i + "_" + fieldsData[i].KeyOfEn + "_UIVisible" + "' type='checkbox' " + (fieldsData[i].UIVisible ? "checked" : "") + "></label></td>";
-                        trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + i + "_" + fieldsData[i].KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (fieldsData[i].UIIsEnable ? "checked" : "") + "></label></td>";
-                        trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsSigan" + "' type='checkbox' " + (fieldsData[i].IsSigan ? "checked" : "") + "></label></td>";
-                        trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (fieldsData[i].IsNotNull ? "checked" : "") + "></label></td>";
-                        trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (fieldsData[i].IsWriteToFlowTable ? "checked" : "") + "></label></td>";
-                        trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (fieldsData[i].IsWriteToGenerWorkFlow ? "checked" : "") + "></label></td>";
-                        trStr += "</tr>";
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                        if (!fieldsData[i].UIVisible) {
-                            UIVisible = false;
-                        }
-                        if (!fieldsData[i].UIIsEnable) {
-                            UIIsEnable = false;
-                        }
-                        if (!fieldsData[i].IsSigan) {
-                            IsSigan = false;
-                        }
-                        if (!fieldsData[i].IsNotNull) {
-                            IsNotNull = false;
-                        }
-                        if (!fieldsData[i].IsWriteToFlowTable) {
-                            IsWriteToFlowTable = false;
-                        }
-                        if (!fieldsData[i].IsWriteToGenerWorkFlow) {
-                            IsWriteToGenerWorkFlow = false;
-                        }
-                        if (i == fieldsData.length - 1) {
-                            trStr += "<tr >";
-                            trStr += "<td colspan=\"12\"> <button onclick='dosave();' class=\"btn btn-primary\" type=\"button\">保存</button></td>";
-                            trStr += "</tr>";
-                        }
-                    }
-                    if (UIVisible) {
-                        $('#KeyOfEn_UIVisible')[0].checked = true;
-                    }
-                    if (UIIsEnable) {
-                        $('#KeyOfEn_UIIsEnable')[0].checked = true;
-                    }
-                    if (IsSigan) {
-                        $('#KeyOfEn_IsSigan')[0].checked = true;
-                    }
-                    if (IsNotNull) {
-                        $('#KeyOfEn_IsNotNull')[0].checked = true;
-                    }
-                    if (IsWriteToFlowTable) {
-                        $('#KeyOfEn_IsWriteToFlowTable')[0].checked = true;
-                    }
-                    if (IsWriteToGenerWorkFlow) {
-                        $('#KeyOfEn_IsWriteToGenerWorkFlow')[0].checked = true;
-                    }
+            fieldsData = JSON.parse(data);
 
-                    $("#Table1 tr:last").after(trStr);
+            var trStr = "";
+            var UIVisible = true;
+            var UIIsEnable = true;
+            var IsSigan = true;
+            var IsNotNull = true;
+            var IsWriteToFlowTable = true;
+            var IsWriteToGenerWorkFlow = true;
+
+            for (var i = 0; i < fieldsData.length; i++) {
+                fieldsData[i].IsChange = false;
+                trStr += "<tr >";
+                trStr += "<td class=Idx>" + (fieldsData[i].idx + 1) + "</td>";
+                trStr += "<td>" + fieldsData[i].KeyOfEn + "</td>";
+                trStr += "<td>" + fieldsData[i].Name + "</td>";
+                trStr += "<td>" + fieldsData[i].LGTypeT + "</td>";
+                trStr += "<td><input onkeydown='upischange(" + i + ");' id='" + i + "_" + fieldsData[i].KeyOfEn + "_RegularExp" + "' type='text' placeholder='输入有效的正则表达式' value='" + fieldsData[i].RegularExp + "'/></td>";
+                trStr += "<td><input onkeydown='upischange(" + i + ");' id='" + i + "_" + fieldsData[i].KeyOfEn + "_DefVal" + "' type='text' placeholder='请输入默认值…' value='" + fieldsData[i].DefVal + "'/></td>";
+                trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + i + "_" + fieldsData[i].KeyOfEn + "_UIVisible" + "' type='checkbox' " + (fieldsData[i].UIVisible ? "checked" : "") + ">可见</label></td>";
+                trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + i + "_" + fieldsData[i].KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (fieldsData[i].UIIsEnable ? "checked" : "") + ">可用</label></td>";
+                trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsSigan" + "' type='checkbox' " + (fieldsData[i].IsSigan ? "checked" : "") + ">签名</label></td>";
+                trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (fieldsData[i].IsNotNull ? "checked" : "") + ">必填</label></td>";
+                trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (fieldsData[i].IsWriteToFlowTable ? "checked" : "") + ">写入NDxxRpt</label></td>";
+                trStr += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + i + "_" + fieldsData[i].KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (fieldsData[i].IsWriteToGenerWorkFlow ? "checked" : "") + ">写入WF_GernrWorkFlow</label></td>";
+                trStr += "</tr>";
+
+                if (!fieldsData[i].UIVisible) {
+                    UIVisible = false;
                 }
-            });
+                if (!fieldsData[i].UIIsEnable) {
+                    UIIsEnable = false;
+                }
+                if (!fieldsData[i].IsSigan) {
+                    IsSigan = false;
+                }
+                if (!fieldsData[i].IsNotNull) {
+                    IsNotNull = false;
+                }
+                if (!fieldsData[i].IsWriteToFlowTable) {
+                    IsWriteToFlowTable = false;
+                }
+                if (!fieldsData[i].IsWriteToGenerWorkFlow) {
+                    IsWriteToGenerWorkFlow = false;
+                }
+                if (i == fieldsData.length - 1) {
+                    trStr += "<tr >";
+                    trStr += "<td colspan=\"12\"> <button onclick='dosave();' class='btn btn-primary' type='button' >保存</button></td>";
+                    trStr += "</tr>";
+                }
+            }
+            if (UIVisible) {
+                $('#KeyOfEn_UIVisible')[0].checked = true;
+            }
+            if (UIIsEnable) {
+                $('#KeyOfEn_UIIsEnable')[0].checked = true;
+            }
+            if (IsSigan) {
+                $('#KeyOfEn_IsSigan')[0].checked = true;
+            }
+            if (IsNotNull) {
+                $('#KeyOfEn_IsNotNull')[0].checked = true;
+            }
+            if (IsWriteToFlowTable) {
+                $('#KeyOfEn_IsWriteToFlowTable')[0].checked = true;
+            }
+            if (IsWriteToGenerWorkFlow) {
+                $('#KeyOfEn_IsWriteToGenerWorkFlow')[0].checked = true;
+            }
+
+            $("#Table1 tr:last").after(trStr);
+
         });
         var FieldsAttrs = new Object();
         var fieldsData = null;
 
         //保存字段方案
         function dosave() {
+
             var arr = new Array();
             for (var i = 0; i < fieldsData.length; i++) {
                 if (fieldsData[i].IsChange) {
@@ -161,20 +157,29 @@
                 return;
             }
 
+            var flowNo = GetQueryString("FK_Flow");
+            var nodeID = GetQueryString("FK_Node");
+            var frmID = GetQueryString("FK_MapData");
+
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Fields_Save&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&FK_MapData=" + frmID,
+                url: Handler + "?DoType=Fields_Save&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FK_MapData=" + frmID,
                 dataType: 'json',
                 data: { 'FieldsAttrsObj': JSON.stringify(arr) },
                 success: function (data) {
-                    upstate(false);
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+
+
+                    //    alert(data);
+                    //     upstate(false);
+                    //                    if (data.indexOf('err@') == 0) {
+                    //                        alert(data);
+                    //                        return;
+                    //                //    }
 
                     alert("共更新" + data + "个字段信息");
+                    window.location.href = window.location.href;
+
                 }
             });
         }
@@ -222,7 +227,7 @@
         }
     </script>
 </head>
-<body onkeypress="Esc();">
+<body >
     <table id="Table1" >
     <caption> 节点-表单-字段权限 </caption>
         <tr>

@@ -52,7 +52,13 @@ function FlowFormTree_Init() {
                 if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
                     i++;
                     var isEdit = node.attributes.IsEdit;
-                    if ((IsCC && IsCC == "1") || IsReadonly == "1") isEdit = "0";
+                    if ((IsCC && IsCC == "1") || IsReadonly == "1")
+                        isEdit = "0";
+
+                    if (isEdit == "0")
+                        urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
+
+
                     var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                     addTab(node.id, node.text, url);
                 }
@@ -62,7 +68,13 @@ function FlowFormTree_Init() {
         onClick: function (node) {
             if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") { /*普通表单和必填表单*/
                 var isEdit = node.attributes.IsEdit;
-                if ((IsCC && IsCC == "1") || IsReadonly == "1") isEdit = "0";
+
+                if ((IsCC && IsCC == "1") || IsReadonly == "1")
+                    isEdit = "0";
+
+                if (isEdit == "0")
+                    urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
+
                 var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                 addTab(node.id, node.text, url);
             } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/

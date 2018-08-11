@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋工作流</title>
+    <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/default/tree.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
+    <!-- 引用通用的js文件. -->
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="Gener.js" type="text/javascript"></script>
+    <script src="JS/Tree.js" type="text/javascript"></script>
+
+    <script type="text/javascript" language="javascript" >
+
+        //定义公共个变量.
+        var webUser = new WebUser();
+        var treeEnsName = GetQueryString("TreeEnsName");
+        var ensName = GetQueryString("EnsName");
+        var refPK = GetQueryString("RefPK");
+        var enPK = null;
+
+        var expnode = [];
+        //页面启动函数.
+        $(function () {
+
+            if (webUser.No == undefined) {
+                alert('登录信息丢失，请重新登录。');
+                return;
+            }
+
+            if (treeEnsName == null || treeEnsName == undefined) {
+                $("#Msg").html("必要的参数treeEnsName没有传入.");
+                return;
+            }
+
+            if (ensName == null || ensName == undefined) {
+                $("#Msg").html("必要的参数EnsName没有传入.");
+                return;
+            }
+            if (refPK == null || refPK == undefined) {
+                $("#Msg").html("没有找到外键值refPK.");
+                return;
+            }
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            //获取TreeEns的基本信息
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Tree_MapBaseInfo");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            data = ToJson(data);
+            $('#westPanel').panel({ title: data["TreeEnsDesc"] });
+            $('#centerPanel').panel({ title: data["EnsDesc"] });
+
+            enPK = data["EnPK"];
+            //绑定部门树形数据.
+            BindTree();
+
+
+
+            $("#Msg").html("");
+        });
+
+
+        function BindTree() {
+
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("TreeEnsName", treeEnsName);  //增加参数.
+            //获得map基本信息.
+            var pushData = handler.DoMethodReturnString("TreeEn_Init");
+            if (pushData.indexOf("err@") != -1) {
+                alert(pushData);
+                $("#enTree").append("<li>"+pushData.replace("err@","").replace("entity",treeEnsName)+"</li>");
+                return;
+            }
+
+            pushData = ToJson(pushData);
+            //绑定树结构.
+            // var pushData = eval('(' + treeJson + ')');
+            //加载类别树
+            $("#enTree").tree({
+                data: pushData,
+                iconCls: 'tree-folder',
+                collapsed: true,
+                lines: true,
+                onLoadSuccess: function () {
+                    if (expnode.length == 0) {
+                        //获取根节点
+                        var rooNode = $("#enTree").tree('getRoot');
+
+                        //默认展开根节点
+                        $("#enTree").tree('expand', rooNode);
+                    } else {
+                        var list = [];
+                        for (var j = 0; j < expnode.length; j++) {
+                            list.push(expnode[j])
+                        }
+                        $("#enTree").tree("collapseAll");
+                        for (var i = 0; i < list.length; i++) {
+                            var node = $('#enTree').tree('find', list[i]);
+                            $('#enTree').tree('expand', node.target);
+                        }
+                    }
+
+                },
+                onBeforeExpand: function (node) {
+                    expnode.push(node.id.toString());
+                },
+                onBeforeCollapse: function (node) {
+                    var i = expnode.indexOf(node.id.toString());
+                    if (i >= 0) {
+                        expnode.splice(i, 1);
+                    }
+                },
+                onClick: function (node) {
+                    //加载对应的人员信息
+                    LoadGridData();
+                }
+
+            });
+            $("#enTree").bind('contextmenu', function (e) {
+                e.preventDefault();
+                $('#treeMM').menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
+            });
+
+        }
+
+        function LoadGridData() {
+            var node = $('#enTree').tree('getSelected');
+            if (node == null) {
+                alert('请选择树节点');
+                return;
+            }
+
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("EnsName", ensName);  //增加参数.
+            handler.AddPara("RefPK", refPK);
+            handler.AddPara("FK", node.id);
+            var pushData = handler.DoMethodReturnString("TreeEmp_Init");
+            if (pushData.indexOf("err@") != -1) {
+                $(".datagrid-view").html("<b style='color:red;'>请传入正确的参数名。如：TreeEns.aspx?TreeEnsName=BP.Port.Depts&EnsName=BP.Port.Emps&RefPK=FK_Dept<br/>主意：如果根节点ParentNo不为0，需传入根节点ParentNo的值.<b>");
+                return;
+            }
+
+            pushData = ToJson(pushData);
+            var cols = [];
+            //增加列
+            $.each(pushData.Sys_MapAttr, function (idx, c) {
+
+                cols.push({
+                    title: c.title,
+                    field: c.field,
+                    width: c.Width
+                });
+                if (c.UIContralType == 2) {
+                    cols[cols.length - 1].formatter = function (value, row, index) {
+                        if (value == "0") return "否";
+                        if (value == "1") return "是";
+                    }
+                }
+            });
+            var fitColumns = true;
+            if (cols.length > 6) {
+                fitColumns = false;
+            }
+
+            var data = pushData["GridData"];
+            $('#ensGrid').datagrid({
+                columns: [cols],
+                data: data,
+                width: 'auto',
+                height: 'auto',
+                striped: true,
+                rownumbers: true,
+                singleSelect: true,
+                remoteSort: false,
+                fitColumns: fitColumns,
+                onDblClickCell: function (index, field, value) {
+                    EditEntityForm();
+                },
+                toolbar: [{ 'text': '新建', 'iconCls': 'icon-new', 'handler': 'CreateEntityForm' }, { 'text': '修改', 'iconCls': 'icon-config', 'handler': 'EditEntityForm'}],
+                loadMsg: '数据加载中......'
+            });
+
+        }
+
+        //新建页面
+        function CreateEntityForm() {
+            var enName = GetEnName();
+            var node = $('#enTree').tree('getSelected');
+            if (node) {
+                var url = "En.htm?EnName=" + enName + "&"+refPK+"="+ node.id;
+                OpenEasyUiDialogExt(url, '新增',650,500,false);
+                LoadGridData();
+            }
+        }
+        //编辑页面
+        function EditEntityForm() {
+            var enName = GetEnName(); 
+            var en = new Entity(enName);
+            
+
+            var url = "En.htm?EnName=" + enName;
+            var row = $('#ensGrid').datagrid('getSelected');
+            if (row) {
+                if (enPK == null || enPK == "")
+                    enPK = "No";
+                url = "En.htm?EnName=" + enName + "&PK=" + row[enPK];
+            }
+            OpenEasyUiDialogExt(url, '编辑',650,500,false);
+            LoadGridData();
+        }
+        //获得enName.
+        function GetEnName() {
+
+            var ensName = GetQueryString("EnsName");
+            return ensName.substring(0, ensName.length - 1);
+        }
+
+       
+    </script>
+</head>
+<body  class="easyui-layout">
+<form id="cc">
+<center> <div id='Msg'></div> </center>
+    <div id="westPanel" region="west" border="true" split="true" title="部门" style="width: 310px;padding: 0;">
+        <ul id="enTree" class="easyui-tree-line" data-options="animate:false,dnd:false"  style="width:400px;">
+    </div>
+    <div id="centerPanel" data-options="region:'center'" style="padding: 0px;" border="false" title="用户" style="overflow: hidden;">
+        <table id="ensGrid" fit="true" class="easyui-datagrid"></table>
+    </div>
+</form>
+
+</body>
+</html>

@@ -58,7 +58,7 @@
 
                         html += "<li>";
                         html += "<div>";
-                        url = "FlowSearch.htm?SearchType=" + menu.No + "&FK_Flow=" + fk_flow;
+                        url = "Search.htm?SearchType=" + menu.No + "&FK_Flow=" + fk_flow;
                         html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + url + "');\" >";
                         html += "<span>" + menu.Name + "</span></a>";
                         html += "</div>";
@@ -71,7 +71,7 @@
                     if (showType == null)
                         showType = "MyJoin";
 
-                    url = "FlowSearch.htm?SearchType=" + showType + "&FK_Flow=" + fk_flow;
+                    url = "Search.htm?SearchType=" + showType + "&FK_Flow=" + fk_flow;
                     $('#context').attr('src', url + '&s=' + Math.random());
 
                     document.title = '流程实例查询';

@@ -107,7 +107,7 @@
         function WinOpenStart(flowNo,title) {
 
             var intFlowNo = flowNo;
-            var url = "./RptDfine/FlowSearch.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
+            var url = "./RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
             //window.open(url);
            // return;
 
@@ -123,7 +123,7 @@
         //我发起的流程.
         function WinOpenJoin(flowNo,title) {
             var intFlowNo = flowNo;
-            var url = "./RptDfine/FlowSearch.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
+            var url = "./RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
             layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 

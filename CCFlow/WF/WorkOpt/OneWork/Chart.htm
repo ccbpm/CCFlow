@@ -8,7 +8,7 @@
     <script src="../../Scripts/designer.utility.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-
+    <script src="PubliceTrack.js" type="text/javascript"></script>
 </head>
 <body>
     <style type="text/css">
@@ -98,12 +98,8 @@
             }
 
             jdata = $.parseJSON(data);
-
             drawStart(jdata);
-
         });
-
-      
 
         function drawStart(datas) {
 
@@ -140,8 +136,14 @@
 
             $.each(datas.WF_NODE, function () {
 
-                //确定边框颜色
-                switch (this.NODEPOSTYPE) {
+                // alert(this.NodeposType);
+
+                //  alert(this.ID);
+                //   alert(this.Name);
+                // alert(this.NodePosType);
+
+                ////确定边框颜色
+                switch (this.NodePosType) {
                     case startNodePosType:
                         nodeBorderColor = STYLE_NODE_BORDER_COLOR_FIRST;
                         break;
@@ -171,7 +173,7 @@
                         this.ICON = DATA_USER_ICON_PATH + DATA_USER_ICON_DEFAULT;
                     }
                 }
-                else {
+                if (nodeTrack == null) {
                     if (this.ICON == null || this.ICON.length == 0) {
                         this.ICON = STYLE_NODE_DEFAULT_ICON_PATH + STYLE_NODE_DEFAULT_ICON;
                     }
@@ -190,20 +192,28 @@
                     }
                 }
 
+
                 //开始绘制
                 rNode = new RNode(this.ID, this.Name, this.X - STYLE_NODE_WIDTH / 2, this.Y - STYLE_NODE_HEIGHT / 2);
                 rNode.rBorder = r.rect(rNode.x, rNode.y, STYLE_NODE_WIDTH, STYLE_NODE_HEIGHT, STYLE_NODE_BORDER_RADIUS);
                 rNode.rIcon = r.image(this.ICON, rNode.x + 1, rNode.y + 1, STYLE_NODE_WIDTH - 2, STYLE_NODE_HEIGHT - 2);
                 rNode.rText = r.text(rNode.x + STYLE_NODE_WIDTH / 2, rNode.y + STYLE_NODE_HEIGHT + Math.ceil(this.Name.length / 7.00) * 7 + 10, breakstr(this.Name, 7));    //edited by liuxc,2016-3-31,增加节点名称换行处理
                 rNode.rBorderColor = nodeBorderColor;
-                rNode.isTrackNode = nodeTrack != null;
+
+
+                if (nodeTrack == null) //设置是否是有track信息的节点.
+                    rNode.isTrackNode = false;
+                else
+                    rNode.isTrackNode = true;
+
                 rNode.tracks = nodeTracks;
                 rNode.currTrack = nodeTrack;
 
-                //在节点右侧绘制流程轨迹中当前节点的处理人/处理时间
+                //在节点右侧绘制流程轨迹中当前节点的处理人/处理时间.
                 if (rNode.isTrackNode) {
+
                     //判断此节点是否是多人处理
-                    if (rNode.currTrack.track.EmpToT.indexOf('多人接受') > -1) {
+                    if (rNode.currTrack.track.EmpToT.indexOf('多人接受') >= 0) {
                         //alert(rNode.currTrack.track.EMPTOT);
                         this.ICON = DATA_MULTI_USER_ICON_DEFAULT;
                         rNode.rIcon.attr("src", this.ICON);
@@ -228,132 +238,151 @@
                 rNode.rText.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "fill": getFillTextColor(rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "font-size": STYLE_FONT_SIZE_NODE });
                 rNode.rIcon.attr("title", this.Name);
 
-                //增加节点图片的鼠标滑过/移开效果
+                //增加节点图片的鼠标滑过/移开效果. 让其显示一个table信息显示该节点的运动数据.
                 rNode.rIcon.hover(function () {
+
                     $('#tracktable').empty();
                     var node = rFlow.getNodeByRIconId(this.id);
-                    if (node != null) {
-                        node.rBorder.attr({ "stroke": STYLE_NODE_BORDER_COLOR_HOVER, "stroke-width": STYLE_NODE_BORDER_WIDTH_HOVER });
-                        node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                    if (node == null)
+                        return;
 
-                        var tablehtml = "";
+                    //先把边框字体改变,显示.
+                    node.rBorder.attr({ "stroke": STYLE_NODE_BORDER_COLOR_HOVER, "stroke-width": STYLE_NODE_BORDER_WIDTH_HOVER });
+                    node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
-                        if (node.isTrackNode && node.currTrack.type == "FROM") {
-                            node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                    if (node.isTrackNode && node.currTrack.type == "FROM") {
+                    } else {
+                        return;
+                    }
 
-                            tablehtml +=
-                                    '<tr>' +
-                                    '   <td colspan="4" class="GroupTitle">轨迹信息</td>' +
-                                    '</tr>';
+                    //alert(JSON.stringify(node.currTrack.track.NDFromT));
+                    var nodeName= JSON.stringify(node.currTrack.track.NDFromT);
 
+                    var tablehtml = "<table style='width:100%;' >";
+                    tablehtml += "<caption>" + nodeName + "</caption>";
 
-                            var operID = ",";
+                    // node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                    //生成操作的ID.
+                    var operID = ",";
+                    $.each(node.tracks, function () {
 
-                            $.each(node.tracks, function () {
-
-                                var at = this.track.ACTIONTYPE;
-                                if (at == 1 || at == 28 || at == 30) {
-                                    operID = this.track.EmpFrom + "_" + this.track.NDTo + ",";
-                                    return true;
-                                }
-
-                            });
-
-
-                            $.each(node.tracks, function () {
-
-                                if (this.type == "TO") {
-                                    return true;
-                                }
-
-                                var val = this.track.ACTIONTYPETEXT;
-
-                                var at = this.track.ACTIONTYPE;
-
-                                if (val == "协作") {
-                                    operID = this.track.EmpFrom + "_" + this.track.NDTo;
-                                    return true;
-                                }
-
-                                if (val == "前进" && node.isTrackNode.length != 1) {
-                                    operID = this.track.EmpFrom + "_" + this.track.NDTo;
-                                    return true;
-                                }
-
-                                //仅仅显示已经审批过的人员记录, 对于打开过，但是没有审批的，不显示.
-                                var myoperID = this.track.EmpFrom + "_" + this.track.NDTo;
-
-                                if (at == 22 || val == "审核") {
-                                    if (operID.indexOf(myoperID) == 0) {
-                                        return true;
-                                    }
-                                }
-
-                                var emp = this.track.EmpToT;
-                                if (emp.indexOf('(') >= 0) {
-                                    return true;
-                                }
-
-                                tablehtml +=
-                                    '<tr>' +
-                                    '   <td style="width:120px">' + this.track.RDT + '</td>' +
-                                    '   <td style="width:200px">' + this.track.ActionType + '</td>' +
-                                    '   <td style="width:50px">' + this.track.EmpToT + '</td>' +
-                                    '   <td><font color=green>' + this.track.Msg.replace(/~/g, "'") + '</font></td>' +
-                                    '</tr>';
-                            });
+                        var at = this.track.ActionType;
+                        if (at == 1 || at == ActionType.TeampUp || at == ActionType.HuiQian) {
+                            operID = this.track.EmpFrom + "_" + this.track.NDTo + ",";
+                            return true;
                         }
-                        else if (node.rTrackText) { //added by liuxc,2016-03-16                            
-                            node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                    });
 
-                        }
-                        else if (node.rPossibleText) { //added by liuxc,2016-04-15
-                            node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                    $.each(node.tracks, function () {
+
+                        if (this.type == "TO") {
+                            return true;
                         }
 
-                        if (work_ID == "0") {
-                            return;
+                        //                        //子线城前进.
+                        //                        if (this.track.ActionType == ActionType.SubFlowForward)
+                        //                            return true;
+
+                        var val = this.track.ActiontypeText;
+                        var at = this.track.TctionType;
+
+                        if (val == "协作") {
+                            operID = this.track.EmpFrom + "_" + this.track.NDTo;
+                            return true;
                         }
 
-                        var subcount = 0;
-                        var subflows = getSubFlows(node.id);
+                        if (val == "前进" && node.isTrackNode.length != 1) {
+                            operID = this.track.EmpFrom + "_" + this.track.NDTo;
+                            return true;
+                        }
+
+                        //仅仅显示已经审批过的人员记录, 对于打开过，但是没有审批的，不显示.
+                        var myoperID = this.track.EmpFrom + "_" + this.track.NDTo;
+
+                        if (at == ActionType.WorkCheck) {
+                            if (operID.indexOf(myoperID) == 0) {
+                                return true;
+                            }
+                        }
+
+                        var emp = this.track.EmpToT;
+                        if (emp.indexOf('(') >= 0) {
+                            return true;
+                        }
+
+                        //   //输出row
+                        //   var newRow = "";
+                        //   newRow = "<tr  title='" + this.track.ActionTypeText + "' >";
+                        //   newRow += "<td class='TDTime' >" + GenerLeftIcon(this.track) + "</td>";
+                        //   newRow += "<td class='TDBase' ></td>";
+                        //   newRow += "<td class='TDDoc' >" + this.track.Msg.replace(/~/g, "'") + "</td>";
+                        //   newRow += "</tr>";
+
+                        var src = ActionTypeStr(this.track.ActionType);
+
+                        // tablehtml += newRow;
+                        tablehtml += "<tr>";
+                        tablehtml += "<td style='width:120px'><img src='" + src + "' border=0/>" + this.track.ActionTypeText + "</td>";
+                        tablehtml += "<td style='width:120px'>" + this.track.EmpToT + "<br>" + GenerDataFormat(this.track.RDT) + "</td>";
+                        //  tablehtml += "<td style='width:200px'>" + this.track.ActionType + "</td>";
+                        //tablehtml += "<td style='width:50px'>" + this.track.EmpToT + "</td>";
+                        tablehtml += "<td><font color=green>" + this.track.Msg.replace(/~/g, "'") + "</font></td>";
+                        tablehtml += "</tr>";
+
+                    });
+
+                    //                        else if (node.rTrackText) { //added by liuxc,2016-03-16                            
+                    //                            node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                    //                        }
+                    //                        else if (node.rPossibleText) { //added by liuxc,2016-04-15
+                    //                            node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                    //                        }
+
+                    if (work_ID == "0") {
+                        return;
+                    }
+
+                    var subcount = 0;
+                    var subflows = getSubFlows(node.id);
+
+                    for (var sf in subflows) {
+                        subcount++;
+                    }
+
+                    if (subcount > 0) {
+                        isSubFlowNode = true;
 
                         for (var sf in subflows) {
-                            subcount++;
-                        }
-
-                        if (subcount > 0) {
-                            isSubFlowNode = true;
-
-                            for (var sf in subflows) {
-                                tablehtml +=
+                            tablehtml +=
                                         '<tr>' +
                                         '   <td colspan="4" class="GroupTitle">' + subflows[sf].Name + '</td>' +
                                         '</tr>';
 
-                                $.each(subflows[sf].Flows, function () {
-                                    tablehtml +=
+                            $.each(subflows[sf].Flows, function () {
+                                tablehtml +=
                                             '<tr>' +
                                             '   <td style="width:120px;">' + this.RDT + '</td>' +
                                             '   <td style="width:200px"><a href="' + this.Url + '" target="_blank" style="color:' + STYLE_NODE_COLOR_FORE_HOVER + '">' + this.Title + '</a></td>' +
                                             '   <td style="width:50px;">' + this.WFStaText + '</td>' +
                                             '   <td>' + this.NodeName + '</td>' +
                                             '</tr>';
-                                });
-                            }
-                        }
-                        else {
-                            isSubFlowNode = false;
-                        }
-
-                        if (tablehtml.length > 0) {
-                            //组织节点的轨迹信息
-                            var p = $(this.node).offset();
-                            $('#tracktable').append(tablehtml);
-                            $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
-                            $('#trackinfo').show();
+                            });
                         }
                     }
+                    else {
+                        isSubFlowNode = false;
+                    }
+
+                    tablehtml += "</table>";
+
+                    if (tablehtml.length > 0) {
+                        //组织节点的轨迹信息
+                        var p = $(this.node).offset();
+                        $('#tracktable').append(tablehtml);
+                        $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
+                        $('#trackinfo').show();
+                    }
+
                 }, function () {
                     var node = rFlow.getNodeByRIconId(this.id);
                     if (node != null) {

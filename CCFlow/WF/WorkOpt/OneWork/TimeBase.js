@@ -76,16 +76,12 @@ function InitPage() {
         var img = ActionTypeStr(track.ActionType);
         img = "<img src='" + img + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
 
-
-
         //是否显示审批意见？
         var isShowCheckMsg = true;
         if (fwc.FWCMsgShow == "1" && track.NDFrom == GetQueryString("FK_Node") && webUser.No != track.EmpTo) {
             continue;
             //isShowCheckMsg = false;
         }
-
-         
 
         //内容.
         var doc = "";

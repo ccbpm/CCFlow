@@ -58,7 +58,6 @@ function FlowFormTree_Init() {
                     if (isEdit == "0")
                         urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
 
-
                     var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                     addTab(node.id, node.text, url);
                 }
@@ -273,6 +272,7 @@ var RequestArgs = function () {
     this.NodeID = GetQueryString("NodeID");
     this.UserNo = GetQueryString("UserNo");
     this.FID = GetQueryString("FID");
+
     this.SID = GetQueryString("SID");
 
     this.PWorkID = GetQueryString("PWorkID");

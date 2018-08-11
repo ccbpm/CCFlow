@@ -1313,7 +1313,6 @@ namespace BP.WF.HttpHandler
                 //保存主表数据.
                 GEEntity en = new GEEntity(this.EnsName);
 
-
                 #region 求出 who is pk 值.
                 Int64 pk = this.RefOID;
                 if (pk == 0)
@@ -1351,14 +1350,10 @@ namespace BP.WF.HttpHandler
                 #endregion  求who is PK.
 
                 en.OID = pk;
-
-
                 int i = en.RetrieveFromDBSources();
-
                 en.ResetDefaultVal();
 
                 en = BP.Sys.PubClass.CopyFromRequest(en, context.Request) as GEEntity;
-
 
                 en.OID = pk;
 

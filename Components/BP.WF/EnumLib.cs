@@ -429,7 +429,7 @@ namespace BP.WF
         /// <summary>
         /// 信息
         /// </summary>
-        Info=10
+        Info=100
     }
     /// <summary>
     /// 挂起方式

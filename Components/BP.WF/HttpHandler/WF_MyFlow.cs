@@ -1709,83 +1709,12 @@ namespace BP.WF.HttpHandler
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
 
             FrmNodes frmNodes = new FrmNodes();
-            QueryObject qo = new QueryObject(frmNodes);
-            qo.AddWhere(FrmNodeAttr.FK_Node, this.FK_Node);
-            qo.addAnd();
-            qo.AddWhere(FrmNodeAttr.FK_Flow, this.FK_Flow);
-            //如果配置了启用关键字段，一下会判断绑定的独立表单中的关键字段是否有数据，没有就不会被显示
-            // add  by  海南  zqp
-            if (tfModel == "1")
-            {
-                //针对合流点与分合流节点有效
-                //获取独立表单的字段
-                MapDatas mdes = new MapDatas();
-                string mypks = "";
-                if (nd.IsStartNode == false)
-                {
-                    qo.addOrderBy(FrmNodeAttr.Idx);
-                    qo.DoQuery();
-                    foreach (FrmNode fn in frmNodes)
-                    {
-                        if (fn.HisFrmType == FrmType.FoolForm || fn.HisFrmType == FrmType.FreeFrm)
-                        {
-                            mdes.Retrieve(MapDataAttr.No, fn.FK_Frm);
-                            //根据设置的关键字段是否有值，进行判断
-                            foreach (MapData md in mdes)
-                            {
-                                Paras ps = new Paras();
-                                ps.SQL = "SELECT " + fn.GuanJianZiDuan + " FROM " + md.PTable + " WHERE "
-                                + " OID=" + SystemConfig.AppCenterDBVarStr + "OID";
-                                if (this.FID == 0)
-                                    ps.Add("OID", this.WorkID);
-                                else
-                                    ps.Add("OID", this.FID);
-                                try
-                                {
-                                    DataTable dtmd = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                                    string dtVal = dtmd.Rows[0]["" + fn.GuanJianZiDuan + ""].ToString();
-                                    if (string.IsNullOrWhiteSpace(dtVal))
-                                    {
-                                        mypks = mypks + "'" + md.No + "',";
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    mypks = mypks + "'" + md.No + "',";
-                                }
-                            }
-                        }
-                    }
-                    mypks = mypks.TrimEnd(',');
-                    if (!string.IsNullOrWhiteSpace(mypks))
-                    {
-                        //添加查询条件
-                        qo = new QueryObject(frmNodes);
-                        qo.AddWhere(FrmNodeAttr.FK_Node, this.FK_Node);
-                        qo.addAnd();
-                        qo.AddWhere(FrmNodeAttr.FK_Flow, this.FK_Flow);
-                        qo.addAnd();
-                        qo.AddWhere(FrmNodeAttr.FK_Frm + " not in(" + mypks + ")");
-                        qo.addOrderBy(FrmNodeAttr.Idx);
-                        qo.DoQuery();
-                    }
-
-                }
-                else
-                {
-                    qo.addOrderBy(FrmNodeAttr.Idx);
-                    qo.DoQuery();
-                }
-            }
-            else
-            {
-                qo.addOrderBy(FrmNodeAttr.Idx);
-                qo.DoQuery();
-            }
+            frmNodes.Retrieve(FrmNodeAttr.FK_Node, this.FK_Node, FrmNodeAttr.Idx);
+            
             //文件夹
             SysFormTrees formTrees = new SysFormTrees();
             formTrees.RetrieveAll(SysFormTreeAttr.Name);
-
+            
             //所有表单集合.
             MapDatas mds = new MapDatas();
             mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
@@ -1941,7 +1870,8 @@ namespace BP.WF.HttpHandler
                             appFlowFormTree.AddEntity(nodeFolder);
                         }
                     }
-                    //检查必填项
+
+                    //检查必填项.
                     bool IsNotNull = false;
                     FrmFields formFields = new FrmFields();
                     QueryObject obj = new QueryObject(formFields);
@@ -1967,7 +1897,7 @@ namespace BP.WF.HttpHandler
             AppendFolder(formTrees);
             #endregion
 
-            //扩展工具，显示位置为表单树类型
+            //扩展工具，显示位置为表单树类型.
             NodeToolbars extToolBars = new NodeToolbars();
             QueryObject info = new QueryObject(extToolBars);
             info.AddWhere(NodeToolbarAttr.FK_Node, this.FK_Node);

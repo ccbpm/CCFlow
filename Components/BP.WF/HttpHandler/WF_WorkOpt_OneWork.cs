@@ -619,7 +619,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //获取流程中的节点信息
-                sql = "SELECT NodeID \"ID\", Name \"Name\", ICON \"Icon\", X \"X\", Y \"Y\", NodePosType \"NodePosType\",RunModel \"RunModel\",HisToNDs \"HisToNDs\",TodolistModel \"TodolistModel\" FROM WF_Node WHERE FK_Flow='" +
+                sql = "SELECT NodeID \"ID\", Name \"Name\", ICON \"Icon\", X \"X\", Y \"Y\", NodePosType \"NodePosType\", RunModel \"RunModel\",HisToNDs \"HisToNDs\",TodolistModel \"TodolistModel\" FROM WF_Node WHERE FK_Flow='" +
                     fk_flow + "' ORDER BY Step";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_NODE";

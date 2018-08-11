@@ -1140,8 +1140,7 @@ namespace BP.WF
         /// 执行修复
         /// </summary>
         public void DoRepair()
-        { 
-
+        {
         }
 		/// <summary>
 		/// 重写基类方法
@@ -1162,9 +1161,7 @@ namespace BP.WF
                 map.AddTBString(GenerWorkFlowAttr.SysType, null, "系统类别", true, false, 0, 10, 10);
                 map.AddTBString(GenerWorkFlowAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
-
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 1000, 10);
-                
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
 

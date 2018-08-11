@@ -722,6 +722,9 @@ namespace BP.WF.HttpHandler
                 return "url@" + nd.FormUrl + "?IsReadonly=1&WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt;
             }
 
+            if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.SheetAutoTree)
+                return "url@../../../MyFlowTreeReadonly.htm?3=4&WorkID=" +this.WorkID + "&FID=" + this.FID + "&OID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + this.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+
             Work wk = nd.HisWork;
             wk.OID = workid;
             if (wk.RetrieveFromDBSources() == 0)
@@ -749,8 +752,7 @@ namespace BP.WF.HttpHandler
 
             nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
 
-            if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.SheetAutoTree)
-                return "url@../../../MyFlowTreeReadonly.htm?3=4&FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+          
 
             if (nd.HisFormType == NodeFormType.FreeForm)
             {

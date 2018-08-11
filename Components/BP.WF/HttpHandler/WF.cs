@@ -1257,7 +1257,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(this.FK_Flow))
                     return "url@./RptSearch/Default.htm";
                 else
-                    return "url@./RptDfine/FlowSearch.htm?2=1&FK_Flow=001&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
+                    return "url@./RptDfine/Search.htm?2=1&FK_Flow=001&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
             }
 
             //流程查询小页面.

@@ -220,6 +220,15 @@ namespace BP.WF.Rpt
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "执行分析";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
+                rm.ClassMethodName = this.ToString() + ".DoGroup_MyJoinFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我审批的流程";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "恢复设置";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Reset.png";
                 rm.Warning = "您确定要执行吗?";
@@ -528,7 +537,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyStartFlow()
         {
-            return "../../RptDfine/FlowSearch.htm?SearchType=My&FK_Flow=" + this.No;
+            return "../../RptDfine/Search.htm?SearchType=My&FK_Flow=" + this.No;
         }
         #endregion
 
@@ -579,7 +588,12 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyJoinFlow()
         {
-            return "../../RptDfine/FlowSearch.htm?SearchType=MyJoin&FK_Flow=" + this.No;
+            return "../../RptDfine/Search.htm?SearchType=MyJoin&FK_Flow=" + this.No;
+        }
+
+        public string DoGroup_MyJoinFlow()
+        {
+            return "../../RptDfine/Group.htm?SearchType=MyJoin&FK_Flow=" + this.No;
         }
         #endregion 我审批的流程
 
@@ -630,7 +644,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyDeptFlow()
         {
-            return "../../RptDfine/FlowSearch.htm?SearchType=MyDept&FK_Flow=" + this.No;
+            return "../../RptDfine/Search.htm?SearchType=MyDept&FK_Flow=" + this.No;
         }
         #endregion 本部门发起的流程
 
@@ -682,7 +696,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_AdminerFlow()
         {
-            return "../../RptDfine/FlowSearch.htm?SearchType=Adminer&FK_Flow=" + this.No;
+            return "../../RptDfine/Search.htm?SearchType=Adminer&FK_Flow=" + this.No;
         }
 
         public string DoReset_AdminerFlowRight()

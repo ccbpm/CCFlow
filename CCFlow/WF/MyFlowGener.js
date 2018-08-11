@@ -607,6 +607,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
     var formArr = formss.split('&');
     var formArrResult = [];
+
     //获取CHECKBOX的值
     $.each(formArr, function (i, ele) {
 
@@ -1753,7 +1754,7 @@ function initModal(modalType, toNode) {
                   + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
                    + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'
                + '</div>'
-               + '<div class="modal-body">'
+               + '<div class="modal-body" style="margin:0px;padding:0px">'
                    + '<iframe style="width:100%;border:0px;height:450px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
                + '</div>'
            + '</div><!-- /.modal-content -->'

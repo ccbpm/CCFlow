@@ -13,7 +13,6 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="Gener.js" type="text/javascript"></script>
-    <script src="JS/Tree.js" type="text/javascript"></script>
 
     <script type="text/javascript" language="javascript" >
 
@@ -81,7 +80,7 @@
             var pushData = handler.DoMethodReturnString("TreeEn_Init");
             if (pushData.indexOf("err@") != -1) {
                 alert(pushData);
-                $("#enTree").append("<li>"+pushData.replace("err@","").replace("entity",treeEnsName)+"</li>");
+                $("#enTree").append("<li>" + pushData.replace("err@", "").replace("entity", treeEnsName) + "</li>");
                 return;
             }
 
@@ -204,16 +203,18 @@
             var enName = GetEnName();
             var node = $('#enTree').tree('getSelected');
             if (node) {
-                var url = "En.htm?EnName=" + enName + "&"+refPK+"="+ node.id;
-                OpenEasyUiDialogExt(url, '新增',650,500,false);
-                LoadGridData();
+                var url = "En.htm?EnName=" + enName + "&" + refPK + "=" + node.id;
+                OpenEasyUiDialog(url, "eudlgframe", '新增', 650, 500, "icon-property", true, null, null, null, function () {
+                    LoadGridData();
+                });
+
             }
         }
         //编辑页面
         function EditEntityForm() {
-            var enName = GetEnName(); 
+            var enName = GetEnName();
             var en = new Entity(enName);
-            
+
 
             var url = "En.htm?EnName=" + enName;
             var row = $('#ensGrid').datagrid('getSelected');
@@ -222,8 +223,11 @@
                     enPK = "No";
                 url = "En.htm?EnName=" + enName + "&PK=" + row[enPK];
             }
-            OpenEasyUiDialogExt(url, '编辑',650,500,false);
-            LoadGridData();
+            OpenEasyUiDialog(url, "eudlgframe", '编辑', 650, 500, "icon-property", true, null, null, null, function () {
+                LoadGridData();
+            });
+
+
         }
         //获得enName.
         function GetEnName() {

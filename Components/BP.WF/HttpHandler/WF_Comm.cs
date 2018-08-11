@@ -33,6 +33,86 @@ namespace BP.WF.HttpHandler
         }
         #endregion 树的实体
 
+        #region 部门-人员关系.
+
+        public string Tree_MapBaseInfo()
+        {
+            EntitiesTree enTrees = ClassFactory.GetEns(this.TreeEnsName) as EntitiesTree;
+            EntityTree enenTree = enTrees.GetNewEntity as EntityTree;
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+            Hashtable ht = new Hashtable();
+            ht.Add("TreeEnsDesc", enenTree.EnDesc);
+            ht.Add("EnsDesc", en.EnDesc);
+            ht.Add("EnPK", en.PK);
+            return BP.Tools.Json.ToJson(ht);
+        }
+
+        /// <summary>
+        /// 获得树的结构
+        /// </summary>
+        /// <returns></returns>
+        public string TreeEn_Init()
+        {
+            EntitiesTree ens = ClassFactory.GetEns(this.TreeEnsName) as EntitiesTree;
+            ens.RetrieveAll(EntityTreeAttr.Idx);
+            return ens.ToJsonOfTree();
+        }
+        
+        /// <summary>
+        /// 获取树关联的集合
+        /// </summary>
+        /// <returns></returns>
+        public string TreeEmp_Init()
+        {
+            DataSet ds = new DataSet();
+            string RefPK = this.GetRequestVal("RefPK");
+            string FK = this.GetRequestVal("FK");
+            //获取关联的信息集合
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            ens.RetrieveByAttr(RefPK, FK);
+            DataTable dt = ens.ToDataTableField("GridData");
+            ds.Tables.Add(dt);
+
+            //获取实体对应的列明
+            Entity en = ens.GetNewEntity;
+            Map map = en.EnMapInTime;
+            MapAttrs attrs = map.Attrs.ToMapAttrs;
+            //属性集合.
+            DataTable dtAttrs = attrs.ToDataTableField();
+            dtAttrs.TableName = "Sys_MapAttrs";
+
+            dt = new DataTable("Sys_MapAttr");
+            dt.Columns.Add("field", typeof(string));
+            dt.Columns.Add("title", typeof(string));
+            dt.Columns.Add("Width", typeof(int));
+            dt.Columns.Add("UIContralType", typeof(int));
+            DataRow row = null;
+            foreach (MapAttr attr in attrs)
+            {
+                if (attr.UIVisible == false)
+                    continue;
+
+                if (attr.KeyOfEn == this.RefPK)
+                    continue;
+
+                row = dt.NewRow();
+                row["field"] = attr.KeyOfEn;
+                row["title"] = attr.Name;
+                row["Width"] = attr.UIWidthInt*2;
+                row["UIContralType"] = attr.UIContralType;
+
+                if (attr.HisAttr.IsFKorEnum)
+                    row["field"] = attr.KeyOfEn + "Text";
+                dt.Rows.Add(row);
+            }
+
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 部门-人员关系
+
         /// <summary>
         /// 页面功能实体
         /// </summary>

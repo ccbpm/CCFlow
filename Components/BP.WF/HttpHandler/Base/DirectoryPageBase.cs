@@ -365,6 +365,24 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
+
+        /// <summary>
+        /// 树形结构的类名
+        /// </summary>
+        public string TreeEnsName
+        {
+            get
+            {
+                string str = this.GetRequestVal("TreeEnsName");
+                if (str == null || str == "" || str == "null")
+                {
+                    if (this.EnName == null)
+                        return null;
+                    return this.EnName + "s";
+                }
+                return str;
+            }
+        }
         /// <summary>
         /// 部门编号
         /// </summary>

@@ -295,8 +295,7 @@
                 var width = c.Width; // getColumnWidth(c.No, c.Name, d.MainData, c.Width);
                 if (c.No == "Title")
                     width = 300;
-                //alert(JSON.stringify(c));
-                //alert(width + c.Name);
+
 
                 cols.push({
                     title: c.Name,
@@ -307,6 +306,13 @@
                 if (c.No == "Title") {
                     cols[cols.length - 1].formatter = function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="ViewFlow(' + index + ')">' + value + '</a>';
+                    }
+                }
+
+                if (c.UIContralType == 2) {
+                    cols[cols.length - 1].formatter = function (value, row, index) {
+                        if (value == "0") return "否";
+                        if (value == "1") return "是";
                     }
                 }
             });

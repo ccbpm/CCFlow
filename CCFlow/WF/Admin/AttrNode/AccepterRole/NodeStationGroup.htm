@@ -33,7 +33,7 @@
 	        stas.Retrieve("OrgNo", orgNo);
 
 	        //查询出来数据.	       
-	        var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ") group by No,Name";
+	        var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ") group by No,Name";
 	       
 	        //获得要增加的流程集合.
 	        var stationTypes = DBAccess.RunSQLReturnTable(sql);
@@ -43,6 +43,7 @@
 	    });
 
 	    function BindGroupModel(groups, entities, selectedEles) {
+
 	        AttrOfMInMM = "FK_Station";
 	        var html = "<table style='width:100%;' >";
 

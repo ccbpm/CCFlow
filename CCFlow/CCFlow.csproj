@@ -761,10 +761,6 @@
     <Content Include="WF\Comm\Sys\SystemClassCheck.htm" />
     <Content Include="WF\Comm\Sys\SystemClassField.htm" />
     <Content Include="WF\Comm\Tree.htm" />
-    <Content Include="WF\Comm\TreeV2.htm" />
-    <Content Include="WF\Comm\UC\ToolBar.ascx" />
-    <Content Include="WF\Comm\UC\UCGraphics.ascx" />
-    <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\emotion.css" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\emotion.js" />
     <Content Include="WF\Comm\umeditor1.2.3-utf8\dialogs\emotion\images\0.gif" />
@@ -1050,15 +1046,10 @@
     <Content Include="WF\RptDfine\Batch.htm" />
     <Content Include="WF\RptDfine\Contrast.htm" />
     <Content Include="WF\RptDfine\Flowlist.htm" />
-    <Content Include="WF\RptDfine\FlowSearch.htm" />
     <Content Include="WF\RptDfine\Default.htm" />
     <Content Include="WF\RptDfine\Group.htm" />
     <Content Include="WF\RptDfine\Img\BJ.png" />
-    <Content Include="WF\RptDfine\Pub.ascx" />
     <Content Include="WF\RptDfine\Search.htm" />
-    <Content Include="WF\RptDfine\Single.Master" />
-    <Content Include="WF\RptDfine\SiteEUI.Master" />
-    <Content Include="WF\RptDfine\UC\Pub.ascx" />
     <Content Include="WF\RptSearch\Default.htm" />
     <Content Include="WF\RptSearch\Img\BJ.png" />
     <Content Include="WF\RptSearch\KeySearch.htm" />
@@ -2391,8 +2382,6 @@
     <Content Include="WF\Comm\Charts\swf\StackedBar3D.swf" />
     <Content Include="WF\Comm\Charts\swf\StackedColumn3D.swf" />
     <Content Include="WF\Comm\Charts\swf\ZoomLine.swf" />
-    <Content Include="WF\Comm\Contrast.aspx" />
-    <Content Include="WF\Comm\ContrastDtl.aspx" />
     <Content Include="WF\Comm\CSS\images\ccflowInfo.jpg" />
     <Content Include="WF\Comm\CSS\images\generate.png" />
     <Content Include="WF\Comm\CSS\images\indicator.gif" />
@@ -2404,18 +2393,12 @@
     <Content Include="WF\Comm\Do.aspx" />
     <Content Include="WF\Comm\En.htm" />
     <Content Include="WF\Comm\Gener.js" />
-    <Content Include="WF\Comm\Group.aspx" />
     <Content Include="WF\Comm\JScript.js" />
     <Content Include="WF\Comm\JS\Calendar\calendar.js" />
     <Content Include="WF\Comm\JS\Calendar\config.js" />
-    <Content Include="WF\Comm\JS\Calendar\jquery-1.3.1.min.js" />
-    <Content Include="WF\Comm\JS\Calendar\jquery.bitmapcutter.js" />
-    <Content Include="WF\Comm\JS\Calendar\jquery.bitmapcutter.min.js" />
-    <Content Include="WF\Comm\JS\Calendar\jquery.js" />
     <Content Include="WF\Comm\JS\Calendar\lang\en.js" />
     <Content Include="WF\Comm\JS\Calendar\lang\zh-cn.js" />
     <Content Include="WF\Comm\JS\Calendar\lang\zh-tw.js" />
-    <Content Include="WF\Comm\JS\Calendar\My97DatePicker.htm" />
     <Content Include="WF\Comm\JS\Calendar\skin\datePicker.gif" />
     <Content Include="WF\Comm\JS\Calendar\skin\default\datepicker.css" />
     <Content Include="WF\Comm\JS\Calendar\skin\default\img.gif" />
@@ -2425,222 +2408,9 @@
     <Content Include="WF\Comm\JS\Calendar\skin\whyGreen\img.gif" />
     <Content Include="WF\Comm\JS\Calendar\WdatePicker.js" />
     <Content Include="WF\Comm\JS\Ctrls.js" />
-    <Content Include="WF\Comm\JS\EasyUI\easyloader.js" />
-    <Content Include="WF\Comm\JS\EasyUI\easytemplate.js" />
-    <Content Include="WF\Comm\JS\EasyUI\extend.js" />
-    <Content Include="WF\Comm\JS\EasyUI\jquery.easyui.min.js" />
-    <Content Include="WF\Comm\JS\EasyUI\jquery.min.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-af.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-bg.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-ca.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-cs.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-cz.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-da.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-de.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-en.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-es.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-fr.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-nl.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-tr.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-zh_CN.js" />
-    <Content Include="WF\Comm\JS\EasyUI\locale\easyui-lang-zh_TW.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.accordion.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.calendar.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.combo.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.combobox.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.combogrid.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.combotree.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.datagrid.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.datebox.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.datetimebox.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.dialog.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.draggable.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.droppable.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.extend.validatebox.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.form.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.layout.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.linkbutton.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.menu.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.menubutton.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.messager.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.numberbox.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.numberspinner.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.pagination.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.panel.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.parser.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.progressbar.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.propertygrid.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.resizable.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.searchbox.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.slider.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.spinner.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.splitbutton.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.tabs.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.timespinner.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.tree.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.treegrid.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.validatebox.js" />
-    <Content Include="WF\Comm\JS\EasyUI\plugins\jquery.window.js" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\accordion.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\calendar.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\combo.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\combobox.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\datagrid.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\datebox.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\dialog.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\easyui.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\accordion_arrows.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\accordion_collapse.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\accordion_expand.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\blank.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\button_a_bg.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\button_plain_hover.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\button_span_bg.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\calendar_arrows.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\calendar_nextmonth.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\calendar_nextyear.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\calendar_prevmonth.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\calendar_prevyear.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\combo_arrow.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\combo_arrow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datagrid_header_bg.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datagrid_icons.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datagrid_row_collapse.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datagrid_row_expand.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datagrid_sort_asc.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datagrid_sort_desc.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datagrid_title_bg.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\datebox_arrow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\layout_arrows.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\layout_button_down.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\layout_button_left.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\layout_button_right.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\layout_button_up.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\linkbutton_bg.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\loading.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\menu.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\menu_arrows.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\menu_downarrow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\menu_rightarrow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\menu_sep.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\menu_split_downarrow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\messager_error.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\messager_icons.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\messager_info.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\messager_question.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\messager_warning.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\pagination_first.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\pagination_icons.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\pagination_last.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\pagination_load.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\pagination_loading.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\pagination_next.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\pagination_prev.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\panel_loading.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\panel_title.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\panel_tools.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\panel_tools.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\panel_tool_collapse.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\panel_tool_expand.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\searchbox_button.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\slider_handle.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\spinner_arrows.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\spinner_arrow_down.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\spinner_arrow_up.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tabs_active.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tabs_close.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tabs_enabled.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tabs_icons.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tabs_leftarrow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tabs_rightarrow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_arrows.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_checkbox_0.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_checkbox_1.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_checkbox_2.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_dnd_no.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_dnd_yes.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_elbow.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_file.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_folder.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_folder_open.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_icons.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\tree_loading.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\validatebox_pointer.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\images\validatebox_warning.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\layout.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\linkbutton.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\menu.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\menubutton.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\messager.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\pagination.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\panel.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\progressbar.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\propertygrid.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\searchbox.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\slider.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\spinner.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\splitbutton.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\tabs.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\tooltip.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\tree.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\validatebox.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\default\window.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\demo.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icon.css" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\add.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\addfile.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\addfolder.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\back.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\blank.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\cancel.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\config.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\cut.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\delete.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\delete.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\department.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\department.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\down.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\edit_add.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\edit_remove.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\filesave.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\gongneng.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\help.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\home.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\icon_meeting.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\kongzhidian.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\loading.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\mini_add.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\mini_edit.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\mini_refresh.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\mulu.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\new.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\no.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\ok.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\pencil.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\person.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\print.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\redo.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\reload.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\reset.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\reset.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\rights.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\save_close.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\search.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\search.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\seasons.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\sum.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\tip.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\tree_folder.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\undo.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\up.gif" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\user.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\xitong.png" />
-    <Content Include="WF\Comm\JS\EasyUI\themes\icons\xitongleibie.png" />
     <Content Include="WF\Comm\JS\echarts.js" />
-    <Content Include="WF\Comm\JS\jquery-1.7.2.min.js" />
     <Content Include="WF\Comm\JS\TBHelpDiv.js" />
     <Content Include="WF\Comm\JS\Tree.js" />
-    <Content Include="WF\Comm\JS\TreeEns.js" />
     <Content Include="WF\Comm\readme.txt" />
     <Content Include="WF\Comm\Style\BG_Title.png" />
     <Content Include="WF\Comm\Style\btnBG.gif" />
@@ -2691,9 +2461,6 @@
     <Content Include="WF\Comm\Sys\Img\Table.png" />
     <Content Include="WF\Comm\Sys\Img\View.png" />
     <Content Include="WF\Comm\Sys\Img\WS.png" />
-    <Content Include="WF\Comm\Tree.aspx" />
-    <Content Include="WF\Comm\TreeEns.aspx" />
-    <Content Include="WF\Comm\UC\Pub.ascx" />
     <Content Include="WF\Comm\Sys\Holiday.htm" />
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\Focus.htm" />
@@ -2928,21 +2695,6 @@
     <Content Include="WF\Img\yaoshi.jpg" />
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\PortDemo.htm" />
-    <Content Include="WF\RptDfine\D3.aspx" />
-    <Content Include="WF\RptDfine\Group.aspx" />
-    <Content Include="WF\RptDfine\GroupDtl.aspx" />
-    <Content Include="WF\RptDfine\RptDoc.aspx" />
-    <Content Include="WF\RptDfine\Search.aspx" />
-    <Content Include="WF\RptDfine\SearchAdv.aspx" />
-    <Content Include="WF\RptDfine\SearchEUI.aspx" />
-    <Content Include="WF\RptDfine\SearchEUIReadOnly.aspx" />
-    <Content Include="WF\RptDfine\SelectMVals.aspx" />
-    <Content Include="WF\RptDfine\UC\D3.ascx" />
-    <Content Include="WF\RptDfine\UC\Group.ascx" />
-    <Content Include="WF\RptDfine\UC\Search.ascx" />
-    <Content Include="WF\RptDfine\UC\SearchAdv.ascx" />
-    <Content Include="WF\RptDfine\UC\SearchAdv.ascx" />
-    <Content Include="WF\RptDfine\UC\ToolBar.ascx" />
     <Content Include="WF\Runing.htm" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.css" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.min.css" />
@@ -7426,20 +7178,6 @@
     <Compile Include="WF\Comm\Charts\FCExport.aspx.designer.cs">
       <DependentUpon>FCExport.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\Contrast.aspx.cs">
-      <DependentUpon>Contrast.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Contrast.aspx.designer.cs">
-      <DependentUpon>Contrast.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\ContrastDtl.aspx.cs">
-      <DependentUpon>ContrastDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\ContrastDtl.aspx.designer.cs">
-      <DependentUpon>ContrastDtl.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7447,75 +7185,12 @@
     <Compile Include="WF\Comm\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\Group.aspx.cs">
-      <DependentUpon>Group.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Group.aspx.designer.cs">
-      <DependentUpon>Group.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Tree.aspx.cs">
-      <DependentUpon>Tree.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Tree.aspx.designer.cs">
-      <DependentUpon>Tree.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\TreeEns.aspx.cs">
-      <DependentUpon>TreeEns.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\TreeEns.aspx.designer.cs">
-      <DependentUpon>TreeEns.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UC\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UC\ToolBar.ascx.cs">
-      <DependentUpon>ToolBar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\ToolBar.ascx.designer.cs">
-      <DependentUpon>ToolBar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCGraphics.ascx.cs">
-      <DependentUpon>UCGraphics.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCGraphics.ascx.designer.cs">
-      <DependentUpon>UCGraphics.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCSys.ascx.cs">
-      <DependentUpon>UCSys.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\UC\UCSys.ascx.designer.cs">
-      <DependentUpon>UCSys.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
     <Compile Include="WF\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\RptSearch\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -7523,120 +7198,8 @@
     <Compile Include="WF\MyFlow.ashx.cs">
       <DependentUpon>MyFlow.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\RptDfine\D3.aspx.cs">
-      <DependentUpon>D3.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\D3.aspx.designer.cs">
-      <DependentUpon>D3.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\Group.aspx.cs">
-      <DependentUpon>Group.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\Group.aspx.designer.cs">
-      <DependentUpon>Group.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\GroupDtl.aspx.cs">
-      <DependentUpon>GroupDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\GroupDtl.aspx.designer.cs">
-      <DependentUpon>GroupDtl.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\RptDfine\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\RptDoc.aspx.cs">
-      <DependentUpon>RptDoc.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\RptDoc.aspx.designer.cs">
-      <DependentUpon>RptDoc.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\SearchAdv.aspx.cs">
-      <DependentUpon>SearchAdv.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\SearchAdv.aspx.designer.cs">
-      <DependentUpon>SearchAdv.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\SearchEUI.aspx.cs">
-      <DependentUpon>SearchEUI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\SearchEUI.aspx.designer.cs">
-      <DependentUpon>SearchEUI.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\SearchEUIReadOnly.aspx.cs">
-      <DependentUpon>SearchEUIReadOnly.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\SearchEUIReadOnly.aspx.designer.cs">
-      <DependentUpon>SearchEUIReadOnly.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\SelectMVals.aspx.cs">
-      <DependentUpon>SelectMVals.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\SelectMVals.aspx.designer.cs">
-      <DependentUpon>SelectMVals.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\Single.Master.cs">
-      <DependentUpon>Single.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\Single.Master.designer.cs">
-      <DependentUpon>Single.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\SiteEUI.Master.cs">
-      <DependentUpon>SiteEUI.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\SiteEUI.Master.designer.cs">
-      <DependentUpon>SiteEUI.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\D3.ascx.cs">
-      <DependentUpon>D3.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\D3.ascx.designer.cs">
-      <DependentUpon>D3.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\Group.ascx.cs">
-      <DependentUpon>Group.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\Group.ascx.designer.cs">
-      <DependentUpon>Group.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\Search.ascx.cs">
-      <DependentUpon>Search.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\Search.ascx.designer.cs">
-      <DependentUpon>Search.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\SearchAdv.ascx.cs">
-      <DependentUpon>SearchAdv.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\SearchAdv.ascx.designer.cs">
-      <DependentUpon>SearchAdv.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\ToolBar.ascx.cs">
-      <DependentUpon>ToolBar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
-      <DependentUpon>ToolBar.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Setting\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

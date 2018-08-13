@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>独立组织的二级管理员 </title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //初始化页面函数.....
+        $(function () {
+
+            $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在加载请稍后.</font>");
+            var orgNo = GetQueryString("OrgNo");
+
+            var html = "";
+            var adminers = new Entities("BP.WF.Port.AdminEmps");
+            adminers.Retrieve("RootOfDept", orgNo);
+
+            html += "<table style='width:100%;'>";
+            html += "<caption>该组织的二级管理员</caption>";
+            html += "<tr>";
+            html += "<th>管理员编号</th>";
+            html += "<th>名称</th>";
+            html += "<th>状态</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
+            for (var i = 0; i < adminers.length; i++) {
+                var adminer = adminers[i];
+
+                if (adminer.No.indexOf('@') == -1)
+                    continue;
+
+                html += "<tr>";
+                html += "<td>" + adminer.No + "</td>";
+                html += "<td>" + adminer.Name + "</td>";
+                html += "<td>" + adminer.UseStaText + "</td>";
+                html += "<td><a href=\"javascript:Delete('" + adminer.No + "')\">删除</a></td>";
+                html += "</tr>";
+            }
+
+            $("#Msg").html(html);
+
+        });
+
+        function Delete(no) {
+
+            if (window.confirm('您确定要删除[' + no + ']吗？') == false)
+                return;
+
+            var emp = new Entity("BP.WF.Port.AdminEmp", no);
+            emp.Delete();
+
+            var orgNo = GetQueryString("OrgNo");
+
+            var emps = new Entities("BP.WF.Port.AdminEmps");
+            emps.Retrieve("RootOfDept", orgNo);
+
+            for (var i = 0; i < emps.length; i++) {
+
+                var emp = emps[i];
+                var myemp = new Entity(emp, emp.No);
+                if (emp.No + '@' + orgNo == no ) {
+                    emp.Delete();
+                }
+            }
+
+
+            window.location.href = window.location.href;
+
+        }
+
+
+    </script>
+</head>
+
+<body >
+
+        <form id="cc" >
+        <div id="Msg">
+        </div>
+           </form>
+
+</body>
+</html>

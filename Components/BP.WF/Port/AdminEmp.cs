@@ -252,7 +252,6 @@ namespace BP.WF.Port
                 map.AddDDLEntities(AdminEmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), false);
                 map.AddDDLEntities(AdminEmpAttr.OrgNo, null, "组织", new BP.WF.Port.Incs(), true);
 
-
                 map.AddDDLSysEnum(AdminEmpAttr.UseSta, 3, "用户状态", true, true, AdminEmpAttr.UseSta, "@0=禁用@1=启用");
                 map.AddDDLSysEnum(AdminEmpAttr.UserType, 3, "用户状态", true, true, AdminEmpAttr.UserType, "@0=普通用户@1=管理员用户");
 
@@ -269,15 +268,14 @@ namespace BP.WF.Port
                 map.AddSearchAttr(AdminEmpAttr.OrgNo);
 
 
-
                 RefMethod rm = new RefMethod();
-                rm.Title = "增加管理员";
+                rm.Title = "增加管理机构";
                 //  rm.GroupName = "高级设置";
                 rm.HisAttrs.AddTBString("FrmID", null, "管理员编号ID", true, false, 0, 100, 100);
-
                 rm.ClassMethodName = this.ToString() + ".DoAddAdminer";
                 rm.Icon = "../../WF/Img/Btn/Copy.GIF";
                 map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "设置加密密码";

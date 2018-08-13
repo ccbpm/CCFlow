@@ -22,6 +22,38 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_CCBPMDesigner : DirectoryPageBase
     {
 
+        /// <summary>
+        /// 按照管理员登录.
+        /// </summary>
+        /// <param name="userNo">管理员编号</param>
+        /// <returns>登录信息</returns>
+        public string AdminerChang_LoginAs()
+        {
+            string orgNo = this.GetRequestVal("OrgNo");
+
+            BP.WF.Port.AdminEmp ae = new Port.AdminEmp();
+            ae.No = WebUser.No + "@" + orgNo;
+            if (ae.RetrieveFromDBSources() == 0)
+                return "err@您不是该组织的管理员.";
+
+            BP.WF.Port.AdminEmp ae1 = new Port.AdminEmp();
+            ae1.No = WebUser.No;
+            ae1.RetrieveFromDBSources();
+
+            if (ae1.RootOfDept.Equals(orgNo) == true)
+                return "info@当前已经是该组织的管理员了，您不用切换.";
+
+            ae1.Copy(ae);
+            ae1.No = WebUser.No;
+            ae1.Update();
+
+            //AdminEmp ad = new AdminEmp();
+            //ad.No = userNo;
+            //if (ad.RetrieveFromDBSources() == 0)
+            //    return "err@用户名错误.";
+            return "info@登录成功, 如果系统不能自动刷新，请手工刷新。";
+        }
+
         public string Flows_Init()
         {
             DataTable dt = new DataTable();
@@ -516,7 +548,8 @@ namespace BP.WF.HttpHandler
                 //string sql = "SELECT count(No) FROM WF_FlowSort WHERE ParentNo='" + adminEmp.RootOfFlow + "' OR No='" + adminEmp.RootOfFlow + "'";
                 int num = DBAccess.RunSQLReturnValInt(ps, 0);
                 if (num == 0)
-                    return "err@二级管理员用户没有设置流程树的权限..";
+                    return "err@您的二级管理员["+adminEmp.No+"],设置的流程树权限已经时效,请联系admin.";
+
                 if (num == 1)
                 {
                     /*只有一个根目录: 就让其生成子目录数据, f.*/
@@ -552,6 +585,7 @@ namespace BP.WF.HttpHandler
             return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
         }
         #endregion 登录窗口.
+
 
 
         #region 流程相关 Flow

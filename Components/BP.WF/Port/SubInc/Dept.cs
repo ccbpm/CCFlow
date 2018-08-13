@@ -99,74 +99,115 @@ namespace BP.WF.Port.SubInc
 		}
 		#endregion
 
-        public string SetSubInc(string userNo)
+        private void InitFlowSortTree()
         {
             //设置流程树权限.
             BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
             fs.No = "Inc" + this.No;
             if (fs.RetrieveFromDBSources() != 0)
             {
-                return "err@该组织结构已经设置过您不能在设置.";
-
                 fs.OrgNo = this.No;
                 fs.Update();
-
-                //AdminEmp ae = new AdminEmp();
-                //int i = ae.Retrieve(AdminEmpAttr.RootOfFlow, "Inc" + this.No);
-                //if (i == 0)
-                //    return "info@该部门[" + this.No + "," + this.Name + "]已经被设置过了子公司，但是没有指定管理员.";
-                //else
-                //    return "info@该部门[" + this.No + "," + this.Name + "]已经被设置过了子公司，管理员为:" + ae.No + "," + ae.Name;
+                return;
             }
 
-            //设置二级管理员.
-            AdminEmp ad = new AdminEmp();
-            ad.No = userNo;
-            if (ad.RetrieveFromDBSources() == 0)
-            {
-                BP.Port.Emp emp = new BP.Port.Emp();
-                emp.No = userNo;
-                if (emp.RetrieveFromDBSources() == 0)
-                    return "err@用户编号错误:" + userNo;
-
-                ad.Copy(emp);
-                ad.Insert();
-            }
-
-            ad.No = userNo;
-            ad.RootOfDept = this.No;
-            ad.RootOfFlow = "Inc" + this.No;
-            ad.RootOfForm = "Inc" + this.No;
-            ad.UserType = 1;
-            ad.UseSta = 1;
-            ad.Update();
+            //获得根目录节点.
+            BP.WF.Template.FlowSort root = new Template.FlowSort();
+            int i=root.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
 
             //设置流程树权限.
             fs.Name = this.Name;
-            fs.ParentNo = "00";
+            fs.ParentNo = root.No;
             fs.OrgNo = this.No;
             fs.Idx = 999;
             fs.Save();
 
-            //设置流程树权限.
+
+            //创建下一级目录.
+            EntityTree en = fs.DoCreateSubNode();
+            en.Name = "流程目录1";
+            en.Update();
+
+            en = fs.DoCreateSubNode();
+            en.Name = "流程目录2";
+            en.Update();
+
+            //表单根目录.
+            BP.Sys.FrmTree ftRoot = new Sys.FrmTree();
+            ftRoot.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
+
+
+            //设置表单树权限.
             BP.Sys.FrmTree ft = new Sys.FrmTree();
             ft.No = "Inc" + this.No;
             if (ft.RetrieveFromDBSources() == 0)
             {
                 ft.Name = this.Name;
-                ft.ParentNo = "1";
-                 ft.OrgNo = this.No;
+                ft.ParentNo = ftRoot.No;
+                ft.OrgNo = this.No;
                 ft.Idx = 999;
                 ft.Insert();
+
+                //创建两个目录.
+                ft.DoCreateSubNode();
+                ft.DoCreateSubNode();
             }
             else
             {
                 ft.Name = this.Name;
-                ft.ParentNo = "1";
-                 ft.OrgNo = this.No;
+                ft.ParentNo = ftRoot.No;
+                ft.OrgNo = this.No;
                 ft.Idx = 999;
                 ft.Update();
             }
+        }
+
+        public string SetSubInc(string userNo)
+        {
+            //检查是否有该用户.
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = userNo;
+            if (emp.RetrieveFromDBSources() == 0)
+                return "err@用户编号错误:" + userNo;
+
+            AdminEmp ad = new AdminEmp();
+            ad.No = userNo + "@" + this.No;
+            if (ad.RetrieveFromDBSources() == 1)
+                return "err@该用户已经是该公司的管理员了.";
+
+            ad.Copy(emp);
+            ad.No = userNo + "@" + this.No; //增加一个影子版本.
+            ad.RootOfDept = this.No;
+            ad.RootOfFlow = "Inc" + this.No;
+            ad.RootOfForm = "Inc" + this.No;
+            ad.UserType = 1;
+            ad.UseSta = 1;
+            ad.Insert();
+
+            //设置二级管理员.
+            ad.No = userNo;
+            if (ad.RetrieveFromDBSources() == 0)
+            {
+                ad.Copy(emp);
+                ad.RootOfDept = this.No;
+                ad.RootOfFlow = "Inc" + this.No;
+                ad.RootOfForm = "Inc" + this.No;
+                ad.UserType = 1;
+                ad.UseSta = 1;
+                ad.Insert();
+            }
+            else
+            {
+                ad.RootOfDept = this.No;
+                ad.RootOfFlow = "Inc" + this.No;
+                ad.RootOfForm = "Inc" + this.No;
+                ad.UserType = 1;
+                ad.UseSta = 1;
+                ad.Update();
+            }
+
+            //初始化表单树，流程树.
+            InitFlowSortTree();
 
             return "设置成功,[" + ad.No + "," + ad.Name + "]重新登录就可以看到.";
         }

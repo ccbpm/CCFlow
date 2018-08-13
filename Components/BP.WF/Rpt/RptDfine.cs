@@ -167,6 +167,14 @@ namespace BP.WF.Rpt
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
+                rm = new RefMethod();
+
+                rm.Title = "执行分析";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
+                rm.ClassMethodName = this.ToString() + ".DoGroup_MyStartFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我审批的流程";
+                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "恢复设置";
@@ -277,6 +285,14 @@ namespace BP.WF.Rpt
                 rm.ClassMethodName = this.ToString() + ".DoSearch_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "执行分析";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
+                rm.ClassMethodName = this.ToString() + ".DoGroup_MyDeptFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -539,6 +555,15 @@ namespace BP.WF.Rpt
         {
             return "../../RptDfine/Search.htm?SearchType=My&FK_Flow=" + this.No;
         }
+
+        /// <summary>
+        /// 分析
+        /// </summary>
+        /// <returns></returns>
+        public string DoGroup_MyStartFlow()
+        {
+            return "../../RptDfine/Group.htm?GroupType=My&FK_Flow=" + this.No;
+        }
         #endregion
 
         #region 我参与的流程
@@ -593,7 +618,7 @@ namespace BP.WF.Rpt
 
         public string DoGroup_MyJoinFlow()
         {
-            return "../../RptDfine/Group.htm?SearchType=MyJoin&FK_Flow=" + this.No;
+            return "../../RptDfine/Group.htm?GroupType=MyJoin&FK_Flow=" + this.No;
         }
         #endregion 我审批的流程
 
@@ -645,6 +670,15 @@ namespace BP.WF.Rpt
         public string DoSearch_MyDeptFlow()
         {
             return "../../RptDfine/Search.htm?SearchType=MyDept&FK_Flow=" + this.No;
+        }
+
+        /// <summary>
+        /// 分析
+        /// </summary>
+        /// <returns></returns>
+        public string DoGroup_MyDeptFlow()
+        {
+            return "../../RptDfine/Group.htm?GroupType=MyDept&FK_Flow=" + this.No;
         }
         #endregion 本部门发起的流程
 

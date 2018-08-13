@@ -1334,6 +1334,43 @@ namespace BP.En
                 throw ex;
             }
         }
+
+        public DataTable DoGroupQueryToTable(string selectSQl,string groupBy,string orderBy)
+        {
+            string sql = this.SQL;
+            string ptable = this.En.EnMap.PhysicsTable;
+            string pk = this.En.PKField;
+
+            switch (this.En.EnMap.EnDBUrl.DBType)
+            {
+                case DBType.Oracle:
+                    if (this._sql == "" || this._sql == null)
+                        sql = selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
+                    else
+                        sql =  selectSQl + sql.Substring(sql.IndexOf(" FROM ")) + groupBy + orderBy;
+                    break;
+                default:
+                    if (this._sql == "" || this._sql == null)
+                        sql =  selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
+                    else
+                    {
+                        sql = sql.Substring(sql.IndexOf(" FROM "));
+                        if (sql.IndexOf("ORDER BY") >= 0)
+                            sql = sql.Substring(0, sql.IndexOf("ORDER BY") - 1);
+                        sql = selectSQl + sql + groupBy + orderBy;
+                    }
+
+
+                    //sql="SELECT COUNT(*) as C "+this._endSql  +sql.Substring(  sql.IndexOf("FROM ") ) ;
+                    //sql="SELECT COUNT(*) as C FROM "+ this._ens.GetNewEntity.EnMap.PhysicsTable+ "  " +sql.Substring(sql.IndexOf("WHERE") ) ;
+                    //int i = sql.IndexOf("ORDER BY") ;
+                    //if (i!=-1)
+                    //	sql=sql.Substring(0,i);
+                    break;
+            }
+           return DBAccess.RunSQLReturnTable(sql, this.MyParas);
+               
+        }
         /// <summary>
         /// 最大的数量
         /// </summary>

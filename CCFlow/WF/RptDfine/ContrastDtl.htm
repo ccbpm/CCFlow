@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>详细数据</title>
+    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Comm/JScript.js" language="JavaScript" ></script>
+
+    <!--引入公共的JS-->
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+
+    <script language="javascript" type="text/javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src='../Img/loading.gif' />正在加载, 请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
+            handler.AddUrlData();  //增加参数.
+
+            //获得map基本信息.
+            var maindata = handler.DoMethodReturnString("FlowContrastDtl_Init");
+            if (maindata.indexOf("err@") != -1) {
+                alert(maindata);
+                return;
+            }
+            maindata = JSON.parse(maindata);
+
+            var Sys_MapAttrs = maindata["Sys_MapAttr"];
+
+            var Group_Dtls = maindata["Group_Dtls"];
+
+            //获取标题名称
+            var title = "";
+            var searchType = this.GetQueryString("SearchType");
+            switch (searchType) {
+                case "My":
+                    title = '我发起的流程';
+                    break;
+                case "MyJoin":
+                    title = '我审批的流程';
+                    break;
+                case "MyDept":
+                    title =  '部门发起的流程';
+                    break;
+                case "Adminer":
+                    title =  '高级查询';
+                    break;
+            }
+
+            document.title = title;
+
+            $('#mainDiv').panel({ title: title + ",数据:" + Group_Dtls.length + "条。; &nbsp;&nbsp;&nbsp;&nbsp;<a href=javascript:Exp(); >导出到Excel</a>" });
+
+
+
+            //获取标题
+            var keyOfEn = "";
+
+            var columns = new Array(); ;
+            for (var i = 0; i < Sys_MapAttrs.length; i++) {
+                var attr = Sys_MapAttrs[i];
+
+                if (attr.UIVisible == 0
+                || attr.No == "OID"
+                || attr.No == "WorkID"
+                || attr.No == "NodeID"
+                || attr.No == "MyNum"
+                || attr.No == "MyPK") {
+                    keyOfEn = attr.KeyOfEn
+                    continue;
+                }
+
+
+                var field = attr.No;
+                var title = attr.Name;
+                if (attr.UIContralType == 2)
+                    columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false,
+                        formatter: function (value, row, index) {
+                            if (value == "0") return "否";
+                            if (value == "1") return "是";
+
+                        }
+                    });
+                else
+                    columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false
+
+                    });
+            }
+
+            //显示行
+            $('#Table1').datagrid({
+                data: maindata["Group_Dtls"],
+                columns: [columns],
+                fitColumns: false,
+                fit: true,
+                rownumbers: true,
+                striped: true,
+                singleSelect: false,
+                pagination: false
+            });
+        }
+
+        //导出
+        function Exp() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
+            handler.AddUrlData();  //增加参数.
+            //查询集合
+            var data = handler.DoMethodReturnString("FlowGroupDtl_Exp");
+            var url = "";
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+            if (plant != 'CCFlow') {
+                var currentPath = window.document.location.href;
+                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                data = path + data;
+            }
+            window.open(data);
+            return;
+        }
+     </script>
+</head>
+<body  class="easyui-layout">
+    <div id="mainDiv" data-options="region:'center',title:'学生',halign: 'center' ">
+            <div class="easyui-layout"  data-options="fit:true">
+                <table id="Table1"></table>
+            </div>
+    </div>
+
+
+<div id="Msg"></div>
+
+</body>
+</html>

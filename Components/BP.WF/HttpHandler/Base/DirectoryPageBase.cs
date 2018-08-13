@@ -930,7 +930,7 @@ namespace BP.WF.HttpHandler
 
             return file;
         }
-        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title)
+        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title,Attrs mapAttrs=null)
         {
             string filename = title + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
             string file = filename;
@@ -957,8 +957,13 @@ namespace BP.WF.HttpHandler
 
             #region 生成导出文件
             try
-            {
-                Attrs attrs = en.EnMap.Attrs;
+            {   
+                Attrs attrs = null;
+                if(mapAttrs!=null)
+                    attrs = mapAttrs;
+                else
+                    attrs = en.EnMap.Attrs;
+
                 Attrs selectedAttrs = null;
                 BP.Sys.UIConfig cfg = new UIConfig(en);
 
@@ -993,9 +998,19 @@ namespace BP.WF.HttpHandler
 
                 //生成文件标题
                 //生成文件标题
-                foreach (DataColumn attr in dt.Columns)
+                foreach (Attr attr in selectedAttrs)
                 {
-                    strLine = strLine + attr.ColumnName + Convert.ToChar(9);
+                    if (attr.IsFKorEnum)
+                        continue;
+                    if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt") 
+                        || attr.Key.Equals("WebPath") || attr.Key.Equals("MyFileH")
+                        || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize"))
+                        continue;
+
+                    if(attr.MyFieldType == FieldType.RefText)
+                        strLine = strLine + attr.Desc.Replace("名称","") + Convert.ToChar(9);
+                    else
+                        strLine = strLine + attr.Desc + Convert.ToChar(9);
                 }
 
                 objStreamWriter.WriteLine(strLine);

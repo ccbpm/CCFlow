@@ -82,7 +82,7 @@
 
 
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
-            if ((mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+            if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
                 if (mapAttr.UIContralType == 1) {
                     /*启用了显示与隐藏.*/
                     var ddl = $("#DDL_" + mapAttr.KeyOfEn);

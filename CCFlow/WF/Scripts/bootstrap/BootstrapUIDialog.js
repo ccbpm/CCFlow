@@ -1,4 +1,4 @@
-﻿function OpenBootStrapModal(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dlgClosedFunc, divId) {
+﻿function OpenBootStrapModal(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dlgClosedFunc, divId,closeBtnColor) {
     ///<summary>使用EasyUiDialog打开一个页面</summary>
     ///<param name="url" type="String">页面链接</param>
     ///<param name="iframeId" type="String">嵌套url页面的iframe的id，在okBtnFunc中，可以通过document.getElementById('eudlgframe').contentWindow获取该页面，然后直接调用该页面的方法，比如获取选中值</param>
@@ -44,7 +44,9 @@
     //标题
     var modalHead = $("<div class='modal-header' style='padding: 5px;'></div>");
     //关闭按钮
-    var btnClose = $("<button type='button' style='color:white;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>&times;</button>");
+    var btnClose = $("<button type='button'  style='color:white;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>&times;</button>");
+    if (closeBtnColor && closeBtnColor != "")
+        btnClose = $("<button type='button'  style='color:black;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>X</button>");
     //标题
     var titleHead = $("<h4 class='modal-title'></h4>");
 

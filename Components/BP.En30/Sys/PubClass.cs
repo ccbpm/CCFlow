@@ -1031,6 +1031,16 @@ namespace BP.Sys
         }
         public static string AddComment(Entity en)
         {
+            if (en == null)
+                return null;
+
+            if (en.EnMap == null)
+                return null;
+
+            if (en.EnMap.PhysicsTable == null)
+                return null;
+
+
             if (DBAccess.IsExitsObject(en.EnMap.PhysicsTable) == false)
                 return "实体表不存在.";
 

@@ -201,6 +201,11 @@
            if (confirm('您确定要删除该人员吗？') == false)
                return;
 
+           //取消人员部门管理关系
+           var en = new Entity("BP.GPM.DeptEmp");
+           en.SetPKVal(deptNo + "_" + no);
+           en.Delete();
+
            var en = new Entity("BP.GPM.Emp", no);
            en.Delete();
 

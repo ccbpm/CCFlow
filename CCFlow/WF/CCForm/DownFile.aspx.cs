@@ -416,8 +416,11 @@ namespace CCFlow.WF.CCForm
                     readLen = readLen + everylen;
                 }
                 encStream.Close();
-                inFs.Close();
+                inFs.Close();                
                 outFs.Close();
+                encStream.Dispose();
+                inFs.Dispose();                
+                outFs.Dispose();
                 return true;//加密成功
             }
             catch (Exception ex)

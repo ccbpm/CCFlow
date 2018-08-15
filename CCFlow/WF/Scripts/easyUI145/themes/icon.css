@@ -133,6 +133,10 @@
     -o-background-size: cover;
     background-size: cover;
 }
+.icon-tree_folder
+{
+    background: url('icons/tree_folder.gif') no-repeat center center !important;
+}
 .icon-flow1
 {
     background: url('../../../Admin/CCBPMDesigner/Img/Flow.png') center 0 no-repeat;

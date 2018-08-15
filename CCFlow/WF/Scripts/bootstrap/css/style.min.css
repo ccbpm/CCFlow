@@ -3123,14 +3123,14 @@ a.forum-item-title:hover {
 }
 
 body {
-	font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 13px;
+	/**font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;**/
+	font-size: 12px;
 	color: #676a6c;
 	overflow-x: hidden
 }
 
 body,
-body.full-height-layout #page-wrapper,
+body.full-height-layou3 #page-wrapper,
 body.full-height-layout #wrapper,
 html {
 	height: 100%;

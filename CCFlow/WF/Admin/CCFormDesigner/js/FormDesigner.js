@@ -144,7 +144,7 @@ function InitonMouseMove() {
             var figureId = STACK.figureGetByXY(x, y);
             if (figureIdMouseMove != figureId) {
                 figureIdMouseMove = figureId;
-                console.log(figureId)
+
                 if (figureId != -1) {
                     var figure = STACK.figureGetById(figureId);
                     mouseHoverCallBackFun(figure, x, y);
@@ -316,7 +316,6 @@ function showFigurePropertyWin(figure) {
     //枚举类型.
     if (shap == 'RadioButton') {
 
-        console.log(figure);
         var mypk= figure.CCForm_MyPK;
 
         mypk= mypk.replace('RB_', "");
@@ -820,7 +819,7 @@ function figure_MapAttr_Template(mapAttr) {
         return;
     } else {
         alert(mapAttr)
-        console.log(mapAttr)
+
     }
 
     f.name = f.CCForm_Shape;

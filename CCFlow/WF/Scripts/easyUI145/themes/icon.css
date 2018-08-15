@@ -1,4 +1,4 @@
-.icon-blank{
+﻿.icon-blank{
 	background:url('icons/blank.gif') no-repeat center center;
 }
 .icon-add{
@@ -121,4 +121,226 @@
 .icon-reset
 {
     background: url('icons/reset.png') no-repeat;
+}
+/*BPMN�°�������������ͼ����ʽ���� ��ʼ��added by liuxc��2015-10-8*/
+.icon-flowtree
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/FlowTree.png') center 0 no-repeat !important;
+    width: 20px;
+    height: 21px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-flow1
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/Flow.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.icon-flowpublic
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/FlowPublic.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-flowprivate
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/FlowPrivate.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-formtree
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/FormTree.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-form
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/Form.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-srctree
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/DBSrcTree.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-src
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/DBSrc.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-srctable
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/DBSrcTable.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-js
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/Script.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-enum
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/Enum.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-formcloud
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/FormCloud.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-formprivate
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/FormPrivate.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-formpublic
+{
+    background: url('../../../Admin/CCBPMDesigner/Img/FormPublic.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+/*BPMN�°�������������ͼ����ʽ���� ����*/
+.icon-property
+{
+    background: url('icons/property.png') no-repeat;
+}
+.icon-guide
+{
+    background: url('icons/guide.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-node
+{
+    background: url('../../../Img/Node.png') center 0 no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.icon-copy
+{
+    background: url('icons/copy.png') no-repeat;
+}
+/*ɵ�ϱ���ť��ʽ*/
+.icon-expimp
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/ExpImp.png') no-repeat;
+}
+.icon-hidden
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/HiddenField.png') no-repeat;
+}
+.icon-groupbar
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/GroupBar.png') no-repeat;
+}
+.icon-checkGroup
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/CheckGroup.png') no-repeat;
+}
+.icon-dtl
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/Dtl.png') no-repeat;
+}
+.icon-closecol
+{
+    background: url('../../../Img/Btn/ChoseCol.gif') no-repeat;
+}
+.icon-attachment
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/Attachment.png') no-repeat;
+}
+.icon-frame
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/Frame.gif') no-repeat;
+}
+.icon-event
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/event.png') no-repeat;
+}
+.icon-dts
+{
+    background: url('../../../Admin/FoolFormDesigner/Img/MapExt/DTS.gif') no-repeat;
+}
+
+.icon-Components
+{
+    background: url('../../../Img/Components.png') no-repeat;
+}
+
+.icon-telephone
+{
+    background: url('../../../Admin/CCFormDesigner/Img/telephone.png') no-repeat;
 }

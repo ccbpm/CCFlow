@@ -94,7 +94,7 @@ B.Rec as Sender,
 CREATE VIEW V_FlowStarter
 (FK_Flow,FlowName,FK_Emp)
 AS
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeStation b, Port_EmpStation c 
+SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
  WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
 AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND  ( A.DeliveryWay=0 OR A.DeliveryWay=14 )
 UNION  

@@ -177,7 +177,7 @@ namespace CCFlow.WF.CCForm
                     //HttpContext.Current.EnableViewState =false;
 
                     HttpContext.Current.Response.WriteFile(filepath);
-                    File.Delete(filepath);
+                  //  File.Delete(filepath);
                     HttpContext.Current.Response.End();
                     HttpContext.Current.Response.Close();
                     #endregion

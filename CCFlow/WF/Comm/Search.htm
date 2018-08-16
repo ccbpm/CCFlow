@@ -569,8 +569,10 @@
             if (pkval == undefined) {
                 pkval = rowData["NodeID"];
             }
-
-            return "<a href='#' onclick='downLoadFile(\"" + pkval + "\")' target='_self'>下载</a>";  
+            if (rowData.MyFileName != null && rowData.MyFileName != "")
+                return "<a href='#' onclick='downLoadFile(\"" + pkval + "\")' target='_self'>下载</a>";
+            else
+                return "-";
         }
 
         function downLoadFile(PKVal) {

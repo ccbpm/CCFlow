@@ -402,7 +402,6 @@
     <Compile Include="Port\Emp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\EmpStation.cs" />
     <Compile Include="Port\SubInc\Station.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="SMS.cs" />

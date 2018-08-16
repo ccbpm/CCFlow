@@ -819,9 +819,7 @@ namespace BP.Web
                 {
                     Stations sts = new Stations();
                     QueryObject qo = new QueryObject(sts);
-                    if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-                        qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_EmpStation WHERE FK_Emp='" + WebUser.No + "'");
-                    else //if(BP.Sys.SystemConfig.OSModel == OSModel.OneMore)
+                   
                         qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
                     qo.DoQuery();
                     SetSessionByKey("HisSts", sts);

@@ -55,7 +55,7 @@ namespace BP.WF.DTS
             sqls += "@DELETE FROM Port_Emp";
             sqls += "@DELETE FROM Port_Dept";
             sqls += "@DELETE FROM Port_Station";
-            sqls += "@DELETE FROM Port_EmpStation";
+            sqls += "@DELETE FROM Port_DeptEmpStation";
             DBAccess.RunSQLs(sqls);
 
            

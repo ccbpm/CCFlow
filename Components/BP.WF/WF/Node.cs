@@ -3384,19 +3384,7 @@ namespace BP.WF
             this.AddEntities(nds);
             return this.Count;
         }
-        /// <summary>
-        /// 开始节点
-        /// </summary>
-        public void RetrieveStartNode()
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeAttr.NodePosType, (int)NodePosType.Start);
-            qo.addAnd();
-            qo.AddWhereInSQL(NodeAttr.NodeID, "SELECT FK_Node FROM WF_NodeStation WHERE FK_STATION IN (SELECT FK_STATION FROM Port_EmpSTATION WHERE FK_Emp='" + BP.Web.WebUser.No + "')");
-
-            qo.addOrderBy(NodeAttr.FK_Flow);
-            qo.DoQuery();
-        }
+       
         #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

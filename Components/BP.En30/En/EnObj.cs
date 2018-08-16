@@ -43,9 +43,7 @@ namespace BP.En
             ps.Add("st", fk_station);
 
             bool bl;
-            if (BP.Sys.SystemConfig.OSModel == BP.Sys.OSModel.OneOne)
-                bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_EmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "user AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
-            else
+           
                 bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "user AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
 
             if (bl)

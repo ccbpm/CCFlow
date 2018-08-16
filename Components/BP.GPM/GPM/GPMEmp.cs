@@ -22,8 +22,7 @@ namespace BP.GPM
                 if ( this.No == "admin")
                     return true;
 
-                if (BP.Sys.SystemConfig.OSModel == Sys.OSModel.OneMore)
-                {
+              
                     string sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmpStation WHERE FK_Emp='" + this.No + "'";
                     if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                         return false;
@@ -31,18 +30,9 @@ namespace BP.GPM
                     sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmp WHERE FK_Emp='" + this.No + "'";
                     if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                         return false;
-                }
+                 
 
-                if (BP.Sys.SystemConfig.OSModel == Sys.OSModel.OneOne)
-                {
-                    string sql = "SELECT COUNT(FK_Emp) FROM Port_EmpStation WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
-
-                    sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmp WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
-                }
+              
 
                 return true;
             }

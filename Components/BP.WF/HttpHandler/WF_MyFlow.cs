@@ -1889,7 +1889,7 @@ namespace BP.WF.HttpHandler
                     nodeForm.ParentNo = md.FK_FormTree;
                     nodeForm.Name = md.Name;
                     nodeForm.NodeType = IsNotNull ? "form|1" : "form|0";
-                    nodeForm.IsEdit = Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
+                    nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
                     appFlowFormTree.AddEntity(nodeForm);
                 }
             }

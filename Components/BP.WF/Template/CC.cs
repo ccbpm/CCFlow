@@ -111,10 +111,7 @@ namespace BP.WF.Template
             {
                 if (this.CCStaWay == WF.CCStaWay.StationOnly)
                 {
-                    /* 如果抄送到岗位. */
-                    if (Glo.OSModel == Sys.OSModel.OneOne)
-                        sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C  WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+this.NodeID;
-                    else
+                  
                         sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C  WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node=" + this.NodeID;
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
@@ -136,10 +133,7 @@ namespace BP.WF.Template
                     else
                         deptNo = DBAccess.RunSQLReturnStringIsNull("SELECT FK_Dept FROM WF_GenerWorkerlist WHERE WorkID=" + workid + " AND IsEnable=1 AND IsPass=0", BP.Web.WebUser.FK_Dept);
 
-                    /* 抄送到当前登陆人. */
-                    if (Glo.OSModel == Sys.OSModel.OneOne)
-                        sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND A.FK_Dept='" + deptNo + "'";
-                    else
+                 
                         sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND B.FK_Dept='" + deptNo + "'";
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
@@ -154,10 +148,7 @@ namespace BP.WF.Template
 
                 if (this.CCStaWay == WF.CCStaWay.StationAdndDept)
                 {
-                    /* 如果抄送到岗位与部门的交集. */
-                    if (Glo.OSModel == Sys.OSModel.OneOne)
-                        sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C, WF_CCDept D WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND C.FK_Node=D.FK_Node AND D.FK_Node="+this.NodeID;
-                    else
+                  
                         sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C, WF_CCDept D WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND B.FK_Dept=D.FK_Dept AND C.FK_Node="+this.NodeID+" AND D.FK_Node="+this.NodeID;
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
@@ -186,10 +177,7 @@ namespace BP.WF.Template
                     {
                         BP.Port.Dept dept = new Dept(deptNo);
 
-                        /* 抄送到当前登陆人. */
-                        if (Glo.OSModel == Sys.OSModel.OneOne)
-                            sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node="+this.NodeID+" AND A.FK_Dept='"+deptNo+"'";
-                        else
+                      
                             sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node="+this.NodeID+" AND B.FK_Dept='"+deptNo+"'";
 
                         mydt = DBAccess.RunSQLReturnTable(sql);

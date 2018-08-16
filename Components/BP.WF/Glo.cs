@@ -2022,10 +2022,9 @@ namespace BP.WF
         {
             get
             {
-                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
+               
                     return "Port_DeptEmpStation";
-                else
-                    return "Port_EmpStation";
+                
             }
         }
         /// <summary>

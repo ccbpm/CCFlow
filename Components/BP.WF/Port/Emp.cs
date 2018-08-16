@@ -59,19 +59,7 @@ namespace BP.WF.Port
                 }
             }
         }
-        /// <summary>
-        /// 工作岗位集合。
-        /// </summary>
-        public Stations HisStations
-        {
-            get
-            {
-                EmpStations sts = new EmpStations();
-                Stations mysts = sts.GetHisStations(this.No);
-                return mysts;
-                //return new Station(this.FK_Station);
-            }
-        }
+       
         /// <summary>
         /// 部门
         /// </summary>
@@ -191,9 +179,9 @@ namespace BP.WF.Port
 
                 map.AddSearchAttr(EmpAttr.FK_Dept); //查询条件.
 
-                //增加点对多属性 一个操作员的部门查询权限与岗位权限.
-                map.AttrsOfOneVSM.Add(new EmpStations(), new Stations(), 
-                    EmpStationAttr.FK_Emp, EmpStationAttr.FK_Station, DeptAttr.Name, DeptAttr.No, "岗位权限");
+                ////增加点对多属性 一个操作员的部门查询权限与岗位权限.
+                //map.AttrsOfOneVSM.Add(new EmpStations(), new Stations(), 
+                //    EmpStationAttr.FK_Emp, EmpStationAttr.FK_Station, DeptAttr.Name, DeptAttr.No, "岗位权限");
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "禁用";
@@ -205,7 +193,6 @@ namespace BP.WF.Port
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoEnableIt";
                 map.AddRefMethod(rm);
-
 
 
                 rm = new RefMethod();

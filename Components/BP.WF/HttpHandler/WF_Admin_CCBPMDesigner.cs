@@ -176,32 +176,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("NAME", typeof(string));
             dt.Columns.Add("TTYPE", typeof(string));
 
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-            {
-                BP.GPM.DeptEmp de = null;
-                BP.Port.Emp emp = null;
-                BP.WF.Port.EmpStations ess = new BP.WF.Port.EmpStations(stid);
-
-                BP.GPM.DeptEmps des = new BP.GPM.DeptEmps();
-                des.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, deptid);
-
-                BP.Port.Emps emps = new BP.Port.Emps();
-                emps.RetrieveAll();
-
-                foreach (BP.WF.Port.EmpStation es in ess)
-                {
-                    de = des.GetEntityByKey(BP.GPM.DeptEmpAttr.FK_Emp, es.FK_Emp) as BP.GPM.DeptEmp;
-
-                    if (de == null)
-                        continue;
-
-                    emp = emps.GetEntityByKey(es.FK_Emp) as BP.Port.Emp;
-
-                    dt.Rows.Add(emp.No, deptid + "|" + stid, emp.Name, "EMP");
-                }
-            }
-            else
-            {
+           
                 BP.GPM.Emp emp = null;
                 BP.GPM.Emps emps = new BP.GPM.Emps();
                 emps.RetrieveAll();
@@ -215,7 +190,6 @@ namespace BP.WF.HttpHandler
 
                     dt.Rows.Add(emp.No, deptid + "|" + stid, emp.Name, "EMP");
                 }
-            }
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -1029,85 +1003,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("NAME", typeof(string));
             dt.Columns.Add("TTYPE", typeof(string));
 
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-            {
-                BP.WF.Port.Depts depts = new BP.WF.Port.Depts();
-                depts.RetrieveAll();
-                BP.WF.Port.Stations sts = new BP.WF.Port.Stations();
-                sts.RetrieveAll();
-                BP.WF.Port.Emps emps = new BP.WF.Port.Emps();
-                emps.RetrieveAll(BP.WF.Port.EmpAttr.Name);
-                BP.WF.Port.EmpStations empsts = new BP.WF.Port.EmpStations();
-                empsts.RetrieveAll();
-                BP.GPM.DeptEmps empdetps = new BP.GPM.DeptEmps();
-                empdetps.RetrieveAll();
-
-                //部门人员
-                Dictionary<string, List<string>> des = new Dictionary<string, List<string>>();
-                //岗位人员
-                Dictionary<string, List<string>> ses = new Dictionary<string, List<string>>();
-                //部门岗位
-                Dictionary<string, List<string>> dss = new Dictionary<string, List<string>>();
-                BP.WF.Port.Station stt = null;
-                BP.WF.Port.Emp empt = null;
-
-                foreach (BP.WF.Port.Dept dept in depts)
-                {
-                    //增加部门
-                    dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
-                    des.Add(dept.No, new List<string>());
-                    dss.Add(dept.No, new List<string>());
-
-                    //获取部门下的岗位
-                    empdetps.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, dept.No);
-                    foreach (BP.GPM.DeptEmp empdept in empdetps)
-                    {
-                        des[dept.No].Add(empdept.FK_Emp);
-                        //判断该人员拥有的岗位
-                        empsts.Retrieve(BP.WF.Port.EmpStationAttr.FK_Emp, empdept.FK_Emp);
-                        foreach (BP.WF.Port.EmpStation es in empsts)
-                        {
-                            if (ses.ContainsKey(es.FK_Station))
-                            {
-                                if (ses[es.FK_Station].Contains(es.FK_Emp) == false)
-                                    ses[es.FK_Station].Add(es.FK_Emp);
-                            }
-                            else
-                            {
-                                ses.Add(es.FK_Station, new List<string> { es.FK_Emp });
-                            }
-
-                            //增加部门的岗位
-                            if (dss[dept.No].Contains(es.FK_Station) == false)
-                            {
-                                stt = sts.GetEntityByKey(es.FK_Station) as BP.WF.Port.Station;
-
-                                if (stt == null) continue;
-
-                                dss[dept.No].Add(es.FK_Station);
-                                dt.Rows.Add(dept.No + "|" + es.FK_Station, dept.No, stt.Name, "STATION");
-                            }
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, List<string>> ds in dss)
-                {
-                    foreach (string st in ds.Value)
-                    {
-                        foreach (string emp in ses[st])
-                        {
-                            empt = emps.GetEntityByKey(emp) as BP.WF.Port.Emp;
-
-                            if (empt == null) continue;
-
-                            dt.Rows.Add(ds.Key + "|" + st + "|" + emp, ds.Key + "|" + st, empt.Name, "EMP");
-                        }
-                    }
-                }
-            }
-            else
-            {
+            
                 BP.GPM.Depts depts = new BP.GPM.Depts();
                 depts.RetrieveAll();
                 BP.GPM.Stations sts = new BP.GPM.Stations();
@@ -1151,7 +1047,6 @@ namespace BP.WF.HttpHandler
                         }
                     }
                 }
-            }
 
             return BP.Tools.Json.ToJson(dt);
         }

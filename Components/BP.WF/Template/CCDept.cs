@@ -175,16 +175,7 @@ namespace BP.WF.Template
             }
             return nds;
         }
-        /// <summary>
-        /// 取到一个工作人员能够访问到的节点。
-        /// </summary>
-        /// <param name="empId">工作人员ID</param>
-        /// <returns></returns>
-        public Nodes GetHisNodes_del(string empId)
-        {
-            Emp em = new Emp(empId);
-            return this.GetHisNodes(em.HisStations);
-        }
+       
         /// <summary>
         /// 工作部门对应的节点
         /// </summary>

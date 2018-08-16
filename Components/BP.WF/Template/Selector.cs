@@ -576,7 +576,7 @@ namespace BP.WF.Template
             //部门.
             string sql = "";
             if (SystemConfig.OSModel == OSModel.OneOne)
-                sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+                sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
             else
             {
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -593,7 +593,7 @@ namespace BP.WF.Template
 
             //人员.
             if (SystemConfig.OSModel == OSModel.OneOne)
-                sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + " ";
+                sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + " ";
             else
             {
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -626,31 +626,6 @@ namespace BP.WF.Template
             //string orderByEmp = "";
             //if (DBAccess.IsExitsTableCol("Port_Emp", "Idx"))
             //    orderByEmp = " ORDER BY Port_Emp.Idx";
-
-
-            if (SystemConfig.OSModel == OSModel.OneOne)
-            {
-                //部门.
-                string sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "Depts";
-                ds.Tables.Add(dt);
-
-
-                //人员.
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
-                        sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,No";
-                    else
-                        sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
-                else
-                    sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
-
-
-                DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dtEmp.TableName = "Emps";
-                ds.Tables.Add(dtEmp);
-            }
 
             if (SystemConfig.OSModel == OSModel.OneMore)
             {

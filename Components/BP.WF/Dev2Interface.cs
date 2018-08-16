@@ -914,20 +914,8 @@ namespace BP.WF
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
                 string sql = "";
-                // 采用新算法.  为烟台纵横添加，可以根据部门与岗位交集，获取流程发起权限 by  zqp
-                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                {
-                    sql = "SELECT FK_Flow FROM V_FlowStarter WHERE FK_Emp='" + userNo + "'";
-                    sql += " UNION ";
-                    sql += "SELECT FK_Flow FROM WF_Node WHERE NodePosType=1 AND NodeID IN ";
-                    sql += "(SELECT a.FK_Node FROM WF_NodeDept A, Port_Emp B, WF_NodeStation C, Port_EmpStation D "
-                    + " WHERE A.FK_Dept= B.FK_Dept AND B.No='" + userNo + "' AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp='" + userNo + "')";
-
-                }
-                else
-                {
+              
                     sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
-                }
 
                 Flows fls = new Flows();
                 BP.En.QueryObject qo = new BP.En.QueryObject(fls);

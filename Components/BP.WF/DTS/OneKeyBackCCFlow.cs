@@ -82,8 +82,8 @@ namespace BP.WF.DTS
             dsPort.Tables.Add(dt);
 
             //Port_EmpStation
-            dt = DBAccess.RunSQLReturnTable("SELECT * FROM Port_EmpStation");
-            dt.TableName = "Port_EmpStation";
+            dt = DBAccess.RunSQLReturnTable("SELECT * FROM Port_DeptEmpStation");
+            dt.TableName = "Port_DeptEmpStation";
             dsPort.Tables.Add(dt);
             
 

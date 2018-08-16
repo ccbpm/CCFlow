@@ -5412,21 +5412,7 @@ namespace BP.WF
                 #region 按照岗位与部门的交集.
                 if (node.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 {
-                    //added by liuxc,2015.6.29.
-                    //区别集成与BPM模式
-                    if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                    {
-                        sql = " SELECT a.No,a.Name FROM Port_Emp A, WF_NodeDept B, WF_NodeStation C, Port_EmpStation D ";
-                        sql += " WHERE A.FK_Dept=B.FK_Dept AND A.No=D.FK_Emp AND C.FK_Station=D.FK_Station AND B.FK_Node=C.FK_Node ";
-                        sql += " AND B.FK_Node=" + dbStr + "FK_Node";
-
-                        ps = new Paras();
-                        ps.Add("FK_Node", node.NodeID);
-                        ps.SQL = sql;
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                    }
-                    else
-                    {
+                   
                         sql = "SELECT pdes.FK_Emp AS No"
                               + " FROM   Port_DeptEmpStation pdes"
                               + " INNER JOIN WF_NodeDept wnd ON wnd.FK_Dept = pdes.FK_Dept"
@@ -5436,7 +5422,7 @@ namespace BP.WF
                               + " ORDER BY pdes.FK_Emp";
 
                         dt = DBAccess.RunSQLReturnTable(sql);
-                    }
+                     
 
                     if (dt.Rows.Count == 0)
                         throw new Exception("@节点访问规则(" + node.HisDeliveryWay.ToString() + ")错误:节点(" + node.NodeID + "," + node.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);

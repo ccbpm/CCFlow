@@ -114,14 +114,15 @@
                     html += '</div>';
                 }
             }
+			
+            $("#toolbar").append(html); //设置基础信息.
 
             //绑定外键枚举查询条件.
             var attrs = data["Attrs"];
 
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
-
-
+            $("#toolbar").html(html); //设置基础信息.
             for (var i = 0; i < attrs.length; i++) {
 
                 var attr = attrs[i];
@@ -131,10 +132,9 @@
                 str += "<select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str += "</div>";
                 str = $(str);
-                $("#toolbar").prepend(str); //设置基础信息.
+                $("#toolbar").append(str); //设置基础信息.
             }
-            $("#toolbar").prepend(html); //设置基础信息.
-
+            
             //为查询外键赋值.
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
@@ -145,14 +145,23 @@
 
                 $("#DDL_" + attr.Field).val(selectVal);
             }
-
+			
+            html='<div  class="col-sm-3" style="margin-left:10px">';
+            html += '<a href="#"class="btn btn-primary" id="search_btn" onclick="Search()">查询</a>  ';
+            
+            
             if (mapBase.IsInsert.toString().toLowerCase() == "true") {
-                $("#newWin").show();
-            } else {
-                $("#newWin").hide();
-            }
-
+                html += '<a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a>  ';
+            } 
+			html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>  ';
+			
+			html +='<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
+			html +='</div>';
+			$("#toolbar").append(html);
+			
         }
+        
+    
 
         //初始化下拉列表框的OPERATION
         function InitDDLOperation(frmData, mapAttr, defVal) {
@@ -697,12 +706,7 @@
 <form id="cc">
     <div class="row" style="margin-top:10px">
     	<div class="panel panel-default" style="border-bottom-width:0px;border-top-width:0px"> 
-    		 <div class="panel-body  form-group" id="toolbar">
-                <a href="#"class="btn btn-primary" id="search_btn" onclick="Search()">查询</a>
-                <a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a>
-                <a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>               
-                <a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>
-              </div>
+    		 <div class="panel-body  form-group" id="toolbar"></div>
         </div>
     </div>
     <table id="dg" class="table table-hover"></table>

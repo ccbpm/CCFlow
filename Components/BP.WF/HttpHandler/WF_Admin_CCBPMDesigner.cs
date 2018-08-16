@@ -373,6 +373,9 @@ namespace BP.WF.HttpHandler
                 ht.Add("CustomerNo", SystemConfig.CustomerNo);
                 ht.Add("CustomerName", SystemConfig.CustomerName);
 
+                //集成的平台.
+                ht.Add("RunOnPlant", SystemConfig.RunOnPlant);
+
                 try
                 {
                     // 执行升级
@@ -416,8 +419,6 @@ namespace BP.WF.HttpHandler
             try
             {
                 DBAccess.TestIsConnection();
-
-                
             }
             catch (Exception ex)
             {

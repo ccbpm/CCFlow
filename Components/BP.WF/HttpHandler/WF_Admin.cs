@@ -46,6 +46,14 @@ namespace BP.WF.HttpHandler
 
         #region 测试页面.
         /// <summary>
+        /// 获得运行的集成平台.
+        /// </summary>
+        /// <returns></returns>
+        public string TestFlow_GetRunOnPlant()
+        {
+            return BP.Sys.SystemConfig.RunOnPlant;
+        }
+        /// <summary>
         /// 初始化界面.
         /// </summary>
         /// <returns></returns>

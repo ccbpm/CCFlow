@@ -913,6 +913,16 @@ namespace BP.Sys
                 return AppSettings["CustomerName"];
             }
         }
+        /// <summary>
+        /// 客户名称
+        /// </summary>
+        public static string RunOnPlant
+        {
+            get
+            {
+                return AppSettings["RunOnPlant"];
+            }
+        }
         public static string CustomerURL
         {
             get

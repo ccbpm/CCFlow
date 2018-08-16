@@ -49,6 +49,8 @@ function GenerFreeFrm(mapData, frmData) {
         var createdFigure = figure_Template_ImageAth(frmImgAth);
         $('#CCForm').append(createdFigure);
     }
+
+
     //循环 附件
     for (var i in frmData.Sys_FrmAttachment) {
         var frmAttachment = frmData.Sys_FrmAttachment[i];
@@ -334,8 +336,12 @@ function figure_Template_FigureSubFlowDtl(wf_node, mapData) {
 
 //初始化从表
 function figure_Template_Dtl(frmDtl, ext) {
+
+
     var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
     var paras = this.pageData;
+
+
     var strs = "";
     for (var str in paras) {
 
@@ -845,13 +851,15 @@ function figure_Template_ImageAth(frmImageAth) {
 
 //初始化 附件
 function figure_Template_Attachment(frmAttachment) {
+
     var eleHtml = '';
     var ath = frmAttachment;
     if (ath.UploadType == 0) {//单附件上传 L4204
         return $('');
     }
+
     var src = "";
-    if (pageData.IsReadonly)
+    if (pageData.IsReadonly == "1")
         src = "Ath.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
     else
         src = "Ath.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;

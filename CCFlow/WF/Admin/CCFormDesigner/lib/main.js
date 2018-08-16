@@ -3927,50 +3927,7 @@ function action(action) {
 
 /**Stores last mouse position. Null initially.*/
 var lastMousePosition = null;
-
-
-//function startResize(ev){
-//    lastMousePosition = getBodyXY(ev);
-//    currentMoveUndo = new Action(null, null, History.ACTION_CANVAS_RESIZE, null, lastMousePosition, null);
-//}
-//
-//
-//function stopResize(ev){
-//    if(lastMousePosition != null){
-//        currentMoveUndo.currentValue = [lastMousePosition[0],lastMousePosition[1]];
-//        History.addUndo(currentMoveUndo);
-//        currentMoveUndo = null;
-//        lastMousePosition = null;
-//    }
-//}
-
-
-//function resize(ev){
-//    if(lastMousePosition != null){
-//        var currentMousePosition
-//        if(ev instanceof Array){
-//            //we are undoing this
-//            currentMousePosition = ev;
-//        }
-//        else{
-//            currentMousePosition = getBodyXY(ev);
-//        }
-//        var width = canvas.getwidth() - (lastMousePosition[0] - currentMousePosition[0]);
-//        var height = canvas.getheight() - (lastMousePosition[1] - currentMousePosition[1]);
-//        canvas.setwidth(canvas,width);
-//        canvas.setheight(canvas, height);
-//        setUpEditPanel(canvas);
-//        lastMousePosition = currentMousePosition;
-//        /*if(canvas.width >= document.body.scrollWidth-370){
-//        }
-//        else {
-//            //document.getElementById("container").style.width = "";
-//        }*/
-//        draw();
-//    }
-//}
-
-
+ 
 function documentOnMouseDown(evt) {
     //Log.info("documentOnMouseDown");
     //evt.preventDefault();

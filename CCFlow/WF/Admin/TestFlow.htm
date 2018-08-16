@@ -19,7 +19,7 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载可以<font color=red>发起该流程</font>的人员列表, 请稍后......");
 
             InitPage();
 
@@ -29,8 +29,6 @@
         //初始化数据.
         function InitPage() {
 
-            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
             var doType = GetQueryString("DoType");
             if (doType == "" || doType == null)
                 doType = "TestFlow_Init";
@@ -39,21 +37,30 @@
             var doWhat = GetQueryString("DoWhat");
             var userNo = getQueryStringByName("UserNo");
 
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-            handler.AddUrlData();
 
-            var data = handler.DoMethodReturnString(doType);
+            var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
+            var urlHost = "";
+            if (plant == "jeesite") {
+
+                urlHost = "/js/a/logout";
+                //$("#Table1").attr("caption", "&nbsp;&nbsp;演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a>");
+
+                document.getElementById("Table1").caption.innerHTML = "演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a> - <font color=red><a href=\"javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');\" >提示</font>";
+
+                //$("#demoPass").html("&nbsp;&nbsp;");
+            }
+
+
+            handler.AddUrlData();
+            var  data = handler.DoMethodReturnString(doType);
 
             if (data.indexOf('err@') == 0) {
-
-
+            
                 if (data.indexOf('访问规则') > 0) {
                     document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
                     return;
-                   // document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
                 }
-
 
                 if (data.indexOf('管理员') > 0) {
                     window.location.href = './CCBPMDesigner/Login.htm';
@@ -70,6 +77,7 @@
                 return;
             }
 
+
             data = JSON.parse(data);
 
             //增加处理.
@@ -82,15 +90,14 @@
 
                 newRow += "<td>" + emp.No + "</td>";
 
-                if (emp.No=="admin")
+                if (emp.No == "admin")
                     newRow += "<td><font color=red><b>" + emp.Name + "</b>-推荐使用</font></td>";
                 else
                     newRow += "<td>" + emp.Name + "</td>";
 
-                var url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
-                //  newRow += "<td>" + url + "</td>";
+                var url = "<a target='_blank' href='" + urlHost + "?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
 
-                url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
+                url = "<a target='_blank' href='" + urlHost + "?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
 
                 if (emp.No == "admin")
                     newRow += "<td><font color=green><b>" + url + "</b></font></td>";
@@ -110,10 +117,11 @@
     </script>
 </head>
 <body onkeypress="Esc()" class="easyui-layout">
-<table>
+<!--<table>
+<caption>流程发起测试</caption>
 <tr>
 <td valign=top style="width:30%"> 
-    <fieldset>
+   <!-- <fieldset>
     <legend><img src='../Img/Help.gif' />发起说明</legend>
      <ul>
      <li> 该界面是流程发起测试界面。 </li>
@@ -131,15 +139,17 @@
      <li> <a href="../AppClassic/Login.htm" >转到前端登录窗口 </a></li>
      </ul>
     </fieldset>
+-->
+<!-- </td>
 
- </td>
+<td valign=top> -->
 
-<td valign=top> 
-        <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
-        <caption>流程发起测试,能够发起该流程的人员列表.(<font color=red>运行流程之前不检查可能会导致字段没有创建的错误</font>)</caption>
+        <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 90%; padding:10px; margin:10px;">
+        <caption>流程发起测试,能够发起该流程的人员列表.(<font color=red><a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');">提示</font>)</caption>
+       
             <tr>
                 <th> 序 </th>
-                <th> 编号</th>
+                <th> 可登录用户编号</th>
                 <th> 名称</th>
               <!--  <th> ACE模式</th>-->
                 <th> 经典模式</th>
@@ -147,12 +157,15 @@
                 <th> 所在部门</th>
             </tr>
         </table>
-    </td>
+        
+   <!-- </td>
 </tr>
-</table>
-    <div id="Info"></div>
-   
-    <div id="Msg"></div>
+</table>-->
 
+<center>
+    <div id="Info"></div>   
+    <div id="Msg"></div>
+</center>
+ 
 </body>
 </html>

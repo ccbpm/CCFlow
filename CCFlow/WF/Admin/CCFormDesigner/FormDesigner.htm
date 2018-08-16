@@ -9,7 +9,7 @@
     <link rel="stylesheet" media="screen" type="text/css" href="./assets/css/style.css" />
     <link rel="stylesheet" media="screen" type="text/css" href="./assets/css/minimap.css" />
     <script type="text/javascript" src="./assets/javascript/json2.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="./assets/javascript/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
      <!-- 基本控件 -->
      <script src="../../Scripts/config.js" type="text/javascript" > </script>
@@ -76,6 +76,7 @@
     <!--[if IE]>
         <script src="./assets/javascript/excanvas.js"></script>
     <![endif]-->
+    <link href="./Img/Menu/icon.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         ToolbarIcon
         {
@@ -95,26 +96,12 @@
         //页面启动函数.
         $(function () {
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddUrlData();
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FormDesigner_InitMapData&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var mapData = handler.DoMethodReturnJSON("FormDesigner_InitMapData");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    mapData = JSON.parse(data);
-
-                    document.title = mapData.Name + " - CCForm H5表单设计.";
-
-                }
-            });
+            document.title = mapData.Name + " - CCForm H5表单设计.";
 
             $("#Msg").html("");
             var fromDtl = Application.common.getArgsFromHref("FromDtl");
@@ -122,7 +109,6 @@
                 ResizeWindow();
             }
         });
-
 
         function closeDlg() {
             $("#eudlg").dialog("close");
@@ -145,7 +131,6 @@
             CCForm_ShowDialog(url, '重置表单', 300, 200);
             return;
         }
-
 
         function FoolFormDesigner() {
 

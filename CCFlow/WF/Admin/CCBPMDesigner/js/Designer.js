@@ -620,7 +620,10 @@ function TextProperty_Funs(item) {
 
 //运行流程
 function Run_Flow() {
-	var url = "../TestFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&Lang=CH";
+
+
+    var url = "../TestFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&Lang=CH&RunOnPlant=1";
+
 	OpenEasyUiDialog(url, "eudlgframe", '流程测试运行', 900, 500, "icon-property", true, null, null, null, function () {
 		//window.location.href = window.location.href;
 	});

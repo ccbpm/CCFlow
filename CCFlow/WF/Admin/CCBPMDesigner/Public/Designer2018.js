@@ -49,7 +49,6 @@ function FlowRunAdmin() {
 
     //var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
     var webUser = new WebUser();
-
     var url = "../TestFlow.htm?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + webUser.No + "&FK_Flow=" + flowNo;
     //  var url = "../../MyFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
     WinOpen(url);

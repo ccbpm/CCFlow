@@ -723,7 +723,7 @@ namespace BP.WF.HttpHandler
             }
 
             if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.SheetAutoTree)
-                return "url@../../MyFlowTreeReadonly.htm?3=4&WorkID=" +this.WorkID + "&FID=" + this.FID + "&OID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + this.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+                return "url@./MyFlowTreeReadonly.htm?3=4&WorkID=" +this.WorkID + "&FID=" + this.FID + "&OID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + this.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
 
             Work wk = nd.HisWork;
             wk.OID = workid;
@@ -959,7 +959,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("Auth", BP.Web.WebUser.Auth);
             else
                 ht.Add("Auth", "");
-            return BP.Tools.FormatToJson.ToJson(ht);
+            return BP.Tools.Json.ToJson(ht);
         }
         /// <summary>
         /// 执行登录.

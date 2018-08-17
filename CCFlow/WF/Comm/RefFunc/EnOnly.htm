@@ -488,7 +488,7 @@
                 html += "<tr>";
                 html += "<td class='FDesc' style='width:20%;'>附件上传</td>";
                 html += "<td colspan=3>";
-                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white' onchange='uploadFile()'/>";
+                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white' onchange='changeFile()' />";
                 html += "</td>";
                 html += "</tr>";
 
@@ -857,10 +857,11 @@
                     return;
                 }
 
+                //保存实体后文件上传
+                var entityAthType = mapData.GetPara("BPEntityAthType")
+                if (entityAthType == 1 || entityAthType == 2)
+                    uploadFile(en.GetPKVal());
 
-                //url += "?EnName=" + GetQueryString("EnName") + "&=" + pkval + "&RefKey=" + GetQueryString("RefKey") + "&RefVal=" + GetQueryString("RefVal");
-
-                //window.location.href = url+"&tabIndex="+index; //刷新.
                 url = window.location.href;
                 url = url.replace("#", "");
                 url = replaceParamVal(url, "PKVal", en.GetPKVal());
@@ -882,22 +883,32 @@
                 alert('更新错误:' + info);
                 return;
             }
+
+            //保存实体后文件上传
+            var entityAthType = mapData.GetPara("BPEntityAthType")
+            if (entityAthType == 1 || entityAthType == 2)
+                uploadFile(pkval);
+
             url = window.location.href;
             url = url.replace("#", "");
             url = replaceParamVal(url, "tabIndex", index);
             window.location.href = url; ; //刷新.
         }
 
-        //文件上传
-        function uploadFile() {
+        function changeFile() {
             var pkval = GetPKVal();
             if (pkval == null || pkval == "") {
-                alert("请先保存实体信息，然后才可以上传文件 ");
-                return ;
+                return; 
             }
+            uploadFile(pkval);
+               
+        }
+
+        //文件上传
+        function uploadFile(pkval) {
+
             var fileObj = document.getElementById("File_Upload").files[0]; // js 获取文件对象
             if (fileObj == null || (fileObj) == "undefined" || fileObj.size <= 0) {
-                alert("请选择上传的文件.");
                 return;
             }
             //form表单序列话
@@ -909,6 +920,9 @@
             //获取发送请求时的参数
             var queryString = document.location.search.substr(1);
 
+            if (queryString.indexOf("PKVal=&") != -1)
+                queryString = replaceParamVal(queryString, "PKVal", pkval);
+
 
             //URL 路径
             var URL = "/WF/Comm/Handler.ashx?DoType=EntityAth_Upload";
@@ -918,7 +932,6 @@
                 URL = path + "/WF/Comm/ProcessRequest.do?DoType=EntityAth_Upload";
 
             }
-            	
 
             if (queryString != null && queryString.length > 0)
                 URL += "&" + queryString;

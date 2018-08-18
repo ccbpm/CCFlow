@@ -55,9 +55,6 @@ function FlowRunAdmin() {
     //window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
 }
 
-
-
-
 //旧版本.
 function OldVer() {
     var url = "Designer2016.htm?FK_Flow=" + flowNo + "&Lang=CH&&Flow_V=1";

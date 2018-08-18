@@ -304,7 +304,7 @@ namespace BP.En
                 if (item.ParentNo != parentEn.No)
                     continue;
 
-                appendMenuSb.Append("{'id':'" + item.No + "','pid':'"+item.ParentNo+"','text':'" + item.Name + "','state':'closed'");
+                appendMenuSb.Append("{'id':'" + item.No + "','pid':'"+item.ParentNo+"','text':'" + item.Name + "'");
                 //appendMenuSb.Append(IsPermissionsNodes(ens, dms, item.No));
                 EntityTree treeNode = item as EntityTree;
                 // 增加它的子级.

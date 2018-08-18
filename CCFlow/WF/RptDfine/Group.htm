@@ -645,7 +645,7 @@
 
             xml += " <categories font='Arial' fontSize='11' fontColor='000000' >";
             for (var i = 0; i < groupSearch.length; i++) {
-                xml += "<category  label='" + groupSearch[i][KeyOfEn] + "' />";
+                xml += "<category  label='" + groupSearch[i][KeyOfEn+"T"] + "' />";
             }
             xml += "</categories>";
             for (var i = 0; i < AttrsOfNum.length; i++) {
@@ -683,7 +683,7 @@
 
 
             for (var i = 0; i < groupSearch.length; i++) {
-                xml += " <set  value='" + groupSearch[i][firstKey.KeyOfEn] + "' label='" + groupSearch[i][KeyOfEn] + "'/>";
+                xml += " <set  value='" + groupSearch[i][firstKey.KeyOfEn] + "' label='" + groupSearch[i][KeyOfEn + "T"] + "'/>";
             }
             xml += "</chart>";
 
@@ -708,7 +708,7 @@
             //xml += " xAxisName='adadasd'> ";     // 左边显示的数据.
             xml += " <categories font='Arial' fontSize='11' fontColor='000000' >";
             for (var i = 0; i < groupSearch.length; i++) {
-                xml += "<category  label='" + groupSearch[i][KeyOfEn] + "' />";
+                xml += "<category  label='" + groupSearch[i][KeyOfEn + "T"] + "' />";
             }
             xml += "</categories>";
             for (var i = 0; i < AttrsOfNum.length; i++) {

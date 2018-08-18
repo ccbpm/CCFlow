@@ -129,14 +129,13 @@
             //加载类别树
             $("#enTree").tree({
                 data: pushData,
-                iconCls: 'tree-folder',
                 collapsed: true,
                 lines: true,
                 onLoadSuccess: function () {
                     if (expnode.length == 0) {
                         //获取根节点
                         var rooNode = $("#enTree").tree('getRoot');
-
+                        $("#enTree").tree("collapseAll");
                         //默认展开根节点
                         $("#enTree").tree('expand', rooNode);
                     } else {

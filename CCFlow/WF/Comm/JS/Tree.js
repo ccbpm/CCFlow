@@ -30,8 +30,6 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
             if (val == null)
               return;
 
-            var val = "xxx";
-
             var subEn = en.DoMethodReturnString("DoMyCreateSubNode");
             if (subEn.indexOf('err@') == 0) {
                 alert(subEn);

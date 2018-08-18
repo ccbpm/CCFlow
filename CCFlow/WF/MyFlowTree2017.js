@@ -124,9 +124,18 @@ function addTab(id, title, url) {
             title: title,
             id: id,
             content: content,
-            closable: true
+            closable: true,
         });
     }
+    OnTabChange("saveOther");
+    var tabs = $("#tabs").tabs().tabs('tabs');
+    for (var i = 0; i < tabs.length; i++) {
+	    ///以下代码是为页签动态绑定单击事件
+	    tabs[i].panel('options').tab.unbind().bind('click', { index: i }, function (e) {
+	    	OnTabChange();
+	    });
+    }
+    $('#tabs').tabs('select', title);
     tabClose();
 }
 
@@ -181,33 +190,63 @@ function ChangTabFormTitleRemove() {
 //tab切换事件
 function OnTabChange(scope) {
     //表单内容修改，执行自动保存
+	var tab = $('#tabs').tabs('getSelected');
+	var index = $('#tabs').tabs('getTabIndex',tab);
+	
     var p = $(document.getElementById("tabs")).find("li");
     var tabText = "";
-    $.each(p, function (i, val) {
-        if (val.className.indexOf("tabs-selected") > -1) {
-            tabText = $($(val).find("span")[0]).text();
-        }
-    });
-
+    var selectSpan = p.eq(index).find("span")[0];
+    if(selectSpan != null){
+   	 tabText = $(selectSpan).text();
+    }
     var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+    //参数是保存时，保存当前选择的tab标签
     if (scope == "btnsave") {
-        var currTab = $('#tabs').tabs('getSelected');
-        var currScope = currTab.find('iframe')[0];
-        var contentWidow = currScope.contentWindow;
-        contentWidow.IsChange = true;
-        contentWidow.SaveDtlData();
+    	 //保存tab标签中带有*的标签页
+        var tabs = $('#tabs').tabs().tabs('tabs');
         $.each(p, function (i, val) {
-            if (val.className.indexOf("tabs-selected") > -1) {
-                if (lastChar == "*") {
-                    $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));
-                }
-                else {
-                    $($(val).find("span")[0]).text(tabText.substring(0, tabText.length));
-                }
-            }
+        	selectSpan = $(val).find("span")[0];
+        	var currTab = $("#tabs").tabs("getTab",i);
+        	tabText = $(selectSpan).text();
+        	var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+        	if(lastChar == "*"){
+        		var currScope = currTab.find('iframe')[0];
+                var contentWidow = currScope.contentWindow;
+                contentWidow.IsChange = true;
+                contentWidow.SaveDtlData("btnsave");
+                if (lastChar == "*")
+                	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
+               else
+            	   $(selectSpan).text(tabText.substring(0, tabText.length)) ;
+        	}
+           
         });
         return;
     }
+    
+    if(scope == "saveOther"){
+    	var tabs = $('#tabs').tabs().tabs('tabs');
+        $.each(p, function (i, val) {
+        	if(i!= index){
+	        	selectSpan = $(val).find("span")[0];
+	        	var currTab = $("#tabs").tabs("getTab",i);
+	        	tabText = $(selectSpan).text();
+	        	var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+	        	if(lastChar == "*"){
+	        		var currScope = currTab.find('iframe')[0];
+	                var contentWidow = currScope.contentWindow;
+	                contentWidow.IsChange = true;
+	                contentWidow.SaveDtlData();
+	                if (lastChar == "*")
+	                	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
+	               else
+	            	   $(selectSpan).text(tabText.substring(0, tabText.length)) ;
+	        	}
+        	}
+        });
+        return;
+    }
+    
     if (lastChar == "*") {
         if (typeof scope == "undefined") {
             var currTab = $('#tabs').tabs('getSelected');
@@ -216,11 +255,10 @@ function OnTabChange(scope) {
         var contentWidow = scope.contentWindow;
         contentWidow.SaveDtlData();
         $.each(p, function (i, val) {
-            if (val.className.indexOf("tabs-selected") > -1) {
-                $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));
-            }
+        	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
         });
     }
+
 }
 
 function tabClose() {

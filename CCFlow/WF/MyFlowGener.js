@@ -850,7 +850,13 @@ function execSend(toNodeID) {
 
     //先设置按钮等不可用.
     setToobarDisiable();
-
+    //树形表单保存
+    if (flowData) {
+        var node = flowData.WF_Node[0];
+        if (node && node.FormType == 5) {
+            OnTabChange("btnsave");
+        }
+    }
     $.ajax({
         type: 'post',
         async: true,

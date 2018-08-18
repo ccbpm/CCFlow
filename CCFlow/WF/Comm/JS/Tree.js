@@ -5,22 +5,45 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
     var returnVal = "";
     switch (dowhat) {
         case "sample": //新建同级节点
+
+            var val = window.prompt('请输入名称', '新建节点');
+            if (val == null)
+                return;
+
             var sampleEn = en.DoMethodReturnString("DoMyCreateSameLevelNode");
             if (sampleEn.indexOf('err@') == 0) {
                 alert(sampleEn);
                 return;
             }
-            sampleEn = JSON.parse(sampleEn);
-            returnVal = "{No:'" + sampleEn.No + "',Name:'" + sampleEn.Name + "'}";
+
+           sampleEn = JSON.parse(sampleEn);
+           var myen = new Entity(enName, sampleEn);
+           myen.Name= val;
+           myen.Update();
+
+
+          returnVal = "{No:'" + myen.No + "',Name:'" + myen.Name + "'}";
             break;
         case "children": //新建下级节点
+
+            var val = window.prompt('请输入名称', '新建节点');
+            if (val == null)
+              return;
+
+            var val = "xxx";
+
             var subEn = en.DoMethodReturnString("DoMyCreateSubNode");
             if (subEn.indexOf('err@') == 0) {
                 alert(subEn);
                 return;
             }
+
             subEn = JSON.parse(subEn);
-            returnVal = "{No:'" + subEn.No + "',Name:'" + subEn.Name + "'}";
+            var myen = new Entity(enName, subEn);
+            myen.Name = val;
+            myen.Update();
+
+            returnVal = "{No:'" + myen.No + "',Name:'" + myen.Name + "'}";
             break;
         case "doup": //上移
             en.DoMethodReturnString("DoUp");
@@ -43,6 +66,7 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
 function CreateSampleNode() {
     var node = $('#enTree').tree('getSelected');
     if (node) {
+
         treeNodeManage("sample", node.id, function (js) {
             if (js) {
                 var parentNode = $('#enTree').tree('getParent', node.target);

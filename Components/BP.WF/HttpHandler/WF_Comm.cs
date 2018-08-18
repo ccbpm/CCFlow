@@ -1814,7 +1814,9 @@ namespace BP.WF.HttpHandler
 
             //查询出来从表数据.
             Entities dtls = ClassFactory.GetEns(this.EnsName);
+            Entity en = dtls.GetNewEntity;
             QueryObject qo = new QueryObject(dtls);
+            qo.addOrderBy(en.PK);
             qo.DoQuery();
             ds.Tables.Add(dtls.ToDataTableField("Ens"));
 
@@ -1836,7 +1838,7 @@ namespace BP.WF.HttpHandler
             #endregion 加入权限信息.
 
             #region 判断主键是否为自增长
-            Entity en = dtls.GetNewEntity;
+          
             if( en.IsNoEntity==true && en.EnMap.IsAutoGenerNo)
                 md.SetPara("IsNewRow", "0");
             else
@@ -1894,12 +1896,8 @@ namespace BP.WF.HttpHandler
             if (enumKeys.Length > 2)
             {
                 enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
-                // Sys_Enum
-                Paras ps = new Paras();
-                ps.SQL = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + SystemConfig.AppCenterDBVarStr + "enumKeys)";
-                ps.Add("EnumKeys" + enumKeys);
-                //string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
-                DataTable dtEnum = DBAccess.RunSQLReturnTable(ps);
+                string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                 dtEnum.TableName = "Sys_Enum";
 
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -1991,7 +1989,7 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion  查询出来实体数据.
 
-                #region 保存新加行.
+                /*#region 保存新加行.
 
 
                 string valValue = "";
@@ -2060,7 +2058,7 @@ namespace BP.WF.HttpHandler
               
 
 
-                #endregion 保存新加行.
+                #endregion 保存新加行.*/
 
                 return "保存成功.";
             }

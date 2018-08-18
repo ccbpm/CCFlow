@@ -22,6 +22,7 @@
         var mapData;
         var dtM; //方法集合.
         var webUser = new WebUser();
+        var mapAtrrs;
 
         $(function () {
             InitPage();
@@ -46,7 +47,17 @@
             mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
 
             document.title = mapData.Name;
-            //var isReadonly = GetQueryString("IsReadonly");
+
+            //toolBar
+            if (mapData.GetPara("IsInsert") == "1")
+                $("#newbtn").show();
+            else
+                $("#newbtn").hide();
+
+            if (mapData.GetPara("IsDelete") == "1")
+                $("#delbtn").show();
+            else
+                $("#delbtn").hide(); 
 
             //绑定数据.
             BindDtls();
@@ -55,12 +66,12 @@
         //绑定明细.
         function BindDtls() {
 
-            var mapAtrrs = frmData.Sys_MapAttr;
+            mapAtrrs = frmData.Sys_MapAttr;
             var dtls = frmData.Ens;
 
             var html = "<table border=0 cellpadding='0'  style='border-collapse: collapse;width:100%' cellspacing='0' >";
             html += "<tr>";
-            html += "<th class='GroupTitle' nowrap=''style='width:40px'><input id='checkedAll' onclick='SelectAll()' type='checkbox' name='checkedAll'></th>";
+            html += "<th class='GroupTitle' nowrap=''style='width:70px;text-align:center'><input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></th>";
            
 
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -96,7 +107,7 @@
                 }
 
                 html += "<tr>";
-                html += "<td class='Idx' nowrap style='width:40px'><input id='IDX_" + pkval + "'  type='checkbox' name='IDX_" + pkval + "' /><label for='IDX_" + pkval + "'>" + (i + 1) + "</label></td>";
+                html += "<td class='Idx' nowrap style='width:70px'><input id='IDX_" + pkval + "'  type='checkbox' name='IDX_" + pkval + "' /><label for='IDX_" + pkval + "'>" + (i + 1) + "</label></td>";
               
 
                 for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
@@ -113,11 +124,7 @@
                 html += "</tr>";
             }
 
-            //新增一行
-           if( mapData.GetPara("IsNewRow")=="1")
-            html += New(mapAtrrs);
             html += "</table>";
-
             var html = $(html);
             $('#mytable').html("").append(html);
             $('#mytable').append(hidden);
@@ -355,11 +362,16 @@
         }
 
         //新建.
-        function New(mapAtrrs) {
-
+        function New() {
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
-            var dtl = new Entity(enName);
+            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            httpHandler.AddPara("EnName", enName);
+            var data = httpHandler.DoMethodReturnString("EntityOnly_Init");
+            frmData = JSON.parse(data);
+            var mapAtrrs = frmData.Sys_MapAttr;
+            mainData = frmData.MainTable[0];
+           
 
             var html = "";
             html += "<tr>";
@@ -371,14 +383,15 @@
                 var mapAttr = mapAtrrs[attrIdx];
                 mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
                 if (mapAttr.UIVisible == "0") {
-                    html += "<input type='hidden' id='TB_0_" + mapAttr.KeyOfEn + "' name='TB_0_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
+                    html += "<input type='hidden' id='TB_0_" + mapAttr.KeyOfEn + "' name='TB_0_" + mapAttr.KeyOfEn + "' value='" + mainData[mapAttr.KeyOfEn] + "' />";
                     continue;
                 }
-                html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, "0") + "</td>";
+                html += "<td>" + InitMapAttrOfCtrl(mapAttr, mainData, "0") + "</td>";
             }
             html += "<td></td>";
             html += "</tr>";
-            return html;
+
+            $("#mytable tbody:last").append(html);
         }
 
         function OpenEn(pkVal) {
@@ -432,7 +445,20 @@
             InitPage(); //刷新.
           }
 
-       
+          function SelectAll(obj) {
+              var checkeds = $("input[type='checkbox']");
+              if (obj.checked == true) {
+                  //获取name=box的复选框 遍历输出复选框
+                  for (var i = 0; i < checkeds.length; i++) {
+                      checkeds[i].checked = true;
+                  }
+              } else {
+                  for (var i = 0; i < checkeds.length; i++) {
+                      checkeds[i].checked = false;
+                  }
+              }
+
+          }
     
  
     </script>
@@ -444,7 +470,8 @@
              <div id="Btns" class="ToolBar" style="width:auto">
               
                 <a href="#" class="easyui-linkbutton l-btn l-btn-plain" data-options="plain:true,iconCls:'icon-save'" onclick="Save()">保存</a>
-                <a href="#" class="easyui-linkbutton l-btn l-btn-plain" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
+                <a id="newbtn" href="#" class="easyui-linkbutton l-btn l-btn-plain" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新增</a>
+                <a id="delbtn" href="#" class="easyui-linkbutton l-btn l-btn-plain" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
                  </div>
               <div id="mytable"> </div>
          </div>

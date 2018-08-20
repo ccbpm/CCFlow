@@ -5046,6 +5046,8 @@ namespace BP.WF
                 //cut 当前的人员.
                 string emps = this.HisGenerWorkFlow.TodoEmps;
                 emps = emps.Replace(WebUser.Name + ";", "");
+                emps = emps.Replace(WebUser.Name , "");
+
                 this.HisGenerWorkFlow.TodoEmps = emps;
                 this.HisGenerWorkFlow.DirectUpdate();
 
@@ -5800,6 +5802,8 @@ namespace BP.WF
                 // @fanleiwei ,增加了此部分.
                 string todoEmps = this.HisGenerWorkFlow.TodoEmps;
                 todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
+                todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name , "");
+
                 this.HisGenerWorkFlow.TodoEmps = todoEmps;
                 this.HisGenerWorkFlow.Update(GenerWorkFlowAttr.TodoEmps, todoEmps);
 

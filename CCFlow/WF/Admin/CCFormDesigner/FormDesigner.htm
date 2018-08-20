@@ -99,7 +99,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
             handler.AddUrlData();
 
-            var mapData = handler.DoMethodReturnJSON("FormDesigner_InitMapData");
+            mapData = handler.DoMethodReturnJSON("FormDesigner_InitMapData");
 
             document.title = mapData.Name + " - CCForm H5表单设计.";
 

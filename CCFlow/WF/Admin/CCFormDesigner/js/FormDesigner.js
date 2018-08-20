@@ -170,6 +170,7 @@ function ondbclickCallBackFun(figure) {
 
 //打开元素的属性窗口
 function showFigurePropertyWin(figure) {
+
     var v = figure.CCForm_Shape;
     var shap = figure.CCForm_Shape;
 

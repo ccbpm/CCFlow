@@ -87,6 +87,40 @@
             alert("保存成功.");
         }
 
+
+        ///设置该流程的所有节点都是用该方案。
+        function SetAllNodeFrmUseThisSln() {
+
+            if (confirm('您确定要设置吗？') == false)
+                return;
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            var flowNo = node.FK_Flow;
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo);
+
+            for (var i = 0; i < nds.length; i++) {
+
+                var jsNode = nds[i];
+
+                var node = new Entity("BP.WF.Node", jsNode);
+
+                node.FormType = FormType.FreeForm;
+                node.NodeFrmID = "ND" + node.NodeID;
+                node.Update();
+
+                //更新表单类型.
+                var frmID = "ND" + node.NodeID;
+                var mapData = new Entity("BP.Sys.MapData", frmID);
+                mapData.FrmType = FormType.FoolTruck;
+                mapData.Update();
+            }
+            alert('设置成功.');
+            window.location.href = window.location.href;
+        }
+     
     </script>
 </head>
 <body >
@@ -142,6 +176,8 @@
     </li>
 
     <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
+
+    <li> <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
 
     </ul>
 </fieldset>

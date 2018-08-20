@@ -1341,7 +1341,7 @@ namespace BP.WF.HttpHandler
                             break;
                     }
 
-                    if (fn.FrmSln == 2)
+                    if (fn.FrmSln == 1)
                     {
                         /*如果是不可以编辑*/
                         return "err@不可以,该表单不允许编辑..";

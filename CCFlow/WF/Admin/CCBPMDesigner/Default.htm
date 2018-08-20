@@ -497,17 +497,19 @@
         //登录,判断为天业BPM，转向到天业新版界面
         function Login2App() {
 
-            if (initData.RunOnPlant == "BP") {
-                window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
-                return;
-            }
-
+          
             if (initData.RunOnPlant == "jeesite") {
                 window.location.href = "/js/a/logout";
                 return;
             }
 
-            alert("没有判断的集成平台:" + initData.RunOnPlant);
+                        window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
+
+//            if (initData.RunOnPlant == "BP") {
+//                window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
+//                return;
+//            }
+            //   alert("没有判断的集成平台:" + initData.RunOnPlant);
             return;
 
 

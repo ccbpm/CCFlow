@@ -229,9 +229,13 @@ function InitPage() {
                 //当前发生日期.
                 timeDot = new Date();
 
-                doc += "<br>";
-                doc += "<span>还剩余:</span>";
-                doc += GetSpanTime(timeDot, toTimeDot);
+                var timeLeft = GetSpanTime(timeDot, toTimeDot);
+
+                if (timeLeft != 'NaN秒') {
+                    doc += "<br>";
+                    doc += "<span>还剩余:</span>";
+                    doc += timeLeft;
+                }
 
                 var left = "";
                 left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";

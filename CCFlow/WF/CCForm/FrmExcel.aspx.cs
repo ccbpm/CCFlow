@@ -449,7 +449,7 @@ namespace CCFlow.WF.CCForm
                 {
                     /*接受到了流程编号，就要找到他的控制方案.*/
                     fn = new BP.WF.Template.FrmNode(this.FK_Flow, this.FK_Node, fk_mapdata);
-                    if (fn.FrmSln == 1)
+                    if (fn.FrmSln == FrmSln.Self)
                     {
                         /* 如果是自定义方案.*/
                         toobarsln = new ToolbarExcelSln(this.FK_Flow, this.FK_Node, fk_mapdata);

@@ -107,14 +107,14 @@
 
                 var node = new Entity("BP.WF.Node", jsNode);
 
-                node.FormType = FormType.FreeForm;
+                node.FormType = FormType.SheetTree;
                 node.NodeFrmID = "ND" + node.NodeID;
                 node.Update();
 
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;
                 var mapData = new Entity("BP.Sys.MapData", frmID);
-                mapData.FrmType = FormType.FoolTruck;
+                mapData.FrmType = FormType.FoolForm;
                 mapData.Update();
             }
             alert('设置成功.');

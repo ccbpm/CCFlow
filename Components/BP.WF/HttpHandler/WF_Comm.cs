@@ -28,6 +28,9 @@ namespace BP.WF.HttpHandler
         public string Tree_Init()
         {
             EntitiesTree ens = ClassFactory.GetEns(this.EnsName) as EntitiesTree;
+            if (ens == null)
+                return "err@该实体["+this.EnsName+"]不是一个树形实体.";
+
             ens.RetrieveAll(EntityTreeAttr.Idx);
             return ens.ToJsonOfTree();  
         }
@@ -1896,8 +1899,10 @@ namespace BP.WF.HttpHandler
             if (enumKeys.Length > 2)
             {
                 enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
+ 
                 string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
                 DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+ 
                 dtEnum.TableName = "Sys_Enum";
 
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)

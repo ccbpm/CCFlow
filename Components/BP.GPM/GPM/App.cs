@@ -291,10 +291,13 @@ namespace BP.GPM
 
 
                 map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 20);
-                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 20);
-
                 map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel, "@0=BS系统@1=CS系统");
+                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 20,true);
+
                 map.AddDDLEntities(AppAttr.FK_AppSort, null, "类别", new AppSorts(), true);
+                map.AddBoolean(AppAttr.IsEnable, true, "是否启用", true, true);
+
+
                 map.AddTBString(AppAttr.Url, null, "默认连接", true, false, 0, 3900, 100, true);
                 map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 100, true);
                 map.AddTBString(AppAttr.UidControl, null, "用户名控件", true, false, 0, 100, 100);
@@ -305,7 +308,6 @@ namespace BP.GPM
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
                 map.AddTBInt(AppAttr.Idx, 0, "显示顺序", true, false);
-                map.AddBoolean(AppAttr.IsEnable, true, "是否启用", true, true);
 
                 map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 3900, 20);
                 map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 500,true);
@@ -405,31 +407,31 @@ namespace BP.GPM
             Menu dir = appMenu.DoCreateSubNode() as Menu;
             dir.FK_App = this.No;
             dir.Name = "功能目录1";
-            dir.MenuType = 3;
+            dir.MenuType =  MenuType.Dir;
             dir.Update();
 
             Menu func = dir.DoCreateSubNode() as Menu;
             func.Name = "xxx管理1";
             func.FK_App = this.No;
-            func.MenuType = 4;
+            func.MenuType = MenuType.Menu;
             func.Url = "http://ccflow.org";
             func.Update();
 
             Menu funcDot = func.DoCreateSubNode() as Menu;
             funcDot.Name = "查看";
-            funcDot.MenuType = 5;
+            funcDot.MenuType =  MenuType.Function;
             funcDot.FK_App = this.No;
             funcDot.Update();
 
             funcDot = func.DoCreateSubNode() as Menu;
             funcDot.Name = "增加";
-            funcDot.MenuType = 5;
+            funcDot.MenuType = MenuType.Function;
             funcDot.FK_App = this.No;
             funcDot.Update();
 
             funcDot = func.DoCreateSubNode() as Menu;
             funcDot.Name = "删除";
-            funcDot.MenuType = 5;
+            funcDot.MenuType = MenuType.Function;
             funcDot.FK_App = this.No;
             funcDot.Update();
             #endregion

@@ -265,6 +265,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\Direction.cs" />
+    <Compile Include="Template\FindWorkerRole.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Template\FlowFormTree.cs" />
     <Compile Include="Template\FlowSort.cs" />
     <Compile Include="Template\Frm.cs">
@@ -378,7 +381,6 @@
     <Compile Include="Template\BtnLab.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Template\FlowNode.cs" />
     <Compile Include="Template\SysFormTree.cs" />
     <Compile Include="Template\FlowSheet.cs" />
     <Compile Include="Template\NodeSheet.cs" />
@@ -391,7 +393,6 @@
     <Compile Include="Template\FrmNode.cs" />
     <Compile Include="Template\CC.cs" />
     <Compile Include="Template\NodeCancel.cs" />
-    <Compile Include="Template\FindWorkerRole.cs" />
     <Compile Include="WF\Flow.cs">
       <SubType>Code</SubType>
     </Compile>

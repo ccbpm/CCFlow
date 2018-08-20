@@ -13,6 +13,35 @@ namespace BP.En
     public class UAC
     {
         #region 常用方法
+        /// <summary>
+        /// 从权限管理系统里装载数据.
+        /// </summary>
+        public void LoadRightFromCCGPM(Entity en)
+        {
+            string sql = "SELECT Tag1  FROM V_GPM_EmpMenu WHERE  FK_Emp='"+BP.Web.WebUser.No+"'  AND Url LIKE '%" + en.ToString()+ "%'  ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string tag = dr[0].ToString();
+
+                if (tag.Contains("Insert") == true)
+                    this.IsInsert = true;
+                else
+                    this.IsInsert = false;
+
+                if (tag.Contains("Update") == true)
+                    this.IsUpdate = true;
+                else
+                    this.IsUpdate = false;
+
+
+                if (tag.Contains("Delete") == true)
+                    this.IsDelete = true;
+                else
+                    this.IsDelete = false;
+            }
+
+        }
         public void Readonly()
         {
             this.IsUpdate = false;

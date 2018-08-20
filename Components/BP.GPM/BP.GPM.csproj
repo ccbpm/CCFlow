@@ -54,7 +54,6 @@
     <Compile Include="GPM\StationExt.cs" />
     <Compile Include="GPM\AppSort.cs" />
     <Compile Include="GPM\GPMEmp.cs" />
-    <Compile Include="GPM\UserMenu.cs" />
     <Compile Include="GPM\GroupEmp.cs" />
     <Compile Include="GPM\Group.cs" />
     <Compile Include="GPM\GroupStation.cs" />

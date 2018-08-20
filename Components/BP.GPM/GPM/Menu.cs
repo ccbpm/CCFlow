@@ -216,15 +216,15 @@ namespace BP.GPM
         /// <summary>
         /// 是否是ccSytem
         /// </summary>
-        public int MenuType
+        public MenuType MenuType
         {
             get
             {
-                return this.GetValIntByKey(MenuAttr.MenuType);
+                return (MenuType)this.GetValIntByKey(MenuAttr.MenuType);
             }
             set
             {
-                this.SetValByKey(MenuAttr.MenuType, value);
+                this.SetValByKey(MenuAttr.MenuType, (int)value);
             }
         }
         public string FK_App
@@ -285,6 +285,20 @@ namespace BP.GPM
             }
         }
         public bool IsCheck = false;
+        /// <summary>
+        /// 标记
+        /// </summary>
+        public string Tag1
+        {
+            get
+            {
+                return this.GetValStringByKey(MenuAttr.Tag1);
+            }
+            set
+            {
+                this.SetValByKey(MenuAttr.Tag1, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -338,29 +352,26 @@ namespace BP.GPM
                 Map map = new Map("GPM_Menu");  // 类的基本属性.
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "系统";
+                map.EnDesc = "系统菜单";
                 map.EnType = EnType.Sys;
                 map.CodeStruct = "4";
 
                 #region 与树有关的必备属性.
                 map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 4, 4, 4);
-                map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 400);
-
                 map.AddDDLEntities(MenuAttr.ParentNo, null, DataType.AppString, "父节点", new Menus(), "No", "Name", false);
-                //map.AddTBString(MenuAttr.ParentNo, null, "父节点编号", true, true, 0, 10, 10);
+                map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 400,true);
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
                 #endregion 与树有关的必备属性.
 
-                // 类的字段属性.
-                map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType,
-                    "@3=目录@4=功能@5=功能控制点");
+                // 类的字段属性. 
+                map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType, "@0=系统根目录@1=系统类别@2=系统@3=目录@4=功能@5=功能控制点");
                 
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), true);
                // map.AddTBString(MenuAttr.FK_App, null, "系统", true, false, 0, 3900, 20, true);
                 map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?",true,true);
-                map.AddDDLSysEnum(MenuAttr.OpenWay, 0, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
                 map.AddTBString(MenuAttr.Flag, null, "标记", true, false, 0, 500, 20, true);
 
                 map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
@@ -385,23 +396,63 @@ namespace BP.GPM
                 //map.AttrsOfOneVSM.Add(new ByEmps(), new Emps(), ByStationAttr.RefObj, ByEmpAttr.FK_Emp,
                 //    EmpAttr.Name, EmpAttr.No, "可访问的人员");
 
-
                 //可以访问的权限组.
                 map.AttrsOfOneVSM.Add(new GroupMenus(), new Groups(),
                     GroupMenuAttr.FK_Menu, GroupMenuAttr.FK_Group, EmpAttr.Name, EmpAttr.No, "权限组");
-
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),
                    EmpMenuAttr.FK_Menu,
                    EmpMenuAttr.FK_Emp, "绑定人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
-                 
 
+
+                //不带有参数的方法.
+                RefMethod rm = new RefMethod();
+                rm.Title = "增加(增删改查)功能权限";
+                rm.Warning = "确定要增加吗？";
+                rm.ClassMethodName = this.ToString() + ".DoAddRight3";
+                rm.IsForEns = true;
+                rm.IsCanBatch = true; //是否可以批处理？
+                map.AddRefMethod(rm);
+                 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 增加增删改查功能权限
+        /// </summary>
+        /// <returns></returns>
+        public string DoAddRight3()
+        {
+            if (this.Url.Contains("Search.htm") == false)
+                return "该功能非Search组件，所以您不能增加功能权限.";
+
+            Menu en = this.DoCreateSubNode() as Menu;
+            en.Name = "增加权限";
+            en.MenuType = GPM.MenuType.Function; //功能权限.
+            en.Url = this.Url;
+            en.Tag1 = "Insert";
+            en.Update();
+
+            en = this.DoCreateSubNode() as Menu;
+            en.Name = "修改权限";
+            en.MenuType = GPM.MenuType.Function; //功能权限.
+            en.Url = this.Url;
+            en.Tag1 = "Update";
+            en.Update();
+
+            en = this.DoCreateSubNode() as Menu;
+            en.Name = "删除权限";
+            en.MenuType = GPM.MenuType.Function; //功能权限.
+            en.Url = this.Url;
+            en.Tag1 = "Delete";
+            en.Update();
+
+            return "增加成功,请刷新节点.";
+        }
 
         public string WebPath
         {

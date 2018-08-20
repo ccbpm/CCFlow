@@ -26,19 +26,10 @@ namespace BP.En
 
                 if (tag.Contains("Insert") == true)
                     this.IsInsert = true;
-                else
-                    this.IsInsert = false;
-
                 if (tag.Contains("Update") == true)
                     this.IsUpdate = true;
-                else
-                    this.IsUpdate = false;
-
-
                 if (tag.Contains("Delete") == true)
                     this.IsDelete = true;
-                else
-                    this.IsDelete = false;
             }
 
         }

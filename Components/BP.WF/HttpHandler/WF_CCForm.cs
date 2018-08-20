@@ -1001,14 +1001,15 @@ namespace BP.WF.HttpHandler
             if (this.FK_MapData.Contains("BP.") == true)
                 return FrmGener_Init_ForBPClass();
 
+            //定义节点变量.
+            Node nd = null;
             try
             {
                 #region 特殊判断 适应累加表单.
                 string fromWhere = this.GetRequestVal("FromWorkOpt");
                 if (fromWhere != null && fromWhere.Equals("1") && this.FK_Node != 0 && this.FK_Node != 999999)
                 {
-                    Node nd = new Node(this.FK_Node);
-
+                    nd = new Node(this.FK_Node);
                     nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
 
                     //如果是累加表单.
@@ -1020,13 +1021,10 @@ namespace BP.WF.HttpHandler
                         return BP.Tools.Json.ToJson(myds);
                     }
                 }
-                #endregion 特殊判断.适应累加表单
+                #endregion 特殊判断.适应累加表单.
 
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
-
-
-                #region 把主表数据放入.
                 string atParas = "";
                 //主表实体.
                 GEEntity en = new GEEntity(this.EnsName);
@@ -1061,6 +1059,7 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion  求who is PK.
 
+                #region 根据who is pk 获取数据.
                 en.OID = pk;
                 if (en.OID == 0)
                 {
@@ -1071,7 +1070,9 @@ namespace BP.WF.HttpHandler
                     if (en.RetrieveFromDBSources() == 0)
                         en.Insert();
                 }
+                #endregion 根据who is pk 获取数据.
 
+                #region 附加参数数据.
                 //把参数放入到 En 的 Row 里面。
                 if (DataType.IsNullOrEmpty(atParas) == false)
                 {
@@ -1099,11 +1100,12 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@错误:" + msg;
 
-
                 //重设默认值.
                 en.ResetDefaultVal();
 
-                //执行装载填充.
+                #endregion 附加参数数据.
+
+                #region 执行装载填充.与相关的事件.
                 MapExt me = new MapExt();
                 if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
                 {
@@ -1116,19 +1118,18 @@ namespace BP.WF.HttpHandler
                 //执行事件
                 md.DoEvent(FrmEventList.SaveBefore, en, null);
 
+                #endregion 执行装载填充.与相关的事件.
 
+                #region 加入主表的数据.
                 //增加主表数据.
                 DataTable mainTable = en.ToDataTableField(md.No);
                 mainTable.TableName = "MainTable";
-
                 ds.Tables.Add(mainTable);
-                #endregion 把主表数据放入.
+                #endregion 加入主表的数据.
 
-                #region 把外键表加入DataSet
+                #region 把外键表加入DataSet.
                 DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
-
                 MapExts mes = md.MapExts;
-
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
@@ -1138,10 +1139,6 @@ namespace BP.WF.HttpHandler
                     string UIIsEnable = dr["UIVisible"].ToString();
                     if (UIIsEnable == "0")
                         continue;
-
-                    //string lgType = dr[MapAttrAttr.LGType].ToString();
-                    //if (lgType == "0")
-                    //    continue
 
                     string uiBindKey = dr["UIBindKey"].ToString();
                     if (DataType.IsNullOrEmpty(uiBindKey) == true)
@@ -1176,14 +1173,14 @@ namespace BP.WF.HttpHandler
                     DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
                     if (dataTable != null)
                         ds.Tables.Add(dataTable);
-
                 }
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
+
                 if (this.FK_Node != 0 && this.FK_Node != 999999)
                 {
-                    Node nd = new Node(this.FK_Node);
+                      nd = new Node(this.FK_Node);
                     nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
 
 
@@ -1224,9 +1221,57 @@ namespace BP.WF.HttpHandler
 
                     ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
                     ds.Tables.Add(nd.ToDataTableField("WF_Node"));
-
                 }
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
+
+                #region 处理权限方案
+                if (nd != null && nd.FormType== NodeFormType.SheetTree)
+                {
+                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+
+                    #region 只读方案.
+                    if (fn.FrmSln == FrmSln.Readonly)
+                    {
+                        foreach (DataRow dr in dtMapAttr.Rows)
+                        {
+                            dr[MapAttrAttr.UIIsEnable] = 0;
+                        }
+
+                        //改变他的属性. 不知道是否应该这样写？
+                        ds.Tables.Remove("Sys_MapAttr");
+                        ds.Tables.Add(dtMapAttr);
+                    }
+                    #endregion 只读方案.
+
+                    #region 自定义方案.
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        //查询出来自定义的数据.
+                        FrmFields ffs = new FrmFields();
+                        ffs.Retrieve(FrmFieldAttr.FK_Node, nd.NodeID, FrmFieldAttr.FK_MapData, md.No);
+
+                        //遍历属性集合.
+                        foreach (DataRow dr in dtMapAttr.Rows)
+                        {
+                            string keyOfEn=dr[MapAttrAttr.KeyOfEn].ToString();
+                            foreach (FrmField ff in ffs)
+                            {
+                                if (ff.KeyOfEn.Equals(keyOfEn) == false)
+                                    continue;
+
+                                dr[MapAttrAttr.UIIsEnable] = ff.UIIsEnable;//是否只读?
+                                dr[MapAttrAttr.UIVisible] = ff.UIVisible; //是否可见?
+                            }
+                        }
+
+                        //改变他的属性. 不知道是否应该这样写？
+                        ds.Tables.Remove("Sys_MapAttr");
+                        ds.Tables.Add(dtMapAttr);
+                    }
+                    #endregion 自定义方案.
+
+                }
+                #endregion 处理权限方案s
 
                 return BP.Tools.Json.DataSetToJson(ds, false);
             }
@@ -1341,7 +1386,7 @@ namespace BP.WF.HttpHandler
                             break;
                     }
 
-                    if (fn.FrmSln == 1)
+                    if (fn.FrmSln == FrmSln.Readonly)
                     {
                         /*如果是不可以编辑*/
                         return "err@不可以,该表单不允许编辑..";
@@ -1409,8 +1454,7 @@ namespace BP.WF.HttpHandler
                  * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
 
                 BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, mdtl.FK_MapData);
-                int i = fn.Retrieve(FrmNodeAttr.FK_Frm, mdtl.FK_MapData, FrmNodeAttr.FK_Node, this.FK_Node);
-                if (i != 0 && fn.FrmSln > 1)
+                if (fn.FrmSln == FrmSln.Self)
                 {
                     /*使用了自定义的方案. 
                      * 并且，一定为dtl设定了自定义方案，就用自定义方案.
@@ -1419,7 +1463,7 @@ namespace BP.WF.HttpHandler
                     mdtl.RetrieveFromDBSources();
                 }
 
-                if (i != 0 && fn.FrmSln == 1)
+                if ( fn.FrmSln == FrmSln.Readonly )
                 {
                     mdtl.IsInsert = false;
                     mdtl.IsDelete = false;
@@ -3416,36 +3460,32 @@ namespace BP.WF.HttpHandler
             #endregion 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
 
             #region 处理权限方案。
-            /*首先判断是否具有权限方案*/
-            string at = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            Paras ps = new BP.DA.Paras();
-            ps.SQL = "SELECT FrmSln FROM WF_FrmNode WHERE FK_Node=" + at + "FK_Node AND FK_Flow=" + at + "FK_Flow AND FK_Frm=" + at + "FK_Frm";
-            ps.Add("FK_Node", this.FK_Node);
-            ps.Add("FK_Flow", this.FK_Flow);
-            ps.Add("FK_Frm", this.FK_MapData);
-            DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (dt.Rows.Count == 0)
+            if (this.FK_Node != 0)
             {
-                athDesc.RetrieveFromDBSources();
-            }
-            else
-            {
-                int sln = int.Parse(dt.Rows[0][0].ToString());
-                if (sln == 0)
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree)
                 {
-                    athDesc.RetrieveFromDBSources();
-                }
-                else
-                {
-                    result = athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData,
-                        FrmAttachmentAttr.FK_Node, this.FK_Node, FrmAttachmentAttr.NoOfObj, this.Ath);
+                    FrmNode fn = new FrmNode(nd.FK_Flow,nd.NodeID, this.FK_MapData);
+                    if (fn.FrmSln != FrmSln.Default)
+                    {
+                        if (fn.FrmSln == FrmSln.Readonly)
+                        {
+                            athDesc.HisDeleteWay = AthDeleteWay.None;
+                            athDesc.IsUpload = false;
+                            return athDesc;
+                        }
 
-                    if (result == 0) /*如果没有定义，就获取默认的.*/
-                        athDesc.RetrieveFromDBSources();
-                    //  throw new Exception("@该独立表单在该节点("+this.FK_Node+")使用的是自定义的权限控制，但是没有定义该附件的权限。");
+                        if (fn.FrmSln == FrmSln.Self)
+                        {
+                            athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.FK_Flow;
+                            athDesc.RetrieveFromDBSources();
+                            return athDesc;
+                        }
+                    }
                 }
             }
             #endregion 处理权限方案。
+
 
             return athDesc;
         }

@@ -108,6 +108,24 @@ namespace BP.WF.Template
         /// </summary>
         CWorkID
     }
+    /// <summary>
+    /// 方案类型
+    /// </summary>
+    public enum FrmSln
+    {
+        /// <summary>
+        /// 默认方案
+        /// </summary>
+        Default,
+        /// <summary>
+        /// 只读方案
+        /// </summary>
+        Readonly,
+        /// <summary>
+        /// 自定义方案
+        /// </summary>
+        Self        
+    }
 
     /// <summary>
     /// 表单启用规则
@@ -363,17 +381,17 @@ namespace BP.WF.Template
         }
         /// <summary>
         /// 对应的解决方案
-        /// 0=默认方案.节点编号 =自定义方案, 1=不可编辑.
+        /// 0=默认方案.节点编号 1=自定义方案, 1=不可编辑.
         /// </summary>
-        public int FrmSln
+        public FrmSln FrmSln
         {
             get
             {
-                return this.GetValIntByKey(FrmNodeAttr.FrmSln);
+                return (FrmSln)this.GetValIntByKey(FrmNodeAttr.FrmSln);
             }
             set
             {
-                this.SetValByKey(FrmNodeAttr.FrmSln, value);
+                this.SetValByKey(FrmNodeAttr.FrmSln, (int)value);
             }
         }
         /// <summary>
@@ -453,7 +471,7 @@ namespace BP.WF.Template
         {
             get
             {
-                if (this.FrmSln == 1)
+                if (this.FrmSln == Template.FrmSln.Readonly)
                     return false;
                 return true;
             }
@@ -535,7 +553,7 @@ namespace BP.WF.Template
             {
                 this.IsPrint = false;
                 //不可以编辑.
-                this.FrmSln = 1;
+                this.FrmSln = Template.FrmSln.Default;
                // this.IsEdit = false;
                 return;
                 throw new Exception("@表单关联信息已被删除。");

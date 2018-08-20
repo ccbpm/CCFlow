@@ -4915,7 +4915,10 @@ namespace BP.WF
 
                 //替换人员信息.
                 string emps = this.HisGenerWorkFlow.TodoEmps;
+                 
                 emps = emps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
+                emps = emps.Replace(WebUser.No + "," + WebUser.Name , "");
+
                 this.HisGenerWorkFlow.TodoEmps = emps;
 
                 //处理会签问题

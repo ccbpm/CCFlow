@@ -556,7 +556,7 @@ namespace BP.WF.HttpHandler
                             }
                         }
                         FrmField frmField = new FrmField();
-                        bool isExit = frmField.IsExit("mypk", this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + fieldsAttrs.KeyOfEn + "_" + FrmEleType.Field);
+                        bool isExit = frmField.IsExit("MyPK", this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + fieldsAttrs.KeyOfEn + "_" + FrmEleType.Field);
 
                         frmField.UIVisible = fieldsAttrs.UIVisible;
                         frmField.UIIsEnable = fieldsAttrs.UIIsEnable;

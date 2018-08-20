@@ -427,7 +427,7 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoAddRight3()
         {
-            if (this.Url.Contains("Search.htm") == false)
+            if (this.Url.Contains("Search.htm") == false && this.Url.Contains("SearchBS.htm") == false)
                 return "该功能非Search组件，所以您不能增加功能权限.";
 
             Menu en = this.DoCreateSubNode() as Menu;

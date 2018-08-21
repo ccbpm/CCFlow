@@ -122,12 +122,6 @@ namespace BP.WF.Template
                 //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "自定义方案(将要删除)";
-                rm.ClassMethodName = this.ToString() + ".DoSelfSln()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
                 rm.Title = "字段权限";
                 rm.ClassMethodName = this.ToString() + ".DoFields()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
@@ -136,13 +130,13 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "从表权限";
                 rm.ClassMethodName = this.ToString() + ".DoDtls()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "附件权限";
                 rm.ClassMethodName = this.ToString() + ".DoAths()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -175,10 +169,6 @@ namespace BP.WF.Template
         public string DoCopyFromNode()
         {
             return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
-        }
-        public string DoSelfSln()
-        {
-            return "../../Admin/Sln/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
         public string DoEnableRole()
         {

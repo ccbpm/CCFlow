@@ -429,7 +429,6 @@ namespace BP.WF.HttpHandler
             /// </summary>
             public bool IsWriteToGenerWorkFlow;
         }
-
         public string Fields_Init()
         {
             FrmFields fss = new FrmFields(this.FK_MapData, this.FK_Node);
@@ -578,112 +577,11 @@ namespace BP.WF.HttpHandler
                             frmField.Insert();
                     }
                 }
-
                 return fieldsAttrsList.Count.ToString();
             }
-
             return "0";
         }
         #endregion 字段权限.
-
-        #region 附件权限.
-        public class AthsAttrs
-        {
-            public int idx;
-            public string NoOfObj;
-            public string Name;
-            public string UploadTypeT;
-            public string PrimitiveAttrTag;
-            public string EditTag;
-            public string DelTag;
-        }
-        public string Aths_Init()
-        {
-            BP.Sys.FrmAttachments fas = new BP.Sys.FrmAttachments();
-            fas.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData);
-
-            List<AthsAttrs> athsAttrsList = new List<AthsAttrs>();
-            int idx = 0;
-            foreach (BP.Sys.FrmAttachment item in fas)
-            {
-                if (item.FK_Node != 0)
-                    continue;
-
-                athsAttrsList.Add(new AthsAttrs { });
-                athsAttrsList[idx].idx = idx + 1;
-                athsAttrsList[idx].NoOfObj = item.NoOfObj;
-                athsAttrsList[idx].Name = item.Name;
-                athsAttrsList[idx].UploadTypeT = item.UploadTypeT;
-                athsAttrsList[idx].PrimitiveAttrTag = "<a href=\"javascript:EditFJYuanShi('" + this.FK_MapData + "','" + item.NoOfObj + "')\">原始属性</a>";
-                athsAttrsList[idx].EditTag = "<a href=\"javascript:EditFJ('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.NoOfObj + "')\">编辑</a>";
-
-                FrmAttachment en = new FrmAttachment();
-                en.MyPK = this.FK_MapData + "_" + item.NoOfObj + "_" + this.FK_Node;
-                if (en.RetrieveFromDBSources() == 0)
-                    athsAttrsList[idx].DelTag = "";
-                else
-                    athsAttrsList[idx].DelTag = "<a href=\"javascript:DeleteFJ('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.NoOfObj + "')\">删除</a>";
-
-                idx++;
-            }
-
-            return LitJson.JsonMapper.ToJson(athsAttrsList);
-        }
-        public string Aths_Save()
-        {
-            return "";
-        }
-        #endregion 附件权限.
-
-        #region 从表权限.
-        public class DtlsAttrs
-        {
-            public int idx;
-            public string No;
-            public string Name;
-            /// <summary>
-            /// 原始属性标签
-            /// </summary>
-            public string PrimitiveAttrTag;
-            public string EditTag;
-            public string DelTag;
-        }
-        public string Dtls_Init()
-        {
-            BP.Sys.MapDtls dtls = new BP.Sys.MapDtls();
-            dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData);
-            List<DtlsAttrs> dtlsAttrsList = new List<DtlsAttrs>();
-            int idx = 0;
-
-            foreach (BP.Sys.MapDtl item in dtls)
-            {
-                if (item.FK_Node != 0)
-                    continue;
-
-                dtlsAttrsList.Add(new DtlsAttrs { });
-                dtlsAttrsList[idx].idx = idx + 1;
-                dtlsAttrsList[idx].No = item.No;
-                dtlsAttrsList[idx].Name = item.Name;
-                dtlsAttrsList[idx].PrimitiveAttrTag = "<a href=\"javascript:EditDtlYuanShi('" + this.FK_MapData + "','" + item.No + "')\">原始属性</a>";
-                dtlsAttrsList[idx].EditTag = "<a href=\"javascript:EditDtl('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.No + "')\">编辑</a>";
-
-                MapDtl en = new MapDtl();
-                en.No = item.No + "_" + this.FK_Node;
-                if (en.RetrieveFromDBSources() == 0)
-                    dtlsAttrsList[idx].DelTag = "";
-                else
-                    dtlsAttrsList[idx].DelTag = "<a href=\"javascript:DeleteDtl('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.No + "')\">删除</a>";
-
-                idx++;
-            }
-
-            return LitJson.JsonMapper.ToJson(dtlsAttrsList);
-        }
-        public string Dtls_Save()
-        {
-            return "";
-        }
-        #endregion 从表权限.
 
     }
 }

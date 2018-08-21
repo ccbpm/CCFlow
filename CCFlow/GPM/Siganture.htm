@@ -17,35 +17,28 @@
         $(function () {
 
             var empNo = GetQueryString("EmpNo");
-
-<<<<<<< .mine
             if (empNo == null) {
-=======
+                var webUser = new WebUser();
+                empNo = webUser.No;
+
+            }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
             handler.AddPara("EmpNo", empNo);
             var data = handler.DoMethodReturnString("Siganture_Init");
->>>>>>> .r6727
 
-                var webUser = new WebUser();
-                empNo = webUser.No;
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
             }
 
-<<<<<<< .mine
-
-=======
             data = JSON.parse(data);
->>>>>>> .r6727
             var img = document.getElementById("sigimg");
 
-<<<<<<< .mine
-            var url = '/DataUser/Siganture/' + empNo + '.jpg';
-=======
             var url = "";
             if (plant == "CCFlow")
                 url = '/DataUser/Siganture/' + empNo + '.jpg';
             else
                 url = basePath + 'DataUser/Siganture/' + empNo + '.jpg';
->>>>>>> .r6727
             img.src = url;
 
         });
@@ -56,8 +49,6 @@
                 return;
             }
 
-<<<<<<< .mine
-=======
             var fileName = File_Upload.files[0].name;
 
             //判断文件类型.
@@ -69,8 +60,12 @@
                 return;
             }
 
->>>>>>> .r6727
             var empNo = GetQueryString("EmpNo");
+            if (empNo == null) {
+                var webUser = new WebUser();
+                empNo = webUser.No;
+
+            }
 
             Handler = "../WF/Setting/Handler.ashx";
             if (plant != "CCFLow")

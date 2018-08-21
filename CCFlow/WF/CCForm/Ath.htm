@@ -601,6 +601,11 @@
                 Url = path + "/WF/CCForm/AttachmentUploadS.do/?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal + "&parasData=" + parasData;
             }
 
+            Url += "&FID=" + GetQueryString("FID");
+            Url += "&FK_Node=" + GetQueryString("FK_Node");
+            Url += "&PWorkID=" + GetQueryString("PWorkID");
+            Url += "&FK_MapData=" + GetQueryString("FK_MapData");
+
 
             $.ajax({
                 url: Url,
@@ -615,9 +620,16 @@
                     console.log("正在进行，请稍候");
                 },
                 success: function (responseStr) {
+
+                    if (responseStr.indexOf('err@') != -1)
+                        alert(responseStr);
+
                 },
                 error: function (responseStr) {
-                    console.log("error");
+                    if (responseStr.indexOf('err@') != -1)
+                        alert(responseStr);
+
+                    console.log(responseStr);
                 }
             });
 

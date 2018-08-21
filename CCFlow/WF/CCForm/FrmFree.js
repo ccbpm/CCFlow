@@ -854,15 +854,24 @@ function figure_Template_Attachment(frmAttachment) {
 
     var eleHtml = '';
     var ath = frmAttachment;
-    if (ath.UploadType == 0) {//单附件上传 L4204
+    if (ath.UploadType == 0) { //单附件上传 L4204.
         return $('');
     }
+
 
     var src = "";
     if (pageData.IsReadonly == "1")
         src = "Ath.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
     else
         src = "Ath.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+
+    var fid = GetQueryString("FID");
+    var pWorkID = GetQueryString("PWorkID");
+
+    src += "&FID=" + fid;
+    src += "&PWorkID=" + pWorkID;
+
+
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);

@@ -135,6 +135,7 @@ function addTab(id, title, url) {
 	    	OnTabChange();
 	    });
     }
+    ChangTabFormTitle();
     $('#tabs').tabs('select', title);
     tabClose();
 }

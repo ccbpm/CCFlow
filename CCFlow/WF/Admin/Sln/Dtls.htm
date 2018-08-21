@@ -23,34 +23,31 @@
             fk_flow = GetQueryString("FK_Flow");
             fk_Node = GetQueryString("FK_Node");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Dtls_Init&FK_Flow=" + fk_flow + "&FK_MapData=" + frmID + "&FK_Node=" + fk_Node + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    data = JSON.parse(data);
-                    var trStr = "";
+            var dtls = new Entities("BP.Sys.MapDtls");
+            dtls.Retrieve("FK_MapData", frmID);
 
-                    for (var i = 0; i < data.length; i++) { 
-                        trStr += "<tr >";
-                        trStr += "<td class=Idx>" + data[i].idx + "</td>";
-                        trStr += "<td>" + data[i].No + "</td>";
-                        trStr += "<td>" + data[i].Name + "</td>";
-                        trStr += "<td>" + data[i].PrimitiveAttrTag + "</td>";
-                        trStr += "<td>" + data[i].EditTag + "</td>";
-                        trStr += "<td>" + data[i].DelTag + "</td>";
-                        trStr += "</tr>";
-                    }
+            var html = "";
 
-                    $("#Table1 tr:last").after(trStr);
-                }
-            });
+            for (var i = 0; i < dtls.length; i++) {
+                
+                var dtl = dtls[i];
+
+                html += "<tr >";
+                html += "<td>" + dtl.No + "</td>";
+                html += "<td>" + dtl.Name + "</td>";
+                html += "<td>";
+
+                html += "<a href=\"javascript:EditDtlYuanShi('" + frmID + "','" + dtl.No + "')\">原始属性</a>";
+                html += "<a href=\"javascript:EditDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">原始属性</a>";
+                html += "<a href=\"javascript:DeleteDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">删除</a>";
+
+                html += "</td>";
+                 
+                html += "</tr>";
+
+            }
+
+            $("#Table1 tr:last").after(trStr);
         });
 
         //编辑从表的原始属性.
@@ -99,18 +96,13 @@
 </head>
 <body onkeypress="Esc();">
     <table id="Table1" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
+
+    <caption>节点-表单-从表权限 </caption>
+
         <tr>
-            <td colspan="6">
-                节点-表单-明细表权限
-            </td>
-        </tr>
-        <tr>
-            <td>序</td>
             <td>编号</td>
             <td>名称</td>
-            <td>原始属性</td>
-            <td>编辑</td>
-            <td>删除</td>
+            <td colspan=3>操作</td>
         </tr>
     </table>
 </body>

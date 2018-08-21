@@ -32,7 +32,15 @@ namespace BP.WF.HttpHandler
 
 
                 //查询出来数据实体.
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment);
+                string pkVal = this.PKVal;
+                if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                    pkVal = this.FID.ToString();
+
+                if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                    pkVal = this.PWorkID.ToString();
+
+
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment);
 
                 #region 如果图片显示.(先不考虑.)
                 if (athDesc.FileShowWay == FileShowWay.Pict)
@@ -2457,18 +2465,60 @@ namespace BP.WF.HttpHandler
         }
 
         //多附件上传方法
-        public void MoreAttach()
+        public string MoreAttach()
         {
-            string PKVal = this.GetRequestVal("PKVal");
+            string pkVal = this.GetRequestVal("PKVal");
             string attachPk = this.GetRequestVal("AttachPK");
             string paras = this.GetRequestVal("parasData");
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
             MapData mapData = new MapData(athDesc.FK_MapData);
             string msg = null;
+
+
+            //求出来实体记录，方便执行事件.
             GEEntity en = new GEEntity(athDesc.FK_MapData);
-            en.PKVal = PKVal;
-            en.Retrieve();
+            en.PKVal = pkVal;
+            if (en.RetrieveFromDBSources() == 0)
+            {
+                en.PKVal = this.FID;
+                if (en.RetrieveFromDBSources() == 0)
+                {
+                    en.PKVal = this.PWorkID;
+                    en.RetrieveFromDBSources();
+                }
+            }
+
+            //求主键. 如果该表单挂接到流程上.
+            if (this.FK_Node != 0)
+            {
+                //判断表单方案。
+                FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                if (fn.FrmSln == FrmSln.Readonly)
+                    return "err@不允许上传附件.";
+
+                //是默认的方案的时候.
+                if (fn.FrmSln == FrmSln.Default)
+                {
+                    //判断当前方案设置的whoIsPk ，让附件集成 whoIsPK 的设置。
+                    if (fn.WhoIsPK == WhoIsPK.FID)
+                        pkVal = this.FID.ToString();
+
+                    if (fn.WhoIsPK == WhoIsPK.PWorkID)
+                        pkVal = this.PWorkID.ToString();
+                }
+
+                //自定义方案.
+                if (fn.FrmSln == FrmSln.Self)
+                {
+                    athDesc = new FrmAttachment(attachPk + "_" + this.FK_Node);
+                    if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                        pkVal = this.FID.ToString();
+
+                    if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                        pkVal = this.PWorkID.ToString();
+                }
+            }
 
             for (int i = 0; i < context.Request.Files.Count; i++)
             {
@@ -2477,13 +2527,12 @@ namespace BP.WF.HttpHandler
                 #region 文件上传的iis服务器上 or db数据库里.
                 if (athDesc.AthSaveWay == AthSaveWay.IISServer)
                 {
-
                     string savePath = athDesc.SaveTo;
                     if (savePath.Contains("@") == true || savePath.Contains("*") == true)
                     {
                         /*如果有变量*/
                         savePath = savePath.Replace("*", "@");
-                        savePath = BP.WF.Glo.DealExp(savePath, en, null);
+                     //   savePath = BP.WF.Glo.DealExp(savePath, en, null);
 
                         if (savePath.Contains("@") && this.FK_Node != 0)
                         {
@@ -2499,7 +2548,7 @@ namespace BP.WF.HttpHandler
                     }
                     else
                     {
-                        savePath = athDesc.SaveTo + "\\" + PKVal;
+                        savePath = athDesc.SaveTo + "\\" + pkVal;
                     }
 
                     //替换关键的字串.
@@ -2544,11 +2593,13 @@ namespace BP.WF.HttpHandler
                         {
                             File.Delete(realSaveTo);
                         }
-                        catch { }
+                        catch 
+                        {
+
+                        }
 
                         //note:此处如何向前uploadify传递失败信息，有待研究
                         //this.Alert("上传附件错误：" + msg, true);
-                        return;
                     }
 
                     FileInfo info = new FileInfo(realSaveTo);
@@ -2591,7 +2642,7 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
-                    dbUpload.RefPKVal = PKVal;
+                    dbUpload.RefPKVal = pkVal;
                     dbUpload.FID = this.FID;
 
                     //if (athDesc.IsNote)
@@ -2661,7 +2712,7 @@ namespace BP.WF.HttpHandler
                     if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                     {
                         /*如果是继承，就让他保持本地的PK. */
-                        dbUpload.RefPKVal = PKVal.ToString();
+                        dbUpload.RefPKVal = pkVal.ToString();
                     }
 
                     if (athDesc.AthUploadWay == AthUploadWay.Interwork)
@@ -2669,10 +2720,10 @@ namespace BP.WF.HttpHandler
                         /*如果是协同，就让他是PWorkID. */
                         Paras ps = new Paras();
                         ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
-                        ps.Add("WorkID", PKVal);
+                        ps.Add("WorkID", pkVal);
                         string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                         if (pWorkID == null || pWorkID == "0")
-                            pWorkID = PKVal;
+                            pWorkID = pkVal;
                         dbUpload.RefPKVal = pWorkID;
                     }
 
@@ -2743,6 +2794,8 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 保存到数据库.
             }
+
+            return "上传成功.";
         }
 
         /// <summary>
@@ -3477,7 +3530,7 @@ namespace BP.WF.HttpHandler
 
                         if (fn.FrmSln == FrmSln.Self)
                         {
-                            athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.FK_Flow;
+                            athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.NodeID;
                             athDesc.RetrieveFromDBSources();
                             return athDesc;
                         }

@@ -4332,7 +4332,8 @@ namespace BP.WF
                     dir.Delete(true);
             }
         }
-        public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment)
+        public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment, 
+            Int64 workid=0, Int64 fid=0, Int64 pworkid=0)
         {
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();

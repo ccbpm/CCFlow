@@ -1200,9 +1200,6 @@ namespace BP.Sys
                 map.AddTBInt(FrmAttachmentAttr.AthRunModel, 0, "运行模式", false, false);
                 map.AddTBInt(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", false, false);
 
-
-                
-
                 map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 50, 20);
                 map.AddTBInt("NumOfUpload", 0, "最低上传数量", true, false);

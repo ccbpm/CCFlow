@@ -92,10 +92,10 @@ namespace BP.WF.Template
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
-                map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
-                    "@0=默认方案@1=只读方案@2=自定义方案");
 
                 map.AddDDLSysEnum(FrmNodeAttr.WhoIsPK, 0, "谁是主键?", true, true);
+                map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
+                    "@0=默认方案@1=只读方案@2=自定义方案");
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号(显示的顺序)", true, false);

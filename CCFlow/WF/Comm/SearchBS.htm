@@ -91,14 +91,18 @@
 
             //获得查询信息，包含了查询数据表.
             var data = handler.DoMethodReturnJSON("Search_SearchAttrs");
+            
+            var barCount = 0; //记录查询条件，超过五个就换行
 
             var html = "";
-            if (mapBase.IsShowSearchKey == "1")
-                html += "<label  style='text-align: right; margin-top:5px;margin-left:10px;' for='TB_Key'>关键字:&nbsp;&nbsp</label>"
+            if (mapBase.IsShowSearchKey == "1"){
+                html += "<label  style='text-align: right; margin-top:5px;margin-left:20px;' for='TB_Key'>关键字:&nbsp;&nbsp</label>"
                 html +="<input style='width:150px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
+                barCount += 1;
+            }
             if (mapBase.DTSearchWay != "0") {
-
-                html += "<label style='text-align: right; margin-top:5px;padding-left:10px;'>" + mapBase.DTSearchLable + "&nbsp;&nbsp</label>";
+            	barCount += 2;
+                html += "<label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + "&nbsp;&nbsp</label>";
 
                 if (mapBase.DTSearchWay == "1") {
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
@@ -118,12 +122,21 @@
             var json = AtParaToJson(ur.Vals);
             
             for (var i = 0; i < attrs.length; i++) {
-
-                var attr = attrs[i];
-                var str = "";
-                str += "<label  style='text-align: right; margin-top:5px;padding-left:10px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":&nbsp;&nbsp  </label>";
-                str += "<select class='form-control' style='padding:0px;width:150px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+            	 var attr = attrs[i];
+                 var str = "";
+				if(barCount%5==0)
+					str +="<br/>";
+					
+                str += "<label  style='text-align: right; margin-top:5px;padding-left:20px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":&nbsp;&nbsp  </label>";
+                
+                if(barCount%5==0)
+                	str += "<select class='form-control' style='margin-top:5px;width:150px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                else
+                	str += "<select class='form-control' style='padding:0px;width:150px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
+              
+                barCount += 1;
+                
                 $("#toolbar").append(str); //设置基础信息.
             }
             
@@ -138,7 +151,9 @@
 
                 $("#DDL_" + attr.Field).val(selectVal);
             }
-			
+            
+            if(barCount%5==0)
+            	html+="</br>";
             html += '<a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
             
@@ -148,6 +163,7 @@
 			html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>  ';
 			
 			html +='<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
+
 			$("#toolbar").append(html);
 			
         }
@@ -698,7 +714,6 @@
     <div class="row" style="margin-top:10px">
     	<div class="panel panel-default" style="border-bottom-width:0px;border-top-width:0px"> 
     		 <div id="toolbar" style="width:100%"></div>
-        </div>
     </div>
     <table id="dg" class="table table-hover"></table>
     <!-- 显示分页信息 -->

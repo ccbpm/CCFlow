@@ -55,7 +55,6 @@
         var dtM; //方法集合.
         var isReadonly = GetQueryString("isReadonly");
         $(function () {
-
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             var enName = GetQueryString("EnName");
             var type = GetQueryString("type");
@@ -920,8 +919,7 @@
             //获取发送请求时的参数
             var queryString = document.location.search.substr(1);
 
-            if (queryString.indexOf("PKVal=&") != -1)
-                queryString = replaceParamVal(queryString, "PKVal", pkval);
+            queryString = replaceParamVal(queryString, "PKVal", pkval);
 
 
             //URL 路径

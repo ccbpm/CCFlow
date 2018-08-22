@@ -105,12 +105,18 @@
                 if (mapBase.DTSearchWay == "1") {
                     html += '<div class="col-sm-2" style="width:150px">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
+                    html +="</div>";
+                    html +="<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:5px;margin-left:-20px'>到</label>";
+                    html += '<div class="col-sm-2" style="width:150px">';
+                    html += "<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
                     html += '</div>';
                 } else {
                     html += '<div class="col-sm-2" style="width:150px">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:120px;' class='form-control' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:120px;' class='form-control' />";
+                    html +="</div>";
+                    html +="<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:5px;margin-left:-20px'>到</label>";
+                    html += '<div class="col-sm-2" style="width:150px">';
+                    html += "<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:120px;' class='form-control' />";
                     html += '</div>';
                 }
             }
@@ -127,7 +133,7 @@
 
                 var attr = attrs[i];
                 var str = "";
-                str += "<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:100px' for='DDL_" + attr.Field + "'>" + attr.Name + "  </label>";
+                str += "<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:100px;margin-left:-50px' for='DDL_" + attr.Field + "'>" + attr.Name + ":  </label>";
                 str += '<div class="col-sm-2" style="width:150px">';
                 str += "<select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str += "</div>";
@@ -146,7 +152,7 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
 			
-            html='<div  class="col-sm-3" style="margin-left:10px">';
+            html='<div  class="col-sm-2" style="margin-left:10px;margin-top:5px">';
             html += '<a href="#"class="btn btn-primary" id="search_btn" onclick="Search()">查询</a>  ';
             
             

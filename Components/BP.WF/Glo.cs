@@ -4362,11 +4362,11 @@ namespace BP.WF
                 return dbs;
             }
 
-            if (athDesc.HisCtrlWay == AthCtrlWay.WorkID || athDesc.HisCtrlWay == AthCtrlWay.FID)
+            if (athDesc.HisCtrlWay == AthCtrlWay.WorkID )
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                qo.AddWhere(FrmAttachmentDBAttr.MyNote, athDesc.NoOfObj);
                 qo.addAnd();
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
 
@@ -4377,7 +4377,20 @@ namespace BP.WF
                 qo.DoQuery();
                 return dbs;
             }
-           
+
+            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+            {
+                /* 继承模式 */
+                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK);
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+
+                qo.addOrderBy("RDT");
+                qo.DoQuery();
+                return dbs;
+            }
+
 
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {

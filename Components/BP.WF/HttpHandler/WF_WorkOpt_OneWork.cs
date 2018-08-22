@@ -439,6 +439,7 @@ namespace BP.WF.HttpHandler
 
             return re.TrimEnd(',') + "]";
         }
+
         /// <summary>
         /// 获取流程的JSON数据，以供显示工作轨迹/流程设计
         /// </summary>
@@ -562,6 +563,23 @@ namespace BP.WF.HttpHandler
                     dt = DBAccess.RunSQLReturnTable(sql);
                     dt.TableName = "DISPOSE";
                     ds.Tables.Add(dt);
+
+                    GenerWorkerLists gwls = new GenerWorkerLists();
+                    if (this.FID == 0)
+                    {
+                        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID);
+                    }
+                    else
+                    {
+                        QueryObject qo = new QueryObject(gwls);
+                        qo.AddWhere(GenerWorkerListAttr.FID, this.FID);
+                        qo.addOr();
+                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.FID);
+                        qo.DoQuery();
+                    }
+
+                    DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
+                    ds.Tables.Add(dtGwls);
                 }
                 else
                 {
@@ -609,7 +627,6 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = new DataSet();
             DataTable dt = null;
-            string json = string.Empty;
             try
             {
                 //获取流程信息
@@ -744,7 +761,6 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
-            return json;
         }
         /// <summary>
         /// 获得发起的BBS评论.

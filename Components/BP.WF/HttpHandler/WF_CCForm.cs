@@ -30,7 +30,6 @@ namespace BP.WF.HttpHandler
 
                 FrmAttachment athDesc = this.GenerAthDesc();
 
-
                 //查询出来数据实体.
                 string pkVal = this.PKVal;
                 if (athDesc.HisCtrlWay == AthCtrlWay.FID)
@@ -40,7 +39,7 @@ namespace BP.WF.HttpHandler
                     pkVal = this.PWorkID.ToString();
 
 
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment);
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID,this.FID,this.PWorkID);
 
                 #region 如果图片显示.(先不考虑.)
                 if (athDesc.FileShowWay == FileShowWay.Pict)
@@ -2475,7 +2474,6 @@ namespace BP.WF.HttpHandler
             MapData mapData = new MapData(athDesc.FK_MapData);
             string msg = null;
 
-
             //求出来实体记录，方便执行事件.
             GEEntity en = new GEEntity(athDesc.FK_MapData);
             en.PKVal = pkVal;
@@ -2595,15 +2593,12 @@ namespace BP.WF.HttpHandler
                         }
                         catch 
                         {
-
                         }
-
                         //note:此处如何向前uploadify传递失败信息，有待研究
                         //this.Alert("上传附件错误：" + msg, true);
                     }
 
                     FileInfo info = new FileInfo(realSaveTo);
-
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
                     dbUpload.NodeID = this.FK_Node.ToString();
@@ -2611,6 +2606,9 @@ namespace BP.WF.HttpHandler
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FileExts = info.Extension;
+                    dbUpload.FID = this.FID;
+                  //  dbUpload.work = this.FID;
+
                     if (athDesc.IsExpCol == true)
                     {
                         if (paras != null && paras.Length > 0)
@@ -2621,7 +2619,6 @@ namespace BP.WF.HttpHandler
                             }
                         }
                     }
-
 
                     #region 处理文件路径，如果是保存到数据库，就存储pk.
                     if (athDesc.AthSaveWay == AthSaveWay.IISServer)
@@ -2807,12 +2804,14 @@ namespace BP.WF.HttpHandler
         {
             FrmAttachmentDB athDB = new FrmAttachmentDB();
             athDB.RetrieveByAttr(FrmAttachmentDBAttr.MyPK, this.MyPK);
+
             //删除文件
             if (athDB.FileFullName != null)
             {
                 if (File.Exists(athDB.FileFullName) == true)
                     File.Delete(athDB.FileFullName);
             }
+
             int i = athDB.Delete(FrmAttachmentDBAttr.MyPK, this.MyPK);
             if (i > 0)
                 return "true";
@@ -3519,21 +3518,35 @@ namespace BP.WF.HttpHandler
                 if (nd.HisFormType == NodeFormType.SheetTree)
                 {
                     FrmNode fn = new FrmNode(nd.FK_Flow,nd.NodeID, this.FK_MapData);
-                    if (fn.FrmSln != FrmSln.Default)
+                    if (fn.FrmSln == FrmSln.Default)
                     {
-                        if (fn.FrmSln == FrmSln.Readonly)
-                        {
-                            athDesc.HisDeleteWay = AthDeleteWay.None;
-                            athDesc.IsUpload = false;
-                            return athDesc;
-                        }
+                        if (fn.WhoIsPK == WhoIsPK.FID)
+                            athDesc.HisCtrlWay = AthCtrlWay.FID;
 
-                        if (fn.FrmSln == FrmSln.Self)
-                        {
-                            athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.NodeID;
-                            athDesc.RetrieveFromDBSources();
-                            return athDesc;
-                        }
+                        if (fn.WhoIsPK == WhoIsPK.PWorkID)
+                            athDesc.HisCtrlWay = AthCtrlWay.PWorkID;
+                    }
+
+                    if (fn.FrmSln == FrmSln.Readonly)
+                    {
+                        if (fn.WhoIsPK == WhoIsPK.FID)
+                            athDesc.HisCtrlWay = AthCtrlWay.FID;
+
+                        if (fn.WhoIsPK == WhoIsPK.PWorkID)
+                            athDesc.HisCtrlWay = AthCtrlWay.PWorkID;
+
+                        athDesc.HisDeleteWay = AthDeleteWay.None;
+                        athDesc.IsUpload = false;
+                        athDesc.MyPK = this.FK_FrmAttachment;
+                        return athDesc;
+                    }
+
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.NodeID;
+                        athDesc.RetrieveFromDBSources();
+                        athDesc.MyPK = this.FK_FrmAttachment;
+                        return athDesc;
                     }
                 }
             }

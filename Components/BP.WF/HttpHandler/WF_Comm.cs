@@ -1183,7 +1183,6 @@ namespace BP.WF.HttpHandler
                 {
                     qo.addAnd();
                     qo.addLeftBracket();
-                    dtFrom += " 00:00:00";
                     dtTo += " 23:59:59";
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -3188,7 +3187,6 @@ namespace BP.WF.HttpHandler
                 if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
 
-                    dtFrom += " 00:00:00";
                     dtTo += " 23:59:59";
                     where += " and (" + map.DTSearchKey + " >= '" + dtFrom + "'";
                     where += " and " + map.DTSearchKey + " <= '" + dtTo + "'";

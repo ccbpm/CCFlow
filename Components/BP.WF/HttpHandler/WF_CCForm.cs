@@ -1124,15 +1124,8 @@ namespace BP.WF.HttpHandler
 
                 //执行事件
                 md.DoEvent(FrmEventList.SaveBefore, en, null);
-
                 #endregion 执行装载填充.与相关的事件.
-
-                #region 加入主表的数据.
-                //增加主表数据.
-                DataTable mainTable = en.ToDataTableField(md.No);
-                mainTable.TableName = "MainTable";
-                ds.Tables.Add(mainTable);
-                #endregion 加入主表的数据.
+         
 
                 #region 把外键表加入DataSet.
                 DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
@@ -1184,7 +1177,6 @@ namespace BP.WF.HttpHandler
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-
                 if (this.FK_Node != 0 && this.FK_Node != 999999)
                 {
                       nd = new Node(this.FK_Node);
@@ -1260,7 +1252,7 @@ namespace BP.WF.HttpHandler
                         //遍历属性集合.
                         foreach (DataRow dr in dtMapAttr.Rows)
                         {
-                            string keyOfEn=dr[MapAttrAttr.KeyOfEn].ToString();
+                            string keyOfEn = dr[MapAttrAttr.KeyOfEn].ToString();
                             foreach (FrmField ff in ffs)
                             {
                                 if (ff.KeyOfEn.Equals(keyOfEn) == false)
@@ -1268,6 +1260,124 @@ namespace BP.WF.HttpHandler
 
                                 dr[MapAttrAttr.UIIsEnable] = ff.UIIsEnable;//是否只读?
                                 dr[MapAttrAttr.UIVisible] = ff.UIVisible; //是否可见?
+                                if (DataType.IsNullOrEmpty(ff.DefVal) == true)
+                                    continue;
+                                dr[MapAttrAttr.DefVal] = ff.DefVal; //默认值.
+
+                                Attr attr = new Attr();
+                                attr.MyDataType = DataType.AppString;
+                                attr.DefaultValOfReal = ff.DefVal;
+                                attr.Key = ff.KeyOfEn;
+                                if (dr[MapAttrAttr.UIIsEnable].ToString() == "0")
+                                    attr.UIIsReadonly = true;
+                                 
+                                if (DataType.IsNullOrEmpty(ff.DefVal) == true)
+                                    continue;
+
+                                //数据类型.
+                                attr.MyDataType = int.Parse(dr[MapAttrAttr.MyDataType].ToString());
+
+                                string v = ff.DefVal;
+
+                                //设置默认值.                              
+                                string myval = en.GetValStrByKey(ff.KeyOfEn);
+
+                                // 设置默认值.
+                                switch (ff.DefVal)
+                                {
+                                    case "@WebUser.No":
+                                        if (attr.UIIsReadonly == true)
+                                        {
+                                            en.SetValByKey(attr.Key, Web.WebUser.No);
+                                        }
+                                        else
+                                        {
+                                            if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, Web.WebUser.No);
+                                        }
+                                        continue;
+                                    case "@WebUser.Name":
+                                        if (attr.UIIsReadonly == true)
+                                        {
+                                            en.SetValByKey(attr.Key, Web.WebUser.Name);
+                                        }
+                                        else
+                                        {
+                                            if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, Web.WebUser.Name);
+                                        }
+                                        continue;
+                                    case "@WebUser.FK_Dept":
+                                        if (attr.UIIsReadonly == true)
+                                        {
+                                            en.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                                        }
+                                        else
+                                        {
+                                            if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                                        }
+                                        continue;
+                                    case "@WebUser.FK_DeptName":
+                                        if (attr.UIIsReadonly == true)
+                                        {
+                                            en.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                                        }
+                                        else
+                                        {
+                                            if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                                        }
+                                        continue;
+                                    case "@WebUser.FK_DeptNameOfFull":
+                                    case "@WebUser.FK_DeptFullName":
+                                        if (attr.UIIsReadonly == true)
+                                        {
+                                            en.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                                        }
+                                        else
+                                        {
+                                            if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                                        }
+                                        continue;
+                                    case "@RDT":
+                                        if (attr.UIIsReadonly == true)
+                                        {
+                                            if (attr.MyDataType == DataType.AppDate || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, DataType.CurrentData);
+
+                                            if (attr.MyDataType == DataType.AppDateTime || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                                        }
+                                        else
+                                        {
+                                            if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
+                                            {
+                                                if (attr.MyDataType == DataType.AppDate)
+                                                    en.SetValByKey(attr.Key, DataType.CurrentData);
+                                                else
+                                                    en.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                                            }
+                                        }
+                                        continue;
+                                    case "@yyyy年mm月dd日":
+                                    case "@yyyy年mm月dd日HH时mm分":
+                                    case "@yy年mm月dd日":
+                                    case "@yy年mm月dd日HH时mm分":
+                                        if (attr.UIIsReadonly == true)
+                                        {
+                                            en.SetValByKey(attr.Key, DateTime.Now.ToString(v.Replace("@", "")));
+                                        }
+                                        else
+                                        {
+                                            if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
+                                                en.SetValByKey(attr.Key, DateTime.Now.ToString(v.Replace("@", "")));
+                                        }
+                                        continue;
+                                    default:
+                                        continue;
+                                }
                             }
                         }
 
@@ -1279,6 +1389,14 @@ namespace BP.WF.HttpHandler
 
                 }
                 #endregion 处理权限方案s
+
+
+                #region 加入主表的数据.
+                //增加主表数据.
+                DataTable mainTable = en.ToDataTableField(md.No);
+                mainTable.TableName = "MainTable";
+                ds.Tables.Add(mainTable);
+                #endregion 加入主表的数据.
 
                 return BP.Tools.Json.DataSetToJson(ds, false);
             }

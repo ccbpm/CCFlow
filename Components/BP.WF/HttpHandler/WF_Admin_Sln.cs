@@ -504,82 +504,84 @@ namespace BP.WF.HttpHandler
             var jsonSetting = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             List<FieldsAttrs> fieldsAttrsList = JsonConvert.DeserializeObject<List<FieldsAttrs>>(FieldsAttrsObj, jsonSetting);
 
-            if (fieldsAttrsList != null)
+            if (fieldsAttrsList == null)
+                return "0";
+
+            MapAttrs attrs = new MapAttrs();
+            //增加排序
+            QueryObject obj = new QueryObject(attrs);
+            obj.AddWhere(MapAttrAttr.FK_MapData, this.FK_MapData);
+            obj.DoQuery();
+
+            foreach (MapAttr attr in attrs)
             {
-                MapAttrs attrs = new MapAttrs();
-                //增加排序
-                QueryObject obj = new QueryObject(attrs);
-                obj.AddWhere(MapAttrAttr.FK_MapData, this.FK_MapData);
-                obj.DoQuery();
-
-                foreach (MapAttr attr in attrs)
+                foreach (FieldsAttrs fieldsAttrs in fieldsAttrsList)
                 {
-                    foreach (FieldsAttrs fieldsAttrs in fieldsAttrsList)
+                    if (!attr.KeyOfEn.Equals(fieldsAttrs.KeyOfEn))
+                        continue;
+
+                    if (currND.HisFormType == NodeFormType.RefOneFrmTree)
                     {
-                        if (!attr.KeyOfEn .Equals(fieldsAttrs.KeyOfEn))
-                            continue;
+                        attr.UIVisible = fieldsAttrs.UIVisible;
+                        attr.UIIsEnable = fieldsAttrs.UIIsEnable;
+                        attr.IsSigan = fieldsAttrs.IsSigan;
+                        attr.DefVal = fieldsAttrs.DefVal;
+                        attr.UIIsInput = fieldsAttrs.IsNotNull;
+                        attr.FK_MapData = this.FK_MapData;
+                        attr.KeyOfEn = attr.KeyOfEn;
+                        attr.Name = attr.Name;
+                        attr.Update();
 
-                        if (currND.HisFormType == NodeFormType.RefOneFrmTree)
+                        //如果是表单库表单，需要写入MapAttr
+                        if (DataType.IsNullOrEmpty(fieldsAttrs.RegularExp) == false)
                         {
-                            attr.UIVisible = fieldsAttrs.UIVisible;
-                            attr.UIIsEnable = fieldsAttrs.UIIsEnable;
-                            attr.IsSigan = fieldsAttrs.IsSigan;
-                            attr.DefVal = fieldsAttrs.DefVal;
-                            attr.UIIsInput = fieldsAttrs.IsNotNull;
-                            attr.FK_MapData = this.FK_MapData;
-                            attr.KeyOfEn = attr.KeyOfEn;
-                            attr.Name = attr.Name;
-                            attr.Update();
+                            MapExt ext = new MapExt();
+                            bool extisExit = ext.IsExit("MyPK", "RegularExpression_" + this.FK_MapData + "_" + fieldsAttrs.KeyOfEn + "_onchange");
 
-                            //如果是表单库表单，需要写入MapAttr
-                            if (!string.IsNullOrWhiteSpace(fieldsAttrs.RegularExp))
+                            ext.FK_MapData = this.FK_MapData;
+                            ext.ExtType = MapExtXmlList.RegularExpression;
+                            ext.DoWay = 0;
+                            ext.AttrOfOper = fieldsAttrs.KeyOfEn;
+                            ext.Doc = fieldsAttrs.RegularExp;
+                            ext.Tag = "onchange";
+                            ext.Tag1 = "格式不正确！";
+
+                            if (extisExit)
+                                ext.Update();
+                            else
                             {
-                                MapExt ext = new MapExt();
-                                bool extisExit = ext.IsExit("MyPK", "RegularExpression_" + this.FK_MapData + "_" + fieldsAttrs.KeyOfEn + "_onchange");
-
-                                ext.FK_MapData = this.FK_MapData;
-                                ext.ExtType = MapExtXmlList.RegularExpression;
-                                ext.DoWay = 0;
-                                ext.AttrOfOper = fieldsAttrs.KeyOfEn;
-                                ext.Doc = fieldsAttrs.RegularExp;
-                                ext.Tag = "onchange";
-                                ext.Tag1 = "格式不正确！";
-
-                                if (extisExit)
-                                    ext.Update();
-                                else
-                                {
-                                    ext.MyPK = "RegularExpression_" + this.FK_MapData + "_" + fieldsAttrs.KeyOfEn + "_onchange";
-                                    ext.Insert();
-                                }
+                                ext.MyPK = "RegularExpression_" + this.FK_MapData + "_" + fieldsAttrs.KeyOfEn + "_onchange";
+                                ext.Insert();
                             }
                         }
-                        FrmField frmField = new FrmField();
-                        bool isExit = frmField.IsExit("MyPK", this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + fieldsAttrs.KeyOfEn + "_" + FrmEleType.Field);
-
-                        frmField.UIVisible = fieldsAttrs.UIVisible;
-                        frmField.UIIsEnable = fieldsAttrs.UIIsEnable;
-                        frmField.IsSigan = fieldsAttrs.IsSigan;
-                        frmField.DefVal = fieldsAttrs.DefVal;
-                        frmField.IsNotNull = fieldsAttrs.IsNotNull;
-                        frmField.RegularExp = fieldsAttrs.RegularExp;
-                        frmField.IsWriteToFlowTable = fieldsAttrs.IsWriteToFlowTable;
-                        //frmField.IsWriteToGenerWorkFlow = fieldsAttrs.IsWriteToGenerWorkFlow;  //sln无此属性
-                        frmField.FK_Node = this.FK_Node;
-                        frmField.FK_Flow = this.FK_Flow;
-                        frmField.FK_MapData = this.FK_MapData;
-                        frmField.KeyOfEn = attr.KeyOfEn;
-                        frmField.Name = attr.Name;
-
-                        if (isExit)
-                            frmField.Update();
-                        else
-                            frmField.Insert();
                     }
+
+                    FrmField frmField = new FrmField();
+                    bool isExit = frmField.IsExit("MyPK",
+                        this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + fieldsAttrs.KeyOfEn + "_" + FrmEleType.Field);
+
+                    frmField.UIVisible = fieldsAttrs.UIVisible;
+                    frmField.UIIsEnable = fieldsAttrs.UIIsEnable;
+                    frmField.IsSigan = fieldsAttrs.IsSigan;
+                    frmField.DefVal = fieldsAttrs.DefVal;
+                    frmField.IsNotNull = fieldsAttrs.IsNotNull;
+                    frmField.RegularExp = fieldsAttrs.RegularExp;
+                    frmField.IsWriteToFlowTable = fieldsAttrs.IsWriteToFlowTable;
+                    //frmField.IsWriteToGenerWorkFlow = fieldsAttrs.IsWriteToGenerWorkFlow;  //sln无此属性
+                    frmField.FK_Node = this.FK_Node;
+                    frmField.FK_Flow = this.FK_Flow;
+                    frmField.FK_MapData = this.FK_MapData;
+                    frmField.KeyOfEn = attr.KeyOfEn;
+                    frmField.Name = attr.Name;
+
+                    if (isExit)
+                        frmField.Update();
+                    else
+                        frmField.Insert();
                 }
-                return fieldsAttrsList.Count.ToString();
             }
-            return "0";
+
+            return fieldsAttrsList.Count.ToString();
         }
         #endregion 字段权限.
 

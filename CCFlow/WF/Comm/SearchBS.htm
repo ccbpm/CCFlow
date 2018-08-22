@@ -94,30 +94,18 @@
 
             var html = "";
             if (mapBase.IsShowSearchKey == "1")
-                html += "<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:100px;' for='TB_Key'>关键字:</label>"
-                html +="<div class='col-sm-2'style='width:150px'>";
-                html +="<input style='width:150px' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
-                html += "</div>";
+                html += "<label  style='text-align: right; margin-top:5px;margin-left:10px;' for='TB_Key'>关键字:&nbsp;&nbsp</label>"
+                html +="<input style='width:150px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
             if (mapBase.DTSearchWay != "0") {
 
-                html += "<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:100px'>" + mapBase.DTSearchLable + "</label>";
+                html += "<label style='text-align: right; margin-top:5px;padding-left:10px;'>" + mapBase.DTSearchLable + "&nbsp;&nbsp</label>";
 
                 if (mapBase.DTSearchWay == "1") {
-                    html += '<div class="col-sm-2" style="width:150px">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
-                    html +="</div>";
-                    html +="<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:5px;margin-left:-20px'>到</label>";
-                    html += '<div class="col-sm-2" style="width:150px">';
-                    html += "<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
-                    html += '</div>';
+                    html += "&nbsp;&nbsp;到&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
                 } else {
-                    html += '<div class="col-sm-2" style="width:150px">';
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:120px;' class='form-control' />";
-                    html +="</div>";
-                    html +="<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:5px;margin-left:-20px'>到</label>";
-                    html += '<div class="col-sm-2" style="width:150px">';
-                    html += "<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:120px;' class='form-control' />";
-                    html += '</div>';
+                    html += "&nbsp;&nbsp;到&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:120px;' class='form-control' />";
                 }
             }
 			
@@ -128,19 +116,18 @@
 
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
-            $("#toolbar").html(html); //设置基础信息.
+            
             for (var i = 0; i < attrs.length; i++) {
 
                 var attr = attrs[i];
                 var str = "";
-                str += "<label class='col-sm-1 control-label' style='text-align: right; margin-top:5px;width:100px;margin-left:-50px' for='DDL_" + attr.Field + "'>" + attr.Name + ":  </label>";
-                str += '<div class="col-sm-2" style="width:150px">';
-                str += "<select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
-                str += "</div>";
+                str += "<label  style='text-align: right; margin-top:5px;padding-left:10px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":&nbsp;&nbsp  </label>";
+                str += "<select class='form-control' style='padding:0px;width:150px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
                 $("#toolbar").append(str); //设置基础信息.
             }
             
+            html="";
             //为查询外键赋值.
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
@@ -152,8 +139,7 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
 			
-            html='<div  class="col-sm-3" style="margin-left:10px;margin-top:5px">';
-            html += '<a href="#"class="btn btn-primary" id="search_btn" onclick="Search()">查询</a>  ';
+            html += '<a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
             
             if (mapBase.IsInsert.toString().toLowerCase() == "true") {
@@ -162,7 +148,6 @@
 			html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>  ';
 			
 			html +='<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
-			html +='</div>';
 			$("#toolbar").append(html);
 			
         }
@@ -226,7 +211,7 @@
             ur.FK_MapData = ensName;
             ur.SetPara("RecCount", count);
             var i = ur.Save();
-            window.location.href = "?EnsName=" + ensName + "&PageIdx=" + pageIdx + "&PageSize=" + pageSize;
+            window.location.href = "?EnsName=" + ensName + "&PageIdx=1"  + "&PageSize=" + pageSize;
         }
 
         function Exp() {
@@ -712,7 +697,7 @@
 <form id="cc">
     <div class="row" style="margin-top:10px">
     	<div class="panel panel-default" style="border-bottom-width:0px;border-top-width:0px"> 
-    		 <div class="panel-body  form-group" id="toolbar"></div>
+    		 <div id="toolbar" style="width:100%"></div>
         </div>
     </div>
     <table id="dg" class="table table-hover"></table>

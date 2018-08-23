@@ -4,7 +4,7 @@ if (plant == "CCFlow") {
     dynamicHandler = "/WF/Comm/Handler.ashx";
 } else {
     // JFlow
-    dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do"; 
 }
 
 /* 把一个 @XB=1@Age=25 转化成一个js对象.  */
@@ -976,8 +976,8 @@ var Entity = (function () {
             return result;
         },
         SetPKVal: function (pkVal) {
-            self.pkval = pkVal;
 
+            self.pkval = pkVal;
             this["MyPK"] = pkval;
             this["OID"] = pkval;
             this["WorkID"] = pkval;

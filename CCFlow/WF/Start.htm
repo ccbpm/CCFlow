@@ -175,6 +175,9 @@
         function InitPage() {
 
 
+             $('#lists').html("正在加载发起流程列表，请稍后。。。");
+
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             var data = handler.DoMethodReturnString("Start_Init");
             if (data.indexOf('err@') == 0) {

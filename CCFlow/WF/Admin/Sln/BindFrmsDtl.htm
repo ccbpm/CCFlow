@@ -23,9 +23,7 @@
             var pushData =new Entities("BP.WF.Nodes");
             pushData.Retrieve("FK_Flow",node.FK_Flow);
 
-
             var objSelect = document.getElementById("lbFlowNodes");
-
             if (pushData.length > 0) {
 
                 $.each(pushData, function (index, val) {
@@ -42,36 +40,39 @@
         //绑定表单库
         function InitFormTree(FK_Flow, FK_Node) {
 
-            var param = {
-                DoType: "BindForm_GenerForms",
-                FK_Flow: FK_Flow,
-                FK_Node: FK_Node
-            };
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Sln");
+            handler.AddPara("FK_Flow", FK_Flow);
+            handler.AddPara("FK_Node", FK_Node);
+            var data = handler.DoMethodReturnString("BindForm_GenerForms");
 
-            Handler_AjaxQueryData(param, function (data, scope) {
-                var pushData = eval('(' + data + ')');
-                //加载表单库
-                $("#formTree").tree({
-                    data: pushData,
-                    iconCls: 'tree-folder',
-                    collapsed: true,
-                    checkbox: true,
-                    lines: true,
-                    onCheck: function (node) {
-                        var pasteSelectIndex = document.getElementById("lbFlowNodes").selectedIndex;
-                        if (pasteSelectIndex >= 0) {
-                            $('#saveBindTree').linkbutton('enable');
-                        }
-                    },
-                    onClick: function (node) {
-                        if (node) {
-                            $('#formTree').tree('expand', node.target);
-                        }
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
+
+            var pushData = eval('(' + data + ')');
+
+            //加载表单库
+            $("#formTree").tree({
+                data: pushData,
+                iconCls: 'tree-folder',
+                collapsed: true,
+                checkbox: true,
+                lines: true,
+                onCheck: function (node) {
+                    var pasteSelectIndex = document.getElementById("lbFlowNodes").selectedIndex;
+                    if (pasteSelectIndex >= 0) {
+                        $('#saveBindTree').linkbutton('enable');
                     }
-                });
-                $("#pageloading").hide();
-                $('#saveBindTree').linkbutton('disable');
-            }, this);
+                },
+                onClick: function (node) {
+                    if (node) {
+                        $('#formTree').tree('expand', node.target);
+                    }
+                }
+            });
+            $("#pageloading").hide();
+            $('#saveBindTree').linkbutton('disable');
         }
 
         function GetCheckedFrms() {
@@ -119,6 +120,7 @@
                 FK_Flow: FK_Flow,
                 FK_Node: FK_Node
             };
+
             $('#copyfrmdlg .panel-body').empty();
             Handler_AjaxQueryData(param, function (data, scope) {
                 $('#copyfrmdlg .panel-body').append(data);
@@ -138,23 +140,22 @@
                 nodelist.push(this.value);
             });
 
-            if (nodelist.length != 0) {
-                if (confirm("您确定执行此操作吗")) {
-                    var param = {
-                        DoType: "BindFrmsDtl_DoCopyFrmToNodes",
-                        NodeStr: nodelist.join(','),
-                        frmStr: frmStr,
-                        FK_Flow: FK_Flow
-                    };
-
-                    Handler_AjaxQueryData(param, function (data, scope) {
-                        alert(data);
-                        $('#copyfrmdlg').dialog('close');
-                    }, this);
-                }
-            } else {
+            if (nodelist.length == 0) {
                 alert("请选择要绑定的节点");
+                return;
             }
+
+            if (confirm("您确定执行此操作吗") == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Sln");
+            handler.AddPara("NodeStr", nodelist.join(','));
+            handler.AddPara("frmStr", frmStr);
+            handler.AddPara("FK_Flow", FK_Flow);
+            var data = handler.DoMethodReturnString("BindFrmsDtl_DoCopyFrmToNodes");
+            alert(data);
+
+            $('#copyfrmdlg').dialog('close');
         }
         //查询节点
         function QueryFlowNodes() {
@@ -181,23 +182,25 @@
                 var FK_Flow = Application.common.getArgsFromHref("FK_Flow");
                 var selectIndex = document.getElementById("lbFlowNodes").selectedIndex;
                 var options = document.getElementById("lbFlowNodes").options;
-                if (selectIndex >= 0) {
-                    var param = {
-                        DoType: "BindFrmsDtl_Save",
-                        FK_Flow: FK_Flow,
-                        FK_Node: options[selectIndex].value,
-                        formNos: formNos
-                    };
-                    Handler_AjaxPostData(param, function (data, scope) {
 
-                        var str = JSON.stringify(data);
-                        alert(str);
-
-                    }, this);
-                } else {
+                if (selectIndex < 0) {
                     $.messager.alert('提示', '没有选中节点');
+                    return;
+
                 }
-            }
+ 
+
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Sln");
+                handler.AddPara("FK_Node", options[selectIndex].value);
+                handler.AddPara("formNos", formNos);
+                handler.AddPara("FK_Flow", FK_Flow);
+
+                var data = handler.DoMethodReturnString("BindFrmsDtl_Save");
+                 
+                    var str = JSON.stringify(data);
+                    alert(str);
+            
         }
         //设置方案
         function SetFormSln() {

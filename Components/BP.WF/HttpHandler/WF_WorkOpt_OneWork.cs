@@ -521,7 +521,8 @@ namespace BP.WF.HttpHandler
                     dt.TableName = "FlowInfo";
                     ds.Tables.Add(dt);
 
-                  
+                    //获得流程状态.
+                    WFState wfState = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
 
                     //获取工作轨迹信息
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
@@ -566,8 +567,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dt);
 
 
-                    //获得流程状态.
-                    WFState wfState = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
+                   
 
                     //如果流程没有完成.
                     if (wfState != WFState.Complete)

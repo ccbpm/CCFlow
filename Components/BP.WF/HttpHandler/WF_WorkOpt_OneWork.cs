@@ -565,18 +565,15 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dt);
 
                     GenerWorkerLists gwls = new GenerWorkerLists();
-                    if (this.FID == 0)
-                    {
-                        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID);
-                    }
-                    else
-                    {
+                    Int64 id = this.FID;
+                    if (id == 0)
+                        id = this.WorkID;
+                     
                         QueryObject qo = new QueryObject(gwls);
-                        qo.AddWhere(GenerWorkerListAttr.FID, this.FID);
+                        qo.AddWhere(GenerWorkerListAttr.FID, id);
                         qo.addOr();
-                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.FID);
+                        qo.AddWhere(GenerWorkerListAttr.WorkID,id);
                         qo.DoQuery();
-                    }
 
                     DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
                     ds.Tables.Add(dtGwls);

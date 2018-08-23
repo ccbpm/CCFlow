@@ -1262,6 +1262,7 @@ namespace BP.WF.HttpHandler
                                 dr[MapAttrAttr.UIVisible] = ff.UIVisible; //是否可见?
                                 if (DataType.IsNullOrEmpty(ff.DefVal) == true)
                                     continue;
+
                                 dr[MapAttrAttr.DefVal] = ff.DefVal; //默认值.
 
                                 Attr attr = new Attr();

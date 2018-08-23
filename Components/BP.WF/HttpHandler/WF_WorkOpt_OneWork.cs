@@ -453,7 +453,6 @@ namespace BP.WF.HttpHandler
             Int64 workid = this.WorkID;
             Int64 fid = this.FID;
 
-
             DataSet ds = new DataSet();
             DataTable dt = null;
             string json = string.Empty;
@@ -522,6 +521,8 @@ namespace BP.WF.HttpHandler
                     dt.TableName = "FlowInfo";
                     ds.Tables.Add(dt);
 
+                  
+
                     //获取工作轨迹信息
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
                     sql = "SELECT NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
@@ -564,19 +565,28 @@ namespace BP.WF.HttpHandler
                     dt.TableName = "DISPOSE";
                     ds.Tables.Add(dt);
 
-                    GenerWorkerLists gwls = new GenerWorkerLists();
-                    Int64 id = this.FID;
-                    if (id == 0)
-                        id = this.WorkID;
-                     
+
+                    //获得流程状态.
+                    WFState wfState = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
+
+                    //如果流程没有完成.
+                    if (wfState != WFState.Complete)
+                    {
+                        GenerWorkerLists gwls = new GenerWorkerLists();
+                        Int64 id = this.FID;
+                        if (id == 0)
+                            id = this.WorkID;
+
                         QueryObject qo = new QueryObject(gwls);
                         qo.AddWhere(GenerWorkerListAttr.FID, id);
                         qo.addOr();
-                        qo.AddWhere(GenerWorkerListAttr.WorkID,id);
+                        qo.AddWhere(GenerWorkerListAttr.WorkID, id);
                         qo.DoQuery();
 
-                    DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
-                    ds.Tables.Add(dtGwls);
+                        DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
+                        ds.Tables.Add(dtGwls);
+                    }
+
                 }
                 else
                 {

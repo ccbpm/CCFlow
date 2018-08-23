@@ -173,7 +173,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoGroup_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我审批的流程";
+                rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -292,7 +292,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoGroup_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我审批的流程";
+                rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -342,6 +342,14 @@ namespace BP.WF.Rpt
                 rm.Title = "执行查询";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearch_AdminerFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "高级查询";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "执行分析";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
+                rm.ClassMethodName = this.ToString() + ".DoGroup_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
@@ -731,6 +739,15 @@ namespace BP.WF.Rpt
         public string DoSearch_AdminerFlow()
         {
             return "../../RptDfine/Search.htm?SearchType=Adminer&FK_Flow=" + this.No;
+        }
+
+        /// <summary>
+        /// 分析
+        /// </summary>
+        /// <returns></returns>
+        public string DoGroup_AdminerFlow()
+        {
+            return "../../RptDfine/Search.htm?GroupType=Adminer&FK_Flow=" + this.No;
         }
 
         public string DoReset_AdminerFlowRight()

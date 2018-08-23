@@ -526,6 +526,7 @@ namespace BP.WF.HttpHandler
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
 
             qo.AddWhere( " AND  WFState > 1 ");
+            qo.AddWhere(" AND FID = 0 ");
 
             md.SetPara("T_total", qo.GetCount());
             qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), 1);

@@ -744,6 +744,7 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyDeptFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyDeptFlowAttr.WFSta);
                 map.AddSearchAttr(MyDeptFlowAttr.TSpan);
+                map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
 
                 //增加隐藏的查询条件.

@@ -749,6 +749,7 @@ namespace BP.WF.Data
               //  map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
                 map.AddSearchAttr(MyStartFlowAttr.TSpan);
+                map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
                 //我发起的流程.
                 AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",

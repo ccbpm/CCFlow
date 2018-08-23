@@ -175,6 +175,8 @@ namespace BP.WF.Data
             get
             {
                 UAC uac = new UAC();
+                uac.LoadRightFromCCGPM(this);
+                return uac;
                 uac.Readonly();
                 return uac;
             }
@@ -749,6 +751,7 @@ namespace BP.WF.Data
              //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyFlowAttr.WFSta);
                 map.AddSearchAttr(MyFlowAttr.TSpan);
+                map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
                 //增加隐藏的查询条件. 我参与的流程.
                 AttrOfSearch search = new AttrOfSearch(MyFlowAttr.Emps, "人员",

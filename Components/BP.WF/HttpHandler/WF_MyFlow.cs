@@ -2119,7 +2119,7 @@ namespace BP.WF.HttpHandler
             {
                 DataSet ds = new DataSet();
 
-                if (this.DoType1.ToUpper() == "VIEW")
+                if (this.DoType1!=null && this.DoType1.ToUpper() == "VIEW")
                 {
                     DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
                     ds.Tables.Add(trackDt.Copy());

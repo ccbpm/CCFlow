@@ -25,8 +25,6 @@
             handler.AddUrlData();
 
             var data = handler.DoMethodReturnString("Fields_Init");
-
-
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;

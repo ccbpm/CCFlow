@@ -80,7 +80,7 @@
 	        return;
 
 	    var flowNo = GetQueryString("FK_Flow");
-	    var en = new Entity("BP.WF.Flow", flowNo);
+	    var en = new Entity("BP.WF.Flow", no);
 	    var data = en.DoMethodReturnString("DoDelete");
 
 	    alert(data);

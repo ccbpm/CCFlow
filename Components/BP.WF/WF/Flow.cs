@@ -3385,6 +3385,24 @@ namespace BP.WF
                 attr.Insert();
             }
 
+
+            if (attrs.Contains(md.No + "_" + GERptAttr.FID) == false)
+            {
+                /* WorkID */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = md.No;
+                attr.KeyOfEn = "FID";
+                attr.Name = "FID";
+                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.DefVal = "0";
+                attr.HisEditType = BP.En.EditType.Readonly;
+                attr.Insert();
+            }
+
             if (attrs.Contains(md.No + "_" + GERptAttr.WFState) == false)
             {
                 /* 流程状态 */

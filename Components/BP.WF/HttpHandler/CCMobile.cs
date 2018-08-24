@@ -189,7 +189,12 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(dt);
         }
-
+        public string MyFlow_Init()
+        {
+            BP.WF.HttpHandler.WF_MyFlow wfPage = new WF_MyFlow(this.context);
+            return wfPage.MyFlow_Init();
+        }
+        
         public string Runing_Init()
         {
             BP.WF.HttpHandler.WF wfPage = new WF(this.context);

@@ -280,7 +280,7 @@ namespace BP.WF
                     gfs.RetrieveIn(GroupFieldAttr.FrmID, "(" + myFrmIDs + ")");
 
                     //按照时间的顺序查找出来 ids .
-                    string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + myFrmIDs + ")";
+                    string sqlOrder = "SELECT OID FROM  C WHERE   FrmID IN (" + myFrmIDs + ")";
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
                     {
                         myFrmIDs = myFrmIDs.Replace("'", "");
@@ -296,7 +296,7 @@ namespace BP.WF
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         myFrmIDs = myFrmIDs.Replace("'", "");
-                        sqlOrder += " ORDER BY INSTR(FrmID, '" + myFrmIDs + "'), Idx";
+                        sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "', FrmID ), Idx";
                     }
                     DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);
 

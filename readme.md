@@ -1,31 +1,39 @@
-﻿
-### CCFlow基本信息.###
-1. **产品名称:**驰骋.net工作流引擎.  **简称** CCFlow   **版本:** ccflow6  **英文名称:** ChiCheng Workflow Engine  
-2. **官方网站:** [http://ccflow.org](http://ccflow.org "官方网站")  **开发历史:** 2003-2016年.         **性质:** 100%开源,无任何功能限制.
-5. **许可协议:** GPL  URL: http://www.gnu.org/licenses/gpl.html 
-6. **运行环境:** 设计器BS结构, IIS6.0+, .net4.0. 支持CS调用. IIS6.0 +
-7. **开发语言:** VS2010, .net4.0 c#.net. **客户端:** FireFox 3.0以上. IE6+,或者使用IE内核的浏览器.
-8. **组成部分:** 流程设计器、表单设计器、流程解析执行器、表单解析执行器、流程服务。
-9. **基本功能:** 图形化流程设计/智能表单web定义免程序开发/级联下拉框/流程轨迹/单据自定义打印/邮件短信工作到达通知/自动任务分配/支持sdk模式开发/简洁集成/消息侦听/丰富事件接口/报表定义/工作量分析/绩效考核/手机访问/支持sqlserve,oracle,mysql,informix数据库
-CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发水平解决复杂的逻辑问题与其它系统耦合,有程基础就可以使用sdk做高级的开发.
-10. **支持数据库:** sqlserver系列版本， oracle 系列版本， informix 系列版本, mysql系列版本.
-10. **Git 地址:** http://git.oschina.net/opencc/ccflow/tree/develop
-11. **下载地址** 请参考: http://git.oschina.net/opencc/ccflow/wikis/pages
-12. **两个版本:**  ccflow是.net版本开发的. jflow使用Java开发是ccflow的影子版本。两个版本,代码&数据库解构,设计思想,功能,操作手册,完全相同. 流程表单模版完全通用。
-13. [JFlow的官方网站 ](http://jflow.cn "jflow官方网站."), git网站地址:[http://git.oschina.net/opencc/jflow/tree/develop](http://git.oschina.net/opencc/jflow/tree/develop "jflow在git上.")
-14. ccflow & JFlow 集成多众多的开发人员、流程设计人员、管理人员众多的智慧，成长过程中得到众多企业的帮助。
-15. ccflow帮助了成百上千家企业成功，众多的爱好者的贡献，成功客户案例，请打开官方网站查找. http://ccflow.org/Case.aspx 
-16. ccbpm 支持IE8+, 支持火狐，谷歌，等等大多数浏览器.
+﻿### ccbpm系统概要介绍
+01. 驰骋工作流引擎研发与2003年，具有.net与java两个版本，这两个版本代码结构，数据库结构，设计思想，功能组成， 操作手册，完全相同。 导入导出的流程模版，表单模版两个版本完全通用。
+02. 我们把驰骋工作流程引擎简称ccbpm, CCFlow是.net版本的简称，JFlow是java版本的简称，我们未来将要发布python版本的PFlow,敬请关注.
+03. 十多年来，我们一直践行自己的诺言，真心服务中国IT产业，努力提高产品质量，成为了国内知名的老牌工作流引擎。
+04. ccbpm作简单、概念通俗易懂、操作手册完善（计:14万操作手册说明书）、代码注释完整、案例丰富翔实、单元测试完整。
+05. ccbpm包含表单引擎与流程引擎两大部分，并且两块完美结合，流程引擎对表单引擎的操纵，协同高效工作, 完成了很多国内生产审批模式下的流程设计,
+06. ccbpm的流程与表单界面可视化的设计，可配置程度高，采用结构化的表单模版设计,集中解析模式的设计. 适应于中国国情的多种场景的需要、配置所见即所得、低代码、高配置.
+07. ccbpm 在国内拥有最广泛的研究群体与应用客户群，是大型集团企业IT部门、软件公司、研究院、高校研究与应用的产品。
+08. ccbpm不仅仅能够满足中小企业的需要，也能满足通信级用户的应用，先后在西门子、海南航空、中船、陕汽重卡、山东省国土资源厅、华电国际、江苏山东吉林测绘院、厦门证券、天业集团、天津港等国内外大型企业政府单位服役。
+09。  ccbpm可以独立运行，也可以作为中间件嵌入您的开发架构,还可以作为服务的模式支持对外发布.
+10. ccbpm 既有配置类型的开发适用于业务人员，IT维护人员， 也有面向程序员的高级引擎API开发,满足不同层次的流程设计人员需要.
+11. 支持 oracle,sqlserver,mysql 数据库. 内置:
+12. 流程引擎设计支持所见即所得的设计：节点设计、表单设计、单据设计、报表定义设计、以及用户菜单设计。
+13. 流程模式简洁，只有4种容易理解：线性流程、同表单分合流、异表单分合流、父子流程，没有复杂的概念。
+14. 配置参数丰富，支持流程的基础功能：前进、后退、转向、转发、撤销、抄送、挂起、草稿、任务池共享，也支持高级功能取回审批、项目组、外部用户等等。
+
+### 组成部分
+1. 驰骋工作流程引擎， JFlow
+2. 驰骋表单引擎. CCForm
+3. 组织结构管理, 菜单权限管理. GPM
+
+### 驰骋工作流程引擎下载资源 
+1. 在线演示: http://demo.ccflow.org
+2. 在线文档: http://ccbpm.mydoc.io
+3. 视频/资料教程下载: svn http://140.143.236.168:7080/svn/ccbpmdocs 用户名: ccbpm密码:ccbpm  也可以使用在线浏览.
+4. 官方网站: http://ccflow.org 
 
 ### 为什么选择ccflow? ###
-1. CCFlow成长于中国2003年,历史长久,在多种生产、管理环境中成长起来，是国内老牌的工作流程引擎,拥有众多的爱好者,开发者, 100%的核心代码开源.
-2. 历经多个项目多种行业磨练(请参考官方网站成功案例),规则丰富，生命力强，绝大多数应用可以实现无代码流程设计.
-3. CCFlow的核心代码都是公司自己研发的，核心算法也是基于实际应用，经过我们十多年的发展，每个所服务的客户都能得到最佳的流程解决方案.
-4. CCFlow没有借助第3方的流程软件,拥有独立知识产权, 所以我们最容易扩展,实现客户的需求.
-6. CCFlow功能强大,可配置性好，通常的应用开发可以实现无代码实现,面向业务人员、系统管理员、与程序员.
-7. 使用开源的软件好处众多,可以跟踪调试,可以修改，研究者众多，容易得到帮助,可以与我们的开发人员在线互动,遇到问题可以在第1时间解决.
-8. CCFlow是国内第一款同时拥有.net版本与java版本的工作流引擎,两者互为影子版本,数据库解构,配置界面完全相同.
-9. CCFlow设计思路精巧、概念简单.只有线性、同表单分合流、异表单分合流、父子流程四个概念. 有涵盖多种行为的5*5的算法，流程模式实现现实生活中绝大多数模式(目前没有我们解决不了的问题).
+01. CCFlow成长于中国2003年,历史长久,在多种生产、管理环境中成长起来，是国内老牌的工作流程引擎,拥有众多的爱好者,开发者, 100%的核心代码开源.
+02. 历经多个项目多种行业磨练(请参考官方网站成功案例),规则丰富，生命力强，绝大多数应用可以实现无代码流程设计.
+03. CCFlow的核心代码都是公司自己研发的，核心算法也是基于实际应用，经过我们十多年的发展，每个所服务的客户都能得到最佳的流程解决方案.
+04. CCFlow没有借助第3方的流程软件,拥有独立知识产权, 所以我们最容易扩展,实现客户的需求.
+06. CCFlow功能强大,可配置性好，通常的应用开发可以实现无代码实现,面向业务人员、系统管理员、与程序员.
+07. 使用开源的软件好处众多,可以跟踪调试,可以修改，研究者众多，容易得到帮助,可以与我们的开发人员在线互动,遇到问题可以在第1时间解决.
+08. CCFlow是国内第一款同时拥有.net版本与java版本的工作流引擎,两者互为影子版本,数据库解构,配置界面完全相同.
+09. CCFlow设计思路精巧、概念简单.只有线性、同表单分合流、异表单分合流、父子流程四个概念. 有涵盖多种行为的5*5的算法，流程模式实现现实生活中绝大多数模式(目前没有我们解决不了的问题).
 10. CCFlow的概念简洁、通俗易懂, 运行规则与运行模式清晰，数据库结构设计精简,规则丰富，帮助详实.
 11. CCFlow是国内流程引擎与表单引擎集成较好的bpm软件,流程引擎可以操纵表单引擎数据实现复杂的业务数据处理与权限控制.
 12. CCFlow拥有200多个流程演示模版,涵盖了我们在开发过程中遇到的很多的应用场景,参考这些模版,容易获得帮助.
@@ -46,26 +54,24 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 ### ccflow 程序文件清单:  ###
 1. D:\ccflow\Components   -- 组件目录.
 2. D:\ccflow\Components\BP.En30   -- 底层基类.
-3. D:\ccflow\Components\BP.Web.Controls30   --BS 控件层.
-4. D:\ccflow\Components\BP.WF  --工作流程引擎层
-5. D:\ccflow\RefDLL  -- 第三方组件中需要调用dll.
-6. D:\ccflow\Documents -  文档
-7. D:\ccflow\CCFlow  -- BS工作流程引擎前台.  
-8. D:\ccflow\CCFlowServices - 流程服务程序,用于执行自动发起流程、自动任务.
-9. D:\ccflow\DemoAndTesting  - 单元测试&Demo
+3. D:\ccflow\Components\BP.WF  --工作流程引擎层
+4. D:\ccflow\RefDLL  -- 第三方组件中需要调用dll.
+5. D:\ccflow\Documents -  文档
+6. D:\ccflow\CCFlow  -- BS工作流程引擎前台.  
+7. D:\ccflow\DemoAndTesting  - 单元测试&Demo
  
 
 
 ### ccflow前台目录结构.前台程序.(不建议用户修改，如果修改请提交给我们，否则您就没有办法升级.) ###
-1. D:\ccflow\CCFlow\WF\ --前台程序.
-2. D:\ccflow\CCFlow\WF\Comm  --通用功能层.
-3. D:\ccflow\CCFlow\WF\Data  -- 应用程序数据目录. 包含一些xml,等等。
-4. D:\ccflow\CCFlow\WF\Data\Install 与安装有关系的文件
-5. D:\ccflow\CCFlow\WF\Data\JSLib  系统javascript 函数库。
-6. D:\ccflow\CCFlow\WF\Data\Language 语言包(完善中)
-7. D:\ccflow\CCFlow\WF\Data\Node  cs流程设计器节点类型（cs流程设计器不在发展）
-8. D:\ccflow\CCFlow\WF\Data\XML  xml配置文件不仅仅ccflow使用,bp框架也使用它。
-9. D:\ccflow\CCFlow\WF\UC  --用户控件.
+01. D:\ccflow\CCFlow\WF\ --前台程序.
+02. D:\ccflow\CCFlow\WF\Comm  --通用功能层.
+03. D:\ccflow\CCFlow\WF\Data  -- 应用程序数据目录. 包含一些xml,等等。
+04. D:\ccflow\CCFlow\WF\Data\Install 与安装有关系的文件
+05. D:\ccflow\CCFlow\WF\Data\JSLib  系统javascript 函数库。
+06. D:\ccflow\CCFlow\WF\Data\Language 语言包(完善中)
+07. D:\ccflow\CCFlow\WF\Data\Node  cs流程设计器节点类型（cs流程设计器不在发展）
+08. D:\ccflow\CCFlow\WF\Data\XML  xml配置文件不仅仅ccflow使用,bp框架也使用它。
+09. D:\ccflow\CCFlow\WF\UC  --用户控件.
 10. D:\ccflow\CCFlow\WF\DocFlow -- 公文流程(目前还不是很完善)
 11. D:\ccflow\CCFlow\WF\Admin - 对ccflow的管理比如设计方向条件.报表定义...
 12. D:\ccflow\CCFlow\WF\SDKComponents  --流程组件目录.
@@ -76,15 +82,15 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 
 
 ### 1.2 前台的用户数据文件，用户可以更改. ###
-1. D:\ccflow\CCFlow\DataUser --用户文件.
-2. D:\ccflow\CCFlow\DataUser\Seal -- 电子盖章图片.
-3. D:\ccflow\CCFlow\DataUser\UploadFile - 上传附件
-4. D:\ccflow\CCFlow\DataUser\Style -- 个性化风格文件.
-5. D:\ccflow\CCFlow\DataUser\CyclostyleFile -- 单据模版文件.
-6. D:\ccflow\CCFlow\DataUser\EmailTemplete -邮件模版文件.
-7. D:\ccflow\CCFlow\DataUser\ICON --ICON
-8. D:\ccflow\CCFlow\DataUser\TaoHong --公文套红.
-9. D:\ccflow\CCFlow\DataUser\Bill  单据打印生成数据.
+01. D:\ccflow\CCFlow\DataUser --用户文件.
+02. D:\ccflow\CCFlow\DataUser\Seal -- 电子盖章图片.
+03. D:\ccflow\CCFlow\DataUser\UploadFile - 上传附件
+04. D:\ccflow\CCFlow\DataUser\Style -- 个性化风格文件.
+05. D:\ccflow\CCFlow\DataUser\CyclostyleFile -- 单据模版文件.
+06. D:\ccflow\CCFlow\DataUser\EmailTemplete -邮件模版文件.
+07. D:\ccflow\CCFlow\DataUser\ICON --ICON
+08. D:\ccflow\CCFlow\DataUser\TaoHong --公文套红.
+09. D:\ccflow\CCFlow\DataUser\Bill  单据打印生成数据.
 10. D:\ccflow\CCFlow\DataUser\CyclostyleFile 单据模板数据
 11. D:\ccflow\CCFlow\DataUser\DtlTemplete  导入明细表模板文件.
 12. D:\ccflow\CCFlow\DataUser\EmailTemplete  自定义邮件发送格式文件.
@@ -96,16 +102,6 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
 18. D:\ccflow\CCFlow\DataUser\Style 用户自定义风格文件。
 19. D:\ccflow\CCFlow\DataUser\UploadFile 表单附件上传文件，单附件，与多附件。
 20. D:\ccflow\CCFlow\DataUser\XML 用户系统配置文件。
-
- 
-###  如何学习好ccflow? ###
-1.  多看视频与文档.
-   1. ccflow提供的视频是4.0的视频，有一些功能对应不上您可以看文档，文档是最新的。
-   2. ccflow提供了两个重要的文档<<驰骋工作流引擎-流程设计器操作手册-CCFlow6.doc>> <<驰骋工作流引擎-表单设计器操作手册-CCFlow6.doc>> 这是您掌握ccflow的基础.   
-2. 加入群里与ccflow爱好者交流.请打开http://ccflow.org 网站,找到qq群加入里面, 把不明白的问题，提交到群论坛里，会有人回答你的问题.
-3. 有问题反馈到bbs,  http://bbs.ccflow.org/  注意不要省掉注册邀请码.    
-4. 通过OSC发布bug，反馈问题，协助我们开发。
-5. 如果您们项目工期紧张并且有充足的费用，建议成为ccflow的vip用户，您会得到现场的技术支持与系统培训。
 
 ### 如何安装并设置ccflow开发环境?(请严格按如下步骤去安装,不要跳跃,否则会导致安装失败.) ###
 
@@ -170,19 +166,7 @@ CCFlow功能: 懂管理就会开发基本流程,会SQL就能达到中级开发�
    2. 注意选择是否是要安装demo .
    3. 安装成功会ccflow 会自动转入设计器.
    4. 如果中途安装失败，您需要删除数据库重新建立，重新安装.   
-
-
-9. 启动流程服务: 用来发短信与邮件的服务. 
-
-     D:\ccflow\CCFlowServices\bin\Release\CCFlowServices.exe  
-     把他在桌面上创建一个快捷方式.
-
-
-10. 可选步骤:
-
-   1. 在解决方案里，把单元测试设置为启动项目，然后执行完每个单元测试，看当前的版本是否有问题.
-   2. 查看bbs上的最新更新说明 http://bbs.ccflow.org
-
+  
 
 
 ### 安装过程中经常遇到的问题: ###

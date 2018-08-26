@@ -169,7 +169,7 @@
                 node.FormType = FormType.FoolTruck;
                 node.NodeFrmID = "ND" + node.NodeID;
                 node.Update();
-
+                
 
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;
@@ -177,6 +177,11 @@
                 mapData.FrmType = FormType.FoolTruck;
                 mapData.Update();
             }
+
+            //执行流程检查.
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.DoMethodReturnString("DoCheck");
+
             alert('设置成功.');
             window.location.href = window.location.href;
         }

@@ -117,19 +117,32 @@ function NodeFrmD(nodeID) {
 }
 
 function NodeFrmFool(nodeID) {
+
     //傻瓜表单.
     var url = "../FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    //WinOpen(url);
-    window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
+
+    try {
+        window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
+        return;
+
+    } catch (e) {
+    }
+
+    WinOpen(url);
 }
 
 function NodeFrmFree(nodeID) {
 
     //自由表单.
-    var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND"+nodeID+"&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    window.parent.addTab(nodeID + "_Free", "设计表单" + nodeID, url);
-    ///CCFormDesigner/FormDesigner.htm?FK_Node=9502&FK_MapData=ND9502&FK_Flow=095&UserNo=admin&SID=c3466cb7-edbe-4cdc-92df-674482182d01
-    //WinOpen(url);
+    var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    try {
+        window.parent.addTab(nodeID + "_Free", "设计表单" + nodeID, url);
+        return;
+    } catch (e) {
+
+    }
+
+    WinOpen(url);
 }
 
 //接受人规则.

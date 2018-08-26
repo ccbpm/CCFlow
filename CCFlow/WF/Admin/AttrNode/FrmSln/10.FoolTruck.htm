@@ -57,7 +57,7 @@
                     sln.FK_Frm = frmID;
                     sln.FK_Node = json.NodeID; //节点ID.
                     sln.FrmSln = 1; //只读方案.
-                    sln.Insert();
+                    sln.Insert();                     
                 } else {
                     sln.Retrieve();
                 }
@@ -143,9 +143,14 @@
             var mapData = new Entity("BP.Sys.MapData", frmID);
             mapData.FrmType = FormType.FoolTruck;
             mapData.Update();
+            
+            //执行流程检查.
+            var flow = new Entity("BP.WF.Flow", node.FK_Flow);
+            flow.DoMethodReturnString("DoCheck"); 
 
             alert("保存成功.");
-        }
+        }       
+        
 
         ///设置该流程的所有节点都是用该方案。
         function SetAllNodeFrmUseThisSln() {

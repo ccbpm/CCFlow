@@ -187,6 +187,12 @@ function changeOption() {
 }
 
 
+function CheckFlow(flowNo)
+{
+	  var flow=new Entity('BP.WF.Flow', flowNo);
+	  flow.DoMethodReturnString("DoCheck"); //重置密码:不带参数的方法. 
+}
+
 function SaveAndClose() {
 
     Save();

@@ -659,12 +659,12 @@
                         }
                     }
 
-
                     //删除原来的连接线.
                     //var ens = new Entities("BP.WF.Directions");
-                    //ens.
+                    // ens.Retrieve("FK_Flow", flowNo);
+                    //  ens.Delete();
+                    //  ens.Delete("FK_Flow", flowNo);
                     DBAccess.RunSQL("DELETE FROM WF_Direction WHERE FK_Flow='" + flowNo + "' ");
-
 
                     //创建一个实体.
                     var dir = new Entity("BP.WF.Template.Direction");
@@ -680,17 +680,39 @@
                         var toNodes = nodeJSON.process_to;
                         if (toNodes == "")
                             continue;
+ 
+                        if (nodeID == undefined
+                            || nodeID == null
+                            || nodeID == "undefined"
+                            || nodeID == 'undefined') {
+                            continue;
+                        }
 
                         for (var i = 0; i < toNodes.length; i++) {
 
                             var toNodeID = toNodes[i];
+
+                            if (toNodeID == undefined
+                            || toNodeID == null
+                            || toNodeID == "undefined"
+                            || toNodeID == 'undefined') {
+                            
+                                var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
+                                alert('保存出错: \t\n\t\n1.节点[' + fromNode.Name + ']到达节点没有把线连接正确.\t\n2.请您关闭当前流程，重新打开然后连接，执行保存。 \t\n3.其余的方向条件保存成功.');
+                                continue;
+                            }
 
                             dir.FK_Flow = flowNo;
                             dir.Node = nodeID;
                             dir.ToNode = toNodeID;
                             dir.MyPK = dir.FK_Flow + "_" + dir.Node + "_" + dir.ToNode;
                             dir.DirType = 2;
-                            dir.Insert();
+
+                            try {
+                                dir.Insert();
+                            } catch (e) {
+                            }
+
                         }
 
                     }

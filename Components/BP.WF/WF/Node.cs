@@ -490,7 +490,8 @@ namespace BP.WF
             Nodes nds = new Nodes();
             nds.Retrieve(NodeAttr.FK_Flow, fl.No);
 
-            FlowSort fs = new FlowSort(fl.FK_FlowSort);
+            //FlowSort fs = new FlowSort(fl.FK_FlowSort);
+
             if (nds.Count == 0)
                 return "流程[" + fl.No + fl.Name + "]中没有节点数据，您需要注册一下这个流程。";
 

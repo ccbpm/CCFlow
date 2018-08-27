@@ -6213,7 +6213,7 @@ namespace BP.WF
             string sql = "UPDATE WF_Flow SET Ver='" + BP.DA.DataType.CurrentDataTimess + "' WHERE No='" + flowNo + "'";
             DBAccess.RunSQL(sql);
         }
-        public void DoDelete()
+        public string DoDelete()
         {
             //删除流程数据.
             this.DoDelData();
@@ -6303,6 +6303,8 @@ namespace BP.WF
             // 执行录制的sql scripts.
             DBAccess.RunSQLs(sql);
             this.Delete(); //删除需要移除缓存.
+
+            return "执行成功.";
         }
 
         /// <summary>

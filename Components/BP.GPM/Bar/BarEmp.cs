@@ -113,7 +113,7 @@ namespace BP.GPM
                 map.AddMyPK(); // 主键是由:  FK_Bar+"_"+FK_Emp 组成的，它是一个复合主键.
                 map.AddTBString(BarEmpAttr.FK_Bar, null, "信息块编号", true, false, 0, 90, 20);
                 map.AddTBString(BarEmpAttr.FK_Emp, null, "人员编号", true, false, 0, 90, 20);
-                map.AddTBInt(BarEmpAttr.IsShow, 0, "是否显示", false, true);
+                map.AddTBInt(BarEmpAttr.IsShow, 1, "是否显示", false, true);
                 map.AddTBInt(BarEmpAttr.Idx, 0, "显示顺序", false, true);
 
                 this._enMap = map;

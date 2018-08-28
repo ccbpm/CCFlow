@@ -482,6 +482,21 @@ namespace BP.GPM
                 bar.No = en.No;
                 bar.Name = en.Name;
                 bar.Save();
+
+
+                if (en.IsCanView == false)
+                    continue;
+
+
+                BP.GPM.BarEmp barEmp = new BarEmp();
+                barEmp.MyPK = en.No+"_"+Web.WebUser.No;
+               int i=  barEmp.RetrieveFromDBSources();
+
+                barEmp.FK_Bar = en.No;
+                barEmp.FK_Emp = Web.WebUser.No;
+                if (i==0)
+                    barEmp.Insert();
+
             }
             return base.RetrieveAll();
         }

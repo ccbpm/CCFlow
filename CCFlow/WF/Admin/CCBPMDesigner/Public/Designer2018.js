@@ -43,7 +43,7 @@ function FlowRun() {
 	
 	   //执行流程检查.
     var flow = new Entity("BP.WF.Flow", flowNo);
-    flow.DoMethodReturnString("DoCheck"); 
+    flow.DoMethodReturnString("ClearCash"); 
     
     var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
     //WinOpen(url);
@@ -52,12 +52,9 @@ function FlowRun() {
 //运行流程
 function FlowRunAdmin() {
  
-	
     //执行流程检查.
     var flow = new Entity("BP.WF.Flow", flowNo);
-    flow.DoMethodReturnString("DoCheck"); 
-     
-	
+    flow.DoMethodReturnString("ClearCash"); 
 	
     //var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
     var webUser = new WebUser();

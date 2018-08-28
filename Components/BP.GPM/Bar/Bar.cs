@@ -55,6 +55,7 @@ namespace BP.GPM
         /// MoreUrl
         /// </summary>
         public const string MoreUrl = "MoreUrl";
+
         /// <summary>
         /// Doc
         /// </summary>
@@ -322,6 +323,7 @@ namespace BP.GPM
                 }
                 return this.GetValStrByKey(BarAttr.Doc);
             }
+           
         }
         /// <summary>
         /// 获取参数化的字符串
@@ -378,7 +380,7 @@ namespace BP.GPM
                 map.AddTBStringPK(BarAttr.No, null, "编号", true, false, 1, 200, 200);
                 map.AddTBString(BarAttr.Name, null, "名称", true, false, 0, 3900, 20);
 
-                //map.AddTBString(BarAttr.Title, null, "标题", true, false, 0, 3900, 20);
+                map.AddTBString(BarAttr.Title, null, "标题", true, false, 0, 3900, 20);
                 //map.AddDDLSysEnum(BarAttr.BarType, 0, "信息块类型", true, true, 
                 //    BarAttr.BarType, "@0=标题消息列表(Tag1=SQL语句)@1=其它");
 
@@ -388,22 +390,22 @@ namespace BP.GPM
 
                 //map.AddBoolean(BarAttr.IsDel, true, "用户是否可删除",true,true);
 
-                //map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true,
-                //  BarAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true,
+                  BarAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
                 ////map.AddDDLSysEnum(AppAttr.CtrlWay, 0, "控制方式", true, true,
                 ////   AppAttr.CtrlWay, "@0=游客@1=所有人员@2=按岗位@3=按部门@4=按人员@5=按SQL");
 
                 //map.AddTBInt(BarAttr.Idx, 0, "显示顺序", false, true);
 
-                //map.AddTBString(BarAttr.MoreLab, "更多...", "更多标签", true, false, 0, 900, 20);
-                //map.AddTBString(BarAttr.MoreUrl, null, "更多标签Url", true, false, 0, 3900, 20,true);
-
-                //map.AddTBString(BarAttr.Doc, null, "Doc", false, false, 0, 3900, 20, false);
+                // map.AddTBString(BarAttr.MoreLab, "更多...", "更多标签", true, false, 0, 900, 20);
+                map.AddTBString(BarAttr.MoreUrl, null, "更多标签Url", true, false, 0, 3900, 20,true);
+                 //map.AddTBString(BarAttr.Doc, null, "Doc", false, false, 0, 3900, 20, false);
+              
                 //map.AddTBDateTime(BarAttr.DocGenerRDT, null, "Doc生成日期", false, false);
 
-                //map.AddTBInt(BarAttr.Width, 200, "显示宽度", false, true);
-                //map.AddTBInt(BarAttr.Height, 100, "显示高度", false, true);
+                map.AddTBInt(BarAttr.Width, 200, "显示宽度", false, true);
+                map.AddTBInt(BarAttr.Height, 100, "显示高度", false, true);
 
                 //map.AttrsOfOneVSM.Add(new ByStations(), new Stations(), ByStationAttr.RefObj, ByStationAttr.FK_Station, StationAttr.Name, StationAttr.No, "可访问的岗位");
                 //map.AttrsOfOneVSM.Add(new ByDepts(), new Depts(), ByStationAttr.RefObj, ByDeptAttr.FK_Dept, DeptAttr.Name, DeptAttr.No, "可访问的部门");
@@ -416,7 +418,16 @@ namespace BP.GPM
             }
         }
         #endregion
+
+        public string GetDocument()
+        {
+            BarBase barBase = (BarBase)ClassFactory.GetObject_OK(this.No);
+            return barBase.Documents;
+        }
+
     }
+
+    
     /// <summary>
     /// 信息块s
     /// </summary>
@@ -481,6 +492,10 @@ namespace BP.GPM
                 BP.GPM.Bar bar = new Bar();
                 bar.No = en.No;
                 bar.Name = en.Name;
+                bar.Title = en.Title;
+                bar.MoreUrl = en.More;
+                bar.Height = en.Height;
+                bar.Width = en.Width;
                 bar.Save();
 
                 if (en.IsCanView == false)
@@ -493,6 +508,8 @@ namespace BP.GPM
 
                 barEmp.FK_Bar = en.No;
                 barEmp.FK_Emp = Web.WebUser.No;
+                barEmp.IsShow = true;
+                barEmp.Title = en.Name;
                 if (i==0)
                     barEmp.Insert();
 

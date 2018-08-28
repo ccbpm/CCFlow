@@ -26,6 +26,10 @@ namespace BP.GPM
         /// 是否显示?
         /// </summary>
         public const string IsShow = "IsShow";
+        /// <summary>
+        /// 标题?
+        /// </summary>
+        public const string Title = "Title";
     }
     /// <summary>
     /// 人员信息块
@@ -77,6 +81,18 @@ namespace BP.GPM
                 this.SetValByKey(BarEmpAttr.IsShow, value);
             }
         }
+
+        public string Title
+        {
+            get
+            {
+                return this.GetValStringByKey(BarEmpAttr.Title);
+            }
+            set
+            {
+                this.SetValByKey(BarEmpAttr.Title, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -113,6 +129,7 @@ namespace BP.GPM
                 map.AddMyPK(); // 主键是由:  FK_Bar+"_"+FK_Emp 组成的，它是一个复合主键.
                 map.AddTBString(BarEmpAttr.FK_Bar, null, "信息块编号", true, false, 0, 90, 20);
                 map.AddTBString(BarEmpAttr.FK_Emp, null, "人员编号", true, false, 0, 90, 20);
+                map.AddTBString(BarEmpAttr.Title, null, "标题", true, false, 0, 3900, 20);
                 map.AddTBInt(BarEmpAttr.IsShow, 1, "是否显示", false, true);
                 map.AddTBInt(BarEmpAttr.Idx, 0, "显示顺序", false, true);
 
@@ -125,17 +142,20 @@ namespace BP.GPM
         #region 显示与隐藏.
         public void DoUp()
         {
-            this.DoOrderUp(BarEmpAttr.FK_Emp, Web.WebUser.No, BarEmpAttr.Idx);
+            this.DoOrderUp(BarEmpAttr.FK_Bar, this.FK_Bar, BarEmpAttr.Idx);
         }
         public void DoDown()
         {
-            this.DoOrderDown(BarEmpAttr.FK_Emp, Web.WebUser.No, BarEmpAttr.Idx);
+            this.DoOrderDown(BarEmpAttr.FK_Bar, this.FK_Bar, BarEmpAttr.Idx);
         }
         public void DoHidShow()
         {
-            this.IsShow = !this.IsShow;
+            this.IsShow = this.IsShow;
             this.Update();
         }
+
+        
+
         #endregion 显示与隐藏.
     }
     /// <summary>
@@ -176,6 +196,7 @@ namespace BP.GPM
                 be.FK_Bar = b.No;
                 be.FK_Emp = BP.Web.WebUser.No;
                 be.IsShow = true;
+                be.Title = b.Name;
                 be.Insert();
             }
         }

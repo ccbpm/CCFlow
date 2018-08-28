@@ -46,6 +46,12 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bar\Bar.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bar\BarEmp.cs" />
+    <Compile Include="Bar\BarBase.cs" />
+    <Compile Include="Bar\BarOfTodolist.cs" />
     <Compile Include="Crypto.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1861,6 +1861,11 @@ namespace BP.WF
             //}
             //return null;
         }
+        public string ClearCash()
+        {
+            BP.DA.Cash.ClearCash();
+            return "清除成功.";
+        }
         /// <summary>
         /// 校验流程
         /// </summary>

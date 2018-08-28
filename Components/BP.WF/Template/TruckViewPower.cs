@@ -305,7 +305,6 @@ namespace BP.WF.Template
 
         #endregion
 
-
         #region 构造方法
         /// <summary>
         /// 流程轨迹权限

@@ -781,7 +781,26 @@ namespace BP.Sys
                 if (obj == null)
                 {
                     obj = new SysEnums();
-                    obj.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    {
+                        QueryObject qo = new QueryObject(obj);
+                        string keys = "";
+                        DataTable dt = DBAccess.RunSQLReturnTable("SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            qo.AddWhere("EnumKey", dr[0].ToString());
+                            qo.addOr();
+                        }
+
+                        if (dt.Rows.Count >= 1)
+                            qo.AddWhere("EnumKey","s1s2");
+
+                        qo.DoQuery();
+                    }
+                    else
+                    {
+                        obj.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+                    }
                     this.SetRefObject("SysEnums", obj);
 
                 }

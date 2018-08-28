@@ -483,7 +483,6 @@ namespace BP.GPM
                 bar.Name = en.Name;
                 bar.Save();
 
-
                 if (en.IsCanView == false)
                     continue;
 

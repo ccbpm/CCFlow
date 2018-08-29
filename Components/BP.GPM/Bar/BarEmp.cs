@@ -189,7 +189,7 @@ namespace BP.GPM
             foreach (Bar b in bars)
             {
                 BarEmp be = new BarEmp();
-                be.MyPK = BP.Web.WebUser.No + "_" + b.No;
+                be.MyPK =  b.No + "_" + BP.Web.WebUser.No;
                 if (be.RetrieveFromDBSources() == 1)
                     continue;
 

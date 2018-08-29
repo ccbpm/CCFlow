@@ -6,7 +6,8 @@
     <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="../Scripts/bootstrap/css/style.min.css" type="text/css" media="all" />
+    <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet"  type="text/css" media="all" />
+	<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
@@ -29,6 +30,16 @@
            .datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber
             {
                 text-overflow: ellipsis;
+            }
+            .fixed-table-container thead th .th-inner
+             {
+                padding: 8px;
+                line-height: 24px;
+                vertical-align: top;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                background-color: #eaf2ff;
             }
      </style>
     <script language="javascript" type="text/javascript">
@@ -708,31 +719,25 @@
          }
     </style>
 </head>
-<body>
-
-<form id="cc">
-    <div class="row" style="margin-top:10px">
-    	<div class="panel panel-default" style="border-bottom-width:0px;border-top-width:0px"> 
-    		 <div id="toolbar" style="width:100%"></div>
-    </div>
-    <table id="dg" class="table table-hover"></table>
-    <!-- 显示分页信息 -->
-    <div class="row">
-        <div class="col-md-6" id="page_info_area"></div>
-        <!-- 分页导航条 -->
-        <div class="col-md-6" id="page_nav_area"></div>
-    </div>
-<div id="Msg"></div>
-</form>
-<div id="dialogExpFile" style="width: 400px; height: 300px;">
-        <div style="margin: 20px; color: Blue;">
-            提示：如果没有正常导出文件，请手动点击下方按钮进行下载。
-            <br />
-            <br />
-            <a id="downLoad" href="" class="easyui-linkbutton" data-options="iconCls:'icon-save'">
-                点击下载</a>
+<body  class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <div class="row" style="margin-top:10px">
+    	        <div class="panel panel-default" style="border:0px"> 
+    		    <div id="toolbar" style="width:100%"></div>
+            </div>
+            <table id="dg" class="table table-hover"></table>
+            <!-- 显示分页信息 -->
+            <div class="row">
+                <div class="col-md-6" id="page_info_area"></div>
+                <!-- 分页导航条 -->
+                <div class="col-md-6" id="page_nav_area"></div>
+            </div>
         </div>
     </div>
-    <input type="hidden" id="expFileName" runat="server" />
+
+	
+    
+<div id="Msg"></div>
 </body>
 </html>

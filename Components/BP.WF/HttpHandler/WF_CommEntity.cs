@@ -629,39 +629,13 @@ namespace BP.WF.HttpHandler
                     en.PKVal = pkVal;
                     en.RetrieveFromDBSources();
                 }
-                
 
                 //定义容器.
                 DataSet ds = new DataSet();
 
-                //定义Sys_MapData.
-                MapData md = new MapData();
-                md.No = this.EnName;
-                md.Name = map.EnDesc;
-
-                #region 加入权限信息.
-                //把权限加入参数里面.
-                if (en.HisUAC.IsInsert)
-                    md.SetPara("IsInsert", "1");
-
-                //附件类型.
-                md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType );
-
-                if (isBlank == true)
-                {
-                    if (en.HisUAC.IsUpdate)
-                        md.SetPara("IsUpdate", "0");
-                    if (en.HisUAC.IsDelete)
-                        md.SetPara("IsDelete", "0");
-                }
-                else
-                {
-                    if (en.HisUAC.IsUpdate)
-                        md.SetPara("IsUpdate", "1");
-                    if (en.HisUAC.IsDelete)
-                        md.SetPara("IsDelete", "1");
-                }
-                #endregion 加入权限信息.
+                //把主数据放入里面去.
+                DataTable dtMain = en.ToDataTableField("MainTable");
+                ds.Tables.Add(dtMain);
 
                 #region 增加 上方法.
                 DataTable dtM = new DataTable("dtM");
@@ -860,7 +834,8 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 增加 从表.
 
-                ds.Tables.Add(dtM); //
+                ds.Tables.Add(dtM); 
+                
 
 
                 return BP.Tools.Json.ToJson(ds);

@@ -911,41 +911,38 @@ namespace BP.WF
         /// 如何使用该方法形成发起工作列表,请参考:\WF\UC\Start.ascx</returns>
         public static DataTable DB_GenerCanStartFlowsOfDataTable(string userNo)
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
+
+            string sql = "";
+            sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
+            Flows fls = new Flows();
+            BP.En.QueryObject qo = new BP.En.QueryObject(fls);
+            qo.AddWhereInSQL("No", sql);
+            qo.addAnd();
+            qo.AddWhere(FlowAttr.IsCanStart, true);
+
+            if (WebUser.IsAuthorize)
             {
-                string sql = "";
-              
-                    sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
-
-                Flows fls = new Flows();
-                BP.En.QueryObject qo = new BP.En.QueryObject(fls);
-                qo.AddWhereInSQL("No", sql);
+                /*如果是授权状态 */
                 qo.addAnd();
-                qo.AddWhere(FlowAttr.IsCanStart, true);
+                WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
+                qo.AddWhereIn("No", wfEmp.AuthorFlows);
+            }
+            qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
 
-                if (WebUser.IsAuthorize)
-                {
-                    /*如果是授权状态 */
-                    qo.addAnd();
-                    WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
-                    qo.AddWhereIn("No", wfEmp.AuthorFlows);
-                }
-                qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
-
-                DataTable dt = qo.DoQueryToTable();
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                {
-                    dt.Columns["NO"].ColumnName = "No";
-                    dt.Columns["NAME"].ColumnName = "Name";
-                    dt.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
-                    dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
-                    dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
-                }
-
-                return dt;
+            DataTable dt = qo.DoQueryToTable();
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
             }
 
-            throw new Exception("@未判断的类型。");
+            return dt;
+
+
+            //  throw new Exception("@未判断的类型。");
 
         }
         public static DataTable DB_GenerCanStartFlowsTree(string userNo)

@@ -117,6 +117,10 @@ namespace BP.GPM
         /// Tag3
         /// </summary>
         public const string Tag3 = "Tag3";
+        /// <summary>
+        /// 图标
+        /// </summary>
+        public const string Icon = "Icon";
     }
     /// <summary>
     /// 菜单
@@ -377,7 +381,13 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
-                map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
+
+                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 20);
+
+
+
+                //map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
+
                 map.AddMyFile("图标");  //附件.
 
                 map.AddSearchAttr(MenuAttr.FK_App);

@@ -23,6 +23,7 @@
 
 	<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <link href="../fonts/font-icons.min.css" rel="Stylesheet" />
   
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -604,8 +605,18 @@
                     var enableAttr = '';
                     if (mapAttr.UIIsEnable == 0)
                         enableAttr = "disabled='disabled'";
+                    var html = "";
+                    if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
+                        html += '<div class="input-group">';
+                        html += "<span class='input-group-addon' style='border-radius:0;border-color:#d2d6de;background-color:#fff'><i id='menuIconIcon' class='icon-settings'></i></span>";
+                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
+	                    html += "<span class='input-group-btn'><a id='menuIconButton' href='javascript:' class='btn btn-default'><i class='fa fa-search'></i></a></span>";
+                        html +="</div>";
+                        return html;
+                    }
 
-                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
+                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " aria-invalid='false' />";
+                   
                 }
 
                 //普通的大块文本.
@@ -1039,9 +1050,9 @@
 		
             <div class="easyui-layout" data-options="fit:true">
                 <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false" style="height: 30px;padding: 2px; background-color: #E0ECFF">
-                    <a id="Btn_New" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
-                    <a id="Btn_Save" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
-                    <a id="Btn_Delete" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
+                    <a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
+                    <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
+                    <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
                 </div>
 
                 <div data-options="region:'center',noheader:true,border:false" style="margin:0px">

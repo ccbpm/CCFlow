@@ -80,11 +80,8 @@
 
         function RefMethod() {
 
-            if (dtM.length == 0) {
-                window.location.href = url;
+            if (dtM.length == 0) 
                 return;
-            }
-               
            
             //求出所有的分组名称.
             var groupName = "@基本信息";
@@ -110,7 +107,10 @@
                 var gName = gNames[i];
                 if (gName == "")
                     continue;
-                html += "<div title='" + gName + "' style='overflow:auto;'>";
+                if (gNames.length == 2 && gName.indexOf('基本信息') != -1)
+                    html += "";
+                else
+                    html += "<div title='" + gName + "' style='overflow:auto;'>";
 
 
                 //填入菜单内容.

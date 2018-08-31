@@ -7,7 +7,7 @@
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet"  type="text/css" media="all" />
-	<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+	
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
@@ -107,8 +107,8 @@
 
             var html = "";
             if (mapBase.IsShowSearchKey == "1"){
-                html += "<label  style='text-align: right; margin-top:5px;margin-left:20px;' for='TB_Key'>关键字:&nbsp;&nbsp</label>"
-                html +="<input style='width:150px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
+                html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:&nbsp;&nbsp</label>"
+                html +="<input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
                 barCount += 1;
             }
             if (mapBase.DTSearchWay != "0") {
@@ -117,9 +117,9 @@
 
                 if (mapBase.DTSearchWay == "1") {
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
-                    html += "&nbsp;&nbsp;到&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' />";
+                    html += "&nbsp;&nbsp;到&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:140px;' class='form-control' />";
                 } else {
-                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:120px;' class='form-control' />";
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:140px;' class='form-control' />";
                     html += "&nbsp;&nbsp;到&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:120px;' class='form-control' />";
                 }
             }
@@ -135,15 +135,15 @@
             for (var i = 0; i < attrs.length; i++) {
             	 var attr = attrs[i];
                  var str = "";
-				if(barCount%5==0)
+				if(barCount%4==0)
 					str +="<br/>";
 					
-                str += "<label  style='text-align: right; margin-top:5px;padding-left:20px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":&nbsp;&nbsp  </label>";
+                str += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":&nbsp;&nbsp  </label>";
                 
-                if(barCount%5==0)
-                	str += "<select class='form-control' style='margin-top:5px;width:150px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                if(barCount%4==0)
+                	str += "<select class='form-control' style='margin-top:5px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 else
-                	str += "<select class='form-control' style='padding:0px;width:150px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                	str += "<select class='form-control' style='padding:0px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
               
                 barCount += 1;
@@ -163,7 +163,7 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
             
-            if(barCount%5==0)
+           if(barCount%4==0)
             	html+="</br>";
             html += '<a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
@@ -715,11 +715,11 @@
           border-top:0px;
           border-left:0px;
           border-right:0px;
-          /* border-style: solid; */
          }
+   
     </style>
 </head>
-<body  class="gray-bg">
+<body >
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox-content">
             <div class="row" style="margin-top:10px">
@@ -731,7 +731,7 @@
             <div class="row">
                 <div class="col-md-6" id="page_info_area"></div>
                 <!-- 分页导航条 -->
-                <div class="col-md-6" id="page_nav_area"></div>
+                <div class="col-md-6" id="page_nav_area" style="text-align:center"></div>
             </div>
         </div>
     </div>

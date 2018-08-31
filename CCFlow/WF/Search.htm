@@ -145,11 +145,14 @@
             var userNo = webUser.No;
             var todoEmpsName = "";
             htmlbox = '';
+            var realIndex = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
                 if (en.FID != 0)
                     continue;
+
+                realIndex++;
 
                 var fk_flow = en.FK_Flow,
                             fk_node = en.FK_Node,
@@ -188,7 +191,7 @@
                 var color = GenerColor(en.WFState, isCanDo);
 
                 htmlbox += "<tr >";
-                htmlbox += "<td class=Idx>" + (i + 1) + "</td>";
+                htmlbox += "<td class=Idx>" + realIndex + "</td>";
 
                 htmlbox += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\">" + en.Title + "</td>";
 

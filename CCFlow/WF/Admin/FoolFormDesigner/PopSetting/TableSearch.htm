@@ -191,10 +191,11 @@
 
 <br />
 总条数: SELECT COUNT(no) FROM Demo_Student 
-WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB
+WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') 
  </li>
- <li>比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
- <li>比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+ <li>比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%')</li>
+ <li>比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%')   </li>
+ <li>添加的查询条件在为执行SQL查询时SQL语句后面不添加，解析的时候自动添加，其余的查询方式需要包含添加的查询条件</li>
  </ul>
  </div>
  </th>

@@ -512,10 +512,10 @@ function Show_ModleField_Panel() {
 function CCForm_ShowDialog(url, title, w, h) {
 
     if (w == undefined)
-        w = 860;
+        w = 760;
 
     if (h == undefined)
-        h = 560;
+        h = 460;
 
     if (plant == 'JFlow') {
         url = url.replace('.aspx', '.jsp');

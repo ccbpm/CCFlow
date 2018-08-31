@@ -546,7 +546,7 @@ namespace BP.WF.HttpHandler
                             specFlowNos = ",001,";
 
                         string specEmpNos = "";
-                        if (specFlowNos.Contains(this.FK_Flow + ",") == false)
+                        if (specFlowNos.Contains(this.FK_Node.ToString() + ",") == false)
                             specEmpNos = " AND a.No!='00000001' ";
 
                         sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 " + specEmpNos + " " + endSql;

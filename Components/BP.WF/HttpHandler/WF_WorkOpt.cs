@@ -541,7 +541,15 @@ namespace BP.WF.HttpHandler
                         else
                             endSql = " AND B.No NOT LIKE '18099%' ";
 
-                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001' " + endSql;
+                        string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
+                        if (specFlowNos == "" || specFlowNos == null)
+                            specFlowNos = ",001,";
+
+                        string specEmpNos = "";
+                        if (specFlowNos.Contains(this.FK_Flow + ",") == false)
+                            specEmpNos = " AND a.No!='00000001' ";
+
+                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 " + specEmpNos + " " + endSql;
                     }
                     else
                     {

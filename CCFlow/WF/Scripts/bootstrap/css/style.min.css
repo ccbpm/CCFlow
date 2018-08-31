@@ -11080,13 +11080,13 @@ code {
 .ibox-content {
 	background-color: #fff;
 	color: inherit;
-	padding: 15px 20px 20px;
+	padding: 0px 10px 10px;
 	border-color: #e7eaec;
 	-webkit-border-image: none;
 	-o-border-image: none;
 	border-image: none;
 	border-style: solid solid none;
-	border-width: 1px 0
+	border-width: 0px 0
 }
 
 table.table-mail tr td {

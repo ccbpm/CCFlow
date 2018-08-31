@@ -37,7 +37,7 @@
         //查询条件，按照条件字段长度排序后
         var condtionFieldsArry = [];
         var mapExt = null;
-        
+
         //初始化页面
         $(function () {
 
@@ -59,7 +59,7 @@
 
             //设置查询条件
             InitQueryParameters();
-           
+
             //如果单选
             mapExt.ShowCheckBox = selectType == "0" ? false : true;
 
@@ -209,7 +209,7 @@
             }
             }];*/
 
-           // alert(gridUrl);
+            // alert(gridUrl);
 
             var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
             if ($.isArray(json)) {
@@ -315,8 +315,8 @@
             var groupItems = $.grep(condtionsArry, function (condtion) {
                 return condtion.CtrlType == "ListURL" || condtion.CtrlType == "ListSQL" || condtion.CtrlType == "EnumKey";
             });
-                //CreateGroupPanel(groupItems);
-           
+            //CreateGroupPanel(groupItems);
+
             //关键字后面的查询条件
             var noFirstRow = false;
             $.each(condtionsArry, function (i, condtion) {
@@ -395,7 +395,7 @@
                         return;
                 }
             });
-           
+
         }
 
         //输入关键字进行查询
@@ -416,9 +416,9 @@
                 if (value == null || value == "null") value = "";
                 dbSrc = dbSrc.replace(regC, value);
                 if (mapExt.DBType == 0) {
-                    if (dbSrc.indexOf("where") == -1)
-                        dbSrc = dbSrc + "Where 1=1";
-                    if (value != "" )
+                    if (dbSrc.toLowerCase().indexOf("where") == -1)
+                        dbSrc = dbSrc + "WHERE 1=1";
+                    if (value != "")
                         dbSrc = dbSrc + " and " + obj.FieldKey + "=" + value;
                 }
             });
@@ -431,14 +431,14 @@
             //$("#jsonDataTable").html("");
             //if (data && data.length > 0) {
             //    InitTableByData(data);
-           // }
+            // }
         }
 
         function addSelectedData(globalSelectedRows, selectedRows) {
             if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
                 return;
             }
-          $.each(selectedRows, function(i, o) {
+            $.each(selectedRows, function (i, o) {
                 var sel = $.grep(globalSelectedRows, function (obj) {
                     return obj.No == o.No;
                 });

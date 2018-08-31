@@ -159,7 +159,7 @@
 
                     'data': function (node, cb) {
 
-                        url = Handler + "?DoType=SelectEmps_Init&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
+                        url = Handler + "?DoType=SelectEmps_Init&FK_Node="+GetQueryString("FK_Node")+"&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
 
                         //初始化根节点
                         if (node.id == "#") {
@@ -187,7 +187,7 @@
                             }
                             else {
                                 pageData.FK_Dept = node.id;
-                                url = Handler + "?DoType=SelectEmps_Init&FK_Dept=" + node.id + "&m=" + Math.random();
+                                url = Handler + "?DoType=SelectEmps_Init&FK_Node="+GetQueryString("FK_Node")+"&FK_Dept=" + node.id + "&m=" + Math.random();
                                 $.ajax({
                                     type: 'post',
                                     async: true,

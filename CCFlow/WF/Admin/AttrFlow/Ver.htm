@@ -15,103 +15,112 @@
 
    <script type="text/javascript">
 
-	//页面启动函数.
-	$(function () {
-	    $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-	    InitPage();
-	    $("#Msg").html("");
-	});
+       //页面启动函数.
+       $(function () {
+           $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+           InitPage();
+           $("#Msg").html("");
+       });
 
-	//初始化数据.
-	function InitPage() {
+       //初始化数据.
+       function InitPage() {
 
-	    var flowNo = GetQueryString("FK_Flow");
-	    var en = new Entity("BP.WF.Flow", flowNo);
+           var flowNo = GetQueryString("FK_Flow");
+           var en = new Entity("BP.WF.Flow", flowNo);
 
-	    var data = en.DoMethodReturnJSON("VerGenerVerList");
+           var data = en.DoMethodReturnJSON("VerGenerVerList");
 
-	    var html = "";
-	    html += "<table style='width:100%;'>";
-	    html += "<caption>版本管理</caption>";
-	    html += "<tr>";
-	    html += "<th>版本号</th>";
-	    html += "<th>流程编号</th>";
-	    html += "<th>名称</th>";
-	    html += "<th>发布状态</th>";
-	    html += "<th>运行中数量</th>";
-	    html += "<th>完成数量</th>";
-	    html += "<th>删除</th>";
-	    html += "<th>操作</th>";
-	    html += "<th>编辑</th>";
-	    html += "</tr>";
+           var html = "";
+           html += "<table style='width:100%;'>";
+           html += "<caption>版本管理</caption>";
+           html += "<tr>";
+           html += "<th>版本号</th>";
+           html += "<th>流程编号</th>";
+           html += "<th>名称</th>";
+           html += "<th>发布状态</th>";
+           html += "<th>运行中数量</th>";
+           html += "<th>完成数量</th>";
+           html += "<th>删除</th>";
+           html += "<th>操作</th>";
+           html += "<th>编辑</th>";
+           html += "</tr>";
 
-	    for (var i = 0; i < data.length; i++) {
-	        var item = data[i];
+           for (var i = 0; i < data.length; i++) {
+               var item = data[i];
 
-	        html += "<tr>";
-	        html += "<td>" + item.Ver + "</td>";
-	        html += "<td>" + item.No + "</td>";
-	        html += "<td>" + item.Name + "</td>";
-	        html += "<td>" + item.IsRel + "</td>";
-	        html += "<td>" + item.NumOfRuning + "</td>";
-	        html += "<td>" + item.NumOfOK + "</td>";
+               html += "<tr>";
 
-	        if (item.IsRel == 0) {
-	            html += "<td><a href=\"javascript:Del('" + item.No + "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
-	            html += "<td><a href=\"javascript:SetCurrentVer('" + item.No + "')\">设置主版本</a></td>";
-	        }
-	        else {
-	            html += "<td>--</td>";
-	            html += "<td>主版本</td>";
-	        }
+               var ver = item.Ver;
+               if (ver == "")
+                   ver = "原始版";
 
-	     //、  if (item.IsRel == 0)
-	       //     html += "<td>-</td>";
-	        //else
-	        	
-	            html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow=" + item.No + "' target=_blank >编辑</a></td>";
+               html += "<td>" + ver + "</td>";
+               html += "<td>" + item.No + "</td>";
+               html += "<td>" + item.Name + "</td>";
+               html += "<td>" + item.IsRel + "</td>";
+               html += "<td>" + item.NumOfRuning + "</td>";
+               html += "<td>" + item.NumOfOK + "</td>";
 
-	        html += "</tr>";
-	    }
-	    html += "</table>";
-	    $("#docs").html(html);
-	}
+               if (item.IsRel == 0) {
+                   html += "<td><a href=\"javascript:Del('" + item.No + "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
+                   html += "<td><a href=\"javascript:SetCurrentVer('" + item.No + "')\">设置主版本</a></td>";
+               }
+               else {
+                   html += "<td>--</td>";
+                   html += "<td>主版本</td>";
+               }
 
-	function Del(no) {
+               //html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow=" + item.No + "' target=_blank >编辑</a></td>";
+               html += "<td><a href='javaScript:void(0)' onclick='changeOrOpenTab(\"" + item.Name + "\",\"" + item.No + "\")'>编辑</a></td>";
+               html += "</tr>";
+           }
+           html += "</table>";
+           $("#docs").html(html);
+       }
 
-	    if (window.confirm('您确定要删除吗？') == false)
-	        return;
- 
-	    var en = new Entity("BP.WF.Flow", no);
-	    var data = en.DoMethodReturnString("DoDelete");
+       function changeOrOpenTab(flowName, flowNo) {
+           //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
+           var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+           window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url, "icon-flow1");
+       }
 
-	    alert(data);
-	    window.location.href = window.location.href;
-	}
-    //创建新版本.
-	function NewVer() {
+       function Del(no) {
 
-	    if (window.confirm('您确定要创建新版本吗？') == false)
-	        return;
+           if (window.confirm('您确定要删除吗？') == false)
+               return;
 
-	    var flowNo = GetQueryString("FK_Flow");
-	    var en = new Entity("BP.WF.Flow", flowNo);
-	    var data = en.DoMethodReturnString("VerCreateNew");
+           var en = new Entity("BP.WF.Flow", no);
+           var data = en.DoMethodReturnString("DoDelete");
 
-	    alert('版本创建成功');
+           alert("删除成功");
+           window.location.href = window.location.href;
+       }
+       //创建新版本.
+       function NewVer() {
 
-	    window.location.href = window.location.href;
-	}
-	function SetCurrentVer(no) {
+           if (window.confirm('您确定要创建新版本吗？') == false)
+               return;
 
-	    if (window.confirm('您确定要设置为当前版本？') == false)
-	        return;
+           var flowNo = GetQueryString("FK_Flow");
+           var en = new Entity("BP.WF.Flow", flowNo);
+           var data = en.DoMethodReturnString("VerCreateNew");
 
-	    var en = new Entity("BP.WF.Flow", no);
+           alert('版本创建成功');
 
-	    var data = en.DoMethodReturnString("VerSetCurrentVer");
-	    window.location.href = window.location.href;
-	}
+           window.location.href = window.location.href;
+       }
+       function SetCurrentVer(no) {
+
+           if (window.confirm('您确定要设置为当前版本？') == false)
+               return;
+
+           var en = new Entity("BP.WF.Flow", no);
+
+           var data = en.DoMethodReturnString("VerSetCurrentVer");
+           window.location.href = window.location.href;
+       }
+	
+
 </script>
 </head>
 <body >

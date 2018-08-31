@@ -571,15 +571,24 @@ namespace BP.WF.HttpHandler
                         else
                             endSql = " AND B.No NOT LIKE '18099%' ";
 
+                        string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
+                        if (specFlowNos == "" || specFlowNos == null)
+                            specFlowNos = ",001,";
+
+                        string specEmpNos = "";
+                        if (specFlowNos.Contains(this.FK_Node.ToString() + ",") == false)
+                            specEmpNos = " AND a.No!='00000001' ";
+
+
                         Selector sa = new Selector(this.FK_Node);
                         //启用搜索范围限定.
                         if (sa.IsEnableStaRange == true || sa.IsEnableDeptRange == true)
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' " + endSql;
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " +specEmpNos+ " " + endSql;
                         }
                         else
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' " + endSql;
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   "+specEmpNos+" " + endSql;
                         }
                     }
                     else

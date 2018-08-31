@@ -2310,8 +2310,8 @@ namespace BP.WF.HttpHandler
 
                 string specEmpNos = "";
                 if (specFlowNos.Contains(this.FK_Node.ToString() + ",") == false)
-                    specEmpNos = " AND a.No!='00000001' ";
-
+                    specEmpNos = " AND No!='00000001' ";
+                  
                 sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx ";
             }
             else

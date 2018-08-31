@@ -2303,7 +2303,17 @@ namespace BP.WF.HttpHandler
             }
 
             if (SystemConfig.CustomerNo == "TianYe")
-                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='00000001'  ORDER BY Idx ";
+            {
+                string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
+                if (specFlowNos == "" || specFlowNos == null)
+                    specFlowNos = ",001,";
+
+                string specEmpNos = "";
+                if (specFlowNos.Contains(this.FK_Node.ToString() + ",") == false)
+                    specEmpNos = " AND a.No!='00000001' ";
+
+                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx ";
+            }
             else
             {
                 //sql = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";

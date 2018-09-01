@@ -378,7 +378,7 @@
                     var u = new WebUser();
                     dept = u.FK_Dept;
                 }
-                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random() + "&IsSelectMore=1");
+                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node="+GetQueryString("FK_Node")+"&s=" + Math.random() + "&IsSelectMore=1");
                 $('#selectEmpsModal').modal().show();
             });
         }

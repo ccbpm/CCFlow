@@ -69,7 +69,7 @@
             var u = new WebUser();
             ccs_fk_dept = u.FK_Dept;
         }
-        $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + ccs_fk_dept + "&s=" + Math.random());
+        $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + ccs_fk_dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random());
 
         $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
         $("section").show();

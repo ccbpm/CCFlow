@@ -518,7 +518,10 @@
                 if (dept == "101")
                     dept = "10102";
 
-                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random() + "&IsSelectMore=1");
+                var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random() + "&IsSelectMore=1";
+                alert(url);
+
+                $('#iframeSelectEmpsForm').attr('src', url);
                 $('#selectEmpsModal').modal().show();
             });
         }

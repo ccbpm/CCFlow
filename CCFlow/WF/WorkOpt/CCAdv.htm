@@ -159,7 +159,7 @@
             $('#BtnSelectEmpsp').bind('click', function () {
 
 
-                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random() + "&IsSelectMore=1");
+                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random() + "&IsSelectMore=1");
                 $('#selectEmpsModal').modal().show();
             });
         }

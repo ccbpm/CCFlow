@@ -88,7 +88,7 @@
             }
 
 
-            var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
 
             //为天业集团做的特殊判断.
             url = url.replace('=101&', '=10102&');

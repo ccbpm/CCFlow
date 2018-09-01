@@ -563,7 +563,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    if (SystemConfig.CustomerNo == "TianYe")//只改了oracle的
+                    if (SystemConfig.CustomerNo == "TianYe")  //只改了oracle的
                     {
                         string endSql = "";
                         if (Web.WebUser.FK_Dept.IndexOf("18099") == 0)
@@ -578,7 +578,6 @@ namespace BP.WF.HttpHandler
                         string specEmpNos = "";
                         if (specFlowNos.Contains(this.FK_Node.ToString() + ",") == false)
                             specEmpNos = " AND a.No!='00000001' ";
-
 
                         Selector sa = new Selector(this.FK_Node);
                         //启用搜索范围限定.
@@ -2394,15 +2393,15 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.CustomerNo == "TianYe") //天业集团，去掉00000001董事长
             {
-                DataTable TYEmp = ds.Tables["Emps"];
-                if (TYEmp.Rows.Count != 0)
-                    foreach (DataRow row in TYEmp.Rows)
-                        if (row["No"].ToString() == "00000001")
-                        {
-                            row.Delete();
-                            break;
-                        }
-                TYEmp.AcceptChanges();
+                //DataTable TYEmp = ds.Tables["Emps"];
+                //if (TYEmp.Rows.Count != 0)
+                //    foreach (DataRow row in TYEmp.Rows)
+                //        if (row["No"].ToString() == "00000001")
+                //        {
+                //            row.Delete();
+                //            break;
+                //        }
+                //TYEmp.AcceptChanges();
             }
 
             #region 计算上一次选择的结果, 并把结果返回过去.

@@ -254,6 +254,9 @@
                     if (defValue == null || defValue == "null")
                         continue;
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+                    if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
+                        $("#menuIconIcon").attr("class", defValue);
+                    }
                 }
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
@@ -609,8 +612,8 @@
                     if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
                         html += '<div class="input-group">';
                         html += "<span class='input-group-addon' style='border-radius:0;border-color:#d2d6de;background-color:#fff'><i id='menuIconIcon' class='icon-settings'></i></span>";
-                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
-	                    html += "<span class='input-group-btn'><a id='menuIconButton' href='javascript:' class='btn btn-default'><i class='fa fa-search'></i></a></span>";
+                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
+	                    html += "<span class='input-group-btn' style='padding-left:3px'><a id='menuIconButton' href='javascript:void(0)' class='btn btn-default'  onclick='openIconWindow(\""+ mapAttr.KeyOfEn+"\")'><i class='fa fa-search'></i></a></span>";
                         html +="</div>";
                         return html;
                     }
@@ -1033,6 +1036,23 @@
             var accordion = new Accordion($('#accordion'), false);
 
         });
+
+        var IconKeyOfEn="";
+        function openIconWindow(keyOfEn) {
+            IconKeyOfEn = keyOfEn;
+            var width = $(document).width() - 120;
+            var height = $(document).height() - 120;
+            OpenEasyUiDialogExt("IconSelect.htm", "选择图标", width, height, false);
+        }
+
+        function changeICon(icon) {
+            //获取ICon的值
+            var oldICon = $("#TB_" + IconKeyOfEn).val();
+            $("#menuIconIcon").attr("class",icon);
+            $("#TB_" + IconKeyOfEn).val(icon);
+            $("#eudlg").dialog("close");
+
+        }
     </script>
     <style type="text/css">
         .panel-body {
@@ -1042,7 +1062,10 @@
   
           border-width: 1px 0 1px 0;
         }
-    </style>
+        .btn-default{ border:0px}
+        .btn{background:white !important;color:#337ab7 !important}
+        
+      </style>
 </head> 
 <body class="easyui-layout">
 	

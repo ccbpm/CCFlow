@@ -5931,7 +5931,16 @@ namespace BP.WF
             DBAccess.RunSQL("DELETE FROM WF_Cond WHERE NodeID NOT IN (SELECT NodeID FROM WF_Node)");
             DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ToNodeID NOT IN (SELECT NodeID FROM WF_Node) ");
             DBAccess.RunSQL("DELETE FROM WF_Cond WHERE FK_Node NOT IN (SELECT NodeID FROM WF_Node) AND FK_Node > 0");
+
+            //处理分组错误.
+            Nodes nds = new Nodes(fl.No);
+            foreach (Node nd in nds)
+            {
+                MapFrmFool cols = new MapFrmFool("ND" + nd.NodeID);
+                cols.DoCheckFixFrmForUpdateVer();
+            }
             #endregion
+         
 
             if (infoErr == "")
             {

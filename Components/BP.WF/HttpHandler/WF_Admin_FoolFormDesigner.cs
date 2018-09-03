@@ -71,7 +71,6 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion
 
-
                 MapFrmFool cols = new MapFrmFool(this.FK_MapData);
                 cols.DoCheckFixFrmForUpdateVer();
                 return "url@Designer.htm?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;

@@ -2305,14 +2305,14 @@ namespace BP.WF.HttpHandler
             {
                 string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
                 if (specFlowNos == "" || specFlowNos == null)
-                    specFlowNos = ",001,";
+                    specFlowNos = ",,";
 
                 string specEmpNos = "";
-                if (specFlowNos.Contains(this.FK_Node.ToString() + ",") == false)
+                if (specFlowNos.Contains( ","+this.FK_Node.ToString() + ",") == false)
                     specEmpNos = " AND No!='00000001' ";
 
-                specEmpNos = "";
-                  
+                //  specEmpNos = "";
+
                 sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx ";
             }
             else

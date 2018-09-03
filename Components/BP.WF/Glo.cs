@@ -4366,8 +4366,8 @@ namespace BP.WF
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                qo.AddWhere(FrmAttachmentDBAttr.MyNote, athDesc.NoOfObj);
-                qo.addAnd();
+                //qo.AddWhere(FrmAttachmentDBAttr.MyNote, athDesc.NoOfObj);
+                //qo.addAnd();
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
 
                 //qo.addAnd();

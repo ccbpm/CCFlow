@@ -72,6 +72,10 @@ namespace BP.GPM
         /// 显示高度
         /// </summary>
         public const string Height = "Height";
+        /// <summary>
+        /// 是否独占一行
+        /// </summary>
+        public const string IsLine = "IsLine";
     }
     /// <summary>
     /// 信息块
@@ -392,6 +396,7 @@ namespace BP.GPM
 
                 map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true,
                   BarAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddBoolean(BarAttr.IsLine, false, "是否独占一行", true, true);
 
                 ////map.AddDDLSysEnum(AppAttr.CtrlWay, 0, "控制方式", true, true,
                 ////   AppAttr.CtrlWay, "@0=游客@1=所有人员@2=按岗位@3=按部门@4=按人员@5=按SQL");
@@ -404,8 +409,8 @@ namespace BP.GPM
               
                 //map.AddTBDateTime(BarAttr.DocGenerRDT, null, "Doc生成日期", false, false);
 
-                map.AddTBInt(BarAttr.Width, 200, "显示宽度", false, true);
-                map.AddTBInt(BarAttr.Height, 100, "显示高度", false, true);
+                //map.AddTBInt(BarAttr.Width, 200, "显示宽度", false, true);
+                //map.AddTBInt(BarAttr.Height, 100, "显示高度", false, true);
 
                 //map.AttrsOfOneVSM.Add(new ByStations(), new Stations(), ByStationAttr.RefObj, ByStationAttr.FK_Station, StationAttr.Name, StationAttr.No, "可访问的岗位");
                 //map.AttrsOfOneVSM.Add(new ByDepts(), new Depts(), ByStationAttr.RefObj, ByDeptAttr.FK_Dept, DeptAttr.Name, DeptAttr.No, "可访问的部门");

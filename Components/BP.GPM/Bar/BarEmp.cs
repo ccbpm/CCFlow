@@ -30,6 +30,7 @@ namespace BP.GPM
         /// 标题?
         /// </summary>
         public const string Title = "Title";
+
     }
     /// <summary>
     /// 人员信息块
@@ -93,6 +94,7 @@ namespace BP.GPM
                 this.SetValByKey(BarEmpAttr.Title, value);
             }
         }
+
         #endregion
 
         #region 构造方法

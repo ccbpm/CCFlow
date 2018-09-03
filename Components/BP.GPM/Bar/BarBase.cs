@@ -79,6 +79,12 @@ namespace BP.GPM
         {
             get;
         }
+
+        abstract public bool IsLine
+        {
+            get;
+        }
+
         #endregion 外观行为.
 
     }

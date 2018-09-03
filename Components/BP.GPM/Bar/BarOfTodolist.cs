@@ -78,7 +78,7 @@ namespace BP.GPM
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
-                string html = "<ul>";
+                string html = "";
                 Int32 count = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -90,11 +90,11 @@ namespace BP.GPM
                     string rdt = dr["RDT"].ToString();
                     count++;
                     if(count >6)
-                        html += "<li style='list-style-type:none'>更多....</li>";
+                        html += "<tr><td><a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>更多....</td></tr>";
                     else
-                    html += "<li style='list-style-type:none'>"+count+".<a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>" + title + "</a></li>";
+                        html += "<tr><td><a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>"+count+"."+title + "</a></td></tr>";
                 }
-                html += "</ul>";
+               
                 return html;
             }
         }
@@ -116,6 +116,14 @@ namespace BP.GPM
             get
             {
                 return "200";
+            }
+        }
+
+        public override bool IsLine
+        {
+            get
+            {
+                return false;  
             }
         }
         #endregion 外观行为.
@@ -231,6 +239,13 @@ namespace BP.GPM
             get
             {
                 return "200";
+            }
+        }
+        public override bool IsLine
+        {
+            get
+            {
+                return false;
             }
         }
         #endregion 外观行为.

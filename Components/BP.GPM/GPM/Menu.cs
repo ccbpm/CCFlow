@@ -382,7 +382,7 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
 
-                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 20);
+                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 20,true);
 
 
 

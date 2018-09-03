@@ -6220,6 +6220,15 @@ namespace BP.WF
         }
         public string DoDelete()
         {
+            //检查流程有没有版本管理？
+            if (this.FK_FlowSort.Length > 1)
+            {
+                string str = "SELECT * FROM WF_Flow WHERE PTable='" + this.PTable + "' AND FK_FlowSort='' ";
+                DataTable dt = DBAccess.RunSQLReturnTable(str);
+                if (dt.Rows.Count >= 1)
+                    return "err@删除流程出错，该流程下有["+dt.Rows.Count+"]个子版本您不能删除。";
+            }
+
             //删除流程数据.
             this.DoDelData();
 

@@ -173,10 +173,16 @@
             //文件上传
             var url = "";
             if (plant == 'CCFlow')
-                url = '/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&WorkID=' + PKVal + '&FID=' + FID + '&DoType=MoreAttach&FK_Node=' + FK_Node + '&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal;
+                url = '/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&DoType=MoreAttach&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal;
             else {
-                url = "AttachmentUpload.do?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal;
+                url = "AttachmentUpload.do?FK_FrmAttachment=" + FK_FrmAttachment+ '&FK_Flow=' + FK_Flow + "&PKVal=" + PKVal;
             }
+            url += "&WorkID=" + GetQueryString("WorkID");
+            url += "&FID=" + GetQueryString("FID");
+            url += "&FK_Node=" + GetQueryString("FK_Node");
+            url += "&PWorkID=" + GetQueryString("PWorkID");
+            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+
             if (athDesc.IsExpCol == 0) {
                 $('#file_upload').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',

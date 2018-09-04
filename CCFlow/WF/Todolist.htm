@@ -88,25 +88,12 @@
         //页面启动函数.
         $(function () {
             InitPage();
-            //改变左侧导航栏合计不匹配的问题
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
-            var data = handler.DoMethodReturnString("Home_Init");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            data = JSON.parse(data);
-
-            //调用公共类库的方法:执行批量主表赋值
-            GenerChangeParentValue(data);
-            
         });
 
         //初始化数据.
         function InitPage() {
-
+            //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
+            var flowNos = GetQueryString("FlowNos");
 
             //获取当前时间
             var cdt = getNowFormatDate();
@@ -167,18 +154,25 @@
             for (var i = 0; i < data.length; i++) {
 
                 if (groupBy == "ByNode") {
-                    if (str.indexOf('@' + data[i].NodeName + "@") == -1)
-                        str += "@" + data[i].NodeName + "@";
+                    if (str.indexOf('@' + data[i].NodeName + "@") == -1) {
+                        if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                            str += "@" + data[i].NodeName + "@";
+                    }
                 }
 
                 if (groupBy == "ByFlow") {
-                    if (str.indexOf('@' + data[i].FlowName + "@") == -1)
-                        str += "@" + data[i].FlowName + "@";
+                    if (str.indexOf('@' + data[i].FlowName + "@") == -1) {
+                        if (flowNos == null || (flowNos!=null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                            str += "@" + data[i].FlowName + "@";
+                    }                    
+                       
                 }
 
                 if (groupBy == "ByStarter") {
-                    if (str.indexOf('@' + data[i].StarterName + "@") == -1)
-                        str += "@" + data[i].StarterName + "@";
+                    if (str.indexOf('@' + data[i].StarterName + "@") == -1) {
+                        if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                            str += "@" + data[i].StarterName + "@";
+                    }
                 }
             }
             var strs = str.split("@"); //生成数组.
@@ -186,6 +180,7 @@
 			
             var num = 0;
             var is1 = false;
+            var realCount = 0;
 
             //循环数组.
             for (var idx = 0; idx < strs.length; idx++) {
@@ -217,6 +212,12 @@
                         continue;
                     }
 
+                    //当参数flowNos不为空时，流程编码存在于flowNos时显示
+                    if(flowNos!=null && flowNos.indexOf(data[i].FK_Flow) == -1)
+                        continue;
+
+                    realCount++;
+                   
                     var newRow = "";
                     var title = work.Title;
                     var isRead = work.IsRead;
@@ -307,8 +308,12 @@
 
             //  $("#Table1").after("<br><br><div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' >[<a href='TaskPoolApply.htm' >共享任务池待办</a>][<a href='TodolistOfAuth.htm' >查看授权人的待办工作</a>]</div>");
             $('#Table1').html(listbox);
-			$("#Table2").html("合计:" + data.length + "条");
+            $("#Table2").html("合计:" + realCount + "条");
 
+            var div = window.parent.document.getElementById("Todolist_EmpWorks");
+            if (div != null) {
+                div.innerHTML = realCount;
+            }
 
         }
         function GetState(wfState) {

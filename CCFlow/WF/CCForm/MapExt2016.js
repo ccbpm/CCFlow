@@ -847,11 +847,7 @@ function TableFullCtrl(dataObj,ctrlIdBefore) {
                     return false;
                 }
             });
-
         }
-
-
-
     }
 }
 

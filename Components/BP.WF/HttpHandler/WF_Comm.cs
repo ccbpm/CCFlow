@@ -1072,12 +1072,37 @@ namespace BP.WF.HttpHandler
             Entity en = ens.GetNewEntity;
             Map map = en.EnMapInTime;
 
-            MapAttrs attrs = map.Attrs.ToMapAttrs;
+           // MapAttrs attrs = map.Attrs.ToMapAttrs;
+            //DataTable dtAttrs = attrs.ToDataTableField();
+            //dtAttrs.TableName = "Attrs";
 
             //属性集合.
-            DataTable dtAttrs = attrs.ToDataTableField();
-            dtAttrs.TableName = "Attrs";
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
 
+            //根据设置的显示列显示字段
+            DataRow row = null;
+            DataTable dtAttrs = new DataTable("Attrs");
+            dtAttrs.Columns.Add("KeyOfEn", typeof(string));
+            dtAttrs.Columns.Add("Name", typeof(string));
+            dtAttrs.Columns.Add("Width", typeof(int));
+            dtAttrs.Columns.Add("UIContralType", typeof(int));
+            foreach (MapAttr attr in attrs)
+            {
+                string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
+                if (searchVisable == "0")
+                    continue;
+                if (DataType.IsNullOrEmpty(searchVisable) && attr.UIVisible == false)
+                    continue;
+                row = dtAttrs.NewRow();
+                row["KeyOfEn"] = attr.KeyOfEn;
+                row["Name"] = attr.Name;
+                row["Width"] = attr.UIWidthInt;
+                row["UIContralType"] = attr.UIContralType;
+
+                dtAttrs.Rows.Add(row);
+            }
+ 
             DataSet ds = new DataSet();
             ds.Tables.Add(dtAttrs); //把描述加入.
 

@@ -30,7 +30,6 @@
                 if (mapAttr.KeyOfEn == 'OID') {
                     continue;
                 }
-
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
 
                 var html = "";
@@ -39,10 +38,8 @@
                 html += "<td>" + mapAttr.KeyOfEn + "</td>";
                 html += "<td>" + mapAttr.Name + "</td>";
 
-               // alert(mapAttrEn.GetPara("SearchVisable"));
-
-                if (mapAttrEn.GetPara("SearchVisable") == "1" || mapAttrEn.GetPara("SearchVisable") == "")
-                    html += "<td><a href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
+                if (mapAttrEn.GetPara("SearchVisable") == "1")
+                    html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
                 else
                     html += "<td><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
 
@@ -55,11 +52,12 @@
 
         });
 
-        function HiddenIt(mypk) {
-
+        function HiddenIt(mypk, i) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.SetPara("SearchVisable", 0);
             mapAttrEn.Update();
+
+
             window.location.href = window.location.href;
         }
 
@@ -72,12 +70,12 @@
 
         function Up(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
-            mapAttrEn.DoMethodReturnString("DoUp");
+            mapAttrEn.DoMethodReturnString("DoUpTabIdx");
             window.location.href = window.location.href;
         }
         function Down(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
-            mapAttrEn.DoMethodReturnString("DoDown");
+            mapAttrEn.DoMethodReturnString("DoDownTabIdx");
 
             window.location.href = window.location.href;
         }
@@ -109,11 +107,14 @@
             var mapdata = new Entity("BP.Sys.MapData", GetQueryString("EnsName"));
             mapdata.Delete();
 
+            //重置排序顺序
+
+
             window.location.href = window.location.href;
         }
 
         function FoolDesinger() {
-            var url = "../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + GetQueryString("EnsName") + "&FK_Flow=&FK_Node=0&IsFirst=1";
+            var url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + GetQueryString("EnsName") + "&FK_Flow=&FK_Node=0&IsFirst=1";
             window.open(url);
         }
 
@@ -127,16 +128,12 @@
 <th >配置项</th>
 <th>内容</th>
 <th>信息</th>
-<th>是否可见</th>
+<th>设置显示/隐藏</th>
 <th>顺序</th>
 </tr>
 
 </table>
-
-<input type="button" value="保存"  onclick="Save()" />
-<!--<input type="button" value="重置"  onclick="Reset()" />-->
 <input type="button" value="启动傻瓜表单设计器"  onclick="FoolDesinger()" />
-
 <input type="button" value="返回基本设置"  onclick="Back()" />
 
 

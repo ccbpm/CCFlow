@@ -2312,9 +2312,9 @@ namespace BP.WF.HttpHandler
                     specEmpNos = " AND No!='00000001' ";
 
                 // specEmpNos = "";
-                 sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx " + this.FK_Node + " " + specEmpNos + " " + specFlowNos;
+                //sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx " + this.FK_Node + " " + specEmpNos + " " + specFlowNos;
 
-               // sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx "; 
+                 sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx "; 
                 //return "err@xx" + sql + "  = " + specEmpNos + "  " + specFlowNos +" nodeID="+this.FK_Node.ToString();
 
             }

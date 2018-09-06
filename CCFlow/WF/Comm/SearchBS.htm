@@ -135,15 +135,15 @@
             for (var i = 0; i < attrs.length; i++) {
             	 var attr = attrs[i];
                  var str = "";
-				if(barCount%4==0)
-					str +="<br/>";
+				//if(barCount%4==0)
+				//	str +="<br/>";
 					
-                str += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":&nbsp;&nbsp  </label>";
+                str += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>&nbsp;&nbsp&nbsp;&nbsp" + attr.Name + ":&nbsp;&nbsp  </label>";
                 
-                if(barCount%4==0)
+               // if(barCount%4==0)
+               // 	str += "<select class='form-control' style='margin-top:5px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+               // else
                 	str += "<select class='form-control' style='margin-top:5px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
-                else
-                	str += "<select class='form-control' style='padding:0px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
               
                 barCount += 1;
@@ -163,8 +163,9 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
             
-           if(barCount%4==0)
-            	html+="</br>";
+           //if(barCount%4==0)
+            //	html+="</br>";
+
             html += '<a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
             

@@ -524,9 +524,15 @@ namespace BP.WF.HttpHandler
                     //获得流程状态.
                     WFState wfState = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
 
+                    String fk_Node = dt.Rows[0]["FK_Node"].ToString();
+                    //把节点审核配置信息.
+                    FrmWorkCheck fwc = new FrmWorkCheck(fk_Node);
+                    ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
+        		
+
                     //获取工作轨迹信息
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
-                    sql = "SELECT NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
+                    sql = "SELECT FID \"FID\",NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
                           " WHERE WorkID=" +
                           workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT ASC";
 

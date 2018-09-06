@@ -9,6 +9,7 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>
+    <script src="TimeBase.js?s=xxx" type="text/javascript"></script>
 </head>
 <body>
     <style type="text/css">
@@ -225,7 +226,7 @@
                     if (rNode.rPossible) {
                         rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EmpName + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
                         rNode.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
-                        rNode.rPossibleText.toFront();
+                        rNode.rPossibleText.toFront(); FrmWorkCheck
                     }
                 }
 
@@ -238,12 +239,236 @@
 
                     $('#tracktable').empty();
                     var node = rFlow.getNodeByRIconId(this.id);
+                    var Tracks = jdata.Track;
+                    //审核组件信息.
+                    var fwc = jdata.FrmWorkCheck;
 
                     if (node != null) {
                         node.rBorder.attr({ "stroke": STYLE_NODE_BORDER_COLOR_HOVER, "stroke-width": STYLE_NODE_BORDER_WIDTH_HOVER });
                         node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
                         var tablehtml = "";
+                        //是否有审核组件?
+                        var isHaveCheck = false;
+                        for (var i = 0; i < Tracks.length; i++) {
+
+                            var track = Tracks[i];
+
+                            // 记录审核节点。
+                            if (track.ActionType == ActionType.WorkCheck) {
+                                isHaveCheck = true;
+                                break;
+                            }
+                        }
+                        for (var i = 0; i < Tracks.length; i++) {
+
+                            var track = Tracks[i];
+                            if (track.FID != 0)
+                                continue;
+
+                            if (track.ActionType == ActionType.FlowBBS)
+                                continue;
+                            if (track.ActionType == ActionType.WorkCheck)
+                                continue;
+
+                            if (track.NDFrom != node.id)
+                                continue;
+
+                            //时间轴.
+                            var timeBase = "";
+                            var img = ActionTypeStr(track.ActionType);
+                            img = "<img src='" + img + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
+
+                            //是否显示审批意见？
+                            var isShowCheckMsg = true;
+                            if (fwc.FWCMsgShow == "1" && track.NDFrom == GetQueryString("FK_Node") && webUser.No != track.EmpTo) {
+                                continue;
+                                isShowCheckMsg = false;
+                            }
+
+                            //内容.
+                            tablehtml += "<tr style='background-color:InfoBackground' >";
+                            tablehtml += "<td>" + track.NDFromT + "</td>";
+                            tablehtml += "<td>" + track.ActionTypeText + "</td>";
+                            tablehtml += "</tr>";
+                            var at = track.ActionType;
+
+                            if (at == ActionType.Return) {
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td><span>退回到:</span></td>";
+                                tablehtml += "<td><font color=green>" + track.NDToT + "</font><td>";
+                                tablehtml += "</tr>";
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td><span>退回给:</span></td>";
+                                tablehtml += "<td><font color=green>" + track.EmpToT + "</font></td>>";
+                                tablehtml += "</tr>";
+                                tablehtml += "<tr>";
+                                tablehtml += "<td colspan='2'><span>退回意见如下</span>  </td>";
+                                tablehtml += "</tr>";
+                            }
+
+                            if (at == ActionType.Forward) {
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td><span>到达节点:</span></td>";
+                                tablehtml += "<td><font color=green>" + track.NDToT + "</font></td>";
+                                tablehtml += "</tr>";
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td><span>到达人员:</span></td>";
+                                tablehtml += "<td><font color=green>" + track.EmpToT + "</font> </td>";
+                                tablehtml += "</tr>";
+
+                                //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
+                                for (var myIdx = 0; myIdx < Tracks.length; myIdx++) {
+
+                                    var checkTrack = Tracks[myIdx];
+                                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                                        ttablehtml += "<tr style='background-color:InfoBackground' >";
+                                        tablehtml += "<td colspan='2'><span>审批意见：</span></td>";
+                                        tablehtml += "</tr>";
+                                        tablehtml += "<tr>";
+                                        tablehtml += "<td colspan='2'><font color=green>" + checkTrack.Msg + "</font> </td>";
+                                        tablehtml += "</tr>";
+                                    }
+                                }
+                            }
+
+                            //协作发送.
+                            if (at == ActionType.TeampUp) {
+
+                                for (var myIdx = 0; myIdx < Tracks.length; myIdx++) {
+
+                                    var checkTrack = Tracks[myIdx];
+                                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                                        tablehtml += "<tr style='background-color:InfoBackground' >";
+                                        tablehtml += "<td><span colspan='2'>会签意见：</span></td>";
+                                        tablehtml += "</tr>";
+                                        tablehtml += "<tr>";
+                                        tablehtml += "<td colspan='2'><font color=green>" + checkTrack.Msg.replace('null', '') + "</font> </td>";
+                                        tablehtml += "</tr>";
+                                    }
+                                }
+                            }
+
+                            //输出备注信息.
+                            var tag = track.Tag;
+                            if (tag != null)
+                                tag = tag.replace("~", "'");
+
+                            var msg = track.Msg;
+                            if (msg == "0")
+                                msg = "";
+
+                            if (msg != "") {
+
+                                while (msg.indexOf('\t\n') >= 0) {
+                                    msg = msg.replace('\t\n', '<br>');
+                                }
+
+                                msg = msg.replace('null', '');
+
+                                if (msg == "" || msg == undefined)
+                                    msg = "无";
+                                tablehtml += "<tr>";
+                                tablehtml += "<td colspan='2'>";
+                                tablehtml += "<font color=green><br>" + msg + "</font><br>";
+                                tablehtml += "</td>";
+                                tablehtml += "</tr>";
+                            }
+
+                        }
+
+
+                        //增加等待审核的人员, 在所有的人员循环以后.
+                        var gwls = jdata.WF_GenerWorkerList;
+                        if (gwls) {
+                            var isHaveNoChecker = false;
+                            var gwl = null;
+                            for (var i = 0; i < gwls.length; i++) {
+
+                                var gwl = gwls[i];
+                                if (gwl.FK_Node != node.id)
+                                    continue;
+                                if (gwl.IsPass == 1)
+                                    continue;
+
+                                isHaveNoChecker = true;
+                            }
+
+                            //如果有尚未审核的人员，就输出.
+                            if (isHaveNoChecker == true) {
+
+                                for (var i = 0; i < gwls.length; i++) {
+                                    var html = "";
+
+                                    var gwl = gwls[i];
+                                    if (gwl.IsPass == 1)
+                                        continue;
+
+                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                                    tablehtml += "<td><span>审批人</span></td>";
+                                    tablehtml += "<td>" + gwl.FK_EmpText + "</td>";
+                                    tablehtml += "</tr>";
+                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                                    tablehtml += "<td><span>阅读状态:</span></td>";
+
+                                    if (gwl.IsRead == "1")
+                                        tablehtml += "<td><span><font color=green>已阅读.</font></span></td>";
+                                    else
+                                        tablehtml += "<td><span><font color=green>尚未阅读.</font></span></td>";
+
+                                    tablehtml += "</tr>";
+                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                                    tablehtml += "<td><span>工作到达日期:</span></td>";
+                                    tablehtml += "<td>" + gwl.RDT + "</td>";
+                                    tablehtml += "</tr>";
+
+                                    //到达时间.
+                                    var toTime = gwl.RDT;
+                                    var toTimeDot = toTime.replace(/\-/g, "/");
+                                    toTimeDot = new Date(toTimeDot);
+
+                                    //当前发生日期.
+                                    timeDot = new Date();
+
+
+                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                                    tablehtml += "<td><span>已经耗时:</span></td>";
+                                    tablehtml += "<td>" + GetSpanTime(toTimeDot, timeDot) + "</td>";
+                                    tablehtml += "</tr>";
+
+                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                                    tablehtml += "<td><span>应完成日期:</span></td>";
+                                    tablehtml += "<td>" + gwl.SDT + "</td>";
+                                    tablehtml += "</tr>";
+
+
+                                    //应该完成日期.
+                                    toTime = gwl.SDT;
+                                    toTimeDot = toTime.replace(/\-/g, "/");
+                                    toTimeDot = new Date(toTimeDot);
+
+                                    //当前发生日期.
+                                    timeDot = new Date();
+
+                                    var timeLeft = GetSpanTime(timeDot, toTimeDot);
+
+                                    if (timeLeft != 'NaN秒') {
+                                        tablehtml += "<tr style='background-color:InfoBackground' >";
+                                        tablehtml += "<td><span>还剩余:</span></td>";
+                                        tablehtml += "<td>" + timeLeft + "</td>";
+                                    }
+                                }
+                            }
+                        }
+
+                        tablehtml += "</table>";
+
+                        //组织节点的轨迹信息
+                        var p = $(this.node).offset();
+                        $('#tracktable').append(tablehtml);
+                        $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
+                        $('#trackinfo').show();
+                        return;
 
                         //增加到达时间,应完成时间.
                         var generWorkerLists = jdata.WF_GenerWorkerList;
@@ -345,7 +570,7 @@
                                 tablehtml += "</tr>";
 
 
-                                if (track.Msg != "" ) {
+                                if (track.Msg != "") {
                                     tablehtml += "<tr>";
                                     tablehtml += "<td colspan=2>" + track.Msg + "</td>";
                                     tablehtml += "</tr>";

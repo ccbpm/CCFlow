@@ -3,144 +3,164 @@
     var utils = UM.utils,
         browser = UM.browser,
         Base = {
-        checkURL: function (url) {
-            if(!url)    return false;
-            url = utils.trim(url);
-            if (url.length <= 0) {
-                return false;
-            }
-            if (url.search(/http:\/\/|https:\/\//) !== 0) {
-                url += 'http://';
-            }
+            checkURL: function (url) {
+                if (!url) return false;
+                url = utils.trim(url);
+                if (url.length <= 0) {
+                    return false;
+                }
+                if (url.search(/http:\/\/|https:\/\//) !== 0) {
+                    url += 'http://';
+                }
 
-            url=url.replace(/\?[\s\S]*$/,"");
+                url = url.replace(/\?[\s\S]*$/, "");
 
-            if (!/(.gif|.jpg|.jpeg|.png)$/i.test(url)) {
-                return false;
-            }
-            return url;
-        },
-        getAllPic: function (sel, $w, editor) {
-            var me = this,
+                if (!/(.gif|.jpg|.jpeg|.png)$/i.test(url)) {
+                    return false;
+                }
+                return url;
+            },
+            getAllPic: function (sel, $w, editor) {
+                var me = this,
                 arr = [],
                 $imgs = $(sel, $w);
 
-            $.each($imgs, function (index, node) {
-                $(node).removeAttr("width").removeAttr("height");
+                $.each($imgs, function (index, node) {
+                    $(node).removeAttr("width").removeAttr("height");
 
-//                if (node.width > editor.options.initialFrameWidth) {
-//                    me.scale(node, editor.options.initialFrameWidth -
-//                        parseInt($(editor.body).css("padding-left"))  -
-//                        parseInt($(editor.body).css("padding-right")));
-//                }
+                    //                if (node.width > editor.options.initialFrameWidth) {
+                    //                    me.scale(node, editor.options.initialFrameWidth -
+                    //                        parseInt($(editor.body).css("padding-left"))  -
+                    //                        parseInt($(editor.body).css("padding-right")));
+                    //                }
 
-                return arr.push({
-                    _src: node.src,
-                    src: node.src
+                    return arr.push({
+                        _src: node.src,
+                        src: node.src
+                    });
                 });
-            });
 
-            return arr;
-        },
-        scale: function (img, max, oWidth, oHeight) {
-            var width = 0, height = 0, percent, ow = img.width || oWidth, oh = img.height || oHeight;
-            if (ow > max || oh > max) {
-                if (ow >= oh) {
-                    if (width = ow - max) {
-                        percent = (width / ow).toFixed(2);
-                        img.height = oh - oh * percent;
-                        img.width = max;
+                return arr;
+            },
+            scale: function (img, max, oWidth, oHeight) {
+                var width = 0, height = 0, percent, ow = img.width || oWidth, oh = img.height || oHeight;
+                if (ow > max || oh > max) {
+                    if (ow >= oh) {
+                        if (width = ow - max) {
+                            percent = (width / ow).toFixed(2);
+                            img.height = oh - oh * percent;
+                            img.width = max;
+                        }
+                    } else {
+                        if (height = oh - max) {
+                            percent = (height / oh).toFixed(2);
+                            img.width = ow - ow * percent;
+                            img.height = max;
+                        }
                     }
+                }
+
+                return this;
+            },
+            close: function ($img) {
+
+                $img.css({
+                    top: ($img.parent().height() - $img.height()) / 2,
+                    left: ($img.parent().width() - $img.width()) / 2
+                }).prev().on("click", function () {
+
+                    if ($(this).parent().remove().hasClass("edui-image-upload-item")) {
+                        //显示图片计数-1
+                        Upload.showCount--;
+                        Upload.updateView();
+                    }
+
+                });
+
+                return this;
+            },
+            createImgBase64: function (img, file, $w) {
+                if (browser.webkit) {
+                    //Chrome8+
+                    img.src = window.webkitURL.createObjectURL(file);
+                } else if (browser.gecko) {
+                    //FF4+
+                    img.src = window.URL.createObjectURL(file);
                 } else {
-                    if (height = oh - max) {
-                        percent = (height / oh).toFixed(2);
-                        img.width = ow - ow * percent;
-                        img.height = max;
-                    }
+                    //实例化file reader对象
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.src = this.result;
+                        $w.append(img);
+                    };
+                    reader.readAsDataURL(file);
                 }
-            }
+            },
+            callback: function (editor, $w, url, state) {
 
-            return this;
-        },
-        close: function ($img) {
+                if (state == "SUCCESS") {
+                    //显示图片计数+1
+                    Upload.showCount++;
 
-            $img.css({
-                top: ($img.parent().height() - $img.height()) / 2,
-                left: ($img.parent().width()-$img.width())/2
-            }).prev().on("click",function () {
+                    //获取当前的运行地址
+                    //获取当前网址，如： http://localhost:8080/Tmall/index.jsp 
+                    var curWwwPath = window.document.location.href;
 
-                if ( $(this).parent().remove().hasClass("edui-image-upload-item") ) {
-                    //显示图片计数-1
-                    Upload.showCount--;
-                    Upload.updateView();
-                }
+                    //获取主机地址之后的目录如：/Tmall/index.jsp 
+                    var pathName = window.document.location.pathname;
+                    var pos = curWwwPath.indexOf(pathName);
 
-            });
+                    //获取主机地址，如： http://localhost:8080 
+                    var localhostPaht = curWwwPath.substring(0, pos);
 
-            return this;
-        },
-        createImgBase64: function (img, file, $w) {
-            if (browser.webkit) {
-                //Chrome8+
-                img.src = window.webkitURL.createObjectURL(file);
-            } else if (browser.gecko) {
-                //FF4+
-                img.src = window.URL.createObjectURL(file);
-            } else {
-                //实例化file reader对象
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    img.src = this.result;
-                    $w.append(img);
-                };
-                reader.readAsDataURL(file);
-            }
-        },
-        callback: function (editor, $w, url, state) {
+                    //获取带"/"的项目名，如：/Tmall 
+                    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+                    if (plant == "CCFlow")
+                        url = localhostPaht + "/" + url.substring(url.indexOf("DataUser"));
+                    else
+                        url = localhostPaht + projectName + "/" + url.substring(url.indexOf("DataUser"));
 
-            if (state == "SUCCESS") {
-                //显示图片计数+1
-                Upload.showCount++;
-                var $img = $("<img src='" + editor.options.imagePath + url + "' class='edui-image-pic' />"),
+
+                    var $img = $("<img src='" + url + "' class='edui-image-pic' />"),
                     $item = $("<div class='edui-image-item edui-image-upload-item'><div class='edui-image-close'></div></div>").append($img);
 
-                if ($(".edui-image-upload2", $w).length < 1) {
-                    $(".edui-image-content", $w).append($item);
+                    if ($(".edui-image-upload2", $w).length < 1) {
+                        $(".edui-image-content", $w).append($item);
 
-                    Upload.render(".edui-image-content", 2)
+                        Upload.render(".edui-image-content", 2)
                         .config(".edui-image-upload2");
+                    } else {
+                        $(".edui-image-upload2", $w).before($item).show();
+                    }
+
+                    $img.on("load", function () {
+                        Base.scale(this, 120);
+                        Base.close($(this));
+                        $(".edui-image-content", $w).focus();
+                    });
+
                 } else {
-                    $(".edui-image-upload2", $w).before($item).show();
+                    currentDialog.showTip(state);
+                    window.setTimeout(function () {
+
+                        currentDialog.hideTip();
+
+                    }, 3000);
                 }
 
-                $img.on("load", function () {
-                    Base.scale(this, 120);
-                    Base.close($(this));
-                    $(".edui-image-content", $w).focus();
-                });
+                Upload.toggleMask();
 
-            } else {
-                currentDialog.showTip( state );
-                window.setTimeout( function () {
-
-                    currentDialog.hideTip();
-
-                }, 3000 );
             }
-
-            Upload.toggleMask();
-
-        }
-    };
+        };
 
     /*
-     * 本地上传
-     * */
+    * 本地上传
+    * */
     var Upload = {
         showCount: 0,
         uploadTpl: '<div class="edui-image-upload%%">' +
             '<span class="edui-image-icon"></span>' +
-            '<form class="edui-image-form" method="post" enctype="multipart/form-data" target="up">' +
+            '<form id="imageform" class="edui-image-form" method="post" enctype="multipart/form-data" target="up">' +
             '<input style=\"filter: alpha(opacity=0);\" class="edui-image-file" type="file" hidefocus name="upfile" accept="image/gif,image/jpeg,image/png,image/jpg,image/bmp"/>' +
             '</form>' +
 
@@ -175,20 +195,20 @@
         },
         config: function (sel) {
             var me = this,
-                url=me.editor.options.imageUrl;
+                url = me.editor.options.imageUrl;
 
-            url=url + (url.indexOf("?") == -1 ? "?" : "&") + "editorid="+me.editor.id;//初始form提交地址;
+            url = url + (url.indexOf("?") == -1 ? "?" : "&") + "editorid=" + me.editor.id; //初始form提交地址;
 
             $("form", $(sel, me.dialog)).attr("action", url);
 
             return me;
         },
-        uploadComplete: function(r){
+        uploadComplete: function (r) {
             var me = this;
-            try{
-                var json = eval('('+r+')');
+            try {
+                var json = eval('(' + r + ')');
                 Base.callback(me.editor, me.dialog, json.url, json.state);
-            }catch (e){
+            } catch (e) {
                 var lang = me.editor.getLang('image');
                 Base.callback(me.editor, me.dialog, '', (lang && lang.uploadError) || 'Error!');
             }
@@ -196,47 +216,66 @@
         submit: function (callback) {
 
             var me = this,
-                input = $( '<input style="filter: alpha(opacity=0);" class="edui-image-file" type="file" hidefocus="" name="upfile" accept="image/gif,image/jpeg,image/png,image/jpg,image/bmp">'),
+                input = $('<input style="filter: alpha(opacity=0);" class="edui-image-file" type="file" hidefocus="" name="upfile" accept="image/gif,image/jpeg,image/png,image/jpg,image/bmp">'),
                 input = input[0];
 
-            $(me.dialog).delegate( ".edui-image-file", "change", function ( e ) {
+            $(me.dialog).delegate(".edui-image-file", "change", function (e) {
 
-                if ( !this.parentNode ) {
+                if (!this.parentNode) {
                     return;
                 }
 
-                $('<iframe name="up"  style="display: none"></iframe>').insertBefore(me.dialog).on('load', function(){
+                $('<iframe name="up"  style="display: none" id="richFrame"></iframe>').insertBefore(me.dialog);
+
+                $("#richFrame").on('load', function () {
                     var r = this.contentWindow.document.body.innerHTML;
-                    if(r == '')return;
+                    if (r == '') return;
                     me.uploadComplete(r);
                     $(this).unbind('load');
                     $(this).remove();
 
                 });
 
-                $(this).parent()[0].submit();
-                Upload.updateInput( input );
-                me.toggleMask("Loading....");
-                callback && callback();
+                var richurl = me.editor.options.imageUrl;
+
+                richurl = richurl + (richurl.indexOf("?") == -1 ? "?" : "&") + "editorid=" + me.editor.id; //初始form提交地址;
+
+                //提交数据
+                $("#imageform").form("submit", {
+                    type: 'POST',
+                    dataType: 'html',
+                    url: richurl,
+                    onSubmit: function (param) {
+                        //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                    },
+                    success: function (data) {
+                        Upload.updateInput(input);
+                        Base.callback(me.editor, me.dialog, data, "SUCCESS");
+                    }
+                });
+                //$(this).parent()[0].submit();
+                // Upload.updateInput( input );
+                // me.toggleMask("Loading....");
+
 
             });
 
             return me;
         },
         //更新input
-        updateInput: function ( inputField ) {
+        updateInput: function (inputField) {
 
-            $( ".edui-image-file", this.dialog ).each( function ( index, ele ) {
+            $(".edui-image-file", this.dialog).each(function (index, ele) {
 
-                ele.parentNode.replaceChild( inputField.cloneNode( true ), ele );
+                ele.parentNode.replaceChild(inputField.cloneNode(true), ele);
 
-            } );
+            });
 
         },
         //更新上传框
         updateView: function () {
 
-            if ( Upload.showCount !== 0 ) {
+            if (Upload.showCount !== 0) {
                 return;
             }
 
@@ -249,7 +288,7 @@
             var me = this;
             //做拽上传的支持
             if (!UM.browser.ie9below) {
-                me.dialog.find('.edui-image-content').on('drop',function (e) {
+                me.dialog.find('.edui-image-content').on('drop', function (e) {
 
                     //获取文件列表
                     var fileList = e.originalEvent.dataTransfer.files;
@@ -285,8 +324,8 @@
                     }
 
                 }).on('dragover', function (e) {
-                        e.preventDefault();
-                    });
+                    e.preventDefault();
+                });
             }
         },
         toggleMask: function (html) {
@@ -295,22 +334,22 @@
             var $mask = $(".edui-image-mask", me.dialog);
             if (html) {
                 if (!(UM.browser.ie && UM.browser.version <= 9)) {
-                    $(".edui-image-dragTip", me.dialog).css( "display", "none" );
+                    $(".edui-image-dragTip", me.dialog).css("display", "none");
                 }
-                $(".edui-image-upload1", me.dialog).css( "display", "none" );
+                $(".edui-image-upload1", me.dialog).css("display", "none");
                 $mask.addClass("edui-active").html(html);
             } else {
 
                 $mask.removeClass("edui-active").html();
 
-                if ( Upload.showCount > 0 ) {
+                if (Upload.showCount > 0) {
                     return me;
                 }
 
-                if (!(UM.browser.ie && UM.browser.version <= 9) ){
+                if (!(UM.browser.ie && UM.browser.version <= 9)) {
                     $(".edui-image-dragTip", me.dialog).css("display", "block");
                 }
-                $(".edui-image-upload1", me.dialog).css( "display", "block" );
+                $(".edui-image-upload1", me.dialog).css("display", "block");
             }
 
             return me;
@@ -318,8 +357,8 @@
     };
 
     /*
-     * 网络图片
-     * */
+    * 网络图片
+    * */
     var NetWork = {
         init: function (editor, $w) {
             var me = this;
@@ -406,7 +445,7 @@
 
         },
         initEvent: function (editor, $w) {
-            $tab = $.eduitab({selector: ".edui-image-wrapper"})
+            $tab = $.eduitab({ selector: ".edui-image-wrapper" })
                 .edui().on("beforeshow", function (e) {
                     e.stopPropagation();
                 });

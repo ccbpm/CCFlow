@@ -677,6 +677,29 @@ namespace BP.WF.HttpHandler
             return "脚本" + fileName + "导入成功";
         }
 
+        public string RichUploadFile()
+        {
+            HttpFileCollection files = context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的图片。";
+            //获取文件存放目录
+            string directory = this.GetRequestVal("Directory");
+            string fileName = files[0].FileName;
+            string savePath = BP.Sys.SystemConfig.PathOfDataUser + "RichTextFile" + "\\" + directory ;
+
+            if (System.IO.Directory.Exists(savePath) == false)
+                System.IO.Directory.CreateDirectory(savePath);
+
+            savePath = savePath + "\\" + fileName;
+            //存在文件则删除
+            if (System.IO.Directory.Exists(savePath) == true)
+                System.IO.Directory.Delete(savePath);
+
+            files[0].SaveAs(savePath);
+            
+            return savePath;
+        }
+
         /**
          * 获取已知目录下的文件列表
          * @return

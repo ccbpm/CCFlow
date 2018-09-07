@@ -248,227 +248,227 @@
                         node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
                         var tablehtml = "";
-                        //是否有审核组件?
-                        var isHaveCheck = false;
-                        for (var i = 0; i < Tracks.length; i++) {
+                        //                        //是否有审核组件?
+                        //                        var isHaveCheck = false;
+                        //                        for (var i = 0; i < Tracks.length; i++) {
 
-                            var track = Tracks[i];
+                        //                            var track = Tracks[i];
 
-                            // 记录审核节点。
-                            if (track.ActionType == ActionType.WorkCheck) {
-                                isHaveCheck = true;
-                                break;
-                            }
-                        }
-                        for (var i = 0; i < Tracks.length; i++) {
+                        //                            // 记录审核节点。
+                        //                            if (track.ActionType == ActionType.WorkCheck) {
+                        //                                isHaveCheck = true;
+                        //                                break;
+                        //                            }
+                        //                        }
+                        //                        for (var i = 0; i < Tracks.length; i++) {
 
-                            var track = Tracks[i];
-                            if (track.FID != 0)
-                                continue;
+                        //                            var track = Tracks[i];
+                        //                            if (track.FID != 0)
+                        //                                continue;
 
-                            if (track.ActionType == ActionType.FlowBBS)
-                                continue;
-                            if (track.ActionType == ActionType.WorkCheck)
-                                continue;
+                        //                            if (track.ActionType == ActionType.FlowBBS)
+                        //                                continue;
+                        //                            if (track.ActionType == ActionType.WorkCheck)
+                        //                                continue;
 
-                            if (track.NDFrom != node.id)
-                                continue;
+                        //                            if (track.NDFrom != node.id)
+                        //                                continue;
 
-                            //时间轴.
-                            var timeBase = "";
-                            var img = ActionTypeStr(track.ActionType);
-                            img = "<img src='" + img + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
+                        //                            //时间轴.
+                        //                            var timeBase = "";
+                        //                            var img = ActionTypeStr(track.ActionType);
+                        //                            img = "<img src='" + img + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
 
-                            //是否显示审批意见？
-                            var isShowCheckMsg = true;
-                            if (fwc.FWCMsgShow == "1" && track.NDFrom == GetQueryString("FK_Node") && webUser.No != track.EmpTo) {
-                                continue;
-                                isShowCheckMsg = false;
-                            }
+                        //                            //是否显示审批意见？
+                        //                            var isShowCheckMsg = true;
+                        //                            if (fwc.FWCMsgShow == "1" && track.NDFrom == GetQueryString("FK_Node") && webUser.No != track.EmpTo) {
+                        //                                continue;
+                        //                                isShowCheckMsg = false;
+                        //                            }
 
-                            //内容.
-                            tablehtml += "<tr style='background-color:InfoBackground' >";
-                            tablehtml += "<td>" + track.NDFromT + "</td>";
-                            tablehtml += "<td>" + track.ActionTypeText + "</td>";
-                            tablehtml += "</tr>";
-                            var at = track.ActionType;
+                        //                            //内容.
+                        //                            tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                            tablehtml += "<td>" + track.NDFromT + "</td>";
+                        //                            tablehtml += "<td>" + track.ActionTypeText + "</td>";
+                        //                            tablehtml += "</tr>";
+                        //                            var at = track.ActionType;
 
-                            if (at == ActionType.Return) {
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td><span>退回到:</span></td>";
-                                tablehtml += "<td><font color=green>" + track.NDToT + "</font><td>";
-                                tablehtml += "</tr>";
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td><span>退回给:</span></td>";
-                                tablehtml += "<td><font color=green>" + track.EmpToT + "</font></td>>";
-                                tablehtml += "</tr>";
-                                tablehtml += "<tr>";
-                                tablehtml += "<td colspan='2'><span>退回意见如下</span>  </td>";
-                                tablehtml += "</tr>";
-                            }
+                        //                            if (at == ActionType.Return) {
+                        //                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                tablehtml += "<td><span>退回到:</span></td>";
+                        //                                tablehtml += "<td><font color=green>" + track.NDToT + "</font><td>";
+                        //                                tablehtml += "</tr>";
+                        //                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                tablehtml += "<td><span>退回给:</span></td>";
+                        //                                tablehtml += "<td><font color=green>" + track.EmpToT + "</font></td>>";
+                        //                                tablehtml += "</tr>";
+                        //                                tablehtml += "<tr>";
+                        //                                tablehtml += "<td colspan='2'><span>退回意见如下</span>  </td>";
+                        //                                tablehtml += "</tr>";
+                        //                            }
 
-                            if (at == ActionType.Forward) {
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td><span>到达节点:</span></td>";
-                                tablehtml += "<td><font color=green>" + track.NDToT + "</font></td>";
-                                tablehtml += "</tr>";
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td><span>到达人员:</span></td>";
-                                tablehtml += "<td><font color=green>" + track.EmpToT + "</font> </td>";
-                                tablehtml += "</tr>";
+                        //                            if (at == ActionType.Forward) {
+                        //                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                tablehtml += "<td><span>到达节点:</span></td>";
+                        //                                tablehtml += "<td><font color=green>" + track.NDToT + "</font></td>";
+                        //                                tablehtml += "</tr>";
+                        //                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                tablehtml += "<td><span>到达人员:</span></td>";
+                        //                                tablehtml += "<td><font color=green>" + track.EmpToT + "</font> </td>";
+                        //                                tablehtml += "</tr>";
 
-                                //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
-                                for (var myIdx = 0; myIdx < Tracks.length; myIdx++) {
+                        //                                //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
+                        //                                for (var myIdx = 0; myIdx < Tracks.length; myIdx++) {
 
-                                    var checkTrack = Tracks[myIdx];
-                                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                                        ttablehtml += "<tr style='background-color:InfoBackground' >";
-                                        tablehtml += "<td colspan='2'><span>审批意见：</span></td>";
-                                        tablehtml += "</tr>";
-                                        tablehtml += "<tr>";
-                                        tablehtml += "<td colspan='2'><font color=green>" + checkTrack.Msg + "</font> </td>";
-                                        tablehtml += "</tr>";
-                                    }
-                                }
-                            }
+                        //                                    var checkTrack = Tracks[myIdx];
+                        //                                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                        //                                        ttablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                        tablehtml += "<td colspan='2'><span>审批意见：</span></td>";
+                        //                                        tablehtml += "</tr>";
+                        //                                        tablehtml += "<tr>";
+                        //                                        tablehtml += "<td colspan='2'><font color=green>" + checkTrack.Msg + "</font> </td>";
+                        //                                        tablehtml += "</tr>";
+                        //                                    }
+                        //                                }
+                        //                            }
 
-                            //协作发送.
-                            if (at == ActionType.TeampUp) {
+                        //                            //协作发送.
+                        //                            if (at == ActionType.TeampUp) {
 
-                                for (var myIdx = 0; myIdx < Tracks.length; myIdx++) {
+                        //                                for (var myIdx = 0; myIdx < Tracks.length; myIdx++) {
 
-                                    var checkTrack = Tracks[myIdx];
-                                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                                        tablehtml += "<tr style='background-color:InfoBackground' >";
-                                        tablehtml += "<td><span colspan='2'>会签意见：</span></td>";
-                                        tablehtml += "</tr>";
-                                        tablehtml += "<tr>";
-                                        tablehtml += "<td colspan='2'><font color=green>" + checkTrack.Msg.replace('null', '') + "</font> </td>";
-                                        tablehtml += "</tr>";
-                                    }
-                                }
-                            }
+                        //                                    var checkTrack = Tracks[myIdx];
+                        //                                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                        //                                        tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                        tablehtml += "<td><span colspan='2'>会签意见：</span></td>";
+                        //                                        tablehtml += "</tr>";
+                        //                                        tablehtml += "<tr>";
+                        //                                        tablehtml += "<td colspan='2'><font color=green>" + checkTrack.Msg.replace('null', '') + "</font> </td>";
+                        //                                        tablehtml += "</tr>";
+                        //                                    }
+                        //                                }
+                        //                            }
 
-                            //输出备注信息.
-                            var tag = track.Tag;
-                            if (tag != null)
-                                tag = tag.replace("~", "'");
+                        //                            //输出备注信息.
+                        //                            var tag = track.Tag;
+                        //                            if (tag != null)
+                        //                                tag = tag.replace("~", "'");
 
-                            var msg = track.Msg;
-                            if (msg == "0")
-                                msg = "";
+                        //                            var msg = track.Msg;
+                        //                            if (msg == "0")
+                        //                                msg = "";
 
-                            if (msg != "") {
+                        //                            if (msg != "") {
 
-                                while (msg.indexOf('\t\n') >= 0) {
-                                    msg = msg.replace('\t\n', '<br>');
-                                }
+                        //                                while (msg.indexOf('\t\n') >= 0) {
+                        //                                    msg = msg.replace('\t\n', '<br>');
+                        //                                }
 
-                                msg = msg.replace('null', '');
+                        //                                msg = msg.replace('null', '');
 
-                                if (msg == "" || msg == undefined)
-                                    msg = "无";
-                                tablehtml += "<tr>";
-                                tablehtml += "<td colspan='2'>";
-                                tablehtml += "<font color=green><br>" + msg + "</font><br>";
-                                tablehtml += "</td>";
-                                tablehtml += "</tr>";
-                            }
+                        //                                if (msg == "" || msg == undefined)
+                        //                                    msg = "无";
+                        //                                tablehtml += "<tr>";
+                        //                                tablehtml += "<td colspan='2'>";
+                        //                                tablehtml += "<font color=green><br>" + msg + "</font><br>";
+                        //                                tablehtml += "</td>";
+                        //                                tablehtml += "</tr>";
+                        //                            }
 
-                        }
-
-
-                        //增加等待审核的人员, 在所有的人员循环以后.
-                        var gwls = jdata.WF_GenerWorkerList;
-                        if (gwls) {
-                            var isHaveNoChecker = false;
-                            var gwl = null;
-                            for (var i = 0; i < gwls.length; i++) {
-
-                                var gwl = gwls[i];
-                                if (gwl.FK_Node != node.id)
-                                    continue;
-                                if (gwl.IsPass == 1)
-                                    continue;
-
-                                isHaveNoChecker = true;
-                            }
-
-                            //如果有尚未审核的人员，就输出.
-                            if (isHaveNoChecker == true) {
-
-                                for (var i = 0; i < gwls.length; i++) {
-                                    var html = "";
-
-                                    var gwl = gwls[i];
-                                    if (gwl.IsPass == 1)
-                                        continue;
-
-                                    tablehtml += "<tr style='background-color:InfoBackground' >";
-                                    tablehtml += "<td><span>审批人</span></td>";
-                                    tablehtml += "<td>" + gwl.FK_EmpText + "</td>";
-                                    tablehtml += "</tr>";
-                                    tablehtml += "<tr style='background-color:InfoBackground' >";
-                                    tablehtml += "<td><span>阅读状态:</span></td>";
-
-                                    if (gwl.IsRead == "1")
-                                        tablehtml += "<td><span><font color=green>已阅读.</font></span></td>";
-                                    else
-                                        tablehtml += "<td><span><font color=green>尚未阅读.</font></span></td>";
-
-                                    tablehtml += "</tr>";
-                                    tablehtml += "<tr style='background-color:InfoBackground' >";
-                                    tablehtml += "<td><span>工作到达日期:</span></td>";
-                                    tablehtml += "<td>" + gwl.RDT + "</td>";
-                                    tablehtml += "</tr>";
-
-                                    //到达时间.
-                                    var toTime = gwl.RDT;
-                                    var toTimeDot = toTime.replace(/\-/g, "/");
-                                    toTimeDot = new Date(toTimeDot);
-
-                                    //当前发生日期.
-                                    timeDot = new Date();
+                        //                        }
 
 
-                                    tablehtml += "<tr style='background-color:InfoBackground' >";
-                                    tablehtml += "<td><span>已经耗时:</span></td>";
-                                    tablehtml += "<td>" + GetSpanTime(toTimeDot, timeDot) + "</td>";
-                                    tablehtml += "</tr>";
+                        //                        //增加等待审核的人员, 在所有的人员循环以后.
+                        //                        var gwls = jdata.WF_GenerWorkerList;
+                        //                        if (gwls) {
+                        //                            var isHaveNoChecker = false;
+                        //                            var gwl = null;
+                        //                            for (var i = 0; i < gwls.length; i++) {
 
-                                    tablehtml += "<tr style='background-color:InfoBackground' >";
-                                    tablehtml += "<td><span>应完成日期:</span></td>";
-                                    tablehtml += "<td>" + gwl.SDT + "</td>";
-                                    tablehtml += "</tr>";
+                        //                                var gwl = gwls[i];
+                        //                                if (gwl.FK_Node != node.id)
+                        //                                    continue;
+                        //                                if (gwl.IsPass == 1)
+                        //                                    continue;
+
+                        //                                isHaveNoChecker = true;
+                        //                            }
+
+                        //                            //如果有尚未审核的人员，就输出.
+                        //                            if (isHaveNoChecker == true) {
+
+                        //                                for (var i = 0; i < gwls.length; i++) {
+                        //                                    var html = "";
+
+                        //                                    var gwl = gwls[i];
+                        //                                    if (gwl.IsPass == 1)
+                        //                                        continue;
+
+                        //                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                    tablehtml += "<td><span>审批人</span></td>";
+                        //                                    tablehtml += "<td>" + gwl.FK_EmpText + "</td>";
+                        //                                    tablehtml += "</tr>";
+                        //                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                    tablehtml += "<td><span>阅读状态:</span></td>";
+
+                        //                                    if (gwl.IsRead == "1")
+                        //                                        tablehtml += "<td><span><font color=green>已阅读.</font></span></td>";
+                        //                                    else
+                        //                                        tablehtml += "<td><span><font color=green>尚未阅读.</font></span></td>";
+
+                        //                                    tablehtml += "</tr>";
+                        //                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                    tablehtml += "<td><span>工作到达日期:</span></td>";
+                        //                                    tablehtml += "<td>" + gwl.RDT + "</td>";
+                        //                                    tablehtml += "</tr>";
+
+                        //                                    //到达时间.
+                        //                                    var toTime = gwl.RDT;
+                        //                                    var toTimeDot = toTime.replace(/\-/g, "/");
+                        //                                    toTimeDot = new Date(toTimeDot);
+
+                        //                                    //当前发生日期.
+                        //                                    timeDot = new Date();
 
 
-                                    //应该完成日期.
-                                    toTime = gwl.SDT;
-                                    toTimeDot = toTime.replace(/\-/g, "/");
-                                    toTimeDot = new Date(toTimeDot);
+                        //                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                    tablehtml += "<td><span>已经耗时:</span></td>";
+                        //                                    tablehtml += "<td>" + GetSpanTime(toTimeDot, timeDot) + "</td>";
+                        //                                    tablehtml += "</tr>";
 
-                                    //当前发生日期.
-                                    timeDot = new Date();
+                        //                                    tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                    tablehtml += "<td><span>应完成日期:</span></td>";
+                        //                                    tablehtml += "<td>" + gwl.SDT + "</td>";
+                        //                                    tablehtml += "</tr>";
 
-                                    var timeLeft = GetSpanTime(timeDot, toTimeDot);
 
-                                    if (timeLeft != 'NaN秒') {
-                                        tablehtml += "<tr style='background-color:InfoBackground' >";
-                                        tablehtml += "<td><span>还剩余:</span></td>";
-                                        tablehtml += "<td>" + timeLeft + "</td>";
-                                    }
-                                }
-                            }
-                        }
+                        //                                    //应该完成日期.
+                        //                                    toTime = gwl.SDT;
+                        //                                    toTimeDot = toTime.replace(/\-/g, "/");
+                        //                                    toTimeDot = new Date(toTimeDot);
 
-                        tablehtml += "</table>";
+                        //                                    //当前发生日期.
+                        //                                    timeDot = new Date();
 
-                        //组织节点的轨迹信息
-                        var p = $(this.node).offset();
-                        $('#tracktable').append(tablehtml);
-                        $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
-                        $('#trackinfo').show();
-                        return;
+                        //                                    var timeLeft = GetSpanTime(timeDot, toTimeDot);
+
+                        //                                    if (timeLeft != 'NaN秒') {
+                        //                                        tablehtml += "<tr style='background-color:InfoBackground' >";
+                        //                                        tablehtml += "<td><span>还剩余:</span></td>";
+                        //                                        tablehtml += "<td>" + timeLeft + "</td>";
+                        //                                    }
+                        //                                }
+                        //                            }
+                        //                        }
+
+                        //                        tablehtml += "</table>";
+
+                        //                        //组织节点的轨迹信息
+                        //                        var p = $(this.node).offset();
+                        //                        $('#tracktable').append(tablehtml);
+                        //                        $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
+                        //                        $('#trackinfo').show();
+                        //                        return;
 
                         //增加到达时间,应完成时间.
                         var generWorkerLists = jdata.WF_GenerWorkerList;
@@ -510,10 +510,13 @@
                                 }
                                 tablehtml += "</tr>";
 
+                                var cdt = gwl.CDT.replace(/\-/g, "/");
+                                cdt = new Date(cdt);
+
                                 tablehtml += "<tr style='background-color:InfoBackground' >";
                                 if (gwl.IsPass == 1) {
                                     tablehtml += "<td>用时</td>";
-                                    tablehtml += "<td> " + GetSpanTime(rdt, sdt) + "</td>";
+                                    tablehtml += "<td> " + GetSpanTime(rdt, cdt) + "</td>";
                                 }
                                 tablehtml += "</tr>";
 
@@ -547,36 +550,109 @@
                         //重track里面获取数据.
 
                         //获得上一个节点发送的日志.
-                        tablehtml = "<table style='width:300px;'>";
-
-                        tablehtml += "<caption> " + node.name + " </capiton>";
 
                         var Tracks = jdata.Track;
+                        var NDTo = "";
 
                         for (var i = 0; i < Tracks.length; i++) {
-
                             var track = Tracks[i];
+                            if (track.ActionType == ActionType.FlowBBS)
+                                continue;
+                            if (track.ActionType == ActionType.WorkCheck)
+                                continue;
+                            var nodeId = node.id;
+                            if (track.NDFrom == nodeId || track.NDTo == nodeId) {
+                                NDTo = track.NDTo;
+                                //node的最后两位判断是否为开始节点
+                                var lastTwoBit = nodeId.toString().substring(nodeId.toString().length - 2);
 
-                            if (track.NDFrom == node.id || track.NDTo == node.id) {
-
-                                tablehtml += "<tr style='background-color:InfoBackground'>";
-                                tablehtml += "<td>" + track.ActionTypeText + "</td>";
+                                tablehtml = "<table style='width:300px;'>";
+                                if(track.NDFrom == nodeId)
+                                    tablehtml += "<caption> " + track.EmpFromT + " </capiton>";
+                                if (track.NDTo == nodeId && track.NDFrom != nodeId)
+                                    tablehtml += "<caption> " + track.EmpToT + " </capiton>";
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                if (lastTwoBit == "01")
+                                    tablehtml += "<td>任务启动日期</td>";
+                                else
+                                    tablehtml += "<td>任务下达日期</td>";
                                 tablehtml += "<td>" + track.RDT + "</td>";
                                 tablehtml += "</tr>";
 
-                                tablehtml += "<tr>";
-                                tablehtml += "<td>从:" + track.EmpFromT + "</td>";
-                                tablehtml += "<td>到:" + track.EmpToT + "</td>";
+                                //判断是否有考核时间
+                                var mypk = node.id + "_" + uh["WorkID"] + "_" + track.FID + "_" + track.EmpFrom;
+                                var chext = new Entity("BP.WF.Data.CH");
+                                chext.SetPKVal(mypk);
+                                var count = chext.RetrieveFromDBSources();
+                                var SDT = "无";
+                                if (count == 1 && lastTwoBit != "01")
+                                    SDT = chext.SDT;
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td>应完成日期</td>";
+                                tablehtml += "<td>" + SDT + "</td>";
+
                                 tablehtml += "</tr>";
 
 
-                                if (track.Msg != "") {
-                                    tablehtml += "<tr>";
-                                    tablehtml += "<td colspan=2>" + track.Msg + "</td>";
-                                    tablehtml += "</tr>";
+                                var rdt = track.RDT.replace(/\-/g, "/");
+                                rdt = new Date(rdt);
+
+
+
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td>实际完成</td>";
+                                var dtto = "";
+                                if (count == 1) {
+                                    dtto = chext.DTTo;
+                                    //最后流程
+                                } else if (track.NDFrom == track.NDTo) {
+                                    dtto = track.RDT;
+                                } else {
+
+                                    for (var k = 0; k < Tracks.length; k++) {
+                                        var track1 = Tracks[k];
+                                        if (track1.ActionType == ActionType.FlowBBS)
+                                            continue;
+                                        if (track1.ActionType == ActionType.WorkCheck)
+                                            continue;
+                                        if (track1.NDFrom == track.NDTo)
+                                            dtto = track1.RDT;
+                                    }
+
                                 }
+                                tablehtml += "<td id='cdt'> " + dtto + "</td>";
+                                tablehtml += "</tr>";
+
+                                dtto = dtto.replace(/\-/g, "/");
+                                dtto = new Date(dtto);
+
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td>用时</td>";
+                                tablehtml += "<td> " + GetSpanTime(rdt, dtto) + "</td>";
+
+                                tablehtml += "</tr>";
+                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                tablehtml += "<td>发送人</td>";
+                                if (lastTwoBit == "01")
+                                    tablehtml += "<td></td>"
+                                else {
+                                    for (var k = 0; k < Tracks.length; k++) {
+                                        var track1 = Tracks[k];
+                                        if (track1.ActionType == ActionType.FlowBBS)
+                                            continue;
+                                        if (track1.ActionType == ActionType.WorkCheck)
+                                            continue;
+                                        if (track1.NDTo == node.id) {
+                                            tablehtml += "<td>" + track1.EmpFrom + "," + track1.EmpFromT + "</td>";
+                                           break;
+                                        }
+                                    }
+                                }
+                                tablehtml += "</tr>";
                             }
+
                         }
+
 
                         tablehtml += "</table>";
 
@@ -586,6 +662,7 @@
                         $('#tracktable').append(tablehtml);
                         $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
                         $('#trackinfo').show();
+
                         return;
 
 

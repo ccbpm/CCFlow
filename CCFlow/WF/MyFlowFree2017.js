@@ -291,7 +291,8 @@ function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
 //升级表单元素 初始化Label
 function figure_Template_Label(frmLab) {
     var eleHtml = '';
-    eleHtml = '<label></label>'
+    eleHtml = "<label id='" + frmLab.MyPK + "' ></label>";
+
     eleHtml = $(eleHtml);
     var text = frmLab.Text == null ? "" : frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);

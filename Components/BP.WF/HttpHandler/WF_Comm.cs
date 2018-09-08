@@ -1072,13 +1072,18 @@ namespace BP.WF.HttpHandler
             Entity en = ens.GetNewEntity;
             Map map = en.EnMapInTime;
 
-           // MapAttrs attrs = map.Attrs.ToMapAttrs;
-            //DataTable dtAttrs = attrs.ToDataTableField();
-            //dtAttrs.TableName = "Attrs";
+            MapAttrs attrs = new MapAttrs(); ;
+           //DataTable dtAttrs = attrs.ToDataTableField();
+           //dtAttrs.TableName = "Attrs";
 
-            //属性集合.
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
+
+            MapData md = new MapData();
+            md.No = this.EnsName;
+            int count = md.RetrieveFromDBSources();
+           if(count==0)
+              attrs =  map.Attrs.ToMapAttrs;
+           else
+               attrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
 
             //根据设置的显示列显示字段
             DataRow row = null;
@@ -1107,8 +1112,8 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtAttrs); //把描述加入.
 
             //定义Sys_MapData.
-            MapData md = new MapData();
-            md.No = this.EnsName.Substring(0,this.EnsName.Length-1);
+           // MapData md = new MapData();
+            //md.No = this.EnsName.Substring(0,this.EnsName.Length-1);
             md.Name = map.EnDesc;
 
             //附件类型.

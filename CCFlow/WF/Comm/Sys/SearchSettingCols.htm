@@ -99,14 +99,17 @@
             window.location.href = url;
         }
 
-        function Reset() {
+        function Clear() {
 
             if (confirm('您确定要重置吗？重置后傻瓜表单设计内容，与排序内容都将会被清除。') == false)
                 return;
 
             var mapdata = new Entity("BP.Sys.MapData", GetQueryString("EnsName"));
             mapdata.Delete();
-
+            var mapAttrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", GetQueryString("EnsName"));
+            for (var i = 0; i < mapAttrs.length; i++) {
+                mapAttrs[i].Delete();
+            }
             //重置排序顺序
 
 
@@ -133,6 +136,7 @@
 </tr>
 
 </table>
+<input type="button" value="清空排序"  onclick="Clear()" />
 <input type="button" value="启动傻瓜表单设计器"  onclick="FoolDesinger()" />
 <input type="button" value="返回基本设置"  onclick="Back()" />
 

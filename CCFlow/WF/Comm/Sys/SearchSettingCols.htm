@@ -23,6 +23,8 @@
 
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", ensName, "Idx");
+            if (mapAttrs.length == 0)
+                alert("请启动傻瓜表单设计器");
 
             for (var i = 0; i < mapAttrs.length; i++) {
 

@@ -23,8 +23,6 @@ function GenerFoolFrm(wn) {
     //  html += "<td colspan=2 ></td>";
     html += "</tr>";
 
-
-
     //遍历循环生成 listview
     for (var i = 0; i < Sys_GroupFields.length; i++) {
 
@@ -274,7 +272,17 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     if (mapAttr.MyDataType == "1") {  //不是外键
 
         if (mapAttr.UIHeight <= 40) //普通的文本框.
+        {
+            if (mapAttr.IsSigan == "1") {
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type=hidden />";
+                var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                return "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            }
+
+            //alert(mapAttr.IsSigan);
+
             return "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  class='form-control' type='text'/>";
+        }
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
 
@@ -283,7 +291,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             if (mapAttr.UIIsEnable == "0") {
                 //只读状态直接 div 展示富文本内容                
                 eleHtml += "<div class='richText' style='width:99%;margin-right:2px'>" + defValue + "</div>";
-
 
             } else {
                 document.BindEditorMapAttr = mapAttr; //存到全局备用

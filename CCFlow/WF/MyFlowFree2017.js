@@ -152,7 +152,19 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
         //普通类型的单行文本.
         if (mapAttr.UIHeight <= 40) {
+
+            if (mapAttr.IsSigan == "1") {
+
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type=hidden />";
+                var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+
+                eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                return eleHtml;
+            }
+
+
             eleHtml += "<input class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+
             return eleHtml;
         }
 

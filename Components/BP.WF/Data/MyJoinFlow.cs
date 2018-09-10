@@ -175,8 +175,8 @@ namespace BP.WF.Data
             get
             {
                 UAC uac = new UAC();
-                uac.LoadRightFromCCGPM(this);
-                return uac;
+                //uac.LoadRightFromCCGPM(this);
+                //return uac;
                 uac.Readonly();
                 return uac;
             }

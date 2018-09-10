@@ -19,8 +19,12 @@
     <script type="text/javascript">
         var ensName;
         $(function () {
+
             ensName = GetQueryString("EnsName");
-            var mapData = new Entity("BP.Sys.MapData", ensName);
+            var mapData = new Entity("BP.Sys.MapData");
+            mapData.No = ensName;
+            mapData.RetrieveFromDBSources();
+
             if (mapData != null) {
                 $("#title").html(mapData.Name + "信息导入");
             }
@@ -29,6 +33,7 @@
 
         //数据导入.
         function Imp_Done() {
+
             var impWay = GetRadioValue("RB_ImpType");
             var fileValue = $("#File_Upload").val();
             //必须要选择文件
@@ -128,13 +133,17 @@
 </fieldset>
 <fieldset>
 <legend>说明</legend>
+
+<ul>
+<li>
 <a href="#"onclick="downloadFile()">
     <img style="width: 16px; height: 16px;" src="../../../WF/Img/redo.png" border="0"/>
     下载导入模板
- </a>
- <br />
-该模版存在:D:\ccflow\CCFlow\DataUser\TempleteOfImp\下面.
-比如: :D:\ccflow\CCFlow\DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls
+ </a></li>
+ 
+<li>该模版存在:D:\ccflow\CCFlow\DataUser\TempleteOfImp\下面.</li>
+<li>比如: :D:\ccflow\CCFlow\DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls</li>
+</ul>
 </fieldset>
 <fieldset>
 <legend>导入结果</legend>

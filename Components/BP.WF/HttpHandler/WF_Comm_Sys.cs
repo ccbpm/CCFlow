@@ -124,7 +124,6 @@ namespace BP.WF.HttpHandler
 
             #endregion 清空方式导入.
 
-
             #region 更新方式导入
             if (impWay == 1 || impWay == 2)
             {
@@ -235,10 +234,19 @@ namespace BP.WF.HttpHandler
                 string myval = dr[item.Desc].ToString();
                 en.SetValByKey(item.Key, myval);
             }
-            if (saveType == 0)
-                en.Insert(); //执行插入.
-            else
-                en.Update();
+
+            try
+            {
+                if (saveType == 0)
+                    en.Insert(); //执行插入.
+                else
+                    en.Update();
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
+
             return errInfo;
         }
 

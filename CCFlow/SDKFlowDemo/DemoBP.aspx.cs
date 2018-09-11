@@ -185,12 +185,17 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         ps.Add("UserNo", "abc");
         BP.DA.DBAccess.RunSQL(ps);
 
-
         //执行查询返回datatable.
         ps = new Paras();
         ps.SQL = "SELECT * FROM Port_Emp WHERE FK_Dept=@DeptNoVar";
         ps.Add("DeptNoVar", "0102");
-        DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(ps);
+        DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(ps);
+
+        foreach (DataRow dr in dtEmps.Rows)
+        {
+            string no = dr["No"].ToString();
+            string name = dr["Name"].ToString();
+        }
 
         //运行存储过程.
         ps = new Paras();
@@ -198,6 +203,8 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         spName = "MySp";
         BP.DA.DBAccess.RunSP(spName, ps);
         #endregion 执行带有参数.
+
+
 
         #region 向数据库存储、读写文件.
         //写入实例.
@@ -271,8 +278,9 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         //按照sql查询.
         string sql = "SELECT * FROM Demo_Student WHERE FK_BanJi='01' AND XB=0 AND ZZMM=0 ";
         DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+         
     }
-
+     
     public void EntityDemo()
     {
         Student stu = new Student();

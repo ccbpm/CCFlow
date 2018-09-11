@@ -37,7 +37,7 @@ namespace CCFlow.SDKFlowDemo
             this.Pub1.AddTR();
             this.Pub1.AddTD("重输密码");
             tb = new BP.Web.Controls.TB();
-            tb.ID = "TB_Pass1";
+            tb.ID = "TB_PW1";
             this.Pub1.AddTD(tb);
             this.Pub1.AddTD("两次密码不能重复.");
             this.Pub1.AddTREnd();
@@ -110,8 +110,8 @@ namespace CCFlow.SDKFlowDemo
         {
             try
             {
-                string pass = this.Pub1.GetTBByID("TB_Pass").Text;
-                string pass1 = this.Pub1.GetTBByID("TB_Pass1").Text;
+                string pass = this.Pub1.GetTBByID("TB_PW").Text;
+                string pass1 = this.Pub1.GetTBByID("TB_PW1").Text;
 
                 //提交前做完整的校验.
                 if (DataType.IsNullOrEmpty(pass))

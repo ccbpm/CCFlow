@@ -17,7 +17,7 @@ namespace CCFlow.SDKFlowDemo.GuestFlow
         {
             // 获取学生信息。
             string stuNo = this.TB_No.Text.Trim();
-            string pass = this.TB_Pass.Text.Trim();
+            string pass = this.TB_PW.Text.Trim();
 
             // 应该根据学号，查询出来学生名称，这里是直接定义了.
             string stuName = "张三";

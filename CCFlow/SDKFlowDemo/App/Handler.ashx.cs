@@ -70,8 +70,8 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
                         break;
                     case "Login_Submit":
 
-                        string userNo = mycontext.Request.Form["TB_UserNo"];
-                        string pass = mycontext.Request.Form["TB_Pass"];
+                        string userNo = mycontext.Request.Form["TB_No"];
+                        string pass = mycontext.Request.Form["TB_PW"];
 
                         string sql = "SELECT pass FROM Port_Emp WHERE No='" + userNo + "'";
                         string val = BP.DA.DBAccess.RunSQLReturnString(sql);

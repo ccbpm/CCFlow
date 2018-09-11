@@ -24,13 +24,13 @@
 
             $("#Msg").html("正在验证请稍候....");
 
-            var ctrlUserNo = document.getElementById("TB_UserNo");
+            var ctrlUserNo = document.getElementById("TB_No");
             if (ctrlUserNo.value == "") {
                 alert('请输入用户名');
                 return;
             }
 
-            var ctrlPass = document.getElementById("TB_Pass");
+            var ctrlPass = document.getElementById("TB_PW");
             if (ctrlPass.value == "") {
                 alert('请输入密码');
                 return;
@@ -75,12 +75,12 @@
 <caption>请您登录</caption>
 <tr>
 <td> 用户名</td>
-<td> <input type=text  id="TB_UserNo" name="TB_UserNo" style="width:80%;" /> </td>
+<td> <input type=text  id="TB_No" name="TB_No" style="width:80%;" /> </td>
 </tr>
 
 <tr>
 <td> 密码</td>
-<td> <input type=text  id="TB_Pass" name="TB_Pass"  style="width:80%;"  /> </td>
+<td> <input type=text  id="TB_PW" name="TB_PW"  style="width:80%;"  /> </td>
 </tr>
 
 <tr>

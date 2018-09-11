@@ -40,22 +40,22 @@ namespace CCFlow.SDKFlowDemo {
         protected global::System.Web.UI.WebControls.TextBox TB_Name;
         
         /// <summary>
-        /// TB_Pass 控件。
+        /// TB_PW 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TB_Pass;
+        protected global::System.Web.UI.WebControls.TextBox TB_PW;
         
         /// <summary>
-        /// TB_Pass1 控件。
+        /// TB_PW1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TB_Pass1;
+        protected global::System.Web.UI.WebControls.TextBox TB_PW1;
         
         /// <summary>
         /// DDL_XB 控件。

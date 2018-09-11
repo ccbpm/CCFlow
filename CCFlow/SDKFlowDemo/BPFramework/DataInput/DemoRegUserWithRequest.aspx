@@ -30,14 +30,14 @@
     <tr>
     <td>密码</td>
     <td>
-        <asp:TextBox ID="TB_Pass" runat="server"></asp:TextBox>
+        <asp:TextBox ID="TB_PW" runat="server"></asp:TextBox>
         </td>
     <td>不能为空</td>
     </tr>
      <tr>
     <td>重输密码</td>
     <td>
-        <asp:TextBox ID="TB_Pass1" runat="server"></asp:TextBox>
+        <asp:TextBox ID="TB_PW1" runat="server"></asp:TextBox>
          </td>
     <td>两次需要保持一致</td>
     </tr>

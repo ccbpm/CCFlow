@@ -20,10 +20,10 @@ namespace CCFlow.SDKFlowDemo
             try
             {
                 //提交前做完整的校验.
-                if (DataType.IsNullOrEmpty(this.TB_Pass.Text.Trim()))
+                if (DataType.IsNullOrEmpty(this.TB_PW.Text.Trim()))
                     throw new Exception("密码不能为空.");
 
-                if (this.TB_Pass.Text.Trim() != this.TB_Pass1.Text.Trim())
+                if (this.TB_PW.Text.Trim() != this.TB_PW1.Text.Trim())
                     throw new Exception("输入的密码两次不一致.");
 
                 //创建一个entity.

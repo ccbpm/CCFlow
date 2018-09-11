@@ -96,6 +96,10 @@ namespace CCFlow.SDKFlowDemo.QingJia
 
             objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht);
 
+
+            //objs = BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, 0,null);
+
+
             /*
              这里注意： 
              * 1,发送api有多个, 根据不同的场景使用不同的api 但是常用的就那1个，您可以产看该参数使用说明.

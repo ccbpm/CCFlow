@@ -1,4 +1,10 @@
-﻿
+﻿function SendMyFlow()
+{ 
+
+alert('该纳税人，有欠税，您不能注销.');
+
+return true;
+}
 function DateDiffExt() {
 
     var d1 = $("#TB_QingJiaShiJianCong").val();

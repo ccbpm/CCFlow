@@ -88,7 +88,18 @@
         //清除傻瓜表达设计内容
         function ClearMapData() {
             var alt = "如果您确定要删除吗？";
-            alt += "1. 系统会清除Sys_MapAttr, Sys_MapData设计内容，包括排列顺序. ";
+            alt += "\t\n1. 系统会清除Sys_MapAttr, Sys_MapData设计内容，包括排列顺序. ";
+            alt += "\t\n2. 清除后您可以通过启动傻瓜表单设计器. ";
+            if (confirm(alt) == false)
+                return;
+
+            var ensName = GetQueryString("EnsName");
+            var mapdata = new Entity("BP.Sys.MapData");
+            mapdata.SetPKVal(ensName);
+            mapdata.Delete();
+
+            alert("清除成功.");
+
         }
 
     </script>
@@ -190,10 +201,8 @@
 <input type="button" value="保存"  onclick="Save()" />
 <input type="button" value="设置显示的列"  onclick="ShowCols()" />
 <input type="button" value="启动傻瓜表单设计器"  onclick="StartFoolFormDesigner()" />
-<input type="button" value="清除傻瓜表单设计内容"  onclick="ClearMapData()" />
+<input type="button" value="清除表单设计内容"  onclick="ClearMapData()" />
 <input type="button" value="导入数据"  onclick="Imp()" />
-
-
 
 </body>
 </html>

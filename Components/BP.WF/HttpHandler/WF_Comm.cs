@@ -1015,6 +1015,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = new DataTable();
             dt.Columns.Add("Field");
             dt.Columns.Add("Name");
+            dt.Columns.Add("Width");
             dt.TableName = "Attrs";
 
             AttrSearchs attrs = map.SearchAttrs;
@@ -1023,6 +1024,7 @@ namespace BP.WF.HttpHandler
                 DataRow dr = dt.NewRow();
                 dr["Field"] = item.Key;
                 dr["Name"] = item.HisAttr.Desc;
+                dr["Width"] = item.Width; //下拉框显示的宽度.
                 dt.Rows.Add(dr);
             }
             ds.Tables.Add(dt);
@@ -1046,7 +1048,6 @@ namespace BP.WF.HttpHandler
 
                     DataTable dtEn = ensFK.ToDataTableField();
                     dtEn.TableName = item.Key;
-
                     ds.Tables.Add(dtEn);
                 }
             }

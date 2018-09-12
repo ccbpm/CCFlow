@@ -385,13 +385,13 @@ namespace BP.En
 		/// 加入查找属性.必须是外键盘/枚举类型/boolen.
 		/// </summary>
 		/// <param name="key">key</param>
-		public void AddSearchAttr(string key)
+		public void AddSearchAttr(string key, int width=130)
 		{
 			Attr attr = this.GetAttrByKey(key);
 			if (attr.Key == "FK_Dept")
-				this.SearchAttrs.Add(attr, false, null);
+				this.SearchAttrs.Add(attr, false, null,width);
 			else
-				this.SearchAttrs.Add(attr, true, null);
+                this.SearchAttrs.Add(attr, true, null, width);
 		}
 		/// <summary>
 		/// 加入查找属性.必须是外键盘/枚举类型/boolen.

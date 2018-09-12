@@ -24,6 +24,10 @@ namespace BP.En
         /// </summary>
         public string RelationalDtlKey = null;
         public string Key = null;
+        /// <summary>
+        /// 下拉框显示的宽度
+        /// </summary>
+        public int Width = 120;
         public AttrSearch()
         {
         }
@@ -36,13 +40,14 @@ namespace BP.En
         public AttrSearchs()
         {
         }
-        public void Add(Attr attr, bool isShowSelectedAll, string relationalDtlKey)
+        public void Add(Attr attr, bool isShowSelectedAll, string relationalDtlKey, int width=120 )
         {
             AttrSearch en = new AttrSearch();
             en.HisAttr = attr;
             en.IsShowAll = isShowSelectedAll;
             en.RelationalDtlKey = relationalDtlKey;
             en.Key = attr.Key;
+            en.Width = width; //宽度.
             this.InnerList.Add(en);
         }
 

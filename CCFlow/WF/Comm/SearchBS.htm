@@ -138,12 +138,13 @@
 				//if(barCount%4==0)
 				//	str +="<br/>";
 					
-                str += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>&nbsp;&nbsp&nbsp;&nbsp" + attr.Name + ":&nbsp;&nbsp  </label>";
+                str += "<label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label>";
                 
                // if(barCount%4==0)
                // 	str += "<select class='form-control' style='margin-top:5px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                // else
-                	str += "<select class='form-control' style='margin-top:5px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+
+                	str += "<select class='form-control' style='margin-top:5px;width:"+attr.Width+"px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
               
                 barCount += 1;
@@ -606,7 +607,7 @@
 
             var windowW = cfg.GetPara("WinCardW");
             if (windowW == "" || windowW == undefined)
-                windowW = 700;
+                windowW = 900;
 
             var windowH = cfg.GetPara("WinCardH");
             if (windowH == "" || windowH == undefined)

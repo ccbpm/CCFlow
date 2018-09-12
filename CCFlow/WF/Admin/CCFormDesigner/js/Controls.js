@@ -252,13 +252,14 @@ function figure_TextBox(x, y) {
     f.style.fillStyle = FigureDefaults.fillStyle;
     f.style.strokeStyle = FigureDefaults.strokeStyle;
 
-    //Image
-    var url = figureSetsURL + "/Data/TextBoxBig.png";
+    if (createFigureName != "RadioButton") {
+        //Image
+        var url = figureSetsURL + "/Data/TextBoxBig.png";
 
-    var ifig = new ImageFrame(url, x, y, true, 150, 30);
-    ifig.debug = true;
-    f.addPrimitive(ifig);
-
+        var ifig = new ImageFrame(url, x, y, true, 150, 30);
+        ifig.debug = true;
+        f.addPrimitive(ifig);
+    }
     var t2 = new Text("", x, y, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
     f.addPrimitive(t2);

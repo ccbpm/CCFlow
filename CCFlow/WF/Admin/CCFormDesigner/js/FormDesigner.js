@@ -319,11 +319,13 @@ function showFigurePropertyWin(figure) {
 
         var mypk= figure.CCForm_MyPK;
 
-        mypk= mypk.replace('RB_', "");
+        mypk = mypk.replace('RB_', "");
+        mypk = mypk.substr(0, mypk.lastIndexOf('_'));
         mypk= mypk.replace('_0', "");
         mypk= mypk.replace('_1', "");
         mypk= mypk.replace('_2', "");
-        mypk= mypk.replace('_3', "");
+        mypk = mypk.replace('_3', "");
+      
 
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + CCForm_FK_MapData + "_" + mypk;
         CCForm_ShowDialog(url, '单选按钮属性');
@@ -667,20 +669,20 @@ function Conver_CCForm_V1ToV2() {
     //循环FrmRB
     for (var i in flow_Data.Sys_FrmRB) {
         var frmRb = flow_Data.Sys_FrmRB[i];
-        if (i == 0) {
+        //if (i == 0) {
             var createdFigure = figure_Template_Rb(frmRb);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
             createdFigure.style.lineWidth = defaultLineWidth;
             //add to STACK
             STACK.figureAdd(createdFigure);
-        }
-        createdFigure = figure_Template_RbLab(frmRb);
-        //move it into position
-        //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
-        createdFigure.style.lineWidth = defaultLineWidth;
-        //add to STACK
-        STACK.figureAdd(createdFigure);
+//        }
+//        createdFigure = figure_Template_RbLab(frmRb);
+//        //move it into position
+//        //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
+//        createdFigure.style.lineWidth = defaultLineWidth;
+//        //add to STACK
+//        STACK.figureAdd(createdFigure);
     }
 
     //循环FrmBtn
@@ -1016,7 +1018,8 @@ function figure_Template_Rb(frmRb ) {
     var f = new Figure("RadioButton");
     f.CCForm_Shape = "RadioButton";
     f.name = 'TextBox';
-    f.CCForm_MyPK = frmRb.MyPK + '=' + frmRb.Lab;
+    //f.CCForm_MyPK = frmRb.MyPK + '=' + frmRb.Lab;
+    f.CCForm_MyPK = frmRb.EnumKey + "_" + frmRb.IntKey;
     f.style.fillStyle = FigureDefaults.fillStyle;
     f.style.strokeStyle = FigureDefaults.strokeStyle;
     f.properties.push(new BuilderProperty('控件属性-' + f.CCForm_Shape, 'group', BuilderProperty.TYPE_GROUP_LABEL));
@@ -1035,7 +1038,7 @@ function figure_Template_Rb(frmRb ) {
         }
 
         if (propertyVale == undefined) {
-            propertyVale = property.DefVal;
+            propertyVale = frmRb["Lab"];
         }
 
         if (property.proName == "AutoFullDLL" || property.proName == "ActiveDDL" || property.proName == "DDLFullCtrl") {
@@ -1045,13 +1048,14 @@ function figure_Template_Rb(frmRb ) {
         f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
     }
     //Image
-    var url = figureSetsURL  + "/DataView/TextBoxStr.png";
+//    var url = figureSetsURL  + "/DataView/TextBoxStr.png";
 
-    var ifig = new ImageFrame(url, frmRb.X+15, frmRb.Y+15 , true, 30, 30);
-    ifig.debug = true;
-    f.addPrimitive(ifig);
+//    var ifig = new ImageFrame(url, frmRb.X+15, frmRb.Y+15 , true, 30, 30);
+//    ifig.debug = true;
+//    f.addPrimitive(ifig);
 
-    var t2 = new Text(frmRb.KeyOfEn, frmRb.X + FigureDefaults.radiusSize / 2, frmRb.Y, FigureDefaults.textFont + FigureDefaults.radiusSize / 2, FigureDefaults.textSize);
+    //var t2 = new Text("*" + frmRb.Lab, frmRb.X + FigureDefaults.radiusSize / 2, frmRb.Y, FigureDefaults.textFont + FigureDefaults.radiusSize / 2, FigureDefaults.textSize);
+    var t2 = new Text("*" + frmRb.Lab, frmRb.X + FigureDefaults.radiusSize / 2, frmRb.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
     f.addPrimitive(t2);
 

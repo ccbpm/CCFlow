@@ -85,6 +85,12 @@
             window.location.href = url;
         }
 
+        //清除傻瓜表达设计内容
+        function ClearMapData() {
+            var alt = "如果您确定要删除吗？";
+            alt += "1. 系统会清除Sys_MapAttr, Sys_MapData设计内容，包括排列顺序. ";
+        }
+
     </script>
 </head>
 <body>
@@ -184,7 +190,9 @@
 <input type="button" value="保存"  onclick="Save()" />
 <input type="button" value="设置显示的列"  onclick="ShowCols()" />
 <input type="button" value="启动傻瓜表单设计器"  onclick="StartFoolFormDesigner()" />
+<input type="button" value="清除傻瓜表单设计内容"  onclick="ClearMapData()" />
 <input type="button" value="导入数据"  onclick="Imp()" />
+
 
 
 </body>

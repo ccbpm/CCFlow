@@ -357,7 +357,7 @@
                     columns.push({
                         field: field,
                         title: title,
-                        //width:attr.UIWidth*2,
+                        width:attr.UIWidth*2,
                         fixed: false,
                         formatter: function (value, row, index) {
                             if (value == "0") return "否";
@@ -369,7 +369,7 @@
                     columns.push({
                         field: field,
                         title: title,
-                        //width:attr.UIWidth*2,
+                        width:attr.UIWidth*2,
                         fixed: false
 
                     });
@@ -721,10 +721,10 @@
     </style>
 </head>
 <body >
-    <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="wrapper wrapper-content animated fadeInRight" style="padding:0px 10px 20px 10px">
         <div class="ibox-content">
-            <div class="row" style="margin-top:10px">
-    	        <div class="panel panel-default" style="border:0px"> 
+            <div class="row">
+    	        <div class="panel panel-default" style="border:0px;margin-bottom:3px"> 
     		    <div id="toolbar" style="width:100%"></div>
             </div>
             <table id="dg" class="table table-hover"></table>

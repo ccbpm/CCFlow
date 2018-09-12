@@ -26,7 +26,6 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -800,7 +799,7 @@ namespace BP.WF.HttpHandler
                 {
                     //判断该dtl是否要显示?
                     Entity myEnDtl = enDtl.Ens.GetNewEntity; //获取他的en
-                    myEnDtl.SetValByKey(enDtl.RefKey, this.PKVal);  //给refpk赋值
+                    myEnDtl.SetValByKey(enDtl.RefKey, this.PKVal);  //给refpk赋值.
                     if (myEnDtl.HisUAC.IsView == false)
                         continue;
 
@@ -842,7 +841,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@Entity_Init错误:" + ex.Message;
             }
         }
         #endregion 实体的操作.

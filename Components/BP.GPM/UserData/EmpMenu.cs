@@ -117,10 +117,10 @@ namespace BP.GPM
                 map.EnDesc = "人员菜单对应";
                 map.EnType = EnType.App;
 
-
-                map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
-               // map.AddDDLEntitiesPK(EmpMenuAttr.FK_Menu, null, "菜单功能",new BP.GPM.Menus(),true);
+               // map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
                 map.AddTBStringPK(EmpMenuAttr.FK_Menu, null, "菜单", false, false, 0, 50, 20);
+                map.AddDDLEntitiesPK(EmpMenuAttr.FK_Emp, null, "菜单功能", new BP.Port.Emps(), true);
+
                 map.AddBoolean(EmpMenuAttr.IsChecked, true, "是否选中", true, true);
 
                 this._enMap = map;

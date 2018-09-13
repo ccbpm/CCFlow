@@ -2829,6 +2829,9 @@ namespace BP.WF.HttpHandler
             //获取注册信心表
             UserRegedit ur = new UserRegedit(WebUser.No, this.EnsName + "_Group");
             string reAttrs = this.GetRequestVal("Attrs");
+            
+            //判断是否已经选择分组
+            bool contentFlag = false;
             foreach (Attr attr in attrs)
             {
                 if (attr.UIContralType == UIContralType.DDL)
@@ -2839,15 +2842,18 @@ namespace BP.WF.HttpHandler
 
                     // 根据状态 设置信息.
                     if (ur.Vals.IndexOf(attr.Key) != -1)
+                    {
                         dr["Checked"] = "true";
-
-                    if (ur.Vals.IndexOf(attr.Key) != -1)
-                        dr["Checked"] = "true";
-
+                        contentFlag = true;
+                    }
                     dt.Rows.Add(dr);
                 }
                 
             }
+
+            if (contentFlag == false && dt.Rows.Count != 0)
+                  dt.Rows[0]["Checked"] = "true";
+
             return BP.Tools.Json.ToJson(dt);
         }
 
@@ -2875,8 +2881,26 @@ namespace BP.WF.HttpHandler
            
             dt.TableName = "Attrs";
 
-            //标注是否有分析项
-            bool IsExitAnalySis = false;
+            //如果不存在分析项手动添加一个分析项
+            DataRow dtr = dt.NewRow();
+            dtr["Field"] = "Group_Number";
+            dtr["Name"] = "数量";
+            dtr["Checked"] = "true";
+            dt.Rows.Add(dtr);
+
+            DataTable ddlDt = new DataTable();
+            ddlDt.TableName = "Group_Number";
+            ddlDt.Columns.Add("No");
+            ddlDt.Columns.Add("Name");
+            ddlDt.Columns.Add("Selected");
+            DataRow ddlDr = ddlDt.NewRow();
+            ddlDr["No"] = "SUM";
+            ddlDr["Name"] = "求和";
+            ddlDr["Selected"] = "true";
+            ddlDt.Rows.Add(ddlDr);
+            ds.Tables.Add(ddlDt);
+            
+
 
             foreach (Attr attr in map.Attrs)
             {
@@ -2909,7 +2933,6 @@ namespace BP.WF.HttpHandler
                         dr["Checked"] = "true";
 
                     dt.Rows.Add(dr);
-                    IsExitAnalySis = true;
 
                     isHave = true;
                 }
@@ -2918,7 +2941,7 @@ namespace BP.WF.HttpHandler
                     continue;
 
 
-                DataRow dtr = dt.NewRow();
+                dtr = dt.NewRow();
                 dtr["Field"] = attr.Key;
                 dtr["Name"] = attr.Desc;
                 
@@ -2926,16 +2949,16 @@ namespace BP.WF.HttpHandler
                 // 根据状态 设置信息.
                 if (ur.Vals.IndexOf(attr.Key) != -1)
                     dtr["Checked"] = "true";
-                IsExitAnalySis = true;
+   
                 dt.Rows.Add(dtr);
 
-                DataTable ddlDt = new DataTable();
+                ddlDt = new DataTable();
                 ddlDt.Columns.Add("No");
                 ddlDt.Columns.Add("Name");
                 ddlDt.Columns.Add("Selected");
                 ddlDt.TableName = attr.Key;
 
-                DataRow ddlDr = ddlDt.NewRow();
+                ddlDr = ddlDt.NewRow();
                 ddlDr["No"] = "SUM";
                 ddlDr["Name"] = "求和";
                 if (ur.Vals.IndexOf("@" + attr.Key + "=SUM") != -1)
@@ -2960,33 +2983,8 @@ namespace BP.WF.HttpHandler
                 }
 
                 ds.Tables.Add(ddlDt);
-               // if (ur.Vals.IndexOf("@" + attr.Key + "=MAX") != -1)
-               // if (ur.Vals.IndexOf("@" + attr.Key + "=MIN") != -1)
-               // if (ur.Vals.IndexOf("@" + attr.Key + "=BZC") != -1)
-               // if (ur.Vals.IndexOf("@" + attr.Key + "=LSXS") != -1)
                 
 
-            }
-
-             if(IsExitAnalySis == false){
-        	    //如果不存在分析项手动添加一个分析项
-        	     DataRow dtr = dt.NewRow();
-                 dtr["Field"] = "Group_Number";
-                 dtr["Name"] ="数量";
-                 dtr["Checked"] = "true";
-                 dt.Rows.Add(dtr);
-             
-                 DataTable ddlDt = new DataTable();
-                 ddlDt.TableName = "Group_Number";
-                 ddlDt.Columns.Add("No");
-                 ddlDt.Columns.Add("Name");
-                 ddlDt.Columns.Add("Selected");
-                 DataRow ddlDr = ddlDt.NewRow();
-                 ddlDr["No"] = "SUM";
-                 ddlDr["Name"] = "求和";
-                 ddlDr["Selected"] = "true";
-                 ddlDt.Rows.Add(ddlDr);
-                 ds.Tables.Add(ddlDt);
             }
             ds.Tables.Add(dt);
             return BP.Tools.Json.ToJson(ds);
@@ -3012,7 +3010,7 @@ namespace BP.WF.HttpHandler
 
             ds = GroupSearchSet(ens, en, map, ur, ds, aas);
             if (ds == null)
-                return "info@<img src='../Img/Pub/warning.gif' /><b><font color=red> 您没有选择分析的数据</font></b>";
+                return "info@<img src='../Img/Pub/warning.gif' /><b><font color=red> 您没有选择显示内容/分析项目</font></b>";
 
             //不显示合计列。
             string NoShowSum = SystemConfig.GetConfigXmlEns("NoShowSum", this.EnsName);
@@ -3042,6 +3040,7 @@ namespace BP.WF.HttpHandler
 
             //根据注册表信息获取里面的分组信息
             string StateNumKey = ur.Vals.Substring(ur.Vals.IndexOf("@StateNumKey") + 1);
+           
             string[] statNumKeys = StateNumKey.Split('@');
             foreach (string ct in statNumKeys)
             {
@@ -3103,14 +3102,12 @@ namespace BP.WF.HttpHandler
                     
                 }
            
-                
-
-
             }
             bool isHaveLJ = false; // 是否有累计字段。
             if (StateNumKey.IndexOf("AMOUNT@") != -1)
                 isHaveLJ = true;
 
+            
             if (groupKey == "")
             {
                 return null;
@@ -3157,7 +3154,9 @@ namespace BP.WF.HttpHandler
 
             groupBy = groupBy.Substring(0, groupBy.Length - 1);
 
-
+            if(groupBy.Trim().Equals("GROUP BY")){
+                return null;
+            }
 
             // 查询语句的生成
             string where = " WHERE ";

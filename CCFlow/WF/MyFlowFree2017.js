@@ -326,7 +326,7 @@ function figure_Template_Btn(frmBtn) {
         btnHtml.attr('disabled', 'disabled').css('background', 'gray');
     } else if (eventType == 1) {//运行Exe文件. 运行JS
         $.each(flowData.Sys_MapAttr, function (i, obj) {
-            if (doc != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
+            if (doc != null && doc.indexOf('@' + obj.KeyOfEn) > 0) {
                 //替换
                 //url=  url.replace(new RegExp(/(：)/g), ':');
                 //先这样吧

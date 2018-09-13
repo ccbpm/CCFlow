@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8"/>
     <title>批量处理</title>
-    <link href="JS/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="JS/EasyUI/themes/default/datagrid.css" rel="stylesheet" type="text/css" />
-    <link href="JS/EasyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="JS/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="JS/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="JS/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript" charset="UTF-8"></script>
+    <link href="../Scripts/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/EasyUI/themes/default/datagrid.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/EasyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript" charset="UTF-8"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
@@ -592,9 +592,8 @@
 <body>
 
 <form id="cc">
- <div data-options="region:'center'" style="padding: 0px;" border="false" style="overflow: hidden;">
-        <div class="easyui-panel" style="height:600px">
-        <div id="tb" style="padding: 3px;">
+        <div class="easyui-panel" style="height:400px;">
+        <div id="tb" style="padding: 1px;  border-color:Green;">
             <div id="Div1" style="height: 30px;">
                 <div id="toolbar" style="float: left;"> 
                 </div>
@@ -614,8 +613,8 @@
         <table id="dg"></table>
        </div>
        <div id="refMethod" ></div>
-    </div>
-<div id="Msg"></div>
+
+       <div id="Msg"></div>
 </form>
 <div id="dialogExpFile" style="width: 400px; height: 300px;">
         <div style="margin: 20px; color: Blue;">

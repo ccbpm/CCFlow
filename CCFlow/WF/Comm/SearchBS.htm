@@ -333,6 +333,7 @@
                 title: '序号',
                 field: '',
                 align: 'center',
+                width:80,
                 formatter: function (value, row, index) {
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
@@ -359,20 +360,23 @@
                     columns.push({
                         field: field,
                         title: title,
-                        width:attr.UIWidth*2,
+                        width:attr.Width,
                         fixed: false,
                         formatter: function (value, row, index) {
                             if (value == "0") return "否";
                             if (value == "1") return "是";
-
                         }
                     });
                 else
                     columns.push({
                         field: field,
                         title: title,
-                        width:attr.UIWidth*2,
+                        width:attr.Width,
                         fixed: false
+//                        formatter: function (value, row, index) {
+//                            return "<div style='width:"+attr.Width+"px;'>"+value+"</div>";
+//                        }
+
 
                     });
             }

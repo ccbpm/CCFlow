@@ -40,6 +40,7 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 background-color: #eaf2ff;
+                width:100%;
             }
      </style>
     <script language="javascript" type="text/javascript">
@@ -449,9 +450,16 @@
 
             });
 
-            if (pages == 0) pages = 1;
+            var headerCount = $("table thead tr th").length;
+            var tableLength=0;
+            $("table thead tr th").each(function (hi, th) {
+                tableLength += $(this).data().width;
+               
+            });
+            $('#dg').attr("width",tableLength);
 
-            
+
+            if (pages == 0) pages = 1;
             build_page_nav();
             build_page_info();
 
@@ -669,8 +677,11 @@
         function Setting() {
             var user = new WebUser();
             var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
-            OpenBootStrapModal(url, "eudlgframe", '设置', 800, 500, "icon-property", null, null, null, null, null, 'black');
-            //OpenEasyUiDialogExt(url, '设置', 800, 500, true);
+            //获取屏幕的长宽
+           var W = document.body.clientWidth-40;
+           var H = document.body.clientHeight-40;
+            OpenBootStrapModal(url, "eudlgframe", '设置', W, H, "icon-property", null, null, null, null, null, 'black');
+            
         }
 
         function formatOper(val,rowData,index){
@@ -718,7 +729,10 @@
           border-left:0px;
           border-right:0px;
          }
-   
+        
+        table{table-layout:fixed;}
+
+        table>td{width：100%}
     </style>
 </head>
 <body >
@@ -728,7 +742,7 @@
     	        <div class="panel panel-default" style="border:0px;margin-bottom:3px"> 
     		    <div id="toolbar" style="width:100%"></div>
             </div>
-            <table id="dg" class="table table-hover"></table>
+            <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;"></table>
             <!-- 显示分页信息 -->
             <div class="row">
                 <div class="col-md-6" id="page_info_area"></div>

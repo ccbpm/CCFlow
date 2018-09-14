@@ -14599,3 +14599,31 @@ body.skin-3 {
 		font-size: 12px
 	}
 }
+
+/**滚动条的样式**/
+.calcscrollin {
+    width: 100%;
+    height: 200px;
+}
+.calcscrollout{   
+    top: 0;
+    left: 0;    
+    width: 200px;
+    height: 150px; 
+    overflow: scroll;
+}
+.calcscrollout::-webkit-scrollbar,.fixed-table-body::-webkit-scrollbar{
+    width: 7px;
+    height: 7px;
+    background: #fff;
+}
+.calcscrollout::-webkit-scrollbar-track,.fixed-table-body::-webkit-scrollbar-track{
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-right: 4px;
+}
+.calcscrollout::-webkit-scrollbar-thumb,.fixed-table-body::-webkit-scrollbar-thumb{
+    height: 7px;
+    border: 1px solid #ccc;
+    background-color: #e5e5e5;
+}

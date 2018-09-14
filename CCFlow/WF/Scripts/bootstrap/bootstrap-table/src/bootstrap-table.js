@@ -130,22 +130,34 @@
     };
 
     var getScrollBarWidth = function () {
+//        if (cachedWidth === null) {
+//            var inner = $('<p/>').addClass('fixed-table-scroll-inner'),
+//                outer = $('<div/>').addClass('fixed-table-scroll-outer'),
+//                w1, w2;
+
+//            outer.append(inner);
+//            $('body').append(outer);
+
+//            w1 = inner[0].offsetWidth;
+//            outer.css('overflow', 'scroll');
+//            w2 = inner[0].offsetWidth;
+
+//            if (w1 === w2) {
+//                w2 = outer[0].clientWidth;
+//            }
+
+//            outer.remove();
+//            cachedWidth = w1 - w2;
+        //        }
         if (cachedWidth === null) {
-            var inner = $('<p/>').addClass('fixed-table-scroll-inner'),
-                outer = $('<div/>').addClass('fixed-table-scroll-outer'),
-                w1, w2;
-
-            outer.append(inner);
+            var outer = $('<div  class="calcscrollout"><p class="calcscrollin"><p/><div/>')
+            var w1, w2;
             $('body').append(outer);
-
-            w1 = inner[0].offsetWidth;
-            outer.css('overflow', 'scroll');
-            w2 = inner[0].offsetWidth;
-
+            w1 = $('.calcscrollout')[0].offsetWidth;
+            w2 = $('.calcscrollin')[0].offsetWidth;
             if (w1 === w2) {
-                w2 = outer[0].clientWidth;
+                w2 = $('.calcscrollin')[0].clientWidth;
             }
-
             outer.remove();
             cachedWidth = w1 - w2;
         }

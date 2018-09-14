@@ -127,11 +127,14 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
 
-            if (mapBase.IsInsert.toString().toLowerCase() == "true") {
-                $("#newWin").show();
-            } else {
+            if (mapBase.IsInsert.toString().toLowerCase() != "true")
                 $("#newWin").hide();
-            }
+
+            if (mapBase.IsImp.toString().toLowerCase() != "true")
+                $("#Imp").hide();
+
+            if(new WebUser().No != "admin")
+                $("#Set").hide();
 
         }
 
@@ -549,6 +552,11 @@
             $("#end").html(html);
         }
 
+        function Imp() {
+            var user = new WebUser();
+            var url = "./Sys/ImpData.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+            OpenEasyUiDialogExt(url, '导入数据', 800, 500, true);
+        }
         function Setting() {
             var user = new WebUser();
             var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
@@ -613,12 +621,13 @@
                 </div>
                 <div  style="float: left;"> 
                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
-                     <a id="newWin" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
+                    <a id="newWin" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
                 </div>
 
                 <div  style="float: left;">
                     <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出</a>
-                    <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="Setting()">设置</a>
+                     <a id="Imp" href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Imp()">导入</a>
+                    <a  id="Set" href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="Setting()">设置</a>
                 </div> 
 
             </div>

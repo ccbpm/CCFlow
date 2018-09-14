@@ -192,9 +192,6 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
             
-           //if(barCount%4==0)
-            //	html+="</br>";
-
             html += '<a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
             
@@ -202,8 +199,12 @@
                 html += '<a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a>  ';
             } 
 			html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>  ';
-			
-			html +='<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
+
+            if(mapBase.IsImp.toString().toLowerCase() == "true")
+                html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Imp()">导入</a>  ';
+
+			if(new WebUser().No=="admin")
+			    html +='<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
 
 			$("#toolbar").append(html);
 			
@@ -699,14 +700,24 @@
 
         }
 
+        function Imp(){
+           var user = new WebUser();
+           var url = "./Sys/ImpData.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+           //获取屏幕的长宽
+           var W = document.body.clientWidth-80;
+           var H = document.body.clientHeight-120;
+           OpenBootStrapModal(url, "eudlgframe", '导入数据', W, H, "icon-property", null, null, null, function(){
+             window.location.href= window.location.href;
+           }, null, 'black'); 
+        }
+
         function Setting() {
             var user = new WebUser();
             var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
             //获取屏幕的长宽
            var W = document.body.clientWidth-40;
            var H = document.body.clientHeight-40;
-            OpenBootStrapModal(url, "eudlgframe", '设置', W, H, "icon-property", null, null, null, null, null, 'black');
-            
+            OpenBootStrapModal(url, "eudlgframe", '设置', W, H, "icon-property", null, null, null, null, null, 'black'); 
         }
 
         function formatOper(val,rowData,index){
@@ -777,8 +788,6 @@
         </div>
     </div>
 
-	
-    
 <div id="Msg"></div>
 </body>
 </html>

@@ -206,7 +206,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
         }
 
-        eleHtml = "<input  type='text' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
+        eleHtml = "<input  type='text' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
         return eleHtml;
     }
 
@@ -216,7 +216,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (mapAttr.UIIsEnable == 1) {
             enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
         }
-        eleHtml = "<input type='text' class='form-control'  " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml = "<input type='text' class='form-control Wdate'  " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
         return eleHtml;
     }
 

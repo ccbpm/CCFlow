@@ -486,7 +486,6 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         return eleHtml;
     }
-
  
     /***************** 作为附件展示的控件. *****************************/
     if (mapAttr.UIContralType == 6) {
@@ -558,7 +557,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        eleHtml = "<input class='TBcalendar form-control' type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        eleHtml = "<input class='form-control Wdate' type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
         return eleHtml;
     }
 
@@ -570,7 +569,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        eleHtml = "<input  class='TBcalendar form-control' type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml = "<input  class='form-control Wdate' type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
         return eleHtml;
     }
 

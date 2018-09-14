@@ -374,7 +374,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input " + enableAttr + " style='width:125px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
+        return "<input " + enableAttr + " style='width:125px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' class='Wdate' />";
     }
 
     //时期时间类型.
@@ -386,7 +386,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input  type='text'  style='width:145px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input class='Wdate'  type='text'  style='width:145px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     // boolen 类型.

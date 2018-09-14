@@ -268,7 +268,7 @@
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
 
 
-                                html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control' style='width:160px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+                                html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:160px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
 
                                 if (isDrawTR == false) {
                                     html += "</tr>";
@@ -281,7 +281,7 @@
                             if (mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) {
                                 html += "<tr>";
                                 html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control' style='width:100%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:96%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
                                 html += "</tr>";
                                 isDrawTR = true;
                                 continue;

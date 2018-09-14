@@ -237,9 +237,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         if (mapAttr.UIIsEnable == 0) {
             var ctrl = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type=hidden  class='form-control' type='text'/>";
 
-
-            //console.log(flowData);
-            // defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn + "Text");
             defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn + "T");
 
             if (defValue == '' || defValue == null)
@@ -248,8 +245,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             ctrl += "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "Text'  value='" + defValue + "' disabled='disabled'   class='form-control' type='text'/>";
             return ctrl;
         }
-
-        //return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
         return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 
@@ -263,7 +258,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        //return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
         return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 
@@ -322,7 +316,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return " <input type='text' " + enableAttr + " value='" + defValue + "' style='width:125px;' class='form-control' id='TB_" + mapAttr.KeyOfEn + "' />";
+        return " <input type='text' " + enableAttr + " value='" + defValue + "' style='width:125px;' class='form-control Wdate' id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     //时期时间类型.
@@ -334,7 +328,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return " <input  type='text'  value='" + defValue + "' style='width:145px;' class='form-control' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        return " <input  type='text'  value='" + defValue + "' style='width:145px;' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     // boolen 类型.

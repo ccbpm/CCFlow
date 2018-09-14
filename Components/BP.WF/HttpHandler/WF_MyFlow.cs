@@ -327,7 +327,7 @@ namespace BP.WF.HttpHandler
                     case StartGuideWay.BySQLMulti:
                         return "url@StartGuideEntities.htm?StartGuideWay=BySQLMulti&FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.BySelfUrl: //按照定义的url.
-                        return "url@" + this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" + workid;
+                        return "url@" + this.currFlow.StartGuidePara1 + this.RequestParasOfAll + "&WorkID=" + workid;
                     case StartGuideWay.ByFrms: //选择表单.
                         return "url@./WorkOpt/StartGuideFrms.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     default:

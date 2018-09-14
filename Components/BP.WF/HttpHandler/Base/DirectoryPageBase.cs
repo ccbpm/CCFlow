@@ -230,6 +230,39 @@ namespace BP.WF.HttpHandler
                 return urlExt;
             }
         }
+        /// <summary>
+        /// 所有的paras
+        /// </summary>
+        public string RequestParasOfAll
+        {
+            get
+            {
+                string urlExt = "";
+                string rawUrl = this.context.Request.RawUrl;
+                rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
+                string[] paras = rawUrl.Split('&');
+                foreach (string para in paras)
+                {
+                    if (para == null
+                        || para == ""
+                        || para.Contains("=") == false)
+                        continue;
+
+                    if (para == "1=1")
+                        continue;
+
+                    urlExt += "&" + para;
+                }
+
+
+                foreach (string key in this.context.Request.Form.Keys)
+                {
+                    urlExt += "&" + key + "=" + this.context.Request.Form[key];
+                }
+
+                return urlExt;
+            }
+        }
         #endregion
 
         #region 属性参数.

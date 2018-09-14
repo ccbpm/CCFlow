@@ -11,6 +11,8 @@
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
+    <script src="./JS/layer/layer.js" type="text/javascript"></script>
+    <link href="./JS/layer/layer.css"  rel="stylesheet"  type="text/css"/>
 
     <!--bootstrap-table-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
@@ -42,6 +44,25 @@
                 background-color: #eaf2ff;
                 width:100%;
             }
+            table
+            {
+                border-collapse: collapse; 
+            }
+            
+            td{
+               width:100%;
+               word-break:keep-all;/* 不换行 */
+               white-space:nowrap;/* 不换行 */
+               overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+               text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+               -o-text-overflow:ellipsis;
+               -icab-text-overflow: ellipsis;
+               -khtml-text-overflow: ellipsis;
+               -moz-text-overflow: ellipsis;
+               -webkit-text-overflow: ellipsis;
+            }
+
+            
      </style>
     <script language="javascript" type="text/javascript">
 
@@ -81,12 +102,24 @@
             $("#dialogExpFile").hide();
             //初始化工具栏.
             InitToolbar();
-
             //执行查询.
             BindTable();
- 
-
             $("#Msg").html("");
+
+              $("td").on("mouseover",function() {
+                if (this.offsetWidth < this.scrollWidth) {
+                    var that = this;
+                    var text = $(this).text();
+                   layer.tips(text, that,{
+                        tips: 1,
+                        time: 0
+                   });
+                }
+              });
+              $("td").on("mouseout",function(){
+                layer.closeAll();
+              });
+           
         });
 
         //初始化数据.
@@ -136,16 +169,10 @@
             for (var i = 0; i < attrs.length; i++) {
             	 var attr = attrs[i];
                  var str = "";
-				//if(barCount%4==0)
-				//	str +="<br/>";
 					
                 str += "<label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label>";
-                
-               // if(barCount%4==0)
-               // 	str += "<select class='form-control' style='margin-top:5px;width:140px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
-               // else
 
-                	str += "<select class='form-control' style='margin-top:5px;width:"+attr.Width+"px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                str += "<select class='form-control' style='margin-top:5px;width:"+attr.Width+"px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
               
                 barCount += 1;
@@ -257,8 +284,6 @@
 
         }
 
-
-
         function ReDownExpFile() {
 
             var fileName = $("*[id$=expFileName]").val();
@@ -354,9 +379,20 @@
 
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
-                if (attr.UIContralType == 1)
+                if (attr.UIContralType == 1){
                     field = field + "Text";
-                if (attr.UIContralType == 2)
+                     columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false,
+                        width:attr.Width,
+                        cellStyle:{
+                            css:{"white-space": "nowrap","word-break":"keep-all",  "width":"100%"}
+                        }
+                    });
+                    continue;
+                }
+                if (attr.UIContralType == 2){
                     columns.push({
                         field: field,
                         title: title,
@@ -367,18 +403,16 @@
                             if (value == "1") return "是";
                         }
                     });
-                else
-                    columns.push({
-                        field: field,
-                        title: title,
-                        width:attr.Width,
-                        fixed: false
-//                        formatter: function (value, row, index) {
-//                            return "<div style='width:"+attr.Width+"px;'>"+value+"</div>";
-//                        }
+                    continue;
+                }
+               
+                columns.push({
+                    field: field,
+                    title: title,
+                    width:attr.Width,
+                    fixed: false
 
-
-                    });
+                });
             }
 
             sysMapData = mapdata["Sys_MapData"][0];
@@ -396,20 +430,14 @@
                  });
              }
 
-
-
             $('#dg').bootstrapTable({
                 data: mapdata["DT"],
                 columns: [columns],
                 cache:false,
                 striped: true,
                 singleSelect: true,
-                //pagination: true,
                 sidePagination: "server",
                 pageNumber: 1,
-                //pageSize: 10,
-               // pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-               // showPaginationSwitch:true,
                 strictSearch: true,
                 //得到查询的参数
                 queryParams: function (params) {
@@ -422,7 +450,6 @@
                     return temp;
                 },
 
-               // loadFilter: pagerFilter,
                 onDblClickRow: function (row, $element) {
                     var pkval = row["No"];
                     var objectID = "No";
@@ -467,16 +494,12 @@
             build_page_nav();
             build_page_info();
 
-
-
      }
 
    
          //解析显示分页信息
 
         function build_page_info() {
-            
-
                 $("#page_info_area").empty();
                 $("#page_info_area").append("当前第" + pageIdx + "页，总共" + pages +
                                 "页,总共"+count+"条记录。");
@@ -675,8 +698,6 @@
             return;
 
         }
-
-
 
         function Setting() {
             var user = new WebUser();

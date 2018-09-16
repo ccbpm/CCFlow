@@ -395,7 +395,7 @@ namespace BP.WF.HttpHandler
                     if (this.IsMobile == true)
                         toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                     else
-                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
                 }
                 else
                 {
@@ -1766,6 +1766,12 @@ namespace BP.WF.HttpHandler
                         frms = frms.Trim();
                         frms = frms.Replace(" ", "");
                         frms = frms.Replace(" ", "");
+
+                        if (DataType.IsNullOrEmpty(frms) == true)
+                        {
+                            continue;
+                            //return "err@当前表单设置为仅有参数的时候启用,但是没有传递来参数.";
+                        }
 
                         if (frms.Contains(",") == false)
                         {

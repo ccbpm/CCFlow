@@ -695,7 +695,7 @@ namespace BP.WF
                     catch
                     {
                         wk.CheckPhysicsTable();
-                        wk.DirectInsert();
+                        //    wk.DirectInsert();
                     }
 
                     //设置参数.

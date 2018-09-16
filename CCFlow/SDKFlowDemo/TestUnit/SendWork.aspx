@@ -78,11 +78,12 @@ entWireup="true" CodeBehind="SendWork.aspx.cs" Inherits="CCFlow.Test111" %>
     </fieldset>
 
     <fieldset>
-    <legend>历史测试报告</legend>
+    <legend>历史测试报告-徐淑豪-sqlserver</legend>
     <ul>
-    <li> 徐淑豪: 执行1000次平均用60秒. 每秒跑出了49个. sqlserver数据库. </li>
+    <li>执行1000次平均用60秒. 每秒跑出了49个.</li>
     </ul>
     </fieldset>
+
 
 
     </form>

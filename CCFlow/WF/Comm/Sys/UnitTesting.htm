@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>数据结构</title>
+    <title>单元测试</title>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -21,48 +21,42 @@
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-            //var user = new WebUser();
-            //if (user.No != "admin") {
-               // alert("您无权使用该功能.");
-              //  return;
-            //}
+//            var user = new WebUser();
+//            if (user.No != "admin") {
+//                // alert("您无权使用该功能.");
+//                return;
+//            }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
-
-            var data = handler.DoMethodReturnJSON("SystemClass_Init");
+            var data = handler.DoMethodReturnJSON("UnitTesting_Init");
 
             var html = "<table border=0 style='width:98%;'>";
-            html += "<caption>系统实体表结构</caption>";
+            html += "<caption>单元测试</caption>";
             html += "<tr>";
             html += "<th>序号</th>";
             html += "<th>类名</th>";
             html += "<th>名称</th>";
-            html += "<th>表</th>";
-            html += "<th>操作1</th>";
-            html += "<th>操作2</th>";
-            html += "<th>操作3</th>";
+            html += "<th>备注</th>";
+            html += "<th>执行</th>";
             html += "</tr>";
 
             var isTr = false;
             for (var i = 0; i < data.length; i++) {
 
                 var en = data[i];
-                //  var str = JSON.stringify(en);
 
                 if (isTr == true)
-                    html += "<tr style='background-color:#F4F4F4;' ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\" >";
+                    html += "<tr style='background-color:#F4F4F4;'  >";
                 else
-                    html += "<tr ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\"  >";
+                    html += "<tr >";
 
                 isTr = !isTr;
 
                 html += "<td>" + i + "</td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
-                html += "<td>" + en.PTable + "</td>";
-                html += "<td><a href=\"javascript:OpenFeild('" + en.EnsName + "','" + en.Name + "')\">字段</a></td>";
-                html += "<td><a href=\"javascript:OpenCheck('" + en.No + "','" + en.Name + "')\">体检</a></td>";
-                html += "<td><a href=\"javascript:OpenEn('" + en.EnsName + "','" + en.Name + "')\">界面</a></td>";
+                html += "<td>" + en.Note + "</td>";
+                html += "<td><a href=\"javascript:OpenEn('" + en.No + "','" + en.Name + "')\">执行</a></td>";
                 html += "</tr>";
             }
 
@@ -70,29 +64,13 @@
 
         });
 
-         function OpenFeild(m,name) {
-             var url = 'SystemClassField.htm?EnsName=' + m;
-             OpenEasyUiDialog(url, "eudlgframe", name, 800, 550, "icon-edit", true, null, null, null, function () {
-                //window.location.href = window.location.href;
-            });
-        }
-
         function OpenEn(m, name) {
-            m = m.substring(0, m.length - 1);
-            var url = '../En.htm?EnName=' + m;
-            OpenEasyUiDialog(url, "eudlgframe",name, 700, 550, "icon-edit", true, null, null, null, function () {
-              //  window.location.href = window.location.href;
-            });
-        }
-
-        function OpenCheck(ensName, name) {
-
-            var url = 'SystemClassCheck.htm?EnName=' + ensName;
-
+            var url = 'SystemClassField.htm?EnsName=' + m;
             OpenEasyUiDialog(url, "eudlgframe", name, 800, 550, "icon-edit", true, null, null, null, function () {
                 //window.location.href = window.location.href;
             });
         }
+         
         
     </script>
 

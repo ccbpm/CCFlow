@@ -14,7 +14,6 @@ using System.Collections;
 using System.Net;
 using System.Xml.Schema;
 using System.Web.Services.Description;
-using System.Linq;
 using System.IO;
 
 namespace BP.WF.HttpHandler
@@ -63,21 +62,21 @@ namespace BP.WF.HttpHandler
                 dr["Note"] = en.Note;
                 dt.Rows.Add(dr);
             }
-
             return BP.Tools.Json.ToJson(dt);
         }
-        public string UnitTestingName()
+        public string UnitTesting_Done()
         {
-
-            string enName = this.GetRequestVal("UnitTestingName");
-
-            // BP.UnitTesting.TestBase
-            //object obj= "";
-
-            return "ss";
+            try
+            {
+                BP.UnitTesting.TestBase tc = BP.UnitTesting.Glo.GetTestEntity(this.EnName);
+                tc.Do();
+                return "执行成功.<hr>" + tc.Note.Replace("\t\n", "@<br>");
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
-        
-
         public string ImpData_Init()
         {
             return "";
@@ -93,7 +92,7 @@ namespace BP.WF.HttpHandler
             if (files.Count == 0)
                 return "err@请选择要导入的数据信息。";
 
-            string errInfo="";
+            string errInfo = "";
 
             string ext = ".xls";
             string fileName = System.IO.Path.GetFileName(files[0].FileName);
@@ -114,23 +113,23 @@ namespace BP.WF.HttpHandler
             //删除临时文件
             System.IO.File.Delete(filePath);
 
-            if (dt.Rows.Count==0)
+            if (dt.Rows.Count == 0)
                 return "err@无导入的数据";
 
             //获得entity.
             Entities ens = ClassFactory.GetEns(this.EnsName);
-            Entity en =ens.GetNewEntity;
-            if (en.IsNoEntity==false)
+            Entity en = ens.GetNewEntity;
+            if (en.IsNoEntity == false)
                 return "err@必须是EntityNo是实体";
 
             string noColName = ""; //实体列的编号名称.
             string nameColName = ""; //实体列的名字名称.
 
-            Attr attr=en.EnMap.GetAttrByKey("No");
+            Attr attr = en.EnMap.GetAttrByKey("No");
             noColName = attr.Desc; //
             BP.En.Map map = en.EnMap;
             String codeStruct = map.CodeStruct;
-            attr=map.GetAttrByKey("Name");
+            attr = map.GetAttrByKey("Name");
             nameColName = attr.Desc; //
 
             //定义属性.
@@ -142,7 +141,7 @@ namespace BP.WF.HttpHandler
             //清空方式导入.
             int count = 0;//导入的行数
             String successInfo = "";
-            if (impWay==0)
+            if (impWay == 0)
             {
                 ens.ClearTable();
                 foreach (DataRow dr in dt.Rows)
@@ -158,18 +157,18 @@ namespace BP.WF.HttpHandler
 
                     EntityNoName myen = ens.GetNewEntity as EntityNoName;
                     myen.No = no;
-                    if (myen.IsExits==true)
+                    if (myen.IsExits == true)
                     {
-                        errInfo += "err@编号["+no+"]["+name+"]重复.";
+                        errInfo += "err@编号[" + no + "][" + name + "]重复.";
                         continue;
                     }
-                   
+
                     myen.Name = name;
 
-                     en = ens.GetNewEntity;
+                    en = ens.GetNewEntity;
 
                     //给实体赋值
-                    errInfo += SetEntityAttrVal(no,dr, attrs, en, dt,0);
+                    errInfo += SetEntityAttrVal(no, dr, attrs, en, dt, 0);
                     count++;
                     successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
                 }
@@ -194,7 +193,7 @@ namespace BP.WF.HttpHandler
                     if (myen.IsExits == true)
                     {
                         //给实体赋值
-                        errInfo += SetEntityAttrVal(no,dr, attrs, en, dt,1);
+                        errInfo += SetEntityAttrVal(no, dr, attrs, en, dt, 1);
                         count++;
                         successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
                         continue;
@@ -202,32 +201,33 @@ namespace BP.WF.HttpHandler
                     myen.Name = name;
 
                     //给实体赋值
-                    errInfo += SetEntityAttrVal(no,dr, attrs, en, dt,0);
+                    errInfo += SetEntityAttrVal(no, dr, attrs, en, dt, 0);
                     count++;
                     successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
                 }
             }
             #endregion
 
-            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split"+"successInfo=" + successInfo;
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo;
         }
 
-        private string SetEntityAttrVal(string no,DataRow dr, Attrs attrs, Entity en, DataTable dt, int saveType)
+        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, Entity en, DataTable dt, int saveType)
         {
             string errInfo = "";
             //按照属性赋值.
             foreach (Attr item in attrs)
             {
-                if (item.Key == "No" )
+                if (item.Key == "No")
                 {
                     en.SetValByKey(item.Key, no);
                     continue;
                 }
-                if(item.Key == "Name"){
+                if (item.Key == "Name")
+                {
                     en.SetValByKey(item.Key, dr[item.Desc].ToString());
                     continue;
                 }
-                    
+
 
                 if (dt.Columns.Contains(item.Desc) == false)
                     continue;
@@ -297,7 +297,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
 
             return errInfo;
@@ -461,7 +461,8 @@ namespace BP.WF.HttpHandler
                 string info = map.EnDesc + ":数据体检信息：体检失败" + msg;
                 return info;
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
@@ -538,7 +539,7 @@ namespace BP.WF.HttpHandler
                     case FieldType.FK:
                     case FieldType.PKFK:
                         Entities myens = ClassFactory.GetEns(attr.UIBindKey);
-                        html += "<td>表/视图:" + myens.GetNewEntity.EnMap.PhysicsTable + " 关联字段:" + attr.UIRefKeyValue + "," + attr.UIRefKeyText+"</td>";
+                        html += "<td>表/视图:" + myens.GetNewEntity.EnMap.PhysicsTable + " 关联字段:" + attr.UIRefKeyValue + "," + attr.UIRefKeyText + "</td>";
                         break;
                     default:
                         html += "<td>无</td>";
@@ -582,7 +583,7 @@ namespace BP.WF.HttpHandler
 
 
                 DataRow dr = dt.NewRow();
-               
+
                 dr["No"] = en.ToString();
                 try
                 {
@@ -590,7 +591,7 @@ namespace BP.WF.HttpHandler
                 }
                 catch
                 {
-                    dr["EnsName"] = en.ToString()+"s";
+                    dr["EnsName"] = en.ToString() + "s";
                 }
                 dr["Name"] = en.EnMap.EnDesc;
                 dr["PTable"] = en.EnMap.PhysicsTable;
@@ -609,7 +610,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-            string sfno = this.GetRequestVal("sfno") ;
+            string sfno = this.GetRequestVal("sfno");
             SFTable sftable = null;
             DataTable dt = null;
             StringBuilder s = null;
@@ -618,7 +619,7 @@ namespace BP.WF.HttpHandler
             {
                 case "DtlFieldUp": //字段上移
                     return "执行成功.";
-              
+
 
                 default:
                     break;
@@ -628,7 +629,7 @@ namespace BP.WF.HttpHandler
             throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
-        
+
         #region 数据源管理
         public string SFDBSrcNewGuide_GetList()
         {
@@ -746,7 +747,7 @@ namespace BP.WF.HttpHandler
             //获取文件存放目录
             string directory = this.GetRequestVal("Directory");
             string fileName = files[0].FileName;
-            string savePath = BP.Sys.SystemConfig.PathOfDataUser + "RichTextFile" + "\\" + directory ;
+            string savePath = BP.Sys.SystemConfig.PathOfDataUser + "RichTextFile" + "\\" + directory;
 
             if (System.IO.Directory.Exists(savePath) == false)
                 System.IO.Directory.CreateDirectory(savePath);
@@ -757,7 +758,7 @@ namespace BP.WF.HttpHandler
                 System.IO.Directory.Delete(savePath);
 
             files[0].SaveAs(savePath);
-            
+
             return savePath;
         }
 
@@ -765,31 +766,33 @@ namespace BP.WF.HttpHandler
          * 获取已知目录下的文件列表
          * @return
          */
-        public string javaScriptFiles(){
-		String savePath = BP.Sys.SystemConfig.PathOfDataUser+"JSLibData";
+        public string javaScriptFiles()
+        {
+            String savePath = BP.Sys.SystemConfig.PathOfDataUser + "JSLibData";
 
-         DirectoryInfo di = new DirectoryInfo(savePath);
-        //找到该目录下的文件 
-        FileInfo[] fileList = di.GetFiles();
+            DirectoryInfo di = new DirectoryInfo(savePath);
+            //找到该目录下的文件 
+            FileInfo[] fileList = di.GetFiles();
 
-	    if(fileList==null||fileList.Length==0)
-	    	return "";
-	    DataTable dt = new DataTable();
-	    dt.Columns.Add("FileName");
-	    dt.Columns.Add("ChangeTime");
-	    foreach(FileInfo file in fileList){
-	    	DataRow dr = dt.NewRow();
-            dr["FileName"] = file.Name;
-            dr["ChangeTime"] = file.LastAccessTime.ToString();
-			
-			dt.Rows.Add(dr);
-	    }
-	    return BP.Tools.Json.ToJson(dt);
-			
-	}
-        #endregion        
+            if (fileList == null || fileList.Length == 0)
+                return "";
+            DataTable dt = new DataTable();
+            dt.Columns.Add("FileName");
+            dt.Columns.Add("ChangeTime");
+            foreach (FileInfo file in fileList)
+            {
+                DataRow dr = dt.NewRow();
+                dr["FileName"] = file.Name;
+                dr["ChangeTime"] = file.LastAccessTime.ToString();
+
+                dt.Rows.Add(dr);
+            }
+            return BP.Tools.Json.ToJson(dt);
+
+        }
+        #endregion
     }
 
 
-   
+
 }

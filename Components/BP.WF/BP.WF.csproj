@@ -300,7 +300,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\FoolTruckNodeFrm.cs" />
-    <Compile Include="UnitTesting\AboutTitle.cs" />
+    <Compile Include="UnitTesting\Etc\AboutTitle.cs" />
     <Compile Include="UnitTesting\AttrFlow\CreateStartWork.cs" />
     <Compile Include="UnitTesting\AttrFlow\GenerBillNo.cs" />
     <Compile Include="UnitTesting\AttrFlow\GenerTitle.cs" />
@@ -324,11 +324,13 @@
     <Compile Include="UnitTesting\AttrNode\TurnByFieldAndStation.cs" />
     <Compile Include="UnitTesting\AttrNode\TurnBySQL.cs" />
     <Compile Include="UnitTesting\AttrNode\TurnByURL.cs" />
-    <Compile Include="UnitTesting\CallSubFlow.cs" />
-    <Compile Include="UnitTesting\CellTestBase.cs" />
-    <Compile Include="UnitTesting\DeleteSubThread.cs" />
-    <Compile Include="UnitTesting\FlowBaseFunc023.cs" />
-    <Compile Include="UnitTesting\GenerBillByDataTable.cs" />
+    <Compile Include="UnitTesting\Etc\CallSubFlow.cs" />
+    <Compile Include="UnitTesting\Speed\SendWork.cs" />
+    <Compile Include="UnitTesting\TestBase.cs" />
+    <Compile Include="UnitTesting\Etc\DeleteSubThread.cs" />
+    <Compile Include="UnitTesting\Etc\FlowBaseFunc023.cs" />
+    <Compile Include="UnitTesting\Etc\GenerBillByDataTable.cs" />
+    <Compile Include="UnitTesting\Glo.cs" />
     <Compile Include="UnitTesting\ReturnCase\HeLiuNodeReturn.cs" />
     <Compile Include="UnitTesting\ReturnCase\Return024.cs" />
     <Compile Include="UnitTesting\ReturnCase\ReturnByDesigner.cs" />
@@ -347,15 +349,15 @@
     <Compile Include="UnitTesting\SendCase\SendCases.cs" />
     <Compile Include="UnitTesting\SendCase\StarterFlowByERS.cs" />
     <Compile Include="UnitTesting\SendCase\Test001.cs" />
-    <Compile Include="UnitTesting\SendMessage.cs" />
-    <Compile Include="UnitTesting\SendObjs.cs" />
-    <Compile Include="UnitTesting\SubFlowReback.cs" />
-    <Compile Include="UnitTesting\TaskPool.cs" />
+    <Compile Include="UnitTesting\Etc\SendMessage.cs" />
+    <Compile Include="UnitTesting\Etc\SendObjs.cs" />
+    <Compile Include="UnitTesting\Etc\SubFlowReback.cs" />
+    <Compile Include="UnitTesting\Etc\TaskPool.cs" />
     <Compile Include="UnitTesting\TestCaseTemplete.cs" />
     <Compile Include="UnitTesting\TestData\TestAPI.cs" />
     <Compile Include="UnitTesting\TestData\TestSample.cs" />
     <Compile Include="UnitTesting\TestData\TestVer.cs" />
-    <Compile Include="UnitTesting\YGFlow.cs" />
+    <Compile Include="UnitTesting\Etc\YGFlow.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

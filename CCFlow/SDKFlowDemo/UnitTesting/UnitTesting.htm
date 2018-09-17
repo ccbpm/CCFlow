@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>单元测试</title>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../WF/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <link href="../../WF/Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../WF/Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script language="javascript" type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../WF/Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            //            var user = new WebUser();
+            //            if (user.No != "admin") {
+            //                // alert("您无权使用该功能.");
+            //                return;
+            //            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
+            var data = handler.DoMethodReturnJSON("UnitTesting_Init");
+
+            var html = "<table border=0 style='width:98%;'>";
+            html += "<caption>单元测试</caption>";
+            html += "<tr>";
+            html += "<th>序号</th>";
+            html += "<th>类名</th>";
+            html += "<th>名称</th>";
+            html += "<th>备注</th>";
+            html += "<th>执行</th>";
+            html += "</tr>";
+
+            var isTr = false;
+            for (var i = 0; i < data.length; i++) {
+
+                var en = data[i];
+
+                if (isTr == true)
+                    html += "<tr style='background-color:#F4F4F4;'  >";
+                else
+                    html += "<tr >";
+
+                isTr = !isTr;
+
+                html += "<td>" + i + "</td>";
+                html += "<td>" + en.No + "</td>";
+                html += "<td>" + en.Name + "</td>";
+                html += "<td>" + en.Note + "</td>";
+                html += "<td><a href=\"javascript:OpenEn('" + en.No + "','" + en.Name + "')\">执行</a></td>";
+                html += "</tr>";
+            }
+
+            $("#Msg").html(html);
+
+        });
+
+        function OpenEn(m, name) {
+
+            var url = 'UnitTestingDone.htm?EnName=' + m;
+            alert(url);
+
+            OpenEasyUiDialog(url, "eudlgframe", name, 800, 550, "icon-edit", true, null, null, null, function () {
+                //window.location.href = window.location.href;
+            });
+        }
+         
+        
+    </script>
+</head>
+<body style="padding: 15px; margin: 15px;">
+    <form id="cc">
+    <div style="padding: 10px;" id="Msg">
+        <img src="../../WF/Img/loading.gif" />&nbsp;正在加载,请稍后......</div>
+    </form>
+</body>
+</html>

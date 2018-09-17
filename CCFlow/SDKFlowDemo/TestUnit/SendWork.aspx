@@ -1,5 +1,4 @@
-﻿<%@ Page Language="C#" AutoEv
-entWireup="true" CodeBehind="SendWork.aspx.cs" Inherits="CCFlow.Test111" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SendWork.aspx.cs" Inherits="CCFlow.SDKFlowDemo.TestUnit.Test111" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -21,20 +20,20 @@ entWireup="true" CodeBehind="SendWork.aspx.cs" Inherits="CCFlow.Test111" %>
         api.Save();
 
         BP.WF.UnitTesting.TestVer apiVer = new BP.WF.UnitTesting.TestVer();
-        apiVer.No = "SendWork005";
+        apiVer.No = "SendWork002";
         apiVer.Name = "版本" + apiVer.No;
 
         try
         {
-            //定义了10个样本. 对该过程执行10次。
+            //定义了5个样本. 对该过程执行5次。
             for (int idx = 0; idx < 5; idx++)
             {
 
                 DateTime startTime = System.DateTime.Now;
                 for (int i = 0; i <= 1000; i++)
                 {
-                    long workid = BP.WF.Dev2Interface.Node_CreateBlankWork("230");
-                    BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork("230", workid, 0, "admin");
+                    long workid = BP.WF.Dev2Interface.Node_CreateBlankWork("065");
+                    BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork("065", workid, 0, "admin");
                 }
                 //doSomeThing();   //要运行的java程序
                 DateTime endTime = System.DateTime.Now;
@@ -49,7 +48,9 @@ entWireup="true" CodeBehind="SendWork.aspx.cs" Inherits="CCFlow.Test111" %>
                 dtl.Name = api.Name + "-" + apiVer.Name;
 
                 dtl.TimeUse = ts.TotalMilliseconds;
-                dtl.TimesPerSecond = ts.TotalMilliseconds / 1000;
+                //运行时间间隔长度（毫秒）/1000 (换算成秒)/1000(每次需要多少秒) 
+                //
+                dtl.TimesPerSecond = 1/(ts.TotalMilliseconds / 1000/1000);
                 dtl.Insert();
             }
 
@@ -62,7 +63,7 @@ entWireup="true" CodeBehind="SendWork.aspx.cs" Inherits="CCFlow.Test111" %>
             throw ex;
         }
 
-        this.Response.Redirect("/WF/Comm/Group.htm?EnsName=BP.Test.TestAPIDtls", true);
+        this.Response.Redirect("/WF/Comm/Group.htm?EnsName=BP.WF.UnitTesting.TestSamples", true);
 
      %>
     </div>
@@ -78,13 +79,24 @@ entWireup="true" CodeBehind="SendWork.aspx.cs" Inherits="CCFlow.Test111" %>
     </fieldset>
 
     <fieldset>
-    <legend>历史测试报告-徐淑豪-sqlserver</legend>
+    <legend>历史测试报告-徐淑浩-sqlserver  2018-9-16</legend>
     <ul>
-    <li>执行1000次平均用60秒. 每秒跑出了49个.</li>
+    <li>执行了5个批次：每批次执行1000次发起. 每秒跑出了19次发起.</li>
+    </ul>
+    </fieldset>
+    <fieldset>
+    <legend>历史测试报告-徐淑浩-oracle  2018-9-16</legend>
+    <ul>
+    <li>执行了5个批次：每批次执行1000次发起. 每秒跑出了10次发起.</li>
     </ul>
     </fieldset>
 
-
+    <fieldset>
+    <legend>历史测试报告-徐淑浩-oracle  2018-9-16</legend>
+    <ul>
+    <li>执行了5个批次：每批次执行1000次发起. 每秒跑出了10次发起.</li>
+    </ul>
+    </fieldset>
 
     </form>
 </body>

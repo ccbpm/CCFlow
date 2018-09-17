@@ -7,7 +7,7 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace CCFlow {
+namespace CCFlow.SDKFlowDemo.TestUnit {
     
     
     public partial class Test111 {

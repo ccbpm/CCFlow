@@ -642,8 +642,6 @@ namespace BP.DA
             responseStream.Close();
             return path;
         }
-
-
         /// <summary>
         /// 读取URL内容
         /// </summary>

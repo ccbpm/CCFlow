@@ -995,7 +995,6 @@ namespace BP.WF
                         case "WF_EmpWorks":
                         case "WF_GenerEmpWorkDtls":
                         case "WF_GenerEmpWorks":
-                        case "V_FlowData":
                             continue;
                         case "Sys_Enum":
                             en.CheckPhysicsTable();
@@ -1156,9 +1155,7 @@ namespace BP.WF
                
 
                 BP.Sys.Glo.WriteLineInfo("装载模板完成。开始修复视图...");
-
-                //修复视图.
-                //Flow.RepareV_FlowData_View();
+             
 
                 BP.Sys.Glo.WriteLineInfo("视图修复完成。");
             }

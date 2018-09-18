@@ -384,7 +384,6 @@
     <Compile Include="Template\FindWorker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\FlowData.cs" />
     <Compile Include="Template\AccepterRole.cs">
       <SubType>Code</SubType>
     </Compile>

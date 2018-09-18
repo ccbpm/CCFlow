@@ -48,7 +48,6 @@ namespace BP.WF.DTS
         public override object Do()
         {
             string msg = "";
-            msg+=Flow.RepareV_FlowData_View();
 
             Flows fls = new Flows();
             fls.RetrieveAllFromDBSource();

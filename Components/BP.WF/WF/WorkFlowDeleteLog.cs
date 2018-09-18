@@ -266,21 +266,19 @@ namespace BP.WF
 
                 Map map = new Map("WF_WorkFlowDeleteLog", "流程删除日志");
                  
-
                 // 流程基础数据。
-                map.AddTBIntPKOID(FlowDataAttr.OID, "WorkID");
-                map.AddTBInt(FlowDataAttr.FID, 0, "FID", false, false);
-                map.AddDDLEntities(FlowDataAttr.FK_Dept, null, "部门", new Port.Depts(), false);
-                map.AddTBString(FlowDataAttr.Title, null, "标题", true, true, 0, 100, 100);
-                map.AddTBString(FlowDataAttr.FlowStarter, null, "发起人", true, true, 0, 100, 100);
-                map.AddTBDateTime(FlowDataAttr.FlowStartRDT, null, "发起时间", true, true);
-                map.AddDDLEntities(FlowDataAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
-                map.AddDDLEntities(FlowDataAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddTBDateTime(FlowDataAttr.FlowEnderRDT, null, "最后处理时间", true, true);
-                map.AddTBInt(FlowDataAttr.FlowEndNode, 0, "停留节点", true, true);
-                map.AddTBFloat(FlowDataAttr.FlowDaySpan, 0, "跨度(天)", true, true);
-                map.AddTBInt(FlowDataAttr.MyNum, 1, "个数", true, true);
-                map.AddTBString(FlowDataAttr.FlowEmps, null, "参与人", false, false, 0, 100, 100);
+                map.AddTBIntPKOID(); 
+                map.AddTBInt(GenerWorkFlowAttr.FID, 0, "FID", false, false);
+                map.AddDDLEntities(GenerWorkFlowAttr.FK_Dept, null, "部门", new Port.Depts(), false);
+                map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, true, 0, 100, 100);
+                map.AddTBString(GERptAttr.FlowStarter, null, "发起人", true, true, 0, 100, 100);
+                map.AddTBDateTime(GERptAttr.FlowStartRDT, null, "发起时间", true, true);
+                map.AddDDLEntities(GenerWorkFlowAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
+                map.AddDDLEntities(GenerWorkFlowAttr.FK_Flow, null, "流程", new Flows(), false);
+                map.AddTBDateTime(GERptAttr.FlowEnderRDT, null, "最后处理时间", true, true);
+                map.AddTBInt(GERptAttr.FlowEndNode, 0, "停留节点", true, true);
+                map.AddTBFloat(GERptAttr.FlowDaySpan, 0, "跨度(天)", true, true);
+                map.AddTBString(GERptAttr.FlowEmps, null, "参与人", false, false, 0, 100, 100);
 
                 //删除信息.
                 map.AddTBString(WorkFlowDeleteLogAttr.Oper, null, "删除人员", true, true, 0, 20, 10);
@@ -290,9 +288,9 @@ namespace BP.WF
                 map.AddTBDateTime(WorkFlowDeleteLogAttr.DeleteDT, null, "删除日期", true, true);
 
                 //查询.
-                map.AddSearchAttr(FlowDataAttr.FK_Dept);
-                map.AddSearchAttr(FlowDataAttr.FK_NY);
-                map.AddSearchAttr(FlowDataAttr.FK_Flow);
+                map.AddSearchAttr(GenerWorkFlowAttr.FK_Dept);
+                map.AddSearchAttr(GenerWorkFlowAttr.FK_NY);
+                map.AddSearchAttr(GenerWorkFlowAttr.FK_Flow);
 
                // map.AddHidden(FlowDataAttr.FlowEmps, " LIKE ", "'%@@WebUser.No%'");
 

@@ -57,13 +57,15 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
         cbx.attr("id", AttrOfOper + "_combobox");
         cbx.attr("name", AttrOfOper + "_combobox");
         tb.before(cbx);
+        var w = tb.outerWidth() - 120;
         cbx.attr("class", "easyui-combobox");
-        cbx.css("width", tb.width());
+        cbx.css("width", w);
 
         cbx.combobox({
             "editable": false,
             "valueField": valueField,
             "textField": textField,
+            "width": w,
             "multiple": true,
             "onSelect": function (p) {
                 $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
@@ -83,6 +85,8 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
                 })(p[valueField], AttrOfOper);
             }
         });
+
+
         cbx.combobox("loadData", data);
         if (mapAttr != null && mapAttr.UIIsEnable != 1) {
             cbx.combobox('disable');

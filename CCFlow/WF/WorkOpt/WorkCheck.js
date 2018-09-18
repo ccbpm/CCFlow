@@ -101,7 +101,7 @@
                 html += "</td>";
 
                 //审核意见
-                if (this.IsDoc && isReadonly == false) {
+                if (this.IsDoc =="1" && isReadonly == false) {
 
                     html += "<td>";
 

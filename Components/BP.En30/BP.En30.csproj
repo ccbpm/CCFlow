@@ -331,16 +331,7 @@
     <Compile Include="Sys\XML\ActiveAttr.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\XML\AttrDesc.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Sys\XML\EnumInfoXml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\GlobalKeyVal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\Search.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\XML\RegularExpression.cs">

@@ -2668,54 +2668,7 @@ namespace BP.Web.UC
                 _Text = value;
             }
         }
-
-        #region bind entity
-        public void BindEntity3ItemReadonly(Entity en, bool isShowDtl)
-        {
-            Map map = en.EnMap;
-            AttrDescs ads = new AttrDescs(en.ToString());
-
-            this.Add("<table border=0 >");
-            foreach (AttrDesc ad in ads)
-            {
-                Attr attr = map.GetAttrByKey(ad.Attr);
-                this.AddTR();
-                this.AddTD("valign=top  align=right ", attr.Desc + "：");
-                switch (attr.MyDataType)
-                {
-                    case DataType.AppString:
-                        if (attr.UIHeight != 0)
-                            this.AddTD("valign=top ", en.GetValHtmlStringByKey(ad.Attr));
-                        else
-                            this.AddTD("valign=top ", en.GetValStringByKey(ad.Attr));
-                        break;
-                    case DataType.AppDateTime:
-                    case DataType.AppDate:
-                        this.AddTD("valign=top ", en.GetValStringByKey(ad.Attr));
-                        break;
-                    case DataType.AppBoolean:
-                        this.AddTD("valign=top ", en.GetValBoolStrByKey(ad.Attr));
-                        break;
-                    case DataType.AppFloat:
-                    case DataType.AppInt:
-                        this.AddTD("valign=top class='TDNum'", en.GetValStringByKey(ad.Attr));
-                        break;
-                    case DataType.AppMoney:
-                        this.AddTD("valign=top class='TDNum'", en.GetValDecimalByKey(ad.Attr).ToString("0.00"));
-                        break;
-                    case DataType.AppDouble:
-                        this.AddTD("valign=top class='TDNum'", en.GetValStringByKey(ad.Attr));
-                        break;
-                    default:
-                        break;
-                }
-                this.AddTD("valign=right  ", ad.Desc);
-                this.AddTREnd();
-            }
-            this.AddTableEnd();
-        }
-        #endregion
-
+ 
 
         #region Web 窗体设计器生成的代码
 

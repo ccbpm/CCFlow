@@ -141,12 +141,12 @@ etpl.config({
 
     if (plant == "CCFlow") {
         // CCFlow
-        dynamicHandler = "/WF/Comm/Handler.ashx";
-        richurl = dynamicHandler + '?DoType=HttpHandler&DoMethod=RichUploadFile&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&Directory=' + directory;
+        var handlerUrl = "/WF/Comm/Handler.ashx";
+        richurl = handlerUrl + '?DoType=HttpHandler&DoMethod=RichUploadFile&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&Directory=' + directory;
     } else {
         // JFlow
-        dynamicHandler = basePath + "/WF/Comm/Sys/ProcessRequest.do";
-        richurl = dynamicHandler + '?DoType=RichUploadFile&Directory=' + directory;
+        var handlerUrl = basePath + "/WF/Comm/Sys/ProcessRequest.do";
+        richurl = handlerUrl + '?DoType=RichUploadFile&Directory=' + directory;
     }
 
 

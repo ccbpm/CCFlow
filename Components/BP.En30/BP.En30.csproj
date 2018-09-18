@@ -403,9 +403,6 @@
     <Compile Include="DTS\FF.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="En\EntityMultiTree.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="En\EntityOIDName.cs" />
     <Compile Include="En\EnDtl.cs">
       <SubType>Code</SubType>
@@ -414,9 +411,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\Entity.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityMID.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\EntityMM.cs">

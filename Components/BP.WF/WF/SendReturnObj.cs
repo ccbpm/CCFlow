@@ -267,7 +267,8 @@ namespace BP.WF
                     case SendReturnMsgFlag.AllotTask:
                         return "分配任务";
                     default:
-                        throw new Exception("@没有判断的标记...");
+                        return "信息:" + MsgFlag;
+                    //  throw new Exception("@没有判断的标记...");
                 }
             }
         }

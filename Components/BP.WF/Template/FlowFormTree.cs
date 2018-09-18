@@ -25,7 +25,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 独立表单树
     /// </summary>
-    public class FlowFormTree : EntityMultiTree
+    public class FlowFormTree : EntityTree
     {
         #region 扩展属性，不做数据操作
         /// <summary>
@@ -41,6 +41,7 @@ namespace BP.WF.Template
         /// </summary>
         public string Url { get; set; }
         #endregion
+
         #region 属性
         public string FK_Flow
         {
@@ -69,13 +70,13 @@ namespace BP.WF.Template
         public FlowFormTree(string _No) : base(_No) { }
         #endregion
 
-        /// <summary>
-        /// 分组字段
-        /// </summary>
-        public override string RefObjField
-        {
-            get { return FlowFormTreeAttr.FK_Flow; }
-        }
+        ///// <summary>
+        ///// 分组字段
+        ///// </summary>
+        //public override string RefObjField
+        //{
+        //    get { return FlowFormTreeAttr.FK_Flow; }
+        //}
         /// <summary>
         /// 独立表单树Map
         /// </summary>
@@ -203,7 +204,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 独立表单树
     /// </summary>
-    public class FlowFormTrees : EntitiesMultiTree
+    public class FlowFormTrees : EntitiesTree
     {
         /// <summary>
         /// 独立表单树s
@@ -223,7 +224,7 @@ namespace BP.WF.Template
                tree.No = "100";
                tree.FK_Flow = flowNo;
                tree.Name = "根目录";
-               tree.IsDir = false;
+              // tree.IsDir = false;
                tree.ParentNo = "0";
                tree.Insert();
 

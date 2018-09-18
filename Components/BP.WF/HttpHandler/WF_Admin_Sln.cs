@@ -252,7 +252,7 @@ namespace BP.WF.HttpHandler
         StringBuilder appendMenuSb = new StringBuilder();
         public void TansEntitiesToGenerTree(Entities ens, string rootNo, string checkIds)
         {
-            EntityMultiTree root = ens.GetEntityByKey(rootNo) as EntityMultiTree;
+            EntityTree root = ens.GetEntityByKey(rootNo) as EntityTree;
             if (root == null)
                 throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
             appendMenus.Append("[{");
@@ -275,13 +275,13 @@ namespace BP.WF.HttpHandler
             appendMenus.Append("}]");
         }
 
-        public void AddChildren(EntityMultiTree parentEn, Entities ens, string checkIds)
+        public void AddChildren(EntityTree parentEn, Entities ens, string checkIds)
         {
             appendMenus.Append(appendMenuSb);
             appendMenuSb.Clear();
 
             appendMenuSb.Append("[");
-            foreach (EntityMultiTree item in ens)
+            foreach (EntityTree item in ens)
             {
                 if (item.ParentNo != parentEn.No)
                     continue;

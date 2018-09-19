@@ -158,7 +158,26 @@ function CloseOKBtn() {
  //   alert('嘿，我听说您喜欢模态框...');
 }
 
+//双击签名
+function figure_Template_Siganture(SigantureID, val) {
+    var src = '../DataUser/Siganture/' + val + '.jpg'   //新图片地址
+    document.getElementById("Img" + SigantureID).src = src;
+    isSigantureChecked = true;
 
+    var sealData = new Entities("BP.Tools.WFSealDatas");
+    sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+    if (sealData.length > 0) {
+        return;
+    }
+    else {
+        sealData = new Entity("BP.Tools.WFSealData");
+        sealData.OID = GetQueryString("WorkID");
+        sealData.FK_Node = GetQueryString("FK_Node");
+        sealData.SealData = val;
+        sealData.Insert();
+    }
+
+}
 //然浏览器最大化.
 function ResizeWindow() {
     if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     

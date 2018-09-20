@@ -388,21 +388,21 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
+                #region 开始组合url.
                 string toUrl = "";
                 if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
                 {
-
                     //toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                     if (this.IsMobile == true)
                     {
-                        if (gwf.Paras_Frms != "")
+                        if (gwf.Paras_Frms.Equals("") == false)
                             toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
                         else
                             toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                     }
                     else
                     {
-                        if (gwf.Paras_Frms != "")
+                        if (gwf.Paras_Frms.Equals("")==false)
                             toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
                         else
                             toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
@@ -438,16 +438,8 @@ namespace BP.WF.HttpHandler
                 {
                     toUrl = "./WebOffice/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                 }
-
-                string[] ps = this.RequestParas.Split('&');
-                foreach (string s in ps)
-                {
-                    if (DataType.IsNullOrEmpty(s))
-                        continue;
-                    if (toUrl.Contains(s))
-                        continue;
-                    toUrl += "&" + s;
-                }
+                #endregion 开始组合url.
+ 
 
                 if (gwf == null)
                 {
@@ -1063,7 +1055,7 @@ namespace BP.WF.HttpHandler
            
                 #endregion
 
-                #region  //加载自定义的button.
+                #region  加载自定义的button.
                 BP.WF.Template.NodeToolbars bars = new NodeToolbars();
                 bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node);
                 foreach (NodeToolbar bar in bars)

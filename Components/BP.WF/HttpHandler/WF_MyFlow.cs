@@ -391,11 +391,48 @@ namespace BP.WF.HttpHandler
                 string toUrl = "";
                 if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
                 {
+
                     //toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                     if (this.IsMobile == true)
-                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    {
+                        if (gwf.Paras_Frms != "")
+                            toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
+                        else
+                            toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    }
                     else
-                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
+                    {
+                        if (gwf.Paras_Frms != "")
+                            toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
+                        else
+                            toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    }
+
+                    string[] strs = this.RequestParas.Split('&');
+                    foreach (string str in strs)
+                    {
+                        if (toUrl.Contains(str) == true)
+                            continue;
+                        if (str.Contains("DoType=") == true)
+                            continue;
+                        if (str.Contains("DoMethod=") == true)
+                            continue;
+                        if (str.Contains("HttpHandlerName=") == true)
+                            continue;
+                        if (str.Contains("IsLoadData=") == true)
+                            continue;
+                        if (str.Contains("IsCheckGuide=") == true)
+                            continue;                     
+
+                        toUrl += "&" + str;
+                    }
+                    foreach (string key in context.Request.Form.Keys)
+                    {
+                        if (toUrl.Contains(key+"=") == true)
+                            continue;
+
+                        toUrl += "&" + key + "=" + context.Request.Form[key];
+                    }
                 }
                 else
                 {
@@ -497,7 +534,7 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-             //   string url = "MyFlowFoolTruck.htm";
+               //string url = "MyFlowFoolTruck.htm";
                 string url = "MyFlowGener.htm";
 
                 //处理连接.

@@ -10,7 +10,7 @@ namespace BP.GPM
     /// <summary>
     /// 流程待办
     /// </summary>
-    public class BarOfTodolist :BarBase
+    public class BarOfTodolist : BarBase
     {
         #region 系统属性.
         /// <summary>
@@ -53,7 +53,7 @@ namespace BP.GPM
         {
             get
             {
-                return "待办流程";
+                return "待办";
             }
         }
         /// <summary>
@@ -74,7 +74,7 @@ namespace BP.GPM
             get
             {
 
-                string sql = "select A.WorkID, A.FK_Flow, A.FK_Node, A.Title , A.Sender, A.RDT from WF_GenerWorkFlow A , WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.IsPass=0 AND B.FK_Emp='"+ Web.WebUser.No+"' ";
+                string sql = "select A.WorkID, A.FK_Flow, A.FK_Node, A.Title , A.Sender, A.RDT from WF_GenerWorkFlow A , WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.IsPass=0 AND B.FK_Emp='" + Web.WebUser.No + "' ";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
@@ -89,12 +89,11 @@ namespace BP.GPM
                     string sender = dr["Sender"].ToString();
                     string rdt = dr["RDT"].ToString();
                     count++;
-                    if(count >6)
+                    if (count > 6)
                         html += "<tr><td><a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>更多....</td></tr>";
                     else
-                        html += "<tr><td><a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>"+count+"."+title + "</a></td></tr>";
+                        html += "<tr><td><a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>" + count + "." + title + "</a></td></tr>";
                 }
-               
                 return html;
             }
         }
@@ -118,17 +117,15 @@ namespace BP.GPM
                 return "200";
             }
         }
-
         public override bool IsLine
         {
             get
             {
-                return false;  
+                return false;
             }
         }
         #endregion 外观行为.
     }
-
     /// <summary>
     /// 流程待办
     /// </summary>
@@ -196,7 +193,7 @@ namespace BP.GPM
             get
             {
 
-                string sql = "select A.WorkID, A.FK_Flow, A.FK_Node, A.Title , A.Sender, A.RDT from WF_GenerWorkFlow A , WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.IsPass=0 AND B.FK_Emp='"+Web.WebUser.No+"' ";
+                string sql = "select A.WorkID, A.FK_Flow, A.FK_Node, A.Title , A.Sender, A.RDT from WF_GenerWorkFlow A , WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.IsPass=0 AND B.FK_Emp='" + Web.WebUser.No + "' ";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
@@ -214,8 +211,8 @@ namespace BP.GPM
                     if (count > 6)
                         html += "<li style='list-style-type:none'>更多....</li>";
                     else
-                     html += "<li style='list-style-type:none'>"+count+".<a href='MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>" + title + "</a></li>";
-                   
+                        html += "<li style='list-style-type:none'>" + count + ".<a href='MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'>" + title + "</a></li>";
+
                 }
                 html += "</ul>";
                 return html;

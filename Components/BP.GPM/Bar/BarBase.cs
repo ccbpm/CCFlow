@@ -6,7 +6,6 @@ using BP.En;
 using BP.Web.Controls;
 using BP.Web;
 using BP.Sys;
-using BP.WF.XML;
 
 namespace BP.GPM
 {

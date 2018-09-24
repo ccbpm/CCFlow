@@ -35,7 +35,9 @@ namespace BP.GPM
     public class EmpMenu : EntityMM
     {
         #region 属性
-       
+        /// <summary>
+        /// 人员
+        /// </summary>
         public string FK_Emp
         {
             get
@@ -47,6 +49,9 @@ namespace BP.GPM
                 this.SetValByKey(EmpMenuAttr.FK_Emp, value);
             }
         }
+        /// <summary>
+        /// 菜单
+        /// </summary>
         public string FK_Menu
         {
             get
@@ -58,8 +63,9 @@ namespace BP.GPM
                 this.SetValByKey(EmpMenuAttr.FK_Menu, value);
             }
         }
-       
-
+        /// <summary>
+        /// 系统
+        /// </summary>
         public string FK_App
         {
             get
@@ -74,11 +80,11 @@ namespace BP.GPM
         /// <summary>
         /// 是否选中
         /// </summary>
-        public string IsChecked
+        public bool IsChecked
         {
             get
             {
-                return this.GetValStringByKey(EmpMenuAttr.IsChecked);
+                return this.GetValBooleanByKey(EmpMenuAttr.IsChecked);
             }
             set
             {
@@ -97,14 +103,6 @@ namespace BP.GPM
         /// <summary>
         /// 人员菜单功能
         /// </summary>
-        /// <param name="mypk"></param>
-        public EmpMenu(string no)
-        {
-            this.Retrieve();
-        }
-        /// <summary>
-        /// 人员菜单功能
-        /// </summary>
         public override Map EnMap
         {
             get
@@ -117,7 +115,7 @@ namespace BP.GPM
                 map.EnDesc = "人员菜单对应";
                 map.EnType = EnType.App;
 
-               // map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
+                // map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
                 map.AddTBStringPK(EmpMenuAttr.FK_Menu, null, "菜单", false, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(EmpMenuAttr.FK_Emp, null, "菜单功能", new BP.Port.Emps(), true);
 

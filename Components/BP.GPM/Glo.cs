@@ -17,9 +17,10 @@ namespace BP.GPM
         public static OSModel OSModel
         {
             get
-            { 
-                OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 1);
-                return os;  
+            {
+                return OSModel.OneMore;
+                //OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 1);
+                //return os;  
             }
         }
         /// <summary>
@@ -34,7 +35,6 @@ namespace BP.GPM
                 string corpsecret = BP.Sys.SystemConfig.Ding_CorpSecret;
                 if (DataType.IsNullOrEmpty(corpid) || DataType.IsNullOrEmpty(corpsecret))
                     return false;
-
                 return true;
             }
         }
@@ -57,7 +57,7 @@ namespace BP.GPM
         /// <summary>
         /// 安装包
         /// </summary>
-        public static void DoInstallDataBase(string lang, string yunXingHuanjing)
+        public static void DoInstallDataBase()
         {
             ArrayList al = null;
             string info = "BP.En.Entity";
@@ -76,11 +76,15 @@ namespace BP.GPM
 
                 if (en.ToString().Contains("BP.Port."))
                     continue;
+
+                if (en.ToString().Contains("BP.GPM.") == false)
+                    continue;
+
                 //if (en.ToString().Contains("BP.GPM."))
                 //    continue;
                 //if (en.ToString().Contains("BP.Demo."))
                 //    continue;
-                 
+
                 string table = null;
                 try
                 {
@@ -133,117 +137,36 @@ namespace BP.GPM
 
             #region 3, 执行基本的 sql
             string sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Port_Inc_CH_BPM.sql";
-            /*孙战平将RunSQLScript改为RunSQLScriptGo*/
             BP.DA.DBAccess.RunSQLScript(sqlscript);
             #endregion 修复
 
             #region 5, 初始化数据。
-
             sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\InitPublicData.sql";
             BP.DA.DBAccess.RunSQLScript(sqlscript);
-
-            //sqlscript = SystemConfig.PathOfWebApp + "\\Data\\Install\\SQLScript\\GO.sql";
-            //BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
             #endregion 初始化数据
 
             #region 6, 创建视图。
-            
-            //if (DBAccess.IsExitsObject("V_GPM_EmpGroup"))
-            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
-
-            //if (DBAccess.IsExitsObject("V_GPM_EmpGroupMenu"))
-            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroupMenu");
-
-            //if (DBAccess.IsExitsObject("V_GPM_EmpStationMenu"))
-            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpStationMenu");
-
-            //if (DBAccess.IsExitsObject("V_GPM_EmpMenu_GPM"))
-            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu_GPM");
-
-            // if (DBAccess.IsExitsObject("V_GPM_EmpMenu"))
-            //    BP.DA.DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu");
-            
-
             sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
 
             //MySQL 语法有所区别
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
-            {
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
-            }
+
             //Oracle 语法有所区别
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
-            }
+
             BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
             #endregion 创建视图
 
-            #region 7, 初始化系统访问权限
-            //查询出来系统
-            Apps apps = new Apps();
-            apps.RetrieveAll();
-
-            //查询出来人员.
-            Emps emps = new Emps();
-            emps.RetrieveAllFromDBSource();
-            //查询出来菜单
-            Menus menus = new Menus();
-            menus.RetrieveAllFromDBSource();
-
-            //删除数据.
-            BP.DA.DBAccess.RunSQL("DELETE FROM GPM_EmpApp");
-         //   BP.DA.DBAccess.RunSQL("DELETE FROM GPM_EmpMenu");
-
-            foreach (Emp emp in emps)
-            {
-                #region 初始化系统访问权限.
-                foreach (App app in apps)
-                {
-                    EmpApp me = new EmpApp();
-                    me.Copy(app);
-                    me.FK_Emp = emp.No;
-                    me.FK_App = app.No;
-                    me.Name = app.Name;
-                    me.MyPK = app.No + "_" + me.FK_Emp;
-                    me.Insert();
-                }
-                #endregion 初始化系统访问权限.
-
-                #region 初始化人员菜单权限
-                foreach (Menu menu in menus)
-                {
-                    EmpMenu em = new EmpMenu();
-                    em.Copy(menu);
-                    em.FK_Emp = emp.No;
-                    em.FK_App = menu.FK_App;
-                    em.FK_Menu = menu.No;
-                    //    em.MyPK = menu.No + "_" + emp.No;
-                    em.Insert();
-                }
-                #endregion
-            }
+          
             //处理全路径
             Depts depts = new Depts();
             depts.RetrieveAll();
             foreach (Dept dept in depts)
-            {
                 dept.GenerNameOfPath();
-            }
-            #endregion
-        }
-        /// <summary>
-        /// 安装CCIM
-        /// </summary>
-        /// <param name="lang"></param>
-        /// <param name="yunXingHuanjing"></param>
-        /// <param name="isDemo"></param>
-        public static void DoInstallCCIM(string lang, string dbTypes)
-        {
-          //  string sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\CCIM_"+BP.Sys.SystemConfig.AppCenterDBType+".sql";
-           // BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
-        }
 
+        }
         /// <summary>
         /// 是否可以执行判断
         /// </summary>

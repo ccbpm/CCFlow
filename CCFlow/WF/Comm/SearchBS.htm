@@ -29,10 +29,6 @@
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
      <base target="_self" />
      <style type="text/css">
-           .datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber
-            {
-                text-overflow: ellipsis;
-            }
             .fixed-table-container thead th .th-inner
              {
                 padding: 8px;
@@ -43,10 +39,6 @@
                 white-space: nowrap;
                 background-color: #eaf2ff;
                 width:100%;
-            }
-            table
-            {
-                border-collapse: collapse; 
             }
             
             td{
@@ -359,7 +351,7 @@
                 title: '序号',
                 field: '',
                 align: 'center',
-                width:80,
+                width:60,
                 formatter: function (value, row, index) {
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
@@ -380,13 +372,16 @@
 
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
+                var width = attr.Width;
                 if (attr.UIContralType == 1){
+                    if(width==null || width==""|| width==undefined)
+                        width = 180;
                     field = field + "Text";
                      columns.push({
                         field: field,
                         title: title,
                         fixed: false,
-                        width:attr.Width,
+                        width:width,
                         cellStyle:{
                             css:{"white-space": "nowrap","word-break":"keep-all",  "width":"100%"}
                         }
@@ -406,7 +401,8 @@
                     });
                     continue;
                 }
-               
+                if(width==null || width==""|| width==undefined)
+                    width = 100;
                 columns.push({
                     field: field,
                     title: title,
@@ -430,7 +426,7 @@
                      formatter: formatOper
                  });
              }
-
+            $('#dg').html("");
             $('#dg').bootstrapTable({
                 data: mapdata["DT"],
                 columns: [columns],

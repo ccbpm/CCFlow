@@ -2024,8 +2024,10 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion  查询出来实体数据.
 
-                /*#region 保存新加行.
-
+                #region 保存新加行.
+                //没有新增行
+                if (this.GetRequestValBoolen("InsertFlag") == false)
+                    return "保存成功.";
 
                 string valValue = "";
 
@@ -2093,7 +2095,7 @@ namespace BP.WF.HttpHandler
               
 
 
-                #endregion 保存新加行.*/
+                #endregion 保存新加行.
 
                 return "保存成功.";
             }

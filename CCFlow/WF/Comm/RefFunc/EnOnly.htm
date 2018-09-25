@@ -925,17 +925,14 @@
                 return;
             }
 
-            
-
             //获取文件的后缀名
             if (fileObj.name.indexOf(".") == -1) {
                 alert("上传的文件名没有扩展名，请检查后上传");
                 return;
             }
-            var ext = name.substring(name.lastIndexOf(".") + 1);
-            
-            //form表单序列话
+           
 
+            //form表单序列话
             var formData = new FormData();
             var name = $("input").val();
             formData.append("file", fileObj);

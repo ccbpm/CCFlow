@@ -23,6 +23,7 @@
         var dtM; //方法集合.
         var webUser = new WebUser();
         var mapAtrrs;
+        var InsertFlag = 0;
 
         $(function () {
             InitPage();
@@ -30,6 +31,7 @@
         });
 
         function InitPage() {
+            InsertFlag = 0;
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             httpHandler.AddUrlData();  //增加参数属性.
 
@@ -392,6 +394,9 @@
             html += "</tr>";
 
             $("#mytable tbody:last").append(html);
+            $("#newbtn").linkbutton('disable');
+
+            InsertFlag = 1;
         }
 
         function OpenEn(pkVal) {
@@ -411,12 +416,14 @@
             formData = $("form").serialize();
 
             handler.AddFormData();
+            handler.AddPara("InsertFlag", InsertFlag);
             //name = encodeURIComponent(name);
             var data = handler.DoMethodReturnString("Entities_Save");
             if (data.indexOf("err@") == 0) {
                 alert(data);
                 return;
             }
+            $("#newbtn").linkbutton('enable');
             InitPage(); //刷新.
         }
 

@@ -23,7 +23,7 @@
 
 	<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-    <link href="../fonts/font-icons.min.css" rel="Stylesheet" />
+    <link href="../../../GPM/fonts/font-icons.min.css" rel="Stylesheet" />
   
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -924,10 +924,20 @@
             if (fileObj == null || (fileObj) == "undefined" || fileObj.size <= 0) {
                 return;
             }
+
+            var name = $("input").val();
+
+            //获取文件的后缀名
+            if (name.indexOf(".") == -1) {
+                alert("上传的文件名没有扩展名，请检查后上传");
+                return;
+            }
+            var ext = name.substring(name.lastIndexOf(".") + 1);
+            
             //form表单序列话
 
             var formData = new FormData();
-            var name = $("input").val();
+           
             formData.append("file", fileObj);
             formData.append("name", name);
             //获取发送请求时的参数

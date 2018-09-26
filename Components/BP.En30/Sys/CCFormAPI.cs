@@ -225,6 +225,7 @@ namespace BP.Sys
             attr.KeyOfEn = fieldName;
             attr.Name = fieldDesc;
             attr.MyDataType = BP.DA.DataType.AppString;
+
             attr.UIContralType = BP.En.UIContralType.DDL;
             attr.UIBindKey = fk_SFTable; //绑定信息.
             attr.X = x;
@@ -236,9 +237,9 @@ namespace BP.Sys
                 case SrcType.CreateTable:
                 case SrcType.TableOrView:
                 case SrcType.BPClass:
-                case SrcType.SQL: //是sql模式.
                     attr.LGType = FieldTypeS.FK;
                     break;
+                case SrcType.SQL: //是sql模式.
                 default:
                     attr.LGType = FieldTypeS.Normal;
                     break;
@@ -250,7 +251,7 @@ namespace BP.Sys
             attr.GroupID = groupField.OID;
             attr.Save();
 
-            //如果是普通的字段, 这个属于外部数据类型,或者webservices类型.
+            //如果是普通的字段, 这个属于外部数据类型,或者webservices类型. sql 语句类型.
             if (attr.LGType == FieldTypeS.Normal)
             {
                 MapAttr attrH = new MapAttr();

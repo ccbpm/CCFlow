@@ -171,6 +171,7 @@ function figure_Template_Siganture(SigantureID, val) {
     }
     else {
         sealData = new Entity("BP.Tools.WFSealData");
+        sealData.MyPK = GetQueryString("WorkID") + "_" + GetQueryString("FK_Node") + "_" + val;
         sealData.OID = GetQueryString("WorkID");
         sealData.FK_Node = GetQueryString("FK_Node");
         sealData.SealData = val;

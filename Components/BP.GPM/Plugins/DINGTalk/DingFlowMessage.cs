@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
 using System.Text;
 using BP.Sys;
 using System.Collections;
@@ -12,26 +12,40 @@ namespace BP.EAI.Plugins.DINGTalk
     {
         public Ding_Post_ReturnVal Ding_SendWorkMessage(DingMsgType msgType, long WorkID, string sender)
         {
-            //主业务表
-            GenerWorkFlow workFlow = new GenerWorkFlow(WorkID);
-            //结束不发送消息
-            if (workFlow.WFState == WFState.Complete)
-                return null;
-            //判断节点类型，分合流等
-            Node node = new Node(workFlow.FK_Node);
 
-            Monitors empWorks = new Monitors();
-            QueryObject obj = new QueryObject(empWorks);
-            obj.AddWhere(MonitorAttr.WorkID, WorkID);
-            obj.addOr();
-            obj.AddWhere(MonitorAttr.FID, WorkID);
-            obj.DoQuery();
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID);
+            if (dt.Rows.Count == 0)
+                return null;
+
+            int wfState = int.Parse(dt.Rows[0]["WFState"].ToString());
+            string title = dt.Rows[0]["Title"].ToString();
+            string flowNo = dt.Rows[0]["FK_Flow"].ToString();
+            string nodeID = dt.Rows[0]["FK_Node"].ToString();
+            string fid = dt.Rows[0]["FID"].ToString();
+            string flowName = dt.Rows[0]["FlowName"].ToString();
+            string nodeName = dt.Rows[0]["NodeName"].ToString();
+            string starterName = dt.Rows[0]["StarterName"].ToString();
+            string rdt = dt.Rows[0]["RDT"].ToString();
+
+
+            //结束不发送消息
+            if (wfState==3 )
+                return null;
+
+
+
+            //判断节点类型，分合流等.
+            dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EmpWorks WHERE WorkID=" + WorkID+" OR FID="+WorkID);
+            if (dt.Rows.Count == 0)
+                return null;
+
             string toUsers = "";
-            foreach (Monitor empWork in empWorks)
+            foreach (DataRow dr in dt.Rows)
             {
                 if (toUsers.Length > 0)
                     toUsers += "|";
-                toUsers += empWork.FK_Emp;
+                toUsers += dr["FK_Emp"].ToString();
             }
             if (toUsers.Length == 0)
                 return null;
@@ -43,7 +57,7 @@ namespace BP.EAI.Plugins.DINGTalk
                     msgText.Access_Token = DingDing.getAccessToken();
                     msgText.agentid = SystemConfig.Ding_AgentID;
                     msgText.touser = toUsers;
-                    msgText.content = workFlow.Title + "\n发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
+                    msgText.content = title + "\n发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentText_Send(msgText);
                 case DingMsgType.link:
                     Ding_Msg_Link msgLink = new Ding_Msg_Link();
@@ -52,7 +66,7 @@ namespace BP.EAI.Plugins.DINGTalk
                     msgLink.agentid = SystemConfig.Ding_AgentID;
                     msgLink.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
                     msgLink.picUrl = "@lALOACZwe2Rk";
-                    msgLink.title = workFlow.Title;
+                    msgLink.title = title;
                     msgLink.text = "发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentLink_Send(msgLink);
                 case DingMsgType.OA:
@@ -66,17 +80,17 @@ namespace BP.EAI.Plugins.DINGTalk
                         msgOA.agentid = SystemConfig.Ding_AgentID;
                         msgOA.touser = user;
                         msgOA.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/DingAction.aspx?ActionFrom=message&UserID=" + user
-                            + "&ActionType=ToDo&FK_Flow=" + workFlow.FK_Flow + "&FK_Node=" + workFlow.FK_Node
-                            + "&WorkID=" + workFlow.WorkID + "&FID=" + workFlow.FID;
+                            + "&ActionType=ToDo&FK_Flow=" + flowNo + "&FK_Node=" + nodeID
+                            + "&WorkID=" + WorkID+ "&FID=" + fid;
                         //00是完全透明，ff是完全不透明，比较适中的透明度值是 1e
                         msgOA.head_bgcolor = "FFBBBBBB";
                         msgOA.head_text = "审批";
-                        msgOA.body_title = workFlow.Title;
+                        msgOA.body_title = title;
                         Hashtable hs = new Hashtable();
-                        hs.Add("流程名", workFlow.FlowName);
-                        hs.Add("当前节点", workFlow.NodeName);
-                        hs.Add("申请人", workFlow.StarterName);
-                        hs.Add("申请时间", workFlow.RDT);
+                        hs.Add("流程名",flowName);
+                        hs.Add("当前节点", nodeName);
+                        hs.Add("申请人", starterName);
+                        hs.Add("申请时间",rdt);
                         msgOA.body_form = hs;
                         msgOA.body_author = sender;
                         postVal = DingTalk_Message.Msg_OAText_Send(msgOA);

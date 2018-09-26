@@ -1556,25 +1556,23 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果数据</returns>
         public string Dtl_Init()
         {
-            #region 检查是否是测试.
-            if (this.GetRequestVal("IsTest") != null)
-            {
-                BP.Sys.GEDtl dtl = new GEDtl(this.EnsName);
-                dtl.CheckPhysicsTable();
-
-                //MapDtl mdtl = new MapDtl(this.EnsName);
-                //BP.Sys.CCFormAPI.RepareCCForm();
-            }
-            #endregion
-
             #region 组织参数.
             MapDtl mdtl = new MapDtl(this.EnsName);
             mdtl.No = this.EnsName;
             mdtl.RetrieveFromDBSources();
 
+            #region 如果是测试，就创建表.
+            if (this.FK_Node == 999999 ||this.GetRequestVal("IsTest") != null)
+            {
+                GEDtl dtl = new GEDtl(mdtl.No);
+                dtl.CheckPhysicsTable();
+            }
+            #endregion 如果是测试，就创建表.
+
+
             if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp" && this.EnsName.Contains("ND" + this.FK_Node) == false && this.FK_Node != 999999)
             {
-                Node nd = new BP.WF.Node(this.FK_Node);
+                Node nd = new BP.WF.Node(this.FK_Node);                
                 /*如果
                  * 1,传来节点ID, 不等于0.
                  * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/

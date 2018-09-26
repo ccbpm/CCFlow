@@ -817,7 +817,7 @@ TransFormDataField.prototype = {
         if (figureText != null) {
             if (this.figure.CCForm_Shape == "RadioButton") {
                 figureText.setTextStr(" * " + this.figure.CCForm_MyPK.split("=")[1]);
-                createdFigure.CCForm_MyPK = this.figure.CCForm_MyPK.split("=")[0];
+                createdFigure.CCForm_MyPK = this.figure.CCForm_MyPK.split("=")[0] + "_" + CCForm_FK_MapData;
                 if (figureText.str == " * undefined") {
                     figureText.setTextStr(this.dataArrary.Name);
                 } else {

@@ -151,12 +151,11 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.FID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState "
                     + " FROM WF_GenerWorkFlow A "
-                    + " WHERE A.Title LIKE '%" + keywords + "%' "
+                    + " WHERE (A.Title LIKE '%" + keywords + "%' "
+                    + " or A.Starter LIKE '%" + keywords + "%' "
+                    + " or A.StarterName LIKE '%" + keywords + "%') "
                     + " AND (A.Emps LIKE '@%" + WebUser.No + "%' "
                     + " or A.TodoEmps LIKE '%" + WebUser.No + "%') "
-                    + " AND (A.Starter LIKE '%" + keywords + "%' "
-                    + " or A.StarterName LIKE '%" + keywords + "%') "
-
                     + " AND A.WFState!=0 ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);

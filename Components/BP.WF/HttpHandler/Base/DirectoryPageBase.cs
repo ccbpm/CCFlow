@@ -1030,9 +1030,11 @@ namespace BP.WF.HttpHandler
                 string strLine = "";
 
                 //生成文件标题
-                //生成文件标题
                 foreach (Attr attr in selectedAttrs)
                 {
+                    if(attr.Key.Equals("OID"))
+                        continue;
+
                     if (attr.IsFKorEnum)
                         continue;
                     if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt") 

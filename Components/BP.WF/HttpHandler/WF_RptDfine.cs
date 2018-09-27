@@ -377,37 +377,6 @@ namespace BP.WF.HttpHandler
 
                         switch (ar.LGType)
                         {
-                            //case DDLShowType.BindSQL:
-                            //    string sql = ar.UIBindKey;
-
-                            //    if (sql.Contains("@Web"))
-                            //    {
-                            //        sql = sql.Replace("@WebUser.No", WebUser.No);
-                            //        sql = sql.Replace("@WebUser.Name", WebUser.Name);
-                            //        sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-                            //        sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-                            //    }
-
-                            //    if (sql.Contains("@"))
-                            //        throw new Exception("不允许使用除@WebUser之外的变量");
-
-                            //    dtNoName = DBAccess.RunSQLReturnTable(sql);
-                            //    dtNoName.TableName = ar.KeyOfEn;
-                            //    ds.Tables.Add(dtNoName);
-
-                            //    row["ValueField"] = "No";
-                            //    row["TextField"] = "Name";
-                            //    break;
-                            //case DDLShowType.Boolean:
-                            //    dtNoName = GetNoNameDataTable(ar.KeyOfEn);
-                            //    dtNoName.Rows.Add("all", "全部");
-                            //    dtNoName.Rows.Add("1", "是");
-                            //    dtNoName.Rows.Add("0", "否");
-                            //    ds.Tables.Add(dtNoName);
-
-                            //    row["ValueField"] = "No";
-                            //    row["TextField"] = "Name";
-                            //    break;
                             case FieldTypeS.FK:
                                 Entities ens = ar.HisAttr.HisFKEns;
                                 ens.RetrieveAll();
@@ -457,16 +426,6 @@ namespace BP.WF.HttpHandler
                                     }
                                 }
                                 break;
-                            //case DDLShowType.Gender:
-                            //    dtNoName = GetNoNameDataTable(ar.KeyOfEn);
-                            //    dtNoName.Rows.Add("all", "全部");
-                            //    dtNoName.Rows.Add("1", "男");
-                            //    dtNoName.Rows.Add("0", "女");
-                            //    ds.Tables.Add(dtNoName);
-
-                            //    row["ValueField"] = "No";
-                            //    row["TextField"] = "Name";
-                            //    break;
                             case FieldTypeS.Enum:
                                 dtNoName = GetNoNameDataTable(ar.KeyOfEn);
                                 dtNoName.Rows.Add("all", "全部");
@@ -485,13 +444,6 @@ namespace BP.WF.HttpHandler
                                 break;
                         }
                         break;
-                    //case UIContralType.CheckBok:
-                    //    row["Type"] = "checkbox";
-                    //    fcid = "CB_" + ar.KeyOfEn;
-
-                    //    if (vals.ContainsKey(fcid))
-                    //        row["DefaultValue"] = Convert.ToBoolean(int.Parse(vals[fcid]));
-                    //    break;
                     default:
                         break;
                 }
@@ -537,6 +489,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
+        
         public string FlowSearch_Done()
         {
             string vals = this.GetRequestVal("vals");
@@ -594,7 +547,63 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
+        /// <summary>
+        /// 导出
+        /// </summary>
+        /// <returns></returns>
+        public string FlowSearch_Exp()
+        {
+            string vals = this.GetRequestVal("vals");
+            string searchKey = GetRequestVal("key");
+            string dtFrom = GetRequestVal("dtFrom");
+            string dtTo = GetRequestVal("dtTo");
+            string mvals = GetRequestVal("mvals");
+  
 
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+            UserRegedit ur = new UserRegedit();
+            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            ur.SearchKey = searchKey;
+            ur.DTFrom_Data = dtFrom;
+            ur.DTTo_Data = dtTo;
+            ur.Vals = vals;
+            ur.MVals = mvals;
+            ur.Update();
+
+            DataSet ds = new DataSet();
+            MapData md = new MapData(rptNo);
+            MapAttrs attrs = new MapAttrs(rptNo);
+            GEEntitys ges = new GEEntitys(rptNo);
+            QueryObject qo = new QueryObject(ges);
+
+            switch (this.SearchType)
+            {
+                case "My": //我发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+                    break;
+                case "MyDept": //我部门发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    break;
+                case "MyJoin": //我参与的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+                    break;
+                case "Adminer":
+                    break;
+                default:
+                    return "err@" + this.SearchType + "标记错误.";
+            }
+
+
+            qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
+            qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
+
+            string filePath = ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, this.SearchType, ges.GetNewEntity.EnMap.Attrs);
+
+
+            return filePath;
+        }
         /// <summary>
         /// 流程分組分析 1.获取查询条件 2.获取分组的枚举或者外键值 3.获取分析的信息列表进行求和、求平均
         /// </summary>

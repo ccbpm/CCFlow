@@ -154,7 +154,7 @@ namespace BP.WF.HttpHandler
                     + " WHERE A.Title LIKE '%" + keywords + "%' "
                     + " AND (A.Emps LIKE '@%" + WebUser.No + "%' "
                     + " or A.TodoEmps LIKE '%" + WebUser.No + "%') "
-                    + " AND (A.Starter LIKE '@%" + keywords + "%' "
+                    + " AND (A.Starter LIKE '%" + keywords + "%' "
                     + " or A.StarterName LIKE '%" + keywords + "%') "
 
                     + " AND A.WFState!=0 ";

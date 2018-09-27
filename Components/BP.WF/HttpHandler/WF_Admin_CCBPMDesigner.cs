@@ -110,7 +110,7 @@ namespace BP.WF.HttpHandler
         }
         public string DownFormTemplete()
         {
-            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(this.FK_MapData);
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(this.FK_MapData);
             string file = BP.Sys.SystemConfig.PathOfTemp + this.FK_MapData + ".xml";
             ds.WriteXml(file);
             string docs = DataType.ReadTextFile(file);

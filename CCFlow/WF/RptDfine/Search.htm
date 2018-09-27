@@ -129,7 +129,86 @@
 
             $("#btn_export").linkbutton({
                 onClick: function () {
-                    window.open('../Do.htm?ActionType=DownFlowSearchExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
+                    var key = "";
+                    var mvals = "";
+                    var vals = "";
+                    var val;
+                    var dtFrom = "";
+                    var dtTo = "";
+
+                    if ($("#tb_key").length > 0) {
+                        key = $("#tb_key").textbox("getText");
+                    }
+
+                    if ($("#tb_dtFrom").length > 0) {
+                        dtFrom = $("#tb_dtFrom").textbox("getText");
+                        dtTo = $("#tb_dtTo").textbox("getText");
+                    }
+
+                    $.each(FilterCtrls, function () {
+                        switch (this.type) {
+                            case "date":
+                                val = $("#" + this.id).datebox("getValue");
+
+                                if (val.length > 0) {
+                                    vals += "@" + this.id + "=" + val;
+                                }
+                                break;
+                            case "datetime":
+                                val = $("#" + this.id).datetimebox("getValue");
+
+                                if (val.length > 0) {
+                                    vals += "@" + this.id + "=" + val;
+                                }
+                                break;
+                            case "text":
+                                val = $("#" + this.id).textbox("getText");
+
+                                if (val.length > 0) {
+                                    vals += "@" + this.id + "=" + val;
+                                }
+                                break;
+                            case "combo":
+                            case "combotree":
+                                val = $("#" + this.id).combobox("getValues");
+
+                                if (val.length > 1) {
+                                    mvals += "@" + this.id.substr("DDL_".length) + "=" + JoinMVals(val);
+                                    vals += "@" + this.id + "=mvals";
+                                }
+
+                                if (val.length == 1) {
+                                    vals += "@" + this.id + "=" + val[0];
+                                }
+                                break;
+                            case "checkbox":
+                                val = $("#" + this.id)[0].checked ? 1 : 0;
+                                vals += "@" + this.id + "=" + val;
+                                break;
+                        }
+                    });
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
+                    handler.AddPara("SearchType", GetQueryString("SearchType"));
+                    handler.AddPara("FK_Flow", fk_flow);
+                    handler.AddPara("key", key);
+                    handler.AddPara("dtFrom", dtFrom);
+                    handler.AddPara("dtTo", dtTo);
+                    handler.AddPara("mvals", mvals);
+                    handler.AddPara("vals", vals);
+                    //查询集合
+                    var data = handler.DoMethodReturnString("FlowSearch_Exp");
+                    var url = "";
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                    }
+                    if (plant != 'CCFlow') {
+                        var currentPath = window.document.location.href;
+                        var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                        data = path + data;
+                    }
+                    window.open(data);
+                    return;
+                    //window.open('../Do.htm?ActionType=DownFlowSearchExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
                 }
             });
 
@@ -142,14 +221,7 @@
                 });
             }
 
-            /*
-            $("#btn_reset").after('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
-            $("#btn_more").linkbutton();
-            $(".more").click(function () {
-            $(this).closest(".conditions").siblings().toggleClass("hide");
-            $("#dg").datagrid("resize");
-            });
-            */
+         
 
             //filters
             var ctrl;

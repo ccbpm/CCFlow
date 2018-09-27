@@ -189,7 +189,9 @@
 			});
 
 			//初始化数据.
-			function InitPage() {
+        function InitPage() {
+            //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
+            var flowNos = GetQueryString("FlowNos");
 
 			    //随机串.
 			    var timeKey = Math.random();
@@ -208,9 +210,10 @@
 			    //生成分组的字符串.
 			    var str = "";
 			    for (var i = 0; i < data.length; i++) {
-
-			        if (str.indexOf('@' + data[i].FlowName) == -1)
-			            str += "@" + data[i].FlowName;
+			        if (str.indexOf('@' + data[i].FlowName) == -1) {
+			            if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+			                str += "@" + data[i].NodeName;
+			        }
 
 			    }
 			    var strs = str.split("@"); //生成数组.

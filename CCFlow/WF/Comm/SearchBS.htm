@@ -42,7 +42,6 @@
             }
             
             td{
-               width:100%;
                word-break:keep-all;/* 不换行 */
                white-space:nowrap;/* 不换行 */
                overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
@@ -130,8 +129,24 @@
             var data = handler.DoMethodReturnJSON("Search_SearchAttrs");
             
             var barCount = 0; //记录查询条件，超过五个就换行
+            var IsTableShow = false;
+             //绑定外键枚举查询条件.
+            var attrs = data["Attrs"];
+            if(attrs.length>0){
+                for(var i = 0; i < attrs.length; i++){
+                    if(attrs[i].Width>=1000){
+                        IsTableShow = true;
+                        break;
+                    }
 
+                }
+            }
             var html = "";
+            if(IsTableShow){
+               showBarTable(attrs,data);
+               return;
+            }
+           
             if (mapBase.IsShowSearchKey == "1"){
                 html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:&nbsp;&nbsp</label>"
                 html +="<input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
@@ -151,9 +166,6 @@
             }
 			
             $("#toolbar").append(html); //设置基础信息.
-
-            //绑定外键枚举查询条件.
-            var attrs = data["Attrs"];
 
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
@@ -202,6 +214,84 @@
 			
         }
         
+        function showBarTable(attrs,data){
+            var html = "";
+             html +="<table>";
+             html +="<tr>";
+             if (mapBase.IsShowSearchKey == "1"){
+                html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:</label></td>";
+                html +="<td align='left'><input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+            }
+            if (mapBase.DTSearchWay != "0") {
+                html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + "</label></td>";
+
+                if (mapBase.DTSearchWay == "1") {
+                    html += "<td align='left'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control' /></td>";
+                    html += "<td align='left'>到&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:140px;' class='form-control' /></td>";
+                } else {
+                    html += "<td align='left'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:140px;' class='form-control' /></td>";
+                    html += "<td align='left'>到&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:120px;' class='form-control' /></td>";
+                }
+            }
+			
+
+            //格式为: @WFSta=0@FK_Dept=02
+            var json = AtParaToJson(ur.Vals);
+            
+            for (var i = 0; i < attrs.length; i++) {
+            	 var attr = attrs[i];
+                 var W = attr.Width;
+				if(attr.Width>=1000){
+                    html +="</tr>";
+                    html +="<tr>";
+                    W = 130;
+                }
+                	
+                html += "<td align='right'><label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label></td>";
+
+                html += "<td align='left'><select class='form-control' style='margin-top:5px;width:"+W+"px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
+            }
+            
+            //为查询外键赋值.
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                var selectVal = json[attr.Field];
+
+                if (selectVal == undefined || selectVal == "")
+                    selectVal = "all";
+
+                $("#DDL_" + attr.Field).val(selectVal);
+            }
+            
+            html += '<td align="left"><a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
+            
+            
+            if (mapBase.IsInsert.toString().toLowerCase() == "true") {
+                html += '&nbsp;<a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a><td>  ';
+                html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>';
+                if(mapBase.IsImp.toString().toLowerCase() == "true"){
+                    html +='&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Imp()">导入</a></td> ';
+                    if(new WebUser().No=="admin")
+			             html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
+                }else{
+                     if(new WebUser().No=="admin")
+			             html +='&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
+                }
+            }else{
+                 html +='&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a></td>  ';
+                 if(mapBase.IsImp.toString().toLowerCase() == "true"){
+                    html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Imp()">导入</a> ';
+                    if(new WebUser().No=="admin")
+			             html +='&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
+                }else{
+                     if(new WebUser().No=="admin")
+			             html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
+                }
+            } 
+			html +="</tr></table>";
+			$("#toolbar").append(html);
+        }
+
     
 
         //初始化下拉列表框的OPERATION

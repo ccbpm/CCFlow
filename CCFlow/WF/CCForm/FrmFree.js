@@ -840,7 +840,7 @@ function figure_Template_ImageAth(frmImageAth) {
     }
     //设计属性
     img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
-    img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Data/Img/LogH.PNG'");
+    img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Admin/CCFormDesigner/Controls/DataView/AthImg.png'");
     img.css('width', frmImageAth.W).css('height', frmImageAth.H).css('padding', "0px").css('margin', "0px").css('border-width', "0px");
     //不可编辑
     eleHtml.append(img);

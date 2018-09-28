@@ -237,7 +237,9 @@ function showFigurePropertyWin(figure) {
 
     if (shap == 'Dtl') {
         var url = '../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_MapDtl=' + figure.CCForm_MyPK;
-        CCForm_ShowDialog(url, '从表/明细表' + figure.CCForm_MyPK + '属性');
+        var W = document.body.clientWidth - 40;
+        var H = $("#editor")[0].clientHeight - 40;
+        CCForm_ShowDialog(url, '从表/明细表' + figure.CCForm_MyPK + '属性',W,H);
         return;
     }
 

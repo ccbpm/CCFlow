@@ -1009,11 +1009,8 @@
         }
 
         function CloseIt() {
-            if (window.parent && window.parent.CloseBootstrapDialog) {
-                window.parent.CloseBootstrapDialog("取消");
-            } else {
-                window.close();
-            }
+               parent.$("#eudlg").dialog('close');
+               parent.parent.$("#eudlg").dialog('close');
         }
 
         $(function () {

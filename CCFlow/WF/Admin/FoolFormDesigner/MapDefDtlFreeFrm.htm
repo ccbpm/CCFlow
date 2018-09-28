@@ -182,8 +182,9 @@
           function EditDtl(fk_mapData, dtlKey) {
 
               var url = "../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PKVal=" + dtlKey;
-
-              OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
+              var W = document.body.clientWidth - 40;
+              var H = document.body.clientHeight - 40;
+              OpenEasyUiDialog(url, "eudlgframe", "设置", W, H, "icon-edit", true, null, null, null, function () {
                   window.location.href = window.location.href;
               });
           }

@@ -216,7 +216,7 @@
         
         function showBarTable(attrs,data){
             var html = "";
-             html +="<table>";
+             html +="<table width='98%'>";
              html +="<tr>";
              if (mapBase.IsShowSearchKey == "1"){
                 html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:</label></td>";
@@ -263,32 +263,20 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
             
-            html += '<td align="left"><a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
+            html += '<td align="left" clospan="2"><a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
             
-            if (mapBase.IsInsert.toString().toLowerCase() == "true") {
-                html += '&nbsp;<a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a><td>  ';
-                html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>';
-                if(mapBase.IsImp.toString().toLowerCase() == "true"){
-                    html +='&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Imp()">导入</a></td> ';
-                    if(new WebUser().No=="admin")
-			             html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
-                }else{
-                     if(new WebUser().No=="admin")
-			             html +='&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
-                }
-            }else{
-                 html +='&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a></td>  ';
-                 if(mapBase.IsImp.toString().toLowerCase() == "true"){
-                    html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Imp()">导入</a> ';
-                    if(new WebUser().No=="admin")
-			             html +='&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
-                }else{
-                     if(new WebUser().No=="admin")
-			             html +='<td align="left">&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a></td>';
-                }
-            } 
-			html +="</tr></table>";
+            if (mapBase.IsInsert.toString().toLowerCase() == "true")
+                html += '&nbsp;<a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a>';
+            
+            html +='&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>';
+
+            if(mapBase.IsImp.toString().toLowerCase() == "true")
+               html +='&nbsp;<a href="#" class="btn btn-primary" id="exp_btn" onclick="Imp()">导入</a></td> ';
+            if(new WebUser().No=="admin")
+			    html +='&nbsp;<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
+         
+			html +="</td></tr></table>";
 			$("#toolbar").append(html);
         }
 
@@ -852,7 +840,7 @@
           border-right:0px;
          }
         
-        table{table-layout:fixed;}
+        .table{table-layout:fixed;}
 
         table>td{width：100%}
     </style>

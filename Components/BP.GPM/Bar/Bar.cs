@@ -394,8 +394,7 @@ namespace BP.GPM
 
                 //map.AddBoolean(BarAttr.IsDel, true, "用户是否可删除",true,true);
 
-                map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true,
-                  BarAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true, BarAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
                 map.AddBoolean(BarAttr.IsLine, false, "是否独占一行", true, true);
 
                 ////map.AddDDLSysEnum(AppAttr.CtrlWay, 0, "控制方式", true, true,

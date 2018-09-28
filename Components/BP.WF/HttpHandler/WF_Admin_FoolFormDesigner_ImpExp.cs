@@ -233,7 +233,6 @@ namespace BP.WF.HttpHandler
                 bool isSetReadonly = this.GetRequestValBoolen("IsSetReadonly");
 
                 MapData md = new MapData(fromMapData);
-
                 MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(md.No));
 
                 //设置为只读模式.

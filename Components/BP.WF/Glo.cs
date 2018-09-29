@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20180615;
+        public static int Ver = 20180616;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -153,6 +153,19 @@ namespace BP.WF
           
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
+
+            //检查表.
+            BP.Sys.GloVar gv = new GloVar();
+            gv.CheckPhysicsTable();
+
+            //检查表.
+            BP.Sys.EnCfg cfg = new BP.Sys.EnCfg();
+            cfg.CheckPhysicsTable();
+
+            //检查表.
+            BP.Sys.FrmTree frmTree = new BP.Sys.FrmTree();
+            frmTree.CheckPhysicsTable();
+
 
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
@@ -3272,6 +3285,9 @@ namespace BP.WF
             }
             set
             {
+                if (value == null)
+                    return;
+
                 if (_SendHTOfTemp == null)
                     _SendHTOfTemp = new Hashtable();
                 _SendHTOfTemp[BP.Web.WebUser.No] = value;

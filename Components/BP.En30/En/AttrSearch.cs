@@ -40,7 +40,7 @@ namespace BP.En
         public AttrSearchs()
         {
         }
-        public void Add(Attr attr, bool isShowSelectedAll, string relationalDtlKey, int width=120 )
+        public void Add(Attr attr, bool isShowSelectedAll, string relationalDtlKey, int width=120)
         {
             AttrSearch en = new AttrSearch();
             en.HisAttr = attr;

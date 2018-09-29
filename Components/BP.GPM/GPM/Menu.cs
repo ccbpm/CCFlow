@@ -79,7 +79,7 @@ namespace BP.GPM
         /// <summary>
         /// 控制方法
         /// </summary>
-        public const string CtrlWay = "CtrlWay";
+        public const string MenuCtrlWay = "MenuCtrlWay";
         /// <summary>
         /// 系统
         /// </summary>
@@ -100,6 +100,9 @@ namespace BP.GPM
         /// 是否启用
         /// </summary>
         public const string IsEnable = "IsEnable";
+        /// <summary>
+        /// 打开方式
+        /// </summary>
         public const string OpenWay = "OpenWay";
         /// <summary>
         /// 标记
@@ -373,20 +376,18 @@ namespace BP.GPM
                 
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);
-                map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay,
-                  "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
                 map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?",true,true);
+                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 20,true);
+                map.AddDDLSysEnum(MenuAttr.MenuCtrlWay, 0, "控制方式", true, true, MenuAttr.MenuCtrlWay,
+                    "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
 
                 map.AddTBString(MenuAttr.Flag, null, "标记", true, false, 0, 500, 20, false);
                 map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
-
-                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 20,true);
-
-
 
                 //map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
 

@@ -52,7 +52,7 @@ namespace BP.Port
                 }
             }
         }
-       
+
         /// <summary>
         /// 部门编号
         /// </summary>
@@ -152,7 +152,7 @@ namespace BP.Port
             return false;
         }
 
-        private static byte[] Keys = {0x12, 0xCD, 0x3F, 0x34, 0x78, 0x90, 0x56, 0x7B};
+        private static byte[] Keys = { 0x12, 0xCD, 0x3F, 0x34, 0x78, 0x90, 0x56, 0x7B };
 
         /// <summary>
         /// 加密字符串
@@ -203,9 +203,10 @@ namespace BP.Port
         /// <param name="no">编号</param>
         public Emp(string no)
         {
-            this.No = no.Trim();
-            if (this.No.Length == 0)
+            if (no == null || no.Length == 0)
                 throw new Exception("@要查询的操作员编号为空。");
+
+            this.No = no.Trim();
             try
             {
                 this.Retrieve();
@@ -244,8 +245,8 @@ namespace BP.Port
                 #region 基本属性
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
                 map.PhysicsTable = "Port_Emp"; // 要物理表。
-                map.Java_SetDepositaryOfMap( Depositary.Application);    //实体map的存放位置.
-                map.Java_SetDepositaryOfEntity( Depositary.Application); //实体存放位置
+                map.Java_SetDepositaryOfMap(Depositary.Application);    //实体map的存放位置.
+                map.Java_SetDepositaryOfEntity(Depositary.Application); //实体存放位置
                 map.EnDesc = "用户"; // "用户";
                 map.Java_SetEnType(EnType.App);   //实体类型。
                 #endregion
@@ -260,7 +261,7 @@ namespace BP.Port
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
 
-               // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
+                // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
 
                 #endregion 字段
 
@@ -285,7 +286,7 @@ namespace BP.Port
         #region 重写方法
         protected override bool beforeDelete()
         {
-           
+
             return base.beforeDelete();
         }
         #endregion 重写方法
@@ -344,7 +345,7 @@ namespace BP.Port
             return "执行成功.";
         }
 
-        public string ChangePass(string oldpass,string pass1,string pass2)
+        public string ChangePass(string oldpass, string pass1, string pass2)
         {
             return "执行成功.";
         }

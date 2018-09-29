@@ -300,6 +300,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\FoolTruckNodeFrm.cs" />
+    <Compile Include="Template\TestCase.cs" />
     <Compile Include="UnitTesting\Etc\AboutTitle.cs" />
     <Compile Include="UnitTesting\AttrFlow\CreateStartWork.cs" />
     <Compile Include="UnitTesting\AttrFlow\GenerBillNo.cs" />

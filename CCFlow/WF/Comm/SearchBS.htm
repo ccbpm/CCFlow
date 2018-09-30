@@ -1,25 +1,24 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>查询</title>
     <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
-    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet"  type="text/css" media="all" />
-	
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
+        media="all" />
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="./JS/layer/layer.js" type="text/javascript"></script>
-    <link href="./JS/layer/layer.css"  rel="stylesheet"  type="text/css"/>
-
+    <link href="./JS/layer/layer.css" rel="stylesheet" type="text/css" />
     <!--bootstrap-table-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
-
+    <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
+        type="text/javascript"></script>
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
-    
     <!--公共JS-->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
@@ -27,34 +26,33 @@
     <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-     <base target="_self" />
-     <style type="text/css">
-            .fixed-table-container thead th .th-inner
-             {
-                padding: 8px;
-                line-height: 24px;
-                vertical-align: top;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                background-color: #eaf2ff;
-                width:100%;
-            }
-            
-            td{
-               word-break:keep-all;/* 不换行 */
-               white-space:nowrap;/* 不换行 */
-               overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
-               text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
-               -o-text-overflow:ellipsis;
-               -icab-text-overflow: ellipsis;
-               -khtml-text-overflow: ellipsis;
-               -moz-text-overflow: ellipsis;
-               -webkit-text-overflow: ellipsis;
-            }
-
-            
-     </style>
+    <base target="_self" />
+    <style type="text/css">
+        .fixed-table-container thead th .th-inner
+        {
+            padding: 8px;
+            line-height: 24px;
+            vertical-align: top;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background-color: #eaf2ff;
+            width: 100%;
+        }
+        
+        td
+        {
+            word-break: keep-all; /* 不换行 */
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+            text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+            -o-text-overflow: ellipsis;
+            -icab-text-overflow: ellipsis;
+            -khtml-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+        }
+    </style>
     <script language="javascript" type="text/javascript">
 
         //定义公共个变量.
@@ -142,16 +140,17 @@
                 }
             }
             var html = "";
-            if(IsTableShow){
+            if(IsTableShow || 1==1){
                showBarTable(attrs,data);
                return;
             }
            
             if (mapBase.IsShowSearchKey == "1"){
-                html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:&nbsp;&nbsp</label>"
+                html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+GetKeyLabel()+":&nbsp;&nbsp</label>"
                 html +="<input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
                 barCount += 1;
             }
+
             if (mapBase.DTSearchWay != "0") {
             	barCount += 2;
                 html += "<label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + "&nbsp;&nbsp</label>";
@@ -205,7 +204,7 @@
 			html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>  ';
 
             if(mapBase.IsImp.toString().toLowerCase() == "true")
-                html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Imp()">导入</a>  ';
+                html +='<a href="#" class="btn btn-primary" id="imp_btn" onclick="Imp()">导入</a>';
 
 			if(new WebUser().No=="admin")
 			    html +='<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
@@ -216,10 +215,10 @@
         
         function showBarTable(attrs,data){
             var html = "";
-             html +="<table width='98%'>";
+             html +="<table >";
              html +="<tr>";
              if (mapBase.IsShowSearchKey == "1"){
-                html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:</label></td>";
+                html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+GetKeyLabel()+":</label></td>";
                 html +="<td align='left'><input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
             }
             if (mapBase.DTSearchWay != "0") {
@@ -263,7 +262,7 @@
             }
             
             //增加按钮.
-            html += '<td align="left" clospan=2><a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
+            html += '<td align="left" clospan=2 ><a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
             if (mapBase.IsInsert.toString().toLowerCase() == "true")
                 html += '&nbsp;<a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a>';
@@ -355,6 +354,13 @@
 
             ReDownExpFile();
 
+        }
+        function GetKeyLabel()
+        {
+
+        if (GetQueryString("EnsName")=="BP.YYT.HaiDaos")
+        return "海岛名";
+        return "关键字";
         }
 
         function ReDownExpFile() {
@@ -847,23 +853,27 @@
         table>td{width：100%}
     </style>
 </head>
-<body >
-    <div class="wrapper wrapper-content animated fadeInRight" style="padding:0px 10px 20px 10px">
+<body>
+    <div class="wrapper wrapper-content animated fadeInRight" style="padding: 0px 10px 20px 10px">
         <div class="ibox-content">
             <div class="row">
-    	        <div class="panel panel-default" style="border:0px;margin-bottom:3px"> 
-    		    <div id="toolbar" style="width:100%"></div>
-            </div>
-            <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;"></table>
-            <!-- 显示分页信息 -->
-            <div class="row">
-                <div class="col-md-6" id="page_info_area"></div>
-                <!-- 分页导航条 -->
-                <div class="col-md-6" id="page_nav_area" style="text-align:center"></div>
+                <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
+                    <div id="toolbar" style="width: 100%">
+                    </div>
+                </div>
+                <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
+                </table>
+                <!-- 显示分页信息 -->
+                <div class="row">
+                    <div class="col-md-6" id="page_info_area">
+                    </div>
+                    <!-- 分页导航条 -->
+                    <div class="col-md-6" id="page_nav_area" style="text-align: center">
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-<div id="Msg"></div>
+        <div id="Msg">
+        </div>
 </body>
 </html>

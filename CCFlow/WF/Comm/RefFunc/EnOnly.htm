@@ -843,7 +843,8 @@
 
                 var tab = $('#tabDiv').tabs('getSelected');
                  index = $('#tabDiv').tabs('getTabIndex', tab);
-            }  
+             }  
+
             if (pkval == null || pkval == "") {
 
                 en.CopyForm();
@@ -879,6 +880,10 @@
                 url = url.replace("#", "");
                 url = replaceParamVal(url, "PKVal", en.GetPKVal());
                 url = replaceParamVal(url, "tabIndex", index);
+
+                if (url.indexOf('&PKVal=') == -1)
+                    url += "&PKVal=" + en.GetPKVal();
+
                 window.location.href = url; //刷新.
                 return;
             }
@@ -905,6 +910,8 @@
             url = window.location.href;
             url = url.replace("#", "");
             url = replaceParamVal(url, "tabIndex", index);
+
+
             window.location.href = url; ; //刷新.
         }
 

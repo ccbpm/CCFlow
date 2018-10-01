@@ -224,7 +224,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
         }
 
-        eleHtml = "<input  type='text' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
+        eleHtml = "<input  type='text' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
         return eleHtml;
     }
 

@@ -25,18 +25,35 @@
         var StartGuideWay = GetQueryString("StartGuideWay");
 
         $(function () {
-            var url = MyFlow + "?DoType=StartGuide_Init&" + str + "&m=" + Math.random();
-            //执行加载
-            StartGuide_Init(url, FK_Flow, FK_Node, WorkID);
+
+            //执行查询.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnJSON("StartGuide_Init");
+
+            //显示数据.
+            StartGuide_Init(data);
+
+            var fl = new Entity("BP.WF.Flow", FK_Flow);
+            var html = "<a href=\"javascript:WinOpen('" + fl.StartGuideLink + "')\" >" + fl.StartGuideLab + "</a>";
+            $("#leftBar").html(html);
+
         });
 
         //关键字查询
         function KeyOfSearch() {
+
             //获取要查询的关键字
             var key = document.getElementById('TB_Key').value;
-            var url = MyFlow + "?DoType=StartGuide_Init&" + str + "&Keys=" + key + "&m=" + Math.random();
-            //执行查询
-            StartGuide_Init(url, FK_Flow, FK_Node, WorkID);
+
+            //执行查询.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            handler.AddPara("Keys", key); //增加参数.
+            var data = handler.DoMethodReturnJSON("StartGuide_Init");
+
+            //显示数据.
+            StartGuide_Init(data);
         }
 
         //发起
@@ -73,105 +90,98 @@
             });
         }
         //加载方法
-        function StartGuide_Init(url, FK_Flow, FK_Node, WorkID) {
+        function StartGuide_Init(data) {
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
-                    data = JSON.parse(data);
-                    //选中的超链接及参数
-                    var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&IsCheckGuide=1";
-                    var _Html = "";
-                    //判断是否出现异常
-                    if (data.indexOf('err@') == 0) {
+            //判断是否出现异常
+            if (data.indexOf('err@') == 0) {
 
-                        _Html += "<tr><td>";
-                        _Html += "" + data + "";
-                        _Html += "</td></tr>";
+                _Html += "<tr><td>";
+                _Html += "" + data + "";
+                _Html += "</td></tr>";
 
-                        $('#dataList').html([_Html].join(''));
-                        return;
-                    }
+                $('#dataList').html([_Html].join(''));
+                return;
+            }
 
-                    //循环取出来的数据
-                    for (var i in data) {
-                        var key; var Name;
-                        var thHtml = "<tr><th>Idx</th>";
-                        //如果是第一行，先生成table列名
-                        if (i < 1) {
-                            for (var k in data[i]) {
-                                if (k == "NO" || k == "No") {//No这一列，不显示
-                                    key = data[i][k];
-                                }
-                                else if (k == "NAME" || k == "Name") {
-                                    Name = data[i][k];
-                                    thHtml += "<th>NAME</th>";
-                                }
-                                else {
-                                    thHtml += "<th>" + k + "</th>";
-                                }
-                            }
-                            _Html += thHtml + "</tr>";
+            //选中的超链接及参数
+            var href = "MyFlow.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + FK_Node + "&WorkID=" + GetQueryString("WorkID") + "&IsCheckGuide=1";
+            var _Html = "";
+          
+
+            //循环取出来的数据
+            for (var i in data) {
+                var key; var Name;
+                var thHtml = "<tr><th>Idx</th>";
+                //如果是第一行，先生成table列名
+                if (i < 1) {
+                    for (var k in data[i]) {
+                        if (k == "NO" || k == "No") {//No这一列，不显示
+                            key = data[i][k];
                         }
-                        //添加要显示的数据
-                        _Html += "<tr>";
-
-                        //如果是SQL多条模式，增加勾选框
-                        if (StartGuideWay == "BySQLMulti") {
-                            if (data[i]["NO"] == null || data[i]["NO"] == '' || data[i]["NO"] == undefined || data[i]["NO"] == "undefined")
-                                _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["No"] + "' id='" + data[i]["No"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
-                            else
-                                _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                        else if (k == "NAME" || k == "Name") {
+                            Name = data[i][k];
+                            thHtml += "<th>NAME</th>";
                         }
                         else {
-                            _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
+                            thHtml += "<th>" + k + "</th>";
                         }
-
-                        //根据sql查询的列名，依次显示，并对应列名
-                        for (var v in data[i]) {
-                            if (v == "NO" || v == "No") {//此处No列不显示
-                                key = data[i][v];
-                            }
-                            else if (v == "NAME" || v == "Name") {
-
-                                if (key.length < 0)//如果No没有在Name列之前，就去读josn中指定的对象值
-                                    key = data[i]["NO"];
-                                if (key == null || key == '' || key == undefined || key == "undefined")
-                                    key = data[i]["No"];
-                                _Html += "<td nowrap>";
-                                //如果是SQL多条模式，去掉超链接
-                                if (StartGuideWay == "BySQLMulti") {
-                                    _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
-                                }
-                                else {
-                                    _Html += "   <a href='" + href + "&KeyNo=" + key + "' target='_self'>";
-                                    _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
-                                    _Html += "</a>";
-                                }
-                                _Html += "</td>";
-                            }
-                            else {
-                                _Html += "<td nowrap> " + data[i][v] + "</td>"; //显示其他列
-                            }
-                        }
-                        _Html += "</tr>";
                     }
+                    _Html += thHtml + "</tr>";
+                }
+                //添加要显示的数据
+                _Html += "<tr>";
 
-                    //在容器中显示
-                    $('#dataList').html([
+                //如果是SQL多条模式，增加勾选框
+                if (StartGuideWay == "BySQLMulti") {
+                    if (data[i]["NO"] == null || data[i]["NO"] == '' || data[i]["NO"] == undefined || data[i]["NO"] == "undefined")
+                        _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["No"] + "' id='" + data[i]["No"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                    else
+                        _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                }
+                else {
+                    _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
+                }
+
+                //根据sql查询的列名，依次显示，并对应列名
+                for (var v in data[i]) {
+                    if (v == "NO" || v == "No") {//此处No列不显示
+                        key = data[i][v];
+                    }
+                    else if (v == "NAME" || v == "Name") {
+
+                        if (key.length < 0)//如果No没有在Name列之前，就去读josn中指定的对象值
+                            key = data[i]["NO"];
+                        if (key == null || key == '' || key == undefined || key == "undefined")
+                            key = data[i]["No"];
+                        _Html += "<td nowrap>";
+                        //如果是SQL多条模式，去掉超链接
+                        if (StartGuideWay == "BySQLMulti") {
+                            _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                        }
+                        else {
+                            _Html += "   <a href='" + href + "&KeyNo=" + key + "' target='_self'>";
+                            _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                            _Html += "</a>";
+                        }
+                        _Html += "</td>";
+                    }
+                    else {
+                        _Html += "<td nowrap> " + data[i][v] + "</td>"; //显示其他列
+                    }
+                }
+                _Html += "</tr>";
+            }
+
+            //在容器中显示
+            $('#dataList').html([
                         _Html
                     ].join(''));
 
-                    //如果是SQL多条模式，增加发送按钮
-                    if (StartGuideWay == "BySQLMulti") {
-                        var sendMultiHtml = "<tr><td><input type='button' name='pub_Send' value='发起' id='Btn_Send' onclick='SendMulit()'/></td></tr>";
-                        $("#mainTable tr:last").after(sendMultiHtml);
-                    }
-                }
-            });
+            //如果是SQL多条模式，增加发送按钮
+            if (StartGuideWay == "BySQLMulti") {
+                var sendMultiHtml = "<tr><td><input type='button' name='pub_Send' value='发起' id='Btn_Send' onclick='SendMulit()'/></td></tr>";
+                $("#mainTable tr:last").after(sendMultiHtml);
+            }
         }
     </script>
 </head>
@@ -183,10 +193,14 @@
             <caption id="cap_Title">提示：请点击连接发起流程</caption>
             <tbody>
                 <tr>
-                    <td class="ToolBar">
+                    <td >
+                    <div style=" float:left">
                         输入关键字:
                         <input name="TB_Key" type="text" id="TB_Key" />
                         <input type="button" name="pub_Btn" value="查询" id="Btn_Search" onclick="KeyOfSearch()" />
+                        </div>
+
+                        <div id='leftBar' style="float:right" />
                     </td>
                 </tr>
                 <tr>

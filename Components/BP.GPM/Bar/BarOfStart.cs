@@ -40,7 +40,9 @@ namespace BP.GPM
         {
             get
             {
-                return true; //任何人都可以看到.
+                if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    return true;
+                return false;
             }
         }
         #endregion 系统属性.
@@ -74,7 +76,9 @@ namespace BP.GPM
             get
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT Title, RDT FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
+                if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+                ps.SQL = "SELECT top 17 Title,RDT,FK_Flow,WorkID,FK_Node,Sender FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
+                
                 ps.AddFK_Emp();
 
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -90,7 +94,7 @@ namespace BP.GPM
                     string sender = dr["Sender"].ToString();
                     string rdt = dr["RDT"].ToString();
                     idx++;
-                    html += "<li style='list-style-type:none'>" + idx + ".<a href='MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2' target=_blank >" + title + "</a></li>";
+                    html += "<li style='list-style-type:none'>" + idx + ".<a href='../WF/WFRpt.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2' target=_blank >" + title + "</a></li>";
                 }
                 html += "</ul>";
                 return html;

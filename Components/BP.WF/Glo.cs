@@ -192,7 +192,6 @@ namespace BP.WF
                 }
                 #endregion 创建缺少的视图 Port_Inc.
 
-
                 #region 升级事件.
                 if (DBAccess.IsExitsTableCol("Sys_FrmEvent", "DoType") == true)
                 {

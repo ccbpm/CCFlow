@@ -661,11 +661,20 @@ namespace BP.WF.HttpHandler
                 foreach (RefMethod item in rms)
                 {
                     string myurl = "";
-                    if (item.RefMethodType != RefMethodType.Func)
+                    if (item.RefMethodType == RefMethodType.LinkeWinOpen
+                         || item.RefMethodType == RefMethodType.RightFrameOpen
+                        || item.RefMethodType == RefMethodType.LinkModel)
                     {
-                        myurl = item.Do(null) as string;
-                        if (myurl == null)
-                            continue;
+                        try
+                        {
+                            myurl = item.Do(null) as string;
+                            if (myurl == null)
+                                continue;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("err@系统错误:根据方法名生成url出现错误:@"+ex.Message+"@"+ex.InnerException+" @方法名:"+item.ClassMethodName );
+                        }
                     }
                     else
                     {

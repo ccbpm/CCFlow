@@ -116,7 +116,6 @@
             html += "<tr>";
             html += "<th class='GroupTitle'>";
             html +="<input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></th>";
-           
 
             for (var i = 0; i < mapAtrrs.length; i++) {
                 var mapAttr = mapAtrrs[i];
@@ -137,7 +136,9 @@
                 var pkval = dtl[PK];
 
                 html += "<tr>";
-                html += "<td class='Idx' nowrap style='width:70px'><input id='IDX_" + pkval + "'  type='checkbox' name='IDX_" + pkval + "' /><label for='IDX_" + pkval + "'>" + (i + 1) + "</label></td>";
+                html += "<td class='Idx' nowrap style='width:10px'>" + (i + 1) + "</td>";
+
+                html += "<td class='Idx' nowrap style='width:70px'><input id='IDX_" + pkval + "'  type='checkbox' name='IDX_" + pkval + "' /><label for='IDX_" + pkval + "'>选择</label></td>";
               
 
                 for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {

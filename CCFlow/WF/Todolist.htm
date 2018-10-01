@@ -153,7 +153,7 @@
             var listbox='';
             for (var i = 0; i < data.length; i++) {
 
-                if (groupBy == "ByNode") {
+                if (groupBy == "ByNode" || groupBy=="NodeName" ) {
                     if (str.indexOf('@' + data[i].NodeName + "@") == -1) {
                         if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
                             str += "@" + data[i].NodeName + "@";
@@ -176,7 +176,6 @@
                 }
             }
             var strs = str.split("@"); //生成数组.
-            
 			
             var num = 0;
             var is1 = false;
@@ -196,7 +195,7 @@
                 for (var i = 0; i < data.length; i++) {
 
                     var work = data[i];
-                    if (groupBy == "ByNode") {
+                    if (groupBy == "ByNode" || groupBy == "NodeName") {
                         if (work.NodeName != groupName) {
                             continue;
                         }
@@ -268,7 +267,7 @@
 
                     listbox += "<td>" + url + "</td>"; //标题
 
-                    if (groupBy == "ByNode") {
+                    if (groupBy == "ByNode" || groupBy == "NodeName" ) {
                         listbox += "<td>" + flowName + "</td>"; //流程类别
                         listbox += "<td>" + starterName + "</td>"; //发起人
                     } else if (groupBy == "ByFlow") {

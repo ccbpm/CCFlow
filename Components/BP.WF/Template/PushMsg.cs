@@ -810,7 +810,7 @@ namespace BP.WF.Template
                         msg += dr["Name"].ToString() + ",";
                     }
                 }
-                return "@已向:{" + msg + "}发送提醒信息.";
+                return "@已向:{" + msg + "}发送提醒消息.";
 
                 //    // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
                 //    string mailDocReal = mailDocTmp.Clone() as string;
@@ -820,7 +820,7 @@ namespace BP.WF.Template
                 //    //发送邮件.
                 //    BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid);
                 //}
-                //return "@已向:{" + toEmpIDs + "}发送提醒邮件.";
+                //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
             }
             #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
 
@@ -1070,7 +1070,7 @@ namespace BP.WF.Template
                         Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null);
                     }
                     //return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
-                    return "@已向:{" + toEmpIDs + "}发送提醒手机短信.";
+                    return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                 }
 
                 if (this.SMSPushWay == 2)
@@ -1081,7 +1081,7 @@ namespace BP.WF.Template
                     //发送短信.
                     string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
                     BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid,BP.Web.WebUser.No,null,paras);
-                    return "@已向:{" + tel + "}发送提醒手机短信.";
+                    return "@已向:{" + tel + "}发送提醒消息.";
                   //  return "@已向:{" + tel + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
 
                 }
@@ -1112,7 +1112,7 @@ namespace BP.WF.Template
                         //发送短信.
                         Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras);
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒手机短信.";
+                    return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                 }
 
                 if (this.SMSPushWay == 2)
@@ -1161,7 +1161,7 @@ namespace BP.WF.Template
                         //发送短信.
                         Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver"  + workid, BP.Web.WebUser.No, null, empID, paras);
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒手机短信.";
+                    return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                 }
 
                 if (this.SMSPushWay == 2)
@@ -1173,7 +1173,7 @@ namespace BP.WF.Template
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
                         //发送短信.
                         BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "FlowOver"+ workid, BP.Web.WebUser.No, null, paras);
-                        return "@已向:{" + tel + "}发送提醒手机短信.";
+                        return "@已向:{" + tel + "}发送提醒消息.";
                     }
                 }
             }

@@ -140,7 +140,7 @@ namespace BP.WF.HttpHandler
         public string PushMsg_Save()
         {
             BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
-            msg.MyPK = HttpContext.Current.Request.QueryString["MyPK"];
+            msg.MyPK = this.MyPK;  
             msg.RetrieveFromDBSources();
 
             msg.FK_Event = this.FK_Event;

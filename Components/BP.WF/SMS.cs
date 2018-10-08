@@ -581,15 +581,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 插入之前要做的事情. 
-        /// return false 标识不插入数据.
-        /// </summary>
-        /// <returns></returns>
-        protected override bool beforeInsert()
-        {
-            return false;
-        }
-        /// <summary>
         /// 插入之后执行的方法.
         /// </summary>
         protected override void afterInsert()

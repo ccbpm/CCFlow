@@ -39,19 +39,4 @@ SELECT a.FK_Emp+'_'+a.FK_Menu as MyPK, a.FK_Emp, b.No as FK_Menu, b.*
 FROM V_GPM_EmpStationMenu a,GPM_Menu b WHERE a.FK_Menu=b.No AND B.IsEnable=1
 ) c
 
-
---GO--
---DROP VIEW V_GPM_EmpMenu_GPM
---GO--
-CREATE VIEW V_GPM_EmpMenu_GPM
-AS
-select distinct c.* from (
-SELECT a.FK_Emp+'_'+a.FK_Menu as MyPK, a.FK_Emp,a.IsChecked, b.No as FK_Menu, b.* FROM 
-   GPM_EmpMenu a,GPM_Menu b WHERE a.FK_Menu=b.No AND B.IsEnable=1
-UNION
-SELECT a.FK_Emp+'_'+a.FK_Menu as MyPK, a.FK_Emp,a.IsChecked, b.No as FK_Menu, b.* FROM 
-  V_GPM_EmpGroupMenu a,GPM_Menu b  WHERE a.FK_Menu=b.No AND B.IsEnable=1
-UNION
-SELECT a.FK_Emp+'_'+a.FK_Menu as MyPK, a.FK_Emp,a.IsChecked, b.No as FK_Menu, b.* 
-FROM V_GPM_EmpStationMenu a,GPM_Menu b WHERE a.FK_Menu=b.No AND B.IsEnable=1
-) c
+ 

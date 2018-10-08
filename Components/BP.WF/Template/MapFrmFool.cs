@@ -58,32 +58,7 @@ namespace BP.WF.Template
                 return int.Parse(this.No.Replace("ND", ""));
             }
         }
-        /// <summary>
-        /// 傻瓜表单-宽度
-        /// </summary>
-        public string TableWidth
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
-                if (i <= 50)
-                    return "900";
-                return i.ToString();
-            }
-        }
-        /// <summary>
-        /// 傻瓜表单-高度
-        /// </summary>
-        public string TableHeight
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapDataAttr.TableHeight);
-                if (i <= 500)
-                    return "900";
-                return i.ToString();
-            }
-        }
+       
         /// <summary>
         /// 表格显示的列
         /// </summary>
@@ -148,7 +123,7 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapData", "傻瓜傻瓜表单属性");
+                Map map = new Map("Sys_MapData", "傻瓜表单属性");
                 map.Java_SetEnType(EnType.Sys);
                 map.Java_SetCodeStruct("4");
 
@@ -160,8 +135,12 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 
                 map.AddTBInt(MapDataAttr.TableCol, 4, "表单显示列数", true, true);
-                map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
-                map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
+
+              //  map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
+               // map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
+
+                map.AddTBInt(MapDataAttr.FrmW, 900, "傻瓜表单宽度", true, false);
+                map.AddTBInt(MapDataAttr.FrmH, 900, "傻瓜表单高度", true, false);
 
                 //数据源.
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);

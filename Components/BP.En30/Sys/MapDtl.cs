@@ -1114,6 +1114,7 @@ namespace BP.Sys
                 string s = this.GetValStrByKey(MapDtlAttr.PTable);
                 if (s == "" || s == null)
                 {
+
                     s = this.No;
                     if (s.Substring(0, 1) == "0")
                     {
@@ -1577,6 +1578,17 @@ namespace BP.Sys
                 gf.Idx = 0;
                 gf.Insert(); //插入.
             }
+
+            if (DataType.IsNullOrEmpty(this.PTable) == true
+                && this.No.Contains("ND") == true)
+            {
+                if (this.No.Contains("01Dtl") == false)
+                {
+                    string ptable = this.No.Substring(0, this.No.IndexOf("01Dtl")) + this.No.Substring(this.No.IndexOf("01Dtl")) ;
+                    this.PTable = ptable;
+                }
+            }
+
 
             return base.beforeInsert();
         }

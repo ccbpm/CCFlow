@@ -484,7 +484,6 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(str))
                     return null;
                 return str;
-
             }
         }
         /// <summary>

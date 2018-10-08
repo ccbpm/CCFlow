@@ -93,32 +93,8 @@ namespace BP.WF.Template
                 return int.Parse(this.No.Replace("ND", ""));
             }
         }
-        /// <summary>
-        /// 傻瓜表单-宽度
-        /// </summary>
-        public string TableWidth
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapFrmNodeAttr.TableWidth);
-                if (i <= 50)
-                    return "900";
-                return i.ToString();
-            }
-        }
-        /// <summary>
-        /// 傻瓜表单-高度
-        /// </summary>
-        public string TableHeight
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapFrmNodeAttr.TableHeight);
-                if (i <= 500)
-                    return "900";
-                return i.ToString();
-            }
-        }
+     
+     
         /// <summary>
         /// 表格显示的列
         /// </summary>

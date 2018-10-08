@@ -882,40 +882,7 @@ namespace BP.WF.Template
                 this.SetValByKey(MapDataAttr.TableCol, value);
             }
         }
-        public string TableWidth
-        {
-            get
-            {
-                //switch (this.TableCol)
-                //{
-                //    case 2:
-                //        return
-                //        labCol = 25;
-                //        ctrlCol = 75;
-                //        break;
-                //    case 4:
-                //        labCol = 20;
-                //        ctrlCol = 30;
-                //        break;
-                //    case 6:
-                //        labCol = 15;
-                //        ctrlCol = 30;
-                //        break;
-                //    case 8:
-                //        labCol = 10;
-                //        ctrlCol = 15;
-                //        break;
-                //    default:
-                //        break;
-                //}
-
-
-                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
-                if (i <= 50)
-                    return "100%";
-                return i + "px";
-            }
-        }
+      
         #endregion
 
         #region 构造方法

@@ -108,32 +108,7 @@ namespace BP.WF.Template
                 return int.Parse(this.No.Replace("ND", ""));
             }
         }
-        /// <summary>
-        /// 傻瓜表单-宽度
-        /// </summary>
-        public string TableWidth
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapFrmFreeAttr.TableWidth);
-                if (i <= 50)
-                    return "900";
-                return i.ToString();
-            }
-        }
-        /// <summary>
-        /// 傻瓜表单-高度
-        /// </summary>
-        public string TableHeight
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapFrmFreeAttr.TableHeight);
-                if (i <= 500)
-                    return "900";
-                return i.ToString();
-            }
-        }
+      
         /// <summary>
         /// 表格显示的列
         /// </summary>
@@ -210,8 +185,8 @@ namespace BP.WF.Template
                 map.AddDDLEntities(MapFrmFreeAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
 
                 //宽度高度.
-                map.AddTBInt(MapFrmFreeAttr.FrmW, 900, "宽度", true, false);
-                map.AddTBInt(MapFrmFreeAttr.FrmH, 1200, "高度", true, false);
+                map.AddTBInt(MapFrmFreeAttr.FrmW, 900, "自由表单-宽度", true, false);
+                map.AddTBInt(MapFrmFreeAttr.FrmH, 1200, "自由表单-高度", true, false);
 
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapFrmFreeAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapFrmFreeAttr.FrmType);

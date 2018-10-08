@@ -1098,7 +1098,7 @@ namespace BP.WF.HttpHandler
                 string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")
                     continue;
-                if (DataType.IsNullOrEmpty(searchVisable) || attr.UIVisible == false)
+                if ((count!=0 && DataType.IsNullOrEmpty(searchVisable)) || attr.UIVisible == false)
                     continue;
                 row = dtAttrs.NewRow();
                 row["KeyOfEn"] = attr.KeyOfEn;

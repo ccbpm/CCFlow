@@ -822,11 +822,6 @@ fieldset[disabled] .btn-info:hover {
 	border-color: #26d7d9
 }
 
-.btn-default {
-	background-color: #fff;
-	border-color: #1ab394;
-	color: #1ab394;
-}
 
 .btn-default.active,
 .btn-default:active,
@@ -14614,5 +14609,7 @@ body.skin-3 {
 }
 
 
- .btn-default{background-color:#f4f4f4;color:#444;border-color: #ddd;}.btn-default:hover,.btn-default:active,.btn-default.hover{background-color:#e7e7e7}
+ .btn-default{background-color:#f4f4f4;color:#444;border-color: #ddd;}
+ .btn-default:hover,.btn-default:active,.btn-default.hover{background-color:#e7e7e7;border-color: #ddd;}
  .btn-primary{background-color:#3c8dbc;border-color:#367fa9}.btn-primary:hover,.btn-primary:active,.btn-primary.hover{background-color:#367fa9}
+  border-color:rgba(255,255,255,0.7)}.btn-link{-webkit-box-shadow:none;box-shadow:none}.btn[class*='bg-']:hover{-webkit-box-shadow:inset 0 0 100px rgba(0,0,0,0.2);

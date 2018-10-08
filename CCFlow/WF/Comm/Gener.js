@@ -1821,9 +1821,10 @@ var HttpHandler = (function () {
 
         constructor: HttpHandler,
 
-        AddUrlData: function () {
-
-            var queryString = document.location.search.substr(1);
+        AddUrlData: function (url) {
+            var queryString = url;
+            if(url==null || url == undefined || url=="")
+                queryString = document.location.search.substr(1);
 
 
             if (queryString.length > 0) {
@@ -1843,7 +1844,7 @@ var HttpHandler = (function () {
         AddFormData: function () {
             formData = $("form").serialize();
             //form表单序列化时调用了encodeURLComponent方法将数据编码了
-           // formData = decodeURIComponent(formData, true);
+            // formData = decodeURIComponent(formData, true);
             if (formData.length > 0) {
                 var self = this;
                 $.each(formData.split("&"), function (i, o) {
@@ -1878,8 +1879,8 @@ var HttpHandler = (function () {
             $.each(parameters, function (key, value) {
 
                 if (value.indexOf('<script') != -1)
-                    value = '';      
-                                   
+                    value = '';
+
                 params.push(key + "=" + value);
 
             });

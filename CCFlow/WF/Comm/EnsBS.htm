@@ -41,11 +41,18 @@
             {
                 width:auto;
             }
-            
+             .Wdate {
+                border: 1px solid #e5e6e7;
+                height: 34px;
+            }
             .table-responsive {
-            min-height: .01%;
-            overflow-x: visible;
-        }
+                min-height: .01%;
+                overflow-x: visible;
+            }
+            th
+            {
+                text-align:center;
+            }
     
     </style>
     <script type="text/javascript">
@@ -109,9 +116,8 @@
             var keyOfEn = "";
             var html = "<table class='table table-bordered' >";
             html += "<tr>";
-            html += "<th class='GroupTitle' style='width:14px;'></th>";
-            html += "<th class='GroupTitle' style='width:20px;' ><label><input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></label></th>";
-
+            html += "<th class='GroupTitle' style='width:15px;' ><label><input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></label></th>";
+            html += "<th class='GroupTitle' style='width:15px;'>序号</th>";
             for (var i = 0; i < mapAtrrs.length; i++) {
                 var mapAttr = mapAtrrs[i];
                 mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
@@ -131,13 +137,9 @@
                 dtl = new Entity(mapData,dtl);
                 var pkval = dtl[PK];
 
-               // pkval = dtl.pkval;
-               // alert(pkval);
-
                 html += "<tr>";
-                html += "<td class='Idx' nowrap style='width:10px'>" + (i + 1) + "</td>";
-                html += "<td nowrap style='width:70px'><label><input id='IDX_" + pkval + "' type='checkbox' name='IDX_" + pkval + "' />选择</label></td>";
-
+                html += "<td nowrap  style=text-align:center'><label><input id='IDX_" + pkval + "' type='checkbox' name='IDX_" + pkval + "' /></label></td>";
+                html += "<td class='Idx' nowrap >" + (i + 1) + "</td>";
                 for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
                     var mapAttr = mapAtrrs[attrIdx];
                     mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
@@ -450,6 +452,7 @@
                 alert(data);
                 return;
             }
+            alert("保存成功");
             $("#newbtn").attr("disabled", false); 
             InitPage(); //刷新.
         }

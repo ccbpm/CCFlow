@@ -24,6 +24,7 @@
         var webUser = new WebUser();
         var mapAtrrs;
         var InsertFlag = 0;
+        var PK;//实体的主键
 
         $(function () {
             InitPage();
@@ -59,15 +60,15 @@
             if (mapData.GetPara("IsDelete") == "1")
                 $("#delbtn").show();
             else
-                $("#delbtn").hide(); 
-
+                $("#delbtn").hide();
+            PK = mapData.GetPara("PK");
             //绑定数据.
             BindDtls();
         }
 
         //绑定明细.
         function BindDtls() {
-
+           
             mapAtrrs = frmData.Sys_MapAttr;
             var dtls = frmData.Ens;
 

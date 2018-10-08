@@ -39,8 +39,12 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                background-color: #eaf2ff;
+                background-color: #f2f2f2;
                 width:100%;
+            }
+            .fixed-table-header
+            {
+               background-color: #f2f2f2; 
             }
           .input-group-addon {
             padding: 6px 3px;
@@ -103,7 +107,11 @@
         
         table{table-layout:fixed;}
 
-        table>td{width：100%}
+        table>td{width:100%}
+         .Wdate {
+            border: 1px solid #e5e6e7;
+            height: 28px;
+          }
        
      </style>
     <script language="javascript" type="text/javascript" >
@@ -194,18 +202,29 @@
             }
             if (mapBase.DTSearchWay != "0") {
 
-                html += mapBase.DTSearchLable;
                 html +='<div class="form-group">';
                 html +='<label class="sr-only">'+mapBase.DTSearchLable+'</label>';
                 html +='<div class="input-group">';
                 html +='<div class="input-group-addon">'+mapBase.DTSearchLable+'</div>';
                
                 if (mapBase.DTSearchWay == "1") {
-                    html +="<input type='text' class='form-control Wdate' name='TB_DTFrom' id='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\">";
-                    html +="到<input type='text' class='form-control Wdate' name='TB_DTTo' id='TB_DTTo' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\">"; 
+                    html +="<input type='text' class='form-control Wdate' name='TB_DTFrom' id='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px'>";
+                    html +='</div>';
+                    html +='</div>';
+                    html +='<div class="form-group">';
+                    html +='<label class="sr-only">到</label>';
+                    html +='<div class="input-group">';
+                    html +='<div class="input-group-addon">到</div>';
+                    html +="<input type='text' class='form-control Wdate' name='TB_DTTo' id='TB_DTTo' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px'>"; 
                 } else {
-                    html +="<input type='text' class='form-control Wdate' name='TB_DTFrom' id='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})\">";
-                    html +="到<input type='text' class='form-control Wdate' name='TB_DTTo' id='TB_DTTo' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})\">";
+                    html +="<input type='text' class='form-control Wdate' name='TB_DTFrom' id='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})\" style='width:135px'>";
+                     html +='</div>';
+                    html +='</div>';
+                    html +='<div class="form-group">';
+                    html +='<label class="sr-only">到</label>';
+                    html +='<div class="input-group">';
+                    html +='<div class="input-group-addon">到</div>';
+                    html +="<input type='text' class='form-control Wdate' name='TB_DTTo' id='TB_DTTo' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})\" style='width:135px'>";
                 }
                 html +='</div>';
                 html +='</div>';
@@ -353,6 +372,9 @@
 
         //生成Easyui DataGrid列表页面..
         function BindTable() {
+        //获取页面的高度
+            var H = document.body.clientHeight;
+            var tableH = H-$("#toolbar").outerHeight()-$("#page-nav").outerHeight()-60;
 
             var mapdata = SearchData();
 
@@ -425,6 +447,7 @@
                 fit: true,
                 rownumbers: true,
                 striped: true,
+                height:tableH,
                 singleSelect: false,
                 checkOnSelect:false,
                 selectOnCheck:false,
@@ -513,7 +536,7 @@
                 
             for(var i =0;i<refMethods.length;i++){
                 var en = refMethods[i];
-                html+="<input type='button' value='"+en.Title+"' onclick='operateBatch(\"" + en.RefMethodType + "\",\"" + en.Url + "\",\"" + en.Title + "\",\"" + en.Warning + "\",\"" + en.W + "\",\"" + en.H + "\")'/>";
+                html+="<input type='button' class='btn btn-default' value='"+en.Title+"' onclick='operateBatch(\"" + en.RefMethodType + "\",\"" + en.Url + "\",\"" + en.Title + "\",\"" + en.Warning + "\",\"" + en.W + "\",\"" + en.H + "\")'/>";
             }
             $("#refMethod").html(html);
           }
@@ -651,19 +674,19 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <div class="row">
+<div style="padding: 0px 10px 0px 10px">
+    <div >
         <div class="table-responsive">
             <div style="margin-bottom:5px">
                 <div class="form-inline" id="toolbar">
-                  <button type="button" class="btn btn-primary" onclick="Search()">查询</button>
-                  <button id="NewBtn"type="button" class="btn btn-primary" onclick="New()">新建</button>
-                  <button type="button" class="btn btn-primary" onclick="Exp()">导出</button>
-                  <button id="SetingBtn"type="button" class="btn btn-primary"onclick="Setting()">设置</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="Search()">查询</button>
+                  <button id="NewBtn"type="button" class="btn btn-default  btn-sm" onclick="New()">新建</button>
+                  <button type="button" class="btn btn-default  btn-sm" onclick="Exp()">导出</button>
+                  <button id="SetingBtn"type="button" class="btn btn-default  btn-sm"onclick="Setting()">设置</button>
                 </div>
             </div>
             <table id="bsTable"  class="table table-hover"></table>
-             <div id="refMethod" ></div>
+            <div id="refMethod"  style="margin-top:5px"></div>
         </div>
     </div>
 </div>

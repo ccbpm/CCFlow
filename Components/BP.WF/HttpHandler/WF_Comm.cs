@@ -1098,7 +1098,7 @@ namespace BP.WF.HttpHandler
                 string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")
                     continue;
-                if (DataType.IsNullOrEmpty(searchVisable) && attr.UIVisible == false)
+                if (DataType.IsNullOrEmpty(searchVisable) || attr.UIVisible == false)
                     continue;
                 row = dtAttrs.NewRow();
                 row["KeyOfEn"] = attr.KeyOfEn;
@@ -1660,7 +1660,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Search_Exp()
         {
-            Entities ens = ClassFactory.GetEns(this.EnsName);;
+            Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
            string  name = "数据导出";
            string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
@@ -1876,6 +1876,10 @@ namespace BP.WF.HttpHandler
                 md.SetPara("IsNewRow", "0");
             else
                 md.SetPara("IsNewRow", "1");
+            #endregion
+
+            #region 添加EN的主键
+            md.SetPara("PK", en.PK);
             #endregion
 
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));

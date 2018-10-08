@@ -9,6 +9,7 @@
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <!--引入图表-->
@@ -124,11 +125,11 @@
                 html += md.T_DateLabel;
 
                 if (mapBase.RptDTSearchWay == "1") {
-                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + md.T_DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + md.T_DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:100px;' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + md.T_DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + md.T_DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />&nbsp;&nbsp;&nbsp;&nbsp;";
                 } else {
-                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + md.T_DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' class='form-control' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + md.T_DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + md.T_DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:135px;' class='form-control Wdate' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + md.T_DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:135px;' class='form-control Wdate' />&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
             }
 

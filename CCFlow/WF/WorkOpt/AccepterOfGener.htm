@@ -331,7 +331,7 @@
         function CloseAll() {
 
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.close();
+                window.parent.returnWorkWindowClose();
             }
             window.close();
         }

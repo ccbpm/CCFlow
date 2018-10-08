@@ -497,6 +497,8 @@ namespace BP.WF.HttpHandler
                 string str = this.GetRequestVal("FK_MapData");
                 if (DataType.IsNullOrEmpty(str))
                     str = this.GetRequestVal("FrmID");
+                if (DataType.IsNullOrEmpty(str))
+                    str = this.GetRequestVal("EnsName");
                 return str;
             }
         }

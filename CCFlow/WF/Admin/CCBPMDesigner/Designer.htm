@@ -656,7 +656,7 @@
             /*保存*/
             $("#Btn_Save").bind('click', function () {
                 $("#Btn_Save").attr("disabled", true);
-                $("#Btn_Save").html("保存中");
+                $("#Btn_Save").html("保存中...");
 
                 SaveFlow(_canvas);
 
@@ -791,7 +791,9 @@
             catch (e) {
                 alert(e);
             }
-            alert('保存成功!');
+
+            //alert('保存成功!');
+
             $("#Btn_Save").attr("disabled", false);
             $("#Btn_Save").html("保存");
             return;

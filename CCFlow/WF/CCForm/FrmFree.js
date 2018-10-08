@@ -452,8 +452,14 @@ function figure_MapAttr_Template(mapAttr) {
     ele += mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
 
     var eleHtml = $('<div>' + ele + '</div>');
+    var W = mapAttr.UIWidth;
+    if (mapAttr.MyDataType == 6)
+        if (W < 120) W = 120;
+    if (mapAttr.MyDataType == 7)
+        if (W < 160) W = 160;
 
-    eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
+
+    eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
 
     return eleHtml;

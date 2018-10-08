@@ -560,21 +560,7 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
     athFormTitle.text("上传附件：" + athLab);
     athModal.modal().show();
 }
-
-//window.onresize = function () {
-//    if (pageData.Col == 8) {
-//        if (jsonStr != undefined && jsonStr != '') {
-//            var workNodeData = JSON.parse(jsonStr);
-//            //设置CCFORM的表格宽度  
-//            if (document.body.clientWidth > 992) {//处于中屏时设置宽度最小值
-//                $('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
-//            }
-//            else {
-//                $('#CCForm').css('min-width', 0);
-//            }
-//        }
-//    }
-//}
+ 
 
   
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0

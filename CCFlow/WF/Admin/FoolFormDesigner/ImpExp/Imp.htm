@@ -98,38 +98,40 @@
             $('#ulNodeFrmImp').html(ulHtml);
 
             //03.从表单库导入
-            var treedata = data["Sys_FormTree"],
-                        rootdata = $.grep(treedata, function (item) {
-                            return item.ParentNo == "0";
-                        })[0];
+            var treedata = data["Sys_FormTree"];
+            var rootdata = $.grep(treedata, function (item) {
+                return item.ParentNo == "0";
+            })[0];
 
             //构建树节点数据
             var root = {};
             root.text = rootdata.Name;
             root.state = "open";
-            root.children = [];
-            $.grep(treedata, function (item) {
-                //选出一级节点
-                return item.ParentNo == rootdata.No;
-            }).forEach(function (folder) {
-                //构建node开始
-                var node = {};
-                node.text = folder.Name;
-                node.state = "closed";
-                node.children = [];
-                $.grep(data["Sys_MapData"], function (map) {
-                    //选出当前节点的二级节点
-                    return map.FK_FormTree == folder.No;
+            root.children = createJsonToTree(treedata, rootdata.No, data);
 
-                }).forEach(function (frm) {
-                    node.children.push({
-                        text: frm.Name,
-                        id: frm.No
-                    });
-                });
-                //构建node结束
-                root.children.push(node);
-            });
+
+            //            $.grep(treedata, function (item) {
+            //                //选出一级节点
+            //                return item.ParentNo == rootdata.No;
+            //            }).forEach(function (folder) {
+            //                //构建node开始
+            //                var node = {};
+            //                node.text = folder.Name;
+            //                node.state = "closed";
+            //                node.children = [];
+            //                $.grep(data["Sys_MapData"], function (map) {
+            //                    //选出当前节点的二级节点
+            //                    return map.FK_FormTree == folder.No;
+
+            //                }).forEach(function (frm) {
+            //                    node.children.push({
+            //                        text: frm.Name,
+            //                        id: frm.No
+            //                    });
+            //                });
+            //                //构建node结束
+            //                root.children.push(node);
+            //            });
 
             $('#ulLib').tree({
                 data: [root],
@@ -170,6 +172,7 @@
             root.text = rootdata.Name;
             root.state = "open";
             root.children = [];
+
             $.grep(treedata, function (item) {
                 //选出一级节点
                 return item.ParentNo == rootdata.No;
@@ -208,6 +211,61 @@
             //加载完成.
             $("#Msg").html("");
         });
+
+        //树形结构转换
+        var treeJson = [];
+        function createJsonToTree(treedata, parentNo, data) {
+            for (var i = 0; i < treedata.length; i++) {
+                var folder = treedata[i];
+                if (folder.ParentNo == parentNo) {
+                    treeJson.push({
+                        "id": folder.No,
+                        "text": folder.Name,
+                        "children": creatTreeChildern(treedata, folder.No,data),
+                        "state": "closed"
+                    });
+                }
+            }
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.nodes)) {
+                        if (o.nodes.length == 0) {
+                            o.nodes = undefined;
+                        } else {
+                            _(o.nodes);
+                        }
+                    }
+                });
+            }
+            _(treeJson);
+            return treeJson;
+        }
+
+        function creatTreeChildern(jsonArray, parentNo,data) {
+            var childList = []
+            for (var i = 0; i < jsonArray.length; i++) {
+                var folder = jsonArray[i];
+                if (folder.ParentNo == parentNo) {
+                    childList.push({
+                        "id": folder.No,
+                        "text": folder.Name,
+                        "children": creatTreeChildern(jsonArray, folder.No,data),
+                        "state": "closed"
+                    });
+                }
+            }
+             $.grep(data["Sys_MapData"], function (map) {
+                    //选出当前节点的二级节点
+                 return map.FK_FormTree == parentNo;
+
+                }).forEach(function (frm) {
+                    childList.push({
+                        "text": frm.Name,
+                        "id": frm.No
+                    });
+                });
+            return childList;
+        }
     </script>
 
     <script type="text/javascript">

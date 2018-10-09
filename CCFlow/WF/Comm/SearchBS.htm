@@ -61,26 +61,43 @@
             -moz-text-overflow: ellipsis;
             -webkit-text-overflow: ellipsis;
         }
+        
     </style>
     <script language="javascript" type="text/javascript">
+        var ensName = GetQueryString("EnsName");
 
         //定义公共个变量.
         var webUser = new WebUser();
 
-        var ensName = GetQueryString("EnsName");
-        //当前用户页面信息.
+         //页面设置信息
+        var cfg = new Entity("BP.Sys.EnCfg");
+        cfg.No = ensName;
+        cfg.RetrieveFromDBSources();
+
+        //当前用户查询信息.
         var ur = new Entity("BP.Sys.UserRegedit");
         ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
         ur.RetrieveFromDBSources();
-        var count = ur.GetPara("RecCount");
+
+        var count = ur.GetPara("RecCount");//查询总条数
         var mapBase;
         var pageIdx = this.GetQueryString("PageIdx");//当前页
-        var pageSize = 20;//一页显示的行数
+
+        var pageSize = cfg.GetPara("PageSize");
+        if(pageSize == null || pageSize == undefined || pageSize ==0)
+            pageSize = 10;//一页显示的行数
+
         var pages = 1;//总页数
         if (count%pageSize!=0)
             pages = parseInt(count / pageSize) + 1;
         else
             pages = parseInt(count / pageSize);
+
+        //页面字体大小
+        var fontSize = cfg.GetPara("FontSize");
+        if(fontSize == null || fontSize == undefined || fontSize ==0)
+            fontSize = 13;
+       
 
       var firstLoadTable = false;
 
@@ -124,6 +141,7 @@
                 pageIdx = 1;
             //分页
             Paginator(pages,pageIdx);
+            $("#SearchHtml").css("font-size", fontSize+"px");
            
         });
 
@@ -451,7 +469,8 @@
             var mapdata = SearchData();
             var attrs = mapdata["Attrs"];
 
-            if (attrs == undefined) {                alert('没有取得属性.');
+            if (attrs == undefined) {
+                alert('没有取得属性.');
                 return;
             }
 
@@ -638,11 +657,6 @@
 
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
-
-            var cfg = new Entity("BP.Sys.EnCfg");
-            cfg.No = ensName;
-            cfg.RetrieveFromDBSources();
-
             //考虑兼容旧版本.
             var url = cfg.GetPara("WinOpenUrl");
             if (url && url.length >4)
@@ -814,7 +828,7 @@
         }
     </style>
 </head>
-<body>
+<body id="SearchHtml">
     <div class="wrapper wrapper-content animated fadeInRight" style="padding: 0px 10px 0px 10px">
         <div class="ibox-content">
             <div class="row">

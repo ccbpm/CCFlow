@@ -275,8 +275,8 @@ namespace BP.WF.HttpHandler
             }
 
             qo.AddHD();
-
-            DataTable dt = qo.DoQueryToTable();
+            qo.DoQuery();
+            DataTable dt = ens.ToDataTableField();
             dt.TableName = "Group_Dtls";
             ds.Tables.Add(dt);
 
@@ -3074,14 +3074,14 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     Condition += aa.Condition;
-                    groupKey += " round (" + aa.Exp + ", 4) AS " + paras[0] + ",";
+                    groupKey += " round (" + aa.Exp + ", 4)  \"" + paras[0] + "\",";
                     StateNumKey += paras[0] + "=Checked@"; // 记录状态
                     continue;
                 }
 
                 if (paras[0].Equals("Group_Number"))
                 {
-                    groupKey += " count(*) " + paras[0] + ",";
+                    groupKey += " count(*) \"" + paras[0] + "\",";
                 }
                 else
                 {
@@ -3089,18 +3089,18 @@ namespace BP.WF.HttpHandler
                     {
                         case "SUM":
                             if (dataType == 2)
-                                groupKey += " SUM(" + paras[0] + ")" + paras[0] + ",";
+                                groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
+                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
                             break;
                         case "AVG":
-                            groupKey += " round (AVG(" + paras[0] + "), 4)  " + paras[0] + ",";
+                            groupKey += " round (AVG(" + paras[0] + "), 4)  \"" + paras[0] + "\",";
                             break;
                         case "AMOUNT":
                             if (dataType == 2)
-                                groupKey += " SUM(" + paras[0] + ")" + paras[0] + ",";
+                                groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
+                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
                             break;
                         default:
                             throw new Exception("没有判断的情况.");
@@ -3136,6 +3136,8 @@ namespace BP.WF.HttpHandler
                 {
                     if (key.Contains("=") == true)
                         continue;
+                   //if (key.Equals("Group_Number"))
+
                     selectSQL += key + ",";
                     groupBy += key + ",";
                     // 加入组里面。
@@ -3467,6 +3469,7 @@ namespace BP.WF.HttpHandler
         public string ParseExpToDecimal()
         {
             string exp = this.GetRequestVal("Exp");
+            
             decimal d = DataType.ParseExpToDecimal(exp);
             return d.ToString();
         }

@@ -529,6 +529,16 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
 
         return;
     }
+    if (selectVal == "all") {
+        $("#" + ddlChild).empty();
+        //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
+        $("#" + ddlChild).append("<option value='all' selected='selected' >全部</option");
+        var chg = $("#" + ddlChild).attr("onchange");
+
+        $("#" + ddlChild).change();
+
+        return;
+    }
 
     GenerPageKVs();
 

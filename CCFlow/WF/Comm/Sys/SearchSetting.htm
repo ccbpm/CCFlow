@@ -30,6 +30,8 @@
                 en.SetPara("MoveTo", "无"); //是否启用相关功能列
                 en.SetPara("WinCardW", "1000"); //是否启用相关功能列
                 en.SetPara("WinCardH", "600"); //是否启用相关功能列
+                en.SetPara("PageSize", 10); //显示的条数
+                en.SetPara("FontSize", 14); //字体的大小
 
                 en.SetPara("EditerType", 0); //是否启用相关功能列
 
@@ -49,10 +51,13 @@
             GenerBindEnumKey("DDLPara_EditerType", "EditerType");
 
             //双击行打开内容类型.
-          //  GenerBindEnumKey("DDLPara_SearchUrlOpenType", "SearchUrlOpenType", 0);
+            //  GenerBindEnumKey("DDLPara_SearchUrlOpenType", "SearchUrlOpenType", 0);
 
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
+            var H = document.body.clientHeight;
+            var tableH = H-180;
+            $("#tableDiv").css("height", tableH+"px");
 
         });
 
@@ -106,7 +111,7 @@
 </head>
 <body>
 <span style="height: 30px;text-align: left;font-size: 14px;background-position: 12px 6px;text-indent: 1.8em;line-height: 30px;color: #336699; font-weight: bolder;">基本设置</span>
-<div style="height:430px;overflow:auto;">
+<div style="overflow:auto;" id="tableDiv">
 <table style="width:96%;">
 
 <tr>
@@ -170,6 +175,21 @@
 <td>WinCardH</td>
 <td>弹出窗口高度</td>
 <td ><input name="TBPara_WinCardH" type="text"  id="TBPara_WinCardH" style="width:100%" /></td>
+</tr>
+<tr bgcolor='AliceBlue' >
+<td>PageSize</td>
+<td>页面显示的条数</td>
+<td ><input name="TBPara_PageSize" type="text"  id="TBPara_PageSize" style="width:100%" /></td>
+</tr>
+<tr bgcolor='AliceBlue' >
+<td>FontSize</td>
+<td>页面字体大小</td>
+<td ><input name="TBPara_FontSize" type="text"  id="TBPara_FontSize" style="width:100%" /></td>
+</tr>
+<tr bgcolor='AliceBlue' >
+<td>WinCardH</td>
+<td>弹出窗口高度</td>
+<td ><input name="TBPara_WinCardH" type="text"  id="Text2" style="width:100%" /></td>
 </tr>
 
 <tr bgcolor='white' >

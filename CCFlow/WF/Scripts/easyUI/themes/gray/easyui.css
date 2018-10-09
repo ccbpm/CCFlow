@@ -659,7 +659,7 @@ a.l-btn span span.l-btn-text{
 	display:inline-block;
 	height:16px;
 	line-height:16px;
-	padding:0px;
+	padding-left:17px;
 }
 a.l-btn span span span.l-btn-empty{
 	display:inline-block;

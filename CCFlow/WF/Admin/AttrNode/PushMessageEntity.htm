@@ -144,11 +144,7 @@
         function Back() {
 
             var url = '';
-            /* if (window.confirm('您想使用新版本的设置吗？') == true)
-            url = 'PushMessage.aspx?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
-            else */
             url = 'PushMessage.htm?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
-
             window.location.href = url;
         }
     </script>

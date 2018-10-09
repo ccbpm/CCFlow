@@ -203,12 +203,12 @@ namespace BP.Web
                 HttpCookie cookie = new HttpCookie("CCS");
                 //设置Cookies有效期
                 DateTime time = DateTime.Now;
-                TimeSpan span = new TimeSpan(0, 0, 15, 0, 0);//时间间隔
-                cookie.Expires = time.Add(span);
+
+                //TimeSpan span = new TimeSpan(0, 0, 60, 0, 0);//时间间隔
+              //  cookie.Expires = time.Add(span);
 
                 cookie.Values.Add("No", em.No);
                 cookie.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
-
 
                 if (isRememberMe)
                     cookie.Values.Add("IsRememberMe", "1");

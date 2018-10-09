@@ -19,7 +19,8 @@
     <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
         type="text/javascript"></script>
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js"
+        type="text/javascript"></script>
     <!--公共JS-->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
@@ -30,13 +31,13 @@
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <!--serach页面JS开发接口-->
     <script src="../../DataUser/JSLibData/SearchSelf.js" type="text/javascript"></script>
-
     <base target="_self" />
     <style type="text/css">
-         .Wdate {
+        .Wdate
+        {
             border: 1px solid #e5e6e7;
             height: 28px;
-          }
+        }
         .fixed-table-container thead th .th-inner
         {
             padding: 8px;
@@ -44,8 +45,7 @@
             vertical-align: top;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-            /**background-color: #eaf2ff;**/
+            white-space: nowrap; /**background-color: #eaf2ff;**/
             width: 100%;
         }
         .fixed-table-header
@@ -65,7 +65,6 @@
             -moz-text-overflow: ellipsis;
             -webkit-text-overflow: ellipsis;
         }
-        
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
@@ -281,7 +280,18 @@
         
         function showBarTable(attrs,data){
             var html = "";
+          
+
+              if (attrs.length==0)
+             html +="<table style='width:30%;' >";
+
+                   if (attrs.length==1)
+             html +="<table style='width:50%;' >";
+
+            if (attrs.length>1)
              html +="<table style='width:100%;' >";
+
+
              html +="<tr>";
              if (mapBase.IsShowSearchKey == "1"){
                  var keyLabel  = cfg.GetPara("KeyLabel");
@@ -867,27 +877,35 @@
 
     </script>
     <style type="text/css">
-         body
-         {
-             margin:0px;
-         }
-         .panel-header,
-         .panel-body {
-          border-width: 1px;
-          border-top:0px;
-          border-left:0px;
-          border-right:0px;
-         }
+        body
+        {
+            margin: 0px;
+        }
+        .panel-header, .panel-body
+        {
+            border-width: 1px;
+            border-top: 0px;
+            border-left: 0px;
+            border-right: 0px;
+        }
         
-        .table{table-layout:fixed;}
-
-        table>td{width:100%}
-        .pagination {
+        .table
+        {
+            table-layout: fixed;
+        }
+        
+        table > td
+        {
+            width: 100%;
+        }
+        .pagination
+        {
             margin: 8px 0;
             display: block;
             font-size: 13px;
         }
-        .pagination .controls {
+        .pagination .controls
+        {
             float: left;
             border: 0;
             padding: 7px 0 0 15px;
@@ -900,20 +918,26 @@
         <div class="ibox-content">
             <div class="row">
                 <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
-                    <div id="toolbar" style="width: 100%"></div>
+                    <div id="toolbar" style="width: 100%">
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;"></table>
+                <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
+                </table>
             </div>
             <!-- 显示分页信息 -->
-            <div class="row"  style="text-align:left;">
-                <ul class="pagination" id="page_nav"></ul>
-                 <ul class="pagination controls" id="page_info"></ul>
-                <div style="clear:both;"></div>
+            <div class="row" style="text-align: left;">
+                <ul class="pagination" id="page_nav">
+                </ul>
+                <ul class="pagination controls" id="page_info">
+                </ul>
+                <div style="clear: both;">
+                </div>
             </div>
         </div>
-           <div id="Msg"></div>
-     </div>
+        <div id="Msg">
+        </div>
+    </div>
 </body>
 </html>

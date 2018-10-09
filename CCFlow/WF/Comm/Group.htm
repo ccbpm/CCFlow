@@ -470,6 +470,7 @@
                 }
                 for (var j = 0; j < AttrsOfNum.length; j++) {
                     var obj = dr[AttrsOfNum[j].KeyOfEn];
+                    if (obj == null || obj == undefined) obj = "-";
                     if (AttrsOfNum[j].MyDataType == 8) {
                         if (ur.Vals.indexOf(AttrsOfNum[j].KeyOfEn + "=AMOUNT") != -1) {
                             //需要转换为金额类型，小数位数不到两位的补全,功能待定
@@ -544,12 +545,14 @@
                         if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1) {
                             d = 0;
                             $.each(groupSearch, function (k, o) {
+                                if (o[AttrsOfNum[i].KeyOfEn] != null && o[AttrsOfNum[i].KeyOfEn] != undefined)
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
                             html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
+                                if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
                             html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
@@ -557,6 +560,7 @@
                         else {
                             d = 0;
                             $.each(groupSearch, function (k, o) {
+                                if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
 
@@ -574,13 +578,15 @@
                         if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1) {
                             d = 0;
                             $.each(groupSearch, function (k, o) {
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
+                                if (o[AttrsOfNum[i].KeyOfEn] != null && o[AttrsOfNum[i].KeyOfEn] != undefined)
+                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
 
                             html += "<td class='TDNum' nowrap >" + d + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
+                                if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
                             html += "<td class='TDNum' nowrap >" + d + "</td>";
@@ -588,7 +594,8 @@
                         } else {
                             d = 0;
                             $.each(groupSearch, function (k, o) {
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
+                                if(o[AttrsOfNum[i].KeyOfEn]!=null && o[AttrsOfNum[i].KeyOfEn]!=undefined)
+                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
 
                             if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") == -1)

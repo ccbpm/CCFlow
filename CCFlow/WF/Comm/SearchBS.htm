@@ -180,7 +180,10 @@
             }
            
             if (mapBase.IsShowSearchKey == "1"){
-                html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+GetKeyLabel()+":&nbsp;&nbsp</label>"
+                var keyLabel  = cfg.GetPara("KeyLabel");
+                if(keyLabel == null || keyLabel == undefined || keyLabel =="")
+                    keyLabel="关键字";
+                html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+keyLabel+":&nbsp;&nbsp</label>"
                 html +="<input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
                 barCount += 1;
             }
@@ -229,19 +232,28 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
             
-            html += '<a href="#"class="btn btn-primary" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
-            
+            html += '<a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
+           var btnLab1 = cfg.GetPara("BtnLab1");
+            var btnLab2 = cfg.GetPara("BtnLab2");
+            if(btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
+                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\""+cfg.GetPara("BtnJS1")+"\",\""+btnLab1+"\")'>"+btnLab1+"</a>";
+
+             if(btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
+                 html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\""+cfg.GetPara("BtnJS2")+"\",\""+btnLab2+"\")'>"+btnLab2+"</a>";
             
             if (mapBase.IsInsert.toString().toLowerCase() == "true") {
-                html += '<a href="#" class="btn btn-primary" id="new_btn" onclick="New()">新建</a>  ';
+                html += '<a href="#" class="btn btn-default btn-sm" id="new_btn" onclick="New()">新建</a>  ';
             } 
-			html +='<a href="#" class="btn btn-primary" id="exp_btn" onclick="Exp()">导出</a>  ';
+			html +='<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Exp()">导出</a>  ';
 
             if(mapBase.IsImp.toString().toLowerCase() == "true")
-                html +='<a href="#" class="btn btn-primary" id="imp_btn" onclick="Imp()">导入</a>';
+                html +='<a href="#" class="btn btn-default btn-sm" id="imp_btn" onclick="Imp()">导入</a>';
 
 			if(new WebUser().No=="admin")
-			    html +='<a href="#" class="btn btn-primary" id="setting_btn" onclick="Setting()">设置</a>';
+			    html +='<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
+
+            
+                
 
 			$("#toolbar").append(html);
 			
@@ -252,7 +264,10 @@
              html +="<table style='width:100%;' >";
              html +="<tr>";
              if (mapBase.IsShowSearchKey == "1"){
-                html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+GetKeyLabel()+":</label></td>";
+                 var keyLabel  = cfg.GetPara("KeyLabel");
+                if(keyLabel == null || keyLabel == undefined || keyLabel =="")
+                    keyLabel="关键字";
+                html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+keyLabel+":</label></td>";
                 html +="<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
             }
             if (mapBase.DTSearchWay != "0") {
@@ -287,6 +302,14 @@
             //增加按钮.
             html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             
+            var btnLab1 = cfg.GetPara("BtnLab1");
+            var btnLab2 = cfg.GetPara("BtnLab2");
+            if(btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
+                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'  onclick='executeFunction(\""+cfg.GetPara("BtnJS1")+"\",\""+btnLab1+"\")'>"+btnLab1+"</a>";
+
+             if(btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
+                 html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\""+cfg.GetPara("BtnJS2")+"\",\""+btnLab2+"\")'>"+btnLab2+"</a>";
+
             if (mapBase.IsInsert.toString().toLowerCase() == "true")
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="new_btn" onclick="New()">新建</a>';
             
@@ -390,13 +413,7 @@
             ReDownExpFile();
 
         }
-        function GetKeyLabel()
-        {
-
-        if (GetQueryString("EnsName")=="BP.YYT.HaiDaos")
-        return "海岛名";
-        return "关键字";
-        }
+        
 
         function ReDownExpFile() {
 
@@ -797,6 +814,21 @@
                 window.location.href = Url;
             }
         }
+
+       function executeFunction(jsString,label){
+         jsString = jsString.replace(/~/g, "'");
+         if(jsString.indexOf("/")!=-1){
+             var W = document.body.clientWidth-40;
+             var H = document.body.clientHeight-40;
+            OpenBootStrapModal(jsString, "eudlgframe", label, W, H, "icon-property", null, null, null, null, null, 'black'); 
+          }else{
+            if (jsString.indexOf('(') == -1)
+                eval(jsString + "()");
+            else
+                eval(jsString);
+          }
+          
+       }
 
     </script>
     <style type="text/css">

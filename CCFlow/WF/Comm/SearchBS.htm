@@ -27,7 +27,6 @@
     <script src="Gener.js" type="text/javascript"></script>
     <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <script src="../CCForm/MapExt2016.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <!--serach页面JS开发接口-->
     <script src="../../DataUser/JSLibData/SearchSelf.js" type="text/javascript"></script>
@@ -874,6 +873,114 @@
                 eval(jsString);
           }
        }
+
+       /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
+    function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
+        if (selectVal == "all") {
+            $("#" + ddlChild).empty();
+            //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
+            $("#" + ddlChild).append("<option value='all' selected='selected' >全部</option");
+            var chg = $("#" + ddlChild).attr("onchange");
+
+            $("#" + ddlChild).change();
+
+            return;
+        }
+
+        GenerPageKVs();
+
+        var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
+
+        //处理参数问题
+        if (param != undefined) {
+            kvs = '';
+        }
+        var dbSrc = mapExt.Doc;
+        if (param != undefined) {
+            for (var pro in param) {
+                if (pro == 'DoType')
+                    continue;
+                dbSrc = dbSrc.replace("@" + pro, param[pro]);
+            }
+        }
+
+        var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType); //获得数据源.
+
+        // 这里要设置一下获取的外部数据.
+        // 获取原来选择值.
+        var oldVal = null;
+        var ddl = document.getElementById(ddlChild);
+
+        if (ddl == null) {
+            alert(ddlChild + "丢失,或者该字段被删除.");
+            return;
+        }
+
+
+        var mylen = ddl.options.length - 1;
+        while (mylen >= 0) {
+            if (ddl.options[mylen].selected) {
+                oldVal = ddl.options[mylen].value;
+            }
+            mylen--;
+        }
+
+        //清空级联字段
+        $("#" + ddlChild).empty();
+
+        //查询数据为空时为级联字段赋值
+        if (dataObj == null || dataObj.length == 0) {
+            //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
+            $("#" + ddlChild).append("<option value='' selected='selected' >无数据</option");
+            var chg = $("#" + ddlChild).attr("onchange");
+
+            if (typeof chg == "function") {
+                $("#" + ddlChild).change();
+            }
+            return;
+        }
+
+        //不为空的时候赋值
+         $("#" + ddlChild).append("<option value='all' >全部</option>");
+        $.each(dataObj, function (idx, item) {
+
+            //  alert(item[idx][1]);
+            //console.log(item);
+            //return;
+
+            var no = item.No;
+            if (no == undefined)
+                no = item.NO;
+
+            var name = item.Name;
+            if (name == undefined)
+                name = item.NAME;
+
+            $("#" + ddlChild).append("<option value='" + no + "'>" + name + "</option");
+
+        });
+
+        var isInIt = false;
+        mylen = ddl.options.length - 1;
+        while (mylen >= 0) {
+            if (ddl.options[mylen].value == oldVal) {
+                ddl.options[mylen].selected = true;
+                isInIt = true;
+                break;
+            }
+            mylen--;
+        }
+        if (isInIt == false) {
+            //此处修改，去掉直接选中上次的结果，避免错误数据的产生，edited by liuxc,2015-10-22
+            //$("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
+            $("#" + ddlChild).val('');
+            //增加默认选择第一条数据
+            ddl.options[0].selected = true;
+            var chg = $("#" + ddlChild).attr("onchange");
+            $("#" + ddlChild).change();
+       
+        }
+    }
 
     </script>
     <style type="text/css">

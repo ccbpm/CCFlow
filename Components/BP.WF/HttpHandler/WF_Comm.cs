@@ -1116,6 +1116,9 @@ namespace BP.WF.HttpHandler
 
             //附件类型.
             md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType);
+            
+            //获取实体类的主键
+            md.SetPara("PK", en.PK);
 
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 

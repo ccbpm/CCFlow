@@ -869,6 +869,10 @@ namespace BP.WF
         /// </summary>
         ByStation = 0,
         /// <summary>
+        /// 本部门内的人员
+        /// </summary>
+        FindSpecDeptEmpsInStationlist = 19,
+        /// <summary>
         /// 按部门
         /// </summary>
         ByDept = 1,

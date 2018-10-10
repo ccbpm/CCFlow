@@ -220,7 +220,7 @@ namespace BP.WF
             Nodes toNDs = currND.HisToNodes;
             foreach (Node item in toNDs)
             {
-                if (item.HisDeliveryWay == DeliveryWay.ByStation)
+                if (item.HisDeliveryWay == DeliveryWay.ByStation || item.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
                 {
                     /*如果按照岗位访问*/
                     #region 最后判断 - 按照岗位来执行。

@@ -457,6 +457,35 @@ namespace BP.WF.Template
                 }
             }
 
+
+            #region 为省立医院增加，按照指定的部门范围内的岗位计算..
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
+            {
+                //sql = "SELECT pdes.FK_Emp AS No"
+                //      + " FROM   Port_DeptEmpStation pdes"
+                //      + " INNER JOIN WF_NodeDept wnd ON wnd.FK_Dept = pdes.FK_Dept"
+                //      + " AND wnd.FK_Node = " + town.HisNode.NodeID
+                //      + " INNER JOIN WF_NodeStation wns ON  wns.FK_Station = pdes.FK_Station"
+                //      + " AND wns.FK_Node =" + town.HisNode.NodeID
+                //      + " ORDER BY pdes.FK_Emp";
+
+                sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeDept B, WF_NodeStation C ";
+                sql += "WHERE  A.FK_Dept=B.FK_Dept AND B.FK_Node=C.FK_Node AND C.FK_Node=" + town.HisNode.NodeID + " AND A.FK_Dept='" + BP.Web.WebUser.FK_Dept + "'";
+
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+                if (dt.Rows.Count > 0)
+                    return dt;
+                else
+                {
+                    if (this.town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
+                    else
+                        return dt;
+                }
+            }
+            #endregion 按部门与岗位的交集计算.
+
             #region 按部门与岗位的交集计算.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
             {

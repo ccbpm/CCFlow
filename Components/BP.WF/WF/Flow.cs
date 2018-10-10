@@ -1924,6 +1924,7 @@ namespace BP.WF
                     switch (nd.HisDeliveryWay)
                     {
                         case DeliveryWay.ByStation:
+                        case DeliveryWay.FindSpecDeptEmpsInStationlist:
                             if (nd.NodeStations.Count == 0)
                                 msg += "@错误:您设置了该节点的访问规则是按岗位，但是您没有为节点绑定岗位。";
                             break;

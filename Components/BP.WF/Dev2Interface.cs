@@ -531,6 +531,7 @@ namespace BP.WF
                     sql = "SELECT * FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + nd.NodeID + ")";
                     break;
                 case DeliveryWay.ByStation: /*按岗位*/
+                case DeliveryWay.FindSpecDeptEmpsInStationlist: /*按岗位*/
                     sql = "SELECT * FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ( SELECT FK_Station from WF_nodeStation where FK_Node=" + nd.NodeID + ")) ";
                     break;
                 default:

@@ -28,6 +28,7 @@
     <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script>  
     <!--serach页面JS开发接口-->
     <script src="../../DataUser/JSLibData/SearchSelf.js" type="text/javascript"></script>
     <base target="_self" />
@@ -530,6 +531,8 @@
             var mapdata = SearchData();
             var attrs = mapdata["Attrs"];
 
+            var dtMs = mapdata["dtM"];
+
             if (attrs == undefined) {
                 alert('没有取得属性.');
                 return;
@@ -602,7 +605,55 @@
 
                 });
             }
+           
+            for(var k = 0 ;k<dtMs.length;k++){
+                var dtm = dtMs[k];
+                columns.push({
+                     field: dtMs[k].ClassMethodName,
+                     title: dtMs[k].Title,
+                     width: 80,
+                     align:'center',
+                     formatter: function(value,row,index){
+                         var pkval = row["No"];
+                        if (pkval == undefined) {
+                            pkval = row["OID"];
+                        }
+                        if (pkval == undefined) {
+                            pkval = row["MyPK"];
+                        }
+                        if (pkval == undefined) {
+                            pkval = row["WorkID"];
+                        }
+                        if (pkval == undefined) {
+                            pkval = row["NodeID"];
+                        }
+                        var warning = dtm.Warning;
+                        var refMethodType = parseInt(dtm.RefMethodType);
+                        var url = dtm.Url+pkval;
+                        switch(refMethodType){
+                            case RefMethodType.LinkeWinOpen:
+                            case RefMethodType.LinkModel:
+                            case RefMethodType.RightFrameOpen:
+                                return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
+                            case RefMethodType.Func:
+                                 if (dtm.FunPara == true || dtm.FunPara == "true")
+                                    return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
+                                else {
+                                    if (warning == "null" || warning == "")
+                                        warning = "确定要执行吗？";
+                                    else {
+                                        warning = warning.replace(/,\s+/g, ",");
+                                        warning = warning.replace(/\s+/g, "\r\n");
+                                    }
+                                    return "<a href='#' onclick='openFun(\""+warning+"\",\""+url+"\",\""+dtm.Title+"\")'>"+dtm.Title+"</a>";
+                       
+                                }
+                            default:return "-";
 
+                        }
+                     }
+                 });
+            }
             sysMapData = mapdata["Sys_MapData"][0];
             sysMapData = new Entity("BP.Sys.MapData", sysMapData); //把他转化成entity.
 
@@ -617,6 +668,8 @@
                      formatter: formatOper
                  });
              }
+
+
             
             $('#dg').html("");
             $('#dg').bootstrapTable({
@@ -846,6 +899,39 @@
                 return "<a href='#' onclick='downLoadFile(\"" + pkval + "\")' target='_self'>下载</a>";
             else
                 return "-"; 
+        }
+
+        function formatMethod(rowData,value,row,index){
+            var warning = rowData.Warning;
+            var refMethodType = parseInt(rowData.RefMethodType);
+            switch(refMethodType){
+                case RefMethodType.LinkeWinOpen:
+                case RefMethodType.LinkModel:
+                case RefMethodType.RightFrameOpen:
+                    return "<a href='#' onclick='OpenBootStrapModal(\""+rowData.Url+"\",\"eudlgframe\",\""+rowData.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+rowData.Title+"</a>";
+                case RefMethodType.Func:
+                     if (rowData.FunPara == true || rowData.FunPara == "true")
+                        return "<a href='#' onclick='OpenBootStrapModal(\""+rowData.Url+"\",\"eudlgframe\",\""+rowData.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+rowData.Title+"</a>";
+                    else {
+                        if (warning == "null" || warning == "")
+                            warning = "确定要执行吗？";
+                        else {
+                            warning = warning.replace(/,\s+/g, ",");
+                            warning = warning.replace(/\s+/g, "\r\n");
+                        }
+                        return "<a href='#' onclick='openFun(\""+warning+"\",\""+rowData.Url+"\",\""+rowData.Title+"\")'>"+rowData.Title+"</a>";
+                       
+                    }
+                default:return "-";
+
+           }
+            
+        }
+
+        function openFun(warning,url,title){
+            if(confirm(warning)){
+               OpenBootStrapModal(url,"eudlgframe",title,540,450,"icon-property", null, null, null, null, null, "black"); 
+            }
         }
 
         function downLoadFile(PKVal) {

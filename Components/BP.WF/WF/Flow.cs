@@ -2105,6 +2105,27 @@ namespace BP.WF
                         msg += "@(" + nd.Name + ")方向条件检查完成.....";
                     }
                     #endregion 检查节点完成条件的定义.
+
+
+                    #region 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
+                    if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                    {
+                        MapAttr mattr = new MapAttr();
+                        mattr.MyPK = nd.NodeFrmID + "_FID";
+                        if (mattr.RetrieveFromDBSources() == 0)
+                        {
+                            mattr.KeyOfEn = "FID";
+                            mattr.FK_MapData = nd.NodeFrmID;
+                            mattr.MyDataType = DataType.AppInt;
+                            mattr.Name = "FID(自动增加)";
+                            mattr.Insert();
+
+                            GEEntity en = new GEEntity(nd.NodeFrmID);
+                            en.CheckPhysicsTable();
+                        }
+                    }
+                    #endregion 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
+
                 }
                 #endregion
 

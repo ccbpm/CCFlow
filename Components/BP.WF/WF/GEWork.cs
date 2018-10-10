@@ -97,6 +97,15 @@ namespace BP.WF
             }
         }
         #endregion
+
+        /// <summary>
+        /// 重写tostring 返回fromID.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.NodeFrmID; 
+        }
     }
     /// <summary>
     /// 普通工作s

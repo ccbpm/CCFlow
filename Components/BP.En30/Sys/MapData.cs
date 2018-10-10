@@ -2755,7 +2755,10 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_FrmRB WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmAttachment WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_MapFrame WHERE " + whereFK_MapData;
-            sql += "@DELETE FROM Sys_MapExt WHERE " + whereFK_MapData;
+            
+            if (this.No.Contains("BP.")==false)
+               sql += "@DELETE FROM Sys_MapExt WHERE " + whereFK_MapData;
+
             sql += "@DELETE FROM Sys_MapAttr WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_GroupField WHERE " + whereEnsName;
             sql += "@DELETE FROM Sys_MapData WHERE " + whereNo;

@@ -1136,7 +1136,10 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_FrmRB WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapFrame WHERE FK_MapData='" + this.No + "'";
+
+            if (this.No.Contains("BP.") == false)
             sql += "@DELETE FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'";
+
             sql += "@DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapData WHERE No='" + this.No + "'";
             sql += "@DELETE FROM Sys_GroupField WHERE FrmID='" + this.No + "'";

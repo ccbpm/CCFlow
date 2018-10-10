@@ -536,9 +536,9 @@ namespace BP.Sys.FrmUI
                             sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
 
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                            sql = "alter table " + md.PTable + " modify " + attr.Field + " varchar2(" + attr.MaxLen + ")";
-
-                        DBAccess.RunSQL(sql);
+                            sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
+                         
+                        DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
                     }
                 }
             }

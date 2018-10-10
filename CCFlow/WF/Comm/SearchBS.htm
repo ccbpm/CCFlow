@@ -632,8 +632,10 @@
                                  if (dtm.FunPara == true || dtm.FunPara == "true")
                                     return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
                                 else {
-                                    if (warning == "null" || warning == "")
+                                    if (warning ==null || warning == "null" || warning == "")
+                                    {
                                         warning = "确定要执行吗？";
+                                    }
                                     else {
                                         warning = warning.replace(/,\s+/g, ",");
                                         warning = warning.replace(/\s+/g, "\r\n");

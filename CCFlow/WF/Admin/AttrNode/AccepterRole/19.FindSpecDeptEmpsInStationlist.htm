@@ -1,0 +1,129 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>在指定的部门里按照岗位计算</title> 
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>    
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
+    <script  type="text/javascript">
+        //初始化页面
+        $(function () {
+
+            InitBar(DeliveryWay.FindSpecDeptEmpsInStationlist);
+
+            var ens = new Entities("BP.WF.Template.NodeStations");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            var html = "<table style='width:60%;' >";
+            html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var idx = 0;
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                if (idx == 0)
+                    html += "<tr>";
+
+                html += "<td>" + en.FK_StationText + "</td>";
+                
+                idx++;
+                if (idx == 7) {
+                    idx = 0;
+                    html += "</tr>";
+                }
+            }
+
+            html += "</table>";
+            document.getElementById("stas").innerHTML = html;
+
+            //根据用户的信息，判断是否启用那个设置工具。
+            var user = new WebUser();
+
+            $("#OrgModel").hide();
+            $("#AdminModel").hide();
+
+            if (user.No == "admin") {
+                /*调用通用的.*/
+                $("#AdminModel").show();
+
+            } else {
+                /*调用集团模式的.*/
+                $("#OrgModel").show();
+            }
+
+        });
+
+
+        function OpenNew() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+        }
+
+
+       //设置本组织岗位.
+       function SetOrgStations() {
+           var user = new WebUser();
+           OpenNodStationGroup(user.FK_Dept);
+       }
+
+       //设置集团岗位.
+       function SetGroupStations() {
+           var user = new WebUser();
+           OpenNodStationGroup(user.GroupNo);
+       }
+
+       function OpenNodStationGroup(orgNo) {
+           var url = "NodeStationGroup.htm?OrgNo=" + orgNo+"&FK_Node="+GetQueryString("FK_Node");
+           OpenEasyUiDialogExt(url, "绑定岗位", 500, 600, true);
+       }
+
+        //保存
+       function Save() {
+           var nodeID = GetQueryString("FK_Node");
+           var node = new Entity("BP.WF.Node", nodeID);
+           node.DeliveryWay = DeliveryWay.FindSpecDeptEmpsInStationlist;
+           node.Update();
+           alert("保存成功.");
+       }
+    </script>
+</head>
+<body >
+<div id="bar"> </div>
+ 
+ <div id="AdminModel">
+    <fieldset >
+        <legend>设置岗位</legend>
+        <ul>
+            <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
+            <li> <a href="javascript:OpenNew()" >设置/更改岗位（左右树结构）</a> </li>
+            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+<div id="OrgModel">
+    <fieldset >
+        <legend>设置（组织管理员）</legend>
+        <ul>
+            <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
+            <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+
+   <div id="stas"></div>
+
+
+</body>
+</html>

@@ -34,7 +34,11 @@ if (typeof RunModel == "undefined") {
 if (typeof DeliveryWay == "undefined") {
     var DeliveryWay = {}
         // 按岗位(以部门为纬度)
-        DeliveryWay.ByStation = 0,
+    DeliveryWay.ByStation = 0,
+    //在指定的部门里按照岗位计算.
+    DeliveryWay.FindSpecDeptEmpsInStationlist = 19,
+
+
         // 按部门
         DeliveryWay.ByDept = 1,
         // 按SQL

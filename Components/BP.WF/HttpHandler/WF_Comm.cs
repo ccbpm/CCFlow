@@ -1112,9 +1112,6 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             ds.Tables.Add(dtAttrs); //把描述加入.
 
-            //定义Sys_MapData.
-           // MapData md = new MapData();
-            //md.No = this.EnsName.Substring(0,this.EnsName.Length-1);
             md.Name = map.EnDesc;
 
             //附件类型.
@@ -1346,6 +1343,7 @@ namespace BP.WF.HttpHandler
             dtM.Columns.Add("Icon");
             dtM.Columns.Add("IsCanBatch");
             dtM.Columns.Add("RefAttrKey");
+            dtM.Columns.Add("ClassMethodName");
 
             RefMethods rms = map.HisRefMethods;
             foreach (RefMethod item in rms)
@@ -1358,7 +1356,7 @@ namespace BP.WF.HttpHandler
 
                 string myurl = "";
 
-                myurl = "../RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=";
+                myurl = "RefMethod.htm?Index=" + item.Index + "&EnName=" + en.ToString() + "&EnsName=" + en.GetNewEntities.ToString() + "&PKVal=";
 
                 DataRow dr = dtM.NewRow();
 
@@ -1375,6 +1373,7 @@ namespace BP.WF.HttpHandler
                 dr["Icon"] = item.Icon;
                 dr["IsCanBatch"] = item.IsCanBatch;
                 dr["GroupName"] = item.GroupName;
+                dr["ClassMethodName"] = item.ClassMethodName;
 
                 dtM.Rows.Add(dr); //增加到rows.
             }

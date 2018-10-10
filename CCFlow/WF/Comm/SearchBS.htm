@@ -28,7 +28,8 @@
     <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script>  
+    <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script> 
+    <script src="../CCForm/MapExt2016.js" type="text/javascript"></script>   
     <!--serach页面JS开发接口-->
     <script src="../../DataUser/JSLibData/SearchSelf.js" type="text/javascript"></script>
     <base target="_self" />
@@ -101,7 +102,7 @@
         var fontSize = cfg.GetPara("FontSize");
         if(fontSize == null || fontSize == undefined || fontSize ==0)
             fontSize = 13;
-       
+      
 
       var firstLoadTable = false;
 
@@ -243,7 +244,7 @@
                     var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
                     var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
                     if (ddlPerant != null && ddlChild != null){
-                        ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\',\'" + ddlPerant.val() + "\')");
+                        ddlPerant.attr("onchange", "DDLRelation(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\',\'" + ddlPerant.val() + "\')");
                        
                     }
                 }
@@ -372,7 +373,7 @@
                     var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
                     var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
                     if (ddlPerant != null && ddlChild != null){
-                        ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\',\'" + ddlPerant.val() + "\')");
+                        ddlPerant.attr("onchange", "DDLRelation(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\',\'" + ddlPerant.val() + "\')");
                        
                     }
                 }
@@ -533,6 +534,10 @@
 
             var dtMs = mapdata["dtM"];
 
+            var sysMapData = mapdata["Sys_MapData"][0];
+            sysMapData = new Entity("BP.Sys.MapData", sysMapData); //把他转化成entity.
+            var enPK = sysMapData.GetPara("PK");
+
             if (attrs == undefined) {
                 alert('没有取得属性.');
                 return;
@@ -614,19 +619,7 @@
                      width: 80,
                      align:'center',
                      formatter: function(value,row,index){
-                         var pkval = row["No"];
-                        if (pkval == undefined) {
-                            pkval = row["OID"];
-                        }
-                        if (pkval == undefined) {
-                            pkval = row["MyPK"];
-                        }
-                        if (pkval == undefined) {
-                            pkval = row["WorkID"];
-                        }
-                        if (pkval == undefined) {
-                            pkval = row["NodeID"];
-                        }
+                         var pkval = row[enPK];
                         var warning = dtm.Warning;
                         var refMethodType = parseInt(dtm.RefMethodType);
                         var url = dtm.Url+pkval;
@@ -654,8 +647,30 @@
                      }
                  });
             }
-            sysMapData = mapdata["Sys_MapData"][0];
-            sysMapData = new Entity("BP.Sys.MapData", sysMapData); //把他转化成entity.
+
+            var isEnableOpen = cfg.GetPara("IsEnableOpenICON");
+            //添加显示详情列
+            if(isEnableOpen == "1"){
+                //加入操作下载文件
+                 columns.push({
+                     field: 'viewDetail',
+                     title: '详细信息',
+                     width: 80,
+                     align:'center',
+                     formatter: function(value,row,index){
+                        var pkval = row[enPK];
+                        var paras = "&" + enPK + "=" + pkval;
+                        for (var i = 0; i < attrs.length; i++) {
+                            var attr = attrs[i];
+                            if (attr.UIContralType == 1)
+                                paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
+                        }
+
+                        return "<a href='#' onclick='OpenEn(\""+pkval+"\",\""+paras+"\")'>详情</a>";
+                     }
+                 }); 
+            }
+           
 
              var entityAthType = sysMapData.GetPara("BPEntityAthType");
              if (entityAthType == 1 || entityAthType == 2) {
@@ -694,25 +709,8 @@
                 },
 
                 onDblClickRow: function (row, $element) {
-                    var pkval = row["No"];
-                    var objectID = "No";
-                    if (pkval == undefined) {
-                        pkval = row["OID"];
-                        objectID = "OID";
-                    }
-                    if (pkval == undefined) {
-                        pkval = row["MyPK"];
-                        objectID = "MyPK";
-                    }
-                    if (pkval == undefined) {
-                        pkval = row["WorkID"];
-                        objectID = "WorkID";
-                    }
-                    if (pkval == undefined) {
-                        pkval = row["NodeID"];
-                        objectID = "NodeID";
-                    }
-                    var paras = "&" + objectID + "=" + pkval;
+                    var pkval = row[enPK];
+                    var paras = "&" + enPK + "=" + pkval;
                     for (var i = 0; i < attrs.length; i++) {
                         var attr = attrs[i];
                         if (attr.UIContralType == 1)
@@ -960,7 +958,7 @@
        }
 
        /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
-    function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
+    function DDLRelation(selectVal, ddlChild, fk_mapExt, param) {
         if (selectVal == "all") {
             $("#" + ddlChild).empty();
             //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
@@ -971,8 +969,6 @@
 
             return;
         }
-
-        GenerPageKVs();
 
         var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
 
@@ -1066,6 +1062,8 @@
        
         }
     }
+
+   
 
     </script>
     <style type="text/css">

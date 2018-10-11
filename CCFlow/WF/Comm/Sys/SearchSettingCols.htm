@@ -23,8 +23,20 @@
 
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", ensName, "Idx");
-            if (mapAttrs.length == 0)
-                alert("请启动傻瓜表单设计器");
+            if (mapAttrs.length == 0) {
+
+                var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                hander.Clear();
+                hander.AddPara("IsFirst", 1);
+                hander.AddPara("FK_MapData", ensName);
+                hander.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+                hander.AddPara("FK_Node", GetQueryString("FK_Node"));
+                var data = hander.DoMethodReturnString("Designer_Init");
+                mapAttrs.Retrieve("FK_MapData", ensName, "Idx");
+            }
+
+            //alert("请启动傻瓜表单设计器");
+
 
             for (var i = 0; i < mapAttrs.length; i++) {
 
@@ -32,19 +44,24 @@
                 if (mapAttr.KeyOfEn == 'OID') {
                     continue;
                 }
+
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
 
                 var html = "";
                 html += "<tr>";
                 html += "<td>" + i + "</td>";
                 html += "<td>" + mapAttr.KeyOfEn + "</td>";
-                html += "<td>" + mapAttr.Name + "</td>";
+
+                if (mapAttrEn.GetPara("SearchVisable") == "1")
+                    html += "<td>" + mapAttr.Name + "</td>";
+                else
+                    html += "<td><strike>" + mapAttr.Name + "</strike></td>";
+
 
                 if (mapAttrEn.GetPara("SearchVisable") == "1")
                     html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
                 else
                     html += "<td><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
-
 
                 html += "<td><a href=\"javascript:Up('" + mapAttr.MyPK + "')\">上移</a> - <a href=\"javascript:Down('" + mapAttr.MyPK + "')\">下移</a></td>";
                 html += "</tr>";
@@ -58,7 +75,6 @@
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.SetPara("SearchVisable", 0);
             mapAttrEn.Update();
-
 
             window.location.href = window.location.href;
         }
@@ -108,13 +124,13 @@
 
             var mapdata = new Entity("BP.Sys.MapData", GetQueryString("EnsName"));
             mapdata.Delete();
+
             var mapAttrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", GetQueryString("EnsName"));
             for (var i = 0; i < mapAttrs.length; i++) {
                 mapAttrs[i].Delete();
             }
+
             //重置排序顺序
-
-
             window.location.href = window.location.href;
         }
 

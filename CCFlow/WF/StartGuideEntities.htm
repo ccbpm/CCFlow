@@ -131,7 +131,6 @@
                 //添加要显示的数据
                 _Html += "<tr>";
 
-
                 var extParas = "";
 
                 //如果是SQL多条模式，增加勾选框
@@ -146,9 +145,11 @@
 
                     //把扩展的paras 求出来.
                     for (var v in data[i]) {
-                        if (v == "NO" || v == "No" || v == "Name" || v == "NAME") {//此处No列不显示
-                            continue;
+
+                        if (v == "NO" || v == "No" || v == "Name" || v == "NAME") { //此处No列不显示 why? 
+                           // continue;   //此处被zhoupeng注释掉.
                         }
+
                         extParas += "&" + v + "=" + data[i][v];
                     }
                 }

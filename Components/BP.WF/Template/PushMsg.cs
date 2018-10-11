@@ -702,7 +702,11 @@ namespace BP.WF.Template
             Int64 workid = Int64.Parse(en.PKVal.ToString());
             string title = "标题";
             if (en.Row.ContainsKey("Title") == true)
+            {
                 title = en.GetValStringByKey("Title"); // 获得工作标题.
+                if(DataType.IsNullOrEmpty(title))
+                    title = BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
+            }
             else
                 title = BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
 
@@ -1054,23 +1058,26 @@ namespace BP.WF.Template
                 {
                     /*如果向接受人发送短信.*/
                     toEmpIDs = SendToEmpIDs;
-                    string[] emps = toEmpIDs.Split(',');
-                    foreach (string emp in emps)
+                    if (DataType.IsNullOrEmpty(toEmpIDs) == false)
                     {
-                        if (DataType.IsNullOrEmpty(emp))
-                            continue;
+                        string[] emps = toEmpIDs.Split(',');
+                        foreach (string emp in emps)
+                        {
+                            if (DataType.IsNullOrEmpty(emp))
+                                continue;
 
-                        string smsDocTmpReal = smsDocTmp.Clone() as string;
-                        smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", emp);
-                        BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
+                            string smsDocTmpReal = smsDocTmp.Clone() as string;
+                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", emp);
+                            BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
 
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+                            string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 
-                        //发送短信.
-                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null);
+                            //发送短信.
+                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null);
+                        }
+                        //return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
+                        return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                     }
-                    //return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
-                    return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                 }
 
                 if (this.SMSPushWay == 2)
@@ -1096,23 +1103,26 @@ namespace BP.WF.Template
                 {
                     /*如果向接受人发送短信.*/
                     toEmpIDs = objs.VarAcceptersID;
-                    string[] emps = toEmpIDs.Split(',');
-                    foreach (string empID in emps)
+                    if (DataType.IsNullOrEmpty(toEmpIDs) == false)
                     {
-                        if (DataType.IsNullOrEmpty(empID))
-                            continue;
+                        string[] emps = toEmpIDs.Split(',');
+                        foreach (string empID in emps)
+                        {
+                            if (DataType.IsNullOrEmpty(empID))
+                                continue;
 
-                        string smsDocTmpReal = smsDocTmp.Clone() as string;
-                        smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
+                            string smsDocTmpReal = smsDocTmp.Clone() as string;
+                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
 
-                        BP.WF.Port.WFEmp empEn = new Port.WFEmp(empID);
+                            BP.WF.Port.WFEmp empEn = new Port.WFEmp(empID);
 
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+                            string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 
-                        //发送短信.
-                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras);
+                            //发送短信.
+                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras);
+                        }
+                        return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                 }
 
                 if (this.SMSPushWay == 2)

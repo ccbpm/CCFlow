@@ -611,6 +611,10 @@
                 });
             }
            
+            //获取屏幕的长宽
+           var W = document.body.clientWidth-40;
+           var H = document.body.clientHeight-40;
+
             for(var k = 0 ;k<dtMs.length;k++){
                 var dtm = dtMs[k];
                 columns.push({
@@ -627,10 +631,10 @@
                             case RefMethodType.LinkeWinOpen:
                             case RefMethodType.LinkModel:
                             case RefMethodType.RightFrameOpen:
-                                return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
+                                return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
                             case RefMethodType.Func:
                                  if (dtm.FunPara == true || dtm.FunPara == "true")
-                                    return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
+                                    return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
                                 else {
                                     if (warning ==null || warning == "null" || warning == "")
                                     {
@@ -901,36 +905,11 @@
                 return "-"; 
         }
 
-        function formatMethod(rowData,value,row,index){
-            var warning = rowData.Warning;
-            var refMethodType = parseInt(rowData.RefMethodType);
-            switch(refMethodType){
-                case RefMethodType.LinkeWinOpen:
-                case RefMethodType.LinkModel:
-                case RefMethodType.RightFrameOpen:
-                    return "<a href='#' onclick='OpenBootStrapModal(\""+rowData.Url+"\",\"eudlgframe\",\""+rowData.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+rowData.Title+"</a>";
-                case RefMethodType.Func:
-                     if (rowData.FunPara == true || rowData.FunPara == "true")
-                        return "<a href='#' onclick='OpenBootStrapModal(\""+rowData.Url+"\",\"eudlgframe\",\""+rowData.Title+"\",540,450,\"icon-property\", null, null, null, null, null, \"black\")'>"+rowData.Title+"</a>";
-                    else {
-                        if (warning == "null" || warning == "")
-                            warning = "确定要执行吗？";
-                        else {
-                            warning = warning.replace(/,\s+/g, ",");
-                            warning = warning.replace(/\s+/g, "\r\n");
-                        }
-                        return "<a href='#' onclick='openFun(\""+warning+"\",\""+rowData.Url+"\",\""+rowData.Title+"\")'>"+rowData.Title+"</a>";
-                       
-                    }
-                default:return "-";
-
-           }
-            
-        }
-
         function openFun(warning,url,title){
+            var W = document.body.clientWidth-40;
+           var H = document.body.clientHeight-40;
             if(confirm(warning)){
-               OpenBootStrapModal(url,"eudlgframe",title,540,450,"icon-property", null, null, null, null, null, "black"); 
+               OpenBootStrapModal(url,"eudlgframe",title,W,H,"icon-property", null, null, null, null, null, "black"); 
             }
         }
 

@@ -110,109 +110,83 @@
     </script>
 </head>
 <body>
-<span style="height: 30px;text-align: left;font-size: 14px;background-position: 12px 6px;text-indent: 1.8em;line-height: 30px;color: #336699; font-weight: bolder;">基本设置</span>
+
+
+<div style="width:95%;border-top: 1px solid #C0C0C0;">
+<input type="button" value="保存"  onclick="Save()" />
+<input type="button" value="设置显示的列"  onclick="ShowCols()" />
+<input type="button" value="启动傻瓜表单设计器"  onclick="StartFoolFormDesigner()" />
+<input type="button" value="清除表单设计内容"  onclick="ClearMapData()" />
+<input type="button" value="导入数据"  onclick="Imp()" />
+</div>
+
+ 
 <div style="overflow:auto;" id="tableDiv">
 <table style="width:96%;">
 
 <tr>
-<th >配置项</th>
-<th>内容</th>
-<th>信息</th>
+<th colspan=4>基本配置</th>
 </tr>
 
 <tr bgcolor='white' >
-<td>UIRowStyleGlo</td>
 <td>表格数据行风格(应用全局)</td>
-<td ><select name="DDLPara_UIRowStyleGlo" id="DDLPara_UIRowStyleGlo">
-</select></td>
-</tr>
+<td ><select name="DDLPara_UIRowStyleGlo" id="DDLPara_UIRowStyleGlo"></select></td>
 
-<tr bgcolor='AliceBlue' >
-<td>IsEnableDouclickGlo</td>
 <td>是否启动双击打开(应用全局)</td>
 <td ><label ><input id="CBPara_IsEnableDouclickGlo" type="checkbox" name="CBPara_IsEnableDouclickGlo" />是否启动双击打开(应用全局)</label></td>
 </tr>
 
 <tr bgcolor='white' >
-<td>IsEnableFocusField</td>
 <td>是否启用焦点字段</td>
 <td ><label ><input id="CBPara_IsEnableFocusField" type="checkbox" name="CBPara_IsEnableFocusField"  />是否启用焦点字段</label></td>
-</tr>
-
-<tr bgcolor='AliceBlue' >
-<td>FocusField</td>
 <td>焦点字段(用于显示点击打开的列</td>
 <td ><input name="TBPara_FocusField" type="text" value="" id="TBPara_FocusField" style="width:100%;" /></td>
 </tr>
+
 <tr bgcolor='white' >
-<td>IsEnableRefFunc</td>
 <td>是否启用相关功能列</td>
 <td ><label ><input id="CBPara_IsEnableRefFunc" type="checkbox" name="CBPara_IsEnableRefFunc"  />是否启用相关功能列</label></td>
-</tr>
-<tr bgcolor='AliceBlue' >
-<td>IsEnableOpenICON</td>
 <td>是否启用打开图标</td>
 <td ><label ><input id="CBPara_IsEnableOpenICON" type="checkbox" name="CBPara_IsEnableOpenICON"  />是否启用打开图标</label></td>
 </tr>
 
 <tr bgcolor='white' >
-<td>MoveToShowWay</td>
 <td>移动到显示方式</td>
 <td ><select name="DDLPara_MoveToShowWay" id="DDLPara_MoveToShowWay">
 </select></td>
-</tr>
-
-
-<tr bgcolor='AliceBlue' >
-<td>KeyLabel</td>
 <td>关键字Label(默认为:输入关键字:)</td>
 <td ><input name="TBPara_KeyLabel" type="text" id="TBPara_KeyLabel" style="width:100%" /> </td>
 </tr>
 
 
-
 <tr bgcolor='' >
-<td>MoveTo</td>
 <td>移动到字段</td>
 <td ><input name="TBPara_MoveTo" type="text" id="TBPara_MoveTo" style="width:100%" /></td>
-</tr>
-<tr bgcolor='AliceBlue' >
-<td>WinCardW</td>
 <td>弹出窗口宽度</td>
 <td ><input name="TBPara_WinCardW" type="text"  id="TBPara_WinCardW" style="width:100%" /></td>
 </tr>
 
 <tr bgcolor='' >
-<td>WinCardH</td>
 <td>弹出窗口高度</td>
 <td ><input name="TBPara_WinCardH" type="text"  id="TBPara_WinCardH" style="width:100%" /></td>
-</tr>
-<tr bgcolor='AliceBlue' >
-<td>PageSize</td>
 <td>页面显示的条数(默认:10)</td>
 <td ><input name="TBPara_PageSize" type="text"  id="TBPara_PageSize" style="width:100%" /></td>
 </tr>
+
 <tr bgcolor='' >
-<td>FontSize</td>
 <td>页面字体大小(默认:14px)</td>
 <td ><input name="TBPara_FontSize" type="text"  id="TBPara_FontSize" style="width:100%" /></td>
-</tr>
-<tr bgcolor='AliceBlue' >
-<td>WinCardH</td>
 <td>弹出窗口高度</td>
 <td ><input name="TBPara_WinCardH" type="text"  id="Text2" style="width:100%" /></td>
 </tr>
 
+
+
 <tr bgcolor='white' >
-<td>EditerType</td>
 <td>大块文本编辑器</td>
 <td ><select name="DDLPara_EditerType" id="DDLPara_EditerType">
 </select></td>
-</tr>
 
-
-<tr bgcolor='AliceBlue' >
-<td>UrlOpenType</td>
 <td>双击行打开内容</td>
 <td ><select name="DDLPara_SearchUrlOpenType" id="DDLPara_SearchUrlOpenType">
 <option value="0"> En.htm 实体与实体相关功能编辑器 </option>
@@ -224,45 +198,33 @@
 </tr>
 
 <tr>
-<td>WinOpenUrl</td>
 <td>URL(当为自定义url的时候有效)</td>
 <td ><input name="TB_Url" type="text" value="" id="TB_Url" style="width:100%;" /></td>
+<td></td>
+<td></td>
 </tr>
 
 
 <tr  bgcolor='AliceBlue'>
-<td>Btn1</td>
-<td>自定义按钮标签1</td>
-<td ><input name="TBPara_BtnLab1" type="text" value="" id="TBPara_BtnLab1" style="width:100%;" /></td>
+<th colspan="4">自定义按钮与标签,函数可以写入到\DataUser\JSLabData\SearchSelf.js里面.</th>
 </tr>
 
 <tr>
-<td>BtnJS1</td>
+<td>自定义按钮标签1</td>
+<td ><input name="TBPara_BtnLab1" type="text" value="" id="TBPara_BtnLab1" style="width:100%;" /></td>
 <td>Url/Javasccript</td>
 <td ><input name="TBPara_BtnJS1" type="text" value="" id="TBPara_BtnJS1" style="width:100%;" /></td>
 </tr>
 
-<tr  bgcolor='AliceBlue'>
-<td>Btn2</td>
+<tr >
 <td>自定义按钮标签2</td>
 <td ><input name="TBPara_BtnLab2" type="text" value="" id="TBPara_BtnLab2" style="width:100%;" /></td>
-</tr>
-
-<tr>
-<td>BtnJS2</td>
 <td>Url/Javasccript</td>
 <td ><input name="TBPara_BtnJS2" type="text" value="" id="TBPara_BtnJS2" style="width:100%;" /></td>
 </tr>
 
-
 </table>
 </div>
-<div style="width:95%;border-top: 1px solid #C0C0C0;">
-<input type="button" value="保存"  onclick="Save()" />
-<input type="button" value="设置显示的列"  onclick="ShowCols()" />
-<input type="button" value="启动傻瓜表单设计器"  onclick="StartFoolFormDesigner()" />
-<input type="button" value="清除表单设计内容"  onclick="ClearMapData()" />
-<input type="button" value="导入数据"  onclick="Imp()" />
-</div>
+
 </body>
 </html>

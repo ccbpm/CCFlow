@@ -1150,28 +1150,31 @@ namespace BP.WF.Template
                 {
                     /*向所有参与人. */
                     string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "");
-                    string[] emps = empsStrs.Split('@');
-                    foreach (string empID in emps)
+                    if (DataType.IsNullOrEmpty(empsStrs) == false)
                     {
-                        if (DataType.IsNullOrEmpty(empID))
-                            continue;
+                        string[] emps = empsStrs.Split('@');
+                        foreach (string empID in emps)
+                        {
+                            if (DataType.IsNullOrEmpty(empID))
+                                continue;
 
-                        if (empID == WebUser.No)
-                            continue;
+                            if (empID == WebUser.No)
+                                continue;
 
-                        string smsDocTmpReal = smsDocTmp.Clone() as string;
-                        smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
+                            string smsDocTmpReal = smsDocTmp.Clone() as string;
+                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
 
-                        BP.WF.Port.WFEmp empEn = new Port.WFEmp();
-                        empEn.No = empID;
-                        empEn.RetrieveFromDBSources();
+                            BP.WF.Port.WFEmp empEn = new Port.WFEmp();
+                            empEn.No = empID;
+                            empEn.RetrieveFromDBSources();
 
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+                            string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 
-                        //发送短信.
-                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver"  + workid, BP.Web.WebUser.No, null, empID, paras);
+                            //发送短信.
+                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, empID, paras);
+                        }
+                        return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                 }
 
                 if (this.SMSPushWay == 2)

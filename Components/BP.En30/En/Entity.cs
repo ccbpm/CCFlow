@@ -3620,6 +3620,16 @@ namespace BP.En
                 mattr.UIRefKeyText = attr.UIRefKeyText;
                 mattr.UIVisible = attr.UIVisible;
 
+                //设置显示与隐藏，按照默认值.
+                if (mattr.GetParaString("SearchVisable") == "")
+                {
+                    if (mattr.UIVisible == true)
+                        mattr.SetPara("SearchVisable", 1);
+                    else
+                        mattr.SetPara("SearchVisable", 0);
+                }
+             
+
                 switch (attr.MyFieldType)
                 {
                     case FieldType.Enum:

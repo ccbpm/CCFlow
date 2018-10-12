@@ -24,9 +24,8 @@ namespace BP.WF
         public HttpWebResponse CreateGetHttpResponse(string url, int? timeout, string userAgent, CookieCollection cookies)
         {
             if (DataType.IsNullOrEmpty(url))
-            {
                 throw new ArgumentNullException("url");
-            }
+
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "GET";
             request.UserAgent = DefaultUserAgent;

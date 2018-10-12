@@ -248,6 +248,230 @@ namespace BP.WF.HttpHandler
             return base.DoDefaultMethod();
         }
 
+        /// <summary>
+        /// 执行的方法.
+        /// </summary>
+        /// <returns></returns>
+        public string Do_Init()
+        {
+            string at = this.GetRequestVal("ActionType");
+            try
+            {
+                switch (at)
+                {
+
+                    case "Focus": //把任务放入任务池.
+                        BP.WF.Dev2Interface.Flow_Focus(this.WorkID);
+                        return "info@Close";
+                    case "PutOne": //把任务放入任务池.
+                        BP.WF.Dev2Interface.Node_TaskPoolPutOne(this.WorkID);
+                        return "info@Close";
+                        break;
+                    case "DoAppTask": // 申请任务.
+                        BP.WF.Dev2Interface.Node_TaskPoolTakebackOne(this.WorkID);
+                        return "info@Close";
+                    case "DoOpenCC":
+
+                        string Sta = this.GetRequestVal("Sta");
+                        if (Sta == "0")
+                        {
+                            BP.WF.Template.CCList cc1 = new BP.WF.Template.CCList();
+                            cc1.MyPK = this.MyPK;
+                            cc1.Retrieve();
+                            cc1.HisSta = CCSta.Read;
+                            cc1.Update();
+                        }
+                        return "url@./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
+                    case "DelCC": //删除抄送.
+                        CCList cc = new CCList();
+                        cc.MyPK = this.MyPK;
+                        cc.Retrieve();
+                        cc.HisSta = CCSta.Del;
+                        cc.Update();
+                        return "info@Close";
+                    case "DelSubFlow": //删除进程。
+                        try
+                        {
+                            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+                            return "info@Close";
+                        }
+                        catch (Exception ex)
+                        {
+                            return "err@" + ex.Message;
+                        }
+                        break;
+                    case "DownBill":
+                        Bill b = new Bill(this.MyPK);
+                        b.DoOpen();
+                        break;
+                    case "DelDtl":
+                        GEDtls dtls = new GEDtls(this.EnsName);
+                        GEDtl dtl = (GEDtl)dtls.GetNewEntity;
+                        dtl.OID = this.RefOID;
+                        if (dtl.RetrieveFromDBSources() == 0)
+                        {
+                            return "info@Close";
+                        }
+                        FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
+
+                        // 处理删除前事件.
+                        try
+                        {
+                            fes.DoEventNode(BP.WF.XML.EventListDtlList.DtlItemDelBefore, dtl);
+                        }
+                        catch (Exception ex)
+                        {
+                            return "err@" + ex.Message;
+                        }
+                        dtl.Delete();
+
+                        // 处理删除后事件.
+                        try
+                        {
+                            fes.DoEventNode(BP.WF.XML.EventListDtlList.DtlItemDelAfter, dtl);
+                        }
+                        catch (Exception ex)
+                        {
+                            return "err@" + ex.Message;
+                            break;
+                        }
+                        return "info@Close";
+                        break;
+                    case "EmpDoUp":
+                        BP.WF.Port.WFEmp ep = new BP.WF.Port.WFEmp(this.RefNo);
+                        ep.DoUp();
+
+                        BP.WF.Port.WFEmps emps111 = new BP.WF.Port.WFEmps();
+                        //  emps111.RemoveCash();
+                        emps111.RetrieveAll();
+                        return "info@Close";
+                        break;
+                    case "EmpDoDown":
+                        BP.WF.Port.WFEmp ep1 = new BP.WF.Port.WFEmp(this.RefNo);
+                        ep1.DoDown();
+
+                        BP.WF.Port.WFEmps emps11441 = new BP.WF.Port.WFEmps();
+                        //  emps11441.RemoveCash();
+                        emps11441.RetrieveAll();
+                        return "info@Close";
+                    case "Track": //通过一个串来打开一个工作.
+                        string mySid = this.SID; // this.Request.QueryString["SID"];
+                        string[] mystrs = mySid.Split('_');
+
+                        Int64 myWorkID = int.Parse(mystrs[1]);
+                        string fk_emp = mystrs[0];
+                        int fk_node = int.Parse(mystrs[2]);
+                        Node mynd = new Node();
+                        mynd.NodeID = fk_node;
+                        mynd.RetrieveFromDBSources();
+
+                        string fk_flow = mynd.FK_Flow;
+                        string myurl = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Node=" + mynd.NodeID + "&WorkID=" + myWorkID + "&FK_Flow=" + fk_flow;
+                        Web.WebUser.SignInOfGener(new BP.Port.Emp(fk_emp));
+
+                        return "url@" + myurl;
+                    case "OF": //通过一个串来打开一个工作.
+                        string sid = this.SID;
+                        string[] strs = sid.Split('_');
+                        GenerWorkerList wl = new GenerWorkerList();
+                        int i = wl.Retrieve(GenerWorkerListAttr.FK_Emp, strs[0],
+                            GenerWorkerListAttr.WorkID, strs[1],
+                            GenerWorkerListAttr.IsPass, 0);
+
+                        if (i == 0)
+                        {
+                            return "info@此工作已经被别人处理或者此流程已删除";
+                        }
+
+                        BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
+                        Web.WebUser.SignInOfGener(empOF);
+                        string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
+                        return "url@" + u;
+                    case "ExitAuth":
+                        BP.Port.Emp emp = new BP.Port.Emp(this.FK_Emp);
+                        //首先退出，再进行登录
+                        BP.Web.WebUser.Exit();
+                        BP.Web.WebUser.SignInOfGener(emp, WebUser.SysLang);
+                        return "info@Close";
+                    case "LogAs":
+                        BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(this.FK_Emp);
+                        if (wfemp.AuthorIsOK == false)
+                        {
+                            return "err@授权失败";
+                        }
+                        BP.Port.Emp emp1 = new BP.Port.Emp(this.FK_Emp);
+                        BP.Web.WebUser.SignInOfGener(emp1, "CH", false, false, wfemp.Author, WebUser.Name);
+                        return "info@Close";
+                    case "TakeBack": // 取消授权。
+                        BP.WF.Port.WFEmp myau = new BP.WF.Port.WFEmp(WebUser.No);
+                        BP.DA.Log.DefaultLogWriteLineInfo("取消授权:" + WebUser.No + "取消了对(" + myau.Author + ")的授权。");
+                        myau.Author = "";
+                        myau.AuthorWay = 0;
+                        myau.Update();
+                        return "info@Close";
+                    case "AutoTo": // 执行授权。
+                        BP.WF.Port.WFEmp au = new BP.WF.Port.WFEmp();
+                        au.No = WebUser.No;
+                        au.RetrieveFromDBSources();
+                        au.AuthorDate = BP.DA.DataType.CurrentData;
+                        au.Author = this.FK_Emp;
+                        au.AuthorWay = 1;
+                        au.Save();
+                        BP.DA.Log.DefaultLogWriteLineInfo("执行授权:" + WebUser.No + "执行了对(" + au.Author + ")的授权。");
+                        return "info@Close";
+                    case "UnSend": //执行撤消发送。
+                        string url = "./WorkOpt/UnSend.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
+                        return "url@" + url;
+                    case "SetBillState":
+                        break;
+                    case "WorkRpt":
+                        //  Bill bk1 = new Bill(this.OID);
+                        //  Node nd = new Node(bk1.FK_Node);
+                        // this.Response.Redirect("WFRpt.htm?WorkID=" + bk1.WorkID + "&FID=" + bk1.FID + "&FK_Flow=" + nd.FK_Flow + "&NodeId=" + bk1.FK_Node, false);
+                        //this.WinOpen();
+                        //this.WinClose();
+                        break;
+                    case "PrintBill":
+                        //Bill bk2 = new Bill(this.Request.QueryString["OID"]);
+                        //Node nd2 = new Node(bk2.FK_Node);
+                        //this.Response.Redirect("NodeRefFunc.aspx?NodeId=" + bk2.FK_Node + "&FlowNo=" + nd2.FK_Flow + "&NodeRefFuncOID=" + bk2.FK_NodeRefFunc + "&WorkFlowID=" + bk2.WorkID);
+                        ////this.WinClose();
+                        break;
+                    //删除流程中第一个节点的数据，包括待办工作
+                    case "DeleteFlow":
+                        //调用DoDeleteWorkFlowByReal方法
+                        WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID);
+                        wf.DoDeleteWorkFlowByReal(true);
+                        //  Glo.ToMsg("流程删除成功");
+                        BP.WF.Glo.ToMsg("流程删除成功");
+
+                        //this.ToWFMsgPage("流程删除成功");
+                        break;
+                    case "DownFlowSearchExcel":    //下载流程查询结果，转到下面的逻辑，不放在此try..catch..中
+                        break;
+                    case "DownFlowSearchToTmpExcel":    //导出到模板
+                        break;
+                    default:
+                        throw new Exception("没有判断的at标记:" + at);
+                }
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+            //此处之所以再加一个switch，是因为在下载文件逻辑中，调用Response.End()方法，如果此方法放在try..catch..中，会报线程中止异常
+            switch (at)
+            {
+                case "DownFlowSearchExcel":
+                    //  DownMyStartFlowExcel();
+                    break;
+                case "DownFlowSearchToTmpExcel":    //导出到模板
+                    // DownMyStartFlowToTmpExcel();
+                    break;
+            }
+            return "";
+        }
+
         #region 我的关注流程.
         /// <summary>
         /// 我的关注流程

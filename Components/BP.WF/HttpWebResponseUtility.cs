@@ -187,7 +187,6 @@ namespace BP.WF
             }
             return request.GetResponse() as HttpWebResponse;
         }
-
         /// <summary>  
         /// 创建POST方式的HTTP请求  (用于微信自动推送)
         /// </summary>  

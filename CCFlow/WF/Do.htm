@@ -14,16 +14,25 @@
         $(function () {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var url = document.location.search.substr(1);
+            url = url.replace("DoType", "ActionType");
+            handler.AddUrlData(url);
+
             var data = handler.DoMethodReturnString("Do_Init");
             $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             if (data.indexOf('err@') == 0) {
-                $("#Msg").html("错误:"+data);
+                $("#Msg").html("错误:" + data);
                 return;
             }
 
             if (data.indexOf('info@Close') == 0) {
                 window.close();
+                return;
+            }
+            if (data.indexOf('url@') == 0) {
+                data = data.replace("url@", "");
+                window.location.href = data;
                 return;
             }
             $("#Msg").html(data);

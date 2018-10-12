@@ -521,6 +521,22 @@ namespace BP.Sys
                 return HostURLOfBS; // "http:/127.0.0.1/";
             }
         }
+
+        /// <summary>
+        /// 移动端用于生成url, 支持cs程序调用ws程序.
+        /// </summary>
+        public static string MobileURL
+        {
+            get
+            {
+                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["MobileURL"]) == false)
+                {
+                    return SystemConfig.AppSettings["MobileURL"];
+                }
+                return SystemConfig.AppSettings["MobileURL"]; // "http:/127.0.0.1/";
+            }
+        }
+
         /// <summary>
         /// HostURL 在bs的模式下调用.
         /// </summary>

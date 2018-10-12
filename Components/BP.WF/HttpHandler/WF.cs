@@ -255,6 +255,10 @@ namespace BP.WF.HttpHandler
         public string Do_Init()
         {
             string at = this.GetRequestVal("ActionType");
+            if (DataType.IsNullOrEmpty(at))
+                at = this.GetRequestVal("DoType");
+            if (DataType.IsNullOrEmpty(at) && this.SID != null)
+                at = "Track";
             try
             {
                 switch (at)
@@ -338,7 +342,7 @@ namespace BP.WF.HttpHandler
                         return "info@Close";
                         break;
                     case "EmpDoUp":
-                        BP.WF.Port.WFEmp ep = new BP.WF.Port.WFEmp(this.RefNo);
+                        BP.WF.Port.WFEmp ep = new BP.WF.Port.WFEmp(this.GetRequestVal("RefNo"));
                         ep.DoUp();
 
                         BP.WF.Port.WFEmps emps111 = new BP.WF.Port.WFEmps();
@@ -347,7 +351,7 @@ namespace BP.WF.HttpHandler
                         return "info@Close";
                         break;
                     case "EmpDoDown":
-                        BP.WF.Port.WFEmp ep1 = new BP.WF.Port.WFEmp(this.RefNo);
+                        BP.WF.Port.WFEmp ep1 = new BP.WF.Port.WFEmp(this.GetRequestVal("RefNo"));
                         ep1.DoDown();
 
                         BP.WF.Port.WFEmps emps11441 = new BP.WF.Port.WFEmps();

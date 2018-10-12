@@ -61,7 +61,7 @@
                 if (mapAttrEn.GetPara("SearchVisable") == "1")
                     html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
                 else
-                    html += "<td><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
+                    html += "<td style='text-align:right' ><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
 
                 html += "<td><a href=\"javascript:Up('" + mapAttr.MyPK + "')\">上移</a> - <a href=\"javascript:Down('" + mapAttr.MyPK + "')\">下移</a></td>";
                 html += "</tr>";

@@ -1,35 +1,43 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="./Scripts/config.js"></script>
-    <script type="text/javascript" language="javascript" >
-        function Load() {
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+       //页面启动函数.
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var data = handler.DoMethodReturnString("Do_Init");
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("错误:"+data);
                 return;
             }
-        }
+
+            if (data.indexOf('info@Close') == 0) {
+                window.close();
+                return;
+            }
+            $("#Msg").html(data);
+
+        });
+
     </script>
 </head>
-<body  onload="Load()" >
-
-<form id="cc">
-
-<br />
-<br />
-<br />
-
- <h2> <img src="Img/loading.gif" border=0 /> 正在加载，请稍后。。。</h2>
-</form>
-
+<body >
+    <form id="cc">
+    <br />
+    <br />
+    <div id="Msg">
+    </div>
+    </form>
 </body>
 </html>

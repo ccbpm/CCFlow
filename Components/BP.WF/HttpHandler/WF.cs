@@ -13,6 +13,7 @@ using BP.WF.Data;
 using BP.WF.Template;
 using BP.WF.Port;
 using BP.Web;
+using System.Text.RegularExpressions;
 
 namespace BP.WF.HttpHandler
 {
@@ -390,6 +391,23 @@ namespace BP.WF.HttpHandler
                         BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
                         Web.WebUser.SignInOfGener(empOF);
                         string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
+                        //if(SystemConfig.CustomerNo.Equals("TianYe"))
+                        //判断是移动端还是PC端打开的页面
+                        Regex RegexMobile = new Regex(@"(iemobile|iphone|ipod|android|nokia|sonyericsson|blackberry|samsung|sec\-|windows ce|motorola|mot\-|up.b|midp\-)",
+                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                        //移动端打开
+                        if (context.Request.Browser.IsMobileDevice || (!string.IsNullOrEmpty(context.Request.UserAgent) && RegexMobile.IsMatch(context.Request.UserAgent)))
+                        {
+                            if(SystemConfig.IsBSsystem == true)
+                                return "url@"+SystemConfig.MobileURL + "CCMobile/"+u;
+                            return "url@" + u;
+                        }
+                        else
+                        {
+                            if(SystemConfig.IsBSsystem == true)
+                                return "url@" + "WF/"+u;
+                            return "url@" + SystemConfig.HostURL + u;
+                        }
                         return "url@" + u;
                     case "ExitAuth":
                         BP.Port.Emp emp = new BP.Port.Emp(this.FK_Emp);
@@ -474,6 +492,29 @@ namespace BP.WF.HttpHandler
                     break;
             }
             return "";
+        }
+
+        /// <summary>
+        /// 页面调整移动端OR手机端
+        /// </summary>
+        /// <returns></returns>
+        public string Do_Direct()
+        {
+            //获取地址
+            string baseUrl = this.GetRequestVal("DirectUrl");
+            //判断是移动端还是PC端打开的页面
+            Regex RegexMobile =new Regex(@"(iemobile|iphone|ipod|android|nokia|sonyericsson|blackberry|samsung|sec\-|windows ce|motorola|mot\-|up.b|midp\-)",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            //移动端打开
+            if (context.Request.Browser.IsMobileDevice || (!string.IsNullOrEmpty(context.Request.UserAgent) && RegexMobile.IsMatch(context.Request.UserAgent)))
+            {
+                return SystemConfig.MobileURL + baseUrl;
+            }
+            else
+            {
+                return SystemConfig.HostURL + baseUrl;
+            }
+        
         }
 
         #region 我的关注流程.

@@ -1700,8 +1700,13 @@ var DBAccess = (function () {
         var dt = DBAccess.RunSQLReturnTable(sql);
         if (dt.length == 0)
             return null;
-
-        return dt[0][0];
+        var firItem = dt[0];
+        var firAttr = "";
+        for (var k in firItem) {
+            firAttr = k;
+            break;
+        }
+        return firItem[firAttr];
     };
 
     DBAccess.RunSQLReturnTable = function (sql) {

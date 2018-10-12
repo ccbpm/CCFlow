@@ -553,6 +553,20 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 相关编号
+        /// </summary>
+        public string RefNo
+        {
+            get
+            {
+                string str = this.GetRequestVal("RefNo");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return null;
+                return str;
+            }
+        }
+        
+        /// <summary>
         /// 表单ID
         /// </summary>
         public string FrmID

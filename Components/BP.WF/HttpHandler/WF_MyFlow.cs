@@ -614,7 +614,10 @@ namespace BP.WF.HttpHandler
                 urlExt += "&FK_Node=" + currND.NodeID;
 
             if (urlExt.Contains("&FID") == false && currWK != null)
-                urlExt += "&FID=" + currWK.FID;
+            {
+                //urlExt += "&FID=" + currWK.FID;
+                urlExt += "&FID=" + this.FID;
+            }
 
             if (urlExt.Contains("&UserNo") == false)
                 urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);

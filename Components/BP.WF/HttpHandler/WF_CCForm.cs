@@ -1005,7 +1005,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmGener_Init()
         {
-            if (this.FK_MapData.Contains("BP.") == true)
+            if (this.FK_MapData!=null && this.FK_MapData.Contains("BP.") == true)
                 return FrmGener_Init_ForBPClass();
 
             //定义节点变量.
@@ -3632,7 +3632,7 @@ namespace BP.WF.HttpHandler
             if (this.FK_Node != 0)
             {
                 Node nd = new Node(this.FK_Node);
-                if (nd.HisFormType == NodeFormType.SheetTree)
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     FrmNode fn = new FrmNode(nd.FK_Flow,nd.NodeID, this.FK_MapData);
                     if (fn.FrmSln == FrmSln.Default)

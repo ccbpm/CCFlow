@@ -1785,6 +1785,9 @@ namespace BP.WF
         /// <returns></returns>
         public string DoCheck()
         {
+
+            BP.DA.Cash.ClearCash();
+
             #region 检查独立表单
             FrmNodes fns = new FrmNodes();
             fns.Retrieve(FrmNodeAttr.FK_Flow, this.No);
@@ -2117,6 +2120,7 @@ namespace BP.WF
                             mattr.KeyOfEn = "FID";
                             mattr.FK_MapData = nd.NodeFrmID;
                             mattr.MyDataType = DataType.AppInt;
+                            mattr.UIVisible = false;
                             mattr.Name = "FID(自动增加)";
                             mattr.Insert();
 

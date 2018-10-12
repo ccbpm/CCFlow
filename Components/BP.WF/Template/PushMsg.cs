@@ -713,7 +713,12 @@ namespace BP.WF.Template
             //生成URL.
             string hostUrl = BP.WF.Glo.HostURL;
             string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DataType.CurrentDataTime;
-            string openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
+            string openWorkURl =  hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
+            if (SystemConfig.CustomerNo.Equals("TianYe"))
+            {
+                openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
+                openWorkURl = "<a href='" + hostUrl + "'>" + title + "</a>";
+            }
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("http:/", "http://");
             #endregion 

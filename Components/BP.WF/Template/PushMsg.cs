@@ -793,6 +793,21 @@ namespace BP.WF.Template
                 {
                     if (DataType.IsNullOrEmpty(nodeID) == true)
                         continue;
+                    if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+                    {
+                        //获取退回原因
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                        ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                        DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
+                        if (retunWdt.Rows.Count != 0)
+                        {
+                            string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
+                            string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+                            mailDocTmp = mailDocTmp.Replace("ReturnMsg", returnMsg);
+
+                        }
+                    }
 
                     string sql = "SELECT b.Name, b.Email, b.No FROM ND" + int.Parse(this.FK_Flow) + "Track a, WF_Emp b WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID + " AND a.EmpFrom=B.No ";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -831,6 +846,21 @@ namespace BP.WF.Template
             #region WorkArrive-工作到达. - 邮件处理.
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
             {
+                if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+                {
+                    //获取退回原因
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                    ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                    DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
+                    if (retunWdt.Rows.Count != 0)
+                    {
+                        string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
+                        string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+                        mailDocTmp = mailDocTmp.Replace("ReturnMsg", returnMsg);
+
+                    }
+                }
                 /*工作到达.*/
                 if (this.MailPushWay == 1 && !string.IsNullOrWhiteSpace(jumpToEmps))
                 {
@@ -1022,6 +1052,23 @@ namespace BP.WF.Template
                     if (dt.Rows.Count == 0)
                         continue;
 
+                    if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+                    {
+                        //获取退回原因
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                        ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                        DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
+                        if (retunWdt.Rows.Count != 0)
+                        {
+                            string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
+                            string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+                            smsDocTmp = smsDocTmp.Replace("ReturnMsg", returnMsg);
+
+                        }
+                    }
+
+                   
                     foreach (DataRow dr in dt.Rows)
                     {
                         string tel = dr["Tel"].ToString();
@@ -1053,6 +1100,21 @@ namespace BP.WF.Template
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
                 || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
             {
+                if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+                {
+                    //获取退回原因
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                    ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                    DataTable dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count != 0)
+                    {
+                        string returnMsg = dt.Rows[0]["BeiZhu"].ToString();
+                        string returner = dt.Rows[0]["ReturnerName"].ToString();
+                        smsDocTmp = smsDocTmp.Replace("ReturnMsg", returnMsg);
+
+                    }
+                }
                 /*发送成功事件, 退回后事件. */
                 if (this.SMSPushWay == 1)
                 {
@@ -1114,7 +1176,8 @@ namespace BP.WF.Template
                             string smsDocTmpReal = smsDocTmp.Clone() as string;
                             smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
 
-                            BP.WF.Port.WFEmp empEn = new Port.WFEmp(empID);
+                           // BP.WF.Port.WFEmp empEn = new Port.WFEmp(empID);
+                            BP.GPM.Emp empEn = new BP.GPM.Emp(empID);
 
                             string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 

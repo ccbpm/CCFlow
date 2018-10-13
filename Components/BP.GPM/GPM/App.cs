@@ -290,9 +290,9 @@ namespace BP.GPM
                 map.EnType = EnType.Sys;
 
 
-                map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 20);
+                map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 100);
                 map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel, "@0=BS系统@1=CS系统");
-                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 20,true);
+                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 150, true);
 
                 map.AddDDLEntities(AppAttr.FK_AppSort, null, "类别", new AppSorts(), true);
                 map.AddBoolean(AppAttr.IsEnable, true, "是否启用", true, true);
@@ -307,10 +307,9 @@ namespace BP.GPM
                 map.AddDDLSysEnum(AppAttr.OpenWay, 0, "打开方式", true, true, AppAttr.OpenWay,
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
-                map.AddTBInt(AppAttr.Idx, 0, "显示顺序", true, false);
-
-                map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 3900, 20);
+                map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 3900, 100);
                 map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 500,true);
+                map.AddTBInt(AppAttr.Idx, 0, "显示顺序", true, false);
                 map.AddMyFile("ICON");
 
                 RefMethod rm = new RefMethod();

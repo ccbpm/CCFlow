@@ -215,8 +215,8 @@ namespace BP.GPM
 
                 #region 字段
                 /*关于字段属性的增加 */
-                map.AddTBStringPK(EmpAttr.No, null, "登陆账号", true, false, 1, 50, 50);
-                map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
+                map.AddTBStringPK(EmpAttr.No, null, "登陆账号", true, false, 1, 50, 100);
+                map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 100);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), true);
 

@@ -1269,7 +1269,7 @@ namespace BP.WF
         /// </summary>
         WordForm=9,
         /// <summary>
-        /// 傻瓜轨迹表单
+        /// 累加表单
         /// </summary>
         FoolTruck = 10,
         /// <summary>

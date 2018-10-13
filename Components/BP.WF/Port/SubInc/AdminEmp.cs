@@ -247,11 +247,10 @@ namespace BP.WF.Port.SubInc
 
                 Map map = new Map("WF_Emp", "管理员");
 
-                map.AddTBStringPK(AdminEmpAttr.No, null, "帐号", true, true, 1, 50, 36);
-                map.AddTBString(AdminEmpAttr.Name, null, "名称", true,false, 0, 50, 20);
+                map.AddTBStringPK(AdminEmpAttr.No, null, "帐号", true, true, 1, 50, 110);
+                map.AddTBString(AdminEmpAttr.Name, null, "名称", true, false, 0, 50, 110);
                 map.AddDDLEntities(AdminEmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), false);
                 map.AddDDLEntities(AdminEmpAttr.OrgNo, null, "组织", new BP.WF.Port.Incs(), true);
-
 
                 map.AddDDLSysEnum(AdminEmpAttr.UseSta, 3, "用户状态", true, true, AdminEmpAttr.UseSta, "@0=禁用@1=启用");
                 map.AddDDLSysEnum(AdminEmpAttr.UserType, 3, "用户状态", true, true, AdminEmpAttr.UserType, "@0=普通用户@1=管理员用户");

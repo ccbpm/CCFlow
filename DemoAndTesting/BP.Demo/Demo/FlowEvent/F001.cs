@@ -46,11 +46,8 @@ namespace BP.Demo.FlowEvent
         {
 
           ///  throw new Exception("err@不符合流程发送条件。");
-
-
             if (SystemConfig.CustomerNo != "CCFlow")
                 return null;
-
 
             //相关的变量,
             // 当前的节点, 其他的变量请从 this.HisNode .

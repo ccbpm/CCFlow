@@ -77,7 +77,6 @@ namespace BP.CN
             get { return new PQs(); }
         }
 		#endregion
-		 
 	}
 	/// <summary>
 	/// Æ¬Çø

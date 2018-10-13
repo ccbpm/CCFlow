@@ -231,10 +231,12 @@ namespace BP.Demo.BPFramework
         {
             get
             {
+
                 UAC uac = new UAC();
+                //  uac.LoadRightFromCCGPM(this); //从GPM里面装载.
+                // return uac;
                 if (BP.Web.WebUser.No == "admin")
                 {
-
                     uac.IsDelete = true;
                     uac.IsUpdate = true;
                     uac.IsInsert = true;
@@ -244,7 +246,7 @@ namespace BP.Demo.BPFramework
                 {
                     uac.IsView = true;
                 }
-                
+                uac.IsImp = true;
                 return uac;
             }
         }
@@ -298,9 +300,8 @@ namespace BP.Demo.BPFramework
 
                 //map.AddTBString(StudentAttr.FK_SF, null, "地址", true, false, 0, 200, 100, true);
                 //map.AddTBString(StudentAttr, null, "地址", true, false, 0, 200, 100, true);
-
-             //   map.AddTBString("LXR", null, "联系人", true, false, 0, 200, 100, true);
-              //  map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
+                //map.AddTBString("LXR", null, "联系人", true, false, 0, 200, 100, true);
+                //map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
 
                 //枚举字段
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
@@ -313,15 +314,14 @@ namespace BP.Demo.BPFramework
                 map.AddBoolean(StudentAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
                 map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
 
-                // 枚举字段 - 整治面貌.
-                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
-                    "@0=少先队员@1=团员@2=党员");
+                //枚举字段 - 整治面貌.
+                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM, "@0=少先队员@1=团员@2=党员");
 
-               // map.AddHidden("XB", " = ", "0");
+               //map.AddHidden("XB", " = ", "0");
 
                 map.AddMyFile("简历");
 
-                // map.AddMyFileS("简历");
+                //map.AddMyFileS("简历");
 
                 //设置查询条件。
                 map.AddSearchAttr(StudentAttr.XB);

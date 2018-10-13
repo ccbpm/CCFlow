@@ -571,7 +571,6 @@ namespace BP.WF
             //删除主键.
             DBAccess.DropTablePK(ptable);
 
-
             // 删除主键.
             DBAccess.DropTablePK("WF_Track");
 

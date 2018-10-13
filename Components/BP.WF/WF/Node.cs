@@ -575,7 +575,6 @@ namespace BP.WF
                     nd.DirectUpdate();
                 }
             }
-
             /* 判断流程的类型 */
             sql = "SELECT Name FROM WF_Node WHERE (NodeWorkType=" + (int)NodeWorkType.StartWorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFHL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkHL + ") AND (FK_Flow='" + fl.No + "')";
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
@@ -2912,7 +2911,6 @@ namespace BP.WF
 
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, md.No);
-
 
             #region 增加节点必要的字段.
             BP.Sys.MapAttr attr = new BP.Sys.MapAttr();

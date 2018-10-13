@@ -1779,6 +1779,8 @@ namespace BP.WF
             BP.DA.Cash.ClearCash();
             return "清除成功.";
         }
+
+      
         /// <summary>
         /// 校验流程
         /// </summary>
@@ -2391,6 +2393,11 @@ namespace BP.WF
             return errorAppend.ToString();
         }
         #endregion 其他方法.
+
+        #region 检查流程.
+
+        #endregion 检查流程.
+
 
         #region 产生数据模板。
         readonly static string PathFlowDesc;

@@ -1177,43 +1177,8 @@ namespace BP.WF.Template
         protected override bool beforeUpdate()
         {
             //更新流程版本
-            Flow.UpdateVer(this.FK_Flow);
-
-            //把工具栏的配置放入 sys_mapdata里.
-            ToolbarExcel te = new ToolbarExcel("ND" + this.NodeID);
-            te.Copy(this);
-            try
-            {
-                te.Update();
-            }
-            catch
-            {
-
-            }
+            Flow.UpdateVer(this.FK_Flow); 
            
-            #region  检查考核逾期处理的设置的完整性.
-            //string doOutTime = this.GetValStrByKey(NodeAttr.DoOutTime);
-            //switch (this.HisOutTimeDeal)
-            //{
-            //    case OutTimeDeal.AutoJumpToSpecNode:
-            //        string[] jumps = doOutTime.Split(',');
-            //        if (jumps.Length  > 2)
-            //        {
-            //            string msg = "自动跳转到相应节点,配置的内容不正确,格式应该为: Node,EmpNo , 比如: 101,zhoupeng  现在设置的格式为:" + doOutTime;
-            //            throw new Exception(msg);
-            //        }
-            //        break;
-            //    case OutTimeDeal.AutoShiftToSpecUser:
-            //    case OutTimeDeal.RunSQL:
-            //    case OutTimeDeal.SendMsgToSpecUser:
-            //        if (DataType.IsNullOrEmpty(doOutTime) == false)
-            //            throw new Exception("@在考核逾期处理方式上，您选择的是:" + this.HisOutTimeDeal + " ,但是您没有为该规则设置内容。");
-            //        break;
-            //    default:
-            //        break;
-            //}
-            #endregion 检查考核逾期处理的设置的完整性
-
             #region 处理节点数据.
             Node nd = new Node(this.NodeID);
             if (nd.IsStartNode == true)
@@ -1221,7 +1186,6 @@ namespace BP.WF.Template
                 /*处理按钮的问题*/
                 //不能退回, 加签，移交，退回, 子线程.
                 //this.SetValByKey(BtnAttr.ReturnRole,(int)ReturnRole.CanNotReturn); //开始节点可以退回。
-
                 this.SetValByKey(BtnAttr.HungEnable, false);
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
@@ -1243,7 +1207,6 @@ namespace BP.WF.Template
 
                 if (this.HuiQianRole == WF.HuiQianRole.TeamupGroupLeader)
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.TeamupGroupLeader + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
-
             }
 
             // @杜. 翻译&测试.
@@ -1282,27 +1245,13 @@ namespace BP.WF.Template
                 }
             }
             #endregion 处理节点数据.
-
-            #region 处理消息参数字段.
-            //this.SetPara(NodeAttr.MsgCtrl, this.GetValIntByKey(NodeAttr.MsgCtrl));
-            //this.SetPara(NodeAttr.MsgIsSend, this.GetValIntByKey(NodeAttr.MsgIsSend));
-            //this.SetPara(NodeAttr.MsgIsReturn, this.GetValIntByKey(NodeAttr.MsgIsReturn));
-            //this.SetPara(NodeAttr.MsgIsShift, this.GetValIntByKey(NodeAttr.MsgIsShift));
-            //this.SetPara(NodeAttr.MsgIsCC, this.GetValIntByKey(NodeAttr.MsgIsCC));
-
-            //this.SetPara(NodeAttr.MailEnable, this.GetValIntByKey(NodeAttr.MailEnable));
-            //this.SetPara(NodeAttr.MsgMailTitle, this.GetValStrByKey(NodeAttr.MsgMailTitle));
-            //this.SetPara(NodeAttr.MsgMailDoc, this.GetValStrByKey(NodeAttr.MsgMailDoc));
-
-            //this.SetPara(NodeAttr.MsgSMSEnable, this.GetValIntByKey(NodeAttr.MsgSMSEnable));
-            //this.SetPara(NodeAttr.MsgSMSDoc, this.GetValStrByKey(NodeAttr.MsgSMSDoc));
-            #endregion
+             
 
             #region 创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
-            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, this.NodeID + "_FrmWorkCheck");
+            workCheckAth.MyPK = this.NodeID + "_FrmWorkCheck";
             //不包含审核组件
-            if (isHave == false)
+            if (workCheckAth.RetrieveFromDBSources()==0 )
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
@@ -1349,7 +1298,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion 审核组件.
-
 
 
             //清除所有的缓存.

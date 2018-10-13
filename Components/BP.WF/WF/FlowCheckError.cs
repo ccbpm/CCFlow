@@ -109,7 +109,6 @@ namespace BP.WF
                 dr[2] = nd.NodeID;
                 dr[3] = nd.Name;
             }
-
             this.dt.Rows.Add(dr);
         }
         #endregion 构造方法与属性.
@@ -121,60 +120,14 @@ namespace BP.WF
         public void DoCheck()
         {
             BP.DA.Cash.ClearCash();
-
-            string msg = "";
-
-            #region 检查独立表单
-            FrmNodes fns = new FrmNodes();
-            fns.Retrieve(FrmNodeAttr.FK_Flow, this.flow.No);
-            string frms = "";
-            string err = "";
-            foreach (FrmNode item in fns)
-            {
-                if (frms.Contains(item.FK_Frm + ","))
-                    continue;
-                frms += item.FK_Frm + ",";
-
-                MapData md = new MapData();
-                md.No = item.FK_Frm;
-                if (md.RetrieveFromDBSources() == 0)
-                {
-                    this.AddMsgError("节点绑定的表单ID=" + item.FK_Frm + "，但该表单已经不存在.", new Node(item.FK_Node));
-                    continue;
-                }
-                // md.RepairMap();
-                //Entity en = md.HisEn;
-                //en.CheckPhysicsTable();
-            }
-            #endregion
-
-            #region 流程属性的预先计算与基础的更新.
-            // 设置流程名称.
-            DBAccess.RunSQL("UPDATE WF_Node SET FlowName = (SELECT Name FROM WF_Flow WHERE NO=WF_Node.FK_Flow)");
-
-            //设置单据编号只读格式.
-            DBAccess.RunSQL("UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE KeyOfEn='BillNo' AND UIIsEnable=1");
-
-            //开始节点不能有会签.
-            DBAccess.RunSQL("UPDATE WF_Node SET HuiQianRole=0 WHERE NodePosType=0 AND HuiQianRole !=0");
-
-            //开始节点不能有退回.
-            DBAccess.RunSQL("UPDATE WF_Node SET ReturnRole=0 WHERE NodePosType=0 AND ReturnRole !=0");
-
-            //删除垃圾,非法数据.
-            string sqls = "DELETE FROM Sys_FrmSln WHERE fk_mapdata not in (select no from sys_mapdata)";
-            sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";
-            DBAccess.RunSQLs(sqls);
-
-            //更新计算数据.
-            this.flow.NumOfBill = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM WF_BillTemplate WHERE NodeID IN (SELECT NodeID FROM WF_Flow WHERE No='" + this.flow.No + "')");
-            this.flow.NumOfDtl = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM Sys_MapDtl WHERE FK_MapData='ND" + int.Parse(this.flow.No) + "Rpt'");
-            this.flow.DirectUpdate();
-
-            #endregion 流程属性的预先计算与基础的更新.
-
             try
             {
+                //设置自动计算.
+                CheckMode_Auto();
+
+                ///检查独立表单的完整性.
+                CheckMode_Frms();
+
                 //通用检查.
                 CheckMode_Gener();
 
@@ -199,12 +152,8 @@ namespace BP.WF
                 //检查如果是合流节点必须不能是由上一个节点指定接受人员.
                 CheckMode_HeliuAccpterRole();
 
-
                 Node.CheckFlow(this.flow);
-
-                //一直没有找到设置3列，自动回到四列的情况.
-                DBAccess.RunSQL("UPDATE Sys_MapAttr SET ColSpan=3 WHERE  UIHeight<=23 AND ColSpan=4");
-
+                 
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.flow.No);
 
@@ -409,6 +358,61 @@ namespace BP.WF
                     }
                 }
                 #endregion 检查节点完成条件的定义.
+            }
+        }
+
+        /// <summary>
+        /// 流程属性的预先计算与基础的更新
+        /// </summary>
+        public void CheckMode_Auto()
+        {
+            // 设置流程名称.
+            DBAccess.RunSQL("UPDATE WF_Node SET FlowName = (SELECT Name FROM WF_Flow WHERE NO=WF_Node.FK_Flow)");
+
+            //设置单据编号只读格式.
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE KeyOfEn='BillNo' AND UIIsEnable=1");
+
+            //开始节点不能有会签.
+            DBAccess.RunSQL("UPDATE WF_Node SET HuiQianRole=0 WHERE NodePosType=0 AND HuiQianRole !=0");
+
+            //开始节点不能有退回.
+            DBAccess.RunSQL("UPDATE WF_Node SET ReturnRole=0 WHERE NodePosType=0 AND ReturnRole !=0");
+
+            //删除垃圾,非法数据.
+            string sqls = "DELETE FROM Sys_FrmSln WHERE fk_mapdata not in (select no from sys_mapdata)";
+            sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";
+            DBAccess.RunSQLs(sqls);
+
+            //更新计算数据.
+            this.flow.NumOfBill = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM WF_BillTemplate WHERE NodeID IN (SELECT NodeID FROM WF_Flow WHERE No='" + this.flow.No + "')");
+            this.flow.NumOfDtl = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM Sys_MapDtl WHERE FK_MapData='ND" + int.Parse(this.flow.No) + "Rpt'");
+            this.flow.DirectUpdate();
+
+            //一直没有找到设置3列，自动回到四列的情况.
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET ColSpan=3 WHERE  UIHeight<=23 AND ColSpan=4");
+        }
+        /// <summary>
+        /// 检查独立表单的完整性.
+        /// </summary>
+        public void CheckMode_Frms()
+        {
+            FrmNodes fns = new FrmNodes();
+            fns.Retrieve(FrmNodeAttr.FK_Flow, this.flow.No);
+            string frms = "";
+            string err = "";
+            foreach (FrmNode item in fns)
+            {
+                if (frms.Contains(item.FK_Frm + ","))
+                    continue;
+                frms += item.FK_Frm + ",";
+
+                MapData md = new MapData();
+                md.No = item.FK_Frm;
+                if (md.RetrieveFromDBSources() == 0)
+                {
+                    this.AddMsgError("节点绑定的表单ID=" + item.FK_Frm + "，但该表单已经不存在.", new Node(item.FK_Node));
+                    continue;
+                }
             }
         }
         /// <summary>
@@ -1308,6 +1312,5 @@ namespace BP.WF
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='参与者' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='Emps'");
             #endregion 尾后处理.
         }
-
     }
 }

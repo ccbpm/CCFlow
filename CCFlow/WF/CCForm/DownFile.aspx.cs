@@ -167,10 +167,15 @@ namespace CCFlow.WF.CCForm
                     string filepath = downDB.FileFullName + ".tmp";
                     string tempName = downDB.FileName;
                     if (fileEncrypt == true)
+                    {
+                        if (File.Exists(filepath) == true)
+                            File.Delete(filepath);
                         EncHelper.DecryptDES(downDB.FileFullName, filepath);
+                    }
                     else
+                    {
                         filepath = downDB.FileFullName;
-
+                    }
                     #region 文件下载（并删除临时明文文件）
                     if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
                         tempName = HttpUtility.UrlEncode(tempName);
@@ -183,10 +188,6 @@ namespace CCFlow.WF.CCForm
 
                     HttpContext.Current.Response.WriteFile(filepath);
                     HttpContext.Current.Response.End();
-                    //删除临时文件
-                    if (fileEncrypt == true)
-                        File.Delete(filepath);
-
                     HttpContext.Current.Response.Close();
                     #endregion
 
@@ -202,10 +203,6 @@ namespace CCFlow.WF.CCForm
                         EncHelper.DecryptDES(tempFile, tempDescFile);
                     else
                         tempDescFile = tempFile;
-                    //删除临时文件
-                    if (fileEncrypt == true)
-                        File.Delete(tempFile);
-
                     PubClass.DownloadFile(tempDescFile, downDB.FileName);
                   
                 }
@@ -214,9 +211,13 @@ namespace CCFlow.WF.CCForm
                 {
                     string downpath = GetRealPath(downDB.FileFullName);
                     string filepath = downpath + ".tmp";
+
                     if (fileEncrypt == true)
+                    {
+                        if (File.Exists(filepath) == true)
+                            File.Delete(filepath);
                         EncHelper.DecryptDES(downpath, filepath);
-                    else
+                    }else
                         filepath = downpath;
                     BP.Sys.PubClass.DownloadFile(filepath, downDB.FileName);
 

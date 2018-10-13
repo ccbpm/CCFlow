@@ -34,28 +34,28 @@ function FlowCheck() {
     flowId = String(flowId);
     url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
     // WinOpen(url);
-    OpenEasyUiDialog(url, "FlowCheck" + flowNo, "检查流程" + flowNo, 600, 500, "icon - library",false);
+    OpenEasyUiDialog(url, "FlowCheck" + flowNo, "检查流程" + flowNo, 600, 500, "icon - library", false);
     //window.parent.addTab(flowNo + "_JCLC", "检查流程" + flowNo, url);
 }
 
 //运行流程
 function FlowRun() {
-	
-	   //执行流程检查.
+
+    //执行流程检查.
     var flow = new Entity("BP.WF.Flow", flowNo);
-    flow.DoMethodReturnString("ClearCash"); 
-    
+    flow.DoMethodReturnString("ClearCash");
+
     var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
     //WinOpen(url);
     window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
 }
 //运行流程
 function FlowRunAdmin() {
- 
+
     //执行流程检查.
     var flow = new Entity("BP.WF.Flow", flowNo);
-    flow.DoMethodReturnString("ClearCash"); 
-	
+    flow.DoMethodReturnString("ClearCash");
+
     //var url = "../TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
     var webUser = new WebUser();
     var url = "../TestFlow.htm?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + webUser.No + "&FK_Flow=" + flowNo;
@@ -69,8 +69,6 @@ function OldVer() {
     var url = "Designer2016.htm?FK_Flow=" + flowNo + "&Lang=CH&&Flow_V=1";
     window.location.href = url;
 }
-
-
 
 function Help() {
 
@@ -109,7 +107,7 @@ function NodeFrmSln(nodeID) {
     //表单方案.
     var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
     window.parent.addTab(nodeID + "_JDFA", "表单方案" + nodeID, url);
-   // OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
+    // OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
 }
 
 
@@ -118,7 +116,7 @@ function NodeFrmD(nodeID) {
 
     var node = new Entity("BP.WF.Node", nodeID);
     if (node.FormType == 1) {
-         NodeFrmFree(nodeID);
+        NodeFrmFree(nodeID);
         return;
     }
 
@@ -135,7 +133,7 @@ function NodeFrmFool(nodeID) {
 function NodeFrmFree(nodeID) {
 
     //自由表单.
-    var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND"+nodeID+"&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     window.parent.addTab(nodeID + "_Free", "设计表单" + nodeID, url);
     ///CCFormDesigner/FormDesigner.htm?FK_Node=9502&FK_MapData=ND9502&FK_Flow=095&UserNo=admin&SID=c3466cb7-edbe-4cdc-92df-674482182d01
     //WinOpen(url);

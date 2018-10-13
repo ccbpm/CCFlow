@@ -156,11 +156,11 @@ namespace BP.Sys
         /// <summary>
         /// 附件上传加密
         /// </summary>
-        public static bool FileEncrypt
+        public static bool IsEnableAthEncrypt
         {
             get
             {
-                if (SystemConfig.AppSettings["FileEncrypt"].Equals("1"))
+                if (SystemConfig.AppSettings["IsEnableAthEncrypt"].Equals("1"))
                     return true;
                 return false;
             }

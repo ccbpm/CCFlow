@@ -2639,7 +2639,7 @@ namespace BP.WF.HttpHandler
 
 
             //获取上传文件是否需要加密
-            bool fileEncrypt = SystemConfig.FileEncrypt;
+            bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
 
             for (int i = 0; i < context.Request.Files.Count; i++)
             {
@@ -2738,6 +2738,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FileExts = info.Extension;
                     dbUpload.FID = this.FID;
+                    if (fileEncrypt == true)
+                        dbUpload.SetPara("IsEncrypt", 1);
 
                     if (athDesc.IsExpCol == true)
                     {
@@ -2846,6 +2848,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.NodeID = FK_Node.ToString();
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
+                    if (fileEncrypt == true)
+                        dbUpload.SetPara("IsEncrypt", 1);
                     if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                     {
                         /*如果是继承，就让他保持本地的PK. */

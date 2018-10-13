@@ -369,6 +369,7 @@
     <Compile Include="Tools\DataSet2Json.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\EncHelper.cs" />
     <Compile Include="Tools\Entitis2Json.cs">
       <SubType>Code</SubType>
     </Compile>

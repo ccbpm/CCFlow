@@ -151,7 +151,7 @@ namespace CCFlow.WF.CCForm
             if (this.DoType == "Down")
             {
                 //获取文件是否加密
-                bool fileEncrypt = SystemConfig.FileEncrypt;
+                bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
                 FrmAttachmentDB downDB = new FrmAttachmentDB();
 
                 downDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
@@ -159,14 +159,17 @@ namespace CCFlow.WF.CCForm
                 FrmAttachment dbAtt = new FrmAttachment();
                 dbAtt.MyPK = downDB.FK_FrmAttachment;
                 dbAtt.Retrieve();
-               
+
+                bool isEncrypt = downDB.GetParaBoolen("IsEncrypt");
+
                 if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
                 {
                     #region 解密下载
                     //1、先解密到本地
                     string filepath = downDB.FileFullName + ".tmp";
                     string tempName = downDB.FileName;
-                    if (fileEncrypt == true)
+                   
+                    if (fileEncrypt == true && isEncrypt == true)
                     {
                         if (File.Exists(filepath) == true)
                             File.Delete(filepath);
@@ -184,8 +187,6 @@ namespace CCFlow.WF.CCForm
                     HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
                     HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                     HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
-                    
-
                     HttpContext.Current.Response.WriteFile(filepath);
                     HttpContext.Current.Response.End();
                     HttpContext.Current.Response.Close();
@@ -199,7 +200,7 @@ namespace CCFlow.WF.CCForm
                     //下载文件的临时位置
                     string tempFile = downDB.GenerTempFile(dbAtt.AthSaveWay);
                     string tempDescFile = tempFile + ".temp";
-                    if (fileEncrypt == true)
+                    if (fileEncrypt == true && isEncrypt == true)
                         EncHelper.DecryptDES(tempFile, tempDescFile);
                     else
                         tempDescFile = tempFile;
@@ -211,18 +212,15 @@ namespace CCFlow.WF.CCForm
                 {
                     string downpath = GetRealPath(downDB.FileFullName);
                     string filepath = downpath + ".tmp";
-
-                    if (fileEncrypt == true)
+                    if (fileEncrypt == true && isEncrypt == true)
                     {
                         if (File.Exists(filepath) == true)
                             File.Delete(filepath);
                         EncHelper.DecryptDES(downpath, filepath);
                     }else
                         filepath = downpath;
-                    BP.Sys.PubClass.DownloadFile(filepath, downDB.FileName);
 
-                    if (fileEncrypt == true)
-                        File.Delete(filepath);
+                    BP.Sys.PubClass.DownloadFile(filepath, downDB.FileName);
 
                 }
                

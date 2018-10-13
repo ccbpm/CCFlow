@@ -8,6 +8,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI;
 using BP.Web;
 using BP.Sys;
+using BP.Tools;
 using BP.DA;
 using BP.WF.Template;
 using BP.WF;
@@ -149,6 +150,8 @@ namespace CCFlow.WF.CCForm
 
             if (this.DoType == "Down")
             {
+                //获取文件是否加密
+                bool fileEncrypt = SystemConfig.FileEncrypt;
                 FrmAttachmentDB downDB = new FrmAttachmentDB();
 
                 downDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
@@ -156,15 +159,18 @@ namespace CCFlow.WF.CCForm
                 FrmAttachment dbAtt = new FrmAttachment();
                 dbAtt.MyPK = downDB.FK_FrmAttachment;
                 dbAtt.Retrieve();
+               
                 if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
                 {
                     #region 解密下载
                     //1、先解密到本地
                     string filepath = downDB.FileFullName + ".tmp";
-                    string tempName = downDB.FileFullName;
+                    string tempName = downDB.FileName;
+                    if (fileEncrypt == true)
+                        EncHelper.DecryptDES(downDB.FileFullName, filepath);
+                    else
+                        filepath = downDB.FileFullName;
 
-                    EncHelper.DecryptDES(downDB.FileFullName, filepath);
-                    //PubClass.DownloadFile(filepath, tempName);
                     #region 文件下载（并删除临时明文文件）
                     if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
                         tempName = HttpUtility.UrlEncode(tempName);
@@ -173,12 +179,14 @@ namespace CCFlow.WF.CCForm
                     HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
                     HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                     HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
-                    //HttpContext.Current.Response.ContentType = "application/ms-msword";  //image/JPEG;text/HTML;image/GIF;application/ms-excel
-                    //HttpContext.Current.EnableViewState =false;
+                    
 
                     HttpContext.Current.Response.WriteFile(filepath);
-                  //  File.Delete(filepath);
                     HttpContext.Current.Response.End();
+                    //删除临时文件
+                    if (fileEncrypt == true)
+                        File.Delete(filepath);
+
                     HttpContext.Current.Response.Close();
                     #endregion
 
@@ -187,14 +195,34 @@ namespace CCFlow.WF.CCForm
 
                 if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
                 {
-                    PubClass.DownloadFile(downDB.GenerTempFile(dbAtt.AthSaveWay), downDB.FileName);
+                    //下载文件的临时位置
+                    string tempFile = downDB.GenerTempFile(dbAtt.AthSaveWay);
+                    string tempDescFile = tempFile + ".temp";
+                    if (fileEncrypt == true)
+                        EncHelper.DecryptDES(tempFile, tempDescFile);
+                    else
+                        tempDescFile = tempFile;
+                    //删除临时文件
+                    if (fileEncrypt == true)
+                        File.Delete(tempFile);
+
+                    PubClass.DownloadFile(tempDescFile, downDB.FileName);
+                  
                 }
 
                 if (dbAtt.AthSaveWay == AthSaveWay.DB)
                 {
                     string downpath = GetRealPath(downDB.FileFullName);
-                    BP.Sys.PubClass.DownloadFile(downpath, downDB.FileName);
-                    PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
+                    string filepath = downpath + ".tmp";
+                    if (fileEncrypt == true)
+                        EncHelper.DecryptDES(downpath, filepath);
+                    else
+                        filepath = downpath;
+                    BP.Sys.PubClass.DownloadFile(filepath, downDB.FileName);
+
+                    if (fileEncrypt == true)
+                        File.Delete(filepath);
+
                 }
                
                 this.WinClose();
@@ -355,80 +383,5 @@ namespace CCFlow.WF.CCForm
 
         
     }
-    public static class EncHelper
-    {
-        private static byte[] Keys = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };//自定义密匙
-
-        private static string encryptKey = "ccflow123";
-
-        public static bool EncryptDES(string inFile, string outFile)
-        {
-            byte[] rgb = Keys;
-            try
-            {
-                byte[] rgbKeys = Encoding.UTF8.GetBytes(encryptKey.Substring(0, 8));
-                FileStream inFs = new FileStream(inFile, FileMode.Open, FileAccess.Read);//读入流
-                FileStream outFs = new FileStream(outFile, FileMode.OpenOrCreate, FileAccess.Write);// 等待写入流
-                outFs.SetLength(0);//帮助读写的变量
-                byte[] byteIn = new byte[100];//放临时读入的流
-                long readLen = 0;//读入流的长度
-                long totalLen = inFs.Length;//读入流的总长度
-                int everylen = 0;//每次读入流的长度
-                DES des = new DESCryptoServiceProvider();//将inFile加密后放到outFile
-                CryptoStream encStream = new CryptoStream(outFs, des.CreateEncryptor(rgb, rgbKeys), CryptoStreamMode.Write);
-                while (readLen < totalLen)
-                {
-                    everylen = inFs.Read(byteIn, 0, 100);
-                    encStream.Write(byteIn, 0, everylen);
-                    readLen = readLen + everylen;
-                }
-                encStream.Close();
-                inFs.Close();
-                outFs.Close();
-                return true;//加密成功
-            }
-            catch (Exception ex)
-            {
-                HttpContext.Current.Response.Write(ex.Message.ToString());
-                return false;//加密失败
-            }
-        }
-
-        public static bool DecryptDES(string inFile, string outFile)
-        {
-            byte[] rgb = Keys;
-            try
-            {
-                byte[] rgbKeys = Encoding.UTF8.GetBytes(encryptKey.Substring(0, 8));
-                FileStream inFs = new FileStream(inFile, FileMode.Open, FileAccess.Read);//读入流
-                FileStream outFs = new FileStream(outFile, FileMode.OpenOrCreate, FileAccess.Write);// 等待写入流
-                outFs.SetLength(0);//帮助读写的变量
-                byte[] byteIn = new byte[100];//放临时读入的流
-                long readLen = 0;//读入流的长度
-                long totalLen = inFs.Length;//读入流的总长度
-                int everylen = 0;//每次读入流的长度
-                DES des = new DESCryptoServiceProvider();//将inFile加密后放到outFile
-                CryptoStream encStream = new CryptoStream(outFs, des.CreateDecryptor(rgb, rgbKeys), CryptoStreamMode.Write);
-                while (readLen < totalLen)
-                {
-                    everylen = inFs.Read(byteIn, 0, 100);
-                    encStream.Write(byteIn, 0, everylen);
-                    readLen = readLen + everylen;
-                }
-                encStream.Close();
-                inFs.Close();                
-                outFs.Close();
-                encStream.Dispose();
-                inFs.Dispose();                
-                outFs.Dispose();
-                return true;//加密成功
-            }
-            catch (Exception ex)
-            {
-                HttpContext.Current.Response.Write(ex.Message.ToString());
-                return false;//加密失败
-            }
-        }
-
-    }
+   
 }

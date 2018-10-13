@@ -18,11 +18,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:2779/DataUser/IndustrialAutomationWorkflowAPI.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:18272/DataUser/IndustrialAutomationWorkflowAPI.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="IndustrialAutomationWorkflowAPI.disco" MetadataType="Disco" ID="68212beb-afe0-42ca-ad14-e6811a32b0b8" SourceId="1" SourceUrl="http://localhost:2779/DataUser/IndustrialAutomationWorkflowAPI.asmx?disco" />
-    <MetadataFile FileName="IndustrialAutomationWorkflowAPI.wsdl" MetadataType="Wsdl" ID="4f8d1feb-278a-4452-910d-e87aad5b109d" SourceId="1" SourceUrl="http://localhost:2779/DataUser/IndustrialAutomationWorkflowAPI.asmx?wsdl" />
+    <MetadataFile FileName="IndustrialAutomationWorkflowAPI1.disco" MetadataType="Disco" ID="3e68a651-7f21-466b-9a40-289c5f2aa273" SourceId="1" SourceUrl="http://localhost:18272/DataUser/IndustrialAutomationWorkflowAPI.asmx?disco" />
+    <MetadataFile FileName="IndustrialAutomationWorkflowAPI1.wsdl" MetadataType="Wsdl" ID="0c6c4367-2a5e-4769-92b0-dbf011264d74" SourceId="1" SourceUrl="http://localhost:18272/DataUser/IndustrialAutomationWorkflowAPI.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

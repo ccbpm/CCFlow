@@ -95,7 +95,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\ccbpmAPI\IndustrialAutomationWorkflowAPI.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -104,29 +103,20 @@
     <WCFMetadataStorage Include="Service References\ccbpmAPI\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\ccbpmAPI\IndustrialAutomationWorkflowAPI.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\ccbpmAPI\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\ccbpmAPI\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\ccbpmAPI\IndustrialAutomationWorkflowAPI1.wsdl" />
     <None Include="Service References\ccbpmAPI\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Components\BP.En30\BP.En30.csproj">
-      <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
-      <Name>BP.En30</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Components\BP.WF\BP.WF.csproj">
-      <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
-      <Name>BP.WF</Name>
-    </ProjectReference>
+    <None Include="Service References\ccbpmAPI\IndustrialAutomationWorkflowAPI1.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

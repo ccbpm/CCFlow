@@ -153,6 +153,18 @@ namespace BP.Sys
                 return BP.Sys.Glo.String_JieMi(str);
             }
         }
+        /// <summary>
+        /// 附件上传加密
+        /// </summary>
+        public static bool FileEncrypt
+        {
+            get
+            {
+                if (SystemConfig.AppSettings["FileEncrypt"].Equals("1"))
+                    return true;
+                return false;
+            }
+        }
         public static string AttachWebSite
         {
             get

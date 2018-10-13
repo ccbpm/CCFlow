@@ -7,12 +7,14 @@ using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
+using BP.Tools;
 using BP.Port;
 using BP.Web;
 using BP.WF.Template;
 using BP.WF.XML;
 using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -2635,6 +2637,10 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+
+            //获取上传文件是否需要加密
+            bool fileEncrypt = SystemConfig.FileEncrypt;
+
             for (int i = 0; i < context.Request.Files.Count; i++)
             {
                 HttpPostedFile file = context.Request.Files[i];
@@ -2647,7 +2653,6 @@ namespace BP.WF.HttpHandler
                     {
                         /*如果有变量*/
                         savePath = savePath.Replace("*", "@");
-                     //   savePath = BP.WF.Glo.DealExp(savePath, en, null);
 
                         if (savePath.Contains("@") && this.FK_Node != 0)
                         {
@@ -2695,8 +2700,19 @@ namespace BP.WF.HttpHandler
                     realSaveTo = realSaveTo.Replace("~", "-");
                     realSaveTo = realSaveTo.Replace("'", "-");
                     realSaveTo = realSaveTo.Replace("*", "-");
+                    if (fileEncrypt == true)
+                    {
 
-                    file.SaveAs(realSaveTo);
+                        string strtmp = realSaveTo + ".tmp";
+                        file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        EncHelper.EncryptDES(strtmp, strtmp.Replace(".tmp", ""));//加密
+                        File.Delete(strtmp);//删除临时文件
+                    }
+                    else
+                    {
+                        //文件保存的路径
+                        file.SaveAs(realSaveTo);
+                    }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
@@ -2711,8 +2727,6 @@ namespace BP.WF.HttpHandler
                         catch 
                         {
                         }
-                        //note:此处如何向前uploadify传递失败信息，有待研究
-                        //this.Alert("上传附件错误：" + msg, true);
                     }
 
                     FileInfo info = new FileInfo(realSaveTo);
@@ -2724,7 +2738,6 @@ namespace BP.WF.HttpHandler
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FileExts = info.Extension;
                     dbUpload.FID = this.FID;
-                  //  dbUpload.work = this.FID;
 
                     if (athDesc.IsExpCol == true)
                     {
@@ -2759,12 +2772,6 @@ namespace BP.WF.HttpHandler
                     dbUpload.RefPKVal = pkVal;
                     dbUpload.FID = this.FID;
 
-                    //if (athDesc.IsNote)
-                    //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
-
-                    //if (athDesc.Sort.Contains(","))
-                    //    dbUpload.Sort = this.Pub1.GetDDLByID("ddl").SelectedItemStringVal;
-
                     dbUpload.UploadGUID = guid;
                     dbUpload.Insert();
 
@@ -2788,15 +2795,31 @@ namespace BP.WF.HttpHandler
 
                     //把文件临时保存到一个位置.
                     string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
-                    try
+
+                    if (fileEncrypt == true)
                     {
+
+                        string strtmp = SystemConfig.PathOfTemp + "" + guid + "_Desc" + ".tmp";
+                        file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        EncHelper.EncryptDES(strtmp,temp);//加密
+                        File.Delete(strtmp);//删除临时文件
+                    }
+                    else
+                    {
+                        //文件保存的路径
                         file.SaveAs(temp);
                     }
-                    catch (Exception ex)
-                    {
-                        System.IO.File.Delete(temp);
-                        file.SaveAs(temp);
-                    }
+
+
+                    //try
+                    //{
+                    //    file.SaveAs(temp);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    System.IO.File.Delete(temp);
+                    //    file.SaveAs(temp);
+                    //}
 
                     //  fu.SaveAs(temp);
 
@@ -2843,9 +2866,6 @@ namespace BP.WF.HttpHandler
 
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
-                    // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
-                    //dbUpload.FileExts = info.Extension;
-                    // dbUpload.FileFullName = saveTo;
                     dbUpload.FileName = file.FileName;
                     dbUpload.FileSize = (float)info.Length;
                     dbUpload.RDT = DataType.CurrentDataTimess;
@@ -2898,6 +2918,7 @@ namespace BP.WF.HttpHandler
                         //设置路径.
                         dbUpload.FileFullName = ny + "//" + athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
                         dbUpload.Insert();
+                        File.Delete(temp);
                     }
 
                     //执行附件上传后事件，added by liuxc,2017-7-15

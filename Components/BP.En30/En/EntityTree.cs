@@ -34,6 +34,10 @@ namespace BP.En
         /// 图标
         /// </summary>
         public const string ICON = "ICON";
+       /// <summary>
+       /// 节点类型
+       /// </summary>
+        public const string MenuType = "MenuType";
     }
 	/// <summary>
 	/// 树实体
@@ -124,6 +128,19 @@ namespace BP.En
                 this.SetValByKey(EntityTreeAttr.Idx, value);
             }
         }
+        /// <summary>
+        /// 节点类型
+        /// </summary>
+        public int MenuType {
+            get
+            {
+                return this.GetValIntByKey(EntityTreeAttr.MenuType);
+            }
+            set
+            {
+                this.SetValByKey(EntityTreeAttr.MenuType, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -209,6 +226,7 @@ namespace BP.En
             en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             en.Name = "新建节点" + en.No;
             en.ParentNo = this.ParentNo;
+            en.MenuType = this.MenuType;
           //  en.IsDir = false;
            // en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.ParentNo);
             en.Insert();
@@ -224,6 +242,7 @@ namespace BP.En
             en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             en.Name = "新建节点" + en.No;
             en.ParentNo = this.No;
+            en.MenuType = this.MenuType + 1;
             //en.IsDir = false;
             //en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.No);
             //if (en.TreeNo.Substring(en.TreeNo.Length - 2) == "01")

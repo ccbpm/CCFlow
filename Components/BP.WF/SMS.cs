@@ -628,7 +628,9 @@ namespace BP.WF
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
 
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag,this.Title,this.OpenURL);
+                            //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag,this.Title,this.OpenURL);
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, "17699430990", this.MobileInfo, tag, this.Title, this.OpenURL);
+
 
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.

@@ -160,6 +160,11 @@ namespace BP.Sys
         {
             get
             {
+                string IsEnableAthEncrypt = SystemConfig.AppSettings["IsEnableAthEncrypt"];
+
+                if (DataType.IsNullOrEmpty(IsEnableAthEncrypt) == true)
+                    return false;
+
                 if (SystemConfig.AppSettings["IsEnableAthEncrypt"].Equals("1"))
                     return true;
                 return false;

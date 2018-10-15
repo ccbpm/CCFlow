@@ -10,13 +10,30 @@
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="./Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
-       //页面启动函数.
+        //页面启动函数.
+        function IsPC() {
+            var userAgentInfo = navigator.userAgent;
+            var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+            var flag = true;
+            for (var v = 0; v < Agents.length; v++) {
+                if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }
+            }
+            return flag;
+        }
         $(function () {
+            var params = document.location.search.substr(1);
+            params = params.replace("DoType", "ActionType");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var data = handler.DoMethodReturnJSON("PCAndMobileUrl")
+            
+            if (IsPC() == false) 
+            {
+                window.location.href = data["MobileUrl"].substring(0, data["MobileUrl"].length - 1) + window.document.location.pathname.replace("WF", "CCMobile") + "?" + params;
+                return;
+            }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            var url = document.location.search.substr(1);
-            url = url.replace("DoType", "ActionType");
-            handler.AddUrlData(url);
+            handler.AddUrlData(params);
 
             var data = handler.DoMethodReturnString("Do_Init");
             $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
@@ -32,6 +49,7 @@
             }
             if (data.indexOf('url@') == 0) {
                 data = data.replace("url@", "");
+
                 window.location.href = data;
                 return;
             }

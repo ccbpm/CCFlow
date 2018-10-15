@@ -938,6 +938,7 @@ namespace BP.WF
                 dt.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
                 dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
+                dt.Columns["ISSTARTINMOBILE"].ColumnName = "IsStartInMobile";
             }
 
             return dt;
@@ -3302,7 +3303,7 @@ namespace BP.WF
         /// <param name="sendEmpNo">发送给人员.</param>
         /// <param name="atParas">参数.</param>
         public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
-            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null)
+            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null,string title= null,string opnUrl = null)
         {
             //if (DataType.IsNullOrEmpty(tel))
             //    return;
@@ -3333,6 +3334,8 @@ namespace BP.WF
 
             sms.Mobile = tel;
             sms.MobileInfo = smsDoc;
+            sms.Title = title;
+            sms.setPara("OpenUrl",opnUrl);
 
             // 其他属性.
             sms.RDT = BP.DA.DataType.CurrentDataTime;

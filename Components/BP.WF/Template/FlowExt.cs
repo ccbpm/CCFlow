@@ -434,21 +434,7 @@ namespace BP.WF.Template
                 #region 基本功能.
                 //map.AddRefMethod(rm);
                 RefMethod rm = new RefMethod();
-                rm = new RefMethod();
-                rm.Title = "调试运行"; // "设计检查报告";
-                //rm.ToolTip = "检查流程设计的问题。";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/Run.png";
-                rm.ClassMethodName = this.ToString() + ".DoRunIt";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "检查报告"; // "设计检查报告";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
-                rm.ClassMethodName = this.ToString() + ".DoCheck";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
+             
                 rm = new RefMethod();
                 rm.Title = "设计报表"; // "报表运行";
                 rm.Icon = "../../WF/Img/Btn/Rpt.gif";
@@ -518,8 +504,37 @@ namespace BP.WF.Template
                 //rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 //rm.ClassMethodName = this.ToString() + ".DoFlowFormTree()";
                 //map.AddRefMethod(rm);
-
                 #endregion 流程设置.
+
+                #region 模拟测试.
+                rm = new RefMethod();
+                rm.GroupName = "模拟测试";
+                rm.Title = "调试运行"; // "设计检查报告";
+                //rm.ToolTip = "检查流程设计的问题。";
+                rm.Icon = "../../WF/Img/EntityFunc/Flow/Run.png";
+                rm.ClassMethodName = this.ToString() + ".DoRunIt";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "模拟测试";
+                rm.Title = "检查报告"; // "设计检查报告";
+                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
+                rm.ClassMethodName = this.ToString() + ".DoCheck2018Url";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.GroupName = "模拟测试";
+                rm.Title = "检查报告(旧)"; // "设计检查报告";
+                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
+                rm.ClassMethodName = this.ToString() + ".DoCheck";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                #endregion 模拟测试.
+
 
                 #region 流程模版管理.
                 rm = new RefMethod();
@@ -863,7 +878,6 @@ namespace BP.WF.Template
                 //rm.ToolTip = "在流程完成时间，流程数据转储存到其它系统中应用。";
                 //rm.ClassMethodName = this.ToString() + ".DoExp";
                 //map.AddRefMethod(rm);
-
 
                 this._enMap = map;
                 return this._enMap;
@@ -1514,6 +1528,11 @@ namespace BP.WF.Template
         public string DoCheck()
         {
             return "../../Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
+        }
+      
+        public string DoCheck2018Url()
+        {
+            return "../../Admin/Testing/FlowCheckError.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 启动限制规则

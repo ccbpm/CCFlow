@@ -1782,6 +1782,18 @@ namespace BP.WF
 
       
         /// <summary>
+        /// 执行检查2018
+        /// </summary>
+        /// <returns></returns>
+        public string DoCheck2018()
+        {
+            FlowCheckError check = new FlowCheckError(this);
+            check.DoCheck();
+
+            return BP.Tools.Json.ToJson(check.dt);
+            //return "../../Admin/Testing/FlowCheckError.htm?FK_Flow=" + this.No + "&Lang=CH";
+        }
+        /// <summary>
         /// 校验流程
         /// </summary>
         /// <returns></returns>

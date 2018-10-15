@@ -3335,7 +3335,7 @@ namespace BP.WF
             sms.Mobile = tel;
             sms.MobileInfo = smsDoc;
             sms.Title = title;
-            sms.setPara("OpenUrl",opnUrl);
+            sms.SetPara("OpenUrl",opnUrl);
 
             // 其他属性.
             sms.RDT = BP.DA.DataType.CurrentDataTime;

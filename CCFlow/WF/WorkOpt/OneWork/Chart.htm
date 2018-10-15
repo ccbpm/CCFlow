@@ -616,7 +616,7 @@
                                             continue;
                                         if (track1.ActionType == ActionType.WorkCheck)
                                             continue;
-                                        if (track1.NDFrom == track.NDTo) {
+                                        if (track1.NDFrom == track.NDTo && track1.RDT >= track.RDT) {
                                             dtto = track1.RDT;
                                             return;
                                         }

@@ -3335,7 +3335,6 @@ namespace BP.WF
             sms.Mobile = tel;
             sms.MobileInfo = smsDoc;
             sms.Title = title;
-            sms.SetPara("OpenUrl",opnUrl);
 
             // 其他属性.
             sms.RDT = BP.DA.DataType.CurrentDataTime;
@@ -3345,6 +3344,8 @@ namespace BP.WF
             sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
 
             sms.AtPara = atParas;
+
+            sms.SetPara("OpenUrl", opnUrl);
 
             // 先保留本机一份.
             sms.Insert();

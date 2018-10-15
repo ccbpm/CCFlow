@@ -3748,6 +3748,16 @@ namespace BP.WF.HttpHandler
 
                     //求出文件路径.
                     string fileTempPath = db.GenerTempFile(athDesc.AthSaveWay);
+                    string fileTempDecryPath = fileTempPath;
+                    //获取文件是否加密
+                    bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                    bool isEncrypt = db.GetParaBoolen("IsEncrypt");
+                    if (fileEncrypt == true && isEncrypt == true)
+                    {
+                        fileTempDecryPath = fileTempPath + ".tmp";
+                        EncHelper.DecryptDES(fileTempPath, fileTempDecryPath);
+                       
+                    }
                     if (DataType.IsNullOrEmpty(db.Sort) == false)
                     {
                         copyToPath = tempFilePath + "//" + db.Sort;
@@ -3757,10 +3767,12 @@ namespace BP.WF.HttpHandler
                     //新文件目录
                     copyToPath = copyToPath + "//" + db.FileName;
 
-                    if (File.Exists(fileTempPath) == true)
+                    if (File.Exists(fileTempDecryPath) == true)
                     {
-                        File.Copy(fileTempPath, copyToPath, true);
+                        File.Copy(fileTempDecryPath, copyToPath, true);
                     }
+                    if (fileEncrypt == true && isEncrypt == true)
+                        File.Delete(fileTempDecryPath);
                 }
             }
             catch (Exception ex)

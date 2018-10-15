@@ -552,6 +552,7 @@
                         //获得上一个节点发送的日志.
 
                         var Tracks = jdata.Track;
+                        var nextTracks = Tracks;
                         var NDTo = "";
 
                         for (var i = 0; i < Tracks.length; i++) {
@@ -567,7 +568,7 @@
                                 var lastTwoBit = nodeId.toString().substring(nodeId.toString().length - 2);
 
                                 tablehtml = "<table style='width:300px;'>";
-                                if(track.NDFrom == nodeId)
+                                if (track.NDFrom == nodeId)
                                     tablehtml += "<caption> " + track.EmpFromT + " </capiton>";
                                 if (track.NDTo == nodeId && track.NDFrom != nodeId)
                                     tablehtml += "<caption> " + track.EmpToT + " </capiton>";
@@ -602,10 +603,10 @@
                                 tablehtml += "<tr style='background-color:InfoBackground' >";
                                 tablehtml += "<td>实际完成</td>";
                                 var dtto = "";
-                                if (count == 1) {
-                                    dtto = chext.DTTo;
-                                    //最后流程
-                                } else if (track.NDFrom == track.NDTo) {
+                                // if (count == 1) {
+                                //    dtto = chext.DTTo;
+                                //最后流程
+                                if (track.NDFrom == track.NDTo) {
                                     dtto = track.RDT;
                                 } else {
 
@@ -615,8 +616,10 @@
                                             continue;
                                         if (track1.ActionType == ActionType.WorkCheck)
                                             continue;
-                                        if (track1.NDFrom == track.NDTo)
+                                        if (track1.NDFrom == track.NDTo) {
                                             dtto = track1.RDT;
+                                            return;
+                                        }
                                     }
 
                                 }
@@ -644,7 +647,7 @@
                                             continue;
                                         if (track1.NDTo == node.id) {
                                             tablehtml += "<td>" + track1.EmpFrom + "," + track1.EmpFromT + "</td>";
-                                           break;
+                                            break;
                                         }
                                     }
                                 }

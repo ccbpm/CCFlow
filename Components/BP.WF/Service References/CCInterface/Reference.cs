@@ -18,7 +18,7 @@ namespace BP.WF.CCInterface {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToWebServices", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag);
+        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag, string title = null, string openUrl = null);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendWhen", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -148,8 +148,8 @@ namespace BP.WF.CCInterface {
                 base(binding, remoteAddress) {
         }
         
-        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag) {
-            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, tag);
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag,string title=null,string openUrl = null) {
+            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, tag,title,openUrl);
         }
         
         public bool SendWhen(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo) {

@@ -54,6 +54,7 @@ namespace BP.WF
         /// 错误信息
         /// </summary>
         public const string Err = "Err";
+
     }
     /// <summary>
     /// 消息状态
@@ -146,6 +147,11 @@ namespace BP.WF
         /// 其他参数.
         /// </summary>
         public const string Paras = "Paras";
+        /// <summary>
+        /// 打开的连接
+        /// </summary>
+        public const string OpenUrl = "OpenUrl";
+
     }
     /// <summary>
     /// 消息
@@ -469,6 +475,22 @@ namespace BP.WF
                 SetValByKey(SMSAttr.EmailDoc, value);
             }
         }
+
+        /// <summary>
+        /// 打开的连接
+        /// </summary>
+        public string OpenURL
+        {
+            get
+            {
+                return this.GetParaString(SMSAttr.OpenUrl);
+            }
+            set
+            {
+                this.SetPara(SMSAttr.OpenUrl, value);
+            }
+        }
+
         #endregion
 
         #region 构造函数
@@ -606,7 +628,7 @@ namespace BP.WF
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
 
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag);
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag,this.Title,this.OpenURL);
 
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.

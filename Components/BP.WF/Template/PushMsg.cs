@@ -716,9 +716,6 @@ namespace BP.WF.Template
             string openWorkURl =  hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("http:/", "http://");
-            if (SystemConfig.CustomerNo.Equals("TianYe"))
-                openWorkURl = "<a href='" + hostUrl + "'>" + title + "</a>";
-
             #endregion 
 
 
@@ -1088,7 +1085,7 @@ namespace BP.WF.Template
                         string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node;
 
                         //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, WebUser.No, null, empNo, paras);
+                        BP.WF.Dev2Interface.Port_SendSMS(tel, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, WebUser.No, null, empNo, paras, title, openWorkURl);
 
                         //处理短消息.
                         toEmpIDs += empName + ",";

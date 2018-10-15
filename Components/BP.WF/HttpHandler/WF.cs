@@ -390,24 +390,8 @@ namespace BP.WF.HttpHandler
 
                         BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
                         Web.WebUser.SignInOfGener(empOF);
-                        string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
-                        //if(SystemConfig.CustomerNo.Equals("TianYe"))
-                        //判断是移动端还是PC端打开的页面
-                        Regex RegexMobile = new Regex(@"(iemobile|iphone|ipod|android|nokia|sonyericsson|blackberry|samsung|sec\-|windows ce|motorola|mot\-|up.b|midp\-)",
-                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
-                        //移动端打开
-                        if (context.Request.Browser.IsMobileDevice || (!string.IsNullOrEmpty(context.Request.UserAgent) && RegexMobile.IsMatch(context.Request.UserAgent)))
-                        {
-                            if(SystemConfig.IsBSsystem == true)
-                                return "url@"+SystemConfig.MobileURL + "CCMobile/"+u;
-                            return "url@" + u;
-                        }
-                        else
-                        {
-                            if(SystemConfig.IsBSsystem == true)
-                                return "url@" + "WF/"+u;
-                            return "url@" + SystemConfig.HostURL + u;
-                        }
+                        string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;  
+                    
                         return "url@" + u;
                     case "ExitAuth":
                         BP.Port.Emp emp = new BP.Port.Emp(this.FK_Emp);
@@ -492,6 +476,18 @@ namespace BP.WF.HttpHandler
                     break;
             }
             return "";
+        }
+
+        /// <summary>
+        /// 获取设置的PC端和移动端URL
+        /// </summary>
+        /// <returns></returns>
+        public string PCAndMobileUrl()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("PCUrl", SystemConfig.HostURL);
+            ht.Add("MobileUrl", SystemConfig.MobileURL);
+            return BP.Tools.Json.ToJson(ht);
         }
 
         /// <summary>

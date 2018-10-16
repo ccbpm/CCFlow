@@ -212,7 +212,7 @@
 			    for (var i = 0; i < data.length; i++) {
 			        if (str.indexOf('@' + data[i].FlowName) == -1) {
 			            if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
-			                str += "@" + data[i].NodeName;
+			                str += "@" + data[i].FlowName;
 			        }
 
 			    }

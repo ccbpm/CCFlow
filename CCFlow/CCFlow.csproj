@@ -109,10 +109,256 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataUser\AppCoder\ccbpmServices.htm" />
+    <Content Include="DataUser\AppCoder\FlowDesignerWelcome.htm" />
+    <Content Include="DataUser\AppCoder\驰骋工作流引擎任务自动执行.Readme.txt" />
+    <Content Include="DataUser\AppCoder\驰骋工作流引擎任务自动执行.xml" />
+    <Content Include="DataUser\AthTemplete\readme.txt" />
+    <Content Include="DataUser\BatchStartFlowTemplete\readme.txt" />
+    <Content Include="DataUser\Bill\FlowFrm\readme.txt" />
+    <Content Include="DataUser\Bill\readme.txt" />
+    <Content Include="DataUser\BitmapCut\readme.txt" />
+    <Content Include="DataUser\BPPaint\Def.png" />
+    <Content Include="DataUser\BPPaint\readme.txt" />
+    <Content Include="DataUser\CloundFlow\private\readme.txt" />
+    <Content Include="DataUser\CloundFlow\Public\readme.txt" />
+    <Content Include="DataUser\CloundFlow\readme.txt" />
+    <Content Include="DataUser\CyclostyleFile\FlowFrm\004\readme.txt" />
+    <Content Include="DataUser\CyclostyleFile\FlowFrm\readme.txt" />
+    <Content Include="DataUser\DefaultSelfFormUrl.htm" />
+    <Content Include="DataUser\DocFlowTemplete\readme.txt" />
+    <Content Include="DataUser\DocFlow\readme.txt" />
+    <Content Include="DataUser\DtlTemplete\readme.txt" />
+    <Content Include="DataUser\EmailTemplete\CC_CH.txt" />
+    <Content Include="DataUser\EmailTemplete\CC_EN.txt" />
+    <Content Include="DataUser\EmailTemplete\CH.txt" />
+    <Content Include="DataUser\EmailTemplete\EN.txt" />
+    <Content Include="DataUser\EmailTemplete\JP.txt" />
+    <Content Include="DataUser\EmailTemplete\RU.txt" />
+    <Content Include="DataUser\FastEnter\readme.txt" />
+    <Content Include="DataUser\FlowDesc\readme.txt" />
+    <Content Include="DataUser\FlowFile\readme.txt" />
+    <Content Include="DataUser\FrmImgUpload\readme.txt" />
+    <Content Include="DataUser\FrmOfficeFiles\readme.txt" />
+    <Content Include="DataUser\FrmOfficeTemplate\Readme.txt" />
+    <Content Include="DataUser\ICON\CCBPMDesigner.png" />
+    <Content Include="DataUser\ICON\CCFlow\LogBig.png" />
+    <Content Include="DataUser\ICON\CCFlow\LogBiger.png" />
+    <Content Include="DataUser\ICON\IconSmall.png" />
+    <Content Include="DataUser\ICON\LogBig.png" />
+    <Content Include="DataUser\ICON\LogBiger.png" />
+    <Content Include="DataUser\ICON\logo.png" />
+    <Content Include="DataUser\ICON\logoHome.png" />
+    <Content Include="DataUser\ICON\Smaller.png" />
+    <Content Include="DataUser\ImgAth\Data\ND101ImgAth1_0.png" />
+    <Content Include="DataUser\ImgAth\Data\ND101_ImgAth_001_0_134.png" />
+    <Content Include="DataUser\ImgAth\Data\ND14702ImgAth1_0.png" />
+    <Content Include="DataUser\ImgAth\Data\ND14801ImgAth1_0.png" />
+    <Content Include="DataUser\ImgAth\Def.jpg" />
+    <Content Include="DataUser\ImgAth\h-line.png" />
+    <Content Include="DataUser\ImgAth\s-line.png" />
+    <Content Include="DataUser\ImgAth\Temp\default.png" />
+    <Content Include="DataUser\ImgAth\Temp\DefaultBiger.png" />
+    <Content Include="DataUser\ImgAth\Temp\DefaultSmaller.png" />
+    <Content Include="DataUser\ImgAth\Upload\dbline.png" />
     <Content Include="DataUser\InstancePacketOfData\Template\icon.png" />
     <Content Include="DataUser\InstancePacketOfData\Template\ShuiYin.png" />
+    <Content Include="DataUser\JSLibData\CCFormRef.js" />
+    <Content Include="DataUser\JSLibData\Demo_Fields_Self.js" />
+    <Content Include="DataUser\JSLibData\Demo_JS.js" />
+    <Content Include="DataUser\JSLibData\Demo_JS_Self.js" />
+    <Content Include="DataUser\JSLibData\MyFlowPublic.js" />
+    <Content Include="DataUser\JSLibData\ND101.js" />
+    <Content Include="DataUser\JSLibData\ND101Dtl1.js" />
+    <Content Include="DataUser\JSLibData\ND101_Self.js" />
+    <Content Include="DataUser\JSLibData\ND12102.js" />
+    <Content Include="DataUser\JSLibData\ND13401.js" />
+    <Content Include="DataUser\JSLibData\ND13401_Self.js" />
+    <Content Include="DataUser\JSLibData\ND14701.js" />
+    <Content Include="DataUser\JSLibData\ND14701_Self.js" />
+    <Content Include="DataUser\JSLibData\ND15201_Self.js" />
+    <Content Include="DataUser\JSLibData\ND18701_Self.js" />
+    <Content Include="DataUser\JSLibData\ND201_Self.js" />
+    <Content Include="DataUser\JSLibData\ND20601_Self.js" />
+    <Content Include="DataUser\JSLibData\ND20901_Self.js" />
+    <Content Include="DataUser\JSLibData\ND2101.js" />
+    <Content Include="DataUser\JSLibData\readme.txt" />
+    <Content Include="DataUser\JSLibData\SearchSelf.js" />
+    <Content Include="DataUser\JSLib\onblur\01.校验手机号码：必须以数字开头，除数字外，可含有“-” .js" />
+    <Content Include="DataUser\JSLib\onblur\02.校验用户姓名：只能输入1-30个以字母开头的字串.js" />
+    <Content Include="DataUser\JSLib\onblur\04.校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-” .js" />
+    <Content Include="DataUser\JSLib\onblur\05.校验密码：只能输入6-20个字母、数字、下划线.js" />
+    <Content Include="DataUser\JSLib\onblur\06.校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串.js" />
+    <Content Include="DataUser\JSLib\onblur\07.校验邮政编码.js" />
+    <Content Include="DataUser\JSLib\onblur\08.动态改变下拉框.js" />
+    <Content Include="DataUser\JSLib\onchange\08.动态改变下拉框.js" />
+    <Content Include="DataUser\JSLib\onchange\10.计算两个时间的差值.js" />
+    <Content Include="DataUser\JSLib\onchange\11.校验明细表中时间段字段处于主表时间段字段内.js" />
+    <Content Include="DataUser\JSLib\ondblclick\readme.txt" />
+    <Content Include="DataUser\JSLib\onkeypress\01.校验手机号码：必须以数字开头，除数字外，可含有“-” .js" />
+    <Content Include="DataUser\JSLib\onkeypress\02.校验用户姓名：只能输入1-30个以字母开头的字串.js" />
+    <Content Include="DataUser\JSLib\onkeypress\04.校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-” .js" />
+    <Content Include="DataUser\JSLib\onkeypress\05.校验密码：只能输入6-20个字母、数字、下划线.js" />
+    <Content Include="DataUser\JSLib\onkeypress\06.校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串.js" />
+    <Content Include="DataUser\JSLib\onkeypress\07.校验邮政编码.js" />
+    <Content Include="DataUser\JSLib\onkeyup\01.RMB转大写形式.js" />
+    <Content Include="DataUser\JSLib\onkeyup\03.主表单金额自动同步明细表金额列合计（特殊应用）.js" />
+    <Content Include="DataUser\JSLib\readme.txt" />
+    <Content Include="DataUser\LocalWS.asmx" />
+    <Content Include="DataUser\LogOfUser\readme.txt" />
+    <Content Include="DataUser\Log\readme.txt" />
+    <Content Include="DataUser\NodeIcon\CEO.png" />
+    <Content Include="DataUser\NodeIcon\CFO.png" />
+    <Content Include="DataUser\NodeIcon\CIO.png" />
+    <Content Include="DataUser\NodeIcon\COO.png" />
+    <Content Include="DataUser\NodeIcon\Default.jpg" />
+    <Content Include="DataUser\NodeIcon\产品.png" />
+    <Content Include="DataUser\NodeIcon\人-半身.png" />
+    <Content Include="DataUser\NodeIcon\人.png" />
+    <Content Include="DataUser\NodeIcon\人力资源.png" />
+    <Content Include="DataUser\NodeIcon\仓库.png" />
+    <Content Include="DataUser\NodeIcon\会计合算.png" />
+    <Content Include="DataUser\NodeIcon\供应商.png" />
+    <Content Include="DataUser\NodeIcon\供应商1.png" />
+    <Content Include="DataUser\NodeIcon\保安.png" />
+    <Content Include="DataUser\NodeIcon\信息服务.png" />
+    <Content Include="DataUser\NodeIcon\出纳.png" />
+    <Content Include="DataUser\NodeIcon\制造.png" />
+    <Content Include="DataUser\NodeIcon\前台.png" />
+    <Content Include="DataUser\NodeIcon\包装.png" />
+    <Content Include="DataUser\NodeIcon\印刷品.png" />
+    <Content Include="DataUser\NodeIcon\发货.png" />
+    <Content Include="DataUser\NodeIcon\多人处理.png" />
+    <Content Include="DataUser\NodeIcon\多人审核.png" />
+    <Content Include="DataUser\NodeIcon\子公司.png" />
+    <Content Include="DataUser\NodeIcon\实施.png" />
+    <Content Include="DataUser\NodeIcon\审核.png" />
+    <Content Include="DataUser\NodeIcon\客户服务.png" />
+    <Content Include="DataUser\NodeIcon\工程.png" />
+    <Content Include="DataUser\NodeIcon\归档.png" />
+    <Content Include="DataUser\NodeIcon\打印.png" />
+    <Content Include="DataUser\NodeIcon\接货.png" />
+    <Content Include="DataUser\NodeIcon\操作.png" />
+    <Content Include="DataUser\NodeIcon\文档.png" />
+    <Content Include="DataUser\NodeIcon\文档集.png" />
+    <Content Include="DataUser\NodeIcon\法律部门.png" />
+    <Content Include="DataUser\NodeIcon\演示文稿.png" />
+    <Content Include="DataUser\NodeIcon\申请.png" />
+    <Content Include="DataUser\NodeIcon\电子表格.png" />
+    <Content Include="DataUser\NodeIcon\研发.png" />
+    <Content Include="DataUser\NodeIcon\网页.png" />
+    <Content Include="DataUser\NodeIcon\设计.png" />
+    <Content Include="DataUser\NodeIcon\财务.png" />
+    <Content Include="DataUser\NodeIcon\质保.png" />
+    <Content Include="DataUser\NodeIcon\车队.png" />
+    <Content Include="DataUser\NodeIcon\邮件服务.png" />
+    <Content Include="DataUser\NodeIcon\采购.png" />
+    <Content Include="DataUser\NodeIcon\销售.png" />
+    <Content Include="DataUser\NodeIcon\顾客.png" />
+    <Content Include="DataUser\OfficeFile\readme.txt" />
+    <Content Include="DataUser\OfficeOverTemplate\readme.txt" />
+    <Content Include="DataUser\OfficeOverTemplate\对内公文.png" />
+    <Content Include="DataUser\OfficeOverTemplate\对外公文.png" />
+    <Content Include="DataUser\OfficeOverTemplate\通知公告.png" />
+    <Content Include="DataUser\OfficeSeal\readme.txt" />
+    <Content Include="DataUser\OfficeSeal\sealBig.jpg" />
+    <Content Include="DataUser\OfficeTemplate\readme.txt" />
+    <Content Include="DataUser\OverrideFiles\Ath.htm" />
+    <Content Include="DataUser\OverrideFiles\Ath.js" />
+    <Content Include="DataUser\OverrideFiles\Timer.htm" />
+    <Content Include="DataUser\PrjData\Data\readme.txt" />
+    <Content Include="DataUser\PrjData\Readme.txt" />
+    <Content Include="DataUser\PrjData\Templete\readme.txt" />
+    <Content Include="DataUser\ReturnLog\212\745631734.htm" />
+    <Content Include="DataUser\ReturnLog\212\745631734.txt" />
+    <Content Include="DataUser\ReturnLog\212\844848855.htm" />
+    <Content Include="DataUser\ReturnLog\212\844848855.txt" />
+    <Content Include="DataUser\ReturnLog\readme.txt" />
+    <Content Include="DataUser\RichTextBoxAttached\readme.txt" />
+    <Content Include="DataUser\RichTextFile\readme.txt" />
+    <Content Include="DataUser\Seal\1001_02.png" />
+    <Content Include="DataUser\Seal\1004_05.png" />
+    <Content Include="DataUser\Seal\1005_06.png" />
+    <Content Include="DataUser\Seal\def.png" />
+    <Content Include="DataUser\Seal\readme.txt" />
+    <Content Include="DataUser\SFTable.js" />
+    <Content Include="DataUser\Siganture\admin.JPG" />
+    <Content Include="DataUser\Siganture\fuhui.JPG" />
+    <Content Include="DataUser\Siganture\guobaogeng.JPG" />
+    <Content Include="DataUser\Siganture\guoxiangbin.JPG" />
+    <Content Include="DataUser\Siganture\liping.JPG" />
+    <Content Include="DataUser\Siganture\liyan.JPG" />
+    <Content Include="DataUser\Siganture\qifenglin.JPG" />
+    <Content Include="DataUser\Siganture\sigan-readonly.JPG" />
+    <Content Include="DataUser\Siganture\siganture.JPG" />
+    <Content Include="DataUser\Siganture\T.JPG" />
+    <Content Include="DataUser\Siganture\Tadmin.jpg" />
+    <Content Include="DataUser\Siganture\Templete.JPG" />
+    <Content Include="DataUser\Siganture\Tliyan.jpg" />
+    <Content Include="DataUser\Siganture\Tzhoupeng.jpg" />
+    <Content Include="DataUser\Siganture\UnName.JPG" />
+    <Content Include="DataUser\Siganture\yangyilei.JPG" />
+    <Content Include="DataUser\Siganture\zhanghaicheng.JPG" />
+    <Content Include="DataUser\Siganture\zhangyifan.JPG" />
+    <Content Include="DataUser\Siganture\zhoupeng.JPG" />
+    <Content Include="DataUser\Siganture\zhoushengyu.JPG" />
+    <Content Include="DataUser\Siganture\zhoutianjiao.JPG" />
+    <Content Include="DataUser\Siganture\李言.jpg" />
     <Content Include="DataUser\Style\ccbpm.css" />
     <Content Include="DataUser\Style\dtl.css" />
+    <Content Include="DataUser\TaoHong\readme.txt" />
+    <Content Include="DataUser\TempImageFiles\readme.txt" />
+    <Content Include="DataUser\TempleteOfImp\readme.txt" />
+    <Content Include="DataUser\ThirdpartySoftware\readme.png" />
+    <Content Include="DataUser\ThirdpartySoftware\readme.txt" />
+    <Content Include="DataUser\ThirdpartySoftware\wkhtmltox\libgcc_s_sjlj-1.dll" />
+    <Content Include="DataUser\ThirdpartySoftware\wkhtmltox\libstdc++-6.dll" />
+    <Content Include="DataUser\ThirdpartySoftware\wkhtmltox\libwinpthread-1.dll" />
+    <Content Include="DataUser\ThirdpartySoftware\wkhtmltox\wkhtmltoimage.exe" />
+    <Content Include="DataUser\ThirdpartySoftware\wkhtmltox\wkhtmltopdf.exe" />
+    <Content Include="DataUser\ThirdpartySoftware\wkhtmltox\wkhtmltox.dll" />
+    <Content Include="DataUser\UploadFile\readme.txt" />
+    <Content Include="DataUser\UserIcon\admin.png" />
+    <Content Include="DataUser\UserIcon\adminBiger.png" />
+    <Content Include="DataUser\UserIcon\adminBigerCon.png" />
+    <Content Include="DataUser\UserIcon\adminSmaller.png" />
+    <Content Include="DataUser\UserIcon\adminSmallerCon.png" />
+    <Content Include="DataUser\UserIcon\Default.png" />
+    <Content Include="DataUser\UserIcon\DefaultBiger.png" />
+    <Content Include="DataUser\UserIcon\DefaultSmaller.png" />
+    <Content Include="DataUser\UserIcon\fuhui.png" />
+    <Content Include="DataUser\UserIcon\fuhuiBiger.png" />
+    <Content Include="DataUser\UserIcon\fuhuiBigerCon.png" />
+    <Content Include="DataUser\UserIcon\fuhuiSmaller.png" />
+    <Content Include="DataUser\UserIcon\fuhuiSmallerCon.png" />
+    <Content Include="DataUser\UserIcon\liping.png" />
+    <Content Include="DataUser\UserIcon\lipingBiger.png" />
+    <Content Include="DataUser\UserIcon\lipingBigerCon.png" />
+    <Content Include="DataUser\UserIcon\lipingSmaller.png" />
+    <Content Include="DataUser\UserIcon\lipingSmallerCon.png" />
+    <Content Include="DataUser\UserIcon\qifenglin.png" />
+    <Content Include="DataUser\UserIcon\qifenglinBiger.png" />
+    <Content Include="DataUser\UserIcon\qifenglinBigerCon.png" />
+    <Content Include="DataUser\UserIcon\qifenglinSmaller.png" />
+    <Content Include="DataUser\UserIcon\qifenglinSmallerCon.png" />
+    <Content Include="DataUser\UserIcon\zhanghaicheng.png" />
+    <Content Include="DataUser\UserIcon\zhanghaichengBiger.png" />
+    <Content Include="DataUser\UserIcon\zhanghaichengBigerCon.png" />
+    <Content Include="DataUser\UserIcon\zhanghaichengSmaller.png" />
+    <Content Include="DataUser\UserIcon\zhanghaichengSmallerCon.png" />
+    <Content Include="DataUser\UserIcon\zhangyifan.png" />
+    <Content Include="DataUser\UserIcon\zhangyifanBiger.png" />
+    <Content Include="DataUser\UserIcon\zhangyifanBigerCon.png" />
+    <Content Include="DataUser\UserIcon\zhangyifanSmaller.png" />
+    <Content Include="DataUser\UserIcon\zhangyifanSmallerCon.png" />
+    <Content Include="DataUser\UserIcon\zhoupeng.png" />
+    <Content Include="DataUser\UserIcon\zhoupengBiger.png" />
+    <Content Include="DataUser\UserIcon\zhoupengSmaller.png" />
+    <Content Include="DataUser\UserIcon\zhoutianjiao.png" />
+    <Content Include="DataUser\UserIcon\zhoutianjiaoBiger.png" />
+    <Content Include="DataUser\UserIcon\zhoutianjiaoBigerCon.png" />
+    <Content Include="DataUser\UserIcon\zhoutianjiaoSmaller.png" />
+    <Content Include="DataUser\UserIcon\zhoutianjiaoSmallerCon.png" />
     <Content Include="DataUser\XML\AdminMenu.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -138,7 +384,6 @@
     <Content Include="GPM\SQLScript\MSSQL_GPM_VIEW.sql" />
     <Content Include="GPM\SQLScript\MySQL_GPM_VIEW.sql" />
     <Content Include="GPM\SQLScript\Oracle_GPM_VIEW.sql" />
-    <Content Include="GPM\SQLScript\Port_Inc_CH.sql" />
     <Content Include="GPM\SQLScript\Port_Inc_CH_BPM.sql" />
     <Content Include="GPM\themes\default\accordion.css" />
     <Content Include="GPM\themes\default\calendar.css" />
@@ -646,6 +891,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\Template\Fields.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Template\FieldsGroup.htm" />
     <Content Include="WF\Admin\Img\Frm.png" />
+    <Content Include="WF\Admin\Port\AdminOrgList.htm" />
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
     <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
@@ -689,8 +935,6 @@
     <Content Include="WF\AppClassic\Img\Todolist.png" />
     <Content Include="WF\AppClassic\Img\Key.png" />
     <Content Include="WF\AppClassic\Img\ICON.png" />
-    <Content Include="WF\AppClassic\Left.htm" />
-    <Content Include="WF\AppClassic\Top.htm" />
     <Content Include="WF\AppClassic\Welcome.htm" />
     <Content Include="WF\AppClassic\Login.htm" />
     <Content Include="WF\Batch.htm" />
@@ -846,12 +1090,9 @@
     <Content Include="WF\Data\Sys\FieldKeys.txt" />
     <Content Include="WF\Data\Templete\SysFields.txt" />
     <Content Include="WF\Data\UpdataCCFlowVer.sql" />
-    <Content Include="WF\Data\XML\AdminTools.xml" />
-    <Content Include="WF\Data\XML\BPMMenu.xml" />
     <Content Include="WF\Data\XML\CCForm.xml" />
     <Content Include="WF\Data\XML\DBUrl.xml" />
     <Content Include="WF\Data\XML\DefVal.xml" />
-    <Content Include="WF\Data\XML\Designer.xml" />
     <Content Include="WF\Data\XML\Ens\ActiveAttr.xml" />
     <Content Include="WF\Data\XML\Ens\AttrDesc.xml" />
     <Content Include="WF\Data\XML\Ens\ConfigEns.xml" />
@@ -862,7 +1103,6 @@
     <Content Include="WF\Data\XML\Enum\Map.xml" />
     <Content Include="WF\Data\XML\Enum\WFV4.xml" />
     <Content Include="WF\Data\XML\EventList.xml" />
-    <Content Include="WF\Data\XML\FeatureSet.xml" />
     <Content Include="WF\Data\XML\FrmEle.xml" />
     <Content Include="WF\Data\XML\MapExt.xml" />
     <Content Include="WF\Data\XML\Menu.xml" />
@@ -1903,6 +2143,7 @@
     <Content Include="WF\Style\skin\plugins\metisMenu\jquery.metisMenu.js" />
     <Content Include="WF\Style\skin\plugins\slimscroll\jquery.slimscroll.min.js" />
     <Content Include="WF\TodolistAdv.htm" />
+    <Content Include="WF\WorkOpt\AccepterOfDeptStationEmp.htm" />
     <Content Include="WF\WorkOpt\AllotTask.htm" />
     <Content Include="WF\WorkOpt\Askfor.htm" />
     <Content Include="WF\WorkOpt\AskForRe.htm" />
@@ -1911,7 +2152,9 @@
     <Content Include="WF\WorkOpt\FHLFlow.htm" />
     <Content Include="WF\WorkOpt\HandWriting.html" />
     <Content Include="WF\WorkOpt\HuiQianToNodes.htm" />
+    <Content Include="WF\WorkOpt\OneWork\ChartV2.htm" />
     <Content Include="WF\WorkOpt\OneWork\FrmGuide.htm" />
+    <Content Include="WF\WorkOpt\OneWork\PubliceTrack.js" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
@@ -6430,7 +6673,6 @@
     <Content Include="WF\WorkOpt\OneWork\css\demo.js" />
     <Content Include="WF\WorkOpt\OneWork\css\style.css" />
     <Content Include="WF\WorkOpt\OneWork\Handler.ashx" />
-    <Content Include="WF\WorkOpt\OneWork\Img\log\circle - 副本.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\log\circle.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\log\clock.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\log\clock_1.png" />
@@ -6477,6 +6719,33 @@
     <Content Include="WF\WorkOpt\WorkCheck.js" />
     <Content Include="DataUser\Handler.ashx" />
     <Content Include="DataUser\SFTableHandler.ashx" />
+    <None Include="DataUser\AppCoder\ccbpmServices.bat" />
+    <None Include="DataUser\CyclostyleFile\chichengfeiyongbaoxiaodan.rtf" />
+    <None Include="DataUser\CyclostyleFile\feiyongbaoxiaodan.rtf" />
+    <None Include="DataUser\CyclostyleFile\FlowFrm\004\401\all.单据打印样本多表.rtf" />
+    <None Include="DataUser\CyclostyleFile\FlowFrm\004\401\Demo_Inc01.单据打印样本.rtf" />
+    <None Include="DataUser\CyclostyleFile\StudentDemo.rtf" />
+    <None Include="DataUser\CyclostyleFile\Temp.rtf" />
+    <None Include="DataUser\CyclostyleFile\单据打印样本-审核组件%28审核信息依次输出%29-请假流程118.rtf" />
+    <None Include="DataUser\CyclostyleFile\单据打印样本-审核组件-请假流程118.rtf" />
+    <None Include="DataUser\CyclostyleFile\单据打印样本.rtf" />
+    <None Include="DataUser\CyclostyleFile\驰骋费用报销单.rtf" />
+    <Content Include="DataUser\FrmOfficeTemplate\Excel表单插件安装程序.zip" />
+    <None Include="DataUser\Log\2018_09_28.log" />
+    <None Include="DataUser\Log\2018_10_08.log" />
+    <None Include="DataUser\Log\2018_10_09.log" />
+    <None Include="DataUser\Log\2018_10_10.log" />
+    <None Include="DataUser\Log\2018_10_11.log" />
+    <None Include="DataUser\Log\2018_10_13.log" />
+    <None Include="DataUser\Log\2018_10_17.log" />
+    <None Include="DataUser\OfficeTemplate\1XX银通知.doc" />
+    <None Include="DataUser\OfficeTemplate\2XX银报告.doc" />
+    <None Include="DataUser\OfficeTemplate\3XX银请示.doc" />
+    <None Include="DataUser\OfficeTemplate\HG-Model.doc" />
+    <None Include="DataUser\OfficeTemplate\空白模版.docx" />
+    <Content Include="DataUser\OverrideFiles\Handler.ashx" />
+    <None Include="DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls" />
+    <None Include="DataUser\TempleteOfImp\ND7401Dtl1.xls" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
@@ -6498,7 +6767,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
-    <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\Admin\Port\Handler.ashx" />
     <Content Include="WF\Admin\Sln\Handler.ashx" />
     <Content Include="WF\Admin\Cond\Handler.ashx" />
@@ -6748,6 +7016,12 @@
     <Compile Include="DataUser\IndustrialAutomationWorkflowAPI.asmx.cs">
       <DependentUpon>IndustrialAutomationWorkflowAPI.asmx</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataUser\LocalWS.asmx.cs">
+      <DependentUpon>LocalWS.asmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataUser\OverrideFiles\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="DataUser\PortalInterface.asmx.cs">
       <DependentUpon>PortalInterface.asmx</DependentUpon>
@@ -7188,7 +7462,9 @@
     <Compile Include="WF\Comm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
+    <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WF\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -7239,6 +7515,7 @@
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
+    <Folder Include="DataUser\Temp\" />
     <Folder Include="SDKFlowDemo\SDK\F129\" />
   </ItemGroup>
   <ItemGroup>
@@ -7274,8 +7551,8 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1579</DevelopmentServerPort>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>2207</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

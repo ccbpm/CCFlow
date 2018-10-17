@@ -445,49 +445,7 @@
             window.location.href = "?EnsName=" + ensName + "&PageIdx=1"  + "&PageSize=" + pageSize;
         }
 
-        function Exp() {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            handler.AddPara("EnsName", GetQueryString("EnsName"));
-            //查询集合
-            var data = handler.DoMethodReturnString("Search_Exp");
-            var url = "";
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-            }
-            if (plant != 'CCFlow') {
-                var currentPath = window.document.location.href;
-                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                data = path + data;
-            }
-            window.open(data);
-            return;
-
-        }
-        
-
-        function ReDownExpFile() {
-
-            var fileName = $("*[id$=expFileName]").val();
-            document.getElementById("downLoad").href = "../../DataUser/Temp/" + fileName;
-
-            $("#dialogExpFile").show();
-            $("#dialogExpFile").dialog({
-                height: 300,
-                width: 400,
-                showMax: false,
-                isResize: true,
-                modal: true,
-                title: "手动下载文件",
-                slide: false,
-                close: function () {
-                },
-                buttons: [{ text: '关闭', handler: function () {
-                    $('#dialogExpFile').dialog('close');
-                }
-                }]
-            });
-        }
-
+    
         function SearchData() {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");

@@ -140,7 +140,9 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
-
+                //@袁丽娜解析并翻译.
+                map.AddTBInt("DecimalDigits", 0, "保留小数位数", true, false);
+                map.SetHelperAlert("DecimalDigits","针对float,decimal字段类型有效，默认为0，就是不保留小数位数。");
                 #endregion 傻瓜表单。
 
                 #region 执行的方法.
@@ -209,12 +211,14 @@ namespace BP.Sys.FrmUI
 
             //是否显示合计
             attr.IsSum = this.GetValBooleanByKey("ExtIsSum");
+
+            //增加保留小数位数.
+            attr.SetPara("DecimalDigits", this.GetValIntByKey("DecimalDigits"));
             attr.Update();
 
             return base.beforeUpdateInsertAction();
         }
         #endregion
-
 
         #region 基本功能.
         /// <summary>
@@ -226,7 +230,6 @@ namespace BP.Sys.FrmUI
             return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
-
 
         #region 方法执行.
         public string DoAutoFullDtlField()

@@ -13,40 +13,31 @@
         //页面启动函数.
         $(function () {
 
+
             $("#Msg").html("正在加载,请稍后......");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=AutoFull_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            var data = handler.DoMethodReturnString("AutoFull_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    data = JSON.parse(data);
+            data = JSON.parse(data);
+            var mapExt = data['Sys_MapExt'];
+            mapExt = mapExt[0];
 
-                    var mapExt = data['Sys_MapExt'];
+            if (mapExt.Doc == "" || mapExt.Doc == " ") {
+                document.getElementById("Btn_Delete").disabled = true;
+            }
 
-                    mapExt = mapExt[0];
-
-
-                    if (mapExt.Doc == "" || mapExt.Doc == " ") {
-                        document.getElementById("Btn_Delete").disabled = true;
-                    }
-
-                    document.getElementById("TB_Doc").value = mapExt.Doc;
-
-                    //调用公共类库的方法:执行批量主表赋值.
-                    //GenerFullAllCtrlsVal(mapExt);
-                    return;
-                }
-            });
+            document.getElementById("TB_Doc").value = mapExt.Doc;
 
             $("#Msg").html("");
+
         });
 
         //装载模版.
@@ -56,34 +47,30 @@
         }
         function Save() {
 
+            var doc = $("#TB_Doc").val();
+            if (doc == null || doc == undefined || doc == "") {
+                alert("请输入内容.");
+                return;
+            }
+
+            doc = doc.replace("'", "~");
+
             $("#Msg").html("正在保存,请稍后......");
 
-            var frmData = $("#cc").serialize();
+            //组织主键, 
+            var mypk = "AutoFull_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
 
-            var myurl = Handler + "?DoType=AutoFull_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: myurl,
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') != -1) {
+            en.SetValByKey("FK_MapData", GetQueryString("FK_MapData"));
+            en.SetValByKey("AttrOfOper", GetQueryString("KeyOfEn"));
+            en.SetValByKey("ExtType", "AutoFull");
+            en.SetValByKey("Doc", doc);
+            en.Save();
+            window.location.href = window.location.href;
+              
 
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
-
-                    document.getElementById("Btn_Delete").disabled = false;
-
-                    $("#Msg").html("<font color=green>" + data + "</font>");
-                    return;
-                },
-                error: function (data) {
-                    alert(data);
-                    console.info(data);
-                }
-            });
         }
 
         function Delete() {
@@ -91,17 +78,13 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return false;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=AutoFull_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    alert(data);
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            //组织主键, 
+            var mypk = "AutoFull_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.Delete(); //执行删除.
+
+            window.location.href = window.location.href;
         }
     </script>
 </head>

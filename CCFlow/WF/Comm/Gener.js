@@ -1,4 +1,5 @@
-﻿//
+﻿
+//
 if (plant == "CCFlow") {
     // CCFlow
     dynamicHandler = "/WF/Comm/Handler.ashx";
@@ -6,6 +7,7 @@ if (plant == "CCFlow") {
     // JFlow
     dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
 }
+ 
 
 /* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {

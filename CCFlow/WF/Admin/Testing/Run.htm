@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试方案定义</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载请稍后......");
+
+            var flowNo = ""; // this.GetQueryString("FK_Flow");
+            if (flowNo == null || flowNo == undefined || flowNo == "")
+                flowNo = "001";
+
+            var flow = new Entity("BP.WF.Flow", flowNo);
+
+            //所有的节点.
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo);
+
+            var html = "<table style='width:80%;'>";
+
+            html += "<caption>" + flow.Name + ":模拟测试运行</caption>";
+            html += "<tr>";
+            html += "<th>节点ID</th>";
+            html += "<th>名称</th>";
+            html += "<th>步骤ID</th>";
+            html += "<th>接收人规则</th>";
+
+            html += "<th>处理人</th>";
+            html += "<th>是否有分支？</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < nds.length; i++) {
+                var nd = nds[i];
+
+                html += "<tr>";
+                html += "<td>" + nd.NodeID + "</td>";
+                html += "<td>" + nd.Name + "</td>";
+                html += "<td>" + nd.Step + "</td>";
+                html += "<td>" + nd.DeliveryWay + "</td>";
+
+                var tester = flow.GetPara("Tester" + nd.NodeID);
+                if (undefined == tester)
+                    tester = "";
+
+                var testerName = flow.GetPara("TesterName" + nd.NodeID);
+                if (undefined == testerName)
+                    testerName = "";
+
+                html += "<td> " + tester + testerName + "  <div style='float:right'><a href=\"javascript:SetTester('" + nd.NodeID + "','" + tester + "','" + flowNo + "');\" >修改设置/处理人</a></div></td>";
+
+                var toNds = nd.HisToNDs;
+
+                toNds = toNds.replace('@', '');
+                if (toNds.indexOf('@') == -1) {
+                    html += "<td>无</td>";
+                }
+                else {
+
+                    var testToNode = flow.GetPara("TestToNode" + nd.NodeID);
+                    if (undefined == testToNode)
+                        testToNode = "";
+
+                    var testToNodeName = flow.GetPara("TestToNodeName" + nd.NodeID);
+                    if (undefined == testToNodeName)
+                        testToNodeName = "";
+
+                    html += "<td> " + testToNode + testToNodeName + "  <div style='float:right'><a href=\"javascript:SetTestToNode('" + nd.NodeID + "','" + toNds + "','" + testToNode + "','" + flowNo + "');\" >设置到达节点</a></div></td>";
+                }
+                html += "</tr>";
+            }
+
+            html += "</table>";
+            //  InitPage();
+
+            $("#Msg").html(html);
+        });
+
+        function SetTestToNode(nodeID, toNds, nodeIDOfSet, flowNo) {
+
+            nodeIDOfSet = window.prompt("设置到达的节点(您可以选择的节点是:" + toNds + "):", nodeIDOfSet);
+            if (nodeIDOfSet == null)
+                return;
+
+            //获得节点名称.
+            var node = new Entity("BP.WF.Node", nodeIDOfSet);
+            var nodeName = node.Name;
+
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.SetPKVal(flowNo);
+            flow.SetPara("TestToNode" + nodeID, nodeIDOfSet);
+
+            flow.SetPara("TestToNodeName" + nodeID, nodeName);
+            flow.Update();
+
+            window.location.href = window.location.href;
+        }
+
+        function SetTester(nodeID, val,flowNo) {
+            val = window.prompt('请设置该节点的处理人，多个人用逗号分开', val);
+            if (val == null)
+                return;
+
+            var emp = new Entity("BP.Port.Emp");
+            emp.SetPKVal(val);
+            if (emp.RetrieveFromDBSources() == 0) {
+                alert('人员编号['+val+']输入不正确');
+                SetTester(nodeID, val, flowNo);
+                return;
+            }
+            var empName = emp.Name;
+
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.SetPara("Tester" + nodeID, val);
+            flow.SetPara("TesterName" + nodeID, empName);
+            flow.Update();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body >
+    
+        <div id="Msg">
+        </div>
+
+        <input type="button" value="检查流程"  onclick="CheckFlowError();" />
+        <input type="button" value="运行到这里"  onclick="RunToNode();" />
+        <input type="button" value="试运行"  onclick="TestRun();" />
+
+</body>
+</html>

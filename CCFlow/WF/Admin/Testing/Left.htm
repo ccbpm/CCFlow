@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<title>HTML框架</title> 
+<script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            var flowNo = ""; // this.GetQueryString("FK_Flow");
+            if (flowNo == null || flowNo == undefined || flowNo == "")
+                flowNo = "001";
+
+            var html = "";
+
+            html += "<ul>";
+            html += "<li><a href='BaseSetting.htm?FK_Flow=" + flowNo + "' target=right>基本设置概况</a></li>";
+            html += "<li><a href='FlowCheckError.htm?FK_Flow=" + flowNo + "' target=right>流程检查</a></li>";
+            html += "<li><a href='Run.htm?FK_Flow=" + flowNo + "' target=right>模拟运行</a></li>";
+            html += "</ul>";
+            $("#Info").html(html);
+
+        });
+       
+    </script>
+
+</head> 
+<body> 
+
+<div id="Info">
+</div>
+ 
+</body> 
+</html>
+ 

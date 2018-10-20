@@ -344,7 +344,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoFastEnter()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FastEnter.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FastInput.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
 

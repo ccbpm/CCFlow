@@ -117,18 +117,23 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 2, "数据类型", true, false);
 
-                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, false, 0, 200, 20);
+                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值/小数位数", true, false, 0, 200, 20);
 
+                string help = "给该字段设置默认值:\t\r";
+
+                help += "\t\r 1. 如果是整形就设置一个整形的数字作为默认值.";
+                help += "\t\r 2. 对于float,decimal数据类型，如果设置0.0000就是标识要保留4位小数,如果是1.0000 标识保留4位小数,默认值为1.";
+                map.SetHelperAlert("DefVal", help);
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
-
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
 
                 map.AddBoolean("ExtIsSum", false, "是否显示合计(对从表有效)", true, true);
+                map.SetHelperAlert("ExtIsSum", "如果是从表，就需要显示该从表的合计,在从表的底部.");
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
                 #endregion 基本信息.
@@ -140,9 +145,7 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
-                //@袁丽娜解析并翻译.
-                map.AddTBInt("DecimalDigits", 0, "保留小数位数", true, false);
-                map.SetHelperAlert("DecimalDigits","针对float,decimal字段类型有效，默认为0，就是不保留小数位数。");
+              
                 #endregion 傻瓜表单。
 
                 #region 执行的方法.

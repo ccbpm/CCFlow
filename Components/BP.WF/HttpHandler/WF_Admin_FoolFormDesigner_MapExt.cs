@@ -163,15 +163,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功.";
         }
-        public string AutoFull_Delete()
-        {
-            MapExt me = new MapExt();
-            me.Delete(MapExtAttr.ExtType, MapExtXmlList.AutoFull,
-                MapExtAttr.FK_MapData, this.FK_MapData,
-                MapExtAttr.AttrOfOper, this.KeyOfEn);
-
-            return "删除成功.";
-        }
+       
         public string AutoFull_Init()
         {
             DataSet ds = new DataSet();

@@ -177,6 +177,13 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoLink()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "快速录入";
+                rm.ClassMethodName = this.ToString() + ".DoFastEnter()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 #endregion 基本功能.
 
                 #region 输入多选.
@@ -210,7 +217,6 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
                 #endregion Pop 自动填充.
-
 
                 #region Pop返回值.
                 rm = new RefMethod();
@@ -331,6 +337,14 @@ namespace BP.Sys.FrmUI
         public string BindFunction()
         {
             return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 快速录入
+        /// </summary>
+        /// <returns></returns>
+        public string DoFastEnter()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/FastEnter.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
 

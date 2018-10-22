@@ -3527,9 +3527,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HelperWordsData()
         {
-            DefVal dv = new DefVal();
-            dv.CheckPhysicsTable();
-
+            
             string FK_MapData = this.GetRequestVal("FK_MapData");
             string AttrKey = this.GetRequestVal("AttrKey");
             string lb = this.GetRequestVal("lb");
@@ -3538,44 +3536,85 @@ namespace BP.WF.HttpHandler
             if (lb == "readWords")
                 return readTxt();
             
-            //读取其他常用词汇信息
-
-            DataTable dt = new DataTable();
-
-            QueryObject qo = new QueryObject(dv);
-            qo.AddHD();
-
-            qo.addAnd();
-            qo.addLeftBracket();
-            qo.AddWhere("FK_MapData", "=", FK_MapData);
-            qo.addRightBracket();
-            qo.addAnd();
-            qo.addLeftBracket();
-            qo.AddWhere("AttrKey", "=", AttrKey);
-            qo.addRightBracket();
-            qo.addAnd();
-            qo.addLeftBracket();
-            qo.AddWhere("FK_Emp", "=", WebUser.No );
-            qo.addRightBracket();
-             qo.addAnd();
-            qo.addLeftBracket();
+            //读取其他常用词汇
+            DataSet ds = new DataSet();
+            //我的词汇
             if (lb == "myWords")
-            qo.AddWhere("LB", "=", "1" );
-             if (lb == "hisWords")
-            qo.AddWhere("LB", "=", "2" );
-            qo.addRightBracket();
+            {
+                DefVals dvs = new DefVals();
+                QueryObject qo = new QueryObject(dvs);
+                qo.AddHD();
 
-            //系统词汇放在mapExt中
-           
-            string pageNumber = GetRequestVal("pageNumber");
-            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
-            //每页多少行
-            string pageSize = GetRequestVal("pageSize");
-            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+                qo.addAnd();
+                qo.AddWhere("FK_MapData", "=", FK_MapData);
+                qo.addAnd();
+                qo.AddWhere("AttrKey", "=", AttrKey);
+                qo.addAnd();
+                qo.AddWhere("FK_Emp", "=", WebUser.No);
+                qo.addAnd();
+                qo.AddWhere("LB", "=", "1");
+                
+                string pageNumber = GetRequestVal("pageNumber");
+                int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+                //每页多少行
+                string pageSize = GetRequestVal("pageSize");
+                int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
-            qo.DoQuery("MyPK",this.PageSize,this.PageIdx);
+                DataTable dt = new DataTable("DataCount");
+                dt.Columns.Add("DataCount", typeof(int));
+                DataRow dr = dt.NewRow();
+                dr["DataCount"] = qo.GetCount();
+                dt.Rows.Add(dr);
+                ds.Tables.Add(dt);
 
-            return BP.Tools.Json.DataTableToJson(dv.ToDataTableField()); ;
+                qo.DoQuery("MyPK", iPageSize, iPageNumber);
+
+                ds.Tables.Add(dvs.ToDataTableField("MainTable")); //把描述加入.
+            }
+            if (lb == "hisWords")
+            {
+                //Node nd = new Node(this.FK_Node);
+                string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+                
+                GEEntitys ges = new GEEntitys(rptNo);
+                QueryObject qo = new QueryObject(ges);
+                qo.AddHD();
+                qo.addAnd();
+                qo.AddWhere("Rec", "=", WebUser.No);
+                string pageNumber = GetRequestVal("pageNumber");
+                int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+                //每页多少行
+                string pageSize = GetRequestVal("pageSize");
+                int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+
+                DataTable dt = new DataTable("DataCount");
+                dt.Columns.Add("DataCount", typeof(int));
+                DataRow dr = dt.NewRow();
+                dr["DataCount"] = qo.GetCount();
+                dt.Rows.Add(dr);
+                ds.Tables.Add(dt);
+
+                qo.DoQuery("OID", iPageSize, iPageNumber);
+
+                dt = ges.ToDataTableField();
+                DataTable newDt = new DataTable("MainTable");
+                newDt.Columns.Add("CurValue");
+                newDt.Columns.Add("MyPk");
+                foreach (DataRow drs in dt.Rows)
+                {
+                    if (DataType.IsNullOrEmpty(drs[AttrKey].ToString()))
+                        continue;
+                    dr = newDt.NewRow();
+                    dr["CurValue"] = drs[AttrKey];
+                    dr["MyPK"] = drs["OID"];
+                    newDt.Rows.Add(dr);
+                }
+
+                ds.Tables.Add(newDt); //把描述加入.
+
+                
+            }
+            return BP.Tools.Json.ToJson(ds);
           
           
         }
@@ -3604,9 +3643,9 @@ namespace BP.WF.HttpHandler
                 string pageSize = GetRequestVal("pageSize");
                 int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
-
-                DataTable dt = new DataTable();
-                dt.Columns.Add("OID", typeof(string));
+                DataSet ds = new DataSet();
+                DataTable dt = new DataTable("MainTable");
+                dt.Columns.Add("MyPk", typeof(string));
                 dt.Columns.Add("TxtStr", typeof(string));
                 dt.Columns.Add("CurValue", typeof(string));
 
@@ -3618,7 +3657,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add("", "", "");
                     if (count >= index && count < iPageSize * iPageNumber)
                     {
-                        dt.Rows[count]["OID"] = BP.DA.DBAccess.GenerGUID();
+                        dt.Rows[count]["MyPk"] = BP.DA.DBAccess.GenerGUID();
 
                         strArray = folder.Split('\\');
                         fileName = strArray[strArray.Length - 1].Replace("\"", "").Replace("'", "");
@@ -3631,7 +3670,14 @@ namespace BP.WF.HttpHandler
                     count += 1;
                 }
 
-                return DataTableConvertJson.DataTable2Json(dt, folderArray.Length);
+                ds.Tables.Add(dt);
+                dt = new DataTable("DataCount");
+                dt.Columns.Add("DataCount", typeof(int));
+                DataRow dr = dt.NewRow();
+                dr["DataCount"] = folderArray.Length;
+                dt.Rows.Add(dr);
+                ds.Tables.Add(dt);
+                return BP.Tools.Json.ToJson(ds) ;
             }
             catch (Exception)
             {

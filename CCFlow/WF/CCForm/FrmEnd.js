@@ -370,11 +370,12 @@ function AfterBindEn_DealMapExt(frmData) {
                 //}
                 break;
             case "FastInput": //是否启用快速录入
+                if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || GetQueryString("IsReadonly") == "1")
+                    continue;
                 var tbFastInput = $("#TB_" + mapExt.AttrOfOper);
-                var content = $("<span></span><br/>");
-                tbFastInput.before(content);
-                content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a>");
-                content.attr("margin-top", -tbFastInput.height());
+                var content = $("<span style='margin-left:-120px'></span><br/>");
+                tbFastInput.after(content);
+                content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper +"\")'>清空<a>");
                 break;
             case "TBFullCtrl": //自动填充
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
@@ -542,22 +543,18 @@ function AfterBindEn_DealMapExt(frmData) {
     }
 }
 
-function TBHelp(ObjId,MyPK) {
-    var url = "/WF/CCForm/Pop/HelperOfTBEUI.htm?PKVal=" + MyPK;
-     var W = document.body.clientWidth-40;
-     var H = document.body.clientHeight-40;
-    OpenEasyUiDialogExt(url,"词汇选择",W,H,false);
-
-    var explorer = window.navigator.userAgent;
-    var str = "";
-    if (explorer.indexOf("Chrome") >= 0) {
-        window.open(url, "sd", "left=200,height=500,top=150,width=600,location=yes,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no");
-    }
-    else {
-        str = window.showModalDialog(url, "sd", "dialogHeight:500px;dialogWidth:600px;dialogTop:150px;dialogLeft:200px;center:no;help:no");
-        if (str == undefined) return;
-        $("*[id$=" + ctrl + "]").focus().val(str);
-    }
+function TBHelp(ObjId, MyPK) {
+    var url = "/WF/CCForm/Pop/HelperOfTBEUI.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow");
+     var W = document.body.clientWidth-500;
+     var H = document.body.clientHeight-140;
+     var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);
+}
+function changeFastInt(ctrl,value) {
+    $("#TB_" + ctrl).val(value);
+    $('#eudlg').window('close');
+}
+function clearContent(ctrl) {
+    $("#"+ctrl).val("");
 }
 function DynamicBind(mapExt, ctrlType) {
 

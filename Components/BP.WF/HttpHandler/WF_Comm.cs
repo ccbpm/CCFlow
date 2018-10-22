@@ -3573,14 +3573,21 @@ namespace BP.WF.HttpHandler
             }
             if (lb == "hisWords")
             {
-                //Node nd = new Node(this.FK_Node);
+                Node nd = new Node(this.FK_Node);
                 string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    MapData mapData = new MapData(this.FK_MapData);
+                    rptNo = mapData.PTable;
+                }
+               
                 
                 GEEntitys ges = new GEEntitys(rptNo);
                 QueryObject qo = new QueryObject(ges);
-                qo.AddHD();
+                string fk_emp = this.GetRequestVal("FK_Emp");
+                qo.AddWhere(fk_emp, "=", WebUser.No);
                 qo.addAnd();
-                qo.AddWhere("Rec", "=", WebUser.No);
+                qo.AddWhere(AttrKey, "!=", "");
                 string pageNumber = GetRequestVal("pageNumber");
                 int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
                 //每页多少行

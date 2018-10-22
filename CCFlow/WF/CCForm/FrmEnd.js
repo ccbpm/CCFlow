@@ -544,7 +544,7 @@ function AfterBindEn_DealMapExt(frmData) {
 }
 
 function TBHelp(ObjId, MyPK) {
-    var url = "/WF/CCForm/Pop/HelperOfTBEUI.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow");
+    var url = "/WF/CCForm/Pop/HelperOfTBEUI.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
      var W = document.body.clientWidth-500;
      var H = document.body.clientHeight-140;
      var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);

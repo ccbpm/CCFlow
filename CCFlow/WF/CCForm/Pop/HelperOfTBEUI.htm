@@ -1,0 +1,439 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>词汇选择</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript" ></script>
+    <script src="../../Scripts/config.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <style type="text/css">
+        .datagrid-header-check
+        {
+            display: none;
+        }
+        .datagrid-header-row
+        {
+            display: none;
+        }
+        .panel-body, .datagrid-header
+        {
+            border: none;
+        }
+    </style>
+    <script type="text/ecmascript">
+        var WordsSort;
+        var AttrKey;
+        var FK_MapData;
+        var PKVal = GetQueryString("PKVal");
+        var FK_Flow = GetQueryString("FK_Flow");
+        var mapExt;
+        var lb;
+        var webUser = new WebUser();
+        var SearchData;
+        var DataCount;
+        $(function () {
+            mapExt = new Entity("BP.Sys.MapExt", PKVal);
+            var i = mapExt.RetrieveFromDBSources();
+            if (i == 0) {
+                $("body").html("<b>设置的扩展属性缺失，请联系管理员。<b>");
+                return;
+            }
+            //初始化赋值.
+            AttrKey = mapExt.AttrOfOper;
+            FK_MapData = mapExt.FK_MapData;
+
+            $('#tt').tabs({
+                onSelect: function (title, index) {
+                    switch (index) {  //注意tabs的顺序
+                        case 0:
+                            startBtn(); //允许新增、编辑、删除
+                            runEffect("myWords");
+                            break;
+                        case 1:
+                            forbiddenBtn(); //禁止新增、编辑、删除
+                            runEffect("hisWords");
+                            break;
+                        case 2:
+                            forbiddenBtn();//系统词汇禁止新增、编辑、删除
+                            runEffect("sysWords");
+                            break;
+                        case 3:
+                            forbiddenBtn();
+                            runEffect("readWords");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+
+            $('#win').window('close');
+            runEffect("myWords"); //初始化加载我的词汇
+        });
+        function startBtn() { //启用按钮
+            $('#btnAdd').linkbutton('enable');
+            $('#btnEdit').linkbutton('enable');
+            $('#btnDelete').linkbutton('enable');
+        }
+        function forbiddenBtn() {  //禁用按钮
+            $('#btnAdd').linkbutton('disable');
+            $('#btnEdit').linkbutton('disable');
+            $('#btnDelete').linkbutton('disable');
+        }
+        function runEffect(v) {
+            lb = v;
+            LoadGridData(1, 15);
+        };
+
+        function GetSearchData(pageNumber, pageSize) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("AttrKey", AttrKey);
+            handler.AddPara("FK_MapData", FK_MapData);
+            handler.AddPara("FK_Flow", FK_Flow);
+            handler.AddPara("pageNumber", pageNumber);
+            handler.AddPara("pageSize", pageSize);
+            handler.AddPara("lb", lb);
+            var data = handler.DoMethodReturnString("HelperWordsData");
+            if (data.indexOf("err@") == 0) {
+                $("body").html("<b>访问页面出错，请联系管理员。<b>");
+                return;
+            }
+            data = ToJson(data);
+            if (data == null || data =="" || data==undefined) {
+                SearchData = [];
+                DataCount = 0;
+            } else {
+                SearchData = data["MainTable"];
+                DataCount = data["DataCount"][0]["DataCount"];
+            }
+            return SearchData;
+        }
+        function LoadGridData(pageNumber, pageSize) {
+
+            $('#newsGrid').datagrid('loadData', { total: 0, rows: [] });
+            $('#newsGrid').datagrid('clearChecked');
+            var pagination = (lb == "sysWords"?false:true) ;
+            if (lb == "sysWords") {
+                SearchData = [];
+                var docs = mapExt.Doc;
+                docs = docs.split('@');
+                for (var i = 0; i < docs.length; i++) {
+                    var doc = docs[i];
+                    if (doc == null || doc == "")
+                        continue;
+                    SearchData.push({"MyPK":i,"CurValue":doc});
+                }
+                DataCount = SearchData.length;
+               
+            }else{
+                SearchData = GetSearchData(pageNumber,pageSize);
+            }
+            $('#newsGrid').datagrid({
+                columns: [[
+                { checkbox: true },
+                { field: 'CurValue', title: '', width: 100, align: 'left' }
+                ]],
+                idField: 'MyPK',
+                selectOnCheck: false,
+                checkOnSelect: true,
+                singleSelect: true,
+                data: SearchData,
+                width: 'auto',
+                height: 'auto',
+                striped: true,
+                rownumbers: true,
+                pagination: pagination,
+                pagePosition: 'bottom',
+                fitColumns: true,
+                pageNumber: pageNumber,
+                pageSize: pageSize,
+                pageList: [10,15,20,30],
+                loadFilter: pagerFilter,
+                loadMsg: '数据加载中......'
+            });
+           
+
+        }
+
+        //分页功能 
+        var IsUrl = true;
+        function pagerFilter(SearchData) {
+            if (typeof SearchData.length == 'number' && typeof SearchData.splice == 'function') {
+                SearchData = {
+                    total: DataCount,
+                     rows: SearchData
+                }
+            }
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            var pager = dg.datagrid('getPager');
+
+            //url 路径上包含PageIdx、PageSize
+            if (IsUrl) {
+                var pageIdx = GetQueryString("PageIdx");
+                var pageSize = GetQueryString("PageSize");
+                if (pageIdx !== null && pageIdx != "") {
+                    opts.pageNumber = parseInt(pageIdx);
+                    opts.pageSize = parseInt(pageSize);
+                    pager.data("pagination").options.pageNumber = parseInt(pageIdx);
+                    pager.data("pagination").options.pageSize = parseInt(pageSize);
+                }
+            }
+            //点击分页
+            pager.pagination({
+                onSelectPage: function (pageNum, pageSize) {
+                    opts.pageNumber = pageNum;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh', {
+                        pageNumber: pageNum,
+                        pageSize: pageSize
+                    });
+                    IsUrl = false;
+                    SearchData = GetSearchData(opts.pageNumber, opts.pageSize);
+                    dg.datagrid('loadData', SearchData);
+                }
+            });
+
+
+
+            if (!SearchData.originalRows) {
+                if (SearchData.rows)
+                    SearchData.originalRows = (SearchData.rows);
+                else if (SearchData.data && SearchData.data.rows)
+                    SearchData.originalRows = (SearchData.data.rows);
+                else
+                    SearchData.originalRows = [];
+            }
+            return SearchData;
+        }
+
+        //刷新
+        function RefreshGrid() {
+            var grid = $('#newsGrid');
+            var options = grid.datagrid('getPager').data("pagination").options;
+            var curPage = options.pageNumber;
+            var pageSize = options.pageSize;
+            LoadGridData(curPage, pageSize);
+        }
+       
+        var insEdit = true;
+        //添加数据
+        function btnOpenWindow() {
+            insEdit = true;
+            if (lb == "readWords" || lb == "hisWords")//如果是文件,历史词汇
+                return;
+
+            $('#TextArea').val('');
+            $('#win').window('open');
+            $('#TextArea').focus();
+        }
+        function AddWorks() {
+            var params;
+            if (insEdit) {//添加
+                var text = $('#TextArea').val();
+                text = replaceTrim(text);
+                if (text == "") {
+                    $.messager.alert("提示", "请输入数据", "info");
+                    $('#TextArea').val('');
+                    $('#TextArea').focus();
+                    return;
+                }
+                if (lb == "myWords")//我的词汇
+                {
+                    //判断是否存在我的词汇
+                    var defVals = new Entities("BP.Sys.DefVals", "FK_MapData", FK_MapData, "AttrKey", AttrKey, "FK_Emp", webUser.No, "LB", "1", "CurValue", text);
+                    if (defVals.length != 0) {
+                        $.messager.alert("提示", "该词汇已经存在，不能重复录入", "info");
+                        return;
+                    }
+                    var defVal = new Entity("BP.Sys.DefVal");
+                    defVal.FK_MapData = FK_MapData;
+                    defVal.FK_Emp = webUser.No;
+                    defVal.AttrKey = AttrKey;
+                    defVal.LB = "1";
+                    defVal.CurValue = text;
+                    defVal.Insert();
+                    $('#win').window('close');
+                    LoadGridData(1, 15);
+
+                }
+               
+               
+                
+            } else {//编辑
+                var text = $('#TextArea').val();
+                text = replaceTrim(text);
+                //没有输入数据
+                if (text == "") {
+                    $.messager.alert("提示", "请输入数据", "info");
+                    $('#TextArea').val('');
+                    $('#TextArea').focus();
+                    return;
+                }
+                //输入数据没有改变
+                if (text == againText) {
+                    $.messager.alert("提示", "数据没有任何改变哦", "info");
+                    return;
+                }
+                //保存数据
+                var defVal = new Entity("BP.Sys.DefVal",defValPK);
+                defVal.CurValue = text;
+                defVal.Update();
+                $('#win').window('close');
+                RefreshGrid();
+                
+            }
+
+        }
+
+        var againText;
+        var defValPK;
+        //编辑词汇
+        function btnEdit() {
+            insEdit = false;
+            if (lb == "readWords" || lb == "hisWords")//如果是文件,历史
+                return;
+            var rows = $('#newsGrid').datagrid('getChecked');
+            if (rows.length == 1) {
+                againText = rows[0].CurValue;
+                defValPK = rows[0].MyPK;
+                $('#TextArea').val(rows[0].CurValue);
+                $('#win').window('open');
+                $('#TextArea').focus();
+            }
+            else {
+                $.messager.alert("提示", "请选择一条数据", "info");
+            }
+        }
+        //字符的操作
+        function replaceTrim(val) {//去除空格
+            val = val.replace(/[ ]/g, "");
+            val = val.replace(/<\/?.+?>/g, "");
+            val = val.replace(/[\r\n]/g, "");
+            return val;
+        }
+        //删除
+        function btnDelete() {
+            if (lb == "readWords" || lb == "hisWords" || lb == "sysWords")//如果是文件,历史
+                return;
+            var rows = $('#newsGrid').datagrid('getChecked');
+
+            if (rows.length >= 1) {
+                $.messager.confirm('提示', '确定要删除这' + rows.length + '条数据吗？', function (r) {
+                    if (r) {
+                        var oids = '';
+                        $.each(rows, function (n, value) {
+                            var defVal = new Entity("BP.Sys.DefVal", value.MyPK);
+                            defVal.Delete();
+                        });
+                        LoadGridData(1, 15);
+                    }
+                });
+            }
+            else {
+                $.messager.alert("提示", "请选择一条数据", "info");
+            }
+        }
+        //关闭主窗体
+        function btnClose() {
+            window.parent.$("#eudlg").window('close');
+        }
+        //返回数据
+        function btnOk() {
+            var rows = $('#newsGrid').datagrid('getChecked');
+            if (rows.length == 0) {
+                $.messager.alert("提示", "请选择数据", "info");
+                return;
+            }
+            var str = '';
+            if (lb == "readWords")//如果是文件
+            {
+                $.each(rows, function (n, value) {
+                    str += value.TxtStr;
+                });
+
+                for (var i = 0; true; i++) {
+                    if (str.indexOf("ccflow_lover") != -1) {
+                        str = str.replace("ccflow_lover", "\n");
+                    } else {
+                        break;
+                    }
+                }
+
+
+            } else {
+                $.each(rows, function (n, value) {
+                    str += value.CurValue + ",";
+                });
+
+                str = str.substr(0, str.length - 1);
+            }
+            str = str.replace(/{/g, "｛");
+            str = str.replace(/}/g, "｝");
+            str = str.replace(/\[/g, "【");
+            str = str.replace(/\]/g, "】");
+            str = str.replace(/\"/g, "”");
+            str = str.replace(/\'/g, "‘");
+
+            if (str == '') {
+                $.messager.alert("提示", "1.没有选中项<br />2.选中的文件不包含任何数据!", "info");
+                return;
+            }
+
+
+            window.parent.changeFastInt(AttrKey, str);
+            $('#eudlg').window('close');
+
+        }
+    </script>
+</head>
+<body class="easyui-layout body">
+
+    <div data-options="region:'north'" style="height: 60px; border: none;">
+        <div id="tt" class="easyui-tabs" style="width: auto; height: 30px;">
+            <div title="我的词汇" style="padding: 20px;"></div>
+            <div title="历史词汇" style="padding: 20px;"></div>
+            <div title="系统词汇" style="padding: 20px;"></div>
+            <div title="读取文件" style="padding: 20px;"></div>
+        </div>
+        <div style="background-color: #F4F4F4;">
+            <div style="text-align: left; float: left;">
+                <a href='javascript:void(0)' id="btnAdd" onclick='btnOpenWindow()' class='easyui-linkbutton'
+                    data-options="plain:true,iconCls:'icon-add'" style='margin-left: 10px; color: blue;'>添加数据</a> 
+                <a id="btnEdit" href='javascript:void(0)' onclick='btnEdit()' class='easyui-linkbutton'
+                    data-options="plain:true,iconCls:'icon-edit'" style='margin-left: 10px; color: blue;'>编辑</a>
+                <a href='javascript:void(0)' onclick='btnDelete()' id='btnDelete' class='easyui-linkbutton'
+                     data-options="plain:true,iconCls:'icon-delete'" style='margin-left: 10px; color: blue;'>删除</a>
+            </div>
+            <div style="text-align: right;">
+                <a href='javascript:void(0)' onclick='btnOk()' id='btnOk' class='easyui-linkbutton'
+                    data-options="plain:true,iconCls:'icon-ok'" style='margin-right: 10px; color: blue;'>确定</a> 
+                <a href='javascript:void(0)' onclick='btnClose()' id='btnClose' class='easyui-linkbutton'
+                    data-options="plain:true,iconCls:'icon-cancel'" style='margin-right: 20px; color: blue;'>取消</a></div>
+        </div>
+    </div>
+    <div data-options="region:'center'" style="padding: 5px;">
+        <table id="newsGrid" fit="true" fitcolumns="true" class="easyui-datagrid">
+        </table>
+    </div>
+    <div id="win" class="easyui-window" title="请输入" style="width: 400px; height: 230px;
+        overflow: hidden;" data-options="iconCls:'icon-save',modal:true,collapsible:false,minimizable:false,maximizable:false">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center'" style="text-align: center;">
+                <textarea id="TextArea" cols="20" rows="2" style="width: 350px; height: 150px; margin-top: 5px; overflow: hidden;"></textarea>
+                <div style="width: auto; height: 20px; margin-bottom: 0px; text-align: center;">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true"onclick="AddWorks()">保存</a> 
+                    <a href="javascript:void(0)" class="easyui-linkbutton"data-options="iconCls:'icon-cancel',plain:true" onclick="$('#win').window('close');">取消</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

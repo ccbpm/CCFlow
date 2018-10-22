@@ -3,12 +3,13 @@
     //加入隐藏控件.
     var mapAttrs = frmData.Sys_MapAttr;
     var html = "";
-    for (var mapAttr in mapAttrs) {
-        if (mapAttr.UIVisable == 0) {
+    for (var i = 0; i < mapAttrs.length; i++) {
+        var mapAttr = mapAttrs[i];
+        if (mapAttr.UIVisible == 0) {
             var defval = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-            html += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + defval + "' />";
+            html = "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + defval + "' />";
             html = $(html);
-            $('#CCFrom').append(html);
+            $('#CCForm').append(html);
         }
     }
 
@@ -368,6 +369,13 @@ function AfterBindEn_DealMapExt(frmData) {
                 //        ddl.attr(mapExt.Tag2, mapExt.Tag1 + "(this);");
                 //}
                 break;
+            case "FastInput": //是否启用快速录入
+                var tbFastInput = $("#TB_" + mapExt.AttrOfOper);
+                var content = $("<span></span><br/>");
+                tbFastInput.before(content);
+                content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a>");
+                content.attr("margin-top", -tbFastInput.height());
+                break;
             case "TBFullCtrl": //自动填充
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
                 if (tbAuto == null)
@@ -534,6 +542,23 @@ function AfterBindEn_DealMapExt(frmData) {
     }
 }
 
+function TBHelp(ObjId,MyPK) {
+    var url = "/WF/CCForm/Pop/HelperOfTBEUI.htm?PKVal=" + MyPK;
+     var W = document.body.clientWidth-40;
+     var H = document.body.clientHeight-40;
+    OpenEasyUiDialogExt(url,"词汇选择",W,H,false);
+
+    var explorer = window.navigator.userAgent;
+    var str = "";
+    if (explorer.indexOf("Chrome") >= 0) {
+        window.open(url, "sd", "left=200,height=500,top=150,width=600,location=yes,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no");
+    }
+    else {
+        str = window.showModalDialog(url, "sd", "dialogHeight:500px;dialogWidth:600px;dialogTop:150px;dialogLeft:200px;center:no;help:no");
+        if (str == undefined) return;
+        $("*[id$=" + ctrl + "]").focus().val(str);
+    }
+}
 function DynamicBind(mapExt, ctrlType) {
 
     $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {

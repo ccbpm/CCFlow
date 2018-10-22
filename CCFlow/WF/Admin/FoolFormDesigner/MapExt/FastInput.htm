@@ -19,10 +19,17 @@
             var mypk = "FastInput_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = mypk;
-            var i = en.RetrieveFromDBSources(); //执行查询..
+            var num = en.RetrieveFromDBSources(); //执行查询..
 
-            if (1 == 1) {
+            if (num == 1) {
                 document.getElementById("Btn_Delete").disabled = true;
+            }
+
+            //绑定历史词汇录入人字段.
+            var attrs = new Entities("BP.Sys.MapAttrs");
+            attrs.Rtirur("FK_MapData", GetQueryString("FK_MapData"));
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
             }
 
             document.getElementById("TB_Doc").value = mapExt.Doc;
@@ -88,11 +95,21 @@
                     快速输入内容，多行用逗号分开。
                 </td>
             </tr>
+
             <tr>
                 <td colspan="3" style="width: 100%;">
                     <textarea rows="4" name="TB_Doc" id="TB_Doc"> </textarea>
                 </td>
             </tr>
+
+              <tr>
+                <td colspan="2">
+                    历史词汇启用字段
+                </td>
+               <td><select> <option>不启用</option> </select> </td>
+            </tr>
+
+           
             <tr>
                 <td colspan="3">
                     <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />

@@ -526,8 +526,17 @@ namespace BP.DA
         /// </summary>
         /// <param name="getText">需要替换的原始字符串</param>
         /// <returns></returns>
-        public static string GetFilteredStrForJSON(string getText)
+        public static string GetFilteredStrForJSON(string getText, bool checkId)
         {
+            if (checkId)
+            {
+                getText = getText.Replace("\n", "");
+            }
+            else
+            {
+                getText = getText.Replace("\n", "ccflow_lover");
+            }
+
             getText = getText.Replace("\n", "");
             getText = getText.Replace("\r", "");
             getText = getText.Replace("{", "｛");
@@ -560,7 +569,7 @@ namespace BP.DA
                 {
                     jsonBuilder.Append(dt.Columns[j].ColumnName.ToUpper());
                     jsonBuilder.Append(":");
-                    jsonBuilder.Append("'" + GetFilteredStrForJSON(dt.Rows[i][j].ToString()) + "'");
+                    jsonBuilder.Append("'" + GetFilteredStrForJSON(dt.Rows[i][j].ToString(), true) + "'");
                     jsonBuilder.Append(",");
                 }
                 jsonBuilder.Remove(jsonBuilder.Length - 1, 1);

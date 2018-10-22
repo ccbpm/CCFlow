@@ -378,7 +378,7 @@ namespace BP.Web.UC
                     {
                         if (tb.Enabled==false || tb.ReadOnly)
                         {
-                            if (Request.Path.EndsWith("Frm.aspx") || Request.Path.EndsWith("MyFlow.aspx"))
+                            if (Request.Path.EndsWith("Frm.aspx") || Request.Path.EndsWith("MyFlow.htm"))
                             {
                                 foreach (string paramKey in Request.Params.AllKeys)
                                 {
@@ -402,7 +402,7 @@ namespace BP.Web.UC
                     {
                         if (mytb.Enabled==false || mytb.ReadOnly)
                         {
-                            if (Request.Path.EndsWith("Frm.aspx") || Request.Path.EndsWith("MyFlow.aspx"))
+                            if (Request.Path.EndsWith("Frm.aspx") || Request.Path.EndsWith("MyFlow.htm"))
                             {
                                 foreach (string paramKey in Request.Params.AllKeys)
                                 {

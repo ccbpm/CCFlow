@@ -8716,7 +8716,7 @@ namespace BP.WF
             wk.OID = workid;
             wk.Retrieve();
 
-            // 以下代码是从 MyFlow.aspx Send 方法copy 过来的，需要保持业务逻辑的一致性，所以代码需要保持一致.
+            // 以下代码是从 MyFlow.htm Send 方法copy 过来的，需要保持业务逻辑的一致性，所以代码需要保持一致.
             WorkNode firstwn = new WorkNode(wk, nd);
             string msg = "";
             SendReturnObjs objs = firstwn.NodeSend();
@@ -8926,7 +8926,7 @@ namespace BP.WF
             wk.OID = workid;
             wk.Retrieve();
 
-            // 以下代码是从 MyFlow.aspx Send 方法copy 过来的，需要保持业务逻辑的一致性，所以代码需要保持一致.
+            // 以下代码是从 MyFlow.htm Send 方法copy 过来的，需要保持业务逻辑的一致性，所以代码需要保持一致.
             WorkNode firstwn = new WorkNode(wk, nd);
             string msg = "";
             SendReturnObjs objs = firstwn.NodeSend();

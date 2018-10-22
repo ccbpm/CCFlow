@@ -415,12 +415,14 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
+
                 map.AddTBString(FrmAttachmentDBAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FK_FrmAttachment, null, "附件主键", true, false, 1, 500, 20);
                 map.AddTBString(FrmAttachmentDBAttr.NoOfObj, null, "附件标识", true, false, 0, 50, 20);
 
                 map.AddTBString(FrmAttachmentDBAttr.RefPKVal, null, "实体主键", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentDBAttr.FID, 0, "FID", true, false);
+                map.AddTBString(FrmAttachmentDBAttr.NodeID, null, "节点ID", true, false, 0, 50, 20);
 
                 map.AddTBString(FrmAttachmentDBAttr.Sort, null, "类别", true, false, 0, 200, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FileFullName, null, "文件路径", true, false, 0, 700, 20);
@@ -432,7 +434,6 @@ namespace BP.Sys
                 map.AddTBString(FrmAttachmentDBAttr.Rec, null, "记录人", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentDBAttr.RecName, null, "记录人名字", true, false, 0, 50, 20);
                 map.AddTBStringDoc(FrmAttachmentDBAttr.MyNote, null, "备注", true, false);
-                map.AddTBString(FrmAttachmentDBAttr.NodeID, null, "节点ID", true, false, 0, 50, 20);
 
                 map.AddTBInt(FrmAttachmentDBAttr.IsRowLock, 0, "是否锁定行", true, false);
 

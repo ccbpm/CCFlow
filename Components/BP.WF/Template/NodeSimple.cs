@@ -116,7 +116,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 节点集合
     /// </summary>
-    public class NodeSimples : EntitiesOID
+    public class NodeSimples : EntitiesOIDName
     {
         #region 方法
         /// <summary>

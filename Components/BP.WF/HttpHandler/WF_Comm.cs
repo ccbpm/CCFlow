@@ -3518,7 +3518,128 @@ namespace BP.WF.HttpHandler
                     return false;
             }
         }
-        
+
+
+        #region 常用词汇功能开始
+        /// <summary>
+        /// 常用词汇
+        /// </summary>
+        /// <returns></returns>
+        public string HelperWordsData()
+        {
+            DefVal dv = new DefVal();
+            dv.CheckPhysicsTable();
+
+            string FK_MapData = this.GetRequestVal("FK_MapData");
+            string AttrKey = this.GetRequestVal("AttrKey");
+            string lb = this.GetRequestVal("lb");
+
+            //读取txt文件
+            if (lb == "readWords")
+                return readTxt();
+            
+            //读取其他常用词汇信息
+
+            DataTable dt = new DataTable();
+
+            QueryObject qo = new QueryObject(dv);
+            qo.AddHD();
+
+            qo.addAnd();
+            qo.addLeftBracket();
+            qo.AddWhere("FK_MapData", "=", FK_MapData);
+            qo.addRightBracket();
+            qo.addAnd();
+            qo.addLeftBracket();
+            qo.AddWhere("AttrKey", "=", AttrKey);
+            qo.addRightBracket();
+            qo.addAnd();
+            qo.addLeftBracket();
+            qo.AddWhere("FK_Emp", "=", WebUser.No );
+            qo.addRightBracket();
+             qo.addAnd();
+            qo.addLeftBracket();
+            if (lb == "myWords")
+            qo.AddWhere("LB", "=", "1" );
+             if (lb == "hisWords")
+            qo.AddWhere("LB", "=", "2" );
+            qo.addRightBracket();
+
+            //系统词汇放在mapExt中
+           
+            string pageNumber = GetRequestVal("pageNumber");
+            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+            //每页多少行
+            string pageSize = GetRequestVal("pageSize");
+            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+
+            qo.DoQuery("MyPK",this.PageSize,this.PageIdx);
+
+            return BP.Tools.Json.DataTableToJson(dv.ToDataTableField()); ;
+          
+          
+        }
+
+        /// <summary>
+        /// 注意特殊字符的处理
+        /// </summary>
+        /// <returns></returns>
+        private string readTxt()
+        {
+            try
+            {
+                string path = BP.Sys.SystemConfig.PathOfDataUser + "Fastenter\\" + FK_MapData + "\\" + GetRequestVal("AttrKey"); ;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                string[] folderArray = Directory.GetFiles(path);
+                if (folderArray.Length == 0)
+                    return "";
+
+                string fileName;
+                string[] strArray;
+
+                string pageNumber = GetRequestVal("pageNumber");
+                int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+                string pageSize = GetRequestVal("pageSize");
+                int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("OID", typeof(string));
+                dt.Columns.Add("TxtStr", typeof(string));
+                dt.Columns.Add("CurValue", typeof(string));
+
+                string liStr = "";
+                int count = 0;
+                int index = iPageSize * (iPageNumber - 1);
+                foreach (string folder in folderArray)
+                {
+                    dt.Rows.Add("", "", "");
+                    if (count >= index && count < iPageSize * iPageNumber)
+                    {
+                        dt.Rows[count]["OID"] = BP.DA.DBAccess.GenerGUID();
+
+                        strArray = folder.Split('\\');
+                        fileName = strArray[strArray.Length - 1].Replace("\"", "").Replace("'", "");
+                        liStr += string.Format("{{id:\"{0}\",value:\"{1}\"}},", DataTableConvertJson.GetFilteredStrForJSON(fileName, true),
+                            DataTableConvertJson.GetFilteredStrForJSON(File.ReadAllText(folder, System.Text.Encoding.Default), false));
+
+                        dt.Rows[count]["CurValue"] = DataTableConvertJson.GetFilteredStrForJSON(fileName, true);
+                        dt.Rows[count]["TxtStr"] = DataTableConvertJson.GetFilteredStrForJSON(File.ReadAllText(folder, System.Text.Encoding.Default), false);
+                    }
+                    count += 1;
+                }
+
+                return DataTableConvertJson.DataTable2Json(dt, folderArray.Length);
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        #endregion 常用词汇结束
+
     }
 
 }

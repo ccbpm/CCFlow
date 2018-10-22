@@ -45,6 +45,12 @@
                 $("body").html("<b>设置的扩展属性缺失，请联系管理员。<b>");
                 return;
             }
+            if (mapExt.Tag == "0") {
+                var tab_option = $('#tt').tabs('getTab', "历史词汇").panel('options').tab;
+                tab_option.hide(); //隐藏数据录入tab
+              
+            }
+
             //初始化赋值.
             AttrKey = mapExt.AttrOfOper;
             FK_MapData = mapExt.FK_MapData;
@@ -61,7 +67,7 @@
                             runEffect("hisWords");
                             break;
                         case 2:
-                            forbiddenBtn();//系统词汇禁止新增、编辑、删除
+                            forbiddenBtn(); //系统词汇禁止新增、编辑、删除
                             runEffect("sysWords");
                             break;
                         case 3:
@@ -90,13 +96,15 @@
         function runEffect(v) {
             lb = v;
             LoadGridData(1, 15);
-        };
+        }
 
         function GetSearchData(pageNumber, pageSize) {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddPara("AttrKey", AttrKey);
             handler.AddPara("FK_MapData", FK_MapData);
             handler.AddPara("FK_Flow", FK_Flow);
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("FK_Emp",mapExt.Tag);
             handler.AddPara("pageNumber", pageNumber);
             handler.AddPara("pageSize", pageSize);
             handler.AddPara("lb", lb);
@@ -399,7 +407,7 @@
     <div data-options="region:'north'" style="height: 60px; border: none;">
         <div id="tt" class="easyui-tabs" style="width: auto; height: 30px;">
             <div title="我的词汇" style="padding: 20px;"></div>
-            <div title="历史词汇" style="padding: 20px;"></div>
+            <div id="LSJL" title="历史词汇" style="padding: 20px;"></div>
             <div title="系统词汇" style="padding: 20px;"></div>
             <div title="读取文件" style="padding: 20px;"></div>
         </div>

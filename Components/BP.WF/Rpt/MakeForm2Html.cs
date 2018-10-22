@@ -584,7 +584,7 @@ namespace BP.WF
                 string src = "";
                 if (dtl.HisEditModel == EditModel.TableModel)
                 {
-                    src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
+                    src = SystemConfig.CCFlowWebPath +  "WF/CCForm/Dtl.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
                 }
                 else
                 {

@@ -2649,7 +2649,7 @@ namespace BP.WF.HttpHandler
             else
             {
 
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + "ensName";
+                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName;
 
                 if (System.IO.Directory.Exists(savePath) == false)
                     System.IO.Directory.CreateDirectory(savePath);

@@ -65,9 +65,7 @@
 					</thead>
 					<tbody id="Table1"></tbody>
 				</table>
-				<div class="row">
-					<div class="col-sm-12"><span id="Table2"></span></div>
-				</div>
+				
                  <!-- 显示分页信息 -->
                 <div class="row" style="text-align: left;">
                     <ul class="pagination" id="page_nav">
@@ -230,6 +228,7 @@
 			var total = 0;
             var pageIdx = 1;
             var pageStartN = 1;
+            var realCount = 0;
 			//页面启动函数.
             $(function () {
                 //GetRuningData(pageIdx);
@@ -252,6 +251,17 @@
                     alert(data);
                 }
                 data = JSON.parse(data);
+
+                realCount = data.length;
+                if (flowNos != "") {
+                    realCount = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        if (flowNos.indexOf(data[i].FK_Flow) != -1)
+                            realCount++;
+                    }
+                }
+
+
                 var sourceData;
                 //获取在途总的查询信息
 
@@ -290,6 +300,11 @@
                 else
                     pageCount = parseInt(total / pageSize);
                 if (pageCount == 0) pageCount = 1;
+
+                var div = window.parent.document.getElementById("Todolist_Runing");
+                if (div != null) {
+                    div.innerHTML = realCount;
+                }
 
                 return data;
                 

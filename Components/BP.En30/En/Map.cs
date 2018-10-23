@@ -2139,7 +2139,9 @@ namespace BP.En
 		public void AddMyFile(string fileDesc, string fExt)
 		{
 			HisAttrFiles.Add(fExt, fileDesc);
-            this.HisBPEntityAthType = BPEntityAthType.Single; 
+            this.HisBPEntityAthType = BPEntityAthType.Single;
+
+            AddMyFile(fileDesc, fExt, null);
 		}
 
 		#region 增加大块文本输入

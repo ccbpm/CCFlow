@@ -34,6 +34,20 @@
             width: 100%;
             max-width: 100%;
             margin-bottom: 0px;
+            table-layout: fixed;
+        }
+       
+        .tdHidden
+        {
+            word-break: keep-all; /* 不换行 */
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+            text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+            -o-text-overflow: ellipsis;
+            -icab-text-overflow: ellipsis;
+            -khtml-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
         }
     </style>
 	</head>
@@ -59,7 +73,7 @@
 							<th width="120">发起部门</th>
 							<th>当前节点</th>
 							<th width="120">到达时间</th>
-							<th>当前处理人</th>
+							<th width="150">当前处理人</th>
 							<th width="120">操作</th>
 						</tr>
 					</thead>
@@ -84,6 +98,8 @@
 		<script src="./Scripts/config.js" type="text/javascript"></script>
 		<script src="Comm/Gener.js" type="text/javascript"></script>
 		<script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+        <script src="./Comm/JS/layer/layer.js" type="text/javascript"></script>
+       <link href="./Comm/JS/layer/layer.css" rel="stylesheet" type="text/css" />
 		<script language="javascript" type="text/javascript">
 		
 			function GroupBarClick(groupName) {
@@ -233,7 +249,20 @@
             $(function () {
                 //GetRuningData(pageIdx);
                 InitPage();
-                Paginator(pageCount,pageIdx);
+                Paginator(pageCount, pageIdx);
+                $(".tdHidden").on("mouseover", function () {
+                    if (this.offsetWidth < this.scrollWidth) {
+                        var that = this;
+                        var text = $(this).text();
+                        layer.tips(text, that, {
+                            tips: 1,
+                            time: 0
+                        });
+                    }
+                });
+                $(".tdHidden").on("mouseout", function () {
+                    layer.closeAll();
+                });
             });
 
             function GetRuningData(pageIdex) {
@@ -334,7 +363,7 @@
 			    if (todoEmps.indexOf(',') != -1)
 			        todoEmps = todoEmps.substring(todoEmps.indexOf(',') + 1);
 
-			    listbox += "<td>" + todoEmps + "</td>";
+			    listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
 			    listbox += "<td>";
 			    listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\">撤销</a>";
 			    listbox += "</td>";
@@ -342,7 +371,8 @@
 			          
 			}
 			$('#Table1').html(listbox);
-        }
+
+        }
 
         //查询
         function SearchKey() {

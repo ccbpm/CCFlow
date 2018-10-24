@@ -3972,16 +3972,6 @@ namespace BP.WF
             return rpt;
         }
         /// <summary>
-        /// 产生一个新的工作ID
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <returns>返回当前操作员创建的工作ID</returns>
-        public static Int64 Flow_GenerWorkID(string flowNo)
-        {
-            Flow fl = new Flow(flowNo);
-            return fl.NewWork().OID;
-        }
-        /// <summary>
         /// 产生一个新的工作
         /// </summary>
         /// <param name="flowNo">流程编号</param>

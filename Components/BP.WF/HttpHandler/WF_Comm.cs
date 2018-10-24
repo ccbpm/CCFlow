@@ -2462,6 +2462,9 @@ namespace BP.WF.HttpHandler
         {
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~", "'");
+
+         
+
             return DBAccess.RunSQL(sql).ToString();
         }
         /// <summary>
@@ -2472,7 +2475,13 @@ namespace BP.WF.HttpHandler
         {
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~","'");
-            sql = sql.Replace("-", "%");
+
+           #warning zhoupeng把这个去掉了. 2018.10.24
+           // sql = sql.Replace("-", "%"); //为什么？
+
+            sql = sql.Replace("/#", "+"); //为什么？
+            sql = sql.Replace("/$", "-"); //为什么？
+
             if (null == sql || "" == sql)
             {
                 return "err@查询sql为空";

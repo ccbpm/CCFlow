@@ -250,12 +250,14 @@
                 //GetRuningData(pageIdx);
                 InitPage();
                 Paginator(pageCount, pageIdx);
+
                 $(".tdHidden").on("mouseover", function () {
                     if (this.offsetWidth < this.scrollWidth) {
                         var that = this;
                         var text = $(this).text();
                         layer.tips(text, that, {
                             tips: 1,
+                            area: [this.offsetWidth+'px', 'auto'],
                             time: 0
                         });
                     }

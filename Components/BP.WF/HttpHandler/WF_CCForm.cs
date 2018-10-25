@@ -2584,6 +2584,7 @@ namespace BP.WF.HttpHandler
             string pkVal = this.GetRequestVal("PKVal");
             string attachPk = this.GetRequestVal("AttachPK");
             string paras = this.GetRequestVal("parasData");
+            string sort = this.GetRequestVal("Sort");
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
             MapData mapData = new MapData(athDesc.FK_MapData);
@@ -2729,6 +2730,7 @@ namespace BP.WF.HttpHandler
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
                     dbUpload.NodeID = this.FK_Node.ToString();
+                    dbUpload.Sort = sort;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = attachPk;
@@ -2841,6 +2843,7 @@ namespace BP.WF.HttpHandler
                     FileInfo info = new FileInfo(temp);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
+                    dbUpload.Sort = sort;
                     dbUpload.NodeID = FK_Node.ToString();
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.

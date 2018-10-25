@@ -36,11 +36,7 @@ namespace BP.WF.HttpHandler
                 string pkVal = this.PKVal;
                 if (athDesc.HisCtrlWay == AthCtrlWay.FID)
                     pkVal = this.FID.ToString();
-
-                if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                    pkVal = this.PWorkID.ToString();
-
-
+                 
                 BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID,this.FID,this.PWorkID);
 
                 #region 如果图片显示.(先不考虑.)

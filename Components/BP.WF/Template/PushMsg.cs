@@ -877,7 +877,7 @@ namespace BP.WF.Template
                         mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
 
                         //获得当前人的邮件.
-                        BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
+                        BP.GPM.Emp empEn = new BP.GPM.Emp(emp);
 
                         //发送邮件.
                         BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event,
@@ -919,7 +919,7 @@ namespace BP.WF.Template
                         mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
 
                         //获得当前人的邮件.
-                        BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
+                        BP.GPM.Emp empEn = new BP.GPM.Emp(emp);
 
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
 
@@ -966,7 +966,7 @@ namespace BP.WF.Template
                         mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
 
                         //获得当前人的邮件.
-                        BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
+                        BP.GPM.Emp empEn = new BP.GPM.Emp(emp);
 
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
 

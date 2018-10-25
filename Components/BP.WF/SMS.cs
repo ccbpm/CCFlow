@@ -565,7 +565,16 @@ namespace BP.WF
         public static bool SendEmailNow(string mail, string mailTitle, string mailDoc)
         {
             System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
-            myEmail.From = new System.Net.Mail.MailAddress("ccflow.cn@gmail.com", "ccflow", System.Text.Encoding.UTF8);
+            //邮件地址.
+            string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
+            if (emailAddr == null)
+                emailAddr = "ccbpmtester@tom.com";
+
+            string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
+            if (emailPassword == null)
+                emailPassword = "ccbpm123";
+
+            myEmail.From = new System.Net.Mail.MailAddress(emailAddr, emailPassword, System.Text.Encoding.UTF8);
 
             myEmail.To.Add(mail);
             myEmail.Subject = mailTitle;
@@ -578,8 +587,18 @@ namespace BP.WF
             myEmail.Priority = MailPriority.High;//邮件优先级
 
             SmtpClient client = new SmtpClient();
-            client.Credentials = new System.Net.NetworkCredential(SystemConfig.GetValByKey("SendEmailAddress", "ccflow.cn@gmail.com"),
-                SystemConfig.GetValByKey("SendEmailPass", "ccflow123"));
+
+           
+
+            //是否启用ssl? 
+            bool isEnableSSL = false;
+            string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
+            if (emailEnableSSL == null || emailEnableSSL == "0")
+                isEnableSSL = false;
+            else
+                isEnableSSL = true;
+
+            client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
 
             //上述写你的邮箱和密码
             client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
@@ -595,6 +614,7 @@ namespace BP.WF
             {
                 object userState = myEmail;
                 client.SendAsync(myEmail, userState);
+                
                 return true;
             }
             catch
@@ -613,8 +633,9 @@ namespace BP.WF
                 if (this.HisEmailSta == MsgSta.UnRun)
                 {
                     /*发送邮件*/
-                    soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                    soap.SendToEmail(this.MyPK, WebUser.No, this.SendToEmpNo, this.Email, this.Title, this.DocOfEmail);
+                    //soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                    //soap.SendToEmail(this.MyPK, WebUser.No, this.SendToEmpNo, this.Email, this.Title, this.DocOfEmail);
+                    SendEmailNow(this.Email, this.Title, this.DocOfEmail);
                     return;
                 }
 
@@ -628,8 +649,8 @@ namespace BP.WF
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
 
-                            //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag,this.Title,this.OpenURL);
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, "17699430990", this.MobileInfo, tag, this.Title, this.OpenURL);
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag,this.Title,this.OpenURL);
+                            //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, "17699430990", this.MobileInfo, tag, this.Title, this.OpenURL);
 
 
                             break;
@@ -650,7 +671,7 @@ namespace BP.WF
                     }
                 }
             }
-            catch (Exception ex)
+          catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }

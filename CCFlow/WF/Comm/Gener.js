@@ -1716,6 +1716,14 @@ var DBAccess = (function () {
 
         sql = sql.replace(/~/g, "'");
         sql = sql.replace(/%/g, "-");
+
+        //sql = sql.replace(, "-");
+
+        sql = sql.replaceAll('+', '/#');
+        sql = sql.replaceAll('-', '/$');
+
+
+
         var jsonString;
 
         $.ajax({

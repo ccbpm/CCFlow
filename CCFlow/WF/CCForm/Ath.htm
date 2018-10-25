@@ -182,6 +182,10 @@
             url += "&FK_Node=" + GetQueryString("FK_Node");
             url += "&PWorkID=" + GetQueryString("PWorkID");
             url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            //获取分组
+            var sort = $("#Sort").val();
+            if (sort != null && sort != "" && sort != undefined)
+                url += "&Sort=" + sort;
 
             if (athDesc.IsExpCol == 0) {
                 $('#file_upload').uploadify({
@@ -317,7 +321,7 @@
             if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                 haveAuthSort = true;
                 //追加一个空项
-                if (!athDesc.Sort.endsWith(",")) athDesc.Sort = athDesc.Sort + ",";
+                if (athDesc.Sort.lastIndexOf(",")+1!=athDesc.Sort.length) athDesc.Sort = athDesc.Sort + ",";
                 fileSorts = athDesc.Sort.split(',');
             }
 
@@ -487,20 +491,14 @@
                     if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                         var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                         var strs = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
-                        /*BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
-                        ddl.ID = "ddl";
-                        int ddlIdex = 0;
-                        foreach (string str in strs)
-                        {
-                        if (str == null || str == "")
-                        continue;
-                        ddl.Items.Add(new ListItem(str, ddlIdex.ToString()));
-                        ddlIdex++;
-                        }*/
-                        html += "<div id='s' style='width:360px;text-align:right;float:right;display:inline;' >";
-                        html += "<div style='float:left;'>";
+                        var operations = "";
+                        for (var idx = 0; idx < strs.length; idx++) {
+                            operations += "<option  value='" + strs[idx] + "'>" + strs[idx] + "</option>";
+                        }
+                        html += "<div id='s' style='text-align:right;float:left;display:inline;' >";
+                        html += "<div style='float:left;padding-top:7px;padding-right:2px'>";
                         html += "请选择" + sortColumn + "：";
-                        //this.Pub1.Add(ddl);
+                        html += "<select id='Sort_'" + idex + ">" + operations + "</select>";
                         html += "</div>";
                     }
                     else {
@@ -519,8 +517,15 @@
                     if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                         var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                         var strs = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
+                        var operations = "";
+                        for (var idx = 0; idx < strs.length; idx++) {
+                            operations += "<option  value='" + strs[idx] + "'>" + strs[idx] + "</option>";
+                        }
+                        html += "<div id='s' style='text-align:right;float:left;display:inline;' >";
+                        html += "<div style='float:left;padding-top:7px;padding-right:2px'>";
                         html += "请选择" + sortColumn + "：";
-
+                        html += "<select id='Sort'>" + operations + "</select>";
+                        html += "</div>";
                     }
 
                     html += "文件:"
@@ -611,6 +616,10 @@
             Url += "&FK_Node=" + GetQueryString("FK_Node");
             Url += "&PWorkID=" + GetQueryString("PWorkID");
             Url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            //获取分组
+            var sort = $("#Sort").val();
+            if (sort != null && sort != "" && sort != undefined)
+                Url += "&Sort=" + sort;
 
 
             $.ajax({

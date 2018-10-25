@@ -245,10 +245,19 @@ namespace BP.WF
             FrmNodes nds = new FrmNodes(fl.No, nodeId);
             foreach (FrmNode item in nds)
             {
-                GEEntity en = new GEEntity(item.FK_Frm);
-                en.PKVal = workid;
-                if (en.RetrieveFromDBSources() == 0)
+                GEEntity en = null;
+                try
+                {
+                    en = new GEEntity(item.FK_Frm);
+                    en.PKVal = workid;
+                    if (en.RetrieveFromDBSources() == 0)
+                        continue;
+                }
+                catch(Exception ex)
+                {
                     continue;
+                }
+
                 Attrs attrs = en.EnMap.Attrs;
                 // 优先考虑外键的替换,因为外键文本的字段的长度相对较长。
                 foreach (Attr attr in attrs)

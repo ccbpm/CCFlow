@@ -557,7 +557,7 @@ namespace BP.WF
             if (cancelToNode.HisRunModel == RunModel.Ordinary
                  && nd.HisRunModel == RunModel.HL
                  && nd.HisRunModel == RunModel.FHL
-                && nd.HisRunModel == RunModel.FL)
+                 && nd.HisRunModel == RunModel.FL)
             {
                 /* 检查一下是否还有没有完成的子线程，如果有就抛出不允许撤销的异常。 */
                   sql = "SELECT COUNT(*) as NUM FROM WF_GenerWorkerList WHERE FID="+this.WorkID+" AND IsPass=0";

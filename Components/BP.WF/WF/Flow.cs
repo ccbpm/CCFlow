@@ -793,7 +793,7 @@ namespace BP.WF
 
                 //检查报表.
                 this.CheckRpt();
-                throw new Exception("@创建工作失败：有可能是您在设计表单时候，新增加的控件，没有预览导致的，请您刷新一次应该可以解决，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
+                throw new Exception("@创建工作失败：请您刷新一次，如果问题仍然存在请反馈给管理员，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
             }
 
             //在创建WorkID的时候调用的事件.

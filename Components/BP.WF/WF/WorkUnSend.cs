@@ -411,9 +411,7 @@ namespace BP.WF
 
                 if (gwl.IsHuiQian == true)
                 {
-
                 }
-
 
                 //如果是会签人，就让其显示待办.
                 gwl.IsPassInt = 0;
@@ -555,6 +553,22 @@ namespace BP.WF
             /********** 开始执行撤销. **********************/
             Node cancelToNode = new Node(cancelToNodeID);
 
+            #region 如果撤销到的节点是普通的节点，并且当前的节点是分流(分流)节点，并且分流(分流)节点已经发送下去了,就不允许撤销了.
+            if (cancelToNode.HisRunModel == RunModel.Ordinary
+                 && nd.HisRunModel == RunModel.HL
+                 && nd.HisRunModel == RunModel.FHL
+                && nd.HisRunModel == RunModel.FL)
+            {
+                /* 检查一下是否还有没有完成的子线程，如果有就抛出不允许撤销的异常。 */
+                  sql = "SELECT COUNT(*) as NUM FROM WF_GenerWorkerList WHERE FID="+this.WorkID+" AND IsPass=0";
+                  int num = BP.DA.DBAccess.RunSQLReturnValInt(sql);
+
+                  if (num != 0)
+                      return "err@不允许撤销，因为有未完成的子线程.";
+            }
+            #endregion 如果撤销到的节点是普通的节点，并且当前的节点是分流节点，并且分流节点已经发送下去了.
+
+
             #region 如果当前是协作组长模式,就要考虑当前是否是会签节点，如果是会签节点，就要处理。
             if (cancelToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                 || cancelToNode.TodolistModel == TodolistModel.Teamup)
@@ -685,7 +699,7 @@ namespace BP.WF
             }
             #endregion 恢复工作轨迹，解决工作抢办。
 
-            #region 如果是开始节点, 检查此流程是否有子线程，如果有则删除它们。
+            #region 如果是开始节点, 检查此流程是否有子流程，如果有则删除它们。
             if (nd.IsStartNode)
             {
                 /*要检查一个是否有 子流程，如果有，则删除它们。*/

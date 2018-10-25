@@ -4626,7 +4626,6 @@ namespace BP.WF
             }
             return true;
         }
-
         /// <summary>
         /// 检查当前人员是否有权限处理当前的工作.
         /// </summary>

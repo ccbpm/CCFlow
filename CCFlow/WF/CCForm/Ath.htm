@@ -318,6 +318,8 @@
             var fileSorts = new Array("");
             var haveAuthSort = false;
             var bSort_Add_TD = false;
+
+            //存在分組
             if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                 haveAuthSort = true;
                 //追加一个空项
@@ -325,6 +327,8 @@
                 fileSorts = athDesc.Sort.split(',');
             }
 
+            //循环分组
+            var haveFileSort = "";
             for (var j = 0; j < fileSorts.length; j++) {
                 var sort = fileSorts[j]
                 bSort_Add_TD = true;
@@ -337,7 +341,7 @@
                     var db = dbs[k];
                     if (haveAuthSort == true && db.Sort != mysort)
                         continue;
-
+                    haveFileSort += db.Sort + ",";
                     i++;
                     html += "<tr>";
                     html += "<td class='Idx' nowrap>" + i + "</td>";
@@ -404,13 +408,9 @@
                     html += "</tr>";
                 }
             }
-            if (i == 0 || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true)) {
+            if ((i == 0 &&(athDesc.Sort==null || athDesc.Sort.indexOf(",")==-1 ))|| (athDesc.IsExpCol == 1 && athDesc.IsUpload == true)) {
                 html += "<tr>";
                 html += "<td class='Idx' nowrap>*</td>"; ;
-                if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1)
-                    html += "<td></td>";
-
-                //<span style='color:red;' >请点击下方按钮上传附件</span>
 
                 if (athDesc.IsUpload == true)
                     html += "<td style='width:100px'> </td>";
@@ -432,6 +432,38 @@
                     html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a></td>";
                 else
                     html += "<td>&nbsp&nbsp</td>";
+                html += "</tr>";
+            }
+
+
+            //如果存在分组，增加还没有上传文件的分组
+            for (var j = 0; j < fileSorts.length; j++) {
+                var sort = fileSorts[j];
+                var idx = dbs.length + 1 + j;
+                //分组为空或者已经存在
+                if(sort == "" || haveFileSort.indexOf(sort)!=-1)
+                    continue;
+                //组合Html
+                html += "<tr>";
+                html += "<td class='Idx' nowrap>" + idx + "</td>";
+                html += "<td>" + sort + "</td>";
+                html += "<td style='width:100px;color:red'>你还未上传任何附件，请上传附件</td>";
+                html += "nbsp</td>";
+                html += "<td>&nbsp&nbsp</td>";
+                html += "<td>&nbsp&nbsp</td>";
+                html += "<td>&nbsp&nbsp</td>";
+                //如果有数据,就要解析它附件属性.
+                if (athDesc.IsExpCol == 1) {
+
+                    for (var ii = 0; ii < mapAttrs.length; ii++) {
+
+                        html += "<td>" + InitAthMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";
+                    }
+                }
+                if (athDesc.IsExpCol == 1)
+                    html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                else
+                    html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
                 html += "</tr>";
             }
 
@@ -541,6 +573,12 @@
                 html += "</tr>";
             }
             return html;
+        }
+
+        function changeSort(sort) {
+            $("#Sort").val(sort);
+            //激活上传文件
+            $("#file").click();
         }
 
         //上传.

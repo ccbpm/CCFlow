@@ -551,6 +551,8 @@
                         var strs = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
                         var operations = "";
                         for (var idx = 0; idx < strs.length; idx++) {
+                            if (strs[idx] == "")
+                                continue;
                             operations += "<option  value='" + strs[idx] + "'>" + strs[idx] + "</option>";
                         }
                         html += "<div id='s' style='text-align:right;float:left;display:inline;' >";

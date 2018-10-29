@@ -142,7 +142,12 @@ namespace BP.WF
         /// <summary>
         /// 通用部门岗位人员选择器
         /// </summary>
-        AccepterOfDeptStationEmp
+        AccepterOfDeptStationEmp,
+        /// <summary>
+        /// 按岗位智能计算(操作员所在部门)
+        /// </summary>
+        AccepterOfDeptStationOfCurrentOper
+
 
     }
     /// <summary>

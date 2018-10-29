@@ -1715,7 +1715,7 @@ var DBAccess = (function () {
         //sql = replaceAll(sql, "~", "'");
 
         sql = sql.replace(/~/g, "'");
-        sql = sql.replace(new RegExp("+","gm"),"/#");
+        sql = sql.replace(/[+]/g, "/#");
         sql = sql.replace(/-/g, '/$');
 
 

@@ -4,24 +4,24 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>ccform正在加载请稍候...</title>
-   
-	<script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
-
-	<script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-
+    <!--
+    <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>-->
     <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
-    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
-    <script type="text/javascript" src="../Scripts/Cookie.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.nav.js"></script>
+    <!--<script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>-->
+ <!--   <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
+        type="text/css" />-->
+
+    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>-->
+    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>-->
+    <!--<script type="text/javascript" src="../Scripts/Cookie.js"></script>-->
+    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/jquery.nav.js"></script>-->
 
     <!-- 重要的表单3文件. -->
     <script type="text/javascript" src="FrmGener.js"></script>
@@ -29,35 +29,29 @@
     <script type="text/javascript" src="FrmFree.js"></script>
     <!-- 引入公共的frm加载以后的业务逻辑处理.-->
     <script src="FrmEnd.js" type="text/javascript"></script>
-
     <!-- 引入用户要重写的公共js -->
     <script src="../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
-
-
     <!-- 表单组件 -->
     <script src="./JS/MultipleChoiceSearch.js" type="text/javascript"></script>
     <script src="JS/MultipleChoiceSmall.js" type="text/javascript"></script>
     <script src="JS/Pop.js" type="text/javascript"></script>
-    <link   href="JS/mselector.css" rel="stylesheet" type="text/css" />
+    <link href="JS/mselector.css" rel="stylesheet" type="text/css" />
     <script src="JS/mselector.js" type="text/javascript"></script>
     <script src="JS/mtags.js" type="text/javascript"></script>
-
     <script type="text/javascript" src="MapExt2016.js"></script>
-    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    
+    <!--<script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>-->
 
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
-    <link  href="../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
 
-    <!--下拉框多选-->
-    <link href="../Scripts/bootstrap/bootstrap-select-1.12.4/css/bootstrap-select.css" rel="stylesheet" />
-    <script src="../Scripts/bootstrap/bootstrap-select-1.12.4/js/bootstrap-select.min.js"></script>
 
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
-    <script src="../Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
-    <link href="../Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
+
+ <!--   <script src="../Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
+    <link href="../Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />-->
 
 
     <!--UEditor-->
@@ -66,112 +60,22 @@
     <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
     <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
+    <!-- end UmEditor-->
 
-    <!--UmEditor-->
     <!--时间-->
-     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
 
     <style type="text/css">
-        h1{
+        h1
+        {
             font-family: "微软雅黑";
             font-weight: normal;
         }
-        .btn {
-            display: inline-block;
-            /*display: inline;*/
-            padding: 4px 12px;
-            margin-bottom: 0;
-            /*margin-left: .3em;*/
-            font-size: 14px;
-            line-height: 20px;
-            color: #333333;
-            text-align: center;
-            /* text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
-            vertical-align: middle;
-            cursor: pointer;
-            background-color: #f5f5f5;
-            /*background-color: #e6e6e6;*/
-            background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
-            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
-            background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-            background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
-            background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
-            background-repeat: repeat-x;
-            border: 1px solid #cccccc;
-            /*border: 0;*/
-            border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-            border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-            border-bottom-color: #b3b3b3;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
-            filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-            /*zoom: 1;*/
-            -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-            -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .btn:hover,
-        .btn:focus,
-        .btn:active,
-        .btn.active,
-        .btn.disabled,
-        .btn[disabled] {
-            color: #333333;
-            background-color: #e6e6e6;
-            /*background-color: #d9d9d9;*/
-        }
-
-        .btn:active,
-        .btn.active {
-            background-color: #cccccc;
-        }
-
-        .btn:first-child {
-            /*margin-left: 0;*/
-        }
-
-        .btn:hover,
-        .btn:focus {
-            color: #333333;
-            text-decoration: none;
-            background-position: 0 -15px;
-            -webkit-transition: background-position 0.1s linear;
-            -moz-transition: background-position 0.1s linear;
-            -o-transition: background-position 0.1s linear;
-            transition: background-position 0.1s linear;
-        }
-
-        .btn:focus {
-            outline: thin dotted #333;
-            outline: 5px auto -webkit-focus-ring-color;
-            outline-offset: -2px;
-        }
-
-        .btn.active,
-        .btn:active {
-            background-image: none;
-            outline: 0;
-            -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-            -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .btn.disabled,
-        .btn[disabled] {
-            cursor: default;
-            background-image: none;
-            opacity: 0.65;
-            filter: alpha(opacity=65);
-            -webkit-box-shadow: none;
-            -moz-box-shadow: none;
-            box-shadow: none;
-        }
-          td{
-           border-right-style: none;
+        
+        td
+        {
+            border-right-style: none;
             border-left-style: none;
             border-style: solid;
             padding: 4px;
@@ -182,7 +86,6 @@
             border-color: black;
         }
     </style>
-
     <style type="text/css">
         body {
             padding: 0px;
@@ -348,197 +251,99 @@
             margin: 4px 0px !important;
         }
     </style>
-
     <style type="text/css">
-    div.richText
-    {
-        min-height:40px;
-		border: 1px solid #d4d4d4;
-		cursor:text;
-		padding:0 10px 0;		
-		overflow:auto;
-		word-wrap:break-word;
-		box-shadow: 2px 2px 5px #d3d6da;
-		background-color: #fff;
-	}
-
-		input.align_cb {
-			padding-left: 4px;
-			cursor: pointer;
-			margin: 0;
-			vertical-align: middle;
-		}
-		label.align_cbl {
-			display: inline-block;
-			vertical-align: middle;
-			margin-bottom: 2px;
-		}
-    </style>
-
-     <!--JS 加载-->
-    <script type="text/javascript">
-        var load = {};
-        /*JS 动态加载js 文件*/
-        load.LoadJs = function (jsPath, chartset, callbackfun) {
-
-            try {
-                var head = document.getElementsByTagName('head')[0];
-                var script = document.createElement('script');
-                script.src = jsPath + "?Version=" + Math.random();
-                script.type = 'text/javascript';
-                if (chartset != undefined) {
-                    script.chartset = chartset;
-                }
-
-                if (script.readyState) {
-                    script.onreadystatechange = function () {
-                        if (script.readyState == "loaded" || script.readyState == "complete") {
-                            script.onreadystatechange = null;
-                            if (callbackfun != undefined && typeof (callbackfun) == 'function') {
-                                callbackfun();
-                            }
-                        }
-                    }
-                } else {
-                    script.onload = function () {
-                        if (callbackfun != undefined && typeof (callbackfun) == 'function') {
-                            callbackfun();
-                        }
-                    }
-                }
-                head.appendChild(script);
-            }
-            catch (err) {
-                alert(err)
-            }
-            //$.getScript(jsPath, callbackfun);
+        div.richText
+        {
+            min-height: 40px;
+            border: 1px solid #d4d4d4;
+            cursor: text;
+            padding: 0 10px 0;
+            overflow: auto;
+            word-wrap: break-word;
+            box-shadow: 2px 2px 5px #d3d6da;
+            background-color: #fff;
         }
+        
+        input.align_cb
+        {
+            padding-left: 4px;
+            cursor: pointer;
+            margin: 0;
+            vertical-align: middle;
+        }
+        label.align_cbl
+        {
+            display: inline-block;
+            vertical-align: middle;
+            margin-bottom: 2px;
+        }
+    </style>
+    <!--JS 加载-->
+    <script type="text/javascript">
 
-        /*js 和CSS 的版本号*/
-        load.Version = '0412145201';
-        //使用随机数作为版本号，保证每次加载的config.js 都是最新的，其余的通过公共函数加载，带入版本号，更新版本号即更新文件
-        $.getScript("../Scripts/config.js?Version=" + Math.random(), function () {
-            load.LoadJs("../Scripts/commonYangYH.js", undefined, function () {
-                load.LoadJs('MapExt2016.js', undefined, function () {
-                    load.LoadJs('../Comm/Gener.js', undefined, function () {
-//                        load.LoadJs('FrmFoolReadonly.js', undefined, function () {
-//                        })
-                    })
-                })
-            })
+        function setContentHeight() {
+            $("body").css("overflow", "hidden");
+            $("#divCurrentForm").css("overflow", "hidden");
+            $("#topContentDiv").css("overflow", "hidden");
+            $("#contentDiv").css("overflow", "hidden");
+            $("#divCCForm").css("overflow", "auto");
+            $("#CCForm").css("overflow", "hidden");
+            $("#CCForm").css("overflow-y", "hidden");
+            $("#CCForm").css("height", "auto");
+            var bodyHeight = $("body").height();
+            var bottomHeight = $("#bottomToolBar").height(); // save button
+            if (($("#Btn").css("display") || "") != "block") {
+                bottomHeight = 0;
+            }
+            bottomHeight = 0; // tmp
+            var height = bodyHeight - bottomHeight;
+            $("#divCurrentForm").height(height);
+            $("#topContentDiv").height(height - 45);
+            $("#contentDiv").height(height - 50);
+            $("#divCCForm").height(height - 50);
+        }
+        $(function () {
+            $("body").css("overflow", "hidden");
+            $("#divCurrentForm").css("overflow", "hidden");
+            $("#topContentDiv").css("overflow", "hidden");
+            $("#contentDiv").css("overflow", "hidden");
+            $("#divCCForm").css("overflow", "auto");
+            $("#CCForm").css("overflow", "hidden");
+            $("#CCForm").css("overflow-y", "hidden");
+            $("#CCForm").css("height", "auto");
+            $(window).bind("resize", function () {
+                setTimeout(setContentHeight, 100);
+            });
         });
-
-		function setContentHeight() {
-			$("body").css("overflow", "hidden");
-			$("#divCurrentForm").css("overflow", "hidden");
-			$("#topContentDiv").css("overflow", "hidden");
-			$("#contentDiv").css("overflow", "hidden");
-			$("#divCCForm").css("overflow", "auto");
-			$("#CCForm").css("overflow", "hidden");
-			$("#CCForm").css("overflow-y", "hidden");
-			$("#CCForm").css("height", "auto");
-			var bodyHeight = $("body").height();
-			var bottomHeight = $("#bottomToolBar").height();	// save button
-			if (($("#Btn").css("display") || "") != "block") {
-				bottomHeight = 0;
-			}
-			bottomHeight = 0;	// tmp
-			var height = bodyHeight - bottomHeight;
-			$("#divCurrentForm").height(height);
-			$("#topContentDiv").height(height - 45);
-			$("#contentDiv").height(height - 50);
-			$("#divCCForm").height(height - 50);
-		}
-		$(function () {
-			$("body").css("overflow", "hidden");
-			$("#divCurrentForm").css("overflow", "hidden");
-			$("#topContentDiv").css("overflow", "hidden");
-			$("#contentDiv").css("overflow", "hidden");
-			$("#divCCForm").css("overflow", "auto");
-			$("#CCForm").css("overflow", "hidden");
-			$("#CCForm").css("overflow-y", "hidden");
-			$("#CCForm").css("height", "auto");
-			$(window).bind("resize", function () {
-				setTimeout(setContentHeight, 100);
-			});
-		});
     </script>
 </head>
 <body onclick="hiddenDiv()">
-   
+
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
-        
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 20px 5px;margin:0px auto;">
-            <i class="topContentDiv-i" style="display:none;"></i>
+        <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
+            <i class="topContentDiv-i" style="display: none;"></i>
             <div id="contentDiv">
-                <form id="divCCForm"  method="post">
-                    
-                    <div id="CCForm" style="">
-                        <br />
-                        <img src='./../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
-                        <br />
-                    </div>
-                    <!--DIVINFO-->
-                    <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
-                        align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
-                    </div>
-                   
-                    
+                <form id="divCCForm" method="post">
+                <div id="CCForm" style="">
+                    <br />
+                    <img src='./../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+                    <br />
+                    <br />
+                </div>
+                <!--DIVINFO-->
+                <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
+                    align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
+                </div>
                 </form>
             </div>
         </div>
-        <!--底部功能按钮 发送、移交-->
-        <div id="bottomToolBar" style="display: none;height:50px;width:100%;background:rgb(157, 159, 175);padding-top:5px;" class="Bar">
-        </div>
     </div>
-    <!--杨玉慧加 暂时解决POP窗不好用的问题-->
-    <div class="modal fade" id="returnPopValModal">
-        <div class="modal-dialog" style="margin-left: auto; margin-right: auto;">
-            <div class="modal-content" style="border-radius: 0px;">
-                <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;border: none; float: right;">×</button>
-                    <h4 class="modal-title">选择提出人</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm"
-                        name="iframePopModalForm"></iframe>
-                    <div style="text-align: right;">
-                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">取消</button>
-                        <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!--下拉框选项提示信息-->
-    <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px; left: 304.98961639404297px; display: none;">
-        <div class="arrow" style="left: 50.22522522522522%;"></div>
-        <h3 class="popover-title"><span> title</span><span style="color: white; opacity: 1; float: right; cursor: pointer;" id="span_CloseNoticeInfo">×</span></h3>
-        <div class="popover-content">顶部的 Popover 中的一些内容</div>
-    </div>
-    <!--杨玉慧加  附件弹出窗口-->
-    <div class="modal fade" id="athModal">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius:0px;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1; display:none;">×</button>
-                    <h4 class="modal-title">选择附件</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width:100%;border:0px;height:400px;" id="iframeAthForm" name="iframeAthForm"></iframe>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
      
-     
-      <div id="Btn" >
-         <input type="button" value="Save" id="Btn_Save" onclick="Save()" />
-     </div>
+    
+    <!-- /.modal -->
+    <div id="Btn">
+        <input type="button" value="Save" id="Btn_Save" onclick="Save()" />
+    </div>
 </body>
 </html>

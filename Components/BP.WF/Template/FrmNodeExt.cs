@@ -93,6 +93,10 @@ namespace BP.WF.Template
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
 
+                map.AddBoolean(FrmNodeAttr.IsCloseEtcFrm, false, "打开时是否关闭其它的页面？", true, true);
+                map.SetHelperAlert(FrmNodeAttr.IsCloseEtcFrm,"默认为不关闭,当该表单以tab标签也打开时,是否关闭其它的tab页?");
+
+
                 map.AddDDLSysEnum(FrmNodeAttr.WhoIsPK, 0, "谁是主键?", true, true);
                 map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
                     "@0=默认方案@1=只读方案@2=自定义方案");

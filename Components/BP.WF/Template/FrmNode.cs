@@ -34,6 +34,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsEnableLoadData = "IsEnableLoadData";
         /// <summary>
+        /// 打开表单时是否覆盖其他节点页面？ 
+        /// </summary>
+        public const string IsCloseEtcFrm = "IsCloseEtcFrm";
+        /// <summary>
         /// 是否1变N(对于分流节点有效)
         /// </summary>
         public const string Is1ToN = "Is1ToN";
@@ -583,6 +587,9 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.IsPrint, 0, "是否可以打印", true, false);
                 map.AddTBInt(FrmNodeAttr.IsEnableLoadData, 0, "是否启用装载填充事件", true, false);
                 map.AddTBInt(FrmNodeAttr.IsDefaultOpen, 0, "是否默认打开", true, false);
+                map.AddTBInt(FrmNodeAttr.IsCloseEtcFrm, 0, "打开时是否关闭其它的页面？", true, false);
+
+                
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);

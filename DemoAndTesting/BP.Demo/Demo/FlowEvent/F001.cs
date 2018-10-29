@@ -56,7 +56,7 @@ namespace BP.Demo.FlowEvent
 
             switch (nodeID)
             {
-                case 101:  //当是第1个节点的时候.
+                case 101:  //当是第1个节点的时候....
                     //  throw new Exception("不符合流程发送条件,阻止向下运行.");
                     //this.JumpToEmps = "zhangsan,lisi";
                     //this.JumpToNode = new Node(102);

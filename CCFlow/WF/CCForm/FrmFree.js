@@ -894,8 +894,8 @@ function connector_Template_Line(frmLine) {
     eleHtml.find('td').css('padding', '0px')
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
         eleHtml.find('td').css('padding', '0px')
-        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0.5 : Math.abs(frmLine.X1 - frmLine.X2))
-    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ?1.5 : Math.abs(frmLine.Y1 - frmLine.Y2))
+        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
+    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ?2 : Math.abs(frmLine.Y1 - frmLine.Y2))
         .css("background", frmLine.BorderColor);
     } else {
         eleHtml.find('td').css('padding', '0px')

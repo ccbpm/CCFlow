@@ -591,7 +591,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         }
         checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
         eleHtml += "<div class='checkbox' ><label > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
-        eleHtml += '&nbsp;' + mapAttr.Name + '</label></div>';
+        eleHtml += mapAttr.Name + '</label></div>';
         return eleHtml;
     }
 

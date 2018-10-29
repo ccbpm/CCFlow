@@ -75,7 +75,7 @@ function FlowFormTree_Init() {
                     urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
 
                 var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
-                addTab(node.id, node.text, url);
+                addTab(node.id, node.text, url,node.attributes.IsCloseEtcFrm);
             } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
                 var url = node.attributes.Url;
                 while (url.indexOf('|') >= 0) {
@@ -87,7 +87,7 @@ function FlowFormTree_Init() {
                 else {
                     url = url + "?FK_MapData=" + node.id + "&" + urlExt;
                 }
-                addTab(node.id, node.text, url);
+                addTab(node.id, node.text, url,node.attributes.IsCloseEtcFrm);
             } else if (node.attributes.NodeType == "tools|1") {/*工具栏按钮打开新窗体*/
                 var url = node.attributes.Url;
                 while (url.indexOf('|') >= 0) {
@@ -114,7 +114,19 @@ $(function () {
     }
 });
 
-function addTab(id, title, url) {
+function addTab(id, title, url,IsCloseEtcFrm) {
+    //关闭其余的tab
+   if(IsCloseEtcFrm == "1"){
+        OnTabChange("btnsave");
+        //获取所有可关闭的选项卡
+        $(".tabs li").each(function(index, obj) {
+            //获取所有可关闭的选项卡
+            var currTitile = $(".tabs-closable", this).text();
+            currTitile = currTitile.replace("*","");
+            if(title !=currTitile)
+                $('#tabs').tabs('close', currTitile);
+        });
+    }
     if ($('#tabs').tabs('exists', title)) {
         $('#tabs').tabs('select', title); //选中并刷新
         var currTab = $('#tabs').tabs('getSelected');

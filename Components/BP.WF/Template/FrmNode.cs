@@ -530,6 +530,25 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.HuiZong, value);
             }
         }
+        /// <summary>
+        ///打开时是否关闭其它的页面？
+        /// </summary>
+        public bool IsCloseEtcFrm
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmNodeAttr.IsCloseEtcFrm);
+            }
+        }
+        public int IsCloseEtcFrmInt
+        {
+            get
+            {
+                if (this.IsCloseEtcFrm)
+                    return 1;
+                return 0;
+            }
+        }
         #endregion
 
         #region 构造方法

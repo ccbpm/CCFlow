@@ -40,6 +40,10 @@ namespace BP.WF.Template
         /// Url
         /// </summary>
         public string Url { get; set; }
+        /// <summary>
+        /// 打开时是否关闭其它的页面？
+        /// </summary>
+        public string IsCloseEtcFrm { get; set; }
         #endregion
 
         #region 属性

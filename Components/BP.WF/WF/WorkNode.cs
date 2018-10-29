@@ -480,7 +480,7 @@ namespace BP.WF
             {
                 //计算警告日期.
                 //增加小时数. 考虑到了节假日.
-                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.WarningDay,0, 0, this.town.HisNode.TWay);
+                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.WarningDay, 0, 0, this.town.HisNode.TWay);
             }
 
             switch (this.HisNode.HisNodeWorkType)
@@ -873,7 +873,7 @@ namespace BP.WF
             #endregion  求出日志类型，并加入变量中。
 
             //把工作的当时信息存入数据库.
-           // string json = this.HisWork.ToJson();
+            // string json = this.HisWork.ToJson();
 
             #region 如果是子线城前进.
             if (at == ActionType.SubThreadForward)
@@ -881,7 +881,7 @@ namespace BP.WF
                 string emps = "";
                 foreach (GenerWorkerList wl in this.HisWorkerLists)
                 {
-                    this.AddToTrack(at, wl, "子线程",this.town.HisWork.OID);
+                    this.AddToTrack(at, wl, "子线程", this.town.HisWork.OID);
                 }
                 //写入到日志.
             }
@@ -1085,7 +1085,7 @@ namespace BP.WF
             #region (最后)判断是否有延续流程.
             NodeYGFlows ygflows = new NodeYGFlows();
             ygflows.Retrieve(NodeYGFlowAttr.FK_Node, this.HisNode.NodeID);
-            if (ygflows.Count != 0 && 1==2 )
+            if (ygflows.Count != 0 && 1 == 2)
             {
                 foreach (NodeYGFlow item in ygflows)
                 {
@@ -1832,7 +1832,7 @@ namespace BP.WF
                 throw new Exception("没有找到它的下了步节点.");
 
             Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID,  CondAttr.PRI);
+            dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID, CondAttr.PRI);
             //if (dcsAll.Count == 0)
             //    throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件.");
 
@@ -1996,7 +1996,7 @@ namespace BP.WF
                 foreach (Node nd in toNodes)
                 {
                     Conds conds = new Conds();
-                    int i= conds.Retrieve(CondAttr.NodeID, nd.NodeID, CondAttr.CondType, 2);
+                    int i = conds.Retrieve(CondAttr.NodeID, nd.NodeID, CondAttr.CondType, 2);
                     if (i == 0)
                         continue;
 
@@ -2349,7 +2349,7 @@ namespace BP.WF
             if (this.HisNode.HisFormType != NodeFormType.SDKForm || 1 == 1)
             {
                 if (this.HisNode.IsStartNode)
-                   // this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a><a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
+                    // this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a><a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
                     this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>", SendReturnMsgType.Info);
                 else
                     this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0 />撤销本次发送</a> ", SendReturnMsgType.Info);
@@ -2400,7 +2400,7 @@ namespace BP.WF
             #endregion
 
         }
-      
+
         /// <summary>
         /// 处理分流点向下发送 to 异表单.
         /// </summary>
@@ -2414,10 +2414,10 @@ namespace BP.WF
 
             #region 查询出来当前流程节点数据，为子线程的节点copy数据所用。
             //查询出来上一个节点的附件信息来。
-            FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID,this.WorkID.ToString());
+            FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID, this.WorkID.ToString());
 
             //查询出来上一个Ele信息来。
-            FrmEleDBs eleDBs = new FrmEleDBs("ND" + this.HisNode.NodeID,this.WorkID.ToString());
+            FrmEleDBs eleDBs = new FrmEleDBs("ND" + this.HisNode.NodeID, this.WorkID.ToString());
             #endregion
 
             //定义系统变量.
@@ -2554,7 +2554,7 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarToNodeIDs, toNodeIDs, toNodeIDs, SendReturnMsgType.SystemMsg);
 
             //写入日志. @yuanlina
-            if (this.HisNode.IsStartNode==true)
+            if (this.HisNode.IsStartNode == true)
                 this.AddToTrack(ActionType.Start, empIDs, empNames, this.HisNode.NodeID, this.HisNode.Name, msg);
             else
                 this.AddToTrack(ActionType.Forward, empIDs, empNames, this.HisNode.NodeID, this.HisNode.Name, msg);
@@ -3176,7 +3176,7 @@ namespace BP.WF
             }
             else
             {
-                this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo="+WebUser.No+"&SID="+WebUser.SID+"&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
+                this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
             }
 
             //  this.addMsg("Rpt", "@<a href='WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + wk.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>");
@@ -3236,7 +3236,7 @@ namespace BP.WF
 
             // 先查询一下是否有人员，在合流节点上，如果没有就让其初始化人员. 
             current_gwls = new GenerWorkerLists();
-            current_gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisWork.FID,GenerWorkerListAttr.FK_Node, toNode.NodeID );
+            current_gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisWork.FID, GenerWorkerListAttr.FK_Node, toNode.NodeID);
             if (current_gwls.Count == 0)
                 current_gwls = this.Func_GenerWorkerLists(this.town);// 初试化他们的工作人员．
 
@@ -3262,7 +3262,7 @@ namespace BP.WF
             */
 
             #region 设置父流程状态 设置当前的节点为:
-           
+
             Work mainWK = town.HisWork;
             mainWK.OID = this.HisWork.FID;
             mainWK.RetrieveFromDBSources();
@@ -3333,7 +3333,7 @@ namespace BP.WF
             ps.Add("WorkID", this.HisWork.FID);
             DBAccess.RunSQL(ps);
 
-          
+
             #endregion 设置父流程状态
 
             this.addMsg("InfoToHeLiu", "@流程已经运行到合流节点[" + toNode.Name + "]。@您的工作已经发送给如下人员[" + toEmpsStr + "]，@您是第一个到达此节点的处理人.");
@@ -4050,7 +4050,7 @@ namespace BP.WF
         /// </summary>
         public void DealEvalUn()
         {
-            
+
             //数据发送。
             BP.WF.Data.Eval eval = new Eval();
             if (this.HisNode.IsFLHL == false)
@@ -4819,7 +4819,7 @@ namespace BP.WF
                 TimeSpan ts = t_lastDTOfHuiQian - t_dtOfToZhuChiRen;
 
                 //生成该节点设定的 时间范围.
-                int hour = this.HisNode.TimeLimit * 24 + this.HisNode.TimeLimitHH; 
+                int hour = this.HisNode.TimeLimit * 24 + this.HisNode.TimeLimitHH;
                 // int.Parse(this.HisNode.TSpanHour.ToString());
                 TimeSpan tsLimt = new TimeSpan(hour, this.HisNode.TimeLimitMM, 0);
 
@@ -4866,7 +4866,7 @@ namespace BP.WF
             {
                 if (item.IsPassInt == 0 || item.IsPassInt == 90)
                 {
-                    if (item.FK_Emp.Equals(WebUser.No)==false)
+                    if (item.FK_Emp.Equals(WebUser.No) == false)
                         todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
                     num++;
                 }
@@ -4897,7 +4897,7 @@ namespace BP.WF
             //把当前的待办设置已办，并且提示未处理的人。
             foreach (GenerWorkerList gwl in gwls)
             {
-                if (gwl.FK_Emp.Equals(WebUser.No)==false)
+                if (gwl.FK_Emp.Equals(WebUser.No) == false)
                     continue;
 
                 //设置当前不可以用.
@@ -4916,9 +4916,9 @@ namespace BP.WF
 
                 //替换人员信息.
                 string emps = this.HisGenerWorkFlow.TodoEmps;
-                 
+
                 emps = emps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
-                emps = emps.Replace(WebUser.No + "," + WebUser.Name , "");
+                emps = emps.Replace(WebUser.No + "," + WebUser.Name, "");
 
                 this.HisGenerWorkFlow.TodoEmps = emps;
 
@@ -4968,7 +4968,7 @@ namespace BP.WF
 
             if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.HuiQianLeader)
             {
-                if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ","+BP.Web.WebUser.Name+";" ) == true)
+                if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == true)
                 {
                     /*当前人是组长，检查是否可以可以发送,检查自己是否是最后一个人 ？*/
                     string todoEmps = ""; //记录没有处理的人.
@@ -5047,7 +5047,7 @@ namespace BP.WF
                 //cut 当前的人员.
                 string emps = this.HisGenerWorkFlow.TodoEmps;
                 emps = emps.Replace(WebUser.Name + ";", "");
-                emps = emps.Replace(WebUser.Name , "");
+                emps = emps.Replace(WebUser.Name, "");
 
                 this.HisGenerWorkFlow.TodoEmps = emps;
                 this.HisGenerWorkFlow.DirectUpdate();
@@ -5418,17 +5418,17 @@ namespace BP.WF
                 #region 按照岗位与部门的交集.
                 if (node.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 {
-                   
-                        sql = "SELECT pdes.FK_Emp AS No"
-                              + " FROM   Port_DeptEmpStation pdes"
-                              + " INNER JOIN WF_NodeDept wnd ON wnd.FK_Dept = pdes.FK_Dept"
-                              + " AND wnd.FK_Node = " + node.NodeID
-                              + " INNER JOIN WF_NodeStation wns ON  wns.FK_Station = pdes.FK_Station"
-                              + " AND wns.FK_Node =" + node.NodeID
-                              + " ORDER BY pdes.FK_Emp";
 
-                        dt = DBAccess.RunSQLReturnTable(sql);
-                     
+                    sql = "SELECT pdes.FK_Emp AS No"
+                          + " FROM   Port_DeptEmpStation pdes"
+                          + " INNER JOIN WF_NodeDept wnd ON wnd.FK_Dept = pdes.FK_Dept"
+                          + " AND wnd.FK_Node = " + node.NodeID
+                          + " INNER JOIN WF_NodeStation wns ON  wns.FK_Station = pdes.FK_Station"
+                          + " AND wns.FK_Node =" + node.NodeID
+                          + " ORDER BY pdes.FK_Emp";
+
+                    dt = DBAccess.RunSQLReturnTable(sql);
+
 
                     if (dt.Rows.Count == 0)
                         throw new Exception("@节点访问规则(" + node.HisDeliveryWay.ToString() + ")错误:节点(" + node.NodeID + "," + node.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
@@ -5703,10 +5703,7 @@ namespace BP.WF
                             GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Emp, this.Execer);
 
                         //执行时效考核.
-                        if (this.rptGe == null)
-                            Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
-                        else
-                            Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
+                        Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
 
                         //返回发送对象.
                         return this.HisMsgObjs;
@@ -5802,7 +5799,7 @@ namespace BP.WF
                 // @fanleiwei ,增加了此部分.
                 string todoEmps = this.HisGenerWorkFlow.TodoEmps;
                 todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
-                todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name , "");
+                todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name, "");
 
                 this.HisGenerWorkFlow.TodoEmps = todoEmps;
                 this.HisGenerWorkFlow.Update(GenerWorkFlowAttr.TodoEmps, todoEmps);
@@ -7068,7 +7065,7 @@ namespace BP.WF
             t.EmpFromT = this.ExecerName;
             t.FK_Flow = this.HisNode.FK_Flow;
 
-       //     t.Tag = tag + "@SendNode=" + this.HisNode.NodeID;
+            //     t.Tag = tag + "@SendNode=" + this.HisNode.NodeID;
 
             t.NDTo = gwl.FK_Node;
             t.NDToT = gwl.FK_NodeText;
@@ -7509,7 +7506,7 @@ namespace BP.WF
                 gwf.TodoEmpsNum = gwls.Count;
 
                 string todoEmps = "";
-                foreach (GenerWorkerList  item in gwls)
+                foreach (GenerWorkerList item in gwls)
                     todoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
 
                 gwf.TodoEmps = todoEmps;
@@ -7801,7 +7798,7 @@ namespace BP.WF
                 }
             }
             #endregion 复制Ele。
-            
+
 
         }
         /// <summary>
@@ -8042,23 +8039,23 @@ namespace BP.WF
                 {
                     string tag = dt.Rows[0]["Tag"].ToString();
                     string[] strs = tag.Split('@');
-                     foreach (string str in strs)
-                     {
-                         if (str == null || str == "" || str.Contains("SendNode=") == false)
-                             continue;
-                         string[] mystr = str.Split('=');
-                         if (mystr.Length == 2)
-                         {
-                             string sendNode = mystr[1];
-                             if (string.IsNullOrEmpty(sendNode) == false && sendNode.Equals("0") == false)
-                             {
-                                 nodeid = int.Parse(sendNode);
-                             }
-                         }
-                     }
+                    foreach (string str in strs)
+                    {
+                        if (str == null || str == "" || str.Contains("SendNode=") == false)
+                            continue;
+                        string[] mystr = str.Split('=');
+                        if (mystr.Length == 2)
+                        {
+                            string sendNode = mystr[1];
+                            if (string.IsNullOrEmpty(sendNode) == false && sendNode.Equals("0") == false)
+                            {
+                                nodeid = int.Parse(sendNode);
+                            }
+                        }
+                    }
                 }
             }
-            
+
             if (nodeid == 0)
             {
                 switch (this.HisNode.HisRunModel)

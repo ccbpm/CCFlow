@@ -654,7 +654,7 @@ TransFormDataField.prototype = {
             var rbArr = this.dataArrary.Vals.slice(1).split("@");
             var s = [];
             for (var i = 0; i < rbArr.length; i++) {
-                s.push("RB_" + this.dataArrary.UIBindKey + "_" + rbArr[i]);
+                s.push("RB_"+ this.dataArrary.UIBindKey + "_" + rbArr[i]);
             }
             for (var k = 0; k < s.length; k++) {
                 if (this.dataArrary.UIBindKey != null) {
@@ -817,7 +817,7 @@ TransFormDataField.prototype = {
         if (figureText != null) {
             if (this.figure.CCForm_Shape == "RadioButton") {
                 figureText.setTextStr(" * " + this.figure.CCForm_MyPK.split("=")[1]);
-                createdFigure.CCForm_MyPK = this.figure.CCForm_MyPK.split("=")[0] + "_" + CCForm_FK_MapData;
+                createdFigure.CCForm_MyPK = this.figure.CCForm_MyPK.split("=")[0];
                 if (figureText.str == " * undefined") {
                     figureText.setTextStr(this.dataArrary.Name);
                 } else {

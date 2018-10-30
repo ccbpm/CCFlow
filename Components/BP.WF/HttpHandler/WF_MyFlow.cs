@@ -1928,6 +1928,7 @@ namespace BP.WF.HttpHandler
                     nodeForm.Name = md.Name;
                     nodeForm.NodeType = IsNotNull ? "form|1" : "form|0";
                     nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
+                    nodeForm.IsCloseEtcFrm = frmNode.IsCloseEtcFrmInt.ToString();
                     appFlowFormTree.AddEntity(nodeForm);
                 }
             }
@@ -2065,7 +2066,7 @@ namespace BP.WF.HttpHandler
             {
                 string url = formTree.Url == null ? "" : formTree.Url;
                 url = url.Replace("/", "|");
-                appendMenus.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
+                appendMenus.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"IsCloseEtcFrm\":\""+formTree.IsCloseEtcFrm+"\",\"Url\":\"" + url + "\"}");
             }
             appendMenus.Append(",iconCls:\"icon-Wave\"");
             // 增加它的子级.
@@ -2103,7 +2104,7 @@ namespace BP.WF.HttpHandler
                         ico = "icon-boat_16";
                     }
                     url = url.Replace("/", "|");
-                    appendMenuSb.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
+                    appendMenuSb.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"IsCloseEtcFrm\":\"" + formTree.IsCloseEtcFrm + "\",\"Url\":\"" + url + "\"}");
                     //图标
                     if (formTree.NodeType == "form|0")
                     {

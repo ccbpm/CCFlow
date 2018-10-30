@@ -578,16 +578,18 @@
             //获取屏幕的长宽
            var W = document.body.clientWidth-40;
            var H = document.body.clientHeight-40;
-
-            for(var k = 0 ;k<dtMs.length;k++){
-                var dtm = dtMs[k];
+            var entityAthType = sysMapData.GetPara("BPEntityAthType");
+            if(dtMs.length>0 || entityAthType == 1 || entityAthType == 2){
                 columns.push({
-                     field: dtMs[k].ClassMethodName,
-                     title: dtMs[k].Title,
-                     width: 80,
-                     align:'center',
-                     formatter: function(value,row,index){
-                         var pkval = row[enPK];
+                    field: '_operate',
+                    title: '操作',
+                    width:200,
+                    align:'center',
+                    formatter: function(value,row,index){
+                    var pkval = row[enPK];
+                    var html = "";
+                    for(var k = 0 ;k<dtMs.length;k++){
+                        var dtm = dtMs[k];
                         var warning = dtm.Warning;
                         var refMethodType = parseInt(dtm.RefMethodType);
                         var url = dtm.Url+pkval;
@@ -595,10 +597,11 @@
                             case RefMethodType.LinkeWinOpen:
                             case RefMethodType.LinkModel:
                             case RefMethodType.RightFrameOpen:
-                                return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
+                                html += "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
+                                break;
                             case RefMethodType.Func:
-                                 if (dtm.FunPara == true || dtm.FunPara == "true")
-                                    return "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>";
+                                    if (dtm.FunPara == true || dtm.FunPara == "true")
+                                    html += "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
                                 else {
                                     if (warning ==null || warning == "null" || warning == "")
                                     {
@@ -608,14 +611,21 @@
                                         warning = warning.replace(/,\s+/g, ",");
                                         warning = warning.replace(/\s+/g, "\r\n");
                                     }
-                                    return "<a href='#' onclick='openFun(\""+warning+"\",\""+url+"\",\""+dtm.Title+"\")'>"+dtm.Title+"</a>";
+                                    html += "<a href='#' onclick='openFun(\""+warning+"\",\""+url+"\",\""+dtm.Title+"\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
                        
                                 }
-                            default:return "-";
-
+                                    break;
+                                default:break;
+                            }
                         }
-                     }
-                 });
+                        html += formatOper(value,row,index);
+                        if(html == "")
+                        html ="-";
+                              
+                    return html;
+                              
+                    }
+                });
             }
 
             var isEnableOpen = cfg.GetPara("IsEnableOpenICON");
@@ -641,21 +651,6 @@
                  }); 
             }
            
-
-             var entityAthType = sysMapData.GetPara("BPEntityAthType");
-             if (entityAthType == 1 || entityAthType == 2) {
-                 //加入操作下载文件
-                 columns.push({
-                     field: '_operate',
-                     title: '操作',
-                     width: 80,
-                     align:'center',
-                     formatter: formatOper
-                 });
-             }
-
-
-            
             $('#dg').html("");
             $('#dg').bootstrapTable({
                 data: mapdata["DT"],
@@ -866,7 +861,7 @@
              if (rowData.MyFileName != null && rowData.MyFileName != "")
                 return "<a href='#' onclick='downLoadFile(\"" + pkval + "\")' target='_self'>下载</a>";
             else
-                return "-"; 
+                return ""; 
         }
 
         function openFun(warning,url,title){

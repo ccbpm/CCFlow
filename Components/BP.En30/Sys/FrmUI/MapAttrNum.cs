@@ -216,7 +216,8 @@ namespace BP.Sys.FrmUI
             attr.IsSum = this.GetValBooleanByKey("ExtIsSum");
 
             //增加保留小数位数.
-            attr.SetPara("DecimalDigits", this.GetValIntByKey("DecimalDigits"));
+            //attr.SetPara("DecimalDigits", this.GetValIntByKey("DecimalDigits"));
+
             attr.Update();
 
             return base.beforeUpdateInsertAction();

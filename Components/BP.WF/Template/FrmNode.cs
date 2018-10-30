@@ -128,7 +128,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 自定义方案
         /// </summary>
-        Self        
+        Self    
     }
 
     /// <summary>
@@ -391,6 +391,9 @@ namespace BP.WF.Template
         {
             get
             {
+                if (this.GetValIntByKey(FrmNodeAttr.FrmSln) > 5)
+                    return Template.FrmSln.Self;
+
                 return (FrmSln)this.GetValIntByKey(FrmNodeAttr.FrmSln);
             }
             set

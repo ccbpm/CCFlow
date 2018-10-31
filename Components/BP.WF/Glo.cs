@@ -143,6 +143,7 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+
             /*
              * 升级版本记录:
              * 20150330: 优化发起列表的效率, by:zhoupeng.
@@ -166,6 +167,15 @@ namespace BP.WF
             BP.Sys.FrmTree frmTree = new BP.Sys.FrmTree();
             frmTree.CheckPhysicsTable();
 
+            BP.Sys.SFTable sf = new SFTable();
+            sf.CheckPhysicsTable();
+
+            BP.WF.Template.FrmSubFlow sb = new FrmSubFlow();
+            sb.CheckPhysicsTable();
+
+            //修复数据表.
+            BP.Sys.GroupField gf = new GroupField();
+            gf.CheckPhysicsTable();
 
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();

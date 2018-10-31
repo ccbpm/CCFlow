@@ -16,6 +16,10 @@ namespace BP.WF.Template
         /// 表单数据
         /// </summary>
         NodeForm,
+         /// <summary>
+        /// 独立表单
+        /// </summary>
+        StandAloneFrm,
         /// <summary>
         /// 岗位数据
         /// </summary>
@@ -29,21 +33,19 @@ namespace BP.WF.Template
         /// </summary>
         SQL,
         /// <summary>
+        /// 按sql模版计算.
+        /// </summary>
+        SQLTemplate,
+        /// <summary>
         /// 按参数
         /// </summary>
         Paras,
         /// <summary>
         /// 按Url.
         /// </summary>
-        Url,
-        /// <summary>
-        /// 按sql模版计算.
-        /// </summary>
-        SQLTemplate,
-        /// <summary>
-        /// 独立表单
-        /// </summary>
-        StandAloneFrm
+        Url
+       
+       
     }
     /// <summary>
     /// 条件属性

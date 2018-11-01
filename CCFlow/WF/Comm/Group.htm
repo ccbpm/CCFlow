@@ -279,6 +279,14 @@
             Group_Search();
         }
         function Group_Search() {
+             //销毁图例
+            if (FusionCharts("column_chart") != undefined)
+                FusionCharts("column_chart").dispose();
+            if (FusionCharts("pie_chart") != undefined)
+                FusionCharts("pie_chart").dispose();
+            if (FusionCharts("line_chart") != undefined)
+                FusionCharts("line_chart").dispose();
+
             //重新获取注册信息
             ur = new Entity("BP.Sys.UserRegedit");
             ur.MyPK = webUser.No + ensName + "_Group";
@@ -694,7 +702,8 @@
             
              FusionCharts.ready(function(){
                 var myChart = new FusionCharts({
-                   type: "mscolumn2d",
+                    type: "mscolumn2d",
+                    id: "column_chart",
                    renderAt: "chart-container",
                    width: w,
                    height: h,
@@ -748,6 +757,7 @@
             FusionCharts.ready(function () {
                 var myChart = new FusionCharts({
                     type: "Pie3d",
+                    id: "pie_chart",
                     renderAt: "chart-container",
                     width: w,
                     height: h,
@@ -800,6 +810,7 @@
             FusionCharts.ready(function () {
                 var myChart = new FusionCharts({
                     type: "MSLine",
+                    id: "line_chart",
                     renderAt: "chart-container",
                     width: w,
                     height: h,

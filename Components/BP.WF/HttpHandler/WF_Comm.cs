@@ -3149,7 +3149,7 @@ namespace BP.WF.HttpHandler
                         continue;
                    //if (key.Equals("Group_Number"))
 
-                    selectSQL += key + ",";
+                    selectSQL += key + " \""+key+"\",";
                     groupBy += key + ",";
                     // 加入组里面。
                     AttrsOfGroup.Add(map.GetAttrByKey(key), false, false);

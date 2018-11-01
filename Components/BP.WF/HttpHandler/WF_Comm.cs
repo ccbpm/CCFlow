@@ -3027,7 +3027,7 @@ namespace BP.WF.HttpHandler
 
             ds = GroupSearchSet(ens, en, map, ur, ds, aas);
             if (ds == null)
-                return "info@<img src='../Img/Pub/warning.gif' /><b><font color=red> 您没有选择显示内容/分析项目</font></b>";
+                return "info@<img src='../Img/Warning.gif' /><b><font color=red> 您没有选择显示内容/分析项目</font></b>";
 
             //不显示合计列。
             string NoShowSum = SystemConfig.GetConfigXmlEns("NoShowSum", this.EnsName);

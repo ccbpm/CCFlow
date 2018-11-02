@@ -36,9 +36,38 @@ function FlowFormTree_Init() {
         return;
     }
 
+    var pushData = eval('(' + data + ')');
+      ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+    var enName = "ND"+GetQueryString("FK_Node");
+    if(enName == null || enName == "")
+        enName = "ND"+parseInt(GetQueryString("FK_Flow"))+"01";
+    try {
+        ////加载JS文件
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
+
+    }
+
+    var jsSrc = '';
+    try {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../DataUser/JSLibData/" + enName + ".js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
+
+    }
+
     var i = 0;
     var isSelect = false;
-    var pushData = eval('(' + data + ')');
+    
     var urlExt = urlExtFrm();
 
     //加载类别树

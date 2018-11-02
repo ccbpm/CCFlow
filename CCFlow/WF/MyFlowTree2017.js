@@ -73,8 +73,15 @@ function FlowFormTree_Init() {
 
                 if (isEdit == "0")
                     urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
+                   else
+                    urlExt = urlExt.replace('IsReadonly=1', 'IsReadonly=0');
+
+              //  alert(isEdit);
+               // alert(urlExt);
 
                 var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
+
+               // alert(url);
 
                 //alert(node.attributes.IsCloseEtcFrm);
 
@@ -107,11 +114,13 @@ function FlowFormTree_Init() {
             }
         }
     });
+
     $("#pageloading").hide();
 }
 
 $(function () {
     var pageName = GetLocalPageName();
+
     if (pageName == "MyFlowTreeReadonly.htm") {
         IsReadonly = "1";
         FlowFormTree_Init();
@@ -353,6 +362,7 @@ var RequestArgs = function () {
 
 //传参
 var urlExtFrm = function () {
+
     var extUrl = "";
     var args = new RequestArgs();
     if (args.WorkID != "")
@@ -376,6 +386,7 @@ var urlExtFrm = function () {
     if (args.IsLoadData != "") {
         extUrl += "&IsLoadData=" + args.IsLoadData;
     }
+
     extUrl += "&IsReadonly=" + IsReadonly;
 
     //获取其他参数

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
- <title>绑定列表</title>
+    <meta charset="UTF-8">
+    <title>绑定列表</title>
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -11,12 +11,11 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
-       
+
 
         var fk_flow = GetQueryString('FK_Flow');
         var fk_node = GetQueryString('FK_Node');
@@ -78,6 +77,8 @@
                         newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Up')\">上移</a></td>";
                         newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Down')\">下移</a></td>";
                         newRow += "<td><a href=\"javascript:Delete('" + mypk + "')\">删除</a></td>";
+                        newRow += "<td><a href=\"javascript:Designer('" + mypk + "','" + frmNode.FK_Frm + "')\">设计</a></td>";
+
 
                         //newRow += "<td><a href=\"javascript:WinField('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">字段</a>&nbsp;&nbsp;<a href=\"javascript:WinFJ('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">附件</a>&nbsp;&nbsp;<a href=\"javascript:WinDtl('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">明细表</a></td>";
                         newRow += "</tr>";
@@ -89,8 +90,8 @@
         }
 
         function WinField(fk_mapdata, nodeid, fk_flow) {
-            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';            
-            
+            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';
+
             OpenEasyUiDialog(url, "eudlgframe", '字段权限控制', 1260, 560, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -115,19 +116,14 @@
         //顺序.
         function DoOrder(no, type) {
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=BindFrms_DoOrder&MyPK=" + no + "&OrderType=" + type + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    window.location.href = window.location.href;
-                }
-            });
+            var frmNode = new Entity("BP.WF.Template.FrmNode", no);
+
+            if (type == "Up")
+                frmNode.DoMethodReturnString("DoUp");
+            else
+                frmNode.DoMethodReturnString("DoDown");
+
+            window.location.href = window.location.href;
         }
 
         //删除.
@@ -136,23 +132,27 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            //删除学生.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=BindFrms_Delete&MyPK=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var frmNode = new Entity("BP.WF.Template.FrmNode", no);
+            frmNode.Delete();
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            window.location.href = window.location.href;
+        }
 
-                    alert(data);
-                    window.location.href = window.location.href;
-                }
-            });
+        //设计表单.
+        function Designer(mypk, fk_mapData) {
+
+            var mapdata = new Entity("BP.Sys.MapData", fk_mapData);
+
+            var url = "";
+            if (mapdata.FrmType == 1) {
+                url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=" + fk_mapData;
+            } else {
+                url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + fk_mapData;
+            }
+
+            WinOpen(url);
+            //alert(fk_mapData);
+
         }
 
         function Edit(mypk) {
@@ -169,7 +169,7 @@
         }
     </script>
 </head>
-<body   class="easyui-layout">
+<body class="easyui-layout">
     <div data-options="region:'center'">
         <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
             <tr class="GroupTitle">
@@ -199,13 +199,10 @@
                 <th>
                     上移
                 </th>
-                <th>
-                    下移
-                </th>
-                <th>
-                    删除
-                </th>                
-                            
+                <th> 下移</th>
+                <th>删除 </th>
+                <th>设计</th>
+
             </tr>
         </table>
     </div>

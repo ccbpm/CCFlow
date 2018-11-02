@@ -79,8 +79,11 @@
             }
             //返回节点数组
             var initNodeData = function (data, fk_dept2) {
+
                 data = eval('(' + data + ')');
-                console.log(data);
+
+                //console.log(data); //在ie下报错，调试完毕后删除他。
+
                 var fk_dept = fk_dept2;//pageData.FK_Dept;
                 var parentNo = undefined;
                 var fkDeptObj = $.grep(data.Depts, function (value) {

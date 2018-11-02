@@ -75,7 +75,11 @@ function FlowFormTree_Init() {
                     urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
 
                 var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
+
+                //alert(node.attributes.IsCloseEtcFrm);
+
                 addTab(node.id, node.text, url,node.attributes.IsCloseEtcFrm);
+
             } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
                 var url = node.attributes.Url;
                 while (url.indexOf('|') >= 0) {

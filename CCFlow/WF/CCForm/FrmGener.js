@@ -235,7 +235,7 @@ function GenerFrm() {
                     GenerFreeFrm(mapData, frmData); //自由表单.
             }
 
-            $.parser.parse("#CCForm");
+          //  $.parser.parse("#CCForm");
             var isReadonly = GetQueryString("IsReadonly");
 
             //原有的。
@@ -278,10 +278,9 @@ function GenerFrm() {
 
             }
 
-
             if (isReadonly != "1") {
 
-                Common.MaxLengthError();
+                //Common.MaxLengthError();
                 //debugger
                 //处理下拉框级联等扩展信息
                 AfterBindEn_DealMapExt(frmData);

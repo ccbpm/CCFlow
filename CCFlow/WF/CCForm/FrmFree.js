@@ -58,35 +58,35 @@ function GenerFreeFrm(mapData, frmData) {
         $('#CCForm').append(createdFigure);
     }
 
-	// 主表扩展(统计从表)
-	var detailExt = {};
-	// 装载公式 从表id -> 公式
-	$.each(frmData.Sys_MapExt, function (i, o) {
-		if (o.ExtType == "AutoFullDtlField") {	// 明细统计公式
-			// 从表id.列.[Sum|Avg|Max|Min] -> CCFrm_CongBiaoCeShiDtl1.ShanJia.Avg
-			var docs = o.Doc.split("\.");
-			if (docs.length == 3) {
-				var ext = {
-					"DtlNo" : docs[0],
-					"FK_MapData" : o.FK_MapData,
-					"AttrOfOper" : o.AttrOfOper,
-					"Doc" : o.Doc,
-					"DtlColumn" : docs[1],
-					"exp" : docs[2]
-				};
-				if (!$.isArray(detailExt[ext.DtlNo])) {
-					detailExt[ext.DtlNo] = [];
-				}
-				detailExt[ext.DtlNo].push(ext);
-				$(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
-			}
-		}
-	});
+    // 主表扩展(统计从表)
+    var detailExt = {};
+    // 装载公式 从表id -> 公式
+    $.each(frmData.Sys_MapExt, function (i, o) {
+        if (o.ExtType == "AutoFullDtlField") {	// 明细统计公式
+            // 从表id.列.[Sum|Avg|Max|Min] -> CCFrm_CongBiaoCeShiDtl1.ShanJia.Avg
+            var docs = o.Doc.split("\.");
+            if (docs.length == 3) {
+                var ext = {
+                    "DtlNo": docs[0],
+                    "FK_MapData": o.FK_MapData,
+                    "AttrOfOper": o.AttrOfOper,
+                    "Doc": o.Doc,
+                    "DtlColumn": docs[1],
+                    "exp": docs[2]
+                };
+                if (!$.isArray(detailExt[ext.DtlNo])) {
+                    detailExt[ext.DtlNo] = [];
+                }
+                detailExt[ext.DtlNo].push(ext);
+                $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
+            }
+        }
+    });
 
     //循环 从表
     for (var i in frmData.Sys_MapDtl) {
         var frmMapDtl = frmData.Sys_MapDtl[i];
-        var createdFigure = figure_Template_Dtl(frmMapDtl, detailExt[frmMapDtl.No]);	// 根据从表id获取公式 从表id -> 公式
+        var createdFigure = figure_Template_Dtl(frmMapDtl, detailExt[frmMapDtl.No]); // 根据从表id获取公式 从表id -> 公式
         $('#CCForm').append(createdFigure);
     }
 
@@ -126,14 +126,14 @@ function figure_Template_FigureFlowChart(wf_node, mapData) {
 
     //轨迹图
     var sta = wf_node.FrmTrackSta;
-    if (sta == 0 || sta==undefined) 
+    if (sta == 0 || sta == undefined)
         return $('');
 
     var x = wf_node.FrmTrack_X;
     var y = wf_node.FrmTrack_Y;
     var h = wf_node.FrmTrack_H;
     var w = wf_node.FrmTrack_W;
-    
+
     var src = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
     src += '&FK_Flow=' + pageData.FK_Flow;
     src += '&FK_Node=' + pageData.FK_Node;
@@ -159,10 +159,10 @@ function figure_Template_FigureFrmCheck(wf_node, mapData) {
 
     var x = 0, y = 0, h = 0, w = 0;
     if (pos == null) {
-          x = wf_node.FWC_X;
-          y = wf_node.FWC_Y;
-          h = wf_node.FWC_H;
-          w = wf_node.FWC_W;
+        x = wf_node.FWC_X;
+        y = wf_node.FWC_Y;
+        h = wf_node.FWC_H;
+        w = wf_node.FWC_W;
     }
 
     if (pos != null) {
@@ -200,10 +200,10 @@ function figure_Template_FigureFrmCheck(wf_node, mapData) {
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += "&IsReadonly=" + isReadonly;
 
-  //  paras += '&WorkID=' + pageData.WorkID;
+    //  paras += '&WorkID=' + pageData.WorkID;
     if (sta == 2)//只读
     {
-       // src += "&DoType=View";
+        // src += "&DoType=View";
     }
     else {
         fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
@@ -253,7 +253,7 @@ function PreaseFlowCtrls(flowCtrls, ctrlID) {
 }
 
 //子线程
-function figure_Template_FigureThreadDtl(wf_node,mapData) {
+function figure_Template_FigureThreadDtl(wf_node, mapData) {
 
     //FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W
     var sta = wf_node.FrmThreadSta;
@@ -446,7 +446,7 @@ function figure_Template_IFrame(fram) {
 
 function figure_MapAttr_Template(mapAttr) {
 
-   //根据不同的类型控件，生成html.
+    //根据不同的类型控件，生成html.
     var ele = figure_MapAttr_TemplateEle(mapAttr);
 
     ele += mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
@@ -458,9 +458,9 @@ function figure_MapAttr_Template(mapAttr) {
     if (mapAttr.MyDataType == 7)
         if (W < 160) W = 160;
 
-   
-     eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
-   
+
+    eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
+
 
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
 
@@ -494,7 +494,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         return eleHtml;
     }
- 
+
     /***************** 作为附件展示的控件. *****************************/
     if (mapAttr.UIContralType == 6) {
         var atParamObj = AtParaToJson(mapAttr.AtPara);
@@ -590,7 +590,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             checkedStr = ' checked="checked" '
         }
         checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
-        eleHtml += "<div class='checkbox' ><label > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+        eleHtml += "<div class='checkbox' ><label style='width:100%;' > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
         eleHtml += mapAttr.Name + '</label></div>';
         return eleHtml;
     }
@@ -661,6 +661,25 @@ function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
 
 //升级表单元素 初始化Label
 function figure_Template_Label(frmLab) {
+
+//    var eleHtml = "<div id=u2 style='position:absolute;left:" + frmLab.X + "px;top:" + frmLab.Y + "px;text-align:left;' >";
+//    eleHtml += "<span style='color:" + frmLab.FontColorHtml + ";font-family: " + frmLab.FontName + ";font-size: " + frmLab.FontSize + "px;' >" + frmLab.Text + "</span>";
+//    eleHtml += "</div>";
+//    eleHtml = $(eleHtml);
+//    return eleHtml;
+
+    eleHtml = '<label></label>'
+    eleHtml = $(eleHtml);
+    var text = frmLab.Text.replace(/@/g, "<br>");
+    eleHtml.html(text);
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize)
+        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
+    analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
+    return eleHtml;
+}
+
+//升级表单元素 初始化Label
+function figure_Template_Label_old(frmLab) {
     var eleHtml = '';
     eleHtml = '<label></label>'
     eleHtml = $(eleHtml);
@@ -878,8 +897,6 @@ function figure_Template_Attachment(frmAttachment) {
     src += "&FID=" + fid;
     src += "&PWorkID=" + pWorkID;
 
-
-
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', ath.Y).css('left', ath.X).css('width', ath.W).css('height', ath.H);
@@ -895,12 +912,12 @@ function connector_Template_Line(frmLine) {
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
         eleHtml.find('td').css('padding', '0px')
         .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
-    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ?2 : Math.abs(frmLine.Y1 - frmLine.Y2))
+    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2 : Math.abs(frmLine.Y1 - frmLine.Y2))
         .css("background", frmLine.BorderColor);
     } else {
         eleHtml.find('td').css('padding', '0px')
         .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
-    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ?1 : Math.abs(frmLine.Y1 - frmLine.Y2))
+    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
         .css("background", frmLine.BorderColor);
     }
 

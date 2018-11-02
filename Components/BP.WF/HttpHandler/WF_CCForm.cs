@@ -1118,6 +1118,13 @@ namespace BP.WF.HttpHandler
                     MapAttrs attrs = new MapAttrs(this.EnsName);
                     MapDtls dtls = new MapDtls(this.EnsName);
                     en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                    try
+                    {
+                        en.DirectUpdate();
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
 
                 //执行事件
@@ -1269,6 +1276,9 @@ namespace BP.WF.HttpHandler
                                
                                 if (dr[MapAttrAttr.UIIsEnable].ToString() == "0")
                                     attr.UIIsReadonly = true;
+                                else
+                                    attr.UIIsReadonly = false;
+
 
                                 //处理默认值.
                                 if (DataType.IsNullOrEmpty(ff.DefVal) == true)
@@ -1400,7 +1410,7 @@ namespace BP.WF.HttpHandler
 
                 string json= BP.Tools.Json.DataSetToJson(ds, false);
 
-                BP.DA.DataType.WriteFile("c:\\aaa.txt", json);
+              //  BP.DA.DataType.WriteFile("c:\\aaa.txt", json);
 
                 return json;
 

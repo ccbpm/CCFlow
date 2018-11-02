@@ -736,6 +736,7 @@ function valitationBefore(o, validateType) {
 		}
 	}
 }
+
 function valitationAfter(o, validateType) {
 	if (isFF()) {
 		var value = o.value;
@@ -758,6 +759,7 @@ function valitationAfter(o, validateType) {
 		}
 	}
 }
+
 /**
  * 输入验证firfox, ff浏览器不支持execCommand()
  */

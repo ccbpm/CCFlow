@@ -4743,17 +4743,20 @@ namespace BP.WF
                 ps.Add(WorkAttr.OID, pk);
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-                // 检查数据是否完整.
-                foreach (FrmField ff in ffs)
+                if (dt.Rows.Count == 1)
                 {
-                    if (ff.FK_MapData != item.FK_Frm)
-                        continue;
+                    // 检查数据是否完整.
+                    foreach (FrmField ff in ffs)
+                    {
+                        if (ff.FK_MapData != item.FK_Frm)
+                            continue;
 
-                    //获得数据.
-                    string val = string.Empty;
-                    val = dt.Rows[0][ff.KeyOfEn].ToString();
+                        //获得数据.
+                        string val = string.Empty;
+                        val = dt.Rows[0][ff.KeyOfEn].ToString();
 
-                    this.HisWork.SetValByKey(ff.KeyOfEn, val);
+                        this.HisWork.SetValByKey(ff.KeyOfEn, val);
+                    }
                 }
             }
 

@@ -387,28 +387,6 @@ namespace BP.WF.HttpHandler
             //把json数据返回过去.
             return fnes.ToJson();
         }
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <returns></returns>
-        public string BindFrms_Delete()
-        {
-            FrmNodeExt myen = new FrmNodeExt(this.MyPK);
-            myen.Delete();
-            return "删除成功.";
-        }
-
-        public string BindFrms_DoOrder()
-        {
-            FrmNode myen = new FrmNode(this.MyPK);
-
-            if (this.GetRequestVal("OrderType") == "Up")
-                myen.DoUp();
-            else
-                myen.DoDown();
-
-            return "执行成功...";
-        }
         #endregion 表单方案.
 
         #region 字段权限.

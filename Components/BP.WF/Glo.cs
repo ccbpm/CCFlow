@@ -173,9 +173,15 @@ namespace BP.WF
             BP.WF.Template.FrmSubFlow sb = new FrmSubFlow();
             sb.CheckPhysicsTable();
 
+            
+            BP.WF.Template.PushMsg pm = new PushMsg();
+            pm.CheckPhysicsTable();
+
             //修复数据表.
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
+
+        
 
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();

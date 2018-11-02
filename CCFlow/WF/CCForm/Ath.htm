@@ -191,7 +191,7 @@
 
 
             if (athDesc.IsExpCol == 0) {
-                $('#file_upload').uploadify({
+                $('#file').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
                     'uploader': url,
                     'auto': true,
@@ -206,7 +206,7 @@
                         //获取分组
                         var sort = $("#Sort").val();
                         if (sort != null && sort != "" && sort != undefined)
-                            $('#file_upload').uploadify('settings', 'formData', { "parasData": "Sort=" + sort });
+                            $('#file').uploadify('settings', 'formData', { "parasData": "Sort=" + sort });
                     },
                     'onQueueComplete': function (queueData) {
                         window.location.href = window.location.href;
@@ -217,7 +217,7 @@
             }
             if (athDesc.IsExpCol == 1) {
                 var parasData = "";
-                $('#file_upload').uploadify({
+                $('#file').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
                     'uploader': url,
                     'method': 'GET',
@@ -243,7 +243,7 @@
                         if (sort != null && sort != "" && sort != undefined)
                             parasData += "@Sort=" + sort;
 
-                        $('#file_upload').uploadify('settings', 'formData', { "parasData": parasData });
+                        $('#file').uploadify('settings', 'formData', { "parasData": parasData });
 
                     },
                     'onQueueComplete': function (queueData) {
@@ -477,8 +477,14 @@
                 }
                 if (athDesc.IsExpCol == 1)
                     html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
-                else
-                    html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                else {
+                    var explorer = window.navigator.userAgent;
+                    var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+                    if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
+                        html += "<td></td>";
+                    else
+                        html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                }
                 html += "</tr>";
             }
 
@@ -552,7 +558,7 @@
                         html += "<div id='s' style='text-align:right;float:right;display:inline;' >";
                     }
                     html += "<div style='float:left;margin-left:5px;'>";
-                    html += "<input type='file' style='float:left' name='file_upload' id='file_upload' />";
+                    html += "<input type='file' style='float:left' name='file' id='file' />";
                     html += "</div>";
                     html += "</div>";
 
@@ -598,6 +604,7 @@
             $("#Sort").val(sort);
             //激活上传文件
             $("#file").click();
+           
         }
 
         //上传.

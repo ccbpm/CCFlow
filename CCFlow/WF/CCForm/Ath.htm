@@ -188,10 +188,7 @@
             url += "&FK_Node=" + GetQueryString("FK_Node");
             url += "&PWorkID=" + GetQueryString("PWorkID");
             url += "&FK_MapData=" + GetQueryString("FK_MapData");
-            //获取分组
-            var sort = $("#Sort").val();
-            if (sort != null && sort != "" && sort != undefined)
-                url += "&Sort=" + sort;
+
 
             if (athDesc.IsExpCol == 0) {
                 $('#file_upload').uploadify({
@@ -205,6 +202,12 @@
                     'height': 15,
                     'multi': true,
                     'queueSizeLimit': 999,
+                    'onUploadStart': function (file) {
+                        //获取分组
+                        var sort = $("#Sort").val();
+                        if (sort != null && sort != "" && sort != undefined)
+                            $('#file_upload').uploadify('settings', 'formData', { "parasData": "Sort=" + sort });
+                    },
                     'onQueueComplete': function (queueData) {
                         window.location.href = window.location.href;
 
@@ -235,6 +238,11 @@
                         parasData = parasData.replace(/RB_/g, '');
                         parasData = parasData.replace(/CB_/g, '');
                         parasData = parasData.replace(/DDL_/g, '');
+                        //获取分组
+                        var sort = $("#Sort").val();
+                        if (sort != null && sort != "" && sort != undefined)
+                            parasData += "@Sort=" + sort;
+
                         $('#file_upload').uploadify('settings', 'formData', { "parasData": parasData });
 
                     },
@@ -501,8 +509,8 @@
                     html += "<td colspan=" + columnNum + ">";
 
                 var explorer = window.navigator.userAgent;
-
-                if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)) {
+                var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+                if ( ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
 
                     if (athDesc.Exts != null && athDesc.Exts != "") {
                         var fileExts = athDesc.Exts.replace("|", ";");
@@ -623,7 +631,8 @@
             }
 
             var explorer = window.navigator.userAgent;
-            if ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)) {
+            var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+            if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
                 $('#file_upload').uploadify("upload", "*");
                 return;
             }

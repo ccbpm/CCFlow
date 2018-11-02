@@ -2,9 +2,21 @@
 
 function GenerFreeFrm(mapData, frmData) {
 
+    //循环FrmRB
+    for (var i in frmData.Sys_FrmRB) {
+        var frmLab = frmData.Sys_FrmRB[i];
+        var label = figure_Template_Rb(frmLab);
+        $('#CCForm').append(label);
+    }
+
     //循环MapAttr
     for (var mapAtrrIndex in frmData.Sys_MapAttr) {
         var mapAttr = frmData.Sys_MapAttr[mapAtrrIndex];
+        if (mapAttr.UIContralType == 3) {
+            if (mapAttr.UIIsEnable == 0)
+                $('input[name=RB_' + mapAttr.KeyOfEn + ']').attr("disabled", "disabled");
+            continue;
+        }
         var eleHtml = figure_MapAttr_Template(mapAttr);
         $('#CCForm').append(eleHtml);
     }
@@ -15,12 +27,8 @@ function GenerFreeFrm(mapData, frmData) {
         var label = figure_Template_Label(frmLab);
         $('#CCForm').append(label);
     }
-    //循环FrmRB
-    for (var i in frmData.Sys_FrmRB) {
-        var frmLab = frmData.Sys_FrmRB[i];
-        var label = figure_Template_Rb(frmLab);
-        $('#CCForm').append(label);
-    }
+   
+
 
     //循环FrmBtn
     for (var i in frmData.Sys_FrmBtn) {
@@ -746,8 +754,9 @@ function figure_Template_Rb(frmRb) {
     childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
 
     childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
-    if (frmRb.UIIsEnable == false)
-        childRbEle.attr('disabled', 'disabled');
+//    if (frmRb.UIIsEnable == false)
+//        childRbEle.attr('disabled', 'disabled');
+
     var defVal = ConvertDefVal(frmData, '', frmRb.KeyOfEn);
     if (defVal == frmRb.IntKey) {
         childRbEle.attr("checked", "checked");

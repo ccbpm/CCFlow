@@ -513,7 +513,7 @@
                         for (var i = 0; i < fileExtData.length; i++) {
                             var ext = fileExtData[i]
                             if (ext != null && ext != "") {
-                                if (ext.startsWith("*."))
+                                if (ext.indexOf("*.")==0)
                                     realFileExts += ext + ";";
                                 else
                                     realFileExts += "*." + ext + ";";

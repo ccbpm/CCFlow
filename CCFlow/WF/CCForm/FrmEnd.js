@@ -37,10 +37,7 @@
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-        //if (mapAttr.MyDataType == 8) {
-         //   if (!/\./.test(val))
-        //        val += '.00';
-        //}
+        
         $('#TB_' + mapAttr.KeyOfEn).val(val);
 
         //文本框.
@@ -335,13 +332,13 @@ function AfterBindEn_DealMapExt(frmData) {
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
 
                 if (mapExt.Tag == "onblur") {
-                    var tb = $('[name$=' + "TB_" + mapExt.AttrOfOper + ']');
+                    var tb = $('#TB_' + mapExt.AttrOfOper);
                     tb.blur(function () {  // 失去焦点 
                         //    SetQingJiaTianShu();
                     });
                     return;
                 }
-                var tb = $('[name$=' + mapExt.AttrOfOper + ']');
+                var tb = $('#TB_' + mapExt.AttrOfOper);
 
                 //tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
 

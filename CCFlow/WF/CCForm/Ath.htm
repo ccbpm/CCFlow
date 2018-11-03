@@ -521,8 +521,7 @@
                 if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
 
                     if (athDesc.Exts != null && athDesc.Exts != "") {
-                        var fileExts = athDesc.Exts.replace("|", ";");
-                        fileExts = athDesc.Exts.replace(",", ";");
+                        var fileExts = athDesc.Exts.replace(/,/g, ";");
 
                         var fileExtData = fileExts.split(';');
 

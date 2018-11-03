@@ -230,7 +230,7 @@
                 data: { data: JSON.stringify(initData.Sys_FrmRB) },
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=RadioBtns_Save&FK_MapData=" + pageData + "&FK_MapExt=" + pageData.MyPK + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
+                url: Handler + "?DoType=RadioBtns_Save&FK_MapData=" + pageData.FK_MapData + "&FK_MapExt=" + pageData.MyPK + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     alert(data)

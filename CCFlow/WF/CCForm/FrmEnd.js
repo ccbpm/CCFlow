@@ -336,7 +336,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     tb.blur(function () {  // 失去焦点 
                         //    SetQingJiaTianShu();
                     });
-                    return;
+                    break;
                 }
                 var tb = $('#TB_' + mapExt.AttrOfOper);
 
@@ -601,8 +601,11 @@ function calculator(o) {
     });
     (function (targets, expression, resultTarget, pk, expDefined) {
         $.each(targets, function (i, o) {
+
             var target = o.replace("@", "");
+
             $(":input[name=TB_" + target + "]").bind("change", function () {
+
                 var evalExpression = " var result = ''; ";
                 if (expression.judgement.length > 0) {
                     evalExpression += " if ( " + expression.judgement.join(" || ") + " ) { ";
@@ -618,7 +621,10 @@ function calculator(o) {
                 if (expression.execute_judgement.length > 0) {
                     evalExpression += " } ";
                 }
+
                 eval(evalExpression);
+
+
                 $(":input[name=TB_" + resultTarget + "]").val(typeof result == "undefined" ? "" : result);
             });
             if (i == 0) {

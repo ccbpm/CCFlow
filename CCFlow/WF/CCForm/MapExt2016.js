@@ -933,10 +933,24 @@ function CheckRegInput(oInput, filter, tipInfo) {
         }
         result = re.test(oInputVal);
     }
-    if (!result) {//alert(tipInfo);
+    if (!result) {
         $("[name=" + oInput + ']').addClass('errorInput');
+        var errorId = oInput+"error";
+        if($("#"+errorId).length == 0){
+           var span = $("<span id='"+errorId+"' style='color:red'></span>");
+           $("[name=" + oInput + ']').parent().append(span);
+        }
+        $("#"+errorId).html(tipInfo);
+
     } else {
         $("[name=" + oInput + ']').removeClass('errorInput');
+        var errorId = oInput+"error";
+        if ($("#" + errorId).length != 0)
+            $("#" + errorId).remove();
+            //$("[name=" + oInput + ']').parent().removeChild($("#" + errorId));
+
+            
+
     }
     return result;
 }

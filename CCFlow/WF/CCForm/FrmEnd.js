@@ -331,22 +331,15 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
 
-                if (mapExt.Tag == "onblur") {
-                    var tb = $('#TB_' + mapExt.AttrOfOper);
-                    tb.blur(function () {  // 失去焦点 
-                        //    SetQingJiaTianShu();
-                    });
-                    break;
-                }
+
                 var tb = $('#TB_' + mapExt.AttrOfOper);
-
-                //tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
-
+                
                 if (tb.attr('class') != undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {
                     break;
                 } else {
                     tb.addClass("CheckRegInput");
                     tb.data(mapExt)
+                    tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
                     //tb.data().name = tb.attr('name');
                     //tb.data().Doc = mapExt.Doc;
                     //tb.data().Tag1 = mapExt.Tag1;

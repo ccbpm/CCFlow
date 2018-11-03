@@ -276,21 +276,21 @@
                 //background-color: #f9f9f9;
                 html += "<tr style='border:0px;'>";
 
-                html += "<td class='TitleExt' style='width:50px; border-top: 1px solid #ddd' nowrap=true >序号</td>";
+                html += "<th  style='width:50px; border-top: 1px solid #ddd' nowrap=true >序</td>";
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                     var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                     if (sortColumn == "")
                         sortColumn = "类别";
-                    html += "<td class='TitleExt' style=' border-top: 1px solid #ddd' nowrap=true >" + sortColumn + "</td>";
+                    html += "<th style=' border-top: 1px solid #ddd' nowrap=true >" + sortColumn + "</td>";
                 }
 
                 //是否启用附件从表 0 禁用 1启用
                 if (athDesc.IsExpCol == 0) {
 
-                    html += "<td class='TitleExt' style='min-width:200px; border-top: 1px solid #ddd' nowrap=true >文件名</td>";
-                    html += "<td class='TitleExt' style='width:50px; border-top: 1px solid #ddd' nowrap=true >大小KB</td>";
-                    html += "<td class='TitleExt' style='width:90px; border-top: 1px solid #ddd' nowrap=true >上传时间</td>";
-                    html += "<td class='TitleExt' style='width:50px; border-top: 1px solid #ddd' nowrap=true >上传人</td>";
+                    html += "<th style='min-width:200px; border-top: 1px solid #ddd' nowrap=true >文件名</th>";
+                    html += "<th  style='width:50px; border-top: 1px solid #ddd' nowrap=true >大小KB</th>";
+                    html += "<th  style='width:120px; border-top: 1px solid #ddd' nowrap=true >上传时间</th>";
+                    html += "<th  style='width:80px; border-top: 1px solid #ddd' nowrap=true >上传人</th>";
                     //html += "<td class='TitleExt' nowrap=true style='width:50px;' >";
                 } else {
                     html += "<th nowrap=true style='border: 1px solid #ddd' >文件名</th>";
@@ -319,12 +319,14 @@
                     }
                     columnNum = columnNum + mapAttrs.length;
                 }
-                html += "<td class='TitleExt' nowrap=true style='width:50px; border-top: 1px solid #ddd' >";
+                html += "<th  nowrap=true style='width:50px; border-top: 1px solid #ddd' >";
+
                 if (athDesc.IsDownload == 1 && dbs.length > 0)
                     html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包</a>";
                 else
                     html += "操作";
-                html += "</td>";
+
+                html += "</th>";
                 html += "</tr>";
                 html += "</thead>";
             }
@@ -335,7 +337,7 @@
             var bSort_Add_TD = false;
 
             //存在分組
-            if (athDesc.Sort != null ) {
+            if (athDesc.Sort != null) {
                 haveAuthSort = true;
                 //追加一个空项
                 if (athDesc.Sort.lastIndexOf(",") + 1 != athDesc.Sort.length)
@@ -516,7 +518,7 @@
 
                 var explorer = window.navigator.userAgent;
                 var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
-                if ( ((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
+                if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
 
                     if (athDesc.Exts != null && athDesc.Exts != "") {
                         var fileExts = athDesc.Exts.replace("|", ";");
@@ -527,7 +529,7 @@
                         for (var i = 0; i < fileExtData.length; i++) {
                             var ext = fileExtData[i]
                             if (ext != null && ext != "") {
-                                if (ext.indexOf("*.")==0)
+                                if (ext.indexOf("*.") == 0)
                                     realFileExts += ext + ";";
                                 else
                                     realFileExts += "*." + ext + ";";
@@ -604,7 +606,7 @@
             $("#Sort").val(sort);
             //激活上传文件
             $("#file").click();
-           
+
         }
 
         //上传.

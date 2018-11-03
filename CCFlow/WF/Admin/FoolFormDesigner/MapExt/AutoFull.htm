@@ -19,13 +19,13 @@
             var mypk = "AutoFull_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = mypk;
+            en.SetPKVal(mypk);
+
             var i = en.RetrieveFromDBSources(); //执行查询..
+            if (i == 1)
+                document.getElementById("Btn_Delete").disabled = false;
 
-            if (i == 1) {
-                document.getElementById("Btn_Delete").disabled = true;
-            }
-
-            document.getElementById("TB_Doc").value = mapExt.Doc;
+            document.getElementById("TB_Doc").value = en.Doc;
             $("#Msg").html("");
 
         });
@@ -80,12 +80,12 @@
 </head>
 <body>
     <form id="cc">
-    <table id="table" style="width: 100%;">
+    <table id="table" style="width: 95%;">
         <caption>
             自动计算表达式
         </caption>
         <tr>
-            <td colspan="3" style="width: 100%;">
+            <td colspan="3" style="width: 95%;">
                 <textarea rows="4" name="TB_Doc" id="TB_Doc"> </textarea>
             </td>
         </tr>

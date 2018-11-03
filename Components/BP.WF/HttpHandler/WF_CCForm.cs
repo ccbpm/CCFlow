@@ -2601,6 +2601,18 @@ namespace BP.WF.HttpHandler
             string attachPk = this.GetRequestVal("AttachPK");
             string paras = this.GetRequestVal("parasData");
             string sort = this.GetRequestVal("Sort");
+            //获取sort
+            if (DataType.IsNullOrEmpty(sort))
+            {
+                if (paras != null && paras.Length > 0)
+                {
+                    foreach (string para in paras.Split('@'))
+                    {
+                        if (para.IndexOf("Sort") != -1)
+                            sort = para.Split('=')[1];
+                    }
+                }
+            }
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
             MapData mapData = new MapData(athDesc.FK_MapData);

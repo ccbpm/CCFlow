@@ -12,7 +12,7 @@
   <Dtl ItemNo="NotNull" ForEvent="onkeypress" Exp="sdsds" Msg="字段不能为空"  Note=""/>-->
   
   <Item No="Tel" Name="检查手机号码是否输入正确" Note="应用于手机号码的输入检查"  ForCtrl="TB" />
-  <Dtl ItemNo="Tel"  ForEvent="onblur"  Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="非法的手机号码" />
+  <Dtl ItemNo="Tel"  ForEvent="onblur"  Exp="/^ ((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/" Msg="非法的手机号码" />
 
   <Item No="TelNotNull" Name="检查手机号码是否输入正确(并且提交时不能为空)" Note="应用于手机号码的输入检查"  ForCtrl="TB" />
   <Dtl ItemNo="TelNotNull"  ForEvent="onblur"   Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="非法的手机号码" />
@@ -43,7 +43,7 @@
   <Dtl ItemNo="EngNotNull"  ForEvent="onsubmit"  Exp="/^[A-Za-z]+$/" Msg="必填项，并且只能输入英文字母" />
 
   <Item No="Shen" Name="检查输入的身份证号" Note="应用于检查输入身份证号"  ForCtrl="TB" />
-  <Dtl ItemNo="Shen"  ForEvent="onblur"  Exp="/^\d{15}|\d{}18$/" Msg="非法的身份证号" />
+  <Dtl ItemNo="Shen"  ForEvent="onblur"  Exp="/^(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/" Msg="非法的身份证号" />
 
   <Item No="ShenNotNull" Name="检查输入的身份证号(并且提交时不能为空)" Note="应用于检查输入身份证号"  ForCtrl="TB" />
   <Dtl ItemNo="ShenNotNull"  ForEvent="onblur"  Exp="/^\d{15}|\d{}18$/" Msg="非法的身份证号" />

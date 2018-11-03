@@ -37,7 +37,7 @@
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-        
+
         $('#TB_' + mapAttr.KeyOfEn).val(val);
 
         //文本框.
@@ -226,11 +226,11 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "PopBranchesAndLeaf": //树干叶子模式.
                 var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                PopBranchesAndLeaf(mapExt,val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                PopBranchesAndLeaf(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;
             case "PopBranches": //树干简单模式.
                 var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                PopBranches(mapExt,val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                PopBranches(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;
             case "PopGroupList": //分组模式.
                 PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
@@ -255,45 +255,45 @@ function AfterBindEn_DealMapExt(frmData) {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary>        
-                    /// 自定义URL        
-                    /// </summary>        
-                    //SelfUrl =1,        
+                    /// <summary>         
+                    /// 自定义URL         
+                    /// </summary>         
+                    //SelfUrl =1,         
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                    /// <summary>        
-                    /// 表格模式        
-                    /// </summary>        
-                    // TableOnly,        
+                    /// <summary>         
+                    /// 表格模式         
+                    /// </summary>         
+                    // TableOnly,         
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                    /// <summary>        
-                    /// 表格分页模式        
-                    /// </summary>        
-                    //TablePage,        
+                    /// <summary>         
+                    /// 表格分页模式         
+                    /// </summary>         
+                    //TablePage,         
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>        
-                    /// 分组模式        
-                    /// </summary>        
-                    // Group,        
+                    /// <summary>         
+                    /// 分组模式         
+                    /// </summary>         
+                    // Group,         
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>        
-                    /// 树展现模式        
-                    /// </summary>        
-                    // Tree,        
+                    /// <summary>         
+                    /// 树展现模式         
+                    /// </summary>         
+                    // Tree,         
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                    /// <summary>        
-                    /// 双实体树        
-                    /// </summary>        
-                    // TreeDouble        
+                    /// <summary>         
+                    /// 双实体树         
+                    /// </summary>         
+                    // TreeDouble         
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -308,8 +308,8 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "BindFunction": //控件绑定函数.
 
-              //  alert(mapExt.AttrOfOper);
-               // alert(DynamicBind(mapExt, "TB_"));
+                //  alert(mapExt.AttrOfOper);
+                // alert(DynamicBind(mapExt, "TB_"));
 
 
                 if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
@@ -365,7 +365,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 var tbFastInput = $("#TB_" + mapExt.AttrOfOper);
                 var content = $("<span style='margin-left:-120px'></span><br/>");
                 tbFastInput.after(content);
-                content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper +"\")'>清空<a>");
+                content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper + "\")'>清空<a>");
                 break;
             case "TBFullCtrl": //自动填充
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
@@ -535,16 +535,16 @@ function AfterBindEn_DealMapExt(frmData) {
 
 function TBHelp(ObjId, MyPK) {
     var url = "/WF/CCForm/Pop/HelperOfTBEUI.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-     var W = document.body.clientWidth-500;
-     var H = document.body.clientHeight-140;
-     var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);
+    var W = document.body.clientWidth - 500;
+    var H = document.body.clientHeight - 140;
+    var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);
 }
-function changeFastInt(ctrl,value) {
+function changeFastInt(ctrl, value) {
     $("#TB_" + ctrl).val(value);
     $('#eudlg').window('close');
 }
 function clearContent(ctrl) {
-    $("#"+ctrl).val("");
+    $("#" + ctrl).val("");
 }
 function DynamicBind(mapExt, ctrlType) {
 
@@ -602,7 +602,9 @@ function calculator(o) {
                 var evalExpression = " var result = ''; ";
                 if (expression.judgement.length > 0) {
                     evalExpression += " if ( " + expression.judgement.join(" || ") + " ) { ";
-                    evalExpression += " 	console.log(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
+                    evalExpression += " 	alert(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
+                    // evalExpression += " 	console.log(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
+
                     evalExpression += " } ";
                 }
                 if (expression.execute_judgement.length > 0) {
@@ -665,4 +667,76 @@ function testExpression(exp) {
         return false;
     }
     return true;
+}
+
+/** 为了保障以前的业务逻辑兼容性，特把旧方法移植到这里. **/
+// 获取DDL值
+function ReqDDL(ddlID) {
+    var v = document.getElementById('DDL_' + ddlID).value;
+    if (v == null) {
+        alert('没有找到ID=' + ddlID + '的下拉框控件.');
+        return;
+    }
+    return v;
+}
+
+// 获取TB值
+function ReqTB(tbID) {
+    var v = document.getElementById('TB_' + tbID).value;
+    if (v == null) {
+        alert('没有找到ID=' + tbID + '的文本框控件.');
+        return;
+    }
+    return v;
+}
+
+// 获取CheckBox值
+function ReqCB(cbID) {
+    var v = document.getElementById('CB_' + cbID).value;
+    if (v == null) {
+        alert('没有找到ID=' + cbID + '的文本框控件.');
+        return;
+    }
+    return v;
+}
+
+// 获取 单选按钮的 值.
+function ReqRadio(keyofEn, enumIntVal) {
+    var v = document.getElementById('RB_' + keyofEn + '' + enumIntVal);
+    if (v == null) {
+        alert('没 有找到字段名=' + keyofEn + '值=' + enumIntVal + '的控件.');
+        return;
+    }
+    return v.checked;
+}
+
+/// 获取DDL Obj
+function ReqDDLObj(ddlID) {
+    var v = document.getElementById('DDL_' + ddlID);
+    if (v == null) {
+        alert('没有找到ID=' + ddlID + '的下拉框控件.');
+    }
+    return v;
+}
+// 获取TB Obj
+function ReqTBObj(tbID) {
+    var v = document.getElementById('TB_' + tbID);
+    if (v == null) {
+        alert('没有找到ID=' + tbID + '的文本框控件.');
+    }
+    return v;
+}
+// 获取CheckBox Obj值
+function ReqCBObj(cbID) {
+    var v = document.getElementById('CB_' + cbID);
+    if (v == null) {
+        alert('没有找到ID=' + cbID + '的单选控件.');
+    }
+    return v;
+}
+// 设置值.
+function SetCtrlVal(ctrlID, val) {
+    document.getElementById('TB_' + ctrlID).value = val;
+    document.getElementById('DDL_' + ctrlID).value = val;
+    document.getElementById('CB_' + ctrlID).value = val;
 }

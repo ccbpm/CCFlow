@@ -35,19 +35,14 @@
                 html += "<tr >";
                 html += "<td>" + dtl.No + "</td>";
                 html += "<td>" + dtl.Name + "</td>";
-                html += "<td>";
 
-                html += "<a href=\"javascript:EditDtlYuanShi('" + frmID + "','" + dtl.No + "')\">原始属性</a>";
-                html += "<a href=\"javascript:EditDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">原始属性</a>";
-                html += "<a href=\"javascript:DeleteDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">删除</a>";
-
-                html += "</td>";
-                 
+                html += "<td><a href=\"javascript:EditDtlYuanShi('" + frmID + "','" + dtl.No + "')\">原始属性</a></td>";
+                html += "<td><a href=\"javascript:EditDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">属性</a></td>";
+                html += "<td><a href=\"javascript:DeleteDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">删除</a></td>";
                 html += "</tr>";
-
             }
 
-            $("#Table1 tr:last").after(trStr);
+            $("#Table1 tr:last").after(html);
         });
 
         //编辑从表的原始属性.
@@ -102,7 +97,10 @@
         <tr>
             <td>编号</td>
             <td>名称</td>
-            <td colspan=3>操作</td>
+            <td>原始属性</td>
+            <td>属性</td>
+            <td>删除</td>
+
         </tr>
     </table>
 </body>

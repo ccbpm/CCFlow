@@ -1012,6 +1012,13 @@ namespace BP.WF.HttpHandler
 
             //定义节点变量.
             Node nd = null;
+            if (this.FK_Node != 0 && this.FK_Node != 999999)
+            {
+                nd = new Node(this.FK_Node);
+                nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+                fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+            }
+
             try
             {
                 #region 特殊判断 适应累加表单.
@@ -1051,7 +1058,6 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*说明是流程调用它， 就要判断谁是表单的PK.*/
-                    fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
                     switch (fn.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -1199,8 +1205,7 @@ namespace BP.WF.HttpHandler
                 #region 加入组件的状态信息, 在解析表单的时候使用.
                 if ( this.FK_Node != 0 && this.FK_Node != 999999 && fn.IsEnableFWC==true)
                 {
-                    nd = new Node(this.FK_Node);
-                    nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+                
 
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
@@ -1237,8 +1242,11 @@ namespace BP.WF.HttpHandler
                     }
 
                     ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
-                    ds.Tables.Add(nd.ToDataTableField("WF_Node"));
                 }
+
+                if (this.FK_Node != 0)
+                    ds.Tables.Add(nd.ToDataTableField("WF_Node"));
+
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
                 #region 处理权限方案

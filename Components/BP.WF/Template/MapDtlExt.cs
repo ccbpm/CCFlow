@@ -1293,6 +1293,45 @@ namespace BP.WF.Template
         }
         #endregion 基本属性.
 
+
+        /// <summary>
+        /// 初始化自定义字段属性 @袁丽娜.
+        /// </summary>
+        /// <returns>返回执行结果</returns>
+        public string InitAttrsOfSelf()
+        {
+            if (this.FK_Node==0)
+                return "err@该从表属性不是自定义属性.";
+
+            if (this.No.Contains("_"+this.FK_Node)==false)
+                return "err@该从表属性不是自定义属性.";
+
+            //求从表ID.
+            string refDtl = this.No.Replace("_" + this.FK_Node, "");
+
+            //处理属性问题.
+            MapAttrs attrs = new MapAttrs();
+            attrs.Delete(MapAttrAttr.FK_MapData, this.No);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, refDtl);
+            foreach (MapAttr attr in attrs)
+            {
+                attr.MyPK = this.No + "_" + attr.KeyOfEn;
+                attr.FK_MapData = this.No;
+                attr.Insert();
+            }
+
+            //处理mapExt 的问题.
+            MapExts exts = new MapExts();
+            exts.Delete(MapAttrAttr.FK_MapData, this.No);//先删除，后查询.
+            exts.Retrieve(MapAttrAttr.FK_MapData, refDtl);
+            foreach (MapExt ext in exts)
+            {
+                ext.FK_MapData = this.No;
+                ext.Insert();
+            }
+            return "执行成功";
+        }
+
         protected override bool beforeUpdate()
         {
             MapDtl dtl = new MapDtl(this.No);

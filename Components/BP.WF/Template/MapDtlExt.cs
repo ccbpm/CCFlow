@@ -1020,6 +1020,7 @@ namespace BP.WF.Template
                 rm.Title = "生成英文字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".GenerAttrs";
                 rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "";
                 map.AddRefMethod(rm);
 
 
@@ -1047,7 +1048,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.GroupName = "实验中的功能";

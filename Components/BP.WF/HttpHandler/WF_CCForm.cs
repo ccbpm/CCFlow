@@ -1041,6 +1041,9 @@ namespace BP.WF.HttpHandler
                 if (pk == 0)
                     pk = this.WorkID;
 
+                //是否启用装载填充？ @袁丽娜,
+                bool isLoadData = true;
+
                 if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*说明是流程调用它， 就要判断谁是表单的PK.*/
@@ -1061,6 +1064,9 @@ namespace BP.WF.HttpHandler
                         default:
                             break;
                     }
+
+                    //对于一个表单绑定到一个表单树上，有的节点不需要装载填充的.
+                    isLoadData = fn.IsEnableLoadData;
                 }
                 #endregion  求who is PK.
 
@@ -1111,19 +1117,23 @@ namespace BP.WF.HttpHandler
                 #endregion 附加参数数据.
 
                 #region 执行装载填充.与相关的事件.
-                MapExt me = new MapExt();
-                if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
+                MapExt me = null;
+                if (isLoadData == true )
                 {
-                    //执行通用的装载方法.
-                    MapAttrs attrs = new MapAttrs(this.EnsName);
-                    MapDtls dtls = new MapDtls(this.EnsName);
-                    en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
-                    try
+                    me = new MapExt();
+                    if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
                     {
-                        en.DirectUpdate();
-                    }
-                    catch (Exception ex)
-                    {
+                        //执行通用的装载方法.
+                        MapAttrs attrs = new MapAttrs(this.EnsName);
+                        MapDtls dtls = new MapDtls(this.EnsName);
+                        en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                        try
+                        {
+                            en.DirectUpdate();
+                        }
+                        catch (Exception ex)
+                        {
+                        }
                     }
                 }
 

@@ -107,11 +107,7 @@ namespace BP.En
         /// <summary>
         /// 外键
         /// </summary>
-        FK=2,
-        /// <summary>
-        /// 功能页面
-        /// </summary>
-        WinOpen=3
+        FK=2
     }
 	/// <summary>
 	/// 字段类型

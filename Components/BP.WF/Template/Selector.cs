@@ -447,6 +447,13 @@ namespace BP.WF.Template
             sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
             sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
             sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+             
+           // sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept); 
+            //@袁丽娜
+            sqlDB = sqlDB.Replace("@WorkID", en.GetValStringByKey("OID")); 
+            sqlDB = sqlDB.Replace("@OID", en.GetValStringByKey("OID"));
+
+
             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);

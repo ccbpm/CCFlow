@@ -47,13 +47,16 @@
 
         //编辑从表的原始属性.
         function EditDtlYuanShi(fk_mapdata, dtlKey) {
-            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PK=' + dtlKey;
+            // var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PK=' + dtlKey;
+
+            var url = "../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + fk_mapdata + "&FK_MapDtl=" + dtlKey;
+            //  http: //localhost:9958/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=YYT_XQ_SQ&FK_MapDtl=YYT_XQ_SQDtl2
             WinOpen(url);
         }
 
         //编辑从表在该节点权限.
         function EditDtl(fk_node, fk_mapdata, dtlNo) {
-        
+
             var mypk = dtlNo + '_' + fk_Node;
             var en = new Entity("BP.WF.Template.MapDtlExt");
             en.SetPKVal(mypk);
@@ -67,9 +70,11 @@
                 en.No = mypk;
                 en.Insert();
             }
-            window.location.href = window.location.href;
-            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
 
+            window.location.href = window.location.href;
+            //var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
+
+            var url = "../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + fk_mapdata + "&FK_MapDtl=" + dtlNo + "&FK_Node=" + fk_Node;
             WinOpen(url);
 
             //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');

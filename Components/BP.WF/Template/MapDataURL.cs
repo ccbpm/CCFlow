@@ -910,21 +910,20 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapData", "表单属性");
+                Map map = new Map("Sys_MapData", "URL表单属性");
 
                 #region 基本属性.
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 200, 20);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20);
-
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", false, false, 0, 500, 20);
+
+                map.AddTBString(MapDataAttr.Url, null, "URL连接", true, false, 0, 500, 20, true);
 
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",true, false, MapDataAttr.FrmType);
 
-                map.AddTBString(MapDataAttr.Url, null, "URL连接", true, false, 0, 500, 20, true);
                 //数据源.
-                map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), false);
-                map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+               // map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 #endregion 基本属性.
 
                 #region 设计者信息.
@@ -939,15 +938,15 @@ namespace BP.WF.Template
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 
-                RefMethod rm = new RefMethod();
-                rm.Title = "打开URL"; // "设计表单";
-                rm.GroupName = "基本功能";
-                rm.ClassMethodName = this.ToString() + ".DoOpenUrl";
-                rm.Icon = "../../WF/Img/FullData.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+                //RefMethod rm = new RefMethod();
+                //rm.Title = "打开URL"; // "设计表单";
+                //rm.GroupName = "基本功能";
+                //rm.ClassMethodName = this.ToString() + ".DoOpenUrl";
+                //rm.Icon = "../../WF/Img/FullData.png";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //rm.Target = "_blank";
+                //map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;

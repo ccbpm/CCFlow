@@ -268,6 +268,12 @@ namespace BP.WF.HttpHandler
                 return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
             }
 
+            if (md.HisFrmType == BP.Sys.FrmType.Url)
+            {
+                /* 自由表单 */
+                return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
+            }
+
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();
         }
 

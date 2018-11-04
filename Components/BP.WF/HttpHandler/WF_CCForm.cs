@@ -1607,7 +1607,6 @@ namespace BP.WF.HttpHandler
             #endregion 如果是测试，就创建表.
 
             string frmID = mdtl.FK_MapData;
-
             if (this.FK_Node != 0 && this.FK_Node != 999999)
                 frmID = frmID.Replace("_" + this.FK_Node, "");
 

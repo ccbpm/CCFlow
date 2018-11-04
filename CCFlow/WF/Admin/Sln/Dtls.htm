@@ -9,7 +9,8 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <style type="text/css">
-        th, td {
+        th, td
+        {
             text-align: center;
         }
     </style>
@@ -29,7 +30,7 @@
             var html = "";
 
             for (var i = 0; i < dtls.length; i++) {
-                
+
                 var dtl = dtls[i];
 
                 html += "<tr >";
@@ -37,8 +38,8 @@
                 html += "<td>" + dtl.Name + "</td>";
 
                 html += "<td><a href=\"javascript:EditDtlYuanShi('" + frmID + "','" + dtl.No + "')\">原始属性</a></td>";
-                html += "<td><a href=\"javascript:EditDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">属性</a></td>";
-                html += "<td><a href=\"javascript:DeleteDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">删除</a></td>";
+                html += "<td><a href=\"javascript:EditDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\">自定义属性</a></td>";
+                html += "<td><a href=\"javascript:DeleteDtl('" + fk_Node + "','" + frmID + "','" + dtl.No + "')\"><img src='../../Img/Btn/Delete.gif' />删除</a></td>";
                 html += "</tr>";
             }
 
@@ -54,27 +55,38 @@
             WinOpen(url);
         }
 
-        //编辑从表在该节点权限.
+        //编辑从表在该节点自定义权限.
         function EditDtl(fk_node, fk_mapdata, dtlNo) {
 
             var mypk = dtlNo + '_' + fk_Node;
             var en = new Entity("BP.WF.Template.MapDtlExt");
             en.SetPKVal(mypk);
-            if (en.IsExits() == false) {
+            if (en.RetrieveFromDBSources() == 0) {
 
                 en.SetPKVal(dtlNo);
                 en.RetrieveFromDBSources(); //查询.
 
                 en.SetPKVal(mypk);
                 en.FK_Node = fk_Node; //设置FK_Node.
+                en.FK_MapData = fk_mapdata + "_" + fk_node; //原来的错误.
                 en.No = mypk;
                 en.Insert();
+                 en.DoMethodReturnString("InitAttrsOfSelf");
+
+            } else {
+
+                //  alert(en.FK_MapData);
+
+                if (en.FK_MapData != fk_mapdata + "_" + fk_node) {
+                    en.FK_MapData = fk_mapdata + "_" + fk_node
+                    en.Update();
+                }
             }
 
             window.location.href = window.location.href;
             //var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
 
-            var url = "../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + fk_mapdata + "&FK_MapDtl=" + dtlNo + "&FK_Node=" + fk_Node;
+            var url = "../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + fk_mapdata + "_" + fk_node + "&FK_MapDtl=" + mypk + "&FK_Node=" + fk_Node;
             WinOpen(url);
 
             //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
@@ -96,16 +108,25 @@
 </head>
 <body onkeypress="Esc();">
     <table id="Table1" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
-
-    <caption>节点-表单-从表权限 </caption>
-
+        <caption>
+            节点-表单-从表权限
+        </caption>
         <tr>
-            <td>编号</td>
-            <td>名称</td>
-            <td>原始属性</td>
-            <td>属性</td>
-            <td>删除</td>
-
+            <td>
+                编号
+            </td>
+            <td>
+                名称
+            </td>
+            <td>
+                原始属性
+            </td>
+            <td>
+                自定义属性
+            </td>
+            <td>
+                删除
+            </td>
         </tr>
     </table>
 </body>

@@ -1204,7 +1204,7 @@ namespace BP.WF.HttpHandler
 
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
-                    {
+                    { 
                         /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
                         int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
 
@@ -1214,7 +1214,6 @@ namespace BP.WF.HttpHandler
                         fnc.SetValByKey(FrmWorkCheckAttr.FWC_W, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_W));
                         fnc.SetValByKey(FrmWorkCheckAttr.FWC_X, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_X));
                         fnc.SetValByKey(FrmWorkCheckAttr.FWC_Y, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_Y));
-
 
                         fnc.SetValByKey(FrmSubFlowAttr.SF_H, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_H));
                         fnc.SetValByKey(FrmSubFlowAttr.SF_W, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_W));

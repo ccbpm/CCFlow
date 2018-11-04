@@ -628,8 +628,7 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.IsEnableLoadData, 0, "是否启用装载填充事件", true, false);
                 map.AddTBInt(FrmNodeAttr.IsDefaultOpen, 0, "是否默认打开", true, false);
                 map.AddTBInt(FrmNodeAttr.IsCloseEtcFrm, 0, "打开时是否关闭其它的页面？", true, false);
-
-                
+                map.AddTBInt(FrmNodeAttr.IsEnableFWC, 0, "是否启用审核组件？", true, false);
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);

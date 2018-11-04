@@ -1238,9 +1238,9 @@ namespace BP.Sys
         public MapDtl()
         {
         }
-        public MapDtl(string mypk)
+        public MapDtl(string no)
         {
-            this.No = mypk;
+            this.No = no;
             this._IsReadonly = 2;
             this.Retrieve();
         }

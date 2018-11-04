@@ -933,6 +933,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
                 map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
+
                 //增加参数字段.
                 map.AddTBAtParas(4000);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);

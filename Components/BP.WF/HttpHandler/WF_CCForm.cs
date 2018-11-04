@@ -1596,7 +1596,6 @@ namespace BP.WF.HttpHandler
             #region 组织参数.
             MapDtl mdtl = new MapDtl(this.EnsName);
             mdtl.No = this.EnsName;
-            mdtl.RetrieveFromDBSources();
 
             #region 如果是测试，就创建表.
             if (this.FK_Node == 999999 || this.GetRequestVal("IsTest") != null)
@@ -1610,18 +1609,34 @@ namespace BP.WF.HttpHandler
             if (this.FK_Node != 0 && this.FK_Node != 999999)
                 frmID = frmID.Replace("_" + this.FK_Node, "");
 
-            if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp" && this.EnsName.Contains("ND" + this.FK_Node) == false && this.FK_Node != 999999)
+            if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp"
+                && this.EnsName.Contains("ND" + this.FK_Node) == false 
+                && this.FK_Node != 999999)
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
-                /*如果
-                 * 1,传来节点ID, 不等于0.
-                 * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
-                BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, frmID);
-                if (fn.FrmSln == FrmSln.Readonly)
+
+                if (nd.HisFormType == NodeFormType.SheetTree)
                 {
-                    mdtl.IsInsert = false;
-                    mdtl.IsDelete = false;
-                    mdtl.IsUpdate = false;
+                    /*如果
+                     * 1,传来节点ID, 不等于0.
+                     * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
+                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, frmID);
+                    if (fn.FrmSln == FrmSln.Readonly)
+                    {
+                        mdtl.IsInsert = false;
+                        mdtl.IsDelete = false;
+                        mdtl.IsUpdate = false;
+                    }
+
+                    ///自定义权限.
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        mdtl.No = this.EnsName + "_" + this.FK_Node;
+                        if (mdtl.RetrieveFromDBSources() == 0)
+                        {
+                            /*如果设置了自定义方案，但是没有定义，从表属性，就需要去默认值. */
+                        }
+                    }
                 }
             }
 

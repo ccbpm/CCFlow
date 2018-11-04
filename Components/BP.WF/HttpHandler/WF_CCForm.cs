@@ -1005,6 +1005,10 @@ namespace BP.WF.HttpHandler
         {
             if (this.FK_MapData != null && this.FK_MapData.Contains("BP.") == true)
                 return FrmGener_Init_ForBPClass();
+            
+
+            //节点与表单的权限控制.
+            FrmNode fn = null;
 
             //定义节点变量.
             Node nd = null;
@@ -1047,7 +1051,7 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*说明是流程调用它， 就要判断谁是表单的PK.*/
-                    FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                    fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
                     switch (fn.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -1118,7 +1122,7 @@ namespace BP.WF.HttpHandler
 
                 #region 执行装载填充.与相关的事件.
                 MapExt me = null;
-                if (isLoadData == true )
+                if (isLoadData == true)
                 {
                     me = new MapExt();
                     if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
@@ -1190,12 +1194,13 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion End把外键表加入DataSet
 
+
+
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-                if (this.FK_Node != 0 && this.FK_Node != 999999)
+                if ( this.FK_Node != 0 && this.FK_Node != 999999 && fn.IsEnableFWC==true)
                 {
                     nd = new Node(this.FK_Node);
                     nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
-
 
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
@@ -1240,8 +1245,6 @@ namespace BP.WF.HttpHandler
                 #region 处理权限方案
                 if (nd != null && nd.FormType == NodeFormType.SheetTree)
                 {
-                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
-
                     #region 只读方案.
                     if (fn.FrmSln == FrmSln.Readonly)
                     {
@@ -1283,7 +1286,7 @@ namespace BP.WF.HttpHandler
                                 attr.MyDataType = DataType.AppString;
                                 attr.DefaultValOfReal = ff.DefVal;
                                 attr.Key = ff.KeyOfEn;
-                               
+
                                 if (dr[MapAttrAttr.UIIsEnable].ToString() == "0")
                                     attr.UIIsReadonly = true;
                                 else
@@ -1418,9 +1421,9 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(mainTable);
                 #endregion 加入主表的数据.
 
-                string json= BP.Tools.Json.DataSetToJson(ds, false);
+                string json = BP.Tools.Json.DataSetToJson(ds, false);
 
-              //  BP.DA.DataType.WriteFile("c:\\aaa.txt", json);
+                //  BP.DA.DataType.WriteFile("c:\\aaa.txt", json);
 
                 return json;
 

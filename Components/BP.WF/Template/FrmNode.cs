@@ -62,6 +62,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FrmSln = "FrmSln";
         /// <summary>
+        /// 是否启用审核组件
+        /// </summary>
+        public const string IsEnableFWC = "IsEnableFWC";
+        /// <summary>
         /// 谁是主键？
         /// </summary>
         public const string WhoIsPK = "WhoIsPK";
@@ -252,6 +256,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FrmNodeAttr.IsEnableLoadData, value);
+            }
+        }
+        /// <summary>
+        /// 是否启用节点组件?
+        /// </summary>
+        public bool IsEnableFWC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmNodeAttr.IsEnableFWC);
+            }
+            set
+            {
+                this.SetValByKey(FrmNodeAttr.IsEnableFWC, value);
             }
         }
         /// <summary>

@@ -103,6 +103,12 @@ namespace BP.WF.Template
                     "@0=默认方案@1=只读方案@2=自定义方案");
                 map.SetHelperAlert(FrmNodeAttr.FrmSln, "控制该表单数据元素权限的方案，如果是自定义方案，就要设置每个表单元素的权限.");
 
+
+                map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
+                map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上.");
+
+                //map.AddDDLSysEnum( BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
+
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");

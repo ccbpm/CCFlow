@@ -1005,12 +1005,13 @@ namespace BP.WF.HttpHandler
         {
             if (this.FK_MapData != null && this.FK_MapData.Contains("BP.") == true)
                 return FrmGener_Init_ForBPClass();
-            
 
+
+            #region 定义流程信息的所用的 配置entity.
             //节点与表单的权限控制.
             FrmNode fn = null;
 
-            //定义节点变量.
+            //定义节点变量. @袁丽娜 
             Node nd = null;
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
@@ -1018,6 +1019,8 @@ namespace BP.WF.HttpHandler
                 nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
                 fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
             }
+            #endregion 定义流程信息的所用的 配置entity.
+
 
             try
             {
@@ -1603,6 +1606,10 @@ namespace BP.WF.HttpHandler
             }
             #endregion 如果是测试，就创建表.
 
+            string frmID = mdtl.FK_MapData;
+
+            if (this.FK_Node != 0 && this.FK_Node != 999999)
+                frmID = frmID.Replace("_" + this.FK_Node, "");
 
             if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp" && this.EnsName.Contains("ND" + this.FK_Node) == false && this.FK_Node != 999999)
             {
@@ -1610,17 +1617,7 @@ namespace BP.WF.HttpHandler
                 /*如果
                  * 1,传来节点ID, 不等于0.
                  * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
-
-                BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, mdtl.FK_MapData);
-                if (fn.FrmSln == FrmSln.Self)
-                {
-                    /*使用了自定义的方案. 
-                     * 并且，一定为dtl设定了自定义方案，就用自定义方案.
-                     */
-                    mdtl.No = this.EnsName + "_" + this.FK_Node;
-                    mdtl.RetrieveFromDBSources();
-                }
-
+                BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, frmID);
                 if (fn.FrmSln == FrmSln.Readonly)
                 {
                     mdtl.IsInsert = false;
@@ -1643,7 +1640,7 @@ namespace BP.WF.HttpHandler
             #endregion 组织参数.
 
             //获得他的描述,与数据.
-            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData, mdtl, int.Parse(this.RefPKVal), strs);
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs);
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }

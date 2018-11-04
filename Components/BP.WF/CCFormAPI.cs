@@ -625,7 +625,7 @@ namespace BP.WF
 			DataSet myds = new DataSet();
 
 			//映射实体.
-			MapData md = new MapData(frmID);
+			//MapData md = new MapData(frmID);
 
 			//实体.
 			GEEntity wk = new GEEntity(frmID);
@@ -756,7 +756,7 @@ namespace BP.WF
 
 
 			//增加主表数据.
-			DataTable mainTable = wk.ToDataTableField(md.No);
+			DataTable mainTable = wk.ToDataTableField(frmID);
 			mainTable.TableName = "MainTable";
 			myds.Tables.Add(mainTable);
 			#endregion 把主表数据放入.

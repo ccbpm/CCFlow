@@ -7350,7 +7350,50 @@ namespace BP.WF
                 if (treeWork != null)
                     wk.Copy(treeWork);
 
+                //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 @袁丽娜
+                if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNodes nds = new FrmNodes(fk_flow, fk_node);
+                    foreach (FrmNode item in nds)
+                    {
+                        GEEntity en = null;
+                        try
+                        {
+                            en = new GEEntity(item.FK_Frm);
+                            en.PKVal = workID;
+                            if (en.RetrieveFromDBSources() == 0)
+                                continue;
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
 
+                        Attrs frmAttrs = en.EnMap.Attrs;
+                        Attrs wkAttrs = wk.EnMap.Attrs;
+                        foreach (Attr wkattr in wkAttrs)
+                        {
+                            if(wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
+                                || wkattr.Key.Equals(StartWorkAttr.RDT)||wkattr.Key.Equals(StartWorkAttr.MD5)||wkattr.Key.Equals(StartWorkAttr.Emps)
+                                || wkattr.Key.Equals(StartWorkAttr.FK_Dept) ||  wkattr.Key.Equals(StartWorkAttr.PRI)|| wkattr.Key.Equals(StartWorkAttr.Rec)
+                                || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(GERptAttr.FK_NY)||wkattr.Key.Equals(GERptAttr.FlowEmps)
+                                || wkattr.Key.Equals(GERptAttr.FlowStarter) || wkattr.Key.Equals(GERptAttr.FlowStartRDT) || wkattr.Key.Equals(GERptAttr.WFState))
+                                    continue;
+                            foreach (Attr attr in frmAttrs)
+                            {
+                                if (wkattr.Key.Equals(attr.Key))
+                                {
+                                    wk.SetValByKey(wkattr.Key, en.GetValStrByKey(attr.Key));
+                                    break;
+                                }
+
+                            }
+                           
+                        }
+                        
+                    }
+                    wk.Update();
+                }
                 #region 处理保存后事件
                 bool isHaveSaveAfter = false;
                 try
@@ -7394,6 +7437,10 @@ namespace BP.WF
                     //设置标题.
                     string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
 
+                    //修改RPT表的标题
+                    wk.SetValByKey(GERptAttr.Title, title);
+                    wk.Update();
+                    
                     gwf.WorkID = workID;
                     int i = gwf.RetrieveFromDBSources();
 
@@ -7444,6 +7491,7 @@ namespace BP.WF
                         gwf.WFState = wfState;
                         gwf.DirectUpdate();
                     }
+                    
                 }
                 #endregion 为开始工作创建待办
 

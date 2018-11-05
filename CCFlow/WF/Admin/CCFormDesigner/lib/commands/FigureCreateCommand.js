@@ -654,7 +654,7 @@ TransFormDataField.prototype = {
             var rbArr = this.dataArrary.Vals.slice(1).split("@");
             var s = [];
             for (var i = 0; i < rbArr.length; i++) {
-                s.push("RB_"+ this.dataArrary.UIBindKey + "_" + rbArr[i]);
+                s.push("RB_" + this.dataArrary.UIBindKey + "_" + rbArr[i]);
             }
             for (var k = 0; k < s.length; k++) {
                 if (this.dataArrary.UIBindKey != null) {
@@ -674,6 +674,8 @@ TransFormDataField.prototype = {
                 }
             }
         }
+        
+        
     },
     /**根据控件类型，生成不同控件描述 and propertys**/
     Transform: function () {
@@ -820,6 +822,7 @@ TransFormDataField.prototype = {
                 createdFigure.CCForm_MyPK = this.figure.CCForm_MyPK.split("=")[0];
                 if (figureText.str == " * undefined") {
                     figureText.setTextStr(this.dataArrary.Name);
+                    createdFigure.CCForm_MyPK = Util.NewGUID();
                 } else {
                     createdFigure.CCForm_Shape = this.figure.CCForm_Shape;
                     var propertys = CCForm_Control_Propertys.TextBox_Str;

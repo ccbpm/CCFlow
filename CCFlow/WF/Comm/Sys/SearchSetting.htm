@@ -55,9 +55,7 @@
 
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
-            var H = document.body.clientHeight;
-            var tableH = H-180;
-            $("#tableDiv").css("height", tableH+"px");
+            
 
         });
 
@@ -112,7 +110,7 @@
 <body>
 
 
-<div style="width:95%;border-top: 1px solid #C0C0C0;">
+<div style="width:95%;border-top: 0px solid #C0C0C0;">
 <input type="button" value="保存"  onclick="Save()" />
 <input type="button" value="设置显示的列"  onclick="ShowCols()" />
 <input type="button" value="启动傻瓜表单设计器"  onclick="StartFoolFormDesigner()" />
@@ -122,7 +120,7 @@
 
  
 <div style="overflow:auto;" id="tableDiv">
-<table style="width:800px;">
+<table style="">
 <caption> 查询设置 </caption>
 <tr>
 <th colspan=4>基本配置</th>

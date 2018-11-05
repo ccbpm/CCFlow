@@ -1140,6 +1140,7 @@ namespace BP.WF.HttpHandler
                         MapAttrs attrs = new MapAttrs(this.EnsName);
                         MapDtls dtls = new MapDtls(this.EnsName);
                         en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                      
                         try
                         {
                             en.DirectUpdate();
@@ -1147,6 +1148,7 @@ namespace BP.WF.HttpHandler
                         catch (Exception ex)
                         {
                         }
+                        
                     }
                 }
 
@@ -1247,7 +1249,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
                 }
 
-                if (this.FK_Node != 0)
+                if (this.FK_Node != 0 && this.FK_Node != 999999)
                     ds.Tables.Add(nd.ToDataTableField("WF_Node"));
 
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.

@@ -329,11 +329,11 @@
 				$('#dtlDiv div table tbody').append(insertTr);
 			}
 
-            AfterBindEn_DealMapExt(insertTr);
+            AfterBindEn_DealMapExt(insertTr, newRowIndex);
             setTdDataByTrData(newRowIndex);
 
             insertTr.bind('mouseleave', mouseLeaveTrFun);
-            doAlignColumns()
+            doAlignColumns();
 			//setTimeout(doAlignColumns,100);
         }
 
@@ -627,7 +627,7 @@
                           //循环TBODY 初始化 SYS_MAPEXT
                           var tbodyTrs1 = $('#dtlDiv div table tbody tr');
                           $.each(tbodyTrs1, function (m, tbodyTrObj) {
-                              AfterBindEn_DealMapExt(tbodyTrObj);
+                              AfterBindEn_DealMapExt(tbodyTrObj,m);
                           });
 
                           //mouseleave  鼠标离开行
@@ -674,6 +674,7 @@
                           parentStatistics(extObj);
                       }
                       doAlignColumns();
+
                       //setTimeout(doAlignColumns, 500);
                   }
                   // 统计行over
@@ -1399,12 +1400,15 @@
                 InitPage();
             }
         }
-		$(function () {
-			var bodyHeight = $(document).height();
-			var headHeight = $("#dtlDiv div table thead").height();
-			$("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
-			$("#dtlDiv").height(bodyHeight - 35);
-		});
+        $(function () {
+            var bodyHeight = $(document).height();
+            var headHeight = $("#dtlDiv div table thead").height();
+            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
+            $("#dtlDiv").height(bodyHeight - 35);
+           
+        });
+
+
      </script>
 	<style type="text/css">
 		.table thead {
@@ -1555,7 +1559,7 @@
     }
 
     //处理MapExt
-    function AfterBindEn_DealMapExt(tr) {
+    function AfterBindEn_DealMapExt(tr,rowIndex) {
         var  workNode = workNodeData;
         var mapExtArr = workNode.Sys_MapExt;	// 扩展信息
         for (var i = 0; i < mapExtArr.length; i++) {
@@ -1838,15 +1842,22 @@
                         }
                     }
                     break;
-                case "DDLFullCtrl":// 自动填充其他的控件..  先不做
-                    var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
-                    if (ddlOper == null)
+                case "DDLFullCtrl": // 自动填充其他的控件..  先不做
+                    var ddlOper = $("#DDL_" + mapExt.AttrOfOper + "_" + rowIndex);
+                    if (ddlOper.length == 0)
                         continue;
 
-                    ddlOper.attr("onchange", "Change('" + workNode.Sys_MapData[0].No + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
-                    if (me.Tag != "") {
+                    var dbSrc = mapExt.Doc;
+
+
+                    ddlOper.attr("onchange", "DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "_" + rowIndex + "\', \'" + mapExt.MyPK + "\')");
+
+                    var defValue = ddlOper.val();
+                    if (defValue != null && defValue != undefined && defValue != "")
+                        DDLFullCtrl(defValue, "DDL_" + mapExt.AttrOfOper + "_" + rowIndex, mapExt.MyPK);
+                    if (mapExt.Tag != null && mapExt.Tag != "") {
                         /* 下拉框填充范围. */
-                        var strs = me.Tag.split('$');
+                        var strs = mapExt.Tag.split('$');
                         for (var k = 0; k < strs.length; k++) {
                             var str = strs[k];
                             if (str == "")
@@ -1868,11 +1879,11 @@
                             var sql = myCtl[1].replace("~", "'");
                             sql = sql.replace("@Key", ddlOper.val());
 
-                            var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5' }];
-                            var operations = '';
-                            $.each(items, function (i, item) {
-                                operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
-                            });
+                            //                            var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5' }];
+                            //                            var operations = '';
+                            //                            $.each(items, function (i, item) {
+                            //                                operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
+                            //                            });
                             ddlC1.children().remove();
                             ddlC1.html(operations);
                             //ddlC1.SetSelectItem(valC1);

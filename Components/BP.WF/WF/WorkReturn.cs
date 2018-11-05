@@ -789,19 +789,29 @@ namespace BP.WF
             //if (this.ReturnToNode.IsStartNode == false)
             //    throw new Exception("@没有处理的模式。");
 
+            //求出来退回到的 时间点。
+            GenerWorkerList toWL=new GenerWorkerList();
+            toWL.Retrieve(GenerWorkerListAttr.WorkID,this.WorkID,GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+
+
             //删除子线程节点数据。
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
 
             foreach (GenerWorkerList item in gwls)
             {
+                if (item.RDT.CompareTo(toWL.RDT) == -1)
+                    continue;
+
                 /* 删除 子线程数据 */
                 DBAccess.RunSQL("DELETE FROM ND" + item.FK_Node + " WHERE OID=" + item.WorkID);
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID +" AND FK_Node="+item.FK_Node);
+
             }
 
             //删除流程控制数据。
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FID=" + this.WorkID);
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID);
+           // DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID);
 
             return ExeReturn1_1();
         }

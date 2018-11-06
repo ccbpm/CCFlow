@@ -1139,14 +1139,17 @@ namespace BP.WF.HttpHandler
                         //执行通用的装载方法.
                         MapAttrs attrs = new MapAttrs(this.EnsName);
                         MapDtls dtls = new MapDtls(this.EnsName);
-                        en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
-                      
-                        try
+                       
+                        if (GetRequestValInt("IsTest") != 1)
                         {
-                            en.DirectUpdate();
-                        }
-                        catch (Exception ex)
-                        {
+                            try
+                            {
+                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                                en.DirectUpdate();
+                            }
+                            catch (Exception ex)
+                            {
+                            }
                         }
                         
                     }

@@ -362,8 +362,12 @@ function figure_Template_Dtl(frmDtl, ext) {
         strs += "&" + str + "=" + paras[str];
     }
     var src = "";
+
+   // alert(pageData);
+    //alert(pageData.IsReadonly);
+
     if (frmDtl.ListShowModel == "0") {
-        if (pageData.IsReadonly) {
+        if (pageData.IsReadonly=="1") {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;

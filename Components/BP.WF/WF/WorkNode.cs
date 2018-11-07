@@ -4742,21 +4742,20 @@ namespace BP.WF
                 ps.SQL = "SELECT * FROM " + md.PTable + " WHERE OID=" + ps.DBStr + "OID";
                 ps.Add(WorkAttr.OID, pk);
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    continue;
 
-                if (dt.Rows.Count == 1)
+                // 检查数据是否完整.
+                foreach (FrmField ff in ffs)
                 {
-                    // 检查数据是否完整.
-                    foreach (FrmField ff in ffs)
-                    {
-                        if (ff.FK_MapData != item.FK_Frm)
-                            continue;
+                    if (ff.FK_MapData != item.FK_Frm)
+                        continue;
 
-                        //获得数据.
-                        string val = string.Empty;
-                        val = dt.Rows[0][ff.KeyOfEn].ToString();
+                    //获得数据.
+                    string val = string.Empty;
+                    val = dt.Rows[0][ff.KeyOfEn].ToString();
 
-                        this.HisWork.SetValByKey(ff.KeyOfEn, val);
-                    }
+                    this.HisWork.SetValByKey(ff.KeyOfEn, val);
                 }
             }
 
@@ -7556,7 +7555,6 @@ namespace BP.WF
             //this.GenerHieLiuHuiZhongDtlData_2013(nd);
 
             #endregion 处理合流节点表单数据
-
             /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
             string info = "";
             string sql1 = "";

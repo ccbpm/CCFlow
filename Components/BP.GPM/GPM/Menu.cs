@@ -364,7 +364,7 @@ namespace BP.GPM
                 map.CodeStruct = "4";
 
                 #region 与树有关的必备属性.
-                map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 4, 4, 4);
+                map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 1, 90, 30);
                 map.AddDDLEntities(MenuAttr.ParentNo, null, DataType.AppString, "父节点", new Menus(), "No", "Name", false);
                 map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 400,true);
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);

@@ -2489,13 +2489,9 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
-        /// <summary>
-        /// 运行Url返回string.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public string RunUrlCrossReturnString(string url)
+        public string RunUrlCrossReturnString()
         {
+            string url = this.GetRequestVal("url");
             string strs = DataType.ReadURLContext(url, 9999, System.Text.Encoding.UTF8);
             return strs;
         }

@@ -2499,7 +2499,7 @@ namespace BP.WF.HttpHandler
                 sql = sql.Replace(" ", "");
                 int index = sql.ToUpper().IndexOf("FROM");
                 int indexAs = 0;
-                sql = sql.Substring(5, index-6);
+                sql = sql.Substring(6, index-6);
                 string[] keys = sql.Split(',');
                 foreach (string key in keys)
                 {

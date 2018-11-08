@@ -2475,18 +2475,46 @@ namespace BP.WF.HttpHandler
         {
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~","'");
+            
+
 
            #warning zhoupeng把这个去掉了. 2018.10.24
            // sql = sql.Replace("-", "%"); //为什么？
 
             sql = sql.Replace("/#", "+"); //为什么？
             sql = sql.Replace("/$", "-"); //为什么？
+           // sql = sql.Replace('"', '\"'); //为什么？
 
             if (null == sql || "" == sql)
             {
                 return "err@查询sql为空";
             }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            //暂定
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                //获取SQL的字段
+                //获取 from 的位置
+                sql = sql.Replace(" ", "");
+                int index = sql.ToUpper().IndexOf("FROM");
+                int indexAs = 0;
+                sql = sql.Substring(5, index-6);
+                string[] keys = sql.Split(',');
+                foreach (string key in keys)
+                {
+                    indexAs = key.ToUpper().IndexOf("AS");
+                    string realkey = key;
+                    if(indexAs!=-1)
+                        realkey = key.Substring(indexAs + 2);
+
+                    dt.Columns[realkey.ToUpper()].ColumnName = realkey; 
+                }
+
+
+                
+            }
+
             return BP.Tools.Json.ToJson(dt);
         }
         public string RunUrlCrossReturnString()

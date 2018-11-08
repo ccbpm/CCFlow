@@ -13,6 +13,8 @@
 
     var dlg = $('#bootStrapdlg');
     var isTheFirst;
+    if (divId != null && divId != "")
+        dlg = $('#' + divId);
 
     if (dlg.length == 0) {
         isTheFirst = true;

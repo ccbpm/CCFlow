@@ -373,7 +373,7 @@ function figure_Template_Dtl(frmDtl, ext) {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
         }
     } else if (frmDtl.ListShowModel == "1") {
-        if (pageData.IsReadonly) {
+        if (pageData.IsReadonly =="1") {
             src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
             src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;

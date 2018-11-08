@@ -759,8 +759,19 @@ namespace BP.WF
                                 if (System.IO.File.Exists(toFile) == false)
                                 {
                                     //把文件copy到,
+                                    //获取文件是否加密
+                                    bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                                    bool isEncrypt = item.GetParaBoolen("IsEncrypt");
                                     string file = item.GenerTempFile(ath.AthSaveWay);
-                                    System.IO.File.Copy(file, toFile, true);
+                                    string fileTempDecryPath = file;
+                                    if (fileEncrypt == true && isEncrypt == true)
+                                    {
+                                        fileTempDecryPath = file + ".tmp";
+                                        BP.Tools.EncHelper.DecryptDES(file, fileTempDecryPath);
+
+                                    }
+
+                                    System.IO.File.Copy(fileTempDecryPath, toFile, true);
                                 }
 
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
@@ -778,8 +789,19 @@ namespace BP.WF
                                 string toFile = path + "\\pdf\\" + item.FileName;
                                 if (System.IO.File.Exists(toFile) == false)
                                 {
+                                    //获取文件是否加密
+                                    bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                                    bool isEncrypt = item.GetParaBoolen("IsEncrypt");
+                                    string fileTempDecryPath = item.FileFullName;
+                                    if (fileEncrypt == true && isEncrypt == true)
+                                    {
+                                        fileTempDecryPath = item.FileFullName + ".tmp";
+                                        BP.Tools.EncHelper.DecryptDES(item.FileFullName, fileTempDecryPath);
+
+                                    }
+
                                     //把文件copy到,
-                                    System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
+                                    System.IO.File.Copy(fileTempDecryPath, path + "\\pdf\\" + item.FileName, true);
                                 }
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                             }
@@ -1081,8 +1103,19 @@ namespace BP.WF
 
                                         //把文件copy到,
                                       
-                                            string file = item.GenerTempFile(ath.AthSaveWay);
-                                            System.IO.File.Copy(file, fileTo, true);
+                                        string file = item.GenerTempFile(ath.AthSaveWay);
+                                        //获取文件是否加密
+                                        bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                                        bool isEncrypt = item.GetParaBoolen("IsEncrypt");
+                                        string fileTempDecryPath = file;
+                                        if (fileEncrypt == true && isEncrypt == true)
+                                        {
+                                            fileTempDecryPath = file + ".tmp";
+                                            BP.Tools.EncHelper.DecryptDES(file, fileTempDecryPath);
+
+                                        }
+
+                                        System.IO.File.Copy(fileTempDecryPath, fileTo, true);
 
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                                     }
@@ -1100,7 +1133,22 @@ namespace BP.WF
                                     {
                                         //把文件copy到,
                                         if (System.IO.File.Exists(fileTo) == false)
-                                            System.IO.File.Copy(item.FileFullName, fileTo, true);
+                                        {
+                                            //获取文件是否加密
+                                            bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                                            bool isEncrypt = item.GetParaBoolen("IsEncrypt");
+                                            string fileTempDecryPath = item.FileFullName;
+                                            if (fileEncrypt == true && isEncrypt == true)
+                                            {
+                                                fileTempDecryPath = item.FileFullName + ".tmp";
+                                                BP.Tools.EncHelper.DecryptDES(item.FileFullName, fileTempDecryPath);
+
+                                            }
+
+                                            //把文件copy到,
+                                            System.IO.File.Copy(fileTempDecryPath, fileTo, true);
+                                            
+                                        }
 
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                                     }

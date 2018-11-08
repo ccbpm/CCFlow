@@ -1051,10 +1051,13 @@ function figure_Template_Rb(frmRb ) {
     }
 
 
-
-    var t2 = new Text("*" + frmRb.Lab, frmRb.X + (FigureDefaults.radiusSize + 1) / 2, frmRb.Y + FigureDefaults.textSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-
-    //var t2 = new Text("*" + frmRb.Lab, frmRb.X , frmRb.Y + FigureDefaults.textSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    //获取它的mapattr
+    var mapAttr = new Entity("BP.Sys.MapAttr", frmRb.FK_MapData + "_" + frmRb.KeyOfEn);
+    var t2;
+    if (mapAttr.GetPara("RBShowModel") == "3")
+        t2 = new Text("*" + frmRb.Lab, frmRb.X + (FigureDefaults.radiusSize + 1) / 2, frmRb.Y + FigureDefaults.textSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    else
+        t2 = new Text("*" + frmRb.Lab, frmRb.X + FigureDefaults.radiusSize, frmRb.Y + FigureDefaults.textSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
     f.addPrimitive(t2);
 

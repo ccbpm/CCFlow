@@ -143,8 +143,10 @@ namespace BP.Sys
             ath.NoOfObj = no;
             ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
             int i = ath.RetrieveFromDBSources();
+
             if (i == 0)
             {
+                if(!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
                 ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
             }
 

@@ -449,9 +449,11 @@
         function SearchData() {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddUrlData()
             handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("PageSize", pageSize);
-            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            //handler.AddPara("EnsName", GetQueryString("EnsName"));
+
             //查询集合
             var data = handler.DoMethodReturnString("Search_SearchIt");
             if (data.indexOf('err@') == 0) {
@@ -614,6 +616,7 @@
                                     html += "<a href='#' onclick='openFun(\""+warning+"\",\""+url+"\",\""+dtm.Title+"\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
                        
                                 }
+
                                     break;
                                 default:break;
                             }
@@ -838,7 +841,7 @@
             var user = new WebUser();
             var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
             //获取屏幕的长宽
-           var W = document.body.clientWidth-40;
+           var W = document.body.clientWidth-340;
            var H = document.body.clientHeight-40;
             OpenBootStrapModal(url, "eudlgframe", '设置', W, H, "icon-property", null, null, null, null, null, 'black'); 
         }

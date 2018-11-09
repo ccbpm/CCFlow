@@ -2507,11 +2507,9 @@ namespace BP.WF.HttpHandler
                     string realkey = key;
                     if(indexAs!=-1)
                         realkey = key.Substring(indexAs + 2);
-
-                    dt.Columns[realkey.ToUpper()].ColumnName = realkey; 
+                    if(dt.Columns[realkey.ToUpper()]!=null)
+                        dt.Columns[realkey.ToUpper()].ColumnName = realkey; 
                 }
-
-
                 
             }
 

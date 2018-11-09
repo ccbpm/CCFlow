@@ -2503,10 +2503,10 @@ namespace BP.WF.HttpHandler
                 string[] keys = sql.Split(',');
                 foreach (string key in keys)
                 {
-                    indexAs = key.ToUpper().IndexOf("AS");
-                    string realkey = key;
+                    var realkey = key.Replace("Case", "").Replace("case", "").Replace("CASE", "");
+                    indexAs = realkey.ToUpper().IndexOf("AS");
                     if(indexAs!=-1)
-                        realkey = key.Substring(indexAs + 2);
+                        realkey = realkey.Substring(indexAs + 2);
                     if(dt.Columns[realkey.ToUpper()]!=null)
                         dt.Columns[realkey.ToUpper()].ColumnName = realkey; 
                 }

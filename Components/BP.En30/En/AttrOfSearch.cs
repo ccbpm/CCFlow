@@ -191,6 +191,13 @@ namespace BP.En
                     if (_DefaultVal.Contains("@WebUser.FK_DeptNameOfFull"))
                         return _DefaultVal.Replace("@WebUser.FK_DeptNameOfFull", Web.WebUser.FK_DeptNameOfFull);
 
+                    // 处理传递过来的参数。
+                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    {
+                        if (_DefaultVal.Contains(k))
+                            return _DefaultVal.Replace("@" + k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    }
+
                     //if (_DefaultVal.Contains("@WebUser.FK_Unit"))
                     //    return _DefaultVal.Replace("@WebUser.FK_Unit", Web.WebUser.FK_Unit);
 

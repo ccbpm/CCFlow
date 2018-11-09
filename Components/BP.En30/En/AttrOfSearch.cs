@@ -197,6 +197,11 @@ namespace BP.En
                         if (_DefaultVal.Contains(k))
                             return _DefaultVal.Replace("@" + k, System.Web.HttpContext.Current.Request.QueryString[k]);
                     }
+                    foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                    {
+                        if (_DefaultVal.Contains(k))
+                            return _DefaultVal.Replace("@" + k, System.Web.HttpContext.Current.Request.Form[k]);
+                    }
 
                     //if (_DefaultVal.Contains("@WebUser.FK_Unit"))
                     //    return _DefaultVal.Replace("@WebUser.FK_Unit", Web.WebUser.FK_Unit);

@@ -2,20 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>从表</title>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <base target="_self" />
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
     <script type="text/javascript" src="../Scripts/easyUI145/jquery.min.js"></script>
-	<script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
 
-	<script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
@@ -24,12 +24,12 @@
 
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script type="text/javascript" src="MapExt2016.js"></script>
-    <script src="../Comm/JS/TBHelpDiv.js"  type="text/javascript" ></script>
+    <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script src="../Comm/Gener.js"  type="text/javascript" ></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
 
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
 
         var hjl = new Array(); //合计列名称集合
         var mapExts;  //mapExts扩展
@@ -38,7 +38,7 @@
 
         //页面数据
         var pageData = {
-            DBDtl: [{ OID: 0, RowData: {}}],
+            DBDtl: [{ OID: 0, RowData: {} }],
             updateRowIndex: -1, //正在更新的列索引
             /*
             count：需要保存的行数
@@ -399,7 +399,7 @@
                     var dbDtl = data["DBDtl"]; //从表数据.
 
                     //清空表格数据
-                    $('#tableBody tbody').html(''); 
+                    $('#tableBody tbody').html('');
 
                     if (sys_MapDtl.ShowCols) {
                         var ShowCols = sys_MapDtl.ShowCols.split(",");
@@ -542,6 +542,7 @@
                             $.each(tbodyTrs, function (m, tbodyTrObj) {
                                 var threadTh = $('#tableHead thead tr th');
                                 $.each(threadTh, function (k, threadThObj) {
+                                    $(tbodyTrObj).children('td')[k].width = threadThObj.offsetWidth ;
                                     if ($(threadThObj).data().colname != undefined) {
                                         var o = $(threadThObj);
                                         var tmplate = figure_MapAttr_Template(o.data());
@@ -641,8 +642,11 @@
                         }
                     };
 
-                    $('#tableBody tbody tr').remove();
-                    Common.CustomPagePlug(dtlDataOption); //绑定表格
+                    if (dtlDataOption) {
+                        $('#tableBody tbody tr').remove();
+                        Common.CustomPagePlug(dtlDataOption); //绑定表格
+
+                    }
 
                     if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
                         window.columnExp = [];
@@ -1037,7 +1041,7 @@
             var trData = tr.data().data;
             //input text
             //select
-            //循环  td  
+            //循环  td
             $.each(tdArr, function (i, tdObj) {
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
@@ -1080,7 +1084,7 @@
             var trData = tr.data().data;
             //input text
             //select
-            //循环  td  
+            //循环  td
             $.each(tdArr, function (i, tdObj) {
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
@@ -1145,7 +1149,7 @@
                         eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                     } else {
                         //添加文本框 ，日期控件等
-                        //AppString   
+                        //AppString
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + (workNodeData, mapAttr, defValue) + "</select>";
@@ -1193,7 +1197,7 @@
                             }
                         }
 
-                        // AppDouble  AppFloat 
+                        // AppDouble  AppFloat
                         if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
@@ -1405,38 +1409,41 @@
                 InitPage();
             }
         }
-//        $(function () {
-//            var bodyHeight = $(document).height();
-//            var headHeight = $("#dtlDiv div table thead").height();
-//            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
-//            $("#dtlDiv").height(bodyHeight - 35);
+        //        $(function () {
+        //            var bodyHeight = $(document).height();
+        //            var headHeight = $("#dtlDiv div table thead").height();
+        //            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
+        //            $("#dtlDiv").height(bodyHeight - 35);
 
-//        });
+        //        });
 
 
-     </script>
-	<style type="text/css">
-		.table thead {
-			display:block;
-		}
-		.table tbody {
-			display: block;
-			overflow-x: hidden;
-			overflow-y: hidden;
-		}
-		.table thead, .tbody tr {
-			display: table;
-			width: 100%;
-			table-layout: fixed;
-		}
-		.table thead {
-			width: calc(100% - 1em)
-		}
-	</style>
+    </script>
+    <style type="text/css">
+        .table thead {
+            display: block;
+        }
+
+        .table tbody {
+            display: block;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        .table thead, .tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .table thead {
+            width: calc(100% - 1em);
+        }
+    </style>
 </head>
-<body onblur="SaveAll(this)" >
+<body onblur="SaveAll(this)">
     <form>
-		<input type="hidden" id="formExt">
+        <input type="hidden" id="formExt" />
         <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
         <div id="ContentDtlDiv">
             <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
@@ -1449,7 +1456,7 @@
                                 </table>
                             </div>
                             <div style="overflow-y: scroll">
-                                <table id="tableBody" class="table wupop" data-data="true">
+                                <table id="tableBody" class="table wupop" data-data="true" style="width:100%;">
                                     <tbody></tbody>
                                 </table>
                             </div>
@@ -1462,83 +1469,83 @@
             </div>
         </div>
     </form>
-	<script type="text/javascript">
-	    function updateRow(OID, EditModel) {
-	        if (window.parent) {
-	            var ensName = GetQueryString("EnsName");
-	            var refPKVal = GetQueryString("RefPKVal");
-	            window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitPage);
-	        }
-	    }
-	    function deleteRow(index) {
+    <script type="text/javascript">
+        function updateRow(OID, EditModel) {
+            if (window.parent) {
+                var ensName = GetQueryString("EnsName");
+                var refPKVal = GetQueryString("RefPKVal");
+                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitPage);
+            }
+        }
+        function deleteRow(index) {
 
-	        isDelRowAlert = true;
-	        var result = parent.window.confirm('确定要删除吗?');
-	        if (result == false)
-	            return;
+            isDelRowAlert = true;
+            var result = parent.window.confirm('确定要删除吗?');
+            if (result == false)
+                return;
 
-	        var rowData = $(index).parent().parent().data().data;
-	        var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-	        pageData.currentRowIndex = rowCurrentIndex;
-	        if (rowData.OID > 0) {
-	            rowData.DoType = "Dtl_DeleteRow";
-	            rowData.FK_MapDtl = GetQueryString("EnsName");
-	            //row.FK_MapData = "ND101";
-	            rowData.RefPKVal = GetQueryString("RefPKVal");
-	            currentRowIndex = -1;
+            var rowData = $(index).parent().parent().data().data;
+            var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
+            pageData.currentRowIndex = rowCurrentIndex;
+            if (rowData.OID > 0) {
+                rowData.DoType = "Dtl_DeleteRow";
+                rowData.FK_MapDtl = GetQueryString("EnsName");
+                //row.FK_MapData = "ND101";
+                rowData.RefPKVal = GetQueryString("RefPKVal");
+                currentRowIndex = -1;
 
-	            $('#Msg').show();
-	            AjaxServiceGener(rowData, deleteRowAfter, this);
-	            $('#Msg').hide();
+                $('#Msg').show();
+                AjaxServiceGener(rowData, deleteRowAfter, this);
+                $('#Msg').hide();
 
-	        } else { //移除  新增的 尚未入库
-	            var tr = $(index).parent().parent();
-	            updateTableSn(tr);
-	            tr.remove();
-	            triggerStatistics(); // 重新计算
-	        }
-	    }
+            } else { //移除  新增的 尚未入库
+                var tr = $(index).parent().parent();
+                updateTableSn(tr);
+                tr.remove();
+                triggerStatistics(); // 重新计算
+            }
+        }
 
-	    function deleteRowAfter(data) {
-	        if (data.indexOf('err') > -1) {
-	            alert('删除失败！');
-	        } else {
-	            //
-	            //InitPage();//刷新页面
-	            //删除数据
-	            var tr = $('#tableBody tbody tr')[pageData.currentRowIndex];
-	            var delOid = $(tr).data().data.OID;
-	            var delRow = $.grep(pageData.DBDtl, function (val) { return val.OID == delOid });
-	            if (delRow.length == 1) {
-	                delRow.OID = -1;
-	                delRow.RowData = undefined;
-	            }
+        function deleteRowAfter(data) {
+            if (data.indexOf('err') > -1) {
+                alert('删除失败！');
+            } else {
+                //
+                //InitPage();//刷新页面
+                //删除数据
+                var tr = $('#tableBody tbody tr')[pageData.currentRowIndex];
+                var delOid = $(tr).data().data.OID;
+                var delRow = $.grep(pageData.DBDtl, function (val) { return val.OID == delOid });
+                if (delRow.length == 1) {
+                    delRow.OID = -1;
+                    delRow.RowData = undefined;
+                }
 
 
-	            updateTableSn(tr);
-	            tr = $('#tableBody tbody tr')[pageData.currentRowIndex];
-	            $(tr).remove();
-	            pageData.currentRowIndex = -1;
-	            triggerStatistics(); // 重新计算
-	            return;
-	        }
-	    }
+                updateTableSn(tr);
+                tr = $('#tableBody tbody tr')[pageData.currentRowIndex];
+                $(tr).remove();
+                pageData.currentRowIndex = -1;
+                triggerStatistics(); // 重新计算
+                return;
+            }
+        }
 
-	    //更新表格序号
-	    function updateTableSn(tr) {
-	        tr = $(tr).next();
-	        while (tr.length == 1) {
-	            var snTd = $(tr.children('td')[0]);
-	            var sn = snTd.text();
-	            if (!isNaN(parseInt(sn))) {
-	                snTd.text(parseInt(sn) - 1);
-	            }
-	            tr = $(tr).next();
-	        }
-	    }
-	</script>
+        //更新表格序号
+        function updateTableSn(tr) {
+            tr = $(tr).next();
+            while (tr.length == 1) {
+                var snTd = $(tr.children('td')[0]);
+                var sn = snTd.text();
+                if (!isNaN(parseInt(sn))) {
+                    snTd.text(parseInt(sn) - 1);
+                }
+                tr = $(tr).next();
+            }
+        }
+    </script>
 
-    <script type="text/javascript" >
+    <script type="text/javascript">
         //将获取过来的URL参数转成URL中的参数形式  &
         function pageParamToUrl() {
             var paramUrlStr = '';
@@ -1589,45 +1596,45 @@
                             popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                         }
                         switch (popWorkModelStr) {
-                            /// <summary> 
-                            /// 自定义URL 
-                            /// </summary> 
-                            //SelfUrl =1, 
+                            /// <summary>
+                            /// 自定义URL
+                            /// </summary>
+                            //SelfUrl =1,
                             case "1":
                                 icon = "glyphicon glyphicon-th";
                                 break;
-                            /// <summary> 
-                            /// 表格模式 
-                            /// </summary> 
-                            // TableOnly, 
+                                /// <summary>
+                                /// 表格模式
+                                /// </summary>
+                                // TableOnly,
                             case "2":
                                 icon = "glyphicon glyphicon-list";
                                 break;
-                            /// <summary> 
-                            /// 表格分页模式 
-                            /// </summary> 
-                            //TablePage, 
+                                /// <summary>
+                                /// 表格分页模式
+                                /// </summary>
+                                //TablePage,
                             case "3":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary> 
-                            /// 分组模式 
-                            /// </summary> 
-                            // Group, 
+                                /// <summary>
+                                /// 分组模式
+                                /// </summary>
+                                // Group,
                             case "4":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary> 
-                            /// 树展现模式 
-                            /// </summary> 
-                            // Tree, 
+                                /// <summary>
+                                /// 树展现模式
+                                /// </summary>
+                                // Tree,
                             case "5":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
-                            /// <summary> 
-                            /// 双实体树 
-                            /// </summary> 
-                            // TreeDouble 
+                                /// <summary>
+                                /// 双实体树
+                                /// </summary>
+                                // TreeDouble
                             case "6":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
@@ -1794,7 +1801,7 @@
                                         if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
                                             $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
                                             $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
-                                                //替换 
+                                                //替换
                                                 var mapExt = $(obj.target).data().mapExt;
                                                 var mapExtDoc = mapExt.Doc;
                                                 var evelStr = mapExt.Doc;
@@ -1840,7 +1847,7 @@
                                                 *   当input触发onblur事件后, body的onblur事件就被触发, 并调用SaveAll()方法
                                                 *   SaveAll()方法又调用AjaxServiceGener()方法
                                                 *   AjaxServiceGener()方法提交到后台返回后再次调用了InitPage()方法, 形成死循环
-                                                * 
+                                                *
                                                 * 暂时将SaveAll()禁用
                                                 * 或将blur事件改为onchange事件
                                                 */
@@ -2105,8 +2112,8 @@
                 return $(tr).find("[name=DDL_" + ctrlID + ']').val(val);
             }
         }
-</script>
-   <!--DIVINFO-->
+    </script>
+    <!--DIVINFO-->
     <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; text-align: left; border-color:Black'></div>
 </body>
 </html>

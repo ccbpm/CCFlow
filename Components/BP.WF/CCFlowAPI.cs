@@ -602,7 +602,7 @@ namespace BP.WF
 
                     #region 处理下拉框数据范围. for 小杨.
                     me = mes.GetEntityByKey(MapExtAttr.ExtType,  MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
-                    if (me != null && myds.Tables.Contains(keyOfEn) == true)
+                    if (me != null && myds.Tables.Contains(keyOfEn) == false)
                     {
                         string fullSQL = me.Doc.Clone() as string;
                         fullSQL = fullSQL.Replace("~", ",");

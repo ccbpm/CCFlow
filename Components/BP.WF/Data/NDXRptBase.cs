@@ -90,6 +90,17 @@ namespace BP.WF.Data
         /// </summary>
         public const string BillNo = "BillNo";
 
+        #region 项目相关.
+        /// <summary>
+        /// 项目编号
+        /// </summary>
+        public const string PrjNo = "PrjNo";
+        /// <summary>
+        /// 项目名称
+        /// </summary>
+        public const string PrjName = "PrjName";
+        #endregion 项目相关.
+
         #region 父子流程属性.
         /// <summary>
         /// 父流程WorkID
@@ -99,8 +110,6 @@ namespace BP.WF.Data
         /// 父流程编号
         /// </summary>
         public const string PFlowNo = "PFlowNo";
-
-
         /// <summary>
         /// 调用子流程的节点
         /// </summary>

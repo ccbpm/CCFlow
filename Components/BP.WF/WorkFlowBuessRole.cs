@@ -644,15 +644,23 @@ namespace BP.WF
                 return dt;
             }
 
-            //首先判断是否配置了获取下一步接受人员的sql.
+            #region 首先判断是否配置了获取下一步接受人员的sql.
             if (toNode.HisDeliveryWay == DeliveryWay.BySQL
+                || toNode.HisDeliveryWay == DeliveryWay.BySQLTemplate
                 || toNode.HisDeliveryWay == DeliveryWay.BySQLAsSubThreadEmpsAndData)
             {
-                if (toNode.DeliveryParas.Length < 4)
-                    throw new Exception("@您设置的当前节点按照SQL，决定下一步的接受人员，但是你没有设置SQL.");
-
-                sql = toNode.DeliveryParas;
-                sql = sql.Clone().ToString();
+                if (toNode.HisDeliveryWay == DeliveryWay.BySQLTemplate)
+                {
+                    SQLTemplate st = new SQLTemplate(toNode.DeliveryParas);
+                    sql = st.Docs;
+                }
+                else
+                {
+                    if (toNode.DeliveryParas.Length < 4)
+                        throw new Exception("@您设置的当前节点按照SQL，决定下一步的接受人员，但是你没有设置SQL.");
+                    sql = toNode.DeliveryParas;
+                    sql = sql.Clone().ToString();
+                }
 
                 //特殊的变量.
                 sql = sql.Replace("@FK_Node", toNode.NodeID.ToString());
@@ -675,6 +683,10 @@ namespace BP.WF
                     throw new Exception("@没有找到可接受的工作人员。@技术信息：执行的SQL没有发现人员:" + sql);
                 return dt;
             }
+            #endregion 首先判断是否配置了获取下一步接受人员的sql.
+
+
+
 
             #region 按绑定部门计算,该部门一人处理标识该工作结束(子线程)..
             if (toNode.HisDeliveryWay == DeliveryWay.BySetDeptAsSubthread)
@@ -999,6 +1011,7 @@ namespace BP.WF
             }
             #endregion 按照上一个节点表单指定字段的人员处理。
 
+            #region 获得项目编号.
             string prjNo = "";
             FlowAppType flowAppType = currNode.HisFlow.HisFlowAppType;
             sql = "";
@@ -1014,6 +1027,7 @@ namespace BP.WF
                     throw new Exception("@当前流程是工程类流程，但是在节点表单中没有PrjNo字段(注意区分大小写)，请确认。@异常信息:" + ex.Message);
                 }
             }
+            #endregion 获得项目编号.
 
             #region 按部门与岗位的交集计算.
             if (toNode.HisDeliveryWay == DeliveryWay.ByDeptAndStation)

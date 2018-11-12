@@ -141,8 +141,11 @@ namespace BP.GPM
             #endregion 修复
 
             #region 5, 初始化数据。
-            sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\InitPublicData.sql";
-            BP.DA.DBAccess.RunSQLScript(sqlscript);
+            if (BP.DA.DBAccess.IsExitsObject("GPM_AppSort") == true)
+            {
+                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\InitPublicData.sql";
+                BP.DA.DBAccess.RunSQLScript(sqlscript);
+            }
             #endregion 初始化数据
 
             #region 6, 创建视图。

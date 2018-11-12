@@ -928,6 +928,7 @@ namespace BP.WF
             bool isInstallFlowDemo = true;
             if (demoType == 2)
                 isInstallFlowDemo = false;
+            
 
             #region 检查是否是空白的数据库。
             //if (BP.DA.DBAccess.IsExitsObject("WF_Emp")
@@ -942,6 +943,45 @@ namespace BP.WF
             ArrayList al = null;
             string info = "BP.En.Entity";
             al = BP.En.ClassFactory.GetObjects(info);
+
+            #region 检查是否有BP.Demo 这个类，如果没有就不能安装 demo.
+            if (isInstallFlowDemo == true)
+            {
+                /*检查是否有 BP.Demo 类如果没有，就 isInstallFlowDemo=false */
+
+                bool isHave = false;
+                foreach (Object obj in al)
+                {
+                    Entity en = null;
+                    en = obj as Entity;
+                    if (en == null)
+                        continue;
+
+                    //获得类名.
+                    string clsName = en.ToString();
+                    if (clsName == null)
+                        continue;
+
+                    if (clsName.Contains("FlowSheet") == true)
+                        continue;
+                    if (clsName.Contains("NodeSheet") == true)
+                        continue;
+                    if (clsName.Contains("FlowFormTree") == true)
+                        continue;
+
+                    //不安装CCIM的表.
+                    if (clsName.Contains("BP.Demo"))
+                    {
+                        isHave = true;
+                        break;
+                    }
+                }
+
+                if (isHave == false)
+                    isInstallFlowDemo = false;
+            }
+            #endregion 检查是否有BP.Demo 这个类，如果没有就不能安装 demo.
+
 
             #region 先创建表，否则列的顺序就会变化.
             FlowExt fe = new FlowExt();
@@ -1093,8 +1133,11 @@ namespace BP.WF
             #region 5, 初始化数据.
             if (isInstallFlowDemo)
             {
-                sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitPublicData.sql";
-                BP.DA.DBAccess.RunSQLScript(sqlscript);
+                if (BP.DA.DBAccess.IsExitsObject("Demo_Supplier") == true)
+                {
+                    sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitPublicData.sql";
+                    BP.DA.DBAccess.RunSQLScript(sqlscript);
+                }
             }
             else
             {
@@ -1131,31 +1174,33 @@ namespace BP.WF
                         wfEmp.Insert();
                 }
 
-                // 生成简历数据.
-                foreach (BP.Port.Emp emp in emps)
+                if (BP.DA.DBAccess.IsExitsObject("Demo_Resume") == true)
                 {
-                    for (int myIdx = 0; myIdx < 6; myIdx++)
+                    // 生成简历数据.
+                    foreach (BP.Port.Emp emp in emps)
                     {
-                        string sql = "";
-                        sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.No + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
-                        DBAccess.RunSQL(sql);
+                        for (int myIdx = 0; myIdx < 6; myIdx++)
+                        {
+                            string sql = "";
+                            sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
+                            sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.No + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                            DBAccess.RunSQL(sql);
+                        }
+                    }
+
+                    DataTable dtStudent = BP.DA.DBAccess.RunSQLReturnTable("SELECT No FROM Demo_Student");
+                    foreach (DataRow dr in dtStudent.Rows)
+                    {
+                        string no = dr[0].ToString();
+                        for (int myIdx = 0; myIdx < 6; myIdx++)
+                        {
+                            string sql = "";
+                            sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
+                            sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                            DBAccess.RunSQL(sql);
+                        }
                     }
                 }
-
-                DataTable dtStudent = BP.DA.DBAccess.RunSQLReturnTable("SELECT No FROM Demo_Student");
-                foreach (DataRow dr in dtStudent.Rows)
-                {
-                    string no = dr[0].ToString();
-                    for (int myIdx = 0; myIdx < 6; myIdx++)
-                    {
-                        string sql = "";
-                        sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
-                        DBAccess.RunSQL(sql);
-                    }
-                }
-
 
                 // 生成年度月份数据.
                 string sqls = "";

@@ -79,13 +79,23 @@ namespace BP.WF.Template
 
             //首先判断是否配置了获取下一步接受人员的sql.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySQL
+                || town.HisNode.HisDeliveryWay == DeliveryWay.BySQLTemplate
                 || town.HisNode.HisDeliveryWay == DeliveryWay.BySQLAsSubThreadEmpsAndData)
             {
-                if (town.HisNode.DeliveryParas.Length < 4)
-                    throw new Exception("@您设置的当前节点按照SQL，决定下一步的接受人员，但是你没有设置SQL.");
 
-                sql = town.HisNode.DeliveryParas;
-                sql = sql.Clone().ToString();
+                if (town.HisNode.HisDeliveryWay == DeliveryWay.BySQLTemplate)
+                {
+                    SQLTemplate st = new SQLTemplate(town.HisNode.DeliveryParas);
+                    sql = st.Docs;
+                }
+                else
+                {
+                    if (town.HisNode.DeliveryParas.Length < 4)
+                        throw new Exception("@您设置的当前节点按照SQL，决定下一步的接受人员，但是你没有设置SQL.");
+                    sql = town.HisNode.DeliveryParas;
+                    sql = sql.Clone().ToString();
+                }
+
 
                 //特殊的变量.
                 sql = sql.Replace("@FK_Node", this.town.HisNode.NodeID.ToString());

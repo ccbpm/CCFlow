@@ -206,6 +206,13 @@
                 return;
             }
 
+            //枚举英文名称不能为中文
+            if (/^[\u3220-\uFA29]+$/.test(keyofEn) == true) {
+                alert('枚举英文名称不能含有中文');
+                return;
+            }
+             
+
             //删除现在的枚举值.
             var se = new Entity("BP.Sys.SysEnum");
             se.Delete("EnumKey", keyofEn);

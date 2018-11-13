@@ -4689,6 +4689,8 @@ namespace BP.WF
             //查询出来所有的设置。
             FrmFields ffs = new FrmFields();
 
+            
+
             QueryObject qo = new QueryObject(ffs);
             qo.AddWhere(FrmFieldAttr.FK_Node, this.HisNode.NodeID);
             qo.DoQuery();
@@ -4713,8 +4715,16 @@ namespace BP.WF
                     isHave = true;
                     break;
                 }
+
                 if (isHave == false)
                     continue;
+
+                MapAttrs attrs = new MapAttrs(item.FK_Frm);
+                string attrstr = "";
+                foreach (MapAttr attr in attrs)
+                {
+                    attrstr += attr.KeyOfEn + ",";
+                }
 
                 // 处理主键.
                 long pk = 0;// this.WorkID;
@@ -4751,9 +4761,12 @@ namespace BP.WF
                     if (ff.FK_MapData != item.FK_Frm)
                         continue;
 
-                    //获得数据.
-                    string val = string.Empty;
-                    val = dt.Rows[0][ff.KeyOfEn].ToString();
+                        if (!attrstr.Contains(ff.KeyOfEn))
+                            continue;
+
+                        //获得数据.
+                        string val = string.Empty;
+                        val = dt.Rows[0][ff.KeyOfEn].ToString();
 
                     this.HisWork.SetValByKey(ff.KeyOfEn, val);
                 }

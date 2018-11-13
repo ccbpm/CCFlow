@@ -33,7 +33,7 @@
             handler.AddPara("EnsName", GetQueryString("EnsName"));
 
             var data = handler.DoMethodReturnString("Refmethod_Init");
-            console.log(data);
+
 
             //如果错误,就提示.
             if (data.indexOf('err@') == 0) {

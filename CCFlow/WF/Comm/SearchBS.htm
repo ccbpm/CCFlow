@@ -597,6 +597,8 @@
                         var url = dtm.Url+pkval;
                         switch(refMethodType){
                             case RefMethodType.LinkeWinOpen:
+                                html += "<a href='#' onclick='WinOpenIt(\""+url+"\",\""+dtm.Title+"\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
+                                break;
                             case RefMethodType.LinkModel:
                             case RefMethodType.RightFrameOpen:
                                 html += "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
@@ -1005,7 +1007,14 @@
        
         }
     }
-
+           //打开窗口
+    function WinOpenIt(url, winName) {
+        //var w = screen.availWidth;
+        //var h = screen.availHeight;
+        var newWindow = window.open(url, winName, 'height=1200,width=1000,top=' + (window.screen.availHeight - 800) / 2 + ',left=' + (window.screen.availWidth - 1030) / 2 + ',scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
+        newWindow.focus();
+        return;
+    }
    
 
     </script>

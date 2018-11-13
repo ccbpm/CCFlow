@@ -247,13 +247,8 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     //checkbox 类型.
     if (mapAttr.MyDataType == 4) { // AppBoolean = 7
 
-        //CHECKBOX 默认值
-        var checkedStr = '';
-        if (checkedStr != "true" && checkedStr != '1') {
-            checkedStr = ' checked="checked" '
-        }
-        checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
-        eleHtml += "<div class='checkbox' ><label><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+      
+        eleHtml += "<div class='checkbox' ><label><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' />";
         eleHtml += mapAttr.Name + '</label></div>';
         return eleHtml;
     }

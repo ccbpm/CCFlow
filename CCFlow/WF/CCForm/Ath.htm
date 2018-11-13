@@ -348,11 +348,6 @@
                 html +="</thead>";
             }
 
-           // $("#tableHead").html(html);
-           // var bodyHead = $(html);
-            //bodyHead.css("display", "none");
-           // $("#tableBody").append(bodyHead);
-            //html = colgroup;
              html += "<tbody>";
             var i = 0;
             var fileSorts = new Array("");
@@ -478,12 +473,16 @@
 
 
             //如果存在分组，增加还没有上传文件的分组
+            var index = 0;
             for (var j = 0; j < fileSorts.length; j++) {
                 var sort = fileSorts[j];
-                var idx = dbs.length + 1 + j;
+              
                 //分组为空或者已经存在
                 if (sort == "" || haveFileSort.indexOf(sort) != -1)
                     continue;
+
+                var idx = dbs.length + 1 + index;
+                index++;
                 //组合Html
                 html += "<tr>";
                 html += "<td class='Idx' nowrap>" + idx + "</td>";

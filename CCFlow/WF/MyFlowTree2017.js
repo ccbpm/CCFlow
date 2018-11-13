@@ -267,8 +267,10 @@ function OnTabChange(scope) {
         	if(lastChar == "*"){
         		var currScope = currTab.find('iframe')[0];
                 var contentWidow = currScope.contentWindow;
-                contentWidow.IsChange = true;
-                contentWidow.SaveDtlData("btnsave");
+                if(contentWidow.SaveDtlData!= undefined && typeof(contentWidow.SaveDtlData) == "function"){
+                    contentWidow.IsChange = true;
+                    contentWidow.SaveDtlData("btnsave");
+                 }
                 if (lastChar == "*")
                 	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
                else
@@ -290,8 +292,10 @@ function OnTabChange(scope) {
 	        	if(lastChar == "*"){
 	        		var currScope = currTab.find('iframe')[0];
 	                var contentWidow = currScope.contentWindow;
-	                contentWidow.IsChange = true;
-	                contentWidow.SaveDtlData();
+                    if(contentWidow.SaveDtlData!= undefined && typeof(contentWidow.SaveDtlData) == "function"){
+	                    contentWidow.IsChange = true;
+	                    contentWidow.SaveDtlData();
+                    }
 	                if (lastChar == "*")
 	                	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
 	               else
@@ -308,7 +312,8 @@ function OnTabChange(scope) {
             scope = currTab.find('iframe')[0];
         }
         var contentWidow = scope.contentWindow;
-        contentWidow.SaveDtlData();
+        if(contentWidow.SaveDtlData!= undefined && typeof(contentWidow.SaveDtlData) == "function")
+            contentWidow.SaveDtlData();
         $.each(p, function (i, val) {
         	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
         });

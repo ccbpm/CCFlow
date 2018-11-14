@@ -454,7 +454,8 @@
                      //组合Html
                     html += "<tr>";
                     html += "<td class='Idx' nowrap>" + i + "</td>";
-                    html += "<td>" + sort + "</td>";
+                    if(fileSorts.length>1)
+                        html += "<td>" + sort + "</td>";
                     html += "<td style='width:100px;color:red'>请上传附件..</td>";
                     html += "<td>&nbsp&nbsp</td>";
                     html += "<td>&nbsp&nbsp</td>";

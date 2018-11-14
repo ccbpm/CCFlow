@@ -370,6 +370,8 @@
                 var IsExistFile = false;
 
                 var sort = fileSorts[j]
+                if (sort == "")
+                    continue;
                 bSort_Add_TD = true;
 
                 var mysort = sort;
@@ -506,46 +508,6 @@
                 html += "</tr>";
             }
 
-
-//            //如果存在分组，增加还没有上传文件的分组
-//            var index = 0;
-//            for (var j = 0; j < fileSorts.length; j++) {
-//                var sort = fileSorts[j];
-//              
-//                //分组为空或者已经存在
-//                if (sort == "" || haveFileSort.indexOf(sort) != -1)
-//                    continue;
-
-//                var idx = dbs.length + 1 + index;
-//                index++;
-//                //组合Html
-//                html += "<tr>";
-//                html += "<td class='Idx' nowrap>" + idx + "</td>";
-//                html += "<td>" + sort + "</td>";
-//                html += "<td style='width:100px;color:red'>请上传附件..</td>";
-//                html += "<td>&nbsp&nbsp</td>";
-//                html += "<td>&nbsp&nbsp</td>";
-//                html += "<td>&nbsp&nbsp</td>";
-//                //如果有数据,就要解析它附件属性.
-//                if (athDesc.IsExpCol == 1) {
-
-//                    for (var ii = 0; ii < mapAttrs.length; ii++) {
-
-//                        html += "<td>" + InitAthMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";
-//                    }
-//                }
-//                if (athDesc.IsExpCol == 1)
-//                    html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
-//                else {
-//                    var explorer = window.navigator.userAgent;
-//                    var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
-//                    if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
-//                        html += "<td></td>";
-//                    else
-//                        html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
-//                }
-//                html += "</tr>";
-//            }
             html += AddFileUpload(athDesc);
             html +="</tbody>";
 
@@ -559,10 +521,7 @@
             return "\n<td  nowrap title='" + title + "' >" + str + "</td>";
         }
 
-        function setIframeHeight() {
-            //if (window.frameElement != null)
-            //    $("#" + window.frameElement.getAttribute("id"), parent.document).height(Math.max($(document).height(), $("body").height()) + ($(".Idx").length * 2));
-        }
+
         var realFileExts = "";
         function AddFileUpload(athDesc) {
             var html = "";
@@ -808,26 +767,6 @@
 <body>
     <form id="Ath_Form">
     <div id="Msg"></div>
-   <!-- <div >
-        <table class="table" id="tableHead" ></table>
-    </div>
-    <div class="pre-scrollable" style="height: 280px; margin-top: -22px;">
-	     <table class="table table-striped table-hover" style="table-layout:fixed; -ms-word-break: break-all; -ms-word-wrap: break-word;" id="tableBody">
-            
-          </table>
-    </div>
--->
-    <!--<div class="bootstrap-table">
-    <div class="fixed-table-container">
-        <div class="fixed-table-toolbar"></div>
-        <div class="fixed-table-header">
-            <table class="table table-hover " id="tableHead" ></table>
-        </div>
-        <div class="fixed-table-body">
-            <table class="table table-hover " id="tablebody" style="margin-top: -41px; -ms-word-break: break-all; -ms-word-wrap: break-word;"></table>
-         </div>
-    </div>
-    </div>-->
     <div  style="width:99%"><table id="ShowTable" class="table"></table></div>
     <div id="bar" style="display: none; position: fixed; bottom: 0px; right: 0px;">
         <button class="btn btn-info" id="btn_Colse" style="border: 0; background: #2884fa;

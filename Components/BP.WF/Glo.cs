@@ -2543,8 +2543,7 @@ namespace BP.WF
                                     break;
                             }
 
-                            if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
-                                en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                           en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
                         }
                     }
                 }

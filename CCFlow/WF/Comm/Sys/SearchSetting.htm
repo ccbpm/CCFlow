@@ -37,6 +37,7 @@
 
                 //打开url类型. 
                 en.SetPara("SearchUrlOpenType", "0"); //默认为打开En.htm
+                en.SetPara("OrderBy", "");
                 en.Url = "";
                 en.Insert();
             }
@@ -55,7 +56,7 @@
 
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
-            
+
 
         });
 
@@ -199,7 +200,11 @@
 <td>URL(当为自定义url的时候有效)</td>
 <td colspan=3 ><input name="TB_Url" type="text" value="" id="TB_Url" style="width:100%;" /></td>
 </tr>
-
+<tr>
+<td>查询排序</td>
+<td ><input name="TBPara_OrderBy" type="text" value="" id="TBPara_OrderBy" style="width:100%;" /></td>
+<td></td><td></td>
+</tr>
 
 <tr  bgcolor='AliceBlue'>
 <th colspan="4">自定义按钮与标签,函数可以写入到\DataUser\JSLabData\SearchSelf.js里面.</th>

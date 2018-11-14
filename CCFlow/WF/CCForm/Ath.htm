@@ -370,7 +370,7 @@
                 var IsExistFile = false;
 
                 var sort = fileSorts[j]
-                if (sort == "")
+                if (fileSorts.length>1 && sort == "")
                     continue;
                 bSort_Add_TD = true;
 
@@ -512,10 +512,11 @@
             html +="</tbody>";
 
             $("#ShowTable").html(html);
-          
+
 
         }
 
+       
         //增加文件名称
         function addTdTitle(title, str) {
             return "\n<td  nowrap title='" + title + "' >" + str + "</td>";

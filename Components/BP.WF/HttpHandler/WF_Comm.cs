@@ -1318,6 +1318,12 @@ namespace BP.WF.HttpHandler
              ur.SetPara("RecCount", qo.GetCount());
              ur.Save();
 
+            //获取配置信息
+             EnCfg encfg = new EnCfg(this.EnsName);
+            //增加排序
+             if (encfg != null && !DataType.IsNullOrEmpty(encfg.GetParaString("OrderBy")))
+                 qo.addOrderBy(encfg.GetParaString("OrderBy"));
+
              if (GetRequestVal("DoWhat") != null && GetRequestVal("DoWhat").Equals("Batch"))
                  qo.DoQuery(en.PK,500,1);
              else

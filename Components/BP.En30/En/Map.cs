@@ -1391,6 +1391,25 @@ namespace BP.En
 				_IsCheckNoLength = value;
 			}
 		}
+
+        /// <summary>
+        /// 排序编号
+        /// </summary>
+        private string _orderBy = null;
+        /// <summary>
+        /// 排序编号.
+        /// </summary>
+        public string OrderBy
+        {
+            get
+            {
+                return _orderBy;
+            }
+            set
+            {
+                _orderBy = value;
+            }
+        }
 		#endregion
 
 		#region 与连接有关系。

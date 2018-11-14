@@ -854,14 +854,12 @@ namespace BP.WF
                 return err;
             }
         }
-
         /// <summary>
         /// 如果发现升级sql文件日期变化了，就自动升级.
         /// 就是说该文件如果被修改了就会自动升级.
         /// </summary>
         public static void UpdataCCFlowVerSQLScript()
         {
-
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='UpdataCCFlowVer'";
             string currDBVer =  DBAccess.RunSQLReturnStringIsNull(sql, "");
 
@@ -922,7 +920,7 @@ namespace BP.WF
         /// 安装包
         /// </summary>
         /// <param name="lang">语言</param>
-        /// <param name="demoType">0开发人员流程, 1,业务流程 , 2不安装流程.</param>
+        /// <param name="demoType">0安装Demo, 1 不安装Demo.</param>
         public static void DoInstallDataBase(string lang, int demoType)
         {
             bool isInstallFlowDemo = true;
@@ -938,6 +936,43 @@ namespace BP.WF
             //    throw new Exception("@当前的数据库好像是一个安装执行失败的数据库，里面包含了一些cc的表，所以您需要删除这个数据库然后执行重新安装。");
             //}
             #endregion 检查是否是空白的数据库。
+
+
+            #region 首先创建Port类型的表, 让admin登录.
+            BP.GPM.Emp myemp = new BP.GPM.Emp();
+            myemp.CheckPhysicsTable();
+
+            BP.GPM.Dept mydept = new BP.GPM.Dept();
+            mydept.CheckPhysicsTable();
+
+            BP.GPM.Station mySta = new BP.GPM.Station();
+            mySta.CheckPhysicsTable();
+
+            BP.GPM.StationType myStaType = new BP.GPM.StationType();
+            myStaType.CheckPhysicsTable();
+
+            BP.GPM.DeptEmp myde = new GPM.DeptEmp();
+            myde.CheckPhysicsTable();
+
+            BP.GPM.DeptEmpStation mydes = new GPM.DeptEmpStation();
+            mydes.CheckPhysicsTable();
+
+            BP.GPM.DeptStation mydeptSta = new GPM.DeptStation();
+            mydeptSta.CheckPhysicsTable();
+            #endregion 首先创建Port类型的表.
+
+
+            #region 3, 执行基本的 sql
+            string sqlscript = "";
+
+            /*如果是OneMore模式*/
+            sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
+            BP.DA.DBAccess.RunSQLScript(sqlscript);
+
+            BP.Port.Emp empAdmin = new Emp("admin");
+            BP.Web.WebUser.SignInOfGener(empAdmin);
+            #endregion 执行基本的 sql
+
 
             ArrayList al = null;
             string info = "BP.En.Entity";
@@ -966,8 +1001,10 @@ namespace BP.WF
             gwf.CheckPhysicsTable();
 
             BP.WF.Data.CH ch = new CH();
-            ch.CheckPhysicsTable();
+            ch.CheckPhysicsTable();             
             #endregion 先创建表，否则列的顺序就会变化.
+
+
 
             #region 1, 创建or修复表
             foreach (Object obj in al)
@@ -989,9 +1026,23 @@ namespace BP.WF
                 if (clsName.Contains("FlowFormTree") == true)
                     continue;
 
+
                 //不安装CCIM的表.
-                if (clsName != null && clsName.Contains("BP.CCIM"))
+                if (clsName.Contains("BP.CCIM"))
                     continue;
+                 
+                //抽象的类不允许创建表.
+                switch(clsName)
+                {
+                    case "BP.WF.StartWork":
+                    case "BP.WF.Work":
+                    case "BP.WF.GEStartWork":
+                    case "BP.En.GENoName":
+                    case "BP.En.GETree":
+                        continue;
+                    default:
+                        break;
+                }
 
                 if (isInstallFlowDemo == false)
                 {
@@ -999,10 +1050,8 @@ namespace BP.WF
                     if (clsName.Contains("BP.CN")
                         || clsName.Contains("BP.Demo"))
                         continue;
-
-                    if (en.EnMap.PhysicsTable.ToLower().Contains("demo_") == true)
-                        continue;
                 }
+
 
                 string table = null;
                 try
@@ -1037,7 +1086,6 @@ namespace BP.WF
                 {
                 }
             }
-
             #endregion 修复
 
             #region 2, 注册枚举类型 SQL
@@ -1054,17 +1102,7 @@ namespace BP.WF
             }
             #endregion 注册枚举类型
 
-            #region 3, 执行基本的 sql
-            //删除这个数据, 没有找到，初始化这些数据失败的原因.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Port_DeptStation");
-
-            string sqlscript = "";
-            
-                /*如果是OneMore模式*/
-                sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
-                BP.DA.DBAccess.RunSQLScript(sqlscript);
-             
-            #endregion 修复
+          
 
             #region 4, 创建视图与数据.
             //执行必须的sql.

@@ -76,6 +76,9 @@ namespace BP.WF
                 return this._enMap;
             }
         }
+        /// <summary>
+        /// 获得他的集合
+        /// </summary>
         public override Entities GetNewEntities
         {
             get

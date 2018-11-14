@@ -205,6 +205,9 @@ namespace BP.WF
                 return this.GetValStringByKey(WorkAttr.CDT);
             }
         }
+        /// <summary>
+        /// 人员emps
+        /// </summary>
         public string Emps
         {
             get
@@ -424,104 +427,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 需要子类写的方法
-        /// <summary>
-        /// 自动填充
-        /// </summary>
-        /// <param name="attr"></param>
-        public void DoAutoFull(Attr attr)
-        {
-            if (this.OID == 0)
-                return;
-
-            if (attr.AutoFullDoc == null || attr.AutoFullDoc.Length == 0)
-                return;
-
-            string objval = null;
-
-            // 这个代码需要提纯到基类中去。
-            switch (attr.AutoFullWay)
-            {
-                case BP.En.AutoFullWay.Way0:
-                    return;
-                case BP.En.AutoFullWay.Way1_JS:
-                    break;
-                case BP.En.AutoFullWay.Way2_SQL:
-                    string sql = attr.AutoFullDoc;
-                    Attrs attrs1 = this.EnMap.Attrs;
-                    foreach (Attr a1 in attrs1)
-                    {
-                        if (a1.IsNum)
-                            sql = sql.Replace("@" + a1.Key, this.GetValStringByKey(a1.Key));
-                        else
-                            sql = sql.Replace("@" + a1.Key, "'" + this.GetValStringByKey(a1.Key) + "'");
-                    }
-
-                    objval = DBAccess.RunSQLReturnString(sql);
-                    break;
-                case BP.En.AutoFullWay.Way3_FK:
-                    try
-                    {
-                        string sqlfk = "SELECT @Field FROM @Table WHERE No=@AttrKey";
-                        string[] strsFK = attr.AutoFullDoc.Split('@');
-                        foreach (string str in strsFK)
-                        {
-                            if (str == null || str.Length == 0)
-                                continue;
-
-                            string[] ss = str.Split('=');
-                            if (ss[0] == "AttrKey")
-                                sqlfk = sqlfk.Replace('@' + ss[0], "'" + this.GetValStringByKey(ss[1]) + "'");
-                            else
-                                sqlfk = sqlfk.Replace('@' + ss[0], ss[1]);
-                        }
-                        sqlfk = sqlfk.Replace("''", "'");
-
-                        objval = DBAccess.RunSQLReturnString(sqlfk);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@在处理自动完成：外键[" + attr.Key + ";" + attr.Desc + "],时出现错误。异常信息：" + ex.Message);
-                    }
-                    break;
-                case BP.En.AutoFullWay.Way4_Dtl:
-                    string mysql = "SELECT @Way(@Field) FROM @Table WHERE RefPK='"+ this.OID+"'";
-                    string[] strs = attr.AutoFullDoc.Split('@');
-                    foreach (string str in strs)
-                    {
-                        if (str == null || str.Length == 0)
-                            continue;
-
-                        string[] ss = str.Split('=');
-                        mysql = mysql.Replace('@' + ss[0], ss[1]);
-                    }
-                    objval = DBAccess.RunSQLReturnString(mysql);
-                    break;
-                default:
-                    throw new Exception("未涉及到的类型。");
-            }
-            if (objval == null)
-                return;
-
-            if (attr.IsNum)
-            {
-                try
-                {
-                    decimal d = decimal.Parse(objval);
-                    this.SetValByKey(attr.Key, objval);
-                }
-                catch
-                {
-                }
-            }
-            else
-            {
-                this.SetValByKey(attr.Key, objval);
-            }
-            return;
-        }
-        #endregion
-
         #region  重写基类的方法。
         /// <summary>
         /// 按照指定的OID Insert.
@@ -605,7 +510,6 @@ namespace BP.WF
             //MapDtls dtls = this.HisNode.MapData.MapDtls;
             //foreach (MapDtl dtl in dtls)。
             //    DBAccess.RunSQL("DELETE FROM  " + dtl.PTable + " WHERE RefPK=" + this.OID);
-
             base.afterDelete();
         }
         #endregion
@@ -617,19 +521,6 @@ namespace BP.WF
         /// <returns></returns>
         protected override bool beforeUpdate()
         {
-            #region 特殊处理
-            try
-            {
-                if (this.GetValStrByKey("WFState") == "Runing")
-                {
-                    this.SetValByKey("WFState", (int)WFState.Runing);
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            #endregion
-
             return base.beforeUpdate();
         }
         /// <summary>
@@ -639,8 +530,8 @@ namespace BP.WF
         {
             //执行自动计算.
             this.AutoFull();
-            // 执行保存前的事件。
 
+            // 执行保存前的事件。
             this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.SaveBefore, this.HisNode, this.HisNode.HisWork, null);
         }
         /// <summary>
@@ -696,47 +587,6 @@ namespace BP.WF
         #endregion
 
         #region 查询方法
-        /// <summary>
-        /// 查询工作(不适合审核节点查询)
-        /// </summary>
-        /// <param name="empId">工作人员</param>
-        /// <param name="nodeStat">节点状态</param>
-        /// <param name="fromdate">记录日期从</param>
-        /// <param name="todate">记录日期到</param>
-        /// <returns></returns>
-        public int Retrieve(string key, string empId, string fromdate, string todate)
-        {
-            QueryObject qo = new QueryObject(this);
-                qo.AddWhere(WorkAttr.Rec, empId);
-
-            qo.addAnd();
-            qo.AddWhere(WorkAttr.RDT, ">=", fromdate);
-            qo.addAnd();
-            qo.AddWhere(WorkAttr.RDT, "<=", todate);
-
-            if (key.Trim().Length == 0)
-                return qo.DoQuery();
-            else
-            {
-                if (key.IndexOf("%") == -1)
-                    key = "%" + key + "%";
-                Entity en = this.GetNewEntity;
-                qo.addAnd();
-                qo.addLeftBracket();
-                qo.AddWhere(en.PK, " LIKE ", key);
-                foreach (Attr attr in en.EnMap.Attrs)
-                {
-                    if (attr.MyFieldType == FieldType.RefText)
-                        continue;
-                    if (attr.UIContralType == UIContralType.DDL || attr.UIContralType == UIContralType.CheckBok)
-                        continue;
-                    qo.addOr();
-                    qo.AddWhere(attr.Key, " LIKE ", key);
-                }
-                qo.addRightBracket();
-                return qo.DoQuery();
-            }
-        }
         public int Retrieve(string fromDataTime, string toDataTime)
         {
             QueryObject qo = new QueryObject(this);

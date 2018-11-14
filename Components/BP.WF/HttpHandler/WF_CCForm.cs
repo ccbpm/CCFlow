@@ -1145,7 +1145,7 @@ namespace BP.WF.HttpHandler
                             try
                             {
                                 en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
-                                en.DirectUpdate();
+                                //en.DirectUpdate();
                             }
                             catch (Exception ex)
                             {

@@ -92,7 +92,8 @@
 
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-            handler.AddPara("paras", demoType);
+            handler.AddPara("DemoType", demoType);
+
             var data = handler.DoMethodReturnString("DBInstall_Submit"); //执行方法，返回执行结果.
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<font color=red>" + data + "</font>");
@@ -199,7 +200,7 @@
                         <input id="RB_OSRunModel_0" type="radio" name="RB_OSRunModel" value="0" checked=true /><b>中间件模式:</b>我想集成我自己的开发框架,集成自己的组织结构,仅仅想使用流程引擎与表单引擎.</label>
                     <br />
                     <label>
-                        <input id="RB_OSRunModel_1" type="radio" name="RB_OSRunModel" value="1" /><b>BPM模式:</b>我想让ccbpm为我提供组织结构管理、菜单,权限组管理.</label>
+                        <input id="RB_OSRunModel_1" type="radio" name="RB_OSRunModel" value="1"  /><b>BPM模式:</b>我想让ccbpm为我提供组织结构管理、菜单,权限组管理.</label>
                 </td>
             </tr>
             <tr>

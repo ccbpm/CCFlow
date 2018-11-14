@@ -366,6 +366,9 @@
             //循环分组
             var haveFileSort = "";
             for (var j = 0; j < fileSorts.length; j++) {
+                //判断分组是否有文件
+                var IsExistFile = false;
+
                 var sort = fileSorts[j]
                 bSort_Add_TD = true;
 
@@ -377,6 +380,7 @@
                     var db = dbs[k];
                     if (haveAuthSort == true && db.Sort != mysort)
                         continue;
+                    IsExistFile = true;
                     haveFileSort += db.Sort + ",";
                     i++;
                     html += "<tr>";
@@ -443,6 +447,37 @@
 
                     html += "</tr>";
                 }
+
+                if (IsExistFile == false) {
+                    i++;
+                     //组合Html
+                    html += "<tr>";
+                    html += "<td class='Idx' nowrap>" + i + "</td>";
+                    html += "<td>" + sort + "</td>";
+                    html += "<td style='width:100px;color:red'>请上传附件..</td>";
+                    html += "<td>&nbsp&nbsp</td>";
+                    html += "<td>&nbsp&nbsp</td>";
+                    html += "<td>&nbsp&nbsp</td>";
+                    //如果有数据,就要解析它附件属性.
+                    if (athDesc.IsExpCol == 1) {
+
+                        for (var ii = 0; ii < mapAttrs.length; ii++) {
+
+                            html += "<td>" + InitAthMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";
+                        }
+                    }
+                    if (athDesc.IsExpCol == 1)
+                        html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                    else {
+                        var explorer = window.navigator.userAgent;
+                        var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+                        if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
+                            html += "<td></td>";
+                        else
+                            html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                    }
+                    html += "</tr>";
+                }
             }
             if ((i == 0 && (athDesc.Sort == null || athDesc.Sort.indexOf(",") == -1)) || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true)) {
                 html += "<tr>";
@@ -472,45 +507,45 @@
             }
 
 
-            //如果存在分组，增加还没有上传文件的分组
-            var index = 0;
-            for (var j = 0; j < fileSorts.length; j++) {
-                var sort = fileSorts[j];
-              
-                //分组为空或者已经存在
-                if (sort == "" || haveFileSort.indexOf(sort) != -1)
-                    continue;
+//            //如果存在分组，增加还没有上传文件的分组
+//            var index = 0;
+//            for (var j = 0; j < fileSorts.length; j++) {
+//                var sort = fileSorts[j];
+//              
+//                //分组为空或者已经存在
+//                if (sort == "" || haveFileSort.indexOf(sort) != -1)
+//                    continue;
 
-                var idx = dbs.length + 1 + index;
-                index++;
-                //组合Html
-                html += "<tr>";
-                html += "<td class='Idx' nowrap>" + idx + "</td>";
-                html += "<td>" + sort + "</td>";
-                html += "<td style='width:100px;color:red'>请上传附件..</td>";
-                html += "<td>&nbsp&nbsp</td>";
-                html += "<td>&nbsp&nbsp</td>";
-                html += "<td>&nbsp&nbsp</td>";
-                //如果有数据,就要解析它附件属性.
-                if (athDesc.IsExpCol == 1) {
+//                var idx = dbs.length + 1 + index;
+//                index++;
+//                //组合Html
+//                html += "<tr>";
+//                html += "<td class='Idx' nowrap>" + idx + "</td>";
+//                html += "<td>" + sort + "</td>";
+//                html += "<td style='width:100px;color:red'>请上传附件..</td>";
+//                html += "<td>&nbsp&nbsp</td>";
+//                html += "<td>&nbsp&nbsp</td>";
+//                html += "<td>&nbsp&nbsp</td>";
+//                //如果有数据,就要解析它附件属性.
+//                if (athDesc.IsExpCol == 1) {
 
-                    for (var ii = 0; ii < mapAttrs.length; ii++) {
+//                    for (var ii = 0; ii < mapAttrs.length; ii++) {
 
-                        html += "<td>" + InitAthMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";
-                    }
-                }
-                if (athDesc.IsExpCol == 1)
-                    html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
-                else {
-                    var explorer = window.navigator.userAgent;
-                    var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
-                    if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
-                        html += "<td></td>";
-                    else
-                        html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
-                }
-                html += "</tr>";
-            }
+//                        html += "<td>" + InitAthMapAttrOfCtrlFool("", mapAttrs[ii]) + "</td>";
+//                    }
+//                }
+//                if (athDesc.IsExpCol == 1)
+//                    html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+//                else {
+//                    var explorer = window.navigator.userAgent;
+//                    var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+//                    if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
+//                        html += "<td></td>";
+//                    else
+//                        html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+//                }
+//                html += "</tr>";
+//            }
             html += AddFileUpload(athDesc);
             html +="</tbody>";
 

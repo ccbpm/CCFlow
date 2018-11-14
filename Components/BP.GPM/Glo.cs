@@ -91,6 +91,8 @@ namespace BP.GPM
                     table = en.EnMap.PhysicsTable;
                     if (table == null)
                         continue;
+                    if (en.EnMap.PhysicsTable.ToLower().Contains("demo_") == true)
+                        continue;
                 }
                 catch
                 {

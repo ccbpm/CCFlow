@@ -996,12 +996,12 @@ namespace BP.WF
                 if (isInstallFlowDemo == false)
                 {
                     /*如果不安装demo.*/
-                    if (clsName != null)
-                    {
-                        if (clsName.Contains("BP.CN")
-                            || clsName.Contains("BP.Demo"))
-                            continue;
-                    }
+                    if (clsName.Contains("BP.CN")
+                        || clsName.Contains("BP.Demo"))
+                        continue;
+
+                    if (en.EnMap.PhysicsTable.ToLower().Contains("demo_") == true)
+                        continue;
                 }
 
                 string table = null;

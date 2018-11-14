@@ -208,7 +208,7 @@ namespace BP.WF.HttpHandler
                 if (dt.Rows.Count == 0)
                     return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。";
 
-                if (dt.Rows.Count > 1000)
+                if (dt.Rows.Count > 2000)
                     return "err@可以发起开始节点的人员太多，会导致系统崩溃变慢，您需要在流程属性里设置可以发起的测试用户.";
 
                 // 构造人员表.

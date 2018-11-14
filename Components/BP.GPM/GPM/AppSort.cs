@@ -69,6 +69,7 @@ namespace BP.GPM
                 map.EnType = EnType.App;
                 map.IsAutoGenerNo = true;
 
+
                 map.AddTBStringPK(AppSortAttr.No, null, "编号", true, true, 2, 2, 20);
                 map.AddTBString(AppSortAttr.Name, null, "名称", true, false, 0, 300, 20);
                 map.AddTBInt(AppSortAttr.Idx, 0, "显示顺序", true, false);

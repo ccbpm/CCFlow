@@ -11,7 +11,7 @@ $(function () {
     /**default height for canvas*/
     CanvasProps.DEFAULT_HEIGHT = 1200;
     /**default width for canvas*/
-    CanvasProps.DEFAULT_WIDTH = 900;
+    CanvasProps.DEFAULT_WIDTH = 1000;
 
     //验证登录用户
     checklogin();

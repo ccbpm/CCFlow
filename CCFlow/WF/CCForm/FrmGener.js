@@ -723,13 +723,13 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     });
 
 //    //获取表单中checkbox 没有选中时值的情况
-//    var checkboxs = $('input[type=checkbox]');
-//    $.each(checkboxs, function (i, checkbox) {
-//        var name = $(checkbox).attr("name");
-//        if ($("input[name='" + name + "']:checked").length == 0) {
-//            formArrResult.push(name + "=0");
-//        }
-//    });
+    var checkboxs = $('input[type=checkbox]');
+    $.each(checkboxs, function (i, checkbox) {
+        var name = $(checkbox).attr("name");
+        if ($("input[name='" + name + "']:checked").length == 0) {
+            formArrResult.push(name + "=0");
+        }
+    });
 
     //获取表单中禁用的表单元素的值
     var disabledEles = $('#divCCForm :disabled');

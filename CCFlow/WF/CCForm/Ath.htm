@@ -336,7 +336,7 @@
                     columnNum = columnNum + mapAttrs.length;
                 }
                 colgroup += "<col width='50px'></col>";
-                html += "<th  nowrap=true style=' border-top: 1px solid #ddd;width:50px' >";
+                html += "<th  nowrap=true style=' border: 1px solid #ddd;width:50px' >";
 
                 if (athDesc.IsDownload == 1 && dbs.length > 0)
                     html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包</a>";
@@ -344,7 +344,6 @@
                     html += "操作";
 
                 html += "</th>";
-                html += "</tr>";
                 html +="</thead>";
             }
 
@@ -457,7 +456,6 @@
                     html += "<td class='Idx' nowrap>" + i + "</td>";
                     html += "<td>" + sort + "</td>";
                     html += "<td style='width:100px;color:red'>请上传附件..</td>";
-                    html += "<td>&nbsp&nbsp</td>";
                     html += "<td>&nbsp&nbsp</td>";
                     html += "<td>&nbsp&nbsp</td>";
                     //如果有数据,就要解析它附件属性.

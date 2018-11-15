@@ -2738,8 +2738,9 @@ namespace BP.WF.HttpHandler
                     {
                         savePath = context.Server.MapPath("~/" + savePath);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        return "err@获取路径错误" + ex.Message;
                     }
 
                     try
@@ -2749,7 +2750,7 @@ namespace BP.WF.HttpHandler
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + context.Server.MapPath("~/" + savePath) + "===" + savePath + "@技术问题:" + ex.Message);
+                        throw new Exception("err@创建路径出现错误，可能是没有权限或者路径配置有问题:"  + savePath + "@异常信息:" + ex.Message);
                     }
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");

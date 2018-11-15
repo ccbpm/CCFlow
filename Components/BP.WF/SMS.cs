@@ -588,8 +588,6 @@ namespace BP.WF
 
             SmtpClient client = new SmtpClient();
 
-           
-
             //是否启用ssl? 
             bool isEnableSSL = false;
             string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
@@ -614,7 +612,6 @@ namespace BP.WF
             {
                 object userState = myEmail;
                 client.SendAsync(myEmail, userState);
-                
                 return true;
             }
             catch

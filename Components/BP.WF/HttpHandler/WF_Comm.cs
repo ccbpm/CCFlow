@@ -1324,7 +1324,8 @@ namespace BP.WF.HttpHandler
              if (encfg != null){
                  string orderBy = encfg.GetParaString("OrderBy");
                  bool isDesc = encfg.GetParaBoolen("IsDeSc");
-                 if(DataType.IsNullOrEmpty(orderBy)){
+
+                 if(DataType.IsNullOrEmpty(orderBy) ==false){
                      if(isDesc)
                         qo.addOrderByDesc(encfg.GetParaString("OrderBy"));
                      else

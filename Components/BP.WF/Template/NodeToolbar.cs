@@ -51,6 +51,10 @@ namespace BP.WF.Template
         /// 显示在那里？
         /// </summary>
         public const string ShowWhere = "ShowWhere";
+        /// <summary>
+        /// 执行类型
+        /// </summary>
+        public const string ExcType = "ExcType";
         #endregion
     }
     /// <summary>
@@ -135,6 +139,20 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.ShowWhere, (int)value);
             }
         }
+        /// <summary>
+        /// 执行类型
+        /// </summary>
+        public int ExcType
+        {
+            get
+            {
+                return this.GetValIntByKey(NodeToolbarAttr.ExcType);
+            }
+            set
+            {
+                SetValByKey(NodeToolbarAttr.ExcType, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -167,8 +185,8 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.Title, null, "标题", true, false, 0, 100, 100, true);
 
 
-                // 显示位置.
-                map.AddDDLSysEnum("ExcType", 0, "执行类型", true, true, "ToobarExcType",
+                // 执行类型.
+                map.AddDDLSysEnum(NodeToolbarAttr.ExcType, 0, "执行类型", true, true, "ToobarExcType",
                     "@0=超链接@1=函数");
 
                 map.AddTBString(NodeToolbarAttr.Url, null, "连接/函数", true, false, 0, 500, 300, true);
@@ -185,7 +203,6 @@ namespace BP.WF.Template
                 //map.AddBoolean("sd2s_false", false, "boolesn-false", true, false);
                 //map.AddTBDate("sssdt_false", null, "日期", true,false);
                 //map.AddTBDate("sssdt_true", null, "日期-true", true, true);
-
 
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);

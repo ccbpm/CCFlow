@@ -1063,17 +1063,17 @@ namespace BP.WF.HttpHandler
                 bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node);
                 foreach (NodeToolbar bar in bars)
                 {
-                    if (bar.ShowWhere == ShowWhere.Toolbar)
+                    if (bar.ShowWhere != ShowWhere.Toolbar)
+                        continue;
+
+                    if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
                     {
-                        if (!DataType.IsNullOrEmpty(bar.Target) && bar.Target.ToLower() == "javascript")
-                        {
-                            toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"" + bar.Url + "\" />";
-                        }
-                        else
-                        {
-                            string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                            toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
-                        }
+                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"" + bar.Url + "\" />";
+                    }
+                    else
+                    {
+                        string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
                     }
                 }
                 #endregion  //加载自定义的button.

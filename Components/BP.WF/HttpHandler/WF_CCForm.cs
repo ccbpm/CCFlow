@@ -2740,7 +2740,7 @@ namespace BP.WF.HttpHandler
                     }
                     catch (Exception ex)
                     {
-                        return "err@获取路径错误" + ex.Message;
+                        return "err@获取路径错误" + ex.Message + ",配置的路径是:" + savePath + ",您需要在附件属性上修改该附件的存储路径.";
                     }
 
                     try

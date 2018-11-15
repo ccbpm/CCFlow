@@ -272,7 +272,7 @@
                 //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
                 var flowNos = GetQueryString("FlowNos");
                 if (flowNos == null || flowNos == "" || flowNos == undefined)
-                    flowNos = "";
+                    flowNos = null;
                 //查询
                 var TB_Key = $("#TB_Key").val();
 
@@ -285,7 +285,7 @@
                 data = JSON.parse(data);
 
                 realCount = data.length;
-                if (flowNos != "") {
+                if (flowNos != null) {
                     realCount = 0;
                     for (var i = 0; i < data.length; i++) {
                         if (flowNos.indexOf(data[i].FK_Flow) != -1)
@@ -298,20 +298,20 @@
                 //获取在途总的查询信息
 
                 //1.流程编号和查询组件为空时
-                if (flowNos == "" && TB_Key == "")
+                if (flowNos == null && TB_Key == "")
                     sourceData = data;
                 //2.流程编号不为空和查询组件为空时
-                if (flowNos != "" && TB_Key == "")
+                if (flowNos != null && TB_Key == "")
                  sourceData = $.grep(data, function (n, i) {
                         return (flowNos.indexOf(data[i].FK_Flow) != -1);
                     });
                 //3.流程编号为空和查询组件不为空时
-                 if (flowNos == "" && TB_Key != "")
+                    if (flowNos == null && TB_Key != "")
                     sourceData = $.grep(data, function (n, i) {
                         return (data[i].Title.indexOf(TB_Key) != -1);
                     });
                 //4.流程编号为不空和查询组件不为空时
-                 if (flowNos != "" && TB_Key != "")
+                    if (flowNos != null && TB_Key != "")
                     sourceData = $.grep(data, function (n, i) {
                         return (flowNos.indexOf(data[i].FK_Flow) != -1) && (data[i].Title.indexOf(TB_Key) != -1);
                     });
@@ -320,7 +320,7 @@
                 var str = "";
                 for (var i = 0; i < sourceData.length; i++) {
                     if (str.indexOf('@' + sourceData[i].FlowName) == -1) {
-                        if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                        if (flowNos == null || (flowNos != null && flowNos.indexOf(sourceData[i].FK_Flow) != -1))
                             str += "@" + sourceData[i].FlowName;
                     }
 

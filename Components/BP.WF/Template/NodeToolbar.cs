@@ -165,9 +165,15 @@ namespace BP.WF.Template
 
                 map.AddTBIntPKOID();
                 map.AddTBString(NodeToolbarAttr.Title, null, "标题", true, false, 0, 100, 100, true);
-                map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
-                map.AddTBString(NodeToolbarAttr.Url, null, "连接", true, false, 0, 500, 300, true);
 
+
+                // 显示位置.
+                map.AddDDLSysEnum("ExcType", 0, "执行类型", true, true, "ToobarExcType",
+                    "@0=超链接@1=函数");
+
+                map.AddTBString(NodeToolbarAttr.Url, null, "连接/函数", true, false, 0, 500, 300, true);
+
+                map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
                 // 显示位置.
                 map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", true,true, NodeToolbarAttr.ShowWhere,

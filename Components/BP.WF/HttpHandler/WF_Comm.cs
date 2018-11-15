@@ -1321,8 +1321,17 @@ namespace BP.WF.HttpHandler
             //获取配置信息
              EnCfg encfg = new EnCfg(this.EnsName);
             //增加排序
-             if (encfg != null && !DataType.IsNullOrEmpty(encfg.GetParaString("OrderBy")))
-                 qo.addOrderBy(encfg.GetParaString("OrderBy"));
+             if (encfg != null){
+                 string orderBy = encfg.GetParaString("OrderBy");
+                 bool isDesc = encfg.GetParaBoolen("IsDeSc");
+                 if(DataType.IsNullOrEmpty(orderBy)){
+                     if(isDesc)
+                        qo.addOrderByDesc(encfg.GetParaString("OrderBy"));
+                     else
+                         qo.addOrderBy(encfg.GetParaString("OrderBy"));
+                 }
+
+             }
 
              if (GetRequestVal("DoWhat") != null && GetRequestVal("DoWhat").Equals("Batch"))
                  qo.DoQuery(en.PK,500,1);

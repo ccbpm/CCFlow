@@ -728,10 +728,7 @@ namespace BP.WF.Data
 
                 Map map = new Map("WF_GenerWorkFlow", "流程查询");
 
-                // map.AddTBIntPK("WorkID", 0, "WorkID", true, true);
                 map.AddTBIntPK(GenerWorkFlowViewAttr.WorkID, 0, "WorkID", true, true);
-
-
                 map.AddTBString(GenerWorkFlowViewAttr.StarterName, null, "发起人", true, false, 0, 30, 10);
                 map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, false, 0, 100, 10, true);
                 map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false, GenerWorkFlowViewAttr.WFSta,

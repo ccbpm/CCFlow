@@ -429,16 +429,9 @@ namespace BP.En
                     continue;
 
                 obj = ass.CreateInstance(className);
-                if (obj != null)
-                    return obj;
-                else
-                    throw new Exception("@创建对象实例 " + className + " 失败！");
-
+                return obj;
             }
-            if (obj == null)
-                throw new Exception("@创建对象类型 " + className + " 失败，请确定拼写是否错误。");
-
-            return obj;
+            return null;
         }
         /// <summary>
         /// 根据一个抽象的基类，取出此系统中从他上面继承的子类集合。

@@ -425,13 +425,22 @@ namespace BP.GPM
 
         public string GetDocument()
         {
+
             BarBase barBase = (BarBase)ClassFactory.GetObject_OK(this.No);
+            if (barBase == null)
+            {
+                this.Delete();
+                return "err@已经删除.";
+            }
             return barBase.Documents;
         }
-
+        protected override void afterDelete()
+        {
+            string sql = "DELETE FROM GPM_BarEmp WHERE FK_Bar='" + this.No + "'";
+            DBAccess.RunSQL(sql);
+            base.afterDelete();
+        }
     }
-
-    
     /// <summary>
     /// 信息块s
     /// </summary>

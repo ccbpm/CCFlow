@@ -1039,6 +1039,7 @@ namespace BP.WF
                     case "BP.WF.GEStartWork":
                     case "BP.En.GENoName":
                     case "BP.En.GETree":
+                    case "BP.WF.Data.GERpt":
                         continue;
                     default:
                         break;

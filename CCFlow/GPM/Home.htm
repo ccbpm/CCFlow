@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>驰骋工作流程管理系统</title>
     <!-- <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
-    <link href="/WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="/WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
-    <link href="/WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="/WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../../WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden">
     <div id="wrapper">
@@ -39,29 +39,20 @@
                         </a>
                         <ul class="nav nav-second-level in" >
                       
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Depts" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>部门台帐</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Emps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>人员台帐</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.Depts" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>部门列表</a></li>
+                        <li><a href="../../WF/Comm/Tree.htm?EnsName=BP.GPM.Depts" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>部门树</a></li>
+
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.Emps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>人员台帐</a></li>
                         <li><a href="Organization.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i>组织结构</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Port.Incs" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>二级组织</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>二级管理员</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.WF.Port.Incs" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>二级组织</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.WF.Port.AdminEmps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>二级管理员</a></li>
 
                         <!--<li><a href="../ManagerDept.aspx" class="J_menuItem"><i class="icon iconfont icon-faqi"></i>二级管理员</a></li>-->
                     <!--    <li><a href="../ManagerDept.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>二级管理员</a></li>-->
 
                         <li><a href="../../WF/Comm/Ens.htm?EnsName=BP.GPM.StationTypes" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>岗位类型</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Stations" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>岗位</a></li>
-                     <!--   <li><a href="../StationToDeptEmp.aspx" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>岗位对应人员</a></li>-->
-
-<!--
-                        <li><a href="/WF/Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>待办<label class="label label-warning pull-right"  id="Todolist_EmpWorks" ></label></a></li>
-                        <li><a href="/WF/Runing.htm " class="J_menuItem"><i class="icon iconfont icon-zaitu-"></i>在途 <label class="label label-info pull-right" id="Todolist_Runing" ></label> </a></li>
-                        <li><a href="/WF/Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i>我发起的</a></li>
-                        <li><a href="/WF/Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i>我审批的</a></li>
-                        <li><a href="/WF/RptSearch/DistributedOfMy.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i>我的流程分布</a></li>
-                        <li><a href="/WF/Search.htm" class="J_menuItem"><i class="icon iconfont icon-liuchengdingyi"></i>我的流程</a></li>
-                        <li><a href="/WF/RptDfine/Flowlist.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i>单流程查询</a></li>
-                        <li><a href="/WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>综合查询</a></li>-->
-
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.Stations" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>岗位</a></li>
+                     
                         </ul>
                     </li>
 
@@ -70,14 +61,14 @@
                         <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label">菜单权限管理</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
 
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.AppSorts" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>系统类别</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.AppSorts" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>系统类别</a></li>
 
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Apps" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>系统台帐</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.Apps" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i>系统台帐</a></li>
 
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Groups" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>权限组菜单</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.StationExts" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>岗位菜单</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.GPMEmps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>人员菜单</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Menus" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>菜单台帐</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.Groups" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>权限组菜单</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.StationExts" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>岗位菜单</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.GPMEmps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>人员菜单</a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.Menus" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>菜单台帐</a></li>
                         <li><a href="../../WF/Comm/Tree.htm?EnsName=BP.GPM.Menus" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>菜单树</a></li>
 
 <!--
@@ -104,7 +95,7 @@
                     <ul class="nav navbar-top-links navbar-right">
 
                     <li><a href="Organization.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i>组织结构</a></li>
-                        <li><a href="../../WF/Comm/Search.htm?EnsName=BP.GPM.Emps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>人员台帐<label class="label label-warning pull-right"  id="Label1" ></label></a></li>
+                        <li><a href="../../WF/Comm/SearchBS.htm?EnsName=BP.GPM.Emps" class="J_menuItem"><i class="icon iconfont icon-daiban"></i>人员台帐<label class="label label-warning pull-right"  id="Label1" ></label></a></li>
 
                         <!--<li><a href="../../WF/Admin/CCBPMDesigner/Default.htm" target="_parent" class="J_menuItem">
                         <i class="icon iconfont icon-daiban"></i>流程设计器<label class="label label-warning pull-right"  id="Label2" ></label></a></li>

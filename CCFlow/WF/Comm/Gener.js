@@ -1,4 +1,8 @@
-﻿
+﻿//检查字段,从表名,附件ID,输入是否合法.
+function CheckID (val) {
+    return true;
+}
+
 //
 if (plant == "CCFlow") {
     // CCFlow

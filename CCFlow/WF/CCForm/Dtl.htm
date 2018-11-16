@@ -542,7 +542,7 @@
                             $.each(tbodyTrs, function (m, tbodyTrObj) {
                                 var threadTh = $('#tableHead thead tr th');
                                 $.each(threadTh, function (k, threadThObj) {
-                                    $(tbodyTrObj).children('td')[k].width = threadThObj.clientWidth;
+                                    $(tbodyTrObj).children('td')[0].width = threadThObj.clientWidth;
                                     if ($(threadThObj).data().colname != undefined) {
                                         var o = $(threadThObj);
                                         var tmplate = figure_MapAttr_Template(o.data());

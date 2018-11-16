@@ -99,11 +99,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件                
-                //case CCForm_Controls.FrmCheck: // 审核组件.                
-                //case CCForm_Controls.FlowChart: //轨迹图.                
-                //case CCForm_Controls.SubFlowDtl: //子流程.                
-                //case CCForm_Controls.ThreadDtl: //子线城.                
+                    //case CCForm_Controls.FrmCheck: //审核组件                
+                    //case CCForm_Controls.FrmCheck: // 审核组件.                
+                    //case CCForm_Controls.FlowChart: //轨迹图.                
+                    //case CCForm_Controls.SubFlowDtl: //子流程.                
+                    //case CCForm_Controls.ThreadDtl: //子线城.                
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -397,6 +397,13 @@ FigureCreateCommand.prototype = {
                 return false;
             }
 
+            //秦 18.11.16
+            if (!CheckID(frmVal.No)) {
+                alert("编号不符合规则");
+
+                return false;
+            }
+
             //判断主键是否存在?
             var isExit = funIsExist(frmVal.No);
             if (isExit == true) {
@@ -674,8 +681,8 @@ TransFormDataField.prototype = {
                 }
             }
         }
-        
-        
+
+
     },
     /**根据控件类型，生成不同控件描述 and propertys**/
     Transform: function () {

@@ -1,6 +1,14 @@
 ﻿//检查字段,从表名,附件ID,输入是否合法.
-function CheckID (val) {
-    return true;
+function CheckID(val) { 
+    //首位可以是字母以及下划线。 
+    //首位之后可以是字母，数字以及下划线。下划线后不能接下划线
+     
+    var flag = false; //用来判断
+    var reg = /(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/;
+   
+    flag = reg.test(val);
+   
+    return flag;
 }
 
 //

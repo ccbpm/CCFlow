@@ -3,8 +3,8 @@
     <title>驰骋权限管理系统</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link href="../../WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
-    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="login-bg">
 <div class="login-box">
@@ -23,8 +23,8 @@
             <div class="row login-nav">
             	<div class="col-xs-6">默认密码：123</div>
             	<div class="col-xs-6 ">
-                <a href="../../WF/Admin/CCBPMDesigner/Login.htm"  class="pull-right">流程设计器</a>
-                <a href="../../WF/AppClassic/Login.htm.htm"  class="pull-right">流程前台登录</a>
+                <a href="../WF/Admin/CCBPMDesigner/Login.htm"  class="pull-right">流程设计器</a>
+                <a href="../WF/AppClassic/Login.htm"  class="pull-right">流程前台登录</a>
                 <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
                 </div>
             </div>
@@ -32,12 +32,12 @@
         </div>
    </div>
   
-   <script src="../../WF/Style/skin/layui/layui.js" type="text/javascript"></script>
+   <script src="../WF/Style/skin/layui/layui.js" type="text/javascript"></script>
    
-    <script src="../../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../../WF/Scripts/config.js"></script>
-    <script type="text/javascript" src="../../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >        
     //页面启动函数.
 
@@ -57,7 +57,6 @@
             var userNo = document.getElementById("TB_No").value;
             if (userNo == "")
                 document.getElementById("TB_PW").value = "";
-
 
             var form = layui.form, layer = layui.layer, $ = layui.jquery;
             form.on('submit(formDemo)', function (data) {

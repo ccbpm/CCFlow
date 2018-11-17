@@ -206,10 +206,8 @@
                 return;
             }
 
-            //枚举英文名称不能为中文
-            if (/^[\u3220-\uFA29]+$/.test(keyofEn) == true) {
-                alert('枚举英文名称不能含有中文');
-                return;
+            //秦 18.11.16            if (!CheckID(keyofEn)) {
+                alert("枚举键值不符合规则");                return;
             }
              
 

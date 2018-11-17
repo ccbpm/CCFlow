@@ -1027,6 +1027,11 @@
             if (prix == null || prix == undefined)
                 return;
 
+            //秦 18.11.16
+            if (!CheckID(prix)) {
+                alert("编号不符合规则");
+                return  ;
+            }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("TB_Check_Name", val);
@@ -1363,9 +1368,14 @@
 
         //新增从表.
         function NewMapDtl() {
-            var val = prompt('请输入从表ID，要求表单唯一。', pageParam.fk_mapdata + 'Dtl1');
+            var val = prompt('21请输入从表ID，要求表单唯一。', pageParam.fk_mapdata + 'Dtl1');
+          
             if (val == null) {
                 return;
+            }
+
+            //秦 18.11.16            if (!CheckID(val)) {
+                alert("编号不符合规则");                return;
             }
 
             if (val == '') {
@@ -1448,6 +1458,10 @@
             if (val == '') {
                 alert('附件ID不能为空，请重新输入！');
                 return;
+            }
+
+            //秦 18.11.16            if (!CheckID(val)) {
+                alert("编号不符合规则");                return;
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");

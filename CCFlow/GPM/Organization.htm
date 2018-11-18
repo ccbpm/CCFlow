@@ -1,4 +1,4 @@
-﻿<html >
+<html >
 <head>
     <title>组织结构管理</title>
     <link rel="stylesheet" type="text/css" href="themes/default/easyui.css" />
@@ -100,7 +100,7 @@
            var dept = new Entity("BP.GPM.Dept", deptNo);
 
            var html = "";
-           html += "<table style='width:95%;'>";
+           html += "<table style='width:95%; margin-bottom:15px;'>";
            html += "<caption ><a href=\"javascript:EditDept('" + dept.No + "')\" >" + dept.Name + " </a> - <a href='javascript:EditEmp()'>新建人员</a> -  <a href='javascript:RefEmps()'>关联兼职</a>  </caption>";
            html += "<tr>";
            html += "<th>序</th>";
@@ -154,6 +154,7 @@
                html += "<td>" + emp.Email + "</td>";
                html += "<td>" + emp.Tel + "</td>";
                html += "<td><a href=\"javascript:Remove('" + emp.No + "')\" >移除<img src='../WF/Img/Btn/Delete.gif'></a></td>";
+               html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
                html += "</tr>";
                num++;
            }
@@ -322,7 +323,7 @@
     </div>
      
       
-   <div data-options="region:'center',split:true" style="overflow: hidden;">
+   <div data-options="region:'center',split:true" style="">
 
     <div id="Emps"></div>
 

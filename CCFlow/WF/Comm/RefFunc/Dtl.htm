@@ -187,7 +187,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select style='width:"+mapAttr.UIWidth*2+"px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -199,7 +199,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外部数据类型.
@@ -211,7 +211,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //添加文本框 ，日期控件等
@@ -283,7 +283,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select  style='width:" + mapAttr.UIWidth*2+ "px' class='form-control'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             // AppDouble  AppFloat

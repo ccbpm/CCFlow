@@ -233,7 +233,7 @@
                 }
 
                 //普通的大块文本.
-                return "<textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:" + mapAttr.UIWidth + "px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+                return "<textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:" + mapAttr.UIWidth + "px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " >" + defValue + "</textarea>"
             }
 
             //日期类型.

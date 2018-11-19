@@ -149,6 +149,8 @@ namespace BP.Sys
                 if(!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
                 //ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
                     ath.SaveTo = "\\DataUser\\UploadFile\\" + fk_mapdata + "\\";
+                if (fk_mapdata.Contains("ND") == true)
+                    ath.HisCtrlWay = AthCtrlWay.WorkID;
             }
 
             ath.UploadType = AttachmentUploadType.Multi;

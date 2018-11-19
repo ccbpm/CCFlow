@@ -2700,6 +2700,23 @@ namespace BP.WF.HttpHandler
 
                 if (System.IO.Directory.Exists(savePath) == false)
                     System.IO.Directory.CreateDirectory(savePath);
+                //删除目录下的文件
+                DirectoryInfo dir = new DirectoryInfo(savePath);
+                FileSystemInfo[] fileinfo = dir.GetFileSystemInfos();  //返回目录中所有文件和子目录
+                foreach (FileSystemInfo k in fileinfo)
+                {
+                    if (k is DirectoryInfo)            //判断是否文件夹
+                    {
+                        DirectoryInfo subdir = new DirectoryInfo(k.FullName);
+                        subdir.Delete(true);          //删除子目录和文件
+                    }
+                    else
+                    {
+                        File.Delete(k.FullName);      //删除指定文件
+                    }
+                }                
+                //DirectoryInfo subdir = new DirectoryInfo(savePath);
+                //subdir.Delete(true);
 
                 filepath = savePath + "\\" + fileName + "." + ext;
                 //存在文件则删除

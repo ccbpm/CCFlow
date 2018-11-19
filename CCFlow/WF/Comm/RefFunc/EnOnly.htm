@@ -337,11 +337,28 @@
                     }
                 });
             }
-
-            $("#FileInfo").html($("#TB_MyFileName").val() + $("#TB_MyFileExt").val());
+            var html = "-";
+            var fileName = $("#TB_MyFileName").val();
+            if (fileName != null && fileName != "" && fileName != undefined) {
+                html = "<a href='#' onclick='downLoadFile()' target='_self'>" + $("#TB_MyFileName").val() + $("#TB_MyFileExt").val() + "</a>";
+            }
+            $("#FileInfo").html(html);
+           
             //设置扩展
             AfterBindEn_DealMapExt(frmData);
 
+        }
+
+        function downLoadFile() {
+            var PKVal = GetPKVal();
+            if (plant == "CCFlow")
+                window.location.href = '../../CCForm/DownFile.aspx?DoType=EntityFile_Load&DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnName")+"s";
+            else {
+                var currentPath = window.document.location.href;
+                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                Url = path + '/WF/CCForm/EntityFileLoad.do?DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnName")+"s";
+                window.location.href = Url;
+            }
         }
 
         //解析表单字段 MapAttr.
@@ -492,7 +509,7 @@
                 html += "<tr>";
                 html += "<td class='FDesc' style='width:20%;'>附件上传</td>";
                 html += "<td colspan=3>";
-                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;display:inline' onchange='changeFile()' />";
+                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;' onchange='changeFile()' />";
                 html += "已上传的文件：<span id='FileInfo'></span>";
                 html += "</td>";
                 html += "</tr>";

@@ -99,7 +99,7 @@
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
 
-            for (var i = 0; i < searchAttrs.length; i++) {
+            for (var i = searchAttrs.length-1; i >= 0; i--) {
 
                 var attr = searchAttrs[i];
                 var str = "";

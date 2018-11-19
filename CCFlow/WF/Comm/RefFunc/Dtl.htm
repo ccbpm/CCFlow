@@ -117,7 +117,7 @@
             var html = "<table border=0 id='Table1' style='width:99%;'>";
             html += "<tr>";
             html += "<th>序</th>";
-            html += "<th>....</th>";
+           
             
             for (var i = 0; i < mapAtrrs.length; i++) {
                 var mapAttr = mapAtrrs[i];
@@ -126,6 +126,7 @@
                     continue;
                 html += "<th>" + mapAttr.Name + "</th>";
             }
+            html += "<th>....</th>";
             html += "<th></th>";
             html += "</tr>";
 
@@ -140,7 +141,7 @@
                 var pkval = dtl.OID;
                 html += "<tr>";
                 html += "<td class='Idx'>" + (i + 1) + "</td>";
-                html += "<td ><a href=\"javascript:OpenEn('"+pkval+"')\">详细</a></td>";                
+                     
  
                 for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
                     var mapAttr = mapAtrrs[attrIdx];
@@ -153,6 +154,7 @@
 
                     html += "<td>" + InitMapAttrOfCtrl(mapAttr,dtl, pkval) + "</td>";
                 }
+                html += "<td ><a href=\"javascript:OpenEn('" + pkval + "')\">详细</a></td>";          
                 if (mapData.GetPara("IsDelete")=="1")
                  html += "<td><a href=\"javascript:Delete('"+pkval+"')\"><img src='../../Img/Btn/Delete.png' /></a></td>";
                 else
@@ -416,7 +418,7 @@
             var html = "";
             html += "<tr>";
             html += "<td class='Idx'><font color=red>"+(newRowIdx+1)+"</font></td>";
-            html += "<td >....</td>";
+           
             
             var hidden="";
 
@@ -429,6 +431,7 @@
                 }
                 html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, newRowIdx) + "</td>";
             }
+            html += "<td >....</td>";
             html += "<td></td>";
             html += "</tr>";
 

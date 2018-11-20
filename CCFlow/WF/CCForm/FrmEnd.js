@@ -363,7 +363,12 @@ function AfterBindEn_DealMapExt(frmData) {
                 if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || GetQueryString("IsReadonly") == "1")
                     continue;
                 var tbFastInput = $("#TB_" + mapExt.AttrOfOper);
-                var content = $("<span style='margin-left:-120px'></span><br/>");
+                //获取大文本的长度
+                var width = tbFastInput.width() + parseInt(tbFastInput.parent().css('left').replace("px", ""));
+                width = width - 140;
+                var top = tbFastInput.height();
+                top = top - 6;
+                var content = $("<span style='margin-left:" + width + "px;top: "+top+"px;position: absolute;'></span><br/>");
                 tbFastInput.after(content);
                 content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper + "\")'>清空<a>");
                 break;
@@ -534,14 +539,18 @@ function AfterBindEn_DealMapExt(frmData) {
 }
 
 function TBHelp(ObjId, MyPK) {
-    var url = "/WF/CCForm/Pop/HelperOfTBEUI.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+    var url = "/WF/CCForm/Pop/HelperOfTBEUIBS.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
     var W = document.body.clientWidth - 500;
     var H = document.body.clientHeight - 140;
-    var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);
+    //var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);
+    OpenBootStrapModal(url,"TBHelpIFram","词汇选择", W, H);
 }
 function changeFastInt(ctrl, value) {
     $("#TB_" + ctrl).val(value);
-    $('#eudlg').window('close');
+    if($('#eudlg').length>0)
+        $('#eudlg').window('close');
+    if($('#bootStrapdlg').length>0)
+    $('#bootStrapdlg').modal('hide');
 }
 function clearContent(ctrl) {
     $("#" + ctrl).val("");

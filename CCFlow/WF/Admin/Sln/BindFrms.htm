@@ -89,29 +89,7 @@
             });
         }
 
-        function WinField(fk_mapdata, nodeid, fk_flow) {
-            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';
-
-            OpenEasyUiDialog(url, "eudlgframe", '字段权限控制', 1260, 560, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
-        }
-
-        function WinFJ(fk_mapdata, nodeid, fk_flow) {
-            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=FJ';
-
-            OpenEasyUiDialog(url, "eudlgframe", '附件权限控制', 800, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
-        }
-
-        function WinDtl(fk_mapdata, nodeid, fk_flow) {
-            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Dtl';
-
-            OpenEasyUiDialog(url, "eudlgframe", '明细表权限控制', 800, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
-        }
+       
 
         //顺序.
         function DoOrder(no, type) {
@@ -158,8 +136,10 @@
         function Edit(mypk) {
 
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=' + mypk;
-
-            OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
+            //获取屏幕的长宽
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 40;
+            OpenEasyUiDialog(url, "eudlgframe", '编辑', W, H, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

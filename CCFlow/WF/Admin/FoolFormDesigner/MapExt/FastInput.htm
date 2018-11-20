@@ -21,18 +21,12 @@
             en.MyPK = mypk;
             var num = en.RetrieveFromDBSources(); //执行查询..
 
-            if (num == 0 ) {
+            if (num == 1) {
                 document.getElementById("Btn_Delete").disabled = true;
             }
 
-            //绑定历史词汇录入人字段.
-            var attrs = new Entities("BP.Sys.MapAttrs");
-            attrs.Retrieve("FK_MapData", GetQueryString("FK_MapData"));
-            for (var i = 0; i < attrs.length; i++) {
-                var attr = attrs[i];
-            }
-
             document.getElementById("TB_Doc").value = en.Doc;
+            document.getElementById("DDL_Tag1").value = en.Tag1;
             $("#Msg").html("");
 
         });
@@ -65,6 +59,7 @@
             en.SetValByKey("AttrOfOper", GetQueryString("KeyOfEn"));
             en.SetValByKey("ExtType", "FastInput");
             en.SetValByKey("Doc", doc);
+            en.SetValByKey("Tag1", $("#DDL_Tag1").val());
             en.Save();
 
             window.location.href = window.location.href;
@@ -87,12 +82,12 @@
 </head>
 <body>
     <form id="cc">
- 
+    <fieldset>
+        <legend>快速输入</legend>
         <table id="table" style="width: 100%;">
-        <caption> 快速输入</caption>
             <tr>
                 <td colspan="3">
-                    快速输入内容，多行用逗号分开。
+                    快速输入内容，多行用@分开。
                 </td>
             </tr>
 
@@ -106,32 +101,19 @@
                 <td colspan="2">
                     历史词汇启用字段
                 </td>
-               <td>
-               <select> <option>不启用</option> </select> </td>
+               <td><select id="DDL_Tag1" value="0"> <option value="0" >不启用</option><option value="1">启用</option> </select> </td>
             </tr>
 
            
             <tr>
                 <td colspan="3">
-                    <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
                     <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
                     <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-                    <a href="javascript:ShowHidden('sqlexp')">填充表达式帮助:</a>
                 </td>
             </tr>
-            <tr>
-                <td colspan="3">
-                    <div id='sqlexp' style='color: Gray; display: none'>
-                        <ul>
-                            <li>1.如果是从表: 表达式就是列之间的计算，比如: @A;+@B; </li>
-                            <li>2.如果是主表: 就是主表字段之间的计算,比如: @DanJia;*@ShuLiang; 或者 @单价*@数量 </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
+           
         </table>
-
-
+    </fieldset>
     <div id="Msg">
     </div>
     </form>

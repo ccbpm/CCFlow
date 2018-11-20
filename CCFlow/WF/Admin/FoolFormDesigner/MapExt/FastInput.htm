@@ -21,18 +21,18 @@
             en.MyPK = mypk;
             var num = en.RetrieveFromDBSources(); //执行查询..
 
-            if (num == 1) {
+            if (num == 0 ) {
                 document.getElementById("Btn_Delete").disabled = true;
             }
 
             //绑定历史词汇录入人字段.
             var attrs = new Entities("BP.Sys.MapAttrs");
-            attrs.Rtirur("FK_MapData", GetQueryString("FK_MapData"));
+            attrs.Retrieve("FK_MapData", GetQueryString("FK_MapData"));
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
             }
 
-            document.getElementById("TB_Doc").value = mapExt.Doc;
+            document.getElementById("TB_Doc").value = en.Doc;
             $("#Msg").html("");
 
         });
@@ -87,9 +87,9 @@
 </head>
 <body>
     <form id="cc">
-    <fieldset>
-        <legend>快速输入</legend>
+ 
         <table id="table" style="width: 100%;">
+        <caption> 快速输入</caption>
             <tr>
                 <td colspan="3">
                     快速输入内容，多行用逗号分开。
@@ -106,7 +106,8 @@
                 <td colspan="2">
                     历史词汇启用字段
                 </td>
-               <td><select> <option>不启用</option> </select> </td>
+               <td>
+               <select> <option>不启用</option> </select> </td>
             </tr>
 
            
@@ -129,7 +130,8 @@
                 </td>
             </tr>
         </table>
-    </fieldset>
+
+
     <div id="Msg">
     </div>
     </form>

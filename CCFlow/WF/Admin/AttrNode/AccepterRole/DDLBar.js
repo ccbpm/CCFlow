@@ -10,8 +10,7 @@ function InitBar(key) {
     if (str == "01")
         isSatrtNode = true;
 
-
-   // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
+    // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
     var html = "<div style='padding:5px' >访问规则: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
@@ -55,10 +54,25 @@ function InitBar(key) {
         html += "<option value=" + DeliveryWay.BySQLAsSubThreadEmpsAndData + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL确定子线程接受人与数据源</option>";
     }
 
+
+    if (isSatrtNode == false) {
+        //检查是否是项目类的流程如果
+        var isPrjFlow = false;
+        var node = new Entity("BP.WF.Node", nodeID);
+        var flowNo = node.FK_Flow;
+        var flow = new Entity("BP.WF.Flow", flowNo);
+        if (flow.FlowAppType == 1) {
+            html += "<option value=null disabled='disabled' >+项目类流程</option>";
+            html += "<option value=" + DeliveryWay.ByStationForPrj + ">&nbsp;&nbsp;&nbsp;&nbsp;按项目组内的岗位计算</option>";
+            html += "<option value=" + DeliveryWay.BySelectedForPrj + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人</option>";
+        }
+    }
+
+
     html += "<option value=null disabled='disabled' >+其他方式</option>";
 
     if (isSatrtNode == true) {
-        
+
         html += "<option value=" + DeliveryWay.BySelected + " >&nbsp;&nbsp;&nbsp;&nbsp;所有的人员都可以发起.</option>";
 
     } else {
@@ -69,6 +83,8 @@ function InitBar(key) {
         html += "<option value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
     }
+
+
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
@@ -76,11 +92,9 @@ function InitBar(key) {
     html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
 
-
-
     document.getElementById("bar").innerHTML = html;
-    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 
+    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 
 
 }
@@ -192,8 +206,11 @@ function changeOption() {
         case DeliveryWay.ByFromEmpToEmp:
             roleName = "18.ByFromEmpToEmp.htm";
             break;
-        case DeliveryWay.ByCCFlowBPM:
-            roleName = "100.ByCCFlowBPM.htm";
+        case DeliveryWay.ByStationForPrj:
+            roleName = "20.ByStationForPrj.htm";
+            break;
+        case DeliveryWay.BySelectedForPrj:
+            roleName = "21.BySelectedForPrj.htm";
             break;
         case DeliveryWay.ByCCFlowBPM:
             roleName = "100.ByCCFlowBPM.htm";
@@ -203,7 +220,9 @@ function changeOption() {
             break;
     }
 
-    window.location.href =   roleName + "?FK_Node=" + nodeID;
+   // alert(roleName);
+
+    window.location.href = roleName + "?FK_Node=" + nodeID;
 }
 function SaveAndClose() {
     Save();

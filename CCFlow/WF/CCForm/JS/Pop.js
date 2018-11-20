@@ -104,6 +104,11 @@ function PopBranchesAndLeaf(mapExt, val) {
                         if (selectType == "0" && selectedRows.length == 1) {
                             ValSetter(mapExt.Tag4, selectedRows[0].No);
                         }
+
+                        //执行JS
+                        var backFunc = mapExt.GetPara("BackFunc");
+                        if (backFunc != null && backFunc != "" && backFunc != undefined)
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, selectedRows[0].No));
                     }
                 }
             }, null, function () {
@@ -219,6 +224,9 @@ function PopBranches(mapExt, val) {
                         if (selectType == "0" && nodes.length == 1) {
                             ValSetter(mapExt.Tag4, nodes[0].No);
                         }
+
+                        //执行JS方法
+
                     }
                 }
             }, null, function () {

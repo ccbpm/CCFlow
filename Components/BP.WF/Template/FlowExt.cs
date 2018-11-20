@@ -535,7 +535,6 @@ namespace BP.WF.Template
 
                 #endregion 模拟测试.
 
-
                 #region 流程模版管理.
                 rm = new RefMethod();
                 rm.Title = "模版导入";
@@ -856,7 +855,7 @@ namespace BP.WF.Template
                 //rm.RefAttrLinkLabel = "业务表字段同步配置";
                 //rm.RefMethodType = RefMethodType.Func;
                 //rm.Target = "_blank";
-                ////  map.AddRefMethod(rm);
+                ////map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "设置自动发起"; // "报表运行";
@@ -874,7 +873,7 @@ namespace BP.WF.Template
 
                 //rm = new RefMethod();
                 //rm.Title = this.ToE("FlowExtDataOut", "数据转出定义");  //"数据转出定义";
-                ////  rm.Icon = "/WF/Img/Btn/Table.gif";
+                // rm.Icon = "/WF/Img/Btn/Table.gif";
                 //rm.ToolTip = "在流程完成时间，流程数据转储存到其它系统中应用。";
                 //rm.ClassMethodName = this.ToString() + ".DoExp";
                 //map.AddRefMethod(rm);

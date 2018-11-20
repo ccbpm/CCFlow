@@ -4462,7 +4462,6 @@ namespace BP.WF
             {
                 /*检查审核意见 */
                 string sql = "SELECT Msg,EmpToT FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE  EmpFrom='" + WebUser.No + "' AND NDFrom=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.WorkCheck;
-
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     throw new Exception("err@请填写审核意见.");

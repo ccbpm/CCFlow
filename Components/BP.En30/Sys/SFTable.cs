@@ -791,12 +791,12 @@ namespace BP.Sys
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "创建Table向导";
-                rm.ClassMethodName = this.ToString() + ".DoGuide";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsForEns = false;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "创建Table向导";
+                //rm.ClassMethodName = this.ToString() + ".DoGuide";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.IsForEns = false;
+                //map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "数据源管理";
@@ -886,8 +886,7 @@ namespace BP.Sys
                 {
                     sql = "CREATE TABLE " + this.No + " (";
                     sql += "No varchar(30) NOT NULL,";
-                    sql += "Name varchar(3900) NULL,";
-                    sql += "GUID varchar(36)  NULL";
+                    sql += "Name varchar(3900) NULL";
                     sql += ")";
                 }
 
@@ -896,8 +895,7 @@ namespace BP.Sys
                     sql = "CREATE TABLE " + this.No + " (";
                     sql += "No varchar(30) NOT NULL,";
                     sql += "Name varchar(3900)  NULL,";
-                    sql += "ParentNo varchar(3900)  NULL,";
-                    sql += "GUID varchar(36)  NULL";
+                    sql += "ParentNo varchar(3900)  NULL";
                     sql += ")";
                 }
                 this.RunSQL(sql);
@@ -1016,7 +1014,7 @@ namespace BP.Sys
                 /*初始化数据.*/
                 if (this.CodeStruct == Sys.CodeStruct.Tree)
                 {
-                    sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo,GUID) VALUES('" + this.DefVal + "','根目录','" + this.DefVal + "','" + DBAccess.GenerGUID() + "') ";
+                    sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('1','"+this.Name+"','0') ";
                     this.RunSQL(sql);
 
                     for (int i = 1; i < 4; i++)
@@ -1024,7 +1022,7 @@ namespace BP.Sys
                         string no = i.ToString();
                         no = no.PadLeft(3, '0');
 
-                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo,GUID) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "', '" + DBAccess.GenerGUID() + "') ";
+                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + no + "','Item" + no + "','1') ";
                         this.RunSQL(sql);
                     }
                 }
@@ -1035,7 +1033,7 @@ namespace BP.Sys
                     {
                         string no = i.ToString();
                         no = no.PadLeft(3, '0');
-                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,GUID) VALUES('" + no + "','Item" + no + "','" + DBAccess.GenerGUID() + "') ";
+                        sql = "INSERT INTO " + this.SrcTable + " (No,Name) VALUES('" + no + "','Item" + no + "') ";
                         this.RunSQL(sql);
                     }
                 }

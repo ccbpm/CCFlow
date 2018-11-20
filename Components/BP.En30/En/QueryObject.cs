@@ -1307,8 +1307,6 @@ namespace BP.En
                             sql = sql.Substring(0,sql.IndexOf("ORDER BY")-1);
                         sql = "SELECT COUNT(" + ptable + "." + pk + ") as C " + sql;
                     }
-                      
-
                     //sql="SELECT COUNT(*) as C "+this._endSql  +sql.Substring(  sql.IndexOf("FROM ") ) ;
                     //sql="SELECT COUNT(*) as C FROM "+ this._ens.GetNewEntity.EnMap.PhysicsTable+ "  " +sql.Substring(sql.IndexOf("WHERE") ) ;
                     //int i = sql.IndexOf("ORDER BY") ;
@@ -1329,7 +1327,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-             //   if (SystemConfig.IsDebug)
+                //   if (SystemConfig.IsDebug)
                 this.En.CheckPhysicsTable();
                 throw ex;
             }

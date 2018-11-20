@@ -1581,6 +1581,9 @@ namespace BP.Sys
         /// <returns>转化后的拼音，不成功则抛出异常.</returns>
         public static string ParseStringToPinyinField(string name, bool isQuanPin)
         {
+            if (BP.DA.DataType.IsNullOrEmpty(name) == true)
+                return "";
+
             string s = string.Empty;
             try
             {
@@ -1630,6 +1633,9 @@ namespace BP.Sys
         /// <returns>转化后的拼音，不成功则抛出异常.</returns>
         public static string ParseStringToPinyinField(string name, bool isQuanPin, bool removeSpecialSymbols, int maxLen)
         {
+            if (BP.DA.DataType.IsNullOrEmpty(name) == true)
+                return "";
+
             string s = string.Empty;
 
             if (removeSpecialSymbols)

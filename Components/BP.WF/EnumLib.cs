@@ -950,6 +950,14 @@ namespace BP.WF
         /// </summary>
         ByFromEmpToEmp = 18,
         /// <summary>
+        /// 按照岗位计算-范围内的
+        /// </summary>
+        ByStationForPrj=20,
+        /// <summary>
+        /// 按照选择模式计算.
+        /// </summary>
+        BySelectedForPrj = 21,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100

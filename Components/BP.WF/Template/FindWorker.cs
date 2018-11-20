@@ -603,6 +603,27 @@ namespace BP.WF.Template
             }
             #endregion 判断节点部门里面是否设置了部门，如果设置了，就按照它的部门处理。
 
+            #region 按照岗位计算，项目类.
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationForPrj)
+            {
+                sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B, WF_PrjEmp C WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Emp=C.FK_Emp AND C.PrjNo="+this.currWn.HisWork.GetValStrByKey("PrjNo")+" ORDER BY A.FK_Emp";
+                ps = new Paras();
+                ps.Add("FK_Node", town.HisNode.NodeID);
+                ps.SQL = sql;
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count > 0)
+                    return dt;
+                else
+                {
+                    if (this.town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                    else
+                        return dt;  //可能处理跳转,在没有处理人的情况下.
+                }
+            }
+            #endregion 按照岗位计算，项目类.
+
+
             #region 仅按岗位计算
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {

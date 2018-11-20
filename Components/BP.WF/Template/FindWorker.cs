@@ -606,7 +606,7 @@ namespace BP.WF.Template
             #region 按照岗位计算，项目类.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationForPrj)
             {
-                sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B, WF_PrjEmp C WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Emp=C.FK_Emp AND C.PrjNo="+this.currWn.HisWork.GetValStrByKey("PrjNo")+" ORDER BY A.FK_Emp";
+                sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B, WF_PrjEmp C WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Emp=C.FK_Emp AND C.FK_Prj="+this.currWn.HisWork.GetValStrByKey("PrjNo")+" ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.SQL = sql;

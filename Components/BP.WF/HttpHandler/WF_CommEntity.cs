@@ -183,6 +183,8 @@ namespace BP.WF.HttpHandler
                 md.SetPara("IsUpdate", "1");
             if (dtl.HisUAC.IsDelete)
                 md.SetPara("IsDelete", "1");
+            if (dtl.HisUAC.IsImp)
+                md.SetPara("IsImp", "1");
             #endregion 加入权限信息.
 
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
@@ -254,6 +256,20 @@ namespace BP.WF.HttpHandler
             #endregion 把外键与枚举放入里面去.
 
             return BP.Tools.Json.ToJson(ds);
+        }
+
+        public string Dtl_Exp()
+        {
+            string refPKVal = this.GetRequestVal("RefVal");
+            Entities dtls = ClassFactory.GetEns(this.EnsName);
+            dtls.Retrieve(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
+            Entity en = dtls.GetNewEntity;
+            string name = "数据导出";
+            string filename = refPKVal + "_" + en.ToString() +"_"+DataType.CurrentData+ "_" + name  +".xls";
+            string filePath = ExportDGToExcel(dtls.ToDataTableField(), en, name,null,filename);
+           
+
+            return filePath;
         }
         #endregion 从表.
 

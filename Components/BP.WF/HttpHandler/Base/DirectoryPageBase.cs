@@ -978,17 +978,16 @@ namespace BP.WF.HttpHandler
 
             return file;
         }
-        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title,Attrs mapAttrs=null)
+        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title,Attrs mapAttrs=null,string filename=null)
         {
-            string filename = title + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
+            if(filename == null)
+                filename = title + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
             string file = filename;
             bool flag = true;
             string filepath = BP.Sys.SystemConfig.PathOfTemp;
 
             #region 参数及变量设置
-            //			//参数校验
-            //			if (dg == null || dg.Items.Count <=0 || filename == null || filename == "" || filepath == null || filepath == "")
-            //				return null;
+           
 
             //如果导出目录没有建立，则建立.
             if (Directory.Exists(filepath) == false)
@@ -1054,7 +1053,8 @@ namespace BP.WF.HttpHandler
                         continue;
                     if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt") 
                         || attr.Key.Equals("WebPath") || attr.Key.Equals("MyFileH")
-                        || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize"))
+                        || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize")
+                        || attr.Key.Equals("RefPK"))
                         continue;
 
                     if(attr.MyFieldType == FieldType.RefText)

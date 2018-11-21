@@ -3155,8 +3155,6 @@ namespace BP.WF.HttpHandler
             {
                 string tempPath = BP.Sys.SystemConfig.PathOfTemp;
 
-                MapDtl dtl = new MapDtl(this.FK_MapDtl);
-
                 HttpFileCollection files = context.Request.Files;
                 if (files.Count == 0)
                     return "err@请选择要上传的从表模版。";
@@ -3179,10 +3177,16 @@ namespace BP.WF.HttpHandler
 
                 //执行保存附件. @袁丽娜.
                 files[0].SaveAs(file);
-
-                GEDtls dtls = new GEDtls(this.FK_MapDtl);
                 System.Data.DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(file);
 
+                string FK_MapDtl = this.FK_MapDtl;
+                if (FK_MapDtl.Contains("BP") == true)
+                {
+                    return BPDtlImpByExcel_Imp(dt, FK_MapDtl);
+                }
+
+                MapDtl dtl = new MapDtl(this.FK_MapDtl);
+                GEDtls dtls = new GEDtls(this.FK_MapDtl);
                 #region 检查两个文件是否一致。 生成要导入的属性
                 BP.En.Attrs attrs = dtls.GetNewEntity.EnMap.Attrs;
                 BP.En.Attrs attrsExp = new BP.En.Attrs();
@@ -3299,6 +3303,145 @@ namespace BP.WF.HttpHandler
 
                     dtlEn.InsertAsOID(oid);
                     oid++;
+                }
+                #endregion 执行导入数据.
+
+                if (string.IsNullOrEmpty(errMsg) == true)
+                    return "info@共有(" + i + ")条数据导入成功。";
+                else
+                    return "共有(" + i + ")条数据导入成功，但是出现如下错误:" + errMsg;
+
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message.Replace("'", "‘");
+                return "err@" + msg;
+            }
+        }
+
+        /// <summary>
+        /// BP类从表导入
+        /// </summary>
+        /// <returns></returns>
+        private string BPDtlImpByExcel_Imp(DataTable dt,string fk_mapdtl)
+        {
+            try{
+                #region 检查两个文件是否一致。 生成要导入的属性
+                Entities dtls = ClassFactory.GetEns(this.FK_MapDtl);
+                EntityOID dtlEn= dtls.GetNewEntity as EntityOID;
+                BP.En.Attrs attrs = dtlEn.EnMap.Attrs;
+                BP.En.Attrs attrsExp = new BP.En.Attrs();
+
+                bool isHave = false;
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    foreach (BP.En.Attr attr in attrs)
+                    {
+                        if (dc.ColumnName == attr.Desc)
+                        {
+                            isHave = true;
+                            attrsExp.Add(attr);
+                            continue;
+                        }
+
+                        if (dc.ColumnName.ToLower() == attr.Key.ToLower())
+                        {
+                            isHave = true;
+                            attrsExp.Add(attr);
+                            dc.ColumnName = attr.Desc;
+                        }
+                    }
+                }
+                if (isHave == false)
+                    return "err@您导入的excel文件不符合系统要求的格式，请下载模版文件重新填入。";
+                #endregion
+
+                #region 执行导入数据.
+
+                if (this.GetRequestValInt("DDL_ImpWay") == 0)
+                    BP.DA.DBAccess.RunSQL("DELETE FROM " + dtlEn.EnMap.PhysicsTable + " WHERE RefPK='" + this.GetRequestVal("RefPKVal") + "'");
+
+                int i = 0;
+                Int64 oid = BP.DA.DBAccess.GenerOID(dtlEn.EnMap.PhysicsTable, dt.Rows.Count);
+                string rdt = BP.DA.DataType.CurrentData;
+
+                string errMsg = "";
+                foreach (DataRow dr in dt.Rows)
+                {
+                    dtlEn = dtls.GetNewEntity as EntityOID ;
+                    dtlEn.ResetDefaultVal();
+
+                    foreach (BP.En.Attr attr in attrsExp)
+                    {
+                        if (attr.UIVisible == false || dr[attr.Desc] == DBNull.Value)
+                            continue;
+                        string val = dr[attr.Desc].ToString();
+                        if (val == null)
+                            continue;
+                        val = val.Trim();
+                        switch (attr.MyFieldType)
+                        {
+                            case FieldType.Enum:
+                            case FieldType.PKEnum:
+                                SysEnums ses = new SysEnums(attr.UIBindKey);
+                                bool isHavel = false;
+                                foreach (SysEnum se in ses)
+                                {
+                                    if (val == se.Lab)
+                                    {
+                                        val = se.IntKey.ToString();
+                                        isHavel = true;
+                                        break;
+                                    }
+                                }
+                                if (isHavel == false)
+                                {
+                                    errMsg += "@数据格式不规范,第(" + i + ")行，列(" + attr.Desc + ")，数据(" + val + ")不符合格式,改值没有在枚举列表里.";
+                                    val = attr.DefaultVal.ToString();
+                                }
+                                break;
+                            case FieldType.FK:
+                            case FieldType.PKFK:
+                                Entities ens = null;
+                                if (attr.UIBindKey.Contains("."))
+                                    ens = BP.En.ClassFactory.GetEns(attr.UIBindKey);
+                                else
+                                    ens = new GENoNames(attr.UIBindKey, "desc");
+
+                                ens.RetrieveAll();
+                                bool isHavelIt = false;
+                                foreach (Entity en in ens)
+                                {
+                                    if (val == en.GetValStrByKey("Name"))
+                                    {
+                                        val = en.GetValStrByKey("No");
+                                        isHavelIt = true;
+                                        break;
+                                    }
+                                }
+                                if (isHavelIt == false)
+                                    errMsg += "@数据格式不规范,第(" + i + ")行，列(" + attr.Desc + ")，数据(" + val + ")不符合格式,改值没有在外键数据列表里.";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if (attr.MyDataType == BP.DA.DataType.AppBoolean)
+                        {
+                            if (val.Trim() == "是" || val.Trim().ToLower() == "yes")
+                                val = "1";
+
+                            if (val.Trim() == "否" || val.Trim().ToLower() == "no")
+                                val = "0";
+                        }
+
+                        dtlEn.SetValByKey(attr.Key, val);
+                    }
+
+                    dtlEn.SetValByKey("RefPK", this.GetRequestVal("RefPKVal"));
+                    i++;
+
+                    dtlEn.Insert();
                 }
                 #endregion 执行导入数据.
 

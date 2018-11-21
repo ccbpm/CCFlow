@@ -94,13 +94,11 @@
             if (mapData.GetPara("IsUpdate") == 1) {
                 html += "<input type='button' value='保存' id='Btn_Save' onclick='Save()' />";
             }
+            if (mapData.GetPara("IsImp") == 1) {
+                html += "<input type='button' value='导入' id='Btn_Import' onclick='Import()' />";
+            }
 
-            //            if (mapData.GetPara("IsDelete") == 1) {
-            //                var pkVal = GetPKVal();
-            //                if (pkVal != null)
-            //                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' />";
-            //            }
-
+            html += "<input type='button' value='导出' id='Btn_Export' onclick='Export()' />";
             html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' />";
 
             $("#Btns").append(html);
@@ -481,7 +479,39 @@
                 window.close();
             }
         }
- 
+
+        //导入
+        function Import() {
+            var title = mapData.Name+"导入数据";
+            var W = document.body.clientWidth - 40;
+            var H = document.body.clientHeight - 40;
+            var url = "../../CCForm/DtlImpByExcel.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefVal") + "&FK_MapData=" + GetQueryString("EnName");
+            OpenBootStrapModal(url, "eudlgframe", title, W, H, "icon-edit", false, function () { }, null, function () {
+                location = location;
+            });
+        }
+
+        //导出
+        function Export() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddPara("RefKey", GetQueryString("RefKey"));
+            handler.AddPara("RefVal", GetQueryString("RefVal"));
+            //查询集合
+            var data = handler.DoMethodReturnString("Dtl_Exp");
+            var url = "";
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+            if (plant != 'CCFlow') {
+                var currentPath = window.document.location.href;
+                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                data = path + data;
+            }
+            window.open(data);
+            return;
+
+        }
     </script>
 </head>
 <body>

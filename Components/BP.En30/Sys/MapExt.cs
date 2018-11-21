@@ -138,6 +138,10 @@ namespace BP.Sys
         /// </summary>
         public const string Tag4 = "Tag4";
         /// <summary>
+        /// tag5
+        /// </summary>
+        public const string Tag5 = "Tag5";
+        /// <summary>
         /// 数据源
         /// </summary>
         public const string DBType = "DBType";
@@ -816,6 +820,7 @@ namespace BP.Sys
                 map.AddTBString(MapExtAttr.Tag2, null, "Tag2", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag3, null, "Tag3", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag4, null, "Tag4", true, false, 0, 2000, 20);
+                map.AddTBString(MapExtAttr.Tag5, null, "Tag5", true, false, 0, 2000, 20);
 
 
                 map.AddTBInt(MapExtAttr.H, 500, "高度", false, false);

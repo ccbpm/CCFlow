@@ -30,14 +30,35 @@
     for (var i = 0; i < mapAttrs.length; i++) {
 
         var mapAttr = mapAttrs[i];
-
         $('#TB_' + mapAttr.KeyOfEn).attr("name", "TB_" + mapAttr.KeyOfEn);
         $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
+        if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+            var uiBindKey = mapAttr.UIBindKey;
+            if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
+                var sfTable = new Entity("BP.Sys.FrmUI.SFTable", uiBindKey);
+                if (sfTable.CodeStruct == "1") {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+                    handler.AddPara("EnsName", uiBindKey);  //增加参数.
+                    //获得map基本信息.
+                    var pushData = handler.DoMethodReturnString("Tree_Init");
+                    if (pushData.indexOf("err@") != -1) {
+                        alert(pushData);
+                        return;
+                    }
+                    pushData = ToJson(pushData);
+                    $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
+                    if(mapAttr.UIIsEnable == 0)
+                        $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
+                    $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', val);
+                }
+            }
+        }
+       
         $('#TB_' + mapAttr.KeyOfEn).val(val);
 
         //文本框.

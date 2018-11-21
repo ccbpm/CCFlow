@@ -497,7 +497,19 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (mapAttr.UIIsEnable == 0) {
             enableAttr = "disabled='disabled'";
         }
+
+        //判断外键是否为树形结构
+        var uiBindKey = mapAttr.UIBindKey;
+        if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
+            var sfTable = new Entity("BP.Sys.FrmUI.SFTable", uiBindKey);
+            if (sfTable.CodeStruct == "1") {
+                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
+                
+            }
+        }
+
         eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + enableAttr + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+       
         return eleHtml;
     }
 

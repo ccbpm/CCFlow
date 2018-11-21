@@ -245,6 +245,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             ctrl += "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "Text'  value='" + defValue + "' disabled='disabled'   class='form-control' type='text'/>";
             return ctrl;
         }
+
         return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 
@@ -258,6 +259,14 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
+        //判断外键是否为树形结构
+        var uiBindKey = mapAttr.UIBindKey;
+        if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
+            var sfTable = new Entity("BP.Sys.FrmUI.SFTable", uiBindKey);
+            if (sfTable.CodeStruct == "1") {
+                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
+            }
+        }
         return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 

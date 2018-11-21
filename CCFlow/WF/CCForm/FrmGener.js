@@ -295,6 +295,29 @@ function GenerFrm() {
                 //如果是整行的需要添加  style='clear:both'.
                 var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
+                if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+                    var uiBindKey = mapAttr.UIBindKey;
+                    if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
+                        var sfTable = new Entity("BP.Sys.FrmUI.SFTable", uiBindKey);
+                        if (sfTable.CodeStruct == "1") {
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+                            handler.AddPara("EnsName", uiBindKey);  //增加参数.
+                            //获得map基本信息.
+                            var pushData = handler.DoMethodReturnString("Tree_Init");
+                            if (pushData.indexOf("err@") != -1) {
+                                alert(pushData);
+                                return;
+                            }
+                            pushData = ToJson(pushData);
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
+                            if (mapAttr.UIIsEnable == 0)
+                                $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
+
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
+                        }
+                    }
+                }
+
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (mapAttr.MyDataType == 8)
                         if (!/\./.test(defValue))

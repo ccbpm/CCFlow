@@ -690,15 +690,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 formArrResult.push(name + 'T=' + $(disabledEle).children('option:checked').text());
                 break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());         
-            //对于复选下拉框获取值得方法         
-            //                if ($('[data-id=' + name + ']').length > 0) {         
-            //                    var val = $(disabledEle).val().join(',');         
-            //                    formArrResult.push(name + '=' + val);         
-            //                } else {         
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());         
-            //                }         
-            // break;         
+           
             //文本区域          
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
@@ -706,13 +698,17 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         }
     });
 
-    //获取表单中隐藏的表单元素的值
-    var hiddens = $('input[type=hidden]');
-    //$.each(hiddens, function (i, hidden) {
-    //    if ($(hidden).attr("id").indexOf('TB_') == 0) {
-     //       //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-      //  }
-   // });
+    //获取树形结构的表单值
+    var combotrees = $(".easyui-combotree");
+    $.each(combotrees, function (i, combotree) {
+        var name = $(combotree).attr('id');
+        var tree = $('#' + name).combotree('tree'); 
+        //获取当前选中的节点
+        var data = tree.tree('getSelected');
+
+        formArrResult.push(name + '=' + data.id);
+        formArrResult.push(name + 'T=' + data.text);
+    });
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {

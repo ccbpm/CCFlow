@@ -121,6 +121,15 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     /***************** 外键 *****************************/
     if (mapAttr.LGType == 2 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+
+        //判断外键是否为树形结构
+        var uiBindKey = mapAttr.UIBindKey;
+        if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
+            var sfTable = new Entity("BP.Sys.FrmUI.SFTable", uiBindKey);
+            if (sfTable.CodeStruct == "1") {
+                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
+            }
+        }
         eleHtml = "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  >" + InitDDLOperation(flowData, mapAttr) + "</select>";
         return eleHtml;
     }

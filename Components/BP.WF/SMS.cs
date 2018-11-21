@@ -632,7 +632,25 @@ namespace BP.WF
                     /*发送邮件*/
                     //soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
                     //soap.SendToEmail(this.MyPK, WebUser.No, this.SendToEmpNo, this.Email, this.Title, this.DocOfEmail);
-                    SendEmailNow(this.Email, this.Title, this.DocOfEmail);
+                    if (DataType.IsNullOrEmpty(this.Email) == true)
+                        return;
+
+                    //包含多个邮箱
+                    if (this.Email.Contains(";") == true)
+                    {
+                        string[] emails = this.Email.Split(';');
+                        foreach (string email in emails)
+                        {
+                            if (DataType.IsNullOrEmpty(this.Email) == false)
+                                SendEmailNow(email, this.Title, this.DocOfEmail);
+                        }
+                    }
+                    else
+                    {   //单个邮箱
+                        SendEmailNow(this.Email, this.Title, this.DocOfEmail);
+                    }
+
+                    
                     return;
                 }
 

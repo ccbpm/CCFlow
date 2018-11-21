@@ -831,15 +831,6 @@ namespace BP.WF.Template
                 }
                 return "@已向:{" + msg + "}发送提醒消息.";
 
-                //    // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                //    string mailDocReal = mailDocTmp.Clone() as string;
-                //    mailDocReal = mailDocReal.Replace("{EmpStr}", gwl.FK_Emp);
-                //    //获得当前人的邮件.
-                //    BP.WF.Port.WFEmp empEn = new Port.WFEmp(gwl.FK_Emp);
-                //    //发送邮件.
-                //    BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid);
-                //}
-                //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
             }
             #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
 
@@ -877,7 +868,7 @@ namespace BP.WF.Template
                         mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
 
                         //获得当前人的邮件.
-                        BP.GPM.Emp empEn = new BP.GPM.Emp(emp);
+                        BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
 
                         //发送邮件.
                         BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event,
@@ -919,7 +910,7 @@ namespace BP.WF.Template
                         mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
 
                         //获得当前人的邮件.
-                        BP.GPM.Emp empEn = new BP.GPM.Emp(emp);
+                        BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
 
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
 
@@ -966,7 +957,7 @@ namespace BP.WF.Template
                         mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
 
                         //获得当前人的邮件.
-                        BP.GPM.Emp empEn = new BP.GPM.Emp(emp);
+                        BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
 
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
 

@@ -200,7 +200,7 @@
 
 
             if (athDesc.IsExpCol == 0) {
-                $('#file').uploadify({
+                $('#uploadfile').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
                     'uploader': url,
                     'auto': true,
@@ -215,7 +215,7 @@
                         //获取分组
                         var sort = $("#Sort").val();
                         if (sort != null && sort != "" && sort != undefined)
-                            $('#file').uploadify('settings', 'formData', { "parasData": "Sort=" + sort });
+                            $('#uploadfile').uploadify('settings', 'formData', { "parasData": "Sort=" + sort });
                     },
                     'onQueueComplete': function (queueData) {
                         window.location.href = window.location.href;
@@ -226,7 +226,7 @@
             }
             if (athDesc.IsExpCol == 1) {
                 var parasData = "";
-                $('#file').uploadify({
+                $('#uploadfile').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf?',
                     'uploader': url,
                     'method': 'GET',
@@ -252,7 +252,7 @@
                         if (sort != null && sort != "" && sort != undefined)
                             parasData += "@Sort=" + sort;
 
-                        $('#file').uploadify('settings', 'formData', { "parasData": parasData });
+                        $('#uploadfile').uploadify('settings', 'formData', { "parasData": parasData });
 
                     },
                     'onQueueComplete': function (queueData) {
@@ -575,7 +575,7 @@
                         html += "<div id='s' style='text-align:right;float:right;display:inline;' >";
                     }
                     html += "<div style='float:left;margin-left:5px;'>";
-                    html += "<input type='file' style='float:left' name='file' id='file' />";
+                    html += "<input type='file' style='float:left' name='uploadfile' id='uploadfile' />";
                     html += "</div>";
                     html += "</div>";
 
@@ -656,7 +656,7 @@
             var explorer = window.navigator.userAgent;
             var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
             if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
-                $('#file_upload').uploadify("upload", "*");
+                $('#uploadfile').uploadify("upload", "*");
                 return;
             }
 

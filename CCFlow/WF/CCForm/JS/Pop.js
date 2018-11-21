@@ -106,7 +106,7 @@ function PopBranchesAndLeaf(mapExt, val) {
                         }
 
                         //执行JS
-                        var backFunc = mapExt.GetPara("BackFunc");
+                        var backFunc = mapExt.Tag5;
                         if (backFunc != null && backFunc != "" && backFunc != undefined)
                             DBAccess.RunFunctionReturnStr(DealSQL(backFunc, selectedRows[0].No));
                     }

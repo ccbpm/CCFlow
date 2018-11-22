@@ -22,12 +22,15 @@
             var flowName = GetQueryString("FK_Name");
             var flowID = GetQueryString("FID");
 
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flowName = flow.Name;
+
             $("#TB_Caption").html("<a href='API.htm?FK_Flow=" + flowNo + "' > URL调用接口</a> |  <a href='APICode.htm?FK_Flow=" + flowNo + "'>代码开发API</a> |  <a href='APICodeFEE.htm?FK_Flow=" + flowNo + "' >FEE开发API</a> ");
             $("#TB_LCFQ").html("流程" + flowName + "发起");
-            $("#TB_GZDB").html("工作待办:<font color='Blue'><b>/WF/EmpWorks.htm</b></font> 获得当前操作员的所有的待办列表，<font color='Blue'><b>/WF/EmpWorks.htm?FK_Flow=" + flowNo + "</b></font> 当前操作员的指定流程的待办。");
+            $("#TB_GZDB").html("工作待办:<font color='Blue'><b>/WF/Todolist.htm</b></font> 获得当前操作员的所有的待办列表，<font color='Blue'><b>/WF/Todolist.htm?FK_Flow=" + flowNo + "</b></font> 当前操作员的指定流程的待办。");
             $("#TB_ZT").html("在途:<font color='Blue'><b>/WF/Runing.htm</b></font> 当前工作人员的所有在途,<font color='Blue'><b>/WF/Runing.htm?FK_Flow =" + flowNo + "</b></font>当前操作员的指定流程的在途。在途定义：一个操作员的参与的流程，但是流程还没有完成，就叫在途。");
             $("#TB_FQURL").html("发起URL:<font color='Blue'><b> /WF/MyFlow.htm?FK_Flow=" + flowNo + "</b></font>，您可以把该URL 放入到自己的系统菜单里，或者列表里。");
-            $("#TB_GZDB_DQ").html("当前流程工作待办:<font color='Blue'><b>/WF/EmpWorks.htm?FK_Flow=" + flowNo + "</b></font>");
+            $("#TB_GZDB_DQ").html("当前流程工作待办:<font color='Blue'><b>/WF/Todolist.htm?FK_Flow=" + flowNo + "</b></font>");
             $("#TB_ZTGZ_DQ").html("当前流程工作在途: <font color='Blue'><b>/WF/Runing.htm?FK_Flow= " + flowNo + "</b></font>");
             $("#TB_CX").html("查询:<font color='Blue'><b>/WF/Rpt/Search.htm?FK_Flow=" + flowNo + "&RptNo=ND" + Number(no) + "MyRpt</b></font>");
             $("#TB_GJCX").html("高级查询:<font color='Blue'><b>/WF/Rpt/SearchAdv.htm?FK_Flow=" + flowNo + "&RptNo=ND" + Number(no) + "MyRpt</b></font>");
@@ -87,7 +90,7 @@
 <legend>工作待办</legend>
 <ul>
 <li id="TB_GZDB_DQ"> </li>
-<li id="TB_GZDB_SY"> 所有流程工作待办:<font color="Blue"><b> /WF/EmpWorks.htm </b></font> </li>
+<li id="TB_GZDB_SY"> 所有流程工作待办:<font color="Blue"><b> /WF/Todolist.htm </b></font> </li>
 </ul>
 </fieldset>
  

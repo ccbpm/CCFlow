@@ -302,8 +302,10 @@ function InitMapAttrOfCtrl(mapAttr) {
         //判断外键是否为树形结构
         var uiBindKey = mapAttr.UIBindKey;
         if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-            var sfTable = new Entity("BP.Sys.FrmUI.SFTable", uiBindKey);
-            if (sfTable.CodeStruct == "1") {
+            var sfTable = new Entity("BP.Sys.FrmUI.SFTable");
+            sfTable.SetPKVal(uiBindKey);
+            var count = sfTable.RetrieveFromDBSources();
+            if (count!=0 && sfTable.CodeStruct == "1") {
                 return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
             }
         }

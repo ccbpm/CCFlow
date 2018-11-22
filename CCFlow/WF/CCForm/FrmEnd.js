@@ -39,8 +39,11 @@
         if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
             var uiBindKey = mapAttr.UIBindKey;
             if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-                var sfTable = new Entity("BP.Sys.FrmUI.SFTable", uiBindKey);
-                if (sfTable.CodeStruct == "1") {
+                var sfTable = new Entity("BP.Sys.FrmUI.SFTable");
+                sfTable.SetPKVal(uiBindKey);
+                var count = sfTable.RetrieveFromDBSources();
+
+                if (count!=0 &&sfTable.CodeStruct == "1") {
                     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
                     handler.AddPara("EnsName", uiBindKey);  //增加参数.
                     //获得map基本信息.

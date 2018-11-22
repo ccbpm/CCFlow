@@ -57,10 +57,14 @@
         var dtM; //方法集合.
         var isReadonly = GetQueryString("isReadonly");
         $(function () {
+            var pkVal = GetPKVal();
+            //新增时En.htm页面隐藏
+            if(window.parent &&  window.parent.$('#EnLayout').length==1 && pkVal==null)
+                window.parent.$('#EnLayout').layout('remove', 'west');
+
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             var enName = GetQueryString("EnName");
             var type = GetQueryString("type");
-            var pkVal = GetPKVal();
             httpHandler.AddPara("EnName", enName);
 
             if (pkVal != null) {
@@ -837,9 +841,12 @@
             url = url.replace("#", "");
             url = replaceParamVal(url, "tabIndex", index);
             url = replaceParamVal(url, "PKVal", "");
+
+            //新增时En.htm页面隐藏
+            if(window.parent &&  window.parent.$('#EnLayout').length==1)
+                window.parent.$('#EnLayout').layout('remove', 'west');
             window.location.href = url; //刷新.
 
-            var url = window.location.href;
            
         }
 
@@ -885,8 +892,7 @@
                 }
 
                 var info = en.Insert();
-                if (info == 0) {
-                    alert('更新错误:' + info);
+                if (info.toString().indexOf("err@")!=-1) {
                     return;
                 }
 
@@ -902,7 +908,11 @@
 
                 if (url.indexOf('&PKVal=') == -1)
                     url += "&PKVal=" + en.GetPKVal();
+               
 
+                //新增保存后显示En
+                if (window.parent && window.parent.$('#EnLayout').length == 1)
+                    url = url.replace("EnOnly", "En");
                 window.location.href = url; //刷新.
                 return;
             }

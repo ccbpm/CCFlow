@@ -360,8 +360,10 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.IsBUnit, false, "是否是节点模版（业务单元）?", true, true, true, "http://ccbpm.mydoc.io/?v=5404&t=17904");
 
                 map.AddTBString(NodeAttr.FocusField, null, "焦点字段", true, false, 0, 50, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17932");
-                map.AddDDLSysEnum(NodeAttr.SaveModel, 0, "保存方式", true, true);
-                map.SetHelperUrl(NodeAttr.SaveModel, "http://ccbpm.mydoc.io/?v=5404&t=17934");
+
+                //map.AddDDLSysEnum(NodeAttr.SaveModel, 0, "保存方式", true, true);
+                //map.SetHelperUrl(NodeAttr.SaveModel, "http://ccbpm.mydoc.io/?v=5404&t=17934");
+                
                 map.AddBoolean(NodeAttr.IsGuestNode, false, "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true);
 
                 //节点业务类型.

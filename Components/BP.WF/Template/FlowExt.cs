@@ -770,17 +770,19 @@ namespace BP.WF.Template
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
+            
+                #endregion 流程监控.
+
+                #region 实验中的功能
+
                 rm = new RefMethod();
                 rm.Title = "数据订阅-实验中";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/RptOrder.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_RptOrder()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程监控";
+                rm.GroupName = "实验中的功能";
                 rm.Visable = false;
                 map.AddRefMethod(rm);
-                #endregion 流程监控.
-
-                #region 实验中的功能
 
                 rm = new RefMethod();
                 rm.Title = "流程轨迹表单";

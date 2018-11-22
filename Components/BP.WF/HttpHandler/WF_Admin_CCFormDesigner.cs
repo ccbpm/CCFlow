@@ -349,8 +349,6 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(mapFrameExts.ToDataTableField("Sys_MapFrame"));
 
                 //组织节点组件信息.
-
-
                 string sql = "";
                 if (this.FK_Node > 100)
                 {

@@ -114,6 +114,7 @@ namespace BP.WF
                 if (nd.NodeFrmID != "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                 {
                     /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
+
                     int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
 
                     BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);

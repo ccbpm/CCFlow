@@ -794,10 +794,9 @@ namespace BP.WF
             catch (Exception ex)
             {
                 Log.DebugWriteError(ex.StackTrace);
-                throw new Exception(ex.Message);
+                throw new Exception("generoWorkNode@"+ex.Message);
             }
         }
-         
         /// <summary>
         /// 产生一个WorkNode
         /// </summary>

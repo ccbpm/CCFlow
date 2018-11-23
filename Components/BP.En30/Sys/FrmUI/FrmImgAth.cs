@@ -184,10 +184,9 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
 
-                map.AddTBString(FrmImgAthAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
-                map.AddTBString(FrmImgAthAttr.CtrlID, null, "控件ID", true, false, 0, 200, 20);
+                map.AddTBString(FrmImgAthAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
+                map.AddTBString(FrmImgAthAttr.CtrlID, null, "控件ID", true, true, 0, 200, 20);
                 map.AddTBString(FrmImgAthAttr.Name, null, "中文名称", true, false, 0, 200, 20);
-
 
                 map.AddTBFloat(FrmImgAthAttr.X, 5, "X", true, false);
                 map.AddTBFloat(FrmImgAthAttr.Y, 5, "Y", false, false);
@@ -195,9 +194,11 @@ namespace BP.Sys.FrmUI
                 map.AddTBFloat(FrmImgAthAttr.H, 200, "H", true, false);
                 map.AddTBFloat(FrmImgAthAttr.W, 160, "W", false, false);
 
-                map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
-                map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddBoolean(FrmImgAthAttr.IsEdit, true, "是否可编辑", true, true);
+                //map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
+                map.AddBoolean(FrmImgAthAttr.IsRequired, false, "是否必填项", true, true);
+                //map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
+                //map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, true, 0, 128, 20);
 
                 this._enMap = map;
                 return this._enMap;

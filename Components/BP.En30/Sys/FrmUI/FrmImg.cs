@@ -75,7 +75,6 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
-
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
                     "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'", true);

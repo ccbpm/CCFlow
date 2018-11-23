@@ -2717,7 +2717,6 @@ namespace BP.WF
             frmRBs.RetrieveInSQL(sql);
             ds.Tables.Add(frmRBs.ToDataTableField("Sys_FrmRB"));
 
-
             // Sys_FrmImgAth.
             sql = "SELECT MyPK FROM Sys_FrmImgAth WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
             FrmImgAths frmIs = new FrmImgAths();

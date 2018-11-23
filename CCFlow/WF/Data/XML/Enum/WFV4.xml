@@ -2,7 +2,7 @@
 <NewDataSet>
 
   <Item Key="ReturnSendModel" Name="退会后发送规则"  CH="@0=从退回节点正常执行@1=直接发送到当前节点@2=直接发送到当前节点的下一个节点" />
-  <Item Key="FrmEnableRole" Name="表单启用规则"  CH="@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用" />
+  <Item Key="FrmEnableRole" Name="表单启用规则"  CH="@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按设置的岗位@7=按设置的部门" />
   <Item Key="CHAlertRole" Name="时效考核提示规则"  CH="@0=不提示@1=每天1次@2=每天2次" />
   <Item Key="CHAlertWay" Name="时效考核提示方式"   CH="@0=邮件@1=短信@2=CCIM即时通讯" />
   <Item Key="TWay" Name="时间计算方式"   CH="@0=计算节假日@1=不计算节假日" />

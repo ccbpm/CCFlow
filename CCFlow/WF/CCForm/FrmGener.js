@@ -756,6 +756,19 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         }
     });
 
+    //获取树形结构的表单值
+    var combotrees = $(".easyui-combotree");
+    $.each(combotrees, function (i, combotree) {
+        var name = $(combotree).attr('id');
+        var tree = $('#' + name).combotree('tree');
+        //获取当前选中的节点
+        var data = tree.tree('getSelected');
+        if (data != null) {
+            formArrResult.push(name + '=' + data.id);
+            formArrResult.push(name + 'T=' + data.text);
+        }
+    });
+
     //获取表单中禁用的表单元素的值
     var disabledEles = $('#divCCForm :disabled');
     $.each(disabledEles, function (i, disabledEle) {

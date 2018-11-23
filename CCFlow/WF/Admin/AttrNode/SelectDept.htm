@@ -1,0 +1,365 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .row-margin-top
+        {
+            margin-top: 20px;
+        }
+        .search-margin
+        {
+            margin-top: 15px;
+        }
+    </style>
+    <script type="text/javascript">
+        var mapExt = null;
+        var rootNo;
+        var selectedRows = [];
+        $(function () {
+
+            //获取已经选择的部门
+            var selectDept = GetQueryString("SelectDept");
+
+          
+            //跟节点编号.
+            rootNo = "0";
+            if (rootNo == "@WebUser.FK_Dept") {
+                var webUser = new WebUser();
+                rootNo = webUser.FK_Dept;
+            }
+
+            if (rootNo == "")
+                rootNo = "0";
+
+            //选择的部门
+            selectedRows = [];
+            if (selectDept != null && selectDept != undefined && selectDept != "") {
+                var selectDepts = selectDept.split(";");
+                $.each(selectDepts, function (i, o) {
+                    var item = o.split('@');
+                    if (item.length == 2)
+                        selectedRows.push({ "id": item[0], "text": item[1] });
+                });
+            }
+           
+            $('#viewGrid_Panel').hide();
+            $('#tree_Panel').show();
+
+            loadTree(rootNo);
+
+        });
+
+        //树形结构转换
+        var treeJson = [];
+        function createJsonToTree(jsonArray, parentNo) {
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.ParentNo == parentNo) {
+                    var checked = false;
+                    var selectedNodes = selectedRows;
+                    var sel = $.grep(selectedNodes, function (obj) {
+                        return data.No == obj.id;
+                    });
+
+                    if (sel.length > 0) {
+                        checked = true;
+                    }
+                    treeJson.push({
+                        "id": data.No,
+                        "text": data.Name,
+                        "nodes": creatTreeChildern(jsonArray, data.No),
+                        "state": { checked: checked, disabled: false }
+                    });
+                }
+            }
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.nodes)) {
+                        if (o.nodes.length == 0) {
+                            o.nodes = undefined;
+                        } else {
+                            _(o.nodes);
+                        }
+                    }
+                });
+            }
+            _(treeJson);
+            return treeJson;
+        }
+
+        function creatTreeChildern(jsonArray, parentNo) {
+            var childList = []
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.ParentNo == parentNo) {
+                    var checked = false;
+                    var selectedNodes = selectedRows;
+                    var sel = $.grep(selectedNodes, function (obj) {
+                        return data.No == obj.id;
+                    });
+
+                    if (sel.length > 0) {
+                        checked = true;
+                    }
+                    childList.push({
+                        "id": data.No,
+                        "text": data.Name,
+                        "nodes": creatTreeChildern(jsonArray, data.No),
+                        "state": { checked: checked, disabled: false }
+                    });
+                }
+            }
+
+            return childList;
+        }
+
+
+        function loadTree(rootNo) {
+            var ens = new Entities("BP.Port.Depts"); //BP.Port.Depts
+            ens.RetrieveAll();
+            var jsonTree = createJsonToTree(ens, rootNo);
+            $('#tree').treeview({
+                data: jsonTree,         // 数据源
+                showCheckbox: true,   //是否显示复选框
+                highlightSelected: false,    //是否高亮选中
+                //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
+                nodeIcon: 'glyphicon',
+                emptyIcon: '',    //没有子节点的节点图标
+                multiSelect: false,    //多选
+                onNodeChecked: function (event, node) {
+                    var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
+                    if (selectNodes.length > 0) { //子节点不为空，则选中所有子节点
+                        $('#tree').treeview('checkNode', [selectNodes, { silent: true}]);
+                    }
+                    addSelectedData(selectedRows, [node]);
+                    addSelectedData(selectedRows, selectNodes);
+
+                },
+                onNodeUnchecked: function (event, node) {
+
+                    var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
+                    if (selectNodes.length > 0) { //子节点不为空，则取消选中所有子节点
+                        $('#tree').treeview('uncheckNode', [selectNodes, { silent: true}]);
+                    }
+
+                    removeSelectedData(selectedRows, [node]);
+                    removeSelectedData(selectedRows, selectNodes);
+
+                },
+                onNodeSelected: function (event, node) {
+
+                    var tree = $('#tree');
+                    if (node.state.expanded) {
+                        //处于展开状态则折叠  
+                        tree.treeview('collapseNode', node.nodeId);
+                    } else {
+                        //展开  
+                        tree.treeview('expandNode', node.nodeId);
+                    }
+                }
+            });
+        }
+
+        //查询列表
+        function loadViewGrid(gridUrl) {
+
+            var global = window;
+            var columns = mapExt.Tag;
+            var searchTableColumns = [{
+                field: "_checkbox",
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.checked) {
+                        return {
+                            "checked": true,
+                            "disabled": row.disabled
+                        }
+                    }
+                }
+            }];
+
+            //显示列的中文名称.
+            if (typeof columns == "string") {
+                $.each(columns.split(","), function (i, o) {
+                    var exp = o.split("=");
+                    var field;
+                    var title;
+                    if (exp.length == 1) {
+                        field = title = exp[0];
+                    } else if (exp.length == 2) {
+                        field = exp[0];
+                        title = exp[1];
+                    }
+                    if (!isLegalName(field)) {
+                        return true;
+                    }
+                    searchTableColumns.push({
+                        field: field,
+                        title: title
+                    });
+                });
+            } else {
+                // by default
+                searchTableColumns.push({
+                    field: 'No',
+                    title: '编号'
+                });
+                searchTableColumns.push({
+                    field: 'Name',
+                    title: '名称'
+                });
+            }
+            // grid
+            $('#viewGrid').bootstrapTable({
+                cache: false,
+                minimumCountColumns: 2,
+                clickToSelect: true,
+                sortable: false,
+                maintainSelected: true,
+                singleSelect: !mapExt.ShowCheckBox,
+                uniqueId: "No",
+                columns: searchTableColumns
+            });
+
+            var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
+            if ($.isArray(json)) {
+                $('#tree_Panel').hide();
+                $('#viewGrid_Panel').show();
+                var selectedRows = window.selectedNodes;
+                if ($.isArray(selectedRows)) {
+                    $.each(json, function (i, o) {
+                        var sel = $.grep(selectedRows, function (obj) {
+                            return o.No == obj.id;
+                        });
+                        if (sel.length > 0) {
+                            o.checked = true;
+                            //多选时才需要禁用已选
+                            if (mapExt.ShowCheckBox == true) {
+                                o.disabled = true;
+                            }
+                        }
+                    });
+                }
+                $('#viewGrid').bootstrapTable("load", json);
+            }
+        }
+
+        function isLegalName(name) {
+
+            if (name == false) {
+                return false;
+            }
+            return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+        }
+
+
+
+
+        function getChildNodeIdArr(node, checked) {
+            var ts = [];
+            if (node.nodes) {
+                for (x in node.nodes) {
+                    ts.push(node.nodes[x]);
+                    if (node.nodes[x].nodes) {
+                        var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                        for (j in getNodeDieDai) {
+                            ts.push(getNodeDieDai[j]);
+                        }
+                    }
+                }
+            } 
+            return ts;
+        }
+
+        function setParentNodeCheck(node) {
+            var parentNode = $("#tree").treeview("getNode", node.parentId);
+            if (parentNode.nodes) {
+                var checkedCount = 0;
+                for (x in parentNode.nodes) {
+                    if (parentNode.nodes[x].state.checked) {
+                        checkedCount++;
+                    } else {
+                        break;
+                    }
+                }
+                if (checkedCount === parentNode.nodes.length) {
+                    $("#tree").treeview("checkNode", parentNode.nodeId);
+                    setParentNodeCheck(parentNode);
+                }
+            }
+        }
+
+        function addSelectedData(globalSelectedRows, selectedNodes) {
+            if (!$.isArray(globalSelectedRows) || !$.isArray(selectedNodes)) {
+                return;
+            }
+            $.each(selectedNodes, function (i, o) {
+                var sel = $.grep(globalSelectedRows, function (obj) {
+                    return obj.id == o.id;
+                });
+                if (sel.length == 0) {
+                    selectedRows.push(o);
+                }
+            });
+        }
+        function removeSelectedData(globalSelectedRows, selectedNodes) {
+            if (!$.isArray(globalSelectedRows) || !$.isArray(selectedNodes)) {
+                return;
+            }
+            $.each(selectedNodes, function (i, o) {
+                for (var index = 0; index < globalSelectedRows.length; index++) {
+                    if (o.id == globalSelectedRows[index].id) {
+                        selectedRows.splice(index, 1);
+                        break;
+                    }
+                }
+            });
+        }
+
+
+        function CheckAll() {
+            $('#tree').treeview('checkAll', { silent: true });
+            var selectNodes = $('#tree').treeview('getChecked');
+            selectedRows = [];
+            selectedRows=selectNodes;
+           
+
+        }
+        function UnCheckAll() {
+            $('#tree').treeview('uncheckAll', { silent: true });
+            selectedRows = [];
+        }
+        function Close() {
+            alert("尚未实现.");
+        }
+    </script>
+</head>
+<body>
+        <div class="row row-margin-top" style="width:96%;">
+                <div id="tree"></div>
+        </div>
+
+        <input type="button" value="全选" id="Cancel" onclick="CheckAll()"  />
+        <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()"  />
+
+    <!--</div>-->
+</body>
+</html>

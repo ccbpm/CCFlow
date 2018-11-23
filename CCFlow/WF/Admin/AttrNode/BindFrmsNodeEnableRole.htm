@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程字段列表</title>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+      <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+      <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <script language="javascript" type="text/javascript" >
+        //选择的岗位部门
+        var statonSelectRows = [];
+        var deptSelectRows = [];
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var MyPK = GetQueryString("MyPK");
+
+            //节点表单属性
+            var frmNode = new Entity("BP.WF.Template.FrmNodeExt", MyPK);
+
+            //获取字段值
+            var frmEnableRole = frmNode.FrmEnableRole;
+            var frmEnableExp = frmNode.FrmEnableExp;
+
+            //设置选中的值
+            $('#RB_FrmEnableRole_' + frmEnableRole).attr('checked', 'true');
+            //选中值显示
+            switch (frmEnableRole) {
+                case '4':
+                    $("#TB_FrmEnableExp").val(frmEnableExp);
+                    break;
+                case '6':
+                    var stations = [];
+                    if (frmEnableExp != null && frmEnableExp != undefined && frmEnableExp != "")
+                        stations = frmEnableExp.split(';');
+                    $.each(stations, function (i, o) {
+                        var item = o.split('@');
+                        if (item.length == 2)
+                            statonSelectRows.push({ "No": item[0], "Name": item[1] });
+                    });
+                    ShowTable(statonSelectRows, 6);
+                    break;
+                case '7':
+                    var depts = [];
+                    if (frmEnableExp != null && frmEnableExp != undefined && frmEnableExp != "")
+                        depts = frmEnableExp.split(';');
+                    $.each(depts, function (i, o) {
+                        var item = o.split('@');
+                        if (item.length == 2)
+                            deptSelectRows.push({ "id": item[0], "text": item[1] });
+                    });
+                    ShowTable(deptSelectRows, 7);
+                    break;
+                default: break;
+            }
+        }
+
+        function SaveEn() {
+
+            //指定实体对象,并进行实例化
+            var MyPK = GetQueryString("MyPK");
+            //节点表单属性
+            var frmNode = new Entity("BP.WF.Template.FrmNodeExt", MyPK);
+
+            //取得前台所设置的前置导航类型和值
+            var inputObj = $("input[name='RB_FrmEnableRole']:checked");
+            var  seleID = inputObj.attr('id');
+            var  seleVal = inputObj.val();
+            frmNode.FrmEnableRole = seleVal;
+            if (seleVal == 4)
+                frmNode.FrmEnableExp = $("#TB_FrmEnableExp").val();
+            if (seleVal == 6) {
+                if ($.isArray(statonSelectRows)) {
+                    var exps = "";
+                    $.each(statonSelectRows, function (i, o) {
+                        exps += o.No + "@" + o.Name + ";";
+                    });
+                    frmNode.FrmEnableExp = exps.substr(0,exps.length-1);
+                }
+            }
+
+            if (seleVal == 7) {
+                if ($.isArray(deptSelectRows)) {
+                    var exps = "";
+                    $.each(deptSelectRows, function (i, o) {
+                        exps += o.id + "@" + o.text + ";";
+                    });
+                    frmNode.FrmEnableExp = exps.substr(0, exps.length - 1);
+                }
+            }
+            if (seleVal == 4 || seleVal == 6 || seleVal == 7) {
+                if (frmNode.FrmEnableExp == null || frmNode.FrmEnableExp == "") {
+                    alert("请配置相关的设置");
+                    return;
+                }
+            }
+            frmNode.Update();
+            alert("保存成功");
+            window.location.href = window.location.href;
+        }
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
+
+
+        //设置岗位
+        function OpenNew(frmEnableRole) {
+            var frmEnableExp = "";
+            //获取屏幕的长宽
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 40;
+
+            if (frmEnableRole == 6) {
+                if ($.isArray(statonSelectRows)) {
+                    var exps = "";
+                    $.each(statonSelectRows, function (i, o) {
+                        exps += o.No + "@" + o.Name + ";";
+                    });
+                    frmEnableExp = exps.substr(0, exps.length - 1);
+                }
+                var url = "../AttrNode/SelectStation.htm?SelectStation=" + frmEnableExp;
+                OpenEasyUiDialog(url, 'StationIFrame', '设置岗位', W, H, 'icon-property', true, function () {
+                debugger
+                statonSelectRows = document.getElementById("StationIFrame").contentWindow.selectedRows;
+                    //显示页面内容
+                    ShowTable(statonSelectRows, 6);
+                    $('#eudlg').dialog('close');
+                }, null, null, null);
+            }
+
+            if (frmEnableRole == 7) {
+                if ($.isArray(deptSelectRows)) {
+                    var exps = "";
+                    $.each(deptSelectRows, function (i, o) {
+                        exps += o.id + "@" + o.text + ";";
+                    });
+                    frmEnableExp = exps.substr(0, exps.length - 1);
+                }
+                var url = "../AttrNode/SelectDept.htm?SelectDept=" + frmEnableExp;
+                window.parent.parent.OpenEasyUiDialog(url, 'DeptIFrame', '设置部门', W, H, 'icon-property', true, function () {
+                    deptSelectRows = document.getElementById("DeptIFrame").contentWindow.selectedRows;
+                    //显示页面内容
+                    ShowTable(deptSelectRows, 7);
+                    $('#eudlg').dialog('close');
+                }, null, null, null);
+            }
+        }
+
+        function ShowTable(selectedRows,selectType) {
+            var html = "<table style='width:60%;' >";
+            if(selectType == 6)
+                html += "<caption  style='font-size:12px'>已经设置的岗位,合计:(<font color=red>" + selectedRows.length + "</font>)条</caption>";
+            if (selectType == 7)
+                html += "<caption >已经设置的部门,合计:(<font color=red>" + selectedRows.length + "</font>)条</caption>";
+
+            var idx = 0;
+            for (var i = 0; i < selectedRows.length; i++) {
+                var selectedRow = selectedRows[i];
+                if (idx == 0)
+                    html += "<tr>";
+                if (selectType == 6)
+                    html += "<td>" + selectedRow.Name + "</td>";
+                if (selectType == 7)
+                    html += "<td>" + selectedRow.text + "</td>";
+                idx++;
+                if (idx == 7) {
+                    idx = 0;
+                    html += "</tr>";
+                }
+            }
+
+            html += "</table>";
+            if (selectType == 6)
+                $("#stationDiv").html(html);
+            if (selectType == 7)
+                $("#deptDiv").html(html);
+        }
+
+     </script>
+</head>
+<body>
+
+<form action="" id="form1">
+    <table style="width:98%">
+        <caption>节点绑定表单启用规则</caption>
+        <tr>
+            <td valign="top">
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_0" type="radio" name="RB_FrmEnableRole" value="0"  />
+                        <label for="RB_FrmEnableRole_0">始终启用（默认）</label>
+                    </legend>
+                    <font color="gray">始终启用节点绑定的表单。</font>
+                </fieldset>
+
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_1" type="radio" name="RB_FrmEnableRole" value="1"  />
+                        <label for="RB_FrmEnableRole_1">有数据时启用</label>
+                    </legend>
+                     <font color="gray">在节点绑定表单的有数据时显示该表单。</font>
+                </fieldset>
+
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_2" type="radio" name="RB_FrmEnableRole" value="2"  />
+                        <label for="RB_FrmEnableRole_2">有参数时启用</label>
+                    </legend>
+                    <font color="gray">在节点绑定表单，在流程属性里，要设置发起前置导航，按照表单列表的方式设置。</font>
+                </fieldset>
+
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_3" type="radio" name="RB_FrmEnableRole" value="3"  />
+                        <label for="RB_FrmEnableRole_3">按表单的字段表达式</label>
+                    </legend>
+                     <font color="gray">一个流程开始节点表单输入一些信息，根据这些信息决定以后每个节点上应该绑定什么表单(功能暂未实现)。</font>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_4" type="radio" name="RB_FrmEnableRole" value="4"  />
+                        <label for="RB_FrmEnableRole_4">按SQL表达式</label>
+                    </legend>
+                     <div name="RB_FrmEnableRole_4">
+                        <textarea id="TB_FrmEnableExp" name="TB_FrmEnableExp" runat="server" style="width:98%; height: 24px"></textarea>
+                        <br />
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_6" type="radio" name="RB_FrmEnableRole" value="6"/>
+                        <label for="RB_FrmEnableRole_6">按选择的岗位</label>
+                    </legend>
+                    <ul>
+                        <li><a href="javascript:OpenNew(6)">选择岗位</a></li>
+                    </ul>
+                    <div id="stationDiv"></div>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_7" type="radio" name="RB_FrmEnableRole" value="7" />
+                        <label for="RB_FrmEnableRole_7">按选择的部门</label>
+                    </legend>
+                    <ul>
+                        <li><a href="javascript:OpenNew(7)">选择部门</a></li>
+                    </ul>
+                    <div id="deptDiv"></div>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input id="RB_FrmEnableRole_5" type="radio" name="RB_FrmEnableRole" value="5"  />
+                        <label for="RB_FrmEnableRole_5">不启用</label>
+                    </legend>
+                    <font color="gray">不启用该表单。</font>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button"   id="Btn_Save" runat="server" value="保存" onclick="SaveEn()" />
+                <input type="button"   id="Button1" runat="server" value="我需要帮助" onclick="Help()" />
+            </td>
+        </tr>
+    </table>
+  </form>
+</body>
+</html>

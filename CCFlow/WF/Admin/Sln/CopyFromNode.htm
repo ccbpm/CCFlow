@@ -23,51 +23,45 @@
             var fk_flow = GetQueryString("FK_Flow");
             var fk_Node = GetQueryString("FK_Node");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Fields_Init&FK_Flow=" + fk_flow + "&FK_MapData=" + frmID + "&FK_Node=" + fk_Node + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Sln");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Fields_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
+                return;
+            }
 
-                    //转json.
-                    data = JSON.parse(data);
+            //转json.
+            data = JSON.parse(data);
 
-                    var sys_mapattr = data["Sys_MapAttr"];
-                    var wf_Conds = data["WF_Conds"];
+            var sys_mapattr = data["Sys_MapAttr"];
+            var wf_Conds = data["WF_Conds"];
 
-                    //增加处理.
-                    for (var i = 0; i < wf_Conds.length; i++) {
+            //增加处理.
+            for (var i = 0; i < wf_Conds.length; i++) {
 
-                        var cond = wf_Conds[i];
+                var cond = wf_Conds[i];
 
-                        var newRow = "";
-                        newRow = "<tr >";
-                        newRow += "<td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + cond.AttrKey + "</td>";
-                        newRow += "<td>" + cond.AttrName + "</td>";
-                        newRow += "<td>" + cond.FK_Operator + "</td>";
-                        newRow += "<td>" + cond.OperatorValue + "</td>";
-                        newRow += "<td>" + cond.OperatorValueT + "</td>";
-                        if (cond.CondOrAnd == 0)
-                            newRow += "<td> AND </td>";
-                        else
-                            newRow += "<td> OR </td>";
+                var newRow = "";
+                newRow = "<tr >";
+                newRow += "<td class=Idx>" + i + "</td>";
+                newRow += "<td>" + cond.AttrKey + "</td>";
+                newRow += "<td>" + cond.AttrName + "</td>";
+                newRow += "<td>" + cond.FK_Operator + "</td>";
+                newRow += "<td>" + cond.OperatorValue + "</td>";
+                newRow += "<td>" + cond.OperatorValueT + "</td>";
+                if (cond.CondOrAnd == 0)
+                    newRow += "<td> AND </td>";
+                else
+                    newRow += "<td> OR </td>";
 
-                        newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../Img/Btn/Delete.gif' border=0 />删除</a>";
-                        newRow += "</td>";
-                        newRow += "</tr>";
-                        $("#Table1 tr:last").after(newRow);
-                    }
-                }
-            });
+                newRow += "<td>";
+                newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "</td>";
+                newRow += "</tr>";
+                $("#Table1 tr:last").after(newRow);
+            }
         });
 
         //执行保存..
@@ -77,28 +71,22 @@
             var fk_flow = GetQueryString("FK_Flow");
             var fk_Node = GetQueryString("FK_Node");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Fields_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&FK_Node=" + fk_Node + "&FK_MapData=" + frmID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Sln");
+            handler.AddUrlData();
+            handler.AddPara("FK_MapData", frmID);
+            var data = handler.DoMethodReturnString("Fields_Save");
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
-
-                    window.location.href = window.location.href;
-                }
-            });
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+            window.location.href = window.location.href;
         }
     </script>
 </head>

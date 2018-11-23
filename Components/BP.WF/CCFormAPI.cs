@@ -630,8 +630,10 @@ namespace BP.WF
 			//实体.
 			GEEntity wk = new GEEntity(frmID);
 			wk.OID = pkval;
-			if (wk.RetrieveFromDBSources() == 0)
-				wk.Insert();
+            if (wk.RetrieveFromDBSources() == 0)
+            {
+                wk.Insert();
+            }
 
 			//把参数放入到 En 的 Row 里面。
 			if (DataType.IsNullOrEmpty(atParas) == false)

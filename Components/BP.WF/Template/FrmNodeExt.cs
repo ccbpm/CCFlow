@@ -125,7 +125,9 @@ namespace BP.WF.Template
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
 
                 #region 表单启用规则. @袁丽娜
-                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false);
+                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false, FrmNodeAttr.FrmEnableRole,
+                    "@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门");
+
                 map.SetHelperAlert(FrmNodeAttr.FrmEnableRole, "用来控制该表单是否显示的规则.");
 
 
@@ -163,6 +165,12 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "改变表单类型";
+                rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
+                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                map.AddRefMethod(rm);
+
                 //rm = new RefMethod();
                 //rm.Title = "表单启用规则";
                 //rm.ClassMethodName = this.ToString() + ".DoFrmEnableRole()";
@@ -175,6 +183,29 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        /// <summary>
+        /// 改变表单类型
+        /// </summary>
+        /// <param name="val">要改变的类型</param>
+        /// <returns></returns>
+        public string DoChangeFrmType(int val)
+        {
+            MapData md = new MapData(this.FK_Frm);
+            string html = "原来的是:" + md.HisFrmTypeText + "类型，";
+            md.HisFrmTypeInt = val;
+            html += "现在修改为：" + md.HisFrmTypeText + "类型";
+            md.Update();
+
+
+            if (md.HisFrmType == FrmType.FreeFrm)
+            {
+
+            }
+
+            return html;
+        }
+
 
         #region 表单元素权限.
         public string DoDtls()

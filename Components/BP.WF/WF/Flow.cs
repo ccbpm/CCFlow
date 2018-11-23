@@ -2123,7 +2123,6 @@ namespace BP.WF
                     }
                     #endregion 检查节点完成条件的定义.
 
-
                     #region 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
                     if (nd.HisFormType == NodeFormType.RefOneFrmTree)
                     {
@@ -2144,6 +2143,16 @@ namespace BP.WF
                     }
                     #endregion 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
 
+                    //@李国文. 如果是子线城，子线程的表单必须是轨迹模式。
+                    if (nd.HisRunModel == RunModel.SubThread)
+                    {
+                        MapData md = new MapData("ND" + nd.NodeID);
+                        if (md.PTable != "ND" + nd.NodeID)
+                        {
+                            md.PTable = "ND" + nd.NodeID;
+                            md.Update();
+                        }
+                    }
                 }
                 #endregion
 

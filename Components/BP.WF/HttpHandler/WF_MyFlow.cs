@@ -1851,6 +1851,45 @@ namespace BP.WF.HttpHandler
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
                         break;
+                   //@袁丽娜
+                    case FrmEnableRole.ByStation:
+                        string exp = frmNode.FrmEnableExp.Clone() as string;
+                        string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.No + "'";
+                        string station = DBAccess.RunSQLReturnString(Sql);
+                        if (DataType.IsNullOrEmpty(station) == true)
+                            continue;
+                        string[] stations = station.Split(';');
+                        bool isExit = false;
+                        foreach (string s in stations)
+                        {
+                            if(exp.Contains(s) == true){
+                                isExit = true;
+                                break;
+                            }
+                        }
+                        if (isExit == false)
+                            continue;
+                        break;
+                    //@袁丽娜
+                    case FrmEnableRole.ByDept:
+                         exp = frmNode.FrmEnableExp.Clone() as string;
+                         Sql = "SELECT FK_Dept FROM Port_DeptEmp where FK_Emp='" + WebUser.No + "'";
+                        string dept = DBAccess.RunSQLReturnString(Sql);
+                        if (DataType.IsNullOrEmpty(dept) == true)
+                            continue;
+                        string[] depts = dept.Split(';');
+                        isExit = false;
+                        foreach (string s in depts)
+                        {
+                            if(exp.Contains(s) == true){
+                                isExit = true;
+                                break;
+                            }
+                        }
+                        if (isExit == false)
+                            continue;
+
+                        break;
                     case FrmEnableRole.Disable: // 如果禁用了，就continue出去..
                         continue;
                     default:

@@ -124,19 +124,20 @@ namespace BP.WF.Template
                 //是否显示
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
 
-                #region 表单启用规则.
-                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", true, true);
+                #region 表单启用规则. @袁丽娜
+                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false);
                 map.SetHelperAlert(FrmNodeAttr.FrmEnableRole, "用来控制该表单是否显示的规则.");
 
 
-                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false, true);
+                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", false, false, true);
                 #endregion 表单启用规则.
 
                 RefMethod rm = new RefMethod();
-                //rm.Title = "启用规则";
-                //rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
+                //@袁丽娜
+                rm.Title = "启用规则";
+                rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "字段权限";
@@ -161,6 +162,12 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoCopyFromNode()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "表单启用规则";
+                //rm.ClassMethodName = this.ToString() + ".DoFrmEnableRole()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
 
                 this._enMap = map;
@@ -189,7 +196,7 @@ namespace BP.WF.Template
         }
         public string DoEnableRole()
         {
-            return "../../Admin/AttrNode/BindFrmsFrmEnableRole.htm?MyPK=" + this.MyPK;
+            return "../../Admin/AttrNode/BindFrmsNodeEnableRole.htm?MyPK=" + this.MyPK;
         }
         #endregion 表单元素权限.
 

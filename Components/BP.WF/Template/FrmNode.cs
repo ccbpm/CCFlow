@@ -163,7 +163,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 不启用
         /// </summary>
-        Disable
+        Disable,
+        /// <summary>
+        /// 按岗位
+        /// </summary>
+        ByStation,
+        /// <summary>
+        /// 按部门
+        /// </summary>
+        ByDept
     }
     /// <summary>
     /// 节点表单

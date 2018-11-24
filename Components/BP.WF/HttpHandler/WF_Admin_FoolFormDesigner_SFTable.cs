@@ -33,6 +33,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_Admin_FoolFormDesigner_SFTable()
         {
+
         }
 
         #region xxx 界面 .

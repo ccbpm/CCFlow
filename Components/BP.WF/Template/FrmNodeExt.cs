@@ -192,18 +192,12 @@ namespace BP.WF.Template
         public string DoChangeFrmType(int val)
         {
             MapData md = new MapData(this.FK_Frm);
-            string html = "原来的是:" + md.HisFrmTypeText + "类型，";
+            string str = "原来的是:" + md.HisFrmTypeText + "类型，";
             md.HisFrmTypeInt = val;
-            html += "现在修改为：" + md.HisFrmTypeText + "类型";
+            str += "现在修改为：" + md.HisFrmTypeText + "类型";
             md.Update();
 
-
-            if (md.HisFrmType == FrmType.FreeFrm)
-            {
-
-            }
-
-            return html;
+            return str;
         }
 
 

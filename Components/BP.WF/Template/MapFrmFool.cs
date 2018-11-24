@@ -271,6 +271,16 @@ namespace BP.WF.Template
              
                 #endregion 方法 - 基本功能.
 
+                #region 高级功能.
+                //@李国文.
+                rm = new RefMethod();
+                rm.Title = "改变表单类型";
+                rm.GroupName = "高级功能";
+                rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
+                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                map.AddRefMethod(rm);
+                #endregion
+
                 #region 方法 - 开发接口.
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
@@ -298,6 +308,25 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        #region 高级设置.
+        /// <summary>
+        /// 改变表单类型 @李国文 ，需要搬到jflow.并测试.
+        /// </summary>
+        /// <param name="val">要改变的类型</param>
+        /// <returns></returns>
+        public string DoChangeFrmType(int val)
+        {
+            MapData md = new MapData(this.No);
+            string str = "原来的是:" + md.HisFrmTypeText + "类型，";
+            md.HisFrmTypeInt = val;
+            str += "现在修改为：" + md.HisFrmTypeText + "类型";
+            md.Update();
+
+            return str;
+        }
+        #endregion 高级设置.
+
 
         protected override bool beforeUpdate()
         {
@@ -621,7 +650,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoGroup()
         {
-            return "../../Comm/Group.aspx?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
+            return "../../Comm/Group.htm?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
         }
         /// <summary>
         /// 数据源管理

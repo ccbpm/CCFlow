@@ -587,7 +587,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoGroup()
         {
-            return "../../Comm/Group.aspx?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
+            return "../../Comm/Group.htm?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
         }
         /// <summary>
         /// 数据源管理

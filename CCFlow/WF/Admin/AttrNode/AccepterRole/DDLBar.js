@@ -64,7 +64,7 @@ function InitBar(key) {
         if (flow.FlowAppType == 1) {
             html += "<option value=null disabled='disabled' >+项目类流程</option>";
             html += "<option value=" + DeliveryWay.ByStationForPrj + ">&nbsp;&nbsp;&nbsp;&nbsp;按项目组内的岗位计算</option>";
-            html += "<option value=" + DeliveryWay.BySelectedForPrj + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人</option>";
+            html += "<option value=" + DeliveryWay.BySelectedForPrj + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“项目组人员选择器”选择接受人</option>";
         }
     }
 

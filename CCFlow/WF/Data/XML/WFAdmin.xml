@@ -24,11 +24,11 @@
      <OneWork1 No="OP" CH="发起历史记录" />
 
     <RptFlow1 No="Home_My" CH="主页" URL="Home.aspx?DoType=My"   ICON="/WF/Img/Btn/Home.gif" />
-    <RptFlow No="Search_My" CH="我参与的流程" URL="Search.aspx?DoType=My"   ICON="/WF/Img/Table.gif" />
-    <RptFlow No="Search_Dept" CH="部门流程"   URL="Search.aspx?DoType=Dept"   ICON="/WF/Img/Table.gif"  />
+    <RptFlow No="Search_My" CH="我参与的流程" URL="Search.htm?DoType=My"   ICON="/WF/Img/Table.gif" />
+    <RptFlow No="Search_Dept" CH="部门流程"   URL="Search.htm?DoType=Dept"   ICON="/WF/Img/Table.gif"  />
 
-    <RptFlow No="Group_My" CH="我参与的流程" URL="Group.aspx?DoType=My"   ICON="/WF/Img/Btn/Chart.gif" />
-    <RptFlow No="Group_Dept" CH="部门流程"   URL="Group.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="Group_My" CH="我参与的流程" URL="Group.htm?DoType=My"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="Group_Dept" CH="部门流程"   URL="Group.htm?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
     <RptFlow No="D3_Dept" CH="交叉报表"   URL="D3.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
     <RptFlow No="D3_DB" CH="对比分析"   URL="Contrast.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
 

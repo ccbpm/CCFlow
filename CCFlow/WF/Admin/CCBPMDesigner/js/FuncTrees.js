@@ -14,8 +14,8 @@ easyui-tabs功能导航区定义，added by liuxc
 ③支持各级节点的图标、右键绑定菜单、展开状态、双击链接Url的规则设置，支持多级嵌套规则设置；
 ④链接Url支持node属性值、node.attributes属性值及WebUser属性值、JS表达式计算结果的自动替换（使用“@@属性字段名”来代替要替换的属性；
 使用`符号来将要计算结果的JS表达式前后包含起来，表达式中允许含有@@参数名，计算时，先将@@参数名替换成对应的参数值，
-然后进行计算JS表达式。如设置Url: "Rpt/Group.aspx?FK_Flow=@@fk_flow&RptNo=`'ND'+parseInt('@@fk_flow')+'MyRpt'`"，@@fk_flow=001，则打开页面时，
-自动计算为："Rpt/Group.aspx?FK_Flow=001&RptNo=ND1MyRpt"）
+然后进行计算JS表达式。如设置Url: "Rpt/Group.htm?FK_Flow=@@fk_flow&RptNo=`'ND'+parseInt('@@fk_flow')+'MyRpt'`"，@@fk_flow=001，则打开页面时，
+自动计算为："Rpt/Group.htm?FK_Flow=001&RptNo=ND1MyRpt"）
 2.Nodes数组下元素：
 (1)Type:节点类型，Node=普通定义节点，Service=通过获取WebService数据填充的节点；
 (2)ServiceMethod:ajaxService方法传参中action的值，即调用的获取数据的方法，Service类型节点特有属性；

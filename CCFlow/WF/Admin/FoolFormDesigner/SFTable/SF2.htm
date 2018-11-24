@@ -10,6 +10,8 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
+
     <base target="_self" />
     <style type="text/css">
         .style1
@@ -20,34 +22,34 @@
     <script type="text/javascript" language="javascript">
 
         function getColumns() {
+
             var src = $('#DDL_FK_DBSrc').val();
             var table = $('#DDL_SrcTable').val();
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SF2_GetCols&src=" + src + "&table=" + table + "&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert('获取列信息出错：' + data);
-                    } else {
-                        data = JSON.parse(data);
-                        //绑定数据源.
-                        GenerBindDDL("DDL_ColumnValue", data, "No", "Name");
-                        GenerBindDDL("DDL_ColumnText", data, "No", "Name");
-                        if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
-                            GenerBindDDL("DDL_ParentValue", data, "No", "Name");
-                        }
-                    }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
+            handler.AddPara("SF2_GetCols", src);
+            handler.AddPara("table", table);
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            var data = handler.DoMethodReturnString("SF2_GetCols");
+
+            if (data.indexOf('err@') == 0) {
+                alert('获取列信息出错：' + data);
+            } else {
+                data = JSON.parse(data);
+                //绑定数据源.
+                GenerBindDDL("DDL_ColumnValue", data, "No", "Name");
+                GenerBindDDL("DDL_ColumnText", data, "No", "Name");
+                if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
+                    GenerBindDDL("DDL_ParentValue", data, "No", "Name");
                 }
-            });
+            }
         }
 
         var CONST_STRUCTS = [{ No: '0', Name: '普通的编码表(具有No,Name)' }, { No: '1', Name: '树结构(具有No,Name,ParentNo)'}];
 
         /**
-         * 数据格式切换
-         */
+        * 数据格式切换
+        */
         function loadStructSet(value, text) {
             if (value == CONST_STRUCTS[0].No) {
                 $("#parentTr").hide();
@@ -64,25 +66,23 @@
         }
 
         /**
-         * 加载表/视图
-         */
+        * 加载表/视图
+        */
         function loadTableViews(src) {
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SF2_GetTVs&src=" + src + "&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert('获取表/视图列表出错：' + data);
-                    } else {
-                        data = JSON.parse(data);
-                        //绑定数据源.
-                        GenerBindDDL("DDL_SrcTable", data, "No", "Name");
-                        getColumns();
-                    }
-                }
-            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
+            handler.AddPara("src", src);
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            var data = handler.DoMethodReturnString("SF2_GetTVs");
+
+            if (data.indexOf('err@') == 0) {
+                alert('获取表/视图列表出错：' + data);
+            } else {
+                data = JSON.parse(data);
+                //绑定数据源.
+                GenerBindDDL("DDL_SrcTable", data, "No", "Name");
+                getColumns();
+            }
         }
 
         //页面启动函数.
@@ -90,26 +90,32 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
-            // 初始化加载数据源
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SF2_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    data = JSON.parse(data);
-
-                    //绑定数据源.
-                    GenerBindDDL("DDL_FK_DBSrc", data, "No", "Name", "local");
-
+            var mytb = document.getElementById("TB_Name");
+            mytb.focus();
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var tb = document.getElementById("TB_Name").value;
+                var val = $('input:radio[name="RB_QPJP"]:checked').val();
+                if (tb == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
                 }
+
+                if (val == "ziduanquanpin") {
+                    ParseStringToPinYin(tb, true, "");
+                }
+                else {
+                    ParseStringToPinYin(tb, false, "");
+                }
+
             });
+
+
+            var ens = new Entities("BP.Sys.SFDBSrcs");
+            ens.RetrieveAll();
+
+            //绑定数据源.
+            GenerBindDDL("DDL_FK_DBSrc", ens, "No", "Name", "local");
 
             // 初始化加载表/视图
             loadTableViews("local");
@@ -174,7 +180,7 @@
                         return;
                     }
                     alert(data);
-                    document.location.href = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData");;
+                    document.location.href = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData"); ;
                 }
             });
 
@@ -184,77 +190,136 @@
 </head>
 <body>
     <form action="" id="cc">
-        <table style="width: 95%; margin: 5px; padding: 5px;">
-            <caption>
-                <a href="./Default.htm">返回</a> - 表或者视图 - 该功能暂时提供支持，如果需要使用自己定义的数据表，请手工的创建视图，然后使用[创建本地数据表(外键表)]的模式创建.
-            </caption>
-            <tr>
-                <th>项目</th>
-                <th class="style1">值</th>
-                <th>备注</th>
-            </tr>
-            <tr>
-                <td class="GroupTitle">字典编号</td>
-                <td class="style1"><input type="text" id="TB_No" name="TB_No" /></td>
-                <td>创建字典表的英文名称,不要以数字开头否则创建表出错.</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">字典名称</td>
-                <td class="style1"><input type="text" id="TB_Name" name="TB_Name" /></td>
-                <td>创建字典表的中文名称</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">数据源</td>
-                <td class="style1"><select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" onchange="loadTableViews(this.value)" /></td>
-                <td>选择字典表所属数据源</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">表/视图</td>
-                <td class="style1"><select id="DDL_SrcTable" name="DDL_SrcTable" onchange="getColumns()" /></td>
-                <td>选择一个表或视图</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">数据格式</td>
-                <td class="style1">
-                    <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)"></select>
-                </td>
-                <td>选择具体有指定字段的格式</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">编码列</td>
-                <td class="style1"><select id="DDL_ColumnValue" name="DDL_ColumnValue"></select></td>
-                <td>即No列</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">标签列</td>
-                <td class="style1"><select id="DDL_ColumnText" name="DDL_ColumnText"></select></td>
-                <td>即Name列</td>
-            </tr>
-            <tr id="parentTr" style="display: none;">
-                <td class="GroupTitle">父节点列</td>
-                <td class="style1"><select id="DDL_ParentValue" name="DDL_ParentValue"></select></td>
-                <td>即ParentNo列</td>
-            </tr>
-            <tr id="rootTr" style="display: none;">
-                <td class="GroupTitle">根节点值</td>
-                <td class="style1"><input type="text" id="TB_RootValue" name="TB_RootValue" /></td>
-                <td>填写此树的根节点值</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">过滤SQL</td>
-                <td class="style1" colspan="2">
-                    <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;" />
-                    <br />
-                    比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
-                </td>
-            </tr>
+    <table style="width: 95%; margin: 5px; padding: 5px;">
+        <caption>
+            <a href="./Default.htm">返回</a> - 表或者视图 - 该功能暂时提供支持，如果需要使用自己定义的数据表，请手工的创建视图，然后使用[创建本地数据表(外键表)]的模式创建.
+        </caption>
+       
+       
+        <tr>
+            <td >
+                字典名称
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_Name" name="TB_Name" />
+            </td>
+            <td>
+                创建字典表的中文名称
+            </td>
+        </tr>
 
-            <tr>
-                <td colspan="3">
-                    <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="Save()">保存</a>
-                </td>
-            </tr>
-        </table>
+         <tr>
+            <td  >
+                字典编号
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_No" name="TB_No" />
+            </td>
+            <td>
+                创建字典表的英文名称,不要以数字开头否则创建表出错.
+                <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked"  value="ziduanquanpin" /> <label for="RB_QP">全拼</label>   
+   <input type="radio" name="RB_QPJP" id="RB_JP"  value="ziduanjianpin" />  <label for="RB_JP">简拼</label>  
+            </td>
+        </tr>
+
+        <tr>
+            <td >
+                数据源
+            </td>
+            <td class="style1">
+                <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" onchange="loadTableViews(this.value)" />
+            </td>
+            <td>
+                选择字典表所属数据源
+            </td>
+        </tr>
+        <tr>
+            <td >
+                表/视图
+            </td>
+            <td class="style1">
+                <select id="DDL_SrcTable" name="DDL_SrcTable" onchange="getColumns()" />
+            </td>
+            <td>
+                选择一个表或视图
+            </td>
+        </tr>
+        <tr>
+            <td >
+                数据格式
+            </td>
+            <td class="style1">
+                <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)">
+                </select>
+            </td>
+            <td>
+                选择具体有指定字段的格式
+            </td>
+        </tr>
+        <tr>
+            <td >
+                编码列
+            </td>
+            <td class="style1">
+                <select id="DDL_ColumnValue" name="DDL_ColumnValue">
+                </select>
+            </td>
+            <td>
+                即No列
+            </td>
+        </tr>
+        <tr>
+            <td >
+                标签列
+            </td>
+            <td class="style1">
+                <select id="DDL_ColumnText" name="DDL_ColumnText">
+                </select>
+            </td>
+            <td>
+                即Name列
+            </td>
+        </tr>
+        <tr id="parentTr" style="display: none;">
+            <td >
+                父节点列
+            </td>
+            <td class="style1">
+                <select id="DDL_ParentValue" name="DDL_ParentValue">
+                </select>
+            </td>
+            <td>
+                即ParentNo列
+            </td>
+        </tr>
+        <tr id="rootTr" style="display: none;">
+            <td >
+                根节点值
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_RootValue" name="TB_RootValue" />
+            </td>
+            <td>
+                填写此树的根节点值
+            </td>
+        </tr>
+        <tr>
+            <td >
+                过滤SQL
+            </td>
+            <td class="style1" colspan="2">
+                <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;" />
+                <br />
+                比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+                    onclick="Save()">保存</a>
+            </td>
+        </tr>
+    </table>
     </form>
 </body>
 </html>

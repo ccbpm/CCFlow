@@ -162,7 +162,7 @@
             <li id="pmAttribute"><i class="icon-cog"></i>&nbsp;<span class="_label">节点属性</span></li>
             <!--<li id="pmAttributeOld"><i class="icon-cog"></i>&nbsp;<span class="_label">属性(旧)</span></li>-->
             <li id="pmFrmSln"><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>
-            <li id="pmFrmD"><i class="icon-th"></i>&nbsp;<span class="_label">设计表单</span></li>
+            <li id="pmFrmD"><i class="icon-th"></i>&nbsp;<span class="_label">设计节点表单</span></li>
             <!-- <li id="pmFrmFool"><i class="icon-th"></i>&nbsp;<span class="_label">傻瓜表单</span></li>
              <li id="pmFrmFree"><i class="icon-th"></i>&nbsp;<span class="_label">自由表单</span></li>
             -->
@@ -180,7 +180,8 @@
             <li id="Node_FL"><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
             <li id="Node_HL"><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
             <li id="Node_FHL"><i class="icon-wrench"></i>&nbsp;<span class="_label">分合流</span></li>
-            <li id="Node_SubThread"><i class="icon-th"></i>&nbsp;<span class="_label">子线程</span></li>
+            <li id="Node_SubThread0"><i class="icon-th"></i>&nbsp;<span class="_label">同表单子线程</span></li>
+            <li id="Node_SubThread1"><i class="icon-th"></i>&nbsp;<span class="_label">异表单子线程</span></li>
         </ul>
     </div>
     <div id="canvasMenu" style="display: none;">
@@ -280,17 +281,29 @@
             var nodeID = document.getElementById("leipi_active_id");
             SetNodeRunModel(nodeID.value, 3);
         });
-        //节点类型--子线程
-        $('#Node_SubThread').on('click', function () {
+        //节点类型--同表单的子线程
+        $('#Node_SubThread0').on('click', function () {
             var nodeID = document.getElementById("leipi_active_id");
-            SetNodeRunModel(nodeID.value, 4);
+            SetNodeRunModel(nodeID.value, 4, 0);
+        });
+
+        //节点类型--异表单子线程
+        $('#Node_SubThread1').on('click', function () {
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 4, 1);
         });
 
         //设置节点类型。
-        function SetNodeRunModel(nodeID, runModel) {
+        function SetNodeRunModel(nodeID, runModel, subThreadType) {
             //获得nodeID.
             var node = new Entity("BP.WF.Node", nodeID);
             node.RunModel = runModel;
+
+            //判断是否是同表单的,还是异表单的.
+            if (runModel == 4) {
+                node.SubThreadType = subThreadType; 
+            }
+
             node.Update();
             alert("修改成功！");
         }
@@ -348,7 +361,7 @@
             }
         }
 
-        var flowNo =null;
+        var flowNo = null;
         $(function () {
             flowNo = GetQueryString("FK_Flow");
             if (flowNo == undefined || flowNo == null)

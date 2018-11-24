@@ -866,7 +866,8 @@ namespace BP.WF
             string sqlScript = SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql";
             System.IO.FileInfo fi = new System.IO.FileInfo(sqlScript);
             string myVer = fi.LastWriteTime.ToString("MMddHHmmss");
-            if (currDBVer == "" ||  int.Parse(currDBVer) != int.Parse(myVer) )
+
+            if (currDBVer == "" ||  int.Parse(currDBVer) < int.Parse(myVer) )
             {
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
                 sql = "UPDATE Sys_Serial SET IntVal=" + myVer + " WHERE CfgKey='UpdataCCFlowVer'";

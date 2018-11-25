@@ -19,7 +19,7 @@
     <!--[if lte IE 6]>
     <link rel="stylesheet" type="text/css" href="Public/css/bootstrap/css/bootstrap-ie6.css?2025">
     <![endif]-->
-    <!--[if lte IE 7]>  
+    <!--[if lte IE 7]>
     <link rel="stylesheet" type="text/css" href="Public/css/bootstrap/css/ie.css?2025">
     <![endif]-->
     <link href="Public/css/site.css?2025" rel="stylesheet" type="text/css" />
@@ -47,104 +47,129 @@
             <div class="container">
                 <div class="pull-left">
                     <button class="btn btn-danger" type="button" id="Btn_Save">
-                        保存</button>
+                        保存
+                    </button>
                     <button class="btn btn-Property" type="button" id="Btn_FlowAttr" onclick="FlowProperty()">
-                        流程属性</button>
+                        流程属性
+                    </button>
                     <button class="btn btn-info" type="button" id="Btn_Imp" onclick="FlowRpt()">
-                        定义报表</button>
+                        定义报表
+                    </button>
                     <button class="btn btn-info" type="button" id="Btn_Check" onclick="FlowCheck()">
-                        检查流程</button>
+                        检查流程
+                    </button>
                     <button class="btn btn-danger" type="button" id="Btn_Run" onclick="FlowRun()">
-                        运行测试</button>
+                        运行测试
+                    </button>
                     <button class="btn btn-danger" type="button" id="Btn_RunIt" onclick="FlowRunAdmin()">
-                        运行</button>
+                        运行
+                    </button>
                     <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
                     <!--<button class="btn btn-info" type="button" id="Btn_OldVer" onclick="OldVer()" >旧版本</button>-->
                     <button class="btn btn-help" type="button" id="Btn_Reload" onclick="Reload()">
-                        刷新</button>
+                        刷新
+                    </button>
                     <button class="btn btn-help" type="button" id="Btn_Help" onclick="Help()">
-                        帮助</button>
+                        帮助
+                    </button>
                 </div>
             </div>
         </div>
     </div>
     <!-- Modal -->
     <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                ×</button>
+                ×
+            </button>
             <h3>
-                消息提示</h3>
+                消息提示
+            </h3>
         </div>
         <div class="modal-body">
             <p>
-                提示内容</p>
+                提示内容
+            </p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
-                我知道了</button>
+                我知道了
+            </button>
         </div>
     </div>
     <!-- 修改节点名称 -->
     <div id="alertModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                ×</button>
+                ×
+            </button>
             <h3>
-                修改节点名称</h3>
+                修改节点名称
+            </h3>
         </div>
         <div class="modal-body">
             <p>
-                提示内容</p>
+                提示内容
+            </p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
-                保存</button>
+                保存
+            </button>
         </div>
     </div>
     <!-- 修改标签名称 -->
     <div id="alertModal3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                ×</button>
+                ×
+            </button>
             <h3>
-                修改标签名称</h3>
+                修改标签名称
+            </h3>
         </div>
         <div class="modal-body">
             <p>
-                提示内容</p>
+                提示内容
+            </p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
-                保存</button>
+                保存
+            </button>
         </div>
     </div>
     <!-- 点击线的提示 -->
     <div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                ×</button>
+                ×
+            </button>
             <h3>
-                修改方向</h3>
+                修改方向
+            </h3>
         </div>
         <div class="modal-body">
             <p>
-                提示内容</p>
+                提示内容
+            </p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary savetext" data-dismiss="modal" id="lineDel" aria-hidden="true">
-                删除</button>
+                删除
+            </button>
             <button class="btn btn-primary savetext" data-dismiss="modal_fx" id="lineSet" aria-hidden="true">
-                设置方向条件</button>
+                设置方向条件
+            </button>
         </div>
     </div>
     <!-- attributeModal -->
     <div id="attributeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="width: 800px; margin-left: -350px">
+         aria-hidden="true" style="width: 800px; margin-left: -350px">
         <div class="modal-body" style="max-height: 500px;">
             <!-- body -->
         </div>
@@ -153,8 +178,18 @@
         </div>
     </div>
     <!--contextmenu div-->
+
+    <style type="text/css">
+        #mainul {
+            padding:1px 1px !important;
+        }
+
+            #mainul li {
+                padding: 1px 2px !important;
+            }
+    </style>
     <div id="processMenu" style="display: none;">
-        <ul>
+        <ul id="mainul">
             <!--li id="pm_begin"><i class="icon-play"></i>&nbsp;<span class="_label">设为第一步</span></li-->
             <!--li id="pm_addson"><i class="icon-plus"></i>&nbsp;<span class="_label">添加子步骤</span></li-->
             <!--li id="pm_copy"><i class="icon-check"></i>&nbsp;<span class="_label">复制</span></li-->
@@ -173,9 +208,9 @@
             <li id="Li1"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
         </ul>
     </div>
-    <div id="processMenu3" style="width: 100px; padding: 5px; position: absolute; background: #fff;
+    <div id="processMenu3" style=" padding: 0px; position: absolute; background: #fff;
         display: none;">
-        <ul style="margin: 0 0 10px 10px;">
+        <ul style="margin: 0px 1px;">
             <li id="Node_Ordinary"><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
             <li id="Node_FL"><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
             <li id="Node_HL"><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
@@ -215,34 +250,32 @@
     <!--flowdesign-->
     <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
     <style>
-        li
-        {
+        li {
             list-style: none;
         }
-        #processMenu3
-        {
+
+        #processMenu3 {
             z-index: 1;
         }
-        #processMenu3 li
-        {
-            padding: 5px 0px 5px 5px;
-        }
-        #processMenu3 li:hover
-        {
-            background-color: rgb(90,99,119);
-            cursor: pointer;
-        }
+
+            #processMenu3 li {
+                padding: 5px 0px 5px 5px;
+            }
+
+                #processMenu3 li:hover {
+                    background-color: rgb(90,99,119);
+                    cursor: pointer;
+                }
         /****给弹出框URL写的样式*/
-        .ui-icon-closethick
-        {
+        .ui-icon-closethick {
             background-position: 0;
         }
-        .ui-widget-header .ui-icon
-        {
+
+        .ui-widget-header .ui-icon {
             top: 30% !important;
         }
-        .ui-dialog .ui-dialog-titlebar-close
-        {
+
+        .ui-dialog .ui-dialog-titlebar-close {
             background-image: url(Public/css/images/ui-icons_444444_256x240.png);
             background-repeat: no-repeat;
             background-position: 1px;
@@ -253,7 +286,7 @@
         $("#pmfun,#processMenu3").hover(function () {
             var mLeft = $("#jqContextMenu").css("left").replace('px', '');
             var mTop = $("#jqContextMenu").css("top").replace('px', '');
-            $("#processMenu3").css({ "left": parseInt(mLeft) + 150 + "px", "top": parseInt(mTop) + 97 + "px" });
+            $("#processMenu3").css({ "left": parseInt(mLeft) + 148 + "px", "top": parseInt(mTop) + 62 + "px", "z-index": 3 });
             $("#processMenu3").show();
         }, function () {
             $("#processMenu3").hide();
@@ -301,7 +334,7 @@
 
             //判断是否是同表单的,还是异表单的.
             if (runModel == 4) {
-                node.SubThreadType = subThreadType; 
+                node.SubThreadType = subThreadType;
             }
 
             node.Update();
@@ -312,7 +345,7 @@
         function ChangeNodeIcon(nodeID, runModel) {
 
         }
-       
+
     </script>
     <script type="text/javascript">
         var the_flow_id = '4';
@@ -441,6 +474,7 @@
                                       //获取坐标
                                       var mLeft = $("#jqContextMenu").css("left").replace('px', '');
                                       var mTop = $("#jqContextMenu").css("top").replace('px', '');
+
 
                                       //创建一个节点
                                       var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");

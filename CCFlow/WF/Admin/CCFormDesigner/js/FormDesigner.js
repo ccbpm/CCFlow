@@ -114,12 +114,12 @@ function InitDbClick() {
         var connectorIndex = CONNECTOR_MANAGER.connectorGetByXY(x, y);
         if (connectorIndex >= 0) {
             $('#right').css('display', 'display');
-            $('#container').css('right','auto');
+            $('#container').css('right', 'auto');
             return;
         }
         //打开表单属性.
         CCForm_Attr();
-        
+
         return;
     })
 }
@@ -239,7 +239,7 @@ function showFigurePropertyWin(figure) {
         var url = '../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_MapDtl=' + figure.CCForm_MyPK;
         var W = document.body.clientWidth - 40;
         var H = $("#editor")[0].clientHeight - 40;
-        CCForm_ShowDialog(url, '从表/明细表' + figure.CCForm_MyPK + '属性',W,H);
+        CCForm_ShowDialog(url, '从表/明细表' + figure.CCForm_MyPK + '属性', W, H);
         return;
     }
 
@@ -319,15 +319,15 @@ function showFigurePropertyWin(figure) {
     //枚举类型.
     if (shap == 'RadioButton') {
 
-        var mypk= figure.CCForm_MyPK;
+        var mypk = figure.CCForm_MyPK;
 
         mypk = mypk.replace('RB_', "");
         mypk = mypk.substr(0, mypk.lastIndexOf('_'));
-        mypk= mypk.replace('_0', "");
-        mypk= mypk.replace('_1', "");
-        mypk= mypk.replace('_2', "");
+        mypk = mypk.replace('_0', "");
+        mypk = mypk.replace('_1', "");
+        mypk = mypk.replace('_2', "");
         mypk = mypk.replace('_3', "");
-      
+
 
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + CCForm_FK_MapData + "_" + mypk;
         CCForm_ShowDialog(url, '单选按钮属性');
@@ -338,7 +338,7 @@ function showFigurePropertyWin(figure) {
 
 
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&PKVal=' + CCForm_FK_MapData + "_iFrame_" + figure.CCForm_MyPK;
-        CCForm_ShowDialog(url, '框架',500,200);
+        CCForm_ShowDialog(url, '框架', 500, 200);
         return;
     }
 
@@ -364,7 +364,7 @@ function buildPanel() {
                 evt.preventDefault();
                 setFigurePanel(setName);
             };
-        } (setName), false);
+        }(setName), false);
 
         var groupImg = document.createElement('img');
         groupImg.setAttribute('src', "Img/Min.png");
@@ -410,7 +410,7 @@ function buildPanel() {
                     evt.preventDefault();
                     createFigure(window[figureFunction], figureThumbURL, figureName);
                 };
-            } (figureFunctionName, figureThumbURL, figureName), false);
+            }(figureFunctionName, figureThumbURL, figureName), false);
 
             //in case use drops the figure
             eFigure.addEventListener('mouseup', function () {
@@ -539,7 +539,7 @@ function CCForm_BrowserView() {
 function CCForm_FoolFrm() {
 
     var url = '../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_Flow=001&MyPK=ND101&IsEditMapData=True&IsFirst=1';
-   // var url = "../../CCForm/Frm.htm?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
+    // var url = "../../CCForm/Frm.htm?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
     OpenWindow(url);
 }
 
@@ -551,7 +551,8 @@ function CCForm_Attr() {
     if (fk_node) {
         url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmNode&PKVal=' + CCForm_FK_MapData;
     }
-    CCForm_ShowDialog(url, '表单属性');
+
+    CCForm_ShowDialog(url, '表单属性', $(parent).width() * 0.8, $(parent).height() * 0.8);
 }
 
 //打开页面方法
@@ -571,11 +572,11 @@ function OpenWindow(url, h, w) {
         winHeight = screen.availHeight - 36;
     }
 
-  //  OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, winHeight, winWidth, 'icon-library', false);
+    //  OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, winHeight, winWidth, 'icon-library', false);
 
-     window.open(url, "_blank", "height=" + winHeight + ",width=" + winWidth + ",top=0,left=0,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
+    window.open(url, "_blank", "height=" + winHeight + ",width=" + winWidth + ",top=0,left=0,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
 }
- 
+
 
 function GetDateString() {
 
@@ -638,7 +639,7 @@ function Conver_CCForm_V1ToV2() {
 
     var flow_Data = handler.DoMethodReturnJSON("CCForm_AllElements_ResponseJson");
 
-   // var flow_Data = $.parseJSON(jsonData);
+    // var flow_Data = $.parseJSON(jsonData);
 
     //循环MapAttr
     for (var idx in flow_Data.Sys_MapAttr) {
@@ -672,19 +673,19 @@ function Conver_CCForm_V1ToV2() {
     for (var i in flow_Data.Sys_FrmRB) {
         var frmRb = flow_Data.Sys_FrmRB[i];
         //if (i == 0) {
-            var createdFigure = figure_Template_Rb(frmRb);
-            //move it into position
-            //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
-            createdFigure.style.lineWidth = defaultLineWidth;
-            //add to STACK
-            STACK.figureAdd(createdFigure);
-//        }
-//        createdFigure = figure_Template_RbLab(frmRb);
-//        //move it into position
-//        //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
-//        createdFigure.style.lineWidth = defaultLineWidth;
-//        //add to STACK
-//        STACK.figureAdd(createdFigure);
+        var createdFigure = figure_Template_Rb(frmRb);
+        //move it into position
+        //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
+        createdFigure.style.lineWidth = defaultLineWidth;
+        //add to STACK
+        STACK.figureAdd(createdFigure);
+        //        }
+        //        createdFigure = figure_Template_RbLab(frmRb);
+        //        //move it into position
+        //        //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
+        //        createdFigure.style.lineWidth = defaultLineWidth;
+        //        //add to STACK
+        //        STACK.figureAdd(createdFigure);
     }
 
     //循环FrmBtn
@@ -807,7 +808,7 @@ function figure_MapAttr_Template(mapAttr) {
         else if (mapAttr.LGType == 2) {
             f.CCForm_Shape = "DropDownListTable";
         }
-        //外部数据源
+            //外部数据源
         else if (mapAttr.LGType == 0) {
             f.CCForm_Shape = "DropDownListTable";
         }
@@ -857,8 +858,8 @@ function figure_MapAttr_Template(mapAttr) {
 
     if (f.CCForm_Shape == "TextBoxBoolean") {
         //var t2 = new Text(mapAttr.Name, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + FigureDefaults.radiusSize / 2 + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-		// 导入表单checkbox与label错位
-		var t2 = new Text(mapAttr.Name, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+        // 导入表单checkbox与label错位
+        var t2 = new Text(mapAttr.Name, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
         t2.style.fillStyle = FigureDefaults.textColor;
         f.addPrimitive(t2);
     }
@@ -908,11 +909,11 @@ function figure_Template_Label(frmLab) {
     var labelText = frmLab.Text.replace(new RegExp(/@/g), "\n");
     labelText = labelText.replace(new RegExp(/&nbsp;/g), " ");
     var x = (frmLab.FontSize * getXByteLen(labelText)) / 4 + frmLab.X;
-    
+
     //修改表单设计偏移的问题
     y = (frmLab.FontSize * getYByteLen(labelText)) / 2 + frmLab.Y;
     t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
-    
+
     t2.style.fillStyle = fontColor//frmLab.FontColor;
     t2.size = frmLab.FontSize;
     t2.font = frmLab.FontName;
@@ -921,8 +922,8 @@ function figure_Template_Label(frmLab) {
     f.addPrimitive(t2);
 
     f.gradientBounds = [frmLab.X, frmLab.Y,
-        frmLab.X + (frmLab.FontSize * getXByteLen(labelText) / 2)+50,
-        frmLab.Y + ((frmLab.FontSize + 5) * getYByteLen(labelText))+50];
+        frmLab.X + (frmLab.FontSize * getXByteLen(labelText) / 2) + 50,
+        frmLab.Y + ((frmLab.FontSize + 5) * getYByteLen(labelText)) + 50];
     f.finalise();
     return f;
 }
@@ -1000,22 +1001,22 @@ function figure_Template_Btn(frmBtn) {
 
     var t2 = new Text(frmBtn.Text, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentShortSize / 2 + FigureDefaults.corner, FigureDefaults.textFont, FigureDefaults.textSize);
     //修改偏移的问题
-   // x = t2.getNormalWidth() / 2 + frmBtn.X;
+    // x = t2.getNormalWidth() / 2 + frmBtn.X;
     //y = t2.getNormalHeight() / 2 + frmBtn.Y;
     //t2 = new Text(frmBtn.Text, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
 
     t2.style.fillStyle = FigureDefaults.textColor;
 
     f.addPrimitive(t2);
-    
-   
+
+
 
     f.finalise();
     return f;
 }
 
 //初始化单选按钮
-function figure_Template_Rb(frmRb ) {
+function figure_Template_Rb(frmRb) {
     //需要初始化3个东西  1个TextBox 1个 Label
     var f = new Figure("RadioButton");
     f.CCForm_Shape = "RadioButton";
@@ -1073,8 +1074,8 @@ function figure_Template_RbLab(frmRb) {
     //ccform Property
     f.CCForm_Shape = "Label";
     f.style.fillStyle = FigureDefaults.fillStyle;
-   
-    
+
+
     f.name = "Label";
     var x = frmRb.X;
     var y = frmRb.Y;
@@ -1107,28 +1108,28 @@ function figure_Template_HyperLink(frmLin) {
 
     f.properties.push(new BuilderProperty('基本属性-HyperLink', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT,frmLin.Text));
-    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE,frmLin.FontSize));
+    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLin.Text));
+    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE, frmLin.FontSize));
     f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY, frmLin.FontName));
     //f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
     f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
-    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT,frmLin.IsBold));
-    f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR,frmLin.FontColor));
+    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT, frmLin.IsBold));
+    f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, frmLin.FontColor));
 
     f.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('连接地址', 'URL', BuilderProperty.TYPE_SINGLE_TEXT,frmLin.URL));
-    f.properties.push(new BuilderProperty('打开窗口', 'WinOpenModel', BuilderProperty.CCFormEnum,frmLin.Target));
+    f.properties.push(new BuilderProperty('连接地址', 'URL', BuilderProperty.TYPE_SINGLE_TEXT, frmLin.URL));
+    f.properties.push(new BuilderProperty('打开窗口', 'WinOpenModel', BuilderProperty.CCFormEnum, frmLin.Target));
 
     var x = frmLin.X;
     var y = frmLin.Y;
-  
+
     var t2 = new Text(frmLin.Text, x + FigureDefaults.radiusSize / 2, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-    
+
     //修改偏移的问题
     x = t2.getNormalWidth() / 2 + x;
     y = t2.getNormalHeight() / 2 + y;
-    
+
     t2 = new Text(frmLin.Text, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = "#0000ff";
     t2.underlined = true;
@@ -1150,9 +1151,9 @@ function figure_Template_Image(frmImage) {
 
     //Image
     var url = figureSetsURL + "/basic/TempleteFile.png";
-    var x = frmImage.X+frmImage.W/2;
-    var y = frmImage.Y+frmImage.H/2;
-    var ifig = new ImageFrame(url, x , y , true, frmImage.W, frmImage.H);
+    var x = frmImage.X + frmImage.W / 2;
+    var y = frmImage.Y + frmImage.H / 2;
+    var ifig = new ImageFrame(url, x, y, true, frmImage.W, frmImage.H);
     ifig.debug = true;
     f.addPrimitive(ifig);
 
@@ -1188,7 +1189,7 @@ function figure_Template_ImageAth(frmImageAth) {
     var url = figureSetsURL + "/DataView/AthImg.png";
     var x = frmImageAth.X + frmImageAth.W / 2;
     var y = frmImageAth.Y + frmImageAth.H / 2;
-    var ifig = new ImageFrame(url, x , y , true, frmImageAth.W, frmImageAth.H);
+    var ifig = new ImageFrame(url, x, y, true, frmImageAth.W, frmImageAth.H);
     ifig.debug = true;
     f.addPrimitive(ifig);
 
@@ -1219,7 +1220,7 @@ function figure_Template_ImageAth(frmImageAth) {
         f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
     }
 
-    
+
     f.finalise();
     return f;
 }
@@ -1268,8 +1269,8 @@ function figure_Template_Attachment(frmAttachment) {
 
     //Image
     var url = undefined;
-    var x =  frmAttachment.X+ frmAttachment.W / 2;
-    var y = frmAttachment.Y+ frmAttachment.H / 2;
+    var x = frmAttachment.X + frmAttachment.W / 2;
+    var y = frmAttachment.Y + frmAttachment.H / 2;
 
     if (frmAttachment.UploadType == 0) {
         url = figureSetsURL + "/DataView/AthSingle.png";
@@ -1280,7 +1281,7 @@ function figure_Template_Attachment(frmAttachment) {
     ifig.debug = true;
     f.addPrimitive(ifig);
     //Text
-    
+
     //var t2 = new Text(frmAttachment.Name, x + FigureDefaults.radiusSize / 2 + frmAttachment.W / 2, y + FigureDefaults.radiusSize / 2 + frmAttachment.H / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     //var t2 = new Text(frmAttachment.Name, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
     //t2.style.fillStyle = FigureDefaults.textColor;
@@ -1327,7 +1328,7 @@ function figure_Template_Dtl(frmDtl) {
     var url = figureSetsURL + "/DataView/Dtl.png";
     var x = frmDtl.X + frmDtl.W / 2;
     var y = frmDtl.Y + frmDtl.H / 2;
-    var ifig = new ImageFrame(url, x , y , true, frmDtl.W, frmDtl.H);
+    var ifig = new ImageFrame(url, x, y, true, frmDtl.W, frmDtl.H);
     ifig.debug = true;
     f.addPrimitive(ifig);
     //Text
@@ -1376,7 +1377,7 @@ function figure_Template_FigureCom(figureCom) {
     }
 
     //Image
-    var url = figureSetsURL + "/DataView/" + f.CCForm_Shape + ".png"; 
+    var url = figureSetsURL + "/DataView/" + f.CCForm_Shape + ".png";
     var x = figureCom.X + figureCom.W / 2;
     var y = figureCom.Y + figureCom.H / 2;
     var ifig = new ImageFrame(url, x, y, true, figureCom.W, figureCom.H);

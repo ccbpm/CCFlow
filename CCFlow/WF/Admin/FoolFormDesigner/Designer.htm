@@ -869,8 +869,13 @@
             var tdUp = "<a href=\"javascript:Up('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-left,plain:true'  alt='向左动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-left'>&nbsp;</span></span></span></a>";
             var tdDown = "<a href=\"javascript:Down('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-right,plain:true' alt='向右动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-right'>&nbsp;</span></span></span></a>";
 
-            if (attr.LGType == 0)
+            if (attr.LGType == 0 && attr.UIContralType == 1) {
+                return tdUp + "<a href=\"javascript:EditTableSQL('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
+            }
+
+            if (attr.LGType == 0) {
                 return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "');\" > " + attr.Name + "</a>" + tdDown;
+            }
 
             if (attr.LGType == 1)
                 return tdUp + "<a href=\"javascript:EditEnum('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
@@ -1030,7 +1035,7 @@
             //秦 18.11.16
             if (!CheckID(prix)) {
                 alert("编号不符合规则");
-                return  ;
+                return;
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
@@ -1143,11 +1148,20 @@
             });
         }
 
+        function EditTableSQL(mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '外键SQL字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
         function EditTable(fk_mapData, mypk, keyOfEn) {
 
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
 
-            OpenEasyUiDialog(url, "eudlgframe", '外键' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '外键字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -1369,13 +1383,15 @@
         //新增从表.
         function NewMapDtl() {
             var val = prompt('21请输入从表ID，要求表单唯一。', pageParam.fk_mapdata + 'Dtl1');
-          
+
             if (val == null) {
                 return;
             }
 
-            //秦 18.11.16            if (!CheckID(val)) {
-                alert("编号不符合规则");                return;
+            //秦 18.11.16
+            if (!CheckID(val)) {
+                alert("编号不符合规则");
+                return;
             }
 
             if (val == '') {
@@ -1460,8 +1476,10 @@
                 return;
             }
 
-            //秦 18.11.16            if (!CheckID(val)) {
-                alert("编号不符合规则");                return;
+            //秦 18.11.16
+            if (!CheckID(val)) {
+                alert("编号不符合规则");
+                return;
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");

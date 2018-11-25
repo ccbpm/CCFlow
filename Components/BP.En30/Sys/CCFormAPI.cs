@@ -230,6 +230,7 @@ namespace BP.Sys
 
             attr.UIContralType = BP.En.UIContralType.DDL;
             attr.UIBindKey = fk_SFTable; //绑定信息.
+         //   attr.LGType = FieldTypeS.FK;
             attr.X = x;
             attr.Y = y;
 

@@ -96,13 +96,13 @@ namespace BP.Sys.FrmUI
 
                 #region 基本信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
+                map.AddDDLSysEnum(MapAttrAttr.LGType, 4, "类型", false, false);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
 
-                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
-                map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
+                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20,true);
+                map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20,true);
 
                 //默认值.
-                map.AddDDLSysEnum(MapAttrAttr.LGType, 4, "类型", true, false);
                 map.AddTBString(MapAttrAttr.UIBindKey, null, "外键SFTable", true, true, 0, 100, 20);
 
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
@@ -110,10 +110,8 @@ namespace BP.Sys.FrmUI
                 //map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
 
-
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见", true, false);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
-
 
                // map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                // map.AddBoolean("IsEnableJS", false, "是否启用JS高级设置？", true, true); //参数字段.

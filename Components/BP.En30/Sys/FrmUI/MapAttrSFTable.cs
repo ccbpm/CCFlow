@@ -99,8 +99,8 @@ namespace BP.Sys.FrmUI
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
 
-                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
-                map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
+                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20,true);
+                map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20, true);
 
                 //默认值.
                 map.AddDDLSysEnum(MapAttrAttr.LGType, 4, "类型", true, false);

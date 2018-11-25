@@ -760,68 +760,6 @@ namespace BP.WF.HttpHandler
             return msg;
         }
         /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string EditFExtContral_Init()
-        {
-            ExtContral en = new ExtContral();
-            en.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
-            en.RetrieveFromDBSources();
-            return en.ToJson();
-        }
-        public string EditFExtContral_Save()
-        {
-            ExtContral en = new ExtContral();
-            en.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
-            en.RetrieveFromDBSources();
-
-            en.UIContralType = (UIContralType)int.Parse(this.GetValFromFrmByKey("Model"));
-
-            switch (en.UIContralType)
-            {
-                case UIContralType.AthShow:
-                    en.AthRefObj = this.GetValFromFrmByKey("DDL_Ath");
-                    en.AthShowModel = (AthShowModel)int.Parse(this.GetValFromFrmByKey("DDL_AthShowModel"));
-
-                    //让附件不可见.
-                    FrmAttachment ath = new FrmAttachment(en.AthRefObj);
-                    ath.IsVisable = false;
-                    ath.Update();
-                    //paras参数
-                    Paras ps = new Paras();
-                    ps.SQL = "DELETE FROM Sys_GroupField WHERE FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND CtrlID=" + SystemConfig.AppCenterDBVarStr + "CtrlID";
-                    ps.Add("FrmID", this.FK_MapData);
-                    ps.Add("CtrlID", en.AthRefObj);
-                    BP.DA.DBAccess.RunSQL(ps);
-
-                    FrmAttachments aths = new FrmAttachments(this.FK_MapData);
-                    foreach (FrmAttachment item in aths)
-                    {
-                        ps = new Paras();
-                        ps.SQL = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%" + SystemConfig.AppCenterDBVarStr + "AtPara@%' AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
-                        ps.Add("AtPara", item.MyPK);
-                        ps.Add("FK_MapData", this.FK_MapData);
-                       
-                        //string sql = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%" + item.MyPK + "@%' AND FK_MapData='" + this.FK_MapData + "'";
-                        int num = DBAccess.RunSQLReturnValInt(ps);
-                        if (num == 0)
-                        {
-                            // 没有被引用.
-                            item.IsVisable = true;
-                            item.Update();
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            en.Update();
-
-            return "保存成功.";
-        }
-        /// <summary>
         /// 框架信息.
         /// </summary>
         /// <returns></returns>

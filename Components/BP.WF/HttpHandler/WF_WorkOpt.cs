@@ -1725,40 +1725,7 @@ namespace BP.WF.HttpHandler
             return dt.Rows.Count > 0 ? dt.Rows[0]["RDT"].ToString() : "";
         }
         #endregion
-
-        #region 保存手写签名图片
-        public string SaveHandWritingImg()
-        {
-            try
-            {
-                string basePath = SystemConfig.PathOfDataUser + "HandWritingImg";
-                string ny = DateTime.Now.ToString("yyyy_MM");
-                string tempPath = basePath + "\\" + ny + "\\" + this.FK_Flow;
-                string tempName = this.WorkID + "_" + this.FK_Node + "_" + WebUser.No + ".png";
-
-                if (System.IO.Directory.Exists(tempPath) == false)
-                    System.IO.Directory.CreateDirectory(tempPath);
-                string Pic_Path = tempPath + "\\" + tempName;
-
-                string ImageData = this.GetValFromFrmByKey("imageData");
-
-                using (System.IO.FileStream fs = new FileStream(Pic_Path, FileMode.Create))
-                {
-                    using (BinaryWriter bw = new BinaryWriter(fs))
-                    {
-                        byte[] data = Convert.FromBase64String(ImageData);
-                        bw.Write(data);
-                        bw.Close();
-                    }
-                }
-                return "ok";
-            }
-            catch (Exception e)
-            {
-                return "err@" + e.Message;
-            }
-        }
-        #endregion
+       
         #region 工作分配.
         /// <summary>
         /// 分配工作
@@ -1986,7 +1953,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 抄送Adv.
 
-
         #region 抄送普通的抄送.
         public string CC_AddEmps()
         {
@@ -2170,7 +2136,7 @@ namespace BP.WF.HttpHandler
                 return DBAccess.RunSQLReturnValInt(ps) + "";
             }
 
-            return "";
+            return "删除成功.";
         }
 
         public string DeleteFlowInstance_DoDelete()

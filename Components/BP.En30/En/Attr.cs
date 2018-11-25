@@ -87,9 +87,13 @@ namespace BP.En
         /// </summary>
         AthShow = 6,
         /// <summary>
-        /// 拍照控件
+        /// 手机拍照控件
         /// </summary>
-        Picture=7
+        MobilePhoto = 7,
+        /// <summary>
+        /// 手写签名版
+        /// </summary>
+        HandWriting = 8
     }
     /// <summary>
     /// 逻辑类型

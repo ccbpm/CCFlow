@@ -1139,7 +1139,7 @@ namespace BP.WF.HttpHandler
                         //执行通用的装载方法.
                         MapAttrs attrs = new MapAttrs(this.EnsName);
                         MapDtls dtls = new MapDtls(this.EnsName);
-                       
+
                         if (GetRequestValInt("IsTest") != 1)
                         {
                             try
@@ -1151,7 +1151,7 @@ namespace BP.WF.HttpHandler
                             {
                             }
                         }
-                        
+
                     }
                 }
 
@@ -1211,13 +1211,13 @@ namespace BP.WF.HttpHandler
 
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-                if ( this.FK_Node != 0 && this.FK_Node != 999999 && fn.IsEnableFWC==true)
+                if (this.FK_Node != 0 && this.FK_Node != 999999 && fn.IsEnableFWC == true)
                 {
-                
+
 
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
-                    { 
+                    {
                         /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
                         int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
 
@@ -1615,7 +1615,7 @@ namespace BP.WF.HttpHandler
                 frmID = frmID.Replace("_" + this.FK_Node, "");
 
             if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp"
-                && this.EnsName.Contains("ND" + this.FK_Node) == false 
+                && this.EnsName.Contains("ND" + this.FK_Node) == false
                 && this.FK_Node != 999999)
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
@@ -1871,6 +1871,44 @@ namespace BP.WF.HttpHandler
         }
         #endregion dtl.Card
 
+        #region 保存手写签名图片
+        /// <summary>
+        /// 保存手写签名图片
+        /// </summary>
+        /// <returns>返回保存结果</returns>
+        public string HandWriting_Save()
+        {
+            try
+            {
+                string basePath = SystemConfig.PathOfDataUser + "HandWritingImg";
+                string ny = DateTime.Now.ToString("yyyy_MM");
+                string tempPath = basePath + "\\" + ny + "\\" + this.FrmID + "\\";
+                string tempName = this.KeyOfEn + "_" + this.OID + ".png";
+
+                if (System.IO.Directory.Exists(tempPath) == false)
+                    System.IO.Directory.CreateDirectory(tempPath);
+
+                string pic_Path = tempPath + "\\" + tempName;
+
+                string imgData = this.GetValFromFrmByKey("imageData");
+
+                using (System.IO.FileStream fs = new FileStream(pic_Path, FileMode.Create))
+                {
+                    using (BinaryWriter bw = new BinaryWriter(fs))
+                    {
+                        byte[] data = Convert.FromBase64String(imgData);
+                        bw.Write(data);
+                        bw.Close();
+                    }
+                }
+                return "保存成功.";
+            }
+            catch (Exception e)
+            {
+                return "err@" + e.Message;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// 处理SQL的表达式.
@@ -2740,7 +2778,7 @@ namespace BP.WF.HttpHandler
                     }
                     catch (Exception ex)
                     {
-                        savePath = SystemConfig.PathOfDataUser + "UploadFile\\" + mapData.No+"\\";
+                        savePath = SystemConfig.PathOfDataUser + "UploadFile\\" + mapData.No + "\\";
                         //return "err@获取路径错误" + ex.Message + ",配置的路径是:" + savePath + ",您需要在附件属性上修改该附件的存储路径.";
                     }
 
@@ -2751,7 +2789,7 @@ namespace BP.WF.HttpHandler
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("err@创建路径出现错误，可能是没有权限或者路径配置有问题:"  + savePath + "@异常信息:" + ex.Message);
+                        throw new Exception("err@创建路径出现错误，可能是没有权限或者路径配置有问题:" + savePath + "@异常信息:" + ex.Message);
                     }
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");
@@ -3323,12 +3361,13 @@ namespace BP.WF.HttpHandler
         /// BP类从表导入
         /// </summary>
         /// <returns></returns>
-        private string BPDtlImpByExcel_Imp(DataTable dt,string fk_mapdtl)
+        private string BPDtlImpByExcel_Imp(DataTable dt, string fk_mapdtl)
         {
-            try{
+            try
+            {
                 #region 检查两个文件是否一致。 生成要导入的属性
                 Entities dtls = ClassFactory.GetEns(this.FK_MapDtl);
-                EntityOID dtlEn= dtls.GetNewEntity as EntityOID;
+                EntityOID dtlEn = dtls.GetNewEntity as EntityOID;
                 BP.En.Attrs attrs = dtlEn.EnMap.Attrs;
                 BP.En.Attrs attrsExp = new BP.En.Attrs();
 
@@ -3368,7 +3407,7 @@ namespace BP.WF.HttpHandler
                 string errMsg = "";
                 foreach (DataRow dr in dt.Rows)
                 {
-                    dtlEn = dtls.GetNewEntity as EntityOID ;
+                    dtlEn = dtls.GetNewEntity as EntityOID;
                     dtlEn.ResetDefaultVal();
 
                     foreach (BP.En.Attr attr in attrsExp)

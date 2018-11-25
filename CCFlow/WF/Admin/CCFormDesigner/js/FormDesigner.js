@@ -552,7 +552,7 @@ function CCForm_Attr() {
         url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmNode&PKVal=' + CCForm_FK_MapData;
     }
 
-    CCForm_ShowDialog(url, '表单属性', $(parent).width() * 0.8, $(parent).height() * 0.8);
+    CCForm_ShowDialog(url, '表单属性', $(parent).width() * 0.65, $(parent).height() * 0.8);
 }
 
 //打开页面方法

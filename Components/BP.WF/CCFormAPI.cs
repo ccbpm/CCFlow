@@ -628,12 +628,10 @@ namespace BP.WF
 			//MapData md = new MapData(frmID);
 
 			//实体.
-			GEEntity wk = new GEEntity(frmID);
-			wk.OID = pkval;
-            if (wk.RetrieveFromDBSources() == 0)
-            {
-                wk.Insert();
-            }
+			GEEntity en = new GEEntity(frmID);
+            en.OID = pkval;
+            if (en.RetrieveFromDBSources() == 0)
+                en.Insert();
 
 			//把参数放入到 En 的 Row 里面。
 			if (DataType.IsNullOrEmpty(atParas) == false)
@@ -643,11 +641,10 @@ namespace BP.WF
 				{
                     try
                     {
-
-                        if (wk.Row.ContainsKey(key) == true) //有就该变.
-                            wk.Row[key] = ap.GetValStrByKey(key);
+                        if (en.Row.ContainsKey(key) == true) //有就该变.
+                            en.Row[key] = ap.GetValStrByKey(key);
                         else
-                            wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                            en.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
                     }
                     catch(Exception ex)
                     {
@@ -666,7 +663,6 @@ namespace BP.WF
             myds.Tables.Add(Sys_MapAttr);
 
 			//明细表的配置信息.
-
             DataTable Sys_MapExt = dtl.MapExts.ToDataTableField("Sys_MapExt");
             myds.Tables.Add(Sys_MapExt);
 
@@ -677,15 +673,20 @@ namespace BP.WF
             foreach (DataRow dr in Sys_MapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
-                //不是枚举/外键字段
-                if (lgType.Equals("0"))
-                    continue;
+                string ctrlType = dr[MapAttrAttr.UIContralType].ToString();
+
+                ////不是枚举/外键字段
+                //if (lgType.Equals("0") && ctrlType.Equals("0") )
+                //    continue;
 
                 string uiBindKey = dr["UIBindKey"].ToString();
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                    continue;
+
                 var mypk = dr["MyPK"].ToString();
 
                 #region 枚举字段
-                if (lgType.Equals("1"))
+                if (lgType.Equals("1")==true)
                 {
                     // 如果是枚举值, 判断是否存在.
                     if (myds.Tables.Contains(uiBindKey) == true)
@@ -717,7 +718,7 @@ namespace BP.WF
                 {
                     string fullSQL = me.Doc.Clone() as string;
                     fullSQL = fullSQL.Replace("~", ",");
-                    fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
+                    fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
 
@@ -735,7 +736,10 @@ namespace BP.WF
                 if (myds.Tables.Contains(uiBindKey) == true)
                     continue;
 
-                myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                // 获得数据.
+                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                myds.Tables.Add(mydt);
+
                 #endregion 外键字段
             }
 			#endregion 把从表的- 外键表/枚举 加入 DataSet.
@@ -749,16 +753,16 @@ namespace BP.WF
 				// 处理传递过来的参数。
 				foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
 				{
-					wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
 				}
 			}
 
 			//重设默认值.
-			wk.ResetDefaultVal();
+            en.ResetDefaultVal();
 
 
 			//增加主表数据.
-			DataTable mainTable = wk.ToDataTableField(frmID);
+            DataTable mainTable = en.ToDataTableField(frmID);
 			mainTable.TableName = "MainTable";
 			myds.Tables.Add(mainTable);
 			#endregion 把主表数据放入.
@@ -849,8 +853,13 @@ namespace BP.WF
                 }
                 #endregion 修改区分大小写.
 
+                if (attr.UIContralType == UIContralType.TB)
+                    continue;
+
                 //处理增加动态SQL查询类型的下拉框选中值Text值，added by liuxc,2017-9-22
-                if(attr.LGType == FieldTypeS.FK && attr.UIIsEnable == false)
+                if(attr.UIContralType== UIContralType.DDL 
+                    &&  attr.LGType == FieldTypeS.Normal 
+                    && attr.UIIsEnable == true)
                 {
                     sftable = sftables.GetEntityByKey(attr.UIBindKey) as SFTable;
                     if (sftable != null)
@@ -887,6 +896,8 @@ namespace BP.WF
             dtlBlank.ResetDefaultVal();
 
             myds.Tables.Add(dtlBlank.ToDataTableField("Blank"));
+
+           // myds.WriteXml("c:\\xx.xml");
 
 			return myds;
 		}

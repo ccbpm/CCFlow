@@ -103,8 +103,8 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20, true);
 
                 //默认值.
-                map.AddDDLSysEnum(MapAttrAttr.LGType, 4, "类型", true, false);
-                map.AddTBString(MapAttrAttr.UIBindKey, null, "外键SFTable", true, true, 0, 100, 20);
+                map.AddDDLSysEnum(MapAttrAttr.LGType, 4, "类型", false, false);
+                map.AddTBString(MapAttrAttr.UIBindKey, null, "外键SFTable", true, true, 0, 100, 20,true);
 
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
 

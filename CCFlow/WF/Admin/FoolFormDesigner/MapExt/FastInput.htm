@@ -82,9 +82,11 @@
 </head>
 <body>
     <form id="cc">
-    <fieldset>
-        <legend>快速输入</legend>
-        <table id="table" style="width: 100%;">
+
+  
+        <table id="table" style="width: 98%;">
+    <caption>快速输入 </caption>
+
             <tr>
                 <td colspan="3">
                     快速输入内容，多行用@分开。
@@ -103,17 +105,20 @@
                 </td>
                <td><select id="DDL_Tag1" value="0"> <option value="0" >不启用</option><option value="1">启用</option> </select> </td>
             </tr>
-
-           
-            <tr>
-                <td colspan="3">
-                    <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-                    <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-                </td>
-            </tr>
-           
         </table>
-    </fieldset>
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                    <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+
+                    <fieldset>
+                    <legend>帮助</legend>
+                    <ul>
+                    <li>快速录入是为了解决重复数据相同内容的填写.</li>
+                    <li>能够减轻输入人员的劳动，并大幅度提高使用体验。</li>
+                    <li><a href="FastInput.png" target=_blank > <img src="FastInput.png" style="width:400px;"  border=0/> </a> </li>
+
+                    </ul>
+                    </fieldset>
+
     <div id="Msg">
     </div>
     </form>

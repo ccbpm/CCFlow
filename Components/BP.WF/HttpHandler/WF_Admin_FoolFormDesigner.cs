@@ -563,7 +563,7 @@ namespace BP.WF.HttpHandler
                 {
                     //return this.GetRequestVal("FK_SFDBSrc");
 
-                    _STable = this.GetRequestVal("FK_SFDBSrc");// context.Request.QueryString["STable"];
+                    _STable = this.GetRequestVal("STable");// context.Request.QueryString["STable"];
                     if (_STable == null || "".Equals(_STable))
                     {
                         BP.En.Entity en = BP.En.ClassFactory.GetEn(this.FK_MapData);

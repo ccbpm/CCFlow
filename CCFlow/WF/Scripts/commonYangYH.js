@@ -173,7 +173,7 @@ Common.CustomPagePlug1 = function (operation) {
             var html = "";
             html += "<tr style='text-align: center;'>";
             html += "<td>";
-            html += '没有查询记录';
+          //  html += '-';
             html += "</td>";
             html += "</tr>";
             $("#" + PageData.InitData.DivId + ' table tbody').html(html);
@@ -524,7 +524,7 @@ Common.CustomPagePlug = function (operation) {
                 }
                 html += "<td colspan='" + colSpan + "'>";
                 //console.log(colSpan)
-                html += '没有查询记录';
+              //  html += '-';
                 html += "</td>";
                 html += "</tr>";
                 $("#" + obj.InitData.DivId + ' table tbody').html(html);

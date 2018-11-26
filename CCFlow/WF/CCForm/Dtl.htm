@@ -292,20 +292,20 @@
                         tmplate.val(textVal);
                     }
 
-                    var td = $('<td></td>')
+                    var td = $('<td style="width:' + threadThObj.clientWidth + 'px;"></td>');
                     td.append(tmplate);
                     insertTr.append(td);
 
                 } else if ($(threadThObj).data().coltype == 'SN') {
-
-                    insertTr.append($('<td>' + (newRowIndex + 1) + '</td>'));
+                    insertTr.append($('<td style="width:' + threadThObj.clientWidth + 'px;">' + (newRowIndex + 1) + '</td>'));
+                    //insertTr.append($('<td>' + (newRowIndex + 1) + '</td>'));
 
                 } else {
-
+                    insertTr.append($('<td style="width:' + threadThObj.clientWidth + 'px;"><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" title="移除"/></td>'));
                 }
             });
 
-            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" title="移除"/></td>'));
+            //insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" title="移除"/></td>'));
 
             var trData = { data: {} };
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {

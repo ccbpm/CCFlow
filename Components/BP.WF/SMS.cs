@@ -635,22 +635,26 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(this.Email) == true)
                         return;
 
+                    string emailStrs = this.Email;
+                    emailStrs = emailStrs.Replace(",", ";");
+                    emailStrs = emailStrs.Replace("，", ";");
+
                     //包含多个邮箱
-                    if (this.Email.Contains(";") == true)
+                    if (emailStrs.Contains(";") == true)
                     {
-                        string[] emails = this.Email.Split(';');
+                        string[] emails = emailStrs.Split(';');
                         foreach (string email in emails)
                         {
-                            if (DataType.IsNullOrEmpty(this.Email) == false)
-                                SendEmailNow(email, this.Title, this.DocOfEmail);
+                            if (DataType.IsNullOrEmpty(email) == true)
+                                continue;
+
+                            SendEmailNow(email, this.Title, this.DocOfEmail);
                         }
                     }
                     else
                     {   //单个邮箱
                         SendEmailNow(this.Email, this.Title, this.DocOfEmail);
                     }
-
-                    
                     return;
                 }
 

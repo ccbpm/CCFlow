@@ -71,6 +71,9 @@
             var headHeight = $("#tableHead").height();
             $("#tableBody").parent().height(bodyHeight - headHeight - 75);
             $("#dtlDiv").height(bodyHeight - 35);
+
+            var bodyWidth = $(document).width();
+            $("#ContentDtlDiv").width(bodyWidth - 55);
         });
 
         //公共方法
@@ -1452,12 +1455,12 @@
                     <div class="tab-content" style="margin: 4px 0px;">
                         <div class="tab-pane active portlet_tab flowLists" style="overflow-x: auto; overflow-y: hidden;" id="dtlDiv">
                             <div>
-                                <table id="tableHead" class="table" data-data="true">
+                                <table id="tableHead" class="table" data-data="true" style="width:100%;">
                                     <thead></thead>
                                 </table>
                             </div>
                             <div style="overflow-y: scroll">
-                                <table id="tableBody" class="table wupop" data-data="true" >
+                                <table id="tableBody" class="table wupop" data-data="true" style="width:100%;">
                                     <tbody></tbody>
                                 </table>
                             </div>

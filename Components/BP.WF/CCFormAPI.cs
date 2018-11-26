@@ -619,7 +619,7 @@ namespace BP.WF
 		/// <param name="atParas">参数</param>
 		/// <param name="specDtlFrmID">指定明细表的参数，如果为空就标识主表数据，否则就是从表数据.</param>
 		/// <returns>数据</returns>
-		public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas)
+		public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas,Int64 fid=0)
 		{
 			//数据容器,就是要返回的对象.
 			DataSet myds = new DataSet();
@@ -784,7 +784,10 @@ namespace BP.WF
                         qo.AddWhere(GEDtlAttr.RefPK, pkval);
                         break;
                     case DtlOpenType.ForFID: // 按流程ID来控制.
-                        qo.AddWhere(GEDtlAttr.FID, pkval);
+                        if (fid == 0)
+                            qo.AddWhere(GEDtlAttr.FID, pkval);
+                        else
+                            qo.AddWhere(GEDtlAttr.FID, fid);
                         break;
                 }
             }

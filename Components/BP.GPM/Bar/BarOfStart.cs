@@ -120,11 +120,14 @@ namespace BP.GPM
                 return "200";
             }
         }
+        /// <summary>
+        /// 是否整行显示
+        /// </summary>
         public override bool IsLine
         {
             get
             {
-                return false;
+                return true;
             }
         }
         #endregion 外观行为.

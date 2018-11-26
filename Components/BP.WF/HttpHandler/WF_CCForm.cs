@@ -1658,7 +1658,7 @@ namespace BP.WF.HttpHandler
             #endregion 组织参数.
 
             //获得他的描述,与数据.
-            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs);
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs,this.FID);
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }

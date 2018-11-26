@@ -14,7 +14,7 @@ namespace BP.GPM
     {
         #region 系统属性.
         /// <summary>
-        /// 流程编号/流程标记.
+        /// 标记
         /// </summary>
         override public string No
         {
@@ -40,7 +40,10 @@ namespace BP.GPM
         {
             get
             {
-                return true; //任何人都可以看到.
+                if (BP.Web.WebUser.No == "admin")
+                    return true; //任何人都可以看到.
+                else
+                    return false;
             }
         }
         #endregion 系统属性.
@@ -73,7 +76,6 @@ namespace BP.GPM
         {
             get
             {
-
                 string sql = "select A.WorkID, A.FK_Flow, A.FK_Node, A.Title , A.Sender, A.RDT FROM WF_GenerWorkFlow A , WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.IsPass=0 AND B.FK_Emp='" + Web.WebUser.No + "' ";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);

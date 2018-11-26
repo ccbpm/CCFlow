@@ -123,16 +123,6 @@
     <script type="text/javascript">
         var doType = GetQueryString("DoType");
         $(function () {
-
-            //            if (doType == null || doType == "")
-            //                doType = "Accepter_Save";
-            //            doType = "Accepter_Save";
-            //            if (doType == "Accepter_Send") {
-            //                $("#btnOk").text('发送');
-            //            } else {
-            //                $("#btnOk").text('保存');
-            //            }
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
 
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
@@ -141,7 +131,6 @@
             handler.AddPara("WorkID", GetQueryString("WorkID"));
             var data = handler.DoMethodReturnString("Accepter_Init");
 
-           // alert(data);
 
             if (data.indexOf('info@') == 0) {
                 alert(data);
@@ -179,12 +168,9 @@
             var depts = data.Depts;
             var emps = data.Emps;
 
-            //  alert(JSON.stringify(depts));
-            // alert(JSON.stringify(emps));
-
             var selected = data.Selected;
 
-            if (emps.length == 0) {
+            if (emps == null || emps==undefined || emps.length == 0) {
                 alert('当前节点设置的接收人范围为空,请联系管理员配置接收人范围.');
                 return;
             }

@@ -2764,6 +2764,8 @@ namespace BP.WF
                                 Attrs attrs = mywk.EnMap.Attrs;
                                 foreach (Attr attr in attrs)
                                 {
+                                   
+
                                     switch (attr.Key)
                                     {
                                         case GEDtlAttr.FID:
@@ -2774,6 +2776,11 @@ namespace BP.WF
                                         default:
                                             break;
                                     }
+
+                                    if (attr.IsRefAttr == true)
+                                        continue;
+                                    if (attr.Field == null)
+                                        continue; //
 
                                     if (myDT.Columns.Contains(attr.Field) == true)
                                         mywk.SetValByKey(attr.Key, myDT.Rows[0][attr.Field]);

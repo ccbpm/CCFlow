@@ -136,7 +136,6 @@
                 }
                 var url = "../AttrNode/SelectStation.htm?SelectStation=" + frmEnableExp;
                 OpenEasyUiDialog(url, 'StationIFrame', '设置岗位', W, H, 'icon-property', true, function () {
-                debugger
                 statonSelectRows = document.getElementById("StationIFrame").contentWindow.selectedRows;
                     //显示页面内容
                     ShowTable(statonSelectRows, 6);
@@ -153,7 +152,7 @@
                     frmEnableExp = exps.substr(0, exps.length - 1);
                 }
                 var url = "../AttrNode/SelectDept.htm?SelectDept=" + frmEnableExp;
-                window.parent.parent.OpenEasyUiDialog(url, 'DeptIFrame', '设置部门', W, H, 'icon-property', true, function () {
+                    OpenEasyUiDialog(url, 'DeptIFrame', '设置部门', W, H, 'icon-property', true, function () {
                     deptSelectRows = document.getElementById("DeptIFrame").contentWindow.selectedRows;
                     //显示页面内容
                     ShowTable(deptSelectRows, 7);

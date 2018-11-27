@@ -83,6 +83,26 @@ namespace BP.Sys
                     fe.H = 600;
                     fe.Insert();
                     break;
+                    //@袁丽娜
+                case "HandSiganture"://签字版
+                    //检查是否可以创建字段? 
+                    MapData md = new MapData(fk_mapdata);
+                    md.CheckPTableSaveModel(no);
+
+                    MapAttr ma = new MapAttr();
+                    ma.FK_MapData = fk_mapdata;
+                    ma.KeyOfEn = no;
+                    ma.Name = name;
+                    ma.MyDataType = DataType.AppString;
+                    ma.UIContralType = UIContralType.HandWriting;
+                    ma.X = x;
+                    ma.Y = y;
+                    //frmID设置字段所属的分组
+                    GroupField groupField = new GroupField();
+                    groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
+                    ma.GroupID = groupField.OID;
+                    ma.Insert();
+                    break;
                 default:
                     throw new Exception("@没有判断的存储控件:" + ctrlType + ",存储该控件前,需要做判断.");
             }
@@ -831,7 +851,8 @@ namespace BP.Sys
 
                 #region 数据类控件.
                 if (shape.Contains("TextBox") == true
-                    || shape.Contains("DropDownList") == true)
+                    || shape.Contains("DropDownList") == true
+                    || shape == FrmEle.HandSiganture)
                 {
                     BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata, ctrlID, shape, control, properties, attrPKs);
                     attrPKs = attrPKs.Replace(ctrlID + "@", "@");
@@ -877,7 +898,7 @@ namespace BP.Sys
                 if (shape == "Fieldset"
                     || shape == FrmEle.iFrame
                     || shape == FrmEle.Fieldset
-                    || shape == FrmEle.HandSiganture)
+                    )
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);

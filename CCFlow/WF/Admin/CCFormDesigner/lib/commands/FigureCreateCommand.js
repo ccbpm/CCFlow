@@ -67,8 +67,9 @@ FigureCreateCommand.prototype = {
                 case CCForm_Controls.Date:
                 case CCForm_Controls.DateTime:
                 case CCForm_Controls.CheckBox:
+                //case "HandSiganture":
                     canAddFigure = false;
-                    this.DataFieldCreate(createdFigure, this.x, this.y);
+                    this.DataFieldCreate(createdFigure, this.x, this.y,);
                     break;
                 case CCForm_Controls.ListBox:
                 case CCForm_Controls.HiddendField:
@@ -689,8 +690,10 @@ TransFormDataField.prototype = {
         var createdFigure = this.figure;
         var propertys = CCForm_Control_Propertys.TextBox_Str;
         var shap_src = null;
-
-        shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
+//        if(createdFigure.CCForm_Shape == "HandSiganture")
+//            shap_src = "/DataView/TextBoxStr.png";
+//        else
+          shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
 
         //  alert(shap_src);
         //  alert(shap_src);

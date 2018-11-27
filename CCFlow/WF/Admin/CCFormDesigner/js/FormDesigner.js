@@ -808,7 +808,7 @@ function figure_MapAttr_Template(mapAttr) {
         else if (mapAttr.LGType == 2) {
             f.CCForm_Shape = "DropDownListTable";
         }
-            //外部数据源
+        //外部数据源
         else if (mapAttr.LGType == 0) {
             f.CCForm_Shape = "DropDownListTable";
         }
@@ -817,7 +817,11 @@ function figure_MapAttr_Template(mapAttr) {
         f.CCForm_Shape = "TextBoxBoolean";
     } else if (mapAttr.UIContralType == 3) {//单选妞
         return;
-    } else {
+    } else if (mapAttr.UIContralType == 8) {//签字版
+        f = new Figure("TextBox");
+        f.CCForm_Shape = "HandSiganture";
+    }
+    else {
         alert(mapAttr)
 
     }

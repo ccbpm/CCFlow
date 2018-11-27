@@ -40,6 +40,7 @@
         </div>
     </div>
     <script type="text/javascript">
+        var imagePath = "";
         $(document).on('ready', function () {
             
             //if ($('.js-signature').length) {
@@ -60,18 +61,23 @@
             var form = new FormData();
             form.append("imageData", pic);
 
-            // Sending the image data to Server 
+            // Sending the image data to Server
 
             $.ajax({
                 type: 'POST',
-                url: Handler + "?DoType=HandWriting_Save&WorkID=" + GetQueryString("WorkID") + "&OID=" + GetQueryString("OID") + "&FK_Node=" + GetQueryString("FK_Node"),
-                data:form,
+                url: Handler + "?DoType=HandWriting_Save&WorkID=" + GetQueryString("WorkID") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&FK_Node=" + GetQueryString("FK_Node"),
+                data: form,
                 processData: false,
                 contentType: false,
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
                         alert(data);
+                        imagePath = "";
                         return;
+                    }
+                    if (data.indexOf('info@') == 0) {
+                        imagePath = data.replace('info@', '');
+                        parent.setHandWriteSrc(GetQueryString("KeyOfEn"),imagePath);
                     }
                     alert("图片上传成功.");
                 }

@@ -179,6 +179,19 @@ function figure_Template_Siganture(SigantureID, val) {
     }
 
 }
+
+//签字板
+function figure_Template_HandWrite(HandWriteID, val) {
+    var url = "CCForm/HandWriting.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
+    OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
+}
+
+function setHandWriteSrc(HandWriteID, imagePath) {
+    imagePath = "../" + imagePath.substring(imagePath.indexOf("DataUser"));
+    document.getElementById("Img" + HandWriteID).src = imagePath;
+    $("#TB_" + HandWriteID).val(imagePath);
+    $('#eudlg').dialog('close');
+}
 //然浏览器最大化.
 function ResizeWindow() {
     if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     

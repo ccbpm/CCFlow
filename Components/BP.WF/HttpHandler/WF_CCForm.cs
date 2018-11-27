@@ -1897,13 +1897,13 @@ namespace BP.WF.HttpHandler
             {
                 string basePath = SystemConfig.PathOfDataUser + "HandWritingImg";
                 string ny = DateTime.Now.ToString("yyyy_MM");
-                string tempPath = basePath + "\\" + ny + "\\" + this.FrmID + "\\";
-                string tempName = this.KeyOfEn + "_" + this.OID + ".png";
+                string tempPath = basePath + "\\" + ny + "\\" + this.FK_Node + "\\";
+                string tempName = this.WorkID + "_" + this.KeyOfEn + ".png";
 
                 if (System.IO.Directory.Exists(tempPath) == false)
                     System.IO.Directory.CreateDirectory(tempPath);
 
-                string pic_Path = tempPath + "\\" + tempName;
+                string pic_Path = tempPath +  tempName;
 
                 string imgData = this.GetValFromFrmByKey("imageData");
 
@@ -1916,7 +1916,7 @@ namespace BP.WF.HttpHandler
                         bw.Close();
                     }
                 }
-                return "保存成功.";
+                return "info@" + pic_Path.Replace("\\", "/"); ;
             }
             catch (Exception e)
             {

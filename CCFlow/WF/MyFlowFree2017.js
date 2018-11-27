@@ -175,11 +175,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             //如果是图片签名，并且可以编辑
             var ondblclick = ""
             if (mapAttr.UIIsEnable == 1) {
-                ondblclick = " ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
+                ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
             }
 
             var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
-            eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
             return eleHtml;
         }
 

@@ -730,9 +730,7 @@ function valitationBefore(o, validateType) {
 			    }
 		}
 		if (flag) {
-			$(o).data({
-				value : o.value
-			});
+		    return;
 		}
 	}
 }
@@ -753,9 +751,8 @@ function valitationAfter(o, validateType) {
 			        flag = !isNaN(value);
 			        break;
 			    }
-		}
-        if (!flag) {
-			o.value = $(o).data().value;
+		}        if (!flag) {
+			o.value = 0;
 		}
 	}
 }

@@ -774,7 +774,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", false, false, 0, 150, 20, true, null);
                  
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别", true, false, 0, 500, 20, true, null);
-                map.SetHelperAlert(FrmAttachmentAttr.Sort, "设置格式:生产类,文件类,其他 \t\n目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");
+                map.SetHelperAlert(FrmAttachmentAttr.Sort, "设置格式:生产类,文件类,其他，也可以设置一个SQL，比如select Name FROM Port_Dept  \t\n目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");
 
                 map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true,true);
 

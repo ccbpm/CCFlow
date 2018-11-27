@@ -1734,11 +1734,9 @@ namespace BP.WF.HttpHandler
             root.NodeType = "root";
             appFlowFormTree.Clear();
             appFlowFormTree.AddEntity(root);
-
             #region 添加表单及文件夹
 
             //节点表单
-            string tfModel = SystemConfig.AppSettings["TreeFrmModel"];
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
 
             FrmNodes frmNodes = new FrmNodes();

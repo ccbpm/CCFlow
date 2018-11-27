@@ -1909,7 +1909,7 @@ namespace BP.WF.HttpHandler
                 string treeNo = "0";
                 if (isHave && mds.Count == 1)
                 {
-                    treeNo = "0";
+                    treeNo = "00";
                 }
                 else if (isHave == true)
                 {

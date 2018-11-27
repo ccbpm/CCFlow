@@ -189,7 +189,7 @@ namespace BP.WF.Template
             #endregion 按节点绑定的人员处理.
 
             #region 按照选择的人员处理。
-            if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected || town.HisNode.HisDeliveryWay == DeliveryWay.BySelectedForPrj
                 || town.HisNode.HisDeliveryWay == DeliveryWay.ByFEE)
             {
                 ps = new Paras();
@@ -204,7 +204,8 @@ namespace BP.WF.Template
                     int i = sas.QueryAccepterPriSetting(this.town.HisNode.NodeID);
                     if (i == 0)
                     {
-                        if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected)
+                        if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected 
+                            || town.HisNode.HisDeliveryWay == DeliveryWay.BySelectedForPrj)
                         {
                             Node toNode = this.town.HisNode;
                             Selector select = new Selector(toNode.NodeID);

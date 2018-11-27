@@ -388,7 +388,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
             bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
 
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;'class='form-control'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:125px;'class='form-control'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -399,12 +399,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         //alert(defValue);
 
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     //AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

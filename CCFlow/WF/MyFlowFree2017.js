@@ -168,6 +168,21 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     //AppString
     if (mapAttr.MyDataType == "1") {
 
+        //签字板
+        if (mapAttr.UIContralType == "8") {
+            //查找默认值
+            var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            //如果是图片签名，并且可以编辑
+            var ondblclick = ""
+            if (mapAttr.UIIsEnable == 1) {
+                ondblclick = " ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
+            }
+
+            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+            eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            return eleHtml;
+        }
+
         //普通类型的单行文本.
         if (mapAttr.UIHeight <= 40) {
 
@@ -281,23 +296,24 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'float');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
         return eleHtml;
     }
 
     // int 类型.
     if ((mapAttr.MyDataType == 2 && mapAttr.UIContralType == 0)) { //AppInt
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' />";
         return eleHtml;
     }
 
     // 金额类型. AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
 
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
         return eleHtml;
     }
 
+   
     alert(mapAttr.Name + '没有判断...');
 }
 

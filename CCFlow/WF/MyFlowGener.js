@@ -383,8 +383,11 @@ function Save() {
     //树形表单保存
     if (flowData) {
         var node = flowData.WF_Node[0];
+     //   alert(node.FormType);
         if (node && node.FormType == 5) {
             OnTabChange("btnsave");
+            setToobarEnable();
+            return;
         }
     }
 

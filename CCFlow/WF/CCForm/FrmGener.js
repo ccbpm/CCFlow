@@ -144,7 +144,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     }
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
     if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
-        OpenBootStrapModal(url, "editSubGrid", '编辑', 1000, 450, "icon-property", true, function () { }, null, function () {
+        OpenBootStrapModal(url, "editSubGrid", '编辑', 1000, 450, "icon-property", false, function () { }, null, function () {
             if (typeof InitPage === "function") {
                 InitPage.call();
             } else {

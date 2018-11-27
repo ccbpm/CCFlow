@@ -55,7 +55,6 @@ namespace BP.GPM
         /// MoreUrl
         /// </summary>
         public const string MoreUrl = "MoreUrl";
-
         /// <summary>
         /// Doc
         /// </summary>
@@ -91,8 +90,7 @@ namespace BP.GPM
             {
                 UAC uac = new UAC();
                 uac.IsInsert = false;
-               
-                return base.HisUAC;
+                return uac;
             }
         }
 
@@ -385,14 +383,14 @@ namespace BP.GPM
                 map.AddTBString(BarAttr.Name, null, "名称", true, false, 0, 3900, 20);
 
                 map.AddTBString(BarAttr.Title, null, "标题", true, false, 0, 3900, 20);
-                //map.AddDDLSysEnum(BarAttr.BarType, 0, "信息块类型", true, true, 
-                //    BarAttr.BarType, "@0=标题消息列表(Tag1=SQL语句)@1=其它");
 
+                //map.AddDDLSysEnum(BarAttr.BarType, 0, "信息块类型", true, true, 
+                //BarAttr.BarType, "@0=标题消息列表(Tag1=SQL语句)@1=其它");
                 //map.AddTBString(BarAttr.Tag1, null, "Tag1", true, false, 0, 3900, 300,true);
                 //map.AddTBString(BarAttr.Tag2, null, "Tag2", true, false, 0, 3900, 300, true);
                 //map.AddTBString(BarAttr.Tag3, null, "Tag3", true, false, 0, 3900, 300, true);
-
                 //map.AddBoolean(BarAttr.IsDel, true, "用户是否可删除",true,true);
+
 
                 map.AddDDLSysEnum(BarAttr.OpenWay, 0, "打开方式", true, true, BarAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
                 map.AddBoolean(BarAttr.IsLine, false, "是否独占一行", true, true);

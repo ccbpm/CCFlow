@@ -2764,7 +2764,6 @@ namespace BP.WF
                                 Attrs attrs = mywk.EnMap.Attrs;
                                 foreach (Attr attr in attrs)
                                 {
-                                   
 
                                     switch (attr.Key)
                                     {

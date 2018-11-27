@@ -1004,9 +1004,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true, MapDtlAttr.DtlOpenType, "@0=操作员@1=工作ID@2=流程ID");
                 #endregion 工作流相关.
 
-
+                #region 相关方法.
                 RefMethod  rm = new RefMethod();
-
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".HidAttr";
@@ -1022,7 +1021,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "导入其他表字段"; // "设计表单";
@@ -1050,6 +1048,17 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "从表附件属性"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".OpenAthAttr";
+                rm.Icon = "../Img/AttachmentM.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+                #endregion 相关方法.
+
+                #region 实验中的功能.
+                rm = new RefMethod();
                 rm.GroupName = "实验中的功能";
                 rm.Title = "列自动计算"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".ColAutoExp";
@@ -1069,7 +1078,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.GroupName = "实验中的功能";
                 rm.Title = "事件"; // "设计表单";
@@ -1079,22 +1087,22 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.GroupName = "实验中的功能";
-                //rm.Title = "高级设置";
-                //rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
-                //rm.Icon = "../Img/Setting.png";
-                //rm.Visable = true;
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
+                #endregion 实验中的功能.
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-         
+        /// <summary>
+        /// 打开从表附件属性.
+        /// </summary>
+        /// <returns></returns>
+        public string OpenAthAttr()
+        {
+            string url = "../../Comm/RefFunc/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=" + this.No + "_AthMDtl";
+            // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            return url;
+        }
         /// <summary>
         /// 列自动计算
         /// </summary>

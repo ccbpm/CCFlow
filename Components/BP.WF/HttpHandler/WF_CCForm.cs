@@ -155,6 +155,22 @@ namespace BP.WF.HttpHandler
                 //athDesc.HisDeleteWay = AthDeleteWay.DelAll; 
                 #endregion 处理权限问题.
 
+
+                //为湖南中佳增加可以支持sql的模式查询出来附件的类别. @李国文
+                string sort=athDesc.Sort.Trim();
+                if (sort.Contains("SELECT") == true || sort.Contains("select") == true)
+                {
+                    string sql = BP.WF.Glo.DealExp(sort,null,null);
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    string strs = "";
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        strs += dr[0] + ",";
+                    }
+                    athDesc.Sort = strs;
+                }
+
+
                 //增加附件描述.
                 ds.Tables.Add(athDesc.ToDataTableField("AthDesc"));
 

@@ -2769,9 +2769,7 @@ namespace BP.WF
             //增加对新规则的支持. @MyField; 格式.
             if (en != null)
             {
-
                 Row row = en.Row;
-
                 //特殊判断.
                 if (row.ContainsKey("OID")==true)
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
@@ -4417,7 +4415,7 @@ namespace BP.WF
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
                     qo.addOr();
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
                 }
@@ -4436,7 +4434,7 @@ namespace BP.WF
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                 //qo.AddWhere(FrmAttachmentDBAttr.MyNote, athDesc.NoOfObj);
                 //qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
 
                 //qo.addAnd();
                 //qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);

@@ -261,6 +261,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyFlow_Init()
         {
+            string isCC = this.GetRequestVal("IsCC");
+            if (isCC!=null && isCC == "1")
+                return "url@WFRpt.htm?1=2" + this.RequestParasOfAll;
+
             if (this.WorkID != 0)
             {
                 //判断是否有执行该工作的权限.

@@ -526,7 +526,7 @@ namespace BP.WF.Template
                 ds.Tables.Add(dt);
 
                 //人员.
-                sql = "SELECT distinct a.No, a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeDept b, WF_PrjEmp C WHERE a.FK_Dept=b.FK_Dept  AND A.FK_Emp=C.FK_Emp  AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'  ";
+                sql = "SELECT distinct a.No, a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeDept b, WF_PrjEmp C WHERE a.FK_Dept=b.FK_Dept  AND A.No=C.FK_Emp  AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'  ";
                 dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 ds.Tables.Add(dtEmp);
                 dtEmp.TableName = "Emps";

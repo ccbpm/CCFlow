@@ -30,43 +30,41 @@
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondBySQL_Init&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("CondType", condType);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_MainNode", fk_mainNode);
+            handler.AddPara("FK_Node", fk_Node);
+            handler.AddPara("ToNodeID", toNodeID);
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
-                        return;
-                    }
+            var data = handler.DoMethodReturnString("CondBySQL_Init");
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    //转json.
-                    data = JSON.parse(data);
+            //转json.
+            data = JSON.parse(data);
 
-                    var docs = data.OperatorValue;
-                    docs = docs.replace("~", "'");
-                    docs = docs.replace("~", "'");
-                    docs = docs.replace("~", "'");
-                    docs = docs.replace("~", "'");
-                    docs = docs.replace("~", "'");
-                    docs = docs.replace("~", "'");
-                    docs = docs.replace("~", "'");
+            var docs = data.OperatorValue;
+            docs = docs.replace("~", "'");
+            docs = docs.replace("~", "'");
+            docs = docs.replace("~", "'");
+            docs = docs.replace("~", "'");
+            docs = docs.replace("~", "'");
+            docs = docs.replace("~", "'");
+            docs = docs.replace("~", "'");
 
 
-                    document.getElementById("TB_Docs").value = docs;
-                    document.getElementById("TB_Note").value = data.Note;
+            document.getElementById("TB_Docs").value = docs;
+            document.getElementById("TB_Note").value = data.Note;
 
-                }
-            });
         });
 
         //执行保存..
@@ -90,30 +88,27 @@
                 return;
             }
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondBySQL_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + "&TB_Docs="+sqlVal+"&TB_Note="+note+"&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("CondType", condType);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_MainNode", fk_mainNode);
+            handler.AddPara("FK_Node", fk_Node);
+            handler.AddPara("ToNodeID", toNodeID);
+            handler.AddPara("TB_Docs", sqlVal);
+            handler.AddPara("TB_Note", note);
+            var data = handler.DoMethodReturnString("CondBySQL_Save");
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
-
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
-
-                    alert(data);
-
-                    //$("#Msg").html("<font color=green>" + data + "</font>");
-                }
-            });
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+            alert(data);
+         
         }
 
         //执行删除..
@@ -128,30 +123,28 @@
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondBySQL_Delete&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("CondType", condType);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_MainNode", fk_mainNode);
+            handler.AddPara("FK_Node", fk_Node);
+            handler.AddPara("ToNodeID", toNodeID);
+            var data = handler.DoMethodReturnString("CondBySQL_Delete");
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+            alert(data);
+            document.getElementById("TB_Docs").value = "";
+            document.getElementById("TB_Note").value = "";
 
-                    alert(data);
-                    document.getElementById("TB_Docs").value = "";
-                    document.getElementById("TB_Note").value = "";
-                }
-            });
         }
 
         //装载模版.

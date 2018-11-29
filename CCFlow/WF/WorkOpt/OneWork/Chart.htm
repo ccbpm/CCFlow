@@ -43,6 +43,7 @@
         var STYLE_NODE_WIDTH = 50;  //节点宽度
         var STYLE_NODE_HEIGHT = 50; //节点高度
         var STYLE_NODE_COLOR_FORE = 'Gray';    //节点名称颜色
+        var STYLE_CURRENT_NODE_COLOR_FORE = 'Red';    //节点名称颜色
         var STYLE_NODE_COLOR_FORE_HOVER = 'blue';   //节点名称鼠标悬停时颜色
         var STYLE_NODE_COLOR_FORE_TRACK = 'green';    //走过的节点名称颜色
         var STYLE_NODE_DEFAULT_ICON_PATH = '../../../DataUser/NodeIcon/'; //默认节点图标所在相对路径
@@ -50,9 +51,11 @@
         var STYLE_NODE_BORDER_RADIUS = 5;   //节点边框圆角大小
         var STYLE_NODE_BORDER_COLOR_FIRST = 'green';    //开始节点边框颜色
         var STYLE_NODE_BORDER_COLOR_END = 'red';    //结束节点边框颜色
+        var STYLE_CURRENT_NODE_BORDER_COLOR = 'red';  //当前节点边框
+        var STYLE_NODE_BORDER_COLOR_TRACK = 'green';  //走过的节点边框颜色
         var STYLE_NODE_BORDER_COLOR = 'black';  //节点边框颜色
         var STYLE_NODE_BORDER_COLOR_HOVER = 'blue'; //节点边框鼠标悬停时颜色
-        var STYLE_NODE_BORDER_COLOR_TRACK = 'green';  //走过的节点边框颜色
+        
         var STYLE_NODE_BORDER_WIDTH_NORMAL = 1; //节点边框宽度
         var STYLE_NODE_BORDER_WIDTH_HOVER = 3;  //节点边框鼠标悬停时的宽度
 
@@ -131,6 +134,7 @@
             var nodeTracks;
             var nodeTrack;
             var isExist;
+            var currNode = uh["FK_Node"];
 
             $('#tracktable').hover(function () { }, function () {
                 $('#trackinfo').offset({ top: 0, left: 0 });
@@ -205,6 +209,18 @@
                 rNode.tracks = nodeTracks;
                 rNode.currTrack = nodeTrack;
 
+                var borderColor = nodeBorderColor;
+                var TextColor = STYLE_NODE_COLOR_FORE;
+
+                if (rNode.currTrack != null)
+                    if (this.ID == currNode) {
+                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                    } else {
+                        TextColor = STYLE_NODE_COLOR_FORE_TRACK;
+                        borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                    }
+
                 //在节点右侧绘制流程轨迹中当前节点的处理人/处理时间
                 if (rNode.isTrackNode) {
                     //判断此节点是否是多人处理
@@ -215,7 +231,7 @@
                     }
 
                     rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EmpFromT + '\n' + getChineseDateTime(rNode.currTrack.track.RDT)) : rNode.currTrack.track.EmpToT);
-                    rNode.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
+                    rNode.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                     rNode.rTrackText.toFront();
                 }
                 else if (datas.Possible) {
@@ -225,13 +241,14 @@
 
                     if (rNode.rPossible) {
                         rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EmpName + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
-                        rNode.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
+                        rNode.rPossibleText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                         rNode.rPossibleText.toFront(); FrmWorkCheck
                     }
                 }
+               
 
-                rNode.rBorder.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_BORDER_COLOR_TRACK : nodeBorderColor), "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
-                rNode.rText.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "fill": getFillTextColor(rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "font-size": STYLE_FONT_SIZE_NODE });
+                rNode.rBorder.attr({ "stroke": borderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
+                rNode.rText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor), "font-size": STYLE_FONT_SIZE_NODE });
                 rNode.rIcon.attr("title", this.Name);
 
                 //增加节点图片的鼠标滑过/移开效果
@@ -482,16 +499,16 @@
                                     continue;
 
                                 var rdt = gwl.RDT;
-                                if(rdt!="" && rdt!="无")
-                                 rdt = new Date(gwl.RDT).format('yyyy-MM-dd hh:mm');
+                                if (rdt != "" && rdt != "无")
+                                    rdt = new Date(gwl.RDT).format('yyyy-MM-dd hh:mm');
 
                                 var sdt = gwl.SDT;
-                                if(sdt!="" && sdt!="无")
-                                    sdt= new Date(gwl.SDT).format('yyyy-MM-dd hh:mm');
+                                if (sdt != "" && sdt != "无")
+                                    sdt = new Date(gwl.SDT).format('yyyy-MM-dd hh:mm');
 
                                 var cdt = gwl.CDT;
-                                if(cdt!="" && cdt!="无")
-                                cdt = new Date(gwl.CDT).format('yyyy-MM-dd hh:mm')
+                                if (cdt != "" && cdt != "无")
+                                    cdt = new Date(gwl.CDT).format('yyyy-MM-dd hh:mm')
 
                                 tablehtml += "<table style='width:300px;'>";
                                 tablehtml += "<caption>" + gwl.FK_EmpText + "</capiton>";
@@ -792,17 +809,26 @@
                 }, function () {
                     var node = rFlow.getNodeByRIconId(this.id);
                     if (node != null) {
-                        node.rBorder.attr({ "stroke": node.currTrack ? STYLE_NODE_BORDER_COLOR_TRACK : node.rBorderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
-                        node.rText.attr({ "stroke": node.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE, "fill": getFillTextColor(node.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE) });
+                        var borderColor = nodeBorderColor;
+                        var TextColor = STYLE_NODE_COLOR_FORE;
+                        if (node.id == currNode) {
+                            borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                            TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                        } else {
+                            TextColor = STYLE_NODE_COLOR_FORE_TRACK;
+                            borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                        }
+                        node.rBorder.attr({ "stroke": borderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
+                        node.rText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor) });
 
                         if (node.isTrackNode && node.currTrack.type == "FROM") {
                             node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
                         }
                         else if (node.rTrackText) { //added by liuxc,2016-03-16
-                            node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
+                            node.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor) });
                         }
                         else if (node.rPossibleText) { //added by liuxc,2016-04-15
-                            node.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
+                            node.rPossibleText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor) });
                         }
 
                         if (isSubFlowNode == false) {

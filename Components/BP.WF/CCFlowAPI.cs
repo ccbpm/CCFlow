@@ -388,14 +388,14 @@ namespace BP.WF
                     #region  FrmAttachment .
                     myds.Tables.Remove("Sys_FrmAttachment");
 
-                    //把从表放里面
+                    //把附件放里面
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
                     BP.Sys.FrmAttachment frmAtchs = new FrmAttachment();
                     qo = new QueryObject(frmAtchs);
                     qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
                     qo.DoQuery();
 
-                    // 加入最新的MapDtl.
+                    // 加入最新的Sys_FrmAttachment.
                     myds.Tables.Add(frmAtchs.ToDataTableField("Sys_FrmAttachment"));
                     #endregion  FrmAttachment .
 

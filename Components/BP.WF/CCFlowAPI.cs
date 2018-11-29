@@ -369,6 +369,37 @@ namespace BP.WF
                     // 加入最新的MapExt.
                     myds.Tables.Add(exts.ToDataTableField("Sys_MapExt"));
                     #endregion  MapExt .
+
+                    #region  MapDtl .
+                    myds.Tables.Remove("Sys_MapDtl");
+
+                    //把从表放里面
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    BP.Sys.MapDtls dtls = new MapDtls();
+                    qo = new QueryObject(dtls);
+                    qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
+                    qo.DoQuery();
+
+                    // 加入最新的MapDtl.
+                    myds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
+                    #endregion  MapDtl .
+
+
+                    #region  FrmAttachment .
+                    myds.Tables.Remove("Sys_FrmAttachment");
+
+                    //把从表放里面
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    BP.Sys.FrmAttachment frmAtchs = new FrmAttachment();
+                    qo = new QueryObject(frmAtchs);
+                    qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
+                    qo.DoQuery();
+
+                    // 加入最新的MapDtl.
+                    myds.Tables.Add(frmAtchs.ToDataTableField("Sys_FrmAttachment"));
+                    #endregion  FrmAttachment .
+
+
                 }
                 #endregion 增加 groupfields
 

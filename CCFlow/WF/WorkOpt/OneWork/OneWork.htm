@@ -19,7 +19,7 @@
         var tpo = {};
 
         $(function () {
-         
+
             $("#mtabs").tabs({
                 onSelect: function (title, index) {
                     document.title = title;
@@ -51,20 +51,25 @@
 
             data = eval('(' + data + ')');
 
-            $.each(data, function () {
+            var IsDefaultTab = null;
+            $.each(data, function (index, obj) {
+                if (this.IsDefault == "1")
+                    IsDefaultTab = index;
                 addTab(this.No, this.Name, this.Url);
                 tpo[this.No] = this.Name;
             });
+            if (IsDefaultTab != null) {
+                $("#mtabs").tabs("select", IsDefaultTab);
+            } else {
+                if (currtab == false) {
 
-            if (currtab == false) {
+                    $("#mtabs").tabs("select", 0);
+                }
+                else {
 
-                $("#mtabs").tabs("select", 0);
+                    $("#mtabs").tabs("select", tpo[currtab]);
+                }
             }
-            else {
-
-                $("#mtabs").tabs("select", tpo[currtab]);
-            }
-
             if (window.screen) {
                 var w = screen.availWidth;
                 var h = screen.availHeight;

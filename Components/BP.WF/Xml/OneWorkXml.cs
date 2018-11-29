@@ -29,6 +29,14 @@ namespace BP.WF.XML
                 return this.GetValStringByKey("UrlJFlow");
             }
         }
+
+        public new string IsDefault
+        {
+            get
+            {
+                return this.GetValStringByKey("IsDefault");
+            }
+        }
       
         #endregion 属性.
 

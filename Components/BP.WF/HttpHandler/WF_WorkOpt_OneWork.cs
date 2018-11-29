@@ -434,7 +434,7 @@ namespace BP.WF.HttpHandler
             {
                 string url = "";
                 url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}&FromWorkOpt=1", item.URL, nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
-                re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\"", item.No, item.Name, url) + "},";
+                re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\",\"IsDefault\":\"{3}\"", item.No, item.Name, url, item.IsDefault) + "},";
             }
 
             return re.TrimEnd(',') + "]";

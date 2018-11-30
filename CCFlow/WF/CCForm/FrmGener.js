@@ -443,12 +443,13 @@ function Save(scope) {
             if (data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
                 $('.Message').show();
-                return;
+                return false;
             }
 
             if (scope != "btnsave")
                 window.location.href = window.location.href;
-            
+            return true;
+
         }
     });
 }

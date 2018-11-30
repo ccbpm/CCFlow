@@ -269,7 +269,9 @@ function OnTabChange(scope) {
                 var contentWidow = currScope.contentWindow;
                 if(contentWidow.SaveDtlData!= undefined && typeof(contentWidow.SaveDtlData) == "function"){
                     contentWidow.IsChange = true;
-                    contentWidow.SaveDtlData("btnsave");
+                    var IsSave = contentWidow.SaveDtlData("btnsave");
+                    if(IsSave == false)
+                      return false;
                  }
                 if (lastChar == "*")
                 	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
@@ -278,7 +280,7 @@ function OnTabChange(scope) {
         	}
            
         });
-        return;
+        return true;
     }
     
     if(scope == "saveOther"){

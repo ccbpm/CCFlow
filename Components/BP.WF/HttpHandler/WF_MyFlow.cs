@@ -1722,6 +1722,94 @@ namespace BP.WF.HttpHandler
             return this.GenerWorkNode();
         }
 
+        public string SaveFlow_ToDraftRole()
+        {
+            #region 为开始工作创建待办.
+            Node nd = new Node(this.FK_Node);
+            if (nd.IsStartNode == true)
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                Flow fl = new Flow(this.FK_Flow);
+                if (fl.DraftRole == DraftRole.None)
+                    return "保存成功";
+
+                //规则设置为写入待办，将状态置为运行中，其他设置为草稿.
+                WFState wfState = WFState.Blank;
+                if (fl.DraftRole == DraftRole.SaveToDraftList)
+                    wfState = WFState.Draft;
+                if (fl.DraftRole == DraftRole.SaveToTodolist)
+                    wfState = WFState.Runing;
+                Work wk = nd.HisWork;
+                if (this.WorkID != 0)
+                {
+                    wk.OID = this.WorkID;
+                    wk.RetrieveFromDBSources();
+                }
+                wk.ResetDefaultVal();
+
+                //设置标题.
+                string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
+
+                //修改RPT表的标题
+                wk.SetValByKey(BP.WF.Data.GERptAttr.Title, title);
+                wk.Update();
+
+                gwf.WorkID = this.WorkID;
+                int count = gwf.RetrieveFromDBSources();
+
+                gwf.Title = title; //标题.
+                if (count == 0)
+                {
+                    gwf.FlowName = fl.Name;
+                    gwf.FK_Flow = this.FK_Flow;
+                    gwf.FK_FlowSort = fl.FK_FlowSort;
+                    gwf.SysType = fl.SysType;
+
+                    gwf.FK_Node = this.FK_Node;
+                    gwf.NodeName = nd.Name;
+                    gwf.WFState = wfState;
+
+                    gwf.FK_Dept = WebUser.FK_Dept;
+                    gwf.DeptName = WebUser.FK_DeptName;
+                    gwf.Starter = WebUser.No;
+                    gwf.StarterName = WebUser.Name;
+                    gwf.RDT = DataType.CurrentDataTime;
+                    gwf.Insert();
+
+                    // 产生工作列表.
+                    GenerWorkerList gwl = new GenerWorkerList();
+                    gwl.WorkID = this.WorkID;
+                    gwl.FK_Emp = WebUser.No;
+                    gwl.FK_EmpText = WebUser.Name;
+
+                    gwl.FK_Node = gwf.FK_Node;
+                    gwl.FK_NodeText = nd.Name;
+                    gwl.FID = 0;
+
+                    gwl.FK_Flow = gwf.FK_Flow;
+                    gwl.FK_Dept = WebUser.FK_Dept;
+                    gwl.FK_DeptT = WebUser.FK_DeptName;
+
+                    gwl.SDT = "无";
+                    gwl.DTOfWarning = DataType.CurrentDataTime;
+                    gwl.IsEnable = true;
+
+                    gwl.IsPass = false;
+                    //  gwl.Sender = WebUser.No;
+                    gwl.PRI = gwf.PRI;
+                    gwl.Insert();
+                }
+                else
+                {
+                    gwf.WFState = wfState;
+                    gwf.DirectUpdate();
+                }
+
+            }
+            #endregion 为开始工作创建待办
+            return "保存到待办";
+        }
+
         #region 表单树操作
         /// <summary>
         /// 获取表单树数据

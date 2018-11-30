@@ -402,7 +402,14 @@ function Save() {
         var node = flowData.WF_Node[0];
      //   alert(node.FormType);
         if (node && node.FormType == 5) {
-            OnTabChange("btnsave");
+            if(OnTabChange("btnsave") == true){
+                //判断内容是否保存到待办
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+                handler.AddPara("FK_Flow",pageData.FK_Flow);
+                handler.AddPara("FK_Node",pageData.FK_Node);
+                handler.AddPara("WorkID",pageData.WorkID);
+                handler.DoMethodReturnString("SaveFlow_ToDraftRole");
+            }
             setToobarEnable();
             return;
         }

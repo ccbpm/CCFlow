@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
             //获取track.
             DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID);
             ds.Tables.Add(dt);
-         
+
 
             #region  父子流程数据存储到这里.
             Hashtable ht = new Hashtable();
@@ -114,12 +114,22 @@ namespace BP.WF.HttpHandler
                 GenerWorkerLists gwls = new GenerWorkerLists();
                 gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID);
 
+                //warning 补偿式的更新.  做特殊的判断，当会签过了以后仍然能够看isPass=90的错误数据.
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.IsPassInt == 90 && gwf.FK_Node != item.FK_Node)
+                    {
+                        item.IsPassInt = 0;
+                        item.Update();
+                    }
+                }
+
                 ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
             }
 
             //把节点审核配置信息.
-                FrmWorkCheck fwc = new FrmWorkCheck(gwf.FK_Node);
-                ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
+            FrmWorkCheck fwc = new FrmWorkCheck(gwf.FK_Node);
+            ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
 
             //返回结果.
             return BP.Tools.Json.DataSetToJson(ds, false);
@@ -142,7 +152,7 @@ namespace BP.WF.HttpHandler
 
 
         #region 执行父类的重写方法.
-        
+
         #endregion 执行父类的重写方法.
 
         #region 属性.
@@ -150,7 +160,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = this.GetRequestVal("TB_Msg"); 
+                string str = this.GetRequestVal("TB_Msg");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -160,7 +170,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = this.GetRequestVal("UserName");  
+                string str = this.GetRequestVal("UserName");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -170,7 +180,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str =  this.GetRequestVal("Title");
+                string str = this.GetRequestVal("Title");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -194,14 +204,14 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str =this.GetRequestVal("EnumKey");
+                string str = this.GetRequestVal("EnumKey");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
 
             }
         }
-    
+
 
         public string Name
         {
@@ -229,14 +239,14 @@ namespace BP.WF.HttpHandler
             {
                 return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
         }
         protected override string DoDefaultMethod()
         {
-            return "err@没有判断的执行类型：" + this.DoType+" @类 "+this.ToString();
+            return "err@没有判断的执行类型：" + this.DoType + " @类 " + this.ToString();
         }
 
         public string OP_ComeBack()
@@ -285,10 +295,10 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CustomerNo == "TianYe")
             {
                 bool isAdmin = false;
-                if (BP.Web.WebUser.No == "admin" )
+                if (BP.Web.WebUser.No == "admin")
                     isAdmin = true;
 
-                 //  if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
+                //  if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
 
                 // 判断是否可以打印.
                 //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
@@ -302,7 +312,7 @@ namespace BP.WF.HttpHandler
                     if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
                         string empFrom = dr[1].ToString();
-                        if ( isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter==WebUser.No )
+                        if (isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter == WebUser.No)
                         {
                             CanPackUp = true;
                             break;
@@ -345,7 +355,7 @@ namespace BP.WF.HttpHandler
                         }
                     }
 
-                    ht.Add("CanTackBack", isCan.ToString().ToLower() );
+                    ht.Add("CanTackBack", isCan.ToString().ToLower());
 
 
 
@@ -422,12 +432,12 @@ namespace BP.WF.HttpHandler
 
             OneWorkXmls xmls = new OneWorkXmls();
             xmls.RetrieveAll();
-             
-            int  nodeID = this.FK_Node;
+
+            int nodeID = this.FK_Node;
             if (nodeID == 0)
             {
-                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                 nodeID = this.FK_Node;
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                nodeID = this.FK_Node;
             }
 
             foreach (OneWorkXml item in xmls)
@@ -528,7 +538,7 @@ namespace BP.WF.HttpHandler
                     //把节点审核配置信息.
                     FrmWorkCheck fwc = new FrmWorkCheck(fk_Node);
                     ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
-        		
+
 
                     //获取工作轨迹信息
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
@@ -561,7 +571,7 @@ namespace BP.WF.HttpHandler
                     //获取预先计算的节点处理人，以及处理时间,added by liuxc,2016-4-15
                     sql = "SELECT wsa.FK_Node as \"FK_Node\",wsa.FK_Emp as \"FK_Emp\",wsa.EmpName as \"EmpName\",wsa.TimeLimit as \"TimeLimit\",wsa.TSpanHour as \"TSpanHour\",wsa.ADT as \"ADT\",wsa.SDT as \"SDT\" FROM WF_SelectAccper wsa WHERE wsa.WorkID = " + workid;
                     dt = DBAccess.RunSQLReturnTable(sql);
-                   // dt.TableName = "POSSIBLE";
+                    // dt.TableName = "POSSIBLE";
                     dt.TableName = "Possible";
                     ds.Tables.Add(dt);
 
@@ -573,7 +583,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dt);
 
 
-                   
+
 
                     //如果流程没有完成.
                     if (wfState != WFState.Complete)

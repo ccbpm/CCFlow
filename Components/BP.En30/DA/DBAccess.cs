@@ -1404,8 +1404,10 @@ namespace BP.DA
                 case DBType.Informix:
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT  PRIMARY KEY(" + pk + ") CONSTRAINT " + tab + "pk ";
                     break;
-                case DBType.MySQL:
-                    sql = "ALTER TABLE " + tab + " ADD CONSTRAINT  PRIMARY KEY(" + pk + ") CONSTRAINT " + tab + "pk ";
+                  case DBType.MySQL:
+                         //   ALTER TABLE Port_emp ADD CONSTRAINT Port_emppk PRIMARY KEY (NO)
+                    sql = "ALTER TABLE " + tab + " ADD CONSTRAINT  "+tab+"px PRIMARY KEY(" + pk + ")";
+                    //sql = "ALTER TABLE " + tab + " ADD CONSTRAINT  PRIMARY KEY(" + pk + ") CONSTRAINT " + tab + "pk ";
                     break;
                 default:
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT " + tab + "pk PRIMARY KEY(" + pk.ToUpper() + ")";
@@ -1427,6 +1429,9 @@ namespace BP.DA
                 case DBType.Informix:
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT  PRIMARY KEY(" + pk1.ToUpper() + "," + pk2.ToUpper() + ") CONSTRAINT " + tab + "pk ";
                     break;
+                case DBType.MySQL:
+                    sql = "ALTER TABLE " + tab + " ADD CONSTRAINT " + tab + "pk  PRIMARY KEY(" + pk1 + "," + pk2 + ")";
+                    break;
                 default:
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT " + tab + "pk  PRIMARY KEY(" + pk1.ToUpper() + "," + pk2.ToUpper() + ")";
                     break;
@@ -1446,6 +1451,9 @@ namespace BP.DA
             {
                 case DBType.Informix:
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT  PRIMARY KEY(" + pk1.ToUpper() + "," + pk2.ToUpper() + "," + pk3.ToUpper() + ") CONSTRAINT " + tab + "pk ";
+                    break;
+                case DBType.MySQL:
+                    sql = "ALTER TABLE " + tab + " ADD CONSTRAINT " + tab + "pk PRIMARY KEY(" + pk1 + "," + pk2 + "," + pk3+ ")";
                     break;
                 default:
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT " + tab + "pk PRIMARY KEY(" + pk1.ToUpper() + "," + pk2.ToUpper() + "," + pk3.ToUpper() + ")";

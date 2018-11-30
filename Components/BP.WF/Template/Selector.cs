@@ -673,7 +673,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="nodeID">节点ID</param>
         /// <returns>返回数据源dataset</returns>
-        private DataSet ByStation(int nodeID,Entity en)
+        private DataSet ByStation(int nodeID, Entity en)
         {
             // 定义数据容器.
             DataSet ds = new DataSet();
@@ -710,31 +710,29 @@ namespace BP.WF.Template
                 return ds;
             }
 
-            if (SystemConfig.OSModel == OSModel.OneMore)
+
+            //部门.
+            sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " ORDER BY A.No,A.Idx";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+            //人员.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                //部门.
-                sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " ORDER BY A.No,A.Idx";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "Depts";
-                ds.Tables.Add(dt);
-
-                //人员.
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                {
-                    if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
-                        sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";
-                    else
-                        sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
-                }
+                if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
+                    sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";
                 else
-                {
                     sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
-                }
-
-                dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dtEmp.TableName = "Emps";
-                ds.Tables.Add(dtEmp);
             }
+            else
+            {
+                sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+            }
+
+            dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp.TableName = "Emps";
+            ds.Tables.Add(dtEmp);
 
             return ds;
         }

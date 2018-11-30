@@ -188,7 +188,8 @@ namespace BP.Sys
         {
             get
             {
-                return (OSModel)SystemConfig.GetValByKeyInt("OSModel", 0);
+                return Sys.OSModel.OneMore;
+                //return (OSModel)SystemConfig.GetValByKeyInt("OSModel", 0);
             }
         }
         public static OSDBSrc OSDBSrc

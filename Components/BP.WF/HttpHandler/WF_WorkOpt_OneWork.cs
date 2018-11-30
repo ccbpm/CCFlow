@@ -123,7 +123,6 @@ namespace BP.WF.HttpHandler
                         item.Update();
                     }
                 }
-
                 ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
             }
 

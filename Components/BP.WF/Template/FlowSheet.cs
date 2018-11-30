@@ -1101,9 +1101,6 @@ namespace BP.WF.Template
             //更新流程版本
             Flow.UpdateVer(this.No);
 
-            //同步事件实体.
-            this.FlowEventEntity = BP.WF.Glo.GetFlowEventEntityStringByFlowMark(this.FlowMark, this.No);
-
             #region 检查数据完整性 - 同步业务表数据。
             // 检查业务是否存在.
             Flow fl = new Flow(this.No);

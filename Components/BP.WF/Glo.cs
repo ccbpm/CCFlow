@@ -1971,9 +1971,9 @@ namespace BP.WF
         /// <param name="flowMark">流程标记</param>
         /// <param name="flowNo">流程编号</param>
         /// <returns>null, 或者流程实体.</returns>
-        public static string GetFlowEventEntityStringByFlowMark(string flowMark, string flowNo)
+        public static string GetFlowEventEntityStringByFlowMark(string flowMark)
         {
-            FlowEventBase en = GetFlowEventEntityByFlowMark(flowMark, flowNo);
+            FlowEventBase en = GetFlowEventEntityByFlowMark(flowMark);
             if (en == null)
                 return "";
             return en.ToString();
@@ -1984,8 +1984,9 @@ namespace BP.WF
         /// <param name="flowMark">流程标记</param>
         /// <param name="flowNo">流程编号</param>
         /// <returns>null, 或者流程实体.</returns>
-        public static FlowEventBase GetFlowEventEntityByFlowMark(string flowMark, string flowNo)
+        public static FlowEventBase GetFlowEventEntityByFlowMark(string flowMark)
         {
+                
             if (Htable_FlowFEE == null || Htable_FlowFEE.Count == 0)
             {
                 Htable_FlowFEE = new Hashtable();
@@ -2000,9 +2001,9 @@ namespace BP.WF
             foreach (string key in Htable_FlowFEE.Keys)
             {
                 FlowEventBase fee = Htable_FlowFEE[key] as FlowEventBase;
-                if (fee.FlowMark.Equals(flowMark)
-                    || fee.FlowMark.IndexOf(flowNo + ",") == 0
-                    || fee.FlowMark.Contains("," + flowNo + ",") == true)
+
+                string mark = ","+fee.FlowMark+",";
+                if (mark.Contains(","+flowMark+",")==true)
                     return fee;
             }
             return null;

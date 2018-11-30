@@ -1629,7 +1629,12 @@ namespace BP.WF.Template
             #region 同步事件实体.
             try
             {
-                this.FlowEventEntity = BP.WF.Glo.GetFlowEventEntityStringByFlowMark(this.FlowMark, this.No);
+                string flowMark = this.FlowMark;
+
+                if (DataType.IsNullOrEmpty(flowMark) == true)
+                    flowMark = this.No;
+
+                this.FlowEventEntity = BP.WF.Glo.GetFlowEventEntityStringByFlowMark(flowMark);
             }
             catch
             {

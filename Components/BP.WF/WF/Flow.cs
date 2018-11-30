@@ -181,7 +181,7 @@ namespace BP.WF
         #endregion 业务数据表同步属性.
 
         #region 基础属性.
-        
+
         /// <summary>
         /// 设计类型
         /// </summary>
@@ -587,7 +587,7 @@ namespace BP.WF
             {
                 foreach (string k in BP.Sys.Glo.Request.QueryString.AllKeys)
                 {
-                    if (k == "OID" || k == "WorkID" || k==null)
+                    if (k == "OID" || k == "WorkID" || k == null)
                         continue;
 
                     if (paras.ContainsKey(k))
@@ -1773,14 +1773,14 @@ namespace BP.WF
                 return uac;
             }
         }
-        
+
         public string ClearCash()
         {
             BP.DA.Cash.ClearCash();
             return "清除成功.";
         }
 
-      
+
         /// <summary>
         /// 执行检查2018
         /// </summary>
@@ -2452,7 +2452,7 @@ namespace BP.WF
         /// <returns></returns>
         public DataSet DoExpFlowXmlTemplete(string path)
         {
-            if (Directory.Exists(path)==false)
+            if (Directory.Exists(path) == false)
                 Directory.CreateDirectory(path);
 
             DataSet ds = GetFlow(path);
@@ -2509,7 +2509,7 @@ namespace BP.WF
                         }
                     }
 
-                    if (DataType.IsNullOrEmpty(xmlName)==false)
+                    if (DataType.IsNullOrEmpty(xmlName) == false)
                     {
                         ds.WriteXml(xmlName);
                         isXmlLocked = false;
@@ -2564,7 +2564,7 @@ namespace BP.WF
 
             // 条件信息
             Conds cds = new Template.Conds(this.No);
-            ds.Tables.Add(cds.ToDataTableField("WF_Cond") );
+            ds.Tables.Add(cds.ToDataTableField("WF_Cond"));
 
             // 节点与表单绑定.
             FrmNodes fns = new Template.FrmNodes();
@@ -2590,42 +2590,42 @@ namespace BP.WF
             NodeReturns nrs = new NodeReturns();
             nrs.RetrieveInSQL(NodeReturnAttr.FK_Node, sqlin);
             ds.Tables.Add(nrs.ToDataTableField("WF_NodeReturn"));
-           
+
 
             // 工具栏。
             NodeToolbars tools = new NodeToolbars();
             tools.RetrieveInSQL(NodeToolbarAttr.FK_Node, sqlin);
             ds.Tables.Add(tools.ToDataTableField("WF_NodeToolbar"));
 
-             
+
             // 节点与部门。
             NodeDepts ndepts = new NodeDepts();
             ndepts.RetrieveInSQL(NodeDeptAttr.FK_Node, sqlin);
             ds.Tables.Add(ndepts.ToDataTableField("WF_NodeDept"));
-             
+
 
             // 节点与岗位权限。
             NodeStations nss = new NodeStations();
             nss.RetrieveInSQL(NodeStationAttr.FK_Node, sqlin);
             ds.Tables.Add(nss.ToDataTableField("WF_NodeStation"));
-             
+
             // 节点与人员。
             NodeEmps nes = new NodeEmps();
             nes.RetrieveInSQL(NodeEmpAttr.FK_Node, sqlin);
             ds.Tables.Add(nes.ToDataTableField("WF_NodeEmp"));
-              
+
 
             // 抄送人员。
             CCEmps ces = new CCEmps();
             ces.RetrieveInSQL(CCEmpAttr.FK_Node, sqlin);
             ds.Tables.Add(ces.ToDataTableField("WF_CCEmp"));
-             
+
 
             // 抄送部门。
             CCDepts cdds = new CCDepts();
             cdds.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
             ds.Tables.Add(cdds.ToDataTableField("WF_CCDept"));
-          
+
 
             // 延续子流程。
             NodeYGFlows fls = new Template.NodeYGFlows();
@@ -2641,26 +2641,26 @@ namespace BP.WF
             // Sys_MapAttr.
             sql = "SELECT MyPK FROM Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
             sql += " UNION ";   //增加多附件的扩展列.
-            sql += "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT MyPK FROM Sys_FrmAttachment WHERE FK_Node=0 AND " + Glo.MapDataLikeKey(this.No, "FK_MapData") +" ) "; 
+            sql += "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT MyPK FROM Sys_FrmAttachment WHERE FK_Node=0 AND " + Glo.MapDataLikeKey(this.No, "FK_MapData") + " ) ";
 
             MapAttrs attrs = new MapAttrs();
             attrs.RetrieveInSQL(MapAttrAttr.MyPK, sql);
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
-             
+
 
             // Sys_EnumMain
             sql = "SELECT No FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + ")";
             SysEnumMains ses = new SysEnumMains();
             ses.RetrieveInSQL(SysEnumMainAttr.No, sql);
             ds.Tables.Add(ses.ToDataTableField("Sys_EnumMain"));
-             
+
 
             // Sys_Enum
             sql = "SELECT MyPK FROM Sys_Enum WHERE EnumKey IN ( SELECT No FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + " ) )";
             SysEnums sesDtl = new SysEnums();
             sesDtl.RetrieveInSQL("MyPK", sql);
             ds.Tables.Add(sesDtl.ToDataTableField("Sys_Enum"));
-              
+
 
             // Sys_MapDtl
             sql = "SELECT No FROM Sys_MapDtl WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
@@ -2675,29 +2675,29 @@ namespace BP.WF
             mexts.RetrieveInSQL(sql);
             ds.Tables.Add(mexts.ToDataTableField("Sys_MapExt"));
 
-             
+
 
             // Sys_GroupField
             sql = "SELECT OID FROM Sys_GroupField WHERE   " + Glo.MapDataLikeKey(this.No, "FrmID"); // +" " + Glo.MapDataLikeKey(this.No, "EnName");
             GroupFields gfs = new GroupFields();
             gfs.RetrieveInSQL(sql);
             ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
-             
+
 
             // Sys_MapFrame
             sql = "SELECT MyPK FROM Sys_MapFrame WHERE" + Glo.MapDataLikeKey(this.No, "FK_MapData");
             MapFrames mfs = new MapFrames();
-            mfs.RetrieveInSQL("MyPK",sql);
+            mfs.RetrieveInSQL("MyPK", sql);
             ds.Tables.Add(mfs.ToDataTableField("Sys_MapFrame"));
 
-           
+
 
             // Sys_FrmLine.
             sql = "SELECT MyPK FROM Sys_FrmLine WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
             FrmLines frmls = new FrmLines();
             frmls.RetrieveInSQL(sql);
             ds.Tables.Add(frmls.ToDataTableField("Sys_FrmLine"));
-           
+
 
             // Sys_FrmLab.
             sql = "SELECT MyPK FROM Sys_FrmLab WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
@@ -2705,7 +2705,7 @@ namespace BP.WF
             frmlabs.RetrieveInSQL(sql);
             ds.Tables.Add(frmlabs.ToDataTableField("Sys_FrmLab"));
 
-            
+
 
             // Sys_FrmEle.
             sql = "SELECT MyPK FROM Sys_FrmEle WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
@@ -2789,7 +2789,7 @@ namespace BP.WF
             ds.Tables.Add(tmps.ToDataTableField("WF_BillTemplate"));
 
             string sqlin = "SELECT NodeID FROM WF_Node WHERE fk_flow='" + this.No + "'";
- 
+
 
             // 条件信息
             sql = "SELECT * FROM WF_Cond WHERE FK_Flow='" + this.No + "'";
@@ -2880,7 +2880,7 @@ namespace BP.WF
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_NodeSubFlow";
             ds.Tables.Add(dt);
-          
+
 
             int flowID = int.Parse(this.No);
             sql = "SELECT * FROM Sys_MapData WHERE " + Glo.MapDataLikeKey(this.No, "No");
@@ -3214,7 +3214,7 @@ namespace BP.WF
                 ndsstrs += "'ND" + nd.NodeID + "',";
             }
             ndsstrs = ndsstrs.Substring(0, ndsstrs.Length - 1);
-             
+
             #region 插入字段。
             string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -4390,7 +4390,10 @@ namespace BP.WF
         protected override bool beforeUpdateInsertAction()
         {
             //获得事件实体.
-            this.FlowEventEntity = BP.WF.Glo.GetFlowEventEntityStringByFlowMark(this.FlowMark, this.No);
+            if (DataType.IsNullOrEmpty(this.FlowMark) == true)
+                this.FlowEventEntity = BP.WF.Glo.GetFlowEventEntityStringByFlowMark(this.No);
+            else
+                this.FlowEventEntity = BP.WF.Glo.GetFlowEventEntityStringByFlowMark(this.FlowMark);
 
             DBAccess.RunSQL("UPDATE WF_Node SET FlowName='" + this.Name + "' WHERE FK_Flow='" + this.No + "'");
             DBAccess.RunSQL("UPDATE Sys_MapData SET  Name='" + this.Name + "' WHERE No='" + this.PTable + "'");
@@ -4435,7 +4438,7 @@ namespace BP.WF
                 // map.AddBoolean(FlowAttr.IsOK, true, "是否启用", true, true);
                 map.AddTBInt(FlowAttr.IsCanStart, 1, "可以独立启动否？", true, true);
                 map.AddTBInt(FlowAttr.IsStartInMobile, 1, "是否可以在手机里发起？", true, true);
-                
+
                 map.AddTBDecimal(FlowAttr.AvgDay, 0, "平均运行用天", false, false);
 
 
@@ -4918,7 +4921,7 @@ namespace BP.WF
                                 {
                                     case "tonodeid":
                                     case "fk_node":
-                                    case "nodeid":                                        
+                                    case "nodeid":
                                         if (val.Length < iOldFlowLength)
                                         {
                                             //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
@@ -5841,7 +5844,7 @@ namespace BP.WF
                                         if (val.Length < iOldFlowLength)
                                         {
                                             //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
-                                            throw new Exception("@导入模板名称："+ oldFlowName +"；节点WF_CCEmp下FK_Node值错误:" + val);
+                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_CCEmp下FK_Node值错误:" + val);
                                         }
                                         val = flowID + val.Substring(iOldFlowLength);
                                         break;
@@ -5906,7 +5909,7 @@ namespace BP.WF
                 cols.DoCheckFixFrmForUpdateVer();
             }
             #endregion
-         
+
 
             if (infoErr == "")
             {
@@ -5948,7 +5951,7 @@ namespace BP.WF
             nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
 
             //为创建节点设置默认值 @于庆海. 
-            string file= SystemConfig.PathOfDataUser+"\\XML\\DefaultNewNodeAttr.xml";
+            string file = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
             if (System.IO.File.Exists(file) == true)
             {
                 DataSet ds = new DataSet();
@@ -6201,7 +6204,7 @@ namespace BP.WF
                 string str = "SELECT * FROM WF_Flow WHERE PTable='" + this.PTable + "' AND FK_FlowSort='' ";
                 DataTable dt = DBAccess.RunSQLReturnTable(str);
                 if (dt.Rows.Count >= 1)
-                    return "err@删除流程出错，该流程下有["+dt.Rows.Count+"]个子版本您不能删除。";
+                    return "err@删除流程出错，该流程下有[" + dt.Rows.Count + "]个子版本您不能删除。";
             }
 
             //删除流程数据.
@@ -6248,7 +6251,7 @@ namespace BP.WF
             //  sql += "@GO DELETE WF_M2M WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
             //// 删除配置.
             //sql += "@ DELETE FROM WF_FAppSet WHERE NodeID IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
- 
+
 
             //// 外部程序设置
             //sql += "@ DELETE FROM WF_FAppSet WHERE  NodeID in (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
@@ -6387,14 +6390,14 @@ namespace BP.WF
             }
 
             //获得所有的版本.
-           // string sql = "SELECT No,Name,Ver,FK_FlowSort FROM WF_Flow WHERE PTable='"+this.PTable+"'";
+            // string sql = "SELECT No,Name,Ver,FK_FlowSort FROM WF_Flow WHERE PTable='"+this.PTable+"'";
             string sql = "SELECT No  FROM WF_Flow WHERE PTable='" + this.PTable + "'";
             Flows fls = new Flows();
             fls.RetrieveInSQL(sql);
 
             foreach (Flow item in fls)
             {
-                DataRow dr = dt.NewRow(); 
+                DataRow dr = dt.NewRow();
                 dr["Ver"] = item.Ver;
                 dr["No"] = item.No;
                 dr["Name"] = item.Name;

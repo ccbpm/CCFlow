@@ -19,7 +19,7 @@ function GenerFoolFrm(wn) {
     var Sys_GroupFields = flowData.Sys_GroupField;
 
     html += "<tr>";
-    html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan=4 ><div style='float:right;padding:10px;bordder:none;width:100%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     //  html += "<td colspan=2 ></td>";
     html += "</tr>";
 
@@ -29,7 +29,7 @@ function GenerFoolFrm(wn) {
         var gf = Sys_GroupFields[i];
 
         //从表..
-        if (gf.CtrlType == 'Dtl') {
+        if (gf.CtrlType == 'Dtl' ) {
 
             html += "<tr>";
             html += "  <th colspan=4>" + gf.Lab + "</th>";
@@ -162,7 +162,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         var defval = ConvertDefVal(flowData, attr.DefVal, attr.KeyOfEn);
 
         var lab = "";
-        if (attr.UIContralType == 0)
+        if (attr.UIContralType == 0 || attr.UIContralType == 8)
             lab = "<label id='Lab_" + attr.KeyOfEn + "' for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         if (attr.UIContralType == 1)
@@ -275,6 +275,21 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     //添加文本框 ，日期控件等.
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
+
+        //签字板
+        if (mapAttr.UIContralType == "8") {
+            //查找默认值
+            var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            //如果是图片签名，并且可以编辑
+            var ondblclick = ""
+            if (mapAttr.UIIsEnable == 1) {
+                ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
+            }
+
+            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+            eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            return eleHtml;
+        }
 
         if (mapAttr.UIHeight <= 40) //普通的文本框.
         {

@@ -160,6 +160,8 @@ function CloseOKBtn() {
 
 //双击签名
 function figure_Template_Siganture(SigantureID, val) {
+    if (val == "")
+        val = new WebUser().No;
     var src = '../DataUser/Siganture/' + val + '.jpg'   //新图片地址
     document.getElementById("Img" + SigantureID).src = src;
     isSigantureChecked = true;
@@ -188,7 +190,9 @@ function figure_Template_HandWrite(HandWriteID, val) {
 
 function setHandWriteSrc(HandWriteID, imagePath) {
     imagePath = "../" + imagePath.substring(imagePath.indexOf("DataUser"));
-    document.getElementById("Img" + HandWriteID).src = imagePath;
+    document.getElementById("Img" + HandWriteID).src = "";
+    $("#Img" + HandWriteID).attr("src", imagePath);
+   // document.getElementById("Img" + HandWriteID).src = imagePath;
     $("#TB_" + HandWriteID).val(imagePath);
     $('#eudlg').dialog('close');
 }

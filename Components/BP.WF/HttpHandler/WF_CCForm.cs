@@ -1898,10 +1898,19 @@ namespace BP.WF.HttpHandler
                 string basePath = SystemConfig.PathOfDataUser + "HandWritingImg";
                 string ny = DateTime.Now.ToString("yyyy_MM");
                 string tempPath = basePath + "\\" + ny + "\\" + this.FK_Node + "\\";
-                string tempName = this.WorkID + "_" + this.KeyOfEn + ".png";
+                string tempName = this.WorkID + "_" + this.KeyOfEn + "_" + DateTime.Now.ToString("HHmmss") + ".png";
 
                 if (System.IO.Directory.Exists(tempPath) == false)
                     System.IO.Directory.CreateDirectory(tempPath);
+                //删除改目录下WORKID的文件
+                string[] files = Directory.GetFiles(tempPath);
+                foreach (var file in files)
+                {
+                    if (file.Contains(this.WorkID + "_" + this.KeyOfEn) == true)
+                        System.IO.File.Delete(file);
+                }
+                    
+                
 
                 string pic_Path = tempPath +  tempName;
 

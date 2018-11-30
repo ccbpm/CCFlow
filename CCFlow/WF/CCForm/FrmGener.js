@@ -810,13 +810,13 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         }
     });
 
-    //获取表单中隐藏的表单元素的值
-    var hiddens = $('input[type=hidden]');
-    $.each(hiddens, function (i, hidden) {
-        if ($(hidden).attr("name").indexOf('TB_') == 0) {
-            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-        }
-    });
+//    //获取表单中隐藏的表单元素的值
+//    var hiddens = $('input[type=hidden]');
+//    $.each(hiddens, function (i, hidden) {
+//        if ($(hidden).attr("name").indexOf('TB_') == 0) {
+//            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
+//        }
+//    });
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {
@@ -1277,4 +1277,42 @@ function ResizeWindow() {
     }
 }
 
- 
+
+//双击签名
+function figure_Template_Siganture(SigantureID, val) {
+    if (val == "")
+        val = new WebUser().No;
+    var src = '../../DataUser/Siganture/' + val + '.jpg'   //新图片地址
+    document.getElementById("Img" + SigantureID).src = src;
+    isSigantureChecked = true;
+
+    var sealData = new Entities("BP.Tools.WFSealDatas");
+    sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+    if (sealData.length > 0) {
+        return;
+    }
+    else {
+        sealData = new Entity("BP.Tools.WFSealData");
+        sealData.MyPK = GetQueryString("WorkID") + "_" + GetQueryString("FK_Node") + "_" + val;
+        sealData.OID = GetQueryString("WorkID");
+        sealData.FK_Node = GetQueryString("FK_Node");
+        sealData.SealData = val;
+        sealData.Insert();
+    }
+
+}
+
+//签字板
+function figure_Template_HandWrite(HandWriteID, val) {
+    var url = "HandWriting.htm?WorkID=" + pageData.OID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
+    OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
+}
+
+function setHandWriteSrc(HandWriteID, imagePath) {
+    imagePath = "../../" + imagePath.substring(imagePath.indexOf("DataUser"));
+    document.getElementById("Img" + HandWriteID).src = "";
+    $("#Img" + HandWriteID).attr("src", imagePath);
+    // document.getElementById("Img" + HandWriteID).src = imagePath;
+    $("#TB_" + HandWriteID).val(imagePath);
+    $('#eudlg').dialog('close');
+}

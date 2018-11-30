@@ -549,8 +549,46 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     //AppString
     if (mapAttr.MyDataType == "1") {
 
+        //签字板
+        if (mapAttr.UIContralType == "8") {
+            //如果是图片签名，并且可以编辑
+            var ondblclick = ""
+            if (mapAttr.UIIsEnable == 1) {
+                ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + defValue + "\")'";
+            }
+
+            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'  value='" + defValue + "' type=hidden />";
+            eleHtml += "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            return eleHtml;
+        }
+
         //普通类型的单行文本.
         if (mapAttr.UIHeight <= 40) {
+
+            //如果是图片签名，并且可以编辑
+            if (mapAttr.IsSigan == "1" && mapAttr.UIIsEnable == 1) {
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn +"' value='" + defValue + "' type=hidden />";
+                //是否签过
+                var sealData = new Entities("BP.Tools.WFSealDatas");
+                sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+
+                if (sealData.length > 0) {
+                    eleHtml += "<img src='../../DataUser/Siganture/" + defValue + ".jpg' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                    isSigantureChecked = true;
+                }
+                else {
+                    eleHtml += "<img src='../../DataUser/Siganture/siganture.jpg' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\" ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + defValue + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                }
+                return eleHtml;
+            }
+            //如果不可编辑，并且是图片名称
+            if (mapAttr.IsSigan == "1") {
+                var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+                eleHtml += "<img src='../../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../../DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                return eleHtml;
+            }
+
             eleHtml += "<input class='form-control'  maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>";
             return eleHtml;
         }

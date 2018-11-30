@@ -178,7 +178,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
             }
 
-            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
             eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
             return eleHtml;
         }
@@ -190,7 +190,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             if (mapAttr.IsSigan == "1" && mapAttr.UIIsEnable == 1) {
                 //查找默认值
                 var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
                 //是否签过
                 var sealData = new Entities("BP.Tools.WFSealDatas");
                 sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
@@ -207,7 +207,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             //如果不可编辑，并且是图片名称
             if (mapAttr.IsSigan == "1") {
                 var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
                 eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 return eleHtml;
             }

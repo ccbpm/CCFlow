@@ -384,6 +384,17 @@ namespace BP.En
                             }
                         }
                         continue;
+                    case "@FK_ND":
+                        if (attr.UIIsReadonly == true)
+                        {
+                            this.SetValByKey(attr.Key, DataType.CurrentYear);
+                        }
+                        else
+                        {
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, DataType.CurrentYear);
+                        }
+                        continue;
                     case "@yyyy年mm月dd日":
                     case "@yyyy年mm月dd日HH时mm分":
                     case "@yy年mm月dd日":

@@ -69,7 +69,7 @@ FigureCreateCommand.prototype = {
                 case CCForm_Controls.CheckBox:
                 //case "HandSiganture":
                     canAddFigure = false;
-                    this.DataFieldCreate(createdFigure, this.x, this.y,);
+                    this.DataFieldCreate(createdFigure, this.x, this.y);
                     break;
                 case CCForm_Controls.ListBox:
                 case CCForm_Controls.HiddendField:

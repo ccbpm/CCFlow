@@ -1456,11 +1456,13 @@ function GenerWorkNode() {
 
 
 
-           
 
-            
+
+
 
             var marginLeft = $('#topContentDiv').css('margin-left');
+            marginLeft = marginLeft.replace('px', '');
+
             marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
             $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
             //原有的

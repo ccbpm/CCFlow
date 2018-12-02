@@ -212,6 +212,14 @@ function GenerFrm() {
             $('.Bar').width(w + 15);
 
             var marginLeft = $('#topContentDiv').css('margin-left');
+            if (undefined == marginLeft)
+                marginLeft = '0px';
+
+            //if (marginLeft==un
+            marginLeft = marginLeft.replace('px', '');
+
+            //alert(marginLeft);
+
             marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
             $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
             $('#CCForm').html('');
@@ -235,7 +243,7 @@ function GenerFrm() {
                     GenerFreeFrm(mapData, frmData); //自由表单.
             }
 
-          //  $.parser.parse("#CCForm");
+            //  $.parser.parse("#CCForm");
             var isReadonly = GetQueryString("IsReadonly");
 
             //原有的。
@@ -301,7 +309,7 @@ function GenerFrm() {
                         var sfTable = new Entity("BP.Sys.FrmUI.SFTable");
                         sfTable.SetPKVal(uiBindKey);
                         var count = sfTable.RetrieveFromDBSources();
-                        if (count!=0 && sfTable.CodeStruct == "1") {
+                        if (count != 0 && sfTable.CodeStruct == "1") {
                             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
                             handler.AddPara("EnsName", uiBindKey);  //增加参数.
                             //获得map基本信息.
@@ -323,7 +331,7 @@ function GenerFrm() {
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (mapAttr.MyDataType == 8)
                         if (!/\./.test(defValue))
-                            defValue += '.00';  
+                            defValue += '.00';
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
@@ -346,7 +354,7 @@ function GenerFrm() {
                 }
 
                 //只读或者属性为不可编辑时设置
-                if (mapAttr.UIIsEnable == "0" ||  pageData.IsReadonly=="1") {
+                if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
 
                     $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
                     $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
@@ -748,7 +756,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         formArrResult.push(ele);
     });
 
-//    //获取表单中checkbox 没有选中时值的情况
+    //    //获取表单中checkbox 没有选中时值的情况
     var checkboxs = $('input[type=checkbox]');
     $.each(checkboxs, function (i, checkbox) {
         var name = $(checkbox).attr("name");
@@ -791,33 +799,33 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框   
+            //下拉框     
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
 
-            //对于复选下拉框获取值得方法   
-            //                if ($('[data-id=' + name + ']').length > 0) {  
-            //                    var val = $(disabledEle).val().join(',');  
-            //                    formArrResult.push(name + '=' + val);  
-            //                } else {  
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
-            //                }  
-            //                break;  
-            //文本区域   
+            //对于复选下拉框获取值得方法     
+            //                if ($('[data-id=' + name + ']').length > 0) {    
+            //                    var val = $(disabledEle).val().join(',');    
+            //                    formArrResult.push(name + '=' + val);    
+            //                } else {    
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());    
+            //                }    
+            //                break;    
+            //文本区域     
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
         }
     });
 
-//    //获取表单中隐藏的表单元素的值
-//    var hiddens = $('input[type=hidden]');
-//    $.each(hiddens, function (i, hidden) {
-//        if ($(hidden).attr("name").indexOf('TB_') == 0) {
-//            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-//        }
-//    });
+    //    //获取表单中隐藏的表单元素的值
+    //    var hiddens = $('input[type=hidden]');
+    //    $.each(hiddens, function (i, hidden) {
+    //        if ($(hidden).attr("name").indexOf('TB_') == 0) {
+    //            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
+    //        }
+    //    });
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {

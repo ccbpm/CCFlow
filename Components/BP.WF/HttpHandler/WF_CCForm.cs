@@ -844,9 +844,48 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+
+           
             //设置主键.
             en.OID = DBAccess.GenerOID(this.EnsName);
+            #region 处理权限方案。 @袁丽娜
+            if (this.FK_Node != 0)
+            {
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        string no = this.EnsName + "_" + nd.NodeID;
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = no;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                            dtl = mdtlSln;
+                    }
+                }
+            }
+            #endregion 处理权限方案。
+            //给从表赋值. @袁丽娜
+            switch (dtl.DtlOpenType)
+            {
+                case DtlOpenType.ForEmp:  // 按人员来控制.
+                   
+                    en.SetValByKey("RefPK", this.RefPKVal);
+                    en.SetValByKey("FID", this.RefPKVal);
+                    break;
+                case DtlOpenType.ForWorkID: // 按工作ID来控制
+                    en.SetValByKey("RefPK", this.RefPKVal);
+                    en.SetValByKey("FID", this.RefPKVal);
+                    break;
+                case DtlOpenType.ForFID: // 按流程ID来控制.
+                    en.SetValByKey("RefPK", this.RefPKVal);
+                    en.SetValByKey("FID", this.FID);
+                    break;
+            }
             en.SetValByKey("RefPK", this.RefPKVal);
+
             en.Insert();
 
             return "url@DtlFrm.htm?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&FrmType=" + (int)dtl.HisEditModel + "&OID=" + en.OID;
@@ -1718,7 +1757,7 @@ namespace BP.WF.HttpHandler
             string fk_mapDtl = this.FK_MapDtl;
             MapDtl mdtl = new MapDtl(fk_mapDtl);
 
-            #region 处理权限方案。
+            #region 处理权限方案。 @袁丽娜
             if (this.FK_Node != 0)
             {
                 Node nd = new Node(this.FK_Node);
@@ -1757,7 +1796,7 @@ namespace BP.WF.HttpHandler
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
             }
 
-            //关联主赋值.
+            //关联主赋值. @袁丽娜
             dtl.RefPK = this.RefPKVal;
             switch (mdtl.DtlOpenType)
             {
@@ -1870,6 +1909,27 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             MapDtl md = new MapDtl(this.EnsName);
+            if (this.FK_Node != 0 && md.FK_MapData != "Temp"
+               && this.EnsName.Contains("ND" + this.FK_Node) == false
+               && this.FK_Node != 999999)
+            {
+                Node nd = new BP.WF.Node(this.FK_Node);
+
+                if (nd.HisFormType == NodeFormType.SheetTree)
+                {
+                    /*如果
+                     * 1,传来节点ID, 不等于0.
+                     * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
+                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    ///自定义权限.
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        md.No = this.EnsName + "_" + this.FK_Node;
+                        if (md.RetrieveFromDBSources() == 0)
+                            md = new MapDtl(this.EnsName);
+                    }
+                }
+            }
 
             //主表数据.
             DataTable dt = md.ToDataTableField("Main");
@@ -1891,9 +1951,55 @@ namespace BP.WF.HttpHandler
             }
 
             //从表的数据.
-            GEDtls enDtls = new GEDtls(this.EnsName);
-            enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);
-            ds.Tables.Add(enDtls.ToDataTableField("DTDtls"));
+            //GEDtls enDtls = new GEDtls(this.EnsName);
+            #region  把从表的数据放入. @袁丽娜
+            GEDtls enDtls = new GEDtls(md.No);
+            QueryObject qo = null;
+            try
+            {
+                qo = new QueryObject(enDtls);
+                switch (md.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        qo.AddWhere(GEDtlAttr.RefPK, this.RefPKVal);
+                        qo.addAnd();
+                        qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        qo.AddWhere(GEDtlAttr.RefPK, this.RefPKVal);
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        if (this.FID == 0)
+                            qo.AddWhere(GEDtlAttr.FID, this.RefPKVal);
+                        else
+                            qo.AddWhere(GEDtlAttr.FID, this.FID);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                dtls.GetNewEntity.CheckPhysicsTable();
+                throw ex;
+            }
+
+            //条件过滤.
+            if (md.FilterSQLExp != "")
+            {
+                string[] strs = md.FilterSQLExp.Split('=');
+                qo.addAnd();
+                qo.AddWhere(strs[0], strs[1]);
+            }
+
+            //增加排序.
+            //    qo.addOrderByDesc( dtls.GetNewEntity.PKField );
+
+            //从表
+            DataTable dtDtl = qo.DoQueryToTable();
+            dtDtl.TableName = "DTDtls";
+            ds.Tables.Add(dtDtl);
+            #endregion
+            //enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);
+            //ds.Tables.Add(enDtls.ToDataTableField("DTDtls"));
 
             return BP.Tools.Json.ToJson(ds);
 

@@ -1353,6 +1353,27 @@ namespace BP.WF.Template
             dtl.LinkTarget = this.LinkTarget;
             dtl.Update();
 
+            //判断是否启用多附件
+            if (this.IsEnableAthM == true)
+            {
+                //判断是否有隐藏的AthNum 字段
+                MapAttr attr = new MapAttr();
+                attr.MyPK = this.No + "_AthNum";
+                int count = attr.RetrieveFromDBSources();
+                if (count == 0)
+                {
+                    attr.FK_MapData = this.No;
+                    attr.KeyOfEn = "AthNum";
+                    attr.Name = "附件数量";
+                    attr.DefVal = "0";
+                    attr.UIContralType = UIContralType.TB;
+                    attr.MyDataType = DataType.AppInt;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DirectInsert();
+                }
+            }
+
 
             //获得事件实体.
             var febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(this.No);

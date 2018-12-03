@@ -1715,10 +1715,34 @@ namespace BP.WF.HttpHandler
             //    return "err@从表保存[Dtl_SaveRow],失败没有接收到refpk的值";
 
             //从表.
-            MapDtl mdtl = new MapDtl(this.FK_MapDtl);
+            string fk_mapDtl = this.FK_MapDtl;
+            MapDtl mdtl = new MapDtl(fk_mapDtl);
+
+            #region 处理权限方案。
+            if (this.FK_Node != 0)
+            {
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        string no  = fk_mapDtl + "_" + nd.NodeID;
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = no;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                        {
+                            mdtl = mdtlSln;
+                            fk_mapDtl = no;
+                        }
+                    }
+                }
+            }
+            #endregion 处理权限方案。
 
             //从表实体.
-            GEDtl dtl = new GEDtl(this.FK_MapDtl);
+            GEDtl dtl = new GEDtl(fk_mapDtl);
             int oid = this.RefOID;
             if (oid != 0)
             {
@@ -1735,10 +1759,24 @@ namespace BP.WF.HttpHandler
 
             //关联主赋值.
             dtl.RefPK = this.RefPKVal;
+            switch (mdtl.DtlOpenType)
+            {
+                case DtlOpenType.ForEmp:  // 按人员来控制.
+                    dtl.RefPK = this.RefPKVal;
+                    break;
+                case DtlOpenType.ForWorkID: // 按工作ID来控制
+                    dtl.RefPK = this.RefPKVal;
+                    dtl.FID = long.Parse(this.RefPKVal);
+                    break;
+                case DtlOpenType.ForFID: // 按流程ID来控制.
+                    dtl.RefPK = this.RefPKVal;
+                    dtl.FID = this.FID;
+                    break;
+            }
 
             #region 从表保存前处理事件.
             //获得主表事件.
-            FrmEvents fes = new FrmEvents(this.FK_MapDtl); //获得事件.
+            FrmEvents fes = new FrmEvents(fk_mapDtl); //获得事件.
             GEEntity mainEn = null;
             if (fes.Count > 0)
             {

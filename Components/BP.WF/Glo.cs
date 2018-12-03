@@ -4468,7 +4468,8 @@ namespace BP.WF
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, " LIKE ", "%AthMDtl");
+                    //@袁丽娜
+                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
                     num = qo.DoQuery();
                 }
                 else

@@ -50,7 +50,7 @@
                     var pushData = handler.DoMethodReturnString("Tree_Init");
                     if (pushData.indexOf("err@") != -1) {
                         alert(pushData);
-                        return;
+                        continue;
                     }
                     pushData = ToJson(pushData);
                     $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);

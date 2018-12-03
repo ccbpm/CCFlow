@@ -245,7 +245,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         }
 
         //多行文本模式.
-        eleHtml = "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' id='TB_" + mapAttr.KeyOfEn + "' type='text' />";
+        eleHtml = "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -256,7 +256,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
         }
 
-        eleHtml = "<input  type='text' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml = "<input  type='text' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -266,7 +266,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (mapAttr.UIIsEnable == 1) {
             enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
         }
-        eleHtml = "<input type='text' class='form-control Wdate'  " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml = "<input type='text' class='form-control Wdate'  " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -296,20 +296,20 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'float');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'float');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     // int 类型.
     if ((mapAttr.MyDataType == 2 && mapAttr.UIContralType == 0)) { //AppInt
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     // 金额类型. AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
 
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 

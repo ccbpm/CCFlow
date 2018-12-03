@@ -369,7 +369,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             if (mapAttr.UIIsEnable == 0)
                 enableAttr = "disabled='disabled'";
 
-            return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
+            return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         }
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
@@ -420,7 +420,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' class='Wdate' />";
+        return "<input " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' class='Wdate'   placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     //时期时间类型.
@@ -432,7 +432,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input class='Wdate'  type='text'  style='width:160px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input class='Wdate'  type='text'  style='width:160px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' />";
     }
 
     // boolen 类型.
@@ -495,7 +495,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
         // alert(mapAttr.KeyOfEn);
-        return "<input style='text-align:right;width:125px;'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:125px;'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -504,7 +504,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             enableAttr = "disabled='disabled'";
         }
 
-        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     //AppMoney  AppRate
@@ -515,7 +515,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

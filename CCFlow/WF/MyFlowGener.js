@@ -1357,7 +1357,7 @@ function GenerWorkNode() {
 
             //循环之前的提示信息.
             var info = "";
-            for (var i in flowData.AlertMsg) {
+            for (var i = 0; i < flowData.AlertMsg.length; i++) {
                 var alertMsg = flowData.AlertMsg[i];
                 var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
                 $('#Message').append(alertMsgEle);
@@ -1404,6 +1404,15 @@ function GenerWorkNode() {
                 GenerFreeFrm(flowData);
             }
 
+            //公文表单
+            if (node.FormType == 7) {
+                var btnOffice = new Entity("BP.WF.Template.BtnLabExtWebOffice", pageData.FK_Node);
+                if (btnOffice.WebOfficeFrmModel == 1)
+                    GenerFreeFrm(flowData);  //自由表单.
+                else
+                    GenerFoolFrm(flowData); //傻瓜表单.
+            }
+
             $.parser.parse("#CCForm");
 
             //以下代码是 傻瓜表单与自由表单, 公共方法.
@@ -1441,15 +1450,15 @@ function GenerWorkNode() {
                         //alert("把表单设置为只读.");
                         SetFrmReadonly();
                         //alert('ssssssssssss');
-                    } 
+                    }
 
-                   if (frmNode.FrmSln != 1)
-                   //处理下拉框级联等扩展信息
-                   AfterBindEn_DealMapExt(flowData);
+                    if (frmNode.FrmSln != 1)
+                    //处理下拉框级联等扩展信息
+                        AfterBindEn_DealMapExt(flowData);
                 }
             } else {
-               //处理下拉框级联等扩展信息
-               AfterBindEn_DealMapExt(flowData);
+                //处理下拉框级联等扩展信息
+                AfterBindEn_DealMapExt(flowData);
             }
 
             Common.MaxLengthError();

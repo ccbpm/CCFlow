@@ -94,14 +94,14 @@
 
             // alert($('#DDL_Nodes option:checked').data().isbacktracking);
 
-            if ($('#DDL_Nodes option:checked').data().isbacktracking == 0) {
-                $('#btnIsBackTracking').css('display', 'none');
-            } else {
-                $('#btnIsBackTracking').css('display', 'inline-block');
-            }
+//            if ($('#DDL_Nodes option:checked').data().isbacktracking == 0) {
+//                $('#btnIsBackTracking').css('display', 'none');
+//            } else {
+//                $('#btnIsBackTracking').css('display', 'inline-block');
+//            }
 
             //ie9
-            if ($('#DDL_Nodes option:checked').attr("data-isbacktracking") == 0) {
+            if ($('#DDL_Nodes option:selected').attr("data-isbacktracking") == 0) {
                 $('#btnIsBackTracking').css('display', 'none');
             } else {
                 $('#btnIsBackTracking').css('display', 'inline-block');

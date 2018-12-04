@@ -10,6 +10,7 @@
 var colVisibleJsonStr = ''
 var jsonStr = '';
 var IsChange = false;
+var IsSave = GetQueryString("IsSave")=="true"? true:false;
 //初始化函数
 $(function () {
 
@@ -326,7 +327,7 @@ function Save(isSaveAndNew) {
         return;
     }
 
-  
+
     $.ajax({
         type: 'post',
         async: true,
@@ -342,10 +343,11 @@ function Save(isSaveAndNew) {
             }
 
             if (isSaveAndNew == false) {
-                window.location.href = window.location.href;
+                window.location.href = window.location.href+"&IsSave=true";
+                IsSave = true;
                 return;
             }
-
+            IsSave = false;
             var url = "DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=0";
             window.location.href = url;
         }
@@ -1380,22 +1382,18 @@ function DeleteDtlFrm() {
 
     if (window.confirm('您确定要删除吗?') == false)
         return;
-
-    $.ajax({
-        type: 'post',
-        async: true,
-        url: Handler + "?DoType=DtlFrm_Delete&EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=" + GetQueryString("OID"),
-        dataType: 'html',
-        success: function (data) {
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            alert(data);
-            closeIt();
-            return;
-        }
-    });
+    IsSave = true;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    handler.AddPara("EnsName", GetQueryString("EnsName"));
+    handler.AddPara("RefPKVal", GetQueryString("RefPKVal"));
+    handler.AddPara("OID", GetQueryString("OID"));
+    var data = handler.DoMethodReturnString("DtlFrm_Delete");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+    alert(data);
+    closeIt();
+    return;
+  
 }

@@ -352,7 +352,7 @@
                 var FK_MapData = GetQueryString("FK_MapData");
                 var FID = GetQueryString("FID");
                 var FK_Node = GetQueryString("FK_Node");
-                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitMainTable,FK_MapData,FK_Node,FID);
+                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitMainTable,FK_MapData,FK_Node,FID,false);
                 return;
             }
         }
@@ -364,7 +364,7 @@
                 var FK_MapData = GetQueryString("FK_MapData");
                 var FID = GetQueryString("FID");
                 var FK_Node = GetQueryString("FK_Node");
-                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitMainTable, FK_MapData, FK_Node, FID);
+                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitMainTable, FK_MapData, FK_Node, FID,true);
             }
         }
 

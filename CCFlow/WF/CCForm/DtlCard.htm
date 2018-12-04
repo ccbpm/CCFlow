@@ -361,7 +361,10 @@
             if (window.parent) {
                 var ensName = GetQueryString("EnsName");
                 var refPKVal = GetQueryString("RefPKVal");
-                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitMainTable);
+                var FK_MapData = GetQueryString("FK_MapData");
+                var FID = GetQueryString("FID");
+                var FK_Node = GetQueryString("FK_Node");
+                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitMainTable, FK_MapData, FK_Node, FID);
             }
         }
 

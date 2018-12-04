@@ -407,7 +407,6 @@
         }
 
         function closeIt() {
-            debugger
             if (typeof ((parent && parent.doCloseDialog) || doCloseDialog) === "function") {
                 ((parent && parent.doCloseDialog) || doCloseDialog)();
                 window.parent.$('#editSubGridDiv').modal('hide');
@@ -423,7 +422,7 @@
 <input type="button" value="新建" id="Btn_New" onclick="New()" />
 <input type="button" value="保存" id="Btn_Save" onclick="Save(false)" />
 <input type="button" value="保存并新建" id="Btn_SaveAndNew" onclick="Save(true)" />
-<input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
+<input type="button" value="删除" id="Btn_Delete" onclick="DeleteDtlFrm()" />
 <input type="button" value="关闭" id="Btn_Close" onclick="closeIt()" />
 
    

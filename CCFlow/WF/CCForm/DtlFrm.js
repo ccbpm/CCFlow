@@ -1376,7 +1376,7 @@ function ResizeWindow() {
 
 
 //保存
-function Delete() {
+function DeleteDtlFrm() {
 
     if (window.confirm('您确定要删除吗?') == false)
         return;
@@ -1394,7 +1394,7 @@ function Delete() {
             }
 
             alert(data);
-            this.closeIt();
+            closeIt();
             return;
         }
     });

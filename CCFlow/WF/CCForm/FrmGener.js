@@ -150,7 +150,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node
             } else {
                 alert("请手动刷新表单");
             }
-        }, "editSubGridDiv");
+        }, "editSubGridDiv", null, false);
     } else {
         window.open(url);
     }

@@ -898,6 +898,11 @@ namespace BP.WF.HttpHandler
                 GEEntity en = new GEEntity(this.EnsName);
                 en.OID = this.OID;
                 en.Delete();
+               
+                //如果可以上传附件这删除相应的附件信息
+                FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+                dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.EnsName, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);
+               
 
                 return "删除成功.";
             }
@@ -1198,7 +1203,14 @@ namespace BP.WF.HttpHandler
                         {
                             try
                             {
-                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                                //判断是否自定义权限
+                                bool IsSelf = false;
+                                if ((nd.HisFormType == NodeFormType.SheetTree
+                                     || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                                     && (fn.FrmSln == FrmSln.Self))
+                                    IsSelf = true;
+
+                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf,nd.NodeID,this.WorkID) as GEEntity;
                                 //en.DirectUpdate();
                             }
                             catch (Exception ex)
@@ -1884,6 +1896,11 @@ namespace BP.WF.HttpHandler
             dtl.OID = this.RefOID;
             dtl.Delete();
 
+            //如果可以上传附件这删除相应的附件信息
+            FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+            dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.FK_MapDtl, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);
+            
+
             return "{\"sucess\":\"删除成功\"}";
         }
         /// <summary>
@@ -1991,7 +2008,7 @@ namespace BP.WF.HttpHandler
             }
 
             //增加排序.
-            //    qo.addOrderByDesc( dtls.GetNewEntity.PKField );
+            qo.addOrderBy(enDtls.GetNewEntity.PKField);
 
             //从表
             DataTable dtDtl = qo.DoQueryToTable();

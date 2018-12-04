@@ -2501,7 +2501,7 @@ namespace BP.WF
         /// <param name="mattrs"></param>
         /// <param name="dtls"></param>
         /// <returns></returns>
-        public static Entity DealPageLoadFull(Entity en, MapExt item, MapAttrs mattrs, MapDtls dtls)
+        public static Entity DealPageLoadFull(Entity en, MapExt item, MapAttrs mattrs, MapDtls dtls, bool isSelf=false,int nodeID=0,long workID=0)
         {
             if (item == null)
                 return en;
@@ -2572,14 +2572,37 @@ namespace BP.WF
 
                     if (sql.Contains("@"))
                         throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                    if (isSelf == true)
+                    {
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = dtl.No+"_" +nodeID;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                        {
+                            //dtl.No = mdtlSln.No;
+                            dtl.DtlOpenType = mdtlSln.DtlOpenType;
+                        }
+                    }
 
+                   
+                   
                     GEDtls gedtls = null;
 
                     try
                     {
                         gedtls = new GEDtls(dtl.No);
-                        if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
-                            continue;
+                        if (dtl.DtlOpenType == DtlOpenType.ForFID)
+                        {
+                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
+                                continue;
+                        }
+                        else
+                        {
+                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
+                                continue;
+                        }
+
+                        
                         //gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
                     }
                     catch (Exception ex)
@@ -2598,7 +2621,21 @@ namespace BP.WF
                             gedtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
                         }
 
-                        gedtl.RefPK = en.PKVal.ToString();
+                        switch (dtl.DtlOpenType)
+                        {
+                            case DtlOpenType.ForEmp:  // 按人员来控制.
+                                gedtl.RefPK = en.PKVal.ToString();
+                                gedtl.FID = long.Parse(en.PKVal.ToString());
+                                break;
+                            case DtlOpenType.ForWorkID: // 按工作ID来控制
+                                gedtl.RefPK = en.PKVal.ToString();
+                                gedtl.FID = long.Parse(en.PKVal.ToString());
+                                break;
+                            case DtlOpenType.ForFID: // 按流程ID来控制.
+                                gedtl.RefPK = workID.ToString();
+                                gedtl.FID = long.Parse(en.PKVal.ToString());
+                                break;
+                        }
                         gedtl.RDT = DataType.CurrentDataTime;
                         gedtl.Rec = WebUser.No;
                         gedtl.Insert();

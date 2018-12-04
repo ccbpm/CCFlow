@@ -910,39 +910,58 @@ function figure_Template_Image(frmImage) {
 
 //初始化 IMAGE 附件
 function figure_Template_ImageAth(frmImageAth) {
-
     var isEdit = frmImageAth.IsEdit;
     var eleHtml = $("<div></div>");
     var img = $("<img/>");
 
-    var oid = GetQueryString("OID");
-    if (oid == undefined)
-          oid = GetQueryString("WorkID");
-
-    var srcOnErr = basePath + "/WF/Data/Img/LogH.PNG";
-    var imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImageAth.FK_MapData + "_" + frmImageAth.CtrlID + "_" + oid + ".png";
-
-
+    var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
     //获取数据
     if (frmData.Sys_FrmImgAthDB) {
         $.each(frmData.Sys_FrmImgAthDB, function (i, obj) {
-            if (obj.FK_FrmImgAth == frmImageAth.MyPK) {
+            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
                 imgSrc = basePath + obj.FileFullName;
             }
         });
     }
-
     //设计属性
     img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
-
     img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Admin/CCFormDesigner/Controls/DataView/AthImg.png'");
     img.css('width', frmImageAth.W).css('height', frmImageAth.H).css('padding', "0px").css('margin', "0px").css('border-width', "0px");
-
     //不可编辑
-    eleHtml.append(img);
+    if (isEdit == "1" && pageData.IsReadonly != "1") {
+        var fieldSet = $("<fieldset></fieldset>");
+        var length = $("<legend></legend>");
+        var a = $("<a></a>");
+        var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + frmImageAth.FK_MapData + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+
+        a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
+        length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');
+
+        fieldSet.append(length);
+        length.append(a);
+        fieldSet.append(img);
+        eleHtml.append(fieldSet);
+    } else {
+        eleHtml.append(img);
+    }
     eleHtml.css('position', 'absolute').css('top', frmImageAth.Y).css('left', frmImageAth.X);
     return eleHtml;
 }
+
+//图片附件编辑
+function ImgAth(url, athMyPK) {
+    var dgId = "iframDg";
+    url = url + "&s=" + Math.random();
+    OpenEasyUiDialog(url, dgId, '图片附件', 900, 580, 'icon-new', false, function () {
+
+    }, null, null, function () {
+        //关闭也切换图片
+        var imgSrc = $("#imgSrc").val();
+        if (imgSrc != null && imgSrc != "")
+            document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc);
+    });
+}
+
 
 //初始化 附件
 function figure_Template_Attachment(frmAttachment) {

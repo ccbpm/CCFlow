@@ -1387,6 +1387,7 @@ function DeleteDtlFrm() {
     handler.AddPara("EnsName", GetQueryString("EnsName"));
     handler.AddPara("RefPKVal", GetQueryString("RefPKVal"));
     handler.AddPara("OID", GetQueryString("OID"));
+    handler.AddPara("FK_Node", GetQueryString("FK_Node"));
     var data = handler.DoMethodReturnString("DtlFrm_Delete");
     if (data.indexOf('err@') == 0) {
         alert(data);

@@ -538,6 +538,23 @@ namespace BP.WF.HttpHandler
                 return "url@" + url;
             }
 
+            if (frmtype == NodeFormType.WebOffice)
+            {
+                /*如果是公文表单，就转到公文表单的解析执行器上，为软通动力改造。*/
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
+
+                //string url = "MyFlowFoolTruck.htm";
+                string url = "MyFlowWebOffice.htm";
+
+                //处理连接.
+                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+                return "url@" + url;
+            }
+
             if (frmtype == NodeFormType.FoolForm && this.IsMobile == false)
             {
                 /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上。*/

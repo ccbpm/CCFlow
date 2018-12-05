@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>工作查看</title>
+    <link href="./Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="./Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="./Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="./Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var fk_node = GetQueryString("FK_Node");
+        var fk_flow = GetQueryString("FK_Flow");
+        var workid = GetQueryString("WorkID");
+        var fid = GetQueryString("FID");
+        var tpo = {};
+
+        $(function () {
+
+            $("#mtabs").tabs({
+                onSelect: function (title, index) {
+                    document.title = title;
+                    var currTab = $('#mtabs').tabs('getSelected');
+                    var url = $(currTab.panel('options').content).attr('src');
+                    if (url != undefined) {
+                        $('#mtabs').tabs('update', {
+                            tab: currTab,
+                            options: {
+                                content: createFrame(url)
+                            }
+                        })
+                    }
+                }
+            });
+
+            //获取节点属性
+            //获取节点属性
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            //获取按钮属性
+            var btnLab = new Entity("BP.WF.Template.BtnLab", nodeID);
+            var btnOffice = new Entity("BP.WF.Template.BtnLabExtWebOffice", nodeID);
+            var data = [];
+            data.push({ "No": "Frm", "Name": "表单", "Url": "MyFlowGener.htm?WorkID="+workid+"&NodeID="+fk_node+"&FK_Node="+fk_node+"&FID="+fid+"&FK_Flow="+fk_flow });
+            data.push({ "No": "WebOffice", "Name": "公文", "Url": "" })
+            data.push({ "No": "Track", "Name": "轨迹", "Url": "WorkOpt/OneWork/Chart.htm?FK_Node="+fk_node+"&WorkID="+workid+"&FK_Flow="+fk_flow+"&FID="+fid+"&FromWorkOpt=1" })
+            data.push({ "No": "TimeBase", "Name": "时间轴", "Url": "WorkOpt/OneWork/TimeBase.htm?FK_Node=" + fk_node + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FID=" + fid + "&FromWorkOpt=1" })
+
+            var IsDefaultTab = null;
+            $.each(data, function (index, obj) {
+                addTab(this.No, this.Name, this.Url);
+                tpo[this.No] = this.Name;
+            });
+
+            if (btnOffice.WebOfficeEnable == 3) {
+                $("#mtabs").tabs("select", 0);
+            }
+            if (btnOffice.WebOfficeEnable == 4)
+                $("#mtabs").tabs("select", 1);
+
+            if (window.screen) {
+                var w = screen.availWidth;
+                var h = screen.availHeight;
+                window.moveTo(0, 0);
+                window.resizeTo(w, h);
+            }
+
+        });
+
+        function addTab(id, title, url) {
+
+            if ($('#mtabs').tabs('exists', title)) {
+                $('#mtabs').tabs('select', title); //选中并刷新
+                var currTab = $('#mtabs').tabs('getSelected');
+            } else {
+
+            if (url.indexOf('FK_Node') == -1)
+                url += "&FK_Node=" + GetQueryString("FK_Node");
+
+            if (url.indexOf('WorkID') == -1)
+                url += "&WorkID=" + GetQueryString("WorkID");
+
+            if (url.indexOf('FK_Flow') == -1)
+                url += "&FK_Flow=" + GetQueryString("FK_Flow");
+
+                var content = createFrame(url);
+                $('#mtabs').tabs('add', {
+                    title: title,
+                    id: id,
+                    content: content,
+                    closable: false
+                });
+            }
+        }
+
+        function createFrame(url) {
+            return '<iframe scrolling="auto" frameborder="0"  src="'+ url + '" style="width:100%;height:100%;"></iframe>';
+        }
+
+        function RSize() {
+            if (document.body.scrollWidth > (window.screen.availWidth - 100)) {
+                window.dialogWidth = (window.screen.availWidth - 100).toString() + "px"
+            } else {
+                window.dialogWidth = (document.body.scrollWidth + 50).toString() + "px"
+            }
+
+            if (document.body.scrollHeight > (window.screen.availHeight - 70)) {
+                window.dialogHeight = (window.screen.availHeight - 50).toString() + "px"
+            } else {
+                window.dialogHeight = (document.body.scrollHeight + 115).toString() + "px"
+            }
+            window.dialogLeft = ((window.screen.availWidth - document.body.clientWidth) / 2).toString() + "px"
+            window.dialogTop = ((window.screen.availHeight - document.body.clientHeight) / 2).toString() + "px"
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center',noheader:true">
+        <div id="mtabs" class="easyui-tabs" data-options="fit:true">
+        </div>
+    </div>
+</body>
+</html>

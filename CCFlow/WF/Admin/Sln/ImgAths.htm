@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        th, td {
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        var frmID;
+        var fk_flow;
+        var fk_Node;
+        $(function () {
+
+            frmID = GetQueryString("FK_MapData");
+            fk_flow = GetQueryString("FK_Flow");
+            fk_Node = GetQueryString("FK_Node");
+
+            var ens = new Entities("BP.Sys.FrmImgAths");
+            ens.Retrieve("FK_MapData", frmID);
+             
+            var html = "";
+
+            for (var i = 0; i < ens.length; i++) {
+
+
+                var en = ens[i];
+
+                if (en.FK_MapData.indexOf(fk_flow) != -1)
+                    continue;
+
+                html += "<tr >";
+                html += "<td>" + en.MyPK + "</td>";
+                html += "<td>" + en.CtrlID + "</td>";
+
+                html += "<td>";
+
+                html += "<a href=\"javascript:EditFJYuanShi('" + frmID + "','" + en.CtrlID + "')\" >[原始属性]</a>";
+                html += "<a href=\"javascript:EditFJ('" + fk_Node + "','" + frmID + "','" + en.CtrlID + "')\" >[编辑]</a>";
+                html += "<a href=\"javascript:DeleteFJ('" + fk_Node + "','" + frmID + "','" + en.CtrlID + "')\" >[删除]</a>";
+
+                html += "</td>";
+                html += "</tr>";
+            }
+            $("#Table1 tr:last").after(html);
+        });
+
+        //编辑附件的原始属性.
+        function EditFJYuanShi(fk_mapdata, ath) {
+            var pk = fk_mapdata + '_' + ath;
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&PK=' + pk;
+            WinOpen(url);
+        }
+
+        //编辑附件在该节点权限.
+        function EditFJ(fk_node, fk_mapdata, ath) {
+            var mypk = fk_mapdata + '_' + ath + '_' + fk_node;
+            var en = new Entity("BP.Sys.FrmUI.FrmImgAth");
+            en.SetPKVal(mypk);
+            if (en.RetrieveFromDBSources() == 0) {
+                en.SetPKVal(fk_mapdata + '_' + ath);
+                en.RetrieveFromDBSources(); //查询
+
+                en.MyPK = mypk;
+                en.FK_MapData = fk_mapdata + "_" + fk_node;
+                en.Insert();
+            }
+            window.location.href = window.location.href;
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&FK_MapData=' + fk_mapdata + '&PK=' + mypk + '&FK_Node=' + fk_node;
+            WinOpen(url);
+        }
+
+        //删除附件的权限控制.
+        function DeleteFJ(fk_mapdata, ath) {
+
+            if (confirm('您确定要删除该控件在当前节点的权限控制吗？') == false)
+                return;
+            var mypk = fk_mapdata + '_' + ath + '_' + fk_node;
+            var en = new Entity("BP.Sys.FrmUI.FrmImgAth");
+            en.MyPK = mypk;
+            en.Delete();
+            alert("删除成功!");
+            window.location.href = window.location.href;
+        }
+
+    </script>
+</head>
+<body onkeypress="Esc();">
+    <table id="Table1" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
+    <caption>节点-表单-图片附件权限 </caption>
+        <tr>
+            <td>编号</td>
+            <td>名称</td>
+            <td>操作</td>
+        </tr>
+    </table>
+
+</body>
+</html>

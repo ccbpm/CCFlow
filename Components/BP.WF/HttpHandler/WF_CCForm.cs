@@ -681,17 +681,23 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmImgAthDB_Upload()
         {
-            string ImgAthPK = this.GetRequestVal("ImgAth");
+            string CtrlID = this.GetRequestVal("CtrlID");
             int zoomW = this.GetRequestValInt("zoomW");
             int zoomH = this.GetRequestValInt("zoomH");
 
             HttpFileCollection files = this.context.Request.Files;
             if (files.Count > 0 && files[0].ContentLength > 0)
             {
-                string myName = ImgAthPK + "_" + this.MyPK;
+                string myName = "";
+                string fk_mapData = this.FK_MapData;
+                if (fk_mapData.Contains("ND") == true)
+                    myName = CtrlID + "_" + this.RefPKVal;
+                else
+                    myName = fk_mapData + "_" + CtrlID + "_" + this.RefPKVal ; 
+
                 //生成新路径，解决返回相同src后图片不切换问题
-                string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
+                //string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + myName + ".png";
                 string saveToPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
                 string fileUPloadPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Upload");
                 //创建路径
@@ -700,8 +706,8 @@ namespace BP.WF.HttpHandler
                 if (!Directory.Exists(fileUPloadPath))
                     Directory.CreateDirectory(fileUPloadPath);
 
-                saveToPath = saveToPath + "\\" + newName + ".png";
-                fileUPloadPath = fileUPloadPath + "\\" + newName + ".png";
+                saveToPath = saveToPath + "\\" + myName + ".png";
+                fileUPloadPath = fileUPloadPath + "\\" + myName + ".png";
                 files[0].SaveAs(saveToPath);
 
                 //源图像  
@@ -719,26 +725,26 @@ namespace BP.WF.HttpHandler
 
                 //复制一份
                 File.Copy(saveToPath, fileUPloadPath, true);
-                //获取文件大小
-                FileInfo fileInfo = new FileInfo(saveToPath);
-                float fileSize = 0;
-                if (fileInfo.Exists)
-                    fileSize = float.Parse(fileInfo.Length.ToString());
+                ////获取文件大小
+                //FileInfo fileInfo = new FileInfo(saveToPath);
+                //float fileSize = 0;
+                //if (fileInfo.Exists)
+                //    fileSize = float.Parse(fileInfo.Length.ToString());
 
-                //更新数据表                
-                FrmImgAthDB imgAthDB = new FrmImgAthDB();
-                imgAthDB.MyPK = myName;
-                imgAthDB.FK_MapData = this.FK_MapData;
-                imgAthDB.FK_FrmImgAth = ImgAthPK;
-                imgAthDB.RefPKVal = this.MyPK;
-                imgAthDB.FileFullName = webPath;
-                imgAthDB.FileName = newName;
-                imgAthDB.FileExts = "png";
-                imgAthDB.FileSize = fileSize;
-                imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
-                imgAthDB.Rec = BP.Web.WebUser.No;
-                imgAthDB.RecName = BP.Web.WebUser.Name;
-                imgAthDB.Save();
+                ////更新数据表                
+                //FrmImgAthDB imgAthDB = new FrmImgAthDB();
+                //imgAthDB.MyPK = myName;
+                //imgAthDB.FK_MapData = this.FK_MapData;
+                //imgAthDB.FK_FrmImgAth = ImgAthPK;
+                //imgAthDB.RefPKVal = this.MyPK;
+                //imgAthDB.FileFullName = webPath;
+                //imgAthDB.FileName = newName;
+                //imgAthDB.FileExts = "png";
+                //imgAthDB.FileSize = fileSize;
+                //imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
+                //imgAthDB.Rec = BP.Web.WebUser.No;
+                //imgAthDB.RecName = BP.Web.WebUser.Name;
+                //imgAthDB.Save();
                 return "{SourceImage:\"" + webPath + "\"}";
             }
             return "{err:\"没有选择文件\"}";
@@ -750,7 +756,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmImgAthDB_Cut()
         {
-            string ImgAthPK = this.GetRequestVal("ImgAth");
+            string CtrlID = this.GetRequestVal("CtrlID");
 
             int zoomW = this.GetRequestValInt("zoomW");
             int zoomH = this.GetRequestValInt("zoomH");
@@ -759,26 +765,33 @@ namespace BP.WF.HttpHandler
             int w = this.GetRequestValInt("cW");
             int h = this.GetRequestValInt("cH");
 
-            string myPK = ImgAthPK + "_" + this.MyPK;
-            FrmImgAthDB imgAthDB = new FrmImgAthDB(myPK);
+            //string myPK = ImgAthPK + "_" + this.MyPK;
+            //FrmImgAthDB imgAthDB = new FrmImgAthDB(myPK);
 
             string appPath = SystemConfig.CCFlowAppPath;
             appPath = SystemConfig.CCFlowWebPath;
 
-            string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            string newName = "";
+            string fk_mapData = this.FK_MapData;
+            string fileFullName = "";
+            if (fk_mapData.Contains("ND") == true)
+                newName = CtrlID + "_" + this.RefPKVal;
+            else
+                newName = fk_mapData + "_" + CtrlID + "_" + this.RefPKVal;
+            //string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             string savePath = SystemConfig.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             //获取上传的大图片
-            string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + imgAthDB.FileName + ".png");
+            string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png");
             if (File.Exists(strImgPath) == true)
             {
                 //剪切图
                 bool bSuc = Crop(strImgPath, savePath, w, h, x, y);
-                imgAthDB.FileFullName = webPath;
-                imgAthDB.Update();
+                //imgAthDB.FileFullName = webPath;
+                //imgAthDB.Update();
                 return webPath;
             }
-            return imgAthDB.FileFullName;
+            return webPath;
         }
 
         /// <summary>

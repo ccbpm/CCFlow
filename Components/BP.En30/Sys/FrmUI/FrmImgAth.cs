@@ -208,7 +208,7 @@ namespace BP.Sys.FrmUI
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_MapData + "_" + this.CtrlID;
+            //this.MyPK = this.FK_MapData + "_" + this.CtrlID;
             return base.beforeUpdateInsertAction();
         }
     }

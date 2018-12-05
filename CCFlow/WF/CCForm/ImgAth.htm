@@ -12,13 +12,14 @@
     <script src="../Scripts/Jquery-plug/fileupload/ajaxfileupload.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
 
     <script language="javascript" type="text/javascript">
         var imgH = "";
         var imgW = "";
         var FK_MapData = "";
-        var ImgAth = "";
-        var MyPK = "";
+        var CtrlID = "";
+        var RefPKVal = "";
         var zoomW = 620;
         var zoomH = 400;
 
@@ -78,7 +79,7 @@
           
 
             $.ajax({
-                url: Handler + '?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&ImgAth=' + ImgAth + '&MyPK=' + MyPK + '&zoomW=' + zoomW + '&zoomH=' + zoomH,
+                url: Handler + '?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&CtrlID=' + CtrlID + '&RefPKVal=' + RefPKVal + '&zoomW=' + zoomW + '&zoomH=' + zoomH,
                 type: 'POST',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据
@@ -122,37 +123,37 @@
             //获取图片尺寸
             var jcrop_api = $.Jcrop("#myImage");
             //var zoomWH = jcrop_api.getBounds();
-            
+
             //获取已上传数据
-            Handler_AjaxQueryData({
-                DoType: "FrmImgAthDB_Cut",
-                FK_MapData: FK_MapData,
-                MyPK: MyPK,
-                ImgAth: ImgAth,
-                zoomW: zoomW,
-                zoomH: zoomH,
-                cX: cX,
-                cY: cY,
-                cW: cW,
-                cH: cH
-            }, function (data) {
-                if (data.indexOf('err@') == 0) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddPara("FK_MapData", FK_MapData);
+            handler.AddPara("RefPKVal", RefPKVal);
+            handler.AddPara("CtrlID", CtrlID);
+            handler.AddPara("zoomW", zoomW);
+            handler.AddPara("zoomH", zoomH);
+            handler.AddPara("cX", cX);
+            handler.AddPara("cY", cY);
+            handler.AddPara("cW", cW);
+            handler.AddPara("cH", cH);
+            var data = handler.DoMethodReturnString("FrmImgAthDB_Cut");
+            if (data.indexOf('err@') == 0) {
                     alert(data);
                     return;
-                }
+             }
 
-                if (data.length > 0) {
-                    $("#imgCut").attr("src", data);
-                    $("#HD_ImgAthSrc").val(data);
+            if (data.length > 0) {
+                $("#imgCut").attr("src", data);
+                $("#HD_ImgAthSrc").val(data);
 
-                    var jcrop_api = $.Jcrop("#myImage");
-                    if (jcrop_api) {
-                        var sourceImg = $("#HD_SImgAthSrc").val();
-                        jcrop_api.setImage(sourceImg);
-                    }
-                    AddImgLisenerEvent();
+                var jcrop_api = $.Jcrop("#myImage");
+                if (jcrop_api) {
+                    var sourceImg = $("#HD_SImgAthSrc").val();
+                    jcrop_api.setImage(sourceImg);
                 }
-            }, this);
+             }
+             AddImgLisenerEvent();
+
+           
             //给父窗体赋值
             ImgAthSrc();
             //window.parent.location.href = window.parent.location.href;
@@ -163,26 +164,48 @@
 
         //初始化图片
         function InitImgAth() {
-            //获取已上传数据
-            Handler_AjaxQueryData({ DoType: "FrmImgAthDB_Init", FK_MapData: FK_MapData, MyPK: MyPK, ImgAth: ImgAth }, function (data) {
-                if (data.indexOf('err@') == 0) {
-                    alert(data);
-                    return;
-                }
-                var dataObj = eval("(" + data + ")"); //转换为json对象 
-                if (dataObj.length > 0) {
-                    var fileFullName = basePath + dataObj[0].FileFullName;
-                    var fileName = dataObj[0].FileName;
-                    var fileExts = dataObj[0].FileExts;
-                    fileName = basePath + "/DataUser/ImgAth/Upload/" + fileName + "." + fileExts;
+//            //获取已上传数据
+//            Handler_AjaxQueryData({ DoType: "FrmImgAthDB_Init", FK_MapData: FK_MapData, RefPKVal: RefPKVal, CtrlID: CtrlID }, function (data) {
+//                if (data.indexOf('err@') == 0) {
+//                    alert(data);
+//                    return;
+//                }
+//                var dataObj = eval("(" + data + ")"); //转换为json对象 
+//                if (dataObj.length > 0) {
+//                    var fileFullName = basePath + dataObj[0].FileFullName;
+//                    var fileName = dataObj[0].FileName;
+//                    var fileExts = dataObj[0].FileExts;
+//                    fileName = basePath + "/DataUser/ImgAth/Upload/" + fileName + "." + fileExts;
 
-                    $("#myImage").attr("src", fileName);
-                    $("#imgCut").attr("src", fileFullName);
-                    $("#HD_ImgAthSrc").val(fileFullName);
-                    $("#HD_SImgAthSrc").val(fileName);
-                    AddImgLisenerEvent();
-                }
-            }, this);
+//                    $("#myImage").attr("src", fileName);
+//                    $('#myImage').Jcrop();
+//                    $("#imgCut").attr("src", fileFullName);
+//                    $("#HD_ImgAthSrc").val(fileFullName);
+//                    $("#HD_SImgAthSrc").val(fileName);
+//                    AddImgLisenerEvent();
+//                }
+            //            }, this);
+
+            var fileFullName = "";
+            var fileName = "";
+            if (FK_MapData.indexOf("ND") != -1) {
+                fileFullName = basePath + "/DataUser/ImgAth/Data/" + CtrlID + "_" + RefPKVal + ".png";
+                fileName = basePath + "/DataUser/ImgAth/Upload/" + CtrlID + "_" + RefPKVal + ".png";
+            } else {
+                fileFullName = basePath + "/DataUser/ImgAth/Upload/" + FK_MapData + "_" + CtrlID + "_" + RefPKVal + ".png";
+                fileName = basePath + "/DataUser/ImgAth/Upload/" + FK_MapData + "_" + CtrlID + "_" + RefPKVal + ".png";
+            }
+
+            $("#myImage").attr("src", fileName);
+            $('#myImage').Jcrop();
+            $("#imgCut").attr("src", fileFullName);
+            $("#HD_ImgAthSrc").val(fileFullName);
+            $("#HD_SImgAthSrc").val(fileName);
+            AddImgLisenerEvent();
+            
+             
+
+            
         }
         
         //图片事件
@@ -211,8 +234,10 @@
             imgH = GetQueryString("H");
             imgW = GetQueryString("W");
             FK_MapData = GetQueryString("FK_MapData");
-            ImgAth = GetQueryString("ImgAth");
-            MyPK = GetQueryString("MyPK");
+            CtrlID = GetQueryString("CtrlID");
+            RefPKVal = GetQueryString("RefPKVal");
+            if (RefPKVal == null || RefPKVal == undefined)
+                RefPKVal = 0;
             InitImgAth();
             //设置图片大小
             $("#imgCut").css("width", imgW).css("height", imgH);

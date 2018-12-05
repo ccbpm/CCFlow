@@ -540,7 +540,7 @@ function ImgAth(url, athMyPK) {
         //var win =(obj.contentWindow || obj.contentDocument); 
         var imgSrc = $("#imgSrc").val();
         if(imgSrc!=null && imgSrc!="")
-            document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc);
+            document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc + "?t=" + Math.random());
     });
 }
 
@@ -551,14 +551,20 @@ function figure_Template_ImageAth(frmImageAth) {
     var img = $("<img/>");
 
     var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
+//    //获取数据
+//    if (flowData.Sys_FrmImgAthDB) {
+//        $.each(flowData.Sys_FrmImgAthDB, function (i, obj) {
+//            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
+//                imgSrc = basePath + obj.FileFullName;
+//            }
+//        });
+    //    }
     //获取数据
-    if (flowData.Sys_FrmImgAthDB) {
-        $.each(flowData.Sys_FrmImgAthDB, function (i, obj) {
-            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
-                imgSrc = basePath + obj.FileFullName;
-            }
-        });
-    }
+    if (frmImageAth.FK_MapData.indexOf("ND") != -1)
+        imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImageAth.CtrlID + "_" + pageData.WorkID + ".png";
+    else
+        imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImageAth.FK_MapData + "_" + frmImageAth.CtrlID + "_" + pageData.WorkID + ".png";
+
     //设计属性
     img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
     img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Admin/CCFormDesigner/Controls/DataView/AthImg.png'");
@@ -568,7 +574,7 @@ function figure_Template_ImageAth(frmImageAth) {
         var fieldSet = $("<fieldset></fieldset>");
         var length = $("<legend></legend>");
         var a = $("<a></a>");
-        var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + flowData.Sys_MapData[0].No + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+        var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + flowData.Sys_MapData[0].No + "&RefPKVal=" + pageData.WorkID + "&CtrlID=" + frmImageAth.CtrlID;
 
         a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
         length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');

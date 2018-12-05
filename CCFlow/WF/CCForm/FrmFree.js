@@ -50,6 +50,10 @@ function GenerFreeFrm(mapData, frmData) {
     }
 
     //循环 图片附件
+    if (frmData.Sys_FrmImgAth.length > 0) {
+        var imgSrc = "<input type='hidden' id='imgSrc'/>";
+        $('#CCForm').append(imgSrc);
+    }
     for (var i in frmData.Sys_FrmImgAth) {
         var frmImgAth = frmData.Sys_FrmImgAth[i];
         var createdFigure = figure_Template_ImageAth(frmImgAth);
@@ -914,15 +918,40 @@ function figure_Template_ImageAth(frmImageAth) {
     var eleHtml = $("<div></div>");
     var img = $("<img/>");
 
+
+    //判断权限
+    var WhoIsPK={OID:0,FID:1,PWorkID:2,CWorkID:3};
+    var fn = new Entity("BP.WF.Template.FrmNode");
+    fn.SetPKVal(pageData.FK_MapData + "_" + pageData.FK_Node + "_" + pageData.FK_Flow);
+    var count = fn.RetrieveFromDBSources();
+
+    var refpkVal = pageData.OID;
+    if (count != 0) {
+        if(fn.WhoIsPK == WhoIsPK.FID || fn.WhoIsPK == WhoIsPK.PWorkID)
+            refpkVal = pageData.FID
+        var node = frmData.WF_Node[0];
+        if ((node.FormType == 5 || node.FormType == 10) && fn.FrmSln == 2) {
+           var imgAth = new Entity("BP.Sys.FrmUI.FrmImgAth");
+           imgAth.SetPKVal(frmImageAth.MyPK + "_" + pageData.FK_Node);
+            count = imgAth.RetrieveFromDBSources();
+           if(count !=0)
+            isEdit = ImgAth.IsEdit;
+
+          }  
+    }
     var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
     //获取数据
-    if (frmData.Sys_FrmImgAthDB) {
-        $.each(frmData.Sys_FrmImgAthDB, function (i, obj) {
-            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
-                imgSrc = basePath + obj.FileFullName;
-            }
-        });
-    }
+    if (pageData.FK_MapData.indexOf("ND") != -1)
+        imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImageAth.CtrlID + "_" + refpkVal + ".png";
+    else
+        imgSrc = basePath + "/DataUser/ImgAth/Data/" + pageData.FK_MapData + "_" + frmImageAth.CtrlID + "_" + refpkVal + ".png";
+//    if (frmData.Sys_FrmImgAthDB) {
+//        $.each(frmData.Sys_FrmImgAthDB, function (i, obj) {
+//            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
+//                
+//            }
+//        });
+//    }
     //设计属性
     img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
     img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Admin/CCFormDesigner/Controls/DataView/AthImg.png'");
@@ -932,7 +961,7 @@ function figure_Template_ImageAth(frmImageAth) {
         var fieldSet = $("<fieldset></fieldset>");
         var length = $("<legend></legend>");
         var a = $("<a></a>");
-        var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + frmImageAth.FK_MapData + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+        var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + pageData.FK_MapData + "&RefPKVal=" + refpkVal + "&CtrlID=" + frmImageAth.CtrlID;
 
         a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
         length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');
@@ -958,7 +987,7 @@ function ImgAth(url, athMyPK) {
         //关闭也切换图片
         var imgSrc = $("#imgSrc").val();
         if (imgSrc != null && imgSrc != "")
-            document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc);
+            document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc + "?t=" + Math.random());
     });
 }
 
@@ -971,9 +1000,8 @@ function figure_Template_Attachment(frmAttachment) {
     if (ath.UploadType == 0) { //单附件上传 L4204.
         return $('');
     }
-
-
     var src = "";
+  
     if (pageData.IsReadonly == "1")
         src = "Ath.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
     else

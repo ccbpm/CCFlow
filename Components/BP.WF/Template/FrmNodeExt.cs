@@ -160,6 +160,12 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "图片附件权限";
+                rm.ClassMethodName = this.ToString() + ".DoImgAths()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "从其他节点Copy权限设置";
                 rm.ClassMethodName = this.ToString() + ".DoCopyFromNode()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
@@ -213,6 +219,11 @@ namespace BP.WF.Template
         public string DoAths()
         {
             return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+        }
+
+        public string DoImgAths()
+        {
+            return "../../Admin/Sln/ImgAths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
 
         public string DoCopyFromNode()

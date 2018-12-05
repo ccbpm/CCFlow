@@ -548,7 +548,7 @@ function ImgAth(url, athMyPK) {
 function figure_Template_ImageAth(frmImageAth) {
     var isEdit = frmImageAth.IsEdit;
     var eleHtml = $("<div></div>");
-    var img = $("<img/>");
+    var img = $("<img class='pimg'/>");
 
     var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
 //    //获取数据

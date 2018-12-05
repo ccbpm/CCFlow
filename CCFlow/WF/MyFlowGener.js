@@ -1514,6 +1514,10 @@ function GenerWorkNode() {
 
             }
 
+            $(".pimg").on("dblclick", function () {
+                var _this = $(this); //将当前的pimg元素作为_this传入函数  
+                imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+            });  
 
 
             //给富文本创建编辑器

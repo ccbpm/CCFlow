@@ -916,7 +916,7 @@ function figure_Template_Image(frmImage) {
 function figure_Template_ImageAth(frmImageAth) {
     var isEdit = frmImageAth.IsEdit;
     var eleHtml = $("<div></div>");
-    var img = $("<img/>");
+    var img = $("<img class='pimg'/>");
 
 
     //判断权限
@@ -990,7 +990,6 @@ function ImgAth(url, athMyPK) {
             document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc + "?t=" + Math.random());
     });
 }
-
 
 //初始化 附件
 function figure_Template_Attachment(frmAttachment) {

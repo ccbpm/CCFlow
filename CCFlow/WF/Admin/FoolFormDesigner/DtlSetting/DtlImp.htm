@@ -57,7 +57,7 @@
 <body>
     <form id="cc">
     <table id="Table1" style="width: 99%;">
-        <caption>表格条件查询</caption>
+        <caption>从表导入查询</caption>
         <tr>
             <th colspan="2">基本信息</th>
         </tr>
@@ -183,6 +183,7 @@
                 <div id="divTag" style="color: Gray; display: none">
                     <ul>
                         <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头..</li>
+                        <li>不为空时，设置几个字段则列表里面显示几个字段</li>
                         <li>格式为:</li>
                         <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
                     </ul>
@@ -194,6 +195,7 @@
                 <input id="TB_Tag" name="TB_Tag" style="width: 100%;" />
             </td>
         </tr>
+       
         <tr>
             <td colspan="2">
                 <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save()" />

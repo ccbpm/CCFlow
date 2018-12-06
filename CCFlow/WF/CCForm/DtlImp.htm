@@ -348,6 +348,16 @@
             var dbSrc = mapExt.Tag2;
             var reg = new RegExp("@Key", "g");
             dbSrc = dbSrc.replace(reg, keyWord);
+
+            //处理SQL
+            //替换表达式常用的用户信息
+            var webUser = new WebUser();
+            expStr = expStr.replace('@WebUse.No', webUser.No);
+            expStr = expStr.replace('@WebUse.Name', webUser.Name);
+            expStr = expStr.replace('@WebUse.FK_Dept', webUser.FK_Dept);
+            expStr = expStr.replace('@WebUse.DeptName', webUser.DeptName);
+            expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+
             $.each(condtionFieldsArry, function (i, obj) {
                 var regC = new RegExp("@" + obj.FieldKey, "g");
                 var value = $("#" + obj.FieldKey).val();

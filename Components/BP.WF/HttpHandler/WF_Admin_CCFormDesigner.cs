@@ -176,8 +176,13 @@ namespace BP.WF.HttpHandler
             md.Name = this.GetRequestVal("TB_Name");
             md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
 
+            md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
+
             //表单的物理表.
-            md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
+            if(md.HisFrmType == BP.Sys.FrmType.Url ||  md.HisFrmType == BP.Sys.FrmType.Entity)
+                md.PTable = this.GetRequestVal("TB_PTable");
+            else
+                md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
 
             //数据表模式。 @周朋 需要翻译.
             md.PTableModel = this.GetRequestValInt("DDL_PTableModel");
@@ -188,8 +193,6 @@ namespace BP.WF.HttpHandler
             md.DBSrc = this.GetRequestVal("DDL_DBSrc");
             if (md.IsExits == true)
                 return "err@表单ID:" + md.No + "已经存在.";
-
-            md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
 
             switch (md.HisFrmType)
             {
@@ -216,11 +219,11 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
             {
                 /*把表单模版存储到数据库里 */
-                return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmExcel&PKVal=" + md.No;
+                return "url@../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmExcel&PKVal=" + md.No;
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.Entity)
-                return "url@../../Comm/En.htm?EnName=" + md.PTable;
+                return "url@../../Comm/Ens.htm?EnsName=" + md.PTable;
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
                 return "url@FormDesigner.htm?FK_MapData=" + md.No;
@@ -262,8 +265,11 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.Url)
             {
                 /* 自由表单 */
-                return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
+                return "url@../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
             }
+
+            if (md.HisFrmType == BP.Sys.FrmType.Entity)
+                return "url@../../Comm/Ens.htm?EnsName=" + md.PTable;
 
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();
         }

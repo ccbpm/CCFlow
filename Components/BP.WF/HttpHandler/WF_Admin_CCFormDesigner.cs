@@ -198,6 +198,8 @@ namespace BP.WF.HttpHandler
                 case BP.Sys.FrmType.FoolForm:
                     break;
                 case BP.Sys.FrmType.Url:
+                    md.Url = this.GetRequestVal("TB_Url");
+                    break;
                 case BP.Sys.FrmType.Entity:
                     md.Url = md.PTable;
                     break;

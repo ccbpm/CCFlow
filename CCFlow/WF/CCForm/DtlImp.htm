@@ -352,11 +352,12 @@
             //处理SQL
             //替换表达式常用的用户信息
             var webUser = new WebUser();
-            expStr = expStr.replace('@WebUse.No', webUser.No);
-            expStr = expStr.replace('@WebUse.Name', webUser.Name);
-            expStr = expStr.replace('@WebUse.FK_Dept', webUser.FK_Dept);
-            expStr = expStr.replace('@WebUse.DeptName', webUser.DeptName);
-            expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+            dbSrc = dbSrc.replace('@WebUse.No', webUser.No);
+            dbSrc = dbSrc.replace('@WebUse.Name', webUser.Name);
+            dbSrc = dbSrc.replace('@WebUse.FK_Dept', webUser.FK_Dept);
+            dbSrc = dbSrc.replace('@WebUse.DeptName', webUser.DeptName);
+            dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+            //替换
 
             $.each(condtionFieldsArry, function (i, obj) {
                 var regC = new RegExp("@" + obj.FieldKey, "g");

@@ -62,6 +62,12 @@
 
             var frmType = $("#DDL_FrmType").val();
 
+            $("#DDL_PTableModel").show();
+            $("#Idx_7").show();
+            $("#Idx_8").show();
+            $("#divUrl").hide();
+            $("#OtherTd").html("9");
+
             document.getElementById("PTableName").innerHTML = "存储表";
             document.getElementById("PTableDesc").innerHTML = "数据要存储到那个表里？<br>默认与表单编号一致，指定的表名，必须是下划线或者字母开头，不能包含特殊字符，否则创建表失败。";
 
@@ -73,13 +79,16 @@
             if (frmType == "3") {
                 document.getElementById("PTableName").innerHTML = "请输入URL";
                 document.getElementById("PTableDesc").innerHTML = "请输入嵌入式表单的URL.";
+                $("#DDL_PTableModel").hide();
+                $("#divUrl").show();
+                $("#Idx_7").hide();
+                $("#Idx_8").hide();
+                $("#OtherTd").html("7");
+
+                //隐藏TR
             }
 
-            //              1:拿到select对象： var  myselect=document.getElementById("test");
-            //  2：拿到选中项的索引：var index=myselect.selectedIndex ;             // selectedIndex代表的是你所选中项的index
-            //  3:拿到选中项options的value：  myselect.options[index].value;
-            //  4:拿到选中项options的text：  myselect.options[index].text;
-            //   var frmType = document.getElementById("DDL_FrmType");
+          
         }
 
         //选择一个表.
@@ -142,6 +151,7 @@
   <option value="1" > 从数据库中指定，可以修改数据库结构。 </option>
   <option value="2" > 从数据库中指定，不允许修改数据库结构。 </option>
  </select>
+ <div id="divUrl"><input type="text" id="TB_Url" name="TB_Url" style=" width:100%;" /></div>
 
 </td>
 <td > 
@@ -150,7 +160,7 @@
 </tr>
 
 
-<tr>
+<tr id="Idx_7">
 <td class="Idx" > 7 </td>
 <td > <div id="PTableName" >自定义存储表  </div> </td>
 <td><input type="text" id="TB_PTable" name="TB_PTable" style=" width:100%;" /> </td>
@@ -160,7 +170,7 @@
 </tr>
 
 
-<tr>
+<tr id="Idx_8">
 <td class="Idx" > 8 </td>
 <td > <div id="Div1" >本机已存在的表  </div> </td>
 <td>
@@ -175,7 +185,7 @@
 
 
 <tr>
-<td class="Idx" > 9 </td>
+<td class="Idx" id="OtherTd"> 9 </td>
 <td >  </td>
 
 <td colspan="2">
@@ -226,7 +236,6 @@
             return;
         }
 
-		//$("#DDL_PTable").trigger("change");
 
         var frmData = $("#cc").serialize();
 

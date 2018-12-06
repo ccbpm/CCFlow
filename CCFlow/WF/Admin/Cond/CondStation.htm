@@ -16,18 +16,18 @@
     <script src="../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../CCFlowEnum.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
-    
+
         var operatorValue = "";
-      
+
         //页面启动函数.
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
             var ifm = document.getElementById("stationFrame");
-            ifm.height = document.documentElement.clientHeight-40;
+            ifm.height = document.documentElement.clientHeight - 67;
 
             InitPage();
-           
+
 
             $("#Msg").html("");
         });
@@ -138,8 +138,8 @@
         function SetAdminStations() {
 
             var user = new WebUser();
-               
-            OpenNodStationGroup("",1);
+
+            OpenNodStationGroup("", 1);
         }
         //设置集团岗位.
         function SetGroupStations() {
@@ -149,15 +149,15 @@
         //设置本组织岗位.
         function SetOrgStations() {
             var user = new WebUser();
-            OpenNodStationGroup(user.FK_Dept,3);
+            OpenNodStationGroup(user.FK_Dept, 3);
         }
 
         function OpenNodStationGroup(orgNo, selectType) {
             var emps = $("#emps").html();
             var url = "SelectStation.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node") + "&emps=" + emps + "&SelectType=" + selectType;
             document.getElementById("stationFrame").src = url;
-            $("#win").window("open"); 
-            
+            $("#win").window("open");
+
         }
 
         function Btn_Delete_Click() {
@@ -173,7 +173,7 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("CondByStation_Delete");
             window.location.href = window.location.href;
-           
+
         }
 
         //ajax 提交
@@ -190,7 +190,7 @@
                 emps = document.getElementById("groupEmps").innerHTML;
                 orgEmps = document.getElementById("orgEmps").innerHTML;
             }
-            
+
             var frmData = $("#cc").serialize();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
@@ -204,7 +204,7 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("CondByStation_Save");
             window.location.href = window.location.href;
-            
+
         }
 
         function selChange() {
@@ -405,7 +405,7 @@
             data-options="iconCls:'icon-save',modal:true">       
            
         <div data-options="region:'north',title:'North Title',split:true" style="height:50px;">    
-            <iframe id="stationFrame" src="#" scrolling="no" frameborder="0" width="90%"></iframe>
+            <iframe id="stationFrame" src="#" scrolling="no" frameborder="0" width="99%" ></iframe>
            
        </div>    
             

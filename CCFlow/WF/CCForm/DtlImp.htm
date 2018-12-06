@@ -352,10 +352,10 @@
             //处理SQL
             //替换表达式常用的用户信息
             var webUser = new WebUser();
-            dbSrc = dbSrc.replace('@WebUse.No', webUser.No);
-            dbSrc = dbSrc.replace('@WebUse.Name', webUser.Name);
-            dbSrc = dbSrc.replace('@WebUse.FK_Dept', webUser.FK_Dept);
-            dbSrc = dbSrc.replace('@WebUse.DeptName', webUser.DeptName);
+            dbSrc = dbSrc.replace('@WebUser.No', webUser.No);
+            dbSrc = dbSrc.replace('@WebUser.Name', webUser.Name);
+            dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+            dbSrc = dbSrc.replace('@WebUser.DeptName', webUser.DeptName);
             dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
             //替换
 

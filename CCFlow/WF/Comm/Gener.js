@@ -2086,10 +2086,10 @@ function DealExp(expStr, webUser) {
         webUser = new WebUser();
 
     //替换表达式常用的用户信息
-    expStr = expStr.replace('@WebUse.No', webUser.No);
-    expStr = expStr.replace('@WebUse.Name', webUser.Name);
-    expStr = expStr.replace('@WebUse.FK_Dept', webUser.FK_Dept);
-    expStr = expStr.replace('@WebUse.DeptName', webUser.DeptName);
+    expStr = expStr.replace('@WebUser.No', webUser.No);
+    expStr = expStr.replace('@WebUser.Name', webUser.Name);
+    expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+    expStr = expStr.replace('@WebUser.DeptName', webUser.DeptName);
     expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
 
     if (expStr.indexOf('@') == -1)

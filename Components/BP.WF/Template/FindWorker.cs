@@ -823,7 +823,10 @@ namespace BP.WF.Template
             }
 
             /* 如果执行节点 与 接受节点岗位集合一致 */
-            if (this.currWn.HisNode.GroupStaNDs == town.HisNode.GroupStaNDs)
+            string currGroupStaNDs = this.currWn.HisNode.GroupStaNDs;
+            string toNodeGroupStaNDs = town.HisNode.GroupStaNDs;
+
+            if (DataType.IsNullOrEmpty(currGroupStaNDs)==false && currGroupStaNDs.Equals(toNodeGroupStaNDs)==true)
             {
                 /* 说明，就把当前人员做为下一个节点处理人。*/
                 DataRow dr = dt.NewRow();
@@ -833,7 +836,8 @@ namespace BP.WF.Template
             }
 
             /* 如果执行节点 与 接受节点岗位集合不一致 */
-            if (this.currWn.HisNode.GroupStaNDs != town.HisNode.GroupStaNDs)
+            if ((DataType.IsNullOrEmpty(toNodeGroupStaNDs) == true && DataType.IsNullOrEmpty(currGroupStaNDs) == true)
+                || currGroupStaNDs.Equals(toNodeGroupStaNDs) == false)
             {
                 /* 没有查询到的情况下, 先按照本部门计算。*/
                 if (flowAppType == FlowAppType.Normal)

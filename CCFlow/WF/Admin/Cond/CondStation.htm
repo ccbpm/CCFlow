@@ -18,6 +18,7 @@
     <script type="text/javascript" language="javascript">
 
         var operatorValue = "";
+        var operatorValueT = "";
 
         //页面启动函数.
         $(function () {
@@ -43,11 +44,14 @@
 
             var cond = new Entity("BP.WF.Template.Cond");
             cond.MyPK = mypk;
+            cond.SetPKVal(mypk);
             cond.RetrieveFromDBSources();
 
             // 运算的值
-            operatorValue = cond.OperatorValue;
-            operatorValueT = cond.OperatorValueT;
+            operatorValue = cond.OperatorValue.replace(/,/g, "@");
+            if(cond.GetPara("orgEmps")!=null)
+            operatorValueT = cond.GetPara("orgEmps").replace(/&nbsp;&nbsp;/g, "@");
+
 
             //获取已指定操作员的岗位条件
             operatorValues = operatorValue.split("@");
@@ -120,9 +124,8 @@
             var count = 0;
             for (var i = 0; i < CheckStations.length; i++) {
                 if (CheckStations[i] != "") {
-                    var en = new Entities("BP.GPM.Stations");
-                    en.Retrieve("No", CheckStations[i]);
 
+                    var en = new Entity("BP.GPM.Station", CheckStations[i]);
                     html += "&nbsp;&nbsp;&nbsp;" + en.Name;
                     count++;
                     emps += CheckStations[i] + ",";

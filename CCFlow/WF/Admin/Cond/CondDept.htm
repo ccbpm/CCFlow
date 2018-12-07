@@ -28,7 +28,7 @@
 
             var mypk = fk_Node + "_" + toNodeID + "_Dir_Depts";
             var cond = new Entity("BP.WF.Template.Cond");
-            cond.MyPK = mypk;
+            cond.SetPKVal(mypk);
             cond.RetrieveFromDBSources();
 
             $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");

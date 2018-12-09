@@ -35,7 +35,6 @@
         }
     </style>
     <script language="javascript" type="text/javascript">
-
         var numOfUpload = 0;  //要求上传的数量.
         var numOfAths = 0;    //附件数量.
         function CanEditor(fileType) {
@@ -716,7 +715,6 @@
                     console.log("正在进行，请稍候");
                 },
                 success: function (responseStr) {
-
                     if (responseStr.indexOf('err@') != -1)
                         alert(responseStr);
 
@@ -763,9 +761,13 @@
                 parent.SetAth(nameStrs);
             }
         }
+
+        function checkLeave() {
+            opener.location.reload(); 
+        }
     </script>
 </head>
-<body>
+<body onunload="checkLeave();">
     <form id="Ath_Form">
     <div id="Msg">
     </div>

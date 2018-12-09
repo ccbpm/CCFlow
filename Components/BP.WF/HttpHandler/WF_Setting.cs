@@ -81,6 +81,18 @@ namespace BP.WF.HttpHandler
                     BP.Port.Dept dept = new Dept(item.FK_Dept);
                     depts += dept.Name + "、";
 
+                   
+                   if (DataType.IsNullOrEmpty(item.FK_Station) == true)
+                    {
+                    //    item.Delete();
+                        continue;
+                    }
+
+                    if (DataType.IsNullOrEmpty(item.FK_Dept) == true)
+                    {
+                     //   item.Delete();
+                        continue;
+                    }
 
                     BP.Port.Station sta = new Station(item.FK_Station);
                     stas += sta.Name + "、";

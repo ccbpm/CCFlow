@@ -364,10 +364,9 @@ namespace BP.GPM
                 map.CodeStruct = "4";
 
                 #region 与树有关的必备属性.
-                map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 1, 90, 30);
+                map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 1, 90, 80);
                 map.AddDDLEntities(MenuAttr.ParentNo, null, DataType.AppString, "父节点", new Menus(), "No", "Name", false);
-                map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 400,true);
-                map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
+                map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 300,true);
                 #endregion 与树有关的必备属性.
 
                 // 类的字段属性. 
@@ -378,9 +377,9 @@ namespace BP.GPM
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);
                 map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
-                map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
+                map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 200, true);
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?",true,true);
-                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 20,true);
+                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 40,true);
                 map.AddDDLSysEnum(MenuAttr.MenuCtrlWay, 0, "控制方式", true, true, MenuAttr.MenuCtrlWay,
                     "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
 
@@ -388,6 +387,9 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
+
+                map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
+
 
                 //map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
 

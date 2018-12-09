@@ -184,7 +184,7 @@ namespace BP.GPM
         }
         #endregion
 
-        public void InitMyBars()
+        public string InitMyBars()
         {
             Bars bars = new Bars();
             bars.RetrieveAll();
@@ -201,6 +201,8 @@ namespace BP.GPM
                 be.Title = b.Name;
                 be.Insert();
             }
+
+            return "执行成功";
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

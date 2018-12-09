@@ -91,11 +91,6 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
-
-         
-
-
-
             // 加载mapext 数据.
             MapExt me = new MapExt();
             int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFullDtlField,
@@ -1211,5 +1206,55 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion
+
+        public string NRCMaterielDtlSave()
+        {
+            string fk_Template = this.GetRequestVal("FK_Template");
+            string workid = this.GetRequestVal("WorkId");
+            string sql= "SELECT * FROM STARCO_TemplateNRCMaterielDtl WHERE FK_Template='" + fk_Template + "'";
+            DataTable dt = new DataTable();
+            dt = DBAccess.RunSQLReturnTable(sql);
+            if(dt != null && dt.Rows.Count > 0)
+            {
+                //string sql1 = "SELECT * FROM ND105Dtl1 WHERE RefPK='" + workid + "'";
+                //DataTable dt1 = new DataTable();
+                //dt1 = DBAccess.RunSQLReturnTable(sql1);
+                //if (dt1 != null && dt1.Rows.Count > 0)
+                //{
+
+                //}
+
+                string delSql = "DELETE FROM ND105Dtl1 WHERE RefPK='" + workid + "'";
+                DBAccess.RunSQLReturnString(delSql);
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    GEDtl dtl = new GEDtl("ND105Dtl1");
+
+                    dtl.SetValByKey("MingChen", dt.Rows[i]["Name"].ToString());
+                    dtl.SetValByKey("JianHao", dt.Rows[i]["PartNumber"].ToString());
+                    dtl.SetValByKey("RefPK", dt.Rows[i]["Qty"].ToString());
+                    dtl.SetValByKey("ShuLiang", dt.Rows[i]["PCH"].ToString());
+                    dtl.SetValByKey("PiCiHao", dt.Rows[i]["Name"].ToString());
+                    dtl.SetValByKey("RDT", dt.Rows[i]["Name"].ToString());
+                    dtl.SetValByKey("Rec", dt.Rows[i]["Name"].ToString());
+
+                    string name = dt.Rows[i]["Name"].ToString();
+                    string jianHao = dt.Rows[i]["PartNumber"].ToString();
+                    string workId = workid;
+                    string shuLiang = dt.Rows[i]["Qty"].ToString();
+                    string piCiHao = dt.Rows[i]["PCH"].ToString();
+                    string rdt = DateTime.Now.ToString();
+                    string userNo = WebUser.No;
+
+                    string sql2 = "INSERT INTO ND105Dtl1(MingChen,JianHao,RefPK,ShuLiang,PiCiHao,RDT,Rec) VALUES('" + name + "','" + jianHao + "','" + workId + "','" + shuLiang + "','" + piCiHao + "','" + rdt + "','" + userNo + "')";
+                    string result = DBAccess.RunSQLReturnString(sql2);
+                }
+
+            }
+
+            return "ok";
+        }
+
     }
 }

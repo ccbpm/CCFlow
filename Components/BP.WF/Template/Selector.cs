@@ -520,7 +520,10 @@ namespace BP.WF.Template
             if (nd.HisDeliveryWay == DeliveryWay.BySelectedForPrj)
             {
                 //部门.
-                sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b, WF_PrjEmp C WHERE a.No=b.FK_Dept  AND A.No=C.FK_Dept AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "' ";
+                sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b, WF_PrjEmp C,Port_DeptEmp D WHERE A.No=B.FK_Dept AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "' ";
+                sql += "  AND C.FK_Emp=D.FK_Emp ";
+
+
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);

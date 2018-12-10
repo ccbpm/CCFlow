@@ -27,6 +27,7 @@
               $("#msg").html(html);
 
               var barEmps = new Entities("BP.GPM.BarEmps");
+              barEmps.DoMethodReturnString("InitMyBars");
 
               barEmps.Retrieve("FK_Emp", new WebUser().No, "IsShow", 1, "Idx");
               var html = "";

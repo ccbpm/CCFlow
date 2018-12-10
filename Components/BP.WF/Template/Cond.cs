@@ -798,6 +798,15 @@ namespace BP.WF.Template
                         }
                     }
 
+                    //获取参数值
+                    System.Collections.Specialized.NameValueCollection urlParams = System.Web.HttpContext.Current.Request.Form;
+                    foreach (string key in urlParams.Keys)
+                    {
+                        //循环使用数组
+                        if(DataType.IsNullOrEmpty(key)== false &&  sql.Contains(key)==true)
+                            sql = sql.Replace("@" + key, urlParams[key]);
+                    }
+
                     int result = DBAccess.RunSQLReturnValInt(sql, -1);
                     if (result <= 0)
                         return false;

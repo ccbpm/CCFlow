@@ -2683,14 +2683,14 @@ namespace BP.WF.HttpHandler
                 ftpconn.SetCurrentDirectory("Helper");
 
                 //把文件放上去.
-                ftpconn.PutFile(temp, guid + "." + ext);
+                ftpconn.PutFile(temp, guid + ext);
                 ftpconn.Close();
 
                 //删除临时文件
                 System.IO.File.Delete(temp);
 
                 //设置路径.
-                filepath = ny + "//Helper//" + guid + "." + ext;
+                filepath = ny + "//Helper//" + guid + ext;
                 
             }
             else
@@ -2718,7 +2718,7 @@ namespace BP.WF.HttpHandler
                 //DirectoryInfo subdir = new DirectoryInfo(savePath);
                 //subdir.Delete(true);
 
-                filepath = savePath + "\\" + fileName + "." + ext;
+                filepath = savePath + "\\" + fileName + ext;
                 //存在文件则删除
                 if (System.IO.Directory.Exists(filepath) == true)
                     System.IO.Directory.Delete(filepath);

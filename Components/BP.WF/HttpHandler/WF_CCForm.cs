@@ -1729,7 +1729,7 @@ namespace BP.WF.HttpHandler
             #region 给实体循环赋值/并保存.
             BP.En.Attrs attrs = dtl.EnMap.Attrs;
             foreach (BP.En.Attr attr in attrs)
-            {
+            { 
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
             }
 
@@ -3087,11 +3087,11 @@ namespace BP.WF.HttpHandler
 
                 }
                 #endregion 保存到数据库.
-
-                int athNum = int.Parse(en.Row["AthNum"].ToString());
-                en.Row["AthNum"] = athNum + 1;
-                en.Update();
             }
+
+            int athNum = int.Parse(en.Row["AthNum"].ToString());
+            en.Row["AthNum"] = athNum + context.Request.Files.Count;
+            en.Update();
 
             return "上传成功.";
         }

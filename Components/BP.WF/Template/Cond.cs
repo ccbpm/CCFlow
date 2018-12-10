@@ -783,6 +783,15 @@ namespace BP.WF.Template
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                     sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
+                    //获取参数值
+                    System.Collections.Specialized.NameValueCollection urlParams = System.Web.HttpContext.Current.Request.Form;
+                    foreach (string key in urlParams.Keys)
+                    {
+                        //循环使用数组
+                        if (DataType.IsNullOrEmpty(key) == false && sql.Contains(key) == true)
+                            sql = sql.Replace("@" + key, urlParams[key]);
+                    }
+
                     if (en.IsOIDEntity == true)
                     {
                         sql = sql.Replace("@WorkID", en.GetValStrByKey("OID"));
@@ -796,15 +805,6 @@ namespace BP.WF.Template
                         {
                             sql = sql.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
                         }
-                    }
-
-                    //获取参数值
-                    System.Collections.Specialized.NameValueCollection urlParams = System.Web.HttpContext.Current.Request.Form;
-                    foreach (string key in urlParams.Keys)
-                    {
-                        //循环使用数组
-                        if(DataType.IsNullOrEmpty(key)== false &&  sql.Contains(key)==true)
-                            sql = sql.Replace("@" + key, urlParams[key]);
                     }
 
                     int result = DBAccess.RunSQLReturnValInt(sql, -1);

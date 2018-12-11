@@ -151,6 +151,11 @@
                 return;
             }
 
+            if (!CheckID(no)) {
+                alert("编号不符合规则");
+                return;
+            }
+
             if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
 
                 var parentValue = $("#DDL_ParentValue").val() || "";
@@ -166,6 +171,7 @@
                 }
             }
 
+             
             var frmData = $("#cc").serialize();
 
             $.ajax({

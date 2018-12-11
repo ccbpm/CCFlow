@@ -10,16 +10,17 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
+
     <base target="_self" />
     <style type="text/css">
-        .style1
-        {
+        .style1 {
             width: 184px;
         }
     </style>
     <script type="text/javascript" language="javascript">
 
-        var CONST_STRUCTS = [{ No: '0', Name: '普通的编码表(具有No,Name)' }, { No: '1', Name: '树结构(具有No,Name,ParentNo)'}];
+        var CONST_STRUCTS = [{ No: '0', Name: '普通的编码表(具有No,Name)' }, { No: '1', Name: '树结构(具有No,Name,ParentNo)' }];
 
         /**
          * 数据格式切换
@@ -37,7 +38,7 @@
         //页面启动函数.
         $(function () {
 
-          //绑定数据源.
+            //绑定数据源.
             GenerBindEntities("DDL_FK_DBSrc", "BP.Sys.SFDBSrcs", "local");
 
             var mytb = document.getElementById("TB_Name");
@@ -52,10 +53,10 @@
                 }
 
                 if (val == "ziduanquanpin") {
-                    ParseStringToPinYin(TB_Name, true);
+                    ParseStringToPinYin(TB_Name, true, "");
                 }
                 else {
-                    ParseStringToPinYin(TB_Name, false);
+                    ParseStringToPinYin(TB_Name, false, "");
                 }
 
             });
@@ -67,11 +68,11 @@
             //点击简拼
             $('input[id=RB_JP]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, false,"SQL");
+                ParseStringToPinYin(TB_Name, false, "SQL");
             });
 
         });
- 
+
         // 保存
         function Save() {
 
@@ -94,6 +95,11 @@
             if (!$("#TB_SelectStatement").val() || $("#TB_SelectStatement").val().length == 0) {
                 alert("SQL语句必须填写！");
                 $("#TB_SelectStatement").focus();
+                return;
+            }
+
+            if (!CheckID(no)) {
+                alert("编号不符合规则");
                 return;
             }
 
@@ -127,31 +133,33 @@
                 <th>备注</th>
             </tr>
 
-             <tr>
-                <td >字典名称</td>
+            <tr>
+                <td>字典名称</td>
                 <td class="style1"><input type="text" id="TB_Name" name="TB_Name" /></td>
                 <td>创建字典表的中文名称</td>
             </tr>
 
             <tr>
-                <td >字典编号</td>
+                <td>字典编号</td>
                 <td class="style1"><input type="text" id="TB_No" name="TB_No" /></td>
-                <td> <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked"  value="ziduanquanpin" /> <label for="RB_QP">全拼</label>   
-   <input type="radio" name="RB_QPJP" id="RB_JP"  value="ziduanjianpin" />  <label for="RB_JP">简拼</label>   </td>
+                <td>
+                    <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" /> <label for="RB_QP">全拼</label>
+                    <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />  <label for="RB_JP">简拼</label>
+                </td>
             </tr>
-           
+
             <tr>
-                <td >数据源</td>
+                <td>数据源</td>
                 <td class="style1"><select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" /></td>
                 <td>选择字典表所属数据源</td>
             </tr>
             <tr>
-                <td >数据格式</td>
+                <td>数据格式</td>
                 <td class="style1">
                     <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)">
-                    
-                    <option value="0" selected=true> 普通的编码表(具有No,Name) </option>
-                    <option value="1"> 树结构(具有No,Name,ParentNo)</option>
+
+                        <option value="0" selected=true> 普通的编码表(具有No,Name) </option>
+                        <option value="1"> 树结构(具有No,Name,ParentNo)</option>
 
 
                     </select>
@@ -159,16 +167,15 @@
                 <td>选择具体有指定字段的格式</td>
             </tr>
             <tr id="rootTr" style="display: none;">
-                <td >根节点值</td>
+                <td>根节点值</td>
                 <td class="style1"><input type="text" id="TB_RootValue" name="TB_RootValue" /></td>
                 <td>填写此树的根节点值,也可是一个表达式 比如:WebUser.FK_Dept </td>
             </tr>
             <tr>
-                <td >SQL语句</td>
+                <td>SQL语句</td>
                 <td class="style1" colspan="2">
-                    
-                    <textarea type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;" >
-                    </textarea>
+
+                    <textarea type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;"></textarea>
 
                     <br />
                     支持cc表达式比如:SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'
@@ -177,24 +184,24 @@
 
             <tr>
                 <td colspan="3">
-                <input type=button value="Save" onclick="Save()" />
-                  <!--  <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="Save()">保存</a>-->
+                    <input type=button value="Save" onclick="Save()" />
+                    <!--  <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="Save()">保存</a>-->
                 </td>
             </tr>
         </table>
 
-        
-<font color=gray>
-<fieldset>
-<legend>帮助</legend>
-<ul>
-<li>SQL语句必须包含指定结构指定的列.</li>
-<li>SQL语句支持ccbpm表达式</li>
-<li>例如1: SELECT No,Name FROM Port_Emp WEHRE FK_Dept='@WebUser.FK_Dept' </li>
-<li>例如2: SELECT No,Name,ParnetNo FROM Port_Dept WEHRE ParentNo='@WebUser.FK_Dept' </li>
-</ul>
-</fieldset>
-</font>
+
+        <font color=gray>
+            <fieldset>
+                <legend>帮助</legend>
+                <ul>
+                    <li>SQL语句必须包含指定结构指定的列.</li>
+                    <li>SQL语句支持ccbpm表达式</li>
+                    <li>例如1: SELECT No,Name FROM Port_Emp WEHRE FK_Dept='@WebUser.FK_Dept' </li>
+                    <li>例如2: SELECT No,Name,ParnetNo FROM Port_Dept WEHRE ParentNo='@WebUser.FK_Dept' </li>
+                </ul>
+            </fieldset>
+        </font>
 
     </form>
 </body>

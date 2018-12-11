@@ -1062,7 +1062,7 @@ function figure_Template_Rb(frmRb) {
     if (mapAttr.GetPara("RBShowModel") == "3")
         t2 = new Text("*" + frmRb.Lab, frmRb.X + (FigureDefaults.radiusSize + 1) / 2, frmRb.Y + FigureDefaults.textSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     else
-        t2 = new Text("*" + frmRb.Lab, frmRb.X + FigureDefaults.radiusSize, frmRb.Y + FigureDefaults.textSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+        t2 = new Text("*" + frmRb.Lab, frmRb.X + FigureDefaults.radiusSize/2, frmRb.Y + FigureDefaults.textSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
     f.addPrimitive(t2);
 

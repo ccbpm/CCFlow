@@ -1633,9 +1633,15 @@ namespace BP.En
 
                     if (item.UIIsLine == true)
                         mattr.ColSpan = 3;
-
                     //帮助url.
-                    mattr.UIRefKeyText = item.HelperUrl;
+                    if (DataType.IsNullOrEmpty(item.UIRefKeyText) == true)
+                        mattr.UIRefKeyText = item.HelperUrl;
+                    else
+                        mattr.UIRefKeyText = item.UIRefKeyText;
+                    
+                    mattr.UIRefKey = item.UIRefKeyValue;
+
+                    
 
                     //if (item.UIIsReadonly == true && item.MyFieldType== FieldType.Normal)
                     //    mattr.UIIsEnable = !item.UIIsReadonly;

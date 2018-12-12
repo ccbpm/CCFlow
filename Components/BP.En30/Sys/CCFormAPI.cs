@@ -355,16 +355,23 @@ namespace BP.Sys
 
             ma.Save();
         }
-        /// <summary>
-        /// 创建字段
-        /// </summary>
-        /// <param name="frmID"></param>
-        /// <param name="field"></param>
-        /// <param name="fieldDesc"></param>
-        /// <param name="mydataType"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="colSpan"></param>
+ 
+        public static void NewImage(string frmID, string keyOfEn, string name,  float x, float y)
+        {
+            //BP.Sys.CCFormParse.SaveImage(frmID, control, properties, imgPKs, ctrlID);
+            //imgPKs = imgPKs.Replace(ctrlID + "@", "@");
+
+            FrmImg img = new FrmImg();
+            img.MyPK = keyOfEn;
+            img.FK_MapData = frmID;
+            img.Name = name;
+            img.X = x;
+            img.Y = y;
+
+            img.Insert();
+
+        }
+
         public static void NewField(string frmID, string field, string fieldDesc, int mydataType, float x, float y, int colSpan = 1)
         {
             //检查是否可以创建字段? 

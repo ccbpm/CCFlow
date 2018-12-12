@@ -286,13 +286,6 @@ function GenerFrm() {
 
             }
 
-            if (isReadonly != "1") {
-
-                //Common.MaxLengthError();
-                //debugger
-                //处理下拉框级联等扩展信息
-                AfterBindEn_DealMapExt(frmData);
-            }
 
             //设置默认值
             for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
@@ -344,7 +337,7 @@ function GenerFrm() {
                         var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
                         $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
                     }
-                    //
+                    
                     $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
@@ -363,6 +356,10 @@ function GenerFrm() {
                     $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
                 }
             }
+
+            //处理下拉框级联等扩展信息
+            AfterBindEn_DealMapExt(frmData);
+          
 
             ShowNoticeInfo();
 

@@ -681,17 +681,23 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmImgAthDB_Upload()
         {
-            string ImgAthPK = this.GetRequestVal("ImgAth");
+            string CtrlID = this.GetRequestVal("CtrlID");
             int zoomW = this.GetRequestValInt("zoomW");
             int zoomH = this.GetRequestValInt("zoomH");
 
             HttpFileCollection files = this.context.Request.Files;
             if (files.Count > 0 && files[0].ContentLength > 0)
             {
-                string myName = ImgAthPK + "_" + this.MyPK;
+                string myName = "";
+                string fk_mapData = this.FK_MapData;
+                if (fk_mapData.Contains("ND") == true)
+                    myName = CtrlID + "_" + this.RefPKVal;
+                else
+                    myName = fk_mapData + "_" + CtrlID + "_" + this.RefPKVal;
+
                 //生成新路径，解决返回相同src后图片不切换问题
-                string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
+                //string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + myName + ".png";
                 string saveToPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
                 string fileUPloadPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Upload");
                 //创建路径
@@ -700,8 +706,8 @@ namespace BP.WF.HttpHandler
                 if (!Directory.Exists(fileUPloadPath))
                     Directory.CreateDirectory(fileUPloadPath);
 
-                saveToPath = saveToPath + "\\" + newName + ".png";
-                fileUPloadPath = fileUPloadPath + "\\" + newName + ".png";
+                saveToPath = saveToPath + "\\" + myName + ".png";
+                fileUPloadPath = fileUPloadPath + "\\" + myName + ".png";
                 files[0].SaveAs(saveToPath);
 
                 //源图像  
@@ -719,26 +725,26 @@ namespace BP.WF.HttpHandler
 
                 //复制一份
                 File.Copy(saveToPath, fileUPloadPath, true);
-                //获取文件大小
-                FileInfo fileInfo = new FileInfo(saveToPath);
-                float fileSize = 0;
-                if (fileInfo.Exists)
-                    fileSize = float.Parse(fileInfo.Length.ToString());
+                ////获取文件大小
+                //FileInfo fileInfo = new FileInfo(saveToPath);
+                //float fileSize = 0;
+                //if (fileInfo.Exists)
+                //    fileSize = float.Parse(fileInfo.Length.ToString());
 
-                //更新数据表                
-                FrmImgAthDB imgAthDB = new FrmImgAthDB();
-                imgAthDB.MyPK = myName;
-                imgAthDB.FK_MapData = this.FK_MapData;
-                imgAthDB.FK_FrmImgAth = ImgAthPK;
-                imgAthDB.RefPKVal = this.MyPK;
-                imgAthDB.FileFullName = webPath;
-                imgAthDB.FileName = newName;
-                imgAthDB.FileExts = "png";
-                imgAthDB.FileSize = fileSize;
-                imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
-                imgAthDB.Rec = BP.Web.WebUser.No;
-                imgAthDB.RecName = BP.Web.WebUser.Name;
-                imgAthDB.Save();
+                ////更新数据表                
+                //FrmImgAthDB imgAthDB = new FrmImgAthDB();
+                //imgAthDB.MyPK = myName;
+                //imgAthDB.FK_MapData = this.FK_MapData;
+                //imgAthDB.FK_FrmImgAth = ImgAthPK;
+                //imgAthDB.RefPKVal = this.MyPK;
+                //imgAthDB.FileFullName = webPath;
+                //imgAthDB.FileName = newName;
+                //imgAthDB.FileExts = "png";
+                //imgAthDB.FileSize = fileSize;
+                //imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
+                //imgAthDB.Rec = BP.Web.WebUser.No;
+                //imgAthDB.RecName = BP.Web.WebUser.Name;
+                //imgAthDB.Save();
                 return "{SourceImage:\"" + webPath + "\"}";
             }
             return "{err:\"没有选择文件\"}";
@@ -750,7 +756,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmImgAthDB_Cut()
         {
-            string ImgAthPK = this.GetRequestVal("ImgAth");
+            string CtrlID = this.GetRequestVal("CtrlID");
 
             int zoomW = this.GetRequestValInt("zoomW");
             int zoomH = this.GetRequestValInt("zoomH");
@@ -759,26 +765,33 @@ namespace BP.WF.HttpHandler
             int w = this.GetRequestValInt("cW");
             int h = this.GetRequestValInt("cH");
 
-            string myPK = ImgAthPK + "_" + this.MyPK;
-            FrmImgAthDB imgAthDB = new FrmImgAthDB(myPK);
+            //string myPK = ImgAthPK + "_" + this.MyPK;
+            //FrmImgAthDB imgAthDB = new FrmImgAthDB(myPK);
 
             string appPath = SystemConfig.CCFlowAppPath;
             appPath = SystemConfig.CCFlowWebPath;
 
-            string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            string newName = "";
+            string fk_mapData = this.FK_MapData;
+            string fileFullName = "";
+            if (fk_mapData.Contains("ND") == true)
+                newName = CtrlID + "_" + this.RefPKVal;
+            else
+                newName = fk_mapData + "_" + CtrlID + "_" + this.RefPKVal;
+            //string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             string savePath = SystemConfig.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             //获取上传的大图片
-            string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + imgAthDB.FileName + ".png");
+            string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png");
             if (File.Exists(strImgPath) == true)
             {
                 //剪切图
                 bool bSuc = Crop(strImgPath, savePath, w, h, x, y);
-                imgAthDB.FileFullName = webPath;
-                imgAthDB.Update();
+                //imgAthDB.FileFullName = webPath;
+                //imgAthDB.Update();
                 return webPath;
             }
-            return imgAthDB.FileFullName;
+            return webPath;
         }
 
         /// <summary>
@@ -844,9 +857,48 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+
+
             //设置主键.
             en.OID = DBAccess.GenerOID(this.EnsName);
+            #region 处理权限方案。 @袁丽娜
+            if (this.FK_Node != 0 && this.FK_Node != 999999)
+            {
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        string no = this.EnsName + "_" + nd.NodeID;
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = no;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                            dtl = mdtlSln;
+                    }
+                }
+            }
+            #endregion 处理权限方案。
+            //给从表赋值. @袁丽娜
+            switch (dtl.DtlOpenType)
+            {
+                case DtlOpenType.ForEmp:  // 按人员来控制.
+
+                    en.SetValByKey("RefPK", this.RefPKVal);
+                    en.SetValByKey("FID", this.RefPKVal);
+                    break;
+                case DtlOpenType.ForWorkID: // 按工作ID来控制
+                    en.SetValByKey("RefPK", this.RefPKVal);
+                    en.SetValByKey("FID", this.RefPKVal);
+                    break;
+                case DtlOpenType.ForFID: // 按流程ID来控制.
+                    en.SetValByKey("RefPK", this.RefPKVal);
+                    en.SetValByKey("FID", this.FID);
+                    break;
+            }
             en.SetValByKey("RefPK", this.RefPKVal);
+
             en.Insert();
 
             return "url@DtlFrm.htm?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&FrmType=" + (int)dtl.HisEditModel + "&OID=" + en.OID;
@@ -859,6 +911,11 @@ namespace BP.WF.HttpHandler
                 GEEntity en = new GEEntity(this.EnsName);
                 en.OID = this.OID;
                 en.Delete();
+
+                //如果可以上传附件这删除相应的附件信息
+                FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+                dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.EnsName, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);
+
 
                 return "删除成功.";
             }
@@ -1159,7 +1216,14 @@ namespace BP.WF.HttpHandler
                         {
                             try
                             {
-                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                                //判断是否自定义权限
+                                bool IsSelf = false;
+                                if ((nd.HisFormType == NodeFormType.SheetTree
+                                     || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                                     && (fn.FrmSln == FrmSln.Self))
+                                    IsSelf = true;
+
+                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf, nd.NodeID, this.WorkID) as GEEntity;
                                 //en.DirectUpdate();
                             }
                             catch (Exception ex)
@@ -1715,10 +1779,34 @@ namespace BP.WF.HttpHandler
             //    return "err@从表保存[Dtl_SaveRow],失败没有接收到refpk的值";
 
             //从表.
-            MapDtl mdtl = new MapDtl(this.FK_MapDtl);
+            string fk_mapDtl = this.FK_MapDtl;
+            MapDtl mdtl = new MapDtl(fk_mapDtl);
+
+            #region 处理权限方案。 @袁丽娜
+            if (this.FK_Node != 0)
+            {
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        string no = fk_mapDtl + "_" + nd.NodeID;
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = no;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                        {
+                            mdtl = mdtlSln;
+                            fk_mapDtl = no;
+                        }
+                    }
+                }
+            }
+            #endregion 处理权限方案。
 
             //从表实体.
-            GEDtl dtl = new GEDtl(this.FK_MapDtl);
+            GEDtl dtl = new GEDtl(fk_mapDtl);
             int oid = this.RefOID;
             if (oid != 0)
             {
@@ -1729,44 +1817,30 @@ namespace BP.WF.HttpHandler
             #region 给实体循环赋值/并保存.
             BP.En.Attrs attrs = dtl.EnMap.Attrs;
             foreach (BP.En.Attr attr in attrs)
-            { 
+            {
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
             }
 
-
-            //MapAttrs dtlAttrs = new MapAttrs(this.FK_MapDtl);
-            //SFTables sftables = new SFTables();
-            //sftables.Retrieve(SFTableAttr.SrcType, (int)SrcType.SQL);
-
-            //Hashtable ht = new Hashtable();
-            //foreach (MapAttr attr in dtlAttrs)
-            //{
-            //    if (attr.UIContralType == UIContralType.DDL
-            //        && attr.LGType == FieldTypeS.Normal
-            //        && attr.UIIsEnable == true)
-            //    {
-            //        SFTable sftable = sftables.GetEntityByKey(attr.UIBindKey) as SFTable;
-            //        if (sftable != null)
-            //        {
-            //            DataTable dtsftable = sftable.GenerHisDataTable;
-            //            DataRow[] drs = dtsftable.Select("No='" + this.GetRequestVal(attr.KeyOfEn) + "'");
-
-            //            //为Text赋值
-            //            if (drs.Length != 0)
-            //            {
-            //                dtl.SetValByKey(attr.KeyOfEn + "T", drs[0]["Name"]);
-            //            }
-            //        }
-            //    }
-            //}
-
-
-            //关联主赋值.
+            //关联主赋值. @袁丽娜
             dtl.RefPK = this.RefPKVal;
+            switch (mdtl.DtlOpenType)
+            {
+                case DtlOpenType.ForEmp:  // 按人员来控制.
+                    dtl.RefPK = this.RefPKVal;
+                    break;
+                case DtlOpenType.ForWorkID: // 按工作ID来控制
+                    dtl.RefPK = this.RefPKVal;
+                    dtl.FID = long.Parse(this.RefPKVal);
+                    break;
+                case DtlOpenType.ForFID: // 按流程ID来控制.
+                    dtl.RefPK = this.RefPKVal;
+                    dtl.FID = this.FID;
+                    break;
+            }
 
             #region 从表保存前处理事件.
             //获得主表事件.
-            FrmEvents fes = new FrmEvents(this.FK_MapDtl); //获得事件.
+            FrmEvents fes = new FrmEvents(fk_mapDtl); //获得事件.
             GEEntity mainEn = null;
             if (fes.Count > 0)
             {
@@ -1835,6 +1909,11 @@ namespace BP.WF.HttpHandler
             dtl.OID = this.RefOID;
             dtl.Delete();
 
+            //如果可以上传附件这删除相应的附件信息
+            FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+            dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.FK_MapDtl, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);
+
+
             return "{\"sucess\":\"删除成功\"}";
         }
         /// <summary>
@@ -1860,6 +1939,27 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             MapDtl md = new MapDtl(this.EnsName);
+            if (this.FK_Node != 0 && md.FK_MapData != "Temp"
+               && this.EnsName.Contains("ND" + this.FK_Node) == false
+               && this.FK_Node != 999999)
+            {
+                Node nd = new BP.WF.Node(this.FK_Node);
+
+                if (nd.HisFormType == NodeFormType.SheetTree)
+                {
+                    /*如果
+                     * 1,传来节点ID, 不等于0.
+                     * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
+                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    ///自定义权限.
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        md.No = this.EnsName + "_" + this.FK_Node;
+                        if (md.RetrieveFromDBSources() == 0)
+                            md = new MapDtl(this.EnsName);
+                    }
+                }
+            }
 
             //主表数据.
             DataTable dt = md.ToDataTableField("Main");
@@ -1881,9 +1981,55 @@ namespace BP.WF.HttpHandler
             }
 
             //从表的数据.
-            GEDtls enDtls = new GEDtls(this.EnsName);
-            enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);
-            ds.Tables.Add(enDtls.ToDataTableField("DTDtls"));
+            //GEDtls enDtls = new GEDtls(this.EnsName);
+            #region  把从表的数据放入. @袁丽娜
+            GEDtls enDtls = new GEDtls(md.No);
+            QueryObject qo = null;
+            try
+            {
+                qo = new QueryObject(enDtls);
+                switch (md.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        qo.AddWhere(GEDtlAttr.RefPK, this.RefPKVal);
+                        qo.addAnd();
+                        qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        qo.AddWhere(GEDtlAttr.RefPK, this.RefPKVal);
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        if (this.FID == 0)
+                            qo.AddWhere(GEDtlAttr.FID, this.RefPKVal);
+                        else
+                            qo.AddWhere(GEDtlAttr.FID, this.FID);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                dtls.GetNewEntity.CheckPhysicsTable();
+                throw ex;
+            }
+
+            //条件过滤.
+            if (md.FilterSQLExp != "")
+            {
+                string[] strs = md.FilterSQLExp.Split('=');
+                qo.addAnd();
+                qo.AddWhere(strs[0], strs[1]);
+            }
+
+            //增加排序.
+            qo.addOrderBy(enDtls.GetNewEntity.PKField);
+
+            //从表
+            DataTable dtDtl = qo.DoQueryToTable();
+            dtDtl.TableName = "DTDtls";
+            ds.Tables.Add(dtDtl);
+            #endregion
+            //enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);
+            //ds.Tables.Add(enDtls.ToDataTableField("DTDtls"));
 
             return BP.Tools.Json.ToJson(ds);
 
@@ -3087,12 +3233,15 @@ namespace BP.WF.HttpHandler
 
                 }
                 #endregion 保存到数据库.
+                
             }
-
-            int athNum = int.Parse(en.Row["AthNum"].ToString());
-            en.Row["AthNum"] = athNum + context.Request.Files.Count;
-            en.Update();
-
+				//需要判断是否存在AthNum字段 @袁丽娜
+                if (en.Row["AthNum"] != null)
+                {
+                    int athNum = int.Parse(en.Row["AthNum"].ToString());
+                    en.Row["AthNum"] = athNum + 1;
+                    en.Update();
+                }
             return "上传成功.";
         }
 
@@ -3280,6 +3429,28 @@ namespace BP.WF.HttpHandler
                 }
 
                 MapDtl dtl = new MapDtl(this.FK_MapDtl);
+                #region 处理权限方案。 @袁丽娜
+                if (this.FK_Node != 0)
+                {
+                    Node nd = new Node(this.FK_Node);
+                    if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                    {
+                        FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                        if (fn.FrmSln == FrmSln.Self)
+                        {
+                            string no = this.FK_MapDtl + "_" + nd.NodeID;
+                            MapDtl mdtlSln = new MapDtl();
+                            mdtlSln.No = no;
+                            int result = mdtlSln.RetrieveFromDBSources();
+                            if (result != 0)
+                            {
+                                dtl = mdtlSln;
+                                //fk_mapDtl = no;
+                            }
+                        }
+                    }
+                }
+                #endregion 处理权限方案。
                 GEDtls dtls = new GEDtls(this.FK_MapDtl);
                 #region 检查两个文件是否一致。 生成要导入的属性
                 BP.En.Attrs attrs = dtls.GetNewEntity.EnMap.Attrs;
@@ -3390,7 +3561,23 @@ namespace BP.WF.HttpHandler
 
                         dtlEn.SetValByKey(attr.Key, val);
                     }
-                    dtlEn.RefPKInt = (int)this.WorkID;
+                    //dtlEn.RefPKInt = (int)this.WorkID;
+                    //关联主赋值. @袁丽娜
+                    dtl.RefPK = this.RefPKVal;
+                    switch (dtl.DtlOpenType)
+                    {
+                        case DtlOpenType.ForEmp:  // 按人员来控制.
+                            dtlEn.RefPKInt = (int)this.WorkID;
+                            break;
+                        case DtlOpenType.ForWorkID: // 按工作ID来控制
+                            dtlEn.RefPKInt = (int)this.WorkID;
+                            dtl.SetValByKey("FID", this.WorkID);
+                            break;
+                        case DtlOpenType.ForFID: // 按流程ID来控制.
+                            dtlEn.RefPKInt = (int)this.WorkID;
+                            dtl.SetValByKey("FID", this.FID);
+                            break;
+                    }
                     dtlEn.SetValByKey("RDT", rdt);
                     dtlEn.SetValByKey("Rec", WebUser.No);
                     i++;

@@ -365,6 +365,8 @@ namespace BP.Sys
             img.MyPK = keyOfEn;
             img.FK_MapData = frmID;
             img.Name = name;
+            img.IsEdit = 1;
+            img.HisImgAppType = ImgAppType.Img;
             img.X = x;
             img.Y = y;
 

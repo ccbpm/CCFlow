@@ -48,10 +48,12 @@ FigureCreateCommand.prototype = {
             //ccflow business logic
             switch (createFigureName) {
 
-                case CCForm_Controls.Label:
                 case CCForm_Controls.Image:
-                    createdFigure.CCForm_MyPK = Util.NewGUID();
+                    canAddFigure = false;
+                    this.DataImgCreate(createdFigure, this.x, this.y);
+                    //createdFigure.CCForm_MyPK = Util.NewGUID();
                     break;
+                case CCForm_Controls.Label:
                 case CCForm_Controls.Button:
                     createdFigure.CCForm_MyPK = Util.NewGUID();
                     this.ButtonCreate(createdFigure, this.x, this.y);
@@ -67,7 +69,7 @@ FigureCreateCommand.prototype = {
                 case CCForm_Controls.Date:
                 case CCForm_Controls.DateTime:
                 case CCForm_Controls.CheckBox:
-                //case "HandSiganture":
+                    //case "HandSiganture":
                     canAddFigure = false;
                     this.DataFieldCreate(createdFigure, this.x, this.y);
                     break;
@@ -175,6 +177,57 @@ FigureCreateCommand.prototype = {
         frmLink.Y = y;
         frmLink.Insert();
 
+    },
+    DataImgCreate: function (createdFigure, x, y) {
+        var dgId = "iframeImage";
+        var url = "DialogCtr/FrmImage.htm?DataType=" + createFigureName + "&s=" + Math.random();
+
+        var funIsExist = this.IsExist;
+
+        OpenEasyUiDialog(url, dgId, '新建图片字段', 600, 394, 'icon-new', true, function (HidenFieldFun) {
+            var win = document.getElementById(dgId).contentWindow;
+            var frmVal = win.GetFrmInfo();
+
+            if (frmVal.Name == null || frmVal.Name.length == 0) {
+                $.messager.alert('错误', '字段名称不能为空。', 'error');
+                return false;
+            }
+            if (frmVal.KeyOfEn == null || frmVal.KeyOfEn.length == 0) {
+                $.messager.alert('错误', '英文字段不能为空。', 'error');
+                return false;
+            }
+            //判断主键是否存在
+            var isExit = funIsExist(frmVal.KeyOfEn);
+            if (isExit == true) {
+                $.messager.alert("错误", "已存在ID为(" + frmVal.KeyOfEn + ")的元素，不允许添加同名元素！", "error");
+                return false;
+            }
+
+          
+            // 定义参数，让其保存到数据库里。
+            var param = {
+                DoType: "NewImage",
+                FrmID: CCForm_FK_MapData,
+                KeyOfEn: frmVal.KeyOfEn,
+                Name: frmVal.Name,
+                x: x,
+                y: y
+            };
+
+            ajaxService(param, function (json) {
+
+                if (json.indexOf('err@') == 0) {
+                    alert(json);
+                    return;
+                }
+
+                transField.paint();
+
+            }, this);
+
+        }, this.HidenFieldCreate);
+
+        return false;
     },
     /**创建数据字段**/
     DataFieldCreate: function (createdFigure, x, y) {
@@ -690,10 +743,10 @@ TransFormDataField.prototype = {
         var createdFigure = this.figure;
         var propertys = CCForm_Control_Propertys.TextBox_Str;
         var shap_src = null;
-//        if(createdFigure.CCForm_Shape == "HandSiganture")
-//            shap_src = "/DataView/TextBoxStr.png";
-//        else
-          shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
+        //        if(createdFigure.CCForm_Shape == "HandSiganture")
+        //            shap_src = "/DataView/TextBoxStr.png";
+        //        else
+        shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
 
         //  alert(shap_src);
         //  alert(shap_src);

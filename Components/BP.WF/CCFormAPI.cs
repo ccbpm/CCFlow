@@ -780,8 +780,10 @@ namespace BP.WF
                         qo.addAnd();
                         qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
                         break;
-                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制@袁丽娜
                         qo.AddWhere(GEDtlAttr.RefPK, pkval);
+                        qo.addOr();
+                        qo.AddWhere(GEDtlAttr.FID, pkval);
                         break;
                     case DtlOpenType.ForFID: // 按流程ID来控制.
                         if (fid == 0)

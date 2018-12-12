@@ -539,8 +539,9 @@ function ImgAth(url, athMyPK) {
         //var obj = document.getElementById(dgId);
         //var win =(obj.contentWindow || obj.contentDocument); 
         var imgSrc = $("#imgSrc").val();
-        if(imgSrc!=null && imgSrc!="")
+        if (imgSrc != null && imgSrc != "")
             document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc + "?t=" + Math.random());
+        $("#imgSrc").val("");
     });
 }
 

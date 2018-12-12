@@ -563,6 +563,9 @@
                 dtl.CopyJSON(data);
                 dtl.RefPK = refPKVal;
                 dtl.Rec = UserNo;
+                if (FID == 0 && refPKVal != 0)
+                    dtl.FID = refPKVal;
+                else
                 dtl.FID = FID;
                 dtl.Insert();
             });

@@ -1135,6 +1135,9 @@ namespace BP.WF
                         skipWork.Copy(mywork);
 
                         skipWork.OID = this.WorkID;
+                        if (nd.HisRunModel == RunModel.SubThread)
+                            skipWork.FID = mywork.FID;
+
                         skipWork.Rec = this.Execer;
                         skipWork.SetValByKey(WorkAttr.RDT, DataType.CurrentDataTimess);
                         skipWork.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTimess);
@@ -1145,7 +1148,13 @@ namespace BP.WF
 
                         //如果存在就修改
                         if (skipWork.IsExit(skipWork.PK, this.WorkID) == true)
-                            skipWork.DirectUpdate();
+                        {//@袁丽娜
+                            int count = skipWork.RetrieveFromDBSources();
+                            if (count == 1)
+                                skipWork.DirectUpdate();
+                            else
+                                skipWork.DirectInsert();
+                        }
                         else
                             skipWork.InsertAsOID(this.WorkID);
                     }
@@ -2243,7 +2252,13 @@ namespace BP.WF
                 try
                 {
                     if (this.IsSkip == true)
+                    {
+                        int count = toWK.RetrieveFromDBSources();
+                        if(count >0)
                         toWK.DirectUpdate(); // 如果执行了跳转.
+                        else
+                            toWK.DirectInsert();
+                    }
                     else
                         toWK.DirectInsert();
                 }

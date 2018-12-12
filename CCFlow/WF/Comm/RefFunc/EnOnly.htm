@@ -49,8 +49,9 @@
         var mainData;
         var dtM; //方法集合.
         var isReadonly = GetQueryString("isReadonly");
+        var pkVal = "";
         $(function () {
-            var pkVal = GetPKVal();
+            pkVal = GetPKVal();
             //新增时En.htm页面隐藏
             if (window.parent && window.parent.$('#EnLayout').length == 1 && pkVal == null)
                 window.parent.$('#EnLayout').layout('remove', 'west');
@@ -80,7 +81,6 @@
             document.title = mapData.Name;
 
             InitToolbar(); //初始工具栏.
-            // RefMethod(); //初始化菜单.
 
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
@@ -88,63 +88,7 @@
 
         })
 
-        function RefMethod(mapData, mainData, frmData) {
-
-            if (dtM.length == 0)
-                return;
-
-            //求出所有的分组名称.
-            var groupName = "@基本信息";
-            for (var i = 0; i < dtM.length; i++) {
-                var en = dtM[i];
-                if (en.GroupName == null)
-                    continue;
-                if (groupName.indexOf('@' + en.GroupName) == -1)
-                    groupName += "@" + en.GroupName;
-            }
-
-            var gNames = groupName.split('@');
-
-            //生成菜单.
-            var html = "<div class='easyui-accordion' data-options='fit:true' id='accordion'>";
-            html += "";
-            for (var i = 0; i < gNames.length; i++) {
-                var gName = gNames[i];
-                if (gName == "")
-                    continue;
-                html += "<div title='" + gName + "' style='overflow:auto;'>";
-
-
-                //填入菜单内容.
-                html += "<ul class='navlist' >";
-                if (gName == "基本信息") {
-
-                    html += "<li><a href='" + url + "'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />主页</a></li>";
-
-                }
-                for (var idx = 0; idx < dtM.length; idx++) {
-
-                    var en = dtM[idx];
-                    var myName = en.GroupName;
-                    if (myName == null || myName == "")
-                        myName = "基本信息";
-
-                    if (gName != myName)
-                        continue;
-
-                    if (en.RefAttrKey != null || en.IsCanBatch == "1" || en.Visable == 0)
-                        continue;
-
-                    html += "<li>" + GenerRM(en) + "</li>";
-                }
-                html += "</ul>";   //end填入菜单内容.
-                html += "</div>";
-            }
-            html += "</div>";
-
-            $("#Left").append(html);
-            $.parser.parse("#Left");
-        }
+      
 
         //设置按钮
         function InitToolbar() {
@@ -363,10 +307,21 @@
 
             var html = "<table border='0' style='width:99%;' >";
             var isDropTR = true;
+            var isExitMyNum = false;
+            var fileDesc = "";
             for (var i = 0; i < Sys_MapAttr.length; i++) {
 
                 var attr = Sys_MapAttr[i];
-                if (attr.GroupID != groupID || attr.UIVisible == 0 || attr.KeyOfEn == "MyNum")
+                if (attr.KeyOfEn == "MyFileNum") {
+                    isExitMyNum = true;
+                    continue;
+                }
+                if (attr.KeyOfEn == "MyFileName") {
+                    fileDesc = attr.Name;
+                    continue;
+                }
+
+                if (attr.GroupID != groupID || attr.UIVisible == 0 )
                     continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
@@ -503,19 +458,97 @@
             //如果MapData中具有文件上传的权限，解析设置   0 无 1 单附件上传 2 多附件上传
             var entityAthType = mapData.GetPara("BPEntityAthType");
 
-            if (entityAthType == 1 || entityAthType == 2) {
+            //单附件上传
+            if (entityAthType == 1) {
                 html += "<tr>";
-                html += "<td class='FDesc' style='width:20%;'>附件上传</td>";
+                if(fileDesc == "")
+                    html += "<td class='FDesc' style='width:20%;'>附件上传</td>";
+                else
+                    html += "<td class='FDesc' style='width:20%;'>"+fileDesc+"</td>"; 
                 html += "<td colspan=3>";
-                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;' onchange='changeFile()' />";
+                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;' onchange='changeFile(1)' />";
                 html += "已上传的文件：<span id='FileInfo'></span>";
                 html += "</td>";
                 html += "</tr>";
             }
+            //多附件上传
+            if (entityAthType == 2) {
+                //多附件的信息
+                var AttrFiles = frmData.AttrFiles;
+                var FileManagers = frmData.Sys_FileManager;
+
+                html += ShowMultiFile(AttrFiles, FileManagers, isExitMyNum);
+                if (isExitMyNum == true)
+                    html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;dispaly:none' onchange='UploadFile()' />";
+
+            }
+
             html += "</table>";
             return html;
         }
 
+        //多附件显示
+        function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
+            var html = "";
+           
+            //如果多附件没有分类
+            if (AttrFiles.length == 0) {
+                html += "<tr>";
+                html += "<td class='FDesc' style='width:20%;'>多附件上传</td>";
+                if (isExitMyNum == true)
+                    html += "<td colspan=2>";
+                else
+                    html += "<td colspan=3>";
+                html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;' onchange='changeFile()' />";
+                html += "已上传的文件：<span id='FileInfo'></span>";
+                html += "</td>";
+                if (isExitMyNum == true) {
+                    html += "<td>";
+                    if (pkVal == null || pkVal == "" || pkVal == "0")
+                        html += "<a href=\"javascript:alert('请在保存后在执行。');\" target=_self>附件批量上传(请在保存后在执行)</a>";
+                    else
+                        html += "<a href='javaScript:void(0)' onclick='uploadFile()'>上传附件</a>";
+                    html += "</td>"
+                }
+                html += "</tr>";
+                return html;
+            }
+            //多附件分类
+            for (var i = 0; i < AttrFiles.length; i++) {
+                var attrFile = AttrFiles[i];
+                html += "<tr>";
+                html += "<td class='FDesc' style='width:20%;'>" + attrFile.FileName + "</td>";
+                if (isExitMyNum == true)
+                    html += "<td colspan=2>";
+                else
+                    html += "<td colspan=3>";
+                var count = 0;
+                for (var k; k < FileManagers.length; k++) {
+                    var sf = FileManagers[k];
+                    if (sf.AttrFileNo != attrFile.FileNo)
+                        continue;
+                    //显示附件
+                    html += "<div style='float:left'>&nbsp;<a href='" + sf.WebPath + "/" + sf.OID + "." + sf.MyFileExt + "' target=_blank ><img src='../../Img/FileType/" + sf.MyFileExt + ".gif' border=0 />" + sf.MyFileName + "." + sf.MyFileExt + "</a></div>";
+                    html += "";
+                    count++;
+
+                }
+                if (count == 0)
+                    html += "没有上传附件";
+                html += "</td>";
+
+                if (isExitMyNum == true) {
+                    html += "<td>";
+                    if (pkVal == null || pkVal == "" || pkVal == "0")
+                        html += "<a href=\"javascript:alert('请在保存后在执行。');\" target=_self>附件批量上传(请在保存后在执行)</a>";
+                    else
+                        html += "<a href='javaScript:void(0)' onclick='ActiveUploadFile(\"" + attrFile.FileNo + "\",\""+attrFile.FileName+"\",2)'>上传附件</a>";
+                    html += "</td>"
+                }
+                html += "</tr>";
+            }
+            return html;
+        }
         function GenerRM(rm) {
 
             var icon = rm.Icon;
@@ -764,9 +797,15 @@
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
                     return;
                 }
-
+                var key = "No";
+                var keyText = "Name";
+                if (mapAttr.UIRefKey != "")
+                    key = mapAttr.UIRefKey;
+                if (mapAttr.UIRefKeyText != "")
+                    keyText = mapAttr.UIRefKeyText;
                 $.each(data, function (i, obj) {
-                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                   
+                    operations += "<option " + (obj[key] == defVal ? " selected='selected' " : "") + " value='" + obj[key] + "'>" + obj[keyText] + "</option>";
                 });
             }
 
@@ -935,6 +974,8 @@
 
             window.location.href = url; ; //刷新.
         }
+
+        
 
         function changeFile() {
             var pkval = GetPKVal();

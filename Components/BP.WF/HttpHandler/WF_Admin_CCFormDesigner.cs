@@ -290,6 +290,26 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+        public string NewImage()
+        {
+
+            try
+            {
+                BP.Sys.CCFormAPI.NewImage(this.GetRequestVal("FrmID"),
+                    this.GetRequestVal("KeyOfEn"), this.GetRequestVal("Name"),
+                    //int.Parse(this.GetRequestVal("FieldType")),
+                    float.Parse(this.GetRequestVal("x")),
+                   float.Parse(this.GetRequestVal("y"))
+                   );
+                return "true";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+ 
+        }
         public string NewField()
         {
             try

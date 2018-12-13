@@ -1808,8 +1808,11 @@ namespace BP.WF.HttpHandler
                 // 检查是否有下拉框自动填充。
                 string keyOfEn = dr["KeyOfEn"].ToString();
                 string fk_mapData = dr["FK_MapData"].ToString();
-
-                ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                if(ds.Tables.Contains(uiBindKey) == false)
+                {
+                    ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                }
+                
             }
             #endregion 加入该方法的外键.
 

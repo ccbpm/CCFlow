@@ -445,7 +445,7 @@ function Save(scope) {
 
     $.ajax({
         type: 'post',
-        async: true,
+        async: false,
         data: getFormData(true, true),
         url: Handler + "?DoType=FrmGener_Save&OID=" + pageData.OID,
         dataType: 'html',
@@ -1253,11 +1253,11 @@ function To(url) {
     window.name = "dialogPage"; window.open(url, "dialogPage")
 }
 
-function SaveDtlData() {
+function SaveDtlData(scope) {
     if (IsChange == false)
         return;
 
-    Save();
+    Save(scope);
 }
 
 function Change(id) {

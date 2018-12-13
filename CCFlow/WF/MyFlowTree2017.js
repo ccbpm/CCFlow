@@ -280,6 +280,7 @@ function OnTabChange(scope) {
         	}
            
         });
+         $('#tabs').tabs('select', index);
         return true;
     }
     

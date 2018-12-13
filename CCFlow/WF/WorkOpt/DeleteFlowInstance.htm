@@ -40,7 +40,7 @@
                 }
 
                 $('input[name="deleteWay"][value="' + data + '"]').attr("checked", true);
-                $('#trDelEnable').hide();
+               
             }, this);
         }
 
@@ -77,6 +77,7 @@
 
                 $("body").layout("panel", "center").panel("clear");
                 $("body").layout("panel", "center").panel({ content: "<fieldset style='width:360px;margin:auto;font-size:14px;margin-top:50px;'><legend><img align='middle' src='../Img/info.png'>操作提示</legend><br /><br />&nbsp;&nbsp;· " + data + "<br /><br />&nbsp;&nbsp;· 若页面未自动关闭，请手动点击右上角关闭按钮.<br /><br /><br /><br /></fieldset>" });
+                alert("删除成功");
                 window.close();
             }, this);
         }   

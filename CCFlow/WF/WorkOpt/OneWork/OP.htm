@@ -15,7 +15,7 @@
         $(function () {
 
 
-       
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
 
             handler.AddUrlData();
@@ -35,6 +35,8 @@
 
             html += addPackUp(data.CanPackUp);
 
+            html += addFlowOverByCoercion(data.CanFlowOverByCoercion);
+
             $("#ccop").append(html);
 
         });
@@ -48,7 +50,7 @@
 
             var html = addBlockBegin("删除流程");
 
-            if (isCan) {
+            if (isCan=="true") {
                 html += "功能执行:<a href=\"javascript:DeleteFlowInstance('" + GetQueryString("fk_flow") + "','" + GetQueryString("WorkID") + "')\" >点击执行删除流程</a>。";
                 html += "<br />说明：如果执行流程将会被彻底的删除。";
             }

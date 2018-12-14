@@ -803,6 +803,20 @@
            OpenBootStrapModal(url, "eudlgframe", '设置', W, H, "icon-property", null, null, null, null, null, 'black'); 
         }
 
+
+         function executeFunction(jsString,label){
+             jsString = jsString.replace(/~/g, "'");
+             if(jsString.indexOf("/")!=-1){
+                 var W = document.body.clientWidth-40;
+                 var H = document.body.clientHeight-40;
+                OpenBootStrapModal(jsString, "eudlgframe", label, W, H, "icon-property", null, null, null, null, null, 'black'); 
+              }else{
+                if (jsString.indexOf('(') == -1)
+                    eval(jsString + "()");
+                else
+                    eval(jsString);
+              }
+       }
     </script>
 </head>
 <body id="BatchHtm">

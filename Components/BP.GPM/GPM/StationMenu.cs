@@ -105,7 +105,8 @@ namespace BP.GPM
                 map.EnDesc = "岗位菜单";
                 map.EnType = EnType.Sys;
 
-                map.AddTBStringPK(StationMenuAttr.FK_Station, null, "岗位", false, false, 0, 50, 20);
+                //map.AddTBStringPK(StationMenuAttr.FK_Station, null, "岗位", false, false, 0, 50, 20);
+                map.AddDDLEntitiesPK(StationMenuAttr.FK_Station, null, "岗位", new Stations(), true);
                 map.AddTBStringPK(StationMenuAttr.FK_Menu, null, "菜单", false, false, 0, 50, 20);
                 map.AddBoolean(StationMenuAttr.IsChecked, true, "是否选中", true, true);
                 this._enMap = map;

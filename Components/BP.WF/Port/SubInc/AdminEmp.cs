@@ -274,10 +274,17 @@ namespace BP.WF.Port.SubInc
                 rm.Warning = "您确定要执行设置改密码吗？";
                 rm.ClassMethodName = this.ToString() + ".DoSetPassword";
                 map.AddRefMethod(rm);
-                   
 
-                rm.ClassMethodName = this.ToString() + ".DoTestBoolen";
+                rm = new RefMethod();
+                rm.Title = "增加管理员";
+                rm.HisAttrs.AddTBString("emp", null, "管理员帐号", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("OrgNo", null, "可管理的组织结构代码", true, false, 0, 100, 100);
+                rm.RefMethodType = RefMethodType.Func;
+                rm.ClassMethodName = this.ToString() + ".DoAdd";
                 map.AddRefMethod(rm);
+
+
+             
 
                 this._enMap = map;
                 return this._enMap;
@@ -322,6 +329,50 @@ namespace BP.WF.Port.SubInc
             return base.beforeUpdateInsertAction();
         }
         #endregion
+
+        public string DoAdd(string empNo, string orgNo)
+        {
+            //部门信息.
+            BP.Port.Dept dept = new BP.Port.Dept(orgNo);
+
+            BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
+            fs.No = "Inc" + orgNo;
+            if (fs.RetrieveFromDBSources() == 1)
+                return "err@该组织已经初始化过流程树目录.";
+
+            AdminEmp ae = new AdminEmp();
+            ae.No = empNo;
+            if (ae.RetrieveFromDBSources() == 1)
+            {
+                if (ae.IsAdmin == true)
+                    return "err@该管理员已经存在,请删除该管理员重新增加delete from wf_emp where no='" + empNo + "'";
+                ae.Delete();
+            }
+
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = empNo;
+            if (emp.RetrieveFromDBSources() == 0)
+                return "err@人员帐号不存在.";
+
+            ae.Copy(emp);
+
+            ae.UserType = 1;
+            ae.UseSta = 1;
+            ae.RootOfDept = orgNo;
+            ae.RootOfFlow = orgNo;
+            ae.RootOfForm = orgNo;
+            ae.Insert();
+
+            //初始化目录.
+            BP.WF.Template.FlowSort myfs = new WF.Template.FlowSort();
+            myfs.ParentNo = "0";
+            myfs.Name = dept.Name;
+            myfs.No = "Inc" + dept.No;
+            myfs.OrgNo = dept.No;
+            myfs.Insert();
+
+            return "info@管理员增加成功.";
+        }
 
         /// <summary>
         /// 设置加密密码存储

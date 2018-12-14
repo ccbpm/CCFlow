@@ -276,10 +276,11 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.EnDesc = "剪切图片附件数据存储";
                 map.Java_SetEnType(EnType.Sys);
+
                 map.AddMyPK();
 
                 // 以下三个字段组成一个主键. FK_FrmImgAth+"_"+RefPKVal
-                map.AddTBString(FrmImgAthDBAttr.FK_MapData, null, "附件ID", true, false, 1, 100, 20);
+                map.AddTBString(FrmImgAthDBAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmImgAthDBAttr.FK_FrmImgAth, null, "图片附件编号", true, false, 1, 50, 20);
                 map.AddTBString(FrmImgAthDBAttr.RefPKVal, null, "实体主键", true, false, 1, 50, 20);
 

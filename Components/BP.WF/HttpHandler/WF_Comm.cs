@@ -2942,9 +2942,9 @@ namespace BP.WF.HttpHandler
             Entity en = ens.GetNewEntity;
             Map map = ens.GetNewEntity.EnMapInTime;
             DataSet ds = new DataSet();
-            // 查询出来关于它的活动列配置。
-            ActiveAttrs aas = new ActiveAttrs();
-            aas.RetrieveBy(ActiveAttrAttr.For, this.EnsName);
+            //// 查询出来关于它的活动列配置。
+            //ActiveAttrs aas = new ActiveAttrs();
+            //aas.RetrieveBy(ActiveAttrAttr.For, this.EnsName);
 
             //获取注册信息表
             UserRegedit ur = new UserRegedit(WebUser.No, this.EnsName + "_Group");
@@ -2975,8 +2975,6 @@ namespace BP.WF.HttpHandler
             ddlDt.Rows.Add(ddlDr);
             ds.Tables.Add(ddlDt);
             
-
-
             foreach (Attr attr in map.Attrs)
             {
                 if (attr.IsPK || attr.IsNum == false)
@@ -2993,27 +2991,27 @@ namespace BP.WF.HttpHandler
                     continue;
 
 
-                bool isHave = false;
-                // 有没有配置抵消它的属性。
-                foreach (ActiveAttr aa in aas)
-                {
-                    if (aa.AttrKey != attr.Key)
-                        continue;
-                    DataRow dr = dt.NewRow();
-                    dr["Field"] = attr.Key;
-                    dr["Name"] = attr.Desc;
+                //bool isHave = false;
+                //// 有没有配置抵消它的属性。
+                //foreach (ActiveAttr aa in aas)
+                //{
+                //    if (aa.AttrKey != attr.Key)
+                //        continue;
+                //    DataRow dr = dt.NewRow();
+                //    dr["Field"] = attr.Key;
+                //    dr["Name"] = attr.Desc;
 
-                    // 根据状态 设置信息.
-                    if (ur.Vals.IndexOf(attr.Key) != -1)
-                        dr["Checked"] = "true";
+                //    // 根据状态 设置信息.
+                //    if (ur.Vals.IndexOf(attr.Key) != -1)
+                //        dr["Checked"] = "true";
 
-                    dt.Rows.Add(dr);
+                //    dt.Rows.Add(dr);
 
-                    isHave = true;
-                }
+                //    isHave = true;
+                //}
 
-                if (isHave)
-                    continue;
+                //if (isHave)
+                //    continue;
 
 
                 dtr = dt.NewRow();

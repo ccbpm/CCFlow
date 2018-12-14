@@ -4419,21 +4419,28 @@ namespace BP.WF
         /// </summary>
         public static void DeleteTempFiles()
         {
-            //删除目录.
-            string temp = BP.Sys.SystemConfig.PathOfTemp;
-            System.IO.Directory.Delete(temp, true);
-
-            //创建目录.
-            System.IO.Directory.CreateDirectory(temp);
-
-            //删除pdf 目录.
-            temp = BP.Sys.SystemConfig.PathOfDataUser + "InstancePacketOfData\\";
-            System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(temp);
-            System.IO.DirectoryInfo[] dirs = info.GetDirectories();
-            foreach (System.IO.DirectoryInfo dir in dirs)
+            try
             {
-                if (dir.Name.IndexOf("ND") == 0)
-                    dir.Delete(true);
+                //删除目录.
+                string temp = BP.Sys.SystemConfig.PathOfTemp;
+                System.IO.Directory.Delete(temp, true);
+
+                //创建目录.
+                System.IO.Directory.CreateDirectory(temp);
+
+                //删除pdf 目录.
+                temp = BP.Sys.SystemConfig.PathOfDataUser + "InstancePacketOfData\\";
+                System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(temp);
+                System.IO.DirectoryInfo[] dirs = info.GetDirectories();
+                foreach (System.IO.DirectoryInfo dir in dirs)
+                {
+                    if (dir.Name.IndexOf("ND") == 0)
+                        dir.Delete(true);
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
         public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment, 

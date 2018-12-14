@@ -6,7 +6,7 @@ using BP.En;
 
 namespace BP.GPM
 {
-    
+
     /// <summary>
     /// 控制方式
     /// </summary>
@@ -364,22 +364,22 @@ namespace BP.GPM
                 map.CodeStruct = "4";
 
                 #region 与树有关的必备属性.
-                map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 1, 90, 80);
+                map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 1, 90, 50);
                 map.AddDDLEntities(MenuAttr.ParentNo, null, DataType.AppString, "父节点", new Menus(), "No", "Name", false);
-                map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 300,true);
+                map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 200, true);
+                map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
                 #endregion 与树有关的必备属性.
-
                 // 类的字段属性. 
                 map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType,
                     "@0=系统根目录@1=系统类别@2=系统@3=目录@4=功能@5=功能控制点");
-                
+
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);
                 map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
                 map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 200, true);
-                map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?",true,true);
-                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 40,true);
+                map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);
+                map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 50, true);
                 map.AddDDLSysEnum(MenuAttr.MenuCtrlWay, 0, "控制方式", true, true, MenuAttr.MenuCtrlWay,
                     "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
 
@@ -389,7 +389,6 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
 
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
-
 
                 //map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
 
@@ -402,7 +401,7 @@ namespace BP.GPM
 
                 //map.AddDDLSysEnum(AppAttr.CtrlWay, 1, "控制方式", true, true, AppAttr.CtrlWay,
                 //    "@0=游客@1=所有人员@2=按岗位@3=按部门@4=按人员@5=按SQL");
-               // map.AddTBString(MenuAttr.CtrlObjs, null, "控制内容", false, false, 0, 4000, 20);
+                // map.AddTBString(MenuAttr.CtrlObjs, null, "控制内容", false, false, 0, 4000, 20);
                 //// 一对多的关系.
                 //map.AttrsOfOneVSM.Add(new ByStations(), new Stations(), ByStationAttr.RefObj, ByStationAttr.FK_Station,
                 //    StationAttr.Name, StationAttr.No, "可访问的岗位");
@@ -413,12 +412,21 @@ namespace BP.GPM
 
                 //可以访问的权限组.
                 map.AttrsOfOneVSM.Add(new GroupMenus(), new Groups(),
-                    GroupMenuAttr.FK_Menu, GroupMenuAttr.FK_Group, EmpAttr.Name, EmpAttr.No, "权限组");
+                    GroupMenuAttr.FK_Menu, GroupMenuAttr.FK_Group, EmpAttr.Name, EmpAttr.No, "绑定到权限组");
+
+
+                //可以访问的权限组.
+                map.AttrsOfOneVSM.Add(new StationMenus(), new BP.GPM.Stations(),
+                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "绑定到岗位-列表模式");
+
+                //可以访问的权限组.
+                map.AttrsOfOneVSM.AddGroupListModel(new StationMenus(), new BP.GPM.Stations(),
+                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, "绑定到岗位-分组模式", StationAttr.FK_StationType, "Name", EmpAttr.No);
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),
                    EmpMenuAttr.FK_Menu,
-                   EmpMenuAttr.FK_Emp, "绑定人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   EmpMenuAttr.FK_Emp, "绑定人员-树结构", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 //不带有参数的方法.
@@ -429,7 +437,7 @@ namespace BP.GPM
                 rm.IsForEns = true;
                 rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
-                 
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -486,7 +494,7 @@ namespace BP.GPM
             return base.beforeUpdateInsertAction();
         }
 
-        	  /// <summary>
+        /// <summary>
         /// 创建下级节点.
         /// </summary>
         /// <returns></returns>
@@ -495,7 +503,7 @@ namespace BP.GPM
             Entity en = this.DoCreateSubNode();
             en.SetValByKey(MenuAttr.FK_App, this.GetValByKey(MenuAttr.FK_App));
             en.Update();
-        
+
             return en.ToJson();
         }
 
@@ -503,7 +511,7 @@ namespace BP.GPM
         /// 创建同级节点.
         /// </summary>
         /// <returns></returns>
-        public string DoMyCreateSameLevelNode() 
+        public string DoMyCreateSameLevelNode()
         {
             Entity en = this.DoCreateSameLevelNode();
             en.SetValByKey(MenuAttr.FK_App, this.GetValByKey(MenuAttr.FK_App));

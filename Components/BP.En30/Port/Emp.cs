@@ -347,6 +347,8 @@ namespace BP.Port
 
         public string ChangePass(string oldpass, string pass1, string pass2)
         {
+            if (BP.Web.WebUser.No != this.No)
+                return "err@sss";
             return "执行成功.";
         }
         #endregion 方法测试代码.

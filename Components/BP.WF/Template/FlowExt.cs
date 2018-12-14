@@ -1630,7 +1630,6 @@ namespace BP.WF.Template
             try
             {
                 string flowMark = this.FlowMark;
-
                 if (DataType.IsNullOrEmpty(flowMark) == true)
                     flowMark = this.No;
 

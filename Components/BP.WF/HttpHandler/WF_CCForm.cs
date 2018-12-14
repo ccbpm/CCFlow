@@ -14,6 +14,7 @@ using BP.WF.Template;
 using BP.WF.XML;
 using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
+using LitJson;
 
 namespace BP.WF.HttpHandler
 {
@@ -3387,6 +3388,129 @@ namespace BP.WF.HttpHandler
         }
         #endregion 从表的选项.
 
+        #region SQL从表导入.
+        /// <summary>
+        /// SQL从表导入
+        /// </summary>
+        /// <returns></returns>
+        public string DtlImpBySQl_Imp()
+        {
+            //获取参数
+            string ensName = this.EnsName;
+            string refpk = this.RefPKVal;
+            long pworkID = this.PWorkID;
+            int fkNode = this.FK_Node;
+            long fid = this.FID;
+            string pk = this.GetRequestVal("PKs");
+            GEDtls dtls = new GEDtls(ensName);
+            QueryObject qo = new QueryObject(dtls);
+            //获取从表权限
+            MapDtl dtl = new MapDtl(ensName);
+            #region 处理权限方案。 @袁丽娜
+            if (this.FK_Node != 0 && this.FK_Node != 999999)
+            {
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, dtl.FK_MapData);
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        string no = this.FK_MapDtl + "_" + nd.NodeID;
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = no;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                        {
+                            dtl = mdtlSln;
+
+                        }
+                    }
+                }
+            }
+            #endregion 处理权限方案。
+
+            //判断是否重复导入
+            bool isInsert = true;
+            if (DataType.IsNullOrEmpty(pk) == false){
+                string[] pks = pk.Split('@');
+                int idx = 0;
+                foreach (string k in pks)
+                {
+                    if (DataType.IsNullOrEmpty(k))
+                        continue;
+                    if (idx == 0)
+                        qo.AddWhere(k, this.GetRequestVal(k));
+                    else
+                    {
+                        qo.addAnd();
+                        qo.AddWhere(k, this.GetRequestVal(k));
+                    }
+                    idx++;
+                }
+                switch (dtl.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        qo.addAnd();
+                        qo.AddWhere("RefPk", refpk);
+                        qo.addAnd();
+                        qo.AddWhere("Rec", this.GetRequestVal("UserNo"));
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        qo.addAnd();
+                        qo.addLeftBracket();
+                        qo.AddWhere("RefPk", refpk);
+                        qo.addOr();
+                        qo.AddWhere("FID", fid);
+                        qo.addRightBracket();
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        qo.addAnd();
+                        qo.AddWhere("FID", fid);
+                        break;
+                }
+                
+                int count = qo.GetCount();
+                if (count > 0)
+                    isInsert = false;
+            }
+            //导入数据
+            if (isInsert == true)
+            {
+               
+                GEDtl dtlEn = dtls.GetNewEntity as GEDtl;
+                //遍历属性，循环赋值.
+                foreach (Attr attr in dtlEn.EnMap.Attrs)
+                {
+                    dtlEn.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
+
+                }
+                switch (dtl.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        dtlEn.RefPKInt = int.Parse(refpk);
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        dtlEn.RefPKInt = int.Parse(refpk);
+                        dtlEn.SetValByKey("FID", int.Parse(refpk));
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        dtlEn.RefPKInt = int.Parse(refpk);
+                        dtlEn.SetValByKey("FID", fid);
+                        break;
+                }
+                dtlEn.SetValByKey("RDT", BP.DA.DataType.CurrentData);
+                dtlEn.SetValByKey("Rec", this.GetRequestVal("UserNo"));
+                //dtlEn.OID = (int)DBAccess.GenerOID(ensName);
+
+                dtlEn.InsertAsOID((int)DBAccess.GenerOID(ensName));
+                return dtlEn.OID.ToString();
+            }
+
+            return "";
+
+        }
+        #endregion SQL从表导入
+
         #region Excel导入.
         /// <summary>
         /// 导入excel.
@@ -3430,7 +3554,7 @@ namespace BP.WF.HttpHandler
 
                 MapDtl dtl = new MapDtl(this.FK_MapDtl);
                 #region 处理权限方案。 @袁丽娜
-                if (this.FK_Node != 0)
+                if (this.FK_Node != 0 && this.FK_Node != 999999)
                 {
                     Node nd = new Node(this.FK_Node);
                     if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
@@ -3581,8 +3705,8 @@ namespace BP.WF.HttpHandler
                     dtlEn.SetValByKey("RDT", rdt);
                     dtlEn.SetValByKey("Rec", WebUser.No);
                     i++;
-
-                    dtlEn.InsertAsOID(oid);
+                    //dtlEn.OID = (int)DBAccess.GenerOID(this.EnsName);
+                    dtlEn.Insert();
                     oid++;
                 }
                 #endregion 执行导入数据.

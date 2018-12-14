@@ -583,10 +583,10 @@
                 handler.AddPara("UserNo", UserNo);
                 handler.AddJson(data);
                 //返回导入的从表的OID
-                var data = handler.DoMethodReturnString("DtlImpBySQl_Imp");
-                if (data.indexOf("err@") != 0 && data!="") {
+                var newdata = handler.DoMethodReturnString("DtlImpBySQl_Imp");
+                if (newdata.indexOf("err@") != 0 && data!="") {
                     //FK_MapData,附件属性，RefPK,FK_Node
-                    afterDtlImp(EnsName, frmAth, data, FK_Node);
+                    afterDtlImp(EnsName, frmAth, newdata, FK_Node,data["OID"]);
                 }
             });
             

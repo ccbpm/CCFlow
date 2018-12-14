@@ -4113,8 +4113,16 @@ namespace BP.WF
             wf.DoDeleteWorkFlowByFlag(msg);
             if (isDelSubFlow)
             {
+                //删除子线程
                 GenerWorkFlows gwfs = new GenerWorkFlows();
                 gwfs.Retrieve(GenerWorkFlowAttr.FID, workID);
+                foreach (GenerWorkFlow item in gwfs)
+                {
+                    Flow_DoDeleteFlowByFlag(item.FK_Flow, item.WorkID, "删除子流程:" + msg, false);
+                }
+                //删除子流程
+                gwfs = new GenerWorkFlows();
+                gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, workID);
                 foreach (GenerWorkFlow item in gwfs)
                 {
                     Flow_DoDeleteFlowByFlag(item.FK_Flow, item.WorkID, "删除子流程:" + msg, false);

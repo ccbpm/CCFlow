@@ -8,7 +8,7 @@ function funDemo() {
 }
 
 //FK_MapData,附件属性，RefPK,FK_Node
-function afterDtlImp(EnsName, frmAth, OID, FK_Node) {
+function afterDtlImp(FK_MapData, frmAth, newOID, FK_Node, oldOID) {
     //处理从表附件导入的事件
 }
                   

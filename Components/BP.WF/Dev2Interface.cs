@@ -4114,7 +4114,7 @@ namespace BP.WF
             if (isDelSubFlow)
             {
                 GenerWorkFlows gwfs = new GenerWorkFlows();
-                gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, workID);
+                gwfs.Retrieve(GenerWorkFlowAttr.FID, workID);
                 foreach (GenerWorkFlow item in gwfs)
                 {
                     Flow_DoDeleteFlowByFlag(item.FK_Flow, item.WorkID, "删除子流程:" + msg, false);

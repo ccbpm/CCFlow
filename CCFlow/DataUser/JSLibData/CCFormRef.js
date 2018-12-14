@@ -6,3 +6,9 @@
 function funDemo() {
     alert("我被执行了。");
 }
+
+//FK_MapData,附件属性，RefPK,FK_Node
+function afterDtlImp(EnsName, frmAth, OID, FK_Node) {
+    //处理从表附件导入的事件
+}
+                  

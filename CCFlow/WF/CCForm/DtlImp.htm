@@ -566,7 +566,7 @@
             frmAth.SetPKVal(EnsName + "_" + FK_Node + "_AthMDtl");
             var count = frmAth.RetrieveFromDBSources();
             if (count == 0) {
-                frmAth.SetPKVal(EnsName + "_sAthMDtl");
+                frmAth.SetPKVal(EnsName + "_AthMDtl");
                 frmAth.RetrieveFromDBSources();
             }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");

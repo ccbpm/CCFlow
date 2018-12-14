@@ -195,6 +195,23 @@
                 <input id="TB_Tag" name="TB_Tag" style="width: 100%;" />
             </td>
         </tr>
+
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('SetKey')">设定导入数据列表的主键</a>
+                <div id="SetKey" style="color: Gray; display: none">
+                    <ul>
+                        <li>主键不为空，SQL查询的列表设置主键时，不会重复导入该数据</li>
+                        <li>主键为空时，则为选择的全部导入，不过滤已经导入的数据</li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+            </td>
+        </tr>
        
         <tr>
             <td colspan="2">

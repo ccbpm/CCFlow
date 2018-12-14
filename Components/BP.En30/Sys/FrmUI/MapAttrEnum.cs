@@ -200,6 +200,13 @@ namespace BP.Sys.FrmUI
         }
         #endregion
 
+        protected override void afterDelete()
+        {
+            //删除可能存在的数据.
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'");
+            base.afterDelete();
+        }
+
         #region 基本功能.
         /// <summary>
         /// 绑定函数

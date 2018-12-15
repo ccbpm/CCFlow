@@ -26,11 +26,22 @@
             var nodeID = GetQueryString("FK_MainNode");
             var toNodeID = GetQueryString("ToNodeID");
 
+            var condType = GetQueryString("CondType");
+            if (condType == null || condType == undefined)
+                condType = 2;
+
+
             var ens = new Entities("BP.WF.Template.Conds");
-            ens.Retrieve("NodeID", nodeID, "CondType", 2, "ToNodeID", toNodeID);
+            ens.Retrieve("NodeID", nodeID, "CondType", condType, "ToNodeID", toNodeID);
 
             var html = "<table style='width:98%;'>";
-            html += "<caption><img src='../../Img/Event.png' />节点- 方向条件</caption>";
+
+            if (condType==2)
+                html += "<caption><img src='../../Img/Event.png' />节点- 方向条件</caption>";
+
+            if (condType == 1)
+                html += "<caption><img src='../../Img/Event.png' />该节点上的 - 流程完成条件</caption>";
+
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>标识</th>";
@@ -57,7 +68,7 @@
                     docs += "<br>字段:" + en.AttrKey + " " + en.FK_Operator + " " + en.OperatorValue;
                 }
 
-                if (condDesc.No == "CondDept" || condDesc.No == "CondStation" ) {
+                if (condDesc.No == "CondDept" || condDesc.No == "CondStation") {
                     docs += "解读:" + en.OperatorValueT;
                     docs += "<br>值:" + en.OperatorValue;
                 }
@@ -133,7 +144,7 @@
      <div id="Msg"></div>
      
      <br />
-     <input type="button" value="+新建方向条件" onclick="ShowHidden('state')" />
+     <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
 
       <div id="state" style="display: none; color: Gray">
                 <ul>
@@ -145,11 +156,10 @@
                     <li><a href="javascript:NewCond('CondBySQLTemplate');">按SQL模版条件计算</a> </li>
                     <li><a href="javascript:NewCond('CondByPara');">按开发者参数计算</a> </li>
                     <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
-
                 </ul>
             </div>
 
-     <input type="button" value="什么是方向条件？"  onclick="javascript:Help()" />
+     <input type="button" value="什么是条件？"  onclick="javascript:Help()" />
 
 
 	</form>

@@ -386,7 +386,32 @@ namespace BP.WF.HttpHandler
                     Paras ps = new Paras();
                     ps.SQL = sql;
                     ps.Add("nodeid", this.FK_Node);
-                    DataTable dt = DBAccess.RunSQLReturnTable(ps);
+                    DataTable dt = null;
+
+                    try
+                    {
+                         dt = DBAccess.RunSQLReturnTable(ps);
+                    }
+                    catch (Exception ex)
+                    {
+                        FrmSubFlow sb = new FrmSubFlow();
+                        sb.CheckPhysicsTable();
+
+                        TransferCustom tc = new TransferCustom();
+                        tc.CheckPhysicsTable();
+
+                        FrmThread ft = new FrmThread();
+                        ft.CheckPhysicsTable();
+
+                        FrmTrack ftd = new FrmTrack();
+                        ftd.CheckPhysicsTable();
+
+                        FrmTransferCustom ftd1 = new FrmTransferCustom();
+                        ftd1.CheckPhysicsTable();
+
+                        throw ex;
+                    }
+
                     dt.TableName = "FigureCom";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)

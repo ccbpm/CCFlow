@@ -401,7 +401,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfDataUser + "\\Temp\\";
+                return PathOfDataUser + "Temp\\";
             }
         }
         public static string PathOfWorkDir

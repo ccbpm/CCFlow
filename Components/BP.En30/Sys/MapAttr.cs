@@ -225,6 +225,10 @@ namespace BP.Sys
         /// </summary>
         public const string IsSum = "IsSum";
         /// <summary>
+        /// 列求和
+        /// </summary>
+        public const string ExtIsSum = "ExtIsSum";
+        /// <summary>
         /// 在手机端是否显示
         /// </summary>
         public const string IsEnableInAPP = "IsEnableInAPP";
@@ -296,6 +300,18 @@ namespace BP.Sys
                 this.SetPara(MapAttrAttr.IsSum, value);
             }
         }
+        public bool ExtIsSum
+        {
+            get
+            {
+                return this.GetParaBoolen(MapAttrAttr.ExtIsSum, true);
+            }
+            set
+            {
+                this.SetPara(MapAttrAttr.ExtIsSum, value);
+            }
+        }
+
         #endregion
 
         #region 参数属性.
@@ -1414,6 +1430,7 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.UIRefKeyText, null, "绑定的Text", true, false, 0, 30, 20);
 
 
+                map.AddTBInt(MapAttrAttr.ExtIsSum, 0, "是否显示合计(对从表有效)", true, true);
                 map.AddTBInt(MapAttrAttr.UIVisible, 1, "是否可见", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 1, "是否启用", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsLine, 0, "是否单独栏显示", true, true);

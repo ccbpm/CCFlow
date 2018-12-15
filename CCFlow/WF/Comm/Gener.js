@@ -1619,9 +1619,8 @@ var DBAccess = (function () {
     }
 
     DBAccess.RunSQL = function (sql) {
-
         var count = 0;
-
+        sql = sql.replace(/'/g, '~');
         $.ajax({
             type: 'post',
             async: false,
@@ -1875,6 +1874,8 @@ var HttpHandler = (function () {
 
         AddFormData: function () {
             formData = $("form").serialize();
+            //序列化时把空格转成+，+转义成％２Ｂ，在保存时需要把+转成空格  
+            formData = formData.replace(/\+/g, " ");
             //form表单序列化时调用了encodeURLComponent方法将数据编码了
             // formData = decodeURIComponent(formData, true);
             if (formData.length > 0) {

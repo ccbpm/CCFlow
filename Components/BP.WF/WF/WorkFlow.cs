@@ -814,6 +814,9 @@ namespace BP.WF
                 {
                     try
                     {
+                        if (DBAccess.IsExitsObject("ND" + nd.NodeID) == false)
+                            continue;
+
                         DBAccess.RunSQL("DELETE FROM ND" + nd.NodeID + " WHERE OID=" + this.WorkID + " OR FID=" + this.WorkID);
                     }
                     catch (Exception ex)

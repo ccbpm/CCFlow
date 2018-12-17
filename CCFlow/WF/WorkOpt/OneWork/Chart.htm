@@ -242,7 +242,7 @@
                     if (rNode.rPossible) {
                         rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EmpName + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
                         rNode.rPossibleText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
-                        rNode.rPossibleText.toFront(); FrmWorkCheck
+                        rNode.rPossibleText.toFront(); 
                     }
                 }
                

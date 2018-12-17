@@ -7358,7 +7358,7 @@ namespace BP.WF
                 if (treeWork != null)
                     wk.Copy(treeWork);
 
-                //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 @袁丽娜
+                //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 
                 if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
                 {
                     FrmNodes nds = new FrmNodes(fk_flow, fk_node);

@@ -224,7 +224,7 @@ namespace BP.Sys
 
                 map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
                 map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 this._enMap = map;
                 return this._enMap;

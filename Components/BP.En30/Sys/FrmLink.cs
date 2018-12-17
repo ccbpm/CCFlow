@@ -280,7 +280,7 @@ namespace BP.Sys
                 map.AddTBInt(FrmLabAttr.IsBold, 0, "IsBold", false, false);
                 map.AddTBInt(FrmLabAttr.IsItalic, 0, "IsItalic", false, false);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmLabAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
              
                 this._enMap = map;

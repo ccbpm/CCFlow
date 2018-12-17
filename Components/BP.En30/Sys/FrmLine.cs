@@ -192,7 +192,7 @@ namespace BP.Sys
                 map.AddTBFloat(FrmLineAttr.BorderWidth, 1, "宽度", false, false);
                 map.AddTBString(FrmLineAttr.BorderColor, "black", "颜色", true, false, 0, 30, 20);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "初始的GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmLineAttr.GUID, null, "初始的GUID", true, false, 0, 128, 20);
                 this._enMap = map;
                 return this._enMap;
             }

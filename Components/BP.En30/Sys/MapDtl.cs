@@ -1352,7 +1352,7 @@ namespace BP.Sys
                 //列自动计算表达式.
                 map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算表达式", true, false, 0, 200, 20, true);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+                map.AddTBString(MapDtlAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 //参数.
                 map.AddTBAtParas(300);

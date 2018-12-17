@@ -4505,20 +4505,18 @@ namespace BP.WF
 
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {
-                int num = 0;
                 if (FK_FrmAttachment.Contains("AthMDtl"))
                 {
                     /*如果是一个明细表的多附件，就直接按照传递过来的PK来查询.*/
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
-                    //@袁丽娜
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
-                    num = qo.DoQuery();
+                    qo.DoQuery();
                 }
                 else
                 {
-                    num = dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment,
+                    dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment,
                        FrmAttachmentDBAttr.RefPKVal, pkval, "RDT");
                 }
                 return dbs;

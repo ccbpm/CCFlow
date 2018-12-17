@@ -282,7 +282,7 @@ namespace BP.Sys
 
                 map.AddTBInt(FrmLabAttr.IsBold, 0, "是否粗体", false, false);
                 map.AddTBInt(FrmLabAttr.IsItalic, 0, "是否斜体", false, false);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmLabAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
 
                 this._enMap = map;

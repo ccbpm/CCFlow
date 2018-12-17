@@ -61,7 +61,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);
                 map.AddTBString(FrmBtnAttr.MsgErr, null, "运行失败提示", true, false, 0, 500, 20);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmBtnAttr.BtnID, null, "按钮ID", true, false, 0, 128, 20);
 
                 //显示的分组.
                 map.AddDDLSQL(FrmBtnAttr.GroupID, "0", "所在分组",

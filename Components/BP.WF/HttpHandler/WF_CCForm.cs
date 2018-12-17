@@ -862,7 +862,7 @@ namespace BP.WF.HttpHandler
 
             //设置主键.
             en.OID = DBAccess.GenerOID(this.EnsName);
-            #region 处理权限方案。 @袁丽娜
+            #region 处理权限方案。
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 Node nd = new Node(this.FK_Node);
@@ -881,7 +881,7 @@ namespace BP.WF.HttpHandler
                 }
             }
             #endregion 处理权限方案。
-            //给从表赋值. @袁丽娜
+            //给从表赋值.
             switch (dtl.DtlOpenType)
             {
                 case DtlOpenType.ForEmp:  // 按人员来控制.

@@ -213,7 +213,7 @@ namespace BP.Sys
              //   map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
 
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 //参数属性.
                 map.AddTBAtParas(4000); //

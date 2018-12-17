@@ -1445,7 +1445,7 @@ namespace BP.Sys
              
                 map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
                 map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 map.AddTBString(MapAttrAttr.Tag, null, "标识（存放临时数据）", true, false, 0, 100, 20);
                 map.AddTBInt(MapAttrAttr.EditType, 0, "编辑类型", true, false);
 

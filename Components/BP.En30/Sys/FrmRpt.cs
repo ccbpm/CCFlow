@@ -907,7 +907,7 @@ namespace BP.Sys
 
                 //MTR 多表头列.
                 map.AddTBString(FrmRptAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmRptAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
 
                 this._enMap = map;

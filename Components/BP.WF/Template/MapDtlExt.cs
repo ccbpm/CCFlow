@@ -960,8 +960,8 @@ namespace BP.WF.Template
                 //要显示的列.
                 map.AddTBString(MapDtlAttr.ShowCols, null, "显示的列", true, false, 0, 500, 20, true);
                 map.SetHelperAlert(MapDtlAttr.ShowCols, "默认为空,全部显示,如果配置了就按照配置的计算,格式为:field1,field2");
-                
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+
+                map.AddTBString(MapDtlAttr.GUID, null, "GUID", false, false, 0, 128, 20);
                 #endregion 基础信息.
 
                 #region 导入导出填充.

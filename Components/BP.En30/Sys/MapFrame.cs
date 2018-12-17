@@ -211,7 +211,7 @@ namespace BP.Sys
                // map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
                // map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+                map.AddTBString(FrmEleAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 this._enMap = map;
                 return this._enMap;

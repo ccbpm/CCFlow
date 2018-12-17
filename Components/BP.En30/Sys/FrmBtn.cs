@@ -148,9 +148,9 @@ namespace BP.Sys
         /// </summary>
         public const string MsgErr = "MsgErr";
         /// <summary>
-        /// GUID
+        /// 按钮ID
         /// </summary>
-        public const string GUID = "GUID";
+        public const string BtnID = "BtnID";
         /// <summary>
         /// 分组
         /// </summary>
@@ -420,7 +420,7 @@ namespace BP.Sys
                 map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);
                 map.AddTBString(FrmBtnAttr.MsgErr, null, "运行失败提示", true, false, 0, 500, 20);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmBtnAttr.BtnID, null, "按钮ID", true, false, 0, 128, 20);
 
                 map.AddTBInt(FrmBtnAttr.GroupID, 0, "所在分组", false, false);
 

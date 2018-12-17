@@ -194,7 +194,7 @@ namespace BP.Sys
                 map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, true, 0, 50, 20);
                 map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, true, 0, 500, 20);
                 map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, true, 0, 128, 20,true);
+                map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, true, 0, 128, 20, true);
                 map.AddTBAtParas(3000);
 
 

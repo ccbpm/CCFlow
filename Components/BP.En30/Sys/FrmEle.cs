@@ -796,7 +796,7 @@ namespace BP.Sys
                 map.AddTBString(FrmEleAttr.Tag2, null, "Tag2", true, false, 0, 50, 20);
                 map.AddTBString(FrmEleAttr.Tag3, null, "Tag3", true, false, 0, 50, 20);
                 map.AddTBString(FrmEleAttr.Tag4, null, "Tag4", true, false, 0, 50, 20);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmEleAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 #endregion 参数.
 
                 #region 控制属性.

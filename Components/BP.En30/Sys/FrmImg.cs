@@ -366,7 +366,7 @@ namespace BP.Sys
                 map.AddTBString(FrmImgAttr.LinkURL, null, "LinkURL", true, false, 0, 200, 20);
                 map.AddTBString(FrmImgAttr.LinkTarget, "_blank", "LinkTarget", true, false, 0, 200, 20);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmImgAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 //如果是 seal 就是岗位集合。
                 map.AddTBString(FrmImgAttr.Tag0, null, "参数", true, false, 0, 500, 20);

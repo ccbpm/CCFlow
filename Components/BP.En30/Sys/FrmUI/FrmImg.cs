@@ -73,7 +73,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
 
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmImgAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",

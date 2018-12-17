@@ -401,7 +401,7 @@ namespace BP.WF
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
                 string IsEnableUnSendWhenHuiQian  = SystemConfig.AppSettings["IsEnableUnSendWhenHuiQian"];
-                if (DataType.IsNullOrEmpty(IsEnableUnSendWhenHuiQian) == false && IsEnableUnSendWhenHuiQian.Equals("1"))
+                if (DataType.IsNullOrEmpty(IsEnableUnSendWhenHuiQian) == false && IsEnableUnSendWhenHuiQian.Equals("0"))
                     return "info@当前节点是会签状态，您不能执行撤销.";
 
                 GenerWorkerList gwl = new GenerWorkerList();

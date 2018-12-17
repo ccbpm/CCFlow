@@ -400,6 +400,10 @@ namespace BP.WF
             #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的.
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
+                string IsEnableUnSendWhenHuiQian  = SystemConfig.AppSettings["IsEnableUnSendWhenHuiQian"];
+                if (DataType.IsNullOrEmpty(IsEnableUnSendWhenHuiQian) == false && IsEnableUnSendWhenHuiQian.Equals("1"))
+                    return "info@当前节点是会签状态，您不能执行撤销.";
+
                 GenerWorkerList gwl = new GenerWorkerList();
                 int numOfmyGwl = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
                       GenerWorkerListAttr.WorkID, this.WorkID,

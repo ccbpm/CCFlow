@@ -363,7 +363,10 @@ function figure_Template_Label(frmLab) {
 //初始化按钮
 function figure_Template_Btn(frmBtn) {
     var eleHtml = $('<div></div>');
-    var btnHtml = $('<input type="button" value="">');
+    var btnId = frmBtn.BtnID;
+    if (btnId == null || btnId == "")
+        btnId = frmBtn.MyPK;
+    var btnHtml = $("<input id='" + btnId + "' type='button' value='' >");
     btnHtml.val(frmBtn.Text).width(frmBtn.W).height(frmBtn.H).addClass('btn');
     var doc = frmBtn.EventContext;
     doc = (doc == null ? "" : doc.replace(/~/g, "'"));

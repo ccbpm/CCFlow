@@ -293,11 +293,14 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
+                bool isFlowEnd = false;
+                //前提，流程结束后才可以看到打印权限
+                if (gwf.WFState == BP.WF.WFState.Complete)
+                    isFlowEnd = true;
+
                 bool isAdmin = false;
                 if (BP.Web.WebUser.No == "admin")
                     isAdmin = true;
-
-                //  if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
 
                 // 判断是否可以打印.
                 //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
@@ -311,7 +314,7 @@ namespace BP.WF.HttpHandler
                     if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
                         string empFrom = dr[1].ToString();
-                        if (isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter == WebUser.No)
+                        if (isFlowEnd==true && (isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter == WebUser.No))
                         {
                             CanPackUp = true;
                             break;

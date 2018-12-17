@@ -81,7 +81,7 @@ function FlowFormTree_Init() {
                 if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
                     i++;
                     var isEdit = node.attributes.IsEdit;
-                    if ((IsCC && IsCC == "1") || IsReadonly == "1")
+                    if ((IsCC && IsCC == "1") || IsReadonly == "1" )
                         isEdit = "0";
 
                     if (isEdit == "0")
@@ -192,8 +192,86 @@ function addTab(id, title, url,IsCloseEtcFrm) {
     ChangTabFormTitle();
     $('#tabs').tabs('select', title);
     tabClose();
+    tabCloseEven();
 }
 
+
+ //绑定右键菜单事件
+function tabCloseEven() {
+    //刷新
+    $('#mm-tabupdate').click(function () {
+        var currTab = $('#tabs').tabs('getSelected');
+        var url = $(currTab.panel('options').content).attr('src');
+        if (url != undefined) {
+            $('#tabs').tabs('update', {
+                tab: currTab,
+                options: {
+                    content: createFrame(url)
+                }
+            })
+        }
+    })
+    //关闭当前
+    $('#mm-tabclose').click(function () {
+        var currtab_title = $('#mm').data("currtab");
+        $('#tabs').tabs('close', currtab_title);
+    })
+    //全部关闭
+    $('#mm-tabcloseall').click(function () {
+        $('.tabs-inner span').each(function (i, n) {
+            var t = $(n).text();
+            if (t != '首页') {
+                $('#tabs').tabs('close', t);
+            }
+        });
+    });
+    //关闭除当前之外的TAB
+    $('#mm-tabcloseother').click(function () {
+        var prevall = $('.tabs-selected').prevAll();
+        var nextall = $('.tabs-selected').nextAll();
+        if (prevall.length > 0) {
+            prevall.each(function (i, n) {
+                var t = $('a:eq(0) span', $(n)).text();
+                if (t != '首页') {
+                    $('#tabs').tabs('close', t);
+                }
+            });
+        }
+        if (nextall.length > 0) {
+            nextall.each(function (i, n) {
+                var t = $('a:eq(0) span', $(n)).text();
+                if (t != '首页') {
+                    $('#tabs').tabs('close', t);
+                }
+            });
+        }
+        return false;
+    });
+    //关闭当前右侧的TAB
+    $('#mm-tabcloseright').click(function () {
+        var nextall = $('.tabs-selected').nextAll();
+        if (nextall.length == 0) {
+            return false;
+        }
+        nextall.each(function (i, n) {
+            var t = $('a:eq(0) span', $(n)).text();
+            $('#tabs').tabs('close', t);
+        });
+        return false;
+    });
+    //关闭当前左侧的TAB
+    $('#mm-tabcloseleft').click(function () {
+        var prevall = $('.tabs-selected').prevAll();
+        if (prevall.length == 0) {
+            return false;
+        }
+        prevall.each(function (i, n) {
+            var t = $('a:eq(0) span', $(n)).text();
+            $('#tabs').tabs('close', t);
+        });
+        return false;
+    });
+}
 //判断标签页是否存在
 function TabFormExists() {
     var currTab = $('#tabs').tabs('getSelected');

@@ -39,7 +39,7 @@
         if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
             var uiBindKey = mapAttr.UIBindKey;
             if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-                var sfTable = new Entity("BP.Sys.FrmUI.SFTable");
+                var sfTable = new Entity("BP.Sys.SFTable");
                 sfTable.SetPKVal(uiBindKey);
                 var count = sfTable.RetrieveFromDBSources();
 

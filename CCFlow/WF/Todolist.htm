@@ -141,7 +141,6 @@
             tablet += "<th>期限</th>";
             tablet += "<th>状态</th>";
             tablet += "<th>类型</th>";
-           // title += "<th>备注</th>";
          
 
             
@@ -257,7 +256,6 @@
                     }
 
                     listbox += "<td>" + num + "</td>"; //序号.
-                    //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
 
                     var url = "";
                     if (isRead == 0)
@@ -289,7 +287,7 @@
                     var entStr = nodeID.toString().substr(len - 2);
 
                     //判断流程是否逾期
-                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT) {
+                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT && paras.indexOf("&IsCC=1")==-1) {
                         listbox += "<td><font color=red>逾期</font></td>";
                     }
                     else {

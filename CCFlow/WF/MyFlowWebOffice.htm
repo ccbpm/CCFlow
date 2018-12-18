@@ -24,13 +24,13 @@
                     document.title = title;
                     var currTab = $('#mtabs').tabs('getSelected');
                     var url = $(currTab.panel('options').content).attr('src');
-                    if (url != undefined) {
+                    if (url != undefined && title=="轨迹") {
                         $('#mtabs').tabs('update', {
                             tab: currTab,
                             options: {
                                 content: createFrame(url)
                             }
-                        })
+                        });
                     }
                 }
             });
@@ -43,10 +43,10 @@
             var btnLab = new Entity("BP.WF.Template.BtnLab", nodeID);
             var btnOffice = new Entity("BP.WF.Template.BtnLabExtWebOffice", nodeID);
             var data = [];
-            data.push({ "No": "Frm", "Name": "表单", "Url": "MyFlowGener.htm?WorkID="+workid+"&NodeID="+fk_node+"&FK_Node="+fk_node+"&FID="+fid+"&FK_Flow="+fk_flow });
-            data.push({ "No": "WebOffice", "Name": "公文", "Url": "" })
-            data.push({ "No": "Track", "Name": "轨迹", "Url": "WorkOpt/OneWork/Chart.htm?FK_Node="+fk_node+"&WorkID="+workid+"&FK_Flow="+fk_flow+"&FID="+fid+"&FromWorkOpt=1" })
-            data.push({ "No": "TimeBase", "Name": "时间轴", "Url": "WorkOpt/OneWork/TimeBase.htm?FK_Node=" + fk_node + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FID=" + fid + "&FromWorkOpt=1" })
+            data.push({ "No": "Frm", "Name": "表单", "Url": "MyFlowGener.htm?WorkID=" + workid + "&NodeID=" + fk_node + "&FK_Node=" + fk_node + "&FID=" + fid + "&FK_Flow=" + fk_flow });
+            data.push({ "No": "WebOffice", "Name": "公文", "Url": "CCForm/FrmWord.htm?WorkID=" + workid + "&NodeID=" + fk_node + "&FK_Node=" + fk_node + "&FID=" + fid + "&FK_Flow=" + fk_flow });
+            data.push({ "No": "Track", "Name": "轨迹", "Url": "WorkOpt/OneWork/Chart.htm?FK_Node=" + fk_node + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FID=" + fid + "&FromWorkOpt=1" });
+            data.push({ "No": "TimeBase", "Name": "时间轴", "Url": "WorkOpt/OneWork/TimeBase.htm?FK_Node=" + fk_node + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FID=" + fid + "&FromWorkOpt=1" });
 
             var IsDefaultTab = null;
             $.each(data, function (index, obj) {
@@ -59,13 +59,6 @@
             }
             if (btnOffice.WebOfficeEnable == 4)
                 $("#mtabs").tabs("select", 1);
-
-            if (window.screen) {
-                var w = screen.availWidth;
-                var h = screen.availHeight;
-                window.moveTo(0, 0);
-                window.resizeTo(w, h);
-            }
 
         });
 
@@ -99,21 +92,7 @@
             return '<iframe scrolling="auto" frameborder="0"  src="'+ url + '" style="width:100%;height:100%;"></iframe>';
         }
 
-        function RSize() {
-            if (document.body.scrollWidth > (window.screen.availWidth - 100)) {
-                window.dialogWidth = (window.screen.availWidth - 100).toString() + "px"
-            } else {
-                window.dialogWidth = (document.body.scrollWidth + 50).toString() + "px"
-            }
-
-            if (document.body.scrollHeight > (window.screen.availHeight - 70)) {
-                window.dialogHeight = (window.screen.availHeight - 50).toString() + "px"
-            } else {
-                window.dialogHeight = (document.body.scrollHeight + 115).toString() + "px"
-            }
-            window.dialogLeft = ((window.screen.availWidth - document.body.clientWidth) / 2).toString() + "px"
-            window.dialogTop = ((window.screen.availHeight - document.body.clientHeight) / 2).toString() + "px"
-        }
+       
     </script>
 </head>
 <body class="easyui-layout">

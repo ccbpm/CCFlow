@@ -40,6 +40,8 @@ $(function () {
             }
         }
         window.close();
+        if (window.parent != null && window.parent != undefined)
+            window.parent.close();
     });
 
     setAttachDisabled();
@@ -48,6 +50,8 @@ $(function () {
 
     $('#btnMsgModalOK1').bind('click', function () {
         window.close();
+        if (window.parent != null && window.parent != undefined)
+            window.parent.close();
         opener.window.focus();
     });
 })

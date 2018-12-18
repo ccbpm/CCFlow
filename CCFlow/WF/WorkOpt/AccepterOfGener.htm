@@ -332,6 +332,8 @@
 
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.close();
+                if (window.parent.parent != null && window.parent.parent != undefined)
+                    window.parent.parent.close();
                 window.parent.returnWorkWindowClose();
             }
             window.close();

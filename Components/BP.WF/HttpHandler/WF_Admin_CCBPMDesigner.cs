@@ -514,41 +514,6 @@ namespace BP.WF.HttpHandler
 
                 if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
                     return "err@二级管理员用户没有设置流程树的权限..";
-
-                #region 检查是否有分类好的流程类别数据. for 中冶集团.
-                Paras ps = new Paras();
-                ps.SQL = "SELECT count(No) FROM WF_FlowSort WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo OR No=" + SystemConfig.AppCenterDBVarStr + "No";
-                ps.Add("ParentNo",adminEmp.RootOfFlow);
-                ps.Add("No", adminEmp.RootOfFlow);
-                //string sql = "SELECT count(No) FROM WF_FlowSort WHERE ParentNo='" + adminEmp.RootOfFlow + "' OR No='" + adminEmp.RootOfFlow + "'";
-                int num = DBAccess.RunSQLReturnValInt(ps, 0);
-                if (num == 0)
-                    return "err@您的二级管理员["+adminEmp.No+"],设置的流程树权限已经时效,请联系admin.";
-
-                if (num == 1)
-                {
-                    /*只有一个根目录: 就让其生成子目录数据, f.*/
-                    string xmlFile = SystemConfig.PathOfDataUser + "XML/InitFlowSort.xml";
-                    if (System.IO.File.Exists(xmlFile) == true)
-                    {
-                        DataSet ds = new DataSet();
-                        ds.ReadXml(xmlFile);
-                        DataTable dt = ds.Tables[0];
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            string no = dr[0].ToString();
-                            string name = dr[1].ToString();
-
-                            FlowSort fs = new FlowSort();
-                            fs.No = adminEmp.RootOfFlow + "_" + no;
-                            fs.Name = name;
-                            fs.ParentNo = adminEmp.RootOfFlow;
-                            fs.Insert();
-                        }
-                    }
-                }
-                #endregion 检查是否有分类好的流程类别数据. for 中冶集团.
-
             }
 
             string pass = this.GetRequestVal("TB_PW").Trim();

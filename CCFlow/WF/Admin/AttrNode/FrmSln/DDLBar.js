@@ -8,7 +8,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>";
     html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
     html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>";
-    html += "<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>";
+    html += "<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
 
     html += "<option value=null  disabled='disabled'>+自定义表单</option>";
     html += "<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";

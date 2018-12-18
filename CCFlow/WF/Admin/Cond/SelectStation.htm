@@ -52,7 +52,7 @@
                 Stations = new Entities("BP.GPM.Stations");
                 Stations.Retrieve("OrgNo", orgNo);
                 //查询出来数据.	       
-                var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ")";
+                var sql = "select No,Name from port_StationType where No in (select Fk_StationType from Port_Station where OrgNo ='" + orgNo + "')";
                 //获得要增加的流程集合.
                 StationTypes = DBAccess.RunSQLReturnTable(sql);
             }

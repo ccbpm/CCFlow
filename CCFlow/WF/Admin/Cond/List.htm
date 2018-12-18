@@ -28,8 +28,7 @@
 
             var condType = GetQueryString("CondType");
             if (condType == null || condType == undefined)
-                condType = 2;
-
+                condType = 2; //默认为方向条件.
 
             var ens = new Entities("BP.WF.Template.Conds");
             ens.Retrieve("NodeID", nodeID, "CondType", condType, "ToNodeID", toNodeID);
@@ -138,7 +137,7 @@
         }
     </script>
 </head>
-<body  >
+<body>
 	<form id="cc">
 	 
      <div id="Msg"></div>
@@ -160,7 +159,6 @@
             </div>
 
      <input type="button" value="什么是条件？"  onclick="javascript:Help()" />
-
 
 	</form>
 </body>

@@ -304,13 +304,51 @@ namespace BP.WF.Port
 
         public string DoAdd(string empNo, string orgNo)
         {
-            //部门信息.
-            BP.Port.Dept dept = new BP.Port.Dept(orgNo);
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = empNo;
+            if (emp.RetrieveFromDBSources() == 0)
+                return "err@管理员增加失败，ID=" + empNo + "不存在用户表，您增加的管理员必须存在与Port_Emp用户表.";
 
-            BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
+            BP.Port.Dept dept = new BP.Port.Dept();
+            dept.No = orgNo;
+            if (dept.RetrieveFromDBSources() == 0)
+                return "err@orgNo错误, 不存在 Port_Dept 里面。";
+
+            BP.WF.Port.Inc inc = new BP.WF.Port.Inc();
+            inc.No = orgNo;
+            if (inc.RetrieveFromDBSources() == 0)
+                return "err@orgNo错误, 不存在 Port_Inc 里面。";
+
+            //求根目录流程树.
+            BP.WF.Template.FlowSort fsRoot = new BP.WF.Template.FlowSort();
+            fsRoot.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
+
+
+            BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
             fs.No = "Inc" + orgNo;
             if (fs.RetrieveFromDBSources() == 1)
                 return "err@该组织已经初始化过流程树目录.";
+
+            fs.Name = dept.Name + "-流程树";
+            fs.ParentNo = fsRoot.No;
+            fs.OrgNo = dept.No;
+            fs.Insert();
+
+
+            //求根目录流程树.
+            BP.Sys.FrmTree frmRoot = new BP.Sys.FrmTree();
+            frmRoot.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
+
+            BP.Sys.FrmTree frmTree = new BP.Sys.FrmTree();
+            frmTree.No = "Inc" + orgNo;
+            if (frmTree.RetrieveFromDBSources() == 1)
+                return "err@该组织已经初始化过表单树目录.";
+
+            frmTree.ParentNo = frmRoot.No;
+            frmTree.Name = dept.Name + "-表单树";
+            frmTree.OrgNo = dept.No;
+            frmTree.Insert();
+
 
             AdminEmp ae = new AdminEmp();
             ae.No = empNo;
@@ -321,27 +359,13 @@ namespace BP.WF.Port
                 ae.Delete();
             }
 
-            BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = empNo;
-            if (emp.RetrieveFromDBSources() == 0)
-                return "err@人员帐号不存在.";
-
             ae.Copy(emp);
-
             ae.UserType = 1;
             ae.UseSta = 1;
             ae.RootOfDept = orgNo;
-            ae.RootOfFlow = orgNo;
-            ae.RootOfForm = orgNo;
+            ae.RootOfFlow = "Inc" + orgNo;
+            ae.RootOfForm = "Inc" + orgNo;
             ae.Insert();
-
-            //初始化目录.
-            BP.WF.Template.FlowSort myfs = new WF.Template.FlowSort();
-            myfs.ParentNo = "0";
-            myfs.Name = dept.Name;
-            myfs.No = "Inc" + dept.No;
-            myfs.OrgNo = dept.No;
-            myfs.Insert();
 
             return "info@管理员增加成功.";
         }
@@ -354,30 +378,6 @@ namespace BP.WF.Port
                 this.RootOfDept = "0";
                 this.RootOfFlow = "0";
                 this.RootOfForm = "0";
-            }
-            else
-            {
-                if (this.UserType == 1)
-                {
-                    //为树目录更新OrgNo编号.
-                    BP.WF.Template.FlowSort fs = new Template.FlowSort();
-                    fs.No = this.RootOfFlow;  //周朋需要对照翻译.
-                    if (fs.RetrieveFromDBSources() == 1)
-                    {
-                        fs.OrgNo = this.RootOfDept;
-                        fs.Update();
-
-                        //更新本级目录.
-                        BP.WF.Template.FlowSorts fsSubs = new Template.FlowSorts();
-                        fsSubs.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, fs.No);
-                        foreach (BP.WF.Template.FlowSort item in fsSubs)
-                        {
-                            item.OrgNo = this.RootOfDept;
-                            item.Update();
-                        }
-                    }
-                    BP.DA.DBAccess.RunSQL("UPDATE WF_FlowSort SET OrgNo='0' WHERE OrgNo NOT IN (SELECT RootOfDept FROM WF_Emp WHERE UserType=1 )");
-                }
             }
             return base.beforeUpdateInsertAction();
         }
@@ -394,32 +394,7 @@ namespace BP.WF.Port
             DBAccess.RunSQLReturnVal("UPDATE Port_Emp SET Pass='" + str + "' WHERE No='" + this.No + "'");
             return "设置成功..";
         }
-        /// <summary>
-        /// 增加二级管理员.
-        /// </summary>
-        /// <param name="empID"></param>
-        /// <returns></returns>
-        public string DoAddAdminer(string empID)
-        {
-            BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = empID;
-            if (emp.RetrieveFromDBSources() == 0)
-                return "err@管理员增加失败，ID="+empID+"不存在用户表，您增加的管理员必须存在与Port_Emp用户表.";
-
-            AdminEmp adminEmp = new AdminEmp();
-            adminEmp.No = empID;
-            if (adminEmp.RetrieveFromDBSources() == 1)
-                return "err@管理员【" + adminEmp.Name + "】已经存在，您不需要在增加.";
-
-            adminEmp.Copy(emp);
-            adminEmp.FK_Dept = WebUser.FK_Dept;
-            adminEmp.RootOfDept = WebUser.FK_Dept;
-            adminEmp.UserType = 1;
-            adminEmp.Insert();
-
-            return "增加成功,请关闭当前窗口查询到该管理员，设置他的权限。";
-
-        }
+    
     }
 	/// <summary>
 	/// 管理员s 

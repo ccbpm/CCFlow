@@ -141,17 +141,17 @@ namespace BP.WF.HttpHandler
                 // bool isDel = athDesc.IsDeleteInt == 0 ? false : true;
                 bool isDel = athDesc.HisDeleteWay == AthDeleteWay.None ? false : true;
                 bool isUpdate = athDesc.IsUpload;
-                if (isDel == true || isUpdate == true)
-                {
-                    if (this.WorkID != 0
-                        && DataType.IsNullOrEmpty(this.FK_Flow) == false
-                        && this.FK_Node != 0)
-                    {
-                        isDel = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
-                        if (isDel == false)
-                            isUpdate = false;
-                    }
-                }
+                //if (isDel == true || isUpdate == true)
+                //{
+                //    if (this.WorkID != 0
+                //        && DataType.IsNullOrEmpty(this.FK_Flow) == false
+                //        && this.FK_Node != 0)
+                //    {
+                //        isDel = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
+                //        if (isDel == false)
+                //            isUpdate = false;
+                //    }
+                //}
                 athDesc.IsUpload = isUpdate;
                 //athDesc.HisDeleteWay = AthDeleteWay.DelAll; 
                 #endregion 处理权限问题.
@@ -4270,10 +4270,13 @@ namespace BP.WF.HttpHandler
             #region 处理权限方案。
             if (this.FK_Node != 0)
             {
+                string fk_mapdata = this.FK_MapData;
+                if (this.FK_FrmAttachment.Contains("AthMDtl") == true)
+                    fk_mapdata = this.GetRequestVal("FFK_MapData");
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
-                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, fk_mapdata);
                     if (fn.FrmSln == FrmSln.Default)
                     {
                         if (fn.WhoIsPK == WhoIsPK.FID)
@@ -4299,8 +4302,16 @@ namespace BP.WF.HttpHandler
 
                     if (fn.FrmSln == FrmSln.Self)
                     {
-                        athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.NodeID;
-                        athDesc.RetrieveFromDBSources();
+                        if (this.FK_FrmAttachment.Contains("AthMDtl") == true)
+                        {
+                            athDesc.MyPK = this.FK_MapData + "_" + nd.NodeID +"_AthMDtl";
+                            athDesc.RetrieveFromDBSources();
+                        }
+                        else
+                        {
+                            athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.NodeID;
+                            athDesc.RetrieveFromDBSources();
+                        }
                         athDesc.MyPK = this.FK_FrmAttachment;
                         return athDesc;
                     }

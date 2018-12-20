@@ -166,6 +166,10 @@ namespace BP.WF.HttpHandler
         }
         public string Login_Init()
         {
+            //  修复字段.
+            BP.Sys.GroupField gf = new BP.Sys.GroupField();
+            gf.CheckPhysicsTable();
+
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);

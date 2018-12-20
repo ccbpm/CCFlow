@@ -1222,7 +1222,6 @@ namespace BP.WF
                         }
                         #endregion 排除正在审批的人员.
 
-
                         html += "<tr>";
                         html += " <td valign=middle >" + dr["NDFromT"] + "</td>";
 

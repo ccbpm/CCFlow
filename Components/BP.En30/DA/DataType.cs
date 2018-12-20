@@ -2054,6 +2054,17 @@ namespace BP.DA
             }
             return strs;
         }
+        /// <summary>
+        /// 根据序号生成Idx 的ABC
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        public static string GenerABC(int idx)
+        {
+            string strs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            char[] mystrs=strs.ToCharArray();
+            return mystrs[idx].ToString();
+        }
         public static string GenerBR(int spaceNum)
         {
             string strs = "";

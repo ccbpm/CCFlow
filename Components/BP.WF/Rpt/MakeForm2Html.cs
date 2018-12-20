@@ -66,7 +66,7 @@ namespace BP.WF
                             string dbFile = appPath + "DataUser/BPPaint/Def.png";
                             if (db != null)
                                 dbFile = db.Tag1;
-                            
+
                             break;
                         case FrmEle.iFrame: //输出框架.
                         //    string paras = this.RequestParas;
@@ -491,11 +491,11 @@ namespace BP.WF
                 switch (attr.LGType)
                 {
                     case FieldTypeS.Normal:  // 输出普通类型字段.
-                       text = en.GetValStrByKey(attr.KeyOfEn);
+                        text = en.GetValStrByKey(attr.KeyOfEn);
                         break;
                     case FieldTypeS.Enum:
                     case FieldTypeS.FK:
-                       text = en.GetValRefTextByKey(attr.KeyOfEn);
+                        text = en.GetValRefTextByKey(attr.KeyOfEn);
                         break;
                     default:
                         break;
@@ -530,7 +530,7 @@ namespace BP.WF
                         text = "[&#10004]";
                 }
 
-                 sb.Append(text);
+                sb.Append(text);
 
                 sb.Append("</span>");
                 sb.Append("</DIV>");
@@ -584,7 +584,7 @@ namespace BP.WF
                 string src = "";
                 if (dtl.HisEditModel == EditModel.TableModel)
                 {
-                    src = SystemConfig.CCFlowWebPath +  "WF/CCForm/Dtl.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
+                    src = SystemConfig.CCFlowWebPath + "WF/CCForm/Dtl.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
                 }
                 else
                 {
@@ -613,11 +613,11 @@ namespace BP.WF
                     #region 生成审核信息.
                     if (flowNo != null)
                     {
-                        string sql = "SELECT EmpFrom, EmpFromT,RDT,Msg,NDFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
+                        string sql = "SELECT EmpFrom, EmpFromT,RDT,Msg,NDFrom,NDFromT FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
                         //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
-                        sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID="+workid;
+                        sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + workid;
                         DataTable dtOfTodo = DBAccess.RunSQLReturnTable(sql);
 
                         foreach (DataRow dr in dt.Rows)
@@ -941,7 +941,7 @@ namespace BP.WF
                         // utf.GetChars(
 
                         //线性展示并且colspan=3
-                        if (attr.ColSpan == 3 || (attr.ColSpan==4 && attr.UIHeightInt < 30))
+                        if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeightInt < 30))
                         {
                             isDropTR = true;
                             html += " <tr>";
@@ -991,7 +991,7 @@ namespace BP.WF
                     continue;
                 }
                 #endregion 输出字段.
-                
+
                 #region 如果是从表.
                 if (gf.CtrlType == "Dtl")
                 {
@@ -1054,7 +1054,7 @@ namespace BP.WF
                     sb.Append(" </tr>");
                 }
                 #endregion 如果是从表.
-                
+
                 #region 如果是附件.
                 if (gf.CtrlType == "Ath")
                 {
@@ -1102,7 +1102,7 @@ namespace BP.WF
                                         }
 
                                         //把文件copy到,
-                                      
+
                                         string file = item.GenerTempFile(ath.AthSaveWay);
                                         //获取文件是否加密
                                         bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
@@ -1147,7 +1147,7 @@ namespace BP.WF
 
                                             //把文件copy到,
                                             System.IO.File.Copy(fileTempDecryPath, fileTo, true);
-                                            
+
                                         }
 
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
@@ -1282,7 +1282,7 @@ namespace BP.WF
         public static string ZipFilePath = "";
 
         public static string CCFlowAppPath = "/";
-        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null, bool urlIsHostUrl=false)
+        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null, bool urlIsHostUrl = false)
         {
             try
             {
@@ -1327,10 +1327,10 @@ namespace BP.WF
 
                 #region 生成二维码.
                 /*说明是图片文件.*/
-               string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
+                string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
                 string billUrl = SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
 
-                string qrUrl = SystemConfig.HostURL + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo="+flowNo;
+                string qrUrl = SystemConfig.HostURL + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo=" + flowNo;
                 if (flowNo != null)
                 {
                     gwf = new GenerWorkFlow(workid);
@@ -1377,7 +1377,7 @@ namespace BP.WF
 
                 //生成 表单的 html.
                 StringBuilder sb = new System.Text.StringBuilder();
-              
+
                 #region 替换模版文件..
 
                 //首先判断是否有约定的文件.
@@ -1415,9 +1415,9 @@ namespace BP.WF
                 docs = docs.Replace("@Docs", sb.ToString());
                 docs = docs.Replace("@Width", mapData.FrmW.ToString());
                 docs = docs.Replace("@Height", mapData.FrmH.ToString());
-                docs = docs.Replace("@PrintDT", DateTime.Now.ToString("yyyy年MM月dd日HH时mm分ss秒") );
+                docs = docs.Replace("@PrintDT", DateTime.Now.ToString("yyyy年MM月dd日HH时mm分ss秒"));
 
-                if (flowNo != null )
+                if (flowNo != null)
                 {
                     gwf.WorkID = workid;
                     gwf.RetrieveFromDBSources();
@@ -1426,7 +1426,7 @@ namespace BP.WF
 
                     if (gwf.WFState == WFState.Runing)
                     {
-                        if ( SystemConfig.CustomerNo=="TianYe" && gwf.NodeName.Contains("反馈") == true)
+                        if (SystemConfig.CustomerNo == "TianYe" && gwf.NodeName.Contains("反馈") == true)
                         {
                             Node nd = new Node(gwf.FK_Node);
                             if (nd.IsEndNode == true)

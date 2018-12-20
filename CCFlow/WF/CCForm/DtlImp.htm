@@ -586,7 +586,7 @@
                 var newdata = handler.DoMethodReturnString("DtlImpBySQl_Imp");
                 if (newdata.indexOf("err@") != 0 && newdata != "") {
                     //FK_MapData,附件属性，RefPK,FK_Node
-                    afterDtlImp(EnsName, frmAth, newdata, FK_Node,data["OID"],data["FK_MapData"]);
+                    afterDtlImp(EnsName, frmAth, newdata, FK_Node, data["OID"], data["oldFK_MapData"]);
                 }
             });
             

@@ -474,8 +474,12 @@
                         var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
                         if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
                             html += "<td></td>";
-                        else
-                            html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                        else {
+                            if (athDesc.IsUpload == true && IsReadonly != "1")
+                                html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                            else
+                                html += "<td></td>";
+                        }
                     }
                     html += "</tr>";
                 }

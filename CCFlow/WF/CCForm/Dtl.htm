@@ -201,12 +201,13 @@
             var dtlName = GetQueryString("EnsName");
             var fk_node = GetQueryString("FK_Node");
             var fk_flow = GetQueryString("FK_Flow");
+            var FFK_MapData = GetQueryString("FK_MapData");
 
             var parentUrl = parent.location.href;
-            var url = "CCForm/Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow;
+            var url = "CCForm/Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&FFK_MapData=" + FFK_MapData;
             var AthNum = 0;
             if (parentUrl.indexOf("CCForm") != -1) {
-                url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow;
+                url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&FFK_MapData=" + FFK_MapData;
                 WinOpen(url);
             } else {
             parent.OpenEasyUiDialog(url, 'DtlAthIFrame', '附件上传', 800, 500, "icon-property", false, null, null, null,  function () {

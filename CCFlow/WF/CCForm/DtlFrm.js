@@ -332,7 +332,7 @@ function Save(isSaveAndNew) {
         type: 'post',
         async: true,
         data: getFormData(true, true),
-        url: Handler + "?DoType=FrmGener_Save&EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=" + GetQueryString("OID"),
+        url: Handler + "?DoType=FrmGener_Save&IsForDtl=1&EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=" + GetQueryString("OID"),
         dataType: 'html',
         success: function (data) {
 

@@ -1688,14 +1688,13 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 调用事件.  @李国文.
 
-
-
                 if (i == 0)
                     en.Insert();
                 else
                     en.Update();
 
-                 if (this.GetRequestValInt("IsForDtl") == 1)
+                #region 调用事件.
+                if (this.GetRequestValInt("IsForDtl") == 1)
                 {
                     #region 从表保存前处理事件.
                     //获得主表事件.

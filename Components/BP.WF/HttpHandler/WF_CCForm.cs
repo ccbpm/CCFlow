@@ -1653,15 +1653,81 @@ namespace BP.WF.HttpHandler
                 // 处理表单保存前事件.
                 MapData md = new MapData(this.EnsName);
 
-                md.DoEvent(FrmEventList.SaveBefore, en);
+                #region 调用事件.  @李国文.
+                //是不是从表的保存.
+                if (this.GetRequestValInt("IsForDtl") == 1)
+                {
+                    #region 从表保存前处理事件.
+                    //获得主表事件.
+                    FrmEvents fes = new FrmEvents(this.EnName); //获得事件.
+                    GEEntity mainEn = null;
+                    if (fes.Count > 0)
+                    {
+                        string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, en);
+                        if (DataType.IsNullOrEmpty(msg) == false)
+                            return "err@" + msg;
+                    }
+
+                    MapDtl mdtl = new MapDtl(this.EnName);
+
+                    if (mdtl.FEBD.Length != 0)
+                    {
+                        string str = mdtl.FEBD;
+                        BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+
+                        febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                        febd.HisEnDtl = en;
+
+                        febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, en, null);
+                    }
+                    #endregion 从表保存前处理事件.
+                }
+                else
+                {
+                    md.DoEvent(FrmEventList.SaveBefore, en);
+                }
+                #endregion 调用事件.  @李国文.
+
+
 
                 if (i == 0)
                     en.Insert();
                 else
                     en.Update();
 
-                //处理保存后事件.
-                md.DoEvent(FrmEventList.SaveAfter, en);
+                 if (this.GetRequestValInt("IsForDtl") == 1)
+                {
+                    #region 从表保存前处理事件.
+                    //获得主表事件.
+                    FrmEvents fes = new FrmEvents(this.EnName); //获得事件.
+                    GEEntity mainEn = null;
+                    if (fes.Count > 0)
+                    {
+                        string msg = fes.DoEventNode(EventListDtlList.DtlItemSaveAfter, en);
+                        if (DataType.IsNullOrEmpty(msg) == false)
+                            return "err@" + msg;
+                    }
+
+                    MapDtl mdtl = new MapDtl(this.EnName);
+
+                    if (mdtl.FEBD.Length != 0)
+                    {
+                        string str = mdtl.FEBD;
+                        BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+
+                        febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                        febd.HisEnDtl = en;
+
+                        febd.DoIt(FrmEventListDtl.RowSaveAfter, febd.HisEn, en, null);
+                    }
+                    #endregion 从表保存前处理事件.
+                }
+                else
+                {
+                    md.DoEvent(FrmEventList.SaveAfter, en);
+                }
+                #endregion 调用事件.  @李国文.
+
                 return "保存成功.";
             }
             catch (Exception ex)
@@ -3234,15 +3300,15 @@ namespace BP.WF.HttpHandler
 
                 }
                 #endregion 保存到数据库.
-                
+
             }
-				//需要判断是否存在AthNum字段 @袁丽娜
-                if (en.Row["AthNum"] != null)
-                {
-                    int athNum = int.Parse(en.Row["AthNum"].ToString());
-                    en.Row["AthNum"] = athNum + 1;
-                    en.Update();
-                }
+            //需要判断是否存在AthNum字段 @袁丽娜
+            if (en.Row["AthNum"] != null)
+            {
+                int athNum = int.Parse(en.Row["AthNum"].ToString());
+                en.Row["AthNum"] = athNum + 1;
+                en.Update();
+            }
             return "上传成功.";
         }
 
@@ -3431,7 +3497,8 @@ namespace BP.WF.HttpHandler
 
             //判断是否重复导入
             bool isInsert = true;
-            if (DataType.IsNullOrEmpty(pk) == false){
+            if (DataType.IsNullOrEmpty(pk) == false)
+            {
                 string[] pks = pk.Split('@');
                 int idx = 0;
                 foreach (string k in pks)
@@ -3468,7 +3535,7 @@ namespace BP.WF.HttpHandler
                         qo.AddWhere("FID", fid);
                         break;
                 }
-                
+
                 int count = qo.GetCount();
                 if (count > 0)
                     isInsert = false;
@@ -3476,7 +3543,7 @@ namespace BP.WF.HttpHandler
             //导入数据
             if (isInsert == true)
             {
-               
+
                 GEDtl dtlEn = dtls.GetNewEntity as GEDtl;
                 //遍历属性，循环赋值.
                 foreach (Attr attr in dtlEn.EnMap.Attrs)
@@ -4304,7 +4371,7 @@ namespace BP.WF.HttpHandler
                     {
                         if (this.FK_FrmAttachment.Contains("AthMDtl") == true)
                         {
-                            athDesc.MyPK = this.FK_MapData + "_" + nd.NodeID +"_AthMDtl";
+                            athDesc.MyPK = this.FK_MapData + "_" + nd.NodeID + "_AthMDtl";
                             athDesc.RetrieveFromDBSources();
                         }
                         else

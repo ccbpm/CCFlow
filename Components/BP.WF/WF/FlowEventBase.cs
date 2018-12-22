@@ -192,6 +192,16 @@ namespace BP.WF
                 return this.GetValStr("PrjName");
             }
         }
+        /// <summary>
+        /// 流程标题
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.GetValStr( BP.WF.Data.NDXRptBaseAttr.Title);
+            }
+        }
         #endregion 常用属性.
 
         #region 获取参数方法

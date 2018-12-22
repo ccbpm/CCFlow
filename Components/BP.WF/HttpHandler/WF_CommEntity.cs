@@ -339,6 +339,26 @@ namespace BP.WF.HttpHandler
 
                 //附件类型.
                 md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType);
+               
+
+                //多附件上传
+                if((int)map.HisBPEntityAthType == 2){
+                    //增加附件分类
+                    DataTable attrFiles = new DataTable("AttrFiles");
+                    attrFiles.Columns.Add("FileNo");
+                    attrFiles.Columns.Add("FileName");
+                    foreach(AttrFile attrFile in map.HisAttrFiles){
+                        DataRow dr = attrFiles.NewRow();
+                        dr["FileNo"] = attrFile.FileNo;
+                        dr["FileName"] = attrFile.FileName;
+                        attrFiles.Rows.Add(dr);
+                    }
+                    ds.Tables.Add(attrFiles);
+
+                    //增加附件列表
+                    SysFileManagers sfs = new SysFileManagers(en.ToString(), en.PKVal.ToString());
+                    ds.Tables.Add(sfs.ToDataTableField("Sys_FileManager"));
+                }
 
                 #region 加入权限信息.
                 //把权限加入参数里面.
@@ -602,6 +622,36 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
+        }
+        /// <summary>
+        /// 删除实体多附件上传的信息
+        /// </summary>
+        /// <returns></returns>
+        public string EntityMultiFile_Delete()
+        {
+            int oid = this.OID;
+            SysFileManager fileManager = new SysFileManager(OID);
+            //获取上传的附件路径，删除附件
+            string filepath = fileManager.MyFilePath;
+            if (SystemConfig.IsUploadFileToFTP == false)
+            {
+                if (System.IO.File.Exists(filepath) == true)
+                    System.IO.File.Delete(filepath);
+            }
+            else
+            {
+                /*保存到fpt服务器上.*/
+                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+                if (ftpconn == null)
+                    return "err@FTP服务器连接失败";
+
+                 if (ftpconn.FileExist(filepath) == true)
+                     ftpconn.DeleteFile(filepath);
+            }
+            fileManager.Delete();
+            return fileManager.MyFileName + "删除成功";
         }
         /// <summary>
         /// 实体初始化

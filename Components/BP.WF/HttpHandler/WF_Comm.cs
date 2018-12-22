@@ -2648,7 +2648,7 @@ namespace BP.WF.HttpHandler
             string filepath = "";
 
             //如果是天业集团则保存在ftp服务器上
-            if (SystemConfig.CustomerNo.Equals("TianYe"))
+            if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
             {
                 string guid = DBAccess.GenerGUID();
 
@@ -2699,7 +2699,7 @@ namespace BP.WF.HttpHandler
             else
             {
 
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName;
+                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName + this.PKVal;
 
                 if (System.IO.Directory.Exists(savePath) == false)
                     System.IO.Directory.CreateDirectory(savePath);
@@ -2718,8 +2718,6 @@ namespace BP.WF.HttpHandler
                         File.Delete(k.FullName);      //删除指定文件
                     }
                 }                
-                //DirectoryInfo subdir = new DirectoryInfo(savePath);
-                //subdir.Delete(true);
 
                 filepath = savePath + "\\" + fileName + ext;
                 //存在文件则删除
@@ -2758,6 +2756,124 @@ namespace BP.WF.HttpHandler
             return "文件保存成功";
         }
 
+
+        public string EntityMultiAth_Upload()
+        {
+            HttpFileCollection files = context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的文件。";
+            //获取保存文件信息的实体
+
+            string enName = this.EnName;
+            Entity en = null;
+
+            //是否是空白记录.
+            bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
+            if (isBlank == true)
+                return "err@请先保存实体信息然后再上传文件";
+            else
+                en = ClassFactory.GetEn(this.EnName);
+
+            if (en == null)
+                return "err@参数类名不正确.";
+            en.PKVal = this.PKVal;
+            int i = en.RetrieveFromDBSources();
+            if (i == 0)
+                return "err@数据[" + this.EnName + "]主键为[" + en.PKVal + "]不存在，或者没有保存。";
+
+            //获取文件的名称
+            string fileName = files[0].FileName;
+            if (fileName.IndexOf("\\") >= 0)
+                fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+            fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
+            //文件后缀
+            string ext = System.IO.Path.GetExtension(files[0].FileName);
+
+            //文件大小
+            float size = files[0].ContentLength / 1024;
+
+            //保存位置
+            string filepath = "";
+
+            //如果是天业集团则保存在ftp服务器上
+            if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
+            {
+                string guid = DBAccess.GenerGUID();
+
+                //把文件临时保存到一个位置.
+                string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
+                try
+                {
+                    files[0].SaveAs(temp);
+                }
+                catch (Exception ex)
+                {
+                    System.IO.File.Delete(temp);
+                    files[0].SaveAs(temp);
+                }
+
+                /*保存到fpt服务器上.*/
+                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+                if (ftpconn == null)
+                    return "err@FTP服务器连接失败";
+
+                string ny = DateTime.Now.ToString("yyyy_MM");
+
+                //判断目录年月是否存在.
+                if (ftpconn.DirectoryExist(ny) == false)
+                    ftpconn.CreateDirectory(ny);
+                ftpconn.SetCurrentDirectory(ny);
+
+                //判断目录是否存在.
+                if (ftpconn.DirectoryExist("Helper") == false)
+                    ftpconn.CreateDirectory("Helper");
+
+                //设置当前目录，为操作的目录。
+                ftpconn.SetCurrentDirectory("Helper");
+
+                //把文件放上去.
+                ftpconn.PutFile(temp, guid + ext);
+                ftpconn.Close();
+
+                //删除临时文件
+                System.IO.File.Delete(temp);
+
+                //设置路径.
+                filepath = ny + "//Helper//" + guid + ext;
+
+            }
+            else
+            {
+
+                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName+this.PKVal;
+
+                if (System.IO.Directory.Exists(savePath) == false)
+                    System.IO.Directory.CreateDirectory(savePath);
+                filepath = savePath + "\\" + fileName + ext;
+                //存在文件则删除
+                if (System.IO.Directory.Exists(filepath) == true)
+                    System.IO.Directory.Delete(filepath);
+
+                FileInfo info = new FileInfo(filepath);
+
+                files[0].SaveAs(filepath);
+            }
+            //保存上传的文件
+            SysFileManager fileManager = new SysFileManager();
+            fileManager.AttrFileNo = this.GetRequestVal("FileNo");
+            fileManager.AttrFileName = HttpUtility.UrlDecode(this.GetRequestVal("FileName"), System.Text.Encoding.UTF8);
+            fileManager.EnName = this.EnName;
+            fileManager.RefVal = this.PKVal;
+            fileManager.MyFileName = fileName;
+            fileManager.MyFilePath = filepath;
+            fileManager.MyFileExt = ext;
+            fileManager.MyFileSize = size;
+            fileManager.WebPath = filepath;
+            fileManager.Insert();
+            return fileManager.ToJson();
+        }
         #region 分组统计.
         /// <summary>
         /// 获得分组统计的查询条件.

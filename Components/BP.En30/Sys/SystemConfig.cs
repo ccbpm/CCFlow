@@ -170,6 +170,24 @@ namespace BP.Sys
                 return false;
             }
         }
+        /// <summary>
+        /// 附件上传位置
+        /// </summary>
+        public static bool IsUploadFileToFTP
+        {
+            get
+            {
+                string IsUploadFileToFTP = SystemConfig.AppSettings["IsUploadFileToFTP"];
+
+                if (DataType.IsNullOrEmpty(IsUploadFileToFTP) == true)
+                    return false;
+
+                if (SystemConfig.AppSettings["IsUploadFileToFTP"].Equals("1"))
+                    return true;
+                return false;
+            }
+        }
+
         public static string AttachWebSite
         {
             get

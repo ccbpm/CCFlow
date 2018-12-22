@@ -234,6 +234,14 @@ namespace CCFlow.WF.CCForm
                 this.WinClose();
                 return;
             }
+            else if (this.DoType == "EntityMutliFile_Load")
+            {
+                EntityMutliFile_Load(sender, e);
+
+                this.WinClose();
+                return;
+
+            }
            
         }
 
@@ -249,7 +257,7 @@ namespace CCFlow.WF.CCForm
             if (i == 0)
                 return ;
             //获取使用的客户 TianYe集团保存在FTP服务器上
-            if (SystemConfig.CustomerNo.Equals("TianYe"))
+            if (SystemConfig.CustomerNo.Equals("TianYe") ||SystemConfig.IsUploadFileToFTP == true)
             {
                 string filePath = (string)en.GetValByKey("MyFilePath");
                 string fileName = (string)en.GetValByKey("MyFileName");
@@ -285,6 +293,59 @@ namespace CCFlow.WF.CCForm
                 HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
 
                 HttpContext.Current.Response.WriteFile((string)en.GetValByKey("MyFilePath"));
+                HttpContext.Current.Response.End();
+                HttpContext.Current.Response.Close();
+            }
+        }
+
+        //实体文件下载
+        protected void EntityMutliFile_Load(object sender, EventArgs e)
+        {
+            string oid = this.Request.QueryString["OID"];
+            //根据SysFileManager的OID获取对应的实体
+            SysFileManager fileManager = new SysFileManager();
+            fileManager.PKVal = oid;
+            int i = fileManager.RetrieveFromDBSources();
+            if (i == 0)
+                throw new Exception("没有找到OID=" + oid + "的文件管理数据，请联系管理员");
+           
+            //获取使用的客户 TianYe集团保存在FTP服务器上
+            if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
+            {
+                string filePath = fileManager.MyFilePath;
+                string fileName = fileManager.MyFileName;
+                //临时存储位置
+                string tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + fileManager.MyFileExt;
+                try
+                {
+                    if (System.IO.File.Exists(tempFile) == true)
+                        System.IO.File.Delete(tempFile);
+                }
+                catch
+                {
+                    //  tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
+                }
+
+                //连接FTP服务器
+                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
+                conn.Close();
+
+                PubClass.DownloadFile(tempFile, fileName);
+                //删除临时文件
+                System.IO.File.Delete(tempFile);
+            }
+            else
+            {
+                HttpContext.Current.Response.Charset = "GB2312";
+                string fileName = HttpUtility.UrlEncode(fileManager.MyFileName);
+                string fileExt = HttpUtility.UrlEncode(fileManager.MyFileExt);
+                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName + fileExt);
+                HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
+                HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
+
+                HttpContext.Current.Response.WriteFile(fileManager.MyFilePath);
                 HttpContext.Current.Response.End();
                 HttpContext.Current.Response.Close();
             }

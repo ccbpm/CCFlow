@@ -190,7 +190,7 @@ namespace BP.Sys
         {
             get
             {
-                return BP.Sys.SystemConfig.PathOfUsersFiles + this.GetValStringByKey(SysFileManagerAttr.MyFilePath);
+                return  this.GetValStringByKey(SysFileManagerAttr.MyFilePath);
             }
             set
             {
@@ -303,6 +303,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
            this.Rec = BP.Web.WebUser.No;
+           this.RDT = DataType.CurrentDataTime;
             return base.beforeInsert();
         }
         protected override bool beforeDelete()

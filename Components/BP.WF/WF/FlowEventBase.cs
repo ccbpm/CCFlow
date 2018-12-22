@@ -172,6 +172,26 @@ namespace BP.WF
                 return this.GetValStr("Nos");
             }
         }
+        /// <summary>
+        /// 项目编号
+        /// </summary>
+        public string PrjNo
+        {
+            get
+            {
+                return this.GetValStr("PrjNo");
+            }
+        }
+        /// <summary>
+        /// 项目名称
+        /// </summary>
+        public string PrjName
+        {
+            get
+            {
+                return this.GetValStr("PrjName");
+            }
+        }
         #endregion 常用属性.
 
         #region 获取参数方法

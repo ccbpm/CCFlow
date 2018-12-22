@@ -75,6 +75,14 @@ namespace BP.En
         public RefMethod()
         {
         }
+       /// <summary>
+        /// 相关功能
+       /// </summary>
+       /// <param name="groupName"></param>
+        public RefMethod(string groupName)
+        {
+            this.GroupName = groupName;
+        }
         /// <summary>
         /// 参数
         /// </summary>

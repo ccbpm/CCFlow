@@ -2607,7 +2607,7 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.PTable, null, "物理表", false, false, 0, 100, 10);
 
                 map.AddTBString(NodeAttr.ShowSheets, null, "显示的表单", false, false, 0, 100, 10);
-                map.AddTBString(NodeAttr.GroupStaNDs, null, "岗位分组节点", false, false, 0, 100, 10);
+                map.AddTBString(NodeAttr.GroupStaNDs, null, "岗位分组节点", false, false, 0, 500, 10);
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);
 

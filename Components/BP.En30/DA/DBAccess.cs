@@ -3273,16 +3273,7 @@ namespace BP.DA
                     throw new Exception("@没有判断的数据库类型");
             }
             if (dt.Rows.Count == 0)
-            {
-
-#warning 不应该出现的异常 2011-12-03
-                string cols = "";
-                foreach (DataColumn dc in dt.Columns)
-                    cols += " , " + dc.ColumnName;
-
-               // BP.DA.Log.DebugWriteInfo("@SQL=" + sql + " . 列=" + cols);
                 return null;
-            }
             return dt.Rows[0][0];
         }
         #endregion

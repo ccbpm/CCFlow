@@ -206,7 +206,7 @@
 			}
 
 			/* 打开表单. */
-			function OpenFrm(workid, nodeID, flowNo) {
+			function OpenFrm(workid, nodeID, flowNo,fid) {
 
 			    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
 			    handler.AddUrlData();
@@ -214,6 +214,7 @@
 			    handler.AddPara("WorkID", workid);
 			    handler.AddPara("FK_Node", nodeID);
 			    handler.AddPara("FK_Flow", flowNo);
+			    handler.AddPara("FID", fid);
 			    var data = handler.DoMethodReturnString("Runing_OpenFrm");
 
 			    if (data.indexOf('err@') == 0) {
@@ -384,7 +385,7 @@
 			            is1 = true;
 			        }
 			        listbox += "<td>" + num + "</td>";
-			        listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "')\" >" + work.Title + "</a></td>";
+			        listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','"+work.FID+"')\" >" + work.Title + "</a></td>";
 			        listbox += "<td>" + work.StarterName + "</td>";
 			        listbox += "<td>" + work.DeptName + "</td>";
 			        listbox += "<td>" + work.NodeName + "</td>";
@@ -397,7 +398,7 @@
 
 			        listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
 			        listbox += "<td>";
-			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\">撤销</a>";
+			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node +"&FID="+work.FID+ "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\">撤销</a>";
 			        listbox += "</td>";
 			        listbox += "</tr>";
 			    }

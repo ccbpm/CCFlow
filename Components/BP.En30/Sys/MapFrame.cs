@@ -91,6 +91,34 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// EleID
+        /// </summary>
+        public string FrmID
+        {
+            get
+            {
+                return this.GetValStrByKey(MapFrameAttr.FrmID);
+            }
+            set
+            {
+                this.SetValByKey(MapFrameAttr.FrmID, value);
+            }
+        }
+        /// <summary>
+        /// EleType
+        /// </summary>
+        public string EleType
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmEleAttr.EleType);
+            }
+            set
+            {
+                this.SetValByKey(FrmEleAttr.EleType, value);
+            }
+        }
+        /// <summary>
         /// 连接
         /// </summary>
         public string URL
@@ -107,14 +135,36 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.URL, value);
             }
         }
-        /// <summary>
-        /// 高度
-        /// </summary>
-        public string H
+        public float X
         {
             get
             {
-                return  this.GetValStrByKey(MapFrameAttr.H, "700px");
+                return this.GetValFloatByKey(FrmEleAttr.X);
+            }
+            set
+            {
+                this.SetValByKey(FrmEleAttr.X, value);
+            }
+        }
+        public float Y
+        {
+            get
+            {
+                return this.GetValFloatByKey(FrmEleAttr.Y);
+            }
+            set
+            {
+                this.SetValByKey(FrmEleAttr.Y, value);
+            }
+        }
+        /// <summary>
+        /// 高度
+        /// </summary>
+        public float H
+        {
+            get
+            {
+                return this.GetValFloatByKey(MapFrameAttr.H, 700);
                  
             }
             set
@@ -125,11 +175,11 @@ namespace BP.Sys
         /// <summary>
         /// 宽度
         /// </summary>
-        public string W
+        public float W
         {
             get
             {
-                return this.GetValStrByKey(MapFrameAttr.W, "100%");
+                return this.GetValFloatByKey(MapFrameAttr.W);
             }
             set
             {
@@ -149,17 +199,7 @@ namespace BP.Sys
             }
         }
 
-        //public int GroupID
-        //{
-        //    get
-        //    {
-        //        return this.GetValIntByKey(MapFrameAttr.GroupID);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(MapFrameAttr.GroupID, value);
-        //    }
-        //}
+      
        
         #endregion
 
@@ -198,11 +238,11 @@ namespace BP.Sys
                 map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20,true);
                 map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
 
-                map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
-                map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
+                map.AddTBFloat(FrmEleAttr.X, 5, "X", true, false);
+                map.AddTBFloat(FrmEleAttr.Y, 5, "Y", false, false);
 
-                map.AddTBString(FrmEleAttr.W, null, "宽度", true, false, 0, 20, 20);
-                map.AddTBString(FrmEleAttr.H, null, "高度", true, false, 0, 20, 20);
+                map.AddTBFloat(FrmEleAttr.H, 20, "H", true, false);
+                map.AddTBFloat(FrmEleAttr.W, 20, "W", false, false);
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
 

@@ -337,8 +337,8 @@ function showFigurePropertyWin(figure) {
     if (shap == 'iFrame') {
 
 
-        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&PKVal=' + CCForm_FK_MapData + "_iFrame_" + figure.CCForm_MyPK;
-        CCForm_ShowDialog(url, '框架', 500, 200);
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapFrameExt&PKVal='+figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '框架');
         return;
     }
 
@@ -770,6 +770,14 @@ function Conver_CCForm_V1ToV2() {
         if (createdFigure != undefined) {
             STACK.figureAdd(createdFigure);
         }
+    }
+
+    //循环MapFrame
+    for (var i in flow_Data.Sys_MapFrame) {
+        var mapFrame = flow_Data.Sys_MapFrame[i];
+        var createdFigure = figure_Template_MapFrame(mapFrame); 
+        createdFigure.style.lineWidth = defaultLineWidth;
+        STACK.figureAdd(createdFigure);
     }
     redraw = true;
     draw();
@@ -1343,6 +1351,50 @@ function figure_Template_Dtl(frmDtl) {
     f.finalise();
     return f;
 }
+
+//初始化框架
+function figure_Template_MapFrame(mapFrame) {
+    var f = new Figure("MapFrame");
+    //ccform Property
+    f.CCForm_Shape = "iFrame";
+    f.name = "TextBox";
+
+    f.CCForm_MyPK = mapFrame.MyPK;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+
+
+
+    f.properties.push(new BuilderProperty('控件属性-FrmEle', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
+        var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
+        var propertyVale = mapFrame[property.proName];
+
+        if (propertyVale == undefined) {
+            propertyVale = property.DefVal;
+        }
+
+        if (property.proName == "Set") {
+            propertyVale = propertyVale.replace("@FrmID@", mapFrame.FK_MapData);
+            propertyVale = propertyVale.replace("@KeyOfEn@", mapFrame.MyPK);
+        }
+
+        f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
+    }
+
+    //Image
+    var url = figureSetsURL + "/DataView/Dtl.png";
+    var x = parseFloat(mapFrame.X) + parseFloat(mapFrame.W / 2);
+    var y = parseFloat(mapFrame.Y) + parseFloat(mapFrame.H / 2);
+    var ifig = new ImageFrame(url, x, y, true, mapFrame.W, mapFrame.H);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+
+    f.finalise();
+    return f;
+}
+
 
 //初始化轨迹图 审核组件 子流程 子线程
 function figure_Template_FigureCom(figureCom) {

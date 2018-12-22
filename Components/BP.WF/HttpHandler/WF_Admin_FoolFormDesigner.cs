@@ -771,8 +771,8 @@ namespace BP.WF.HttpHandler
             if (this.MyPK == null)
             {
                 mf.URL = "http://ccflow.org";
-                mf.W = "100%";
-                mf.H = "300";
+                mf.W = 400;
+                mf.H = 300;
                 mf.Name = "我的框架.";
                 mf.FK_MapData = this.FK_MapData;
                 mf.MyPK = BP.DA.DBAccess.GenerGUID();

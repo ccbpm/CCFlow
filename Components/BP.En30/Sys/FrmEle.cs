@@ -744,6 +744,33 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 权限问题
+        /// <summary>
+        /// 实体的权限控制
+        /// </summary>
+        public override UAC HisUAC
+        {
+            get
+            {
+
+                UAC uac = new UAC();
+                if (BP.Web.WebUser.No == "admin")
+                {
+                    uac.IsDelete = true;
+                    uac.IsUpdate = true;
+                    uac.IsInsert = false;
+                    uac.IsView = true;
+                }
+                else
+                {
+                    uac.IsView = true;
+                }
+                uac.IsImp = true;
+                return uac;
+            }
+        }
+        #endregion 权限问题
+
         #region 构造方法
         /// <summary>
         /// 表单元素扩展
@@ -792,7 +819,7 @@ namespace BP.Sys
                 #endregion 位置其他.
 
                 #region 参数.
-                map.AddTBString(FrmEleAttr.Tag1, null, "Tag1", true, false, 0, 50, 20);
+                map.AddTBString(FrmEleAttr.Tag1, null, "链接URL", true, false, 0, 50, 20);
                 map.AddTBString(FrmEleAttr.Tag2, null, "Tag2", true, false, 0, 50, 20);
                 map.AddTBString(FrmEleAttr.Tag3, null, "Tag3", true, false, 0, 50, 20);
                 map.AddTBString(FrmEleAttr.Tag4, null, "Tag4", true, false, 0, 50, 20);

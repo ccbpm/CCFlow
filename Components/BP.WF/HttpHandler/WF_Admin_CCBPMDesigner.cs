@@ -894,8 +894,8 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
-            FrmTrees fts = new FrmTrees();
-            fts.RetrieveAll();
+            //FrmTrees fts = new FrmTrees();
+            //fts.RetrieveAll();
 
 
             //获得表单数据.

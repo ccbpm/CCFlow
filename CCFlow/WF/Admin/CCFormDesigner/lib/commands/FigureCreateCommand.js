@@ -694,8 +694,11 @@ TransFormDataField.prototype = {
         //把主键给他.
         if (this.dataArrary.KeyOfEn != null)
             createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
-        if (this.dataArrary.No != null)
+        if (this.dataArrary.No != null && createdFigure.CCForm_Shape != "iFrame")
             createdFigure.CCForm_MyPK = this.dataArrary.No;
+        if(createdFigure.CCForm_Shape == "iFrame")
+            createdFigure.CCForm_MyPK =CCForm_FK_MapData+"_"+this.dataArrary.No;
+
         //添加到Figures
         //add to STACK
         STACK.figureAdd(createdFigure);

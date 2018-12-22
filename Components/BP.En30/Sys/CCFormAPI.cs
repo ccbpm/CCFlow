@@ -68,20 +68,20 @@ namespace BP.Sys
                     break;
 
                 case "iFrame": //框架.
-                     fe = new FrmEle();
-                    fe.MyPK = fk_mapdata + "_" + no;
-                    if (fe.RetrieveFromDBSources() != 0)
+                    MapFrame mapFrame = new MapFrame();
+                    mapFrame.MyPK = fk_mapdata + "_" + no;
+                    if (mapFrame.RetrieveFromDBSources() != 0)
                         throw new Exception("@创建失败，已经有同名元素[" + no + "]的控件.");
-                    fe.FK_MapData = fk_mapdata;
-                    fe.EleType = "iFrame";
-                    fe.EleName = name;
-                    fe.EleID = no;
-                    fe.Tag1 = "http://ccflow.org";
-                    fe.X = x;
-                    fe.Y = y;
-                    fe.W = 400;
-                    fe.H = 600;
-                    fe.Insert();
+                    mapFrame.FK_MapData = fk_mapdata;
+                    mapFrame.EleType = "iFrame";
+                    mapFrame.Name = name;
+                    mapFrame.FrmID = no;
+                    mapFrame.URL = "http://ccflow.org";
+                    mapFrame.X = x;
+                    mapFrame.Y = y;
+                    mapFrame.W = 400;
+                    mapFrame.H = 600;
+                    mapFrame.Insert();
                     break;
                     //@袁丽娜
                 case "HandSiganture"://签字版

@@ -269,14 +269,7 @@ namespace BP.WF.Port
 
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "增加管理机构";
-                //  rm.GroupName = "高级设置";
-                rm.HisAttrs.AddTBString("FrmID", null, "管理员编号ID", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoAddAdminer";
-                rm.Icon = "../../WF/Img/Btn/Copy.GIF";
-                map.AddRefMethod(rm);
-
-
+  
                 rm = new RefMethod();
                 rm.Title = "增加管理员";
                 rm.HisAttrs.AddTBString("emp", null, "管理员帐号", true, false, 0, 100, 100);

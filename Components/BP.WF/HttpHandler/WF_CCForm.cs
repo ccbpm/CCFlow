@@ -1084,7 +1084,7 @@ namespace BP.WF.HttpHandler
             //节点与表单的权限控制.
             FrmNode fn = null;
 
-            //定义节点变量.
+            //定义节点变量. @袁丽娜 
             Node nd = null;
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
@@ -1128,7 +1128,7 @@ namespace BP.WF.HttpHandler
                 if (pk == 0)
                     pk = this.WorkID;
 
-                //是否启用装载填充？
+                //是否启用装载填充？ @袁丽娜,
                 bool isLoadData = true;
 
                 if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
@@ -4336,6 +4336,10 @@ namespace BP.WF.HttpHandler
                 string fk_mapdata = this.FK_MapData;
                 if (this.FK_FrmAttachment.Contains("AthMDtl") == true)
                     fk_mapdata = this.GetRequestVal("FFK_MapData");
+
+                if (string.IsNullOrWhiteSpace(fk_mapdata))
+                    fk_mapdata = this.GetRequestVal("FK_MapData");
+
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {

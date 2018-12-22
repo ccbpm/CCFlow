@@ -1841,15 +1841,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Dtl_SaveRow()
         {
-            //if (this.RefPKVal == "0" || this.RefPKVal == "")
-            //    return "err@从表保存[Dtl_SaveRow],失败没有接收到refpk的值";
-
             //从表.
             string fk_mapDtl = this.FK_MapDtl;
             MapDtl mdtl = new MapDtl(fk_mapDtl);
 
-            #region 处理权限方案。 @袁丽娜
-            if (this.FK_Node != 0)
+            #region 处理权限方案。
+            if (this.FK_Node != 0 && this.getFK_Node() != 999999)
             {
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
@@ -1887,7 +1884,7 @@ namespace BP.WF.HttpHandler
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
             }
 
-            //关联主赋值. @袁丽娜
+            //关联主赋值.
             dtl.RefPK = this.RefPKVal;
             switch (mdtl.DtlOpenType)
             {
@@ -2048,7 +2045,7 @@ namespace BP.WF.HttpHandler
 
             //从表的数据.
             //GEDtls enDtls = new GEDtls(this.EnsName);
-            #region  把从表的数据放入. @袁丽娜
+            #region  把从表的数据放入. 
             GEDtls enDtls = new GEDtls(md.No);
             QueryObject qo = null;
             try
@@ -3301,7 +3298,7 @@ namespace BP.WF.HttpHandler
                 #endregion 保存到数据库.
 
             }
-            //需要判断是否存在AthNum字段 @袁丽娜
+            //需要判断是否存在AthNum字段 
             if (en.Row["AthNum"] != null)
             {
                 int athNum = int.Parse(en.Row["AthNum"].ToString());
@@ -3471,7 +3468,7 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(dtls);
             //获取从表权限
             MapDtl dtl = new MapDtl(ensName);
-            #region 处理权限方案。 @袁丽娜
+            #region 处理权限方案。
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 Node nd = new Node(this.FK_Node);
@@ -3608,7 +3605,7 @@ namespace BP.WF.HttpHandler
                 if (System.IO.Directory.Exists(tempPath) == false)
                     System.IO.Directory.CreateDirectory(tempPath);
 
-                //执行保存附件. @袁丽娜.
+                //执行保存附件
                 files[0].SaveAs(file);
                 System.Data.DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(file);
 
@@ -3619,7 +3616,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 MapDtl dtl = new MapDtl(this.FK_MapDtl);
-                #region 处理权限方案。 @袁丽娜
+                #region 处理权限方案。
                 if (this.FK_Node != 0 && this.FK_Node != 999999)
                 {
                     Node nd = new Node(this.FK_Node);
@@ -3752,7 +3749,7 @@ namespace BP.WF.HttpHandler
                         dtlEn.SetValByKey(attr.Key, val);
                     }
                     //dtlEn.RefPKInt = (int)this.WorkID;
-                    //关联主赋值. @袁丽娜
+                    //关联主赋值.
                     dtl.RefPK = this.RefPKVal;
                     switch (dtl.DtlOpenType)
                     {

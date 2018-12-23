@@ -476,6 +476,16 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
+        public string Key
+        {
+            get
+            {
+                string str = this.GetRequestVal("Key");
+                if (DataType.IsNullOrEmpty(str))
+                    return null;
+                return str;
+            }
+        }
         public string KeyOfEn
         {
             get

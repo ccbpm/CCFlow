@@ -232,6 +232,19 @@ namespace BP.WF.HttpHandler
                 sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
                 sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
 
+                if (sql.Contains("@") == true)
+                {
+                    foreach (string key in HttpContext.Current.Request.QueryString.Keys)
+                    {
+                        sql = sql.Replace("@" + key, this.GetRequestVal(key));
+                    }
+
+                    foreach (string key in HttpContext.Current.Request.Form.Keys)
+                    {
+                        sql = sql.Replace("@" + key, this.GetRequestVal(key));
+                    }
+                }
+
                 //获取数据
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
@@ -325,11 +338,11 @@ namespace BP.WF.HttpHandler
                         }
                         return "url@StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.BySystemUrlOneEntity:
-                        return "url@StartGuideEntities.htm?StartGuideWay=BySystemUrlOneEntity&FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@StartGuideEntities.htm?StartGuideWay=BySystemUrlOneEntity&WorkID=" + workid+""+this.RequestParasOfAll;
                     case StartGuideWay.BySQLOne:
-                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLOne&FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLOne&WorkID=" + workid + "" + this.RequestParasOfAll;
                     case StartGuideWay.BySQLMulti:
-                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLMulti&FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLMulti&WorkID=" + workid + "" + this.RequestParasOfAll;
                     case StartGuideWay.BySelfUrl: //按照定义的url.
                         return "url@" + this.currFlow.StartGuidePara1 + this.RequestParasOfAll + "&WorkID=" + workid;
                     case StartGuideWay.ByFrms: //选择表单.
@@ -344,9 +357,11 @@ namespace BP.WF.HttpHandler
             #endregion 判断前置导航
 
             #region 前置导航数据拷贝到第一节点
-            if (this.WorkID != 0 &&  this.GetRequestVal("IsCheckGuide") != null)
-                BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, this.KeyOfEn);
-
+            if (this.WorkID != 0 && this.GetRequestVal("IsCheckGuide") != null)
+            {
+                string key = this.GetRequestVal("KeyNo");
+                BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, key);
+            }
             #endregion
 
             #region 处理表单类型.

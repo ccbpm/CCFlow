@@ -498,6 +498,9 @@ namespace BP.WF.HttpHandler
                 {
                     en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
                     en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
+                    
+                    //@李国文.
+                    en.StartGuidePara3 = this.GetRequestVal("TB_BySQLOne3");  //单行赋值语句.
                     en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
                 }
                 //多条模式

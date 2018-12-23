@@ -2429,14 +2429,15 @@ namespace BP.WF
         /// <param name="sKey">选中的No</param>
         public static void StartGuidEnties(long WorkID, string FK_Flow, int FK_Node, string sKey)
         {
+
             Flow fl = new Flow(FK_Flow);
             switch (fl.StartGuideWay)
             {
                 case StartGuideWay.SubFlowGuide:
                 case StartGuideWay.BySQLOne:
                     string sql = "";
-                    sql = fl.StartGuidePara1.Clone() as string;
-                    if (!string.IsNullOrWhiteSpace(sql))
+                    sql = fl.StartGuidePara3.Clone() as string;  //@李国文.
+                    if (DataType.IsNullOrEmpty(sql)==false)
                     {
                         sql = sql.Replace("@Key", sKey);
                         sql = sql.Replace("@key", sKey);
@@ -2445,7 +2446,6 @@ namespace BP.WF
                     else
                     {
                         sql = fl.StartGuidePara2.Clone() as string;
-                        
                     }
 
                     //sql = " SELECT * FROM (" + sql + ") T WHERE T.NO='" + sKey + "' ";

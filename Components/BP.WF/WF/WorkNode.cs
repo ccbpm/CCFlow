@@ -8096,7 +8096,12 @@ namespace BP.WF
                 {
                     case RunModel.HL:
                     case RunModel.FHL:
-                        sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
+                        //@袁丽娜
+                        //sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
+                        //                                                               + " AND NDFrom!=" + this.HisNode.NodeID + " "
+                        //                                                               + " AND ActionType !=" + (int)ActionType.Return + " AND ActionType !=" + (int)ActionType.ReturnAndBackWay
+                         //                                                              + " ORDER BY RDT DESC";
+						sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
                                                                                        + " ORDER BY RDT DESC";
                         break;
                     case RunModel.SubThread:
@@ -8278,7 +8283,7 @@ namespace BP.WF
         public int GenerByWorkID(Flow flow, Int64 oid)
         {
             string table = "ND" + int.Parse(flow.No) + "Track";
-            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubThreadForward + " ) ORDER BY RDT";
+            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid + " AND (ActionType=" + (int)ActionType.Start + "OR ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubThreadForward + " ) ORDER BY RDT";
             DataTable dt = DBAccess.RunSQLReturnTable(actionSQL);
 
             string nds = "";

@@ -1659,7 +1659,7 @@ namespace BP.WF.HttpHandler
                 {
                     #region 从表保存前处理事件.
                     //获得主表事件.
-                    FrmEvents fes = new FrmEvents(this.EnName); //获得事件.
+                    FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
                     GEEntity mainEn = null;
                     if (fes.Count > 0)
                     {
@@ -1668,8 +1668,7 @@ namespace BP.WF.HttpHandler
                             return "err@" + msg;
                     }
 
-                    MapDtl mdtl = new MapDtl(this.EnName);
-
+                    MapDtl mdtl = new MapDtl(this.EnsName);
                     if (mdtl.FEBD.Length != 0)
                     {
                         string str = mdtl.FEBD;
@@ -1698,7 +1697,7 @@ namespace BP.WF.HttpHandler
                 {
                     #region 从表保存前处理事件.
                     //获得主表事件.
-                    FrmEvents fes = new FrmEvents(this.EnName); //获得事件.
+                    FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
                     GEEntity mainEn = null;
                     if (fes.Count > 0)
                     {
@@ -1707,7 +1706,7 @@ namespace BP.WF.HttpHandler
                             return "err@" + msg;
                     }
 
-                    MapDtl mdtl = new MapDtl(this.EnName);
+                    MapDtl mdtl = new MapDtl(this.EnsName);
 
                     if (mdtl.FEBD.Length != 0)
                     {

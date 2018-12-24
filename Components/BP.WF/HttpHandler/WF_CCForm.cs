@@ -1674,10 +1674,13 @@ namespace BP.WF.HttpHandler
                         string str = mdtl.FEBD;
                         BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
 
-                        febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
-                        febd.HisEnDtl = en;
+                        if (febd != null)
+                        {
+                            febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                            febd.HisEnDtl = en;
 
-                        febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, en, null);
+                            febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, en, null);
+                        }
                     }
                     #endregion 从表保存前处理事件.
                 }
@@ -1713,10 +1716,13 @@ namespace BP.WF.HttpHandler
                         string str = mdtl.FEBD;
                         BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
 
-                        febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
-                        febd.HisEnDtl = en;
+                        if (febd != null)
+                        {
+                            febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                            febd.HisEnDtl = en;
 
-                        febd.DoIt(FrmEventListDtl.RowSaveAfter, febd.HisEn, en, null);
+                            febd.DoIt(FrmEventListDtl.RowSaveAfter, febd.HisEn, en, null);
+                        }
                     }
                     #endregion 从表保存前处理事件.
                 }
@@ -1845,7 +1851,7 @@ namespace BP.WF.HttpHandler
             MapDtl mdtl = new MapDtl(fk_mapDtl);
 
             #region 处理权限方案。
-            if (this.FK_Node != 0 && this.FK_Node!= 999999)
+            if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
@@ -4387,6 +4393,8 @@ namespace BP.WF.HttpHandler
 
                 if (string.IsNullOrWhiteSpace(fk_mapdata))
                     fk_mapdata = this.GetRequestVal("FK_MapData");
+
+
 
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)

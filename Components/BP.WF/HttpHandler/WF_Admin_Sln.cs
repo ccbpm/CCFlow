@@ -500,7 +500,7 @@ namespace BP.WF.HttpHandler
                     if (!attr.KeyOfEn.Equals(fieldsAttrs.KeyOfEn))
                         continue;
 
-                    if (currND.HisFormType == NodeFormType.RefOneFrmTree)
+                    if (currND.HisFormType == NodeFormType.RefOneFrmTree || currND.HisFormType == NodeFormType.SheetTree)
                     {
                         attr.UIVisible = fieldsAttrs.UIVisible;
                         attr.UIIsEnable = fieldsAttrs.UIIsEnable;

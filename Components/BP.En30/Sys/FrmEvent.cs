@@ -117,6 +117,16 @@ namespace BP.Sys
         /// 从表保存后
         /// </summary>
         public const string RowSaveAfter = "DtlRowSaveAfter";
+
+        /// <summary>
+        /// 从表保存前
+        /// </summary>
+        public const string DtlRowDelBefore = "DtlRowDelBefore";
+        /// <summary>
+        /// 从表保存后
+        /// </summary>
+        public const string DtlRowDelAfter = "DtlRowDelAfter";
+
     }
     /// <summary>
     /// 事件标记列表

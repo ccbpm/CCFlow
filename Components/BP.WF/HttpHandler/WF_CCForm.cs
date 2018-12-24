@@ -1977,7 +1977,7 @@ namespace BP.WF.HttpHandler
             GEEntity mainEn = null;
             if (fes.Count > 0)
             {
-                string msg = fes.DoEventNode(EventListDtlList.DtlItemDelBefore, dtl);
+                string msg = fes.DoEventNode(FrmEventListDtl.DtlRowDelBefore, dtl);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@" + msg;
             }
@@ -1991,7 +1991,7 @@ namespace BP.WF.HttpHandler
                 febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 febd.HisEnDtl = dtl;
 
-                febd.DoIt(EventListDtlList.DtlItemDelBefore, febd.HisEn, dtl, null);
+                febd.DoIt(FrmEventListDtl.DtlRowDelBefore, febd.HisEn, dtl, null);
             }
             #endregion 从表 删除 前处理事件.
 
@@ -2004,7 +2004,7 @@ namespace BP.WF.HttpHandler
               fes = new FrmEvents(this.EnsName); //获得事件.
             if (fes.Count > 0)
             {
-                string msg = fes.DoEventNode(EventListDtlList.DtlItemDelAfter, dtl);
+                string msg = fes.DoEventNode(FrmEventListDtl.DtlRowDelAfter, dtl);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@" + msg;
             }
@@ -2017,7 +2017,7 @@ namespace BP.WF.HttpHandler
                 febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 febd.HisEnDtl = dtl;
 
-                febd.DoIt(EventListDtlList.DtlItemDelAfter, febd.HisEn, dtl, null);
+                febd.DoIt(FrmEventListDtl.DtlRowDelAfter, febd.HisEn, dtl, null);
             }
             #endregion 从表 删除 后处理事件.
 

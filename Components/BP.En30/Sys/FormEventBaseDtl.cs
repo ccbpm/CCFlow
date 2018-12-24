@@ -248,6 +248,22 @@ namespace BP.Sys
 		{
 			return null;
 		}
+
+        /// <summary>
+        /// 从表del前
+        /// </summary>
+        public virtual string DtlRowDelBefore()
+        {
+            return null;
+        }
+        /// <summary>
+        /// 从表del后
+        /// </summary>
+        public virtual string DtlRowDelAfter()
+        {
+            return null;
+        }
+
 		/// <summary>
 		/// 创建工作ID后的事件
 		/// </summary>
@@ -328,6 +344,10 @@ namespace BP.Sys
 					return this.RowSaveBefore();
 				case FrmEventListDtl.RowSaveAfter: // 从表-保存后.。
 					return this.RowSaveAfter();
+                case FrmEventListDtl.DtlRowDelBefore: // 从表-保存前.。
+                    return this.DtlRowDelBefore();
+                case FrmEventListDtl.DtlRowDelAfter: // 从表-保存后.。
+                    return this.DtlRowDelAfter();
 				default:
 					throw new Exception("@没有判断的表单从表事件类型:" + eventType);
 					break;

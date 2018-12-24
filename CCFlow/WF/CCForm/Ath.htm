@@ -281,24 +281,18 @@
             //var html = "<table class='table' >";
             var html = "";
             html += "<thead>";
-            var colgroup = "<colgroup>";
             if (athDesc.IsShowTitle == 1) {
                 //background-color: #f9f9f9;
                 html += "<tr style='border:0px;'>";
-
                 html += "<th  style='width:50px; border: 1px solid #ddd' nowrap=true >序</td>";
-                colgroup += "<col width='50px'></col>";
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                     var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                     if (sortColumn == "")
                         sortColumn = "类别";
                     html += "<th style=' border-top: 1px solid #ddd;width:120px' nowrap=true >" + sortColumn + "</td>";
-                    colgroup += "<col width='120px'></col>";
+
                 }
-                colgroup += "<col width='200px'></col>";
-                colgroup += "<col width='50px'></col>";
-                colgroup += "<col width='120px'></col>";
-                colgroup += "<col width='80px'></col>";
+
                 //是否启用附件从表 0 禁用 1启用
                 if (athDesc.IsExpCol == 0) {
 
@@ -334,8 +328,7 @@
                     }
                     columnNum = columnNum + mapAttrs.length;
                 }
-                colgroup += "<col width='50px'></col>";
-                html += "<th  nowrap=true style=' border: 1px solid #ddd;width:50px' >";
+                html += "<th  nowrap=true style=' border: 1px solid #ddd;width:100px' >";
 
                 if (athDesc.IsDownload == 1 && dbs.length > 0)
                     html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' alt='打包下载' /></a>";
@@ -455,7 +448,10 @@
                     html += "<td class='Idx' nowrap>" + i + "</td>";
                     if (fileSorts.length > 1)
                         html += "<td>" + sort + "</td>";
-                    html += "<td style='width:100px;color:red'>请上传附件..</td>";
+                   if (athDesc.IsUpload == true && IsReadonly != "1")
+                       html += "<td style='width:100px;color:red'>请上传附件..</td>";
+                   else
+                       html += "<td style='width:100px;color:red'></td>";
                     html += "<td>&nbsp&nbsp</td>";
                     html += "<td>&nbsp&nbsp</td>";
                     html += "<td>&nbsp&nbsp</td>";

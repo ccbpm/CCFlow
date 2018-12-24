@@ -1979,7 +1979,7 @@ namespace BP.WF.HttpHandler
 
             #region 从表 删除 前处理事件.
             //获得主表事件.
-            FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
+            FrmEvents fes = new FrmEvents(this.FK_MapDtl); //获得事件.
             GEEntity mainEn = null;
             if (fes.Count > 0)
             {
@@ -1988,16 +1988,16 @@ namespace BP.WF.HttpHandler
                     return "err@" + msg;
             }
 
-            MapDtl mdtl = new MapDtl(this.EnsName);
+            MapDtl mdtl = new MapDtl(this.FK_MapDtl);
             if (mdtl.FEBD.Length != 0)
             {
                 string str = mdtl.FEBD;
                 BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
-
+                if(febd!=null){
                 febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 febd.HisEnDtl = dtl;
-
                 febd.DoIt(FrmEventListDtl.DtlRowDelBefore, febd.HisEn, dtl, null);
+                }
             }
             #endregion 从表 删除 前处理事件.
 
@@ -2007,7 +2007,7 @@ namespace BP.WF.HttpHandler
 
             #region 从表 删除 后处理事件.
             //获得主表事件.
-              fes = new FrmEvents(this.EnsName); //获得事件.
+            fes = new FrmEvents(this.FK_MapDtl); //获得事件.
             if (fes.Count > 0)
             {
                 string msg = fes.DoEventNode(FrmEventListDtl.DtlRowDelAfter, dtl);
@@ -2019,11 +2019,13 @@ namespace BP.WF.HttpHandler
             {
                 string str = mdtl.FEBD;
                 BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+                if (febd != null)
+                {
+                    febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                    febd.HisEnDtl = dtl;
 
-                febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
-                febd.HisEnDtl = dtl;
-
-                febd.DoIt(FrmEventListDtl.DtlRowDelAfter, febd.HisEn, dtl, null);
+                    febd.DoIt(FrmEventListDtl.DtlRowDelAfter, febd.HisEn, dtl, null);
+                }
             }
             #endregion 从表 删除 后处理事件.
 

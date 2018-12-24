@@ -736,7 +736,7 @@ namespace BP.Web
             }
             set
             {
-                SetSessionByKey("No", value);
+                SetSessionByKey("No", value.Trim() ); //@祝梦娟.
             }
         }
         /// <summary>

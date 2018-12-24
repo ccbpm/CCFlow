@@ -1050,6 +1050,44 @@ namespace BP.WF.HttpHandler
                     dtEn.TableName = item.Key;
                     ds.Tables.Add(dtEn);
                 }
+                //绑定SQL的外键
+                if (item.HisAttr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
+                {
+                    //获取SQl
+                    string sql = item.HisAttr.UIBindKey;
+                    sql = sql.Replace("~", "'");
+                    if (sql.Contains("@WebUser.No"))
+                        sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+
+                    if (sql.Contains("@WebUser.Name"))
+                        sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+
+                    if (sql.Contains("@WebUser.FK_Dept"))
+                        sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                     DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
+                     foreach (DataColumn col in dtSQl.Columns)
+                     {
+                         string colName = col.ColumnName.ToLower();
+                         switch (colName)
+                         {
+                             case "no":
+                                 col.ColumnName = "No";
+                                 break;
+                             case "name":
+                                 col.ColumnName = "Name";
+                                 break;
+                             case "parentno":
+                                 col.ColumnName = "ParentNo";
+                                 break;
+                             default:
+                                 break;
+                         }
+                     }
+                     dtSQl.TableName = item.Key;
+                     ds.Tables.Add(dtSQl);
+                }
+
             }
 
             return BP.Tools.Json.ToJson(ds);

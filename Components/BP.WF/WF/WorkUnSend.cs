@@ -920,6 +920,8 @@ namespace BP.WF
             Node currNode = new Node(gwf.FK_Node);
             Node priFLNode = currNode.HisPriFLNode;
             GenerWorkerList wl = new GenerWorkerList();
+
+            //判断改操作人员是否是分流节点上的人员
             int i = wl.Retrieve(GenerWorkerListAttr.FK_Node, priFLNode.NodeID, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
             if (i == 0)
                 return "@不是您把工作发送到当前节点上，所以您不能撤消。";
@@ -930,17 +932,44 @@ namespace BP.WF
             // 记录日志..
             wnPri.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, wnPri.HisNode.NodeID, wnPri.HisNode.Name, "无");
 
+            //删除当前节点的流程
             GenerWorkerLists wls = new GenerWorkerLists();
             wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node.ToString());
 
             if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
                 wn.HisWork.Delete();
 
+            //更改流程信息
             gwf.FK_Node = wnPri.HisNode.NodeID;
             gwf.NodeName = wnPri.HisNode.Name;
             gwf.Update();
 
             BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+
+            //删除子线程的功能
+            foreach (Node ndNext in wnPri.HisNode.HisToNodes)
+            {
+                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
+                if (i == 0)
+                    continue;
+
+                if (ndNext.HisRunModel == RunModel.SubThread)
+                {
+                    /*如果到达的节点是子线程,就查询出来发起的子线程。*/
+                    GenerWorkFlows gwfs = new GenerWorkFlows();
+                    gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
+                    foreach (GenerWorkFlow en in gwfs)
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                    continue;
+                }
+
+                // 删除工作记录。
+                Works wks = ndNext.HisWorks;
+                if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
+                    wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
+            }
+
+
 
             ShiftWorks fws = new ShiftWorks();
             fws.Delete(ShiftWorkAttr.FK_Node, wn.HisNode.NodeID.ToString(),
@@ -952,7 +981,6 @@ namespace BP.WF
                 WorkNode ppPri = wnPri.GetPreviousWorkNode();
                 wl = new GenerWorkerList();
                 wl.Retrieve(GenerWorkerListAttr.FK_Node, wnPri.HisNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
-                // BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
                 RememberMe rm = new RememberMe();
                 rm.Retrieve(RememberMeAttr.FK_Node, wnPri.HisNode.NodeID, RememberMeAttr.FK_Emp, ppPri.HisWork.Rec);
 
@@ -997,9 +1025,6 @@ namespace BP.WF
             }
             else
             {
-                // 更新是否显示。
-#warning
-                // DBAccess.RunSQL("UPDATE WF_ForwardWork SET IsRead=1 WHERE WORKID=" + this.WorkID + " AND FK_Node=" + wnPri.HisNode.NodeID);
                 if (BP.Web.WebUser.IsWap == false)
                 {
                     return "@撤消执行成功.";

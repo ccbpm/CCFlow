@@ -1969,14 +1969,63 @@ namespace BP.WF.HttpHandler
         {
             GEDtl dtl = new GEDtl(this.FK_MapDtl);
             dtl.OID = this.RefOID;
+
+
+            #region 从表 删除 前处理事件.
+            //获得主表事件.
+            FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
+            GEEntity mainEn = null;
+            if (fes.Count > 0)
+            {
+                string msg = fes.DoEventNode(EventListDtlList.DtlItemDelBefore, dtl);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                    return "err@" + msg;
+            }
+
+            MapDtl mdtl = new MapDtl(this.EnsName);
+            if (mdtl.FEBD.Length != 0)
+            {
+                string str = mdtl.FEBD;
+                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+
+                febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                febd.HisEnDtl = dtl;
+
+                febd.DoIt(EventListDtlList.DtlItemDelBefore, febd.HisEn, dtl, null);
+            }
+            #endregion 从表 删除 前处理事件.
+
+            //执行删除.
             dtl.Delete();
+
+
+            #region 从表 删除 后处理事件.
+            //获得主表事件.
+              fes = new FrmEvents(this.EnsName); //获得事件.
+            if (fes.Count > 0)
+            {
+                string msg = fes.DoEventNode(EventListDtlList.DtlItemDelAfter, dtl);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                    return "err@" + msg;
+            }
+
+            if (mdtl.FEBD.Length != 0)
+            {
+                string str = mdtl.FEBD;
+                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+
+                febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                febd.HisEnDtl = dtl;
+
+                febd.DoIt(EventListDtlList.DtlItemDelAfter, febd.HisEn, dtl, null);
+            }
+            #endregion 从表 删除 后处理事件.
 
             //如果可以上传附件这删除相应的附件信息
             FrmAttachmentDBs dbs = new FrmAttachmentDBs();
             dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.FK_MapDtl, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);
 
-
-            return "{\"sucess\":\"删除成功\"}";
+            return "删除成功";
         }
         /// <summary>
         /// 重新获取单个ddl数据

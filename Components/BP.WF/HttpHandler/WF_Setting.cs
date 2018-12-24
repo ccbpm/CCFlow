@@ -199,14 +199,14 @@ namespace BP.WF.HttpHandler
             BP.Web.WebUser.FK_DeptName = dept.Name;
             BP.Web.WebUser.FK_DeptNameOfFull = dept.NameOfPath;
 
-            //重新设置cookies.
-            string strs = "";
-            strs += "@No=" + WebUser.No;
-            strs += "@Name=" + WebUser.Name;
-            strs += "@FK_Dept=" + WebUser.FK_Dept;
-            strs += "@FK_DeptName=" + WebUser.FK_DeptName;
-            strs += "@FK_DeptNameOfFull=" + WebUser.FK_DeptNameOfFull;
-            BP.Web.WebUser.SetValToCookie(strs);
+            ////重新设置cookies.
+            //string strs = "";
+            //strs += "@No=" + WebUser.No;
+            //strs += "@Name=" + WebUser.Name;
+            //strs += "@FK_Dept=" + WebUser.FK_Dept;
+            //strs += "@FK_DeptName=" + WebUser.FK_DeptName;
+            //strs += "@FK_DeptNameOfFull=" + WebUser.FK_DeptNameOfFull;
+            //BP.Web.WebUser.SetValToCookie(strs);
 
             BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
             emp.StartFlows = "";

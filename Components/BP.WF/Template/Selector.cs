@@ -433,7 +433,7 @@ namespace BP.WF.Template
             string sqlGroup = this.SelectorP1;
             if (DataType.IsNullOrEmpty(sqlGroup) == false)
             {
-                sqlGroup = BP.WF.Glo.DealExp(sqlGroup, en, null);
+                sqlGroup = BP.WF.Glo.DealExp(sqlGroup, en, null);  //@祝梦娟
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);
@@ -441,7 +441,7 @@ namespace BP.WF.Template
 
             //求人员范围.
             string sqlDB = this.SelectorP2;
-            sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
+            sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);  //@祝梦娟
 
             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
             dtEmp.TableName = "Emps";
@@ -451,16 +451,7 @@ namespace BP.WF.Template
             if (this.SelectorP3 != "")
             {
                 sqlDB = this.SelectorP3;
-
-                sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
-                sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
-                sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-
-                sqlDB = sqlDB.Replace("@WorkID", en.GetValStringByKey("OID"));
-                sqlDB = sqlDB.Replace("@OID", en.GetValStringByKey("OID"));
-
-                if (sqlDB.Contains("@"))
-                    sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
+                sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);  //@祝梦娟
 
                 DataTable dtDef = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
                 dtDef.TableName = "DefaultSelected";

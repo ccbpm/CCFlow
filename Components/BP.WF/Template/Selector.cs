@@ -338,13 +338,13 @@ namespace BP.WF.Template
             switch (this.SelectorModel)
             {
                 case SelectorModel.Dept:
-                    ds = ByDept(nodeid,en);
+                    ds = ByDept(nodeid, en);
                     break;
                 case SelectorModel.Emp:
                     ds = ByEmp(nodeid);
                     break;
                 case SelectorModel.Station:
-                    ds = ByStation(nodeid,en);
+                    ds = ByStation(nodeid, en);
                     break;
                 case SelectorModel.DeptAndStation:
                     ds = DeptAndStation(nodeid);
@@ -356,7 +356,7 @@ namespace BP.WF.Template
                     ds = ByGenerUserSelecter();
                     break;
                 case SelectorModel.AccepterOfDeptStationOfCurrentOper:
-                    ds = AccepterOfDeptStationOfCurrentOper(nodeid,  en);
+                    ds = AccepterOfDeptStationOfCurrentOper(nodeid, en);
                     break;
                 default:
                     throw new Exception("@错误:没有判断的选择类型:" + this.SelectorModel);
@@ -433,26 +433,15 @@ namespace BP.WF.Template
             string sqlGroup = this.SelectorP1;
             if (DataType.IsNullOrEmpty(sqlGroup) == false)
             {
-                sqlGroup = sqlGroup.Replace("@WebUser.No", WebUser.No);
-                sqlGroup = sqlGroup.Replace("@WebUser.Name", WebUser.Name);
-                sqlGroup = sqlGroup.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                sqlGroup = BP.WF.Glo.DealExp(sqlGroup, en, null);
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);
             }
 
-
             //求人员范围.
             string sqlDB = this.SelectorP2;
-            sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
-            sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
-            sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-             
-           // sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept); 
-            //@袁丽娜
-            sqlDB = sqlDB.Replace("@WorkID", en.GetValStringByKey("OID")); 
-            sqlDB = sqlDB.Replace("@OID", en.GetValStringByKey("OID"));
-
+            sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
 
             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
             dtEmp.TableName = "Emps";
@@ -508,7 +497,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="nodeID">节点ID</param>
         /// <returns>返回数据源dataset</returns>
-        private DataSet ByDept(int nodeID,Entity en)
+        private DataSet ByDept(int nodeID, Entity en)
         {
             // 定义数据容器.
             DataSet ds = new DataSet();

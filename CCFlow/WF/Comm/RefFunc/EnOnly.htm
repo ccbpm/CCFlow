@@ -195,16 +195,15 @@
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (defValue == null || defValue == "null")
                         continue;
-                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+                    if($('#TB_' + mapAttr.KeyOfEn).val()=="" || $('#TB_' + mapAttr.KeyOfEn).val()==undefined)
+                        $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+
                     if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
                         $("#menuIconIcon").attr("class", defValue);
                     }
                 }
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-
-                    // alert(mapAttr.KeyOfEn + " " + defValue);
-
                     // 判断下拉框是否有对应option, 若没有则追加
                     if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
 
@@ -222,6 +221,13 @@
                     } else {
                         //设置选择的值
                         $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+
+                    }
+                    if ($("#TB_" + mapAttr.KeyOfEn + "Text").length == 1) {
+                        if (defValue == "")
+                            $("#TB_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + mapAttr.KeyOfEn + " option:first").text());
+                        else
+                        $("#TB_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + mapAttr.KeyOfEn).find("option:selected").text());
                     }
                 }
 
@@ -559,7 +565,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='ChangeKeyOfEnText(this,\""+mapAttr.KeyOfEn+"\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -574,17 +580,16 @@
                 return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
-            //外部数据类型.
-            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
+//            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
 
-                //枚举类型.
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = "";
-                else
-                    enableAttr = "disabled='disabled'";
+//                //枚举类型.
+//                if (mapAttr.UIIsEnable == 1)
+//                    enableAttr = "";
+//                else
+//                    enableAttr = "disabled='disabled'";
 
-                return "<select  class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-            }
+//                return "<select  class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+//            }
 
             //添加文本框 ，日期控件等
             //AppString
@@ -795,6 +800,10 @@
             return operations;
         }
 
+        function ChangeKeyOfEnText(obj, KeyOfEn) {
+            if($("#TB_" + KeyOfEn + "Text").length == 1)
+                $("#TB_" + KeyOfEn + "Text").val($(obj).find("option:selected").text());
+        }
         //新建.
         function New() {
             var enName = GetQueryString("EnName");

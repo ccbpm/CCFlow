@@ -10,8 +10,8 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script src="../Scripts/QueryString2016.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../Scripts/config.js" type="text/javascript" ></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -123,6 +123,7 @@
     <script type="text/javascript">
         var doType = GetQueryString("DoType");
         $(function () {
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
 
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
@@ -170,7 +171,7 @@
 
             var selected = data.Selected;
 
-            if (emps == null || emps==undefined || emps.length == 0) {
+            if (emps == null || emps == undefined || emps.length == 0) {
                 alert('当前节点设置的接收人范围为空,请联系管理员配置接收人范围.');
                 return;
             }
@@ -179,43 +180,77 @@
             var isSimplate = data.Selector[0].IsSimpleSelector;
 
             var html = "<table border=0 width='98%' > ";
-            $.each(depts, function (i, dept) {
 
-                html += "<tr><th><b> " + dept.Name + "</b></th></tr>";
-                html += "<tr><td>";
-
+            if (depts == null) {
                 $.each(emps, function (i, emp) {
 
-                    if (emp.FK_Dept == dept.No) {
+                    //检查该人员是否被选择.
+                    var isSele = false;
+                    $.each(selected, function (idx, sele) {
+                        if (sele.No == emp.No)
+                            isSele = true;
+                    });
 
-                        //检查该人员是否被选择.
-                        var isSele = false;
-                        $.each(selected, function (idx, sele) {
-                            if (sele.No == emp.No)
-                                isSele = true;
-                        });
+                    //多选.
+                    if (isSimplate == "0") {
+                        if (isSele == true)
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                        else
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
+                    }
 
-                        //多选.
-                        if (isSimplate == "0") {
-                            if (isSele == true)
-                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
-                            else
-                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
-                        }
-
-                        //单选.
-                        if (isSimplate == "1") {
-                            if (isSele == true)
-                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
-                            else
-                                html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
-                        }
+                    //单选.
+                    if (isSimplate == "1") {
+                        if (isSele == true)
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                        else
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
                     }
                 });
 
                 html += " </td></tr>";
 
-            });
+            }
+
+            if (depts != null) {
+                $.each(depts, function (i, dept) {
+
+                    html += "<tr><th><b> " + dept.Name + "</b></th></tr>";
+                    html += "<tr><td>";
+
+                    $.each(emps, function (i, emp) {
+
+                        if (emp.FK_Dept == dept.No) {
+
+                            //检查该人员是否被选择.
+                            var isSele = false;
+                            $.each(selected, function (idx, sele) {
+                                if (sele.No == emp.No)
+                                    isSele = true;
+                            });
+
+                            //多选.
+                            if (isSimplate == "0") {
+                                if (isSele == true)
+                                    html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                                else
+                                    html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
+                            }
+
+                            //单选.
+                            if (isSimplate == "1") {
+                                if (isSele == true)
+                                    html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                                else
+                                    html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
+                            }
+                        }
+                    });
+
+                    html += " </td></tr>";
+
+                });
+            }
 
             html += "</table>";
 
@@ -226,11 +261,11 @@
 
         //确定【选择接收人并发送】 / 保存.  Accepter_Save Accepter_Send
         function SendNode() {
-        
+
             //生成选择的人员.
             var checked = $('input:checked');
             var selectedEmps = [];
-            var selectedEmpLab="";
+            var selectedEmpLab = "";
             for (var i = 0; i < checked.length; i++) {
 
                 selectedEmps.push(checked[i].id);
@@ -247,8 +282,8 @@
                 return;
             }
 
-//            if (window.confirm("您确定要执行发送给如下人员[ " + selectedEmpLab + " ]吗？") == false)
-//                return;
+            //            if (window.confirm("您确定要执行发送给如下人员[ " + selectedEmpLab + " ]吗？") == false)
+            //                return;
 
             $("#Msg").html("<font color=green>正在发送请稍候...</font>");
 
@@ -355,7 +390,7 @@
             $('body').append($(selectEmpModalHtml));
 
             $('#BtnSelectEmps').bind('click', function () {
-                
+
                 var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
                 if (dept == null || dept == '' || dept == undefined) {
                     dept = $.cookie('FK_Dept');
@@ -364,7 +399,7 @@
                     var u = new WebUser();
                     dept = u.FK_Dept;
                 }
-                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node="+GetQueryString("FK_Node")+"&s=" + Math.random() + "&IsSelectMore=1");
+                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random() + "&IsSelectMore=1");
                 $('#selectEmpsModal').modal().show();
             });
         }
@@ -375,25 +410,27 @@
             if (data == '取消') {
                 return;
             }
-           
-           $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+
+            $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
         }
     </script>
 </head>
-<body  >
-      <div id="selected"></div>
-
-    <div id="table"></div>
-    
+<body>
+    <div id="selected">
+    </div>
+    <div id="table">
+    </div>
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
         <!--<button id="btnSaveAndClose" class="btn btn-info" onclick="SendNode('Accepter_Save')">确定</button>-->
-        <button id="btnOk" class="btn btn-info" onclick="SendNode()" >发送</button>
-        <button id="btnCancel" class="btn btn-info" onclick="Close()">取消</button>
+        <button id="btnOk" class="btn btn-info" onclick="SendNode()">
+            发送</button>
+        <button id="btnCancel" class="btn btn-info" onclick="Close()">
+            取消</button>
     </div>
     <br />
     <center>
-    <div id="Msg"></div>
+        <div id="Msg">
+        </div>
     </center>
-
 </body>
 </html>

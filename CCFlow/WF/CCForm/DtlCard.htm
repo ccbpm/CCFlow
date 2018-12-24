@@ -385,6 +385,12 @@
                 hand.AddPara("RefOID", OID);
                 hand.AddPara("FK_Node", GetQueryString("FK_Node"));
                 var dtlData = hand.DoMethodReturnJSON("Dtl_DeleteRow");
+
+                if (dtlData.indexOf('err@') != -1) {
+                    alert(dtlData);
+                    return;
+                }
+
                 InitMainTable();
             }
         }

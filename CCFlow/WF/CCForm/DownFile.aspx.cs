@@ -157,7 +157,7 @@ namespace CCFlow.WF.CCForm
                 downDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
                 downDB.Retrieve();
                 FrmAttachment dbAtt = new FrmAttachment();
-                dbAtt.MyPK = downDB.FK_FrmAttachment;
+                dbAtt.MyPK = this.FK_FrmAttachment;
                 dbAtt.Retrieve();
 
                 if (dbAtt.ReadRole!=0 && this.FK_Node != 0)

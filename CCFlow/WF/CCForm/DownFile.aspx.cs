@@ -166,7 +166,7 @@ namespace CCFlow.WF.CCForm
                     gwf.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
 
                     string str = gwf.GetParaString(dbAtt.NoOfObj);
-                    str += "," + this.MyPK;
+                    str += "," + downDB.MyPK;
                     gwf.SetPara(dbAtt.NoOfObj, str);
                     gwf.Update();
                 }

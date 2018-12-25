@@ -267,6 +267,7 @@
             if (data.indexOf('err@') == 0) {
                 $(".Msg").show();
                 $(".Msg").html(data);
+                $(".Msg").css("color", "red");
 
                 $("#Btn_Send").attr("disabled", false);
                 $("#Btn_Send").val("执行发送");
@@ -275,7 +276,7 @@
                 return;
             }
 
-
+            $(".Msg").css("color", "");
             data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
             data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
             data = data.replace("'MyFlow.htm", "'../MyFlow.htm");

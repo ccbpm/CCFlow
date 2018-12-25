@@ -1,7 +1,7 @@
 ﻿//点击右边的下载标签.
 function Down2018(fk_ath, pkVal, delPKVal) {
     if (plant == "CCFlow")
-        window.location.href = 'DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
+        window.location.href = 'DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node='+FK_Node+'&FK_Flow='+FK_Flow+'&FK_MapData='+FK_MapData+'&Ath='+Ath;
     else {
         var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);

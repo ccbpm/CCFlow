@@ -160,6 +160,17 @@ namespace CCFlow.WF.CCForm
                 dbAtt.MyPK = downDB.FK_FrmAttachment;
                 dbAtt.Retrieve();
 
+                if (dbAtt.ReadRole!=0 && this.FK_Node != 0)
+                {
+                    GenerWorkerList gwf = new GenerWorkerList();
+                    gwf.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
+
+                    string str = gwf.GetParaString(dbAtt.NoOfObj);
+                    str += "," + this.MyPK;
+                    gwf.SetPara(dbAtt.NoOfObj, str);
+                    gwf.Update();
+                }
+
                 bool isEncrypt = downDB.GetParaBoolen("IsEncrypt");
 
                 if (dbAtt.AthSaveWay == AthSaveWay.IISServer)

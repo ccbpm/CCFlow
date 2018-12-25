@@ -11,6 +11,19 @@ function CheckID(val) {
     return flag;
 }
 
+//去左空格;
+function ltrim(s) {
+    return s.replace(/(^\s*)/g, "");
+}
+//去右空格;
+function rtrim(s) {
+    return s.replace(/(\s*$)/g, "");
+}
+//去左右空格;
+function trim(s) {
+    return s.replace(/(^\s*)|(\s*$)/g, "");
+}
+
 //
 if (plant == "CCFlow") {
     // CCFlow

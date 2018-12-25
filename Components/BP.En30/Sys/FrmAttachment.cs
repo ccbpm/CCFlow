@@ -300,6 +300,10 @@ namespace BP.Sys
         /// 数据引用
         /// </summary>
         public const string DataRefNoOfObj = "DataRefNoOfObj";
+        /// <summary>
+        /// 阅读规则
+        /// </summary>
+        public const string ReadRole = "ReadRole";
         #endregion 数据引用.
 
 
@@ -806,6 +810,21 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.GroupID, value);
             }
         }
+        /// <summary>
+        /// 阅读规则:@0=不控制@1=未阅读阻止发送@2=未阅读做记录
+        /// </summary>
+        public int ReadRole
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentAttr.ReadRole);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.ReadRole, value);
+            }
+        }
+        
 
         public int RowIdx
         {
@@ -1227,12 +1246,15 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", false, false);
                 map.AddTBInt(FrmAttachmentAttr.UploadType, 0, "上传类型0单个1多个2指定", false, false);
 
+                #region 流程属性.
                 //对于父子流程有效.
                 map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", false, false);
                 map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", false, false);
+                map.AddTBInt(FrmAttachmentAttr.ReadRole, 0, "阅读规则", true, true);
 
                 //数据引用，如果为空就引用当前的.
                 map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, null, "数据引用组件ID", true, false, 0, 150, 20, true, null);
+                #endregion 流程属性.
 
                 #region WebOffice控制方式
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableWF, true, "是否启用weboffice", true, true);
@@ -1250,6 +1272,7 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableMarks, true, "是否进入留痕模式", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableDown, true, "是否启用下载", true, true);
                 #endregion WebOffice控制方式
+
 
                 //参数属性.
                 map.AddTBAtParas(3000);

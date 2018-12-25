@@ -4502,8 +4502,6 @@ namespace BP.WF
             //    return true;
 
 
-
-
             //增加节点表单的必填项判断.
             string err = "";
             if (this.HisNode.HisFormType == NodeFormType.FreeForm || this.HisNode.HisFormType == NodeFormType.FoolForm)
@@ -4521,9 +4519,64 @@ namespace BP.WF
                         err += "@字段{" + attr.KeyOfEn + " ; " + attr.Name + "}，不能为空。";
                 }
 
-                #region 检查附件个数的完整性. - 该部分代码稳定后，移动到独立表单的检查上去。
+                #region 检查附件个数的完整性. - 该部分代码稳定后，移动到独立表单的检查上去。 
                 foreach (FrmAttachment ath in this.HisWork.HisFrmAttachments)
                 {
+                    #region 增加阅读规则. @祝梦娟.
+                    if (ath.ReadRole != 0)
+                    {
+                        //查询出来当前的数据.
+                        GenerWorkerList gwl = new GenerWorkerList();
+                        gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
+                            GenerWorkerListAttr.FK_Emp, WebUser.No, GenerWorkerListAttr.FK_Node, this.HisNode.NodeID);
+
+                        //获得已经下载或者读取的数据. 格式为: a2e06fbf-2bae-44fb-9176-9a0047751e83,a2e06fbf-we-44fb-9176-9a0047751e83
+                        string ids = gwl.GetParaString(ath.NoOfObj);
+
+                        //获得当前节点的上传附件.
+                        string sql = "SELECT MyPK,FileName FROM Sys_FrmAttachmentDB WHERE RefPKVal="+this.WorkID+" AND FK_FrmAttachment='"+ath.MyPK+"'";
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                        string errFileUnRead = "";
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            string guid=dr[0].ToString();
+                            if (ids.Contains(guid) == false)
+                                errFileUnRead += "@文件:" + dr[1].ToString() + "未阅读.";
+                        }
+
+                        //如果有未阅读的文件.
+                        if (DataType.IsNullOrEmpty(errFileUnRead) == false)
+                        {
+                            //未阅读不让其发送.
+                            if (ath.ReadRole == 1)
+                                throw new Exception("err@您还有如下文件没有阅读,"+errFileUnRead);
+
+                             //未阅读记录日志并让其发送.
+                            if (ath.ReadRole == 2)
+                            {
+                                AthUnReadLog log = new AthUnReadLog();
+                                log.MyPK = this.WorkID + "_" + this.HisNode.NodeID + "_" + WebUser.No;
+                                log.Delete();
+
+                                log.FK_Emp = WebUser.No;
+                                log.FK_EmpDept = WebUser.FK_Dept;
+                                log.FK_EmpDeptName = WebUser.FK_DeptName;
+                                log.FK_Flow = this.HisNode.FK_Flow;
+                                log.FlowName = this.HisFlow.Name;
+
+                                log.FK_Node = this.HisNode.NodeID; 
+                                log.FlowName = this.HisFlow.Name;
+                                log.SendDT = DataType.CurrentDataTime;
+                                log.WorkID = this.WorkID;
+
+                                log.Insert(); //插入到数据库.
+
+                            }
+                        }
+                    }
+                    #endregion 增加阅读规则.
+
+
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.None)
                         continue;
 
@@ -4569,6 +4622,8 @@ namespace BP.WF
                     }
                 }
                 #endregion 检查附件个数的完整性.
+
+          
 
                 #region 检查图片附件的必填，added by liuxc,2016-11-1
                 foreach (FrmImgAth imgAth in this.HisNode.MapData.FrmImgAths)

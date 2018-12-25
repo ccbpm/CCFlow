@@ -1310,7 +1310,6 @@ namespace BP.WF
 
                         if (fl.Name.Contains("htm"))
                             continue;
-
                         System.IO.File.Copy(fl.FullName, path + "\\" + fl.Name, true);
                     }
 
@@ -1518,11 +1517,9 @@ namespace BP.WF
                 }
                 #endregion 把所有的文件做成一个zip文件.
 
-
                 #region 判断当前流程是否是最后一个节点，是否是反馈给申请人.
 
                 #endregion 判断当前流程是否是最后一个节点，是否是反馈给申请人.
-
 
                 return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
             }

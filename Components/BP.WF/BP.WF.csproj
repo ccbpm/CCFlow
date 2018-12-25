@@ -525,6 +525,7 @@
     <Compile Include="WF\WorkUnSend.cs" />
     <Compile Include="WF\WorkFlowDeleteLog.cs" />
     <Compile Include="Data\NDXRptBase.cs" />
+    <Compile Include="WF\AthUnReadLog.cs" />
     <Compile Include="WorkFlowBuessRole.cs" />
     <Compile Include="Xml\AdminMenu.cs">
       <SubType>Code</SubType>

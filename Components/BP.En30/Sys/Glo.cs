@@ -147,7 +147,7 @@ namespace BP.Sys
             foreach (string key in Htable_FormFEEDtl.Keys)
             {
                 FormEventBaseDtl fee = Htable_FormFEEDtl[key] as FormEventBaseDtl;
-                if (fee.FormDtlMark.IndexOf(dtlEnName + ",") >= 0 || fee.FormDtlMark == dtlEnName)
+                if (fee.FormDtlMark.IndexOf(dtlEnName) >= 0 || fee.FormDtlMark == dtlEnName)
                     return fee;
             }
             return null;

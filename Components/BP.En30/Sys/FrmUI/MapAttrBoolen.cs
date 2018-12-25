@@ -113,7 +113,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
-                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
+                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true); //@李国文
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
                 //数据类型.
@@ -124,7 +124,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.DefVal, "0", "默认值(是否选中？0=否,1=是)", true, false, 0, 200, 20);
 
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
-                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 800, 20, true);
+                map.AddTBStringDoc(MapAttrAttr.Tip, null, "激活提示", true, false); //@李国文
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
@@ -162,8 +162,6 @@ namespace BP.Sys.FrmUI
             return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
-
-       
     }
     /// <summary>
     /// 实体属性s

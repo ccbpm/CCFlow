@@ -435,11 +435,14 @@ namespace BP.WF
             }
             set
             {
+                string str = value;
+                str = str.Replace(" ", "");
+
                 string val = this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
-                if (val.Contains(value) == true)
+                if (val.Contains(str) == true)
                     return;
 
-                SetValByKey(GenerWorkFlowAttr.TodoEmps, value);
+                SetValByKey(GenerWorkFlowAttr.TodoEmps, str);
             }
         }
         /// <summary>

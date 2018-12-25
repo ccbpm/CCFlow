@@ -4535,14 +4535,16 @@ namespace BP.WF
                         if (ids.Contains("ALL") == false)
                         {
                             //获得当前节点的上传附件.
-                            string sql = "SELECT MyPK,FileName FROM Sys_FrmAttachmentDB WHERE RefPKVal=" + this.WorkID + " AND FK_FrmAttachment='" + ath.MyPK + "' AND Rec!='" + BP.Web.WebUser.No + "'";
-                            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                           FrmAttachmentDBs dbs =  BP.WF.Glo.GenerFrmAttachmentDBs(ath, this.WorkID.ToString(), ath.MyPK, this.WorkID, 0, 0,false);
+
+                            //string sql = "SELECT MyPK,FileName FROM Sys_FrmAttachmentDB WHERE RefPKVal=" + this.WorkID + " AND FK_FrmAttachment='" + ath.MyPK + "' AND Rec!='" + BP.Web.WebUser.No + "'";
+                            //DataTable dt = DBAccess.RunSQLReturnTable(sql);
                             string errFileUnRead = "";
-                            foreach (DataRow dr in dt.Rows)
+                            foreach (FrmAttachmentDB db in dbs)
                             {
-                                string guid = dr[0].ToString();
+                                string guid = db.MyPK;
                                 if (ids.Contains(guid) == false)
-                                    errFileUnRead += "@文件:" + dr[1].ToString() + "未阅读.";
+                                    errFileUnRead += "@文件:" + db.FileName + "未阅读.";
                             }
 
                             //如果有未阅读的文件.

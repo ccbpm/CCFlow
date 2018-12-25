@@ -505,6 +505,8 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
+                AthUnReadLog athUnReadLog = new AthUnReadLog();
+                athUnReadLog.CheckPhysicsTable();
                 return "err@" + ex.Message;
             }
         }

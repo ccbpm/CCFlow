@@ -4444,7 +4444,7 @@ namespace BP.WF
             }
         }
         public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment, 
-            Int64 workid=0, Int64 fid=0, Int64 pworkid=0)
+            Int64 workid=0, Int64 fid=0, Int64 pworkid=0,bool isContantSelf=true)
         {
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
@@ -4477,13 +4477,14 @@ namespace BP.WF
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                //qo.AddWhere(FrmAttachmentDBAttr.MyNote, athDesc.NoOfObj);
-                //qo.addAnd();
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
-
-                //qo.addAnd();
-                //qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
-
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                if (isContantSelf == false)
+                {
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.Rec,"!=", WebUser.No);
+                }
                 qo.addOrderBy("RDT");
                 qo.DoQuery();
                 return dbs;
@@ -4496,7 +4497,11 @@ namespace BP.WF
                 qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK);
                 qo.addAnd();
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
-
+                if (isContantSelf == false)
+                {
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
+                }
                 qo.addOrderBy("RDT");
                 qo.DoQuery();
                 return dbs;
@@ -4512,12 +4517,24 @@ namespace BP.WF
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
+                   
                     qo.DoQuery();
                 }
                 else
                 {
-                    dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment,
-                       FrmAttachmentDBAttr.RefPKVal, pkval, "RDT");
+                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
+                    if (isContantSelf == false)
+                    {
+                        qo.addAnd();
+                        qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
+                    }
+                    qo.addOrderBy("RDT");
+                    qo.DoQuery();
+
+                    //dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment,
+                    //   FrmAttachmentDBAttr.RefPKVal, pkval, "RDT");
                 }
                 return dbs;
             }

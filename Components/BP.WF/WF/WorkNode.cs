@@ -4532,45 +4532,47 @@ namespace BP.WF
 
                         //获得已经下载或者读取的数据. 格式为: a2e06fbf-2bae-44fb-9176-9a0047751e83,a2e06fbf-we-44fb-9176-9a0047751e83
                         string ids = gwl.GetParaString(ath.NoOfObj);
-
-                        //获得当前节点的上传附件.
-                        string sql = "SELECT MyPK,FileName FROM Sys_FrmAttachmentDB WHERE RefPKVal="+this.WorkID+" AND FK_FrmAttachment='"+ath.MyPK+"'";
-                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                        string errFileUnRead = "";
-                        foreach (DataRow dr in dt.Rows)
+                        if (ids.Contains("ALL") == false)
                         {
-                            string guid=dr[0].ToString();
-                            if (ids.Contains(guid) == false)
-                                errFileUnRead += "@文件:" + dr[1].ToString() + "未阅读.";
-                        }
-
-                        //如果有未阅读的文件.
-                        if (DataType.IsNullOrEmpty(errFileUnRead) == false)
-                        {
-                            //未阅读不让其发送.
-                            if (ath.ReadRole == 1)
-                                throw new Exception("err@您还有如下文件没有阅读,"+errFileUnRead);
-
-                             //未阅读记录日志并让其发送.
-                            if (ath.ReadRole == 2)
+                            //获得当前节点的上传附件.
+                            string sql = "SELECT MyPK,FileName FROM Sys_FrmAttachmentDB WHERE RefPKVal=" + this.WorkID + " AND FK_FrmAttachment='" + ath.MyPK + "' AND Rec!='" + BP.Web.WebUser.No + "'";
+                            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                            string errFileUnRead = "";
+                            foreach (DataRow dr in dt.Rows)
                             {
-                                AthUnReadLog log = new AthUnReadLog();
-                                log.MyPK = this.WorkID + "_" + this.HisNode.NodeID + "_" + WebUser.No;
-                                log.Delete();
+                                string guid = dr[0].ToString();
+                                if (ids.Contains(guid) == false)
+                                    errFileUnRead += "@文件:" + dr[1].ToString() + "未阅读.";
+                            }
 
-                                log.FK_Emp = WebUser.No;
-                                log.FK_EmpDept = WebUser.FK_Dept;
-                                log.FK_EmpDeptName = WebUser.FK_DeptName;
-                                log.FK_Flow = this.HisNode.FK_Flow;
-                                log.FlowName = this.HisFlow.Name;
+                            //如果有未阅读的文件.
+                            if (DataType.IsNullOrEmpty(errFileUnRead) == false)
+                            {
+                                //未阅读不让其发送.
+                                if (ath.ReadRole == 1)
+                                    throw new Exception("err@您还有如下文件没有阅读," + errFileUnRead);
 
-                                log.FK_Node = this.HisNode.NodeID; 
-                                log.FlowName = this.HisFlow.Name;
-                                log.SendDT = DataType.CurrentDataTime;
-                                log.WorkID = this.WorkID;
+                                //未阅读记录日志并让其发送.
+                                if (ath.ReadRole == 2)
+                                {
+                                    AthUnReadLog log = new AthUnReadLog();
+                                    log.MyPK = this.WorkID + "_" + this.HisNode.NodeID + "_" + WebUser.No;
+                                    log.Delete();
 
-                                log.Insert(); //插入到数据库.
+                                    log.FK_Emp = WebUser.No;
+                                    log.FK_EmpDept = WebUser.FK_Dept;
+                                    log.FK_EmpDeptName = WebUser.FK_DeptName;
+                                    log.FK_Flow = this.HisNode.FK_Flow;
+                                    log.FlowName = this.HisFlow.Name;
 
+                                    log.FK_Node = this.HisNode.NodeID;
+                                    log.FlowName = this.HisFlow.Name;
+                                    log.SendDT = DataType.CurrentDataTime;
+                                    log.WorkID = this.WorkID;
+
+                                    log.Insert(); //插入到数据库.
+
+                                }
                             }
                         }
                     }

@@ -179,8 +179,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
+            if (attr.MyDataType != 4)
+                html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+
+            html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -373,7 +375,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
 
-        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label>";
+        var tip= "";
+        if (mapAttr.Tip != "" && mapAttr.Tip != null)
+            tip = "<span style='color: #C0C0C0;'>(" + mapAttr.Tip + ")</span>";
+
+
+        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name +tip+"</label>";
     }
 
     //枚举类型.

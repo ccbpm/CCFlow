@@ -1332,10 +1332,38 @@ namespace BP.WF.Template
             MapExts exts = new MapExts();
             exts.Delete(MapAttrAttr.FK_MapData, this.No);//先删除，后查询.
             exts.Retrieve(MapAttrAttr.FK_MapData, refDtl);
+            MapExt mapExt = null;
             foreach (MapExt ext in exts)
             {
-                ext.FK_MapData = this.No;
-                ext.Insert();
+                mapExt = new MapExt();
+                mapExt = ext;
+                mapExt.MyPK = ext.MyPK + "_" + this.FK_Node;
+                mapExt.FK_MapData = this.No;
+                mapExt.Insert();
+            }
+
+            //处理附件问题
+            /* 如果启用了多附件*/
+            if (this.IsEnableAthM == true)
+            {
+                BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
+                //获取原始附件的属性
+
+                athDesc.MyPK = this.No + "_AthMDtl";
+                if (athDesc.RetrieveFromDBSources() == 0)
+                {
+                    //获取原来附件的属性
+                    BP.Sys.FrmAttachment oldAthDesc = new BP.Sys.FrmAttachment();
+                    oldAthDesc.MyPK = refDtl + "_AthMDtl";
+                    if (oldAthDesc.RetrieveFromDBSources() == 0)
+                        return "原始从表的附件属性不存在，请联系管理员";
+                    athDesc = oldAthDesc;
+                    athDesc.MyPK = this.No + "_AthMDtl";
+                    athDesc.FK_MapData = this.No;
+                    athDesc.NoOfObj = "AthMDtl";
+                    athDesc.Name = this.Name;
+                    athDesc.DirectInsert();
+                }
             }
 
             return "执行成功";

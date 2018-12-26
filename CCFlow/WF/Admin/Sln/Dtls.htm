@@ -32,7 +32,8 @@
             for (var i = 0; i < dtls.length; i++) {
 
                 var dtl = dtls[i];
-
+                if (dtl.FK_Node != 0)
+                    continue;
                 html += "<tr >";
                 html += "<td>" + dtl.No + "</td>";
                 html += "<td>" + dtl.Name + "</td>";
@@ -68,14 +69,15 @@
 
                 en.SetPKVal(mypk);
                 en.FK_Node = fk_Node; //设置FK_Node.
-                en.FK_MapData = fk_mapdata + "_" + fk_node; //原来的错误.
+                en.FK_MapData = fk_mapdata; //原来的错误.
                 en.No = mypk;
                 en.Insert();
-                 en.DoMethodReturnString("InitAttrsOfSelf");
+                en.DoMethodReturnString("InitAttrsOfSelf");
+                
+                
 
             } else {
 
-                //  alert(en.FK_MapData);
 
                 if (en.FK_MapData != fk_mapdata + "_" + fk_node) {
                     en.FK_MapData = fk_mapdata + "_" + fk_node

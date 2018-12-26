@@ -4552,6 +4552,14 @@ namespace BP.WF.HttpHandler
 
             zipName = DataType.PraseStringToUrlFileName(zipName);
 
+            GenerWorkerList gwf = new GenerWorkerList();
+            gwf.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
+
+            string str = gwf.GetParaString(athDesc.NoOfObj);
+            str += "ALL";
+            gwf.SetPara(athDesc.NoOfObj, str);
+            gwf.Update();
+
             string url = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
             return "url@" + url;
 

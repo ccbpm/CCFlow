@@ -24,11 +24,17 @@
 
             GenerFullAllCtrlsVal(mapExt);
 
-            if (i == 0)
+            if (i == 0) {
                 $("#Btn_Delete").attr("disabled", true);
-            else
-                $("#Btn_Delete").removeAttr("disabled");
+                $("#Btn_FullDtl").attr("disabled", true);
+                $("#Btn_FullDDL").attr("disabled", true);
 
+            }
+            else {
+                $("#Btn_Delete").removeAttr("disabled");
+                $("#Btn_FullDtl").removeAttr("disabled");
+                $("#Btn_FullDDL").removeAttr("disabled");
+            }
             //去掉 ' 号。
             var tag = mapExt.Doc;
             while (tag.indexOf('~') > 1) {
@@ -87,7 +93,7 @@
             if (en.Update() == 0)
                 en.Insert();
 
-            window.location.href = "TBFullCtrl.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            window.location.href = "TBFullCtrl.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&MyPK=" + mypk + "&M=" + Math.random();
             return;
 
         }

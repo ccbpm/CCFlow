@@ -1362,7 +1362,9 @@ namespace BP.Sys
             ds.Tables.Add(Sys_FrmBtn);
 
             //Sys_FrmLab.
-            DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
+            FrmLabs frmlabs = new FrmLabs();
+            frmlabs.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
+            DataTable Sys_FrmLab = frmlabs.ToDataTableField("Sys_FrmLab");
             ds.Tables.Add(Sys_FrmLab);
 
             //img.

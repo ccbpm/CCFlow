@@ -205,7 +205,7 @@ namespace BP.Web
                 DateTime time = DateTime.Now;
 
                 //TimeSpan span = new TimeSpan(0, 0, 60, 0, 0);//时间间隔
-              //  cookie.Expires = time.Add(span);
+                //  cookie.Expires = time.Add(span);
 
                 cookie.Values.Add("No", em.No);
                 cookie.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
@@ -596,7 +596,7 @@ namespace BP.Web
 
             Paras paras = new Paras();
             paras.SQL = "SELECT SID FROM Port_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
-            paras.Add("No",userNo);
+            paras.Add("No", userNo);
             string mysid = DBAccess.RunSQLReturnStringIsNull(paras, null);
             return sid.Equals(mysid);
         }
@@ -736,7 +736,7 @@ namespace BP.Web
             }
             set
             {
-                SetSessionByKey("No", value.Trim() ); //@祝梦娟.
+                SetSessionByKey("No", value.Trim()); //@祝梦娟.
             }
         }
         /// <summary>
@@ -822,8 +822,8 @@ namespace BP.Web
                 {
                     Stations sts = new Stations();
                     QueryObject qo = new QueryObject(sts);
-                   
-                        qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+
+                    qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
                     qo.DoQuery();
                     SetSessionByKey("HisSts", sts);
                     return sts;

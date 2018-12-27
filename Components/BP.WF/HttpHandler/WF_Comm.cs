@@ -2678,6 +2678,7 @@ namespace BP.WF.HttpHandler
             fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
             //文件后缀
             string ext = System.IO.Path.GetExtension(files[0].FileName);
+            ext = ext.Replace(".", ""); //去掉点 @李国文
 
             //文件大小
             float size = files[0].ContentLength/1024;
@@ -2736,8 +2737,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName + this.PKVal;
+                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName+"\\" + this.PKVal;
 
                 if (System.IO.Directory.Exists(savePath) == false)
                     System.IO.Directory.CreateDirectory(savePath);
@@ -2766,29 +2766,13 @@ namespace BP.WF.HttpHandler
 
                 files[0].SaveAs(filepath);
             }
-            //获取上传文件的信息
-            foreach (Attr attr in en.EnMap.Attrs)
-            {
-                //文件名
-                if (attr.Key.Equals("MyFileName"))
-                    en.SetValByKey(attr.Key, fileName);
 
-                //保存路径
-                if (attr.Key.Equals("MyFilePath"))
-                    en.SetValByKey(attr.Key, filepath);
-                //文件后缀名
-                if (attr.Key.Equals("MyFileExt"))
-                    en.SetValByKey(attr.Key, ext);
-
-                //文件大小
-                if (attr.Key.Equals("MyFileSize"))
-                    en.SetValByKey(attr.Key, size);
-
-                //文件保存的网络路径
-                if (attr.Key.Equals("WebPath"))
-                    en.SetValByKey(attr.Key, filepath);
-            }
-
+            //需要这样写 @李国文.
+            en.SetValByKey("MyFileName", fileName);
+            en.SetValByKey("MyFilePath", filepath);
+            en.SetValByKey("MyFileExt", ext);
+            en.SetValByKey("MyFileSize", size);
+            en.SetValByKey("WebPath", filepath);
 
             en.Update();
             return "文件保存成功";

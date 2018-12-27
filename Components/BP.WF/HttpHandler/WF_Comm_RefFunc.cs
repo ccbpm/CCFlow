@@ -30,7 +30,6 @@ namespace BP.WF.HttpHandler
 
 
         #region Dot2DotTreeDeptEmpModel.htm（部门人员选择）
-
         /// <summary>
         /// 保存节点绑定人员信息
         /// </summary>
@@ -108,81 +107,7 @@ namespace BP.WF.HttpHandler
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
         }
-
-        /// <summary>
-        /// 获取部门树根结点
-        /// </summary>
-        /// <returns></returns>
-        public string Dot2DotTreeDeptEmpModel_GetStructureTreeRoot()
-        {
-            JsonResultInnerData jr = new JsonResultInnerData();
-
-            EasyuiTreeNode node = null;
-            List<EasyuiTreeNode> d = new List<EasyuiTreeNode>();
-            string parentrootid = this.GetRequestVal("parentrootid");
-
-            if (string.IsNullOrWhiteSpace(parentrootid))
-                throw new Exception("参数parentrootid不能为空");
-
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-            {
-                BP.WF.Port.Dept dept = new BP.WF.Port.Dept();
-
-                if (dept.Retrieve(BP.WF.Port.DeptAttr.ParentNo, parentrootid) == 0)
-                {
-                    dept.No = "-1";
-                    dept.Name = "无部门";
-                    dept.ParentNo = "";
-                }
-
-                node = new EasyuiTreeNode();
-                node.id = "DEPT_" + dept.No;
-                node.text = dept.Name;
-                node.iconCls = "icon-department";
-                node.attributes = new EasyuiTreeNodeAttributes();
-                node.attributes.No = dept.No;
-                node.attributes.Name = dept.Name;
-                node.attributes.ParentNo = dept.ParentNo;
-                node.attributes.TType = "DEPT";
-                node.state = "closed";
-                node.children = new List<EasyuiTreeNode>();
-                node.children.Add(new EasyuiTreeNode());
-                node.children[0].text = "loading...";
-
-                d.Add(node);
-            }
-            else
-            {
-                BP.GPM.Dept dept = new BP.GPM.Dept();
-
-                if (dept.Retrieve(BP.GPM.DeptAttr.ParentNo, parentrootid) == 0)
-                {
-                    dept.No = "-1";
-                    dept.Name = "无部门";
-                    dept.ParentNo = "";
-                }
-
-                node = new EasyuiTreeNode();
-                node.id = "DEPT_" + dept.No;
-                node.text = dept.Name;
-                node.iconCls = "icon-department";
-                node.attributes = new EasyuiTreeNodeAttributes();
-                node.attributes.No = dept.No;
-                node.attributes.Name = dept.Name;
-                node.attributes.ParentNo = dept.ParentNo;
-                node.attributes.TType = "DEPT";
-                node.state = "closed";
-                node.children = new List<EasyuiTreeNode>();
-                node.children.Add(new EasyuiTreeNode());
-                node.children[0].text = "loading...";
-
-                d.Add(node);
-            }
-
-            jr.InnerData = d;
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
-        }
+         
         /// <summary>
         /// 获取指定部门下一级子部门及人员列表
         /// </summary>
@@ -311,64 +236,7 @@ namespace BP.WF.HttpHandler
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(d);
         }
-
-        /// <summary>
-        /// 获取节点绑定人员信息列表
-        /// </summary>
-        /// <returns></returns>
-        public string Dot2DotTreeDeptEmpModel_GetNodeEmps()
-        {
-            JsonResultInnerData jr = new JsonResultInnerData();
-
-            DataTable dt = null;
-            string nid = this.GetRequestVal("nodeid");
-            int pagesize = int.Parse(this.GetRequestVal("pagesize"));
-            int pageidx = int.Parse(this.GetRequestVal("pageidx"));
-            string sql = "SELECT pe.No,pe.Name,pd.No DeptNo,pd.Name DeptName FROM WF_NodeEmp wne "
-                         + "  INNER JOIN Port_Emp pe ON pe.No = wne.FK_Emp "
-                         + "  LEFT JOIN Port_Dept pd ON pd.No = pe.FK_Dept "
-                         + "WHERE wne.FK_Node = " + nid + " ORDER BY pd.Idx, pe.Name";
-
-            dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
-            dt.Columns.Add("Code", typeof(string));
-            dt.Columns.Add("Checked", typeof(bool));
-
-            foreach (DataRow row in dt.Rows)
-            {
-                if ((Glo.Plant == BP.WF.Plant.JFlow) && (DBAccess.AppCenterDBType == DBType.Oracle))
-                    row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["NAME"] as string);
-                else
-                    row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["Name"] as string);
-                row["Checked"] = true;
-            }
-
-            //对Oracle数据库做兼容性处理
-            if (DBAccess.AppCenterDBType == DBType.Oracle)
-            {
-                foreach (DataColumn col in dt.Columns)
-                {
-                    switch (col.ColumnName)
-                    {
-                        case "NO":
-                            col.ColumnName = "No";
-                            break;
-                        case "NAME":
-                            col.ColumnName = "Name";
-                            break;
-                        case "DEPTNO":
-                            col.ColumnName = "DeptNo";
-                            break;
-                        case "DEPTNAME":
-                            col.ColumnName = "DeptName";
-                            break;
-                    }
-                }
-            }
-
-            jr.InnerData = dt;
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
-        }
+     
         #endregion Dot2DotTreeDeptEmpModel.htm（部门人员选择）
 
         #region Dot2DotTreeDeptModel.htm（部门选择）
@@ -1077,7 +945,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 辅助实体定义
-
         /// <summary>
         /// Eayui tree node对象
         /// <para>主要用于数据的JSON化组织</para>

@@ -4524,6 +4524,7 @@ namespace BP.WF
                 {
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                    qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
                     if (isContantSelf == false)
                     {

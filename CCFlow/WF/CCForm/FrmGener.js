@@ -16,20 +16,21 @@ $(function () {
 
     webUser = new WebUser();
 
-    $("#CCForm").unbind().on('click', function () {
-        Change(frmData);
-    });
-
+    //设置不可以用
+    if (isReadonly != 1) {
+        $("#CCForm").unbind().on('click', function () {
+            Change(frmData);
+        });
+        $("#CCForm").unbind().on('mousemove', function () {
+            Change(frmData);
+        });
+    }
     initPageParam(); //初始化参数.
 
     //构造表单.
     GenerFrm(); //表单数据.
 
-    //设置不可以用.
-    var isReadonly = GetQueryString("IsReadonly");
-    if (isReadonly == 1) {
-        SetReadonly();
-    }
+
 
     if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
         //计算高度，展示滚动条
@@ -359,7 +360,6 @@ function GenerFrm() {
 
             //处理下拉框级联等扩展信息
             AfterBindEn_DealMapExt(frmData);
-          
 
             ShowNoticeInfo();
 

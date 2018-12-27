@@ -549,7 +549,7 @@
             $.each($(":checkbox"), function (i, cb) {
                 if (cb.checked) {
                     var data = $(cb).data();
-                    if (data) {
+                    if (data && cb.id != "CB_CheckAll") {
                         paraDatas.push(data);
                     }
                 }

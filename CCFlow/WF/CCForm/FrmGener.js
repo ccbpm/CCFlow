@@ -16,7 +16,8 @@ $(function () {
 
     webUser = new WebUser();
 
-    //设置不可以用
+    //设置不可以用.
+    var isReadonly = GetQueryString("IsReadonly");
     if (isReadonly != 1) {
         $("#CCForm").unbind().on('click', function () {
             Change(frmData);

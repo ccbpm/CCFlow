@@ -8342,7 +8342,7 @@ namespace BP.WF
         public int GenerByWorkID(Flow flow, Int64 oid)
         {
             string table = "ND" + int.Parse(flow.No) + "Track";
-            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid + " AND (ActionType=" + (int)ActionType.Start + "OR ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubThreadForward + " ) ORDER BY RDT";
+            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid + " AND (ActionType=" + (int)ActionType.Start + " OR ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubThreadForward + " ) ORDER BY RDT";
             DataTable dt = DBAccess.RunSQLReturnTable(actionSQL);
 
             string nds = "";

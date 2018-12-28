@@ -435,7 +435,7 @@
                 var refPK = heads[0].No;
                 var no = dataObj[refPK];
 
-                var ckBox = $("<input type='checkbox'/>");
+                var ckBox = $("<input type='checkbox' onclick='changeSta(this)'/>");
                 ckBox.attr("id", "CB_" + no);
                 ckBox.data(dataObj);
                 tdFirst.append(ckBox);
@@ -536,6 +536,10 @@
             });
         }
 
+        function changeSta(obj) {
+            if (obj.checked == false)
+                document.getElementById('CB_CheckAll').checked = false;
+        }
         //确定按钮，导入数据
         function DalogModelOK() {
             //实体参数.

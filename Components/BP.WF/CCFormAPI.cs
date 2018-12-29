@@ -803,8 +803,11 @@ namespace BP.WF
 			if (dtl.FilterSQLExp != "")
 			{
 				string[] strs = dtl.FilterSQLExp.Split('=');
-				qo.addAnd();
-				qo.AddWhere(strs[0], strs[1]);
+                if (strs.Length == 2)
+                {
+                    qo.addAnd();
+                    qo.AddWhere(strs[0], strs[1]);
+                }
 			}
 
             //增加排序.

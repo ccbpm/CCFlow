@@ -2150,3 +2150,16 @@ function DealExp(expStr, webUser) {
     return expStr;
 }
 
+//根据AtPara例如AtPara=@Helpurl=XXX@Count=XXX,获取HelpUrl的值
+function GetPara(atPara,key) {     
+    if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
+        return undefined;
+    }
+    var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
+    var results = atPara.match(reg);
+    if (results != null) {
+        return unescape(results[2]);
+    }
+    return undefined;
+        
+}

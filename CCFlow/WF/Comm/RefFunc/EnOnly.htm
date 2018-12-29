@@ -340,15 +340,16 @@
 
                 //输出帮助连接.
                 var name = null;
-                if (attr.UIRefKeyText == "" || attr == null) {
+                var helpUrl = GetPara(attr.AtPara,"HelpUrl");
+                if (helpUrl== null || helpUrl =="") {
                     name = attr.Name;
                 }
                 else {
 
-                    if (attr.UIRefKeyText.indexOf('javascr') == 0)
-                        name = "<a href=\"" + attr.UIRefKeyText + "\" >" + attr.Name + "</a>";
+                    if (helpUrl.indexOf('javascr') == 0)
+                        name = "<a href=\"" + helpUrl + "\" >" + attr.Name + "</a>";
                     else
-                        name = "<a href=\"" + attr.UIRefKeyText + "\" target=_blank >" + attr.Name + "</a>";
+                        name = "<a href=\"" + helpUrl + "\" target=_blank >" + attr.Name + "</a>";
                 }
 
                 var lab = "";
@@ -745,7 +746,7 @@
                 var keyText = "Name";
                 if (mapAttr.UIRefKey != "")
                     key = mapAttr.UIRefKey;
-                if (mapAttr.UIRefKeyText != "" && mapAttr.UIRefKeyText.indexOf("http")==-1)
+                if (mapAttr.UIRefKeyText != "")
                     keyText = mapAttr.UIRefKeyText;
                 $.each(data, function (i, obj) {
                    

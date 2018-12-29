@@ -745,7 +745,7 @@
                 var keyText = "Name";
                 if (mapAttr.UIRefKey != "")
                     key = mapAttr.UIRefKey;
-                if (mapAttr.UIRefKeyText != "")
+                if (mapAttr.UIRefKeyText != "" && mapAttr.UIRefKeyText.indexOf("http")==-1)
                     keyText = mapAttr.UIRefKeyText;
                 $.each(data, function (i, obj) {
                    

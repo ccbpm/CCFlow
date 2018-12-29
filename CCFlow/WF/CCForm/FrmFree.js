@@ -518,7 +518,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     }
 
     /***************** 外部数据源 *****************************/
-    if (mapAttr.LGType == 1 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+    if (mapAttr.LGType != 2 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
         eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         return eleHtml;
     }

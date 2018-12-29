@@ -314,7 +314,7 @@ function InitMapAttrOfCtrl(mapAttr) {
     }
 
     //外部数据类型.
-    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
+    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1) {
 
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)

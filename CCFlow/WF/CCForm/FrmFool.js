@@ -359,7 +359,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             }
             //如果不可编辑，并且是图片名称
             if (mapAttr.IsSigan == "1") {
-                var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
                 eleHtml += "<img src='../../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../../DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 return eleHtml;

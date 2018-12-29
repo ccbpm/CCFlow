@@ -196,9 +196,9 @@
                 fileName = basePath + "/DataUser/ImgAth/Upload/" + FK_MapData + "_" + CtrlID + "_" + RefPKVal + ".png";
             }
 
-            $("#myImage").attr("src", fileName);
+            document.getElementById("myImage").setAttribute("src", fileName + "?M=" + Math.random());
             $('#myImage').Jcrop();
-            $("#imgCut").attr("src", fileFullName);
+            document.getElementById("imgCut").setAttribute("src", fileFullName);
             $("#HD_ImgAthSrc").val(fileFullName);
             $("#HD_SImgAthSrc").val(fileName);
             AddImgLisenerEvent();

@@ -198,7 +198,7 @@
 
             document.getElementById("myImage").setAttribute("src", fileName + "?M=" + Math.random());
             $('#myImage').Jcrop();
-            document.getElementById("imgCut").setAttribute("src", fileFullName);
+            document.getElementById("imgCut").setAttribute("src", fileFullName + "?M=" + Math.random());
             $("#HD_ImgAthSrc").val(fileFullName);
             $("#HD_SImgAthSrc").val(fileName);
             AddImgLisenerEvent();

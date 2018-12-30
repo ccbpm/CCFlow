@@ -26,6 +26,7 @@
        var deptNo = "";
        global.selectedNodes = [];
        global.selectedRows = [];
+       var webUser = new WebUser();
 
        //初始化
        $(function () {
@@ -46,12 +47,16 @@
        });
 
        var nodeId = "";
+       var rootNo = "0";
        function LoadDeptTreeV2() {
 
            var ens = new Entities("BP.GPM.Depts");
            ens.RetrieveAll();
+           if (webUser.No != "admin")
+               rootNo = webUser.FK_Dept;
 
-           var pushData = createJsonToTree(ens, "0");
+
+           var pushData = createJsonToTree(ens, rootNo);
            var jsonTree = pushData;
 
            $('#appTree').treeview({
@@ -232,21 +237,40 @@
        function createJsonToTree(jsonArray, parentNo) {
            for (var i = 0; i < jsonArray.length; i++) {
                var data = jsonArray[i];
-               if (data.ParentNo == parentNo) {
-                   var checked = false;
-                   var selectedNodes = window.selectedNodes;
-                   var sel = $.grep(selectedNodes, function (obj) {
-                       return data.No == obj.No;
-                   });
-                   if (sel.length > 0) {
-                       checked = true;
+               if (rootNo != "0") {
+                   if (data.No == parentNo) {
+                       var checked = false;
+                       var selectedNodes = window.selectedNodes;
+                       var sel = $.grep(selectedNodes, function (obj) {
+                           return data.No == obj.No;
+                       });
+                       if (sel.length > 0) {
+                           checked = true;
+                       }
+                       treeJson.push({
+                           "id": data.No,
+                           "text": data.Name,
+                           "nodes": creatTreeChildern(jsonArray, data.No),
+                           "state": { checked: checked, disabled: false }
+                       });
                    }
-                   treeJson.push({
-                       "id": data.No,
-                       "text": data.Name,
-                       "nodes": creatTreeChildern(jsonArray, data.No),
-                       "state": { checked: checked, disabled: false }
-                   });
+               } else {
+                   if (data.ParentNo == parentNo) {
+                       var checked = false;
+                       var selectedNodes = window.selectedNodes;
+                       var sel = $.grep(selectedNodes, function (obj) {
+                           return data.No == obj.No;
+                       });
+                       if (sel.length > 0) {
+                           checked = true;
+                       }
+                       treeJson.push({
+                           "id": data.No,
+                           "text": data.Name,
+                           "nodes": creatTreeChildern(jsonArray, data.No),
+                           "state": { checked: checked, disabled: false }
+                       });
+                   }
                }
            }
            function _(treeArray) {

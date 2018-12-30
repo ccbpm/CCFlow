@@ -7647,6 +7647,14 @@ namespace BP.WF
             //this.GenerHieLiuHuiZhongDtlData_2013(nd);
 
             #endregion 处理合流节点表单数据
+
+            //设置当前子线程已经通过.
+            ps = new Paras();
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=1  WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND IsPass=0";
+            ps.Add("WorkID", this.WorkID);
+            ps.Add("FID", this.HisWork.FID);
+            DBAccess.RunSQL(ps);
+
             /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
             string info = "";
             string sql1 = "";
@@ -7655,7 +7663,11 @@ namespace BP.WF
             ps.SQL = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE  FID=" + dbStr + "FID AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
             ps.Add("FID", this.HisWork.FID);
             decimal numAll1 = (decimal)DBAccess.RunSQLReturnValInt(ps);
-            decimal passRate1 = 1 / numAll1 * 100;
+
+            string mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
+            decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+
+            decimal passRate1 = numPassed / numAll1 * 100;
             if (nd.PassRate <= passRate1)
             {
                 ps = new Paras();
@@ -7679,7 +7691,7 @@ namespace BP.WF
                 ps = new Paras();
                 ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3,FID=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
                 ps.Add("FK_Node", nd.NodeID);
-                ps.Add("WorkID", this.HisWork.OID);
+                ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
             }
 

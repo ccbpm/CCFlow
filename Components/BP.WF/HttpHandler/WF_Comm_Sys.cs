@@ -81,6 +81,10 @@ namespace BP.WF.HttpHandler
         {
             return "";
         }
+        public string ImpData_DoneMyPK()
+        {
+
+        }
         /// <summary>
         /// 执行导入
         /// </summary>
@@ -120,7 +124,10 @@ namespace BP.WF.HttpHandler
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
             if (en.IsNoEntity == false)
-                return "err@必须是EntityNo是实体";
+            {
+                return this.ImpData_DoneMyPK();
+               // return "err@必须是EntityNo是实体,才能导入.";
+            } 
 
             string noColName = ""; //实体列的编号名称.
             string nameColName = ""; //实体列的名字名称.

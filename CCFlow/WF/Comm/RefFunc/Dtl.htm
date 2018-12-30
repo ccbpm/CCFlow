@@ -135,9 +135,18 @@
             for (var i = 0; i < dtls.length; i++) {
 
                 var dtl = dtls[i];
-                dtl = new Entity("BP.Sys.GEDtl", dtl);
+                //dtl = new Entity("BP.Sys.GEDtl", dtl);
                 var pkval = dtl.OID;
-                html += "<tr>";
+                if (pkval == undefined)
+                    pkval = dtl.MyPK;
+                if (pkval == undefined)
+                    pkval = dtl.No;
+                if (pkval == dtl.NodeID)
+                    pkval = dtl.NodeID;
+                if (pkval == dtl.WorkID)
+                    pkval = dtl.WorkID;
+
+                html += "<tr ondblclick='OpenEn(\"" + pkval + "\")'>";
                 html += "<td class='Idx'>" + (i + 1) + "</td>";
                      
  

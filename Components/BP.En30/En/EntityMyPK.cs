@@ -41,6 +41,14 @@ namespace BP.En
                 this.SetValByKey(EntityMyPKAttr.MyPK, value);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public virtual string InitMyPKVals()
+        {
+           return  this.MyPK;
+        }
         #endregion
 
         #region 构造

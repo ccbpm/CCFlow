@@ -81,9 +81,66 @@ namespace BP.WF.HttpHandler
         {
             return "";
         }
-        public string ImpData_DoneMyPK()
+        private string ImpData_DoneMyPK(Entities ens, DataTable dt)
         {
-            return "";
+            //错误信息
+            string errInfo = "";
+            EntityMyPK en = (EntityMyPK)ens.GetNewEntity;
+            //定义属性.
+            Attrs attrs = en.EnMap.Attrs;
+
+            int impWay = this.GetRequestValInt("ImpWay");
+
+            #region 清空方式导入.
+            //清空方式导入.
+            int count = 0;//导入的行数
+            String successInfo = "";
+            if (impWay == 0)
+            {
+                ens.ClearTable();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    en = (EntityMyPK)ens.GetNewEntity;
+                    //给实体赋值
+                    errInfo += SetEntityAttrVal("", dr, attrs, en, dt, 0);
+                    if (errInfo.IndexOf("info@1") == -1)
+                    {
+                        count++;
+                        successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的导入成功</span><br/>";
+                    }
+                    else
+                    {
+                        errInfo = errInfo.Replace("info@1", "");
+                        successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的更新成功</span><br/>";
+                    }
+                }
+            }
+
+            #endregion 清空方式导入.
+
+            #region 更新方式导入
+            if (impWay == 1 || impWay == 2)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    en = (EntityMyPK)ens.GetNewEntity;
+                    //给实体赋值
+                    errInfo += SetEntityAttrVal("", dr, attrs, en, dt, 1);
+                    if (errInfo.IndexOf("info@1") == -1)
+                    {
+                        count++;
+                        successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的导入成功</span><br/>";
+                    }
+                    else
+                    {
+                        errInfo = errInfo.Replace("info@1", "");
+                        successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的更新成功</span><br/>";
+                    }
+                }
+            }
+            #endregion
+
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo;
         }
         /// <summary>
         /// 执行导入
@@ -123,10 +180,13 @@ namespace BP.WF.HttpHandler
             //获得entity.
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
+
+            if(en.PK.Equals("MyPK") == true)
+                return this.ImpData_DoneMyPK(ens, dt);
+
             if (en.IsNoEntity == false)
             {
-                return this.ImpData_DoneMyPK();
-               // return "err@必须是EntityNo是实体,才能导入.";
+                return "err@必须是EntityNo或者EntityMyPK实体,才能导入.";
             } 
 
             string noColName = ""; //实体列的编号名称.
@@ -297,10 +357,27 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                if (saveType == 0)
-                    en.Insert(); //执行插入.
+                if (en.IsNoEntity == true)
+                {
+                    if (saveType == 0)
+                        en.Insert();
+                    else
+                        en.Update();
+                }
                 else
-                    en.Update();
+                {
+                    en.PKVal = ((EntityMyPK)en).InitMyPKVals();
+                    if (en.RetrieveFromDBSources() == 0)
+                        en.Insert(); //执行插入.
+                    else
+                    {
+                        en.Update();
+                        return "info@1";
+                    }
+                   
+                }
+               
+               
             }
             catch (Exception ex)
             {

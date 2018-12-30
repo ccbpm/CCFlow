@@ -104,9 +104,8 @@
                           <li>
                         	<a href="../WF/Admin/CCBPMDesigner/Default.htm"><i class="icon iconfont icon-tuichu fred fz18"></i>流程设计器</a> 
                         </li>
-
                        
-                        <li><a href='/WF/Setting/Default.htm' title="设置个人信息." class="J_menuItem"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
+                        <li><a href='../WF/Setting/Default.htm' title="设置个人信息." class="J_menuItem"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
                         <li>
                         	<a href="Login.htm?DoType=Out"><i class="icon iconfont icon-tuichu fred fz18"></i>退出</a> 
                         </li>
@@ -114,22 +113,22 @@
                 </nav>
             </div>
             <div class="row J_mainContent" id="content-main">
-                <iframe id="J_iframe" width="100%" height="100%" src="/WF/Start.htm" frameborder="0"
-                    data-id="../Start.htm" seamless></iframe>
+                <iframe id="J_iframe" width="100%" height="100%" src="../WF/Start.htm" frameborder="0"
+                    data-id="../WF/Start.htm" seamless></iframe>
             </div>
         </div>
         <!--右侧部分结束-->
     </div>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="/WF/Style/skin/js/appnew.js?v=4.1.0"></script>
-    <script type="text/javascript" src="/WF/Style/skin/js/index.js"></script>
-    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../WF/Style/skin/js/appnew.js?v=4.1.0"></script>
+    <script type="text/javascript" src="../WF/Style/skin/js/index.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
-    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -150,7 +149,7 @@
             var flowNo = GetQueryString("FK_Flow");
 
             if (flowNo != null) {
-                window.open('/WF/MyFlow.htm?FK_Flow=' + flowNo);
+                window.open('../WF/MyFlow.htm?FK_Flow=' + flowNo);
                 return;
             }
             return;

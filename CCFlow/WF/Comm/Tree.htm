@@ -159,6 +159,13 @@
                     if (i >= 0) {
                         expnode.splice(i, 1);
                     }
+                },
+                onDblClick: function (node) {
+                    if($("#View_Node").is(":hidden"))
+                         EditNode(0);
+                    else
+                      EditNode(1);
+                   
                 }
 
             });

@@ -1,4 +1,5 @@
-﻿//树节点操作
+﻿
+//树节点操作
 function treeNodeManage(dowhat, nodeNo, callback, scope) {
     var enName = GetEnName();
     var en = new Entity(enName, nodeNo);
@@ -116,25 +117,57 @@ function EditNode(type) {
             $.messager.alert('提示', '没有找到类名！', 'info');
             return;
         }
-        var url = "";
-        //编辑
-        if (type == 0)
-            url = "En.htm?EnName=" + enName + "&PKVal=" + node.id + "&isTree=1";
-        else
-            url = "En.htm?EnName=" + enName + "&PKVal=" + node.id + "&isTree=1" + "&isReadonly=1";
 
+        //获取设置项
         var cfg = new Entity("BP.Sys.EnCfg");
         cfg.No = GetQueryString("EnsName");
         cfg.RetrieveFromDBSources();
 
+        //主键
+        var pk = node.id;
+
+        var url = "";
+        //考虑兼容旧版本.
+        var url = cfg.GetPara("WinOpenUrl");
+        if (url && url.length > 4) {
+            cfg.Url = url;
+            cfg.Update();
+        }
+
+        url = cfg.Url;
+        var urlOpenType = cfg.GetPara("SearchUrlOpenType");
+
+        if (urlOpenType == 0 || urlOpenType == undefined)
+            url = "./RefFunc/En.htm?EnName=" + enName + "&PKVal=" + pk;
+
+        if (urlOpenType == 1)
+            url = "./RefFunc/EnOnly.htm?EnName=" + enName + "&PKVal=" + pk;
+
+        if (urlOpenType == 2)
+            url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk;
+
+        if (urlOpenType == 3)
+            url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk;
+
+        if (urlOpenType == 9) {
+            if (url.indexOf('?') == -1)
+                url = url + "?1=1";
+            url = url + "&EnsName=" + ensName + "&EnName=" + enName + "&PKVal=" + pk ;
+        }
+
         var windowW = cfg.GetPara("WinCardW");
         if (windowW == "" || windowW == undefined)
-            windowW = 700;
+            windowW = 900;
 
         var windowH = cfg.GetPara("WinCardH");
         if (windowH == "" || windowH == undefined)
             windowH = 500;
 
+        //编辑
+        if (type == 0)
+            url = url + "&isTree=1";
+        else
+            url = url + "&isTree=1" + "&isReadonly=1";
 
         OpenEasyUiDialog(url, 'treeFrame', '编辑', windowW, windowH, null, null, null, null, null, function () {
             var en = new Entity(enName, node.id);

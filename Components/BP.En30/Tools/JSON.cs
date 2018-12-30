@@ -251,8 +251,34 @@ namespace BP.Tools
                     {
                         strKey = dt.Columns[j].ColumnName;
                     }
-                    string strValue = drc[i][j] == null ? "" : drc[i][j].ToString();
+
                     Type type = dt.Columns[j].DataType;
+
+                    string strValue="";
+                    if (type == typeof(Single))
+                    {
+                        object v = drc[i][j];
+
+                        if (v == null || v == DBNull.Value)
+                        {
+                            strValue = "0";
+                        }
+                        else
+                        {
+                            double f =(double)((float)v);
+                            strValue = Convert.ToString(f);
+                        }
+
+                        //strValue = v == null ? "0" : v;
+                        //strValue = drc[i][j] == null ? "" : ((float)(drc[i][j])).ToString("0.00");
+
+                    }
+                    else
+                    {
+                        strValue = drc[i][j] == null ? "" : drc[i][j].ToString();
+                    }
+
+                   
                     jsonString.Append("\"" + strKey + "\":");
                     strValue = StringFormat(strValue, type);
                     if (j < dt.Columns.Count - 1)

@@ -78,11 +78,14 @@
                     }
                     $("#result").html('');
                     $("#result").append("<span>导入成功</span><br/>")
-                    var datas = data.split("_");
+                    var datas = data.split("@Split");
                     var waringInfo = datas[0].replace("errInfo=", "");
                     var count = datas[1].replace("count=", "");
                     var successInfo = datas[2].replace("successInfo=", "");
+                    var changeCount = datas[3].replace("changeCount=", "");
                     $("#result").append("成功导入条数&nbsp;&nbsp;&nbsp;" + count + "<br/>");
+                    if (impWay != 0)
+                        $("#result").append("成功更新条数&nbsp;&nbsp;&nbsp;" + changeCount + "<br/>");
                     $("#result").append("成功导入数据<br/>");
                     $("#result").append(successInfo);
                     $("#result").append("<span style='color:red'>警告</span><br/>");

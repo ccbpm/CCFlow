@@ -279,11 +279,11 @@ namespace BP.Sys
             {
                 MapAttr attrH = new MapAttr();
                 attrH.Copy(attr);
-                attrH.KeyOfEn = attr.KeyOfEn + "T";
+                attrH.KeyOfEn = attr.KeyOfEn + "Text";
                 attrH.Name = attr.Name;
                 attrH.UIContralType = BP.En.UIContralType.TB;
                 attrH.MinLen = 0;
-                attrH.MaxLen = 60;
+                attrH.MaxLen = 500;
                 attrH.MyDataType = BP.DA.DataType.AppString;
                 attrH.UIVisible = false;
                 attrH.UIIsEnable = false;

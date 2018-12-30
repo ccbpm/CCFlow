@@ -77,10 +77,10 @@ namespace BP.GPM
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetDepositaryOfEntity( Depositary.Application);
 
-                map.Java_SetCodeStruct("4");
-                map.IsAutoGenerNo = true;
+                // map.Java_SetCodeStruct("4");
+                // map.IsAutoGenerNo = true;
 
-                map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 200);
+                map.AddTBStringPK(StationAttr.No, null, "编号", true, false, 4, 8, 200);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
                 

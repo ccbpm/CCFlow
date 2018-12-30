@@ -223,11 +223,13 @@
                         $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
 
                     }
-                    if ($("#TB_" + mapAttr.KeyOfEn + "Text").length == 1) {
-                        if (defValue == "")
-                            $("#TB_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + mapAttr.KeyOfEn + " option:first").text());
-                        else
-                        $("#TB_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + mapAttr.KeyOfEn).find("option:selected").text());
+                    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+                        if ($("#TB_" + mapAttr.KeyOfEn + "Text").length == 1) {
+                            if (defValue == "")
+                                $("#TB_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + mapAttr.KeyOfEn + " option:first").text());
+                            else
+                                $("#TB_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + mapAttr.KeyOfEn).find("option:selected").text());
+                        }
                     }
                 }
 

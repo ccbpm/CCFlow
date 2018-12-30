@@ -94,6 +94,7 @@ namespace BP.WF.HttpHandler
             #region 清空方式导入.
             //清空方式导入.
             int count = 0;//导入的行数
+            int changeCount = 0;//更新数据的行数
             String successInfo = "";
             if (impWay == 0)
             {
@@ -103,16 +104,15 @@ namespace BP.WF.HttpHandler
                     en = (EntityMyPK)ens.GetNewEntity;
                     //给实体赋值
                     errInfo += SetEntityAttrVal("", dr, attrs, en, dt, 0);
-                    if (errInfo.IndexOf("info@1") == -1)
+                    //获取PKVal
+                    en.PKVal = en.InitMyPKVals();
+                    if (en.RetrieveFromDBSources() == 0)
                     {
+                        en.Insert();
                         count++;
                         successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的导入成功</span><br/>";
                     }
-                    else
-                    {
-                        errInfo = errInfo.Replace("info@1", "");
-                        successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的更新成功</span><br/>";
-                    }
+                    
                 }
             }
 
@@ -126,21 +126,26 @@ namespace BP.WF.HttpHandler
                     en = (EntityMyPK)ens.GetNewEntity;
                     //给实体赋值
                     errInfo += SetEntityAttrVal("", dr, attrs, en, dt, 1);
-                    if (errInfo.IndexOf("info@1") == -1)
+                    
+                    //获取PKVal
+                    en.PKVal = en.InitMyPKVals();
+                    if (en.RetrieveFromDBSources() == 0)
                     {
+                        en.Insert();
                         count++;
                         successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的导入成功</span><br/>";
                     }
                     else
                     {
-                        errInfo = errInfo.Replace("info@1", "");
+                        changeCount++;
+                        SetEntityAttrVal("", dr, attrs, en, dt, 1);
                         successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的更新成功</span><br/>";
                     }
                 }
             }
             #endregion
 
-            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo;
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo+"@Split"+"changeCount="+changeCount;
         }
         /// <summary>
         /// 执行导入
@@ -207,6 +212,7 @@ namespace BP.WF.HttpHandler
             #region 清空方式导入.
             //清空方式导入.
             int count = 0;//导入的行数
+            int changeCount = 0;//更新的行数
             String successInfo = "";
             if (impWay == 0)
             {
@@ -260,8 +266,8 @@ namespace BP.WF.HttpHandler
                     if (myen.IsExits == true)
                     {
                         //给实体赋值
-                        errInfo += SetEntityAttrVal(no, dr, attrs, en, dt, 1);
-                        count++;
+                        errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 1);
+                        changeCount++;
                         successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
                         continue;
                     }
@@ -275,7 +281,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo;
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo + "@Split" + "changeCount=" + changeCount;
         }
 
         private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, Entity en, DataTable dt, int saveType)
@@ -364,20 +370,7 @@ namespace BP.WF.HttpHandler
                     else
                         en.Update();
                 }
-                else
-                {
-                    en.PKVal = ((EntityMyPK)en).InitMyPKVals();
-                    if (en.RetrieveFromDBSources() == 0)
-                        en.Insert(); //执行插入.
-                    else
-                    {
-                        en.Update();
-                        return "info@1";
-                    }
-                   
-                }
-               
-               
+                
             }
             catch (Exception ex)
             {

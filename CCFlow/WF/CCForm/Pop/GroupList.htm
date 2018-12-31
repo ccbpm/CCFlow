@@ -15,12 +15,44 @@
 
         var selectedEles = null;
         var mapExt = null;
+        var webUser = new WebUser();
 
         function loadEntities(mapExt) {
             selectedEles = new Entities("BP.Sys.FrmEleDBs");
             selectedEles.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
         }
 
+        function DealSQL(dbSrc) {
+            //dbSrc = dbSrc.replace(/~/g, "'");
+            if (webUser == null || webUser == undefined)
+                webUser = new WebUser();
+
+            //替换表达式常用的用户信息
+            dbSrc = dbSrc.replace('@WebUser.No', webUser.No);
+            dbSrc = dbSrc.replace('@WebUser.Name', webUser.Name);
+            dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+            dbSrc = dbSrc.replace('@WebUser.DeptName', webUser.DeptName);
+            dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+            //SQL语句中含有@符号，替换父窗体表单字段值
+            if (dbSrc.indexOf("@") != -1) {
+                var reg = new RegExp("(\~(.+?)\~)");
+                var results = dbSrc.match(reg);
+                $.each(results, function (i, param) {
+                    param = param.replace("@", "");
+                    //获取父窗体中的字段
+                    var obj = $('#TB_' + param, parent.document);
+                    if (obj.length == 0)
+                        obj = $('#DDL_' + param, parent.document);
+                    if (obj.length == 0)
+                        obj = $('#CB_' + param, parent.document);
+                    if (obj.length != 0)
+                        dbSrc = dbSrc.replace("@" + param, obj.val());
+                });
+            }
+            dbSrc = dbSrc.replace(/~/g, "'");
+            return dbSrc;
+
+        }
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
@@ -31,7 +63,8 @@
 
             var srcOfGroup = mapExt.Tag1; //分组.
             var srcOfEntitis = mapExt.Tag2; //实体.
-
+            srcOfGroup = DealSQL(srcOfGroup);
+            srcOfEntitis = DealSQL(srcOfEntitis);
             var groups = DBAccess.RunDBSrc(srcOfGroup, mapExt.DBType); //分组.
             var entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
 

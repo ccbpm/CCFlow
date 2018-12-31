@@ -1806,7 +1806,7 @@ namespace BP.En
 			attr.DefaultVal = defaultVal;
 			attr.MyDataType = DataType.AppString;
 			attr.MyFieldType = FieldType.Normal;
-			attr.MaxLength = 50;
+			attr.MaxLength = 200; //最大长度 @李国文
 			attr.Desc = desc;
 			attr.UIContralType = UIContralType.TB;
 		//	attr.UIBindKey = sql;

@@ -131,7 +131,6 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
                 map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
-
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单
@@ -144,6 +143,8 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
                     MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA");
+
+                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
                 #endregion 傻瓜表单
 
                 #region 基本功能.

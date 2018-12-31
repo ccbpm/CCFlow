@@ -136,6 +136,7 @@ namespace BP.Sys.FrmUI
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
                 #endregion 傻瓜表单。
 

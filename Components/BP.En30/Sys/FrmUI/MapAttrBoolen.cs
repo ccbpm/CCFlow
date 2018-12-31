@@ -137,6 +137,8 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 map.AddTBInt(MapAttrAttr.UIWidth, 0, "宽度(对自由表单有效)", true, false);
+                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
+
                 #endregion 傻瓜表单。
 
 

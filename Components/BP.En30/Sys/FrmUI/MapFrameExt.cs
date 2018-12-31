@@ -95,6 +95,9 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmEleAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
 
                 map.AddTBString(FrmEleAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+
+                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
+
              
                 this._enMap = map;
                 return this._enMap;

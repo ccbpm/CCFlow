@@ -17,7 +17,7 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "PopGroupList_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
-            
+
             if (mapExt.GetPara("SelectType") == "")
                 mapExt.SetPara("SelectType", "1");
 
@@ -168,27 +168,40 @@
 </tr>
 
 
-   <!-- 填充其他数据控件的数据源 -->
-        <tr>
-            <th colspan="4">
-                <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
-                <div id="tabsT" style="color: Gray; display: none">
-                    <ul>
-                        <li>该数据源可以为空</li>
-                        <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
-                        <li>数据源必须包含@Key变量，并且当前模式为单选。</li>
-                        <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, FK_BanJi AS DianHua FROM Demo_Student WHERE No='@Key'</li>                        
-                    </ul>
-                </div>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
-            </td>
-        </tr>
-
-
+<!-- 填充其他数据控件的数据源 -->
+<tr>
+    <th colspan="4">
+        <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
+        <div id="tabsT" style="color: Gray; display: none">
+            <ul>
+                <li>该数据源可以为空</li>
+                <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
+                <li>数据源必须包含@Key变量，并且当前模式为单选。</li>
+                <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, FK_BanJi AS DianHua FROM Demo_Student WHERE No='@Key'</li>                        
+            </ul>
+        </div>
+    </th>
+</tr>
+<tr>
+    <td colspan="4">
+        <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+    </td>
+</tr>
+<tr>
+    <th colspan="4">
+        <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>
+         <div id="backFunction" style="color:Gray; display:none">
+             <ul>
+             <li>该选项可以为空,弹出框确定后执行的JS，可以直接写方法名或者方法().</li>
+             </ul>
+         </div>
+    </th>
+</tr>
+<tr>
+    <td colspan=4>
+        <input id="TB_Tag5" name="TB_Tag5" style="width:100%;" />
+    </td>
+</tr>
  
  <tr>
 <td colspan=4><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />

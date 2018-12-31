@@ -881,6 +881,46 @@ var Entity = (function () {
             });
             return result;
         },
+        DirectInsert: function () {
+            var self = this;
+            var params = getParams(self);
+
+            if (params.length == 0)
+                params = getParams1(self);
+
+            var result = "";
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_DirectInsert&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                data: params,
+                success: function (data) {
+
+                    result = data;
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return 0; //插入失败.
+                    }
+
+                    data = JSON.parse(data);
+                    result = data;
+
+                    var self = this;
+                    $.each(data, function (n, o) {
+                        if (typeof self[n] !== "function") {
+                            jsonString[n] = o;
+                            self[n] = o;
+                        }
+                    });
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+            return result;
+        },
 
         Update: function () {
             var self = this;
@@ -1159,7 +1199,6 @@ var Entity = (function () {
         },
 
         DoMethodReturnString: function (methodName, myparams) {
-
             var params = [];
             $.each(arguments, function (i, o) {
                 if (i > 0)

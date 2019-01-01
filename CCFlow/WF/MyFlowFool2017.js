@@ -181,8 +181,11 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             html += "<tr>";
             if (attr.MyDataType != 4)
                 html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+            if (attr.MyDataType != 4)
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
+            else
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4 >";
 
-            html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";

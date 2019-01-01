@@ -26,7 +26,7 @@
 
             //加载表单字段。
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
-            mapAttrs.Retrieve("FK_MapData",  frmID);
+            mapAttrs.Retrieve("FK_MapData", frmID);
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var mapAttr = mapAttrs[i];
@@ -48,22 +48,30 @@
 
             //加载历史设置.
             var mapExts = new Entities("BP.Sys.MapExts");
-            mapAttrs.Retrieve("FK_MapData", frmID, "Tag", nodeID);
-           
-                for (var i = 0; i < mapExts.length; i++) {
-                    var mapExt = mapExts[i];
+            mapExts.Retrieve("FK_MapData", frmID, "Tag", nodeID);
 
-                    var html="<tr>";
-                    html+="<td>"+mapExt.Doc+"</td>";
-                    html+="<td>"+mapExt.Tag1+"</td>";
-                    html+="<td><a href=\"javascript:Del('"+mapExt.MyPK+"');\">删除</a></td>";
-                    html+="</tr>";
-
+            for (var i = 0; i < mapExts.length; i++) {
+                var mapExt = mapExts[i];
+                var html = "<tr>";
+                html += "<td>" + mapExt.Doc + "</td>";
+                html += "<td>" + mapExt.Tag1 + "</td>";
+                html += "<td><a href=\"javascript:Del('" + mapExt.MyPK + "');\">删除</a></td>";
+                html += "</tr>";
                 $("#History").append(html);
-
-                }
+            }
         });
 
+        function Del(pkval) {
+
+            if (window.confirm('您确认要删除吗？') == false)
+                return;
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.SetPKVal(pkval);
+            mapExt.Delete();
+
+            window.location.href = window.location.href;
+        }
 
         function SaveField() {
 
@@ -90,8 +98,8 @@
                 return;
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.SetPKVal(emps + "_SepcFields_" + frmID;
-            mapExt.RetrieveFromDBSources();
+            //mapExt.SetPKVal(emps + "_SepcFields_" + frmID);
+            //mapExt.RetrieveFromDBSources();
 
             mapExt.FK_MapData = frmID;
             mapExt.Doc = fields;
@@ -100,10 +108,7 @@
             mapExt.Tag1 = emps;
             mapExt.Insert();
 
-            alert("保存成功");
-
             window.location.href = window.location.href;
-
         }
     </script>
 </head>
@@ -113,7 +118,7 @@
         <caption>
             特别控件特别用户权限</caption>
         <tr>
-            <td>
+            <td style="width:50%;">
                 <table style="width: 100%;" id="Table1">
                     <tr>
                         <th>
@@ -130,32 +135,31 @@
                 <input type="button" value="设置字段的特别权限" onclick="SaveField()" />
             </td>
             <td valign="top">
-                <table id="History">
-                    <caption>
-                        历史设置
-                    </caption>
+                <table id="History" name="History">
                     <tr>
                         <th>
-                            人员
+                           指定的字段集合 
                         </th>
                         <th>
-                            字段
+                            指定的人员集合
                         </th>
                         <th>
                             操作
                         </th>
                     </tr>
                 </table>
+
+                <fieldset>
+                <legend>帮助</legend>
+                <ul>
+                <li>1.该功能是当前节点当前表单上控制指定的字段，让指定的人员可以编辑。</li>
+                <li>2.多用于会签而不使用审核组件的应用环境。</li>
+                <li>3.比如一个节点上需要n个人处理，每个人只能对指定的字段有填写的权限，就要按照人员为每个人设定指定的字段范围设置可以编辑的权限。</li>
+                </ul>
+                </fieldset>
             </td>
         </tr>
     </table>
-    <!--
-
- <h3> 正在加载，请稍后。。。</h3>
- -->
-    <!--
-<br />
-<center> 我们在2018年6月取消了对该功能的支持,如果您想启用此功能请参考就版本的代码进行重构. </center>-->
     </form>
 </body>
 </html>

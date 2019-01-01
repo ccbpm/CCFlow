@@ -227,6 +227,9 @@ function AfterBindEn_DealMapExt(frmData) {
     // 主表扩展(统计从表)
     var detailExt = {};
 
+    //获取当前人员
+    var webUser = new WebUser();
+
     for (var i = 0; i < mapExts.length; i++) {
         var mapExt = mapExts[i];
 
@@ -330,11 +333,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
                 break;
-            case "BindFunction": //控件绑定函数.
-
-                //  alert(mapExt.AttrOfOper);
-                // alert(DynamicBind(mapExt, "TB_"));
-
+            case "BindFunction": //控件绑定函数
 
                 if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
                     $('#TB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "TB_"));
@@ -364,24 +363,10 @@ function AfterBindEn_DealMapExt(frmData) {
                     tb.addClass("CheckRegInput");
                     tb.data(mapExt)
                     tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
-                    //tb.data().name = tb.attr('name');
-                    //tb.data().Doc = mapExt.Doc;
-                    //tb.data().Tag1 = mapExt.Tag1;
-                    //tb.attr("data-name", tb.attr('name'));
-                    //tb.attr("data-Doc", tb.attr('name'));
-                    //tb.attr("data-checkreginput", "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
+                  
                 }
                 break;
             case "InputCheck": //输入检查
-                //var tbJS = $("#TB_" + mapExt.AttrOfOper);
-                //if (tbJS != undefined) {
-                //    tbJS.attr(mapExt.Tag2, mapExt.Tag1 + "(this)");
-                //}
-                //else {
-                //    tbJS = $("#DDL_" + mapExt.AttrOfOper);
-                //    if (ddl != null)
-                //        ddl.attr(mapExt.Tag2, mapExt.Tag1 + "(this);");
-                //}
                 break;
             case "FastInput": //是否启用快速录入
                 if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || GetQueryString("IsReadonly") == "1")
@@ -441,8 +426,6 @@ function AfterBindEn_DealMapExt(frmData) {
                 //初始化页面时方法加载
 
                 DDLAnsc($("#DDL_" + mapExt.AttrOfOper).val(), "DDL_" + mapExt.AttrsOfActive, mapExt.MyPK, dbSrc, mapExt.DBType);
-
-                //ddlChild.select(valClient);  未写
                 break;
             case "AutoFullDLL": // 自动填充下拉框.
                 continue; //已经处理了。
@@ -495,15 +478,6 @@ function AfterBindEn_DealMapExt(frmData) {
 
                 ddlOper.attr("onchange", "Change('" + enName + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
 
-                // alert(enName + " " + ddlOper.length + " " + mapExt.AttrOfOper + " " + document.getElementById("DDL_" + mapExt.AttrOfOper));
-                //ddlOper.bind("change", function () {
-                //alert('sss');
-                // Change('" + enName + "');
-                //DDLFullCtrl(this.value, "DDL_" + mapExt.AttrOfOper, mapExt.MyPK);
-                //s  });
-                //  ddlOper.attr("onchange", "alert('sss');Change('" + enName + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
-
-
                 if (mapExt.Tag != null && mapExt.Tag != "") {
                     /* 下拉框填充范围. */
                     var strs = mapExt.Tag.split('$');
@@ -527,38 +501,33 @@ function AfterBindEn_DealMapExt(frmData) {
 
                         var sql = myCtl[1].replace(/~/g, "'");
                         sql = sql.replace("@Key", ddlOper.val());
-
-                        //需要执行SQL语句
-                        //sql = BP.WF.Glo.DealExp(sql, en, null);
-
-                        //dt = DBAccess.RunSQLReturnTable(sql);
-                        //string valC1 = ddlC1.SelectedItemStringVal;
-                        //if (dt.Rows.Count != 0)
-                        //{
-                        //    foreach (DataRow dr in dt.Rows)
-                        //{
-                        //        ListItem li = ddlC1.Items.FindByValue(dr[0].ToString());
-                        //    if (li == null)
-                        //    {
-                        //        ddlC1.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
-                        //    }
-                        //    else
-                        //    {
-                        //        li.Attributes["visable"] = "false";
-                        //    }
-                        //}
-
-                        //var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5'}];
+                        
                         var operations = '';
-                        //                        $.each(items, function (i, item) {
-                        //                            operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
-                        //                        });
+                       
                         ddlC1.children().remove();
                         ddlC1.html(operations);
-                        //ddlC1.SetSelectItem(valC1);
                     }
                 }
                 break;
+            case "SepcFieldsSepcUsers": //特殊字段的权限
+                //获取字段
+                var Filed = mapExt.Doc;
+                //获取人员
+                var emps = mapExt.Tag1;
+                if (emps.indexOf(webUser.No) != -1) {
+                    var fileds = Filed.split(",");
+                    $.each(fileds, function (i, objID) {
+                        var obj = $("#TB_" + objID);
+                        if (obj.length == 0)
+                            obj = $("#DDL_" + objID);
+                        if (obj.length == 0)
+                            obj = $("#CB_" + objID);
+                        if (obj.length != 0)
+                            obj.attr("disabled", false);
+                    });
+                }
+                break;
+
         }
     }
 }

@@ -770,7 +770,6 @@ namespace BP.Sys
         }
         #endregion
 
-
         #region 构造方法
         /// <summary>
         /// 扩展
@@ -895,6 +894,14 @@ namespace BP.Sys
                         this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
             }
+        }
+
+        protected override bool beforeInsert()
+        {
+            if (this.MyPK == "")
+                this.MyPK = DBAccess.GenerGUID(); //@李国文
+
+            return base.beforeInsert();
         }
 
         protected override bool beforeUpdate()

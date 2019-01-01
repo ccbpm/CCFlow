@@ -110,7 +110,7 @@
                 mapDtlSln.CopyJSON(mapDtl);
                 mapDtlSln.No = mypk;
                 mapDtlSln.FK_Node = currNodeID;
-                mapDtlSln.FK_MapData = "ND" + currNodeID;
+                mapDtlSln.FK_MapData = "ND" + nodeID;
                 mapDtlSln.DirectInsert();//直接插入，不生成新的分组
                 mapDtlSln.DoMethodReturnString("InitAttrsOfSelf");
 
@@ -142,7 +142,7 @@
             athSln.SetPKVal = athSln.MyPK;
             if (athSln.IsExits() == false) {
                 athSln.CopyJSON(ath);
-                athSln.FK_MapData = "ND" + currNodeID;
+                athSln.FK_MapData = athSln.FK_MapData;
                 athSln.MyPK = athSln.FK_MapData + "_" + ath.NoOfObj + "_" + currNodeID;
                 athSln.FK_Node = currNodeID;
                 athSln.CtrlWay = 4;

@@ -798,6 +798,60 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+        /// <summary>
+        /// 获得实体集合s
+        /// </summary>
+        /// <returns></returns>
+        public string Entities_RetrieveCond()
+        {
+            try
+            {
+                Entities ens = ClassFactory.GetEns(this.EnsName);
+                if (this.Paras == null)
+                    return "0";
+
+                QueryObject qo = new QueryObject(ens);
+                string[] myparas = this.Paras.Split('@');
+
+                int idx = 0;
+                for (int i = 0; i < myparas.Length; i++)
+                {
+                    string para = myparas[i];
+                    if (DataType.IsNullOrEmpty(para))
+                        continue;
+
+                    string[] strs = para.Split('|');
+                    string key = strs[0];
+                    string oper = strs[1];
+                    string val = strs[2];
+
+                    if (key.ToLower().Equals("orderby") == true)
+                    {
+                        qo.addOrderBy(val);
+                        continue;
+                    }
+
+                    if (idx == 0)
+                    {
+                        qo.AddWhere(key,oper, val);
+                    }
+                    else
+                    {
+                        qo.addAnd();
+                        qo.AddWhere(key, oper,val);
+                    }
+                    idx++;
+                }
+
+                qo.DoQuery();
+                return ens.ToJson();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 执行方法
         /// </summary>

@@ -552,12 +552,15 @@ namespace BP.WF.HttpHandler
                     frmField.FK_Flow = this.FK_Flow;
                     frmField.FK_MapData = this.FK_MapData;
                     frmField.KeyOfEn = attr.KeyOfEn;
+                    frmField.EleType = FrmEleType.Field;
                     frmField.Name = attr.Name;
-
                     if (isExit)
                         frmField.Update();
                     else
+                    {
+                        frmField.InitMyPKVals();
                         frmField.Insert();
+                    }
                 }
             }
 

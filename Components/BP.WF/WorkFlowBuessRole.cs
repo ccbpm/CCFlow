@@ -1566,7 +1566,8 @@ namespace BP.WF
                 if (node.CCWriteTo == CCWriteTo.All || node.CCWriteTo == CCWriteTo.Todolist)
                 {
                     //如果为写入待办则抄送列表中置为已读，原因：只为不提示有未读抄送。
-                    list.HisSta = node.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                    //list.HisSta = node.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                    list.HisSta = CCSta.UnRead;
                 }
                 //结束节点只写入抄送列表
                 if (node.IsEndNode == true)

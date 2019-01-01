@@ -766,12 +766,6 @@ namespace BP.WF.HttpHandler
             int w = this.GetRequestValInt("cW");
             int h = this.GetRequestValInt("cH");
 
-            //string myPK = ImgAthPK + "_" + this.MyPK;
-            //FrmImgAthDB imgAthDB = new FrmImgAthDB(myPK);
-
-            string appPath = SystemConfig.CCFlowAppPath;
-            appPath = SystemConfig.CCFlowWebPath;
-
             string newName = "";
             string fk_mapData = this.FK_MapData;
             string fileFullName = "";
@@ -1770,7 +1764,7 @@ namespace BP.WF.HttpHandler
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
 
-                if (nd.HisFormType == NodeFormType.SheetTree)
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType== NodeFormType.FoolTruck)
                 {
                     /*如果
                      * 1,传来节点ID, 不等于0.
@@ -4269,37 +4263,36 @@ namespace BP.WF.HttpHandler
         {
             FoolTruckNodeFrm sln = new FoolTruckNodeFrm();
             sln.FrmSln = -1;
-            sln.MyPK = this.GetRequestVal("FromFrm") + "_" + this.FK_Node + "_" + this.FK_Flow;
+            string fromFrm = this.GetRequestVal("FromFrm");
+            sln.MyPK = fromFrm + "_" + this.FK_Node + "_" + this.FK_Flow;
             int result = sln.RetrieveFromDBSources();
+            BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
+            athDesc.MyPK = this.FK_FrmAttachment;
+            athDesc.RetrieveFromDBSources();
 
-            if (result == 0 || sln.FrmSln == 1 || sln.FrmSln == 0)
+            /*没有查询到解决方案, 就是只读方案 */
+            if (result == 0 ||sln.FrmSln == 1)
             {
-                /*没有查询到解决方案, 就是只读方案 */
-                BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
-                athDesc.MyPK = this.FK_FrmAttachment;
-                athDesc.RetrieveFromDBSources();
-
                 athDesc.IsUpload = false;
                 athDesc.IsDownload = false;
                 athDesc.HisDeleteWay = AthDeleteWay.None; //删除模式.
                 return athDesc;
             }
+            //默认方案
+            if(sln.FrmSln == 0)
+                 return athDesc;
 
             //如果是自定义方案,就查询自定义方案信息.
             if (sln.FrmSln == 2)
             {
-                /*没有查询到解决方案, 就是只读方案 */
-                BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
-                athDesc.MyPK = this.FK_Node + "_Ath1";
-                if (athDesc.RetrieveFromDBSources() == 0)
+                BP.Sys.FrmAttachment athDescNode = new BP.Sys.FrmAttachment();
+                athDescNode.MyPK = "ND" + this.FK_Node + "_" + athDesc.NoOfObj + "_" + this.FK_Node;
+                if (athDescNode.RetrieveFromDBSources() == 0)
                 {
-                    athDesc.IsUpload = false;
-                    athDesc.HisDeleteWay = AthDeleteWay.None;
-                    athDesc.IsDownload = false;
-                    athDesc.HisCtrlWay = AthCtrlWay.WorkID; //没有方案.
-                    athDesc.Insert();
+                   //没有设定附件权限，保持原来的附件权限模式
+                    return athDesc;
                 }
-                return athDesc;
+                return athDescNode;
             }
 
             return null;

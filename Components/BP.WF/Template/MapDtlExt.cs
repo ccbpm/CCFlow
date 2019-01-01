@@ -1364,6 +1364,25 @@ namespace BP.WF.Template
                     athDesc.Name = this.Name;
                     athDesc.DirectInsert();
                 }
+
+               //判断是否有隐藏的AthNum 字段
+                MapAttr attr = new MapAttr();
+                attr.MyPK = this.No + "_AthNum";
+                int count = attr.RetrieveFromDBSources();
+                if (count == 0)
+                {
+                    attr.FK_MapData = this.No;
+                    attr.KeyOfEn = "AthNum";
+                    attr.Name = "附件数量";
+                    attr.DefVal = "0";
+                    attr.UIContralType = UIContralType.TB;
+                    attr.MyDataType = DataType.AppInt;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DirectInsert();
+                }
+
+
             }
 
             return "执行成功";

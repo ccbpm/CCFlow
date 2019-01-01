@@ -41,7 +41,7 @@
             var nodes = new Entities("BP.WF.Nodes");
             nodes.Retrieve("FK_Flow", node.FK_Flow, "NodeID");
 
-            var frmID = "ND" + GetQueryString("FK_Node");
+            var currentNode = GetQueryString("FK_Node");
 
             for (var i = 0; i < nodes.length; i++) {
 
@@ -50,12 +50,12 @@
                     continue;
 
                 var sln = new Entity("BP.WF.Template.FoolTruckNodeFrm");
-                sln.MyPK = frmID + "_" + json.NodeID + "_" + json.FK_Flow;
+                sln.MyPK = "ND" + json.NodeID + "_" + currentNode + "_" + json.FK_Flow;
 
                 if (sln.IsExits() == false) {
                     sln.FK_Flow = json.FK_Flow;
-                    sln.FK_Frm = frmID;
-                    sln.FK_Node = json.NodeID; //节点ID.
+                    sln.FK_Frm = "ND" + json.NodeID;
+                    sln.FK_Node = currentNode; //节点ID.
                     sln.FrmSln = 1; //只读方案.
                     sln.Insert();                     
                 } else {
@@ -69,9 +69,9 @@
 
                 var def = "";
 
-                //def = " - <a href=\"javascript:DefField('')\" >定义字段权限</a>";
+                def = " - <a href=\"javascript:DefField('" + json.NodeID + "','"+json.FK_Flow+"')\" >定义字段权限</a>";
                 def += " - <a href=\"javascript:DefAth('" + json.NodeID + "')\" >附件权限</a>";
-                //def += " - <a href=\"javascript:DefDtl('')\" >从表权限</a>";
+                def += " - <a href=\"javascript:DefDtl('" + json.NodeID + "')\" >从表权限</a>";
 
                 html += "<li>[" + sln.FrmSlnText + "]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.NodeID + " - " + json.Name + "</a> " + def + "</li>";
             }
@@ -81,19 +81,51 @@
 
             $("#sln").html(html);
         }
-        function DefField() {
-            alert('未开通.');
+        function DefField(nodeID,FK_Flow) {
+            var url = " ../../Sln/Fields.htm?FK_MapData=ND" + nodeID + "&FK_Node=" +nodeID + "&FK_Flow=" + FK_Flow + "&DoType=Field";
+            window.open(url);
         }
-        function DefDtl() {
-            alert('未开通.');
+        function DefDtl(nodeID) {
+            //获取NodeID的的附件权限
+            var FK_MapData = "ND" + nodeID;
+            var mapDtls = new Entities("BP.Sys.MapDtls");
+            mapDtls.Retrieve("FK_MapData", FK_MapData);
+            if (mapDtls.length == 0) {
+                alert('当前节点表单没有从表。');
+                return;
+            }
+            if (mapDtls.length != 1) {
+                alert("未涉及到两个从表的情况.");
+                return;
+            }
+
+            var mapDtl = mapDtls[0];
+            var currNodeID = GetQueryString("FK_Node");
+
+            //设置当前节点从表权限
+            var mypk = mapDtl.No + '_' + currNodeID;
+            var mapDtlSln = new Entity("BP.WF.Template.MapDtlExt");
+            mapDtlSln.SetPKVal(mypk);
+            if (mapDtlSln.RetrieveFromDBSources() == 0) {
+                mapDtlSln.CopyJSON(mapDtl);
+                mapDtlSln.No = mypk;
+                mapDtlSln.FK_Node = currNodeID;
+                mapDtlSln.FK_MapData = "ND" + currNodeID;
+                mapDtlSln.DirectInsert();//直接插入，不生成新的分组
+                mapDtlSln.DoMethodReturnString("InitAttrsOfSelf");
+
+                }
+            var url = "../../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + mapDtlSln.FK_MapData  + "&FK_MapDtl=" + mypk + "&FK_Node=" + currNodeID;
+                WinOpen(url);
+           
         }
         function DefAth(nodeID) {
+            var currNodeID = GetQueryString("FK_Node");
 
-            var frmID = "ND" + GetQueryString("FK_Node");
-
+            //获取NodeID的的附件权限
+            var FK_MapData = "ND" + nodeID;
             var aths = new Entities("BP.Sys.FrmAttachments");
-            aths.Retrieve("FK_MapData", frmID);
-
+            aths.Retrieve("FK_MapData", FK_MapData);
             if (aths.length == 0) {
                 alert('当前节点表单没有附件。');
                 return;
@@ -104,15 +136,20 @@
             }
 
             var ath = aths[0];
+            //设置当前节点的附件权限
             var athSln = new Entity("BP.Sys.FrmAttachment");
-            athSln.MyPK = nodeID + "_" + ath.NoOfObj;
+            athSln.MyPK = "ND" + currNodeID + "_" + ath.NoOfObj + "_" + currNodeID;
+            athSln.SetPKVal = athSln.MyPK;
             if (athSln.IsExits() == false) {
-
                 athSln.CopyJSON(ath);
-                athSln.MyPK = nodeID + "_" + ath.NoOfObj;
-                athSln.FK_MapData = nodeID;
+                athSln.FK_MapData = "ND" + currNodeID;
+                athSln.MyPK = athSln.FK_MapData + "_" + ath.NoOfObj + "_" + currNodeID;
+                athSln.FK_Node = currNodeID;
                 athSln.CtrlWay = 4;
-                athSln.Insert(); //插入新的.
+                athSln.SetPKVal = athSln.MyPK;
+                athSln.DirectInsert();
+                
+                //athSln.Insert(); //插入新的.
             }
 
             var url = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + athSln.MyPK;

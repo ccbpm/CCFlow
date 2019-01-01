@@ -664,6 +664,36 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+        /// <summary>
+        /// 执行插入.
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_DirectInsert()
+        {
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+
+                //遍历属性，循环赋值.
+                foreach (Attr attr in en.EnMap.Attrs)
+                {
+                    en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
+                }
+
+                //插入数据库.
+                int i = en.DirectInsert();
+                if (i == 1)
+                    en.Retrieve();//执行查询.
+
+                //返回数据.
+                return en.ToJson(false);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 查询
         /// </summary>

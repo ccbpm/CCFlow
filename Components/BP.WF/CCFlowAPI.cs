@@ -332,17 +332,53 @@ namespace BP.WF
                     qo.addOrderBy(MapAttrAttr.Idx);
                     qo.DoQuery();
 
-                    //把两个集合接起来.
-                    foreach (MapAttr item in attrsLeiJia)
+                    ////把两个集合接起来.
+                    //foreach (MapAttr item in attrsLeiJia)
+                    //{
+                    //    if (item.KeyOfEn.Equals("RDT") || item.KeyOfEn.Equals("Rec"))
+                    //        continue;
+
+                    //    item.UIIsEnable = false; //设置为只读的.
+                    //    attrs.AddEntity(item);
+                    //}
+
+                    //获取累加表单的权限
+                    FrmFields fls = new FrmFields();
+                    qo = new QueryObject(fls);
+                    qo.AddWhere(FrmFieldAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
+                    qo.addAnd();
+                    qo.AddWhere(FrmFieldAttr.EleType, FrmEleType.Field);
+                    qo.DoQuery();
+
+                    foreach (MapAttr attr in attrsLeiJia) 
                     {
-                        if (item.KeyOfEn.Equals("RDT") || item.KeyOfEn.Equals("Rec"))
+                        if (attr.KeyOfEn.Equals("RDT") || attr.KeyOfEn.Equals("Rec"))
                             continue;
 
-                        //if (attrs.Contains(item.KeyOfEn) == true)
-                        //    continue;
+                        FrmField frmField = null;
+                        foreach (FrmField item in fls)
+                        {
+                            if (attr.KeyOfEn == item.KeyOfEn)
+                            {
+                                frmField = item;
+                                break;
+                            }
+                        }
+                        if (frmField != null)
+                        {
+                            if (frmField.IsSigan)
+                                attr.UIIsEnable = false;
 
-                        item.UIIsEnable = false; //设置为只读的.
-                        attrs.AddEntity(item);
+                            attr.UIIsEnable = frmField.UIIsEnable;
+                            attr.UIVisible = frmField.UIVisible;
+                            attr.IsSigan = frmField.IsSigan;
+                            attr.DefValReal = frmField.DefVal;
+                        }
+                        else
+                        {
+                            attr.UIIsEnable = false; //设置为只读的.
+                        }
+                        attrs.AddEntity(attr);
                     }
 
                     //替换掉现有的.
@@ -383,7 +419,10 @@ namespace BP.WF
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
                     BP.Sys.MapDtls dtls = new MapDtls();
                     qo = new QueryObject(dtls);
-                    qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
+                    qo.AddWhere(MapDtlAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
+                    qo.addAnd();
+                    qo.AddWhere(MapDtlAttr.FK_Node, 0);
+
                     qo.DoQuery();
 
                     // 加入最新的MapDtl.
@@ -398,7 +437,9 @@ namespace BP.WF
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
                     BP.Sys.FrmAttachment frmAtchs = new FrmAttachment();
                     qo = new QueryObject(frmAtchs);
-                    qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
+                    qo.AddWhere(FrmAttachmentAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentAttr.FK_Node, 0);
                     qo.DoQuery();
 
                     // 加入最新的Sys_FrmAttachment.

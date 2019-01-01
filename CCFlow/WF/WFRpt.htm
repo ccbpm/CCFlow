@@ -12,14 +12,25 @@
         //页面启动函数.
         $(function () {
 
+            //判断是否是抄送
+            var en = new Entity("BP.WF.Template.CCList");
+            var workID = GetQueryString("WorkID");
+            var FK_Node = GetQueryString("FK_Node");
+            var webUser = new WebUser();
+            en.SetPKVal(workID + "_" + FK_Node + "_" + webUser.No);
+            var count = en.RetrieveFromDBSources();
+            if (count == 1 && en.Sta == "0") {
+                en.Sta = 1;
+                en.Update();
+            }
             var url = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + GetQueryString("FK_Flow");
-            url += "&FK_Node=" + GetQueryString("FK_Node");
-            url += "&WorkID=" + GetQueryString("WorkID");
+            url += "&FK_Node=" + FK_Node;
+            url += "&WorkID=" + workID;
             url += "&FID=" + GetQueryString("FID");
             url += "&WorkID=" + GetQueryString("WorkID");
             url += "&CCSta=" + GetQueryString("CCSta");
             window.location.href = url;
- 
+
         });
     </script>
 </head>

@@ -649,7 +649,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
                 fn = eval(mapAttr.UIBindKey);
             }
         } catch (e) {
-            alert(e);
+            //alert(e);
         }
 
         if (typeof fn == "function") {
@@ -659,12 +659,34 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             return operations;
         }
 
-        if (typeof CommonHandler == "function") {
-            CommonHandler.call("", mapAttr.UIBindKey, function (data) {
-                GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
-            })
-            return "";
+        var data = frmData[mapAttr.KeyOfEn];
+        if (data == undefined)
+            data = frmData[mapAttr.UIBindKey];
+
+        if (data == undefined) {
+            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
+            if (sfTable != null && sfTable != "") {
+                var selectStatement = sfTable.SelectStatement;
+                var srcType = sfTable.SrcType;
+                //Handler 获取外部数据源
+                if (srcType == 3)
+                    data = DBAccess.RunDBSrc(selectStatement, 0);
+                //JavaScript获取外部数据源
+                //if (srcType == 1)
+                //data = DBAccess.RunDBSrc(sfTable.No, 0);
+            }
         }
+        if (data == undefined) {
+            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+            return;
+        }
+
+        $.each(data, function (i, obj) {
+            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+
+        });
+        operations += "<option value=''>- 请选择 -</option>";
+        return operations;
 
         if (mapAttr.UIIsEnable == 0) {
 
@@ -673,22 +695,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             return operations;
         }
 
-        if (flowData[mapAttr.KeyOfEn] != undefined) {
-            $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
-            return operations;
-        }
 
-        if (flowData[mapAttr.UIBindKey] != undefined) {
-
-            $.each(flowData[mapAttr.UIBindKey], function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
-            return operations;
-        }
-        //   alert('没有获得约定的数据源.');
-        alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
     }
 }
 

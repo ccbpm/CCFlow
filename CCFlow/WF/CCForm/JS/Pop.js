@@ -104,11 +104,15 @@ function PopBranchesAndLeaf(mapExt, val) {
                         if (selectType == "0" && selectedRows.length == 1) {
                             ValSetter(mapExt.Tag4, selectedRows[0].No);
                         }
-
+                        var No = "";
+                        if (selectedRows != null && $.isArray(selectedRows))
+                            $.each(selectedRows, function (i, selectedRow) {
+                                No += selectedRow.No + ",";
+                            });
                         //执行JS
                         var backFunc = mapExt.Tag5;
                         if (backFunc != null && backFunc != "" && backFunc != undefined)
-                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, selectedRows[0].No));
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
                     }
                 }
             }, null, function () {
@@ -215,11 +219,11 @@ function PopBranches(mapExt, val) {
                     if ($.isArray(nodes)) {
                         $.each(nodes, function (i, node) {
                             SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
-                            
+
                         });
                         //重新加载
                         Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, null);
-                        
+
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
                             ValSetter(mapExt.Tag4, nodes[0].No);
@@ -323,7 +327,7 @@ function PopTableSearch(mapExt) {
             "Name": o.Tag2
         });
     });
-    
+
     var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
     mtags.mtags("loadData", initJsonData);
     $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
@@ -403,6 +407,15 @@ function PopGroupList_Done(mapExt) {
                 if (selectType == "0" && selectVals.length == 1) {
                     ValSetter(mapExt.Tag4, selectVals[0]);
                 }
+                var No = "";
+                if (selectVals != null && $.isArray(selectVals))
+                    $.each(selectVals, function (i, selectVal) {
+                        No += selectVal + ",";
+                    });
+                //执行JS
+                var backFunc = mapExt.Tag5;
+                if (backFunc != null && backFunc != "" && backFunc != undefined)
+                    DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
             }
         }, null, function () {
 

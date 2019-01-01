@@ -82,7 +82,7 @@
             $("#sln").html(html);
         }
         function DefField(nodeID,FK_Flow) {
-            var url = " ../../Sln/Fields.htm?FK_MapData=ND" + nodeID + "&FK_Node=" +nodeID + "&FK_Flow=" + FK_Flow + "&DoType=Field";
+            var url = " ../../Sln/Fields.htm?FK_MapData=ND" + nodeID + "&FK_Node=" +GetQueryString("FK_Node") + "&FK_Flow=" + FK_Flow + "&DoType=Field";
             window.open(url);
         }
         function DefDtl(nodeID) {

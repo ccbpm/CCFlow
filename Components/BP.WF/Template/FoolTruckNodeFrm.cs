@@ -124,6 +124,25 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        /// <summary>
+        /// 修改前的操作
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeUpdate()
+        {
+            //表单方案如果是只读或者默认方案时，删除对应的设置的权限
+            if (this.FrmSln == 0 || this.FrmSln == 1)
+            {
+                string sql = "";
+                sql += "@DELETE FROM Sys_FrmSln WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='"+this.FK_Node+"'";
+                sql += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
+                sql += "@DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
+                DBAccess.RunSQLs(sql);
+               
+            }
+            return base.beforeUpdate();
+        }
     }
     /// <summary>
     /// 累加表单方案s

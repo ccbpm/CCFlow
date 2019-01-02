@@ -1466,7 +1466,7 @@ var Entities = (function () {
         }
 
         if (divisor == 3) {
-            if (args.length % divisor != 0) {
+            if ((args.length-1） % divisor != 0) {
                 orderBy = args[args.length - 1];
                 length = args.length - 1;
             } else {

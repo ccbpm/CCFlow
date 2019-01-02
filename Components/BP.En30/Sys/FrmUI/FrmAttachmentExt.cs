@@ -769,7 +769,7 @@ namespace BP.Sys.FrmUI
 
                 //for tianye group 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
-                  "@0=保存到IIS服务器@1=保存到数据库@2=ftp服务器");
+                  "@0=保存到web服务器@1=保存到数据库@2=ftp服务器");
 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", false, false, 0, 150, 20, true, null);
                  

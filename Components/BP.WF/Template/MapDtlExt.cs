@@ -1023,10 +1023,18 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "导入其他表字段"; // "设计表单";
+                rm.Title = "导入其它表/视图字段"; // "设计表单";
                 rm.Warning = "导入后系统不会自动刷新，请手工刷新。";
                 rm.ClassMethodName = this.ToString() + ".ImpFields";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "导入其从表字段"; // "设计表单";
+                rm.Warning = "导入后系统不会自动刷新，请手工刷新。";
+                rm.ClassMethodName = this.ToString() + ".ImpFromDtlID";
+                rm.HisAttrs.AddTBString("ID", null, "请输入要导入的从表ID", true, false, 0, 100, 100);
+                rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1092,6 +1100,56 @@ namespace BP.WF.Template
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        /// <summary>
+        /// 导入其他从表字段
+        /// </summary>
+        /// <returns></returns>
+        public string ImpFromDtlID(string dtlId)
+        {
+            MapDtl dtl = new MapDtl();
+            dtl.No = dtlId;
+            if (dtl.RetrieveFromDBSources() == 0)
+                return "err@"+dtlId+"输入错误.";
+
+
+            MapDtl dtlOfThis = new MapDtl(this.No);
+            dtlOfThis.Copy(dtl);
+            dtlOfThis.FK_MapData = this.FK_MapData;
+            dtlOfThis.Update();
+
+
+            //删除当前从表Attrs.
+            MapAttrs attrs = new MapAttrs();
+            attrs.Delete(MapAttrAttr.FK_MapData, this.No);
+
+            //查询出来要导入的.
+            attrs.Retrieve(MapAttrAttr.FK_MapData, dtlId);
+
+            //执行字段导入.
+            foreach (MapAttr item in attrs)
+            {
+                item.FK_MapData = this.No;
+                item.Save();
+            }
+
+
+
+            //删除当前从表 exts .
+            MapExts exts = new MapExts();
+            exts.Delete(MapAttrAttr.FK_MapData, this.No);
+
+            //查询出来要导入的.
+            exts.Retrieve(MapAttrAttr.FK_MapData, dtlId);
+
+            //执行字段导入.
+            foreach (MapExt item in exts)
+            {
+                item.FK_MapData = this.No;
+                item.Save();
+            }
+
+            return "导入成功.";
         }
         /// <summary>
         /// 打开从表附件属性.

@@ -29,10 +29,10 @@ namespace BP.WF.HttpHandler
         {
             EntitiesTree ens = ClassFactory.GetEns(this.EnsName) as EntitiesTree;
             if (ens == null)
-                return "err@该实体["+this.EnsName+"]不是一个树形实体.";
+                return "err@该实体[" + this.EnsName + "]不是一个树形实体.";
 
             ens.RetrieveAll(EntityTreeAttr.Idx);
-            return ens.ToJsonOfTree();  
+            return ens.ToJsonOfTree();
         }
         #endregion 树的实体
 
@@ -61,7 +61,7 @@ namespace BP.WF.HttpHandler
             ens.RetrieveAll(EntityTreeAttr.Idx);
             return ens.ToJsonOfTree();
         }
-        
+
         /// <summary>
         /// 获取树关联的集合
         /// </summary>
@@ -102,7 +102,7 @@ namespace BP.WF.HttpHandler
                 row = dt.NewRow();
                 row["field"] = attr.KeyOfEn;
                 row["title"] = attr.Name;
-                row["Width"] = attr.UIWidthInt*2;
+                row["Width"] = attr.UIWidthInt * 2;
                 row["UIContralType"] = attr.UIContralType;
 
                 if (attr.HisAttr.IsFKorEnum)
@@ -181,8 +181,8 @@ namespace BP.WF.HttpHandler
 
             //查询结果
             QueryObject qo = new QueryObject(ens);
-  
-            string[] strs =  this.context.Request.Form.ToString().Split('&');
+
+            string[] strs = this.context.Request.Form.ToString().Split('&');
             foreach (string str in strs)
             {
                 if (str.IndexOf("EnsName") != -1)
@@ -200,15 +200,17 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
                 bool isExist = false;
-                foreach(Attr attr in en.EnMap.Attrs ){
-            	    if(attr.Key.Equals(key)){
-            		    isExist = true;
-            		    break;
-            	    }
+                foreach (Attr attr in en.EnMap.Attrs)
+                {
+                    if (attr.Key.Equals(key))
+                    {
+                        isExist = true;
+                        break;
+                    }
                 }
-            
-            if(isExist==false)
-            	continue;
+
+                if (isExist == false)
+                    continue;
 
                 if (mykey[1] == "mvals")
                 {
@@ -384,7 +386,7 @@ namespace BP.WF.HttpHandler
 
             DataTable dt = qo.DoQueryToTable();
 
-            string filePath = ExportDGToExcel(dt, en,en.EnDesc);
+            string filePath = ExportDGToExcel(dt, en, en.EnDesc);
 
 
             return filePath;
@@ -411,7 +413,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string pkval = this.PKVal;
-                Entity en = ClassFactory.GetEn(this.EnName) ;
+                Entity en = ClassFactory.GetEn(this.EnName);
 
                 if (pkval == "0" || pkval == "" || pkval == null || pkval == "undefined")
                 {
@@ -434,7 +436,7 @@ namespace BP.WF.HttpHandler
 
                 return en.ToJson(false);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
@@ -453,7 +455,7 @@ namespace BP.WF.HttpHandler
                 //    return "err@xx";
 
 
-                #region 首先判断参数删除. 
+                #region 首先判断参数删除.
                 string key1 = this.GetRequestVal("Key1");
                 string key2 = this.GetRequestVal("Key2");
                 string val1 = this.GetRequestVal("Val1");
@@ -606,7 +608,7 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
                 if (en == null)
-                    return "err@实体类名错误["+this.EnName+"].";
+                    return "err@实体类名错误[" + this.EnName + "].";
 
                 en.PKVal = this.PKVal;
                 en.RetrieveFromDBSources();
@@ -618,7 +620,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //保存参数属性.
-                string frmParas = this.GetValFromFrmByKey("frmParas","");
+                string frmParas = this.GetValFromFrmByKey("frmParas", "");
                 if (DataType.IsNullOrEmpty(frmParas) == false)
                 {
                     AtPara ap = new AtPara(frmParas);
@@ -723,8 +725,8 @@ namespace BP.WF.HttpHandler
             string result = mp.Invoke(en, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
         }
-        #endregion 
-       
+        #endregion
+
         #region Entities 公共类库.
         /// <summary>
         /// 调用参数.
@@ -765,7 +767,7 @@ namespace BP.WF.HttpHandler
                 for (int i = 0; i < myparas.Length; i++)
                 {
                     string para = myparas[i];
-                    if (DataType.IsNullOrEmpty(para) || para.Contains("=")==false)
+                    if (DataType.IsNullOrEmpty(para) || para.Contains("=") == false)
                         continue;
 
                     string[] strs = para.Split('=');
@@ -834,12 +836,12 @@ namespace BP.WF.HttpHandler
 
                     if (idx == 0)
                     {
-                        qo.AddWhere(key,oper, val);
+                        qo.AddWhere(key, oper, val);
                     }
                     else
                     {
                         qo.addAnd();
-                        qo.AddWhere(key, oper,val);
+                        qo.AddWhere(key, oper, val);
                     }
                     idx++;
                 }
@@ -879,7 +881,7 @@ namespace BP.WF.HttpHandler
             string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
         }
-        #endregion 
+        #endregion
 
         #region 功能执行.
         /// <summary>
@@ -943,7 +945,7 @@ namespace BP.WF.HttpHandler
                                     rm.SetValByKey(attr.Key, str1);
                                     break;
                                 case BP.DA.DataType.AppInt:
-                                    int myInt =  this.GetValIntFromFrmByKey(attr.Key);  //int.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                    int myInt = this.GetValIntFromFrmByKey(attr.Key);  //int.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                     rm.Row[idx] = myInt;
                                     rm.SetValByKey(attr.Key, myInt);
                                     break;
@@ -953,11 +955,11 @@ namespace BP.WF.HttpHandler
                                     break;
                                 case BP.DA.DataType.AppDouble:
                                 case BP.DA.DataType.AppMoney:
-                                    decimal myDoub =this.GetValDecimalFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                    decimal myDoub = this.GetValDecimalFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                     rm.SetValByKey(attr.Key, myDoub);
                                     break;
                                 case BP.DA.DataType.AppBoolean:
-                                    bool myBool =this.GetValBoolenFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                    bool myBool = this.GetValBoolenFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                     rm.SetValByKey(attr.Key, myBool);
                                     break;
                                 default:
@@ -968,7 +970,7 @@ namespace BP.WF.HttpHandler
                             try
                             {
                                 string str = this.GetValFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
-                               // string str = this.UCEn1.GetDDLByKey("DDL_" + attr.Key).SelectedItemStringVal;
+                                // string str = this.UCEn1.GetDDLByKey("DDL_" + attr.Key).SelectedItemStringVal;
                                 rm.SetValByKey(attr.Key, str);
                             }
                             catch
@@ -977,8 +979,8 @@ namespace BP.WF.HttpHandler
                             }
                             break;
                         case UIContralType.CheckBok:
-                                    bool myBoolval =this.GetValBoolenFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
-                                rm.SetValByKey(attr.Key, myBoolval);
+                            bool myBoolval = this.GetValBoolenFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                            rm.SetValByKey(attr.Key, myBoolval);
                             break;
                         default:
                             break;
@@ -1022,7 +1024,7 @@ namespace BP.WF.HttpHandler
                     || en.IsVisable == false)
                     continue;
 
-              //DataRow dr = dt.NewRow();
+                //DataRow dr = dt.NewRow();
 
                 html += "<li><a href=\"javascript:ShowIt('" + en.ToString() + "');\"  >" + en.GetIcon("/") + en.Title + "</a><br><font size=2 color=Green>" + en.Help + "</font><br><br></li>";
             }
@@ -1149,27 +1151,27 @@ namespace BP.WF.HttpHandler
                     if (sql.Contains("@WebUser.FK_Dept"))
                         sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                     DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
-                     foreach (DataColumn col in dtSQl.Columns)
-                     {
-                         string colName = col.ColumnName.ToLower();
-                         switch (colName)
-                         {
-                             case "no":
-                                 col.ColumnName = "No";
-                                 break;
-                             case "name":
-                                 col.ColumnName = "Name";
-                                 break;
-                             case "parentno":
-                                 col.ColumnName = "ParentNo";
-                                 break;
-                             default:
-                                 break;
-                         }
-                     }
-                     dtSQl.TableName = item.Key;
-                     ds.Tables.Add(dtSQl);
+                    DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataColumn col in dtSQl.Columns)
+                    {
+                        string colName = col.ColumnName.ToLower();
+                        switch (colName)
+                        {
+                            case "no":
+                                col.ColumnName = "No";
+                                break;
+                            case "name":
+                                col.ColumnName = "Name";
+                                break;
+                            case "parentno":
+                                col.ColumnName = "ParentNo";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    dtSQl.TableName = item.Key;
+                    ds.Tables.Add(dtSQl);
                 }
 
             }
@@ -1196,17 +1198,17 @@ namespace BP.WF.HttpHandler
             Map map = en.EnMapInTime;
 
             MapAttrs attrs = new MapAttrs(); ;
-           //DataTable dtAttrs = attrs.ToDataTableField();
-           //dtAttrs.TableName = "Attrs";
+            //DataTable dtAttrs = attrs.ToDataTableField();
+            //dtAttrs.TableName = "Attrs";
 
 
             MapData md = new MapData();
             md.No = this.EnsName;
             int count = md.RetrieveFromDBSources();
-           if(count==0)
-              attrs =  map.Attrs.ToMapAttrs;
-           else
-               attrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
+            if (count == 0)
+                attrs = map.Attrs.ToMapAttrs;
+            else
+                attrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
 
             //根据设置的显示列显示字段
             DataRow row = null;
@@ -1220,7 +1222,7 @@ namespace BP.WF.HttpHandler
                 string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")
                     continue;
-                if ((count!=0 && DataType.IsNullOrEmpty(searchVisable)) || attr.UIVisible == false)
+                if ((count != 0 && DataType.IsNullOrEmpty(searchVisable)) || attr.UIVisible == false)
                     continue;
                 row = dtAttrs.NewRow();
                 row["KeyOfEn"] = attr.KeyOfEn;
@@ -1230,7 +1232,7 @@ namespace BP.WF.HttpHandler
 
                 dtAttrs.Rows.Add(row);
             }
- 
+
             DataSet ds = new DataSet();
             ds.Tables.Add(dtAttrs); //把描述加入.
 
@@ -1238,7 +1240,7 @@ namespace BP.WF.HttpHandler
 
             //附件类型.
             md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType);
-            
+
             //获取实体类的主键
             md.SetPara("PK", en.PK);
 
@@ -1326,7 +1328,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty( ur.DTFrom) ==false)
+            if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)
             {
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
@@ -1399,7 +1401,7 @@ namespace BP.WF.HttpHandler
                     try
                     {
                         /* 就可能是年月日。 */
-                        string y =ap.GetValStrByKey("DDL_" + attr.Key + "_Year");
+                        string y = ap.GetValStrByKey("DDL_" + attr.Key + "_Year");
                         string m = ap.GetValStrByKey("DDL_" + attr.Key + "_Month");
                         string d = ap.GetValStrByKey("DDL_" + attr.Key + "_Day");
                         date = y + "-" + m + "-" + d;
@@ -1437,29 +1439,31 @@ namespace BP.WF.HttpHandler
             }
 
             //获得行数.
-             ur.SetPara("RecCount", qo.GetCount());
-             ur.Save();
+            ur.SetPara("RecCount", qo.GetCount());
+            ur.Save();
 
             //获取配置信息
-             EnCfg encfg = new EnCfg(this.EnsName);
+            EnCfg encfg = new EnCfg(this.EnsName);
             //增加排序
-             if (encfg != null){
-                 string orderBy = encfg.GetParaString("OrderBy");
-                 bool isDesc = encfg.GetParaBoolen("IsDeSc");
+            if (encfg != null)
+            {
+                string orderBy = encfg.GetParaString("OrderBy");
+                bool isDesc = encfg.GetParaBoolen("IsDeSc");
 
-                 if(DataType.IsNullOrEmpty(orderBy) ==false){
-                     if(isDesc)
+                if (DataType.IsNullOrEmpty(orderBy) == false)
+                {
+                    if (isDesc)
                         qo.addOrderByDesc(encfg.GetParaString("OrderBy"));
-                     else
-                         qo.addOrderBy(encfg.GetParaString("OrderBy"));
-                 }
+                    else
+                        qo.addOrderBy(encfg.GetParaString("OrderBy"));
+                }
 
-             }
+            }
 
-             if (GetRequestVal("DoWhat") != null && GetRequestVal("DoWhat").Equals("Batch"))
-                 qo.DoQuery(en.PK,500,1);
-             else
-                qo.DoQuery(en.PK,this.PageSize,this.PageIdx);
+            if (GetRequestVal("DoWhat") != null && GetRequestVal("DoWhat").Equals("Batch"))
+                qo.DoQuery(en.PK, 500, 1);
+            else
+                qo.DoQuery(en.PK, this.PageSize, this.PageIdx);
             #endregion 获得查询数据.
 
             DataTable mydt = ens.ToDataTableField();
@@ -1625,7 +1629,7 @@ namespace BP.WF.HttpHandler
                     qo.addRightBracket();
                 }
 
-                if (map.DTSearchWay == DTSearchWay.ByDateTime )
+                if (map.DTSearchWay == DTSearchWay.ByDateTime)
                 {
                     //取前一天的24：00
                     if (dtFrom.Trim().Length == 10) //2017-09-30
@@ -1717,11 +1721,11 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere(str, ap.GetValStrByKey(str));
                 qo.addRightBracket();
             }
-          
+
             #endregion 获得查询数据.
             return qo.DoQueryToTable();
-            
-           
+
+
         }
         public string Search_GenerPageIdx()
         {
@@ -1730,7 +1734,7 @@ namespace BP.WF.HttpHandler
             ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
-            string url = "?EnsName="+this.EnsName;
+            string url = "?EnsName=" + this.EnsName;
             int pageSpan = 10;
             int recNum = ur.GetParaInt("RecCount"); //获得查询数量.
             int pageSize = 12;
@@ -1753,7 +1757,7 @@ namespace BP.WF.HttpHandler
                 html += "<li><a href='" + url + "&PageIdx=1' ><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/></a><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/></a></li>";
             }
 
-            
+
             //分页采用java默认方式分页，采用bigdecimal分页报错
             int pageNum = 0;
             decimal pageCountD = decimal.Parse(recNum.ToString()) / decimal.Parse(pageSize.ToString()); // 页面个数。
@@ -1802,13 +1806,13 @@ namespace BP.WF.HttpHandler
         {
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
-           string  name = "数据导出";
-           string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
-           string filePath = ExportDGToExcel(Search_Data(ens, en),en,name);
-           //DataTableToExcel(Search_Data(ens, en),en, filename, name,
+            string name = "数据导出";
+            string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
+            string filePath = ExportDGToExcel(Search_Data(ens, en), en, name);
+            //DataTableToExcel(Search_Data(ens, en),en, filename, name,
             //                                                  BP.Web.WebUser.Name, true, true, true);
 
-           return filePath;
+            return filePath;
         }
         #endregion 查询.
 
@@ -1912,7 +1916,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow dr in mapAttrs.Rows)
             {
                 string lgType = dr["LGType"].ToString();
-                if (lgType.Equals("2")==false)
+                if (lgType.Equals("2") == false)
                     continue;
 
                 string UIIsEnable = dr["UIVisible"].ToString();
@@ -1930,11 +1934,11 @@ namespace BP.WF.HttpHandler
                 // 检查是否有下拉框自动填充。
                 string keyOfEn = dr["KeyOfEn"].ToString();
                 string fk_mapData = dr["FK_MapData"].ToString();
-                if(ds.Tables.Contains(uiBindKey) == false)
+                if (ds.Tables.Contains(uiBindKey) == false)
                 {
                     ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }
-                
+
             }
             #endregion 加入该方法的外键.
 
@@ -1968,7 +1972,7 @@ namespace BP.WF.HttpHandler
             #region 增加该方法的信息
             DataTable dt = new DataTable();
             dt.TableName = "RM";
-            dt.Columns.Add("Title",typeof(string));
+            dt.Columns.Add("Title", typeof(string));
             dt.Columns.Add("Warning", typeof(string));
 
             DataRow mydr = dt.NewRow();
@@ -2014,8 +2018,8 @@ namespace BP.WF.HttpHandler
             #endregion 加入权限信息.
 
             #region 判断主键是否为自增长
-          
-            if( en.IsNoEntity==true && en.EnMap.IsAutoGenerNo)
+
+            if (en.IsNoEntity == true && en.EnMap.IsAutoGenerNo)
                 md.SetPara("IsNewRow", "0");
             else
                 md.SetPara("IsNewRow", "1");
@@ -2076,10 +2080,10 @@ namespace BP.WF.HttpHandler
             if (enumKeys.Length > 2)
             {
                 enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
- 
+
                 string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
                 DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
- 
+
                 dtEnum.TableName = "Sys_Enum";
 
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -2219,7 +2223,7 @@ namespace BP.WF.HttpHandler
 
                 if (en.IsNoEntity)
                 {
-                    if ( en.EnMap.IsAutoGenerNo)
+                    if (en.EnMap.IsAutoGenerNo)
                         en.SetValByKey("No", en.GenerNewNoByKey("No"));
                 }
 
@@ -2239,7 +2243,7 @@ namespace BP.WF.HttpHandler
                     Log.DebugWriteInfo(ex.Message);
                     //msg += "<hr>" + ex.Message;
                 }
-              
+
 
 
                 #endregion 保存新加行.
@@ -2260,23 +2264,23 @@ namespace BP.WF.HttpHandler
             Entity en = ens.GetNewEntity;
             BP.En.RefMethods rms = en.EnMap.HisRefMethods;
             DataTable dt = new DataTable();
-             dt.TableName = "RM";
-             dt.Columns.Add("No");
-             dt.Columns.Add("Title");
-             dt.Columns.Add("Tip");
-             dt.Columns.Add("Visable");
+            dt.TableName = "RM";
+            dt.Columns.Add("No");
+            dt.Columns.Add("Title");
+            dt.Columns.Add("Tip");
+            dt.Columns.Add("Visable");
 
-             dt.Columns.Add("Url");
-             dt.Columns.Add("Target");
-             dt.Columns.Add("Warning");
-             dt.Columns.Add("RefMethodType");
-             dt.Columns.Add("GroupName");
-             dt.Columns.Add("W");
-             dt.Columns.Add("H");
-             dt.Columns.Add("Icon");
-             dt.Columns.Add("IsCanBatch");
-             dt.Columns.Add("RefAttrKey");
-             foreach (RefMethod item in rms)
+            dt.Columns.Add("Url");
+            dt.Columns.Add("Target");
+            dt.Columns.Add("Warning");
+            dt.Columns.Add("RefMethodType");
+            dt.Columns.Add("GroupName");
+            dt.Columns.Add("W");
+            dt.Columns.Add("H");
+            dt.Columns.Add("Icon");
+            dt.Columns.Add("IsCanBatch");
+            dt.Columns.Add("RefAttrKey");
+            foreach (RefMethod item in rms)
             {
                 if (item.IsCanBatch == false)
                     continue;
@@ -2311,7 +2315,7 @@ namespace BP.WF.HttpHandler
                 dr["GroupName"] = item.GroupName;
                 dt.Rows.Add(dr);
             }
-            
+
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion
@@ -2461,7 +2465,7 @@ namespace BP.WF.HttpHandler
                 string msg = "";
                 foreach (object obj in objs)
                     msg += "@" + obj.ToString();
-                string err = "@执行[" + this.EnsName + "]["+rm.ClassMethodName+"]期间出现错误：" + ex.Message + " InnerException= " + ex.InnerException + "[参数为：]" + msg;
+                string err = "@执行[" + this.EnsName + "][" + rm.ClassMethodName + "]期间出现错误：" + ex.Message + " InnerException= " + ex.InnerException + "[参数为：]" + msg;
                 return "<font color=red>" + err + "</font>";
             }
         }
@@ -2470,7 +2474,7 @@ namespace BP.WF.HttpHandler
         #region  公共方法。
         public string SFTable()
         {
-            SFTable sftable = new SFTable(this.GetRequestVal("SFTable") );
+            SFTable sftable = new SFTable(this.GetRequestVal("SFTable"));
             DataTable dt = sftable.GenerHisDataTable;
             return BP.Tools.Json.ToJson(dt);
         }
@@ -2504,7 +2508,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SQLList()
         {
-            string sqlKey =this.GetRequestVal("SQLKey"); //SQL的key.
+            string sqlKey = this.GetRequestVal("SQLKey"); //SQL的key.
             string paras = this.GetRequestVal("Paras"); //参数. 格式为 @para1=paraVal@para2=val2
 
             BP.Sys.XML.SQLList sqlXml = new BP.Sys.XML.SQLList(sqlKey);
@@ -2540,7 +2544,7 @@ namespace BP.WF.HttpHandler
         /// <param name="monthodName">方法名称</param>
         /// <param name="paras">参数，可以为空.</param>
         /// <returns>执行结果</returns>
-        public string Exec(string clsName, string methodName, string paras=null)
+        public string Exec(string clsName, string methodName, string paras = null)
         {
             #region 处理 HttpHandler 类.
             if (clsName.Contains(".HttpHandler.") == true)
@@ -2583,7 +2587,7 @@ namespace BP.WF.HttpHandler
 
                 //执行该方法.
                 object[] myparas = null;
-                string result= mp.Invoke(this, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+                string result = mp.Invoke(this, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
                 return result;
             }
             catch (Exception ex)
@@ -2604,7 +2608,7 @@ namespace BP.WF.HttpHandler
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~", "'");
 
-         
+
 
             return DBAccess.RunSQL(sql).ToString();
         }
@@ -2615,16 +2619,16 @@ namespace BP.WF.HttpHandler
         public string DBAccess_RunSQLReturnTable()
         {
             string sql = this.GetRequestVal("SQL");
-            sql = sql.Replace("~","'");
-            
+            sql = sql.Replace("~", "'");
 
 
-           #warning zhoupeng把这个去掉了. 2018.10.24
-           // sql = sql.Replace("-", "%"); //为什么？
+
+#warning zhoupeng把这个去掉了. 2018.10.24
+            // sql = sql.Replace("-", "%"); //为什么？
 
             sql = sql.Replace("/#", "+"); //为什么？
             sql = sql.Replace("/$", "-"); //为什么？
-           // sql = sql.Replace('"', '\"'); //为什么？
+            // sql = sql.Replace('"', '\"'); //为什么？
 
             if (null == sql || "" == sql)
             {
@@ -2640,18 +2644,18 @@ namespace BP.WF.HttpHandler
                 sql = sql.Replace(" ", "");
                 int index = sql.ToUpper().IndexOf("FROM");
                 int indexAs = 0;
-                sql = sql.Substring(6, index-6);
+                sql = sql.Substring(6, index - 6);
                 string[] keys = sql.Split(',');
                 foreach (string key in keys)
                 {
                     var realkey = key.Replace("Case", "").Replace("case", "").Replace("CASE", "");
                     indexAs = realkey.ToUpper().IndexOf("AS");
-                    if(indexAs!=-1)
+                    if (indexAs != -1)
                         realkey = realkey.Substring(indexAs + 2);
-                    if(dt.Columns[realkey.ToUpper()]!=null)
-                        dt.Columns[realkey.ToUpper()].ColumnName = realkey; 
+                    if (dt.Columns[realkey.ToUpper()] != null)
+                        dt.Columns[realkey.ToUpper()].ColumnName = realkey;
                 }
-                
+
             }
 
             return BP.Tools.Json.ToJson(dt);
@@ -2673,7 +2677,7 @@ namespace BP.WF.HttpHandler
             string httpHandlerName = this.GetRequestVal("HttpHandlerName");
             string methodName = this.GetRequestVal("DoMethod");
 
-            var type=System.Type.GetType(httpHandlerName);
+            var type = System.Type.GetType(httpHandlerName);
             if (type == null)
             {
                 BP.WF.HttpHandler.DirectoryPageBase obj = ClassFactory.GetHandlerPage(httpHandlerName) as BP.WF.HttpHandler.DirectoryPageBase;
@@ -2765,7 +2769,7 @@ namespace BP.WF.HttpHandler
             ext = ext.Replace(".", ""); //去掉点 @李国文
 
             //文件大小
-            float size = files[0].ContentLength/1024;
+            float size = files[0].ContentLength / 1024;
 
             //保存位置
             string filepath = "";
@@ -2817,37 +2821,21 @@ namespace BP.WF.HttpHandler
 
                 //设置路径.
                 filepath = ny + "//Helper//" + guid + ext;
-                
+
             }
             else
             {
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName+"\\" + this.PKVal;
+                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName;
 
-                if (System.IO.Directory.Exists(savePath) == false)
-                    System.IO.Directory.CreateDirectory(savePath);
-                //删除目录下的文件
-                DirectoryInfo dir = new DirectoryInfo(savePath);
-                FileSystemInfo[] fileinfo = dir.GetFileSystemInfos();  //返回目录中所有文件和子目录
-                foreach (FileSystemInfo k in fileinfo)
-                {
-                    if (k is DirectoryInfo)            //判断是否文件夹
-                    {
-                        DirectoryInfo subdir = new DirectoryInfo(k.FullName);
-                        subdir.Delete(true);          //删除子目录和文件
-                    }
-                    else
-                    {
-                        File.Delete(k.FullName);      //删除指定文件
-                    }
-                }                
+                if (System.IO.File.Exists(savePath) == false)
+                    System.IO.File.Delete(savePath);
 
-                filepath = savePath + "\\" + fileName + ext;
+                filepath = savePath + "\\" + this.PKVal + "." + ext;
                 //存在文件则删除
-                if (System.IO.Directory.Exists(filepath) == true)
-                    System.IO.Directory.Delete(filepath);
+                if (System.IO.File.Exists(filepath) == false)
+                    System.IO.File.Delete(filepath);
 
                 FileInfo info = new FileInfo(filepath);
-
                 files[0].SaveAs(filepath);
             }
 
@@ -2953,7 +2941,7 @@ namespace BP.WF.HttpHandler
             else
             {
 
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName+this.PKVal;
+                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName + this.PKVal;
 
                 if (System.IO.Directory.Exists(savePath) == false)
                     System.IO.Directory.CreateDirectory(savePath);
@@ -3014,7 +3002,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("IsDelete", uac.IsDelete);
                 ht.Add("IsView", uac.IsView);
             }
-           
+
             ht.Add("IsExp", uac.IsExp); //是否可以导出?
             ht.Add("IsImp", uac.IsImp); //是否可以导入?
 
@@ -3102,9 +3090,9 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
-        
-         /// <summary>
-         ///获取分组的外键、枚举
+
+        /// <summary>
+        ///获取分组的外键、枚举
         /// </summary>
         /// <returns></returns>
         public string Group_ContentAttrs()
@@ -3126,7 +3114,7 @@ namespace BP.WF.HttpHandler
             //获取注册信心表
             UserRegedit ur = new UserRegedit(WebUser.No, this.EnsName + "_Group");
             string reAttrs = this.GetRequestVal("Attrs");
-            
+
             //判断是否已经选择分组
             bool contentFlag = false;
             foreach (Attr attr in attrs)
@@ -3145,11 +3133,11 @@ namespace BP.WF.HttpHandler
                     }
                     dt.Rows.Add(dr);
                 }
-                
+
             }
 
             if (contentFlag == false && dt.Rows.Count != 0)
-                  dt.Rows[0]["Checked"] = "true";
+                dt.Rows[0]["Checked"] = "true";
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -3175,7 +3163,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("Field");
             dt.Columns.Add("Name");
             dt.Columns.Add("Checked");
-           
+
             dt.TableName = "Attrs";
 
             //如果不存在分析项手动添加一个分析项
@@ -3196,7 +3184,7 @@ namespace BP.WF.HttpHandler
             ddlDr["Selected"] = "true";
             ddlDt.Rows.Add(ddlDr);
             ds.Tables.Add(ddlDt);
-            
+
             foreach (Attr attr in map.Attrs)
             {
                 if (attr.IsPK || attr.IsNum == false)
@@ -3239,12 +3227,12 @@ namespace BP.WF.HttpHandler
                 dtr = dt.NewRow();
                 dtr["Field"] = attr.Key;
                 dtr["Name"] = attr.Desc;
-                
+
 
                 // 根据状态 设置信息.
                 if (ur.Vals.IndexOf(attr.Key) != -1)
                     dtr["Checked"] = "true";
-   
+
                 dt.Rows.Add(dtr);
 
                 ddlDt = new DataTable();
@@ -3266,7 +3254,7 @@ namespace BP.WF.HttpHandler
                 if (ur.Vals.IndexOf("@" + attr.Key + "=AVG") != -1)
                     ddlDr["Selected"] = "true";
                 ddlDt.Rows.Add(ddlDr);
-                
+
                 if (this.IsContainsNDYF)
                 {
                     ddlDr = ddlDt.NewRow();
@@ -3278,7 +3266,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 ds.Tables.Add(ddlDt);
-                
+
 
             }
             ds.Tables.Add(dt);
@@ -3316,7 +3304,7 @@ namespace BP.WF.HttpHandler
             showSum.Rows.Add(sumdr);
 
             DataTable activeAttr = aas.ToDataTable();
-            activeAttr.TableName="ActiveAttr";
+            activeAttr.TableName = "ActiveAttr";
             ds.Tables.Add(activeAttr);
             ds.Tables.Add(showSum);
 
@@ -3335,7 +3323,7 @@ namespace BP.WF.HttpHandler
 
             //根据注册表信息获取里面的分组信息
             string StateNumKey = ur.Vals.Substring(ur.Vals.IndexOf("@StateNumKey") + 1);
-           
+
             string[] statNumKeys = StateNumKey.Split('@');
             foreach (string ct in statNumKeys)
             {
@@ -3394,15 +3382,15 @@ namespace BP.WF.HttpHandler
                         default:
                             throw new Exception("没有判断的情况.");
                     }
-                    
+
                 }
-           
+
             }
             bool isHaveLJ = false; // 是否有累计字段。
             if (StateNumKey.IndexOf("AMOUNT@") != -1)
                 isHaveLJ = true;
 
-            
+
             if (groupKey == "")
             {
                 return null;
@@ -3425,9 +3413,9 @@ namespace BP.WF.HttpHandler
                 {
                     if (key.Contains("=") == true)
                         continue;
-                   //if (key.Equals("Group_Number"))
+                    //if (key.Equals("Group_Number"))
 
-                    selectSQL += key + " \""+key+"\",";
+                    selectSQL += key + " \"" + key + "\",";
                     groupBy += key + ",";
                     // 加入组里面。
                     AttrsOfGroup.Add(map.GetAttrByKey(key), false, false);
@@ -3451,7 +3439,8 @@ namespace BP.WF.HttpHandler
 
             groupBy = groupBy.Substring(0, groupBy.Length - 1);
 
-            if(groupBy.Trim().Equals("GROUP BY")){
+            if (groupBy.Trim().Equals("GROUP BY"))
+            {
                 return null;
             }
 
@@ -3538,19 +3527,21 @@ namespace BP.WF.HttpHandler
                     where += ")";
                 }
             }
-               /// #region 获得查询数据.
-  		    foreach (string str in ap.HisHT.Keys)
-            {   Object val = ap.GetValStrByKey(str);
-  			    if (val.Equals("all")) {
-  				    continue;
-  			    }
-  			    where += " " + str + "=" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+            /// #region 获得查询数据.
+            foreach (string str in ap.HisHT.Keys)
+            {
+                Object val = ap.GetValStrByKey(str);
+                if (val.Equals("all"))
+                {
+                    continue;
+                }
+                where += " " + str + "=" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
                 if (str != "FK_NY")
                     whereOfLJ += " " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
 
                 myps.Add(str, val);
-  			
-  		    }
+
+            }
 
             #endregion
 
@@ -3758,7 +3749,7 @@ namespace BP.WF.HttpHandler
         public string ParseExpToDecimal()
         {
             string exp = this.GetRequestVal("Exp");
-            
+
             decimal d = DataType.ParseExpToDecimal(exp);
             return d.ToString();
         }
@@ -3789,7 +3780,7 @@ namespace BP.WF.HttpHandler
             if (ds == null)
                 return "info@<img src='../Img/Warning.gif' /><b><font color=red> 您没有选择分析的数据</font></b>";
 
-            string filePath =  ExportGroupExcel(ds, en.EnDesc,ur.Vals);
+            string filePath = ExportGroupExcel(ds, en.EnDesc, ur.Vals);
 
 
             return filePath;
@@ -3814,7 +3805,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HelperWordsData()
         {
-            
+
             string FK_MapData = this.GetRequestVal("FK_MapData");
             string AttrKey = this.GetRequestVal("AttrKey");
             string lb = this.GetRequestVal("lb");
@@ -3822,7 +3813,7 @@ namespace BP.WF.HttpHandler
             //读取txt文件
             if (lb == "readWords")
                 return readTxt();
-            
+
             //读取其他常用词汇
             DataSet ds = new DataSet();
             //我的词汇
@@ -3840,7 +3831,7 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere("FK_Emp", "=", WebUser.No);
                 qo.addAnd();
                 qo.AddWhere("LB", "=", "1");
-                
+
                 string pageNumber = GetRequestVal("pageNumber");
                 int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
                 //每页多少行
@@ -3867,8 +3858,8 @@ namespace BP.WF.HttpHandler
                     MapData mapData = new MapData(this.FK_MapData);
                     rptNo = mapData.PTable;
                 }
-               
-                
+
+
                 GEEntitys ges = new GEEntitys(rptNo);
                 QueryObject qo = new QueryObject(ges);
                 string fk_emp = this.GetRequestVal("FK_Emp");
@@ -3906,11 +3897,11 @@ namespace BP.WF.HttpHandler
 
                 ds.Tables.Add(newDt); //把描述加入.
 
-                
+
             }
             return BP.Tools.Json.ToJson(ds);
-          
-          
+
+
         }
 
         /// <summary>
@@ -3971,7 +3962,7 @@ namespace BP.WF.HttpHandler
                 dr["DataCount"] = folderArray.Length;
                 dt.Rows.Add(dr);
                 ds.Tables.Add(dt);
-                return BP.Tools.Json.ToJson(ds) ;
+                return BP.Tools.Json.ToJson(ds);
             }
             catch (Exception)
             {

@@ -2457,6 +2457,11 @@ namespace BP.WF
                     sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("err@没有找到那一行数据." + sql);
+
+
                     Hashtable ht = new Hashtable();
                     //转换成ht表
                     DataRow row = dt.Rows[0];

@@ -20,7 +20,7 @@ namespace BP.WF.DTS
         /// </summary>
         public GenerDeptTree()
         {
-            this.Title = "为部门Port_Dept表生成TreeNo字段,跟节点为00。";
+            this.Title = "为部门Port_Dept表生成 TreeNo 字段,跟节点为01。";
             this.Help = "该字段仅仅为了用于LIKE查询，不能作为关联主键，因为该字段是变化的，随着部门的增加而变化.";
             this.Help += "执行此功能要求. 1. Port_Dept, 必须有 TreeNo 字段。 2. Port_Dept 必须有DeptTreeNo 字段. 3. Port_DeptEmp 必须有 DeptTreeNo 字段. 4. Port_DeptEmpStation 必须有 DeptTreeNo 字段.";
             //  this.HisAttrs.AddTBString("Path", "C:\\ccflow.Template", "生成的路径", true, false, 1, 1900, 200);
@@ -76,6 +76,9 @@ namespace BP.WF.DTS
                 DBAccess.RunSQL(sql);
                 sql = "UPDATE Port_DeptEmpStation SET DeptTreeNo='01" + subNo + "' WHERE FK_Dept='" + item.No + "'";
                 DBAccess.RunSQL(sql);
+
+
+                SetDeptTreeNo(item, "01");
             }
 
             return "执行成功.";

@@ -609,7 +609,7 @@ namespace BP.En
             Attr attr = this.HisMap.GetAttrByKey(attrKey);
             if (attr.IsRefAttr == true)
             {
-              //  Entity en = attr.HisFKEn;
+                //  Entity en = attr.HisFKEn;
                 if (this.HisDBType == DBType.Oracle)
                     return "T" + attr.Key.Replace("Text", "") + ".Name";
                 else
@@ -617,11 +617,11 @@ namespace BP.En
                     Entity en = attr.HisFKEn;
                     return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
                 }
-                   
+
             }
 
             return this.HisMap.PhysicsTable + "." + attr.Field;
-           // return this.HisMap.PhysicsTable + "."+attr;
+            // return this.HisMap.PhysicsTable + "."+attr;
         }
         public DataTable DoGroupReturnTable(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
         {
@@ -1009,7 +1009,7 @@ namespace BP.En
         /// <returns></returns>
         public int DoQuery(string pk, int pageSize, int pageIdx)
         {
-            if (pk == "OID" || pk=="WorkID" )
+            if (pk == "OID" || pk == "WorkID")
                 return DoQuery(pk, pageSize, pageIdx, pk, true);
             else
                 return DoQuery(pk, pageSize, pageIdx, pk, false);
@@ -1054,7 +1054,7 @@ namespace BP.En
         public int DoQuery(string pk, int pageSize, int pageIdx, string orderBy, bool isDesc)
         {
             int pageNum = 0;
-            
+
             //如果没有加入排序字段，使用主键
             if (DataType.IsNullOrEmpty(this._orderBy))
             {
@@ -1062,10 +1062,10 @@ namespace BP.En
                 if (isDesc)
                     isDescStr = " DESC ";
 
-                if (DataType.IsNullOrEmpty(orderBy)) 
+                if (DataType.IsNullOrEmpty(orderBy))
                     orderBy = pk;
 
-                this._orderBy =  attr2Field(orderBy) + isDescStr;
+                this._orderBy = attr2Field(orderBy) + isDescStr;
             }
 
             if (this._orderBy.Contains("ORDER BY") == false)
@@ -1111,7 +1111,7 @@ namespace BP.En
                             toIdx = top + pageSize;
                             if (this._sql == "" || this._sql == null)
                             {
-                               
+
 
                                 if (top == 0)
                                     sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " " + this._orderBy + "   ) WHERE ROWNUM <=" + pageSize;
@@ -1179,7 +1179,7 @@ namespace BP.En
                             if (this._sql == "" || this._sql == null)
                             {
                                 if (top == 0)
-                                    sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy + " LIMIT "+pageSize;
+                                    sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy + " LIMIT " + pageSize;
                                 else
                                     sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
                             }
@@ -1214,13 +1214,13 @@ namespace BP.En
                             {
                                 //此处去掉原有的第1页时用top pagesize的写法，会导致第1页数据查询出来的不准确，统一都用下面的写法，edited by liuxc,2017-8-30
                                 //此处查询数据，除第1页外，有可能会造排序不正确，但每一页的数据是准确的，限于原有写法，没法改动此处逻辑解决这个问题
-                                    sql = " SELECT  [" + this.En.PKField + "] FROM " + map.PhysicsTable + " " + this._orderBy;
+                                sql = " SELECT  [" + this.En.PKField + "] FROM " + map.PhysicsTable + " " + this._orderBy;
                             }
                             else
                             {
-                                    string mysql = this.SQL;
-                                    mysql = mysql.Substring(mysql.IndexOf("FROM "));
-                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " as  [" + this.En.PKField + "]  " + mysql;
+                                string mysql = this.SQL;
+                                mysql = mysql.Substring(mysql.IndexOf("FROM "));
+                                sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " as  [" + this.En.PKField + "]  " + mysql;
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");
@@ -1303,8 +1303,8 @@ namespace BP.En
                     else
                     {
                         sql = sql.Substring(sql.IndexOf("FROM "));
-                        if(sql.IndexOf("ORDER BY")>=0)
-                            sql = sql.Substring(0,sql.IndexOf("ORDER BY")-1);
+                        if (sql.IndexOf("ORDER BY") >= 0)
+                            sql = sql.Substring(0, sql.IndexOf("ORDER BY") - 1);
                         sql = "SELECT COUNT(" + ptable + "." + pk + ") as C " + sql;
                     }
                     //sql="SELECT COUNT(*) as C "+this._endSql  +sql.Substring(  sql.IndexOf("FROM ") ) ;
@@ -1333,7 +1333,7 @@ namespace BP.En
             }
         }
 
-        public DataTable DoGroupQueryToTable(string selectSQl,string groupBy,string orderBy)
+        public DataTable DoGroupQueryToTable(string selectSQl, string groupBy, string orderBy)
         {
             string sql = this.SQL;
             string ptable = this.En.EnMap.PhysicsTable;
@@ -1345,11 +1345,11 @@ namespace BP.En
                     if (this._sql == "" || this._sql == null)
                         sql = selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
                     else
-                        sql =  selectSQl + sql.Substring(sql.IndexOf(" FROM ")) + groupBy + orderBy;
+                        sql = selectSQl + sql.Substring(sql.IndexOf(" FROM ")) + groupBy + orderBy;
                     break;
                 default:
                     if (this._sql == "" || this._sql == null)
-                        sql =  selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
+                        sql = selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
                     else
                     {
                         sql = sql.Substring(sql.IndexOf(" FROM "));
@@ -1366,8 +1366,8 @@ namespace BP.En
                     //	sql=sql.Substring(0,i);
                     break;
             }
-           return DBAccess.RunSQLReturnTable(sql, this.MyParas);
-               
+            return DBAccess.RunSQLReturnTable(sql, this.MyParas);
+
         }
         /// <summary>
         /// 最大的数量

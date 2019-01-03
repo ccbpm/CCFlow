@@ -12,8 +12,18 @@ namespace CCBPM.DataUser
     {
         public void ProcessRequest(HttpContext context)
         {
+            string doType = context.Request.QueryString["DoType"];
+
+            string json="";
+            if (doType == "Demo_HandlerEmps")
+                json = Demo_HandlerEmps();
+
+            if (doType == "Demo_HandlerDepts")
+                json = Demo_HandlerDepts();
+
             context.Response.ContentType = "text/plain";
-            context.Response.Write("Hello World");
+            context.Response.Write(json);
+
         }
 
         public bool IsReusable

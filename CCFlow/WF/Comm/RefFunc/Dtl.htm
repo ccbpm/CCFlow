@@ -72,9 +72,9 @@
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
 
-            var url = "EnOnly.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
+            var url = "En.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
-            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 540, 450, "icon-edit", false, function () { }, null, function () {
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 650, 600, "icon-edit", false, function () { }, null, function () {
 
                 window.location.href = window.location.href
 

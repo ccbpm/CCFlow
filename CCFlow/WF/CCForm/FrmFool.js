@@ -779,11 +779,11 @@ function Ele_Attachment(workNode, gf) {
     var src = "";
     
     //这里的连接要取 FK_MapData的值.
-    src = "Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
+    src = "Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {
-        src = "../../DataUser/OverrideFiles/Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url;
+        src = "../../DataUser/OverrideFiles/Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
     }
 
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + gf.CtrlID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';

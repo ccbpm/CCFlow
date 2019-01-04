@@ -492,6 +492,13 @@ namespace BP.WF
                 {
                     case FieldTypeS.Normal:  // 输出普通类型字段.
                         text = en.GetValStrByKey(attr.KeyOfEn);
+                        if (attr.MyDataType == 1 && (int)attr.UIContralType == DataType.AppString)
+                        {
+                            if (en.GetValRefTextByKey(attr.KeyOfEn) == null)
+                                text = en.GetValStrByKey(attr.KeyOfEn + "T");
+                            else
+                                text = en.GetValRefTextByKey(attr.KeyOfEn);
+                        }
                         break;
                     case FieldTypeS.Enum:
                     case FieldTypeS.FK:
@@ -899,6 +906,13 @@ namespace BP.WF
                         {
                             case FieldTypeS.Normal:  // 输出普通类型字段.
                                 text = en.GetValStrByKey(attr.KeyOfEn);
+                                if (attr.MyDataType== 1 && (int)attr.UIContralType == DataType.AppString)
+                                {
+                                    if (en.GetValRefTextByKey(attr.KeyOfEn) == null)
+                                        text = en.GetValStrByKey(attr.KeyOfEn + "T");
+                                    else
+                                        text = en.GetValRefTextByKey(attr.KeyOfEn);
+                                }
                                 break;
                             case FieldTypeS.Enum:
                             case FieldTypeS.FK:

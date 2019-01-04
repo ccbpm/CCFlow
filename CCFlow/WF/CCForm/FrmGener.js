@@ -668,9 +668,22 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             if (sfTable != null && sfTable != "") {
                 var selectStatement = sfTable.SelectStatement;
                 var srcType = sfTable.SrcType;
-                //Handler 获取外部数据源
+                // SQL获取外部数据源
                 if (srcType == 3)
                     data = DBAccess.RunDBSrc(selectStatement, 0);
+                //WebService 获取外部数据源
+                if (srcType == 5) {
+                    data = SFTaleHandler(selectStatement);
+                    if (data == "false") {
+                        alert(mapAttr.KeyOfEn+"外部数据源获取错误");
+                        return;
+                    }
+                      
+                    data = JSON.parse(data);
+                }
+                //JavaScript获取外部数据源
+                if (srcType == 6)
+                    data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
                 //JavaScript获取外部数据源
                 //if (srcType == 1)
                 //data = DBAccess.RunDBSrc(sfTable.No, 0);

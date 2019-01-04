@@ -197,7 +197,8 @@ namespace BP.Sys
                     break;
                 case "DropDownListTable": //外键类型.
                     attr.MyDataType = BP.DA.DataType.AppString;
-                    attr.LGType = En.FieldTypeS.FK;
+                    if (pks.Contains("@" + attr.KeyOfEn + "@") == false)
+                        attr.LGType = En.FieldTypeS.FK;
                     attr.UIContralType = En.UIContralType.DDL;
                     attr.MaxLen = 100;
                     attr.MinLen = 0;

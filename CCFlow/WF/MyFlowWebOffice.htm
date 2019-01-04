@@ -24,14 +24,14 @@
                     document.title = title;
                     var currTab = $('#mtabs').tabs('getSelected');
                     var url = $(currTab.panel('options').content).attr('src');
-                    if (url != undefined && title=="轨迹") {
+                    //if (url != undefined && title=="轨迹") {
                         $('#mtabs').tabs('update', {
                             tab: currTab,
                             options: {
                                 content: createFrame(url)
                             }
                         });
-                    }
+                    //}
                 }
             });
 

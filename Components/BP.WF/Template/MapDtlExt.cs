@@ -1361,7 +1361,7 @@ namespace BP.WF.Template
 
 
         /// <summary>
-        /// 初始化自定义字段属性 @袁丽娜.
+        /// 初始化自定义字段属性
         /// </summary>
         /// <returns>返回执行结果</returns>
         public string InitAttrsOfSelf()

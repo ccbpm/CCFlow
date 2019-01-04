@@ -279,7 +279,7 @@ namespace BP.Sys
             {
                 MapAttr attrH = new MapAttr();
                 attrH.Copy(attr);
-                attrH.KeyOfEn = attr.KeyOfEn + "Text";
+                attrH.KeyOfEn = attr.KeyOfEn + "T";
                 attrH.Name = attr.Name;
                 attrH.UIContralType = BP.En.UIContralType.TB;
                 attrH.MinLen = 0;

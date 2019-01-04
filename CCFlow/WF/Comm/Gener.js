@@ -2255,5 +2255,52 @@ function GetPara(atPara,key) {
         return unescape(results[2]);
     }
     return undefined;
-        
+
+}
+
+
+function SFTaleHandler(url) {
+    //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
+    var curPath = window.document.location.href;
+    //获取主机地址之后的目录，如： jflow-web/index.jsp  
+    var pathName = window.document.location.pathname;
+    var pos = curPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:80  
+    var localhostPaht = curPath.substring(0, pos);
+    //获取带"/"的项目名，如：/jflow-web
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+
+    var localpath =  localhostPaht + projectName;
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = localhostPaht + "/DataUser/SFTableHandler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = localpath + "/DataUser/SFTableHandler/";
+    }
+    var jsonString = "";
+
+    if (url.indexOf("?") == -1)
+        url = url + "?1=1";
+
+    url = dynamicHandler  + url + "&t=" + new Date().getTime();
+    $.ajax({
+        type: 'post',
+        async: false,
+        url: url,
+        dataType: 'html',
+        success: function (data) {
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                jsonString="false";
+            }
+
+            jsonString =  data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(URL+"err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+        }
+    });
+
+    return jsonString;
 }

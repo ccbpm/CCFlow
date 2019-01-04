@@ -265,6 +265,8 @@ namespace BP.WF.HttpHandler
             dtls.Retrieve(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
             Entity en = dtls.GetNewEntity;
             string name = "数据导出";
+            if (refPKVal.Contains("/") == true)
+                refPKVal = refPKVal.Replace("/", "_");
             string filename = refPKVal + "_" + en.ToString() +"_"+DataType.CurrentData+ "_" + name  +".xls";
             string filePath = ExportDGToExcel(dtls.ToDataTableField(), en, name,null,filename);
            

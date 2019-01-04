@@ -1092,7 +1092,11 @@ namespace BP.WF.HttpHandler
                         }
                         else
                         {
-                            strLine = strLine + dr[attr.IsFKorEnum ? (attr.Key + "Text") : attr.Key] + Convert.ToChar(9);
+                            string text = dr[attr.IsFKorEnum ? (attr.Key + "Text") : attr.Key].ToString();
+                            if (DataType.IsNullOrEmpty(text) == false && (text.Contains("\n") == true || text.Contains("\r") == true))
+                                text = text.Replace("\n", " ");
+                                text = text.Replace("\r", " ");
+                            strLine = strLine + text + Convert.ToChar(9);
                         }
                     }
 

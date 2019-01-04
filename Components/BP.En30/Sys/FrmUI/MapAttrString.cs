@@ -186,6 +186,13 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "字段重命名";
+                rm.ClassMethodName = this.ToString() + ".DoRenameField()";
+                rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
                 #endregion 基本功能.
 
                 #region 输入多选.
@@ -302,6 +309,8 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
+
+
                 #endregion 执行的方法.
 
                 this._enMap = map;
@@ -332,6 +341,30 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 基本功能.
+
+        public string DoRenameField(string newField)
+        {
+            string sql = "UPDATE Sys_MapAttr SET KeyOfEn='"+newField+"' WHERE KeyOfEn='"+this.KeyOfEn+"' AND FK_MapData='"+this.FK_MapData+"'";
+
+            DBAccess.RunSQL(sql);
+
+            if (this.FK_MapData.IndexOf("ND")==0 )
+            {
+
+                string strs = this.FK_MapData.Replace("ND", "");
+                strs = strs.Substring(0, strs.Length - 2);
+                  sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='ND" + strs + "Rpt'";
+                DBAccess.RunSQL(sql);
+
+            }
+
+            sql = "UPDATE Sys_MapAttr SET MyPK= FK_MapData +'_'+KeyOfEn";
+            DBAccess.RunSQL(sql);
+
+            return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
+
+          //  sql = "UPDATE ";
+        }
         /// <summary>
         /// 绑定函数
         /// </summary>

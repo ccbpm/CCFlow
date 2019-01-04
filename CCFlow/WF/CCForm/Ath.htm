@@ -39,8 +39,6 @@
         var numOfAths = 0;    //附件数量.
         function CanEditor(fileType) {
 
-            //var fileTypes = BP.Sys.SystemConfig.AppSettings["OpenTypes"];
-
             var fileTypes = "";
             if (fileTypes == null || fileTypes == "")
                 fileTypes = "doc,docx,pdf,xls,xlsx,txt";
@@ -532,28 +530,27 @@
                 else
                     html += "<td colspan=" + columnNum + ">";
 
+                if (athDesc.Exts != null && athDesc.Exts != "") {
+                    var fileExts = athDesc.Exts.replace(/,/g, ";");
+                    var fileExtData = fileExts.split(';');
+
+                    for (var i = 0; i < fileExtData.length; i++) {
+                        var ext = fileExtData[i]
+                        if (ext != null && ext != "") {
+                            if (ext.indexOf("*.") == 0)
+                                realFileExts += ext + ";";
+                            else
+                                realFileExts += "*." + ext + ";";
+                        }
+                    }
+                }
+
+                if (realFileExts == null || realFileExts == "")
+                    realFileExts = "*.*";
+
                 var explorer = window.navigator.userAgent;
                 var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
                 if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
-
-                    if (athDesc.Exts != null && athDesc.Exts != "") {
-                        var fileExts = athDesc.Exts.replace(/,/g, ";");
-                        var fileExtData = fileExts.split(';');
-
-                        for (var i = 0; i < fileExtData.length; i++) {
-                            var ext = fileExtData[i]
-                            if (ext != null && ext != "") {
-                                if (ext.indexOf("*.") == 0)
-                                    realFileExts += ext + ";";
-                                else
-                                    realFileExts += "*." + ext + ";";
-                            }
-                        }
-                    }
-
-                    if (realFileExts == null || realFileExts == "")
-                        realFileExts = "*.*";
-
 
                     html += "<div id='file_upload-queue' class='uploadify-queue'></div>";
 
@@ -582,6 +579,8 @@
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
 
                 } else {
+                    realFileExts = realFileExts.replace(/;/g,',');
+                    realFileExts =replaceAll(realFileExts,'[*]','');
                     html += "<div id='s' style='text-align:right;float:left;display:inline;' >";
                     // 让石家庄客户，来完善附件类别支持sql.
                     if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
@@ -601,9 +600,9 @@
                     }
                     html += "<div style='float:left;padding-top:7px;padding-right:2px'>";
                     if (athDesc.IsExpCol == 1)
-                        html += "<input type='file' name='file' id='file' style='display:inline'  >"
+                        html += "<input type='file' name='file' id='file' style='display:inline' accept='"+realFileExts+"' >"
                     else
-                        html += "<input type='file' name='file' id='file' style='display:inline' onclick='return Upload();' onchange='UploadChange();'>"
+                        html += "<input type='file' name='file' id='file' style='display:inline'  accept='" + realFileExts + "' onclick='return Upload();' onchange='UploadChange();'>"
                     if (athDesc.IsNote)
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
                     html += "</div>";
@@ -667,6 +666,12 @@
                 alert("请选择上传的文件.");
                 return;
             }
+            var fileName = fileObj.name;
+            if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.'))) == -1) {
+                alert("上传附件类型不正确，只能上传" + realFileExts);
+                return;
+            }
+
             //form表单序列话
             var parasData = $("form").serialize();
             //form表单序列化时调用了encodeURLComponent方法将数据编码了

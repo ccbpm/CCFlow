@@ -1887,6 +1887,9 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理无参数的方法.
 
+            en.PKVal = this.PKVal;
+            en.Retrieve();
+
             //转化为json 返回到前台解析. 处理有参数的方法.
             DataSet ds = new DataSet();
             MapAttrs attrs = rm.HisAttrs.ToMapAttrs;
@@ -1906,7 +1909,40 @@ namespace BP.WF.HttpHandler
             DataRow mydrMain = dtMain.NewRow();
             foreach (MapAttr item in attrs)
             {
-                mydrMain[item.KeyOfEn] = item.DefValReal;
+                string v = item.DefValReal;
+                if (v.IndexOf('@') == -1)
+                    mydrMain[item.KeyOfEn] = item.DefValReal;
+                    //替换默认值的@的
+                else
+                {
+                    if (v.Equals("@WebUser.No"))
+                        mydrMain[item.KeyOfEn]= Web.WebUser.No;
+                    else if (v.Equals("@WebUser.Name"))
+                        mydrMain[item.KeyOfEn]= Web.WebUser.Name;
+                    else if (v.Equals("@WebUser.FK_Dept"))
+                        mydrMain[item.KeyOfEn]= Web.WebUser.FK_Dept;
+                    else if (v.Equals("@WebUser.FK_DeptName"))
+                        mydrMain[item.KeyOfEn]= Web.WebUser.FK_DeptName;
+                    else if (v.Equals("@WebUser.FK_DeptNameOfFull") || v.Equals("@WebUser.FK_DeptFullName"))
+                        mydrMain[item.KeyOfEn]= Web.WebUser.FK_DeptNameOfFull;
+                    else if (v.Equals("@RDT"))
+                    {
+                        if (item.MyDataType == DataType.AppDate)
+                            mydrMain[item.KeyOfEn] = DataType.CurrentData;
+                        if (item.MyDataType == DataType.AppDateTime)
+                            mydrMain[item.KeyOfEn] = DataType.CurrentDataTime;
+                    }
+                    else
+                    {
+                        //如果是EnsName中字段
+                        if (en.GetValByKey(v.Replace("@", "")) != null)
+                            mydrMain[item.KeyOfEn] = en.GetValByKey(v.Replace("@", "")).ToString();
+                        
+                    }
+
+
+                }
+
             }
             dtMain.Rows.Add(mydrMain);
             ds.Tables.Add(dtMain);

@@ -133,6 +133,81 @@
             html += "</table>";
 
             $('#CCForm').html(html);
+
+            //为控件赋值.
+            for (var i = 0; i < attrs.length; i++) {
+
+                var mapAttr = attrs[i];
+                $('#TB_' + mapAttr.KeyOfEn).attr("name", "TB_" + mapAttr.KeyOfEn);
+                $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
+                $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
+
+                var val = ConvertDefVal(json, mapAttr.DefVal, mapAttr.KeyOfEn);
+
+                $('#TB_' + mapAttr.KeyOfEn).val(val);
+
+                //文本框.
+                if (mapAttr.UIContralType == 0) {
+                    if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+                        $('#editor').val(val);
+                    } else {
+                        $('#TB_' + mapAttr.KeyOfEn).val(val);
+                    }
+                }
+
+                //枚举下拉框.
+                if (mapAttr.UIContralType == 1) {
+
+                    // InitDDLOperation(flowData, mapAttr, val);
+                    $('#DDL_' + mapAttr.KeyOfEn).val(val);
+
+                }
+                //checkbox.
+                if (mapAttr.UIContralType == 2) {
+                    if (val == "1")
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", "true");
+                }
+            }
+        }
+
+        //填充默认数据
+        function ConvertDefVal(data, defVal, keyOfEn) {
+            //计算URL传过来的表单参数@TXB_Title=事件测试
+
+            var pageParams = getQueryString();
+            var pageParamObj = {};
+            $.each(pageParams, function (i, pageParam) {
+                if (pageParam.indexOf('@') == 0) {
+                    var pageParamArr = pageParam.split('=');
+                    pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
+                }
+            });
+
+
+            var result = defVal;
+
+            var mainTable = data.MainTable[0];
+
+
+            //通过MAINTABLE返回的参数
+            for (var ele in mainTable) {
+                if (keyOfEn == ele && mainTable != '') {
+                    //console.info(ele + "==" + flowData.MainTable[0][ele]);
+                    result = mainTable[ele];
+                    break;
+                }
+            }
+
+            if (result != undefined && typeof (result) == 'string') {
+                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+            }
+            //console.info(defVal+"=="+keyOfEn+"=="+result);
+            var result = unescape(result);
+
+            if (result == "null")
+                result = "";
+
+            return result;
         }
 
         //解析表单字段 MapAttr.
@@ -226,7 +301,7 @@
                     else
                         enableAttr = "disabled='disabled'";
 
-                    return "<select name='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                    return "<select  id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
                 }
 
                 if (mapAttr.UIHeight <= 40) //普通的文本框.
@@ -235,12 +310,12 @@
                     if (mapAttr.UIIsEnable == 0)
                         enableAttr = "disabled='disabled'";
 
-                    return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
+                    return "<input maxlength=" + mapAttr.MaxLen + " id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
                 }
 
 
                 //普通的大块文本.
-                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
             }
 
             //日期类型.
@@ -251,7 +326,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input type='text' " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' />";
+                return "<input type='text' " + enableAttr + " style='width:120px;' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' />";
             }
 
             //时期时间类型.
@@ -263,7 +338,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input  type='text'  style='width:140px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+                return "<input  type='text'  style='width:140px;' " + enableAttr + "id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' />";
             }
 
             // boolen 类型.
@@ -280,7 +355,7 @@
                     checkedStr = ' checked="checked" ';
                 }
 
-               // checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
+                // checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
 
                 return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
@@ -292,7 +367,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             // AppDouble  AppFloat
@@ -303,7 +378,7 @@
                     enableAttr = "disabled='disabled'";
 
                 // alert(mapAttr.KeyOfEn);
-                return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -312,7 +387,7 @@
                     enableAttr = "disabled='disabled'";
                 }
 
-                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             //AppMoney  AppRate
@@ -323,7 +398,7 @@
                 } else {
                     enableAttr = "disabled='disabled'";
                 }
-                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             alert(mapAttr.Name + "的类型没有判断.");

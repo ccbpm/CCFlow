@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>自定义事件代码生成</title>
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -13,42 +13,30 @@
         type="text/css" />
     <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
     <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
-
-
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
-
-
-    
-    <script language="javascript" type="text/javascript" >
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script language="javascript" type="text/javascript">
         //初始化页面函数.....
         $(function () {
 
             $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在生成代码.</font>");
 
-            var fk_flow = GetQueryString("FK_Flow");
-            var doType = "APICodeFEE_Init&FK_Flow=" + fk_flow;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                dataType: 'html',
-                url: Handler + "?DoType=" + doType,
-                success: function (data) {
-                    $("#Msg").html(data);
-                }
-            });
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("APICodeFEE_Init"); //执行方法，返回执行结果.
+            $("#Msg").html(data);
+
         });
 
     </script>
-
 </head>
 <body class="easyui-layout" data-options="border:false">
     <form id="form1" runat="server">
-        <div data-options="region:'center',border:false,title:'自定义事件代码生成'," style="padding: 5px">    
-        
+    <div data-options="region:'center',border:false,title:'自定义事件代码生成'," style="padding: 5px">
         <div id="Msg" />
-        
     </div>
     </form>
 </body>

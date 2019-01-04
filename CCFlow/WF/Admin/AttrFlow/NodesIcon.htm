@@ -5,51 +5,46 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <base target="_self" />
-
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-        
-          var fk_flow=GetQueryString('FK_Flow');
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=NodesIcon_Init&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var fk_flow = GetQueryString('FK_Flow');
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("NodesIcon_Init");
 
-                    data = JSON.parse(data);
 
-                    //取出来两个集合.
-                    var nodes=data['Nodes'];
-                    var icons=data['ICONs'];
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    for (var i = 0; i < nodes.length; i++) {
+            data = JSON.parse(data);
 
-                      var node=nodes[i];
+            //取出来两个集合.
+            var nodes = data['Nodes'];
+            var icons = data['ICONs'];
 
-                      var newRow = "";
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>"+node.NodeID+"</td>";
-                        newRow += "<td>" + node.Name + "</td>";
-                        newRow += "<td><img src='../ClientBin/NodeIcon/" + node.ICON + ".png' style='width:40px'  onerror=\"src='../ClientBin/NodeIcon/Default.jpg' \" />" + node.ICON + "</td>";
-                        newRow += "<td><a href=\"javascript:Chenge('"+node.NodeID+"');\" >更换</a></td>";
-                        newRow += "</tr>";
+            for (var i = 0; i < nodes.length; i++) {
 
-                        $("#Table1 tr:last").after(newRow);
-    
-                      }
-                 }
-            });
+                var node = nodes[i];
+
+                var newRow = "";
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + node.NodeID + "</td>";
+                newRow += "<td>" + node.Name + "</td>";
+                newRow += "<td><img src='../ClientBin/NodeIcon/" + node.ICON + ".png' style='width:40px'  onerror=\"src='../ClientBin/NodeIcon/Default.jpg' \" />" + node.ICON + "</td>";
+                newRow += "<td><a href=\"javascript:Chenge('" + node.NodeID + "');\" >更换</a></td>";
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+
+            }
         });
 
         function Chenge(nodeID) {
@@ -58,29 +53,36 @@
             window.location.href = url;
         }
     </script>
-
     <style type="text/css">
-    li 
-    {
-        padding:3px 0;
+        li
+        {
+            padding: 3px 0;
         }
     </style>
-    
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
-    <form method="post" id="form1">    
-    <div style="margin:8px">
+    <form method="post" id="form1">
+    <div style="margin: 8px">
         <table id="Table1" style="width: 100%">
             <caption>
-               节点icons维护,用户流程图、流程轨迹的显示.
+                节点icons维护,用户流程图、流程轨迹的显示.
             </caption>
             <tr>
-                <th> 序 </th>
-                <th> 节点ID </th>
-                <th>名称 </th>
-                <th> 现在的ICON </th>
-                <th> 操作 </th>
-
+                <th>
+                    序
+                </th>
+                <th>
+                    节点ID
+                </th>
+                <th>
+                    名称
+                </th>
+                <th>
+                    现在的ICON
+                </th>
+                <th>
+                    操作
+                </th>
             </tr>
         </table>
     </div>

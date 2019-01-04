@@ -9,6 +9,8 @@
 	<script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
 	<script type="text/javascript" src="../../Scripts/config.js"></script>
+	<script type="text/javascript" src="../../Comm/Gener.js"></script>
+
 	<base target="_self" />
 <script type="text/javascript">
 	//! TODO: 1.显示流程名称？	2.JS方法中的页面路径
@@ -31,54 +33,49 @@
 	var selectNodeId; //要突出选择的节点
 	//初始化数据.
 	function InitPage() {
-		FK_Flow = GetQueryString("FK_Flow");
-		selectNodeId = GetQueryString("FK_Node");
-		//初始化表格.
-		$.ajax({
-		    type: 'post',
-		    async: true,
-		    url: Handler + "?DoType=NodeAttrs_Init&FK_Flow=" + FK_Flow + "&m=" + Math.random(),
-		    dataType: 'html',
-		    success: function (data) {
-		        if (data.indexOf("err@") == 0) {
-		            alert(data);
-		            return;
-		        }
+	    FK_Flow = GetQueryString("FK_Flow");
+	    selectNodeId = GetQueryString("FK_Node");
 
-		        data = JSON.parse(data);
-		    //    data = data.data;
+	    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+	    handler.AddUrlData();
+	    var data = handler.DoMethodReturnString("NodeAttrs_Init");
 
-		        //增加处理.
-		        var newRow;
-		        for (var i in data) {
-		            newRow = "";
+	    if (data.indexOf("err@") == 0) {
+	        alert(data);
+	        return;
+	    }
 
-		            newRow = "<tr onmouseover='TROver(this)' onmouseout='TROut(this)'><td class=Idx>" + i + "</td>";
-		            newRow += "<td><a href=\"javascript:OpenAttr('" + data[i].NodeID + "');\" >" + data[i].NodeID + "&nbsp;" + data[i].Name + "</a></td>";
-		            //表单方案
-		            newRow += "<td><a href=\"javascript:OpenFrmAttr('" + data[i].NodeID + "');\"  >" + data[i].HisFormTypeText + "</a></td>";
-		            //节点类型
-		            newRow += "<td>" + data[i].HisRunModelT + "</td>";
-		            //设置处理人（接收人）
-		            newRow += "<td><a href=\"javascript:FindWorker('" +data[i].NodeID +"');\" >" +data[i].HisDeliveryWayText +"</a>&nbsp;<a href='javascript:FindWorkerSp('" +data[i].HisDeliveryWayJsFnPara +"','" +data[i].NodeID +"');\" >" +data[i].HisDeliveryWayCountLabel + "(" +data[i].HisDeliveryWayCount +")</a></td>";
-		            //抄送人
-		            newRow += "<td><a href=\"javascript:NodeCCRole('" + data[i].NodeID + "');\" >" + data[i].HisCCRoleText + "</a></td>";
-		            //消息&事件
-		            newRow += "<td><a href=\"javascript:Action('" + data[i].NodeID + "','" + FK_Flow + "');\" >消息&事件(" + data[i].HisFrmEventsCount + ")</a></td>";
-		            //流程完成条件
-		            newRow += "<td><a href=\"javascript:Cond('" + data[i].NodeID + "','" + FK_Flow + "');\" >流程完成条件(" + data[i].HisFinishCondsCount + ")</a></td>";
-		            //按钮权限控制
-		            newRow += "<td><a href=\"javascript:OpenButtonControl('" + data[i].NodeID + "');\" >设置</a></td>";
-		            //吊起子流程
-		            newRow += "<td><a href=\"javascript:OpenSubFlows('" + data[i].NodeID + "');\" >子流程</a></td>";
-		            newRow += "</tr>";
+	    data = JSON.parse(data);
+	    //    data = data.data;
 
-		            $("#Table1 tr:last").after(newRow);
+	    //增加处理.
+	    var newRow;
+	    for (var i in data) {
+	        newRow = "";
 
-		            //$("#Msg").html("");
-		        }
-		    }
-		});
+	        newRow = "<tr onmouseover='TROver(this)' onmouseout='TROut(this)'><td class=Idx>" + i + "</td>";
+	        newRow += "<td><a href=\"javascript:OpenAttr('" + data[i].NodeID + "');\" >" + data[i].NodeID + "&nbsp;" + data[i].Name + "</a></td>";
+	        //表单方案
+	        newRow += "<td><a href=\"javascript:OpenFrmAttr('" + data[i].NodeID + "');\"  >" + data[i].HisFormTypeText + "</a></td>";
+	        //节点类型
+	        newRow += "<td>" + data[i].HisRunModelT + "</td>";
+	        //设置处理人（接收人）
+	        newRow += "<td><a href=\"javascript:FindWorker('" + data[i].NodeID + "');\" >" + data[i].HisDeliveryWayText + "</a>&nbsp;<a href='javascript:FindWorkerSp('" + data[i].HisDeliveryWayJsFnPara + "','" + data[i].NodeID + "');\" >" + data[i].HisDeliveryWayCountLabel + "(" + data[i].HisDeliveryWayCount + ")</a></td>";
+	        //抄送人
+	        newRow += "<td><a href=\"javascript:NodeCCRole('" + data[i].NodeID + "');\" >" + data[i].HisCCRoleText + "</a></td>";
+	        //消息&事件
+	        newRow += "<td><a href=\"javascript:Action('" + data[i].NodeID + "','" + FK_Flow + "');\" >消息&事件(" + data[i].HisFrmEventsCount + ")</a></td>";
+	        //流程完成条件
+	        newRow += "<td><a href=\"javascript:Cond('" + data[i].NodeID + "','" + FK_Flow + "');\" >流程完成条件(" + data[i].HisFinishCondsCount + ")</a></td>";
+	        //按钮权限控制
+	        newRow += "<td><a href=\"javascript:OpenButtonControl('" + data[i].NodeID + "');\" >设置</a></td>";
+	        //吊起子流程
+	        newRow += "<td><a href=\"javascript:OpenSubFlows('" + data[i].NodeID + "');\" >子流程</a></td>";
+	        newRow += "</tr>";
+
+	        $("#Table1 tr:last").after(newRow);
+	        //$("#Msg").html("");
+	    }
 	}
 
 	//节点属性.
@@ -197,7 +194,7 @@
 				序
 			</th>
 			<th>
-				<img src="../../Admin/CCBPMDesigner/Img/Menu/property.png" alt="节点名称" class="Icon" />节点属性
+				<img src="../CCBPMDesigner/Img/Menu/property.png" alt="节点名称" class="Icon" />节点属性
 			</th>
 			<th>
 				<img src="../../Img/Form.png" alt="设置表单的工作方式" class="Icon" />表单方案
@@ -206,23 +203,23 @@
 				<img src="../../Img/Btn/SelectAll.gif" alt="节点类型" class="Icon" />节点类型
 			</th>
 			<th>
-				<img src="../../Admin/CCBPMDesigner/Img/Menu/Sender.png" alt="设置处理人" class="Icon" />设置处理人
+				<img src="../CCBPMDesigner/Img/Menu/Sender.png" alt="设置处理人" class="Icon" />设置处理人
 			</th>
 			<th>
-				<img src="../../Admin/CCBPMDesigner/Img/Menu/CC.png" alt="设置处理人" class="Icon" />设置抄送人
+				<img src="../CCBPMDesigner/Img/Menu/CC.png" alt="设置处理人" class="Icon" />设置抄送人
 			</th>
 			<th>
 				<img src="../../Img/Event.png" alt="消息&事件" class="Icon" />消息&事件
 			</th>
 			<th>
-				<img src="../../Admin/CCBPMDesigner/Img/Menu/Cond.png" alt="流程完成条件" class="Icon" />流程完成条件
+				<img src="../CCBPMDesigner/Img/Menu/Cond.png" alt="流程完成条件" class="Icon" />流程完成条件
 			</th>
 			 
 			<th>
-				<img src="../../Admin/CCBPMDesigner/Img/Menu/CheckFlow.png" alt="按钮权限控制" class="Icon" />按钮权限
+				<img src="../CCBPMDesigner/Img/Menu/CheckFlow.png" alt="按钮权限控制" class="Icon" />按钮权限
 			</th>
 			<th>
-				<img src="../../Admin/CCBPMDesigner/Img/Menu/SubFlows.png" alt="父子流程" class="Icon" />子流程
+				<img src="../CCBPMDesigner/Img/Menu/SubFlows.png" alt="父子流程" class="Icon" />子流程
 			</th>
 		</tr>
 	</table>

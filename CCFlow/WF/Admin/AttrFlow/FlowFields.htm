@@ -2,18 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <!-- 于庆海  -->
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>流程字段列表</title>
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-     <base target="_self" /> 
+    <base target="_self" />
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
 
         function toInt(number) {
             return number * 1 | 0 || 0;
@@ -28,7 +27,7 @@
 
             $("#Msg").html("");
         });
-        
+
         //初始化数据.
         function InitPage() {
 
@@ -170,77 +169,129 @@
             }
         }
           
-     </script>
+    </script>
 </head>
-<body onkeypress="Esc()" >
-
-<table id="Table1" style="width: 100%">
-<caption>流程系统字段</caption>
-  <tr>
-        <th style="width: 5%">序</th>
-        <th style="width: 20%">字段名</th>
-        <th style="width: 20%">字段中文名称</th>
-        <th style="width: 10%">最小长度</th>
-        <th style="width: 10%">最大长度</th>
-        <th style="width: 20%">业务类型</th>
-        <th style="width: 15%">其他</th>
-    </tr>
-</table>
-
-
-<table id="Table2" style="width: 100%">
-<caption>普通字段</caption>
-  <tr>
-        <th style="width: 5%">序</th>
-        <th style="width: 20%">字段名</th>
-        <th style="width: 20%">字段中文名称</th>
-        <th style="width: 10%">最小长度</th>
-        <th style="width: 10%">最大长度</th>
-        <th style="width: 20%">业务类型</th>
-        <th style="width: 15%">其他</th>
-    </tr>
-</table>
-
-
-<table id="Table3" style="width: 100%">
-<caption>枚举字段</caption>
-  <tr>
-        <th style="width: 5%">序</th>
-        <th style="width: 20%">字段名</th>
-        <th style="width: 20%">字段中文名称</th>
-        <th style="width: 10%">最小长度</th>
-        <th style="width: 10%">最大长度</th>
-        <th style="width: 20%">业务类型</th>
-        <th style="width: 15%">其他</th>
-    </tr>
-</table>
-
-
-
-<table id="Table4" style="width: 100%">
-<caption>外键字段</caption>
-  <tr>
-        <th style="width: 5%">序</th>
-        <th style="width: 20%">字段名</th>
-        <th style="width: 20%">字段中文名称</th>
-        <th style="width: 10%">最小长度</th>
-        <th style="width: 10%">最大长度</th>
-        <th style="width: 20%">业务类型</th>
-        <th style="width: 15%">其他</th>
-    </tr>
-</table>
-<table>
+<body onkeypress="Esc()">
+    <table id="Table1" style="width: 100%">
+        <caption>
+            流程系统字段</caption>
         <tr>
-            <th colspan="7">
-                <div style="float: right" id="dtsbt">如果您想把该表的数据实时的同步到您指定的表，请执行【<a href="DTSBTable.htm?FK_Flow=flowNo">与业务数据表同步</a>】</div>
+            <th style="width: 5%">
+                序
+            </th>
+            <th style="width: 20%">
+                字段名
+            </th>
+            <th style="width: 20%">
+                字段中文名称
+            </th>
+            <th style="width: 10%">
+                最小长度
+            </th>
+            <th style="width: 10%">
+                最大长度
+            </th>
+            <th style="width: 20%">
+                业务类型
+            </th>
+            <th style="width: 15%">
+                其他
             </th>
         </tr>
-
     </table>
-<div id="Msg"></div>
-
+    <table id="Table2" style="width: 100%">
+        <caption>
+            普通字段</caption>
+        <tr>
+            <th style="width: 5%">
+                序
+            </th>
+            <th style="width: 20%">
+                字段名
+            </th>
+            <th style="width: 20%">
+                字段中文名称
+            </th>
+            <th style="width: 10%">
+                最小长度
+            </th>
+            <th style="width: 10%">
+                最大长度
+            </th>
+            <th style="width: 20%">
+                业务类型
+            </th>
+            <th style="width: 15%">
+                其他
+            </th>
+        </tr>
+    </table>
+    <table id="Table3" style="width: 100%">
+        <caption>
+            枚举字段</caption>
+        <tr>
+            <th style="width: 5%">
+                序
+            </th>
+            <th style="width: 20%">
+                字段名
+            </th>
+            <th style="width: 20%">
+                字段中文名称
+            </th>
+            <th style="width: 10%">
+                最小长度
+            </th>
+            <th style="width: 10%">
+                最大长度
+            </th>
+            <th style="width: 20%">
+                业务类型
+            </th>
+            <th style="width: 15%">
+                其他
+            </th>
+        </tr>
+    </table>
+    <table id="Table4" style="width: 100%">
+        <caption>
+            外键字段</caption>
+        <tr>
+            <th style="width: 5%">
+                序
+            </th>
+            <th style="width: 20%">
+                字段名
+            </th>
+            <th style="width: 20%">
+                字段中文名称
+            </th>
+            <th style="width: 10%">
+                最小长度
+            </th>
+            <th style="width: 10%">
+                最大长度
+            </th>
+            <th style="width: 20%">
+                业务类型
+            </th>
+            <th style="width: 15%">
+                其他
+            </th>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th colspan="7">
+                <div style="float: right" id="dtsbt">
+                    如果您想把该表的数据实时的同步到您指定的表，请执行【<a href="DTSBTable.htm?FK_Flow=flowNo">与业务数据表同步</a>】</div>
+            </th>
+        </tr>
+    </table>
+    <div id="Msg">
+    </div>
 </body>
-<script language="javascript" type="text/javascript" >
+<script language="javascript" type="text/javascript">
     //动态修改参数
     $("#dtsbt a").click(function () {
         $(this).attr("href", $(this).attr('href').replace('flowNo', GetQueryString("FK_Flow")));

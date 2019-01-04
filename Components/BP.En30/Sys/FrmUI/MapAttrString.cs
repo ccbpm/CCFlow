@@ -115,7 +115,7 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 map.AddDDLSQL("ExtDefVal", "0", "系统默认值", sql, true);
 
-                map.AddTBString(MapAttrAttr.DefVal, null, "默认值表达式", true, false, 0, 400, 20,true);
+                map.AddTBString(MapAttrAttr.DefVal, null, "默认值表达式", true, false, 0, 400, 20, true);
 
                 map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
@@ -191,6 +191,7 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoRenameField()";
                 rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
                 rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
                 map.AddRefMethod(rm);
 
                 #endregion 基本功能.
@@ -344,26 +345,29 @@ namespace BP.Sys.FrmUI
 
         public string DoRenameField(string newField)
         {
-            string sql = "UPDATE Sys_MapAttr SET KeyOfEn='"+newField+"' WHERE KeyOfEn='"+this.KeyOfEn+"' AND FK_MapData='"+this.FK_MapData+"'";
-
-            DBAccess.RunSQL(sql);
-
-            if (this.FK_MapData.IndexOf("ND")==0 )
+            string sql = "";
+            if (this.FK_MapData.IndexOf("ND") == 0)
             {
-
                 string strs = this.FK_MapData.Replace("ND", "");
                 strs = strs.Substring(0, strs.Length - 2);
-                  sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='ND" + strs + "Rpt'";
-                DBAccess.RunSQL(sql);
 
+                string rptTable = "ND" + strs + "Rpt";
+                MapDatas mds = new MapDatas();
+                mds.Retrieve(MapDataAttr.PTable, rptTable);
+
+                foreach (MapData item in mds)
+                {
+                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + newField + "_" + item.No + " WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
+                    DBAccess.RunSQL(sql);
+                }
+            }
+            else
+            {
+                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + newField + "_" + this.FK_MapData + "  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+                DBAccess.RunSQL(sql);
             }
 
-            sql = "UPDATE Sys_MapAttr SET MyPK= FK_MapData +'_'+KeyOfEn";
-            DBAccess.RunSQL(sql);
-
             return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
-
-          //  sql = "UPDATE ";
         }
         /// <summary>
         /// 绑定函数
@@ -479,7 +483,7 @@ namespace BP.Sys.FrmUI
             //return "../../Admin/FoolFormDesigner/EleBatch.aspx?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
             return "../../Admin/FoolFormDesigner/EleBatch.htm?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
         }
-      
+
         /// <summary>
         /// 小范围多选
         /// </summary>
@@ -586,7 +590,7 @@ namespace BP.Sys.FrmUI
 
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                             sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
-                         
+
                         DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
                     }
                 }

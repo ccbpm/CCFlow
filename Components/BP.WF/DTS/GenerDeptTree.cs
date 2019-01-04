@@ -72,12 +72,10 @@ namespace BP.WF.DTS
                 sql = "UPDATE Port_Dept SET TreeNo='01" + subNo + "' WHERE No='" + item.No + "'";
                 DBAccess.RunSQL(sql);
 
-
                 sql = "UPDATE Port_DeptEmp SET DeptTreeNo='01" + subNo + "' WHERE FK_Dept='" + item.No + "'";
                 DBAccess.RunSQL(sql);
                 sql = "UPDATE Port_DeptEmpStation SET DeptTreeNo='01" + subNo + "' WHERE FK_Dept='" + item.No + "'";
                 DBAccess.RunSQL(sql);
-
 
                 SetDeptTreeNo(item, "01"+subNo);
             }

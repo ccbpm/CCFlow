@@ -931,7 +931,6 @@ namespace BP.En
             MapAttr mapAttr = null;
             foreach (Attr attr in fkAttrs)
             {
-
                 if (attr.IsFK == false)
                     continue;
 

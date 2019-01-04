@@ -1,1 +1,1 @@
-﻿<%@ WebHandler Language="C#" CodeBehind="SFTableHandler.ashx.cs" Class="CCFlow.DataUser.Handler" %>
+﻿<%@ WebHandler Language="C#" CodeBehind="SFTableHandler.ashx.cs" Class="CCBPM.DataUser.Handler" %>

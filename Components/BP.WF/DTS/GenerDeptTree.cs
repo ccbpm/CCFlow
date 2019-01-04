@@ -67,6 +67,7 @@ namespace BP.WF.DTS
             foreach (BP.Port.Dept item in depts)
             {
                 idx++;
+                 
                 string subNo = idx.ToString().PadLeft(2, '0');
                 sql = "UPDATE Port_Dept SET TreeNo='01" + subNo + "' WHERE No='" + item.No + "'";
                 DBAccess.RunSQL(sql);
@@ -78,7 +79,7 @@ namespace BP.WF.DTS
                 DBAccess.RunSQL(sql);
 
 
-                SetDeptTreeNo(item, "01");
+                SetDeptTreeNo(item, "01"+subNo);
             }
 
             return "执行成功.";

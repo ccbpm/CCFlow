@@ -11,8 +11,7 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <base target="_self" />
     <style type="text/css">
-        th, td
-        {
+        th, td {
             text-align: center;
         }
     </style>
@@ -21,7 +20,6 @@
         var fk_flow;
         var fk_Node;
         $(function () {
-
             var frmID = GetQueryString("FK_MapData");
             var nodeID = GetQueryString("FK_Node");
             var flowNo = GetQueryString("FK_Flow");
@@ -49,6 +47,7 @@
                     html += "<td>外键</td>";
 
                 html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
+
 
                 html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
                 html += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + ">可见</label></td>";
@@ -115,7 +114,6 @@
 
         //保存字段方案
         function Save() {
-
             var frmID = GetQueryString("FK_MapData");
             var nodeID = GetQueryString("FK_Node");
             var flowNo = GetQueryString("FK_Flow");
@@ -134,7 +132,7 @@
                 var en = mapAttrs[i];
                 if (en.UIVisible == 0)
                     continue;
-
+                ff = new Entity("BP.WF.Template.FrmField");
                 ff.SetPKVal(frmID + '_' + nodeID + '_' + en.KeyOfEn);
 
                 ff.FK_Flow = flowNo;
@@ -144,19 +142,41 @@
                 ff.EleType = "Field";
                 ff.Name = en.Name;
 
-
                 //给其他的字段赋值.
                 ff.DefVal = $("#" + en.KeyOfEn + "_DefVal").val(); //默认值.
                 ff.RegularExp = $("#" + en.KeyOfEn + "_RegularExp").val(); //表达式.
 
-                //其他的字段,如何获取不知道了.
-                // alert($("#" + ff.KeyOfEn + "_IsWriteToGenerWorkFlow"));
+                if ($('#' + ff.KeyOfEn + "_UIVisible").is(':checked'))
+                    ff.UIVisible = 1;
+                else    
+                    ff.UIVisible = 0;
 
-                var id = "#" + ff.KeyOfEn + "_IsWriteToGenerWorkFlow";
-                alert(id);
+                if ($('#' + ff.KeyOfEn + "_UIIsEnable").is(':checked'))
+                    ff.UIIsEnable = 1;
+                else
+                    ff.UIIsEnable = 0;
 
-                var isChecked = $("#" + ff.KeyOfEn + "_IsWriteToGenerWorkFlow").val();
-                alert(isChecked);
+                if ($('#' + ff.KeyOfEn + "_IsSigan").is(':checked'))
+                    ff.IsSigan = 1;
+                else
+                    ff.IsSigan = 0;
+
+
+                if ($('#' + ff.KeyOfEn + "_IsNotNull").is(':checked'))
+                    ff.IsNotNull = 1;
+                else
+                    ff.IsNotNull = 0;
+
+                if ($('#' + ff.KeyOfEn + "_IsWriteToFlowTable").is(':checked'))
+                    ff.IsWriteToFlowTable = 1;
+                else
+                    ff.IsWriteToFlowTable = 0;
+
+                if ($('#' + ff.KeyOfEn + "_IsWriteToGenerWorkFlow").is(':checked'))
+                    ff.IsWriteToGenerWorkFlow = 1;
+                else
+                    ff.IsWriteToGenerWorkFlow = 0;
+
 
                 ff.Insert();
             }
@@ -173,20 +193,20 @@
         }
         //绑定是否全选或者取消全选
         function checkclick(o, index) {
-            upischange(index);
-            var ischeckedall = true;
-            var rowstype = o.classList;
-            $('.' + rowstype).each(function () {
-                if (this.type == 'checkbox' && !this.checked) {
-                    ischeckedall = false;
-                    return ischeckedall;
-                }
-            });
+            //upischange(index);
+            //var ischeckedall = true;
+            //var rowstype = o.classList;
+            //$('.' + rowstype).each(function () {
+            //    if (this.type == 'checkbox' && !this.checked) {
+            //        ischeckedall = false;
+            //        return ischeckedall;
+            //    }
+            //});
 
-            if (ischeckedall)
-                $('#KeyOfEn_' + rowstype)[0].checked = true;
-            else
-                $('#KeyOfEn_' + rowstype)[0].checked = false;
+            //if (ischeckedall)
+            //    $('#KeyOfEn_' + rowstype)[0].checked = true;
+            //else
+            //    $('#KeyOfEn_' + rowstype)[0].checked = false;
         }
 
         //全选或者反选
@@ -239,33 +259,36 @@
                 </label>
             </th>
             <th>
-                <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label
-                    for="KeyOfEn_UIIsEnable">
-                    可用</label>
+                <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label for="KeyOfEn_UIIsEnable">
+                    可用
+                </label>
             </th>
             <th>
-                <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label
-                    for="KeyOfEn_IsSigan">
-                    签名</label>
+                <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label for="KeyOfEn_IsSigan">
+                    签名
+                </label>
             </th>
             <th>
-                <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' /><label
-                    for="KeyOfEn_IsNotNull">
-                    必填</label>
+                <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' /><label for="KeyOfEn_IsNotNull">
+                    必填
+                </label>
             </th>
             <th>
                 <input onclick="CheckAll('IsWriteToFlowTable');" id='KeyOfEn_IsWriteToFlowTable'
-                    type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
-                        写入流程数据表</label>
+                       type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
+                    写入流程数据表
+                </label>
             </th>
             <th>
                 <input onclick="CheckAll('IsWriteToGenerWorkFlow');" id='KeyOfEn_IsWriteToGenerWorkFlow'
-                    type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">
-                        写入流程注册表</label>
+                       type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">
+                    写入流程注册表
+                </label>
             </th>
         </tr>
     </table>
     <button onclick='Save();' type='button'>
-        保存</button>
+        保存
+    </button>
 </body>
 </html>

@@ -109,6 +109,7 @@
             }
 
         });
+
         var FieldsAttrs = new Object();
         var fieldsData = null;
 
@@ -120,16 +121,11 @@
             var flowNo = GetQueryString("FK_Flow");
 
 
-            //删除以前的设置信息..
-            //            var ffs = new Entitie("BP.WF.Template.FrmFields");
-            //            ffs.Delete("FK_MapData", frmID, "FK_Node", nodeID);
-
-
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID);
 
-            //创建一个事例.
+            //删除以前的设置..
             var ff = new Entity("BP.WF.Template.FrmField");
             ff.Delete("FK_MapData", frmID, "FK_Node", nodeID);
 

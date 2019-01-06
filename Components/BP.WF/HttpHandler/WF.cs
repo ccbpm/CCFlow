@@ -1406,12 +1406,11 @@ namespace BP.WF.HttpHandler
                 return this.GetRequestVal("SID"); 
             }
         }
-
         public string Port_Init()
         {
             #region 安全性校验.
             if (this.UserNo == null || this.SID == null || this.DoWhat == null)
-                return "err@必要的参数没有传入，请参考接口规则。";
+                return "err@必要的参数没有传入，请参考接口规则。UserNo,SID,DoWhat";
 
             if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
                 return "err@非法的访问，请与管理员联系。SID=" + this.SID;

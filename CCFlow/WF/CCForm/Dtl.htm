@@ -19,7 +19,7 @@
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
-    <script type="text/javascript" src="MapExt2016.js"></script>
+    <script type="text/javascript" src="MapExt2018.js"></script>
     <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
@@ -68,8 +68,7 @@
                 }
 
                 var EditModel = sys_MapDtlObj.EditModel;
-
-                if (window.parent) {
+                if (EditModel != 0 && window.parent) {
                     var ensName = GetQueryString("EnsName");
                     var refPKVal = GetQueryString("RefPKVal");
                     var FK_MapData = GetQueryString("FK_MapData");
@@ -78,6 +77,17 @@
                         fid = 0
                     var FK_Node = GetQueryString("FK_Node");
                     window.parent.DtlFrm(ensName, refPKVal, selectedRow.OID, EditModel, loadDtlTable, FK_MapData, FK_Node, fid, true);
+                } else {
+                    if (editIndex != index) {
+                        if (endEditing()) {
+                            $('#dtlTable').datagrid('selectRow', index).datagrid('beginEdit', index);
+                            editIndex = index;
+                        } else {
+                            $('#dtlTable').datagrid('selectRow', editIndex).datagrid('beginEdit', editIndex);
+
+                            alert("注意必填项");
+                        }
+                    }
                 }
             }
             return;
@@ -283,7 +293,7 @@
                         if (mapAttrObj.KeyOfEn == "AthNum")
                             if (sys_MapDtl.IsEnableAthM == 1) {
                                 athNumitem.field = mapAttrObj.KeyOfEn;
-                                athNumitem.title = "附件"; //mapAttrObj.Name;
+                                athNumitem.title = "附件";//mapAttrObj.Name;
                                 athNumitem.width = mapAttrObj.UIWidth;
                                 athNumitem.align = 'center';
 
@@ -341,7 +351,7 @@
                         rownumbers: true,
                         remoteSort: false,
                         fitColumns: false,
-                        onDblClickRow: onDblClickRow,
+                        onDblClickRow: onDblClickRow ,
                         onLoadSuccess: function (data) {
                             sys_MapDtlObj = sys_MapDtl;
                             if (sumClos.length != 0) {
@@ -503,6 +513,7 @@
                     });
                 }
 
+                alert(ddlData);
                 return ddlData;
             } else {
                 var enums = workNodeData.Sys_Enum;
@@ -818,7 +829,7 @@
                 var athNum;
                 if (rowData.AthNum != undefined) {
                     athNum = rowData["AthNum"];
-                    delete rowData["AthNum"]; //删除附件数量属性
+                    delete rowData["AthNum"];//删除附件数量属性
                 }
                 rowData.DoType = "Dtl_SaveRow";
                 rowData.FK_MapDtl = GetQueryString("EnsName");

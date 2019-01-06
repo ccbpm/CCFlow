@@ -193,20 +193,20 @@
         }
         //绑定是否全选或者取消全选
         function checkclick(o, index) {
-            //upischange(index);
-            //var ischeckedall = true;
-            //var rowstype = o.classList;
-            //$('.' + rowstype).each(function () {
-            //    if (this.type == 'checkbox' && !this.checked) {
-            //        ischeckedall = false;
-            //        return ischeckedall;
-            //    }
-            //});
+            upischange(index);
+            var ischeckedall = true;
+            var rowstype = o.classList;
+            $('.' + rowstype).each(function () {
+                if (this.type == 'checkbox' && !this.checked) {
+                    ischeckedall = false;
+                    return ischeckedall;
+                }
+            });
 
-            //if (ischeckedall)
-            //    $('#KeyOfEn_' + rowstype)[0].checked = true;
-            //else
-            //    $('#KeyOfEn_' + rowstype)[0].checked = false;
+            if (ischeckedall)
+                $('#KeyOfEn_' + rowstype)[0].checked = true;
+            else
+                $('#KeyOfEn_' + rowstype)[0].checked = false;
         }
 
         //全选或者反选

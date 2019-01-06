@@ -31,12 +31,14 @@ namespace BP.WF.Template
                 return this.GetValIntByKey(FrmNodeAttr.FK_Node);
             }
         }
-
-        public int FK_Flow
+        /// <summary>
+        /// @李国文 
+        /// </summary>
+        public string FK_Flow
         {
             get
             {
-                return this.GetValIntByKey(FrmNodeAttr.FK_Flow);
+                return this.GetValStringByKey(FrmNodeAttr.FK_Flow);
             }
         }
         #endregion

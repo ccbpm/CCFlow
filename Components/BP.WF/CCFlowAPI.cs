@@ -337,7 +337,6 @@ namespace BP.WF
                     //{
                     //    if (item.KeyOfEn.Equals("RDT") || item.KeyOfEn.Equals("Rec"))
                     //        continue;
-
                     //    item.UIIsEnable = false; //设置为只读的.
                     //    attrs.AddEntity(item);
                     //}
@@ -350,7 +349,7 @@ namespace BP.WF
                     qo.AddWhere(FrmFieldAttr.EleType, FrmEleType.Field);
                     qo.DoQuery();
 
-                    foreach (MapAttr attr in attrsLeiJia) 
+                    foreach (MapAttr attr in attrsLeiJia)
                     {
                         if (attr.KeyOfEn.Equals("RDT") || attr.KeyOfEn.Equals("Rec"))
                             continue;
@@ -428,7 +427,6 @@ namespace BP.WF
                     // 加入最新的MapDtl.
                     myds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
                     #endregion  MapDtl .
-
 
                     #region  FrmAttachment .
                     myds.Tables.Remove("Sys_FrmAttachment");

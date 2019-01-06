@@ -54,7 +54,7 @@
                 html += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + ">可用</label></td>";
                 html += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + ">签名</label></td>";
                 html += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.IsNotNull ? "checked" : "") + ">必填</label></td>";
-                html += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + ">写入NDxxRpt</label></td>";
+                html += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + ">写入ND" + parseInt(flowNo) + "Rpt</label></td>";
                 html += "<td><label class='checkbox'><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + ">写入WF_GernrWorkFlow</label></td>";
                 html += "</tr>";
 
@@ -148,7 +148,7 @@
 
                 if ($('#' + ff.KeyOfEn + "_UIVisible").is(':checked'))
                     ff.UIVisible = 1;
-                else    
+                else
                     ff.UIVisible = 0;
 
                 if ($('#' + ff.KeyOfEn + "_UIIsEnable").is(':checked'))

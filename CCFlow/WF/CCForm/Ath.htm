@@ -545,8 +545,10 @@
                     }
                 }
 
-                if (realFileExts == null || realFileExts == "")
+                if (realFileExts == null || realFileExts == "" || realFileExts == "."
+                || realFileExts == undefined || realFileExts == '') {
                     realFileExts = "*.*";
+                }
 
                 var explorer = window.navigator.userAgent;
                 var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
@@ -599,10 +601,15 @@
                         html += "</div>";
                     }
                     html += "<div style='float:left;padding-top:7px;padding-right:2px'>";
+
+                    if (realFileExts == '.')
+                        realFileExts = "*.*";
+
                     if (athDesc.IsExpCol == 1)
-                        html += "<input type='file' name='file' id='file' style='display:inline' accept='"+realFileExts+"' >"
+                        html += "<input type='file' name='file' id='file' style='display:inline' accept='" + realFileExts + "' >";
                     else
-                        html += "<input type='file' name='file' id='file' style='display:inline'  accept='" + realFileExts + "' onclick='return Upload();' onchange='UploadChange();'>"
+                        html += "<input type='file' name='file' id='file' style='display:inline'  accept='" + realFileExts + "' onclick='return Upload();' onchange='UploadChange();'>";
+
                     if (athDesc.IsNote)
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
                     html += "</div>";
@@ -667,6 +674,8 @@
                 return;
             }
             var fileName = fileObj.name;
+
+            
             if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.'))) == -1) {
                 alert("上传附件类型不正确，只能上传" + realFileExts);
                 return;

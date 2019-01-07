@@ -295,6 +295,10 @@ namespace BP.WF.HttpHandler
                     if (DataType.IsNullOrEmpty(this.EnsName) == true)
                         return "err@类名没有传递过来";
                     Entities ens = ClassFactory.GetEns(this.EnsName);
+
+                    if (ens == null)
+                        return "err@类名错误" + this.EnsName; //@李国文.
+
                     en = ens.GetNewEntity;
                 }
                 else

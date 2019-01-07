@@ -2659,23 +2659,6 @@ namespace BP.En
 		{
 			this.AddTBIntPK("OID", _field, 0, "OID", false, true, false);
 		}
-		/// <summary>
-		/// 增加一个MID
-		/// </summary>
-		public void AddTBMID()
-		{
-			Attr attr = new Attr();
-			attr.Key = "MID";
-			attr.Field = "MID";
-			attr.DefaultVal = 0;
-			attr.MyDataType = DataType.AppInt;
-			attr.MyFieldType = FieldType.Normal;
-			attr.Desc = "MID";
-			attr.UITBShowType = TBType.Int;
-			attr.UIVisible = false;
-			attr.UIIsReadonly = true;
-			this.Attrs.Add(attr);
-		}
 		public void AddTBIntPKOID()
 		{
 			this.AddTBIntPKOID("OID", "OID");

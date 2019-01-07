@@ -8576,6 +8576,20 @@ namespace BP.WF
                 return "签章错误：" + ex.Message;
             }
         }
+        /// <summary>
+        /// 增加附件
+        /// </summary>
+        /// <param name="nodeid">节点ID</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="athNo">附件编号，如果当前节点只有一个附件可以为空.</param>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="filePath">文件路径:比如：c:\\xxx.xls</param>
+        /// <param name="fileName">文件名称:比如：我的文档.xls</param>
+        /// <returns>执行结果</returns>
+        public static string CCForm_AddAth(int nodeid, Int64 workid, string athNo, string frmID, string filePath, string fileName)
+        {
+            return "增加成功";
+        }
         #endregion ccform 接口
 
         #region 与工作处理器相关的接口

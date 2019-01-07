@@ -160,14 +160,7 @@ namespace BP.Sys
         {
             get
             {
-                string IsEnableAthEncrypt = SystemConfig.AppSettings["IsEnableAthEncrypt"];
-
-                if (DataType.IsNullOrEmpty(IsEnableAthEncrypt) == true)
-                    return false;
-
-                if (SystemConfig.AppSettings["IsEnableAthEncrypt"].Equals("1"))
-                    return true;
-                return false;
+                return SystemConfig.GetValByKeyBoolen("IsEnableAthEncrypt", false);
             }
         }
         /// <summary>
@@ -177,14 +170,7 @@ namespace BP.Sys
         {
             get
             {
-                string IsUploadFileToFTP = SystemConfig.AppSettings["IsUploadFileToFTP"];
-
-                if (DataType.IsNullOrEmpty(IsUploadFileToFTP) == true)
-                    return false;
-
-                if (SystemConfig.AppSettings["IsUploadFileToFTP"].Equals("1"))
-                    return true;
-                return false;
+                return SystemConfig.GetValByKeyBoolen("IsUploadFileToFTP", false);
             }
         }
 

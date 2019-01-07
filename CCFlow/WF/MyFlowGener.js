@@ -574,9 +574,9 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
             return operations;
         }
 
-        var data = frmData[mapAttr.KeyOfEn];
+        var data = flowData[mapAttr.KeyOfEn];
         if (data == undefined)
-            data = frmData[mapAttr.UIBindKey];
+            data = flowData[mapAttr.UIBindKey];
 
         if (data == undefined) {
             var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);

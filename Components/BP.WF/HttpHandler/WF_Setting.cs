@@ -126,10 +126,12 @@ namespace BP.WF.HttpHandler
         public string Siganture_Save()
         {
             HttpPostedFile f = context.Request.Files[0];
-
+            string empNo = this.GetRequestVal("EmpNo");
+            if (DataType.IsNullOrEmpty(empNo) == true)
+                empNo = WebUser.No;
             try
             {
-                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T" + WebUser.No + ".jpg";
+                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T" + empNo + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 

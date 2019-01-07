@@ -248,7 +248,20 @@ namespace BP.WF.HttpHandler
         {
             return base.DoDefaultMethod();
         }
-
+        public string HasSealPic()
+        {
+            string no = GetRequestVal("No");
+            if (string.IsNullOrWhiteSpace(no))
+                return "";
+            string path = "../DataUser/Siganture/" + no + ".jpg";
+            if (System.IO.Directory.Exists(this.context.Server.MapPath(path)))
+                return "";
+            else
+            {
+                BP.Port.Emp emp = new BP.Port.Emp(no);
+                return emp.Name;
+            }
+        }
         /// <summary>
         /// 执行的方法.
         /// </summary>
@@ -877,6 +890,12 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(dt);
         }
+        public string Complete_Init() 
+        {
+		    DataTable dt=null;
+		    dt=BP.WF.Dev2Interface.DB_FlowComplete();
+		    return  BP.Tools.Json.ToJson(dt);
+	    }
         /// <summary>
         /// 执行撤销
         /// </summary>

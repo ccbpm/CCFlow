@@ -1495,9 +1495,11 @@ namespace BP.WF.HttpHandler
                 if (key == null)
                     continue;
 
+                
                 if (key.Contains("TB_"))
                 {
-                    htMain.Add(key.Replace("TB_", ""), context.Request.Form[key]);
+                    if(htMain.ContainsKey(key.Replace("TB_", ""))==false)
+                        htMain.Add(key.Replace("TB_", ""), context.Request.Form[key]);
                     continue;
                 }
 
@@ -2071,6 +2073,7 @@ namespace BP.WF.HttpHandler
                             nodeFolder.Name = formTree.Name;
                             nodeFolder.NodeType = "folder";
                             appFlowFormTree.AddEntity(nodeFolder);
+                            break;
                         }
                     }
 
@@ -2095,6 +2098,8 @@ namespace BP.WF.HttpHandler
                     nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
                     nodeForm.IsCloseEtcFrm = frmNode.IsCloseEtcFrmInt.ToString();
                     appFlowFormTree.AddEntity(nodeForm);
+
+                    break;
                 }
             }
             //找上级表单文件夹
@@ -2173,6 +2178,7 @@ namespace BP.WF.HttpHandler
             //找到父级目录添加到集合
             foreach (BP.WF.Template.FlowFormTree folderapp in parentFolders)
             {
+                if(appFlowFormTree.Contains(folderapp) == false)
                 appFlowFormTree.AddEntity(folderapp);
             }
             //求出没有父节点的文件夹

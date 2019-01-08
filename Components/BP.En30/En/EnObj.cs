@@ -292,18 +292,8 @@ namespace BP.En
                 if ( v==null || v.Contains("@")==false)
                     continue;
 
-                //if (attr.DefaultValOfReal.Contains("@") == false)
-                //{
-                //    //added by liuxc,2015-7-13,字符串类型的字段，如果有默认值的，按默认值填写值，比如审批意见默认为“同意”的等等
-                //    if (attr.UITBShowType == Web.Controls.TBType.TB
-                //        && attr.UIVisible
-                //        && string.IsNullOrWhiteSpace(this.GetValByKey(attr.Key) as string)
-                //        && !string.IsNullOrWhiteSpace(attr.DefaultValOfReal))
-                //        this.SetValByKey(attr.Key, attr.DefaultVal);
-                //    continue;
-                //}
-
                 string myval = this.GetValStrByKey(attr.Key);
+
 
                 // 设置默认值.
                 switch (v)
@@ -410,10 +400,144 @@ namespace BP.En
                         }
                         continue;
                     default:
+                        GloVar gloVar = new GloVar();
+                        gloVar.PKVal = v;
+                        int count = gloVar.RetrieveFromDBSources();
+                        if (count == 1)
+                        {
+                            //执行SQL获取默认值
+                            string sql = gloVar.Val;
+                            sql = DealExp(sql, null, null);
+                            this.SetValByKey(attr.Key, DBAccess.RunSQLReturnString(sql));
+                        }
                         continue;
                 }
             }
         }
+
+        /// <summary>
+        /// 处理表达式
+        /// </summary>
+        /// <param name="exp">表达式</param>
+        /// <param name="en">数据源</param>
+        /// <param name="errInfo">错误</param>
+        /// <returns></returns>
+        private static string DealExp(string exp, Entity en, string errInfo)
+        {
+            if (exp.Contains("@") == false)
+                return exp;
+
+            exp = exp.Replace("~", "'");
+
+            //首先替换加; 的。
+            exp = exp.Replace("@WebUser.No;", Web.WebUser.No);
+            exp = exp.Replace("@WebUser.Name;", Web.WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_Dept;", Web.WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptName;", Web.WebUser.FK_DeptName);
+
+            // 替换没有 ; 的 .
+            exp = exp.Replace("@WebUser.No", Web.WebUser.No);
+            exp = exp.Replace("@WebUser.Name", Web.WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_DeptName", Web.WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", Web.WebUser.FK_Dept);
+            //  exp = exp.Replace("@WorkID", "0");
+
+            if (exp.Contains("@") == false)
+            {
+                exp = exp.Replace("~", "'");
+                return exp;
+            }
+
+            //增加对新规则的支持. @MyField; 格式.
+            if (en != null)
+            {
+                Row row = en.Row;
+                //特殊判断.
+                if (row.ContainsKey("OID") == true)
+                    exp = exp.Replace("@WorkID", row["OID"].ToString());
+
+                if (exp.Contains("@") == false)
+                    return exp;
+
+                foreach (string key in row.Keys)
+                {
+                    if (exp.Contains("@" + key + ";"))
+                        exp = exp.Replace("@" + key + ";", row[key].ToString());
+                }
+                if (exp.Contains("@") == false)
+                    return exp;
+
+                #region 解决排序问题.
+                Attrs attrs = en.EnMap.Attrs;
+                string mystrs = "";
+                foreach (Attr attr in attrs)
+                {
+                    if (attr.MyDataType == DataType.AppString)
+                        mystrs += "@" + attr.Key + ",";
+                    else
+                        mystrs += "@" + attr.Key;
+                }
+                string[] strs = mystrs.Split('@');
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("No", typeof(string)));
+                foreach (string str in strs)
+                {
+                    if (string.IsNullOrEmpty(str))
+                        continue;
+
+                    DataRow dr = dt.NewRow();
+                    dr[0] = str;
+                    dt.Rows.Add(dr);
+                }
+                DataView dv = dt.DefaultView;
+                dv.Sort = "No DESC";
+                DataTable dtNew = dv.Table;
+                #endregion  解决排序问题.
+
+                #region 替换变量.
+                foreach (DataRow dr in dtNew.Rows)
+                {
+                    string key = dr[0].ToString();
+                    bool isStr = key.Contains(",");
+                    if (isStr == true)
+                    {
+                        key = key.Replace(",", "");
+                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                    }
+                    else
+                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                }
+                #endregion
+
+                if (exp.Contains("@") == false)
+                    return exp;
+
+                //替换全部的变量.
+                foreach (string key in row.Keys)
+                {
+                    if (exp.Contains("@" + key))
+                        exp = exp.Replace("@" + key, row[key].ToString());
+                }
+            }
+
+           
+
+            if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
+            {
+                /*如果是bs*/
+                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.Keys)
+                {
+                    if (string.IsNullOrEmpty(key))
+                        continue;
+                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
+                }
+            }
+
+            exp = exp.Replace("~", "'");
+
+            return exp;
+        }
+
         /// <summary>
         /// 把所有的值都设置成默认值，但是主键除外。
         /// </summary>

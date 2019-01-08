@@ -71,7 +71,7 @@
             en.FK_Node = GetQueryString("FK_Node");
 
             //如果是业务单元.
-            if (en.EventDoType == 6) {
+            if (en.EventDoType == 7) {
                 en.DoDoc = $("#DDL_DoDoc").val();
             } else {
                 en.DoDoc = $("#TB_Doc").val();
@@ -84,6 +84,7 @@
 
             en.SetPKVal( en.FK_Event + Math.random() );
             en.Insert();
+
             Back();
 
             //window.location.href = window.location.href;

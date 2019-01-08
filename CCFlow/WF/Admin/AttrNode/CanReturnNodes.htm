@@ -1,17 +1,15 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>驰骋工作流</title>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -24,8 +22,54 @@
         //初始化数据.
         function InitPage() {
 
+            var nodeID = GetQueryString("FK_Node");
+            var fk_flow = GetQueryString("FK_Flow");
+
+            //所有的nodes.
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", fk_flow);
+
+            //可以退回的nodes.
+            var rnds = new Entities("BP.WF.Template.NodeReturns");
+            rnds.Retrieve("FK_Node", nodeID);
+
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            $("#titl").text(node.Name);
+
+            var rndsArr = [];
+            $.each(rnds, function (i, obj) {
+                rndsArr.push(obj.ReturnTo);
+            });
+
+            for (var i = 0; i < nds.length; i++) {
+                nd = nds[i];
+
+                if (nd.NodeID == GetQueryString("FK_Node"))
+                    continue;
+
+                var newRow = "";
+                newRow = "<tr style='width:100%'><td class=Idx style='width:10%'>" + i + "</td>";
+                newRow += "<td style='width:40%'>第" + nd.Step + "步</td>";
+                if ($.inArray(nd.NodeID, rndsArr) > -1) {
+                    newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
+                } else {
+                    newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
+                }
+                newRow += "</tr>";
+                $("#table1 tr:last").after(newRow);
+            }
+            var newBtn = "<TR class='TRSum' ><TD >&nbsp;</TD><TD>&nbsp;</TD><TD><input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()'/></TD>";
+            $("#table1 tr:last").after(newBtn);
+            return;
+        }
+
+        function InitPage_Old() {
+
             var fk_node = GetQueryString("FK_Node");
             var fk_flow = GetQueryString("FK_Flow");
+
+
             //初始化表格.
             $.ajax({
                 type: 'post',
@@ -39,10 +83,12 @@
                         alert(data);
                         return;
                     }
+
                     data = JSON.parse(data);
 
                     var nds = data.nds;
                     var rnds = data.rnds;
+
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(data.mynd);
                     //GenerBindDDL("DDL_BRole", ses, "IntKey", "Lab", data.BatchRole);
@@ -76,9 +122,57 @@
                 }
             });
         }
-
         //ajax 提交
         function Btn_Save_Click() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var flowNo = GetQueryString("FK_Flow");
+
+            var nodeReturn = new Entity("BP.WF.Template.NodeReturn");
+            nodeReturn.Delete("FK_Node", nodeID); //删除已经存在的数据.
+
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo);
+
+            for (var i = 0; i < nds.length; i++) {
+                var node = nds[i];
+
+                var checked = $("#CB_" + node.NodeID).checked;
+                if (checked == false)
+                    continue;
+ 
+                nodeReturn.FK_Node = GetQueryString("FK_Node");
+                nodeReturn.ReturnTo = node.NodeID;
+                nodeReturn.Insert();
+            }
+            
+            window.location.href = window.location.href;
+            return;
+        }
+        //ajax 提交
+        function Btn_Save_Click20() {
+
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            var frmData = $("#cc").serialize();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddFormData();
+            handler.AddUrlData();
+            handler.AddPara("CheckBoxIDs", checkBoxIDs);
+
+            var data = handler.DoMethodReturnString("CanReturnNodes_Save");
+
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            window.location.href = window.location.href;
+            return;
+        }
+        //ajax 提交
+        function Btn_Save_Click_Old() {
+
             var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             var frmData = $("#cc").serialize();
             //alert(checkBoxIDs);
@@ -102,26 +196,21 @@
         }
     </script>
 </head>
-<body  >
-
-<form id="cc">
- 
-<table width='100%' id="table1" >
-<caption  style="text-align:center">为'<span id="titl"></span>', 设置退回的节点。</caption>
-    <tr>
-    </tr>
-</table>
-
-<fieldset  ><legend>&nbsp;特别说明:&nbsp;</legend>
-
-<ul>
-
-<li>只有节点属性的退回规则被设置成退回制订的节点，此功能才有效。 </li>
-<li>设置退回的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，退回时才做检查。</li>
-</ul>
-</fieldset>
-
-</form>
-
+<body>
+    <form id="cc">
+    <table width='100%' id="table1">
+        <caption style="text-align: center">
+            为'<span id="titl"></span>', 设置退回的节点。</caption>
+        <tr>
+        </tr>
+    </table>
+    <fieldset>
+        <legend>&nbsp;特别说明:&nbsp;</legend>
+        <ul>
+            <li>只有节点属性的退回规则被设置成退回制订的节点，此功能才有效。 </li>
+            <li>设置退回的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，退回时才做检查。</li>
+        </ul>
+    </fieldset>
+    </form>
 </body>
 </html>

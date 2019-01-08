@@ -140,12 +140,12 @@
                 var checked = $("#CB_" + node.NodeID).checked;
                 if (checked == false)
                     continue;
- 
+
                 nodeReturn.FK_Node = GetQueryString("FK_Node");
                 nodeReturn.ReturnTo = node.NodeID;
                 nodeReturn.Insert();
             }
-            
+
             window.location.href = window.location.href;
             return;
         }

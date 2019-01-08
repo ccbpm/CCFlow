@@ -13,6 +13,7 @@ using BP.En;
 using BP.WF.Template;
 using BP.WF.Data;
 using BP.Sys;
+using BP.Tools;
 
 namespace BP.WF
 {
@@ -2603,13 +2604,13 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
+                        ps.SQL = "SELECT DISTINCT a.*,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) ";
+                        ps.SQL = "SELECT DISTINCT a.* ,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) ";
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -2617,14 +2618,14 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter ";
+                        ps.SQL = "SELECT DISTINCT a.* ,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
+                        ps.SQL = "SELECT DISTINCT a.* ,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                     }
@@ -8591,6 +8592,294 @@ namespace BP.WF
             return "增加成功";
         }
         #endregion ccform 接口
+
+        /// <summary>
+        /// 附件上传接口
+        /// </summary>
+        /// <param name="nodeid">节点ID</param>
+        /// <param name="flowid">流程ID</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="athNo">附件属性No</param>
+        /// <param name="frmID">FK_MapData</param>
+        /// <param name="filePath">附件路径</param>
+        /// <param name="fileName">附件名称</param>
+        /// <param name="sort">分类</param>
+        /// <returns></returns>
+        public static string CCForm_AddAth(int nodeid,string flowid, Int64 workid, String athNo, string frmID, string filePath, string fileName,string sort=null,Int32 fid=0,Int32 pworkid=0)
+        {
+            string pkVal = workid.ToString();
+            // 多附件描述.
+            BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(athNo);
+            MapData mapData = new MapData(frmID);
+            string msg = null;
+
+            #region 获取表单方案
+            //求主键. 如果该表单挂接到流程上.
+            if (nodeid != 0)
+            {
+                //判断表单方案。
+                FrmNode fn = new FrmNode(flowid, nodeid, frmID);
+                if (fn.FrmSln == FrmSln.Readonly)
+                    return "err@不允许上传附件.";
+
+                //是默认的方案的时候.
+                if (fn.FrmSln == FrmSln.Default)
+                {
+                    //判断当前方案设置的whoIsPk ，让附件集成 whoIsPK 的设置。
+                    if (fn.WhoIsPK == WhoIsPK.FID)
+                        pkVal = fid.ToString();
+
+                    if (fn.WhoIsPK == WhoIsPK.PWorkID)
+                        pkVal = pworkid.ToString();
+                }
+
+                //自定义方案.
+                if (fn.FrmSln == FrmSln.Self)
+                {
+                    athDesc = new FrmAttachment(athNo + "_" + nodeid);
+                    if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                        pkVal = fid.ToString();
+
+                    if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                        pkVal = pworkid.ToString();
+                }
+            }
+
+            #endregion 获取表单方案
+
+            //获取上传文件是否需要加密
+            bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+          
+            #region 文件上传的iis服务器上 or db数据库里.
+            if (athDesc.AthSaveWay == AthSaveWay.IISServer)
+            {
+                string savePath = athDesc.SaveTo;
+                if (savePath.Contains("@") == true || savePath.Contains("*") == true)
+                {
+                    /*如果有变量*/
+                    savePath = savePath.Replace("*", "@");
+
+                    if (savePath.Contains("@") && nodeid != 0)
+                    {
+                        /*如果包含 @ */
+                        BP.WF.Flow flow = new BP.WF.Flow(flowid);
+                        BP.WF.Data.GERpt myen = flow.HisGERpt;
+                        myen.OID = workid;
+                        myen.RetrieveFromDBSources();
+                        savePath = BP.WF.Glo.DealExp(savePath, myen, null);
+                    }
+                    if (savePath.Contains("@") == true)
+                        throw new Exception("@路径配置错误,变量没有被正确的替换下来." + savePath);
+                }
+                else
+                {
+                    savePath = athDesc.SaveTo + "\\" + pkVal;
+                }
+
+                //替换关键的字串.
+                savePath = savePath.Replace("\\\\", "\\");
+
+                try
+                {
+                    savePath = System.Web.HttpContext.Current.Server.MapPath("~/" + savePath);
+                }
+                catch (Exception ex)
+                {
+                    savePath = SystemConfig.PathOfDataUser + "UploadFile\\" + mapData.No + "\\";
+                    //return "err@获取路径错误" + ex.Message + ",配置的路径是:" + savePath + ",您需要在附件属性上修改该附件的存储路径.";
+                }
+
+                try
+                {
+                    if (System.IO.Directory.Exists(savePath) == false)
+                        System.IO.Directory.CreateDirectory(savePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("err@创建路径出现错误，可能是没有权限或者路径配置有问题:" + savePath + "@异常信息:" + ex.Message);
+                }
+
+                    string guid = BP.DA.DBAccess.GenerGUID();
+                    string ext = fileName.Substring(fileName.LastIndexOf("."));
+                    string realSaveTo = savePath + "\\" + guid + "." + fileName;
+                    realSaveTo = realSaveTo.Replace("~", "-");
+                    realSaveTo = realSaveTo.Replace("'", "-");
+                    realSaveTo = realSaveTo.Replace("*", "-");
+                    if (fileEncrypt == true)
+                    {
+                        string strtmp = realSaveTo + ".tmp";
+                        if (File.Exists(filePath) == true)
+                            File.Copy(filePath, strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        else
+                            return "err@需要保存的文件不存在";
+                        EncHelper.EncryptDES(strtmp, strtmp.Replace(".tmp", ""));//加密
+                        File.Delete(strtmp);//删除临时文件
+                    }
+                    else
+                    {
+                        //文件保存的路径
+                        if (File.Exists(filePath) == true)
+                            File.Copy(filePath, realSaveTo);
+                        else
+                            return "err@需要保存的文件不存在";
+                      
+                    }
+
+                    FileInfo info = new FileInfo(realSaveTo);
+                    FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+                    dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
+                    dbUpload.NodeID =nodeid.ToString();
+                    dbUpload.Sort = sort;
+                    dbUpload.FK_FrmAttachment = athNo;
+                    dbUpload.FK_MapData = athDesc.FK_MapData;
+                    dbUpload.FileExts = ext;
+                    dbUpload.FID = fid;
+                    if (fileEncrypt == true)
+                        dbUpload.SetPara("IsEncrypt", 1);
+
+                    #region 处理文件路径，如果是保存到数据库，就存储pk.
+                    if (athDesc.AthSaveWay == AthSaveWay.IISServer)
+                    {
+                        //文件方式保存
+                        dbUpload.FileFullName = realSaveTo;
+                    }
+
+                    if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
+                    {
+                        //保存到数据库
+                        dbUpload.FileFullName = dbUpload.MyPK;
+                    }
+                    #endregion 处理文件路径，如果是保存到数据库，就存储pk.
+
+                    dbUpload.FileName = fileName;
+                    dbUpload.FileSize = (float)info.Length;
+                    dbUpload.RDT = DataType.CurrentDataTimess;
+                    dbUpload.Rec = BP.Web.WebUser.No;
+                    dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.RefPKVal = pkVal;
+
+                    dbUpload.UploadGUID = guid;
+                    dbUpload.Insert();
+
+                    if (athDesc.AthSaveWay == AthSaveWay.DB)
+                    {
+                        //执行文件保存.
+                        BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+                    }
+                }
+                #endregion 文件上传的iis服务器上 or db数据库里.
+
+                #region 保存到数据库 / FTP服务器上.
+                if (athDesc.AthSaveWay == AthSaveWay.DB || athDesc.AthSaveWay == AthSaveWay.FTPServer)
+                {
+                    string guid = DBAccess.GenerGUID();
+
+                    //把文件临时保存到一个位置.
+                    string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
+
+                    if (fileEncrypt == true)
+                    {
+
+                        string strtmp = SystemConfig.PathOfTemp + "" + guid + "_Desc" + ".tmp";
+                        if (File.Exists(filePath) == true)
+                            File.Copy(filePath, strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        else
+                            return "err@需要保存的文件不存在";
+
+                        EncHelper.EncryptDES(strtmp, temp);//加密
+                        File.Delete(strtmp);//删除临时文件
+                    }
+                    else
+                    {
+                        //文件保存的路径
+                        if (File.Exists(filePath) == true)
+                            File.Copy(filePath, temp);
+                        else
+                            return "err@需要保存的文件不存在";
+                    }
+                    string ext = fileName.Substring(fileName.LastIndexOf("."));
+
+                    FileInfo info = new FileInfo(temp);
+                    FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+                    dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
+                    dbUpload.Sort = sort;
+                    dbUpload.NodeID = nodeid.ToString();
+                    dbUpload.FK_FrmAttachment = athDesc.MyPK;
+                    dbUpload.FileExts = ext;
+                    dbUpload.FID = fid; //流程id.
+                    if (fileEncrypt == true)
+                        dbUpload.SetPara("IsEncrypt", 1);
+                    if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                    {
+                        /*如果是继承，就让他保持本地的PK. */
+                        dbUpload.RefPKVal = pkVal.ToString();
+                    }
+
+                    if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                    {
+                        /*如果是协同，就让他是PWorkID. */
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                        ps.Add("WorkID", pkVal);
+                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
+                        if (pWorkID == null || pWorkID == "0")
+                            pWorkID = pkVal;
+                        dbUpload.RefPKVal = pWorkID;
+                    }
+
+                    dbUpload.FK_MapData = athDesc.FK_MapData;
+                    dbUpload.FK_FrmAttachment = athDesc.MyPK;
+                    dbUpload.FileName = fileName;
+                    dbUpload.FileSize = (float)info.Length;
+                    dbUpload.RDT = DataType.CurrentDataTimess;
+                    dbUpload.Rec = BP.Web.WebUser.No;
+                    dbUpload.RecName = BP.Web.WebUser.Name;
+                    
+                    dbUpload.UploadGUID = guid;
+
+                    if (athDesc.AthSaveWay == AthSaveWay.DB)
+                    {
+                        dbUpload.Insert();
+                        //把文件保存到指定的字段里.
+                        dbUpload.SaveFileToDB("FileDB", temp);
+                    }
+
+                    if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
+                    {
+                        /*保存到fpt服务器上.*/
+                        FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                            SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+                        string ny = DateTime.Now.ToString("yyyy_MM");
+
+                        //判断目录年月是否存在.
+                        if (ftpconn.DirectoryExist(ny) == false)
+                            ftpconn.CreateDirectory(ny);
+                        ftpconn.SetCurrentDirectory(ny);
+
+                        //判断目录是否存在.
+                        if (ftpconn.DirectoryExist(athDesc.FK_MapData) == false)
+                            ftpconn.CreateDirectory(athDesc.FK_MapData);
+
+                        //设置当前目录，为操作的目录。
+                        ftpconn.SetCurrentDirectory(athDesc.FK_MapData);
+
+                        //把文件放上去.
+                        ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
+                        ftpconn.Close();
+
+                        //设置路径.
+                        dbUpload.FileFullName = ny + "//" + athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
+                        dbUpload.Insert();
+                        File.Delete(temp);
+                    }
+
+                }
+                #endregion 保存到数据库.
+
+           
+            return "";
+        }
 
         #region 与工作处理器相关的接口
         /// <summary>

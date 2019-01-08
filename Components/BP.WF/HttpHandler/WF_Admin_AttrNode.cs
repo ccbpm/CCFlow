@@ -1383,49 +1383,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 多人处理规则.
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <returns></returns>
-        public string TodolistModel_Init()
-        {
-            //nd.TodolistModel = (TodolistModel)this.GetRequestValInt("RB_TodolistModel");  //考核方式.
-            //nd.TeamLeaderConfirmRole = (TeamLeaderConfirmRole)this.GetRequestValInt("DDL_TeamLeaderConfirmRole");  //考核方式.
-            //nd.TeamLeaderConfirmDoc = this.GetRequestVal("TB_TeamLeaderConfirmDoc");
-            //nd.Update();
-
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-
-            Hashtable ht = new Hashtable();
-            ht.Add("TodolistModel", (int)nd.TodolistModel);
-            ht.Add("TeamLeaderConfirmRole", (int)nd.TeamLeaderConfirmRole);
-            ht.Add("TeamLeaderConfirmDoc", nd.TeamLeaderConfirmDoc);
-            return BP.Tools.Json.ToJson(ht);
-
-        }
-        /// <summary>
-        /// 保存
-        /// </summary>
-        /// <returns></returns>
-        public string TodolistModel_Save()
-        {
-            BP.WF.Node nd = new BP.WF.Node();
-            nd.NodeID = this.FK_Node;
-            nd.RetrieveFromDBSources();
-
-            nd.TodolistModel = (TodolistModel)this.GetRequestValInt("RB_TodolistModel");  //考核方式.
-            nd.TeamLeaderConfirmRole = (TeamLeaderConfirmRole)this.GetRequestValInt("DDL_TeamLeaderConfirmRole");  //考核方式.
-            nd.TeamLeaderConfirmDoc = this.GetRequestVal("TB_TeamLeaderConfirmDoc");
-
-            nd.Update();
-
-            
-            return "保存成功...";
-        }
-
-        #endregion 多人处理规则.
-
         #region 节点属性（列表）的操作
         /// <summary>
         /// 初始化节点属性列表.
@@ -1682,51 +1639,6 @@ namespace BP.WF.HttpHandler
                 NodeCancel nr = new NodeCancel();
                 nr.FK_Node = this.FK_Node;
                 nr.CancelTo = nd.NodeID;
-                nr.Insert();
-                i++;
-            }
-            if (i == 0)
-            {
-                return "请您选择要撤销的节点。";
-            }
-            return "设置成功.";
-        }
-        #endregion
-
-        #region 可以退回的节点
-        public string CanReturnNodes_Init()
-        {
-
-            BP.WF.Node mynd = new BP.WF.Node();
-            mynd.NodeID = this.FK_Node;
-            mynd.RetrieveFromDBSources();
-
-            BP.WF.Template.NodeReturns rnds = new BP.WF.Template.NodeReturns();
-            rnds.Retrieve(NodeReturnAttr.FK_Node, this.FK_Node);
-
-            BP.WF.Nodes nds = new Nodes();
-            nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FK_Flow);
-
-            return "{\"mynd\":" + mynd.ToJson() + ",\"rnds\":" + rnds.ToJson() + ",\"nds\":" + nds.ToJson() + "}";
-        }
-        public string CanReturnNodes_Save()
-        {
-            BP.WF.Template.NodeReturns rnds = new BP.WF.Template.NodeReturns();
-            rnds.Delete(BP.WF.Template.NodeReturnAttr.FK_Node, this.FK_Node);
-
-            BP.WF.Nodes nds = new Nodes();
-            nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FK_Flow);
-
-            int i = 0;
-            foreach (BP.WF.Node nd in nds)
-            {
-                string cb = this.GetRequestVal("CB_" + nd.NodeID);
-                if (cb == null || cb == "")
-                    continue;
-
-                NodeReturn nr = new NodeReturn();
-                nr.FK_Node = this.FK_Node;
-                nr.ReturnTo = nd.NodeID;
                 nr.Insert();
                 i++;
             }

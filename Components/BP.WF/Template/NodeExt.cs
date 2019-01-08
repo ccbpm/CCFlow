@@ -140,7 +140,7 @@ namespace BP.WF.Template
                 return (FrmWorkCheckSta)this.GetValIntByKey(NodeAttr.FWCSta);
             }
         }
-        
+
         /// <summary>
         /// 超时处理内容
         /// </summary>
@@ -322,17 +322,16 @@ namespace BP.WF.Template
                 //true, true, NodeAttr.TurnToDeal, "@0=提示ccflow默认信息@1=提示指定信息@2=转向指定的url@3=按照条件转向");
                 //map.SetHelperUrl(NodeAttr.TurnToDeal, "http://ccbpm.mydoc.io/?v=5404&t=17914");
                 //map.AddTBString(NodeAttr.TurnToDealDoc, null, "转向处理内容", true, false, 0, 1000, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17914");
-                
+
                 map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "已读回执", true, true, NodeAttr.ReadReceipts,
                 "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
                 map.SetHelperUrl(NodeAttr.ReadReceipts, "http://ccbpm.mydoc.io/?v=5404&t=17915");
 
-
                 //map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
-                // "@0=由连接线条件控制@1=让用户手工选择@2=发送按钮旁下拉框选择");
+                //"@0=由连接线条件控制@1=让用户手工选择@2=发送按钮旁下拉框选择");
+
                 map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel, "@0=由连接线条件控制@2=发送按钮旁下拉框选择");
                 map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
-
 
                 // 撤销规则.
                 map.AddDDLSysEnum(NodeAttr.CancelRole, (int)CancelRole.OnlyNextStep, "撤销规则", true, true,
@@ -363,7 +362,7 @@ namespace BP.WF.Template
 
                 //map.AddDDLSysEnum(NodeAttr.SaveModel, 0, "保存方式", true, true);
                 //map.SetHelperUrl(NodeAttr.SaveModel, "http://ccbpm.mydoc.io/?v=5404&t=17934");
-                
+
                 map.AddBoolean(NodeAttr.IsGuestNode, false, "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true);
 
                 //节点业务类型.
@@ -464,9 +463,9 @@ namespace BP.WF.Template
                 //map.SetHelperUrl(NodeAttr.ThreadKillRole, ""); //增加帮助
 
                 //功能和子流程组件重复，屏蔽 hzm
-              //  map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
-              //  map.SetHelperUrl(BtnAttr.SubFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=16262");
-             //   map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
+                //  map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
+                //  map.SetHelperUrl(BtnAttr.SubFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=16262");
+                //   map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
 
                 //map.AddDDLSysEnum(BtnAttr.SubFlowCtrlRole, 0, "控制规则", true, true, BtnAttr.SubFlowCtrlRole, "@0=无@1=不可以删除子流程@2=可以删除子流程");
 
@@ -610,7 +609,7 @@ namespace BP.WF.Template
 
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
-               
+
 
                 //节点工具栏,主从表映射.
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
@@ -627,7 +626,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoAccepterRoleNew";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-           
+
 
                 rm = new RefMethod();
                 rm.Title = "节点事件"; // "调用事件接口";
@@ -643,7 +642,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-           
+
 
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
@@ -674,7 +673,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-            
+
                 #endregion 基础功能.
 
                 #region 字段相关功能（不显示在菜单里）
@@ -849,7 +848,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
-              
+
 
                 rm = new RefMethod();
                 rm.Title = "抄送人规则";
@@ -901,7 +900,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            return "../../Admin/AttrNode/BatchStartFields.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node="+this.NodeID;
+            return "../../Admin/AttrNode/BatchStartFields.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 批量修改节点属性
@@ -923,7 +922,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
         }
-        
+
         /// <summary>
         /// 父子流程
         /// </summary>
@@ -940,7 +939,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID;
         }
-      
+
         /// <summary>
         /// 发送阻塞规则
         /// </summary>
@@ -965,8 +964,8 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID;
         }
-      
-        #endregion 
+
+        #endregion
 
         #region 表单相关.
         /// <summary>
@@ -975,7 +974,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeComponent()
         {
-            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal="+this.NodeID+"&t=" + DataType.CurrentDataTime;
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 特别用户特殊字段权限.
@@ -984,7 +983,7 @@ namespace BP.WF.Template
         public string DoSpecFieldsSpecUsers()
         {
             return "../../Admin/AttrNode/SepcFiledsSepcUsers.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
-                   this.NodeID + "&FK_Node="+this.NodeID+"&t=" + DataType.CurrentDataTime;
+                   this.NodeID + "&FK_Node=" + this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 排序字段顺序
@@ -1004,10 +1003,10 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoNodeAppType()
         {
-            return "../../Admin/AttrNode/NodeAppType.htm?FK_Node=" + this.NodeID + "&FK_Flow="+this.FK_Flow+"&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/NodeAppType.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
         #endregion
-        
+
         /// <summary>
         /// 延续子流程
         /// </summary>
@@ -1025,7 +1024,7 @@ namespace BP.WF.Template
             PubClass.WinOpen("../../Comm/Port/DeptTree.aspx?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&RefNo=" + DataType.CurrentDataTime, 500, 550);
             return null;
         }
-       
+
         /// <summary>
         /// 制度
         /// </summary>
@@ -1044,7 +1043,7 @@ namespace BP.WF.Template
             PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "ZhiDu/NodeFengXianDian.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "制度", "Bill", 700, 400, 200, 300);
             return null;
         }
-        
+
         public string DoTurn()
         {
             return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID;
@@ -1058,7 +1057,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID; 
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID;
         }
         /// <summary>
         /// 个性化接受人窗口
@@ -1090,7 +1089,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCanCancelNodes()
         {
-            return "../../Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
+            return "../../Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// DXReport
@@ -1100,7 +1099,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
-      
+
         public string DoCond()
         {
             return "../../Admin/Cond/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
@@ -1129,7 +1128,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/Sln/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
         }
-        
+
         public string DoMapData()
         {
             int i = this.GetValIntByKey(NodeAttr.FormType);
@@ -1171,15 +1170,15 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBill()
         {
-            return "../../Admin/AttrNode/Bill.htm?FK_Node="+this.NodeID+"&NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/Bill.htm?FK_Node=" + this.NodeID + "&NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
-        
-        
+
+
         protected override bool beforeUpdate()
         {
             //更新流程版本
-            Flow.UpdateVer(this.FK_Flow); 
-           
+            Flow.UpdateVer(this.FK_Flow);
+
             #region 处理节点数据.
             Node nd = new Node(this.NodeID);
             if (nd.IsStartNode == true)
@@ -1224,14 +1223,14 @@ namespace BP.WF.Template
                     {
                         string errInfo = "设置矛盾:";
                         errInfo += "@当前节点您设置的访问规则是按照方向条件控制的";
-                        errInfo += "但是到达的节点["+mynd.Name+"]的接收人规则是按照上一步选择的,设置矛盾.";
+                        errInfo += "但是到达的节点[" + mynd.Name + "]的接收人规则是按照上一步选择的,设置矛盾.";
                         // throw new Exception(errInfo);
                     }
                 }
             }
 
             //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?
-            if (1==2 && nd.CondModel != CondModel.SendButtonSileSelect)
+            if (1 == 2 && nd.CondModel != CondModel.SendButtonSileSelect)
             {
                 /*如果是启用了按钮，就检查当前节点到达的节点是否有【按照选择接受人】的方式确定接收人的范围. */
                 Nodes nds = nd.HisToNodes;
@@ -1240,19 +1239,19 @@ namespace BP.WF.Template
                     if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
                     {
                         //强制设置安装人员选择器来选择.
-                        this.SetValByKey(NodeAttr.CondModel, (int)CondModel.SendButtonSileSelect); 
+                        this.SetValByKey(NodeAttr.CondModel, (int)CondModel.SendButtonSileSelect);
                         break;
                     }
                 }
             }
             #endregion 处理节点数据.
-             
+
 
             #region 创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
             workCheckAth.MyPK = this.NodeID + "_FrmWorkCheck";
             //不包含审核组件
-            if (workCheckAth.RetrieveFromDBSources()==0 )
+            if (workCheckAth.RetrieveFromDBSources() == 0)
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/

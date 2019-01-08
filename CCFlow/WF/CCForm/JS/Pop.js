@@ -26,23 +26,21 @@ function SelfUrl_Done(mapExt) {
     if (url.indexOf('?') == -1)
         url = url + "?PKVal=" + pkval + "&UserNo=" + webUser.No;
     var title = mapExt.GetPara("Title");
-
-    if (window.parent && window.parent.OpenBootStrapModal) {
-
-        window.parent.OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W,
+        OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W,
          "icon-edit", true, function () {
              var iframe = document.getElementById("eudlgframe");
              if (iframe) {
                  var val = iframe.contentWindow.Btn_OK();
+                 //
+
                  $("#TB_" + mapExt.AttrOfOper).val(val);
 
              }
 
          }, null, function () {
-             //location = location;
+            
          });
-        return;
-    }
+      
 }
 
 //树干叶子模式.
@@ -93,7 +91,6 @@ function PopBranchesAndLeaf(mapExt, val) {
         if (window.parent && window.parent.OpenBootStrapModal) {
             OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
-
                 var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     var selectedRows = iframe.contentWindow.selectedRows;

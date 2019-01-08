@@ -11,7 +11,8 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <base target="_self" />
     <style type="text/css">
-        th, td {
+        th, td
+        {
             text-align: center;
         }
     </style>
@@ -20,13 +21,15 @@
         var fk_flow;
         var fk_Node;
         $(function () {
+
             var frmID = GetQueryString("FK_MapData");
             var nodeID = GetQueryString("FK_Node");
             var flowNo = GetQueryString("FK_Flow");
 
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
-            mapAttrs.Retrieve("FK_MapData", frmID);
+            mapAttrs.Retrieve("FK_MapData", frmID, "Y");
+
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
@@ -132,6 +135,7 @@
                 var en = mapAttrs[i];
                 if (en.UIVisible == 0)
                     continue;
+
                 ff = new Entity("BP.WF.Template.FrmField");
                 ff.SetPKVal(frmID + '_' + nodeID + '_' + en.KeyOfEn);
 
@@ -161,7 +165,6 @@
                 else
                     ff.IsSigan = 0;
 
-
                 if ($('#' + ff.KeyOfEn + "_IsNotNull").is(':checked'))
                     ff.IsNotNull = 1;
                 else
@@ -177,8 +180,25 @@
                 else
                     ff.IsWriteToGenerWorkFlow = 0;
 
+                //判断变化的是否需要保存.
+                var isNeedSave = false;
+                if (ff.IsWriteToGenerWorkFlow == 1)
+                    isNeedSave = true;
+
+                if (ff.IsWriteToFlowTable == 1)
+                    isNeedSave = true;
+
+                if (aa.UIIsEnable != ff.UIIsEnable)
+                    isNeedSave = true;
+
+                if (aa.UIIsEnable != ff.UIIsEnable)
+                    isNeedSave = true;
+
+                if (isNeedSave == false)
+                    continue;
 
                 ff.Insert();
+
             }
 
             window.location.href = window.location.href;
@@ -259,31 +279,34 @@
                 </label>
             </th>
             <th>
-                <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label for="KeyOfEn_UIIsEnable">
+                <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label
+                    for="KeyOfEn_UIIsEnable">
                     可用
                 </label>
             </th>
             <th>
-                <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label for="KeyOfEn_IsSigan">
+                <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label
+                    for="KeyOfEn_IsSigan">
                     签名
                 </label>
             </th>
             <th>
-                <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' /><label for="KeyOfEn_IsNotNull">
+                <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' /><label
+                    for="KeyOfEn_IsNotNull">
                     必填
                 </label>
             </th>
             <th>
                 <input onclick="CheckAll('IsWriteToFlowTable');" id='KeyOfEn_IsWriteToFlowTable'
-                       type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
-                    写入流程数据表
-                </label>
+                    type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
+                        写入流程数据表
+                    </label>
             </th>
             <th>
                 <input onclick="CheckAll('IsWriteToGenerWorkFlow');" id='KeyOfEn_IsWriteToGenerWorkFlow'
-                       type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">
-                    写入流程注册表
-                </label>
+                    type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">
+                        写入流程注册表
+                    </label>
             </th>
         </tr>
     </table>

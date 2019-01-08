@@ -29,7 +29,7 @@
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID, "Y");
-
+            fieldsData = mapAttrs;
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
@@ -134,7 +134,7 @@
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
                 if (en.UIVisible == 0)
-                    continue;
+                   continue;
 
                 ff = new Entity("BP.WF.Template.FrmField");
                 ff.SetPKVal(frmID + '_' + nodeID + '_' + en.KeyOfEn);
@@ -188,10 +188,10 @@
                 if (ff.IsWriteToFlowTable == 1)
                     isNeedSave = true;
 
-                if (aa.UIIsEnable != ff.UIIsEnable)
+                if (en.UIIsEnable != ff.UIIsEnable)
                     isNeedSave = true;
 
-                if (aa.UIIsEnable != ff.UIIsEnable)
+                if (en.UIIsEnable != ff.UIIsEnable)
                     isNeedSave = true;
 
                 if (isNeedSave == false)

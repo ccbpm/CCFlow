@@ -384,8 +384,24 @@
 			            listbox += "<tr  id='" + groupName + num + "' >";
 			            is1 = true;
 			        }
+			        var workID = work.WorkID;
+			        var fid = work.FID;
+			        var nodeID = work.FK_Node;
+			        //当前节点是子线程的节点
+			        if (fid != 0) {
+
+			            //获取人员所处的流程节点
+			            var currNode = work.CurrNode;
+			            //判断当前子线程是否异表单
+			            var node = new Entity("BP.WF.Node", currNode);
+			            //获取节点子线程的类型
+			            var subThreadType = node.SubThreadType;
+			            if (subThreadType == 1)
+			                nodeID = currNode;
+			        }
+
 			        listbox += "<td>" + num + "</td>";
-			        listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','"+work.FID+"')\" >" + work.Title + "</a></td>";
+			        listbox += "<td><a href=\"javascript:OpenFrm('" + workID + "','" + nodeID + "','" + work.FK_Flow + "','" + fid + "')\" >" + work.Title + "</a></td>";
 			        listbox += "<td>" + work.StarterName + "</td>";
 			        listbox += "<td>" + work.DeptName + "</td>";
 			        listbox += "<td>" + work.NodeName + "</td>";
@@ -398,7 +414,7 @@
 
 			        listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
 			        listbox += "<td>";
-			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node +"&FID="+work.FID+ "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\">撤销</a>";
+			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + nodeID +"&FID="+work.FID+ "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\">撤销</a>";
 			        listbox += "</td>";
 			        listbox += "</tr>";
 			    }

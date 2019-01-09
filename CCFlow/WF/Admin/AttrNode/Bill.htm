@@ -70,7 +70,7 @@
 
         function Delete(no) {
 
-            if (window.confirm('您确定要删除['+no+']吗？') == false)
+            if (window.confirm('您确定要删除[' + no + ']吗？') == false)
                 return;
 
             var en = new Entity("BP.WF.Template.BillTemplate");
@@ -80,11 +80,6 @@
             window.location.href = window.location.href;
         }
 
-        function Edit(no) {
-
-            var url = "Billing.htm?FK_BillTemplate=" + no + "&FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
-        }
 
         function Btn_Save_Click() {
 
@@ -98,27 +93,15 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddUrlData();
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-//            handler.AddPara("m", Math.random());
             handler.AddFormData();
             var data = handler.DoMethodReturnString("Bill_Save");
-             
-//            $.ajax({
-//                url: Handler + "?DoType=Bill_Save&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-//                type: 'POST',
-//                data: formData,
-//                async: false,
-//                cache: false,
-//                contentType: false,
-//                processData: false,
-//                success: function (data) {
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-                    window.location.href = window.location.href;
-                    return;
-//                }
-//            });
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            window.location.href = window.location.href;
+            return;
+
         }
 
         function Btn_New_Click() {
@@ -132,30 +115,29 @@
 <body>
     <div style="margin: 8px;">
         <form id="cc" enctype="multipart/form-data" method="post">
-        <table style="width: 100%; ">
-             <caption> 单据模版</caption> 
+        <table style="width: 100%;">
+            <caption>
+                单据模版</caption>
             <tr>
-                <td  style=" width:15%; ">
+                <td style="width: 15%;">
                     编号(自动生成)
                 </td>
                 <td>
-                    <input type="text" id="TB_No" name="TB_No" readonly="1"  style=" width:60%;"  />
+                    <input type="text" id="TB_No" name="TB_No" readonly="1" style="width: 60%;" />
                 </td>
-                <td style=" width:15%; " >
+                <td style="width: 15%;">
                     模版名称
                 </td>
                 <td>
-                    <input type="text" id="TB_Name" name="TB_Name"  style=" width:80%;"   />
+                    <input type="text" id="TB_Name" name="TB_Name" style="width: 80%;" />
                 </td>
             </tr>
-
-
             <tr>
-                <td >
-                   生成模版类型
+                <td>
+                    生成模版类型
                 </td>
                 <td>
-                    <select id="DDL_BillFileType" name="DDL_BillFileType"  style=" width:60%;"  />
+                    <select id="DDL_BillFileType" name="DDL_BillFileType" style="width: 60%;" />
                 </td>
                 <td>
                     打开方式
@@ -164,27 +146,26 @@
                     <select id="DDL_BillOpenModel" name="DDL_BillOpenModel" />
                 </td>
             </tr>
-
-             <tr>
+            <tr>
                 <td>
                     是否加载二维码
                 </td>
                 <td>
-                    <select id="DDL_QRModel" name="DDL_QRModel"   style=" width:60%;"  >
-                    <option value="0">不加载二维码 </option>
-                    <option value="1">加载二维码 </option>
+                    <select id="DDL_QRModel" name="DDL_QRModel" style="width: 60%;">
+                        <option value="0">不加载二维码 </option>
+                        <option value="1">加载二维码 </option>
                     </select>
-
                 </td>
                 <td>
-                    模版文件:<br>符合规范的rtf格式文件.
+                    模版文件:<br>
+                    符合规范的rtf格式文件.
                 </td>
                 <td>
-                    <input id="bill" type="file" name="bill"  style=" width:60%;"  />
+                    <input id="bill" type="file" name="bill" style="width: 60%;" />
                 </td>
             </tr>
             <tr>
-             <td>
+                <td>
                 </td>
                 <td colspan="3">
                     <input type="button" id="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
@@ -198,22 +179,22 @@
                 单据模版列表
             </caption>
             <tr>
-                <th style="width:3%;">
+                <th style="width: 3%;">
                     序
                 </th>
-                <th  style="width:10%;">
+                <th style="width: 10%;">
                     编号
                 </th>
                 <th>
                     名称
                 </th>
-                 <th>
+                <th>
                     二维码生成方式
                 </th>
-                <th style="width:50%;">
+                <th style="width: 50%;">
                     路径
                 </th>
-                <th  style="width:8%;">
+                <th style="width: 8%;">
                     操作
                 </th>
             </tr>

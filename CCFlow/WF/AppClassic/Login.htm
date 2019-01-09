@@ -81,6 +81,12 @@
 
         function Login() {
 
+            //http://59.49.53.167:9003/pis/webService/askForLeave?wsdl
+            //http://localhost:16703/WebSite1314/Service.asmx?op=Ass
+            var ss = DBAccess.RunUrlReturnString("http://59.49.53.167:9003/pis/webService/askForLeave?wsdl");
+            alert(ss);
+            return;
+
             var userNo = $("#TB_No").val();
             var userPass = $("#TB_PW").val();
 
@@ -94,6 +100,7 @@
             handler.AddPara("TB_No", userNo);
             handler.AddPara("TB_PW", userPass);
 
+           
             var data = handler.DoMethodReturnString("Login_Submit");
 
             if (data.indexOf('err@') == 0) {

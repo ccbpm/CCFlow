@@ -560,7 +560,6 @@
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.htm" />
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
-    <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\AttrFlow\Imp.htm" />
     <Content Include="WF\Admin\AttrFlow\Limit.htm" />
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
@@ -7421,10 +7420,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

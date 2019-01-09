@@ -1,16 +1,15 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title></title>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -56,43 +55,38 @@
 
             var fk_flow = GetQueryString("FK_Flow");
 
-//            var dtsWay = GetRadioValue("RB_DTSWay");
-//            var dbsrc = $("DDL_DBSrc").val();
-//            var table = $("DDL_Table").val();
-//            var table = $("DDL_Table").val();
+            //            var dtsWay = GetRadioValue("RB_DTSWay");
+            //            var dbsrc = $("DDL_DBSrc").val();
+            //            var table = $("DDL_Table").val();
+            //            var table = $("DDL_Table").val();
 
             var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
 
-            var frmData = $("#cc").serialize();
-            alert("cc:"+frmData);
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=DTSBTable_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+            handler.AddUrlData();
+            handler.AddFormData();
+            handler.AddPara("CheckBoxIDs", checkBoxIDs);
 
-                    if (data.indexOf('err@') >= 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            var data = handler.DoMethodReturnString("DTSBTable_Save");
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    alert(data);
-                    window.location.href = window.location.href;
-                    //$("#Msg").html("<font color=green>" + data + "</font>");
-                    return;
-                }
-            });
+            alert(data);
+            window.location.href = window.location.href;
+            //$("#Msg").html("<font color=green>" + data + "</font>");
+            return;
         }
     </script>
 </head>
 <body>
     <form id="cc">
     <table>
-        <caption>与业务表数据同步</caption>
+        <caption>
+            与业务表数据同步</caption>
         <tr>
-            <td valign="top" style="width: 20%; color:Gray">
+            <td valign="top" style="width: 20%; color: Gray">
                 <fieldset>
                     <legend>应用场景</legend>
                     <ol>
@@ -104,7 +98,8 @@
                 <fieldset>
                     <legend>帮助</legend>
                     <ol>
-                        <li>ccbpm在运转的过程中会把节点表单的数据存储到ccbpm数据库的数据表 <span style="color: Blue;">[<%=fl.PTable%>] </span>里，这个表的名称可以在流程属性里定义。 </li>
+                        <li>ccbpm在运转的过程中会把节点表单的数据存储到ccbpm数据库的数据表 <span style="color: Blue;">[<%=fl.PTable%>]
+                        </span>里，这个表的名称可以在流程属性里定义。 </li>
                         <li>流程数据存储表可以自定义，定义路径：流程属性=》 基本属性=》流程数据表。</li>
                         <li>有的应用场景下，会把该表的业务数据同步到其他系统中去，ccbpm提供了事件可以使用编程的方式实现这样的需求。</li>
                         <li>为了更好的适应开发者的需求，我们提供了界面化的定义工具。 </li>
@@ -115,11 +110,12 @@
             <td valign="top" style="text-align: left;">
                 <fieldset>
                     <legend>
-
-                     <input type="radio" value="0"  id="RB_DTSWay_0" name="RB_DTSWay"  checked="checked" /> <label for="RB_DTSWay_0">不执行同步 </label>
-
+                        <input type="radio" value="0" id="RB_DTSWay_0" name="RB_DTSWay" checked="checked" />
+                        <label for="RB_DTSWay_0">
+                            不执行同步
+                        </label>
                     </legend>
-                    <ul style="color:Gray">
+                    <ul style="color: Gray">
                         <li>流程运行的数据存储到,不与其他系统交换数据。</li>
                         <li>其他系统可以读写这个表的数据，完成相关的业务操作。</li>
                         <li>该表名是可以在流程属性配置。</li>
@@ -127,7 +123,10 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                     <input type="radio" value="1"  id="RB_DTSWay_1" name="RB_DTSWay" /> <label for="RB_DTSWay_1">执行同步 </label>
+                        <input type="radio" value="1" id="RB_DTSWay_1" name="RB_DTSWay" />
+                        <label for="RB_DTSWay_1">
+                            执行同步
+                        </label>
                     </legend>
                     <table style="text-align: center;">
                         <tr>
@@ -136,7 +135,7 @@
                             </td>
                             <td>
                                 <select id="DDL_DBSrc" name="DDL_DBSrc">
-								</select>
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -144,13 +143,9 @@
                                 指定的表
                             </td>
                             <td>
-
-                               <select id="DDL_Table" name="DDL_Table">
-								</select>
-                               
-                                &nbsp;
-                               
-                                要把数据同步到那个数据表里去？
+                                <select id="DDL_Table" name="DDL_Table">
+                                </select>
+                                &nbsp; 要把数据同步到那个数据表里去？
                             </td>
                         </tr>
                         <tr>
@@ -158,71 +153,74 @@
                                 同步的计算方式
                             </td>
                             <td>
-                             
-                                <input type="radio" value="0"  id="RB_DTSField0" name="DTSField" /> <label for="RB_DTSField0">字段名相同 </label>
-                                <input type="radio" value="1"  id="RB_DTSField1" name="DTSField" /> <label for="RB_DTSField1">按设置字段  </label>
-
+                                <input type="radio" value="0" id="RB_DTSField0" name="DTSField" />
+                                <label for="RB_DTSField0">
+                                    字段名相同
+                                </label>
+                                <input type="radio" value="1" id="RB_DTSField1" name="DTSField" />
+                                <label for="RB_DTSField1">
+                                    按设置字段
+                                </label>
                                 &nbsp; [<a href="javascript:OpenFields()">设置字段匹配</a>]
                             </td>
                         </tr>
                         <script type="text/javascript">
 
-   //设置字段匹配
-   function OpenFields() {
+                            //设置字段匹配
+                            function OpenFields() {
 
-      var dllSrc = document.getElementById("DDL_DBSrc").value; 
-      var src = dllSrc.options[dllSrc.selectedIndex].value; 
-    
-      var dllTable = document.getElementById("DDL_Table").value; 
+                                var dllSrc = document.getElementById("DDL_DBSrc").value;
+                                var src = dllSrc.options[dllSrc.selectedIndex].value;
 
-      var tableName = dllTable.options[dllTable.selectedIndex].value; 
-      var fk_flow= GetQueryString("FK_Flow");
-      var url='../../Admin/AttrFlow/DTSBTableExt.htm?FK_Flow='+fk_flow+'&FK_DBSrc=' + src + '&TableName=' + tableName + '&';
-      if(window.parent && window.parent.addTab){
-        window.parent.addTab('dtsbTable','设置字段匹配',url,'');
-      }else{
-        window.open(url,'_blank');
-      }
-   }
-   function OpenDTSNodes() {
-   var toggleStyle= document.getElementById("dis").style.display;
-   if (toggleStyle=="none") {
-     document.getElementById("dis").style.display="block";
-      }else {
-     document.getElementById("dis").style.display="none";
-}
-   }
-function WinOpen(url, winName) {
-    var newWindow = window.open(url, winName, 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
-    newWindow.focus();
-    return;
-}
-   //必须初始化
-   window.onload=function(){
-      checkNodes();
-   };
- 
-   function checkNodes(){
-        var  input = document.getElementsByTagName("input");
-         var   value='';
-        for (var i = 0; i < input.length; i++) {
-            if (input[i].type == "checkbox") {
-                if (input[i].checked) {
-                    value += input[i].id+",";
-                }
-            }
-        }
-    
-     // document.all.<%= HiddenField.ClientID %>.value=value;
-    }
+                                var dllTable = document.getElementById("DDL_Table").value;
+
+                                var tableName = dllTable.options[dllTable.selectedIndex].value;
+                                var fk_flow = GetQueryString("FK_Flow");
+                                var url = '../../Admin/AttrFlow/DTSBTableExt.htm?FK_Flow=' + fk_flow + '&FK_DBSrc=' + src + '&TableName=' + tableName + '&';
+                                if (window.parent && window.parent.addTab) {
+                                    window.parent.addTab('dtsbTable', '设置字段匹配', url, '');
+                                } else {
+                                    window.open(url, '_blank');
+                                }
+                            }
+                            function OpenDTSNodes() {
+                                var toggleStyle = document.getElementById("dis").style.display;
+                                if (toggleStyle == "none") {
+                                    document.getElementById("dis").style.display = "block";
+                                } else {
+                                    document.getElementById("dis").style.display = "none";
+                                }
+                            }
+                            function WinOpen(url, winName) {
+                                var newWindow = window.open(url, winName, 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
+                                newWindow.focus();
+                                return;
+                            }
+                            //必须初始化
+                            window.onload = function () {
+                                checkNodes();
+                            };
+
+                            function checkNodes() {
+                                var input = document.getElementsByTagName("input");
+                                var value = '';
+                                for (var i = 0; i < input.length; i++) {
+                                    if (input[i].type == "checkbox") {
+                                        if (input[i].checked) {
+                                            value += input[i].id + ",";
+                                        }
+                                    }
+                                }
+
+                                // document.all.<%= HiddenField.ClientID %>.value=value;
+                            }
                         </script>
                         <tr>
                             <td style="border-bottom: none;">
                                 同步的时间
                             </td>
                             <td style="border-bottom: none;">
-
-                            <!--    <asp:RadioButton ID="RB_DTSTime0" Text="所有的节点发送后" GroupName="xx" runat="server" />
+                                <!--    <asp:RadioButton ID="RB_DTSTime0" Text="所有的节点发送后" GroupName="xx" runat="server" />
                                 <br />
                                 <asp:RadioButton ID="RB_DTSTime2" Text="流程结束时" GroupName="xx" runat="server" />
                                 <br />
@@ -271,17 +269,14 @@ function WinOpen(url, winName) {
                                     </fieldset>
                                 </div>
                                 <br />-->
-
                             </td>
                             <td style="border-bottom: none;">
                             </td>
                         </tr>
                     </table>
                 </fieldset>
-
-                <input type="button" value="保存" onclick="Save();" /> 
-
-              <!--  <asp:Button ID="BtnSave" runat="server" OnClick="BtnSave_Click" Text=" 保 存 " />-->
+                <input type="button" value="保存" onclick="Save();" />
+                <!--  <asp:Button ID="BtnSave" runat="server" OnClick="BtnSave_Click" Text=" 保 存 " />-->
             </td>
         </tr>
     </table>

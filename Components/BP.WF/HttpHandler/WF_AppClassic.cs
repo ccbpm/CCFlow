@@ -124,46 +124,53 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Submit()
         {
-            string userNo = this.GetRequestVal("TB_No");
-            if (userNo==null)
-                userNo = this.GetRequestVal("TB_UserNo");
-
-            string pass = this.GetRequestVal("TB_PW");
-            if (pass==null)
-                pass = this.GetRequestVal("TB_Pass");
-
-            BP.Port.Emp emp = new Emp();
-            emp.No = userNo;
-            if (emp.RetrieveFromDBSources() == 0)
+            try
             {
-                if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
-                {
-                    /*如果包含昵称列,就检查昵称是否存在.*/
-                    Paras ps = new Paras();
-                    ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "NikeName";
-                    ps.Add("NikeName", userNo);
-                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                    if (no == null)
-                        return "err@用户名或者密码错误.";
+                string userNo = this.GetRequestVal("TB_No");
+                if (userNo == null)
+                    userNo = this.GetRequestVal("TB_UserNo");
 
-                    emp.No = no;
-                    int i = emp.RetrieveFromDBSources();
-                    if (i == 0)
-                        return "err@用户名或者密码错误.";
-                }
-                else
+                string pass = this.GetRequestVal("TB_PW");
+                if (pass == null)
+                    pass = this.GetRequestVal("TB_Pass");
+
+                BP.Port.Emp emp = new Emp();
+                emp.No = userNo;
+                if (emp.RetrieveFromDBSources() == 0)
                 {
+                    if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
+                    {
+                        /*如果包含昵称列,就检查昵称是否存在.*/
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "NikeName";
+                        ps.Add("NikeName", userNo);
+                        string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                        if (no == null)
+                            return "err@用户名或者密码错误.";
+
+                        emp.No = no;
+                        int i = emp.RetrieveFromDBSources();
+                        if (i == 0)
+                            return "err@用户名或者密码错误.";
+                    }
+                    else
+                    {
+                        return "err@用户名或者密码错误.";
+                    }
+                }
+
+                if (emp.CheckPass(pass) == false)
                     return "err@用户名或者密码错误.";
-                }
+
+                //调用登录方法.
+                BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
+
+                return "登录成功.";
             }
-
-            if (emp.CheckPass(pass) == false)
-                return "err@用户名或者密码错误.";
-
-            //调用登录方法.
-            BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
-
-            return "登录成功.";
+            catch (Exception ex)
+            {
+                return "err@" + ex.StackTrace;
+            }
         }
         public string Login_Init()
         {

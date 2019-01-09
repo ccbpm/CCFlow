@@ -516,10 +516,10 @@ namespace CCFlow.WF.CCForm
         /// </summary>
         /// <returns></returns>
         [WebMethod]
-        public String Doc()
+        public String DocVersion()
         {
             //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
-            return "1.1.0.4";
+            return "1.0.0.0";
         }
 	}
 }

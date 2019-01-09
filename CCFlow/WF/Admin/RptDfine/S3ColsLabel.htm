@@ -73,7 +73,6 @@
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             var data = handler.DoMethodReturnString("S3ColsLabel_Init");
 
-
             if (data.indexOf("@") == 0) {
                 alert(data);
                 return;

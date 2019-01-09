@@ -460,12 +460,18 @@ namespace BP.WF.Template
                 prjNo = "";
                 try
                 {
-                    prjNo = this.currWn.HisWork.GetValStrByKey("PrjNo");
+                    prjNo = this.currWn.rptGe.GetValStrByKey("PrjNo");
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("@当前流程是工程类流程，但是在节点表单中没有PrjNo字段(注意区分大小写)，请确认。@异常信息:" + ex.Message);
+                    if (this.currWn.rptGe.EnMap.Attrs.Contains("PrjNo") == false)
+                        throw new Exception("@当前流程是工程类流程，但是在节点表单中没有PrjNo字段(注意区分大小写)，请确认。@异常信息:" + ex.Message);
+                    else
+                        throw ex;
                 }
+
+                if (DataType.IsNullOrEmpty(prjNo) == true)
+                    throw new Exception("err@没有找到项目编号PrjNo.");
             }
 
 

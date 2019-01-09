@@ -6085,8 +6085,13 @@ namespace BP.WF
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
                 nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
                 nd.Insert();
-
                 nd.CreateMap();
+                
+                //为开始节点增加一个删除按钮. @李国文.
+                string sql = "UPDATE WF_Node SET DelEnable=1 WHERE NodeID=" + nd.NodeID;
+                BP.DA.DBAccess.RunSQL(sql);
+
+
 
                 //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
                 CreatePushMsg(nd);

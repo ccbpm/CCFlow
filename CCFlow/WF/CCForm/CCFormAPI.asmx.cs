@@ -21,9 +21,10 @@ namespace CCFlow.WF.CCForm
 	// 若要允许使用 ASP.NET AJAX 从脚本中调用此 Web 服务，请取消对下行的注释。
 	// [System.Web.Script.Services.ScriptService]
 	public class CCFormAPI : System.Web.Services.WebService
-	{
+    {
+        #region 与表单相关的接口.
         /// <summary>
-        /// 获得Excel文件
+        /// 获得Word文件 - 未开发完成.
         /// </summary>
         /// <param name="userNo">用户编号</param>
         /// <param name="sid">SID</param>
@@ -40,7 +41,6 @@ namespace CCFlow.WF.CCForm
             if (DataType.IsNullOrEmpty(userNo))
                 userNo = "admin";
 
-
             BP.WF.Dev2Interface.Port_Login(userNo);
 
             //如果是一个实体类.
@@ -55,7 +55,7 @@ namespace CCFlow.WF.CCForm
                 var md = en.DTSMapToSys_MapData();
 
                 //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+                MapFrmWord mfe = new MapFrmWord(md.No);
 
                 return md.ExcelGenerFile(pkValue, ref bytes, mfe.DBSave);
             }
@@ -64,7 +64,7 @@ namespace CCFlow.WF.CCForm
                 MapData md = new MapData(frmID);
 
                 //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+                MapFrmWord mfe = new MapFrmWord(md.No);
 
                 return md.ExcelGenerFile(pkValue, ref bytes, mfe.DBSave);
             }
@@ -489,8 +489,9 @@ namespace CCFlow.WF.CCForm
 			}
 			return BP.DA.DBAccess.RunSQLReturnTable(sql);
 		}
+        #endregion 与表单相关的接口.
 
-		/// <summary>
+        /// <summary>
 		/// 获取VSTO插件版本号
 		/// </summary>
 		/// <returns></returns>
@@ -500,5 +501,25 @@ namespace CCFlow.WF.CCForm
 			//return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
 			return "1.1.0.4";
 		}
+        /// <summary>
+        /// 获取VSTO插件版本号
+        /// </summary>
+        /// <returns></returns>
+        [WebMethod]
+        public String GetVstoCCFormWordExtensionVersion()
+        {
+            //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
+            return "1.1.0.4";
+        }
+        /// <summary>
+        /// 获取VSTO-Doc的插件
+        /// </summary>
+        /// <returns></returns>
+        [WebMethod]
+        public String Doc()
+        {
+            //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
+            return "1.1.0.4";
+        }
 	}
 }

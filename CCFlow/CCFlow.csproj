@@ -178,6 +178,7 @@
     <Content Include="DataUser\JSLibData\ND14701_Self.js" />
     <Content Include="DataUser\JSLibData\ND15201_Self.js" />
     <Content Include="DataUser\JSLibData\ND18701_Self.js" />
+    <Content Include="DataUser\JSLibData\ND201.js" />
     <Content Include="DataUser\JSLibData\ND201_Self.js" />
     <Content Include="DataUser\JSLibData\ND20601_Self.js" />
     <Content Include="DataUser\JSLibData\ND20901_Self.js" />
@@ -603,7 +604,6 @@
     <Content Include="WF\Admin\AttrNode\ActionHelp.htm" />
     <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
     <Content Include="WF\Admin\AttrNode\Bill.htm" />
-    <Content Include="WF\Admin\AttrNode\Billing.htm" />
     <Content Include="WF\Admin\AttrNode\BindFrmsNodeEnableRole.htm" />
     <Content Include="WF\Admin\AttrNode\BlockModel.htm" />
     <Content Include="WF\Admin\AttrNode\CanCancelNodes.htm" />
@@ -629,7 +629,6 @@
     <Content Include="WF\Admin\AttrNode\FrmSln\Default.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\SDKFrm.png" />
     <Content Include="WF\Admin\AttrNode\FrmSln\SelfFrm.png" />
-    <Content Include="WF\Admin\AttrNode\Handler.ashx" />
     <Content Include="WF\Admin\AttrNode\Img\CC.png" />
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
     <Content Include="WF\Admin\AttrNode\Img\Cond.png" />
@@ -661,7 +660,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Flows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Guide.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\API.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\App.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\arrow.png" />
@@ -772,8 +770,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2x2.png" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\SelectNodeIcon.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\viewFlowShort.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFlowEnum.js" />
     <Content Include="WF\Admin\CCFormDesigner\Action.htm" />
@@ -7420,14 +7416,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

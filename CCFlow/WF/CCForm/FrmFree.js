@@ -707,7 +707,12 @@ function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
     if (fontStyle != undefined && fontStyle.indexOf(':') > 0) {
         var fontStyleArr = fontStyle.split(';');
         $.each(fontStyleArr, function (i, fontStyleObj) {
-            ele.css(fontStyleObj.split(':')[0], fontStyleObj.split(':')[1]);
+            if (fontStyleObj.split(':')[0] == 'font-size')
+                ele.css(fontStyleObj.split(':')[0], fontStyleObj.split(':')[1] + 'px');
+            else if (fontStyleObj.split(':')[0] == 'color')
+                ele.css(fontStyleObj.split(':')[0], TranColorToHtmlColor(fontStyleObj.split(':')[1]));
+            else
+                ele.css(fontStyleObj.split(':')[0], fontStyleObj.split(':')[1]);
         });
     }
     else {
@@ -729,12 +734,11 @@ function figure_Template_Label(frmLab) {
 //    eleHtml = $(eleHtml);
 //    return eleHtml;
 
-    eleHtml = '<label></label>'
+    eleHtml = "<label></label>";
     eleHtml = $(eleHtml);
     var text = frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
-    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize)
-        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;
 }
@@ -746,8 +750,8 @@ function figure_Template_Label_old(frmLab) {
     eleHtml = $(eleHtml);
     var text = frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
-    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize)
-        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize+'px')
+        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;
 }

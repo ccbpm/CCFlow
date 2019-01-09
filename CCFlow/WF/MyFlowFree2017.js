@@ -338,7 +338,13 @@ function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
     if (fontStyle != undefined && fontStyle.indexOf(':') > 0) {
         var fontStyleArr = fontStyle.split(';');
         $.each(fontStyleArr, function (i, fontStyleObj) {
-            ele.css(fontStyleObj.split(':')[0], TranColorToHtmlColor(fontStyleObj.split(':')[1]));
+            if (fontStyleObj.split(':')[0] == 'font-size')
+                ele.css(fontStyleObj.split(':')[0], fontStyleObj.split(':')[1] + 'px');
+            else if (fontStyleObj.split(':')[0] == 'color')
+                ele.css(fontStyleObj.split(':')[0], TranColorToHtmlColor(fontStyleObj.split(':')[1]));
+            else
+                ele.css(fontStyleObj.split(':')[0], fontStyleObj.split(':')[1]);
+            
         });
     }
     else {
@@ -362,7 +368,7 @@ function figure_Template_Label(frmLab) {
     var text = frmLab.Text == null ? "" : frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
     eleHtml.css('position', 'absolute').css('top', frmLab.Y -5).css('left', frmLab.X).css('font-size', frmLab.FontSize)
-        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
+        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;
 }

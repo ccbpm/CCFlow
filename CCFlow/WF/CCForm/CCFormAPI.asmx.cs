@@ -22,6 +22,53 @@ namespace CCFlow.WF.CCForm
 	// [System.Web.Script.Services.ScriptService]
 	public class CCFormAPI : System.Web.Services.WebService
 	{
+        /// <summary>
+        /// 获得Excel文件
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sid">SID</param>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="oid">表单主键</param>
+        /// <returns></returns>
+        [WebMethod]
+        public bool GenerWordFile(string userNo, string sid, string frmID, string pkValue, ref byte[] bytes)
+        {
+
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                userNo = BP.Web.WebUser.No;
+
+            if (DataType.IsNullOrEmpty(userNo))
+                userNo = "admin";
+
+
+            BP.WF.Dev2Interface.Port_Login(userNo);
+
+            //如果是一个实体类.
+            if (frmID.Contains("BP."))
+            {
+                // 执行map同步.
+                Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
+                Entity en = ens.GetNewEntity;
+
+                //en.DTSMapToSys_MapData();
+                //MapData md = new MapData(frmID);
+                var md = en.DTSMapToSys_MapData();
+
+                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+                MapFrmExcel mfe = new MapFrmExcel(md.No);
+
+                return md.ExcelGenerFile(pkValue, ref bytes, mfe.DBSave);
+            }
+            else
+            {
+                MapData md = new MapData(frmID);
+
+                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+                MapFrmExcel mfe = new MapFrmExcel(md.No);
+
+                return md.ExcelGenerFile(pkValue, ref bytes, mfe.DBSave);
+            }
+        }
 		/// <summary>
 		/// 获得Excel文件
 		/// </summary>

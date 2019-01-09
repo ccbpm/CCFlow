@@ -365,11 +365,12 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
+
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
                  || this.currND.HisFormType == NodeFormType.SheetAutoTree)
             {
-                /*如果是多表单流程.*/
+                /*如果是多表单流程, 表单树*/
                 string pFlowNo = this.GetRequestVal("PFlowNo");
                 string pWorkID = this.GetRequestVal("PWorkID");
                 string pNodeID = this.GetRequestVal("PNodeID");
@@ -406,58 +407,52 @@ namespace BP.WF.HttpHandler
                         string msg = BP.WF.Glo.DealExp(this.currFlow.StartLimitAlert, currWK, null);
                         return "err@" + msg;
                     }
+
                 }
 
                 #region 开始组合url.
                 string toUrl = "";
-                if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
+                //toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                if (this.IsMobile == true)
                 {
-                    //toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
-                    if (this.IsMobile == true)
-                    {
-                        if (gwf.Paras_Frms.Equals("") == false)
-                            toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
-                        else
-                            toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
-                    }
+                    if (gwf.Paras_Frms.Equals("") == false)
+                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                    {
-                        if (gwf.Paras_Frms.Equals("") == false)
-                            toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
-                        else
-                            toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
-                    }
-
-                    string[] strs = this.RequestParas.Split('&');
-                    foreach (string str in strs)
-                    {
-                        if (toUrl.Contains(str) == true)
-                            continue;
-                        if (str.Contains("DoType=") == true)
-                            continue;
-                        if (str.Contains("DoMethod=") == true)
-                            continue;
-                        if (str.Contains("HttpHandlerName=") == true)
-                            continue;
-                        if (str.Contains("IsLoadData=") == true)
-                            continue;
-                        if (str.Contains("IsCheckGuide=") == true)
-                            continue;
-
-                        toUrl += "&" + str;
-                    }
-                    foreach (string key in context.Request.Form.Keys)
-                    {
-                        if (toUrl.Contains(key + "=") == true)
-                            continue;
-
-                        toUrl += "&" + key + "=" + context.Request.Form[key];
-                    }
+                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                 }
                 else
                 {
-                    toUrl = "./WebOffice/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    if (gwf.Paras_Frms.Equals("") == false)
+                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
+                    else
+                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                 }
+
+                string[] strs = this.RequestParas.Split('&');
+                foreach (string str in strs)
+                {
+                    if (toUrl.Contains(str) == true)
+                        continue;
+                    if (str.Contains("DoType=") == true)
+                        continue;
+                    if (str.Contains("DoMethod=") == true)
+                        continue;
+                    if (str.Contains("HttpHandlerName=") == true)
+                        continue;
+                    if (str.Contains("IsLoadData=") == true)
+                        continue;
+                    if (str.Contains("IsCheckGuide=") == true)
+                        continue;
+
+                    toUrl += "&" + str;
+                }
+                foreach (string key in context.Request.Form.Keys)
+                {
+                    if (toUrl.Contains(key + "=") == true)
+                        continue;
+                    toUrl += "&" + key + "=" + context.Request.Form[key];
+                }
+
                 #endregion 开始组合url.
 
                 if (gwf == null)
@@ -480,6 +475,17 @@ namespace BP.WF.HttpHandler
                 //增加fk_node
                 if (toUrl.Contains("&FK_Node=") == false)
                     toUrl += "&FK_Node=" + this.currND.NodeID;
+
+
+                //如果是开始节点.
+                if (currND.IsStartNode == true)
+                {
+                    if (toUrl.Contains("PrjNo") == true && toUrl.Contains("PrjName") == true)
+                    {
+                        string sql = "UPDATE " + currWK.EnMap.PhysicsTable + " SET PrjNo='" + this.GetRequestVal("PrjNo") + "', PrjName='" + this.GetRequestVal("PrjName") + "' WHERE OID=" + gwf.WorkID;
+                        BP.DA.DBAccess.RunSQL(sql);
+                    }
+                }
 
                 //// 加入设置父子流程的参数.
                 //toUrl += "&DoFunc=" + this.DoFunc;
@@ -1495,10 +1501,10 @@ namespace BP.WF.HttpHandler
                 if (key == null)
                     continue;
 
-                
+
                 if (key.Contains("TB_"))
                 {
-                    if(htMain.ContainsKey(key.Replace("TB_", ""))==false)
+                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
                         htMain.Add(key.Replace("TB_", ""), context.Request.Form[key]);
                     continue;
                 }
@@ -2178,8 +2184,8 @@ namespace BP.WF.HttpHandler
             //找到父级目录添加到集合
             foreach (BP.WF.Template.FlowFormTree folderapp in parentFolders)
             {
-                if(appFlowFormTree.Contains(folderapp) == false)
-                appFlowFormTree.AddEntity(folderapp);
+                if (appFlowFormTree.Contains(folderapp) == false)
+                    appFlowFormTree.AddEntity(folderapp);
             }
             //求出没有父节点的文件夹
             parentFolders.Clear();

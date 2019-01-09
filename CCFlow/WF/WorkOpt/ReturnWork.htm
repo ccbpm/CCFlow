@@ -79,10 +79,11 @@
 
             $('#DDL_Nodes').html(nodeListHtml);
 
-            // $('#DDL_Nodes').html(DDL_NodesHtml);
+            //获取当前节点属性
+            var node = new Entity("BP.WF.Node", pageData.FK_Node)
+            if (node.IsBackTracking == "0")
+                $('#btnIsBackTracking').css('display', 'none');
 
-            $('#DDL_Nodes').bind('change', SetIsBackTrackingDispaly);
-            SetIsBackTrackingDispaly();
 
             $("section").show();
             $(".wait").hide();
@@ -90,24 +91,7 @@
             Common.MaxLengthError();
         });
 
-        function SetIsBackTrackingDispaly() {
-
-            // alert($('#DDL_Nodes option:checked').data().isbacktracking);
-
-//            if ($('#DDL_Nodes option:checked').data().isbacktracking == 0) {
-//                $('#btnIsBackTracking').css('display', 'none');
-//            } else {
-//                $('#btnIsBackTracking').css('display', 'inline-block');
-//            }
-
-            //ie9
-            if ($('#DDL_Nodes option:selected').attr("data-isbacktracking") == 0) {
-                $('#btnIsBackTracking').css('display', 'none');
-            } else {
-                $('#btnIsBackTracking').css('display', 'inline-block');
-            }
-        }
-
+    
 
         //确定 退回 执行退回操作
         function ReturnWork(isBack) {

@@ -482,7 +482,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (toUrl.Contains("PrjNo") == true && toUrl.Contains("PrjName") == true)
                     {
-                        string sql = "UPDATE " + currWK.EnMap.PhysicsTable + " SET PrjNo='" + this.GetRequestVal("PrjNo") + "', PrjName='" + this.GetRequestVal("PrjName") + "' WHERE OID=" + gwf.WorkID;
+                        string sql = "UPDATE " + currWK.EnMap.PhysicsTable + " SET PrjNo='" + this.GetRequestVal("PrjNo") + "', PrjName='" + this.GetRequestVal("PrjName") + "' WHERE OID=" + this.WorkID;
                         BP.DA.DBAccess.RunSQL(sql);
                     }
                 }

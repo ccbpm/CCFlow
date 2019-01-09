@@ -160,27 +160,25 @@
         /* 打开表单. */
         function OpenFrm(workid, nodeID, flowNo) {
 
-            //执行催办.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=KeySearch_OpenFrm&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("WorkID", workid);
 
-                    if (data.indexOf('url@') == 0) {
-                        data = data.replace('url@', '.');
+            var data = handler.DoMethodReturnString("KeySearch_OpenFrm");
 
-                        window.open(data);
-                        return;
-                    }
-                    alert(data);
-                }
-            });
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '.');
+
+                window.open(data);
+                return;
+            }
+            alert(data);
         }
     </script>
 </body>

@@ -887,9 +887,9 @@
             //window.EditModel = EditModel;
 
             //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
-          //  if (EditModel != 0 && window.parent) {
+            //  if (EditModel != 0 && window.parent) {
 
-            if (  window.parent) {
+            if (window.parent) {
                 var ensName = GetQueryString("EnsName");
                 var refPKVal = GetQueryString("RefPKVal");
                 var FK_MapData = GetQueryString("FK_MapData");
@@ -949,10 +949,10 @@
             if (myDataType == 8)
                 if (!/\./.test(result))
                     result += '.00';
-            return result = unescape(result);
-        }
+        return result = unescape(result);
+    }
 
-        var workNodeData = {};
+    var workNodeData = {};
 
     </script>
     <!--DIVINFO-->

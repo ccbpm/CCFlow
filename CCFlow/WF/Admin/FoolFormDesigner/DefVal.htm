@@ -2,11 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>设置tab键顺序</title>
+    <title>默认值</title>
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" /><link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
       
     <!-- 引用通用的js文件. -->
@@ -29,27 +28,47 @@
     <script type="text/javascript">
         //页面启动函数
         $(function () {
-            var ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", GetQueryString("FK_MapData"), "UIVisible", "1", "Idx");
+
+            var ens = new Entities("BP.Sys.GloVarExts", "GroupKey", "DefVal");
 
             if (ens.length > 0) {
                 for (var i = 0; i < ens.length; i++) {
+
                     var en = ens[i];
                     var addRow = "";
                     var rowNo = i + 1;
 
                     addRow = "<tr class=" + rowNo + "><td>" + rowNo + "</td>";
-                    addRow += "<td>" + en.KeyOfEn + "</td>";
+                    addRow += "<td>" + en.No + "</td>";
                     addRow += "<td>" + en.Name + "</td>";
+                    addRow += "<td>" + en.Note + "</td>";
+                    addRow += "<td><a href=\"javascript:Delete('"+en.No+"')\">删除</a></td>";
                     addRow += "<td>" + en.Idx + "</td>";
                     addRow += "<td><a href='javascript:void(0);' onclick='doUp(parseInt(this.id))' id='"+rowNo+"'><img src='../../Img/Btn/Up.GIF' border=0></a></td>";
                     addRow += "<td><a href='javascript:void(0);' onclick = 'doDown(parseInt(this.id))'  id='" + rowNo + "'><img src='../../Img/Btn/Down.gif' border=0></a></td>";
-
                     addRow += "</tr>";
 
                     $("#Table1 tr:last").after(addRow);
                 }
             }
         });
+
+        function New() {
+            var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.GloVarExt";
+            WinOpen(url, 's');
+        }
+
+        function Delete(no) {
+
+            var en = new Entity("BP.Sys.GloVar", no);
+            if (en.No.indexOf('@') != -1 || en.No==0 ) {
+                alert('系统设置不能删除.');
+                return;
+            }
+
+            //en.Delete();
+            window.location.href = window.location.href;
+        }
         //获取行对象的函数
         function getRowEn(paramNo) {
             var KeyOfEn = $("table tr:eq(" + paramNo + ") td:eq(1)").text();
@@ -112,26 +131,20 @@
         
     <table id ="Table1" width='100%'>
         <caption>
-            正确的调整好Tab键的顺序,可以方便用户数据录入.</caption>
+            全局默认值,<a href="javascript:New();" >新建默认值</a>.</caption>
         <tr>
             <th>
                 IDX
             </th>
             <th>
-                字段
+                标记
             </th>
-            <th>
-                描述
-            </th>
-            <th>
-                顺序号
-            </th>
-            <th>
-                移动
-            </th>
-            <th>
-                移动
-            </th>
+            <th>名称 </th>
+            <th>表达式 </th>
+             <th>操作 </th>
+             <th>顺序号</th>
+            <th>移动</th>
+            <th>移动</th>
         </tr>
     </table>
     </div>

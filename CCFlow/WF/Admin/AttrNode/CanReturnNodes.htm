@@ -79,7 +79,8 @@
             for (var i = 0; i < nds.length; i++) {
                 var node = nds[i];
 
-                var checked = $("#CB_" + node.NodeID).checked;
+                var checked = $("#CB_" + node.NodeID).prop("checked");
+                
                 if (checked == false)
                     continue;
 

@@ -95,24 +95,30 @@
                 alert('请输入报表名称');
                 return;
             }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+//            handler.AddPara("m", Math.random());
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("Bill_Save");
              
-            $.ajax({
-                url: Handler + "?DoType=Bill_Save&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                type: 'POST',
-                data: formData,
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data) {
+//            $.ajax({
+//                url: Handler + "?DoType=Bill_Save&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+//                type: 'POST',
+//                data: formData,
+//                async: false,
+//                cache: false,
+//                contentType: false,
+//                processData: false,
+//                success: function (data) {
                     if (data.indexOf('err@') >= 0) {
                         alert(data);
                         return;
                     }
                     window.location.href = window.location.href;
                     return;
-                }
-            });
+//                }
+//            });
         }
 
         function Btn_New_Click() {

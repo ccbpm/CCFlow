@@ -30,22 +30,22 @@
             var node = new Entity("BP.WF.Node", fk_node);
 
             //调用公共类库的方法:执行批量主表赋值
-            GenerFullAllCtrlsVal(data);
+            GenerFullAllCtrlsVal(node);
 
-            $("#TB_Alert").val(data.BlockAlert);
-            switch (data.BlockModel) {
+            $("#TB_Alert").val(node.BlockAlert);
+            switch (node.BlockModel) {
                 case "0":
                     break;
                 case "1":
                     break;
                 case "2":
-                    $("#TB_SpecSubFlow").val(data.BlockExp);
+                    $("#TB_SpecSubFlow").val(node.BlockExp);
                     break;
                 case "3":
-                    $("#TB_SQL").val(data.BlockExp);
+                    $("#TB_SQL").val(node.BlockExp);
                     break;
                 case "4":
-                    $("#TB_Exp").val(data.BlockExp);
+                    $("#TB_Exp").val(node.BlockExp);
                     break;
                 default:
                     break;

@@ -121,18 +121,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion APICodeFEE_Init.
 
-        #region 发起限制.
-        public string Limit_Save()
-        {
-            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-            fl.StartLimitRole = (StartLimitRole)this.GetRequestValInt("StartLimitRole");
-            fl.StartLimitPara = this.GetRequestVal("StartLimitPara");
-            fl.StartLimitAlert = this.GetRequestVal("StartLimitAlert");
-            fl.Update();
-            return "保存成功.";
-        }
-        #endregion 发起限制.
-
         #region 节点属性（列表）的操作
         /// <summary>
         /// 初始化节点属性列表.
@@ -541,26 +529,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 流程轨迹查看权限
-        /// <summary>
-        /// 流程轨迹查看权限
-        /// </summary>
-        /// <returns></returns>
-        public string TruckViewPower_Init()
-        {
-            if (DataType.IsNullOrEmpty(FK_Flow))
-            {
-                throw new Exception("流程编号为空");
-                return "err@流程编号为空";
-            }
-            else
-            {
-                BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
-                en.Retrieve();
-                return en.ToJson();
-            }
-        }
-        #endregion 流程轨迹查看权限save
+        
 
         #region 流程轨迹查看权限
         /// <summary>
@@ -667,18 +636,6 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
-        public string NodesIconSelect_Save()
-        {
-            string icon = this.GetRequestVal("ICON");
-
-            Node nd = new Node(this.FK_Node);
-            nd.ICON = icon;
-            nd.Update();
-
-            return "保存成功...";
-        }
         #endregion 修改node Icon.
-
-
     }
 }

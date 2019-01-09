@@ -22,6 +22,10 @@ namespace BP.Sys
         /// GroupKey
         /// </summary>
         public const string GroupKey = "GroupKey";
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public const string Idx = "Idx";
     }
     /// <summary>
     /// 全局变量
@@ -206,12 +210,12 @@ namespace BP.Sys
                 map.AddTBString(GloVarAttr.Val, null, "值", true, false, 0, 4000, 20,true);
                 map.AddTBString(GloVarAttr.GroupKey, null, "分组值", true, false, 0, 120, 20, true);
                 map.AddTBStringDoc(GloVarAttr.Note, null, "说明", true, false,true);
+                map.AddTBInt(GloVarAttr.Idx, 0, "顺序号", true, true);
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-
 
         #region 公共属性.
         /// <summary>
@@ -242,8 +246,6 @@ namespace BP.Sys
             }
         }
         #endregion
-
-
 
     }
     /// <summary>

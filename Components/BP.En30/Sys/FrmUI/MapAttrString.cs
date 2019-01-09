@@ -187,6 +187,12 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "全局默认值";
+                rm.ClassMethodName = this.ToString() + ".DoDefVal()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "字段重命名";
                 rm.ClassMethodName = this.ToString() + ".DoRenameField()";
                 rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
@@ -384,6 +390,14 @@ namespace BP.Sys.FrmUI
         public string DoFastEnter()
         {
             return "../../Admin/FoolFormDesigner/MapExt/FastInput.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 全局默认值
+        /// </summary>
+        /// <returns></returns>
+        public string DoDefVal()
+        {
+            return "../../Admin/FoolFormDesigner/DefVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
 

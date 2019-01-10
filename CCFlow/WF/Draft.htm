@@ -4,47 +4,57 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>草稿</title>
-	<link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
- 	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
 </head>
-<body  class="gray-bg">
-	<div class="wrapper wrapper-content animated fadeInRight">
-						<div class="ibox-content">
-							<table  class="table  table-striped">
-								<thead>
-									<th>#</th>
-									<th>标题</th>
-									<th>流程</th>
-									<th>保存日期</th>
-									<th>备注</th>
-									<th>操作</th>
-									</tr>
-								</thead>
-								<tbody id="Table1"></tbody>
-							</table>
-							
-						</div>
-				
-				</div>
-				
-
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <table class="table  table-striped">
+                <thead>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        标题
+                    </th>
+                    <th>
+                        流程
+                    </th>
+                    <th>
+                        保存日期
+                    </th>
+                    <th>
+                        备注
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                    </tr>
+                </thead>
+                <tbody id="Table1">
+                </tbody>
+            </table>
+        </div>
+    </div>
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
         function WinOpenIt(url) {
-           layer.open({
-				  skin: 'layer-class',	
-				  type: 2, 
-				  title: '我的草稿', 
-				  area:['96%','90%'],
-				  content: url
-				});
-            
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                title: '我的草稿',
+                area: ['96%', '90%'],
+                content: url
+            });
+
         }
 
         /* ESC Key Down */
@@ -56,67 +66,60 @@
 
         //页面启动函数.
         $(function () {
-        	InitPage();
+            InitPage();
 
         });
 
         //初始化数据.
         function InitPage() {
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Draft_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var data = handler.DoMethodReturnString("Draft_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
 
-                    var timeKey = Math.random();
-                    data = JSON.parse(data);
-					var listbox='';
-                    //增加处理.
-                    var idx = 0;
-                    for (var i = 0; i < data.length; i++) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                        idx++;
+            var timeKey = Math.random();
+            data = JSON.parse(data);
+            var listbox = '';
+            //增加处理.
+            var idx = 0;
+            for (var i = 0; i < data.length; i++) {
 
-                        var title = data[i].Title;
-                        var flowNo = data[i].FK_Flow;
-                        var flowName = data[i].FlowName;
-                        var rdt = data[i].RDT;
-                        var flowNote = data[i].FlowNote;
-                        var workID = data[i].WorkID;
-                        var paras = data[i].AtPara; //参数.
-                        if (paras != '' && paras != null) {
-                            paras = paras.replace("'", "\\'");
-                            paras = paras.replace('@', '&');
-                            paras = paras.replace('@', '&');
-                            paras = paras.replace('@', '&');
-                            paras = paras.replace('@', '&');
-                            paras = paras.replace('@', '&');
-                            paras = "1" + paras;
-                        }
+                idx++;
 
-                        listbox = "<tr ><td class=Idx >" + idx + "</td>";
-                        listbox += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + workID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
-                        listbox += "<td>" + flowName + "</td>";
-                        listbox += "<td>" + rdt + "</td>";
-                        listbox += "<td>" + flowNote + "</td>";
-                        listbox += "<td>";
-                        listbox += "<a href=\"javascript:Delete('" + flowNo + "','" + workID + "')\">删除</a>";
-                        listbox += "</td>";
-                        listbox += "</tr>";
-
-	       $('#Table1').append(listbox);
-                    }
-                    
+                var title = data[i].Title;
+                var flowNo = data[i].FK_Flow;
+                var flowName = data[i].FlowName;
+                var rdt = data[i].RDT;
+                var flowNote = data[i].FlowNote;
+                var workID = data[i].WorkID;
+                var paras = data[i].AtPara; //参数.
+                if (paras != '' && paras != null) {
+                    paras = paras.replace("'", "\\'");
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = "1" + paras;
                 }
-            });
+
+                listbox = "<tr ><td class=Idx >" + idx + "</td>";
+                listbox += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + workID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
+                listbox += "<td>" + flowName + "</td>";
+                listbox += "<td>" + rdt + "</td>";
+                listbox += "<td>" + flowNote + "</td>";
+                listbox += "<td>";
+                listbox += "<a href=\"javascript:Delete('" + flowNo + "','" + workID + "')\">删除</a>";
+                listbox += "</td>";
+                listbox += "</tr>";
+
+                $('#Table1').append(listbox);
+            }
         }
 
         //删除流程.
@@ -124,26 +127,21 @@
             if (window.confirm('您确定要删除草稿吗？') == false)
                 return;
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Draft_Delete&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnString("Draft_Delete");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    //删除流程.
-                    alert(data);
+            //删除流程.
+            alert(data);
 
-                    window.location.href = window.location.href;
-                }
-            });
+            window.location.href = window.location.href;
         }
-     </script>
+    </script>
 </body>
 </html>

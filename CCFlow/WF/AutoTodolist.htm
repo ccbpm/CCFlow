@@ -81,92 +81,91 @@
                 conMenu += "<th>发起日期</th><th>接受日期</th><th>应完成日期</th><th>状态</th><th>类型</th><th>备注</th>";
                 conMenu += "</tr>";
 
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                handler.AddPara("No", data[i].NO);
+                handler.AddPara("FK_Node", fk_node);
+                var msg = handler.DoMethodReturnString("Todolist_Author");
+
                 //输出待办详细信息
-                $.ajax({
-                    type: 'post',
-                    async: false,
-                    url: Handler + "?DoType=Todolist_Author&FK_Node=" + fk_node + "&No=" + data[i].NO + "&m=" + Math.random(),
-                    dataType: 'html',
-                    success: function (msg) {
-                        msg = JSON.parse(msg);
 
-                        for (var j = 0; j < msg.length; j++) {
-                            var title = msg[j].TITLE;
-                            var isRead = msg[j].ISREAD;
-                            var flowNo = msg[j].FK_FLOW;
-                            var flowName = msg[j].FLOWNAME;
-                            var nodeName = msg[j].NODENAME;
-                            var starterName = msg[j].STARTERNAME;
-                            var pri = msg[j].PRI;
-                            var nodeID = msg[j].FK_NODE;
-                            var fid = msg[j].FID;
-                            var workID = msg[j].WORKID;
-                            var paras = msg[j].PARAS;
-                            var cdt = getNowFormatDate();
+                msg = JSON.parse(msg);
 
-                            conMenu += "<tr > <td>" + (j + 1) + "</td>"; //序号
-                            conMenu += "<td><img class=Icon src='../WF/Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
-                            var url = "";
-                            if (isRead == 0) {
-                                url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_UnRead.png' />" + title + "</a>";
-                            } else {
-                                url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_Read.png' />" + title + "</a>";
-                            }
+                for (var j = 0; j < msg.length; j++) {
+                    var title = msg[j].TITLE;
+                    var isRead = msg[j].ISREAD;
+                    var flowNo = msg[j].FK_FLOW;
+                    var flowName = msg[j].FLOWNAME;
+                    var nodeName = msg[j].NODENAME;
+                    var starterName = msg[j].STARTERNAME;
+                    var pri = msg[j].PRI;
+                    var nodeID = msg[j].FK_NODE;
+                    var fid = msg[j].FID;
+                    var workID = msg[j].WORKID;
+                    var paras = msg[j].PARAS;
+                    var cdt = getNowFormatDate();
 
-                            conMenu += "<td>" + url + "</td>"; //标题
-                            conMenu += "<td>" + flowName + "</td>"; //流程类别
-                            conMenu += "<td>" + nodeName + "</td>"; //节点名称
-                            conMenu += "<td>" + starterName + "</td>"; //发起人
-
-
-                            conMenu += "<td>" + msg[j].RDT + "</td>"; //发起时间
-                            conMenu += "<td>" + msg[j].ADT + "</td>"; //接受时间
-                            conMenu += "<td>" + msg[j].SDT + "</td>"; //应完成时间
-                            //判断流程是否逾期
-                            if (cdt > msg[j].SDT && msg[j].WFSTATE == 2) {
-                                conMenu += "<td><img src='../WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
-                            }
-                            else {
-                                conMenu += "<td><img src='../WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
-                            }
-                            //待办的状态.
-                            switch (msg[j].WFSTATE) {
-                                case 1:
-                                    conMenu += "<td>草稿</td>";
-                                    break;
-                                case 2:
-                                    conMenu += "<td>待办</td>";
-                                    break;
-                                case 3: //已完成.
-                                    break;
-                                case 4:
-                                    conMenu += "<td>挂起</td>";
-                                    break;
-                                case 5:
-                                    conMenu += "<td>退回</td>";
-                                    break;
-                                case 6:
-                                    conMenu += "<td>转发</td>";
-                                    break;
-                                case 7:
-                                    conMenu += "<td>删除</td>";
-                                    break;
-                                case 8:
-                                    conMenu += "<td>加签</td>";
-                                    break;
-                                case 11:
-                                    conMenu += "<td>加签回复</td>";
-                                    break;
-                                default:
-                                    conMenu += "<td>其他</td>";
-                                    break;
-                            }
-                            //备注
-                            conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FLOWNOTE + "'>" + msg[j].FLOWNOTE + "</div></td>";
-                            conMenu += "</tr>";
-                        }
+                    conMenu += "<tr > <td>" + (j + 1) + "</td>"; //序号
+                    conMenu += "<td><img class=Icon src='../WF/Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
+                    var url = "";
+                    if (isRead == 0) {
+                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_UnRead.png' />" + title + "</a>";
+                    } else {
+                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_Read.png' />" + title + "</a>";
                     }
-                });
+
+                    conMenu += "<td>" + url + "</td>"; //标题
+                    conMenu += "<td>" + flowName + "</td>"; //流程类别
+                    conMenu += "<td>" + nodeName + "</td>"; //节点名称
+                    conMenu += "<td>" + starterName + "</td>"; //发起人
+
+
+                    conMenu += "<td>" + msg[j].RDT + "</td>"; //发起时间
+                    conMenu += "<td>" + msg[j].ADT + "</td>"; //接受时间
+                    conMenu += "<td>" + msg[j].SDT + "</td>"; //应完成时间
+                    //判断流程是否逾期
+                    if (cdt > msg[j].SDT && msg[j].WFSTATE == 2) {
+                        conMenu += "<td><img src='../WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
+                    }
+                    else {
+                        conMenu += "<td><img src='../WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
+                    }
+                    //待办的状态.
+                    switch (msg[j].WFSTATE) {
+                        case 1:
+                            conMenu += "<td>草稿</td>";
+                            break;
+                        case 2:
+                            conMenu += "<td>待办</td>";
+                            break;
+                        case 3: //已完成.
+                            break;
+                        case 4:
+                            conMenu += "<td>挂起</td>";
+                            break;
+                        case 5:
+                            conMenu += "<td>退回</td>";
+                            break;
+                        case 6:
+                            conMenu += "<td>转发</td>";
+                            break;
+                        case 7:
+                            conMenu += "<td>删除</td>";
+                            break;
+                        case 8:
+                            conMenu += "<td>加签</td>";
+                            break;
+                        case 11:
+                            conMenu += "<td>加签回复</td>";
+                            break;
+                        default:
+                            conMenu += "<td>其他</td>";
+                            break;
+                    }
+                    //备注
+                    conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FLOWNOTE + "'>" + msg[j].FLOWNOTE + "</div></td>";
+                    conMenu += "</tr>";
+                }
                 conMenu += "</table>";
                 conMenu += "</div>";
             }

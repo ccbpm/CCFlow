@@ -24,7 +24,6 @@ namespace CCFlow.WF
         {
             get
             {
-                
                 return typeof(BP.WF.HttpHandler.WF_MyFlow);
             }
         }

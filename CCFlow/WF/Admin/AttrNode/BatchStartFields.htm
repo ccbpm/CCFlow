@@ -42,7 +42,7 @@
                 var item = attrs[i];
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + i + "</td>";
-                if (data.BatchParas.indexOf(item.KeyOfEn) > -1) {
+                if (node.BatchParas.indexOf(item.KeyOfEn) > -1) {
                     newRow += "<td>" + "<input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' checked='checked' />" + item.KeyOfEn + "</td>";
                 } else {
                     newRow += "<td>" + "<input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' />" + item.KeyOfEn + "</td>";

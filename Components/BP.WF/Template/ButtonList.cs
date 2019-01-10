@@ -254,9 +254,26 @@ namespace BP.WF.Template
         /// 分配启用
         /// </summary>
         public const string AllotEnable = "AllotEnable";
-
+        /// <summary>
+        /// 选择接受人
+        /// </summary>
         public const string SelectAccepterLab = "SelectAccepterLab";
+        /// <summary>
+        /// 是否启用选择接受人
+        /// </summary>
         public const string SelectAccepterEnable = "SelectAccepterEnable";
+
+
+        #region 公文2019
+        /// <summary>
+        /// 公文标签
+        /// </summary>
+        public const string OfficeBtnLab = "OfficeBtnLab";
+        /// <summary>
+        /// 公文标签接受人
+        /// </summary>
+        public const string OfficeBtnEnable = "OfficeBtnEnable";
+        #endregion 公文2019
 
 
         #region 公文属性

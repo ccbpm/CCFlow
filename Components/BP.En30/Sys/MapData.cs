@@ -2852,6 +2852,48 @@ namespace BP.Sys
         }
         #endregion 与Excel相关的操作 .
 
+
+
+        #region 与Word相关的操作 .
+        /// <summary>
+        /// 获得Excel文件流
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public void WordGenerFile(string pkValue, ref byte[] bytes, string saveTo)
+        {
+            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
+            if (by != null)
+            {
+                bytes = by;
+                return ;
+            }
+            else //说明当前excel文件没有生成.
+            {
+                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".docx";
+                if (System.IO.File.Exists(tempExcel) == true)
+                    tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\NDxxxRpt.docx";
+
+                bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+                return;
+
+                //else //模板文件也不存在时
+                //{
+                //    throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
+                //}
+            }
+        }
+        /// <summary>
+        /// 保存excel文件
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <param name="bty"></param>
+        public void WordSaveFile(string pkValue, byte[] bty, string saveTo)
+        {
+            BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
+        }
+        #endregion 与Excel相关的操作 .
+
     }
     /// <summary>
     /// 映射基础s

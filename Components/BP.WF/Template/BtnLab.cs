@@ -644,8 +644,6 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.PrintZipLab);
             }
         }
-
-
         /// <summary>
         /// pdf 是否可用
         /// </summary>
@@ -1014,6 +1012,29 @@ namespace BP.WF.Template
         {
             get { return this.GetValStringByKey(BtnAttr.OfficeTHTemplate); }
         }
+
+
+        /// <summary>
+        /// 公文标签
+        /// </summary>
+        public string OfficeBtnLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.OfficeBtnLab);
+            }
+        }
+        /// <summary>
+        /// 公文标签
+        /// </summary>
+        public bool OfficeBtnEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.OfficeBtnEnable);
+            }
+        }
+
         #endregion
 
         #region 构造方法
@@ -1068,6 +1089,11 @@ namespace BP.WF.Template
                 //功能和子流程组件重复，屏蔽 hzm
               //  map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
                // map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
+
+                // add 2019.1.9 for 东孚.
+                map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
+
 
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);

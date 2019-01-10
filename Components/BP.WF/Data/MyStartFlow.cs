@@ -176,7 +176,7 @@ namespace BP.WF.Data
             {
                 UAC uac = new UAC();
                 uac.Readonly();
-                uac.IsExp =  UserRegedit.HaveRoleForExp(this.ToString());
+                uac.IsExp = UserRegedit.HaveRoleForExp(this.ToString());
                 return uac;
             }
         }
@@ -746,7 +746,7 @@ namespace BP.WF.Data
                 map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
 
-              //  map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
+                //  map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
                 map.AddSearchAttr(MyStartFlowAttr.TSpan);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
@@ -770,11 +770,18 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "表单";
+                rm.Title = "表单/轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
                 rm.Icon = "../../WF/Img/Form.png";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.IsForEns = true;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "打印表单";
+                rm.ClassMethodName = this.ToString() + ".DoPrintFrm";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.IsForEns = false;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -783,11 +790,17 @@ namespace BP.WF.Data
         }
         #endregion
 
+        public string DoPrintFrm()
+        {
+            return "../../WorkOpt/Packup.htm?FileType=zip,pdf&WorkID="+this.WorkID+"&FK_Flow="+this.FK_Flow+"&NodeID="+this.FK_Node+"&FK_Node="+this.FK_Node;
+           // http://localhost:8787/WF/WorkOpt/Packup.htm?FileType=zip,pdf&WorkID=6129&FK_Flow=116&NodeID=11603&FK_Node=11603
+        }
+
         #region 执行诊断
         public string DoTrack()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node;
+            return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>
         /// 打开最后一个节点表单

@@ -742,7 +742,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitToolBar()
         {
-            #region 处理是否是加签，或者是否是会签模式，.
+            #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             if (this.FK_Node.ToString().EndsWith("01") == false)
             {
@@ -1094,11 +1094,23 @@ namespace BP.WF.HttpHandler
                     {
                         string packUrl = "./WorkOpt/DBTemplate.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
                         toolbar += "<input type=button name='DBTemplate'  value='模版' enable=true/>";
-
                     }
                 }
 
+                /* 打包下载pdf */
+                if (btnLab.PrintPDFEnable == true)
+                {
+                    string packUrl = "./WorkOpt/Packup.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+                    toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
+                }
+
+                /* 公文标签 */
+                if (btnLab.OfficeBtnEnable == true)
+                {
+                    toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice();'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
+                }
                 #endregion
+
 
                 #region  加载自定义的button.
                 BP.WF.Template.NodeToolbars bars = new NodeToolbars();

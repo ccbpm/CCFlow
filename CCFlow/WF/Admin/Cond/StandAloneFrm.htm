@@ -28,58 +28,46 @@
             document.getElementById("TB_Val").style.display = "none";
             document.getElementById("DDL_Val").style.display = "none";
 
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var fk_Node = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("StandAloneFrm_Init");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=StandAloneFrm_Init&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
-                        return;
-                    }
+            //转json.
+            data = JSON.parse(data);
 
-                    //转json.
-                    data = JSON.parse(data);
+            GenerBindDDL("DDL_Frms", data.Frms, "No", "Name", "all");
 
-                    GenerBindDDL("DDL_Frms", data.Frms, "No", "Name", "all");
+            var wf_Conds = data["WF_Conds"];
 
-                    var wf_Conds = data["WF_Conds"];
+            //增加处理.
+            for (var i = 0; i < wf_Conds.length; i++) {
 
-                    //增加处理.
-                    for (var i = 0; i < wf_Conds.length; i++) {
+                var cond = wf_Conds[i];
 
-                        var cond = wf_Conds[i];
+                var newRow = "";
+                newRow = "<tr >";
+                newRow += "<td class=Idx>" + i + "</td>";
+                newRow += "<td>" + cond.AttrKey + "</td>";
+                newRow += "<td>" + cond.AttrName + "</td>";
+                newRow += "<td>" + cond.FK_Operator + "</td>";
+                newRow += "<td>" + cond.OperatorValue + "</td>";
+                newRow += "<td>" + cond.OperatorValueT + "</td>";
+                if (cond.CondOrAnd == 0)
+                    newRow += "<td> AND </td>";
+                else
+                    newRow += "<td> OR </td>";
 
-                        var newRow = "";
-                        newRow = "<tr >";
-                        newRow += "<td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + cond.AttrKey + "</td>";
-                        newRow += "<td>" + cond.AttrName + "</td>";
-                        newRow += "<td>" + cond.FK_Operator + "</td>";
-                        newRow += "<td>" + cond.OperatorValue + "</td>";
-                        newRow += "<td>" + cond.OperatorValueT + "</td>";
-                        if (cond.CondOrAnd == 0)
-                            newRow += "<td> AND </td>";
-                        else
-                            newRow += "<td> OR </td>";
-
-                        newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
-                        newRow += "</td>";
-                        newRow += "</tr>";
-                        $("#Table1 tr:last").after(newRow);
-                    }
-                }
-            });
+                newRow += "<td>";
+                newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "</td>";
+                newRow += "</tr>";
+                $("#Table1 tr:last").after(newRow);
+            }
         });
 
         //执行保存..
@@ -104,45 +92,60 @@
                 OperVal = $("#DDL_Val").val(); //  操作符.
             }
 
-			var DDL_Frms = $("#DDL_Frms").val();
-			if (typeof DDL_Frms == "undefined" || DDL_Frms == "" || DDL_Frms == "all") {
-				alert("请选择独立表单");
-				return;
-			} else if (typeof DDL_Fields == "undefined" || DDL_Fields == "") {
-				alert("请选择表单字段");
-				return;
-			} else if (typeof OperVal == "undefined" || OperVal == "") {
-				alert("请选择操作符");
-				return;
-			}
+            var DDL_Frms = $("#DDL_Frms").val();
+            if (typeof DDL_Frms == "undefined" || DDL_Frms == "" || DDL_Frms == "all") {
+                alert("请选择独立表单");
+                return;
+            } else if (typeof DDL_Fields == "undefined" || DDL_Fields == "") {
+                alert("请选择表单字段");
+                return;
+            } else if (typeof OperVal == "undefined" || OperVal == "") {
+                alert("请选择操作符");
+                return;
+            }
 
             var paras = "&DDL_Fields=" + DDL_Fields + "&DDL_Operator=" + DDL_Operator + "&OperVal=" + OperVal + "&SaveType=" + saveType;
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("DDL_Fields", DDL_Fields);
+            handler.AddPara("DDL_Operator", DDL_Operator);
+            handler.AddPara("OperVal", OperVal);
+            handler.AddPara("SaveType", saveType);
+
+            handler.AddPara("CondType", condType);
+            handler.AddPara("FK_Flow", condType);
+            handler.AddPara("FK_MainNode", fk_mainNode);
+            handler.AddPara("FK_Node", fk_Node);
+            handler.AddPara("ToNodeID", toNodeID);
+            handler.AddPara("FrmID", $("#DDL_Frms").val());
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("StandAloneFrm_Save");
+
             //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=StandAloneFrm_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + paras + "&m=" + Math.random() + "&FrmID=" + $("#DDL_Frms").val(),
-                dataType: 'html',
-                success: function (data) {
+            //            $.ajax({
+            //                type: 'post',
+            //                async: true,
+            //                url: Handler + "?DoType=StandAloneFrm_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + paras + "&m=" + Math.random() + "&FrmID=" + $("#DDL_Frms").val(),
+            //                dataType: 'html',
+            //                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    // alert(data);
-                    window.location.href = window.location.href;
+            // alert(data);
+            window.location.href = window.location.href;
 
-                    //$("#Msg").html("<font color=green>" + data + "</font>");
-                }
-            });
+            //$("#Msg").html("<font color=green>" + data + "</font>");
+            //                }
+            //            });
         }
 
         //执行删除..
@@ -151,110 +154,86 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=StandAloneFrm_Delete&MyPK=" + mypk + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var en = new Entity("BP.WF.Template.Cond", mypk);
+            en.Delete();
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
-
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
-                    window.location.href = window.location.href;
-                }
-            });
+            window.location.href = window.location.href;
         }
 
-		function changeForm(s) {
-			var value = $(s).val();
-			if (value == "all") {
-				$("#DDL_Fields").empty();
-				$("#DDL_Fields").trigger("change");
-			} else {
-				$.ajax({
-					type: 'post',
-					async: true,
-					url: Handler + "?DoType=StandAloneFrm_InitFrmAttr&FrmID=" + value + "&m=" + Math.random(),
-					dataType: 'html',
-					success: function (data) {
-						if (data) {
-							GenerBindDDL("DDL_Fields", JSON.parse(data), "KeyOfEn", "Name");
-							$("#DDL_Fields").trigger("change");
-						}
-					}
-				});
-			}
-		}
+        function changeForm(s) {
+            var value = $(s).val();
+            if (value == "all") {
+                $("#DDL_Fields").empty();
+                $("#DDL_Fields").trigger("change");
+            } else {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+                handler.AddPara("FrmID", value);
+                var data = handler.DoMethodReturnString("StandAloneFrm_InitFrmAttr");
+
+                if (data) {
+                    GenerBindDDL("DDL_Fields", JSON.parse(data), "KeyOfEn", "Name");
+                    $("#DDL_Fields").trigger("change");
+                }
+            }
+        }
 
         //当字段选择的时候.
         function changeCond(c) {
 
             if (c == null || c.value.length == 0 || c.value == "all") {
-				$("#DDL_Operator").empty();
+                $("#DDL_Operator").empty();
                 return;
-			}
+            }
 
             var key = c.value;
 
             var fk_flow = GetQueryString("FK_Flow");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=StandAloneFrm_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&FrmID=" + $("#DDL_Frms").val() + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("KeyOfEn", key);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FrmID", $("#DDL_Frms").val());
 
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            var data = handler.DoMethodReturnString("StandAloneFrm_InitField");
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    data = JSON.parse(data);
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    //获得 mapattr.
-                    var mapattr = data["Sys_MapAttr"][0];
+            data = JSON.parse(data);
 
-                    //操作符.
-                    var opers = data["Opers"];
+            //获得 mapattr.
+            var mapattr = data["Sys_MapAttr"][0];
 
-                    //两者都隐藏.
-                    document.getElementById("TB_Val").style.display = "none";
-                    document.getElementById("DDL_Val").style.display = "none";
+            //操作符.
+            var opers = data["Opers"];
 
-                    if (mapattr.LGType == "1") {
-                        /*是枚举类型*/
-                        var enums = data["Enums"];
+            //两者都隐藏.
+            document.getElementById("TB_Val").style.display = "none";
+            document.getElementById("DDL_Val").style.display = "none";
 
-                        GenerBindDDL("DDL_Val", enums, "IntKey", "Lab", 0);
+            if (mapattr.LGType == "1") {
+                /*是枚举类型*/
+                var enums = data["Enums"];
 
-                        //显示.
-                        document.getElementById("DDL_Val").style.display = "";
+                GenerBindDDL("DDL_Val", enums, "IntKey", "Lab", 0);
 
-                    } else {
-                        document.getElementById("TB_Val").style.display = "";
-                    }
+                //显示.
+                document.getElementById("DDL_Val").style.display = "";
 
-                    //绑定操作符.
-                    GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
-                }
-            });
+            } else {
+                document.getElementById("TB_Val").style.display = "";
+            }
+
+            //绑定操作符.
+            GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
 
         }
 
@@ -268,55 +247,85 @@
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
-        <table style="width: 90%;">
-           <caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 按照独立表单做方向条件</caption>
-            <tr>
-                <td style="width: 20%;">选择独立表单:</td>
-                <td>
-                    <select id="DDL_Frms" name="DDL_Frms" style="width: 400px;" onchange="changeForm(this)"></select>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 20%;">选择表单字段:</td>
-                <td>
-                    <select id="DDL_Fields" name="DDL_Fields" style="width: 400px;" onchange="changeCond(this)"></select>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 20%;">操作符:</td>
-                <td>
-                    <select id="DDL_Operator" name="DDL_Operator" style="width: 100px;"></select>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 20%;">值:</td>
-                <td>
-                    <input type="text" value="" style="width: 100px;" id="TB_Val" name="TB_Val" />
-                    <br />
-                    <select id="DDL_Val" name="DDL_Val" style="width: 100px;"></select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                </td>
-                <td colspan="1">
-                    <input type="button" value="保存为AND条件" onclick="Save('AND');" />
-                    <input type="button" value="保存为OR条件" onclick="Save('OR');" />
-                </td>
-            </tr>
-        </table>
-        <table id="Table1" name="Table1" style="width: 90%;">
-            <tr>
-                <th>序</th>
-                <th>字段的英文名</th>
-                <th>中文名</th>
-                <th>操作符</th>
-                <th>值</th>
-                <th>标签</th>
-                <th>运算关系</th>
-                <th>操作</th>
-            </tr>
-        </table>
+    <table style="width: 90%;">
+        <caption>
+            <a href="javascript:Back();">
+                <img src='../../Img/Btn/back.gif'>返回</a> 按照独立表单做方向条件</caption>
+        <tr>
+            <td style="width: 20%;">
+                选择独立表单:
+            </td>
+            <td>
+                <select id="DDL_Frms" name="DDL_Frms" style="width: 400px;" onchange="changeForm(this)">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 20%;">
+                选择表单字段:
+            </td>
+            <td>
+                <select id="DDL_Fields" name="DDL_Fields" style="width: 400px;" onchange="changeCond(this)">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 20%;">
+                操作符:
+            </td>
+            <td>
+                <select id="DDL_Operator" name="DDL_Operator" style="width: 100px;">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 20%;">
+                值:
+            </td>
+            <td>
+                <input type="text" value="" style="width: 100px;" id="TB_Val" name="TB_Val" />
+                <br />
+                <select id="DDL_Val" name="DDL_Val" style="width: 100px;">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td colspan="1">
+                <input type="button" value="保存为AND条件" onclick="Save('AND');" />
+                <input type="button" value="保存为OR条件" onclick="Save('OR');" />
+            </td>
+        </tr>
+    </table>
+    <table id="Table1" name="Table1" style="width: 90%;">
+        <tr>
+            <th>
+                序
+            </th>
+            <th>
+                字段的英文名
+            </th>
+            <th>
+                中文名
+            </th>
+            <th>
+                操作符
+            </th>
+            <th>
+                值
+            </th>
+            <th>
+                标签
+            </th>
+            <th>
+                运算关系
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </table>
     </form>
     <center>
         <div id="Msg" />

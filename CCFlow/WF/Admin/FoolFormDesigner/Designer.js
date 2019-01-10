@@ -107,13 +107,7 @@ function GroupField(mypk, OID) {
     });
 
 }
-
-function GroupFieldDel(mypk, refoid) {
-    var url = 'GroupField.htm?RefNo=' + mypk + '&DoType=DelIt&RefOID=' + refoid;
-    var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-    window.location.href = window.location.href;
-}
-
+ 
 function Edit(fk_mapdata, mypk, ftype, gf) {
 
     var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;

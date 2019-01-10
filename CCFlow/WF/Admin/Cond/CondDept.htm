@@ -68,7 +68,8 @@
         //执行保存..CondByDept_Save
         function Btn_Save_Click() {
 
-            var param = location.href.split("?")[1];
+            //var param = location.href.split("?")[1];
+
             //获取所有选中的checkbox
             var depts = ",";
             $("input[type='checkbox']").each(function () {
@@ -78,24 +79,25 @@
                 }
             });
 
-            var frmData = $("#cc").serialize();
+            //var frmData = $("#cc").serialize();
             //alert(frmData);
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByDept_Save" + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&depts=" + depts + "&" + param,
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddUrlData();
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("depts", depts);
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("CondByDept_Save");
+
+
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            window.location.href = window.location.href;
+            return;
+
         }
 
         //执行删除..
@@ -104,24 +106,21 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            var param = location.href.split("?")[1];
-            $.ajax({
-                data: '',
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByDept_Delete&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&" + param,
-                dataType: 'html',
-                success: function (data) {
+            //var param = location.href.split("?")[1];
 
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddUrlData();
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("CondByDept_Delete");
 
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+
+            window.location.href = window.location.href;
+            return;
+
         }
 
         function selChange() {
@@ -153,7 +152,6 @@
             window.location.href = url;
         }
     </script>
-
     <style type="text/css">
         ul .cond li
         {
@@ -174,31 +172,31 @@
         
         .btn
         {
-            display:inline-block;
-            height:20px;
-            background-color:#0099ff;
-            text-decoration:none;
-            color:#fff;
-            padding:3px 15px;
-            margin:10px 10px;
+            display: inline-block;
+            height: 20px;
+            background-color: #0099ff;
+            text-decoration: none;
+            color: #fff;
+            padding: 3px 15px;
+            margin: 10px 10px;
         }
         .lbls span
         {
-            width:80px;
-         }
+            width: 80px;
+        }
     </style>
 </head>
-<body >
+<body>
     <form id="cc">
-    <div style="overflow:auto">
-        <div style="width: 100%;max-height: 600px;overflow:auto">
+    <div style="overflow: auto">
+        <div style="width: 100%; max-height: 600px; overflow: auto">
             <table id="t1" style="width: 100%;">
-<caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 方向条件-按部门</caption>
-
+                <caption>
+                    <a href="javascript:Back();">
+                        <img src='../../Img/Btn/back.gif'>返回</a> 方向条件-按部门</caption>
             </table>
         </div>
         <br />
-        
         <div>
             指定的操作员：<select id="DDL_SpecOperWay" name="DDL_SpecOperWay" onchange="selChange()">
                 <option selected="selected" value="0">当前操作员</option>
@@ -209,20 +207,16 @@
             <input type="hidden" name="initDDL_SpecOperWay" id="initDDL_SpecOperWay" value=" " />
             <input type="hidden" name="initTB_SpecOperPara" id="initTB_SpecOperPara" value=" " />
             <br />
-            <br />            
-            <span class="lbls">
-                <span id="span0">参数：</span>
-                <span id="span1" style="display: none">节点编号：</span>
-                <span id="span2" style="display: none">表单字段：</span>
-                <span id="span3" style="display: none">操作员编号：</span>
-            </span>
-            <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled" style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
             <br />
-            <input type=button  onclick="Btn_Save_Click()" value="保存" id="Save" /> 
-            <input type=button  onclick="Btn_Delete_Click()" value="删除" id="Button1" /> 
-            <input type=button  onclick="Back()" value="返回" id="Button2" /> 
-
-             
+            <span class="lbls"><span id="span0">参数：</span> <span id="span1" style="display: none">
+                节点编号：</span> <span id="span2" style="display: none">表单字段：</span> <span id="span3"
+                    style="display: none">操作员编号：</span> </span>
+            <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled"
+                style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
+            <br />
+            <input type="button" onclick="Btn_Save_Click()" value="保存" id="Save" />
+            <input type="button" onclick="Btn_Delete_Click()" value="删除" id="Button1" />
+            <input type="button" onclick="Back()" value="返回" id="Button2" />
         </div>
     </div>
     </form>

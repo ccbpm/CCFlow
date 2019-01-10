@@ -442,7 +442,11 @@
             ur.SetPara("RecCount", count);
             var i = ur.Save();
             
-            window.location.href = "?EnsName=" + ensName + "&PageIdx=1"  + "&PageSize=" + pageSize;
+            var url = window.location.href;
+            if(url.indexOf("PageIdx")!=-1)
+             url = replaceParamVal(url, "PageIdx", 1);
+           
+            window.location.href = url;
         }
 
     

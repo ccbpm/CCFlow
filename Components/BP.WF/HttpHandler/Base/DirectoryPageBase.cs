@@ -1059,8 +1059,15 @@ namespace BP.WF.HttpHandler
                     if(attr.Key.Equals("OID"))
                         continue;
 
+                    if (attr.Key.Equals("MyNum"))
+                        continue;
+
                     if (attr.IsFKorEnum)
                         continue;
+
+                    if (attr.UIVisible == false && attr.MyFieldType!= FieldType.RefText)
+                        continue;
+
                     if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt") 
                         || attr.Key.Equals("WebPath") || attr.Key.Equals("MyFileH")
                         || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize")

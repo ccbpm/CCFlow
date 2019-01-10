@@ -60,13 +60,15 @@
               alert("请填写回复内容!");
               return;
           }
-          $.ajax({
-              data: frmData,
-              type: 'post',
-              async: true,
-              url: Handler + "?DoType=FlowBBS_Replay&F&TB_Msg=" + $("#TB_Msg").val() + "&Title=" + $("#TB_title").val() + "&UserName=" + RE + "&MyPK=" + MyPK + "&m=" + Math.random(),
-              dataType: 'html'
-          });
+
+
+          var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+          handler.AddUrlData();
+          handler.AddFormData();
+          handler.AddPara("TB_Msg", $("#TB_Msg").val());
+          handler.AddPara("Title", $("#TB_title").val());
+          var data = handler.DoMethodReturnString("FlowBBS_Replay");
+           
           alert("发送回复消息成功!");
           window.close();
           window.opener.location.href = window.opener.location.href

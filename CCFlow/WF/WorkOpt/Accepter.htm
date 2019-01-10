@@ -125,11 +125,16 @@
         $(function () {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+         //   handler.AddFormData();
 
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            handler.AddPara("ToNode", GetQueryString("ToNode"));
-            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
-            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            var data = handler.DoMethodReturnString("Accepter_Init");
+
+//            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+//            handler.AddPara("ToNode", GetQueryString("ToNode"));
+//            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+//            handler.AddPara("WorkID", GetQueryString("WorkID"));
+
             var data = handler.DoMethodReturnString("Accepter_Init");
 
 
@@ -287,74 +292,70 @@
 
             $("#Msg").html("<font color=green>正在发送请稍候...</font>");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Accepter_Send&m=" + Math.random() + "&SelectEmps=" + encodeURI(selectedEmps) + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode"),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("SelectEmps", encodeURI(selectedEmps));
+            var data = handler.DoMethodReturnString("Accepter_Send");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
-                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
 
-                    data = data.replace("'WFRpt", "'../WFRpt");
-                    data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
 
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
 
-                    if (data.indexOf("UnSend.htm") == -1) {
-                        data = data.replace("'./WorkOpt/", "");
-                        data = data.replace("'./WorkOpt/", "");
-                        data = data.replace("'./WorkOpt/", "");
-                    }
+            if (data.indexOf("UnSend.htm") == -1) {
+                data = data.replace("'./WorkOpt/", "");
+                data = data.replace("'./WorkOpt/", "");
+                data = data.replace("'./WorkOpt/", "");
+            }
 
-                    data = data.replace('@', '<br/>@');
-                    data = data.replace(/@/g, '<br/>&nbsp;@');
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>&nbsp;@');
 
 
-                    if ("Accepter_Save" == doType) {
-                        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                            window.parent.returnWorkWindowClose(data);
-                        } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                            window.opener.returnWorkWindowClose(data);
-                        } else if (window.parent != undefined && window.parent.AccepterHtmlSave != undefined) {
-                            //表单树使用
-                            window.parent.AccepterHtmlSave(data);
-                        } else {
-                            $('body').append($('<div>' + data + '</div>'));
-                            $('#btnOk').attr('disabled', true);
-                        }
-                        try {
-                            window.opener.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
-                        } catch (e) {
-                            //window.parent.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
-                        }
-                        //alert('保存成功...');
-                        window.close();
-                        return;
-                    }
-
-
-                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                        window.parent.returnWorkWindowClose(data);
-                    } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                        window.opener.returnWorkWindowClose(data);
-                    } else {
-                        $('body').append($('<div>' + data + '</div>'));
-                        $('#btnOk').attr('disabled', true);
-                    }
+            if ("Accepter_Save" == doType) {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose(data);
+                } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                    window.opener.returnWorkWindowClose(data);
+                } else if (window.parent != undefined && window.parent.AccepterHtmlSave != undefined) {
+                    //表单树使用
+                    window.parent.AccepterHtmlSave(data);
+                } else {
+                    $('body').append($('<div>' + data + '</div>'));
+                    $('#btnOk').attr('disabled', true);
                 }
-            });
+                try {
+                    window.opener.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
+                } catch (e) {
+                    //window.parent.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
+                }
+                //alert('保存成功...');
+                window.close();
+                return;
+            }
+
+
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose(data);
+            } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                window.opener.returnWorkWindowClose(data);
+            } else {
+                $('body').append($('<div>' + data + '</div>'));
+                $('#btnOk').attr('disabled', true);
+            }
             $(".foot").hide();
         }
 

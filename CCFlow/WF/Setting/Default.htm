@@ -100,32 +100,24 @@
         //页面启动函数.
         $(function () {
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Default_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            var data = handler.DoMethodReturnString("Default_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            data = JSON.parse(data);
 
-                    data = JSON.parse(data);
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
 
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
+            var url = "../../DataUser/Siganture/" + data.UserNo + ".jpg";
 
-                    var url = "../../DataUser/Siganture/" + data.UserNo + ".jpg";
-
-
-                    //签名.
-                    var img = document.getElementById("QianMing");
-                    img.src = url;
-                    return;
-                }
-            });
+            //签名.
+            var img = document.getElementById("QianMing");
+            img.src = url;
+            return;
         });
     </script>
 </body>

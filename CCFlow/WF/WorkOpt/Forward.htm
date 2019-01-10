@@ -83,23 +83,21 @@
         //WorkID, this.FID, this.FK_Node
         var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
 
-        if (empNos == "" || empNos ==undefined || empNos==null)
+        if (empNos == "" || empNos == undefined || empNos == null)
             return;
 
-        $.ajax({
-            type: 'post',
-            async: true,
-            data: { FK_Flow: param.FK_Flow, WorkID: param.WorkID, FID: param.FID, FK_Node: param.FK_Node },
-            url: Handler + "?DoType=Shift&FK_Flow="+param.FK_Flow+"&WorkID="+param.WorkID+"&FID="+param.FID+"&FK_Node="+param.FK_Node+"&m=" + Math.random() + "&ToEmp=" + empNos + '&Message=' + $('#Message').val(),
-            dataType: 'html',
-            success: function (data) {
-                if (window.parent != null && window.parent.ShiftWorkWindowClose != null) {
-                    window.parent.ShiftWorkWindowClose(data);
-                } else {
-                    $('body').append($('<div>' + data + '</div>'));
-                }
-            }
-        });
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+        handler.AddUrlData();
+        handler.AddPara("ToEmp", empNos);
+        handler.AddPara("Message", $('#Message').val());
+
+        var data = handler.DoMethodReturnString("Shift");
+
+        if (window.parent != null && window.parent.ShiftWorkWindowClose != null) {
+            window.parent.ShiftWorkWindowClose(data);
+        } else {
+            $('body').append($('<div>' + data + '</div>'));
+        }
         $(".foot").hide();
     }
 

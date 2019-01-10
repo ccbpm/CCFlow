@@ -10,8 +10,8 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script src="../Scripts/QueryString2016.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../Scripts/config.js" type="text/javascript" ></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/config.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -130,11 +130,10 @@
                 doType = "Accepter_Save";
 
             doType = "Accepter_Save";
-            if (doType == "Accepter_Send") {
+            if (doType == "Accepter_Send")
                 $("#btnOk").text('发送');
-            } else {
+            else
                 $("#btnOk").text('保存');
-            }
 
             dtTable();
 
@@ -161,214 +160,207 @@
                 toNode = pageUrlParam.toNode;
             }
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Accepter_Init&FK_Node=" + pageUrlParam.fk_node + '&WorkID=' +
-                    pageUrlParam.WorkID + '&m=' + Math.random(),
-                dataType: 'html',
-                data: { ToNode: toNode },
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("ToNode", toNode);
+            var data = handler.DoMethodReturnString("Accepter_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    var initData = {};
-                    if (data == null && data == undefined) {
-                        alert("Accepter_Init&FK_Node=" + pageUrlParam.fk_node + '&WorkID=' +
+            var initData = {};
+            if (data == null && data == undefined) {
+                alert("Accepter_Init&FK_Node=" + pageUrlParam.fk_node + '&WorkID=' +
                         pageUrlParam.WorkID + "未获取到数据" + data);
-                        return;
-                    }
+                return;
+            }
 
-                    try {
-                        initData = eval('(' + data + ')');
-                    }
-                    catch (err) {
-                        alert("转换JSON 失败" + err + data);
-                        return;
-                    }
+            try {
+                initData = eval('(' + data + ')');
+            }
+            catch (err) {
+                alert("转换JSON 失败" + err + data);
+                return;
+            }
 
-                    var selDataArr = initData.Nodes;
-                    var dtgArr = initData.Depts;
-                    var dteArr = initData.Emps;
+            var selDataArr = initData.Nodes;
+            var dtgArr = initData.Depts;
+            var dteArr = initData.Emps;
 
-                    //增加了: 默认选择接收人，与强制选择接收人的数据源,让其在打开的时候，可以把默认值选择上.
-                    // 有可能值是空的.
-                    var defaultSelected = initData.DefaultSelected;
-                    var forceSelected = initData.ForceSelected;
+            //增加了: 默认选择接收人，与强制选择接收人的数据源,让其在打开的时候，可以把默认值选择上.
+            // 有可能值是空的.
+            var defaultSelected = initData.DefaultSelected;
+            var forceSelected = initData.ForceSelected;
 
-                    //初始化到达节点数据
-                    if (firstLoad == true) {
-                        firstLoad = false;
-                        var html = '';
+            //初始化到达节点数据
+            if (firstLoad == true) {
+                firstLoad = false;
+                var html = '';
 
-                        $.each(selDataArr, function (i, obje) {
-                            html += '<option value="' + obje.No + '">' + obje.Name + '</option>';
-                        });
+                $.each(selDataArr, function (i, obje) {
+                    html += '<option value="' + obje.No + '">' + obje.Name + '</option>';
+                });
 
-                        $("#searchS1").html("");
-                        $("#searchS1").html(html);
+                $("#searchS1").html("");
+                $("#searchS1").html(html);
 
-                        if (pageUrlParam.toNode == 0) {
-                            $("#searchS1 option:nth(0)").attr("selected", "selected");
-                        } else {
-                            $("#searchS1 option[value=" + pageUrlParam.toNode + "]").attr("selected", "selected");
-                        }
-                    }
+                if (pageUrlParam.toNode == 0) {
+                    $("#searchS1 option:nth(0)").attr("selected", "selected");
+                } else {
+                    $("#searchS1 option[value=" + pageUrlParam.toNode + "]").attr("selected", "selected");
+                }
+            }
 
-                    var selectNodeVal = $('#searchS1').val();
-                    var selectNode = $.grep(selDataArr, function (value) {
-                        return value.NO == selectNodeVal;
-                    });
+            var selectNodeVal = $('#searchS1').val();
+            var selectNode = $.grep(selDataArr, function (value) {
+                return value.NO == selectNodeVal;
+            });
 
-                    //通过SQL 和树的时候可以显示为树.
-                    if (selectNode[0].SelectorDBShowWay == "Tree" && selectNode[0].SelectorModel == "SQL") {
-                        //树展示
-                        $('#jstree').show();
-                        var jsTreedata = [];
-                        $.each(dtgArr, function (i, obj) {
-                            //jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
-                            // 2016-12-05 by tianbaoyan 人员选择器默认展开  因为数据量通过sql过滤不是很大
-                            jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name, "data": obj, state: { opened: true} });
-                        });
+            //通过SQL 和树的时候可以显示为树.
+            if (selectNode[0].SelectorDBShowWay == "Tree" && selectNode[0].SelectorModel == "SQL") {
+                //树展示
+                $('#jstree').show();
+                var jsTreedata = [];
+                $.each(dtgArr, function (i, obj) {
+                    //jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
+                    // 2016-12-05 by tianbaoyan 人员选择器默认展开  因为数据量通过sql过滤不是很大
+                    jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name, "data": obj, state: { opened: true} });
+                });
 
-                        $.each(dteArr, function (i, obj) {
-                            var disabled = false;
-                            var selected = false;
-                            //默认勾选
-                            if (defaultSelected) {
-                                for (var j = 0; j < defaultSelected.length; j++) {
-                                    if (obj.NO == defaultSelected[j].FK_Emp) {
-                                        selected = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            //强制勾选
-                            if (forceSelected) {
-                                for (var k = 0; k < forceSelected.length; k++) {
-                                    if (obj.NO == forceSelected[k].FK_Emp) {
-                                        selected = true;
-                                        disabled = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            jsTreedata.push({ children: {}, "id": "user" + obj.No, "parent": obj.FK_Dept, "text": obj.Name, "icon": "jstree-file", "data": obj, "state": { "disabled": disabled, "selected": selected} });
-                        });
-
-                        //没有父节点的给到根节点
-                        for (var i = 0; i < jsTreedata.length; i++) {
-                            if (jsTreedata[i].parent != '#') {
-                                var pNode = $.grep(jsTreedata, function (value) {
-                                    return value.id == jsTreedata[i].parent;
-                                });
-                                if (pNode.length == 0) {
-                                    jsTreedata[i].parent = '#'
-                                }
-                            }
-                        }
-
-                        $('#jstree').jstree({
-                            plugins: [
-                            "checkbox",
-                            //"state",
-                            //"conditionalselect"
-                            ],
-                            'core': {
-                                "multiple": true,
-                                'data': jsTreedata
-                            }
-                        })
-                        $(".wait").hide();
-                        $("section").show();
-                        return;
-                    }
-                    if (selectNode[0].SELECTORMODEL == "GenerUserSelecter") {//通用人员选择
-                        $('#selectEmpsDiv').css('display', 'block');
-                        $('#groupTable').css('display', 'none');
-
-                        $(".wait").hide();
-                        $("section").show();
-                        return;
-                    } else {//其它均显示成分组
-                        $('#groupTable').css('display', 'block');
-                        $('#selectEmpsDiv').css('display', 'none');
-                    }
-                    window.fkName = '';
-                    if (dteArr != undefined && dteArr.length > 0) {
-                        for (var pro in dteArr[0]) {
-                            if (pro.toLowerCase() != "no" && pro.toLowerCase() != "name") {
-                                fkName = pro;
+                $.each(dteArr, function (i, obj) {
+                    var disabled = false;
+                    var selected = false;
+                    //默认勾选
+                    if (defaultSelected) {
+                        for (var j = 0; j < defaultSelected.length; j++) {
+                            if (obj.NO == defaultSelected[j].FK_Emp) {
+                                selected = true;
                                 break;
                             }
                         }
                     }
-                    var ultdg = '';
-                    var ultde = '';
-                    var ultdes = '';
-                    var s = "";
-                    $.each(dtgArr, function (i, obje) {
-                        for (var k = 0; k < dteArr.length; k++) {
-                            if (obje.No == dteArr[k][fkName]) {
-                                ultde +=
-                                    "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
+                    //强制勾选
+                    if (forceSelected) {
+                        for (var k = 0; k < forceSelected.length; k++) {
+                            if (obj.NO == forceSelected[k].FK_Emp) {
+                                selected = true;
+                                disabled = true;
+                                break;
                             }
                         }
-                        ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
-                                ultde + "</ul></li>";
-                        ultde = "";
-                    });
-                    //
-                    var groupFileds = $.grep(dteArr, function (value) {
-                        return ($('[name="' + value.FK_Dept + '"]').length != "0");
-                    });
+                    }
+                    jsTreedata.push({ children: {}, "id": "user" + obj.No, "parent": obj.FK_Dept, "text": obj.Name, "icon": "jstree-file", "data": obj, "state": { "disabled": disabled, "selected": selected} });
+                });
 
-                    $.each(groupFileds, function (j, objj) {
-                        ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
-                    });
-                    s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
-                            ultdes + "</ul></li>";
-                    ultdg += s;
-
-                    //
-                    $("#groupTable #dt").html(ultdg);
-                    $(".wait").hide();
-                    $("section").show();
-                    $(".ulm_head").click(function () {
-                        if (this.checked) {
-                            $(this).parent("li").children("ul").find("input").prop("checked", "checked");
-                        } else {
-                            $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                //没有父节点的给到根节点
+                for (var i = 0; i < jsTreedata.length; i++) {
+                    if (jsTreedata[i].parent != '#') {
+                        var pNode = $.grep(jsTreedata, function (value) {
+                            return value.id == jsTreedata[i].parent;
+                        });
+                        if (pNode.length == 0) {
+                            jsTreedata[i].parent = '#'
                         }
-                    });
-                    $(".ulm_head").click(function () {
-                        if (this.checked) {
-                            $(this).parent("li").children("ul").find("input").prop("checked", "checked");
-                        } else {
-                            $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
-                        }
-                    });
-                    //实体绑定
-                    $.each(dteArr, function (k, obj) {
-                        var lifs = $("#groupTable #dt .lif");
-                        for (var i = 0; i < lifs.length; i++) {
-                            if ($(lifs[i]).attr("name") == obj[fkName]) {
-                                var limData = $(lifs[i]).find(".lim");
-                                for (var m = 0; m < limData.length; m++) {
-                                    var lim = limData[m];
-                                    if ($(lim).text() == obj.NAME && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
-                                        $(lim).data().data = obj;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    }
                 }
 
+                $('#jstree').jstree({
+                    plugins: [
+                            "checkbox",
+                    //"state",
+                    //"conditionalselect"
+                            ],
+                    'core': {
+                        "multiple": true,
+                        'data': jsTreedata
+                    }
+                })
+                $(".wait").hide();
+                $("section").show();
+                return;
+            }
+            if (selectNode[0].SELECTORMODEL == "GenerUserSelecter") {//通用人员选择
+                $('#selectEmpsDiv').css('display', 'block');
+                $('#groupTable').css('display', 'none');
+
+                $(".wait").hide();
+                $("section").show();
+                return;
+            } else {//其它均显示成分组
+                $('#groupTable').css('display', 'block');
+                $('#selectEmpsDiv').css('display', 'none');
+            }
+            window.fkName = '';
+            if (dteArr != undefined && dteArr.length > 0) {
+                for (var pro in dteArr[0]) {
+                    if (pro.toLowerCase() != "no" && pro.toLowerCase() != "name") {
+                        fkName = pro;
+                        break;
+                    }
+                }
+            }
+            var ultdg = '';
+            var ultde = '';
+            var ultdes = '';
+            var s = "";
+            $.each(dtgArr, function (i, obje) {
+                for (var k = 0; k < dteArr.length; k++) {
+                    if (obje.No == dteArr[k][fkName]) {
+                        ultde +=
+                                    "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
+                    }
+                }
+                ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                                ultde + "</ul></li>";
+                ultde = "";
+            });
+            //
+            var groupFileds = $.grep(dteArr, function (value) {
+                return ($('[name="' + value.FK_Dept + '"]').length != "0");
+            });
+
+            $.each(groupFileds, function (j, objj) {
+                ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
+            });
+            s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                            ultdes + "</ul></li>";
+            ultdg += s;
+
+            //
+            $("#groupTable #dt").html(ultdg);
+            $(".wait").hide();
+            $("section").show();
+            $(".ulm_head").click(function () {
+                if (this.checked) {
+                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                } else {
+                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                }
+            });
+            $(".ulm_head").click(function () {
+                if (this.checked) {
+                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                } else {
+                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                }
+            });
+            //实体绑定
+            $.each(dteArr, function (k, obj) {
+                var lifs = $("#groupTable #dt .lif");
+                for (var i = 0; i < lifs.length; i++) {
+                    if ($(lifs[i]).attr("name") == obj[fkName]) {
+                        var limData = $(lifs[i]).find(".lim");
+                        for (var m = 0; m < limData.length; m++) {
+                            var lim = limData[m];
+                            if ($(lim).text() == obj.NAME && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
+                                $(lim).data().data = obj;
+                                break;
+                            }
+                        }
+                    }
+                }
             });
         }
         function getSelectEmps() {
@@ -413,61 +405,53 @@
         //确定【选择接收人并发送】 / 保存.  Accepter_Save Accepter_Send
         function SendNode() {
 
-            //Accepter_Save&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
-
             var empNos = getSelectEmps();
             if (empNos == '' || empNos == null) {
                 alert('请选择人员.');
                 return;
             }
-            
+
             if (pageUrlParam.toNode == 0) {
                 toNode = $("#searchS1 option:selected").val();
             } else {
                 toNode = pageUrlParam.toNode;
             }
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID, ToNode: toNode, FK_Node: pageUrlParam.fk_node },
-                url: Handler + "?DoType=" + doType + "&m=" + Math.random() + "&SelectEmps=" + encodeURI(empNos) + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
-                dataType: 'html',
-                success: function (data) {
-                    // alert(data);
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("SelectEmps", encodeURI(selectedEmps));
+            var data = handler.DoMethodReturnString(doType);
 
-                    if ("Accepter_Save" == doType) {
-                        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                            window.parent.returnWorkWindowClose(data);
-                        } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                            window.opener.returnWorkWindowClose(data);
-                        } else if (window.parent != undefined && window.parent.AccepterHtmlSave != undefined) {
-                            //表单树使用
-                            window.parent.AccepterHtmlSave(data);
-                        } else {
-                            $('body').append($('<div>' + data + '</div>'));
-                            $('#btnOk').attr('disabled', true);
-                        }
-                        //alert('保存成功...');
-                        window.close();
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-
-                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                        window.parent.returnWorkWindowClose(data);
-                    } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                        window.opener.returnWorkWindowClose(data);
-                    } else {
-                        $('body').append($('<div>' + data + '</div>'));
-                        $('#btnOk').attr('disabled', true);
-                    }
+            if ("Accepter_Save" == doType) {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose(data);
+                } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                    window.opener.returnWorkWindowClose(data);
+                } else if (window.parent != undefined && window.parent.AccepterHtmlSave != undefined) {
+                    //表单树使用
+                    window.parent.AccepterHtmlSave(data);
+                } else {
+                    $('body').append($('<div>' + data + '</div>'));
+                    $('#btnOk').attr('disabled', true);
                 }
-            });
+                //alert('保存成功...');
+                window.close();
+                return;
+            }
+
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose(data);
+            } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                window.opener.returnWorkWindowClose(data);
+            } else {
+                $('body').append($('<div>' + data + '</div>'));
+                $('#btnOk').attr('disabled', true);
+            }
             $(".foot").hide();
         }
 
@@ -535,11 +519,12 @@
                 $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
             }
         }
-        </script>
+    </script>
 </head>
-<body  >
-<div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
-<section style="display: none;">
+<body>
+    <div class="wait" style="text-align: center;">
+        页面数据正在加载中，请稍候......</div>
+    <section style="display: none;">
     <div id="searchS">
         请选择要到达到的节点：<select id="searchS1" onclick="dtTable()" style="width: 76%;"></select>
     </div>

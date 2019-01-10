@@ -4,67 +4,54 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>流程综合查询</title>
-    
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
-    
 </head>
 <body class="easyui-layout">
-
     <div data-options="region:'center',border:false">
         <div class="easyui-layout" data-options="fit:true">
             <div data-options="region:'west',split:true" style="width: 220px;">
-
                 <div class=" all-search">
-             
-<!-- start 菜单内容 -->
-                
-
-<legend>全局流程查询</legend>
-<ul>
-<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" target="mainS" ><i class="icon iconfont icon-liuchengdingyi"></i>我审批的流程</a></li>
-<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" target="mainS"><i class="icon iconfont icon-liucheng"></i>我发起的流程</a></li>
-<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptFlows" target="mainS"><i class="icon iconfont icon-liucheng1"></i>我部门发起的流程</a></li>
-<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptTodolists" target="mainS"><i class="icon iconfont icon-ziliucheng"></i>我部门的待办</a></li>
-<li><a href="../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs" target="mainS"><i class="icon iconfont icon-shanchu3"></i>流程删除日志</a></li>
-</ul>
-
-
-
-<legend>关键字查询</legend>
-<ul>
-<li><a href="KeySearch.htm" target="mainS"><i class="icon iconfont icon-guanjianzi"></i>关键字查询</a></li>
-</ul>
-
-
-
-
-<legend>按流程查询</legend>
-<ul>
-<li><a href="../RptDfine/Flowlist.htm" target="mainS"><i class="icon iconfont icon-lcchaxun"></i>按流程高级查询</a></li>
-</ul>
-
-
-
-
-<legend>工作分布</legend>
-<ul>
-<li><a href="DistributedOfMy.htm" target="mainS"><i class="icon iconfont icon-dtx-copied"></i>我的工作分布</a></li>
-</ul>
-
-
-<!-- end 菜单内容 -->
-</div>
+                    <!-- start 菜单内容 -->
+                    <legend>全局流程查询</legend>
+                    <ul>
+                        <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" target="mainS"><i
+                            class="icon iconfont icon-liuchengdingyi"></i>我审批的流程</a></li>
+                        <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" target="mainS"><i
+                            class="icon iconfont icon-liucheng"></i>我发起的流程</a></li>
+                        <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptFlows" target="mainS"><i
+                            class="icon iconfont icon-liucheng1"></i>我部门发起的流程</a></li>
+                        <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptTodolists" target="mainS"><i
+                            class="icon iconfont icon-ziliucheng"></i>我部门的待办</a></li>
+                        <li><a href="../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs" target="mainS"><i
+                            class="icon iconfont icon-shanchu3"></i>流程删除日志</a></li>
+                    </ul>
+                    <legend>关键字查询</legend>
+                    <ul>
+                        <li><a href="KeySearch.htm" target="mainS"><i class="icon iconfont icon-guanjianzi">
+                        </i>关键字查询</a></li>
+                    </ul>
+                    <legend>按流程查询</legend>
+                    <ul>
+                        <li><a href="../RptDfine/Flowlist.htm" target="mainS"><i class="icon iconfont icon-lcchaxun">
+                        </i>按流程高级查询</a></li>
+                    </ul>
+                    <legend>工作分布</legend>
+                    <ul>
+                        <li><a href="DistributedOfMy.htm" target="mainS"><i class="icon iconfont icon-dtx-copied">
+                        </i>我的工作分布</a></li>
+                    </ul>
+                    <!-- end 菜单内容 -->
+                </div>
             </div>
             <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
-                <iframe id="context" scrolling="auto" frameborder="0" src="KeySearch.htm" name="mainS" style="width: 100%; height: 100%;"></iframe>
+                <iframe id="context" scrolling="auto" frameborder="0" src="KeySearch.htm" name="mainS"
+                    style="width: 100%; height: 100%;"></iframe>
             </div>
         </div>
     </div>
- 
-	
-<script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
@@ -82,42 +69,35 @@
 
             var fk_flow = GetQueryString("FK_Flow");
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Default_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
+            handler.AddUrlData();
+            handler.DoMethodReturnString("Default_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    return;
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            return;
 
-                    //转json.
-                    data = JSON.parse(data);
+            //转json.
+            data = JSON.parse(data);
 
-                    var html = "<ul class='navlist'>";
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-                        var menu = data[i];
+            var html = "<ul class='navlist'>";
+            //增加处理.
+            for (var i = 0; i < data.length; i++) {
+                var menu = data[i];
 
-                        html += "<li>";
-                        html += "<div>";
-                        html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + menu.No + ".htm?FK_Flow=" + fk_flow + "');\" >";
-                        html += "<span>" + menu.Name + "</span></a>";
-                        html += "</div>";
-                        html += "</li>";
-                    }
-                    html += "</ul>";
-                    document.getElementById("menuList").innerHTML = html;
-                }
-            });
+                html += "<li>";
+                html += "<div>";
+                html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + menu.No + ".htm?FK_Flow=" + fk_flow + "');\" >";
+                html += "<span>" + menu.Name + "</span></a>";
+                html += "</div>";
+                html += "</li>";
+            }
+            html += "</ul>";
+            document.getElementById("menuList").innerHTML = html;
         });
     </script>
-
     <script language="javascript" type="text/javascript">
         var currShow;
         //在右侧框架中显示指定url的页面
@@ -137,6 +117,5 @@
             }
         }
     </script>
-
 </body>
 </html>

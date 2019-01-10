@@ -324,32 +324,23 @@
 		    }
 		}
 
-        function DelWorkCheckAth(athPK) {
-            isChange = false;
-            if (confirm("确定要删除所选文件吗？")) {
-                $.ajax({
-                    type: "GET", //使用GET或POST方法访问后台
-                    dataType: "text", //返回json格式的数据
-                    contentType: "application/json; charset=utf-8",
-                    url: "../CCForm/Handler.ashx?DoType=DelWorkCheckAttach&MyPK=" + athPK, //要访问的后台地址
-                    async: false,
-                    cache: false,
-                    success: function (msg) {//msg为返回的数据，在这里做数据绑定
-                        if (msg == "true") {
-                            isChange = true;
+		function DelWorkCheckAth(athPK) {
+		    isChange = false;
 
-                            $("#Ath_" + athPK).remove();
-                        }
-                        if (msg == "false") {
-                            alert("删除失败。");
-                        }
-                    }
-                });
-            }
-        }
+		    if (confirm("确定要删除所选文件吗？") == false)
+		        return;
 
-
-
+		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+		    handler.AddPara("MyPK", athPK);
+		    var msg = handler.DoMethodReturnString("DelWorkCheckAttach");
+		    if (msg == "true") {
+		        isChange = true;
+		        $("#Ath_" + athPK).remove();
+		    }
+		    if (msg == "false") {
+		        alert("删除失败。");
+		    }
+		}
           
 
         function TBHelp(enName) {
@@ -403,6 +394,7 @@
         }
 
         function GetUserSmallIcon(userNo, userName) {
+
             return userName;
 
             //return "<img src='../../DataUser/UserIcon/" + userNo + "Smaller.png' border=0  style='height:15px;width:15px;padding-right:5px;vertical-align:middle;'  onerror=\"src='../../DataUser/UserIcon/DefaultSmaller.png'\" />" + userName;
@@ -532,19 +524,6 @@
             //}
         }
 
-        function Load() {
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
-        }
-
         //为判断是否增加电子签章所用.
         function IsCanSendWork() {
             if (isCanSend == false)
@@ -560,49 +539,36 @@
             if (pass == undefined || pass == "")
                 return;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=WorkCheck_CheckPass&SPass=" + pass + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("SPass", pass);
+            var data = handler.DoMethodReturnString("WorkCheck_CheckPass");
 
-                    if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    //让其可以发送.
-                    isCanSend = true;
+            //让其可以发送.
+            isCanSend = true;
+            //签名成功后，就需要把图片显示出来.
 
-                    //签名成功后，就需要把图片显示出来.
-
-
-                }
-            });
         }
-
-
 
         function WorkCheck_ChangePass() {
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=WorkCheck_ChangePass&FK_Emp=" + empNo + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("FK_Emp", empNo);
+            var data = handler.DoMethodReturnString("WorkCheck_ChangePass");
 
-                    if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    delRow(row); //清空单个table tbody
+            delRow(row); //清空单个table tbody
 
-                    // 把返回的结果，重新绑定.
-                    var sas = JSON.parse(data);
-                    BindTable(sas);
-                }
-            });
+            // 把返回的结果，重新绑定.
+            var sas = JSON.parse(data);
+            BindTable(sas);
         }

@@ -16,16 +16,19 @@
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <style type="text/css">
-        body {
+        body
+        {
             background: transparent;
         }
-
-            body div {
-                text-align: left;
-                margin: 20px auto;
-            }
-
-        #Message {
+        
+        body div
+        {
+            text-align: left;
+            margin: 20px auto;
+        }
+        
+        #Message
+        {
             width: 100%;
         }
     </style>
@@ -33,8 +36,6 @@
         var pageData = {};
         $(function () {
             //初始化页面退回信息
-
-            alert('正在实施中.');
 
             pageData = {
                 FK_Node: GetQueryString('FK_Node'),
@@ -48,35 +49,30 @@
                 $('#TB_Doc').val(pageData.Message);
             }
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=FlowSkip_Init&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("FlowSkip_Init");
 
-                    var returnNodeArr = JSON.parse(data);
-                    var DDL_NodesHtml = '';
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    $.each(returnNodeArr, function (i, returnNode) {
-                        DDL_NodesHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '">' + returnNode.Name + '=&gt;' + returnNode.RecName + '</option>';
-                    });
+            var returnNodeArr = JSON.parse(data);
+            var DDL_NodesHtml = '';
 
-                    $('#DDL_Nodes').html(DDL_NodesHtml);
-
-                    $('#DDL_Nodes').bind('change', SetIsBackTrackingDispaly);
-                    SetIsBackTrackingDispaly();
-
-                    $("section").show();
-                    $(".wait").hide();
-                }
+            $.each(returnNodeArr, function (i, returnNode) {
+                DDL_NodesHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '">' + returnNode.Name + '=&gt;' + returnNode.RecName + '</option>';
             });
+
+            $('#DDL_Nodes').html(DDL_NodesHtml);
+
+            $('#DDL_Nodes').bind('change', SetIsBackTrackingDispaly);
+            SetIsBackTrackingDispaly();
+
+            $("section").show();
+            $(".wait").hide();
             Common.MaxLengthError();
         });
 
@@ -101,20 +97,20 @@
             $('.foot input').attr('disabled', 'disabled');
             $('.foot input').css('background', 'gray');
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: {},
-                url: Handler + "?DoType=FlowSkip_Do&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&FK_Node=" + pageData.FK_Node + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnInfo=' + escape( $('#TB_Doc').val()) + "&IsBack=" + isBack + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (window.parent != null && window.parent.DoFlowSkipWindowClose != null) {
-                        window.parent.DoFlowSkipWindowClose(data);
-                    } else {
-                        $('body').append($('<div>'+data+'</div>'));
-                    }
-                }
-            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("ReturnToNode", $('#DDL_Nodes option:checked').val());
+            handler.AddPara("ReturnInfo", escape($('#TB_Doc').val()));
+            handler.AddPara("IsBack", isBack);
+
+            var data = handler.DoMethodReturnString("FlowSkip_Do");
+
+            if (window.parent != null && window.parent.DoFlowSkipWindowClose != null) {
+                window.parent.DoFlowSkipWindowClose(data);
+            } else {
+                $('body').append($('<div>' + data + '</div>'));
+            }
             $(".foot").hide();
         }
 
@@ -127,12 +123,13 @@
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
                 window.close();
             }
-         }
+        }
     </script>
 </head>
 <body>
-<div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
-<section style="display: none;">
+    <div class="wait" style="text-align: center;">
+        页面数据正在加载中，请稍候......</div>
+    <section style="display: none;">
     <div>
         请选择要跳转的节点:
         <select id="DDL_Nodes" name="DDL_Nodes" style="width: 77%;"></select>

@@ -14,79 +14,73 @@
 
             $('Msg').val('正在加载请稍候....');
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=DBTemplate_Init&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    $('Msg').val('');
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("DBTemplate_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        document.getElementById("Msg").innerHTML = data;
-                        return;
-                    }
+            $('Msg').val('');
 
-                    data = JSON.parse(data);
-                    var dbTemplate = data['DBTemplate'];
-                    var history = data['History'];
+            if (data.indexOf('err@') == 0) {
+                document.getElementById("Msg").innerHTML = data;
+                return;
+            }
 
-                    var idx = 0;
-                    var html = "<table style='width:90%;'>";
-                    html += "<tr>";
-                    html += "<th colspan=3 >模版数据</th>";
-                    html += "</tr>";
+            data = JSON.parse(data);
+            var dbTemplate = data['DBTemplate'];
+            var history = data['History'];
 
-                    if (dbTemplate.length == 0) {
-                        html += "<tr>";
-                        html += "<td colspan=3>无</th>";
-                        html += "</tr>";
-                    }
+            var idx = 0;
+            var html = "<table style='width:90%;'>";
+            html += "<tr>";
+            html += "<th colspan=3 >模版数据</th>";
+            html += "</tr>";
 
-                    for (var i = 0; i < dbTemplate.length; i++) {
-                        var en = dbTemplate[i];
-                        html += "<tr>";
-                        html += "<td>" + i + "</td>";
-                        html += "<td><a href=\"javascript:Start('"+en.WorkID+"');\" >" + en.Title + "</td>";
-                        html += "<td><a href=\"javascript:DBTemplate_DeleteDBTemplate('" + en.WorkID + "');\" >删除</a></td>";
-                        html += "</tr>";
-                    }
+            if (dbTemplate.length == 0) {
+                html += "<tr>";
+                html += "<td colspan=3>无</th>";
+                html += "</tr>";
+            }
+
+            for (var i = 0; i < dbTemplate.length; i++) {
+                var en = dbTemplate[i];
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td><a href=\"javascript:Start('" + en.WorkID + "');\" >" + en.Title + "</td>";
+                html += "<td><a href=\"javascript:DBTemplate_DeleteDBTemplate('" + en.WorkID + "');\" >删除</a></td>";
+                html += "</tr>";
+            }
 
 
-                    html += "<tr>";
-                    html += "<th colspan=3 >历史数据</th>";
-                    html += "</tr>";
+            html += "<tr>";
+            html += "<th colspan=3 >历史数据</th>";
+            html += "</tr>";
 
-                    if (history.length == 0) {
-                        html += "<tr>";
-                        html += "<td colspan=3>无</th>";
-                        html += "</tr>";
-                    }
+            if (history.length == 0) {
+                html += "<tr>";
+                html += "<td colspan=3>无</th>";
+                html += "</tr>";
+            }
 
-                    for (var i = 0; i < history.length; i++) {
-                        var en = history[i];
-                        html += "<tr>";
-                        html += "<td>" + i + "</td>";
-                        html += "<td><a href=\"javascript:Start('" + en.WorkID + "');\" >" + en.Title + "</td>";
-                        html += "<td><a href=\"javascript:AddToTemplate('" + en.WorkID + "','"+en.Title+"');\" >设置模版</a></td>";
-                        html += "</tr>";
-                    }
-                    html += "<table>";
+            for (var i = 0; i < history.length; i++) {
+                var en = history[i];
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td><a href=\"javascript:Start('" + en.WorkID + "');\" >" + en.Title + "</td>";
+                html += "<td><a href=\"javascript:AddToTemplate('" + en.WorkID + "','" + en.Title + "');\" >设置模版</a></td>";
+                html += "</tr>";
+            }
+            html += "<table>";
+            document.getElementById("Msg").innerHTML = html;
 
-                    document.getElementById("Msg").innerHTML = html;
-
-                    //$('Msg').val('');
-                    //document.getElementById("Msg").innerHTML = html;
-                }
-            });
+            //$('Msg').val('');
+            //document.getElementById("Msg").innerHTML = html;
         });
 
         function Start(workid) {
 
             if (window.confirm('您确定要以次模版发起流程吗？') == false)
                 return;
-            var url = '../MyFlow.htm?FK_Flow=' + GetQueryString('FK_Flow') + '&CopyFormWorkID=' + workid + '&CopyFormNode='+GetQueryString('FK_Flow') +'01&IsDeleteDraft=1';
+            var url = '../MyFlow.htm?FK_Flow=' + GetQueryString('FK_Flow') + '&CopyFormWorkID=' + workid + '&CopyFormNode=' + GetQueryString('FK_Flow') + '01&IsDeleteDraft=1';
 
             window.parent.location.href = url;
             window.close();
@@ -97,22 +91,17 @@
             if (window.confirm('您确定要删除吗?') == false)
                 return;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=DBTemplate_DeleteDBTemplate&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workid + "&Title=" + name + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("Accepter_Send");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href;
-                }
-            });
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            window.location.href = window.location.href;
         }
 
         function AddToTemplate(workid, title) {
@@ -120,27 +109,23 @@
             var name = window.prompt('请输入模版名称', title);
             if (name == null || name == '')
                 return;
-            name = encodeURI(name);
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=DBTemplate_SaveAsDBTemplate&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workid + "&Title=" + name + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href;
-                }
-            });
+            name = encodeURI(name);
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("Title", name);
+            var data = handler.DoMethodReturnString("DBTemplate_SaveAsDBTemplate");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            window.location.href = window.location.href;
         }
          
     </script>
-
     <style type="text/css">
         #tb_msg
         {
@@ -150,11 +135,10 @@
     </style>
 </head>
 <body>
- 
-
- <center>
- <div id="Msg"><img src='../Img/loading.gif' />正在加载请稍候... </div>
- </center>
-
+    <center>
+        <div id="Msg">
+            <img src='../Img/loading.gif' />正在加载请稍候...
+        </div>
+    </center>
 </body>
 </html>

@@ -9,9 +9,10 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="css/demo.js" type="text/javascript"></script>
     <base target="_self" />
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="css/demo.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript">
         /* ESC Key Down */
@@ -36,55 +37,47 @@
         //初始化数据.
         function InitPage() {
             $("#Table1  tr:not(:first)").html("");
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBSList&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
 
-                    if (data == "[]") {
-                        return;
-                    }
-                    //转化成json.
-                    data = JSON.parse(data);
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-                        //增加行.
-                        AddRow(data[i]);
-                    }
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("FlowBBSList");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data == "[]") {
+                return;
+            }
+            //转化成json.
+            data = JSON.parse(data);
+            //增加处理.
+            for (var i = 0; i < data.length; i++) {
+                //增加行.
+                AddRow(data[i]);
+            }
         }
         //删除.
         function Delete(mypk) {
             var name;
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBS_Delete&FK_Flow=" + fk_flow + "&MyPK=" + mypk + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            handler.AddPara("MyPK", mypk);
+            var data = handler.DoMethodReturnString("FlowBBS_Delete");
 
-                   // alert(data);
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            // alert(data);
 
-                    $("#Table1  tr[id='" + mypk + "']").remove();
-                    Count();
-                }
-            });
+            $("#Table1  tr[id='" + mypk + "']").remove();
+            Count();
         }
         var wait = 0;
         function time(o) {
@@ -104,50 +97,42 @@
         }
         //统计评论条数
         function Count() {
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBS_Count&FK_Flow=" + fk_flow + "&WorkID=" + workid,
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("FlowBBS_Count");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    document.getElementById("TB_count").innerText = data;
-                }
-
-            });
+            document.getElementById("TB_count").innerText = data;
         }
         function Check(empName, fk_flow) {
+
             $("#Table1  tr:not(:first)").html("");
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBS_Check&FK_Flow=" + fk_flow + "&UserName=" + encodeURIComponent(empName) + "&WorkID=" + workid,
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            handler.AddPara("UserName", encodeURIComponent(empName));
+            var data = handler.DoMethodReturnString("FlowBBS_Check");
 
-                    if (data == "[]") {
-                        return;
-                    }
-                    //转化成json.
-                    data = JSON.parse(data);
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-                        AddRow2(data[i]);
 
-                    }
-                }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-            });
+            if (data == "[]") {
+                return;
+            }
+            //转化成json.
+            data = JSON.parse(data);
+            //增加处理.
+            for (var i = 0; i < data.length; i++) {
+                AddRow2(data[i]);
+
+            }
         }
 
         function Submit() {
@@ -167,28 +152,22 @@
 
             });
 
-            var frmData = $("#cc").serialize();
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBS_Save&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("FlowBBS_Save");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    if (data == "[]") {
-                        return;
-                    }
-                    //转化成json.
-                    data = JSON.parse(data);
-                    AddRow(data[0]);
-                }
-            });
 
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            if (data == "[]") {
+                return;
+            }
+            //转化成json.
+            data = JSON.parse(data);
+            AddRow(data[0]);
         }
         //清空评论
         function Clear() {
@@ -197,17 +176,13 @@
         }
         //评论回复
         function Rel(empNo, pk, empName) {
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBSUserName",
-                dataType: 'html',
-                success: function (data) {
-                    var url = "FlowBBSReplay.htm?RE=" + empNo + "&MyPK=" + pk + "&UserName=" + encodeURIComponent(empName) + "&WebUser=" + encodeURIComponent(data);
-                    WinOpen(url);
 
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+
+            var data = handler.DoMethodReturnString("FlowBBSUserName");
+            var url = "FlowBBSReplay.htm?RE=" + empNo + "&MyPK=" + pk + "&UserName=" + encodeURIComponent(empName) + "&WebUser=" + encodeURIComponent(data);
+            WinOpen(url);
 
         }
         function AddRow(data) {
@@ -216,24 +191,22 @@
             var empNo = data.EmpFrom;
             var empName = data.EmpFromT;
             var msg = data.Msg;
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBSDept&UserName=" + empNo,
-                dataType: 'html',
-                success: function (data) {
-                    var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "  <br/><br/>";
-                    //增加上icon.
-                    leftInfo += "<center ><img width='100' height='100'  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
-                    leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
-                    leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
-                    leftInfo += "所属部门:&nbsp&nbsp" + data;
-                    var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + fk_flow + "');\">只看该用户</a> ";
-                    var newRow = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
-                    $("#Table1 tr:last").after(newRow);
-                    Count();
-                }
-            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            handler.AddPara("UserName", empNo);
+            var data = handler.DoMethodReturnString("FlowBBSDept");
+
+            var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "  <br/><br/>";
+            //增加上icon.
+            leftInfo += "<center ><img width='100' height='100'  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
+            leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
+            leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
+            leftInfo += "所属部门:&nbsp&nbsp" + data;
+            var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + fk_flow + "');\">只看该用户</a> ";
+            var newRow = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
+            $("#Table1 tr:last").after(newRow);
+            Count();
         }
 
         function AddRow2(data) {
@@ -242,24 +215,22 @@
             var empNo = data.EmpFrom;
             var empName = data.EmpFromT;
             var msg = data.Msg;
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FlowBBSDept&UserName=" + empNo,
-                dataType: 'html',
-                success: function (data) {
-                    var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "<br/><br/>";
-                    //增加上icon.
-                    leftInfo += "<center ><img width='100' height='100'  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
-                    leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
-                    leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
-                    leftInfo += "所属部门:&nbsp&nbsp" + data;
-                    var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:InitPage();\">查看全部</a> ";
-                    var Row = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th class=BigDoc colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' /> " + delLink + "</th></tr>";
-                    $("#Table1 tr:last").after(Row);
-                    Count();
-                }
-            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            handler.AddPara("UserName", empNo);
+            var data = handler.DoMethodReturnString("FlowBBSDept");
+
+            var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "<br/><br/>";
+            //增加上icon.
+            leftInfo += "<center ><img width='100' height='100'  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
+            leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
+            leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
+            leftInfo += "所属部门:&nbsp&nbsp" + data;
+            var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:InitPage();\">查看全部</a> ";
+            var Row = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th class=BigDoc colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' /> " + delLink + "</th></tr>";
+            $("#Table1 tr:last").after(Row);
+            Count();
         }
 
         function goTop() {

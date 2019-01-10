@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -23,82 +22,73 @@
         //初始化页面函数.....
         $(function () {
 
-            var fk_flow = GetQueryString("FK_Flow");
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Default_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Default_Init");
 
 
-                    //转json.
-                    data = JSON.parse(data);
-
-                    var html = "<ul class='navlist'>";
-                    var url = "";
-
-
-                    var flowName = '';
-
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-
-                        var menu = data[i];
-                        if (menu.No == 'FlowName') {
-                            flowName = menu.Name;
-                            continue;
-                        }
-
-                        html += "<li>";
-                        html += "<div>";
-                        url = "Search.htm?SearchType=" + menu.No + "&FK_Flow=" + fk_flow;
-                        html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + url + "');\" >";
-                        html += "<span>" + menu.Name + "</span></a>";
-                        html += "</div>";
-                        html += "</li>";
-                    }
-                    html += "</ul>";
-                    document.getElementById("menuList").innerHTML = html;
-
-                    var showType = GetQueryString("SearchType");
-                    if (showType == null)
-                        showType = "MyJoin";
-
-                    url = "Search.htm?SearchType=" + showType + "&FK_Flow=" + fk_flow;
-                    $('#context').attr('src', url + '&s=' + Math.random());
-
-                    document.title = '流程实例查询';
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
 
-                    document.getElementById('FlowName').innerHTML = '<font color=white><b>' + flowName + '</b></font>';
-                    $("#panelTitle").panel({ title: flowName });
+            //转json.
+            data = JSON.parse(data);
 
-                    //获取页面打开的方式 如果是LayerOpen打开的则ID="FlowName"的div隐藏
-                    var openType = GetQueryString("OpenType");
-                    //if (openType && openType == "LayerOpen") {
-                    $("#North").hide();
-                    $("#North").parent().css("postion", "");
-                    //$("#FlowName").parent().parent().css("height", "0px");
-                    //$("#FlowName").parent().parent().parent().removeClass("layout-panel");
-                    //$("#FlowName").parent().parent().parent().addClass("layout-panel1");
-                    //var classObj = $("#FlowName").parent().parent().parent().attr("class", "layout-panel");
-                    //classObj.removeAttr("position");
+            var html = "<ul class='navlist'>";
+            var url = "";
 
 
-                    // }
+            var flowName = '';
 
+            //增加处理.
+            for (var i = 0; i < data.length; i++) {
+
+                var menu = data[i];
+                if (menu.No == 'FlowName') {
+                    flowName = menu.Name;
+                    continue;
                 }
-            });
+
+                html += "<li>";
+                html += "<div>";
+                url = "Search.htm?SearchType=" + menu.No + "&FK_Flow=" + fk_flow;
+                html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + url + "');\" >";
+                html += "<span>" + menu.Name + "</span></a>";
+                html += "</div>";
+                html += "</li>";
+            }
+            html += "</ul>";
+            document.getElementById("menuList").innerHTML = html;
+
+            var showType = GetQueryString("SearchType");
+            if (showType == null)
+                showType = "MyJoin";
+
+            url = "Search.htm?SearchType=" + showType + "&FK_Flow=" + fk_flow;
+            $('#context').attr('src', url + '&s=' + Math.random());
+
+            document.title = '流程实例查询';
+
+
+            document.getElementById('FlowName').innerHTML = '<font color=white><b>' + flowName + '</b></font>';
+            $("#panelTitle").panel({ title: flowName });
+
+            //获取页面打开的方式 如果是LayerOpen打开的则ID="FlowName"的div隐藏
+            var openType = GetQueryString("OpenType");
+            //if (openType && openType == "LayerOpen") {
+            $("#North").hide();
+            $("#North").parent().css("postion", "");
+            //$("#FlowName").parent().parent().css("height", "0px");
+            //$("#FlowName").parent().parent().parent().removeClass("layout-panel");
+            //$("#FlowName").parent().parent().parent().addClass("layout-panel1");
+            //var classObj = $("#FlowName").parent().parent().parent().attr("class", "layout-panel");
+            //classObj.removeAttr("position");
+            // }
+
         });
     </script>
-
     <script language="javascript">
         var currShow;
         //在右侧框架中显示指定url的页面
@@ -119,9 +109,8 @@
             }
         }
     </script>
-
 </head>
-<body class="easyui-layout" onkeypress="Esc();" onkeydown="Esc();" >
+<body class="easyui-layout" onkeypress="Esc();" onkeydown="Esc();">
     <form id="form1" runat="server">
     <!--<div id="North" class="easyui-layout" data-options="region:'north'" split="true" style=" height:50px; line-height: 43px;padding: 0 10px;background-color:#05a7d8;" >
 	    <div style="text-align:left">
@@ -132,18 +121,19 @@
 
     </div>
 	</div>-->
-
     <div data-options="region:'center',border:false">
         <div class="easyui-layout" data-options="fit:true">
             <div data-options="region:'west',split:true" style="width: 200px;">
-
-                <div id="panelTitle" class="easyui-panel" title="流程查询" data-options="collapsible:true,border:false" style="height: auto">
-                <label id="menuList" ></label>
+                <div id="panelTitle" class="easyui-panel" title="流程查询" data-options="collapsible:true,border:false"
+                    style="height: auto">
+                    <label id="menuList">
+                    </label>
                 </div>
-
             </div>
-            <div data-options="region:'center',noheader:true" style="margin-left:0;overflow-y: hidden;-ms-overflow-y: hidden;" id="mainDiv">
-                <iframe id="context" scrolling="auto" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>
+            <div data-options="region:'center',noheader:true" style="margin-left: 0; overflow-y: hidden;
+                -ms-overflow-y: hidden;" id="mainDiv">
+                <iframe id="context" scrolling="auto" frameborder="0" src="" style="width: 100%;
+                    height: 100%;"></iframe>
             </div>
         </div>
     </div>

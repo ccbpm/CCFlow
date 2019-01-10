@@ -6845,6 +6845,7 @@
     </Content>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
+    <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
@@ -7416,6 +7417,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

@@ -140,7 +140,7 @@ namespace BP.WF.HttpHandler
                             continue;
                         }
                     }
-                    dtl.SetValByKey(pkval, 0);
+                    //dtl.SetValByKey(pkval, 0);
                     dtl.SetValByKey(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
                     dtl.PKVal = "0";
                     dtl.Insert();

@@ -100,8 +100,9 @@
             }
 
             $("#TB_Key").attr("placeholder", SearchTip);
-            $('#TB_Key').bind('input propertychange', function () {
-                InputKeyWordData();
+            $('#TB_Key').bind('keypress', function (event) {
+                if (event.keyCode == 13)      
+                    InputKeyWordData();
             });
             //输入关键字查询数据
             InputKeyWordData();
@@ -615,6 +616,8 @@
             <td>
                 <div id="searchDiv" style='text-align: left;'>
                     <input type="text" id="TB_Key" value="" class="keyWordInput" style="width: 50%;" placeholder="请输入关键字进行搜索"/>
+                    <label style="font-weight:normal;color:#cccccc;font-size:12px">回车执行查询</label>
+                    <input id="hiddenText" type="text" style="display:none" />
                 </div>
             </td>
         </tr>

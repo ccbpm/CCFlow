@@ -1912,19 +1912,19 @@ namespace BP.WF.HttpHandler
                 string v = item.DefValReal;
                 if (v.IndexOf('@') == -1)
                     mydrMain[item.KeyOfEn] = item.DefValReal;
-                    //替换默认值的@的
+                //替换默认值的@的
                 else
                 {
                     if (v.Equals("@WebUser.No"))
-                        mydrMain[item.KeyOfEn]= Web.WebUser.No;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.No;
                     else if (v.Equals("@WebUser.Name"))
-                        mydrMain[item.KeyOfEn]= Web.WebUser.Name;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.Name;
                     else if (v.Equals("@WebUser.FK_Dept"))
-                        mydrMain[item.KeyOfEn]= Web.WebUser.FK_Dept;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_Dept;
                     else if (v.Equals("@WebUser.FK_DeptName"))
-                        mydrMain[item.KeyOfEn]= Web.WebUser.FK_DeptName;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptName;
                     else if (v.Equals("@WebUser.FK_DeptNameOfFull") || v.Equals("@WebUser.FK_DeptFullName"))
-                        mydrMain[item.KeyOfEn]= Web.WebUser.FK_DeptNameOfFull;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptNameOfFull;
                     else if (v.Equals("@RDT"))
                     {
                         if (item.MyDataType == DataType.AppDate)
@@ -1937,7 +1937,7 @@ namespace BP.WF.HttpHandler
                         //如果是EnsName中字段
                         if (en.GetValByKey(v.Replace("@", "")) != null)
                             mydrMain[item.KeyOfEn] = en.GetValByKey(v.Replace("@", "")).ToString();
-                        
+
                     }
 
 
@@ -2810,6 +2810,7 @@ namespace BP.WF.HttpHandler
             //保存位置
             string filepath = "";
 
+
             //如果是天业集团则保存在ftp服务器上
             if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
             {
@@ -2861,14 +2862,18 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName;
+                string fileSavePath = en.EnMap.FJSavePath;
 
-                if (System.IO.File.Exists(savePath) == false)
-                    System.IO.File.Delete(savePath);
+                if (DataType.IsNullOrEmpty(fileSavePath) == true)
+                    fileSavePath = BP.Sys.SystemConfig.PathOfDataUser + enName;
 
-                filepath = savePath + "\\" + this.PKVal + "." + ext;
+                if (System.IO.Directory.Exists(fileSavePath) == false)
+                    System.IO.Directory.CreateDirectory(fileSavePath);
+
+                filepath = fileSavePath + "\\" + this.PKVal + "." + ext;
+
                 //存在文件则删除
-                if (System.IO.File.Exists(filepath) == false)
+                if (System.IO.File.Exists(filepath) == true)
                     System.IO.File.Delete(filepath);
 
                 FileInfo info = new FileInfo(filepath);

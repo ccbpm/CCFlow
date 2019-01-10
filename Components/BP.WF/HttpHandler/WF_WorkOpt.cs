@@ -927,61 +927,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 会签.
-        /// <summary>
-        /// 初始化会签页面.
-        /// </summary>
-        /// <returns></returns>
-        public string HuiQianToNodes_Init()
-        {
-            //获得会签的主数据.
-            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-
-
-            //把当前节点信息放入里面.
-            Node nd = new Node(this.FK_Node);
-            if (nd.CondModel == CondModel.ByLineCond)
-            {
-                /*如果当前的节点是按照line 的方向条件计算, 自动计算方向，自动计算接受人的模式.
-                 * 
-                 * 1, 先检查是否有会签人？没有会签人，就直接发送下去.
-                 * 2. 
-                 * 3. 
-                 */
-
-                GenerWorkerLists gwls = new GenerWorkerLists();
-                gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
-                if (gwls.Count == 1)
-                {
-                    /*只有一个处理人,就是他本人自己，就执行向下发送, 并把发送的信息提示给出来. */
-                    string msg = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID).ToMsgOfHtml();
-                    return "info@" + msg;
-                }
-
-
-                //执行会签的保存,这里为他计算了时间点.
-                HuiQian_SaveAndClose();
-
-
-                /*检查到达的节点有几个？*/
-                //nd.HisToNodes
-
-            }
-
-            DataSet ds = new DataSet();
-            if (nd.CondModel == CondModel.SendButtonSileSelect)
-            {
-                DataTable dtNode = nd.ToDataTableField("WF_Node");
-                ds.Tables.Add(dtNode);
-
-                //把到达节点的信息放入里面.
-            }
-
-            return "";
-        }
-
-        #endregion 会签
-
         #region 审核组件.
         /// <summary>
         /// 校验密码

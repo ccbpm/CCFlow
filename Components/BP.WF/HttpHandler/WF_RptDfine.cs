@@ -578,15 +578,19 @@ namespace BP.WF.HttpHandler
             GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
 
+            string title = "数据导出";
             switch (this.SearchType)
             {
                 case "My": //我发起的.
+                    title = "我发起的流程";
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
                     break;
                 case "MyDept": //我部门发起的.
+                    title = "我部门发起的流程";
                     qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
                     break;
                 case "MyJoin": //我参与的.
+                    title = "我参与的流程";
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
                     break;
                 case "Adminer":
@@ -599,7 +603,7 @@ namespace BP.WF.HttpHandler
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
 
-            string filePath = ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, this.SearchType, ges.GetNewEntity.EnMap.Attrs);
+            string filePath = ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, title, ges.GetNewEntity.EnMap.Attrs);
 
 
             return filePath;

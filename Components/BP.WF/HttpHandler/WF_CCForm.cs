@@ -3330,7 +3330,14 @@ namespace BP.WF.HttpHandler
                         ftpconn.SetCurrentDirectory(athDesc.FK_MapData);
 
                         //把文件放上去.
-                        ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
+                        try
+                        {
+                            ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
+                        }
+                        catch
+                        {
+                            throw new Exception("err@FTP端口号受限或者防火墙未关闭");
+                        }
                         ftpconn.Close();
 
                         //设置路径.

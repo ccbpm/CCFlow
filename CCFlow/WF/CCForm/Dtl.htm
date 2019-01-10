@@ -28,11 +28,11 @@
         $(function () {
             //加载JS文件
             try {
-                //var s = document.createElement('script');
-                //s.type = 'text/javascript';
-                //s.src = "../../DataUser/JSLibData/" + ensName + ".js";
-                //var tmp = document.getElementsByTagName('script')[0];
-                //tmp.parentNode.insertBefore(s, tmp);
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = "../../DataUser/JSLibData/" + ensName + ".js";
+                var tmp = document.getElementsByTagName('script')[0];
+                tmp.parentNode.insertBefore(s, tmp);
             }
             catch (err) {
             }
@@ -777,10 +777,7 @@
                         id="dtlDiv">
                         <table class="easyui-datagrid" id="dtlTable">
                         </table>
-                        <!--<div id="pp" style="background:#efefef;border:1px solid #ccc;"></div>-->
-                        <!--<div class="loadDate" style="text-align: center;">
-                                <img src="../Scripts/bootstrap/fonts/loading.gif" />加载中...
-                            </div>-->
+                        
                     </div>
                 </div>
             </div>
@@ -887,9 +884,7 @@
             //window.EditModel = EditModel;
 
             //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
-            //  if (EditModel != 0 && window.parent) {
-
-            if (window.parent) {
+            if (EditModel != 0 && window.parent) {
                 var ensName = GetQueryString("EnsName");
                 var refPKVal = GetQueryString("RefPKVal");
                 var FK_MapData = GetQueryString("FK_MapData");
@@ -898,7 +893,7 @@
                 window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, loadDtlTable, FK_MapData, FK_Node, FID, false);
                 return;
             } else {
-                alert('表格模式还没有实现.');
+                AddRow(EditModel); 
             }
         }
     </script>

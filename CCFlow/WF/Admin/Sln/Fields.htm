@@ -33,8 +33,8 @@
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
-                if (en.UIVisible == 0)
-                    continue;
+                //if (en.UIVisible == 0)
+                //    continue;
 
                 var html = "";
                 html += "<tr >";
@@ -133,8 +133,8 @@
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
-                if (en.UIVisible == 0)
-                   continue;
+                // if (en.UIVisible == 0)
+                //    continue;
 
                 ff = new Entity("BP.WF.Template.FrmField");
                 ff.SetPKVal(frmID + '_' + nodeID + '_' + en.KeyOfEn);
@@ -180,6 +180,8 @@
                 else
                     ff.IsWriteToGenerWorkFlow = 0;
 
+
+
                 //判断变化的是否需要保存.
                 var isNeedSave = false;
                 if (ff.IsWriteToGenerWorkFlow == 1)
@@ -194,8 +196,16 @@
                 if (en.UIIsEnable != ff.UIIsEnable)
                     isNeedSave = true;
 
+                if (en.DefVal != ff.DefVal)
+                    isNeedSave = true;
+
+                if (en.RegularExp != ff.RegularExp)
+                    isNeedSave = true;
+
                 if (isNeedSave == false)
                     continue;
+
+
 
                 ff.Insert();
 

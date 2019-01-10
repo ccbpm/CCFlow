@@ -116,11 +116,14 @@ namespace BP.WF.HttpHandler
                             continue;
                         }
 
+
                         if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
                         {
                             val = this.GetValFromFrmByKey("TB_" + i + "_" + attr.Key);
-                            dtl.SetValByKey(attr.Key, val);
-                            continue;
+                            if(attr.IsNum && val=="")
+                                val = "0";
+                             dtl.SetValByKey(attr.Key, val);
+                             continue;
                         }
 
                         if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)

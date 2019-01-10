@@ -15,14 +15,18 @@
         var mapExt;
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");
+//            $("#Msg").html("正在加载,请稍后......");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            var json = handler.DoMethodReturnString("DDLFullCtrl_Init");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=DDLFullCtrl_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (json) {
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=DDLFullCtrl_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (json) {
 
                     if (json.indexOf('err@') == 0) {
                         alert(json);
@@ -48,10 +52,10 @@
                         $("#TR_SQL").hide();
 
                     return;
-                }
-            });
+//                }
+//            });
 
-            $("#Msg").html("");
+//            $("#Msg").html("");
         });
 
         function changeDoc(obj) {

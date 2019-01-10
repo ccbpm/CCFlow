@@ -96,13 +96,10 @@ namespace BP.WF.HttpHandler
                 #endregion  查询出来从表数据.
 
                 #region 保存新加行.
-                for (int i = 0; i < 50; i++)
+                int newRowCount = this.GetRequestValInt("NewRowCount");
+                for (int i = 0; i < newRowCount; i++)
                 {
-                    string pkval = "TB_"+i+"_"+dtl.PK;
-                    var val=this.GetValFromFrmByKey(pkval, "");
-                    if (val.Equals(""))
-                        continue;
-
+                    string val = "";
                     foreach (Attr attr in map.Attrs)
                     {
 

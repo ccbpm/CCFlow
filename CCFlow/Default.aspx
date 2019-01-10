@@ -2,17 +2,17 @@
 <html>
 	<head>
 		<title>ccbpm导航页</title>
-	    <link href="DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+	    <link href="DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
         <style type="text/css">
            body
            {
-               
            }
            li
            {
-               font-size:14px;
-               margin:5px;
-               border-style:none;
+              font-size:14px;
+              margin:5px;
+              border-style:none;
+              color:Gray
            }
         </style>
         <base target="_blank" />
@@ -24,16 +24,19 @@
     <body >
     <center>
   <table style="text-align:center; border:1px; width:70%;" >
+
+   
   <caption style="CaptionMsgLong"    >驰骋工作流程引擎ccbpm测试导航</caption>
   <tr>
   <th>多看文档少走弯路，学好ccflow受益一生。</th>
   </tr>
 
   <tr>
-  <td>
+  <td style="text-align:left">
     <ul>
-    <li><font size="30" color="green" ><a href="WF/Admin/CCBPMDesigner/Login.htm" ><b>进入流程设计器</b></a></font> 用户名:admin 密码:123</li>
-    <li> <a href='./WF/AppClassic/Login.htm' >前台登录-经典模式</a></li>
+    <li><font size="30" color="green" ><a href="WF/Admin/CCBPMDesigner/Login.htm" ><b>进入流程设计器</b></a></font> 用户名:admin 密码:123 </li>
+    <li> <a href='./WF/AppClassic/Login.htm' >前台登录-经典模式</a> |  <a href='https://ke.qq.com/course/322297?tuin=2f4f340f' target=_blank ><b>视频教程</b></a></li>
+
     <li> <a href="http://ccflow.org" target=_blank >ccflow 官方网站</a> |  <a href="http://bbs.ccflow.org" target=_blank >  技术论坛</a> </li>
     <li> 商务问题 QQ:<span class="style4">793719823</span> 电话:<span  class="style5">0531-82374939 , 18660153393</span>  - <a href="http://ccflow.org/CCS/Site/PG.aspx" target=_blank > 申请专业人员评估</a> </li> 
     </ul>

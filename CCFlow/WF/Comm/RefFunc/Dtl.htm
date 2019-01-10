@@ -411,11 +411,13 @@
         }
 
         //新建.
+        var newRowCount = 0;//新增行
         function New() {
-
+            newRowCount = newRowCount + 1;
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
             var dtl = new Entity(enName);
+
             newRowIdx++;
             dtl.OID = newRowIdx;
             dtl.RefPK = GetQueryString("RefVal");
@@ -452,7 +454,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             handler.AddUrlData();  //增加参数属性.
             handler.AddFormData();
-
+            handler.AddPara("NewRowCount", newRowCount);
             var data = handler.DoMethodReturnString("Dtl_Save");
             console.log(handler.getParams());
             if (data.indexOf("err@")==0)

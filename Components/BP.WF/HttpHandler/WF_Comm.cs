@@ -2643,8 +2643,7 @@ namespace BP.WF.HttpHandler
         {
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~", "'");
-
-
+            sql = sql.Replace("[%]", "%");  //防止URL编码
 
             return DBAccess.RunSQL(sql).ToString();
         }
@@ -2656,7 +2655,7 @@ namespace BP.WF.HttpHandler
         {
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~", "'");
-
+            sql = sql.Replace("[%]", "%");  //防止URL编码
 
 
 #warning zhoupeng把这个去掉了. 2018.10.24

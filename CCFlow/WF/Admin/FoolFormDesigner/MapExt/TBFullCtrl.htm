@@ -2,15 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>为文本框填充其它控件</title>
-     <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-     
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         var mapExt;
         //页面启动函数.
         $(function () {
@@ -102,128 +101,118 @@
 
             if (window.confirm('您确定要删除吗？') == false)
                 return false;
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=TBFullCtrl_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    alert(data);
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString('FK_MapData'));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            var data = handler.DoMethodReturnString("TBFullCtrl_Delete");
+            alert(data);
+            window.location.href = window.location.href;
+            return;
         }
     </script>
 </head>
-<body  >
-
-<form id="cc">
-
-<div id="Msg"></div>
-
-
-<table id="table" style="width:100%;">
-	<caption>为文本框填充其它控件</caption>
- 	<tr> 
- 		<td>数据源类型 </td>
- 		<td> 
-			<select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
-			<option value="0">执行SQL</option>
-			<option value="1">执行url返回JSON</option>
-			<option value="2">执行CCFromRef.js返回JSON</option>
-			</select>  
-		</td>
- 	</tr>
-
-	<tr>
-		<th colspan="2"> 数据源</th>
-	</tr>
-	<tr>
-		<td colspan="2"> 执行数据源
-			<a href="javascript:ShowHidden('sqlexp')"  >帮助: </a>
-			<div id='sqlexp'  style='color:Gray; display:none'>
-				<ul>
-				 <li>填充SQL帮助:</li>
-				 <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
-				 <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-				 <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-				 <li>4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM WF_Emp WHERE No LIKE '@Key%' </li>
-				 <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
-				 <li><img alt="" src="../Img/TBCtrlFull.png" /></li>
-				 </ul>
-				 <ul>
-					 <li>填充URL帮助:</li>
-					 <li>/DataUser/Handler.ashx?xxx=sss </li>
-					 <li>方法的格式为:</li>
-					 <li>MyFunName</li>
-				</ul>
-			</div>
-		 </td>
-	</tr>
-
-	<tr> 
-		<td colspan="2" style="width:100%;"> 
-			<textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:95%;" > </textarea> 
-		</td>
-	</tr>
-
-
-      <!-- 填充其他数据控件的数据源 -->
-    <tr>
-        <th colspan="4">
-            <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
-            <div id="tabsT" style="color: Gray; display: none">
-                <ul>
-                    <li>该数据源可以为空</li>
-                    <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
-                    <li>数据源必须包含@Key变量，并且当前模式为单选。</li>
-                    <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng FROM Port_Dept WHERE No='@Key'</li>                        
-                </ul>
-            </div>
-        </th>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
-        </td>
-    </tr>
-
-    <!-- 数据列名与中文意思对照 -->
-    <tr>
-        <th colspan="2">
-            <a href="javascript:ShowHidden('tab6')">数据列名与中文意思对照</a>
-            <div id="tab6" style="color: Gray; display: none">
-                <ul>
-                    <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.</li>
-                    <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
-                </ul>
-            </div>
-        </th>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <input id="TB_Tag3" name="TB_Tag3" style="width: 100%;" />
-        </td>
-    </tr>
-	<tr>
-		<td colspan=2 >
-		
-		<input type="button" value="加载模版" onclick="LoadTemplate()" id="TBFullCtrl" />
-		<input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-		<input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-		
-		<input type="button" value="填充从表" onclick="FullDtl()" id="Btn_FullDtl" title = "当数据填充后，需要改变指定的从表数据。比如：主表选择人员，从表人员简历信息。"  />
-		<input type="button" value="填充下拉框" onclick="FullDDL()" id="Btn_FullDDL"  title="当数据填充后，需要改变指定的下拉框内容。比如：选择人员后，有一个人员岗位的下拉框，该下拉框的内容仅仅需要显示人员岗位。" />
-		 </td>
-	</tr>
-
-</table>
-
-<script type="text/javascript">
+<body>
+    <form id="cc">
+    <div id="Msg">
+    </div>
+    <table id="table" style="width: 100%;">
+        <caption>
+            为文本框填充其它控件</caption>
+        <tr>
+            <td>
+                数据源类型
+            </td>
+            <td>
+                <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                    <option value="0">执行SQL</option>
+                    <option value="1">执行url返回JSON</option>
+                    <option value="2">执行CCFromRef.js返回JSON</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                数据源
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                执行数据源 <a href="javascript:ShowHidden('sqlexp')">帮助: </a>
+                <div id='sqlexp' style='color: Gray; display: none'>
+                    <ul>
+                        <li>填充SQL帮助:</li>
+                        <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
+                        <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                        <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                        <li>4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM
+                            WF_Emp WHERE No LIKE '@Key%' </li>
+                        <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
+                        <li>
+                            <img alt="" src="../Img/TBCtrlFull.png" /></li>
+                    </ul>
+                    <ul>
+                        <li>填充URL帮助:</li>
+                        <li>/DataUser/Handler.ashx?xxx=sss </li>
+                        <li>方法的格式为:</li>
+                        <li>MyFunName</li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="width: 100%;">
+                <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 95%;"> </textarea>
+            </td>
+        </tr>
+        <!-- 填充其他数据控件的数据源 -->
+        <tr>
+            <th colspan="4">
+                <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
+                <div id="tabsT" style="color: Gray; display: none">
+                    <ul>
+                        <li>该数据源可以为空</li>
+                        <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
+                        <li>数据源必须包含@Key变量，并且当前模式为单选。</li>
+                        <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng FROM Port_Dept WHERE No='@Key'</li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+            </td>
+        </tr>
+        <!-- 数据列名与中文意思对照 -->
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('tab6')">数据列名与中文意思对照</a>
+                <div id="tab6" style="color: Gray; display: none">
+                    <ul>
+                        <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.</li>
+                        <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input id="TB_Tag3" name="TB_Tag3" style="width: 100%;" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="加载模版" onclick="LoadTemplate()" id="TBFullCtrl" />
+                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+                <input type="button" value="填充从表" onclick="FullDtl()" id="Btn_FullDtl" title="当数据填充后，需要改变指定的从表数据。比如：主表选择人员，从表人员简历信息。" />
+                <input type="button" value="填充下拉框" onclick="FullDDL()" id="Btn_FullDDL" title="当数据填充后，需要改变指定的下拉框内容。比如：选择人员后，有一个人员岗位的下拉框，该下拉框的内容仅仅需要显示人员岗位。" />
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
 	
-</script>
-</form>
+    </script>
+    </form>
 </body>
 </html>

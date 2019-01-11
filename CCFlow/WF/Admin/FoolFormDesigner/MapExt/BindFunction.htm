@@ -19,7 +19,6 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
-
     <base target="_self" />
     <script type="text/javascript">
         function Esc() {
@@ -27,7 +26,7 @@
                 window.close();
             return true;
         }
-         
+
         /*隐藏与显示.*/
         function ShowHidden(ctrlID) {
 
@@ -39,7 +38,6 @@
             }
         }
     </script>
-
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -64,9 +62,9 @@
                 $("#Table1 tr:last").after(newRow);
             }
         });
-       
 
-        function PushWayText(EventListOfNode,PushWay) {
+
+        function PushWayText(EventListOfNode, PushWay) {
             var ret = { "onblur": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"],
                 "onchange": ["不发送", "发送给下一个节点的所有接受人", "向指定的字段发送", "其他节点的处理人"],
                 "onclick": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人"],
@@ -91,26 +89,19 @@
 
             var formData = new FormData($("#cc")[0]);
 
-            $.ajax({
-                url: Handler + "?DoType=Bill_Save&CheckBoxIDs=" + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                type: 'POST',
-                data: formData,
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("Bill_Save");
 
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
 
-                    alert(data);
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
+            alert(data);
+            window.location.href = window.location.href;
+            return;
         }
 
         function BindFunctionEntity(eventType) {
@@ -121,33 +112,44 @@
             window.location.href = url;
         }
     </script>
-
     <style type="text/css">
-    li 
-    {
-        padding:3px 0;
+        li
+        {
+            padding: 3px 0;
         }
     </style>
-    
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
-    <form method="post"   id="form1">    
-    <div style="margin:8px">
+    <form method="post" id="form1">
+    <div style="margin: 8px">
         <table id="Table1" style="width: 100%">
             <caption>
-                <div style="float: left"> 控件绑定function</div>
-                <div style="float: right"> <a href="http://ccbpm.mydoc.io" target="_blank">帮助</a>  </div>
+                <div style="float: left">
+                    控件绑定function</div>
+                <div style="float: right">
+                    <a href="http://ccbpm.mydoc.io" target="_blank">帮助</a>
+                </div>
             </caption>
             <tr>
-                <th> 序 </th>
-                <th> 事件标记 </th>
-                <th> 函数名称 </th>
-                <th> 备注 </th>
-                <th>操作 </th>
+                <th>
+                    序
+                </th>
+                <th>
+                    事件标记
+                </th>
+                <th>
+                    函数名称
+                </th>
+                <th>
+                    备注
+                </th>
+                <th>
+                    操作
+                </th>
             </tr>
         </table>
         <fieldset style="border: 0px;">
-        <input type="button" value="新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp; 
+            <input type="button" value="新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
             <div id="state" style="display: none; color: Gray">
                 <ul>
                     <li><a href="javascript:BindFunctionEntity('blur');">onblur - 失去焦点</a> </li>

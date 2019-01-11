@@ -128,7 +128,7 @@
             $("#tabs").tabs('select', '枚举信息');
 
             var str = '<table>';
-            for (var i = 0; i < 21; i++) {
+            for (var i = 0; i < 31; i++) {
 
                 str += '<tr>';
                 str += "<td> " + i + "</td> ";
@@ -156,7 +156,7 @@
             var str = '<table>';
             var long = 0;
             var enumCount = cfgVals.length + 10;
-            enumCount = enumCount < 21 ? 21 : enumCount;
+            enumCount = enumCount < 31 ? 31 : enumCount;
             for (var i = 0; i < enumCount; i++) {
                 var keyValue = [];
                 keyValue = $.grep(cfgVals, function (value) {
@@ -216,7 +216,7 @@
             se.Delete("EnumKey", keyofEn);
 
             var strs = '';
-            for (var i = 0; i < 20; i++) {
+            for (var i = 0; i < 30; i++) {
                 var v = $("#TB" + i).val();
                 if (v == '' || v == null)
                     continue;

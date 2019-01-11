@@ -2,14 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>新建字段向导</title>
-    
     <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
-	<script type="text/javascript" src="../../Scripts/jquery/jquery.min.js"></script>
-
-	<script type="text/javascript" src="../../Scripts/jquery/jquery.easyui.min.js"></script>
-
-     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
+    <script type="text/javascript" src="../../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery/jquery.easyui.min.js"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -112,33 +109,31 @@
 
             var fType = $('input[name="RB_FType"]:checked').val();
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Port");
+            handler.AddPara("Name", encodeURIComponent(name));
+            handler.AddPara("FType", fType);
+            handler.AddPara("FK_MapData", fk_mapdata);
+            handler.AddPara("KeyOfEn", no);
+            handler.AddPara("GroupField", groupID);
+            var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FieldTypeSelect_Create&Name=" + encodeURIComponent(name) + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&GroupField=" + groupID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            if (data.indexOf("err@") >= 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf("err@") >= 0) {
-                        alert(data);
-                        return;
-                    }
+            var url = data.replace('url@', '');
+            window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
+            return;
 
-                    var url = data.replace('url@', '');
-                    window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
-                    return;
+            if (confirm('创建成功,您还要继续创建吗？') == true) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+            } else {
 
-                    if (confirm('创建成功,您还要继续创建吗？') == true) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                    } else {
-
-                        $("#TB_No").val('');
-                        $("#TB_Name").val('');
-                    }
-                }
-            });
+                $("#TB_No").val('');
+                $("#TB_Name").val('');
+            }
         }
 
         function ContainsChinese(str) {
@@ -153,139 +148,147 @@
     <!--<base target="_self" /> -->
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
 </head>
-<body >
+<body>
+    <form id="cc">
+    <table style="width: 100%;">
+        <tr>
+            <th colspan="2">
+                新增普通类型的字段
+            </th>
+        </tr>
+        <tr>
+            <td valign="top" style="width: auto">
+                <!-- *******************************************************  开始普通类型的字段    -->
+                <table>
+                    <tr>
+                        <td nowarp="true">
+                            中文名
+                        </td>
+                        <td>
+                            <input type="text" name="TB_Name" id="TB_Name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowarp="true">
+                            英文名
+                        </td>
+                        <td>
+                            <input type="text" name="TB_No" id="TB_No" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
+                            <label for="RB_QP">
+                                全拼</label>
+                            <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
+                            <label for="RB_JP">
+                                简拼</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a href="#" onclick="Create();" class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">
+                                创建字段</a>
+                            <!--<a href="#"  onclick="CreateAndNew();"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">保存+创建</a>-->
+                            <!--<input type="button" id="Btn_Create" value="创建新字段" name="Btn_Create"  onclick="Create();" />-->
+                        </td>
+                    </tr>
+                </table>
+                <!-- end *******************************************************  普通类型的字段    -->
+            </td>
+            <td style="width: 60%">
+                <input type="radio" name="RB_FType" id="RB_F_1" value="1" />
+                <label for="RB_F_1">
+                    字符型。<font color="Gray">如:姓名、地址、邮编、电话。</font><br />
+                </label>
+                <input type="radio" name="RB_FType" id="RB_F_2" value="2" />
+                <label for="RB_F_2">
+                    整数型。<font color="Gray">如:年龄、个数。</font><br />
+                </label>
+                <input type="radio" name="RB_FType" id="RB_F_8" value="8" />
+                <label for="RB_F_8">
+                    金额型。<font color="Gray">如:单价、薪水。</font><br />
+                </label>
+                <input type="radio" name="RB_FType" id="RB_F_3" value="3" />
+                <label for="RB_F_3">
+                    浮点型。<font color="Gray">如：身高、体重、长度。</font><br />
+                </label>
+                <input type="radio" name="RB_FType" id="RB_F_5" value="5" />
+                <label for="RB_F_5">
+                    双精度。<font color="Gray">如：亿万、兆数值类型单位。</font><br />
+                </label>
+                <input type="radio" name="RB_FType" id="RB_F_6" value="6" />
+                <label for="RB_F_6">
+                    日期型。<font color="Gray">如：出生日期、发生日期。</font><br />
+                </label>
+                <input type="radio" name="RB_FType" id="RB_F_7" value="7" />
+                <label for="RB_F_7">
+                    日期时间型。<font color="Gray">如：发生日期时间。</font><br />
+                </label>
+                <input type="radio" name="RB_FType" id="RB_F_4" value="4" />
+                <label for="RB_F_4">
+                    Boole型(是/否)。<font color="Gray">如：是否完成、是否达标。</font><br />
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                新增枚举字段(用来表示，状态、类型...的数据。)
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <script type="text/javascript">
 
-<form id="cc">
+                    var groupID = GetQueryString("GroupField");
 
-<table style="width:100%;">
-<tr>
-  <th colspan="2">新增普通类型的字段</th>
-</tr>
+                    function Enum(doType) {
+                        window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                    }
 
-<tr>
-<td valign="top" style="width:auto" >
-<!-- *******************************************************  开始普通类型的字段    -->
-<table>
-<tr>
-<td nowarp="true" >中文名</td>
-<td> 
-<input type="text" name="TB_Name" id="TB_Name"  /> 
-    </td>
-</tr>
+                    function Table(doType) {
+                        window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                    }
 
-<tr>
-<td  nowarp="true">英文名</td>
-<td> 
-
-<input type="text" name="TB_No" id="TB_No" /> 
-
- </td>
-</tr>
-
-<tr>
-  <td colspan="2"> 
-   <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked"  value="ziduanquanpin" /> <label for="RB_QP">全拼</label>   
-   <input type="radio" name="RB_QPJP" id="RB_JP"  value="ziduanjianpin" />  <label for="RB_JP">简拼</label>    
-  </td>
-</tr>
-
-<tr>
-  <td colspan="2" > 
-
-  <a href="#"  onclick="Create();"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">创建字段</a>
-  <!--<a href="#"  onclick="CreateAndNew();"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">保存+创建</a>-->
-
-  <!--<input type="button" id="Btn_Create" value="创建新字段" name="Btn_Create"  onclick="Create();" />-->
-  </td>
-</tr>
-
-</table>
-
-<!-- end *******************************************************  普通类型的字段    -->
- </td>
-
-<td style=" width:60%"> 
-
-<input type="radio" name="RB_FType" id="RB_F_1"  value="1" /> <label for="RB_F_1">字符型。<font color="Gray" >如:姓名、地址、邮编、电话。</font><br/></label> 
-<input type="radio" name="RB_FType" id="RB_F_2"  value="2" /> <label for="RB_F_2">整数型。<font color="Gray" >如:年龄、个数。</font><br/></label> 
-<input type="radio" name="RB_FType" id="RB_F_8"  value="8" /> <label for="RB_F_8">金额型。<font color="Gray" >如:单价、薪水。</font><br/></label> 
-<input type="radio" name="RB_FType" id="RB_F_3"  value="3" /> <label for="RB_F_3">浮点型。<font color="Gray" >如：身高、体重、长度。</font><br/></label> 
-<input type="radio" name="RB_FType" id="RB_F_5"  value="5" /> <label for="RB_F_5">双精度。<font color="Gray" >如：亿万、兆数值类型单位。</font><br/></label> 
-<input type="radio" name="RB_FType" id="RB_F_6"  value="6" /> <label for="RB_F_6">日期型。<font color="Gray" >如：出生日期、发生日期。</font><br/></label> 
-<input type="radio" name="RB_FType" id="RB_F_7"  value="7" /> <label for="RB_F_7">日期时间型。<font color="Gray" >如：发生日期时间。</font><br/></label> 
-<input type="radio" name="RB_FType" id="RB_F_4"  value="4" /> <label for="RB_F_4">Boole型(是/否)。<font color="Gray" >如：是否完成、是否达标。</font><br/></label> 
-
-</td>
-
-</tr>
-
-<tr>
-<th colspan="2">新增枚举字段(用来表示，状态、类型...的数据。)</th>
-</tr>
-
-<tr>
-<td colspan="2">
-
-<script type="text/javascript" >
-
-    var groupID = GetQueryString("GroupField");
-
-    function Enum(doType) {
-        window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
-    }
-
-    function Table(doType) {
-        window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
-    }
-
-    function TableGuide() {
-        ///WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>
-        window.location.href = '/WF/Admin/FoolFormDesigner/CreateSFGuide.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
-    }
-</script>
-
-
-<ul>
-<li><a href="javascript:Enum('AddEnum');"  ><b>枚举型</b></a> -  比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li> 	
-<li> <a  href="javascript:Enum('NewEnum');" >新建枚举 </a> </li>
-</ul>	
-
- </td>
-</tr>
-
-
-<tr>
-<th colspan="2"> 新增下拉框(外键、外部表、WebServices)字典表字段(通常只有编号名称两个列)</th>
-</tr>
-
-<tr>
-<td colspan="2" >
-<ul>
-<li><a href="javascript:Table('AddSFTable')" ><b>外键、外部数据、webservices数据类型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。</li>
-<li><a href="javascript:TableGuide()"  >新建字典表</a></li>
-</ul>
-</td>
-</tr>
-
-<tr>
-<th colspan="2"> 从已有表里导入字段</th>
-</tr>
-
-<tr>
-<td colspan="2">
-
-<ul>
-<li><a href="javascript:WinOpen('ImpTableField.htm?FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>');" ><b>导入字段</b></a>
- &nbsp;&nbsp;从现有的表中导入字段,以提高开发的速度与字段拼写的正确性.</li> 	
-</ul>
-
- </td>
-</tr>
- 
-
-</table>
-
-</form>
-
+                    function TableGuide() {
+                        ///WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>
+                        window.location.href = '/WF/Admin/FoolFormDesigner/CreateSFGuide.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                    }
+                </script>
+                <ul>
+                    <li><a href="javascript:Enum('AddEnum');"><b>枚举型</b></a> - 比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li>
+                    <li><a href="javascript:Enum('NewEnum');">新建枚举 </a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                新增下拉框(外键、外部表、WebServices)字典表字段(通常只有编号名称两个列)
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <ul>
+                    <li><a href="javascript:Table('AddSFTable')"><b>外键、外部数据、webservices数据类型</b></a> - 比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。</li>
+                    <li><a href="javascript:TableGuide()">新建字典表</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                从已有表里导入字段
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <ul>
+                    <li><a href="javascript:WinOpen('ImpTableField.htm?FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>');">
+                        <b>导入字段</b></a> &nbsp;&nbsp;从现有的表中导入字段,以提高开发的速度与字段拼写的正确性.</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    </form>
 </body>
 </html>

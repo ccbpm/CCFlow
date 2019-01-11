@@ -29,12 +29,17 @@
             var rptNo = unescape(GetQueryString("RptNo"));
             var flowNo = unescape(GetQueryString("FK_Flow"));
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=S5SearchCond_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_RptDfine");
+            handler.AddPara("RptNo", rptNo);
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnString("S5SearchCond_Init");
+
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=S5SearchCond_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf("@") == 0) {
                         alert(data);
@@ -82,8 +87,8 @@
                     }
 
                     return;
-                }
-            });
+//                }
+//            });
         }
 
         function Save() {
@@ -102,15 +107,23 @@
                     Fields += "*" + item.id;
                 }
             }
-            $.ajax({
-                type: 'GET',
-                async: true,
-                url: Handler + "?DoType=S5SearchCond_Save&FK_Flow=" + FK_Flow + "&RptNo=" + RptNo + "&Fields=" + Fields + "&IsSearchKey=" + IsSearchKey + "&DTSearchWay=" + DTSearchWay + "&DTSearchKey=" + DTSearchKey + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_RptDfine");
+            handler.AddPara("RptNo", RptNo);
+            handler.AddPara("FK_Flow", FK_Flow);
+            handler.AddPara("Fields", Fields);
+            handler.AddPara("IsSearchKey", IsSearchKey);
+            handler.AddPara("DTSearchWay", DTSearchWay);
+            handler.AddPara("DTSearchKey", DTSearchKey);
+            var data = handler.DoMethodReturnString("S5SearchCond_Save");
+//            $.ajax({
+//                type: 'GET',
+//                async: true,
+//                url: Handler + "?DoType=S5SearchCond_Save&FK_Flow=" + FK_Flow + "&RptNo=" + RptNo + "&Fields=" + Fields + "&IsSearchKey=" + IsSearchKey + "&DTSearchWay=" + DTSearchWay + "&DTSearchKey=" + DTSearchKey + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
                     alert(data)
-                }
-            });
+//                }
+//            });
         }
     </script>
     <base target="_self" /> 

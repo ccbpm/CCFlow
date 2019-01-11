@@ -1002,11 +1002,9 @@
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmEnumeration.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmHiddenField.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmImg.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTable.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTableAttrEdit.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTextBox.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTextBoxChoseOneField.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Excel.js" />
@@ -1014,7 +1012,6 @@
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FrmEvent.htm" />
     <Content Include="WF\Admin\CCFormDesigner\GoToFrmDesigner.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Img\CH.png" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrc.png" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrcTable.png" />
@@ -1243,7 +1240,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Img\TBCtrlFull.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Img\Track.png" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Exp.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Imp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldDone.htm" />
@@ -1316,13 +1312,11 @@
     <Content Include="WF\Admin\Img\Frm.png" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Port\AdminOrgList.htm" />
-    <Content Include="WF\Admin\Port\Handler.ashx" />
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
     <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
     <Content Include="WF\Admin\RptDfine\Default.htm" />
-    <Content Include="WF\Admin\RptDfine\Handler.ashx" />
     <Content Include="WF\Admin\RptDfine\Img\Order.png" />
     <Content Include="WF\Admin\RptDfine\Img\Reset.png" />
     <Content Include="WF\Admin\RptDfine\Img\SearchCond.png" />
@@ -1383,7 +1377,6 @@
     <Content Include="WF\CCForm\DtlImp.htm" />
     <Content Include="WF\CCForm\DtlImpByExcel.htm" />
     <Content Include="WF\CCForm\DtlImpByJSON.htm" />
-    <Content Include="WF\CCForm\DtlOpt.htm" />
     <Content Include="WF\CCForm\DtlReadonly.htm" />
     <Content Include="WF\CCForm\FilesView.aspx" />
     <Content Include="WF\CCForm\Frm.htm" />
@@ -7406,15 +7399,7 @@
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -7422,19 +7407,7 @@
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Port\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

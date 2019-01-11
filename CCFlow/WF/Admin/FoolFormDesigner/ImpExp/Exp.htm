@@ -1,9 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
-   <title>表单模版导出</title>
-
+    <meta charset="UTF-8" />
+    <title>表单模版导出</title>
     <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -14,7 +13,7 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../../Scripts/download.js"></script>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
         //初始化页面函数.....
         $(function () {
 
@@ -24,17 +23,11 @@
 
             $("#downli").html("驰骋工作流引擎已经为您生成了流程模版文件，<a href=\"javascript:Down();\" >请点击这里下载到本机</a>。");
 
-            var doType = "APICodeFEE_Init&FK_Flow=" + fk_flow;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("FK_Flow", fk_flow);
+            var data = handler.DoMethodReturnString("APICodeFEE_Init");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                dataType: 'html',
-                url: Handler + "?DoType=" + doType,
-                success: function (data) {
-                    $("#Msg").html(data);
-                }
-            });
+            $("#Msg").html(data);
         });
 
         function Down() {
@@ -53,22 +46,22 @@
                 return;
             }
 
-            download(data, md.Name+".xml", "xml");
+            download(data, md.Name + ".xml", "xml");
             return;
         }
 
     </script>
-
-
 </head>
-<body >
- 
+<body>
     <table style="width: 100%">
-        <caption> 表单模版导出  </caption>
+        <caption>
+            表单模版导出
+        </caption>
         <tr>
-            <td valign="top" style="width:30%;">
+            <td valign="top" style="width: 30%;">
                 <fieldset>
-                    <legend> <img src="../../../Img/Btn/Help.gif" alt="" />关于表单模版</legend>
+                    <legend>
+                        <img src="../../../Img/Btn/Help.gif" alt="" />关于表单模版</legend>
                     <ol>
                         <li>ccbpm生成的流程模版是一个特定格式的xml文件。</li>
                         <li>它是流程引擎模版与表单引擎模版的完整的组合体。</li>
@@ -89,8 +82,6 @@
                     </ol>
                 </fieldset>
             </td>
-
-
             <td valign="top">
                 <fieldset>
                     <legend>下载到本机 </legend>
@@ -106,36 +97,27 @@
                         请先注册ccbpm私有云账号
                         <!--<a href='javascript: window.parent.closeTab("用户注册");window.parent.addTab("RegUser", "用户注册", "../../../WF/Admin/Clound/RegUser.aspx","");'>注册</a>-->
                         <div />
-
                         <ul>
                             <li>感谢您共享该文件.</li>
                             <li>导出到公有云的流程模版需要经过审核才能发布。 </li>
-                            <li>选择模版类别：
-                            </li>
+                            <li>选择模版类别： </li>
                         </ul>
-                       
                 </fieldset>
                 <fieldset>
                     <legend>
                         <img src="../../CCBPMDesigner/Img/FlowPrivate.png" />上传到私云服务器(暂停开放)</legend>
-                   
                     <div style='color: Gray; margin-top: 10px; margin-bottom: 10px'>
                         请先注册ccbpm私有云账号
-                        
                         <!--<a href='javascript: window.parent.closeTab("用户注册");window.parent.addTab("RegUser", "用户注册", "../../../WF/Admin/Clound/RegUser.aspx","");'>注册</a>
 -->
                         <div />
-                       
                         <ul>
                             <li>您可以把此模版放入到您的私有云里，我们会好好的为您永久的保管。.</li>
-                            <li>选择模版类别：
-                            </li>
+                            <li>选择模版类别： </li>
                         </ul>
-                       
                 </fieldset>
             </td>
-         </tr>
+        </tr>
     </table>
-
 </body>
 </html>

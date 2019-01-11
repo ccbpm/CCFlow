@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet"
+        type="text/css" />
     <link href="../../../Comm/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .style1
@@ -221,7 +222,7 @@
                     treeJson.push({
                         "id": folder.No,
                         "text": folder.Name,
-                        "children": creatTreeChildern(treedata, folder.No,data),
+                        "children": creatTreeChildern(treedata, folder.No, data),
                         "state": "closed"
                     });
                 }
@@ -241,7 +242,7 @@
             return treeJson;
         }
 
-        function creatTreeChildern(jsonArray, parentNo,data) {
+        function creatTreeChildern(jsonArray, parentNo, data) {
             var childList = []
             for (var i = 0; i < jsonArray.length; i++) {
                 var folder = jsonArray[i];
@@ -249,25 +250,24 @@
                     childList.push({
                         "id": folder.No,
                         "text": folder.Name,
-                        "children": creatTreeChildern(jsonArray, folder.No,data),
+                        "children": creatTreeChildern(jsonArray, folder.No, data),
                         "state": "closed"
                     });
                 }
             }
-             $.grep(data["Sys_MapData"], function (map) {
-                    //选出当前节点的二级节点
-                 return map.FK_FormTree == parentNo;
+            $.grep(data["Sys_MapData"], function (map) {
+                //选出当前节点的二级节点
+                return map.FK_FormTree == parentNo;
 
-                }).forEach(function (frm) {
-                    childList.push({
-                        "text": frm.Name,
-                        "id": frm.No
-                    });
+            }).forEach(function (frm) {
+                childList.push({
+                    "text": frm.Name,
+                    "id": frm.No
                 });
+            });
             return childList;
         }
     </script>
-
     <script type="text/javascript">
         function addTab(title, url) {
             if ($('#tt').tabs('exists', title)) {
@@ -333,57 +333,42 @@
             var name = $("input").val();
             formData.append("file", $("#localXmlFile")[0].files[0]);
             formData.append("name", name);
-          
 
-            $.ajax({
-                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
-                type: 'POST',
-                data: formData,
-                // 告诉jQuery不要去处理发送的数据
-                processData: false,
-                dataType: 'html',
-                // 告诉jQuery不要去设置Content-Type请求头
-                contentType: false,
-                beforeSend: function () {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddUrlData();
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnString("Imp_LoadFrmTempleteFromLocalFile");
 
-                },
-                success: function (data) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+            window.parent.location.href = window.parent.location.href;
 
-                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-                    window.parent.location.href = window.parent.location.href;
-                },
-                error: function (data) {
-                    alert("系统错误:" + data);
-                    return;
-                }
-            });
         }
 
         //从表单库导入
         function SaveImpFromLib() {
             var nodeId = selFrmNode.value;
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Imp_FromsCopyFrm&FK_MapData=" + frmID + "&FromFrmID=" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("FromFrmID", nodeId);
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("Imp_FromsCopyFrm");
 
-                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-                    window.parent.location.href = window.parent.location.href;
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                }
-            });
+            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+            window.parent.location.href = window.parent.location.href;
+
         }
 
         //从其他流程导入
@@ -403,7 +388,6 @@
         }
 
     </script>
-
     <!--04.从外部数据源导入-->
     <script type="text/javascript">
         function doImpFromOutside() {
@@ -429,13 +413,16 @@
 			hid_FK_SFDBSrc.value = FK_SFDBSrc;
 			//hid_STable.value = GetQueryString("STable");
             //url: Handler + "?DoType=Imp_Src_Step2_Init&FK_MapData=" + frmID + "&FK_SFDBSrc=" + srcName + "&STable=" + GetQueryString("STable"),
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_SFDBSrc", FK_SFDBSrc);
+            var data = handler.DoMethodReturnString("Imp_Src_Step2_Init");
 
-            $.ajax({
-                type: 'GET',
-                async: true,
-                url: Handler + "?DoType=Imp_Src_Step2_Init&FK_SFDBSrc=" + FK_SFDBSrc,
-                dataType: 'html',
-                success: function (data) {
+//            $.ajax({
+//                type: 'GET',
+//                async: true,
+//                url: Handler + "?DoType=Imp_Src_Step2_Init&FK_SFDBSrc=" + FK_SFDBSrc,
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -480,8 +467,8 @@
                         Table_Cols(data);
 
 					}
-                }
-            });
+//                }
+//            });
         }
 
         //2.2 点击表名获取表下的所有的列
@@ -495,23 +482,19 @@
             $(event.srcElement).css('color','red');
 
             //2.获取数据 FK_MapData=ND18507&FK_SFDBSrc=NKApp&STable=ND104
-            $.ajax({
-                type: 'GET',
-                async: true,
-                url: Handler + "?DoType=Imp_Src_Step2_GetColumns&FK_SFDBSrc=" + hid_FK_SFDBSrc.value + "&FK_MapData=" + frmID+ "&STable=" + tableName,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_SFDBSrc", hid_FK_SFDBSrc.value);
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("STable", tableName);
+            var data = handler.DoMethodReturnString("Imp_Src_Step2_GetColumns");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    //转化成json.
-                    data = JSON.parse(data);
-                    Table_Cols(data);
-                }
-            });
+            //转化成json.
+            data = JSON.parse(data);
+            Table_Cols(data);
         }
 
         //2.2.1 根据获取的数据，生成字段的table
@@ -573,12 +556,12 @@
 
             var SColumns = chk_value.join();
 
-            $.ajax({
-                type: 'GET',
-                async: true,
-                url: Handler + "?DoType=Imp_Src_Step3_Init&FK_SFDBSrc=" + hid_FK_SFDBSrc.value + "&FK_MapData=" + frmID+ "&STable=" + hid_STable.value + "&SColumns=" + SColumns,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_SFDBSrc", hid_FK_SFDBSrc.value);
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("STable", hid_STable.value);
+            handler.AddPara("SColumns", SColumns);
+            var data = handler.DoMethodReturnString("Imp_Src_Step3_Init");
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -647,8 +630,6 @@
                     var btnNext = "<input type='button' name='btnNext' value='导入字段 生成表单 ' onclick='Save_Click();' />";
                     var btnPrev = "<input type='button' id='btnPrev' value='上一步 ' />";
                     $('#srclayout').append(hidImpFields).append(btnNext).append(btnPrev);
-                }
-            });
         }
 
         //构建 Options
@@ -667,12 +648,16 @@
             var fromdata = $('#divCCForm').serialize()
 
             //2.获取数据 FK_MapData=ND18507     &FK_SFDBSrc=NKApp&STable=ND104
-            $.ajax({
-                type: 'GET',
-                async: true,
-                url: Handler + "?DoType=Imp_Src_Step3_Save&FK_MapData=" + frmID + "&" + $('#formCC').serialize() ,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("Imp_Src_Step3_Save");
+//            $.ajax({
+//                type: 'GET',
+//                async: true,
+//                url: Handler + "?DoType=Imp_Src_Step3_Save&FK_MapData=" + frmID + "&" + $('#formCC').serialize() ,
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -682,8 +667,8 @@
                     //转化成json.
                     data = JSON.parse(data);
                     alert(data);
-                }
-            });
+//                }
+//            });
         }
 
         
@@ -720,10 +705,8 @@
                 <input type="checkbox" checked="checked" id="CB_IsClear" name="CB_IsClear" disabled="true" />
                 <label for="CB_IsClear">
                     是否清除现在已有的元素</label>
-
                 <input type="checkbox" checked="checked" id="CB_IsSetReadonly" name="CB_IsSetReadonly" /><label
                     for="CB_IsSetReadonly">是否只读</label>
-
                 <input type="button" value="执行从节点表单导入" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
             </fieldset>
         </div>
@@ -731,10 +714,9 @@
             <ul id="ul1" style="height: auto;">
             </ul>
             <input type="hidden" value="" id="HD_FlowID" name="HD_FlowID" />
-            <input type="button" value="从其他流程导入" id="Btn_Flows" onclick="SaveImpOtherFlow()" style="margin: 25px;"
-                disabled="disabled" />
+            <input type="button" value="从其他流程导入" id="Btn_Flows" onclick="SaveImpOtherFlow()"
+                style="margin: 25px;" disabled="disabled" />
         </div>
-
         <div title="从表单库导入" id="divUlFrmTreeImp" style="padding: 15px; text-align: left">
             <ul id="ulLib" style="height: auto;">
             </ul>
@@ -745,17 +727,16 @@
         <div title="从外部数据源导入" style="padding: 15px; text-align: left">
             <div class="easyui-layout" style="height: 280px;">
                 <fieldset style="height: 90%;">
-					<legend>导入字段生成表单</legend>
-						<ul>
-							<li>你可以选择多个数据源。</li>
-							<li>操作提示：指定内外部数据源中的一个已经设计好的表，把字段信息导入该表单</li>
-							<li>在自由表单里，双列排序，在傻瓜表单里，按照顺序排序。</li>
-
-						</ul>
-						<label style="padding-left: 8px;">
-					</label>
-					<input type="button" value="进入导入数据字段向导" onclick="doImpFromOutside()" style="margin-left: 40px;" />
-				</fieldset>
+                    <legend>导入字段生成表单</legend>
+                    <ul>
+                        <li>你可以选择多个数据源。</li>
+                        <li>操作提示：指定内外部数据源中的一个已经设计好的表，把字段信息导入该表单</li>
+                        <li>在自由表单里，双列排序，在傻瓜表单里，按照顺序排序。</li>
+                    </ul>
+                    <label style="padding-left: 8px;">
+                    </label>
+                    <input type="button" value="进入导入数据字段向导" onclick="doImpFromOutside()" style="margin-left: 40px;" />
+                </fieldset>
                 <!--<div id="divSrcImp" data-options="region:'center',title:'导入字段生成表单',fit:true" style="padding: 5px;">
                     <div id="srclayout">
                     </div>
@@ -771,4 +752,3 @@
     </form>
 </body>
 </html>
- 

@@ -74,9 +74,9 @@ function GenerFoolFrm(wn) {
         }
 
 
-        //附件类的控件.
+        //框架类的控件.
         if (gf.CtrlType == 'Frame') {
-
+           
             html += "<tr>";
             html += "  <th colspan=4>" + gf.Lab + "</th>";
             html += "</tr>";
@@ -767,24 +767,38 @@ function Ele_SubFlow(wf_node) {
 
 //初始化 框架
 function Ele_Frame(flowData, gf) {
-
-    var frame = flowData.Sys_MapFrame[0];
+    var frame = new Entity("BP.Sys.MapFrame", gf.CtrlID);
+  
     if (frame == null)
         return "没有找到框架的定义，请与管理员联系。";
 
     var eleHtml = '';
 
-    var url = "";
-    url += "&WorkID=" + GetQueryString("WorkID");
-    url += "&FK_Node=" + GetQueryString("FK_Node");
+    var url = frame.URL;
+    if (url.indexOf('?') == -1)
+        url += "?1=2";
 
-    var src = frame.URL;
-    if (src.indexOf('?') == -1)
-        src += "?1=2";
+    //处理URL需要的参数
+    //1.拼接参数
+    var paras = this.pageData;
+    var strs = "";
+    for (var str in paras) {
+        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+            continue
+        else
+            strs += "&" + str + "=" + paras[str];
+    }
+   
+    //2.替换@参数
+    var pageParams = getQueryString();
+    $.each(pageParams, function (i, pageParam) {
+        var pageParamArr = pageParam.split('=');
+        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+    });
 
-    src += "&PKVal=" + pageData.WorkID + "&FK_MapFrame=" + frame.MyPK + url;
+    url = url + strs + "&IsReadonly=0";
 
-    eleHtml += "<iframe style='width:100%;height:" + frame.H + "px;' ID='" + frame.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    eleHtml += "<iframe style='width:100%;height:" + frame.H + "px;' ID='" + frame.MyPK + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     return eleHtml;
 }
 

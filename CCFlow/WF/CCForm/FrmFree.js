@@ -437,6 +437,13 @@ function figure_Template_Dtl(frmDtl, ext) {
 function figure_Template_IFrame(fram) {
 
     var eleHtml = $("<DIV id='Fd" + fram.MyPK + "' style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
+    
+    var url = fram.URL;
+    if (url.indexOf('?') == -1)
+        url += "?1=2";
+
+    //处理URL需要的参数
+    //1.拼接参数
     var paras = this.pageData;
     var strs = "";
     for (var str in paras) {
@@ -446,10 +453,17 @@ function figure_Template_IFrame(fram) {
             strs += "&" + str + "=" + paras[str];
     }
 
-    var src = dealWithUrl(fram.URL) + "&IsReadonly=0";
+    //2.替换@参数
+    var pageParams = getQueryString();
+    $.each(pageParams, function (i, pageParam) {
+        var pageParamArr = pageParam.split('=');
+        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+    });
+
+    url = url + strs + "&IsReadonly=0";
 
     var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + src +
+    eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +
                  "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
                  "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 

@@ -84,12 +84,58 @@ function GenerFreeFrm(wn) {
         $('#CCForm').append(createdConnector);
     }
 
+    //循环Sys_MapFrame
+    for (var i in flowData.Sys_MapFrame) {
+        var frame = flowData.Sys_MapFrame[i];
+        var alertMsgEle = figure_Template_IFrame(frame);
+        $('#CCForm').append(alertMsgEle);
+    }
+
     //循环组件 轨迹图 审核组件 子流程 子线程
     var wf_FrmNodeComponent = flowData["WF_FrmNodeComponent"][0];
     $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent));
     $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent));
     $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent));
     $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent));
+}
+
+//初始化框架
+function figure_Template_IFrame(fram) {
+
+    var eleHtml = $("<DIV id='Fd" + fram.MyPK + "' style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
+
+    var url = fram.URL;
+    if (url.indexOf('?') == -1)
+        url += "?1=2";
+
+    //处理URL需要的参数
+    //1.拼接参数
+    var paras = this.pageData;
+    var strs = "";
+    for (var str in paras) {
+        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+            continue
+        else
+            strs += "&" + str + "=" + paras[str];
+    }
+
+    //2.替换@参数
+    var pageParams = getQueryString();
+    $.each(pageParams, function (i, pageParam) {
+        var pageParamArr = pageParam.split('=');
+        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+    });
+
+    url = url + strs + "&IsReadonly=0";
+
+    var eleIframe = '<iframe></iframe>';
+    eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +
+                 "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
+                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+
+    eleHtml.append(eleIframe);
+
+    return eleHtml;
 }
 
 function figure_MapAttr_Template(mapAttr) {
@@ -859,13 +905,4 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
     return eleHtml;
 }
 
-//初始化框架
-function figure_Template_IFrame(fram) {
-    var eleHtml = '';
-    var src = dealWithUrl(fram.src) + "IsReadonly=0";
-    eleHtml = $('<div id="iframe' + fram.MyPK + '">' + '</div>');
-    var iframe = $(+"<iframe  style='width:" + fram.W + "px; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>");
 
-    eleHtml.css('position', 'absolute').css('top', fram.Y).css('left', fram.X).css('width', fram.W).css('height', fram.H);
-    return frameHtml;
-}

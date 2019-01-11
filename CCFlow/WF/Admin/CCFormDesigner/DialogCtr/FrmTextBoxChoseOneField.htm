@@ -55,13 +55,17 @@
 
         //显示所有的字段.
         function ShowFields() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("DataType", GetQueryString("DataType"));
+            var data = handler.DoMethodReturnString("FrmTextBoxChseOneField_Init");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                dataType: 'html',
-                url: Handler + "?DoType=FrmTextBoxChoseOneField_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&DataType=" + GetQueryString("DataType"),
-                success: function (data) {
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                dataType: 'html',
+//                url: Handler + "?DoType=FrmTextBoxChoseOneField_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&DataType=" + GetQueryString("DataType"),
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html("<font color=red><br>" + data + "</font> .");
@@ -144,8 +148,8 @@
                     }
 
                     $("#Msg").html("");
-                }
-            });
+//                }
+//            });
 
         }
 

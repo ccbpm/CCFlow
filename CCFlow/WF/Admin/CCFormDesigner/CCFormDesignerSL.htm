@@ -81,12 +81,16 @@
          //调用公共类库的方法.
          GenerBindEnumKey("DDL_TWay", "TWay", "1");
 
-         $.ajax({
-             type: 'post',
-             async: true,
-             url: Handler + "?DoType=CHRole_Init&FK_Node=" + nodeID + "&m=" + Math.random(),
-             dataType: 'html',
-             success: function (data) {
+         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+         handler.AddPara("FK_Node", nodeID);
+         var data = handler.DoMethodReturnString("CHRole_Init");
+
+//         $.ajax({
+//             type: 'post',
+//             async: true,
+//             url: Handler + "?DoType=CHRole_Init&FK_Node=" + nodeID + "&m=" + Math.random(),
+//             dataType: 'html',
+//             success: function (data) {
 
                  if (data.indexOf('err@') == 0) {
                      alert(data);
@@ -97,8 +101,8 @@
 
                  //调用公共类库的方法:执行批量主表赋值
                  GenerFullAllCtrlsVal(data);
-             }
-         });
+//             }
+//         });
      });
     </script>
 

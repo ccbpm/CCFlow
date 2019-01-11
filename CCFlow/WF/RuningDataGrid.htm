@@ -387,18 +387,19 @@
 			        var workID = work.WorkID;
 			        var fid = work.FID;
 			        var nodeID = work.FK_Node;
-			        //当前节点是子线程的节点
-			        if (fid != 0) {
+			      
+			        //获取人员所处的流程节点
+			        var currNode = work.CurrNode;
+			        var node = new Entity("BP.WF.Node", currNode);
 
-			            //获取人员所处的流程节点
-			            var currNode = work.CurrNode;
-			            //判断当前子线程是否异表单
-			            var node = new Entity("BP.WF.Node", currNode);
+			        //如果是树形表单，则显示当前人所处节点的数据
+			        if (node.FormType == 5)
+			            nodeID = currNode; 
 			            //获取节点子线程的类型
-			            var subThreadType = node.SubThreadType;
-			            if (subThreadType == 1)
-			                nodeID = currNode;
-			        }
+			           // var subThreadType = node.SubThreadType;
+			            //if (subThreadType == 1)
+			             //   nodeID = currNode;
+			        //}
 
 			        listbox += "<td>" + num + "</td>";
 			        listbox += "<td><a href=\"javascript:OpenFrm('" + workID + "','" + nodeID + "','" + work.FK_Flow + "','" + fid + "')\" >" + work.Title + "</a></td>";

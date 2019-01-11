@@ -501,20 +501,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功!!";
         }
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <returns></returns>
-        public string StandAloneFrm_Delete()
-        {
-            Cond deleteCond = new Cond();
-            deleteCond.MyPK = this.MyPK;
-            int i = deleteCond.Delete();
-            if (i == 1)
-                return "删除成功..";
-
-            return "无可删除的数据.";
-        }
+       
         public string StandAloneFrm_InitField()
         {
             //字段属性.

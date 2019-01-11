@@ -271,54 +271,42 @@ namespace BP.WF.HttpHandler
             //此处为字段中文转拼音，设置为最大20个字符，edited by liuxc,2017-9-25
             return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
         }
-        /// <summary>
-        /// 执行默认的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
+
+        public string Designer_GFDoUp()
         {
             string msg = "";
+            GroupField gf = new GroupField(this.RefOID);
+            gf.DoUp();
+            gf.Retrieve();
+            if (gf.Idx == 0)
+                return "";
 
-            //通用局部变量定义
-            string resultString = string.Empty;
-            
-            switch (this.DoType)
+            int oidIdx = gf.Idx;
+            gf.Idx = gf.Idx - 1;
+            GroupField gfUp = new GroupField();
+            if (gfUp.Retrieve(GroupFieldAttr.FrmID, gf.FrmID, GroupFieldAttr.Idx, gf.Idx) == 1)
             {
-                case "GFDoUp":
-                    GroupField gf = new GroupField(this.RefOID);
-                    gf.DoUp();
-                    gf.Retrieve();
-                    if (gf.Idx == 0)
-                        return "";
-
-                    int oidIdx = gf.Idx;
-                    gf.Idx = gf.Idx - 1;
-                    GroupField gfUp = new GroupField();
-                    if (gfUp.Retrieve(GroupFieldAttr.FrmID, gf.FrmID, GroupFieldAttr.Idx, gf.Idx) == 1)
-                    {
-                        gfUp.Idx = oidIdx;
-                        gfUp.Update();
-                    }
-                    gf.Update();
-                    break;
-                case "GFDoDown":
-                    GroupField mygf = new GroupField(this.RefOID);
-                    mygf.DoDown();
-                    mygf.Retrieve();
-                    int oidIdx1 = mygf.Idx;
-                    mygf.Idx = mygf.Idx + 1;
-                    GroupField gfDown = new GroupField();
-                    if (gfDown.Retrieve(GroupFieldAttr.FrmID, mygf.FrmID, GroupFieldAttr.Idx, mygf.Idx) == 1)
-                    {
-                        gfDown.Idx = oidIdx1;
-                        gfDown.Update();
-                    }
-                    mygf.Update();
-                    break;
-                default:
-                    throw new Exception("没有判断的执行类型：" + this.DoType);
-                    break;
+                gfUp.Idx = oidIdx;
+                gfUp.Update();
             }
+            gf.Update();
+            return msg;
+        }
+        public string Designer_GFDoDown()
+        {
+            string msg = "";
+            GroupField mygf = new GroupField(this.RefOID);
+            mygf.DoDown();
+            mygf.Retrieve();
+            int oidIdx1 = mygf.Idx;
+            mygf.Idx = mygf.Idx + 1;
+            GroupField gfDown = new GroupField();
+            if (gfDown.Retrieve(GroupFieldAttr.FrmID, mygf.FrmID, GroupFieldAttr.Idx, mygf.Idx) == 1)
+            {
+                gfDown.Idx = oidIdx1;
+                gfDown.Update();
+            }
+            mygf.Update();
             return msg;
         }
         /// <summary>

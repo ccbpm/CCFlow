@@ -103,8 +103,13 @@
                 return;
             }
 
+
             //选中的超链接及参数
             var href = "MyFlow.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + FK_Node + "&WorkID=" + GetQueryString("WorkID") + "&IsCheckGuide=1";
+            //获取URL参数
+            if (location.search.indexOf("PrjNo") != -1)
+                href = href + "&PrjNo=" + GetQueryString("PrjNo") + "&PrjName=" + GetQueryString("PrjName");
+
             var _Html = "";
 
 

@@ -2569,13 +2569,13 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        ps.SQL = "SELECT DISTINCT a.*,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
                         ps.Add("Starter", userNo);
                         ps.Add("FK_Emp", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        ps.SQL = "SELECT DISTINCT a.*,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -2675,6 +2675,7 @@ namespace BP.WF
                 dt.Columns["TSPAN"].ColumnName = "TSpan";
                 dt.Columns["TODOSTA"].ColumnName = "TodoSta";
                 dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["CURRNODE"].ColumnName = "CurrNode";
                 //dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
                 //dt.Columns["CWORKID"].ColumnName = "CWorkID";
 

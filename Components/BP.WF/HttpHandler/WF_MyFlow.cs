@@ -394,8 +394,8 @@ namespace BP.WF.HttpHandler
                 {
                     gwf.WorkID = this.WorkID;
                     gwf.RetrieveFromDBSources();
-                    pFlowNo = gwf.PFlowNo;
-                    pWorkID = gwf.PWorkID.ToString();
+                    //pFlowNo = gwf.PFlowNo;
+                    //pWorkID = gwf.PWorkID.ToString();
                 }
 
                 if (this.currND.IsStartNode)

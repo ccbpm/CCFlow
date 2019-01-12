@@ -1535,10 +1535,8 @@ namespace BP.WF.HttpHandler
 
                 string json = BP.Tools.Json.DataSetToJson(ds, false);
 
-                //  BP.DA.DataType.WriteFile("c:\\aaa.txt", json);
-
+                //BP.DA.DataType.WriteFile("c:\\aaa.txt", json);
                 return json;
-
             }
             catch (Exception ex)
             {

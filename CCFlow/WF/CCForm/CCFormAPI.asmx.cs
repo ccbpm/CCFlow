@@ -38,13 +38,11 @@ namespace CCFlow.WF.CCForm
             if (DataType.IsNullOrEmpty(userNo) == true)
                 userNo = BP.Web.WebUser.No;
 
-            if (DataType.IsNullOrEmpty(userNo) == true)
-                userNo = "admin";
+            //if (DataType.IsNullOrEmpty(userNo) == true)
+            //    userNo = "admin";
 
             BP.WF.Dev2Interface.Port_Login(userNo);
-
             BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workID);
-
 
             bool b = BP.WF.Dev2Interface.Flow_IsCanViewTruck(gwf.FK_Flow, gwf.WorkID, gwf.FID);
             if (b == false)

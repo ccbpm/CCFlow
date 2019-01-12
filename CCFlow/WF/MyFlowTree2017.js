@@ -37,6 +37,7 @@ function FlowFormTree_Init() {
     }
 
     var pushData = eval('(' + data + ')');
+
       ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = "ND"+GetQueryString("FK_Node");
     if(enName == null || enName == "")

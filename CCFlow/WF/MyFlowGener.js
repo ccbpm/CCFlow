@@ -730,13 +730,13 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框     
+            //下拉框      
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 formArrResult.push(name + 'T=' + $(disabledEle).children('option:checked').text());
                 break;
 
-            //文本区域             
+            //文本区域              
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1842,22 +1842,22 @@ function OpenOffice() {
     //                        
     //			paras = paras.Replace("&", ",");
 
-    var paras = "&WorkID=" + GetQueryString("WorkID");
-    paras += "&FK_Flow=" + GetQueryString("FK_Flow");
-    paras += "&FK_Node=" + GetQueryString("FK_Node");
 
-    var local = window.location.protocol+"//" + window.location.hostname + ":" + window.location.port;
-    alert(local);
 
+    var paras = "WorkID=" + GetQueryString("WorkID")+",";
+    paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
+    paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
+
+    var webUser = new WebUser();
+    paras += "UserNo=" + webUser.No + ",";
+    paras += "SID=" + webUser.SID + ",";
+
+    var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
 
     var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
-    var url = "excelform://-fromccflow,App=FrmExcel" + paras + ",WSUrl=" + urlWS;
-
+    var url = "excelform://-fromccflow,App=FrmExcel," + paras + "WSUrl=" + urlWS;
     alert(url);
-
     window.open(url);
-
-    //alert('ss');
 }
 
 
@@ -1938,7 +1938,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人         
+            //发送选择接收节点和接收人          
             case "sendAccepter":
 
                 $('#modalHeader').text("发送到节点");

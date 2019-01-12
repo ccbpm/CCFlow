@@ -277,7 +277,8 @@ namespace BP.DA
                         string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " image ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
-                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                    return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+                    //throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
 
                 byte[] byteFile = null;

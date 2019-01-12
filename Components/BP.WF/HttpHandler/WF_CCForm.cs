@@ -634,27 +634,79 @@ namespace BP.WF.HttpHandler
             string paras = this.RequestParas;
             paras = paras.Replace("&DoType=Frm_Init", "");
 
-
-            if (md.HisFrmType == FrmType.FreeFrm)
+            #region 流程的独立运行的表单.
+            if (this.FK_Node != 0 && this.FK_Node!=999999 )
             {
+                BP.WF.Template.FrmNode fn = new FrmNode();
+                fn.MyPK = this.FK_MapData + "_" + this.FK_Node;
+
+                if (fn.RetrieveFromDBSources() != 0 && fn.WhoIsPK != WhoIsPK.OID)
+                {
+                    if (fn.WhoIsPK == WhoIsPK.PWorkID)
+                    {
+                        paras = paras.Replace("&OID=" + this.WorkID,"&OID="+this.PWorkID);
+                        paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.PWorkID);
+                    }
+
+                    if (fn.WhoIsPK == WhoIsPK.FID)
+                    {
+                        paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + this.FID);
+                        paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.FID);
+                    }
+
+                    if (md.HisFrmType == FrmType.FreeFrm)
+                    {
+                        if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                            return "url@FrmGener.htm?1=2" + paras;
+                        else
+                            return "url@FrmGener.htm?1=2" + paras;
+                    }
+
+                    if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
+                    {
+                        if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                            return "url@FrmVSTO.aspx?1=2" + paras;
+                        else
+                            return "url@FrmVSTO.aspx?1=2" + paras;
+                    }
+
+                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                        return "url@FrmGener.htm?1=2" + paras;
+                    else
+                        return "url@FrmGener.htm?1=2" + paras;
+                }
+            }
+            #endregion 非流程的独立运行的表单.
+
+
+            #region 非流程的独立运行的表单.
+            if (this.FK_Node == 0)
+            {
+                if (md.HisFrmType == FrmType.FreeFrm)
+                {
+                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                        return "url@FrmGener.htm?1=2" + paras;
+                    else
+                        return "url@FrmGener.htm?1=2" + paras;
+                }
+
+                if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
+                {
+                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                        return "url@FrmVSTO.aspx?1=2" + paras;
+                    else
+                        return "url@FrmVSTO.aspx?1=2" + paras;
+                }
+
                 if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                     return "url@FrmGener.htm?1=2" + paras;
                 else
                     return "url@FrmGener.htm?1=2" + paras;
             }
+            #endregion 非流程的独立运行的表单.
 
-            if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
-            {
-                if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                    return "url@FrmVSTO.aspx?1=2" + paras;
-                else
-                    return "url@FrmVSTO.aspx?1=2" + paras;
-            }
 
-            if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                return "url@FrmGener.htm?1=2" + paras;
-            else
-                return "url@FrmGener.htm?1=2" + paras;
+          
 
         }
 
@@ -1073,11 +1125,12 @@ namespace BP.WF.HttpHandler
             if (this.FK_MapData != null && this.FK_MapData.Contains("BP.") == true)
                 return FrmGener_Init_ForBPClass();
 
-
             #region 定义流程信息的所用的 配置entity.
             //节点与表单的权限控制.
             FrmNode fn = null;
 
+            //是否启用装载填充？ @袁丽娜,
+            bool isLoadData = true;
             //定义节点变量. @袁丽娜 
             Node nd = null;
             if (this.FK_Node != 0 && this.FK_Node != 999999)
@@ -1085,6 +1138,7 @@ namespace BP.WF.HttpHandler
                 nd = new Node(this.FK_Node);
                 nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
                 fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                isLoadData = fn.IsEnableLoadData;
             }
             #endregion 定义流程信息的所用的 配置entity.
 
@@ -1115,41 +1169,12 @@ namespace BP.WF.HttpHandler
                 //主表实体.
                 GEEntity en = new GEEntity(this.EnsName);
 
-                #region 求出 who is pk 值.
                 Int64 pk = this.RefOID;
                 if (pk == 0)
                     pk = this.OID;
                 if (pk == 0)
                     pk = this.WorkID;
-
-                //是否启用装载填充？ @袁丽娜,
-                bool isLoadData = true;
-
-                if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
-                {
-                    /*说明是流程调用它， 就要判断谁是表单的PK.*/
-                    switch (fn.WhoIsPK)
-                    {
-                        case WhoIsPK.FID:
-                            pk = this.FID;
-                            if (pk == 0)
-                                throw new Exception("@没有接收到参数FID");
-                            break;
-                        case WhoIsPK.PWorkID: /*父流程ID*/
-                            pk = this.PWorkID;
-                            if (pk == 0)
-                                throw new Exception("@没有接收到参数PWorkID");
-                            break;
-                        case WhoIsPK.OID:
-                        default:
-                            break;
-                    }
-
-                    //对于一个表单绑定到一个表单树上，有的节点不需要装载填充的.
-                    isLoadData = fn.IsEnableLoadData;
-                }
-                #endregion  求who is PK.
-
+                 
                 #region 根据who is pk 获取数据.
                 en.OID = pk;
                 if (en.OID == 0)
@@ -1281,8 +1306,6 @@ namespace BP.WF.HttpHandler
                         ds.Tables.Add(dataTable);
                 }
                 #endregion End把外键表加入DataSet
-
-
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
                 if (this.FK_Node != 0 && this.FK_Node != 999999 && (fn.IsEnableFWC == true || nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))

@@ -1879,6 +1879,7 @@ namespace BP.WF.HttpHandler
             root.NodeType = "root";
             appFlowFormTree.Clear();
             appFlowFormTree.AddEntity(root);
+
             #region 添加表单及文件夹
 
             //节点表单

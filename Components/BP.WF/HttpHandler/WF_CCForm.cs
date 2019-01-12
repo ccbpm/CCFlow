@@ -635,7 +635,7 @@ namespace BP.WF.HttpHandler
             paras = paras.Replace("&DoType=Frm_Init", "");
 
             #region 流程的独立运行的表单.
-            if (this.FK_Node != 0 && this.FK_Node!=999999 )
+            if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 BP.WF.Template.FrmNode fn = new FrmNode();
                 fn.MyPK = this.FK_MapData + "_" + this.FK_Node;
@@ -644,7 +644,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (fn.WhoIsPK == WhoIsPK.PWorkID)
                     {
-                        paras = paras.Replace("&OID=" + this.WorkID,"&OID="+this.PWorkID);
+                        paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + this.PWorkID);
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.PWorkID);
                     }
 
@@ -680,33 +680,29 @@ namespace BP.WF.HttpHandler
 
 
             #region 非流程的独立运行的表单.
-            if (this.FK_Node == 0)
+
+            if (md.HisFrmType == FrmType.FreeFrm)
             {
-                if (md.HisFrmType == FrmType.FreeFrm)
-                {
-                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                        return "url@FrmGener.htm?1=2" + paras;
-                    else
-                        return "url@FrmGener.htm?1=2" + paras;
-                }
-
-                if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
-                {
-                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                        return "url@FrmVSTO.aspx?1=2" + paras;
-                    else
-                        return "url@FrmVSTO.aspx?1=2" + paras;
-                }
-
                 if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                     return "url@FrmGener.htm?1=2" + paras;
                 else
                     return "url@FrmGener.htm?1=2" + paras;
             }
+
+            if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
+            {
+                if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                    return "url@FrmVSTO.aspx?1=2" + paras;
+                else
+                    return "url@FrmVSTO.aspx?1=2" + paras;
+            }
+
+            if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                return "url@FrmGener.htm?1=2" + paras;
+            else
+                return "url@FrmGener.htm?1=2" + paras;
+
             #endregion 非流程的独立运行的表单.
-
-
-          
 
         }
 
@@ -1174,7 +1170,7 @@ namespace BP.WF.HttpHandler
                     pk = this.OID;
                 if (pk == 0)
                     pk = this.WorkID;
-                 
+
                 #region 根据who is pk 获取数据.
                 en.OID = pk;
                 if (en.OID == 0)
@@ -1785,7 +1781,7 @@ namespace BP.WF.HttpHandler
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
 
-                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType== NodeFormType.FoolTruck)
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType == NodeFormType.FoolTruck)
                 {
                     /*如果
                      * 1,传来节点ID, 不等于0.
@@ -2008,10 +2004,11 @@ namespace BP.WF.HttpHandler
             {
                 string str = mdtl.FEBD;
                 BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
-                if(febd!=null){
-                febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
-                febd.HisEnDtl = dtl;
-                febd.DoIt(FrmEventListDtl.DtlRowDelBefore, febd.HisEn, dtl, null);
+                if (febd != null)
+                {
+                    febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                    febd.HisEnDtl = dtl;
+                    febd.DoIt(FrmEventListDtl.DtlRowDelBefore, febd.HisEn, dtl, null);
                 }
             }
             #endregion 从表 删除 前处理事件.
@@ -2116,7 +2113,7 @@ namespace BP.WF.HttpHandler
 
             //从表的数据.
             //GEDtls enDtls = new GEDtls(this.EnsName);
-            #region  把从表的数据放入. 
+            #region  把从表的数据放入.
             GEDtls enDtls = new GEDtls(md.No);
             QueryObject qo = null;
             try
@@ -4299,7 +4296,7 @@ namespace BP.WF.HttpHandler
             athDesc.RetrieveFromDBSources();
 
             /*没有查询到解决方案, 就是只读方案 */
-            if (result == 0 ||sln.FrmSln == 1)
+            if (result == 0 || sln.FrmSln == 1)
             {
                 athDesc.IsUpload = false;
                 athDesc.IsDownload = false;
@@ -4307,8 +4304,8 @@ namespace BP.WF.HttpHandler
                 return athDesc;
             }
             //默认方案
-            if(sln.FrmSln == 0)
-                 return athDesc;
+            if (sln.FrmSln == 0)
+                return athDesc;
 
             //如果是自定义方案,就查询自定义方案信息.
             if (sln.FrmSln == 2)
@@ -4317,7 +4314,7 @@ namespace BP.WF.HttpHandler
                 athDescNode.MyPK = "ND" + this.FK_Node + "_" + athDesc.NoOfObj + "_" + this.FK_Node;
                 if (athDescNode.RetrieveFromDBSources() == 0)
                 {
-                   //没有设定附件权限，保持原来的附件权限模式
+                    //没有设定附件权限，保持原来的附件权限模式
                     return athDesc;
                 }
                 return athDescNode;

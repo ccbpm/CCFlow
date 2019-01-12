@@ -638,19 +638,21 @@ namespace BP.WF.HttpHandler
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 BP.WF.Template.FrmNode fn = new FrmNode();
-                fn.MyPK = this.FK_MapData + "_" + this.FK_Node;
-
-                if (fn.RetrieveFromDBSources() != 0 && fn.WhoIsPK != WhoIsPK.OID)
+                fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                
+                if (fn !=null && fn.WhoIsPK != WhoIsPK.OID)
                 {
                     if (fn.WhoIsPK == WhoIsPK.PWorkID)
                     {
                         paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + this.PWorkID);
+                        paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + this.PWorkID);
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.PWorkID);
                     }
 
                     if (fn.WhoIsPK == WhoIsPK.FID)
                     {
                         paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + this.FID);
+                        paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + this.FID);
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.FID);
                     }
 

@@ -38,7 +38,6 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
-
             var data = handler.DoMethodReturnString("CondByFrm_Init");
 
             if (data.indexOf('err@') == 0) {

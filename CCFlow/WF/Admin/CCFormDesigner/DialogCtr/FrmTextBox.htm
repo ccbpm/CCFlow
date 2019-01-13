@@ -12,6 +12,8 @@
 
     <!-- 增加一个配置  -->
     <script src="../../../Scripts/config.js" type="text/javascript" > </script>
+    <script src="../../../Comm/Gener.js" type="text/javascript" > </script>
+
     <script type="text/javascript">
 
         $(function () {
@@ -52,18 +54,20 @@
 
             $('#TB_Name').blur(function () //文本失去焦点时触发的事件
             {
-                var TB_Name = document.getElementById("TB_Name").value;
+                var name = document.getElementById("TB_Name").value;
                 var val = $('input:radio[name="RB_qpjp"]:checked').val();
-                if (TB_Name == "") {
+                if (name == "") {
                     document.getElementById("TB_KeyOfEn").value = "";
                     return;
                 }
 
+              
+
                 if (val == "ziduanquanpin") {
-                    ParseStringToPinYin(TB_Name, true);
+                    ParseStringToPinYin(name, true);
                 }
                 else {
-                    ParseStringToPinYin(TB_Name, false);
+                    ParseStringToPinYin(name, false);
                 }
 
             });
@@ -83,20 +87,20 @@
         function ParseStringToPinYin(parseString, parseModel) {
 
             parseString = $.trim(parseString);
+            var data = null;
 
-            if (parseString != "") {
-                $.post(Handler, { DoType: 'FrmTextBox_ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
+            handler.AddPara("name", parseString);
+            handler.AddPara("flag", parseModel);
+            var data = handler.DoMethodReturnString("FrmTextBox_ParseStringToPinyin");
 
-                    if (data.indexOf('err@') != -1) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
 
-                    if (data != "false") {
-                        document.getElementById("TB_KeyOfEn").value = data;
-                    }
-
-                });
+            if (data != "false") {
+                document.getElementById("TB_KeyOfEn").value = data;
             }
         }
         //传入父窗体

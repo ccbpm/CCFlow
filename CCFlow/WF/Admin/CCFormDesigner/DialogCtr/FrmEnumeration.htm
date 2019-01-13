@@ -20,8 +20,6 @@
     </style>
     <script language="javascript" type="text/javascript">
 
-
-
         $(function () {
 
             var enumMains = new Entities("BP.Sys.SysEnumMains");
@@ -113,7 +111,6 @@
             window.location.href = window.location.href;
         }
         function Edit(key) {
-
             var url = "EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + key;
             OpenDialogAndCloseRefresh(url, '编辑枚举', 560, 400, null, function () { window.location.href = window.location.href; });
         }

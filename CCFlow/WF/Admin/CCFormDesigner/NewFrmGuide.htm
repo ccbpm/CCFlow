@@ -30,27 +30,43 @@
             //创建表单树.
             GenerBindEntities("DDL_FrmTree", "BP.WF.Template.SysFormTrees", sort);
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=NewFrmGuide_Init&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
 
-                    $("#Msg").html("");
+            var data = handler.DoMethodReturnString("NewFrmGuide_Init");
+            $("#Msg").html("");
 
-                    if (data.indexOf('err@') >= 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    data = JSON.parse(data);
+            data = JSON.parse(data);
 
-                    var tables = data["Tables"];
-                    GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
-                    return;
-                }
-            });
+            var tables = data["Tables"];
+            GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
+            return;
+
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=NewFrmGuide_Init&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
+
+//                    $("#Msg").html("");
+
+//                    if (data.indexOf('err@') >= 0) {
+//                        $("#Msg").html("<font color=red>" + data + "</font>");
+//                        return;
+//                    }
+
+//                    data = JSON.parse(data);
+
+//                    var tables = data["Tables"];
+//                    GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
+//                    return;
+//                }
+//            });
 
 
             $("#Msg").html("");
@@ -240,17 +256,20 @@
             return;
         }
 
-        var handler = new HttpHandler("");
+//        var handler = new HttpHandler("");
 
-        var frmData = $("#cc").serialize();
+//        var frmData = $("#cc").serialize();
 
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=NewFrmGuide_Create&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+        handler.AddFormData();
+        var data = handler.DoMethodReturnString("NewFrmGuide_Create");
+//        $.ajax({
+//            data: frmData,
+//            type: 'post',
+//            async: true,
+//            url: Handler + "?DoType=NewFrmGuide_Create&m=" + Math.random(),
+//            dataType: 'html',
+//            success: function (data) {
 
                 if (data.indexOf('err@') >= 0) {
                     $("#Msg").html("<font color=red>" + data + "</font>");
@@ -280,8 +299,8 @@
                 //切换页面
                 window.location.href = data;
                 return;
-            }
-        });
+//            }
+//        });
     }
 </script>
 

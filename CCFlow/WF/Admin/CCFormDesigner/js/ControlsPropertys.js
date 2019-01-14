@@ -181,6 +181,9 @@ CCForm_Control_Propertys = {
                  { proName: 'Name', ProText: '名称', DefVal: 'Name', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                  { proName: 'Set', ProText: '设置', DefVal: '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=@FrmID', DType: 'href', ProType: BuilderProperty.CCFormLink }
     ],
+    Image: [{ proName: 'No', ProText: '编号', DefVal: 'No', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
+                  { proName: 'Name', ProText: '名称', DefVal: 'Name', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT }
+    ]
 };
 
 
@@ -205,7 +208,7 @@ CCForm_Control_DefaultPro = {
     ThreadDtl: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
     SubFlowDtl: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
     FrmCheck: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
-
+     Image: { "DefaultWidth": 150, DefaultHeight: 150, ControlLab: "" },
     HandSiganture: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
     iFrame: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
     CheckGroup: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },

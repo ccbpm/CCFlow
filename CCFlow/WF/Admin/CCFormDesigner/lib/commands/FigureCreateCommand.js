@@ -184,7 +184,7 @@ FigureCreateCommand.prototype = {
 
         var funIsExist = this.IsExist;
 
-        OpenEasyUiDialog(url, dgId, '新建图片字段', 600, 394, 'icon-new', true, function (HidenFieldFun) {
+        OpenEasyUiDialog(url, dgId, '新建图片字段', 600, 394, 'icon-new', true, function () {
             var win = document.getElementById(dgId).contentWindow;
             var frmVal = win.GetFrmInfo();
 
@@ -203,7 +203,9 @@ FigureCreateCommand.prototype = {
                 return false;
             }
 
-            /*
+//            //根据信息创建不同类型的数字控件
+            var transField = new TransFormDataField(createdFigure, frmVal, x, y);
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
             handler.AddPara("FrmID", CCForm_FK_MapData);
             handler.AddPara("KeyOfEn", frmVal.KeyOfEn);
@@ -216,33 +218,12 @@ FigureCreateCommand.prototype = {
                 return;
             }
             alert('创建成功.');
-            transField.paint(); */
-         
-            // 定义参数，让其保存到数据库里。
-            var param = {
-                DoType: "NewImage",
-                FrmID: CCForm_FK_MapData,
-                KeyOfEn: frmVal.KeyOfEn,
-                Name: frmVal.Name,
-                x: x,
-                y: y
-            };
-
-            ajaxService(param, function (json) {
-
-                if (json.indexOf('err@') == 0) {
-                    alert(json);
-                    return;
-                }
-
-                transField.paint();
-
-            }, this);
-           
+           transField.paint(); 
 
 
 
-        }, this.HidenFieldCreate);
+
+        }, null);
 
         return false;
     },
@@ -310,27 +291,21 @@ FigureCreateCommand.prototype = {
                 //根据信息创建不同类型的数字控件
                 var transField = new TransFormDataField(createdFigure, frmVal, x, y);
 
-                // 定义参数，让其保存到数据库里。
-                var param = {
-                    DoType: "NewField",
-                    FrmID: CCForm_FK_MapData,
-                    KeyOfEn: frmVal.KeyOfEn,
-                    Name: frmVal.Name,
-                    FieldType: frmVal.FieldType,
-                    x: x,
-                    y: y
-                };
-
-                ajaxService(param, function (json) {
-
-                    if (json.indexOf('err@') == 0) {
-                        alert(json);
+                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+                handler.AddPara("FrmID", CCForm_FK_MapData);
+                handler.AddPara("KeyOfEn",  frmVal.KeyOfEn);
+                handler.AddPara("Name", frmVal.Name);
+                handler.AddPara("FieldType", frmVal.FieldType);
+                handler.AddPara("x", x);
+                handler.AddPara("y", y);
+                var data = handler.DoMethodReturnString("NewField");
+                 if (data.indexOf('err@') == 0) {
+                        alert(data);
                         return;
                     }
 
-                    transField.paint();
-
-                }, this);
+                  transField.paint();
+                
             }
         }, this.HidenFieldCreate);
 
@@ -384,20 +359,17 @@ FigureCreateCommand.prototype = {
             var transField = new TransFormDataField(createdFigure, frmVal, x, y);
 
             // 定义参数，让其保存到数据库里。
-            var param = {
-                DoType: "FrmEnumeration_NewEnumField",
-                FK_MapData: CCForm_FK_MapData,
-                Name: frmVal.Name,
-                KeyOfEn: frmVal.KeyOfEn,
-                UIBindKey: frmVal.UIBindKey,
-                CtrlDoType: dotype,
-                x: x,
-                y: y
-            };
-            ajaxService(param, function (json) {
-
-                if (json.indexOf('err@') == 0) {
-                    alert(json);
+             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("FK_MapData", CCForm_FK_MapData);
+            handler.AddPara("KeyOfEn", frmVal.KeyOfEn);
+            handler.AddPara("Name", frmVal.Name);
+            handler.AddPara("UIBindKey", frmVal.UIBindKey);
+            handler.AddPara("CtrlDoType", dotype);
+            handler.AddPara("x", x);
+            handler.AddPara("y", y);
+            var data = handler.DoMethodReturnString("FrmEnumeration_NewEnumField");
+             if (data.indexOf('err@') == 0) {
+                    alert(data);
                     return;
                 }
 
@@ -410,7 +382,7 @@ FigureCreateCommand.prototype = {
                     alert('画元素错误：' + e);
                 }
 
-            }, this);
+           
 
         }, null);
 
@@ -488,29 +460,30 @@ FigureCreateCommand.prototype = {
             var transField = new TransFormDataField(createdFigure, frmVal, x, y);
 
             // 定义参数，让其保存到数据库里。
-            var param = {
-                action: "PublicNoNameCtrlCreate",
-                CtrlType: ctrlType,
-                FK_MapData: CCForm_FK_MapData,
-                Name: frmVal.Name,
-                No: frmVal.No,
-                x: x,
-                y: y
-            };
-            ajaxService(param, function (json) {
-                if (json == "true") {
-                    try {
-                        //开始画这个 - 元素.
-                        transField.paint();
-                    } catch (e) {
-                        alert(e);
-                    }
-                } else {
-                    Designer_ShowMsg(json);
-                }
-            }, this);
 
-        }, null);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("CtrlType", ctrlType);
+            handler.AddPara("FK_MapData", CCForm_FK_MapData);
+            handler.AddPara("Name", frmVal.Name);
+            handler.AddPara("No", frmVal.No);
+            handler.AddPara("x", x);
+            handler.AddPara("y", y);
+            var data = handler.DoMethodReturnString("PublicNoNameCtrlCreate");
+            if (data == "true") {
+                try {
+                    //开始画这个 - 元素.
+                    transField.paint();
+                } catch (e) {
+                    alert(e);
+                }
+            } else {
+                Designer_ShowMsg(data);
+            }
+            alert('创建成功.');
+            //transField.paint(); 
+
+
+       }, null);
 
         return false;
     },
@@ -556,21 +529,16 @@ FigureCreateCommand.prototype = {
 
             //根据信息创建不同类型的数字控件.
             var transField = new TransFormDataField(createdFigure, frmVal, x, y);
-
-            // 定义参数，让其保存到数据库里。
-            var param = {
-                DoType: "NewSFTableField",
-                FK_MapData: CCForm_FK_MapData,
-                Name: frmVal.Name,
-                KeyOfEn: frmVal.KeyOfEn,
-                UIBindKey: frmVal.UIBindKey,
-                x: x,
-                y: y
-            };
-            ajaxService(param, function (json) {
-
-                if (json.indexOf('err@') == 0) {
-                    alert(json);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("FK_MapData", CCForm_FK_MapData);
+            handler.AddPara("KeyOfEn", frmVal.KeyOfEn);
+            handler.AddPara("Name", frmVal.Name);
+            handler.AddPara("UIBindKey", frmVal.UIBindKey);
+            handler.AddPara("x", x);
+            handler.AddPara("y", y);
+            var data = handler.DoMethodReturnString("NewSFTableField");
+             if (data.indexOf('err@') == 0) {
+                    alert(data);
                     return;
                 }
 
@@ -582,7 +550,7 @@ FigureCreateCommand.prototype = {
                     alert(e);
                 }
 
-            }, this);
+           
 
         }, null);
 
@@ -590,23 +558,19 @@ FigureCreateCommand.prototype = {
     },
     /**创建隐藏字段**/
     HidenFieldCreate: function (frmVal) {
-        var param = {
-            DoType: "NewHidF",
-            FrmID: CCForm_FK_MapData,
-            KeyOfEn: frmVal.KeyOfEn,
-            Name: frmVal.Name,
-            FieldType: frmVal.FieldType,
-            x: 0,
-            y: 0
-        };
-        ajaxService(param, function (data) {
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-        }, this);
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+        handler.AddPara("FrmID", CCForm_FK_MapData);
+        handler.AddPara("KeyOfEn",  frmVal.KeyOfEn);
+        handler.AddPara("Name", frmVal.Name);
+        handler.AddPara("FieldType", frmVal.FieldType);
+        handler.AddPara("x", x);
+        handler.AddPara("y", y);
+        var data = handler.DoMethodReturnString("NewHidF");
+        if (data.indexOf('err@') == 0) {
+            alert(data);
+            return;
+        }
+        
     },
     IsExist: function (MyPK) {
         var flag = false;
@@ -766,7 +730,10 @@ TransFormDataField.prototype = {
         //        if(createdFigure.CCForm_Shape == "HandSiganture")
         //            shap_src = "/DataView/TextBoxStr.png";
         //        else
-        shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
+        if (createdFigure.CCForm_Shape == "Image")
+            shap_src = "/basic/TempleteFile.png";
+        else
+            shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
 
         //  alert(shap_src);
         //  alert(shap_src);

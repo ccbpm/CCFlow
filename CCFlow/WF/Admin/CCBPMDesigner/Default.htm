@@ -512,13 +512,16 @@
 
             return;
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            var data = handler.DoMethodReturnString("Login_Redirect");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Login_Redirect&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+           
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=Login_Redirect&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -527,8 +530,8 @@
 
                     var url = data.replace('url@', '');
                     window.open(url);
-                }
-            });
+//                }
+//            });
         }
         //退出
         function LoginOut() {

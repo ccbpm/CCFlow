@@ -13,6 +13,8 @@
     <!-- 增加一个配置  -->
     <script src="../../../Scripts/config.js" type="text/javascript" > </script>
     <script src="../../../Comm/Gener.js" type="text/javascript" > </script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript" > </script>
+
 
     <script type="text/javascript">
 
@@ -61,48 +63,24 @@
                     return;
                 }
 
-              
-
-                if (val == "ziduanquanpin") {
-                    ParseStringToPinYin(name, true);
-                }
-                else {
-                    ParseStringToPinYin(name, false);
-                }
+                if (val == "ziduanquanpin") 
+                    ParsePinYin(name, true, "TB_KeyOfEn");
+                else 
+                    ParsePinYin(name, false, "TB_KeyOfEn");
 
             });
             //点击全拼
             $('input[id=RB_qp]').change(function () {
-                var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, true);
+                var name = document.getElementById("TB_Name").value;
+                ParsePinYin(name, true, "TB_KeyOfEn");
             });
             //点击简拼
             $('input[id=RB_jp]').change(function () {
-                var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, false);
+                var name = document.getElementById("TB_Name").value;
+                ParsePinYin(name, false, "TB_KeyOfEn");
             });
         });
-
-        //转拼音，并去除开头为数字的字符
-        function ParseStringToPinYin(parseString, parseModel) {
-
-            parseString = $.trim(parseString);
-            var data = null;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
-            handler.AddPara("name", parseString);
-            handler.AddPara("flag", parseModel);
-            var data = handler.DoMethodReturnString("FrmTextBox_ParseStringToPinyin");
-
-            if (data.indexOf('err@') != -1) {
-                alert(data);
-                return;
-            }
-
-            if (data != "false") {
-                document.getElementById("TB_KeyOfEn").value = data;
-            }
-        }
+         
         //传入父窗体
         function GetFrmInfo() {
             return {

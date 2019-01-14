@@ -15,31 +15,11 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript" > </script>
 	<script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript" > </script>
 
     <script language="javascript" type="text/javascript">
 
 		closeWhileEscUp();
-
-        //公共方法
-//        function AjaxServiceGener(param, callback, scope) {
-//            $.ajax({
-//                type: "GET", //使用GET或POST方法访问后台
-//                dataType: "text", //返回json格式的数据
-//                contentType: "application/json; charset=utf-8",
-//                url: Handler, //要访问的后台地址
-//                data: param, //要发送的数据
-//                async: true,
-//                cache: false,
-//                complete: function () { }, //AJAX请求完成时隐藏loading提示
-//                error: function (XMLHttpRequest, errorThrown) {
-//                    callback(XMLHttpRequest);
-//                },
-//                success: function (msg) {//msg为返回的数据，在这里做数据绑定
-//                    var data = msg;
-//                    callback(data, scope);
-//                }
-//            });
-//        }
 
 		$(function () {
 
@@ -65,10 +45,10 @@
 		        }
 
 		        if (val == "ziduanquanpin") {
-		            ParseStringToPinYin(name, true);
+		            ParsePinYin(name, true, "TB_EnumKey");
 		        }
 		        else {
-		            ParseStringToPinYin(name, false);
+		            ParsePinYin(name, false, "TB_EnumKey");
 		        }
 
 		    });
@@ -76,35 +56,17 @@
 		    //点击全拼
 		    $('input[id=RB_QP]').change(function () {
 		        var tbName = document.getElementById("TB_EnumName").value;
-		        ParseStringToPinYin(tbName, true);
+		        ParsePinYin(tbName, true, "TB_EnumKey");
 		    });
 
 		    //点击简拼
 		    $('input[id=RB_JP]').change(function () {
 		        var tbName = document.getElementById("TB_EnumName").value;
-		        ParseStringToPinYin(tbName, false);
+		        ParsePinYin(tbName, false, "TB_EnumKey");
 		    });
 		});
 
         var pageData = {};
-
-        //转拼音，并去除开头为数字的字符
-        function ParseStringToPinYin(parseString, parseModel) {
-
-            parseString = $.trim(parseString);
-            if (parseString != "") {
-                $.post(Handler, { action: 'FrmTextBox_ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
-
-                    if (data.indexOf('err@') != -1) {
-                        alert(data);
-                        return;
-                    }
-
-                    document.getElementById("TB_EnumKey").value = data;
-
-                });
-            }
-        }
          
         //初始化,信息.
         $(function () {

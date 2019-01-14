@@ -4,13 +4,14 @@
     <title></title>
     <!-- 引用配置文件.-->
     <script src="../../../Scripts/config.js" type="text/javascript"> </script>
-    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
 
@@ -93,9 +94,7 @@
                     return;
                 }
 
-
                 var val = $('input:radio[name="RB_QPJP"]:checked').val();
-
                 if (tbName == "") {
                     document.getElementById("TB_No").value = "";
                     return;
@@ -107,45 +106,25 @@
                 }
 
                 if (val == "ZiDuanQuanPin") {
-                    ParseStringToPinYin(TB_Name, true);
+                    ParsePinYin(tbName, true, "TB_No");
                 }
                 else {
-                    ParseStringToPinYin(TB_Name, false);
+                    ParsePinYin(tbName, false, "TB_No");
                 }
             });
 
             //点击全拼
             $('input[id=RB_QP]').change(function () {
-                var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, true);
+                var name = document.getElementById("TB_Name").value;
+                ParsePinYin(name, true, "TB_No");
             });
             //点击简拼
             $('input[id=RB_JP]').change(function () {
-                var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, false);
+                var name = document.getElementById("TB_Name").value;
+                ParsePinYin(name, false, "TB_No");
             });
         });
 
-
-
-        //转拼音，并去除开头为数字的字符
-        function ParseStringToPinYin(parseString, parseModel) {
-
-            parseString = $.trim(parseString);
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
-            handler.AddPara("name", parseString);
-            handler.AddPara("flag", parseModel);
-            var data = handler.DoMethodReturnString("FrmTextBox_ParseStringToPinyin");
-
-            if (data.indexOf('err@') != -1) {
-                alert(data);
-                return;
-            }
-
-            document.getElementById("TB_No").value = data;
-
-        }
         //传入父窗体
         function GetFrmInfo() {
             return {

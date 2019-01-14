@@ -239,19 +239,6 @@ $(function () {
 
 function LoadFLow() {
 
-    //    $.post(location.href, { 'action': 'LoadFlow' }, function(js) {
-
-    //        if (js) {
-    //            var pusData = eval('(' + js + ')');
-    //            $('#CB_Flow').combobox({
-    //                data: pusData,
-    //                valueField: 'No',
-    //                textField: 'Name'
-    //            });
-    //        }
-    //    });
-
-
     $('#CB_Flow').combobox({
         url: location.href + "&action=LoadFlow",
         valueField: 'No',

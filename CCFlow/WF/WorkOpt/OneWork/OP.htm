@@ -9,7 +9,6 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-   
     <script type="text/javascript">
 
         $(function () {
@@ -233,10 +232,14 @@
             if (confirm('您确定要执行撤销吗?') == false)
                 return;
 
-            var url = Handler + "?DoType=OP_UnSend&FK_Node=<%=FK_Node %>&FK_Flow=" + fk_flow + "&WorkID=" + workID;
-            $.post(url, null, function (msg) {
-                $("#opmsg").empty().append(msg);
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddPara("FK_Node",<%=FK_Node %>);
+            handler.AddPara("FK_Flow",fk_flow);
+            handler.AddPara("WorkID",workID);
+
+            var data= handler.DoMethodReturnString("OP_UnSend");
+             $("#opmsg").empty().append(data);
+             
         }
 
         function addBlockBegin(title) {

@@ -28,12 +28,7 @@ function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {
     });
 }
 
-
-//公共方法
-function Handler_AjaxPostData(param, callback, scope) {
-    $.post(Handler, param, callback);
-}
-
+ 
 // for Java.
 // var controllerURLConfig = '/WF/Admin/CCFormDesigner/CCFromHandler';
 // var plant = 'JFlow'; //运行平台.

@@ -175,9 +175,5 @@ ccflowFormTree.Data = function (url) {
             }
         });
     }
-
-    //公共方法
-    function queryPostData(url, param, callback, scope) {
-        $.post(url, param, callback);
-    }
+ 
 }

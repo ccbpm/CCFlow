@@ -1,5 +1,7 @@
 ﻿//公共方法
 function ajaxService(param, callback, scope) {
+
+
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据

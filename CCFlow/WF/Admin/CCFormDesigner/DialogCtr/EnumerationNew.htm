@@ -41,53 +41,56 @@
 //            });
 //        }
 
-        $(function () {
+		$(function () {
 
-            var doType = GetQueryString('DoType');
+		    var doType = GetQueryString('DoType');
 
-            if (doType != null) {
-                $("#RB_QPJP").attr({ "disabled": "disabled" });
-                $("#RB_QPQP").attr({ "disabled": "disabled" });
-                $("#TB_EnumKey").attr({ "disabled": "disabled" });
-                return;
-            }
+		    if (doType != null) {
+		        $("#RB_QPJP").attr({ "disabled": "disabled" });
+		        $("#RB_QPQP").attr({ "disabled": "disabled" });
+		        $("#TB_EnumKey").attr({ "disabled": "disabled" });
+		        return;
+		    }
 
-            var tb_Name = document.getElementById("TB_EnumName");
-            tb_Name.focus();
+		    var tb_Name = document.getElementById("TB_EnumName");
+		    tb_Name.focus();
 
-            $('#TB_EnumName').blur(function () //文本失去焦点时触发的事件
-            {
-                var name = document.getElementById("TB_EnumName").value;
-                var val = $('input:radio[name="RB_QPJP"]:checked').val();
-                if (name == "") {
-                    document.getElementById("TB_EnumKey").value = "";
-                    return;
-                }
+		    $('#TB_EnumName').blur(function () //文本失去焦点时触发的事件
+		    {
+		        var name = document.getElementById("TB_EnumName").value;
+		        var val = $('input:radio[name="RB_QPJP"]:checked').val();
+		        if (name == "") {
+		            document.getElementById("TB_EnumKey").value = "";
+		            return;
+		        }
 
-                if (val == "ziduanquanpin")  
-                    ParseStringToPinYin(name, true);
-                else  
-                    ParseStringToPinYin(name, false);
- 
-            });
+		        if (val == "ziduanquanpin") {
+		            ParseStringToPinYin(name, true);
+		        }
+		        else {
+		            ParseStringToPinYin(name, false);
+		        }
 
-            //点击全拼
-            $('input[id=RB_QP]').change(function () {
-                var tbName = document.getElementById("TB_EnumName").value;
-                ParseStringToPinYin(tbName, true);
-            });
+		    });
 
-            //点击简拼
-            $('input[id=RB_JP]').change(function () {
-                var tbName = document.getElementById("TB_EnumName").value;
-                ParseStringToPinYin(tbName, false);
-            });
-        });
+		    //点击全拼
+		    $('input[id=RB_QP]').change(function () {
+		        var tbName = document.getElementById("TB_EnumName").value;
+		        ParseStringToPinYin(tbName, true);
+		    });
+
+		    //点击简拼
+		    $('input[id=RB_JP]').change(function () {
+		        var tbName = document.getElementById("TB_EnumName").value;
+		        ParseStringToPinYin(tbName, false);
+		    });
+		});
 
         var pageData = {};
 
         //转拼音，并去除开头为数字的字符
         function ParseStringToPinYin(parseString, parseModel) {
+
             parseString = $.trim(parseString);
             if (parseString != "") {
                 $.post(Handler, { action: 'FrmTextBox_ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
@@ -206,8 +209,10 @@
                 return;
             }
 
-            //秦 18.11.16            if (!CheckID(keyofEn)) {
-                alert("枚举键值不符合规则");                return;
+            //秦 18.11.16
+            if (!CheckID(keyofEn)) {
+                alert("枚举键值不符合规则");
+                return;
             }
              
 

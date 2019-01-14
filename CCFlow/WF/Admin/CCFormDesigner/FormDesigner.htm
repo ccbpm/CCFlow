@@ -15,6 +15,7 @@
     <script src="../../Scripts/config.js" type="text/javascript"> </script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"> </script>
     <script src="../../Comm/Gener.js" type="text/javascript"> </script>
+
     <script type="text/javascript" src="./lib/dashed.js"></script>
     <script type="text/javascript" src="./lib/canvasprops.js"></script>
     <script type="text/javascript" src="./lib/style.js"></script>
@@ -94,9 +95,14 @@
         //页面启动函数.
         $(function () {
 
-            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
-            //            handler.AddUrlData();
-            //            mapData = handler.DoMethodReturnJSON("FormDesigner_InitMapData");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("FrmID", CCForm_FK_MapData);
+            handler.AddPara("KeyOfEn", frmVal.KeyOfEn);
+            handler.AddPara("Name", frmVal.Name);
+            handler.AddPara("x", x);
+            handler.AddPara("y", y);
+            mapData = handler.DoMethodReturnString("NewImage");
+            return;
 
             var frmID = GetQueryString("FK_MapData");
 

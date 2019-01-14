@@ -203,7 +203,21 @@ FigureCreateCommand.prototype = {
                 return false;
             }
 
-          
+            /*
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("FrmID", CCForm_FK_MapData);
+            handler.AddPara("KeyOfEn", frmVal.KeyOfEn);
+            handler.AddPara("Name", frmVal.Name);
+            handler.AddPara("x", x);
+            handler.AddPara("y", y);
+            var data = handler.DoMethodReturnString("NewImage");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert('创建成功.');
+            transField.paint(); */
+         
             // 定义参数，让其保存到数据库里。
             var param = {
                 DoType: "NewImage",
@@ -224,6 +238,9 @@ FigureCreateCommand.prototype = {
                 transField.paint();
 
             }, this);
+           
+
+
 
         }, this.HidenFieldCreate);
 

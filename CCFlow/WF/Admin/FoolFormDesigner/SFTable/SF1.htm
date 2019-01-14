@@ -45,15 +45,13 @@
             //点击全拼
             $('input[id=RB_QP]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
-                ParsePinYin(TB_Name, true, "TB_No");
-//                ParseStringToPinYin(TB_Name, true, "Table");
+                ParseStringToPinYin(TB_Name, true, "Table");
             });
 
             //点击简拼
             $('input[id=RB_JP]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
-                ParsePinYin(TB_Name, false, "TB_No");
-//                ParseStringToPinYin(TB_Name, false, "Table");
+                ParseStringToPinYin(TB_Name, false, "Table");
             });
 
 

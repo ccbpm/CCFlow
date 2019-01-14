@@ -1359,6 +1359,46 @@ namespace BP.En
 			attr.UIIsReadonly=uiIsEnable;
 			this.Add(attr,true,false);
 		}
+
+        #region DDLSQL
+        public void AddDDLSQL(string key, string defaultVal, string desc, string sql, bool uiIsEnable = true)
+        {
+            Attr attr = new Attr();
+            attr.Key = key;
+            attr.Field = key;
+            attr.DefaultVal = defaultVal;
+            attr.MyDataType = DataType.AppString;
+            attr.MyFieldType = FieldType.Normal;
+            attr.MaxLength = 50;
+
+            attr.Desc = desc;
+            attr.UIContralType = UIContralType.DDL;
+
+            attr.UIDDLShowType = DDLShowType.BindSQL;
+
+            attr.UIBindKey = sql;
+            attr.HisFKEns = null;
+            attr.UIIsReadonly = !uiIsEnable;
+            this.Add(attr);
+
+
+            //他的名称列.
+            attr = new Attr();
+            attr.Key = key + "Text";
+            attr.Field = key + "Text";
+            attr.DefaultVal = defaultVal;
+            attr.MyDataType = DataType.AppString;
+            attr.MyFieldType = FieldType.Normal;
+            attr.MaxLength = 200; //最大长度 @李国文
+            attr.Desc = desc;
+            attr.UIContralType = UIContralType.TB;
+            //	attr.UIBindKey = sql;
+            attr.UIIsReadonly = true;
+            attr.UIVisible = false;
+            this.Add(attr);
+        }
+        #endregion DDLSQL
+
 		public void AddDDLEntities(string key , string field,  object defaultVal, int dataType, string desc, Entities ens, string refKey, string refText, bool uiIsEnable )
 		{
 			AddDDLEntities(key,field,defaultVal, dataType , FieldType.FK , desc, ens,refKey,refText,uiIsEnable);

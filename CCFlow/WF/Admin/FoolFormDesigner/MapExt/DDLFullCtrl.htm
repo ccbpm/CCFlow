@@ -144,6 +144,8 @@
 
         function FullDtl() {
             var myPK = GetQueryString('MyPK');
+            if(myPK == null ||myPK == undefined)
+                myPK = "DDLFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn"); 
             var DBType = $("#DDL_DBType").val();
             var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType=' + DBType;
             window.location.href = url;
@@ -154,6 +156,8 @@
         function FullDDL() {
 
             var myPK = GetQueryString('MyPK');
+            if(myPK == null ||myPK == undefined)
+             myPK  = "DDLFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");; 
             var DBType = $("#DDL_DBType").val();
             var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType=' + DBType;
             window.location.href = url;

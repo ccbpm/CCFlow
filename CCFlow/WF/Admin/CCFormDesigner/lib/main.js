@@ -3205,14 +3205,21 @@ function Save(showInfo) {
     //save the URLs of figures as a CSV 
     var lMap = linkMap();
 
-    $.post( Handler, {
-        action: 'SaveForm',
-        diagram: serializedDiagram,
-        png: dataURL,
-        linkMap: lMap,
-        svg: "",
-        FK_MapData: CCForm_FK_MapData
-    }, function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+    handler.AddPara("diagram", serializedDiagram);
+    handler.AddPara("png", dataURL);
+    handler.AddPara("linkMap", lMap);
+    handler.AddPara("svg", "");
+    handler.AddPara("FK_MapData", CCForm_FK_MapData);
+    var data = handler.DoMethodReturnString("SaveForm");
+//    $.post( Handler, {
+//        action: 'SaveForm',
+//        diagram: serializedDiagram,
+//        png: dataURL,
+//        linkMap: lMap,
+//        svg: "",
+//        FK_MapData: CCForm_FK_MapData
+//    }, function (data) {
 
         if (data.indexOf('err@') != -1) {
             alert(data);
@@ -3221,7 +3228,7 @@ function Save(showInfo) {
 
         Designer_ShowMsg(data);
 
-    });
+//    });
 }
 
 /** Print current diagram

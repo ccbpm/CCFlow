@@ -11,6 +11,8 @@
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript" > </script>
     <script type="text/javascript">
         $(function () {
 
@@ -57,39 +59,27 @@
                 }
 
                 if (val == "ziduanquanpin") {
-                    ParseStringToPinYin(TB_Name, true);
+                    ParsePinYin(TB_Name, true, "TB_KeyOfEn");
+//                    ParseStringToPinYin(TB_Name, true);
                 }
                 else {
-                    ParseStringToPinYin(TB_Name, false);
+                    ParsePinYin(TB_Name, false, "TB_KeyOfEn");
+//                    ParseStringToPinYin(TB_Name, false);
                 }
 
             });
             //点击全拼
             $('input[id=RB_qp]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, true);
+                ParsePinYin(TB_Name, true, "TB_KeyOfEn");
             });
             //点击简拼
             $('input[id=RB_jp]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, false);
+                ParsePinYin(TB_Name, false, "TB_KeyOfEn");
             });
         });
 
-        //转拼音，并去除开头为数字的字符
-        function ParseStringToPinYin(parseString, parseModel) {
-            parseString = $.trim(parseString);
-            if (parseString != "") {
-                $.post(Handler, { action: 'FrmTextBox_ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
-
-                    if (data.indexOf('err@') != -1) {
-                        alert(data);
-                        return;
-                    }
-                        document.getElementById("TB_KeyOfEn").value = data;
-                });
-            }
-        }
         //传入父窗体
         function GetFrmInfo() {
             return {

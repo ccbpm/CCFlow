@@ -95,14 +95,9 @@
         //页面启动函数.
         $(function () {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
-            handler.AddPara("FrmID", CCForm_FK_MapData);
-            handler.AddPara("KeyOfEn", frmVal.KeyOfEn);
-            handler.AddPara("Name", frmVal.Name);
-            handler.AddPara("x", x);
-            handler.AddPara("y", y);
-            mapData = handler.DoMethodReturnString("NewImage");
-            return;
+            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            //            handler.AddUrlData();
+            //            mapData = handler.DoMethodReturnJSON("FormDesigner_InitMapData");
 
             var frmID = GetQueryString("FK_MapData");
 

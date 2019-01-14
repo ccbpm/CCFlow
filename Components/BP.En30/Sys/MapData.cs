@@ -1928,6 +1928,8 @@ namespace BP.Sys
                 item.Update();
             }
         }
+  
+      
         /// <summary>
         /// 导入表单
         /// </summary>
@@ -1995,8 +1997,9 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(oldMapID) == true)
                     oldMapID = dtMap.Rows[0]["No"].ToString();
             }
-
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
+             
+
 
             #region 表单元素
             foreach (DataTable dt in ds.Tables)
@@ -2005,8 +2008,13 @@ namespace BP.Sys
                 switch (dt.TableName)
                 {
                     case "Sys_MapDtl":
+
+                        // int dtlIdx = 0;
                         foreach (DataRow dr in dt.Rows)
                         {
+                            //   dtlIdx++;
+                            // string generFrmDtlID = fk_mapdata + "Dtl" + dtlIdx;
+
                             MapDtl dtl = new MapDtl();
                             foreach (DataColumn dc in dt.Columns)
                             {
@@ -2015,6 +2023,7 @@ namespace BP.Sys
                                     continue;
 
                                 dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+
                             }
                             dtl.Insert();
                         }
@@ -2257,7 +2266,7 @@ namespace BP.Sys
 
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
-                            en.Insert();
+                            en.DirectInsert();
                         }
                         break;
                     case "Sys_MapExt":

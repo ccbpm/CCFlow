@@ -101,7 +101,7 @@ namespace BP.Sys
             en.MyPK = fk_mapdata + "_" + ctrlID;
             en.FK_MapData = fk_mapdata;
             en.NoOfObj = ctrlID;
-                en.RetrieveFromDBSources();
+            en.RetrieveFromDBSources();
 
             en.X = x;
             en.Y = y;

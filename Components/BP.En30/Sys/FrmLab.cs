@@ -291,7 +291,6 @@ namespace BP.Sys
         }
         #endregion
 
-
         /// <summary>
         /// 是否存在相同的数据?
         /// </summary>
@@ -323,7 +322,6 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmLabs(string fk_mapdata)
         {
-           
            this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
         }
         /// <summary>

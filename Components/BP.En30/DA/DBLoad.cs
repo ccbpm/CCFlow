@@ -189,12 +189,16 @@ namespace BP.DA
                 throw new Exception("@获取table出错误：" + ex.Message + strConn);
             }
         }
-       
         public static DataTable ReadExcelFileToDataTable(string fileFullName,int sheetIdx = 0)
         {
             string tableName = GenerTableNameByIndex(fileFullName, sheetIdx);
             string sql = "SELECT * FROM [" + tableName + "]";
-            return ReadExcelFileToDataTable(fileFullName, sql);
+            return ReadExcelFileToDataTableBySQL(fileFullName, sql);
+        }
+        public static DataTable ReadExcelFileToDataTable(string fileFullName, string tableName)
+        {
+            string sql = "SELECT * FROM [" + tableName + "]";
+            return ReadExcelFileToDataTableBySQL(fileFullName, sql);
         }
 		/// <summary>
 		/// 通过文件，sql ,取出Table.
@@ -202,7 +206,7 @@ namespace BP.DA
 		/// <param name="filePath"></param>
 		/// <param name="sql"></param>
 		/// <returns></returns>
-        public static DataTable ReadExcelFileToDataTable(string filePath, string sql)
+        public static DataTable ReadExcelFileToDataTableBySQL(string filePath, string sql)
         {
             DataTable dt = new DataTable("dt");
 

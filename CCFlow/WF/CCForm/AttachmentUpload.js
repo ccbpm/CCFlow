@@ -8,8 +8,10 @@ function Down2017(mypk) {
 
     //$("#Msg").html("<img src=../Img/loading.gif />正在加载,请稍后......");
 
+
     //组织url.
     var url = Handler + "?DoType=AttachmentUpload_Down&MyPK=" + mypk + "&m=" + Math.random();
+
 
     $.ajax({
         type: 'post',

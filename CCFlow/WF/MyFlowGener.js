@@ -420,6 +420,7 @@ function Save() {
     }
 
     var json = getFormData(true, true);
+    //alert(json);
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddUrlData(json);

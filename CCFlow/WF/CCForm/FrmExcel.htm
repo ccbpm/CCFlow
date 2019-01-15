@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>数据字典表</title>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+
+    <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../Scripts/CreateControl.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+
+            alert('该功能尚未完成...');
+            return;
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnJSON("FrmVSTO_Init");
+
+            var html1 = "<a href='" + data.UrlOfVSTO + "'>打开VSTO版本excel模式的表单</a>";
+            $("#UrlOfVSTO").html(html1); //打开Excel表单.
+
+            var html1 = "<a href='" + data.UrlOfFrm + "'>打开自由表单</a>";
+            $("#UrlOfFrm").html(html1); //打开Excel表单.
+
+            $("#Msg").html("");
+        });
+     </script>
+</head>
+<body>
+ 
+
+  <br />
+        <br />
+        <fieldset>
+            <legend>处理表单</legend>
+            <ul>
+                <li><div id="UrlOfVSTO" > </div></li>
+                <li><div id="UrlOfFrm" > </div></li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>插件安装说明</legend>
+            <ul>
+                <li>该插件是一个ccflow开发的excel插件，用户打开处理excel表单的插件。</li>
+                <li>该需要下载后安装</li>
+                <li><a href="/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip">
+                    点击此处下载VSTO表单插件</a></li>
+            </ul>
+        </fieldset>
+
+</body>
+</html>

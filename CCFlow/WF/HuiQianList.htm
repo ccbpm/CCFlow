@@ -29,8 +29,9 @@
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="./Scripts/config.js" type="text/javascript"></script>   
-      <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>  
+    <script src="./Comm/Gener.js" type="text/javascript"></script>   
+    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
     <script type="text/javascript">
         function GroupBarClick(groupName) {
 
@@ -96,30 +97,28 @@
             var cdt = getNowFormatDate();
             var timeKey = Math.random();
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=HuiQianList_Init&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddJson();
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("HuiQianList_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
 
-                    data = eval('(' + data + ')');
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    //设置表头.
-                    var groupBy = GetQueryString("GroupBy");
-                    if (groupBy == "" || groupBy == null)
-                        groupBy = "ByFlow";
+            data = eval('(' + data + ')');
+
+            //设置表头.
+            var groupBy = GetQueryString("GroupBy");
+            if (groupBy == "" || groupBy == null)
+                groupBy = "ByFlow";
 
 
             var nodeIDt = GetQueryString("FK_Node");
-			var tablet = "";
-          
+            var tablet = "";
+
             tablet += "<th>序号</th>";
             // title += "<th style='width:20px;'>优先级</th>";
             tablet += "<th>标题</th>";
@@ -139,138 +138,135 @@
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >节点</th>";
             }
 
-            
+
             tablet += "<th>参与人</th>";
-           // title += "<th>备注</th>";
-           
-
-            
-             $("#tablet").html(tablet);
-             
+            // title += "<th>备注</th>";
 
 
-                    //生成分组的字符串.
-                    var str = "";
-                    for (var i = 0; i < data.length; i++) {
 
-                        if (groupBy == "ByNode") {
-                            if (str.indexOf('@' + data[i].NodeName) == -1)
-                                str += "@" + data[i].NodeName;
-                        }
+            $("#tablet").html(tablet);
 
-                        if (groupBy == "ByFlow") {
-                            if (str.indexOf('@' + data[i].FlowName) == -1)
-                                str += "@" + data[i].FlowName;
-                        }
 
-                        if (groupBy == "ByStarter") {
-                            if (str.indexOf('@' + data[i].StarterName) == -1)
-                                str += "@" + data[i].StarterName;
-                        }
-                    }
-                    var strs = str.split("@"); //生成数组.
-					var listbox='';
-                    var num = 0;
-                    var is1 = false;
 
-                    //循环数组.
-                    for (var idx = 0; idx < strs.length; idx++) {
+            //生成分组的字符串.
+            var str = "";
+            for (var i = 0; i < data.length; i++) {
 
-                        var groupName = strs[idx];
+                if (groupBy == "ByNode") {
+                    if (str.indexOf('@' + data[i].NodeName) == -1)
+                        str += "@" + data[i].NodeName;
+                }
 
-                        if (groupName == "" || groupName == null)
+                if (groupBy == "ByFlow") {
+                    if (str.indexOf('@' + data[i].FlowName) == -1)
+                        str += "@" + data[i].FlowName;
+                }
+
+                if (groupBy == "ByStarter") {
+                    if (str.indexOf('@' + data[i].StarterName) == -1)
+                        str += "@" + data[i].StarterName;
+                }
+            }
+            var strs = str.split("@"); //生成数组.
+            var listbox = '';
+            var num = 0;
+            var is1 = false;
+
+            //循环数组.
+            for (var idx = 0; idx < strs.length; idx++) {
+
+                var groupName = strs[idx];
+
+                if (groupName == "" || groupName == null)
+                    continue;
+
+
+                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=5 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
+
+                //增加处理.
+                for (var i = 0; i < data.length; i++) {
+
+                    var work = data[i];
+                    if (groupBy == "ByNode") {
+
+                        if (work.NodeName != groupName) {
                             continue;
-
-                        
-                        listbox+="<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=5 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
-
-                        //增加处理.
-                        for (var i = 0; i < data.length; i++) {
-
-                            var work = data[i];
-                            if (groupBy == "ByNode") {
-
-                                if (work.NodeName != groupName) {
-                                    continue;
-                                }
-                            } else if (groupBy == "ByFlow") {
-                                if (work.FlowName != groupName) {
-                                    continue;
-                                }
-                            } else if (groupBy == "ByStarter") {
-                                if (work.StarterName != groupName) {
-                                    continue;
-                                }
-                            } else {
-                                continue;
-                            }
-
-                            var newRow = "";
-                            var title = work.Title;
-                            var flowNo = work.FK_Flow;
-                            var flowName = work.FlowName;
-                            var nodeName = work.NodeName;
-                            var starterName = work.StarterName;
-                            var nodeID = work.FK_Node;
-                            var workID = work.WorkID;
-                            var paras = ""; // work.AtPara;
-                            var todoEmps = work.TodoEmps;
-
-                            if (paras != '') {
-                                paras = paras.replace("'", "\\'");
-                                while (true) {
-                                    paras = paras.replace('@', '&');
-
-                                    if (paras.indexOf('@') < 0) {
-                                        break;
-                                    }
-                                }
-                                paras = "1" + paras;
-                            }
-
-                            num++;
-
-                            if (is1 == true) {
-                                newRow += "<tr  id='" + groupName + num + "' >";
-                                is1 = false;
-                            }
-                            else {
-                                newRow += "<tr  id='" + groupName + num + "' >";
-                                is1 = true;
-                            }
-
-                            listbox += "<td>" + num + "</td>"; //序号.
-                            //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
-
-                            var url = "";
-
-                            url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" >" + title + "</a>";
-
-                            listbox += "<td>" + url + "</td>"; //标题
-
-                            if (groupBy == "ByNode") {
-                                listbox += "<td>" + flowName + "</td>"; //流程类别
-                                listbox += "<td>" + starterName + "</td>"; //发起人
-                            } else if (groupBy == "ByFlow") {
-                                listbox += "<td>" + nodeName + "</td>"; //节点名称
-                                listbox += "<td>" + starterName + "</td>"; //发起人
-
-                            } else if (groupBy == "ByStarter") {
-                                listbox += "<td>" + flowName + "</td>"; //流程类别
-                                listbox += "<td>" + nodeName + "</td>"; //节点名称
-                            }
-
-                            listbox += "<td>" + todoEmps + "</td>"; //参与人
-                            listbox += "</tr>";
-
                         }
+                    } else if (groupBy == "ByFlow") {
+                        if (work.FlowName != groupName) {
+                            continue;
+                        }
+                    } else if (groupBy == "ByStarter") {
+                        if (work.StarterName != groupName) {
+                            continue;
+                        }
+                    } else {
+                        continue;
                     }
 
-                    $('#Table1').html(listbox);
-					$("#Table2").html("合计:" + data.length + "条");
+                    var newRow = "";
+                    var title = work.Title;
+                    var flowNo = work.FK_Flow;
+                    var flowName = work.FlowName;
+                    var nodeName = work.NodeName;
+                    var starterName = work.StarterName;
+                    var nodeID = work.FK_Node;
+                    var workID = work.WorkID;
+                    var paras = ""; // work.AtPara;
+                    var todoEmps = work.TodoEmps;
+
+                    if (paras != '') {
+                        paras = paras.replace("'", "\\'");
+                        while (true) {
+                            paras = paras.replace('@', '&');
+
+                            if (paras.indexOf('@') < 0) {
+                                break;
+                            }
+                        }
+                        paras = "1" + paras;
+                    }
+
+                    num++;
+
+                    if (is1 == true) {
+                        newRow += "<tr  id='" + groupName + num + "' >";
+                        is1 = false;
+                    }
+                    else {
+                        newRow += "<tr  id='" + groupName + num + "' >";
+                        is1 = true;
+                    }
+
+                    listbox += "<td>" + num + "</td>"; //序号.
+                    //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
+
+                    var url = "";
+
+                    url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" >" + title + "</a>";
+
+                    listbox += "<td>" + url + "</td>"; //标题
+
+                    if (groupBy == "ByNode") {
+                        listbox += "<td>" + flowName + "</td>"; //流程类别
+                        listbox += "<td>" + starterName + "</td>"; //发起人
+                    } else if (groupBy == "ByFlow") {
+                        listbox += "<td>" + nodeName + "</td>"; //节点名称
+                        listbox += "<td>" + starterName + "</td>"; //发起人
+
+                    } else if (groupBy == "ByStarter") {
+                        listbox += "<td>" + flowName + "</td>"; //流程类别
+                        listbox += "<td>" + nodeName + "</td>"; //节点名称
+                    }
+
+                    listbox += "<td>" + todoEmps + "</td>"; //参与人
+                    listbox += "</tr>";
 
                 }
-            });
+            }
+
+            $('#Table1').html(listbox);
+            $("#Table2").html("合计:" + data.length + "条");
         }
         //获取当前时间
         function getNowFormatDate() {

@@ -88,7 +88,7 @@
 
         })
 
-      
+
 
         //设置按钮
         function InitToolbar() {
@@ -195,7 +195,7 @@
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (defValue == null || defValue == "null")
                         continue;
-                    if($('#TB_' + mapAttr.KeyOfEn).val()=="" || $('#TB_' + mapAttr.KeyOfEn).val()==undefined)
+                    if ($('#TB_' + mapAttr.KeyOfEn).val() == "" || $('#TB_' + mapAttr.KeyOfEn).val() == undefined)
                         $('#TB_' + mapAttr.KeyOfEn).val(defValue);
 
                     if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
@@ -329,7 +329,7 @@
                     continue;
                 }
 
-                if (attr.GroupID != groupID || attr.UIVisible == 0 )
+                if (attr.GroupID != groupID || attr.UIVisible == 0)
                     continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
@@ -342,8 +342,8 @@
 
                 //输出帮助连接.
                 var name = null;
-                var helpUrl = GetPara(attr.AtPara,"HelpUrl");
-                if (helpUrl== null || helpUrl =="") {
+                var helpUrl = GetPara(attr.AtPara, "HelpUrl");
+                if (helpUrl == null || helpUrl == "") {
                     name = attr.Name;
                 }
                 else {
@@ -470,10 +470,10 @@
             //单附件上传
             if (entityAthType == 1) {
                 html += "<tr>";
-                if(fileDesc == "")
+                if (fileDesc == "")
                     html += "<td class='FDesc' style='width:20%;'>附件上传</td>";
                 else
-                    html += "<td class='FDesc' style='width:20%;'>"+fileDesc+"</td>"; 
+                    html += "<td class='FDesc' style='width:20%;'>" + fileDesc + "</td>";
                 html += "<td colspan=3>";
                 html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;' onchange='changeFile(1)' />";
                 html += "已上传的文件：<span id='FileInfo'></span>";
@@ -495,7 +495,7 @@
             return html;
         }
 
-       
+
 
         function GenerRM(rm) {
 
@@ -568,7 +568,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='ChangeKeyOfEnText(this,\""+mapAttr.KeyOfEn+"\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='ChangeKeyOfEnText(this,\"" + mapAttr.KeyOfEn + "\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -583,16 +583,16 @@
                 return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
-//            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
+            //            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
 
-//                //枚举类型.
-//                if (mapAttr.UIIsEnable == 1)
-//                    enableAttr = "";
-//                else
-//                    enableAttr = "disabled='disabled'";
+            //                //枚举类型.
+            //                if (mapAttr.UIIsEnable == 1)
+            //                    enableAttr = "";
+            //                else
+            //                    enableAttr = "disabled='disabled'";
 
-//                return "<select  class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-//            }
+            //                return "<select  class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            //            }
 
             //添加文本框 ，日期控件等
             //AppString
@@ -751,7 +751,7 @@
                 if (mapAttr.UIRefKeyText != "")
                     keyText = mapAttr.UIRefKeyText;
                 $.each(data, function (i, obj) {
-                   
+
                     operations += "<option " + (obj[key] == defVal ? " selected='selected' " : "") + " value='" + obj[key] + "'>" + obj[keyText] + "</option>";
                 });
             }
@@ -804,7 +804,7 @@
         }
 
         function ChangeKeyOfEnText(obj, KeyOfEn) {
-            if($("#TB_" + KeyOfEn + "Text").length == 1)
+            if ($("#TB_" + KeyOfEn + "Text").length == 1)
                 $("#TB_" + KeyOfEn + "Text").val($(obj).find("option:selected").text());
         }
         //新建.
@@ -926,7 +926,7 @@
             window.location.href = url; ; //刷新.
         }
 
-        
+
 
         function changeFile() {
             var pkval = GetPKVal();
@@ -962,19 +962,16 @@
 
             queryString = replaceParamVal(queryString, "PKVal", pkval);
 
-
             //URL 路径
             var URL = "/WF/Comm/Handler.ashx?DoType=EntityAth_Upload";
             if (plant != "CCFlow") {
                 var currentPath = window.document.location.href;
                 var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
                 URL = path + "/WF/Comm/ProcessRequest.do?DoType=EntityAth_Upload";
-
             }
 
             if (queryString != null && queryString.length > 0)
                 URL += "&" + queryString;
-
 
             $.ajax({
                 url: URL,
@@ -994,7 +991,6 @@
                     console.log("error");
                 }
             });
-
         }
 
         function Delete() {
@@ -1004,7 +1000,6 @@
 
             var enName = GetQueryString("EnName");
             var en = new Entity(enName, GetPKVal());
-
 
             //删除相关的设置
             var mapExts = new Entities("BP.Sys.MapExts");
@@ -1017,7 +1012,7 @@
             }
             en = new Entity(enName, GetPKVal());
             en.Delete();
-          
+
             $("#Btns").html("");
             $("#Left").html("");
             $("#CCFormTabs").html("删除成功..");

@@ -1,13 +1,13 @@
 ﻿//检查字段,从表名,附件ID,输入是否合法.
-function CheckID(val) { 
+function CheckID(val) {
     //首位可以是字母以及下划线。 
     //首位之后可以是字母，数字以及下划线。下划线后不能接下划线
-     
+
     var flag = false; //用来判断
     var reg = /(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/;
-   
+
     flag = reg.test(val);
-   
+
     return flag;
 }
 
@@ -32,7 +32,7 @@ if (plant == "CCFlow") {
     // JFlow
     dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
 }
- 
+
 
 /* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {
@@ -1466,14 +1466,14 @@ var Entities = (function () {
         }
 
         if (divisor == 3) {
-            if ( (args.length -1 ) % divisor != 0) {
+            if ((args.length - 1) % divisor != 0) {
                 orderBy = args[args.length - 1];
                 length = args.length - 1;
             } else {
                 length = args.length;
             }
             for (var i = 1; i < length; i += 3) { //args[i+1]是操作符
-                params += "@" + args[i] + "|"+ args[i + 1] +"|"+ args[i + 2];
+                params += "@" + args[i] + "|" + args[i + 1] + "|" + args[i + 2];
             }
             if (typeof orderBy !== "undefined") {
                 params += "@OrderBy||" + orderBy;
@@ -1563,7 +1563,7 @@ var Entities = (function () {
             $.each(arguments, function (i, o) {
                 args.push(o);
             });
-            this.Paras = getParameters(args,3);
+            this.Paras = getParameters(args, 3);
             var self = this;
 
             if (self.ensName == null || self.ensName == "" || self.ensName == "") {
@@ -1958,24 +1958,21 @@ var HttpHandler = (function () {
     HttpHandler.prototype = {
 
         constructor: HttpHandler,
-
         AddUrlData: function (url) {
             var queryString = url;
             if (url == null || url == undefined || url == "")
                 queryString = document.location.search.substr(1);
 
-
-            if (queryString.length > 0) {
-                var self = this;
-                $.each(queryString.split("&"), function (i, o) {
-                    var param = o.split("=");
-                    if (param.length == 2 && validate(param[1])) {
-                        (function (key, value) {
-                            self.AddPara(key, value);
-                        })(param[0], param[1]);
-                    }
-                });
-            }
+            // queryString = encodeURI(encodeURI(queryString));
+            var self = this;
+            $.each(queryString.split("&"), function (i, o) {
+                var param = o.split("=");
+                if (param.length == 2 && validate(param[1])) {
+                    (function (key, value) {
+                        self.AddPara(key, value);
+                    })(param[0], param[1]);
+                }
+            });
 
         },
 
@@ -2245,7 +2242,7 @@ function DealExp(expStr, webUser) {
 }
 
 //根据AtPara例如AtPara=@Helpurl=XXX@Count=XXX,获取HelpUrl的值
-function GetPara(atPara,key) {     
+function GetPara(atPara, key) {
     if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
         return undefined;
     }
@@ -2270,7 +2267,7 @@ function SFTaleHandler(url) {
     //获取带"/"的项目名，如：/jflow-web
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 
-    var localpath =  localhostPaht + projectName;
+    var localpath = localhostPaht + projectName;
     if (plant == "CCFlow") {
         // CCFlow
         dynamicHandler = localhostPaht + "/DataUser/SFTableHandler.ashx";
@@ -2283,7 +2280,7 @@ function SFTaleHandler(url) {
     if (url.indexOf("?") == -1)
         url = url + "?1=1";
 
-    url = dynamicHandler  + url + "&t=" + new Date().getTime();
+    url = dynamicHandler + url + "&t=" + new Date().getTime();
     $.ajax({
         type: 'post',
         async: false,
@@ -2292,13 +2289,13 @@ function SFTaleHandler(url) {
         success: function (data) {
             if (data.indexOf("err@") != -1) {
                 alert(data);
-                jsonString="false";
+                jsonString = "false";
             }
 
-            jsonString =  data;
+            jsonString = data;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert(URL+"err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            alert(URL + "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
         }
     });
 

@@ -421,26 +421,21 @@ function Save() {
 
     var json = getFormData(true, true);
 
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: json,
-        url: MyFlow + "?DoType=Save",
-        dataType: 'html',
-        success: function (data) {
-            setToobarEnable();
-            //刷新 从表的IFRAME
-            var dtls = $('.Fdtl');
-            $.each(dtls, function (i, dtl) {
-                $(dtl).attr('src', $(dtl).attr('src'));
-            });
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData(json);
+    var data = handler.DoMethodReturnString("Save"); //执行保存方法.
 
-            if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-                $('#Message').html(data.substring(4, data.length));
-                $('#MessageDiv').modal().show();
-            }
-        }
+    setToobarEnable();
+    //刷新 从表的IFRAME
+    var dtls = $('.Fdtl');
+    $.each(dtls, function (i, dtl) {
+        $(dtl).attr('src', $(dtl).attr('src'));
     });
+
+    if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
+        $('#Message').html(data.substring(4, data.length));
+        $('#MessageDiv').modal().show();
+    }
 }
 
 //调用后，就关闭刷新按钮.
@@ -730,13 +725,13 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框      
+            //下拉框       
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 formArrResult.push(name + 'T=' + $(disabledEle).children('option:checked').text());
                 break;
 
-            //文本区域              
+            //文本区域               
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1844,7 +1839,7 @@ function OpenOffice() {
 
 
 
-    var paras = "WorkID=" + GetQueryString("WorkID")+",";
+    var paras = "WorkID=" + GetQueryString("WorkID") + ",";
     paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
     paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
 
@@ -1938,7 +1933,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人          
+            //发送选择接收节点和接收人           
             case "sendAccepter":
 
                 $('#modalHeader').text("发送到节点");

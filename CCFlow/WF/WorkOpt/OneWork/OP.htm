@@ -197,29 +197,18 @@
         }
 
         function DoFunc(doType, workid, fk_flow, fk_node) {
+
             if (doType == 'OP_DelFlow' || doType == 'Reset') {
                 if (confirm('您确定要执行吗？') == false)
                     return;
             }
 
-            var url = '';
-
-            if (doType == 'OP_HungUp' || doType == 'OP_UnHungUp') {
-                url = './../HungUpOp.aspx?WorkID=' + workid + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node;
-                var str = window.showModalDialog(url, '', 'dialogHeight: 350px; dialogWidth:500px;center: no; help: no');
-                if (str == undefined)
-                    return;
-                if (str == null)
-                    return;
-
-                window.location.href = window.location.href;
-                return;
-            }
-
-            url = Handler + '?DoType=' + doType + '&WorkID=' + workid + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node;
-            $.post(url, null, function (msg) {
-                $("#opmsg").empty().append(msg);
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_Node", fk_node);
+            var data = handler.DoMethodReturnString(doType);
+            $("#opmsg").empty().append(data);
         }
 
         function Takeback(workid, fk_flow, fk_node, toNode) {
@@ -234,9 +223,11 @@
                 return;
 
             var url = Handler + "?DoType=OP_UnSend&FK_Node=<%=FK_Node %>&FK_Flow=" + fk_flow + "&WorkID=" + workID;
-            $.post(url, null, function (msg) {
-                $("#opmsg").empty().append(msg);
-            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData(); 
+            var data = handler.DoMethodReturnString("OP_UnSend");
+            $("#opmsg").empty().append(data);
         }
 
         function addBlockBegin(title) {

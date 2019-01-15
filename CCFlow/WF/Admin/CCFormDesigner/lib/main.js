@@ -3331,61 +3331,6 @@ function exportCanvas() {
     window.open('./svg.php', 'SVG', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
 }
 
-/**Loads a saved diagram
-*@param {String} tempDiagramName - the name of temporary diagram
-**/
-function LoadTempDiagram(frmID) {
-    //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
-    Conver_CCForm_V1ToV2();
-    /*
-    $.post(Handler, { action: 'FormDesigner_Loadform', FK_MapData: frmID },
-
-        function (data) {
-
-            if (data.indexOf('err@') != -1) {
-                alert(data);
-                return;
-            }
-
-            try {
-
-                // 装载表单入口.
-                if (data == "" || data == "" || data == null) {
-
-                    
-                    return;
-                }
-
-                action(data);
-
-                var obj = eval('(' + data + ')');
-
-                //alert(obj);
-                //console.log(obj);
-
-                if (!('v' in obj) || obj.v != DIAGRAMO.fileVersion) {
-                    Importer.importDiagram(obj); //import 1st version of Diagramo files
-                }
-
-                STACK = Stack.load(obj['s']);
-                canvasProps = CanvasProps.load(obj['c']);
-                canvasProps.sync();
-                setUpEditPanel(canvasProps);
-
-                CONNECTOR_MANAGER = ConnectorManager.load(obj['m']);
-                CONTAINER_MANAGER = ContainerFigureManager.load(obj['p']);
-
-                draw();
-
-                //alert("loaded");
-            } catch (error) {
-                alert("main.js:load() 装载表单异常 Exception: " + error);
-            }
-        }
-    );
-    */
-}
-
 
 /**Saves a diagram. Actually send the serialized version of diagram
 *for saving
@@ -3497,9 +3442,7 @@ function Init_Panel(diagramId) {
 
     //Edit panel
     setUpEditPanel(canvasProps);
-
-    // loads diagram
-    LoadTempDiagram(diagramId);
+     
 
     // close layer when click-out
     addListeners();

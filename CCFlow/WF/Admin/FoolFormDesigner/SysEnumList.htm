@@ -111,14 +111,20 @@
              if (groupField == null)
                  groupField = "0";
 
-             url = Handler + "?DoType=SysEnumList_SaveEnumField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapdata + "&GroupFeid=" + groupField + "&EnumKey=" + enumID + "&m=" + Math.random();
+//             url = Handler + "?DoType=SysEnumList_SaveEnumField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapdata + "&GroupFeid=" + groupField + "&EnumKey=" + enumID + "&m=" + Math.random();
+             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+             handler.AddPara("KeyOfEn", str);
+             handler.AddPara("FK_MapData", fk_mapdata);
+             handler.AddPara("GroupFeid", groupField);
+             handler.AddPara("EnumKey", enumID);
+             var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
 
-             $.ajax({
-                 type: 'post',
-                 async: true,
-                 url: url,
-                 dataType: 'html',
-                 success: function (data) {
+//             $.ajax({
+//                 type: 'post',
+//                 async: true,
+//                 url: url,
+//                 dataType: 'html',
+//                 success: function (data) {
 
                      if (data.indexOf("err@") >= 0) {
                          alert(data);
@@ -127,8 +133,8 @@
 
                      url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=" + data;
                      window.location.href = url;
-                 }
-             });
+//                 }
+//             });
          }
 
         function NewEnum() {

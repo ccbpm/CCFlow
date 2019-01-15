@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>数据字典表</title>
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
@@ -10,12 +10,12 @@
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-     <base target="_self" /> 
+    <base target="_self" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-	<script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript" >
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
 
-		closeWhileEscUp();
+        closeWhileEscUp();
 
         /* ESC Key Down */
         function Esc() {
@@ -94,7 +94,7 @@
                 newRow += "<td>" + sfTable.FK_SFDBSrcText + "</td>";
                 newRow += "<td>" + sfTable.SrcTypeText + "</td>";
 
-                if (sfTable.CodeStruct==1)
+                if (sfTable.CodeStruct == 1)
                     newRow += "<td>树结构</td>";
                 else
                     newRow += "<td>编号名称</td>";
@@ -117,21 +117,21 @@
             var val = $('input:radio[name="RB"]:checked').val();
             var kv = val.split('@');
 
-            var sfTableNo =  kv[0];
+            var sfTableNo = kv[0];
             var sfTableName = kv[1];
             var fk_val = kv[2];
 
             if (fk_val == null || fk_val == "")
                 fk_val = sfTableNo;
 
-            var str = prompt("在把外键数据["+sfTableName+"]加入表单之前您需要确定该数据字典的字典名称\t\n字段名(必须为字母开头、数字或者下划线组合):", fk_val);
+            var str = prompt("在把外键数据[" + sfTableName + "]加入表单之前您需要确定该数据字典的字典名称\t\n字段名(必须为字母开头、数字或者下划线组合):", fk_val);
             if (str == null)
                 return;
 
             return {
                 Name: sfTableName,
                 KeyOfEn: str,
-                IsCreateLabel:true,
+                IsCreateLabel: true,
                 UIBindKey: sfTableNo
             };
         }
@@ -189,34 +189,29 @@
         }
 
         //删除.
-        function Del(no,name) {
+        function Del(no, name) {
 
             if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
                 return;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SFList_Delete&FK_SFTable=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("FK_SFTable", no);
+            var data = handler.DoMethodReturnString("SFList_Delete");
 
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href; //刷新页面.
-                }
-            });
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            window.location.href = window.location.href; //刷新页面.
         }
-        
+
         //编辑.
         function Edit(fk_sftable, sfType) {
 
             var ensName = '';
             //if (sfType == "0" || sfType==1 ) {
-                ensName = "BP.Sys.SFTable";
+            ensName = "BP.Sys.SFTable";
             //}
 
             if (fk_sftable.indexOf('.') != -1) {
@@ -236,7 +231,7 @@
 
         function New() {
             var url = './SFTable/Default.htm?DoType=New&FromApp=SL&s=' + Math.random();
-           
+
 
             OpenEasyUiDialog(url, "eudlgframe", "新建字典表", 600, 450, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -254,22 +249,36 @@
         });
     </script>
 </head>
-<body onkeypress="Esc()" >
-
-<table id="Table1" style=" width:98%; ">
-<caption>字典列表 - <a href="javascript:New()">创建字典表</a> </caption>
-<tr>
-<th>序</th>
-<th>编号</th>
-<th>名称</th>
-<th>数据源</th>
-<th>类型</th>
-<th>格式</th>
-<th>编辑</th>
-</tr>
-</table>
-
-<div id="Msg"></div>
-
+<body onkeypress="Esc()">
+    <table id="Table1" style="width: 98%;">
+        <caption>
+            字典列表 - <a href="javascript:New()">创建字典表</a>
+        </caption>
+        <tr>
+            <th>
+                序
+            </th>
+            <th>
+                编号
+            </th>
+            <th>
+                名称
+            </th>
+            <th>
+                数据源
+            </th>
+            <th>
+                类型
+            </th>
+            <th>
+                格式
+            </th>
+            <th>
+                编辑
+            </th>
+        </tr>
+    </table>
+    <div id="Msg">
+    </div>
 </body>
 </html>

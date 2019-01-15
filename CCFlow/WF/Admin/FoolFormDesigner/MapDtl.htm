@@ -17,19 +17,23 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+//            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             //初始化groupID.
             var fk_mapData = GetQueryString("FK_MapData");
             var fk_mapDtl = GetQueryString("FK_MapDtl");
 
             //初始化 GroupID.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=DtlInit&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("FK_MapData", fk_mapData);
+            handler.AddPara("FK_MapDtl", fk_mapDtl);
+            var data = handler.DoMethodReturnString("DtlInit");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=DtlInit&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
 
                     data = JSON.parse(data);
@@ -50,9 +54,9 @@
                     GenerFullAllCtrlsVal(main);
                     return;
 
-                }
-            });
-            $("#Msg").html("");
+//                }
+//            });
+//            $("#Msg").html("");
 
         });
 
@@ -301,23 +305,36 @@
     function Save() {
 
         $("#Msg").html("正在执行保存.....");
-        var frmData = $("#cc").serialize();
+//        var frmData = $("#cc").serialize();
 
         //保存的时候，需要把 CheckBoxIDs 传递过去，这个参数名是约定的,用于解决批量保存实体没有传入checkbox的值的问题.
-        var url = Handler + "?DoType=DtlSave&CheckBoxIDs=" + GenerCheckIDs() + "&FK_MapDtl=" + GetQueryString("FK_MapDtl") + "&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random();
-      //  alert(url);
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: url,
-            dataType: 'html',
-            success: function (data) {
-                $("#Msg").html(data);
-            }
-        });
+//        var url = Handler + "?DoType=DtlSave&CheckBoxIDs=" + GenerCheckIDs() + "&FK_MapDtl=" + GetQueryString("FK_MapDtl") + "&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random();
+        //  alert(url);
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+        handler.AddPara("CheckBoxIDs", GenerCheckIDs());
+        handler.AddPara("FK_MapDtl", GetQueryString("FK_MapDtl"));
+        handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+        handler.AddFormData();
+        var data = handler.DoMethodReturnString("DtlSave");
 
-        $("#Msg").html("保存失败.");
+        if (data != null) {
+            alert(data);
+            $("#Msg").html(data);
+        } else {
+            $("#Msg").html("保存失败.");
+        }
+//        $.ajax({
+//            data: frmData,
+//            type: 'post',
+//            async: true,
+//            url: url,
+//            dataType: 'html',
+//            success: function (data) {
+//                $("#Msg").html(data);
+//            }
+//        });
+
+//        $("#Msg").html("保存失败.");
     }
 
     function SaveAndClose() {

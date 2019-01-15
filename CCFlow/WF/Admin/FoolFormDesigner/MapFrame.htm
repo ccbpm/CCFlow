@@ -11,154 +11,193 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-
     <base target="_self" />
-      <script type="text/javascript">
+    <script type="text/javascript">
 
-          //页面启动函数.
-          $(function () {
+        //页面启动函数.
+        $(function () {
 
-              //公共变量.
-              //表单ID.
-              var fk_mapData = GetQueryString("FK_MapData");
+            //公共变量.
+            //表单ID.
+            var fk_mapData = GetQueryString("FK_MapData");
 
-              //框架ID.
-              var mypk = GetQueryString("MyPK");
+            //框架ID.
+            var mypk = GetQueryString("MyPK");
 
-              //初始化 GroupID.
-              $.ajax({
-                  type: 'post',
-                  async: true,
-                  url: Handler + "?DoType=MapFrame_Init&FK_MapData=" + fk_mapData + "&MyPK=" + mypk + "&m=" + Math.random(),
-                  dataType: 'html',
-                  success: function (data) {
-                      data = JSON.parse(data);
-                      if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
-                          data = data[0];
-                      }
-                      GenerFullAllCtrlsVal(data);
-                  }
+            //初始化 GroupID.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("FK_MapData", fk_mapData);
+            handler.AddPara("MyPK", mypk);
+            var data = handler.DoMethodReturnString("MapFrame_Init");
 
-              });
+            data = JSON.parse(data);
+            if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                data = data[0];
+            }
+            GenerFullAllCtrlsVal(data);
 
-              $("#Msg").html("");
+            $("#Msg").html("");
 
-          });
+        });
 
-          function Save() {
-              var CheckBoxIDs = GenerCheckIDs(); //获得所有的checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-              var frmData = $("#cc").serialize();
-              $.ajax({
-                  data: frmData,
-                  type: 'post',
-                  async: true,
-                  url: Handler + "?DoType=MapFrame_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&CheckBoxIDs=" + CheckBoxIDs + "m=" + Math.random(),
-                  dataType: 'html',
-                  success: function (data) {
+        function Save() {
+            var CheckBoxIDs = GenerCheckIDs(); //获得所有的checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+//            var frmData = $("#cc").serialize();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("CheckBoxIDs", CheckBoxIDs);
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("MapFrame_Save");
+//            $.ajax({
+//                data: frmData,
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=MapFrame_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&CheckBoxIDs=" + CheckBoxIDs + "m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
-                      if (data.indexOf('err@') == 0) {
-                          alert(data);
-                          return;
-                      }
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
 
-                      //window.location.href = 'MapFrame.htm?FK_MapData=' + GetQueryString("FK_MapData") + "&MyPK=" + data + "&M=" + Math.random();
-                      alert(data);
-                      window.close();
-                  }
-              });
-          }
-          //保存并关闭
-          function SaveAndClose() {
-              this.Save();
-              window.close();
-          }
-          //关闭
-          function Close() {
-              window.close();
-          }
-          //删除
-          function Delete() {
+                    //window.location.href = 'MapFrame.htm?FK_MapData=' + GetQueryString("FK_MapData") + "&MyPK=" + data + "&M=" + Math.random();
+                    alert(data);
+                    window.close();
+//                }
+//            });
+        }
+        //保存并关闭
+        function SaveAndClose() {
+            this.Save();
+            window.close();
+        }
+        //关闭
+        function Close() {
+            window.close();
+        }
+        //删除
+        function Delete() {
 
-              var name = $("#TB_Name").val();
-              if (window.confirm('您确定要删除[' + name + ']吗？') == false)
-                  return false;
+            var name = $("#TB_Name").val();
+            if (window.confirm('您确定要删除[' + name + ']吗？') == false)
+                return false;
 
-              var mypk = $("#TB_MyPK").val();
+            var mypk = $("#TB_MyPK").val();
 
-              var en = new Entity("BP.Sys.MapFrame");
-              en.SetPKVal(mypk);
-              en.MyPK = mypk;
-              en.Delete();
-              this.close();
-          }
+            var en = new Entity("BP.Sys.MapFrame");
+            en.SetPKVal(mypk);
+            en.MyPK = mypk;
+            en.Delete();
+            this.close();
+        }
 
-      </script>
+    </script>
 </head>
 <body>
-
-<form name="cc" id="cc" >
-
-<center>
-<Table class='Table' cellpadding='2' cellspacing='2'>
-<tr>
-<TH >ID</TH>
-<TH >项目</TH>
-<TH >采集</TH>
-<TH >备注</TH>
-</tr>
-<tr>
-<td class='Idx' nowrap>1</td>
-<td  nowrap >编号</td>
-<td ><input name="TB_MyPK" type="text" value="" id="TB_MyPK"   /></td>
-<td >&nbsp;</td>
-</tr>
-
-
-<tr class="TR1" >
-<td class='Idx' nowrap>2</td>
-<td  nowrap >名称</td>
-<td  nowrap colspan=2  ><input name="TB_Name" type="text" value="" size="50" id="TB_Name" />
-</td>
-</tr>
-<tr>
-<td class='Idx' nowrap>3</td>
-<td  nowrap >框架连接</td>
-<td  nowrap colspan=2  ><input name="TB_URL" type="text" value="" size="50" id="TB_URL" /></td>
-</tr>
-<tr class=TR1 >
-<td class='Idx' nowrap>4</td>
-<td  nowrap >框架宽度</td>
-<td ><input name="TB_W" type="text" value="" id="TB_W" name="TB_W" class="TB" /></td>
-<td  nowrap >比如: 400px , 100%</td>
-</tr>
-<tr>
-<td class='Idx' nowrap>5</td>
-<td  nowrap >框架高度</td>
-<td ><input name="TB_H" type="text" value="" id="TB_H" name="TB_H"  class="TB" /></td>
-<td  nowrap >比如: 600px , 800px</td>
-</tr>
-<tr class=TR1 >
-<td class='Idx' nowrap>6</td>
-<td colspan=3 nowrap ><span class="BPRadioButton0"><input id="RB_IsAutoSize_0" type="radio" name="RB_IsAutoSize" value="0" /><label for="RB_IsAutoSize_0">指定框架宽度高度</label></span><span class="BPRadioButton0"><input id="RB_IsAutoSize_1" type="radio" name="RB_IsAutoSize" value="1" /><label for="RB_IsAutoSize_1">让框架自适应大小</label></span>
-</td>
-</tr>
-<tr class='TRSum' >
-<td colspan=4 align=center nowrap >
-<input type="button" name="Btn_SaveAndClose" value=" 保存并关闭 "  onclick="SaveAndClose()" id="Btn_SaveAndClose"   />
-<input type="button" name="Btn_Del" value="删除" onclick="Delete()" id="Btn_Del"  />
-</td>
-</tr>
-</Table>
-
-</center>
-<div id="Msg"></div>
-
-</form>
-
- 
- 
-
-
-
+    <form name="cc" id="cc">
+    <center>
+        <table class='Table' cellpadding='2' cellspacing='2'>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    项目
+                </th>
+                <th>
+                    采集
+                </th>
+                <th>
+                    备注
+                </th>
+            </tr>
+            <tr>
+                <td class='Idx' nowrap>
+                    1
+                </td>
+                <td nowrap>
+                    编号
+                </td>
+                <td>
+                    <input name="TB_MyPK" type="text" value="" id="TB_MyPK" />
+                </td>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr class="TR1">
+                <td class='Idx' nowrap>
+                    2
+                </td>
+                <td nowrap>
+                    名称
+                </td>
+                <td nowrap colspan="2">
+                    <input name="TB_Name" type="text" value="" size="50" id="TB_Name" />
+                </td>
+            </tr>
+            <tr>
+                <td class='Idx' nowrap>
+                    3
+                </td>
+                <td nowrap>
+                    框架连接
+                </td>
+                <td nowrap colspan="2">
+                    <input name="TB_URL" type="text" value="" size="50" id="TB_URL" />
+                </td>
+            </tr>
+            <tr class="TR1">
+                <td class='Idx' nowrap>
+                    4
+                </td>
+                <td nowrap>
+                    框架宽度
+                </td>
+                <td>
+                    <input name="TB_W" type="text" value="" id="TB_W" name="TB_W" class="TB" />
+                </td>
+                <td nowrap>
+                    比如: 400px , 100%
+                </td>
+            </tr>
+            <tr>
+                <td class='Idx' nowrap>
+                    5
+                </td>
+                <td nowrap>
+                    框架高度
+                </td>
+                <td>
+                    <input name="TB_H" type="text" value="" id="TB_H" name="TB_H" class="TB" />
+                </td>
+                <td nowrap>
+                    比如: 600px , 800px
+                </td>
+            </tr>
+            <tr class="TR1">
+                <td class='Idx' nowrap>
+                    6
+                </td>
+                <td colspan="3" nowrap>
+                    <span class="BPRadioButton0">
+                        <input id="RB_IsAutoSize_0" type="radio" name="RB_IsAutoSize" value="0" /><label
+                            for="RB_IsAutoSize_0">指定框架宽度高度</label></span><span class="BPRadioButton0"><input
+                                id="RB_IsAutoSize_1" type="radio" name="RB_IsAutoSize" value="1" /><label for="RB_IsAutoSize_1">让框架自适应大小</label></span>
+                </td>
+            </tr>
+            <tr class='TRSum'>
+                <td colspan="4" align="center" nowrap>
+                    <input type="button" name="Btn_SaveAndClose" value=" 保存并关闭 " onclick="SaveAndClose()"
+                        id="Btn_SaveAndClose" />
+                    <input type="button" name="Btn_Del" value="删除" onclick="Delete()" id="Btn_Del" />
+                </td>
+            </tr>
+        </table>
+    </center>
+    <div id="Msg">
+    </div>
+    </form>
 </body>
 </html>

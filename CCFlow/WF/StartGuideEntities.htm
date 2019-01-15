@@ -70,24 +70,21 @@
             //替换潜在的错误
             rdVal = rdVal.replace("undefined", "");
 
-            var url = MyFlow + "?DoType=StartGuide_MulitSend&" + str + "&Keys=" + rdVal + "&m=" + Math.random();
+            //            var url = MyFlow + "?DoType=StartGuide_MulitSend&" + str + "&Keys=" + rdVal + "&m=" + Math.random();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            handler.AddPara("Keys", rdVal);
+            var data = handler.DoMethodReturnString("StartGuide_MulitSend");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
-                    //出现异常，提示错误
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    //跳转
-                    var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
-                    window.location.href = href;
-                }
-            });
+            //出现异常，提示错误
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            //跳转
+            var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
+            window.location.href = href;
+
         }
         //加载方法
         function StartGuide_Init(data) {

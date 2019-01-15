@@ -8,6 +8,7 @@
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
     <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
     <style type="text/css">
@@ -110,178 +111,173 @@
             var timeKey = Math.random();
 
             //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Todolist_Init&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("Todolist_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    data = eval('(' + data + ')');
+            data = eval('(' + data + ')');
 
-                    //设置表头.
-                    var groupBy = GetQueryString("GroupBy");
-                    if (groupBy == "" || groupBy == null)
-                        groupBy = "ByFlow";
+            //设置表头.
+            var groupBy = GetQueryString("GroupBy");
+            if (groupBy == "" || groupBy == null)
+                groupBy = "ByFlow";
 
-                    var title = GetTitle(groupBy);
-                    $("#Table1 tr:last").after(title);
+            var title = GetTitle(groupBy);
+            $("#Table1 tr:last").after(title);
 
 
-                    //生成分组的字符串.
-                    var str = "";
-                    for (var i = 0; i < data.length; i++) {
+            //生成分组的字符串.
+            var str = "";
+            for (var i = 0; i < data.length; i++) {
 
-                        if (groupBy == "ByNode") {
-                            if (str.indexOf('@' + data[i].NodeName + "@") == -1)
-                                str += "@" + data[i].NodeName + "@";
-                        }
-
-                        if (groupBy == "ByFlow") {
-                            if (str.indexOf('@' + data[i].FlowName + "@") == -1)
-                                str += "@" + data[i].FlowName + "@";
-                        }
-
-                        if (groupBy == "ByStarter") {
-                            if (str.indexOf('@' + data[i].StarterName + "@") == -1)
-                                str += "@" + data[i].StarterName + "@";
-                        }
-                    }
-                    var strs = str.split("@"); //生成数组.
-
-                    var num = 0;
-                    var is1 = false;
-
-                    //循环数组.
-                    for (var idx = 0; idx < strs.length; idx++) {
-
-                        var groupName = strs[idx];
-
-                        if (groupName == "" || groupName == null)
-                            continue;
-
-                        var grouStr = "<tr class=Sum onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=10 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + groupName + "'   border=0 /> " + groupName + "</th> </tr>";
-                        $("#Table1 tr:last").after(grouStr);
-
-                        //增加处理.
-                        for (var i = 0; i < data.length; i++) {
-
-                            var work = data[i];
-                            if (groupBy == "ByNode") {
-
-                                if (work.NodeName != groupName) {
-                                    continue;
-                                }
-                            } else if (groupBy == "ByFlow") {
-                                if (work.FlowName != groupName) {
-                                    continue;
-                                }
-                            } else if (groupBy == "ByStarter") {
-                                if (work.StarterName != groupName) {
-                                    continue;
-                                }
-                            } else {
-                                continue;
-                            }
-
-                            var newRow = "";
-                            var title = work.Title;
-                            var isRead = work.IsRead;
-                            var flowNo = work.FK_Flow;
-                            var flowName = work.FlowName;
-                            var nodeName = work.NodeName;
-                            var starterName = work.StarterName;
-                            var pri = work.PRI;
-                            var nodeID = work.FK_Node;
-                            var fid = work.FID;
-                            var workID = work.WorkID;
-                            var pWorkID = work.PWorkID;
-                            var paras = work.AtPara;
-
-                            if (paras != '') {
-                                paras = paras.replace("'", "\\'");
-
-                                while (true) {
-                                    paras = paras.replace('@', '&');
-
-                                    if (paras.indexOf('@') < 0) {
-                                        break;
-                                    }
-                                }
-                                paras = "1" + paras;
-                            }
-
-                            num++;
-
-                            if (is1 == true) {
-                                newRow += "<tr bgcolor=AliceBlue id='" + groupName + num + "' >";
-                                is1 = false;
-                            }
-                            else {
-                                newRow += "<tr bgcolor=white id='" + groupName + num + "' >";
-                                is1 = true;
-                            }
-
-                            newRow += "<td style='width:20px'>" + num + "</td>"; //序号.
-                            //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
-
-                            var url = "";
-                            if (isRead == 0)
-                                url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
-                            else
-                                url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
-
-                            newRow += "<td>" + url + "</td>"; //标题
-
-                            if (groupBy == "ByNode") {
-                                newRow += "<td>" + flowName + "</td>"; //流程类别
-                                newRow += "<td>" + starterName + "</td>"; //发起人
-                            } else if (groupBy == "ByFlow") {
-                                newRow += "<td>" + nodeName + "</td>"; //节点名称
-                                newRow += "<td>" + starterName + "</td>"; //发起人
-
-                            } else if (groupBy == "ByStarter") {
-                                newRow += "<td>" + flowName + "</td>"; //流程类别
-                                newRow += "<td>" + nodeName + "</td>"; //节点名称
-                            }
-
-
-                            newRow += "<td>" + work.RDT + "</td>"; //发起时间
-                            newRow += "<td>" + work.ADT + "</td>"; //接受时间
-                            newRow += "<td>" + work.SDT + "</td>"; //应完成时间
-
-                            //为天业解决开始节点撤销回来后，就是逾期状态.
-                            var len = nodeID.toString().length;
-                            var entStr = nodeID.toString().substr(len - 2);
-
-                            //判断流程是否逾期
-                            if (cdt > work.SDT && work.WFState == 2 && entStr != "01")
-                                newRow += "<td><img src='./Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
-                            else
-                                newRow += "<td><img src='./Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
-
-                            newRow += "<td>" + GetState(work.WFState) + "</td>";
-
-                            //备注
-                            //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
-
-                            newRow += "</tr>";
-
-                            $("#Table1 tr:last").after(newRow);
-                        }
-                    }
-
-                    //  $("#Table1").after("<br><br><div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' >[<a href='TaskPoolApply.htm' >共享任务池待办</a>][<a href='TodolistOfAuth.htm' >查看授权人的待办工作</a>]</div>");
-
-                    $("#Table1").after("<br><div style='float:left;' >合计:" + data.length + "条</div> ");
-
+                if (groupBy == "ByNode") {
+                    if (str.indexOf('@' + data[i].NodeName + "@") == -1)
+                        str += "@" + data[i].NodeName + "@";
                 }
-            });
+
+                if (groupBy == "ByFlow") {
+                    if (str.indexOf('@' + data[i].FlowName + "@") == -1)
+                        str += "@" + data[i].FlowName + "@";
+                }
+
+                if (groupBy == "ByStarter") {
+                    if (str.indexOf('@' + data[i].StarterName + "@") == -1)
+                        str += "@" + data[i].StarterName + "@";
+                }
+            }
+            var strs = str.split("@"); //生成数组.
+
+            var num = 0;
+            var is1 = false;
+
+            //循环数组.
+            for (var idx = 0; idx < strs.length; idx++) {
+
+                var groupName = strs[idx];
+
+                if (groupName == "" || groupName == null)
+                    continue;
+
+                var grouStr = "<tr class=Sum onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=10 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + groupName + "'   border=0 /> " + groupName + "</th> </tr>";
+                $("#Table1 tr:last").after(grouStr);
+
+                //增加处理.
+                for (var i = 0; i < data.length; i++) {
+
+                    var work = data[i];
+                    if (groupBy == "ByNode") {
+
+                        if (work.NodeName != groupName) {
+                            continue;
+                        }
+                    } else if (groupBy == "ByFlow") {
+                        if (work.FlowName != groupName) {
+                            continue;
+                        }
+                    } else if (groupBy == "ByStarter") {
+                        if (work.StarterName != groupName) {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+
+                    var newRow = "";
+                    var title = work.Title;
+                    var isRead = work.IsRead;
+                    var flowNo = work.FK_Flow;
+                    var flowName = work.FlowName;
+                    var nodeName = work.NodeName;
+                    var starterName = work.StarterName;
+                    var pri = work.PRI;
+                    var nodeID = work.FK_Node;
+                    var fid = work.FID;
+                    var workID = work.WorkID;
+                    var pWorkID = work.PWorkID;
+                    var paras = work.AtPara;
+
+                    if (paras != '') {
+                        paras = paras.replace("'", "\\'");
+
+                        while (true) {
+                            paras = paras.replace('@', '&');
+
+                            if (paras.indexOf('@') < 0) {
+                                break;
+                            }
+                        }
+                        paras = "1" + paras;
+                    }
+
+                    num++;
+
+                    if (is1 == true) {
+                        newRow += "<tr bgcolor=AliceBlue id='" + groupName + num + "' >";
+                        is1 = false;
+                    }
+                    else {
+                        newRow += "<tr bgcolor=white id='" + groupName + num + "' >";
+                        is1 = true;
+                    }
+
+                    newRow += "<td style='width:20px'>" + num + "</td>"; //序号.
+                    //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
+
+                    var url = "";
+                    if (isRead == 0)
+                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
+                    else
+                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+
+                    newRow += "<td>" + url + "</td>"; //标题
+
+                    if (groupBy == "ByNode") {
+                        newRow += "<td>" + flowName + "</td>"; //流程类别
+                        newRow += "<td>" + starterName + "</td>"; //发起人
+                    } else if (groupBy == "ByFlow") {
+                        newRow += "<td>" + nodeName + "</td>"; //节点名称
+                        newRow += "<td>" + starterName + "</td>"; //发起人
+
+                    } else if (groupBy == "ByStarter") {
+                        newRow += "<td>" + flowName + "</td>"; //流程类别
+                        newRow += "<td>" + nodeName + "</td>"; //节点名称
+                    }
+
+
+                    newRow += "<td>" + work.RDT + "</td>"; //发起时间
+                    newRow += "<td>" + work.ADT + "</td>"; //接受时间
+                    newRow += "<td>" + work.SDT + "</td>"; //应完成时间
+
+                    //为天业解决开始节点撤销回来后，就是逾期状态.
+                    var len = nodeID.toString().length;
+                    var entStr = nodeID.toString().substr(len - 2);
+
+                    //判断流程是否逾期
+                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01")
+                        newRow += "<td><img src='./Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
+                    else
+                        newRow += "<td><img src='./Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
+
+                    newRow += "<td>" + GetState(work.WFState) + "</td>";
+
+                    //备注
+                    //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+
+                    newRow += "</tr>";
+
+                    $("#Table1 tr:last").after(newRow);
+                }
+            }
+
+            //  $("#Table1").after("<br><br><div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' >[<a href='TaskPoolApply.htm' >共享任务池待办</a>][<a href='TodolistOfAuth.htm' >查看授权人的待办工作</a>]</div>");
+
+            $("#Table1").after("<br><div style='float:left;' >合计:" + data.length + "条</div> ");
+
         }
         function GetState(wfState) {
 
@@ -361,7 +357,7 @@
             title += "<th>期限</th>";
             title += "<th>状态</th>";
             title += "<th>类型</th>";
-           // title += "<th>备注</th>";
+            // title += "<th>备注</th>";
             title += "</tr>";
 
             return title;

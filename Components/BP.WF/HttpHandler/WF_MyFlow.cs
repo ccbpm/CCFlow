@@ -1512,12 +1512,16 @@ namespace BP.WF.HttpHandler
             {
                 if (key == null)
                     continue;
-
-
+                
+               
                 if (key.Contains("TB_"))
                 {
+                    string val = context.Request.Form[key];
                     if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
-                        htMain.Add(key.Replace("TB_", ""), context.Request.Form[key]);
+                    {
+                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
+                        htMain.Add(key.Replace("TB_", ""), val);
+                    }
                     continue;
                 }
 

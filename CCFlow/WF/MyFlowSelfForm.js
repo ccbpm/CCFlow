@@ -132,27 +132,6 @@ function DoDelSubFlow(fk_flow, workid) {
     window.location.href = window.location.href;
 }
 
-//公共方法
-function AjaxService(param, callback, scope, levPath) {
-    $.ajax({
-        type: "GET", //使用GET或POST方法访问后台
-        dataType: "text", //返回json格式的数据
-        contentType: "application/json; charset=utf-8",
-        url: MyFlow, //要访问的后台地址
-        data: param, //要发送的数据
-        async: true,
-        cache: false,
-        complete: function () { }, //AJAX请求完成时隐藏loading提示
-        error: function (XMLHttpRequest, errorThrown) {
-            callback(XMLHttpRequest);
-        },
-        success: function (msg) {//msg为返回的数据，在这里做数据绑定
-            var data = msg;
-            callback(data, scope);
-        }
-    });
-}
-
 function Do(warning, url) {
     if (window.confirm(warning) == false)
         return;
@@ -209,11 +188,10 @@ function FocusBtn(btn, workid) {
     else {
         btn.value = '关注';
     }
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara("WorkID", workid);
+    var data = handler.DoMethodReturnString("Focus"); //执行保存方法.
 
-    var para = "DoType=Focus&WorkID=" + workid;
-    AjaxService(para, function (msg, scope) {
-        // alert(msg);
-    });
 }
 
 //确认 按钮.
@@ -226,10 +204,9 @@ function ConfirmBtn(btn, workid) {
         btn.value = '确认';
     }
 
-    var para = "DoType=Confirm&WorkID=" + workid;
-    AjaxService(para, function (msg, scope) {
-        //  alert(msg);
-    });
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara("WorkID", workid);
+    var data = handler.DoMethodReturnString("Confirm"); //执行保存方法.
 }
 
 //以下是软通写的
@@ -270,100 +247,111 @@ function pageParamToUrl() {
 }
 //初始化按钮
 //var MyFlow = "MyFlow.ashx";
-function initBar() {
+//初始化按钮
+//var MyFlow = "MyFlow.ashx";
+function InitToolBar() {
 
-    // 为啥要注释 else MyFlow = "MyFlow.do";
-    if (plant == "CCFlow")
-        MyFlow = "MyFlow.ashx";
+    var href = window.location.href;
+    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+    urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
-    //else
-    //MyFlow = "MyFlow.do";
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData(urlParam);
+    var data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
 
-    var url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
+    var barHtml = data;
 
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: pageData,
-        url: url,
-        dataType: 'html',
-        success: function (data) {
+    $('.Bar').html(barHtml);
 
-            var barHtml = data;
+    if ($('[name=Return]').length > 0) {
+        $('[name=Return]').attr('onclick', '');
+        $('[name=Return]').unbind('click');
+        $('[name=Return]').bind('click', function () { initModal("returnBack"); $('#returnWorkModal').modal().show(); });
+    }
 
-            $('.Bar').html(barHtml);
+    if ($('[name=Shift]').length > 0) {
 
-            if ($('[name=Return]').length > 0) {
-                $('[name=Return]').attr('onclick', '');
-                $('[name=Return]').unbind('click');
-                $('[name=Return]').bind('click', function () { initModal("returnBack"); $('#returnWorkModal').modal().show(); });
-            }
-            if ($('[name=Shift]').length > 0) {
+        $('[name=Shift]').attr('onclick', '');
+        $('[name=Shift]').unbind('click');
+        $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
+    }
 
-                $('[name=Shift]').attr('onclick', '');
-                $('[name=Shift]').unbind('click');
-                $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
-            }
+    if ($('[name=Btn_WorkCheck]').length > 0) {
 
-            if ($('[name=workcheckBtn]').length > 0) {
+        $('[name=Btn_WorkCheck]').attr('onclick', '');
+        $('[name=Btn_WorkCheck]').unbind('click');
+        $('[name=Btn_WorkCheck]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
+    }
 
-                $('[name=workcheckBtn]').attr('onclick', '');
-                $('[name=workcheckBtn]').unbind('click');
-                $('[name=workcheckBtn]').bind('click', function () { initModal("workcheckBtn"); $('#returnWorkModal').modal().show(); });
-            }
+    if ($('[name=Askfor]').length > 0) {
+        $('[name=Askfor]').attr('onclick', '');
+        $('[name=Askfor]').unbind('click');
+        $('[name=Askfor]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
+    }
 
+    if ($('[name=Track]').length > 0) {
+        $('[name=Track]').attr('onclick', '');
+        $('[name=Track]').unbind('click');
+        $('[name=Track]').bind('click', function () { initModal("Track"); $('#returnWorkModal').modal().show(); });
+    }
 
-            if ($('[name=Askfor]').length > 0) {
-                $('[name=Askfor]').attr('onclick', '');
-                $('[name=Askfor]').unbind('click');
-                $('[name=Askfor]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
-            }
+    if ($('[name=HuiQian]').length > 0) {
+        $('[name=HuiQian]').attr('onclick', '');
+        $('[name=HuiQian]').unbind('click');
+        $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
+    }
 
-            if ($('[name=HuiQian]').length > 0) {
-                $('[name=HuiQian]').attr('onclick', '');
-                $('[name=HuiQian]').unbind('click');
-                $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
-            }
+    if ($('[name=CC]').length > 0) {
+        $('[name=CC]').attr('onclick', '');
+        $('[name=CC]').unbind('click');
+        $('[name=CC]').bind('click', function () { initModal("CC"); $('#returnWorkModal').modal().show(); });
+    }
 
-            if ($('[name=PackUp_zip]').length > 0) {
-                $('[name=PackUp_zip]').attr('onclick', '');
-                $('[name=PackUp_zip]').unbind('click');
-                $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); $('#returnWorkModal').modal().show(); });
-            }
+    if ($('[name=PackUp_zip]').length > 0) {
+        $('[name=PackUp_zip]').attr('onclick', '');
+        $('[name=PackUp_zip]').unbind('click');
+        $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); $('#returnWorkModal').modal().show(); });
+    }
 
-            if ($('[name=PackUp_html]').length > 0) {
-                $('[name=PackUp_html]').attr('onclick', '');
-                $('[name=PackUp_html]').unbind('click');
-                $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); $('#returnWorkModal').modal().show(); });
-            }
+    if ($('[name=PackUp_html]').length > 0) {
+        $('[name=PackUp_html]').attr('onclick', '');
+        $('[name=PackUp_html]').unbind('click');
+        $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); $('#returnWorkModal').modal().show(); });
+    }
 
-            if ($('[name=PackUp_pdf]').length > 0) {
-                $('[name=PackUp_pdf]').attr('onclick', '');
-                $('[name=PackUp_pdf]').unbind('click');
-                $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
-            }
+    if ($('[name=PackUp_pdf]').length > 0) {
+        $('[name=PackUp_pdf]').attr('onclick', '');
+        $('[name=PackUp_pdf]').unbind('click');
+        $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
+    }
 
-            if ($('[name=SelectAccepter]').length > 0) {
-                $('[name=SelectAccepter]').attr('onclick', '');
-                $('[name=SelectAccepter]').unbind('click');
-                $('[name=SelectAccepter]').bind('click', function () {
-                    initModal("accepter");
-                    $('#returnWorkModal').modal().show();
-                });
-            }
-            if ($('[name=Delete]').length > 0) {
-                var onclickFun = $('[name=Delete]').attr('onclick');
-                if (onclickFun != undefined) {
-                    if (plant == 'CCFlow') {
-                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
-                    } else {
-                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.jsp'));
-                    }
-                }
-            }
-        }
-    });
-}
+    if ($('[name=SelectAccepter]').length > 0) {
+        $('[name=SelectAccepter]').attr('onclick', '');
+        $('[name=SelectAccepter]').unbind('click');
+        $('[name=SelectAccepter]').bind('click', function () {
+            initModal("accepter");
+            $('#returnWorkModal').modal().show();
+        });
+    }
+
+    if ($('[name=DBTemplate]').length > 0) {
+        $('[name=DBTemplate]').attr('onclick', '');
+        $('[name=DBTemplate]').unbind('click');
+        $('[name=DBTemplate]').bind('click', function () {
+            initModal("DBTemplate");
+            $('#returnWorkModal').modal().show();
+        });
+    }
+
+    if ($('[name=Delete]').length > 0) {
+        $('[name=Delete]').attr('onclick', '');
+        $('[name=Delete]').unbind('click');
+        $('[name=Delete]').bind('click', function () {
+            // initModal("Delete");
+            // $('#Delete').modal().show();
+            DeleteFlow();
+        });
+    }
 
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode) {
@@ -633,14 +621,19 @@ function Send() {
 function execSend(toNode) {
     //先设置按钮等不可用
     setToobarDisiable();
+    //组织数据.
+    var dataStrs = getFormData(true, true) + "&ToNode=" + toNodeID;
 
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: getFormData(true, true) + "&ToNode=" + toNode,
-        url: MyFlow + "?DoType=Send",
-        dataType: 'html',
-        success: function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData(dataStrs);
+    var data = handler.DoMethodReturnString("Send"); //执行保存方法.
+//    $.ajax({
+//        type: 'post',
+//        async: true,
+//        data: getFormData(true, true) + "&ToNode=" + toNode,
+//        url: MyFlow + "?DoType=Send",
+//        dataType: 'html',
+//        success: function (data) {
 
             if (data.indexOf('err@') == 0) {//发送时发生错误
                 $('#Message').html(data.substring(4, data.length));
@@ -671,8 +664,8 @@ function execSend(toNode) {
             //setAttachDisabled();
             //setToobarUnVisible();
             //setFormEleDisabled();
-        }
-    });
+//        }
+//    });
 }
 
 //获取表单数据
@@ -1057,13 +1050,16 @@ function GenerWorkNode() {
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: pageData,
-        url: MyFlow + "?DoType=MyFlowSelfForm_Init&m=" + Math.random() + "&" + urlParam,
-        dataType: 'html',
-        success: function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData(urlParam);
+    var data = handler.DoMethodReturnString("MyFlowSelfForm_Init"); 
+//    $.ajax({
+//        type: 'post',
+//        async: true,
+//        data: pageData,
+//        url: MyFlow + "?DoType=MyFlowSelfForm_Init&m=" + Math.random() + "&" + urlParam,
+//        dataType: 'html',
+//        success: function (data) {
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -1147,8 +1143,8 @@ function GenerWorkNode() {
             showNoticeInfo();
 
             showTbNoticeInfo();
-        }
-    })
+//        }
+//    })
 }
 
 var workNodeData = {};
@@ -1229,7 +1225,7 @@ $(function () {
 
     initPageParam(); //初始化参数
 
-    initBar(); //工具栏.ajax
+    InitToolBar(); //工具栏.ajax
 
     GenerWorkNode(); //表单数据.ajax
 

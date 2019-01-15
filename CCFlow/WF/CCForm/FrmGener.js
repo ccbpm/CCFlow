@@ -301,7 +301,7 @@ function GenerFrm() {
                 if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
                     var uiBindKey = mapAttr.UIBindKey;
                     if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-                        var sfTable = new Entity("BP.Sys.FrmUI.SFTable");
+                        var sfTable = new Entity("BP.Sys.SFTable");
                         sfTable.SetPKVal(uiBindKey);
                         var count = sfTable.RetrieveFromDBSources();
                         if (count != 0 && sfTable.CodeStruct == "1") {
@@ -1189,7 +1189,7 @@ function dealWithUrl(src) {
         var params = getQueryStringFromUrl(src);
         if (params != null && params.length > 0) {
             $.each(params, function (i, param) {
-                if (param.indexOf('@') == 0) {//是需要替换的参数
+                if (param.indexOf('@') >= 0) {//是需要替换的参数
                     paramArr = param.split('=');
                     if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
                         if (paramArr[1].indexOf('@WebUser.') == 0) {

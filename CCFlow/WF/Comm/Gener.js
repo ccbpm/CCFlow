@@ -1969,7 +1969,7 @@ var HttpHandler = (function () {
                 var param = o.split("=");
                 if (param.length == 2 && validate(param[1])) {
                     (function (key, value) {
-                        self.AddPara(key, encodeURI( value) );
+                        self.AddPara(key, value);
                     })(param[0], param[1]);
                 }
             });

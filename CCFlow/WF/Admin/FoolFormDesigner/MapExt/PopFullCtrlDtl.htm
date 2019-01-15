@@ -17,7 +17,11 @@
         $(function () {
 
             $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            handler.AddPara("MyPK", GetQueryString("MyPK"));
+            var data = handler.DoMethodReturnString("PopFullCtrlDtl_Init");
             $.ajax({
                 type: 'post',
                 async: true,

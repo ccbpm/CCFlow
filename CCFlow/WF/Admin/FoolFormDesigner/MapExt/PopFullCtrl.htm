@@ -158,7 +158,7 @@
             url: myurl,
             dataType: 'html',
             success: function (data) {
-
+                alert(data);
                 if (data.indexOf('err@') != -1) {
                     $("#Msg").html("<font color=red>" + data + "</font>");
                     return;

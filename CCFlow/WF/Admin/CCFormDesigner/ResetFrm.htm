@@ -18,6 +18,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            
             var data = handler.DoMethodReturnString("ResetFrm_Init");
 
 //            var url = Handler + "?DoType=ResetFrm_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random();

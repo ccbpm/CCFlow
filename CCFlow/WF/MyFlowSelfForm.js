@@ -123,12 +123,13 @@ function DoDelSubFlow(fk_flow, workid) {
     if (window.confirm('您确定要终止进程吗？') == false)
         return;
 
-    var para = 'DoType=DelSubFlow&FK_Flow=' + fk_flow + '&WorkID=' + workid;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara("FK_Flow", fk_flow);
+    handler.AddPara("WorkID", workid);
+    var data = handler.DoMethodReturnString("DelSubFlow");
 
-    AjaxService(para, function (msg, scope) {
-        alert(msg);
-        window.location.href = window.location.href;
-    });
+    alert(data);
+    window.location.href = window.location.href;
 }
 
 //公共方法
@@ -198,7 +199,7 @@ function OpenCC() {
         return true;
     return false;
 }
-  
+
 //关注 按钮.
 function FocusBtn(btn, workid) {
 
@@ -426,7 +427,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人     
+            //发送选择接收节点和接收人      
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
@@ -560,9 +561,9 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
     athFormTitle.text("上传附件：" + athLab);
     athModal.modal().show();
 }
- 
 
-  
+
+
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
 function GepParaByName(name, atPara) {
     var params = atPara.split('@');
@@ -601,7 +602,7 @@ function InitDDLOperation(workNodeData, mapAttr, defVal) {
     }
     return operations;
 }
-  
+
 //发送
 function Send() {
 
@@ -615,7 +616,7 @@ function Send() {
         var selectToNode = $('#DDL_ToNode  option:selected').data();
         if (selectToNode.IsSelectEmps == "1") {//跳到选择接收人窗口
 
-           
+
 
             initModal("sendAccepter", selectToNode);
 
@@ -713,20 +714,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框   
+            //下拉框    
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
-            //对于复选下拉框获取值得方法  
-            //                if ($('[data-id=' + name + ']').length > 0) {  
-            //                    var val = $(disabledEle).val().join(',');  
-            //                    formArrResult.push(name + '=' + val);  
-            //                } else {  
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
-            //                }  
-            // break;  
-            //文本区域   
+            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());   
+            //对于复选下拉框获取值得方法   
+            //                if ($('[data-id=' + name + ']').length > 0) {   
+            //                    var val = $(disabledEle).val().join(',');   
+            //                    formArrResult.push(name + '=' + val);   
+            //                } else {   
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());   
+            //                }   
+            // break;   
+            //文本区域    
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1047,8 +1048,8 @@ function showTbNoticeInfo() {
         });
     })
 }
- 
- 
+
+
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
 function GenerWorkNode() {
 
@@ -1150,7 +1151,7 @@ function GenerWorkNode() {
     })
 }
 
-var workNodeData = {}; 
+var workNodeData = {};
 
 //处理URL，MainTable URL 参数 替换问题
 function dealWithUrl(src) {

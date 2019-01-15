@@ -1371,28 +1371,7 @@ function GetPageParas(sArgName) {
     }
     return retval;
 }
-
-//获取Dtl中TB的值 20160106 from 柳辉
-function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
-
-    var getworkid = $('#HidWorkID').val(); //hiddenValue
-
-    $.ajax({
-
-        url: "../../DataUser/Do.aspx",
-        data: { getworkid: getworkid, dtlTable: dtlTable, DtlColumn: DtlColumn, onValue: onValue },
-        success: function (arr) {
-            alert(arr);
-            if (arr == "true") {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-
-    });
-}
+ 
 // 获取TB值
 function ReqTB(tbID) {
     var v = document.getElementById('TB_' + tbID).value;

@@ -138,15 +138,14 @@
 			function UnSend(fk_flow, workid, fid) {
 
 				if(window.confirm('您确定要撤销本次发送吗？') == false)
-					return;
+				    return;
 
-				//执行撤销.
-				$.ajax({
-					type: 'post',
-					async: true,
-					url: Handler + "?DoType=Runing_UnSend&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
-					dataType: 'html',
-					success: function(data) {
+				var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+				handler.AddPara("FK_Flow", fk_flow);
+				handler.AddPara("WorkID", workid);
+				handler.AddPara("FID", fid);
+				var data = handler.DoMethodReturnString("Runing_UnSend");
+                 
 						if(data.indexOf('err@') == 0) {
 							alert(data);
 							return;
@@ -158,33 +157,29 @@
 						window.open(url);
 						window.location.href = window.location.href;
 						return;
-					}
-				});
 			}
 
 			//催办.
 			function Press(fk_flow, workid, fid) {
 
-				var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
-				if(msg == null)
-					return;
+			    var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
+			    if (msg == null)
+			        return;
 
-				//执行催办.
-				$.ajax({
-					type: 'post',
-					async: true,
-					url: Handler + "?DoType=Runing_Press&Msg=" + msg + "&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
-					dataType: 'html',
-					success: function(data) {
-						if(data.indexOf('err@') == 0) {
-							alert(data);
-							return;
-						}
+			    var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+			    handler.AddPara("FK_Flow", fk_flow);
+			    handler.AddPara("WorkID", workid);
+			    handler.AddPara("FID", fid);
+			    handler.AddPara("Msg", msg);
+			    var data = handler.DoMethodReturnString("Runing_Press");
 
-						alert(data);
-						return;
-					}
-				});
+			    if (data.indexOf('err@') == 0) {
+			        alert(data);
+			        return;
+			    }
+
+			    alert(data);
+			    return;
 			}
 
 			function WinOpenIt(url) {

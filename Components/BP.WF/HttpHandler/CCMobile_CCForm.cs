@@ -127,7 +127,7 @@ namespace BP.WF.HttpHandler
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");
                     string guid = BP.DA.DBAccess.GenerGUID();
-                    
+
                     string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
                     if (fileName.LastIndexOf("\\") > 0)
                         fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
@@ -150,8 +150,9 @@ namespace BP.WF.HttpHandler
                         {
                             File.Delete(realSaveTo);
                         }
-                        catch { }
-
+                        catch
+                        {
+                        }
                         //note:此处如何向前uploadify传递失败信息，有待研究
                         //this.Alert("上传附件错误：" + msg, true);
                         return;
@@ -264,7 +265,7 @@ namespace BP.WF.HttpHandler
                         /*如果是协同，就让他是PWorkID. */
                         Paras ps = new Paras();
                         ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
-                        ps.Add("WorkID",PKVal);
+                        ps.Add("WorkID", PKVal);
                         string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                         if (pWorkID == null || pWorkID == "0")
                             pWorkID = PKVal;

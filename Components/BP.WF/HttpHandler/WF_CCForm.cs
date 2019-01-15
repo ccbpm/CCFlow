@@ -504,6 +504,44 @@ namespace BP.WF.HttpHandler
         }
         #endregion HanderMapExt
 
+
+        #region FrmVSTO 
+
+        public string FrmVSTO_Init()
+        {
+            string paras = this.RequestParas;
+            if (paras.Contains("SID") == false)
+                paras += "&SID=" + BP.Web.WebUser.SID;
+
+            if (paras.Contains("UserNo") == false)
+                paras += "&UserNo=" + BP.Web.WebUser.No;
+
+            if (string.IsNullOrWhiteSpace(BP.Sys.SystemConfig.AppSettings["IsAutoTesting"]))
+                paras += "&IsAutoTesting=0";
+            else
+                paras += "&IsAutoTesting=" + Convert.ToInt32(BP.Sys.SystemConfig.AppSettings["IsAutoTesting"]); //用于自动化测试
+
+            paras = paras.Replace("&", ",");
+
+            string urlWS = "http://" + context.Request.Url.Authority + "/WF/CCForm/CCFormAPI.asmx";
+            string url = "excelform://-fromccflow,App=FrmExcel" + paras + ",WSUrl=" + urlWS;
+
+
+            //string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+            //string url = "excelform://-fromccflow,App=FrmExcel,UserNo=" + userNo + ",SID=" + sid + ",FK_Flow=" + flowNo + ",FK_Node=" + nodeID + ",FrmID=" + frmID + ",WorkID="+workID+",WSUrl="+urlWS;
+            ///  string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
+            string urlOfFree = "Frm.htm?IsFreeFrm=1" + this.RequestParas;
+
+            Hashtable ht = new Hashtable();
+            ht.Add("UrlOfVSTO", url);
+            ht.Add("UrlOfFrm", urlOfFree);
+
+            return BP.Tools.Json.ToJson(ht);
+
+        }
+        #endregion FrmVSTO
+
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 表单功能界面
@@ -599,7 +637,7 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.VSTOForExcel && this.GetRequestVal("IsFreeFrm") == null)
             {
-                string url = "FrmVSTO.aspx?1=1&" + this.RequestParas;
+                string url = "FrmVSTO.htm?1=1&" + this.RequestParas;
                 return "url@" + url;
             }
 
@@ -667,9 +705,9 @@ namespace BP.WF.HttpHandler
                     if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
                     {
                         if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                            return "url@FrmVSTO.aspx?1=2" + paras;
+                            return "url@FrmVSTO.htm?1=2" + paras;
                         else
-                            return "url@FrmVSTO.aspx?1=2" + paras;
+                            return "url@FrmVSTO.htm?1=2" + paras;
                     }
 
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
@@ -694,9 +732,9 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
             {
                 if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                    return "url@FrmVSTO.aspx?1=2" + paras;
+                    return "url@FrmVSTO.htm?1=2" + paras;
                 else
-                    return "url@FrmVSTO.aspx?1=2" + paras;
+                    return "url@FrmVSTO.htm?1=2" + paras;
             }
 
             if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")

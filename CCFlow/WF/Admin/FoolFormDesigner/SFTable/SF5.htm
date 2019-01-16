@@ -22,8 +22,8 @@
         var CONST_STRUCTS = [{ No: '0', Name: '普通的编码表(具有No,Name)' }, { No: '1', Name: '树结构(具有No,Name,ParentNo)'}];
 
         /**
-         * 数据格式切换
-         */
+        * 数据格式切换
+        */
         function loadStructSet(value, text) {
             if (value == CONST_STRUCTS[0].No) {
                 $("#rootTr").hide();
@@ -68,23 +68,16 @@
                 return;
             }
 
-            var frmData = $("#cc").serialize();
-
-            $.ajax({
-                type: 'post',
-                data: frmData,
-                async: true,
-                url: Handler + "?DoType=SF5_Save&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    document.location.href = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData");;
-                }
-            });
+            //            var frmData = $("#cc").serialize();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("SF5_Save");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            document.location.href = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData"); ;
 
             $("#Msg").html("");
         }
@@ -92,57 +85,95 @@
 </head>
 <body>
     <form action="" id="cc">
-        <table style="width: 95%; margin: 5px; padding: 5px;">
-            <caption>
-                <a href="./Default.htm">返回</a> - 微服务Handler外部数据源,(需要重写\DataUser\SFTableHandler.ashx 文件.)
-            </caption>
-            <tr>
-                <th>项目</th>
-                <th class="style1">值</th>
-                <th>备注</th>
-            </tr>
-            <tr>
-                <td class="GroupTitle">字典编号</td>
-                <td class="style1"><input type="text" id="TB_No" name="TB_No" /></td>
-                <td>创建字典表的英文名称,不要以数字开头否则创建表出错.</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">字典名称</td>
-                <td class="style1"><input type="text" id="TB_Name" name="TB_Name" /></td>
-                <td>创建字典表的中文名称</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">数据源</td>
-                <td class="style1"><select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" /></td>
-                <td>选择字典表所属数据源</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">数据格式</td>
-                <td class="style1">
-                    <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)"></select>
-                </td>
-                <td>选择具体有指定字段的格式</td>
-            </tr>
-            <tr id="rootTr" style="display: none;">
-                <td class="GroupTitle">根节点值</td>
-                <td class="style1"><input type="text" id="TB_RootValue" name="TB_RootValue" /></td>
-                <td>填写此树的根节点值</td>
-            </tr>
-            <tr>
-                <td class="GroupTitle">SQL语句</td>
-                <td class="style1" colspan="2">
-                    <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;" />
-                    <br />
-                    请输入完整SQL查询语句，且返回字段中必须包含No,Name[若为树结构需包含ParentNo]字段，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="3">
-                    <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="Save()">保存</a>
-                </td>
-            </tr>
-        </table>
+    <table style="width: 95%; margin: 5px; padding: 5px;">
+        <caption>
+            <a href="./Default.htm">返回</a> - 微服务Handler外部数据源,(需要重写\DataUser\SFTableHandler.ashx
+            文件.)
+        </caption>
+        <tr>
+            <th>
+                项目
+            </th>
+            <th class="style1">
+                值
+            </th>
+            <th>
+                备注
+            </th>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                字典编号
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_No" name="TB_No" />
+            </td>
+            <td>
+                创建字典表的英文名称,不要以数字开头否则创建表出错.
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                字典名称
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_Name" name="TB_Name" />
+            </td>
+            <td>
+                创建字典表的中文名称
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                数据源
+            </td>
+            <td class="style1">
+                <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" />
+            </td>
+            <td>
+                选择字典表所属数据源
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                数据格式
+            </td>
+            <td class="style1">
+                <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)">
+                </select>
+            </td>
+            <td>
+                选择具体有指定字段的格式
+            </td>
+        </tr>
+        <tr id="rootTr" style="display: none;">
+            <td class="GroupTitle">
+                根节点值
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_RootValue" name="TB_RootValue" />
+            </td>
+            <td>
+                填写此树的根节点值
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                SQL语句
+            </td>
+            <td class="style1" colspan="2">
+                <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;" />
+                <br />
+                请输入完整SQL查询语句，且返回字段中必须包含No,Name[若为树结构需包含ParentNo]字段，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+                    onclick="Save()">保存</a>
+            </td>
+        </tr>
+    </table>
     </form>
 </body>
 </html>

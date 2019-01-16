@@ -10,6 +10,7 @@
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
     <script src="/WF/Scripts/config.js" type="text/javascript" ></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
         //页面启动函数.
         $(function () {
@@ -37,14 +38,17 @@
             }
 
         }
-       
+
         function BindList() {
-            $.ajax({
-                type: 'GET',
-                async: true,
-                url: Handler + "?DoType=SFDBSrcNewGuide_GetList",
-                dataType: 'html',
-                success: function (data) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
+            var data = handler.DoMethodReturnString("SFDBSrcNewGuide_GetList");
+//            $.ajax({
+//                type: 'GET',
+//                async: true,
+//                url: Handler + "?DoType=SFDBSrcNewGuide_GetList",
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -82,8 +86,8 @@
 
                     var btn = "<br/><a class='easyui-linkbutton l-btn' href='./SFDBSrcNewGuide.htm?DoType=New' data-options='plain:false,iconCls:'icon-new',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-new l-btn-icon-left'>新建数据源</span></span></a>";
                     $("#main").append(btn);
-                }
-            });
+//                }
+//            });
         }
 
         //TODO 1、下拉框
@@ -159,12 +163,16 @@
             if (no) {
                 hUrl += "&No=" + no;
             }
-            $.ajax({
-                type: 'GET',
-                async: true,
-                url: hUrl,
-                dataType: 'html',
-                success: function (data) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
+            handler.AddPara("No", no);
+            var data = handler.DoMethodReturnString("SFDBSrcNewGuide_LoadSrc");
+//            $.ajax({
+//                type: 'GET',
+//                async: true,
+//                url: hUrl,
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -199,8 +207,8 @@
                     $("#TB_IP").val(SFDBSrc.IP);
                     $("#TB_DBName").val(SFDBSrc.DBName);
 
-                }
-            });
+//                }
+//            });
 
             //3、表单提交绑定验证
 
@@ -227,13 +235,17 @@
             if (window.confirm('确定要删除本数据源吗？数据源一经使用，不允许删除！') == false)
                 return;
             var no = GetQueryString("No");
-            $.ajax({
-                data: null,
-                type: 'GET',
-                async: true,
-                url: Handler + "?DoType=SFDBSrcNewGuide_DelSrc&No=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
+            handler.AddPara("No", no);
+            var data = handler.DoMethodReturnString("SFDBSrcNewGuide_DelSrc");
+
+//            $.ajax({
+//                data: null,
+//                type: 'GET',
+//                async: true,
+//                url: Handler + "?DoType=SFDBSrcNewGuide_DelSrc&No=" + no + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') >= 0) {
                         alert(data);
@@ -242,8 +254,8 @@
 
                     window.location.href = "SFDBSrcNewGuide.htm";
                     return;
-                }
-            });
+//                }
+//            });
         }
 
     </script>

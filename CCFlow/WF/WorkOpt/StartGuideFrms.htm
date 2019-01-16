@@ -14,13 +14,19 @@
         $(function () {
 
             // 初始化人员.   //开始加载数据.
-            $.ajax({
-                type: 'post',
-                async: true,
-                data: null,
-                url: Handler + "?DoType=StartGuideFrms_Init&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("FID", GetQueryString("FID"));
+            var data = handler.DoMethodReturnString("StartGuideFrms_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                data: null,
+//                url: Handler + "?DoType=StartGuideFrms_Init&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         document.getElementById("Msg").innerHTML = data;
@@ -41,8 +47,8 @@
                     }
                     html += "<ul>";
                     document.getElementById("Msg").innerHTML = html;
-                }
-            });
+//                }
+//            });
         });
 
     </script>
@@ -57,7 +63,7 @@
 </head>
 <body>
  
- <div id="Msg"><img src='../Img/loading.gif' alt=""s />正在加载请稍候... </div>
+ <div id="Msg"><img src='../Img/loading.gif' alt="" />正在加载请稍候... </div>
 
 </body>
 </html>

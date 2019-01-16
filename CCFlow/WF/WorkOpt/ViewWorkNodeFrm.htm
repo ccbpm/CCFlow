@@ -1200,13 +1200,18 @@
 
     //加载表单数据.
     function GenerWorkNode() {
-        $.ajax({
-            type: 'post',
-            async: true,
-            data: pageData,
-            url: Handler + "?DoType=ViewWorkNodeFrm&&m=" + Math.random(),
-            dataType: 'html',
-            success: function(data) {
+
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+        handler.AddJson(pageData);
+        var data = handler.DoMethodReturnString("ViewWorkNodeFrm");
+
+//        $.ajax({
+//            type: 'post',
+//            async: true,
+//            data: pageData,
+//            url: Handler + "?DoType=ViewWorkNodeFrm&&m=" + Math.random(),
+//            dataType: 'html',
+//            success: function(data) {
                 jsonStr = data;
                 try {
                     var datajson = JSON.parse(data);
@@ -1229,8 +1234,8 @@
                 if (pageData.IframeId != undefined) {
                     setParentIframeHeight(pageData.IframeId);
                 }
-            }
-        });
+//            }
+//        });
     }
 
 

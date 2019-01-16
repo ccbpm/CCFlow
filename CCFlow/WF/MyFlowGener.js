@@ -45,7 +45,7 @@ $(function () {
     });
 
     setAttachDisabled();
-    setToobarDisiable();
+//    setToobarDisiable();
     setFormEleDisabled();
 
     $('#btnMsgModalOK1').bind('click', function () {

@@ -947,11 +947,11 @@ function onKeyDown(ev) {
             }
             break;
 
-        //        case KEY.Y:    
-        //            if(CNTRL_PRESSED){    
-        //                action('redo');    
-        //            }    
-        //            break;    
+        //        case KEY.Y:     
+        //            if(CNTRL_PRESSED){     
+        //                action('redo');     
+        //            }     
+        //            break;     
 
         case KEY.G:
             if (CNTRL_PRESSED) {
@@ -2872,7 +2872,7 @@ function generateMoveMatrix(fig, x, y) {
         [0, 0, 1]
         ];
 
-        
+
         snapMonitor[0] += dx;
         snapMonitor[1] += dy;
         var jump = GRIDWIDTH / 2; //the figure will jump half of grid cell width
@@ -3212,23 +3212,23 @@ function Save(showInfo) {
     handler.AddPara("svg", "");
     handler.AddPara("FK_MapData", CCForm_FK_MapData);
     var data = handler.DoMethodReturnString("SaveForm");
-//    $.post( Handler, {
-//        action: 'SaveForm',
-//        diagram: serializedDiagram,
-//        png: dataURL,
-//        linkMap: lMap,
-//        svg: "",
-//        FK_MapData: CCForm_FK_MapData
-//    }, function (data) {
+    //    $.post( Handler, {
+    //        action: 'SaveForm',
+    //        diagram: serializedDiagram,
+    //        png: dataURL,
+    //        linkMap: lMap,
+    //        svg: "",
+    //        FK_MapData: CCForm_FK_MapData
+    //    }, function (data) {
 
-        if (data.indexOf('err@') != -1) {
-            alert(data);
-            return;
-        }
+    if (data.indexOf('err@') != -1) {
+        alert(data);
+        return;
+    }
 
-        Designer_ShowMsg(data);
+    Designer_ShowMsg(data);
 
-//    });
+    //    });
 }
 
 /** Print current diagram
@@ -3331,6 +3331,61 @@ function exportCanvas() {
     window.open('./svg.php', 'SVG', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
 }
 
+/**Loads a saved diagram
+*@param {String} tempDiagramName - the name of temporary diagram
+**/
+function LoadTempDiagram(frmID) {
+    //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
+    Conver_CCForm_V1ToV2();
+    /*
+    $.post(Handler, { action: 'FormDesigner_Loadform', FK_MapData: frmID },
+
+    function (data) {
+
+    if (data.indexOf('err@') != -1) {
+    alert(data);
+    return;
+    }
+
+    try {
+
+    // 装载表单入口.
+    if (data == "" || data == "" || data == null) {
+
+                    
+    return;
+    }
+
+    action(data);
+
+    var obj = eval('(' + data + ')');
+
+    //alert(obj);
+    //console.log(obj);
+
+    if (!('v' in obj) || obj.v != DIAGRAMO.fileVersion) {
+    Importer.importDiagram(obj); //import 1st version of Diagramo files
+    }
+
+    STACK = Stack.load(obj['s']);
+    canvasProps = CanvasProps.load(obj['c']);
+    canvasProps.sync();
+    setUpEditPanel(canvasProps);
+
+    CONNECTOR_MANAGER = ConnectorManager.load(obj['m']);
+    CONTAINER_MANAGER = ContainerFigureManager.load(obj['p']);
+
+    draw();
+
+    //alert("loaded");
+    } catch (error) {
+    alert("main.js:load() 装载表单异常 Exception: " + error);
+    }
+    }
+    );
+    */
+}
+
 
 /**Saves a diagram. Actually send the serialized version of diagram
 *for saving
@@ -3430,7 +3485,7 @@ function Init_Panel(diagramId) {
     canvasProps.setWidth(canvasProps.getWidth());
     //  canvasProps.setHeight(canvasProps.getHeight());
 
-   // alert( canvasProps.getHeight() );
+    // alert( canvasProps.getHeight() );
 
     canvasProps.setHeight(2000);
 
@@ -3442,7 +3497,9 @@ function Init_Panel(diagramId) {
 
     //Edit panel
     setUpEditPanel(canvasProps);
-     
+
+    // loads diagram
+    LoadTempDiagram(diagramId);
 
     // close layer when click-out
     addListeners();
@@ -3469,11 +3526,11 @@ function action(action) {
             redraw = true;
             break;
 
-        //        case 'redo':    
-        //            Log.info("main.js->action()->Redo. Nr of actions in the STACK: " + History.COMMANDS.length);    
-        //            History.redo();    
-        //            redraw = true;    
-        //            break;    
+        //        case 'redo':     
+        //            Log.info("main.js->action()->Redo. Nr of actions in the STACK: " + History.COMMANDS.length);     
+        //            History.redo();     
+        //            redraw = true;     
+        //            break;     
 
         case 'group':
             /*After we pressed Ctrl-G any temporary group will became permanent*/
@@ -3877,7 +3934,7 @@ function action(action) {
 
 /**Stores last mouse position. Null initially.*/
 var lastMousePosition = null;
- 
+
 function documentOnMouseDown(evt) {
     //Log.info("documentOnMouseDown");
     //evt.preventDefault();

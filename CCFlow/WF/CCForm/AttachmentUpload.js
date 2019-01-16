@@ -10,15 +10,18 @@ function Down2017(mypk) {
 
 
     //组织url.
-    var url = Handler + "?DoType=AttachmentUpload_Down&MyPK=" + mypk + "&m=" + Math.random();
+//    var url = Handler + "?DoType=AttachmentUpload_Down&MyPK=" + mypk + "&m=" + Math.random();
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    handler.AddPara("MyPK", mypk);
+    var data = handler.DoMethodReturnString("AttachmentUpload_Down");
 
 
-    $.ajax({
-        type: 'post',
-        async: true,
-        url: url,
-        dataType: 'html',
-        success: function (data) {
+//    $.ajax({
+//        type: 'post',
+//        async: true,
+//        url: url,
+//        dataType: 'html',
+//        success: function (data) {
 
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.
@@ -41,8 +44,8 @@ function Down2017(mypk) {
             }
             //alert(data);
             return;
-        }
-    });
+//        }
+//    });
 }
 
 

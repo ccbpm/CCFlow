@@ -83,6 +83,9 @@
             }
             //跳转
             var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
+            //获取URL参数
+            if (location.search.indexOf("PrjNo") != -1)
+                href = href + "&PrjNo=" + GetQueryString("PrjNo") + "&PrjName=" + GetQueryString("PrjName");
             window.location.href = href;
 
         }

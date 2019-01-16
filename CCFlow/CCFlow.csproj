@@ -1353,6 +1353,74 @@
     <Content Include="WF\BatchStart.htm" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\ccbpmAPI.js" />
+    <Content Include="WF\CCForm\2018Dtl.htm" />
+    <Content Include="WF\CCForm\Ath.htm" />
+    <Content Include="WF\CCForm\Ath.js" />
+    <Content Include="WF\CCForm\AthImg.htm" />
+    <Content Include="WF\CCForm\AttachmentFix.htm" />
+    <Content Include="WF\CCForm\AttachmentUpload.js" />
+    <Content Include="WF\CCForm\CCFormAPI.asmx" />
+    <Content Include="WF\CCForm\DownFile.aspx" />
+    <Content Include="WF\CCForm\Dtl.htm" />
+    <Content Include="WF\CCForm\Dtl2018.htm" />
+    <Content Include="WF\CCForm\DtlCard.htm" />
+    <Content Include="WF\CCForm\DtlFrm.htm" />
+    <Content Include="WF\CCForm\DtlFrm.js" />
+    <Content Include="WF\CCForm\DtlImp.htm" />
+    <Content Include="WF\CCForm\DtlImpByExcel.htm" />
+    <Content Include="WF\CCForm\DtlImpByJSON.htm" />
+    <Content Include="WF\CCForm\DtlOpt.htm" />
+    <Content Include="WF\CCForm\DtlReadonly.htm" />
+    <Content Include="WF\CCForm\Frm.htm" />
+    <Content Include="WF\CCForm\FrmEnd.js" />
+    <Content Include="WF\CCForm\FrmExcel.htm" />
+    <Content Include="WF\CCForm\FrmFool.js" />
+    <Content Include="WF\CCForm\FrmFoolReadonly.htm" />
+    <Content Include="WF\CCForm\FrmFoolReadonly.js" />
+    <Content Include="WF\CCForm\FrmFree.js" />
+    <Content Include="WF\CCForm\FrmGener.htm" />
+    <Content Include="WF\CCForm\FrmGener.js" />
+    <Content Include="WF\CCForm\FrmReadme.txt" />
+    <Content Include="WF\CCForm\FrmSingle.htm" />
+    <Content Include="WF\CCForm\FrmVSTO.htm" />
+    <Content Include="WF\CCForm\FrmWord.htm" />
+    <Content Include="WF\CCForm\Handler.ashx" />
+    <Content Include="WF\CCForm\HandWriting.htm" />
+    <Content Include="WF\CCForm\ImgAth.htm" />
+    <Content Include="WF\CCForm\ImgAth\ajaxfileupload.js" />
+    <Content Include="WF\CCForm\ImgAth\css\images\generate.png" />
+    <Content Include="WF\CCForm\ImgAth\css\images\indicator.gif" />
+    <Content Include="WF\CCForm\ImgAth\css\images\opts.png" />
+    <Content Include="WF\CCForm\ImgAth\css\images\pointer.png" />
+    <Content Include="WF\CCForm\ImgAth\css\images\resize.gif" />
+    <Content Include="WF\CCForm\ImgAth\css\jquery.bitmapcutter.css" />
+    <Content Include="WF\CCForm\ImgAth\images\generate.png" />
+    <Content Include="WF\CCForm\ImgAth\images\indicator.gif" />
+    <Content Include="WF\CCForm\ImgAth\images\opts.png" />
+    <Content Include="WF\CCForm\ImgAth\images\pointer.png" />
+    <Content Include="WF\CCForm\ImgAth\images\resize.gif" />
+    <Content Include="WF\CCForm\ImgAth\js\jquery.bitmapcutter.js" />
+    <Content Include="WF\CCForm\ImgAth\js\jquery1.4.2.min.js" />
+    <Content Include="WF\CCForm\Img\loading.gif" />
+    <Content Include="WF\CCForm\JS\mselector.css" />
+    <Content Include="WF\CCForm\JS\mselector.js" />
+    <Content Include="WF\CCForm\JS\mtags.js" />
+    <Content Include="WF\CCForm\JS\MultipleChoiceSearch.js" />
+    <Content Include="WF\CCForm\JS\MultipleChoiceSmall.js" />
+    <Content Include="WF\CCForm\JS\Pop.js" />
+    <Content Include="WF\CCForm\MapExt2016.js" />
+    <Content Include="WF\CCForm\PopFullCtrl.htm" />
+    <Content Include="WF\CCForm\PopVal.htm" />
+    <Content Include="WF\CCForm\Pop\Branches.htm" />
+    <Content Include="WF\CCForm\Pop\BranchesAndLeaf.htm" />
+    <Content Include="WF\CCForm\Pop\BranchesAndLeafEasyui.htm" />
+    <Content Include="WF\CCForm\Pop\GroupList.htm" />
+    <Content Include="WF\CCForm\Pop\HelperOfTBEUI.htm" />
+    <Content Include="WF\CCForm\Pop\HelperOfTBEUIBS.htm" />
+    <Content Include="WF\CCForm\Pop\Simple.htm" />
+    <Content Include="WF\CCForm\Pop\TableSearch.htm" />
+    <Content Include="WF\CCForm\Port.htm" />
+    <Content Include="WF\CCForm\Print.htm" />
     <Content Include="WF\Comm\Batch.htm" />
     <Content Include="WF\Comm\BatchBS.htm" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
@@ -2031,7 +2099,6 @@
     <Content Include="WF\Img\WorkRpt.gif" />
     <Content Include="WF\Img\yaoshi.jpg" />
     <Content Include="WF\Img\zhuichiren.png" />
-    <Content Include="WF\MyFlow.ashx" />
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\MyFlowFool2017.js" />
     <Content Include="WF\MyFlowFoolTrack2016.js" />
@@ -2046,14 +2113,14 @@
     <Content Include="WF\MyFlowTreeReadonly.htm" />
     <Content Include="WF\Port.htm" />
     <Content Include="WF\PortDemo.htm" />
-    <Content Include="WF\RptDfine\Batch.htm" />
-    <Content Include="WF\RptDfine\Contrast.htm" />
-    <Content Include="WF\RptDfine\ContrastDtl.htm" />
-    <Content Include="WF\RptDfine\Default.htm" />
-    <Content Include="WF\RptDfine\Flowlist.htm" />
-    <Content Include="WF\RptDfine\Group.htm" />
-    <Content Include="WF\RptDfine\Img\BJ.png" />
-    <Content Include="WF\RptDfine\Search.htm" />
+    <Content Include="WF\Img\RptDfine\Batch.htm" />
+    <Content Include="WF\Img\RptDfine\Contrast.htm" />
+    <Content Include="WF\Img\RptDfine\ContrastDtl.htm" />
+    <Content Include="WF\Img\RptDfine\Default.htm" />
+    <Content Include="WF\Img\RptDfine\Flowlist.htm" />
+    <Content Include="WF\Img\RptDfine\Group.htm" />
+    <Content Include="WF\Img\RptDfine\Img\BJ.png" />
+    <Content Include="WF\Img\RptDfine\Search.htm" />
     <Content Include="WF\RptSearch\Default.htm" />
     <Content Include="WF\RptSearch\DistributedOfMy.htm" />
     <Content Include="WF\RptSearch\Img\BJ.png" />
@@ -6755,6 +6822,7 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
+    <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.eot" />
     <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.ttf" />
     <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.woff" />
@@ -7328,6 +7396,21 @@
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
+      <DependentUpon>CCFormAPI.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WF\CCForm\DownFile.aspx.cs">
+      <DependentUpon>DownFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\CCForm\DownFile.aspx.designer.cs">
+      <DependentUpon>DownFile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\CCForm\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="WF\Comm\Charts\FCExport.aspx.cs">
       <DependentUpon>FCExport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7348,10 +7431,6 @@
     </Compile>
     <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WF\MyFlow.ashx.cs">
-      <DependentUpon>MyFlow.ashx</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

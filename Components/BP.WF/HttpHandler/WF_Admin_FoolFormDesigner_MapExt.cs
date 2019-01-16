@@ -684,7 +684,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string RadioBtns_Save()
         {
-            string json = context.Request.Form["data"];
+            //string json = context.Request.Form["data"];
+            //if (DataType.IsNullOrEmpty(json))
+            string json = GetRequestVal("data");
             DataTable dt = BP.Tools.Json.ToDataTable(json);
 
             foreach (DataRow dr in dt.Rows)

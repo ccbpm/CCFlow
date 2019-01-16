@@ -20,8 +20,8 @@
                 KeyOfEn: GetQueryString("KeyOfEn"),
                 SelectIntKey: GetQueryString("SelectIntKey"),
                 MyPK: GetQueryString("MyPK")
-            };
 
+            };
             if (pageData.selectIntKey == null)
                 pageData.selectIntKey = "0";
 
@@ -36,7 +36,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("RadioBtns_Init");
-
             $('#lb_EnName').text(pageData.KeyOfEn);
 
             if (data != undefined && data.indexOf('err@') == 0) {
@@ -225,17 +224,14 @@
 
             //保存当前打开表单信息
             SaveCurrentConfig();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("data",JSON.stringify(initData.Sys_FrmRB));
+            handler.AddPara("FK_MapData", pageData.FK_MapData);
+            handler.AddPara("FK_MapExt", pageData.MyPK);
+            handler.AddPara("KeyOfEn", pageData.KeyOfEn);
+            var data = handler.DoMethodReturnString("RadioBtns_Save");
 
-            $.ajax({
-                data: { data: JSON.stringify(initData.Sys_FrmRB) },
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=RadioBtns_Save&FK_MapData=" + pageData.FK_MapData + "&FK_MapExt=" + pageData.MyPK + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    alert(data)
-                }
-            });
+            alert(data)
         }
 
         function SaveAndClose() {

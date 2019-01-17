@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
      <base target="_self" />
 
     <link href="../../DataUser/Style/dtl.css" rel="stylesheet" type="text/css" />
@@ -52,42 +53,42 @@
         });
 
         //公共方法
-        function AjaxServiceGener(param, callback, scope) {
-            $.ajax({
-                type: "GET", //使用GET或POST方法访问后台
-                dataType: "text", //返回json格式的数据
-                contentType: "application/json; charset=utf-8",
-                url: Handler, //要访问的后台地址
-                data: param, //要发送的数据
-                async: true,
-                cache: false,
-                complete: function () { }, //AJAX请求完成时隐藏loading提示
-                error: function (XMLHttpRequest, errorThrown) {
-                    alert(errorThrown)
-                    callback(XMLHttpRequest);
-                    alert('保存数据出错');
-                    $('#Msg').hide();
-                    $('#ContentDtlDiv').show();
-                },
-                success: function (msg) {//msg为返回的数据，在这里做数据绑定
-                    if (saveAll) {
-                        alerdaySaveCount++;
-                    } else {
-                        var data = msg;
-                        callback(data, scope);
-                    }
-                    if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
-                        $('#Msg').hide();
-                        $('#ContentDtlDiv').show();
-                        alerdaySaveCount = 0;
-                        needSaveCount = 0;
-                        saveAll = false;
+//        function AjaxServiceGener(param, callback, scope) {
+//            $.ajax({
+//                type: "GET", //使用GET或POST方法访问后台
+//                dataType: "text", //返回json格式的数据
+//                contentType: "application/json; charset=utf-8",
+//                url: Handler, //要访问的后台地址
+//                data: param, //要发送的数据
+//                async: true,
+//                cache: false,
+//                complete: function () { }, //AJAX请求完成时隐藏loading提示
+//                error: function (XMLHttpRequest, errorThrown) {
+//                    alert(errorThrown)
+//                    callback(XMLHttpRequest);
+//                    alert('保存数据出错');
+//                    $('#Msg').hide();
+//                    $('#ContentDtlDiv').show();
+//                },
+//                success: function (msg) {//msg为返回的数据，在这里做数据绑定
+//                    if (saveAll) {
+//                        alerdaySaveCount++;
+//                    } else {
+//                        var data = msg;
+//                        callback(data, scope);
+//                    }
+//                    if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
+//                        $('#Msg').hide();
+//                        $('#ContentDtlDiv').show();
+//                        alerdaySaveCount = 0;
+//                        needSaveCount = 0;
+//                        saveAll = false;
 
-                        InitPage();
-                    }
-                }
-            });
-        }
+//                        InitPage();
+//                    }
+//                }
+//            });
+//        }
          
         //初始化数据.
         function InitPage() {
@@ -108,14 +109,18 @@
             //如何获得全部的参数？ &FK_Node=120&FK_Flow=222 放入到url里面去？
             var href = window.location.href;
             var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+
             //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                //url: Handler + "?DoType=Dtl_Init&FK_Node=" + fk_node + "&EnsName=" + ensName + "&RefPKVal=" + refPKVal + "&FID=" + fid + "&m=" + Math.random(),
-                url: Handler + "?DoType=Dtl_Init&" + urlParam + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Dtl_Init"); 
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                //url: Handler + "?DoType=Dtl_Init&FK_Node=" + fk_node + "&EnsName=" + ensName + "&RefPKVal=" + refPKVal + "&FID=" + fid + "&m=" + Math.random(),
+//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
@@ -345,8 +350,8 @@
                     var IsView = sys_MapDtl[0].IsView == 1 ? true : false; //是否可见
                     var titles = IsShowTitle ? sys_MapDtl[0].Name : '';
 
-                }
-            });
+//                }
+//            });
         }
 
         //根据表格中编辑过的值，设置表格TR 的 data

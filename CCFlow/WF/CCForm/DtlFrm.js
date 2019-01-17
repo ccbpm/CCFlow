@@ -120,13 +120,17 @@ function GenerFrm() {
     var url = Handler + "?DoType=DtlFrm_Init&m=" + Math.random() + "&" + urlParam;
     // alert(url);
 
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: pageData,
-        url: url,
-        dataType: 'html',
-        success: function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    handler.AddUrlData(urlParam);
+    handler.AddJson(pageData);
+    var data = handler.DoMethodReturnString("DtlFrm_Init");
+//    $.ajax({
+//        type: 'post',
+//        async: true,
+//        data: pageData,
+//        url: url,
+//        dataType: 'html',
+//        success: function (data) {
 
             if (data.indexOf('err@') == 0) {
                 alert('装载表单出错,请查看控制台console,或者反馈给管理员.');
@@ -347,8 +351,8 @@ function GenerFrm() {
             if (typeof calculator === "function") {
                 calculator(frmData.Sys_MapExt);
             }
-        }
-    })
+//        }
+//    })
 }
 
 //打开从表的从表
@@ -382,14 +386,20 @@ function Save(isSaveAndNew) {
         //alert("请检查表单必填项和正则表达式");
         return;
     }
-
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: getFormData(true, true),
-        url: Handler + "?DoType=FrmGener_Save&IsForDtl=1&EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=" + GetQueryString("OID"),
-        dataType: 'html',
-        success: function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara("IsForDtl", 1);
+    handler.AddPara("EnsName", GetQueryString("EnsName"));
+    handler.AddPara("RefPKVal", GetQueryString("RefPKVal"));
+    handler.AddPara("OID", GetQueryString("OID"));
+    handler.handler.AddFormData();
+    var data = handler.DoMethodReturnString("FrmGener_Save"); 
+//    $.ajax({
+//        type: 'post',
+//        async: true,
+//        data: getFormData(true, true),
+//        url: Handler + "?DoType=FrmGener_Save&IsForDtl=1&EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=" + GetQueryString("OID"),
+//        dataType: 'html',
+//        success: function (data) {
 
             if (data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
@@ -405,8 +415,8 @@ function Save(isSaveAndNew) {
             IsSave = false;
             var url = "DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=0";
             window.location.href = url;
-        }
-    });
+//        }
+//    });
 }
 
 

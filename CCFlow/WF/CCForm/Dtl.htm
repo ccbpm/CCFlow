@@ -120,38 +120,40 @@
         var ensName = GetQueryString("EnsName");
 
         //公共方法
-        function AjaxServiceGener(param, callback, scope) {
-            // 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
-            //if (param.DoType != "Dtl_DeleteRow" && (window.EditModel == 1 || window.EditModel == 2)) {
-            //    return;
-            //}
-            $.ajax({
-                type: "GET", //使用GET或POST方法访问后台
-                dataType: "text", //返回json格式的数据
-                contentType: "application/json; charset=utf-8",
-                url: Handler, //要访问的后台地址
-                data: param, //要发送的数据
-                async: false,
-                cache: false,
-                complete: function () { }, //AJAX请求完成时隐藏loading提示
-                error: function (XMLHttpRequest, errorThrown) {
-                    alert(errorThrown)
-                    callback(XMLHttpRequest);
-                    //alert('保存数据出错');
-                    //$('#Msg').hide();
-                    //$('#ContentDtlDiv').show();
-                },
-                success: function (msg) { //msg为返回的数据，在这里做数据绑定.
-                    if (msg.indexOf('err@') == 0) {
-                        loadDtlTable();
-                        alert("操作失败");
-                    }
-                    else
-                        callback(msg);
+//        function AjaxServiceGener(param, callback, scope) {
+//            // 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
+//            //if (param.DoType != "Dtl_DeleteRow" && (window.EditModel == 1 || window.EditModel == 2)) {
+//            //    return;
+//            //}
 
-                }
-            });
-        }
+
+//            $.ajax({
+//                type: "GET", //使用GET或POST方法访问后台
+//                dataType: "text", //返回json格式的数据
+//                contentType: "application/json; charset=utf-8",
+//                url: Handler, //要访问的后台地址
+//                data: param, //要发送的数据
+//                async: false,
+//                cache: false,
+//                complete: function () { }, //AJAX请求完成时隐藏loading提示
+//                error: function (XMLHttpRequest, errorThrown) {
+//                    alert(errorThrown)
+//                    callback(XMLHttpRequest);
+//                    //alert('保存数据出错');
+//                    //$('#Msg').hide();
+//                    //$('#ContentDtlDiv').show();
+//                },
+//                success: function (msg) { //msg为返回的数据，在这里做数据绑定.
+//                    if (msg.indexOf('err@') == 0) {
+//                        loadDtlTable();
+//                        alert("操作失败");
+//                    }
+//                    else
+//                        callback(msg);
+
+//                }
+//            });
+//        }
 
 
         //打开附件.
@@ -217,12 +219,16 @@
             //调用Gener.js 的方法，处理当前页面传来的参数, 并把参数传入到dtl.htm里面去。
             var urlParam = DearUrlParas();
             //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData(urlParam);
+            var data = handler.DoMethodReturnString("Dtl_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -381,8 +387,8 @@
                     $("#dtlTable").datagrid("clearSelections");
                     $("#dtlTable").datagrid("clearChecked");
                     InitToolBars(data);
-                }
-            });
+//                }
+//            });
         }
 
         //指定列求和
@@ -838,10 +844,17 @@
                 rowData.FK_MapData = GetQueryString("FK_MapData");
                 rowData.FID = GetQueryString("FID");
 
-                AjaxServiceGener(rowData, function (data) {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
+                handler.AddPara("RefPKVal", rowData.RefPKVal);
+                handler.AddPara("FK_Node", rowData.FK_Node);
+                handler.AddPara("FK_MapData", rowData.FK_MapData);
+                handler.AddPara("FID", rowData.FID);
+                var data = handler.DoMethodReturnString("Dtl_SaveRow");
+//                AjaxServiceGener(rowData, function (data) {
                     //rowData["AthNum"] = athNum;
                     loadDtlTable();
-                }, this);
+//                }, this);
             } else {
                 alert("第" + (selectedIndex + 1) + "行数据验证无效。请重新填写");
             }
@@ -866,11 +879,15 @@
                             rowData.FK_MapDtl = GetQueryString("EnsName");
                             rowData.RefPKVal = GetQueryString("RefPKVal");
 
-                            AjaxServiceGener(rowData, function (data) {
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                            handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
+                            handler.AddPara("RefPKVal", rowData.RefPKVal);
+                            var data = handler.DoMethodReturnString("Dtl_DeleteRow");
+//                            AjaxServiceGener(rowData, function (data) {
                                 //$('#dtlTable').datagrid('deleteRow', $('#dtlTable').datagrid('getRowIndex', checkedRows[0]));
                                 loadDtlTable();
 
-                            }, this);
+//                            }, this);
                         }
                     }
                 });

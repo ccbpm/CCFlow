@@ -170,14 +170,17 @@ function GenerFrm() {
     if (href.indexOf('&IsReadonly=1') > 1 || href.indexOf('&IsEdit=0') > 1) {
         $("#Btn").hide();
     }
-
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: pageData,
-        url: Handler + "?DoType=FrmGener_Init&m=" + Math.random() + "&" + urlParam,
-        dataType: 'html',
-        success: function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData();
+    handler.AddJson(pageData);
+    var data = handler.DoMethodReturnString("FrmGener_Init");
+//    $.ajax({
+//        type: 'post',
+//        async: true,
+//        data: pageData,
+//        url: Handler + "?DoType=FrmGener_Init&m=" + Math.random() + "&" + urlParam,
+//        dataType: 'html',
+//        success: function (data) {
 
             if (data.indexOf('err@') == 0) {
                 alert('装载表单出错,请查看控制台console,或者反馈给管理员.');
@@ -395,8 +398,8 @@ function GenerFrm() {
             if (typeof setContentHeight == "function") {
                 setContentHeight();
             }
-        }
-    })
+//        }
+//    })
 }
 
 // V
@@ -444,13 +447,17 @@ function Save(scope) {
 
     // setToobarDisiable();
 
-    $.ajax({
-        type: 'post',
-        async: false,
-        data: getFormData(true, true),
-        url: Handler + "?DoType=FrmGener_Save&OID=" + pageData.OID,
-        dataType: 'html',
-        success: function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara("OID", pageData.OID);
+    handler.AddFormData();
+    var data = handler.DoMethodReturnString("FrmGener_Save");
+//    $.ajax({
+//        type: 'post',
+//        async: false,
+//        data: getFormData(true, true),
+//        url: Handler + "?DoType=FrmGener_Save&OID=" + pageData.OID,
+//        dataType: 'html',
+//        success: function (data) {
 
             if (data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
@@ -462,8 +469,8 @@ function Save(scope) {
                 window.location.href = window.location.href;
             return true;
 
-        }
-    });
+//        }
+//    });
 }
 
 

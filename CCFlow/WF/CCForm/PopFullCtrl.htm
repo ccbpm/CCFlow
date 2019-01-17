@@ -17,6 +17,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <style type="text/css">
     * {
         list-style: none;
@@ -257,14 +258,19 @@
                 //formData2[formData[i].split('=')[0]] = formData[i].split('=')[1];
                 formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
             }
-
-            $.ajax({
-                type: 'post',
-                async: false,
-                data: formData2,
-                url: Handler + "?DoType=PopVal_Init&PopValWorkModel=2&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddPara("PopValWorkModel", 2);
+            handler.AddPara("FK_MapExt", fk_MapExt);
+            handler.AddFormData();
+            handler.AddFormData(formData2);
+            var data = handler.DoMethodReturnString("PopVal_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: false,
+//                data: formData2,
+//                url: Handler + "?DoType=PopVal_Init&PopValWorkModel=2&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+//                dataType: 'html',
+//                success: function (data) {
                     if (data != null) {
                         var setDataArr = null;
                         //SelfUrl   自定义URL
@@ -528,8 +534,8 @@
                             }
                         }
                     }
-                }
-            });
+//                }
+//            });
         }
 
         //初始化树  单实体+多实体
@@ -552,13 +558,20 @@
                         }
 
                         if (node.id === "#") {
-                            $.ajax({
-                                type: 'post',
-                                async: true,
-                                url: url,
-                                data: formData2,
-                                dataType: 'html',
-                                success: function (data) {
+
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                            handler.AddPara("FK_MapExt", getQueryStringByName('FK_MapExt'));
+                            handler.AddPara("FK_MapExt", fk_MapExt);
+                            handler.AddFormData();
+                            handler.AddFormData(formData2);
+                            var data = handler.DoMethodReturnString("PopVal_InitTree");
+//                            $.ajax({
+//                                type: 'post',
+//                                async: true,
+//                                url: url,
+//                                data: formData2,
+//                                dataType: 'html',
+//                                success: function (data) {
                                     data = JSON.parse(data);
                                     var itemArr = [];
                                     $.each(data.DTObjs, function (i, rootNode) {
@@ -569,17 +582,22 @@
                                         });
                                     });
                                     cb(itemArr);
-                                }
-                            });
+//                                }
+//                            });
                         } else {
                             url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') + '&ParentNo=' + node.id;
-                            $.ajax({
-                                type: 'post',
-                                async: true,
-                                url: url,
-                                data: formData2,
-                                dataType: 'html',
-                                success: function (data) {
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                            handler.AddPara("FK_MapExt", getQueryStringByName('FK_MapExt'));
+                            handler.AddPara("ParentNo", node.id);
+                            handler.AddFormData(formData2);
+                            var data = handler.DoMethodReturnString("PopVal_InitTree");
+//                            $.ajax({
+//                                type: 'post',
+//                                async: true,
+//                                url: url,
+//                                data: formData2,
+//                                dataType: 'html',
+//                                success: function (data) {
                                     if (window.pageSetData[0].PopValWorkModel == "TreeDouble") {//双实体树
                                         data = JSON.parse(data);
                                         var itemArr = [];
@@ -602,8 +620,8 @@
                                         cb(itemArr);
                                     });
                                 }
-                            }
-                        });
+//                            }
+//                        });
                     }
                 }
             }

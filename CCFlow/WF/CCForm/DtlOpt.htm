@@ -1,13 +1,12 @@
 ﻿<head>
     <title>驰骋工作流</title>
-   <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
-
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
 
         var result = null;
         //页面启动函数.
@@ -60,7 +59,7 @@
                     if (myidx == 0)
                         html += "<th><input type='checkbox' onclick='CheckAll()' id='CB_CheckAll' ><label for='CB_CheckAll'><span id='sp" + myidx + "'>" + myfield + "</span></label></th>";
                     else
-                        html += "<th><span id='sp" + myidx + "'>" + myfield + "</span></th>"; 
+                        html += "<th><span id='sp" + myidx + "'>" + myfield + "</span></th>";
                     myidx++;
                 }
                 break;
@@ -104,11 +103,11 @@
         function CheangeColName() {
 
             //  BP.WF.Template.MapDtlExt ext = new BP.WF.Template.MapDtlExt();
-//            var ensName = GetQueryString("EnsName"); // Demo_DtlExpImpDtl1
+            //            var ensName = GetQueryString("EnsName"); // Demo_DtlExpImpDtl1
 
-//            var sql = "SELECT ImpSQLNames FROM Sys_MapDtl WHERE No='" + ensName + "'";
-//            var dt=DBAccess.RunSQLReturnTable(sql);
-//            var strs = dt[0][0];
+            //            var sql = "SELECT ImpSQLNames FROM Sys_MapDtl WHERE No='" + ensName + "'";
+            //            var dt=DBAccess.RunSQLReturnTable(sql);
+            //            var strs = dt[0][0];
 
             var pkval = GetQueryString("EnsName");
 
@@ -129,7 +128,7 @@
                 var str = strs[i];
                 $('#sp' + i).html(str);
             }
-         
+
         }
 
         function Search() {
@@ -140,28 +139,24 @@
                 return;
             }
 
-           // var href = window.location.href;
+            // var href = window.location.href;
             //var urlParam = href.substring(href.indexOf('?') + 1, href.length);
             var url = Handler + "?DoType=DtlOpt_Search&Key=" + key + "&FK_MapDtl=" + GetQueryString("FK_MapDtl") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&m=" + Math.random();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("Key", key);
+            handler.AddPara("FK_MapDtl", GetQueryString("FK_MapDtl"));
+            handler.AddPara("RefPKVal", GetQueryString("RefPKVal"));
+            var data = handler.DoMethodReturnString("DtlOpt_Search");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    result = JSON.parse(data);
-                    BindTable();
-                }
-            });
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            result = JSON.parse(data);
+            BindTable();
         }
 
-        function Add( isReturnToDtl ) {
+        function Add(isReturnToDtl) {
 
             var vals = '';
             $.each($(":checkbox"), function () {
@@ -174,14 +169,18 @@
 
             var href = window.location.href;
             var urlParam = href.substring(href.indexOf('?') + 1, href.length);
-            var url = Handler + "?DoType=DtlOpt_Add&PKs="+vals+"&" + urlParam + "&m=" + Math.random();
+            var url = Handler + "?DoType=DtlOpt_Add&PKs=" + vals + "&" + urlParam + "&m=" + Math.random();
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            handler.AddPara("PKs", vals);
+            var data = handler.DoMethodReturnString("DtlOpt_Add");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: url,
+//                dataType: 'html',
+//                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -192,8 +191,8 @@
                     if (isReturnToDtl == false)
                         return;
                     Back(); //返回。
-                }
-            });
+//                }
+//            });
         }
 
         function Back() {
@@ -225,21 +224,22 @@
             });
         }
 
-		$(function () {
-			var bodyHeight = $(document).height();
-			var searchDivHeight = $("#searchDiv").height();
-			$("#Table1").height(bodyHeight - searchDivHeight - 15);
-		});
+        $(function () {
+            var bodyHeight = $(document).height();
+            var searchDivHeight = $("#searchDiv").height();
+            $("#Table1").height(bodyHeight - searchDivHeight - 15);
+        });
     </script>
     <link href="Dtl.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<form id="cc">
-		<div id="searchDiv" style='text-align: left;'>
-			关键字:&nbsp;<input type="text" id="TB_Key" value="" />&nbsp;<input type="button" value="查询" onclick="Search()" />
-		</div>
-		<div id="Table1" style="overflow: auto;" />
-		<div id="Msg" />
-	</form>
+    <form id="cc">
+    <div id="searchDiv" style='text-align: left;'>
+        关键字:&nbsp;<input type="text" id="TB_Key" value="" />&nbsp;<input type="button" value="查询"
+            onclick="Search()" />
+    </div>
+    <div id="Table1" style="overflow: auto;" />
+    <div id="Msg" />
+    </form>
 </body>
-</html>
+</html> 

@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <style type="text/css">
     * {
         list-style: none;
@@ -221,7 +222,7 @@
         var pageSetData = {};
         var initPopValData = {};
         var firstLoad = true;
-
+        //此文件没用，可删除
         function dtTable() {
             var fk_MapExt = getQueryStringByName("FK_MapExt");
             var searchData = $('#searchForm').serialize();
@@ -239,14 +240,19 @@
                 formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
             }
 
-            $.ajax({
-                type: 'post',
-                async: false,
-                data: formData2,
-                dataType: 'html',
-                url: Handler + "?DoType=PopVal_Init&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddPara("FK_MapExt", fk_MapExt);
+            handler.AddFormData();
+            handler.AddFormData(formData2);
+            var data = handler.DoMethodReturnString("PopVal_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: false,
+//                data: formData2,
+//                dataType: 'html',
+//                url: Handler + "?DoType=PopVal_Init&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+//                dataType: 'html',
+//                success: function (data) {
 				debugger;
                     if (data != null) {
                         var setDataArr = null;
@@ -513,90 +519,90 @@
                             }
                         }
                     }
-                }
-            });
+//                }
+//            });
         }
 
         //初始化树  单实体+多实体
-        function initTreeData(workModel) {
-            //$('#tree').css('display', 'block');
-            $('#orgjstree').css('display', 'block');
+//        function initTreeData(workModel) {
+//            //$('#tree').css('display', 'block');
+//            $('#orgjstree').css('display', 'block');
 
-            var url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt');
-            //初始化Tree
-            var jstreeOption = {
-                'core': {
-                    'data': function (node, cb) {
-                        //初始化根节点
-                        var formData = unescape(getQueryString('FormData')).split('&');
+//            var url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt');
+//            //初始化Tree
+//            var jstreeOption = {
+//                'core': {
+//                    'data': function (node, cb) {
+//                        //初始化根节点
+//                        var formData = unescape(getQueryString('FormData')).split('&');
 
-                        var formData2 = {};
-                        for (var i = 0; i < formData.length; i++) {
-                            //  formData2[formData[i].split('=')[0]] =formData[i].split('=')[1];
-                            formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
-                        }
+//                        var formData2 = {};
+//                        for (var i = 0; i < formData.length; i++) {
+//                            //  formData2[formData[i].split('=')[0]] =formData[i].split('=')[1];
+//                            formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
+//                        }
 
-                        if (node.id === "#") {
-                            $.ajax({
-                                type: 'post',
-                                async: true,
-                                url: url,
-                                data: formData2,
-                                dataType: 'html',
-                                success: function (data) {
-                                    data = JSON.parse(data);
-                                    var itemArr = [];
-                                    $.each(data.DTObjs, function (i, rootNode) {
-                                        itemArr.push({
-                                            "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
-                                                "opened": true, "selected": false
-                                            }
-                                        });
-                                    });
-                                    cb(itemArr);
-                                }
-                            });
-                        } else {
-                            url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') + '&ParentNo=' + node.id;
-                            $.ajax({
-                                type: 'post',
-                                async: true,
-                                url: url,
-                                data: formData2,
-                                dataType: 'html',
-                                success: function (data) {
-                                    if (window.pageSetData[0].PopValWorkModel == "TreeDouble") {//双实体树
-                                        data = JSON.parse(data);
-                                        var itemArr = [];
-                                        $.each(data.DTEntitys, function (i, rootNode) {
-                                            itemArr.push({
-                                                "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file", "data": rootNode
-                                            });
-                                        });
+//                        if (node.id === "#") {
+//                            $.ajax({
+//                                type: 'post',
+//                                async: true,
+//                                url: url,
+//                                data: formData2,
+//                                dataType: 'html',
+//                                success: function (data) {
+//                                    data = JSON.parse(data);
+//                                    var itemArr = [];
+//                                    $.each(data.DTObjs, function (i, rootNode) {
+//                                        itemArr.push({
+//                                            "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
+//                                                "opened": true, "selected": false
+//                                            }
+//                                        });
+//                                    });
+//                                    cb(itemArr);
+//                                }
+//                            });
+//                        } else {
+//                            url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') + '&ParentNo=' + node.id;
+//                            $.ajax({
+//                                type: 'post',
+//                                async: true,
+//                                url: url,
+//                                data: formData2,
+//                                dataType: 'html',
+//                                success: function (data) {
+//                                    if (window.pageSetData[0].PopValWorkModel == "TreeDouble") {//双实体树
+//                                        data = JSON.parse(data);
+//                                        var itemArr = [];
+//                                        $.each(data.DTEntitys, function (i, rootNode) {
+//                                            itemArr.push({
+//                                                "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file", "data": rootNode
+//                                            });
+//                                        });
 
-                                        cb(itemArr);
-                                    } else {//单实体树
-                                        data = JSON.parse(data);
-                                        var itemArr = [];
-                                        $.each(data.DTObjs, function (i, rootNode) {
-											itemArr.push({
-												"text" : rootNode.Name,
-												"id" : rootNode.No,
-												"children" : typeof rootNode.TreeCount != "undefined" && rootNode.TreeCount > 0,
-												"data" : rootNode,
-												"state" : {
-													//"opened": false, "selected": false
-												}
-											});
-											cb(itemArr);
-										});
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        };
+//                                        cb(itemArr);
+//                                    } else {//单实体树
+//                                        data = JSON.parse(data);
+//                                        var itemArr = [];
+//                                        $.each(data.DTObjs, function (i, rootNode) {
+//											itemArr.push({
+//												"text" : rootNode.Name,
+//												"id" : rootNode.No,
+//												"children" : typeof rootNode.TreeCount != "undefined" && rootNode.TreeCount > 0,
+//												"data" : rootNode,
+//												"state" : {
+//													//"opened": false, "selected": false
+//												}
+//											});
+//											cb(itemArr);
+//										});
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        };
 
         var plugins = [];
         if (pageSetData[0].PopValSelectModel == "More") {//多选

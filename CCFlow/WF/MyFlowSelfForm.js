@@ -352,6 +352,7 @@ function InitToolBar() {
             DeleteFlow();
         });
     }
+}
 
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode) {

@@ -364,16 +364,22 @@
         document.getElementById("Btn_Done").disabled=true;
 
         //初始化数据.
-        $.ajax({
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=Method_Done&M=" + GetQueryString("M") + "&inlayer=" + GetQueryString("inlayer") + "&mss=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
 
-                $('#CCForm').html(data);
-            }
-        });
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+        handler.AddPara("M", GetQueryString("M"));
+        handler.AddPara("inlayer", GetQueryString("inlayer"));
+        var data = handler.DoMethodReturnString("Method_Done");
+        $('#CCForm').html(data);
+//        $.ajax({
+//            type: 'post',
+//            async: true,
+//            url: Handler + "?DoType=Method_Done&M=" + GetQueryString("M") + "&inlayer=" + GetQueryString("inlayer") + "&mss=" + Math.random(),
+//            dataType: 'html',
+//            success: function (data) {
+
+//                $('#CCForm').html(data);
+//            }
+//        });
     }
 </script>
 

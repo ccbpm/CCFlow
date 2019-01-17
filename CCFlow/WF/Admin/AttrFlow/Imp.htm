@@ -51,6 +51,14 @@
 
             $("#pageloading").show();
             //提交数据
+//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+//            handler.AddPara("FK_Flow", fk_flow);
+//            handler.AddPara("FK_Sort", fk_flowSort);
+//            handler.AddPara("ImpWay", impWay);
+//            handler.AddPara("SpecFlowNo", spenFlowNo);
+//            handler.AddFormData();
+//            var data = handler.DoMethodReturnString("Imp_Done");
+
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',

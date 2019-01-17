@@ -25,15 +25,15 @@
             url = url.replace('&DoType=MyFlow_Init', '');
             url = url.replace('&DoType=View', '');
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Frm_Init"); 
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: url,
-//                dataType: 'html',
-//                success: function (data) {
+//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+//            handler.AddUrlData();
+//            var data = handler.DoMethodReturnString("Frm_Init"); 
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
                     if (data.indexOf('err@') == 0) {
                         alert(data); //如果是异常，就提提示.
                         return;
@@ -47,8 +47,8 @@
 
                     $("#Msg").html(data);
                     return;
-//                }
-//            });
+                }
+            });
 
         });
     </script>

@@ -2849,7 +2849,7 @@ namespace BP.WF.HttpHandler
                 ftpconn.SetCurrentDirectory("Helper");
 
                 //把文件放上去.
-                ftpconn.PutFile(temp, guid + ext);
+                ftpconn.PutFile(temp, guid+ "."+ ext);
                 ftpconn.Close();
 
                 //删除临时文件

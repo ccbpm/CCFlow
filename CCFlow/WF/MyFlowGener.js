@@ -44,9 +44,9 @@ $(function () {
             window.parent.close();
     });
 
-    setAttachDisabled();
+//    setAttachDisabled();
 //    setToobarDisiable();
-    setFormEleDisabled();
+//    setFormEleDisabled();
 
     $('#btnMsgModalOK1').bind('click', function () {
         window.close();

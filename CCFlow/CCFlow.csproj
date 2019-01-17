@@ -1212,7 +1212,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\FrmSln.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Glo.js" />
     <Content Include="WF\Admin\FoolFormDesigner\GuideSFTableAttr.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HidAttr.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Img\DDLCtrlFull.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Img\Frame.gif" />
@@ -1300,9 +1299,6 @@
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\Frm.png" />
     <Content Include="WF\Admin\Img\PK.png" />
-    <Content Include="WF\Admin\Port\AdminOrgList.htm" />
-    <Content Include="WF\Admin\Port\OrderOfDept.htm" />
-    <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
     <Content Include="WF\Admin\RptDfine\Default.htm" />
@@ -1383,7 +1379,6 @@
     <Content Include="WF\CCForm\FrmSingle.htm" />
     <Content Include="WF\CCForm\FrmVSTO.htm" />
     <Content Include="WF\CCForm\FrmWord.htm" />
-    <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\CCForm\HandWriting.htm" />
     <Content Include="WF\CCForm\ImgAth.htm" />
     <Content Include="WF\CCForm\ImgAth\ajaxfileupload.js" />
@@ -6813,6 +6808,7 @@
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
+    <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
@@ -6821,6 +6817,7 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
+    <Content Include="WF\CCForm\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.eot" />
     <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.ttf" />
@@ -7384,12 +7381,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
+    <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Handler.ashx.cs">
+    <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
       <DependentUpon>CCFormAPI.asmx</DependentUpon>
@@ -7404,7 +7400,6 @@
     </Compile>
     <Compile Include="WF\CCForm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\Comm\Charts\FCExport.aspx.cs">
       <DependentUpon>FCExport.aspx</DependentUpon>

@@ -1249,7 +1249,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\DDLFullCtrl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\FastInput.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\FastInput.png" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Img\AutoFullDtlField.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.htm" />
@@ -7389,10 +7388,6 @@
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

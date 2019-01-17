@@ -2856,7 +2856,7 @@ namespace BP.WF.HttpHandler
                 System.IO.File.Delete(temp);
 
                 //设置路径.
-                filepath = ny + "//Helper//" + guid + ext;
+                filepath = ny + "//Helper//" + guid + "." + ext;
 
             }
             else

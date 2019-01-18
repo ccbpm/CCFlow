@@ -52,8 +52,6 @@
 
         //ajax 提交
         function Btn_Save_Click() {
-
-            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             var frmData = $("#cc").serialize();
 
 
@@ -63,11 +61,20 @@
             var turnToDeal = $("input[name='TurnToDeal']:checked").val();
             node.TurnToDeal = turnToDeal;
 
-            if (node.TurnToDeal == 1) 
+            if (node.TurnToDeal == 1) {
+                $("#TB_SpecURL").val("");
                 node.TurnToDealDoc = $("#TB_SpecMsg").val();
+            }
 
-            if (node.TurnToDeal == 2)
+            if (node.TurnToDeal == 2) {
+                $("#TB_SpecMsg").val("");
                 node.TurnToDealDoc = $("#TB_SpecURL").val();
+            }
+
+            if (node.TurnToDeal == 0) {
+                $("#TB_SpecMsg").val("");
+                $("#TB_SpecURL").val("");
+            }
 
             if (node.TurnToDeal != 0) {
                 if (node.TurnToDealDoc == '') {
@@ -85,17 +92,15 @@
         function rb_onchange(obj) {
             
             if (obj == 1) {
-                document.getElementById("TB_SpecURL").value = "";
+               
                 document.getElementById("TB_SpecURL").readOnly = true;
                 document.getElementById("TB_SpecMsg").readOnly = false;
             } else if (obj == 2) {
-                document.getElementById("TB_SpecMsg").value = "";
+                
                 document.getElementById("TB_SpecMsg").readOnly = true;
                 document.getElementById("TB_SpecURL").readOnly = false;
             } else {
-                document.getElementById("TB_SpecMsg").value = "";
                 document.getElementById("TB_SpecMsg").readOnly = true;
-                document.getElementById("TB_SpecURL").value = "";
                 document.getElementById("TB_SpecURL").readOnly = true;
             }
         } 

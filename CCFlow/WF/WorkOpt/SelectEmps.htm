@@ -84,7 +84,7 @@
 
                 //console.log(data); //在ie下报错，调试完毕后删除他。
 
-                var fk_dept = fk_dept2;//pageData.FK_Dept;
+                var fk_dept = fk_dept2; //pageData.FK_Dept;
                 var parentNo = undefined;
                 var fkDeptObj = $.grep(data.Depts, function (value) {
                     return value.No == fk_dept;
@@ -95,6 +95,7 @@
                 pageData.FK_Dept = parentNo;
                 //本节点
                 var instance = $('#OrgJSTree').jstree(true);
+//                alert(instance);
                 var depts = $.grep(data.Depts, function (value) {
                     return value.ParentNo == parentNo;
                 })
@@ -156,38 +157,40 @@
                     itemArr = itemArr[0].data.childrenData;
                 }
                 return itemArr;
+
             };
 
             $('#OrgJSTree').jstree({
                 'core': {
-
+                
                     'data': function (node, cb) {
 
-//                        url = Handler + "?DoType=SelectEmps_Init&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
+                        url = Handler + "?DoType=SelectEmps_Init&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
                         // alert(url);
 
                         //初始化根节点
                         if (node.id == "#") {
 
 
-                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-                            if (pageData.FK_Dept != undefined) {
-                                handler.AddPara("FK_Dept", pageData.FK_Dept);
-                            } else {
-                                handler.AddPara("FK_Dept", "");
-                            }
+//                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+//                            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+//                            alert(pageData.FK_Dept);
+////                            if (pageData.FK_Dept != undefined) {
+//                                handler.AddPara("FK_Dept", pageData.FK_Dept);
+////                            } else {
+////                                handler.AddPara("FK_Dept", "");
+////                            }
 
-                            var data = handler.DoMethodReturnString("SelectEmps_Init");
+//                            var data = handler.DoMethodReturnString("SelectEmps_Init");
 
 
-//                            $.ajax({
-//                                type: 'post',
-//                                async: true,
-//                                url: url,
-//                                data: {},
-//                                dataType: 'html',
-//                                success: function (data) {
+                            $.ajax({
+                                type: 'post',
+                                async: true,
+                                url: url,
+                                data: {},
+                                dataType: 'html',
+                                success: function (data) {
                                     if (data.indexOf('err@') == 0) {
                                         alert(data);
                                         return;
@@ -195,8 +198,8 @@
 
                                     var fk_dept2 = pageData.FK_Dept;
                                     cb(initNodeData(data, fk_dept2));
-//                                }
-//                            });
+                                }
+                            });
                         }
                         else {
                             if (node.data != undefined && node.data.childrenData != undefined && node.data.childrenData.length > 0) {

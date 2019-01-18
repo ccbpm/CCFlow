@@ -151,10 +151,12 @@ namespace BP.DA
         public static string GenerTableNameByIndex(string fileName,int index)
         {
             String[] excelSheets = GenerTableNames(fileName);
-            if (excelSheets != null && excelSheets.Length >= index)
-            {
+            if (excelSheets != null )
                 return excelSheets[index];
-            }
+
+            if (excelSheets.Length < index)
+                throw new Exception("err@table的索引号错误" + index + "最大索引号为:" + excelSheets.Length);
+
             return null;
         }
         public static string[] GenerTableNames(string fileName)

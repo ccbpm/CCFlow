@@ -265,6 +265,10 @@
                     var workID = work.WorkID;
                     var fid = work.FID;
                     var nodeID = work.FK_Node;
+
+                    //但前节点所处的位置
+                    var nowNode = new Entity("BP.WF.Node", nodeID);
+
                     //如果是树形表单，则显示当前人所处节点的数据
                     if (nowNode.FormType == 5) {
                         //获取人员所处的流程节点

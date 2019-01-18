@@ -154,7 +154,7 @@ function figure_MapAttr_Template(mapAttr) {
         if (W < 160) W = 160;
 
     if (mapAttr.MyDataType != 4) {
-        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px");  
+        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px").css('display', 'inline');  
      }
     
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);

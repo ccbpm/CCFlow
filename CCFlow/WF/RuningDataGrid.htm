@@ -355,6 +355,7 @@
             //随机串.
             var timeKey = Math.random();
             $('#Table1').html("");
+            var RunModel={"Ordinary":0,"HL":1,"FL":2,"FHL":3,"SubThread":4};
             for (var idx = 0; idx < groupNames.length; idx++) {
                 var showRealCount = 0;
                 var listbox = '';
@@ -382,20 +383,35 @@
 			        var workID = work.WorkID;
 			        var fid = work.FID;
 			        var nodeID = work.FK_Node;
-			      
-			        //获取人员所处的流程节点
-			        var currNode = work.CurrNode;
-			        var node = new Entity("BP.WF.Node", currNode);
+
+			        //但前节点所处的位置
+			        var nowNode = new Entity("BP.WF.Node", nodeID);
 
 			        //如果是树形表单，则显示当前人所处节点的数据
-			        if (node.FormType == 5)
-			            nodeID = currNode; 
-			            //获取节点子线程的类型
-			           // var subThreadType = node.SubThreadType;
-			            //if (subThreadType == 1)
-			             //   nodeID = currNode;
-			        //}
+			        if (nowNode.FormType == 5) {
+			            //获取人员所处的流程节点
+			            var currNodeId = work.CurrNode;
+			            var currNode = new Entity("BP.WF.Node", currNodeId);
+			            if (currNode.HisToNDs.indexOf(nodeID) == -1) {
+			                if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
+			                    workID = fid;
+			                    fid = 0;
+			                    nodeID = currNodeId;
+			                }
+			            } else {
+			                //判断当前节点的运行模式
+			                if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
+			                    workID = fid;
+			                    fid = 0;
+			                    nodeID = currNodeId;
+			                } else if (currNode.RunModel == RunModel.SubThread) {
+			                    nodeID = currNodeId;
+			                }
+			            }
+			                
 
+			        }
+                   
 			        listbox += "<td>" + num + "</td>";
 			        listbox += "<td><a href=\"javascript:OpenFrm('" + workID + "','" + nodeID + "','" + work.FK_Flow + "','" + fid + "')\" >" + work.Title + "</a></td>";
 			        listbox += "<td>" + work.StarterName + "</td>";

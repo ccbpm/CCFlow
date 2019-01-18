@@ -157,6 +157,9 @@
 
                         //判断参数值里边是否包含特殊字符，包含则替换
                         var val = data[i][v];
+                        if (val == null || val ==undefined)
+                            continue;
+                        val = val + "";
                         if (val.indexOf("#") != -1) {
                             val = val.replace(/\#/g, "%23");
                         }

@@ -8180,7 +8180,7 @@ namespace BP.WF
                                                                                        + " AND NDTo=" + this.HisNode.NodeID + " "
                                                                                        + " AND ActionType=" + (int)ActionType.SubThreadForward + " ORDER BY RDT DESC";
                         if (DBAccess.RunSQLReturnCOUNT(sql) == 0)
-                            sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.HisWork.FID
+                            sql = "SELECT NDFrom FROM " + truckTable + " WHERE FID=" + this.HisWork.FID
                                                                                       + " AND NDTo=" + this.HisNode.NodeID + " "
                                                                                       + " AND ActionType=" + (int)ActionType.SubThreadForward + " ORDER BY RDT DESC";
 

@@ -3316,8 +3316,15 @@ namespace BP.WF
             mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsEnable=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
             decimal numAll = (decimal)DBAccess.RunSQLReturnValInt(mysql);
 
-            mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
-            decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
+            //记录子线程到达合流节点数
+            int count = gwf.GetParaInt("ThreadCount");
+            gwf.SetPara("ThreadCount", count + 1);
+            gwf.Update();
+
+            //mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
+            //decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+            decimal numPassed = gwf.GetParaInt("ThreadCount");
 
             decimal passRate = numPassed / numAll * 100;
             if (toNode.PassRate <= passRate)
@@ -3330,6 +3337,8 @@ namespace BP.WF
                 int num = DBAccess.RunSQL(ps);
                 if (num == 0)
                     throw new Exception("@不应该更新不到它.");
+                gwf.SetPara("ThreadCount", 0);
+                gwf.Update();
             }
             else
             {
@@ -7588,16 +7597,21 @@ namespace BP.WF
             GenerWorkerLists gwls = new GenerWorkerLists(this.HisWork.FID, nd.NodeID);
             current_gwls = gwls;
 
+            GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
+            //记录子线程到达合流节点数
+            int count = gwf.GetParaInt("ThreadCount");
+            gwf.SetPara("ThreadCount", count + 1);
+            gwf.Update();
             if (gwls.Count == 0)
             {
                 // 说明第一次到达河流节点。
                 current_gwls = this.Func_GenerWorkerLists(this.town);
                 gwls = current_gwls;
-
-                GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
+               
                 gwf.FK_Node = nd.NodeID;
                 gwf.NodeName = nd.Name;
                 gwf.TodoEmpsNum = gwls.Count;
+                
 
                 string todoEmps = "";
                 foreach (GenerWorkerList item in gwls)
@@ -7664,8 +7678,11 @@ namespace BP.WF
             ps.Add("FID", this.HisWork.FID);
             decimal numAll1 = (decimal)DBAccess.RunSQLReturnValInt(ps);
 
-            string mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
-            decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+            //string truckTable = "ND" + int.Parse(this.HisNode.FK_Flow) + "Track";
+           // string mysql = "SELECT COUNT(distinct WorkID) AS Num FROM " + truckTable + " WHERE  FID=" + this.HisWork.FID + " AND ActionType=7" + " AND NDTo=" + nd.NodeID;
+
+            //string mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
+            decimal numPassed = gwf.GetParaInt("ThreadCount");
 
             decimal passRate1 = numPassed / numAll1 * 100;
             if (nd.PassRate <= passRate1)
@@ -7683,6 +7700,8 @@ namespace BP.WF
                 ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
 
+                gwf.SetPara("ThreadCount", 0);
+                gwf.Update();
                 info = "@下一步合流点(" + nd.Name + ")已经启动。";
             }
             else
@@ -7693,6 +7712,7 @@ namespace BP.WF
                 ps.Add("FK_Node", nd.NodeID);
                 ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
+
             }
 
             this.HisGenerWorkFlow.FK_Node = nd.NodeID;
@@ -7940,6 +7960,8 @@ namespace BP.WF
                 }
             }
         }
+
+
         #endregion
 
         #region 基本属性

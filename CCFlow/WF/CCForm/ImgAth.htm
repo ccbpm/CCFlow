@@ -77,27 +77,27 @@
             formData.append("file", $("#fileImagAth")[0].files[0]);
             formData.append("name", name);
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-            handler.AddPara("FK_MapData", FK_MapData);
-            handler.AddPara("CtrlID", CtrlID);
-            handler.AddPara("RefPKVal", RefPKVal);
-            handler.AddPara("zoomW", zoomW);
-            handler.AddPara("zoomH", zoomH);
-            handler.AddFormData();
-            var data = handler.DoMethodReturnString("FrmImgAthDB_Upload");
-//            $.ajax({
-//                url: Handler + '?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&CtrlID=' + CtrlID + '&RefPKVal=' + RefPKVal + '&zoomW=' + zoomW + '&zoomH=' + zoomH,
-//                type: 'POST',
-//                data: formData,
-//                // 告诉jQuery不要去处理发送的数据
-//                processData: false,
-//                dataType: 'html',
-//                // 告诉jQuery不要去设置Content-Type请求头
-//                contentType: false,
-//                beforeSend: function () {
+//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+//            handler.AddPara("FK_MapData", FK_MapData);
+//            handler.AddPara("CtrlID", CtrlID);
+//            handler.AddPara("RefPKVal", RefPKVal);
+//            handler.AddPara("zoomW", zoomW);
+//            handler.AddPara("zoomH", zoomH);
+//            handler.AddFormData();
+//            var data = handler.DoMethodReturnString("FrmImgAthDB_Upload");
+            $.ajax({
+                url: Handler + '?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&CtrlID=' + CtrlID + '&RefPKVal=' + RefPKVal + '&zoomW=' + zoomW + '&zoomH=' + zoomH,
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                dataType: 'html',
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
 
-//                },
-//                success: function (data) {
+                },
+                success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -106,12 +106,12 @@
 
                     //alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
                     window.location.href = window.location.href;
-//                },
-//                error: function (data) {
-//                    alert("系统错误:" + data);
-//                    return;
-//                }
-//            });
+                },
+                error: function (data) {
+                    alert("系统错误:" + data);
+                    return;
+                }
+            });
         }
 
         //确认剪切

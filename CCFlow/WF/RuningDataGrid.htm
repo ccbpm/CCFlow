@@ -153,7 +153,7 @@
 
 						$("#Msg").html(data + " <br> @点击这里<a href='javascript:window.location.href = window.location.href;' >刷新</a>");
 						alert(data);
-						var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid;
+						var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid+'&FID='+fid;
 						window.open(url);
 						window.location.href = window.location.href;
 						return;
@@ -426,7 +426,7 @@
 
 			        listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
 			        listbox += "<td>";
-			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + nodeID +"&FID="+work.FID+ "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\">撤销</a>";
+			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + nodeID +"&FID="+work.FID+ "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + workID + "','" + fid + "')\">撤销</a>";
 			        listbox += "</td>";
 			        listbox += "</tr>";
 			    }

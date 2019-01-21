@@ -246,10 +246,10 @@ namespace BP.Sys
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
-                map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 100, 20);
-                map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 30, 20);
+                map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 300, 20);
+                map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 300, 20);
                 map.AddTBString(FrmRBAttr.EnumKey, null, "枚举值", true, false, 0, 30, 20);
-                map.AddTBString(FrmRBAttr.Lab, null, "标签", true, false, 0, 90, 20);
+                map.AddTBString(FrmRBAttr.Lab, null, "标签", true, false, 0, 500, 20);
                 map.AddTBInt(FrmRBAttr.IntKey, 0, "IntKey", true, false);
 
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 0, "是否启用", true, false);

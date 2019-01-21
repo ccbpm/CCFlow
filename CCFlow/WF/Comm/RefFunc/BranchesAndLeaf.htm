@@ -55,7 +55,12 @@
 
 		<script type="text/javascript">
 		    var selectedRows = null;
-		    var hander;
+            var hander;
+            var global = window;
+            var deptNo = "";
+            global.selectedNodes = [];
+            global.selectedRows = [];
+
 		    $(function () {
 
 		        $("#Msg").html("正在加载,请稍后......");
@@ -88,7 +93,7 @@
 		        var treeUrl = ""; // mapExt.Tag2;      //初始化树
 		        var treeClickUrl = ""; // mapExt.Tag3; //树选择.
 
-
+               
 		        var searchTableColumns = [{
 		            field: "_checkbox",
 		            checkbox: true,
@@ -300,53 +305,10 @@
 		        $('#selectGrid').bootstrapTable("load", json);
 		    }
 
-		    function findChildren(jsonArray, parentNo) {
-
-		        var appendToTree = function (treeToAppend, child) {
-		            $.each(treeToAppend, function (i, o) {
-		                if (o.id == child.ParentNo) {
-		                    o.nodes.push({
-		                        "id": child.No,
-		                        "text": child.Name,
-		                        "nodes": []
-		                    });
-		                } else {
-		                    appendToTree(o.nodes, child);
-		                }
-		            });
-		        };
-		        var jsonTree = [];
-		        if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
-		            $.each(jsonArray, function (i, o) {
-		                if (o.ParentNo == parentNo) {
-		                    jsonTree.push({
-		                        "id": o.No,
-		                        "text": o.Name,
-		                        "nodes": []
-		                    });
-		                } else {
-		                    appendToTree(jsonTree, o);
-		                }
-		            });
-		        }
-		        function _(treeArray) {
-		            $.each(treeArray, function (i, o) {
-		                if ($.isArray(o.nodes)) {
-		                    if (o.nodes.length == 0) {
-		                        o.nodes = undefined;
-		                    } else {
-		                        _(o.nodes);
-		                    }
-		                }
-		            });
-		        }
-		        _(jsonTree);
-		        return jsonTree;
-		    }
+            var nodeId = "";
+            var rootNo = "0";
 		    function loadTree(dbTrees,rootNo, global) {
-
-		        var jsonTree = findChildren(dbTrees, rootNo);
-
+                var jsonTree = createJsonToTree(dbTrees, rootNo);
 		        $('#tree').treeview({
 		            data: jsonTree,         // 数据源
 		            showCheckbox: false,   //是否显示复选框
@@ -357,14 +319,123 @@
 		            multiSelect: false,    //多选
 		            onNodeChecked: function (event, data) {
 		                //alert(data.id);
-		            },
+                    },
 		            onNodeSelected: function (event, data) {
-
-		                loadSelectGridByNodeID(data.id); //, selectedRows);
-
+                        nodeId = data.nodeId;
+                        deptNo = data.id;
+                        runModel = 0; //查询模式. 
+                        loadSelectGridByNodeID(data.id); //, selectedRows);
+                        deptNo = $('#tree').treeview('getNode', data.nodeId).id;
+                        var tree = $('#tree');
+                        if (data.state.expanded) {
+                            //处于展开状态则折叠  
+                            tree.treeview('collapseNode', data.nodeId);
+                        } else {
+                            //展开  
+                            tree.treeview('expandNode', data.nodeId);
+                        }
+                       
 		            }
 		        });
-		    }
+            }
+
+
+            //树形结构转换
+            var treeJson = [];
+            function createJsonToTree(jsonArray, parentNo) {
+                for (var i = 0; i < jsonArray.length; i++) {
+                    var data = jsonArray[i];
+                    if (rootNo != "0") {
+                        if (data.No == parentNo) {
+                            var checked = false;
+                            var selectedNodes = window.selectedNodes;
+                            var sel = $.grep(selectedNodes, function (obj) {
+                                return data.No == obj.No;
+                            });
+                            if (sel.length > 0) {
+                                checked = true;
+                            }
+                            treeJson.push({
+                                "id": data.No,
+                                "text": data.Name,
+                                "nodes": creatTreeChildern(jsonArray, data.No),
+                                "state": { checked: checked, disabled: false }
+                            });
+                        }
+                    } else {
+                        if (data.ParentNo == parentNo) {
+                            var checked = false;
+                            var selectedNodes = window.selectedNodes;
+                            var sel = $.grep(selectedNodes, function (obj) {
+                                return data.No == obj.No;
+                            });
+                            if (sel.length > 0) {
+                                checked = true;
+                            }
+                            treeJson.push({
+                                "id": data.No,
+                                "text": data.Name,
+                                "nodes": creatTreeChildern(jsonArray, data.No),
+                                "state": { checked: checked, disabled: false }
+                            });
+                        }
+                    }
+                }
+                function _(treeArray) {
+                    $.each(treeArray, function (i, o) {
+                        if ($.isArray(o.nodes)) {
+                            if (o.nodes.length == 0) {
+                                o.nodes = undefined;
+                            } else {
+                                _(o.nodes);
+                            }
+                        }
+                    });
+                }
+                _(treeJson);
+                return treeJson;
+            }
+
+
+            function creatTreeChildern(jsonArray, parentNo) {
+                var childList = []
+                for (var i = 0; i < jsonArray.length; i++) {
+                    var data = jsonArray[i];
+                    if (data.ParentNo == parentNo) {
+                        var checked = false;
+
+                        childList.push({
+                            "id": data.No,
+                            "text": data.Name,
+                            "nodes": creatTreeChildern(jsonArray, data.No),
+                            "state": { checked: checked, disabled: false }
+                        });
+                    }
+                }
+
+                return childList;
+            }
+
+
+            function getChildNodeIdArr(node, checked) {
+                var ts = [];
+                if (node.nodes) {
+                    for (x in node.nodes) {
+                        ts.push(node.nodes[x].nodeId);
+                        if (node.nodes[x].nodes) {
+                            var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                            for (j in getNodeDieDai) {
+                                ts.push(getNodeDieDai[j]);
+                            }
+                        }
+                    }
+                } else {
+                    ts.push(node.nodeId);
+                }
+                return ts;
+            }
+
+
 		    function isLegalName(name) {
 		        if (!name) {
 		            return false;

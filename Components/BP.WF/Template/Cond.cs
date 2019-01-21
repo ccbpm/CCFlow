@@ -1041,10 +1041,15 @@ namespace BP.WF.Template
                             return false;
                     case ">":
                     case "dayu":
-                        if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
+                        if (en.GetValStringByKey(this.AttrKey).CompareTo(this.OperatorValue.ToString()) == 1)
                             return true;
                         else
                             return false;
+
+                        //if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
+                        //    return true;
+                        //else
+                        //    return false;
                     case ">=":
                     case "dayudengyu":
                         if (en.GetValDoubleByKey(this.AttrKey) >= Double.Parse(this.OperatorValue.ToString()))
@@ -1053,10 +1058,14 @@ namespace BP.WF.Template
                             return false;
                     case "<":
                     case "xiaoyu":
-                        if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
+                        if (en.GetValStringByKey(this.AttrKey).CompareTo(this.OperatorValue.ToString()) == -1)
                             return true;
                         else
                             return false;
+                        //if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
+                        //    return true;
+                        //else
+                        //    return false;
                     case "<=":
                     case "xiaoyudengyu":
                         if (en.GetValDoubleByKey(this.AttrKey) <= Double.Parse(this.OperatorValue.ToString()))

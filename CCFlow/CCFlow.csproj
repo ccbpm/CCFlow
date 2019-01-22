@@ -7029,6 +7029,7 @@
     <None Include="WF\Style\skin\layui\font\iconfont.svg" />
     <None Include="WF\Style\skin\layui\font\iconfont.ttf" />
     <None Include="WF\Style\skin\layui\font\iconfont.woff" />
+    <Content Include="WF\WorkOpt\Handler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
@@ -7425,6 +7426,9 @@
     </Compile>
     <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WF\WorkOpt\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

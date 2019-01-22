@@ -55,6 +55,11 @@
     <script type="text/javascript">
         var param = {};
         $(function () {
+            var IsSend = GetQueryString("IsSend");
+            if (IsSend == null || IsSend == undefined || IsSend == "")
+                IsSend = "1";
+            if (IsSend == "0")
+                $("#Btn_Send").hide();
 
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="SelectEmpsModal">' +
@@ -107,7 +112,7 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("AccepterOfGener_Init");
 
-           // alert(data);
+            // alert(data);
 
             if (data.indexOf('err@') == 0) {
                 alert(data);

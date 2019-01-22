@@ -289,7 +289,7 @@
             var html = "-";
             var fileName = $("#TB_MyFileName").val();
             if (fileName != null && fileName != "" && fileName != undefined && fileName != "null") {
-                html = "<a href='#' onclick='downLoadFile()' target='_self'>" + $("#TB_MyFileName").val() + $("#TB_MyFileExt").val() + "</a>";
+                html = "<a href='#' onclick='downLoadFile()' target='_self'>" + $("#TB_MyFileName").val()+"." + $("#TB_MyFileExt").val() + "</a>";
             }
             $("#FileInfo").html(html);
 

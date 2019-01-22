@@ -782,9 +782,9 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
             var ctrlID = ele.split('=')[0];
 
-            var item = $("select[name='" + ctrlID + "'] option[selected]").text();
+            var item = $("#" + ctrlID).find("option:selected").text();
 
-            var mystr = ctrlID.substring(4) + 'T=' + item;
+            var mystr = "TB_" + ctrlID.substring(4) + 'T=' + item;
             formArrResult.push(mystr);
         }
 
@@ -792,14 +792,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         formArrResult.push(ele);
     });
 
-    //    //获取表单中checkbox 没有选中时值的情况
-    var checkboxs = $('input[type=checkbox]');
-    $.each(checkboxs, function (i, checkbox) {
-        var name = $(checkbox).attr("name");
-        if ($("input[name='" + name + "']:checked").length == 0) {
-            formArrResult.push(name + "=0");
-        }
-    });
+   
 
     //获取树形结构的表单值
     var combotrees = $(".easyui-combotree");

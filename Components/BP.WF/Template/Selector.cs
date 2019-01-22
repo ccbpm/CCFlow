@@ -731,6 +731,12 @@ namespace BP.WF.Template
         public Selectors()
         {
         }
+
+        public Selectors(string fk_flow)
+        {
+            string sql = "select NodeId from WF_Node where FK_Flow='" + fk_flow + "'";
+            this.RetrieveInSQL(sql);
+        }
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>

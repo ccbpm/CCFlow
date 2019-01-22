@@ -2545,6 +2545,11 @@ namespace BP.WF
             DataTable dtNodeExts = ndexts.ToDataTableField("WF_NodeExt");
             ds.Tables.Add(dtNodeExts);
 
+            //接收人规则
+            Selectors selectors = new Selectors(this.No);
+            DataTable dtSelectors = selectors.ToDataTableField("WF_Selector");
+            ds.Tables.Add(dtSelectors);
+
             // 单据模版. 
             BillTemplates tmps = new BillTemplates(this.No);
             string pks = "";
@@ -5499,6 +5504,32 @@ namespace BP.WF
 
                             nd.DirectUpdate();
                         }
+                        break;
+                    case "WF_Selector":
+                         foreach (DataRow dr in dt.Rows)
+                        {
+						    Selector selector = new Selector();
+						    foreach (DataColumn dc in dt.Columns)
+                            {
+
+                                 string val = dr[dc.ColumnName] as string;
+                                 if (val == null)
+                                     continue;
+
+                                 if (dc.ColumnName.ToLower().Equals("nodeid"))
+                                 {
+                                     if (val.Length < iOldFlowLength)
+                                     {
+									    // 节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+									    throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_Node下FK_Node值错误:" + val);
+								    }
+                                     val = flowID + val.Substring(iOldFlowLength);
+						         }
+					       
+							    selector.SetValByKey(dc.ColumnName, val);
+						    }
+						    selector.DirectUpdate();
+					    }
                         break;
                     case "WF_NodeStation": //FAppSets.xml。
                         DBAccess.RunSQL("DELETE FROM WF_NodeStation WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + fl.No + "')");

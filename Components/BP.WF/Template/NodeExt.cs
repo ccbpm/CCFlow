@@ -330,7 +330,7 @@ namespace BP.WF.Template
                 //map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
                 //"@0=由连接线条件控制@1=让用户手工选择@2=发送按钮旁下拉框选择");
 
-                map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel, "@0=由连接线条件控制@2=发送按钮旁下拉框选择");
+                map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel, "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
                 map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
 
                 // 撤销规则.
@@ -1323,6 +1323,12 @@ namespace BP.WF.Template
         /// </summary>
         public NodeExts()
         {
+        }
+
+        public NodeExts(string fk_flow)
+        {
+            this.Retrieve(NodeAttr.FK_Flow, fk_flow, NodeAttr.Step);
+            return;
         }
         #endregion
 

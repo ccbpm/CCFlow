@@ -2599,5 +2599,206 @@ namespace BP.WF.HttpHandler
         #endregion 流程数据模版.
 
 
+        public string ToNodes_Init()
+        {
+            //获取到下一个节点的节点Nodes
+
+            //获得当前节点到达的节点.
+            Nodes nds = new Nodes();
+            string toNodes = this.GetRequestVal("ToNodes");
+            if (DataType.IsNullOrEmpty(toNodes) == false)
+            {
+                /*解决跳转问题.*/
+                string[] mytoNodes = toNodes.Split(',');
+                foreach (string str in mytoNodes)
+                {
+                    if (string.IsNullOrEmpty(str) == true)
+                        continue;
+                    nds.AddEntity(new Node(int.Parse(str)));
+                }
+            }
+            else
+            {
+                nds = BP.WF.Dev2Interface.WorkOpt_GetToNodes(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+            }
+
+            //获得上次默认选择的节点
+            int lastSelectNodeID = BP.WF.Dev2Interface.WorkOpt_ToNodes_GetLasterSelectNodeID(this.FK_Flow, this.FK_Node);
+            if (lastSelectNodeID == 0 && nds.Count != 0)
+                lastSelectNodeID = int.Parse(nds[0].PKVal.ToString());
+
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(nds.ToDataTableField("Nodes"));
+            DataTable dt = new DataTable("SelectNode");
+            dt.Columns.Add("NodeID");
+            DataRow dr = dt.NewRow();
+            dr["NodeID"] = lastSelectNodeID;
+            dt.Rows.Add(dr);
+            ds.Tables.Add(dt);
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+
+        public string ToNodes_Send()
+        {
+            string toNodes = this.GetRequestVal("ToNodes");
+            // 执行发送.
+            string msg = "";
+            Node nd = new Node(this.FK_Node);
+            Work wk = nd.HisWork;
+            wk.OID = this.WorkID;
+            wk.Retrieve();
+
+            try
+            {
+                string toNodeStr = int.Parse(FK_Flow) + "01";
+                //如果为开始节点
+                if (toNodeStr == toNodes)
+                {
+                    //把参数更新到数据库里面.
+                    GenerWorkFlow gwf = new GenerWorkFlow();
+                    gwf.WorkID = this.WorkID;
+                    gwf.RetrieveFromDBSources();
+                    gwf.Paras_ToNodes = toNodes;
+                    gwf.Save();
+
+                    WorkNode firstwn = new WorkNode(wk, nd);
+
+                    Node toNode = new Node(toNodeStr);
+                    msg = firstwn.NodeSend(toNode, gwf.Starter).ToMsgOfHtml();
+                }
+                else
+                {
+                    msg = BP.WF.Dev2Interface.WorkOpt_SendToNodes(this.FK_Flow,
+                        this.FK_Node, this.WorkID, this.FID, toNodes).ToMsgOfHtml();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+            GenerWorkFlow gwfw = new GenerWorkFlow();
+            gwfw.WorkID = this.WorkID;
+            gwfw.RetrieveFromDBSources();
+            if (nd.IsRememberMe == true)
+                gwfw.Paras_ToNodes = toNodes;
+            else
+                gwfw.Paras_ToNodes = "";
+            gwfw.Save();
+
+            //当前节点.
+            Node currNode = new Node(this.FK_Node);
+            Flow currFlow = new Flow(this.FK_Flow);
+
+            #region 处理发送后转向.
+            try
+            {
+                /*处理转向问题.*/
+                switch (currNode.HisTurnToDeal)
+                {
+                    case TurnToDeal.SpecUrl:
+                        string myurl = currNode.TurnToDealDoc.Clone().ToString();
+                        if (myurl.Contains("?") == false)
+                            myurl += "?1=1";
+                        Attrs myattrs = currNode.HisWork.EnMap.Attrs;
+                        Work hisWK = currNode.HisWork;
+                        foreach (Attr attr in myattrs)
+                        {
+                            if (myurl.Contains("@") == false)
+                                break;
+                            myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
+                        }
+                        myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                        if (myurl.Contains("@"))
+                        {
+                            BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currNode.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + currNode.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                            throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl);
+                        }
+
+                        if (myurl.Contains("PWorkID") == false)
+                            myurl += "&PWorkID=" + this.WorkID;
+
+                        myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                        return "TurnUrl@" + myurl;
+                    case TurnToDeal.TurnToByCond:
+
+                        return msg;
+                    default:
+                        msg = msg.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        msg = msg.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        msg = msg.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                        return msg;
+                }
+            #endregion
+
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("请选择下一步骤工作") == true || ex.Message.Contains("用户没有选择发送到的节点") == true)
+                {
+                    if (currNode.CondModel == CondModel.ByLineCond)
+                    {
+                        /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
+                        //return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
+                        return "url@./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
+                    }
+
+
+                    return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。" + ex.Message;
+                }
+
+                //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示.
+                if (currNode.HisFrms != null && currNode.HisFrms.Count > 0 && ex.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
+                {
+                    return "err@" + ex.Message.Replace("@@", "@").Replace("@", "<BR>@");
+                }
+
+                GenerWorkFlow HisGenerWorkFlow = new GenerWorkFlow(this.WorkID);
+                //防止发送失败丢失接受人，导致不能出现下拉方向选择框. @杜.
+                if (HisGenerWorkFlow != null)
+                {
+                    //如果是会签状态.
+                    if (HisGenerWorkFlow.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
+                    {
+                        //如果是主持人.
+                        if (HisGenerWorkFlow.HuiQianZhuChiRen == WebUser.No)
+                        {
+                            if (HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                            {
+                                HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                                HisGenerWorkFlow.Update();
+                            }
+                        }
+                        else
+                        {
+                            //非主持人.
+                            if (HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.Name + ",") == false)
+                            {
+                                HisGenerWorkFlow.TodoEmps += BP.Web.WebUser.Name + ";";
+                                HisGenerWorkFlow.Update();
+                            }
+                        }
+                    }
+
+
+                    if (HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.HuiQianing)
+                    {
+                        if (HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                        {
+                            HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                            HisGenerWorkFlow.Update();
+                        }
+                    }
+                }
+                return ex.Message;
+
+            }
+        }
     }
 }

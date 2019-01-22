@@ -945,6 +945,14 @@ function execSend(toNodeID) {
         return;
     }
 
+    if (data.indexOf('SelectNodeUrl@') == 0) {
+        var url = data;
+        url = url.replace('SelectNodeUrl@', '');
+        window.location.href = url;
+        return;
+    }
+
+
 
     if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
 

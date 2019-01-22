@@ -2540,6 +2540,11 @@ namespace BP.WF
             DataTable dtNodes = nds.ToDataTableField("WF_Node");
             ds.Tables.Add(dtNodes);
 
+            //节点属性
+            NodeExts ndexts = new NodeExts(this.No);
+            DataTable dtNodeExts = ndexts.ToDataTableField("WF_NodeExt");
+            ds.Tables.Add(dtNodeExts);
+
             // 单据模版. 
             BillTemplates tmps = new BillTemplates(this.No);
             string pks = "";
@@ -5455,6 +5460,43 @@ namespace BP.WF
                             }
                             nd.FK_Flow = fl.No;
                             nd.FlowName = fl.Name;
+                            nd.DirectUpdate();
+                        }
+                        break;
+                    case "WF_NodeExt":
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
+                            nd.NodeID = int.Parse(flowID + dr[NodeAttr.NodeID].ToString().Substring(iOldFlowLength));
+                            nd.RetrieveFromDBSources();
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                string val = dr[dc.ColumnName] as string;
+                                switch (dc.ColumnName.ToLower())
+                                {
+                                    case "nodeid":
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_Node下nodeid值错误:" + val);
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
+                                        break;
+                                    case "fk_flow":
+                                    case "fk_flowsort":
+                                        continue;
+                                    case "showsheets":
+                                    case "histonds":
+                                    case "groupstands": //去除不必要的替换
+                                        string key = "@" + flowID;
+                                        val = val.Replace(key, "@");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                nd.SetValByKey(dc.ColumnName, val);
+                            }
+
                             nd.DirectUpdate();
                         }
                         break;

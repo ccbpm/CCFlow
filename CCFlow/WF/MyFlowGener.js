@@ -424,18 +424,27 @@ function Save() {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddUrlData(json);
     var data = handler.DoMethodReturnString("Save"); //执行保存方法.
+//    $.ajax({
+//        type: 'post',
+//        async: true,
+//        data: json,
+//        url: MyFlow + "?DoType=Save",
+//        dataType: 'html',
+//        success: function (data) {
+            setToobarEnable();
+            //刷新 从表的IFRAME
+            var dtls = $('.Fdtl');
+            $.each(dtls, function (i, dtl) {
+                $(dtl).attr('src', $(dtl).attr('src'));
+            });
 
-    setToobarEnable();
-    //刷新 从表的IFRAME
-    var dtls = $('.Fdtl');
-    $.each(dtls, function (i, dtl) {
-        $(dtl).attr('src', $(dtl).attr('src'));
-    });
-
-    if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-        $('#Message').html(data.substring(4, data.length));
-        $('#MessageDiv').modal().show();
-    }
+            if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
+                $('#Message').html(data.substring(4, data.length));
+                $('#MessageDiv').modal().show();
+            }
+//        }
+//    });
+    
 }
 
 //调用后，就关闭刷新按钮.
@@ -1531,8 +1540,11 @@ function GenerWorkNode() {
         //给富文本 创建编辑器
         var editor = document.activeEditor = UM.getEditor('editor', {
             'autoHeightEnabled': false,
-            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
+            'initialFrameWidth': document.BindEditorMapAttr.UIWidth
         });
+        var height = document.BindEditorMapAttr.UIHeight;
+        $(".edui-container").css("height", height);
 
         if (editor) {
 

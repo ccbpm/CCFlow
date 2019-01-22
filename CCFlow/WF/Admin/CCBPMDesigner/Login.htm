@@ -34,15 +34,16 @@
             $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录/自动升级做准备.</font>");
 
             document.getElementById("Btn_Login").disabled = 'disabled';
-            var doType = GetQueryString("DoType");
-            if (doType == null)
-                doType = "Login_Init";
+         
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             var data = handler.DoMethodReturnJSON("Login_InitInfo");
             document.title = data.SysName;
 
             //执行更新检查..
+            var doType = GetQueryString("DoType");
+            if (doType == null)
+                doType = "Login_Init";
             handler.AddUrlData();
             data = handler.DoMethodReturnString(doType);
 

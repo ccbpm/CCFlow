@@ -19,7 +19,6 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-
     <base target="_self" />
     <script type="text/javascript">
         function Esc() {
@@ -27,7 +26,7 @@
                 window.close();
             return true;
         }
-         
+
         /*隐藏与显示.*/
         function ShowHidden(ctrlID) {
 
@@ -39,11 +38,9 @@
             }
         }
     </script>
-
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-
 
             var ens = new Entities("BP.WF.Template.PushMsgs");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
@@ -106,46 +103,49 @@
         }
 
     </script>
- 
-    
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <form method="post" action="./PushMessage.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
-    id="form1">    
-    <div style="margin:8px">
+    id="form1">
+    <div style="margin: 8px">
         <table id="Table1" style="width: 100%">
             <caption>
-               消息事件
+                消息事件
             </caption>
             <tr>
-                <th> 序 </th>
-                <th> 消息发生事件 </th>
-                <th>启用邮件 </th>
-                <th> 邮件标题 </th>
-                <th> 启用短信 </th>
-                <th>操作 </th>
+                <th>
+                    序
+                </th>
+                <th>
+                    消息发生事件
+                </th>
+                <th>
+                    启用邮件
+                </th>
+                <th>
+                    邮件标题
+                </th>
+                <th>
+                    启用短信
+                </th>
+                <th>
+                    操作
+                </th>
             </tr>
         </table>
         <fieldset style="border: 0px;">
-        <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp; 
+            <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
             <div id="state" style="display: none; color: Gray">
                 <ul>
                     <li><a href="javascript:PushMessageEntity('WorkArrive');">工作到达</a> </li>
-                    <li><a href="javascript:PushMessageEntity('SendSuccess');">节点发送成功时</a>
-                    </li>
-                    <li><a href="javascript:PushMessageEntity('ReturnAfter');">当节点退回后</a>
-                    </li>
-                    <li><a href="javascript:PushMessageEntity('UndoneAfter');">当节点撤销发送后</a>
-                    </li>
-                    <li><a href="javascript:PushMessageEntity('FlowOverAfter');">流程结束后</a>
-                    </li>
-                    <li><a href="javascript:PushMessageEntity('AfterFlowDel');">流程删除后</a>
-                    </li>
+                    <li><a href="javascript:PushMessageEntity('SendSuccess');">节点发送成功时</a> </li>
+                    <li><a href="javascript:PushMessageEntity('ReturnAfter');">当节点退回后</a> </li>
+                    <li><a href="javascript:PushMessageEntity('UndoneAfter');">当节点撤销发送后</a> </li>
+                    <li><a href="javascript:PushMessageEntity('FlowOverAfter');">流程结束后</a> </li>
+                    <li><a href="javascript:PushMessageEntity('AfterFlowDel');">流程删除后</a> </li>
                 </ul>
             </div>
-
-               <input type=button value="我需要帮助" onclick="Help()" />
-
+            <input type="button" value="我需要帮助" onclick="Help()" />
         </fieldset>
     </div>
     </form>

@@ -73,7 +73,7 @@ var functrees = [];
 //1.流程库
 functrees.push({
     Id: "flowTree",
-    Name: "流程",
+    Name: "流程树",
     AttrCols: ["TTYPE", "DTYPE", "ISPARENT"],
     ServiceCount: 1,
     Nodes: [{
@@ -99,7 +99,7 @@ functrees.push({
 //2.表单库
 functrees.push({
     Id: "formTree",
-    Name: "表单",
+    Name: "表单树",
     AttrCols: ["TType"],
     RootASC: { Field: "TType", Index: ["FormType", "FormType", "CloundData"] },  //"SRCROOT", 
     ServiceCount: 1, //2
@@ -113,21 +113,21 @@ functrees.push({
     }]
 });
 
-//3.组织结构
-functrees.push({
-    Id: "OrgTree",
-    Name: "组织结构",
-    AttrCols: [],
-    ServiceCount: 0,
-    Nodes: [{
-        Type: "Function",
-        ServiceMethod: "GenerStructureTree",
-        MethodParams: [{
-            name: "parentrootid", value: "0"
-        }],
-        OnExpandFunction: "ShowSubDepts"
-    }]
-});
+////3.组织结构
+//functrees.push({
+//    Id: "OrgTree",
+//    Name: "组织结构",
+//    AttrCols: [],
+//    ServiceCount: 0,
+//    Nodes: [{
+//        Type: "Function",
+//        ServiceMethod: "GenerStructureTree",
+//        MethodParams: [{
+//            name: "parentrootid", value: "0"
+//        }],
+//        OnExpandFunction: "ShowSubDepts"
+//    }]
+//});
 
 //4.系统维护 系统维护管理员菜单 需要翻译
 var Nodes = [{
@@ -146,7 +146,7 @@ if (plant != "CCFlow") {
 }
 functrees.push({
     Id: "sysTree",
-    Name: "系统",
+    Name: "系统管理",
     ServiceCount: 1,
     AttrCols: ["Url"],
     Nodes: [{

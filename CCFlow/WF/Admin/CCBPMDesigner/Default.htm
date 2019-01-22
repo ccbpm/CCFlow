@@ -33,7 +33,6 @@
         {
             background: url('../../Img/Setting.png') no-repeat;
         }
-        
         .icon-DTS
         {
             background: url('./Img/DTS.png') no-repeat;
@@ -210,10 +209,6 @@
             initData = data;
 
             var msg = data.Msg;
-            osModel = data.OSModel;
-            if (msg != "" && msg != "0")
-                alert(msg);
-
             var content = createFrame('../../../DataUser/AppCoder/FlowDesignerWelcome.htm');
             $('#tabs').tabs('add', {
                 title: '首页',
@@ -515,23 +510,23 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             var data = handler.DoMethodReturnString("Login_Redirect");
 
-           
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=Login_Redirect&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            //            $.ajax({
+            //                type: 'post',
+            //                async: true,
+            //                url: Handler + "?DoType=Login_Redirect&m=" + Math.random(),
+            //                dataType: 'html',
+            //                success: function (data) {
 
-                    var url = data.replace('url@', '');
-                    window.open(url);
-//                }
-//            });
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            var url = data.replace('url@', '');
+            window.open(url);
+            //                }
+            //            });
         }
         //退出
         function LoginOut() {
@@ -1653,44 +1648,34 @@
 
         $(function () {
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            var data = handler.DoMethodReturnString("GetWebUserInfo");
 
-            //InitUserInfo();
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                window.location.href = "Login.htm?DoType=Logout";
+                return;
+            }
 
+            var jdata = $.parseJSON(data);
+            WebUser.No = jdata.No;
+            WebUser.Name = jdata.Name;
+            WebUser.FK_Dept = jdata.FK_Dept;
+            WebUser.SID = jdata.SID;
 
+           // SetTreeRoot(jdata);
 
-            var params = {
-                action: "GetWebUserInfo"
-            };
-
-            ajaxService(params, function (data) {
-
-                if (data.indexOf('err@') == 0) {
-                    alert(data);
-                    window.location.href = "Login.htm?DoType=Logout";
-                    return;
-                }
-
-                var jdata = $.parseJSON(data);
-                WebUser.No = jdata.No;
-                WebUser.Name = jdata.Name;
-                WebUser.FK_Dept = jdata.FK_Dept;
-                WebUser.SID = jdata.SID;
-
-                SetTreeRoot(jdata);
-
-                treesObj = new FuncTrees("menuTab");
-                treesObj.loadTrees();
-                $(".mymask").hide();
-            }, this);
-
+            treesObj = new FuncTrees("menuTab");
+            treesObj.loadTrees();
+            $(".mymask").hide();
 
         });
 
-        function SetTreeRoot(data) {
-            //functrees[0].Nodes[0].RootParentId = data.RootOfFlow;
-            //functrees[1].Nodes[0].RootParentId = data.RootOfForm;
-            functrees[2].Nodes[0].MethodParams[0].value = data.RootOfDept;
-        }
+//        function SetTreeRoot(data) {
+//            //functrees[0].Nodes[0].RootParentId = data.RootOfFlow;
+//            //functrees[1].Nodes[0].RootParentId = data.RootOfForm;
+//            functrees[2].Nodes[0].MethodParams[0].value = data.RootOfDept;
+//        }
 
         //通过标题删除标签
         function TabCloseByTitle(TabTitle) {
@@ -1699,8 +1684,6 @@
             if (currTab) {
                 $('#tabs').tabs('close', TabTitle);
             }
-
-
         }
     </script>
 </head>

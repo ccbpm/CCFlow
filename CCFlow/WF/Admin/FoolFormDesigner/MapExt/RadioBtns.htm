@@ -7,7 +7,6 @@
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
-
     <script type="text/javascript">
         //页面启动函数.
         var initData = {};
@@ -63,6 +62,9 @@
             var mapAttrHtml = '';
             //            alert(initData.Sys_MapAttr);
             $.each(initData.Sys_MapAttr, function (i, attr) {
+
+                //    if (attr.UIVisible == 0)
+                //   continue;
 
                 mapAttrHtml += '<tr>';
                 mapAttrHtml += '<td>' + (i + 1) + '</td>';
@@ -225,7 +227,7 @@
             //保存当前打开表单信息
             SaveCurrentConfig();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler.AddPara("data",JSON.stringify(initData.Sys_FrmRB));
+            handler.AddPara("data", JSON.stringify(initData.Sys_FrmRB));
             handler.AddPara("FK_MapData", pageData.FK_MapData);
             handler.AddPara("FK_MapExt", pageData.MyPK);
             handler.AddPara("KeyOfEn", pageData.KeyOfEn);
@@ -263,30 +265,29 @@
     </script>
 </head>
 <body>
-    <table style="width:100%;">
-        <caption><label id="lb_EnName"></label>字段的高级设置</caption>
+    <table style="width: 100%;">
+        <caption>
+            <label id="lb_EnName">
+            </label>
+            字段的高级设置</caption>
         <tr>
-            
             <td valign="top">
-
-              <fieldset>
+                <fieldset>
                     <legend>是否启用？</legend>
-
-                      <input type="radio" value="1" id="RB_IsEnableJS_1" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" /> <label for="RB_IsEnableJS_1">启用 </label>
-                      <input type="radio" value="0" id="RB_IsEnableJS_0"  onclick="SaveEnableJS(this)"  name="RB_IsEnableJS" /> <label for="RB_IsEnableJS_0">禁用 </label>
-                    
+                    <input type="radio" value="1" id="RB_IsEnableJS_1" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
+                    <label for="RB_IsEnableJS_1">
+                        启用
+                    </label>
+                    <input type="radio" value="0" id="RB_IsEnableJS_0" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
+                    <label for="RB_IsEnableJS_0">
+                        禁用
+                    </label>
                 </fieldset>
-
-           
-            <fieldset>
-                    <legend> 列表值 </legend>
-                    <ul id="ulListValues" style = "margin: 0;border: 0;padding: 0;">
-                        
+                <fieldset>
+                    <legend>列表值 </legend>
+                    <ul id="ulListValues" style="margin: 0; border: 0; padding: 0;">
                     </ul>
                 </fieldset>
-
-                 
-
                 <fieldset>
                     <legend>执行JS脚本</legend>
                     <div id="JS">
@@ -302,32 +303,49 @@
                 <fieldset>
                     <legend>联动其他的控件使其属性该表(可见，只读)</legend>
                     <form id="formFields">
-                        <div id="Fields">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>序号</th>
-                                        <th>字段</th>
-                                        <th>字段名</th>
-                                        <th>不设置</th>
-                                        <th>可以编辑</th>
-                                        <th>可见？</th>
-                                        <th>不可见</th>
-                                        <th>设置值</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                    <div id="Fields">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        序号
+                                    </th>
+                                    <th>
+                                        字段
+                                    </th>
+                                    <th>
+                                        字段名
+                                    </th>
+                                    <th>
+                                        不设置
+                                    </th>
+                                    <th>
+                                        可以编辑
+                                    </th>
+                                    <th>
+                                        可见？
+                                    </th>
+                                    <th>
+                                        不可见
+                                    </th>
+                                    <th>
+                                        设置值
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                     </form>
                 </fieldset>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="button" ID="Btn_Save" value="保存" onclick="Save()" />
+                <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
                 <input type="button" value="保存并关闭" onclick="SaveAndClose()" />
-                <input type="button" value="关闭" onclick="Close()"/>
+                <input type="button" value="关闭" onclick="Close()" />
             </td>
         </tr>
     </table>

@@ -181,8 +181,6 @@ namespace BP.WF
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
 
-        
-
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
 
@@ -475,7 +473,6 @@ namespace BP.WF
                 CCList cc = new CCList();
                 cc.CheckPhysicsTable();
                 #endregion 其他.
-
                 
 
                 #region 升级sys_sftable
@@ -641,8 +638,8 @@ namespace BP.WF
                 MapDatas mds = new MapDatas();
                 mds.RetrieveAll();
 
-                foreach (MapData md in mds)
-                    md.ResetMaxMinXY(); //更新边界.
+              //  foreach (MapData md in mds)
+                //    md.ResetMaxMinXY(); //更新边界.
                 #endregion 更新表单的边界.
 
                 #region 升级Img
@@ -835,7 +832,6 @@ namespace BP.WF
                     }
                 }
                 #endregion
-
                  
                 // 最后更新版本号，然后返回.
                 sql = "UPDATE Sys_Serial SET IntVal=" + Ver + " WHERE CfgKey='Ver'";

@@ -97,7 +97,7 @@ namespace BP.WF.HttpHandler
             bt.No = this.GetRequestVal("TB_No");
             if (DataType.IsNullOrEmpty(bt.No))
             {
-                bt.No = DA.DBAccess.GenerOID().ToString(); 
+                bt.No = DA.DBAccess.GenerOID().ToString();
             }
             bt.Name = this.GetRequestVal("TB_Name");
 
@@ -107,7 +107,7 @@ namespace BP.WF.HttpHandler
             bt.QRModel = (QRModel)this.GetRequestValInt("DDL_BillOpenModel");
 
             bt.Save();
-            
+
             return "保存成功.";
         }
         /// <summary>
@@ -116,7 +116,7 @@ namespace BP.WF.HttpHandler
         public void Bill_Download()
         {
             BillTemplate en = new BillTemplate(this.No);
-            string MyFilePath =en.TempFilePath; 
+            string MyFilePath = en.TempFilePath;
             HttpResponse response = context.Response;
 
             response.Clear();
@@ -140,7 +140,7 @@ namespace BP.WF.HttpHandler
         public string PushMsg_Save()
         {
             BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
-            msg.MyPK = this.MyPK;  
+            msg.MyPK = this.MyPK;
             msg.RetrieveFromDBSources();
 
             msg.FK_Event = this.FK_Event;
@@ -214,16 +214,9 @@ namespace BP.WF.HttpHandler
                 msg.Update();
             }
 
-            return "保存成功.."; 
+            return "保存成功..";
         }
-        public string PushMsg_Delete()
-        {
-            PushMsg pm = new PushMsg();
-            pm.MyPK = this.GetRequestVal("MyPK");
-            pm.Delete();
-
-            return "删除成功.";
-        }
+        
         public string PushMsgEntity_Init()
         {
             DataSet ds = new DataSet();
@@ -249,7 +242,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-        
+
 
         #endregion
 
@@ -496,7 +489,7 @@ namespace BP.WF.HttpHandler
             tdtl.No = FK_MapData;
             if (tdtl.RetrieveFromDBSources() == 1)
             {
-                ds.Tables.Add(tdtl.ToDataTableField("tdtl")); 
+                ds.Tables.Add(tdtl.ToDataTableField("tdtl"));
             }
 
             return BP.Tools.Json.ToJson(ds);
@@ -611,17 +604,17 @@ namespace BP.WF.HttpHandler
                 dtGroups = groups.ToDataTableField("dtGroups");
                 #endregion
 
-                
+
                 #endregion
 
 
                 #region 三、其他。如果是明细表的字段排序，则增加“返回”按钮；否则增加“复制排序”按钮,2016-03-21
 
                 DataTable isDtl = new DataTable();
-                isDtl.Columns.Add("tdDtl",typeof(int));
-                isDtl.Columns.Add("FK_MapData",typeof(string));
+                isDtl.Columns.Add("tdDtl", typeof(int));
+                isDtl.Columns.Add("FK_MapData", typeof(string));
                 isDtl.Columns.Add("No", typeof(string));
-                isDtl.TableName="TRDtl";
+                isDtl.TableName = "TRDtl";
 
                 DataRow tddr = isDtl.NewRow();
 
@@ -639,7 +632,7 @@ namespace BP.WF.HttpHandler
                     tddr["FK_MapData"] = FK_MapData;
                     tddr["No"] = tdtl.No;
                 }
-                
+
 
                 isDtl.Rows.Add(tddr.ItemArray);
                 #endregion
@@ -692,7 +685,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow row in rows)
             {
                 int rw = int.Parse(row[field].ToString());
-                if (rw==int.Parse(value.ToString()))
+                if (rw == int.Parse(value.ToString()))
                     return true;
             }
 
@@ -712,7 +705,7 @@ namespace BP.WF.HttpHandler
         /// 重置字段顺序
         /// </summary>
         /// <returns></returns>
-        public string SortingMapAttrs_ReSet() 
+        public string SortingMapAttrs_ReSet()
         {
             try
             {
@@ -1171,14 +1164,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 表单模式
-        public void SortingMapAttrs_Sort() {
-            string type = "";
-            switch (type)
-            {
-                
-            }
-        }
-
         public string SortingMapAttrs_Save()
         {
             Node nd = new Node(this.FK_Node);
@@ -1322,66 +1307,6 @@ namespace BP.WF.HttpHandler
             return "保存成功...";
         }
         #endregion 表单模式
-
-        #region 考核超时规则.
-        /// <summary>
-        /// 初始化考核规则.
-        /// </summary>
-        /// <returns></returns>
-        public string CHOvertimeRole_Init()
-        {
-            BP.WF.Node nd = new Node(this.FK_Node);
-
-            Nodes nds = new Nodes();
-            nds.Retrieve(NodeAttr.FK_Flow, nd.FK_Flow);
-
-            //组装json.
-            DataSet ds = new DataSet();
-
-            DataTable dtNodes = nds.ToDataTableField("Nodes");
-            dtNodes.TableName = "Nodes";
-            ds.Tables.Add(dtNodes);
-
-            DataTable dtNode = nd.ToDataTableField("Node");
-            dtNode.TableName = "Node";
-            ds.Tables.Add(dtNode);
-
-            return BP.Tools.Json.DataSetToJson(ds, false);
-        }
-        public string CHOvertimeRole_Save()
-        {
-            BP.WF.Node nd = new Node(this.FK_Node);
-
-            int val = this.GetRequestValInt("RB_OutTimeDeal");
-
-            var deal = (BP.WF.OutTimeDeal)val;
-
-            nd.HisOutTimeDeal = deal;
-
-            if (nd.HisOutTimeDeal == OutTimeDeal.AutoJumpToSpecNode)
-                nd.DoOutTime = this.GetRequestVal("DDL_Nodes");
-
-            if (nd.HisOutTimeDeal == OutTimeDeal.AutoShiftToSpecUser)
-                nd.DoOutTime = this.GetRequestVal("TB_Shift");
-
-            if (nd.HisOutTimeDeal == OutTimeDeal.SendMsgToSpecUser)
-                nd.DoOutTime = this.GetRequestVal("TB_SendEmps");
-
-            if (nd.HisOutTimeDeal == OutTimeDeal.RunSQL)
-                nd.DoOutTime = this.GetRequestVal("TB_SQL");
-
-            //是否质量考核节点.
-            if (this.GetRequestValInt("IsEval") == 0)
-                nd.IsEval = false;
-            else
-                nd.IsEval = true;
-
-            //执行更新.
-            nd.Update();
-
-            return "@保存成功.";
-        }
-        #endregion
 
         #region 节点属性（列表）的操作
         /// <summary>
@@ -1570,7 +1495,7 @@ namespace BP.WF.HttpHandler
         public string BlockModel_Save()
         {
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            
+
             nd.BlockAlert = this.GetRequestVal("TB_Alert"); //提示信息.
 
             int val = this.GetRequestValInt("RB_BlockModel");
@@ -1607,20 +1532,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 可以撤销的节点
-        public string CanCancelNodes_Init()
-        {
-            BP.WF.Node mynd = new BP.WF.Node();
-            mynd.NodeID = this.FK_Node;
-            mynd.RetrieveFromDBSources();
-
-            BP.WF.Template.NodeCancels rnds = new BP.WF.Template.NodeCancels();
-            rnds.Retrieve(NodeCancelAttr.FK_Node, this.FK_Node);
-
-            BP.WF.Nodes nds = new Nodes();
-            nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FK_Flow);
-
-            return "{\"mynd\":" + mynd.ToJson() + ",\"rnds\":" + rnds.ToJson() + ",\"nds\":" + nds.ToJson() + "}";
-        }
         public string CanCancelNodes_Save()
         {
             BP.WF.Template.NodeCancels rnds = new BP.WF.Template.NodeCancels();
@@ -1643,23 +1554,13 @@ namespace BP.WF.HttpHandler
                 i++;
             }
             if (i == 0)
-            {
                 return "请您选择要撤销的节点。";
-            }
+
             return "设置成功.";
         }
         #endregion
 
         #region 表单检查(CheckFrm.htm)
-        public string CheckFrm_Init()
-        {
-            if (string.IsNullOrWhiteSpace(this.FK_MapData))
-                return "err@参数FK_MapData不能为空！";
-
-            MapData md = new MapData(this.FK_MapData);
-            return md.Name;
-        }
-
         public string CheckFrm_Check()
         {
             if (BP.Web.WebUser.No != "admin")
@@ -1759,126 +1660,6 @@ namespace BP.WF.HttpHandler
             return msg;
         }
         #endregion
-
-        #region 消息事件
-        public string PushMessage_Init()
-        {
-            BP.WF.Template.PushMsg enDel = new BP.WF.Template.PushMsg();
-            enDel.FK_Node = this.FK_Node;
-            enDel.RetrieveFromDBSources();
-            return enDel.ToJson();
-        }
-
-        public string PushMessage_Delete()
-        {
-            BP.WF.Template.PushMsg enDel = new BP.WF.Template.PushMsg();
-            enDel.MyPK = this.MyPK; ;
-            enDel.Delete();
-            return "删除成功";
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string PushMessage_ShowHidden()
-        {
-            BP.WF.XML.EventLists xmls = new BP.WF.XML.EventLists();
-            xmls.RetrieveAll();
-            foreach (BP.WF.XML.EventList item in xmls)
-            {
-                if (item.IsHaveMsg == false)
-                    continue;
-            }
-            return BP.Tools.Json.ToJson(xmls);
-        }
-
-        public string PushMessageEntity_Init()
-        {
-            var fk_node = GetRequestVal("FK_Node");
-            BP.WF.Template.PushMsg en = new BP.WF.Template.PushMsg();
-            en.MyPK = this.MyPK;
-            en.FK_Event = this.FK_Event;
-            int i = en.RetrieveFromDBSources();
-
-            if (i == 0 || this.FK_Event == "SendSuccess")
-                en.MailPushWay = 1;
-
-            return en.ToJson();
-        }
-        public string PushMessageEntity_Save()
-        {
-            BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
-            msg.MyPK = this.MyPK;
-            msg.RetrieveFromDBSources();
-            msg.FK_Event = this.FK_Event;
-            msg.FK_Node = this.FK_Node;
-
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
-
-            #region 求出来选择的节点.
-            string nodesOfSMS = "";
-            string nodesOfEmail = "";
-            foreach (BP.WF.Node mynd in nds)
-            {
-                foreach (string key in context.Request.Params.AllKeys)
-                {
-                    if (key.Contains("CB_SMS_" + mynd.NodeID)
-                        && nodesOfSMS.Contains(mynd.NodeID + "") == false)
-                        nodesOfSMS += mynd.NodeID + ",";
-
-                    if (key.Contains("CB_Email_" + mynd.NodeID)
-                        && nodesOfEmail.Contains(mynd.NodeID + "") == false)
-                        nodesOfEmail += mynd.NodeID + ",";
-                }
-            }
-
-            //节点.
-            msg.MailNodes = nodesOfEmail;
-            msg.SMSNodes = nodesOfSMS;
-            #endregion 求出来选择的节点.
-
-            #region 短信保存.
-            msg.SMSPushWay = this.GetRequestValInt("RB_SMS");
-
-            //短信手机字段.
-            msg.SMSField = this.GetRequestVal("DDL_SMS_Fields");
-            //替换变量
-            string smsstr = this.GetRequestVal("TB_SMS");
-            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
-            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
-            // smsstr = smsstr.Replace("@RDT",);
-            //短信内容模版.
-            msg.SMSDoc_Real = smsstr;
-            #endregion 短信保存.
-
-            #region 邮件保存.
-            msg.MailPushWay = this.GetRequestValInt("RB_Email");
-
-            //邮件标题与内容.
-            msg.MailTitle_Real = this.GetRequestVal("TB_Email_Title");
-            msg.MailDoc_Real = this.GetRequestVal("TB_Email_Doc"); //  this.TB_Email_Doc.Text;
-
-            //邮件地址.
-            msg.MailAddress = this.GetRequestVal("DDL_Email");
-            #endregion 邮件保存.
-
-            //保存.
-            if (DataType.IsNullOrEmpty(msg.MyPK) == true)
-            {
-                msg.MyPK = BP.DA.DBAccess.GenerGUID();
-                msg.Insert();
-            }
-            else
-            {
-                msg.Update();
-            }
-
-            return "保存成功...";
-        }
-        #endregion
+ 
     }
 }

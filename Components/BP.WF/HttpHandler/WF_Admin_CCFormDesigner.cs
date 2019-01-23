@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-        
+
         /// <summary>
         /// 转换拼音
         /// </summary>
@@ -91,7 +91,7 @@ namespace BP.WF.HttpHandler
             //暂时没发现此方法在哪里有调用，edited by liuxc,2017-9-25
             return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
         }
-        
+
         /// <summary>
         /// 创建隐藏字段.
         /// </summary>
@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@"+this.ToString()+" msg:" + ex.Message;
+                return "err@" + this.ToString() + " msg:" + ex.Message;
             }
         }
         #endregion 执行父类的重写方法.
@@ -179,7 +179,7 @@ namespace BP.WF.HttpHandler
             md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
 
             //表单的物理表.
-            if(md.HisFrmType == BP.Sys.FrmType.Url ||  md.HisFrmType == BP.Sys.FrmType.Entity)
+            if (md.HisFrmType == BP.Sys.FrmType.Url || md.HisFrmType == BP.Sys.FrmType.Entity)
                 md.PTable = this.GetRequestVal("TB_PTable");
             else
                 md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
@@ -187,8 +187,14 @@ namespace BP.WF.HttpHandler
             //数据表模式。 @周朋 需要翻译.
             md.PTableModel = this.GetRequestValInt("DDL_PTableModel");
 
-            md.FK_FrmSort = this.GetRequestVal("DDL_FrmTree");
-            md.FK_FormTree = this.GetRequestVal("DDL_FrmTree");
+            //@李国文 需要对比翻译.
+            string sort = this.GetRequestVal("FK_FrmSort");
+            if (DataType.IsNullOrEmpty(sort) == true)
+                sort = this.GetRequestVal("DDL_FrmTree");
+
+            md.FK_FrmSort = sort;
+            md.FK_FormTree = sort;
+
             md.AppType = "0";//独立表单
             md.DBSrc = this.GetRequestVal("DDL_DBSrc");
             if (md.IsExits == true)
@@ -239,7 +245,7 @@ namespace BP.WF.HttpHandler
             WebUser.SignInOfGener(emp);
             return "登录成功.";
         }
-      
+
         public string GoToFrmDesigner_Init()
         {
             //根据不同的表单类型转入不同的表单设计器上去.
@@ -308,7 +314,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
 
- 
+
         }
         public string NewField()
         {
@@ -324,7 +330,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
         }
         /// <summary>
@@ -390,7 +396,7 @@ namespace BP.WF.HttpHandler
 
                     try
                     {
-                         dt = DBAccess.RunSQLReturnTable(ps);
+                        dt = DBAccess.RunSQLReturnTable(ps);
                     }
                     catch (Exception ex)
                     {
@@ -435,7 +441,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
- 
+
         /// <summary>
         /// 保存表单
         /// </summary>
@@ -475,7 +481,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
         }
 
@@ -486,9 +492,9 @@ namespace BP.WF.HttpHandler
 
             DataTable dt = mapAttrs.ToDataTableField();
             return BP.Tools.Json.ToJson(dt);
-          }
+        }
 
-       
+
         #endregion
 
         /// <summary>

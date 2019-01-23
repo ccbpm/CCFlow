@@ -272,6 +272,7 @@ namespace CCFlow.WF.CCForm
             {
                 string filePath = (string)en.GetValByKey("MyFilePath");
                 string fileName = (string)en.GetValByKey("MyFileName");
+                string fileExt = (string)en.GetValByKey("MyFileExt");
                 //临时存储位置
                 string tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + en.GetValByKey("MyFileExt");
                 try
@@ -290,7 +291,7 @@ namespace CCFlow.WF.CCForm
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();
 
-                PubClass.DownloadFile(tempFile, fileName);
+                PubClass.DownloadFile(tempFile, fileName + "." + fileExt);
                 //删除临时文件
                 System.IO.File.Delete(tempFile);
             }
@@ -299,7 +300,7 @@ namespace CCFlow.WF.CCForm
                 HttpContext.Current.Response.Charset = "GB2312";
                 string fileName  = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileName"));
                 string fileExt = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileExt"));
-                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName+fileExt);
+                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName+"."+fileExt);
                 HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                 HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
 

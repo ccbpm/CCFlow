@@ -1733,7 +1733,7 @@ var DBAccess = (function () {
             async: false,
             url: dynamicHandler + "?DoType=DBAccess_RunSQL&t=" + new Date().getTime(),
             dataType: 'html',
-            data: "SQL=" + sql,
+            data: { "SQL": sql },
             success: function (data) {
                 count = parseInt(data);
                 if (isNaN(count)) {
@@ -1845,7 +1845,7 @@ var DBAccess = (function () {
             async: false,
             url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable" + "&t=" + new Date().getTime(),
             dataType: 'html',
-            data: "SQL=" + sql,
+            data: { "SQL": sql },
             success: function (data) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);

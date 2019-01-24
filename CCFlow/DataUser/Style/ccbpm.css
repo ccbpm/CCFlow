@@ -154,7 +154,6 @@ td input[type="textbox"]
 td input
 {
     /*border:none;*/
-    width: auto;
     word-break: keep-all;
 }
  
@@ -756,4 +755,17 @@ body table tr td {
 .ccflow-tag {
     margin-right: 10px !important;
 }
-/*杨玉慧  --临时增加  处理弹窗返回值得表单乱掉的问题*/
+
+/*
+fieldset
+{
+    border-style: none;
+    border-color: #999966;
+    border-top-width: 2px;
+}
+
+legend
+{
+    background-color: #669999;
+}*/
+ 

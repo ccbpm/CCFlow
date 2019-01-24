@@ -41,14 +41,14 @@
             html += "<th>操作</th>";
             html += "</tr>";
             var typeJson = {
-                "Port": "组织结构表:Port_*",
-                "GPM": "权限,菜单管理表:GPM_*",
-                "WF": "流程模版表:WF_*",
-                "Sys_Frm": "表单模版:Sys_Frm* , Sys_Map*",
+                "Port": "组织结构表 : Port_*",
+                "GPM": "权限,菜单管理表 : GPM_*",
+                "WF": "流程模版表 : WF_*",
+                "Sys_Frm": "表单模版 : Sys_Frm* , Sys_Map*",
                 "Sys_Map": "表单模版",
-                "Sys": "BP框架系统表:Sys_*",
-                "Pub": "公共信息表:Pub_*",
-                "qt": "其他的表:*.*"
+                "Sys": "BP框架系统表 : Sys_*",
+                "Pub": "公共信息表 : Pub_*",
+                "qt": "其他的表 : *_*"
 
             };
             for (var key in typeJson) {
@@ -134,6 +134,7 @@
 
 
             $("#Msg").html(html);
+            //把序号重新排序
             var tableId = document.getElementById("tab");
             var str = "";
             for (var i = 2; i < tableId.rows.length; i++) {

@@ -6229,8 +6229,7 @@ namespace BP.WF
                                 if (System.IO.Directory.Exists(path) == false)
                                     System.IO.Directory.CreateDirectory(path);
 
-                                rtf.MakeDoc(func.TempFilePath + ".rtf",
-                                    path, file, func.ReplaceVal, false);
+                                rtf.MakeDoc(func.TempFilePath + ".rtf", path, file, false);
                                 #endregion
 
                                 #region 转化成pdf.
@@ -6262,7 +6261,7 @@ namespace BP.WF
                                 bill.FullPath = path + file;
                                 bill.FK_NY = DataType.CurrentYearMonth;
                                 bill.FK_Flow = this.HisNode.FK_Flow;
-                                bill.FK_BillType = func.FK_BillType;
+                              //  bill.FK_BillType = func.FK_BillType;
                                 bill.FK_Flow = this.HisNode.FK_Flow;
                                 bill.Emps = this.rptGe.GetValStrByKey("Emps");
                                 bill.FK_Starter = this.rptGe.GetValStrByKey("Rec");

@@ -952,26 +952,11 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"javascript:DoStop('" + btnLab.EndFlowLab + "','" + this.FK_Flow + "','" + this.WorkID + "');\" />";
                 }
 
-                if (btnLab.PrintDocEnable)
+                // @李国文.
+                if (btnLab.PrintDocEnable == true)
                 {
-                    /*如果不是加签 */
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintRTF)
-                    {
-                        string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                        toolbar += "<input type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />";
-                    }
-
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintWord)
-                    {
-                        string urlr = appPath + "WF/Rpt/RptDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsPrint=1&s=" + tKey;
-                        toolbar += "<input type=button name='PrintDoc'  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />";
-                    }
-
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintHtml)
-                    {
-                        string urlr = appPath + "PrintSample.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + BP.Web.WebUser.No + "&IsPrint=1";
-                        toolbar += "<input type=button  name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"printFrom('" + urlr + "'); \" />";
-                    }
+                    string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<input type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />";
                 }
 
                 if (btnLab.TrackEnable)

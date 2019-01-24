@@ -956,6 +956,9 @@ namespace BP.WF
 
             BP.GPM.DeptStation mydeptSta = new GPM.DeptStation();
             mydeptSta.CheckPhysicsTable();
+
+            BP.Sys.FrmRB myrb = new BP.Sys.FrmRB();
+            myrb.CheckPhysicsTable();
             #endregion 首先创建Port类型的表.
 
 

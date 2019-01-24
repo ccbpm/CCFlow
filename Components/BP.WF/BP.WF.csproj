@@ -262,9 +262,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Template\BillType.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\FindWorkerRole.cs">
       <SubType>Code</SubType>

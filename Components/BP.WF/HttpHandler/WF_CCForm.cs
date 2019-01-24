@@ -4154,7 +4154,7 @@ namespace BP.WF.HttpHandler
                     engine.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
                 }
                 // engine.MakeDoc(file, toPath, tempName + "." + this.WorkID + ".doc", null, false);
-                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", null, false);
+                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", false);
             }
             else
             {
@@ -4179,7 +4179,7 @@ namespace BP.WF.HttpHandler
                 ps.Add(TrackAttr.WorkID, this.WorkID);
                 engine.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
-                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", null, false);
+                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", false);
             }
 
             #region 保存单据，以方便查询.

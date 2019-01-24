@@ -7,6 +7,24 @@ using BP.WF;
 namespace BP.WF.Template
 {
     /// <summary>
+    /// 模版类型
+    /// </summary>
+    public enum TemplateFileModel
+    {
+        /// <summary>
+        /// 旧版本的rtf模版格式
+        /// </summary>
+        RTF,
+        /// <summary>
+        /// Word模版格式
+        /// </summary>
+        VSTOForWrod,
+        /// <summary>
+        /// Excel模版格式
+        /// </summary>
+        VSTOForExcel
+    }
+    /// <summary>
     /// 二维码生成方式
     /// </summary>
     public enum QRModel
@@ -64,19 +82,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 为生成单据使用
         /// </summary>
-        public const string IDX = "IDX";
-        /// <summary>
-        /// 要排除的字段
-        /// </summary>
-        public const string ExpField = "ExpField";
-        /// <summary>
-        /// 要替换的值
-        /// </summary>
-        public const string ReplaceVal = "ReplaceVal";
+        public const string Idx = "Idx";
         /// <summary>
         /// 单据类型
         /// </summary>
-        public const string FK_BillType = "FK_BillType";
+        public const string TemplateFileModel = "TemplateFileModel";
         /// <summary>
         /// 是否生成PDF
         /// </summary>
@@ -96,34 +106,6 @@ namespace BP.WF.Template
 	public class BillTemplate : EntityNoName
     {
         #region  属性
-        /// <summary>
-        /// 单据类型
-        /// </summary>
-        public string FK_BillType
-        {
-            get
-            {
-                return this.GetValStringByKey(BillTemplateAttr.FK_BillType);
-            }
-            set
-            {
-                this.SetValByKey(BillTemplateAttr.FK_BillType, value);
-            }
-        }
-        /// <summary>
-        /// 要替换的值
-        /// </summary>
-        public string ReplaceVal
-        {
-            get
-            {
-                return this.GetValStringByKey(BillTemplateAttr.ReplaceVal);
-            }
-            set
-            {
-                this.SetValByKey(BillTemplateAttr.ReplaceVal, value);
-            }
-        }
         /// <summary>
         /// UI界面上的访问控制
         /// </summary>
@@ -182,6 +164,18 @@ namespace BP.WF.Template
                 this.SetValByKey(BillTemplateAttr.QRModel, (int)value);
             }
         }
+        public TemplateFileModel TemplateFileModel
+        {
+            get
+            {
+                return (TemplateFileModel)this.GetValIntByKey(BillTemplateAttr.TemplateFileModel);
+            }
+            set
+            {
+                this.SetValByKey(BillTemplateAttr.TemplateFileModel, (int)value);
+            }
+        }
+        
         /// <summary>
         /// 生成的单据打开方式
         /// </summary>
@@ -267,7 +261,7 @@ namespace BP.WF.Template
                 map.AddTBInt(BillTemplateAttr.NodeID, 0, "NodeID", true, false);
 
                 map.AddDDLSysEnum(BillTemplateAttr.BillFileType, 0, "生成的文件类型", true, false,
-                    "BillFileType","@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)@5=锐浪报表");
+                    "BillFileType","@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)");
 
                 map.AddDDLSysEnum(BillTemplateAttr.BillOpenModel, 0, "生成的文件打开方式", true, false,
                     "BillOpenModel", "@0=下载本地@1=在线WebOffice打开");
@@ -275,11 +269,14 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(BillTemplateAttr.QRModel, 0, "二维码生成方式", true, false,
                    BillTemplateAttr.QRModel, "@0=不生成@1=生成二维码");
 
-                map.AddTBString(BillTemplateAttr.FK_BillType, null, "单据类型", true, false, 0, 4, 4);
 
-                map.AddTBString("IDX", null, "IDX", false, false, 0, 200, 20);
-                map.AddTBString(BillTemplateAttr.ExpField, null, "要排除的字段", false, false, 0, 800, 20);
-                map.AddTBString(BillTemplateAttr.ReplaceVal, null, "要替换的值", false, false, 0, 3000, 20);
+                map.AddDDLSysEnum(BillTemplateAttr.TemplateFileModel, 0, "模版模式", true, false,
+                 BillTemplateAttr.TemplateFileModel, "@0=rtf模版@1=vsto模式的word模版@2=vsto模式的excel模版");
+
+                map.AddTBString("Idx", null, "Idx", false, false, 0, 200, 20);
+
+               // map.AddTBString(BillTemplateAttr.ExpField, null, "要排除的字段", false, false, 0, 800, 20);
+               // map.AddTBString(BillTemplateAttr.ReplaceVal, null, "要替换的值", false, false, 0, 3000, 20);
                 this._enMap = map;
                 return this._enMap;
             }

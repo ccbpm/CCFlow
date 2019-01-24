@@ -1068,6 +1068,7 @@ namespace BP.En
 
             if (s == "0")
                 return false;
+
             if (s == "1")
                 return true;
 

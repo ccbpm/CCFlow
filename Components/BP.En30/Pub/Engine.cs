@@ -1046,10 +1046,10 @@ namespace BP.Pub
         /// 生成单据
         /// </summary>
         /// <param name="cfile">模板文件</param>
-        public void MakeDoc(string cfile, string replaceVal)
+        public void MakeDoc(string cfile)
         {
             string file = PubClass.GenerTempFileName("doc");
-            this.MakeDoc(cfile, SystemConfig.PathOfTemp, file, replaceVal, true);
+            this.MakeDoc(cfile, SystemConfig.PathOfTemp, file, true);
         }
         public string ensStrs = "";
         /// <summary>
@@ -1064,7 +1064,7 @@ namespace BP.Pub
         /// <param name="file">生成文件</param>
         /// <param name="isOpen">是否用IE打开？</param>
         /// <param name="isOpen">要打开的url用于生成二维码</param>
-        public void MakeDoc(string templateRtfFile, string path, string file, string replaceVals, bool isOpen, string billUrl=null)
+        public void MakeDoc(string templateRtfFile, string path, string file,bool isOpen, string billUrl=null)
         {
             templateRtfFile = templateRtfFile.Replace(".rtf.rtf", ".rtf");
             
@@ -1353,25 +1353,25 @@ namespace BP.Pub
                 #endregion
 
                 #region 要替换的字段
-                if (replaceVals != null && replaceVals.Contains("@"))
-                {
-                    string[] vals = replaceVals.Split('@');
-                    foreach (string val in vals)
-                    {
-                        if (val == null || val == "")
-                            continue;
+                //if (replaceVals != null && replaceVals.Contains("@"))
+                //{
+                //    string[] vals = replaceVals.Split('@');
+                //    foreach (string val in vals)
+                //    {
+                //        if (val == null || val == "")
+                //            continue;
 
-                        if (val.Contains("=") == false)
-                            continue;
+                //        if (val.Contains("=") == false)
+                //            continue;
 
-                        string myRep = val.Clone() as string;
+                //        string myRep = val.Clone() as string;
 
-                        myRep = myRep.Trim();
-                        myRep = myRep.Replace("null", "");
-                        string[] myvals = myRep.Split('=');
-                        str = str.Replace("<" + myvals[0] + ">", "<" + myvals[1] + ">");
-                    }
-                }
+                //        myRep = myRep.Trim();
+                //        myRep = myRep.Replace("null", "");
+                //        string[] myvals = myRep.Split('=');
+                //        str = str.Replace("<" + myvals[0] + ">", "<" + myvals[1] + ">");
+                //    }
+                //}
                 #endregion
 
                 StreamWriter wr = new StreamWriter(this.TempFilePath, false, Encoding.ASCII);
@@ -1437,7 +1437,7 @@ namespace BP.Pub
                 }
             }
 
-            this.MakeDoc(templeteFile, saveToPath, saveToFileName, "", false);
+            this.MakeDoc(templeteFile, saveToPath, saveToFileName,  false);
         }
         #endregion
         #endregion

@@ -41,7 +41,7 @@ namespace BP.WF
 			foreach (var item in dtls)
 				rtf.EnsDataDtls.Add(item);
 
-			rtf.MakeDoc(templeteFullFile, saveToDir, saveFileName, null, false);
+			rtf.MakeDoc(templeteFullFile, saveToDir, saveFileName, false);
 		}
 
 		/// <summary>

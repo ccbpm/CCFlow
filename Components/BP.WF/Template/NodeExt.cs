@@ -709,7 +709,7 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
-                rm.Title = "绑定rtf打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)"; //"单据&单据";
+                rm.Title = "绑定打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)";
                 rm.ClassMethodName = this.ToString() + ".DoBill";
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;

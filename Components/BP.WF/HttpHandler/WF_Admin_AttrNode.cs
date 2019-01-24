@@ -102,9 +102,18 @@ namespace BP.WF.HttpHandler
             bt.Name = this.GetRequestVal("TB_Name");
 
             bt.TempFilePath = filepath;
+
+            //打印的文件类型.
             bt.HisBillFileType = (BillFileType)this.GetRequestValInt("DDL_BillFileType");
+
+            //打开模式.
             bt.BillOpenModel = (BillOpenModel)this.GetRequestValInt("DDL_BillOpenModel");
+
+            //二维码模式.
             bt.QRModel = (QRModel)this.GetRequestValInt("DDL_BillOpenModel");
+
+            //模版类型.rtf / VSTOForWord / VSTOForExcel  
+            bt.TemplateFileModel = (TemplateFileModel)this.GetRequestValInt("DDL_TemplateFileModel");
 
             bt.Save();
 

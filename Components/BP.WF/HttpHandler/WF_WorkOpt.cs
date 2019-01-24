@@ -192,7 +192,7 @@ namespace BP.WF.HttpHandler
                 //用于扫描打印.
                 string qrUrl = SystemConfig.HostURL + "WF/WorkOpt/PrintDocQRGuide.htm?MyPK=" + bill.MyPK;
                 rtf.MakeDoc(tempFile,
-                    path, file, func.ReplaceVal, false, qrUrl);
+                    path, file, false, qrUrl);
                 #endregion
 
                 #region 转化成pdf.
@@ -223,7 +223,7 @@ namespace BP.WF.HttpHandler
                 bill.FullPath = path + file;
                 bill.FK_NY = DataType.CurrentYearMonth;
                 bill.FK_Flow = nd.FK_Flow;
-                bill.FK_BillType = func.FK_BillType;
+               // bill.FK_BillType = func.FK_BillType;
                 bill.Emps = rtf.HisGEEntity.GetValStrByKey("Emps");
                 bill.FK_Starter = rtf.HisGEEntity.GetValStrByKey("Rec");
                 bill.StartDT = rtf.HisGEEntity.GetValStrByKey("RDT");

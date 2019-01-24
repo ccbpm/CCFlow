@@ -90,12 +90,11 @@
                 alert('请输入报表名称');
                 return;
             }
-            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            //            handler.AddUrlData();
-            //            handler.AddFormData();
-            //            var data = handler.DoMethodReturnString("Bill_Save");
-             $.ajax({
-                url: Handler + "?DoType=Bill_Save&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+
+            var doMethod = "Bill_Save";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $.ajax({
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName +"&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
                 type: 'POST',
                 data: formData,
                 async: false,

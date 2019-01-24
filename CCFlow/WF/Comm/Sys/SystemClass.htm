@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>数据结构</title>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -14,8 +14,8 @@
     <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
-    <base target="_self" /> 
-    <script language="javascript" type="text/javascript" >
+    <base target="_self" />
+    <script language="javascript" type="text/javascript">
         //页面启动函数.
         $(function () {
 
@@ -28,7 +28,6 @@
             //}
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
-
             var data = handler.DoMethodReturnJSON("SystemClass_Init");
 
             var html = "<table border=0 style='width:98%;' id='tab'>";
@@ -40,100 +39,112 @@
             html += "<th>表</th>";
             html += "<th>操作</th>";
             html += "</tr>";
+
             var typeJson = {
                 "Port": "组织结构表 : Port_*",
                 "GPM": "权限,菜单管理表 : GPM_*",
                 "WF": "流程模版表 : WF_*",
                 "Sys_Frm": "表单模版 : Sys_Frm* , Sys_Map*",
-                "Sys_Map": "表单模版",
                 "Sys": "BP框架系统表 : Sys_*",
                 "Pub": "公共信息表 : Pub_*",
-                "qt": "其他的表 : *_*"
-
+                "Demo": "演示数据表 : Demo_*",
+                "Etc": "其他的表 : *_*"
             };
+
+            var isTr = false;
+
+            //首先输出通用的.
             for (var key in typeJson) {
-                if (key != "Sys_Map") {
-                    html += "<tr>";
-                    html += "<th  colspan='5' >" + typeJson[key] + "</th>";
-                    html += "</tr>";
+
+                if (key == 'Etc' || key == 'Sys_Frm' || key == "Sys")
+                    continue;
+
+                html += "<tr>";
+                html += "<th  colspan='5' >" + typeJson[key] + "</th>";
+                html += "</tr>";
+
+                for (var i = 0; i < data.length; i++) {
+
+                    var en = data[i];
+                    if (en.PTable.indexOf(key) == -1)
+                        continue;
+
+                    isTr = !isTr;
+                    html += GenerOneRow(isTr, i, en);
                 }
+            }
 
-                var isTr = false;
+            //输出模版表.
+            html += "<tr>";
+            html += "<th  colspan='5' >表单模版:Sys_Frm*, Sys_Map*</th>";
+            html += "</tr>";
+            for (var i = 0; i < data.length; i++) {
 
-                if ((key != "Sys") && (key != "qt")) {
-                    for (var i = 0; i < data.length; i++) {
-                        var en = data[i];
-                        if (en.PTable.indexOf(key) == 0) {
-                            if (isTr == true)
-                                html += "<tr style='background-color:#F4F4F4;' ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\" >";
-                            else
-                                html += "<tr ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\"  >";
+                var en = data[i];
+                if (en.PTable.indexOf('Sys_Frm') == 0
+                 || en.PTable.indexOf('Sys_Map') == 0
+                 || en.PTable.indexOf('Sys_SF') == 0
+                 || en.PTable.indexOf('Sys_Form') == 0
+                 || en.PTable.indexOf('Sys_Enum') == 0) {
 
-                            isTr = !isTr;
-                            html += "<td>" + i + "</td>";
-                            html += "<td>" + en.No + "</td>";
-                            html += "<td>" + en.Name + "</td>";
-                            html += "<td>" + en.PTable + "</td>";
-                            html += "<td>" + "[" + "<a href=\"javascript:OpenFeild('" + en.EnsName + "','" + en.Name + "')\">字段</a>" + "]";
-                            html += "[" + "<a href=\"javascript:OpenCheck('" + en.No + "','" + en.Name + "')\">体检</a>" + "]";
-                            html += "[" + "<a href=\"javascript:OpenEn('" + en.EnsName + "','" + en.Name + "')\">界面</a>" + "]" + "</td>";
-                            html += "</tr>";
-                        }
-                    }
-                } else if (key == "qt") {
-
-                    for (var i = 0; i < data.length; i++) {
-
-                        var en = data[i];
-
-                        if ((en.PTable.indexOf("Port") != 0) && (en.PTable.indexOf("WF") != 0) && (en.PTable.indexOf("GPM") != 0) && (en.PTable.indexOf("Sys_Frm") != 0) &&
-                            (en.PTable.indexOf("Sys_Map") != 0) && (en.PTable.indexOf("Sys") != 0) && (en.PTable.indexOf("Pub") != 0)) {
-                            if (isTr == true)
-                                html += "<tr style='background-color:#F4F4F4;' ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\" >";
-                            else
-                                html += "<tr ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\"  >";
-
-                            isTr = !isTr;
-                            html += "<td>" + i + "</td>";
-                            html += "<td>" + en.No + "</td>";
-                            html += "<td>" + en.Name + "</td>";
-                            html += "<td>" + en.PTable + "</td>";
-                            html += "<td>" + "[" + "<a href=\"javascript:OpenFeild('" + en.EnsName + "','" + en.Name + "')\">字段</a>" + "]";
-                            html += "[" + "<a href=\"javascript:OpenCheck('" + en.No + "','" + en.Name + "')\">体检</a>" + "]";
-                            html += "[" + "<a href=\"javascript:OpenEn('" + en.EnsName + "','" + en.Name + "')\">界面</a>" + "]" + "</td>";
-                            html += "</tr>";
-                        }
-                    }
-                
-                
                 } else {
-                    for (var i = 0; i < data.length; i++) {
-                        var en = data[i];
-                        if ((en.PTable.indexOf(key) == 0) && (en.PTable.indexOf("Sys_Frm") != 0) && (en.PTable.indexOf("Sys_Map") != 0)) {
-                            if (isTr == true)
-                                html += "<tr style='background-color:#F4F4F4;' ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\" >";
-                            else
-                                html += "<tr ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\"  >";
-
-                            isTr = !isTr;
-                            html += "<td>" + i + "</td>";
-                            html += "<td>" + en.No + "</td>";
-                            html += "<td>" + en.Name + "</td>";
-                            html += "<td>" + en.PTable + "</td>";
-                            html += "<td>" + "[" + "<a href=\"javascript:OpenFeild('" + en.EnsName + "','" + en.Name + "')\">字段</a>" + "]";
-                            html += "[" + "<a href=\"javascript:OpenCheck('" + en.No + "','" + en.Name + "')\">体检</a>" + "]";
-                            html += "[" + "<a href=\"javascript:OpenEn('" + en.EnsName + "','" + en.Name + "')\">界面</a>" + "]" + "</td>";
-                            html += "</tr>";
-                        }
-                    }
-
+                    continue;
                 }
 
-
+                isTr = !isTr;
+                html += GenerOneRow(isTr, i, en);
             }
 
 
+            //输出系统表.
+            html += "<tr>";
+            html += "<th  colspan='5' >系统表:Sys_* </th>";
+            html += "</tr>";
+            for (var i = 0; i < data.length; i++) {
+
+                var en = data[i];
+                if (en.PTable.indexOf('Sys_') == -1)
+                    continue;
+
+                if (en.PTable.indexOf('Sys_Frm') == 0
+                || en.PTable.indexOf('Sys_Enum') == 0
+                || en.PTable.indexOf('Sys_SF') == 0
+                || en.PTable.indexOf('Sys_Form') == 0
+                 || en.PTable.indexOf('Sys_Map') == 0)
+                    continue;
+
+                isTr = !isTr;
+                html += GenerOneRow(isTr, i, en);
+            }
+
+
+            //输出其他表.
+            html += "<tr>";
+            html += "<th  colspan='5' >其他业务表 </th>";
+            html += "</tr>";
+            for (var i = 0; i < data.length; i++) {
+
+                var en = data[i];
+
+                //是否存在.
+                var isHava = false;
+                for (var key in typeJson) {
+                    var idx = en.PTable.indexOf(key);
+                    if (idx == 0) {
+                        isHava = true;
+                        break;
+                    }
+                }
+
+                if (isHava == true)
+                    continue;
+
+                isTr = !isTr;
+                html += GenerOneRow(isTr, i, en);
+            }
+
             $("#Msg").html(html);
+
             //把序号重新排序
             var tableId = document.getElementById("tab");
             var str = "";
@@ -144,6 +155,27 @@
             }
 
         });
+
+        function GenerOneRow(isTr, i, en) {
+
+            var str = "";
+            if (isTr == true)
+                str += "<tr style='background-color:#F4F4F4;' ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\" >";
+            else
+                str += "<tr ondblclick=\"OpenFeild('" + en.EnsName + "','" + en.Name + "');\"  >";
+
+            str += "<td>" + i + "</td>";
+            str += "<td>" + en.No + "</td>";
+            str += "<td>" + en.Name + "</td>";
+            str += "<td>" + en.PTable + "</td>";
+            str += "<td>" + "[" + "<a href=\"javascript:OpenFeild('" + en.EnsName + "','" + en.Name + "')\">字段</a>" + "]";
+            str += "[" + "<a href=\"javascript:OpenCheck('" + en.No + "','" + en.Name + "')\">体检</a>" + "]";
+            str += "[" + "<a href=\"javascript:OpenEn('" + en.EnsName + "','" + en.Name + "')\">界面</a>" + "]" + "</td>";
+            str += "</tr>";
+
+            return str;
+
+        }
 
         function OpenFeild(m, name) {
             var url = 'SystemClassField.htm?EnsName=' + m;
@@ -170,15 +202,11 @@
         }
         
     </script>
-
 </head>
-
-<body style="padding:15px; margin:15px;">
-
-<form id="cc">
-<div style=" padding:10px;" id="Msg">
-<img src="../../Img/loading.gif" />&nbsp;正在加载,请稍后......</div>
-</form>
-
+<body style="padding: 15px; margin: 15px;">
+    <form id="cc">
+    <div style="padding: 10px;" id="Msg">
+        <img src="../../Img/loading.gif" />&nbsp;正在加载,请稍后......</div>
+    </form>
 </body>
 </html>

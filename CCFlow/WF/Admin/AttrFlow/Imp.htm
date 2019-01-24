@@ -51,18 +51,12 @@
 
             $("#pageloading").show();
             //提交数据
-//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
-//            handler.AddPara("FK_Flow", fk_flow);
-//            handler.AddPara("FK_Sort", fk_flowSort);
-//            handler.AddPara("ImpWay", impWay);
-//            handler.AddPara("SpecFlowNo", spenFlowNo);
-//            handler.AddFormData();
-//            var data = handler.DoMethodReturnString("Imp_Done");
-
+            var doMethod = "Imp_Done";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrFlow";
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',
-                url: Handler + "?DoType=Imp_Done&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName +"&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
                 onSubmit: function (param) {
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
                 },

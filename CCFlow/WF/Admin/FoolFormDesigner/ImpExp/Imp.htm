@@ -334,14 +334,10 @@
             formData.append("file", $("#localXmlFile")[0].files[0]);
             formData.append("name", name);
 
-//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
-//            handler.AddUrlData();
-//            handler.AddPara("FK_MapData", frmID);
-//            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-//            handler.AddPara("FK_Flow", flowNo);
-//            var data = handler.DoMethodReturnString("Imp_LoadFrmTempleteFromLocalFile");
-            $.ajax({
-                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
+            var doMethod = "Imp_LoadFrmTempleteFromLocalFile";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp";
+            $.ajax({ 
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 type: 'POST',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据

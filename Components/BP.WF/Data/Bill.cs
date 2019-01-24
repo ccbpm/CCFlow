@@ -6,7 +6,7 @@ using BP.Port;
 using BP.Web;
 using BP.Sys;
 
-namespace BP.WF.Template
+namespace BP.WF
 {
 	/// <summary>
 	/// 单据属性

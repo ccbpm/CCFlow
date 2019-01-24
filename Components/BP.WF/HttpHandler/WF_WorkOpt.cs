@@ -51,13 +51,9 @@ namespace BP.WF.HttpHandler
             BillTemplates templetes = new BillTemplates();
             string billNo = this.GetRequestVal("FK_Bill");
             if (billNo == null)
-            {
                 templetes.Retrieve(BillTemplateAttr.NodeID, this.FK_Node);
-            }
             else
-            {
                 templetes.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.No, billNo);
-            }
 
             if (templetes.Count == 0)
                 return "err@当前节点上没有绑定单据模板。";
@@ -65,22 +61,39 @@ namespace BP.WF.HttpHandler
             if (templetes.Count == 1)
             {
                 BillTemplate templete = templetes[0] as BillTemplate;
-                return PrintDoc_Done(templete.No);
+                return PrintDoc_DoneIt(templete.No);
             }
             return templetes.ToJson();
+        }
+        /// <summary>
+        /// 执行打印
+        /// </summary>
+        /// <returns></returns>
+        public string PrintDoc_Done()
+        {
+            string billTemplateNo = this.GetRequestVal("FK_Bill");
+            return PrintDoc_DoneIt(billTemplateNo);
         }
         /// <summary>
         /// 打印pdf.
         /// </summary>
         /// <param name="func"></param>
         /// <returns></returns>
-        public string PrintDoc_Done(string billTemplateNo = null)
+        public string PrintDoc_DoneIt(string billTemplateNo = null)
         {
-
             if (billTemplateNo == null)
                 billTemplateNo = this.GetRequestVal("FK_Bill");
 
             BillTemplate func = new BillTemplate(billTemplateNo);
+
+            //如果不是 BillTemplateExcel 打印
+            if (func.TemplateFileModel == TemplateFileModel.VSTOForExcel)
+                return "url@excelform://-fromccflow,App=BillTemplateExcel,WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID + ",WSUrl=http://localhost:2207/WF/CCForm/CCFormAPI.asmx";
+
+            //如果不是 BillTemplateWord 打印
+            if (func.TemplateFileModel == TemplateFileModel.VSTOForWord)
+                return "url@excelform://-fromccflow,App=BillTemplateWord,WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID + ",WSUrl=http://localhost:2207/WF/CCForm/CCFormAPI.asmx";
+             
 
             string billInfo = "";
             Node nd = new Node(this.FK_Node);

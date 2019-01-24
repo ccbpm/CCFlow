@@ -18,7 +18,7 @@ namespace BP.WF.Template
         /// <summary>
         /// Word模版格式
         /// </summary>
-        VSTOForWrod,
+        VSTOForWord,
         /// <summary>
         /// Excel模版格式
         /// </summary>

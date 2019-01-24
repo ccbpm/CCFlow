@@ -78,30 +78,33 @@ namespace BP.WF.HttpHandler
 
 
         #region  单据模版维护
+        /// <summary>
+        /// @李国文.
+        /// </summary>
+        /// <returns></returns>
         public string Bill_Save()
         {
             BillTemplate bt = new BillTemplate();
+            if (HttpContext.Current.Request.Files.Count == 0)
+                return "err@请上传模版.";
 
             //上传附件
             string filepath = "";
-            if (HttpContext.Current.Request.Files.Count > 0)
-            {
-                HttpPostedFile file = HttpContext.Current.Request.Files[0];
-                string FileName = Path.GetFileName(file.FileName);
+            HttpPostedFile file = HttpContext.Current.Request.Files[0];
+            string fileName = file.FileName;
+            fileName = fileName.ToLower();
 
-                filepath = HttpContext.Current.Server.MapPath("~\\DataUser\\CyclostyleFile\\" + FileName);
-                file.SaveAs(filepath);
-            }
+            filepath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + fileName;
+            file.SaveAs(filepath);
 
             bt.NodeID = this.FK_Node;
             bt.No = this.GetRequestVal("TB_No");
-            if (DataType.IsNullOrEmpty(bt.No))
-            {
-                bt.No = DA.DBAccess.GenerOID().ToString();
-            }
-            bt.Name = this.GetRequestVal("TB_Name");
 
-            bt.TempFilePath = filepath;
+            if (DataType.IsNullOrEmpty(bt.No))
+                bt.No = DA.DBAccess.GenerOID("Template").ToString();
+
+            bt.Name = this.GetRequestVal("TB_Name");
+            bt.TempFilePath = fileName; //文件.
 
             //打印的文件类型.
             bt.HisBillFileType = (BillFileType)this.GetRequestValInt("DDL_BillFileType");
@@ -112,8 +115,16 @@ namespace BP.WF.HttpHandler
             //二维码模式.
             bt.QRModel = (QRModel)this.GetRequestValInt("DDL_BillOpenModel");
 
-            //模版类型.rtf / VSTOForWord / VSTOForExcel  
-            bt.TemplateFileModel = (TemplateFileModel)this.GetRequestValInt("DDL_TemplateFileModel");
+            //模版类型.rtf / VSTOForWord / VSTOForExcel .
+            if (fileName.Contains(".doc"))
+                bt.TemplateFileModel = TemplateFileModel.VSTOForWord;
+
+            if (fileName.Contains(".xls"))
+                bt.TemplateFileModel = TemplateFileModel.VSTOForExcel;
+
+            if (fileName.Contains(".rtf"))
+                bt.TemplateFileModel = TemplateFileModel.RTF;
+           
 
             bt.Save();
 
@@ -225,7 +236,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
-        
+
         public string PushMsgEntity_Init()
         {
             DataSet ds = new DataSet();
@@ -1669,6 +1680,6 @@ namespace BP.WF.HttpHandler
             return msg;
         }
         #endregion
- 
+
     }
 }

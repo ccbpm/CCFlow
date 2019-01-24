@@ -40,7 +40,6 @@ namespace BP.WF.HttpHandler
         /// 签名保存
         /// </summary>
         /// <returns></returns>
-
         public string Siganture_Save()
         {
             HttpPostedFile f = context.Request.Files[0];

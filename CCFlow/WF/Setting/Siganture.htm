@@ -18,11 +18,13 @@
 
         //页面启动函数.
         $(function () {
-
+            var doMethod = "Siganture_Init";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
             //初始化
             $.ajax({
 
-                url: Handler + "?DoType=Siganture_Init",
+                url: url,
                 dataType: "json",
                 success: function (data) {
                     var img = document.getElementById("sigimg");
@@ -50,7 +52,9 @@
                 alert("上传的文件必须是以图片格式:" + fileExt + "  类型, 现在类型是:" + ext);
                 return;
             }
-            var url = Handler + "?DoType=Siganture_Save";
+            var doMethod = "Siganture_Save";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName;
 
             //提交数据
             $("#cc").form("submit", {

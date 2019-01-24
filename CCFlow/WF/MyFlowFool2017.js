@@ -19,7 +19,7 @@ function GenerFoolFrm(wn) {
     var Sys_GroupFields = flowData.Sys_GroupField;
 
     html += "<tr>";
-    html += "<td colspan=4 ><div style='float:right;padding:10px;bordder:none;width:100%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     //  html += "<td colspan=2 ></td>";
     html += "</tr>";
 

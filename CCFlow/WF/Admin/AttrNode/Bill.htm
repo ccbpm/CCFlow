@@ -118,6 +118,26 @@
             document.getElementById("TB_No").value = "";
             document.getElementById("TB_Name").value = "";
         }
+        //选择文件名自动填充模板名称和模板文件格式
+        function show() {
+        //上传文件名自动显示到模板名称中
+            var path = document.getElementById("bill").value;
+            var pos1 = path.lastIndexOf("\\");
+            var pos2 = path.lastIndexOf(".");
+            var TB_Name = path.substring(pos1 + 1, pos2);
+            document.getElementById("TB_Name").value = TB_Name;
+        //模板文件格式显示对应格式
+            var hz = path.substr(pos2 + 1, 4).toLowerCase();
+            if (hz == "rtf") {
+                $("#DDL_TemplateFileModel").val(0);
+            } else if (hz == "doc" || hz == "docx") {
+                $("#DDL_TemplateFileModel").val(1);
+            } else if (hz == "xlsx" || hz == "xlsx") {
+                $("#DDL_TemplateFileModel").val(2);
+            } else {
+                 alert("格式不正确！");
+            }
+        }
     </script>
 </head>
 <body>
@@ -128,10 +148,10 @@
                 单据模版</caption>
             <tr>
               <td>模版文件: </td>
-                <td> <input id="bill" type="file" name="bill" style="width: 60%;" /></td>
+                <td> <input id="bill" type="file" name="bill" style="width: 60%;" onchange="show()"/></td>
                 <td style="width: 15%;">模版名称 </td>
                 <td>
-                    <input type="text" id="TB_Name" name="TB_Name" style="width: 80%;" />
+                    <input type="text" id="TB_Name" name="TB_Name" style="width: 80%; " disabled="disabled" />
                 </td>
             </tr>
             <tr>

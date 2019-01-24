@@ -334,20 +334,39 @@
             formData.append("file", $("#localXmlFile")[0].files[0]);
             formData.append("name", name);
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
-            handler.AddUrlData();
-            handler.AddPara("FK_MapData", frmID);
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            handler.AddPara("FK_Flow", flowNo);
-            var data = handler.DoMethodReturnString("Imp_LoadFrmTempleteFromLocalFile");
+//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+//            handler.AddUrlData();
+//            handler.AddPara("FK_MapData", frmID);
+//            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+//            handler.AddPara("FK_Flow", flowNo);
+//            var data = handler.DoMethodReturnString("Imp_LoadFrmTempleteFromLocalFile");
+            $.ajax({
+                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                dataType: 'html',
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
 
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
+                },
+                success: function (data) {
 
-            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-            window.parent.location.href = window.parent.location.href;
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.parent.location.href = window.parent.location.href;
+                },
+                error: function (data) {
+                    alert("系统错误:" + data);
+                    return;
+                }
+            });
 
         }
 

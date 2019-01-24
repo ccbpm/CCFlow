@@ -42,6 +42,37 @@ namespace BP.Sys
             else
                 en.Update();
         }
+
+        /// <summary>
+        /// 保存元素
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="eleType">元素类型</param>
+        /// <param name="ctrlID">控件ID</param>
+        /// <param name="x">位置</param>
+        /// <param name="y">位置</param>
+        /// <param name="h">高度</param>
+        /// <param name="w">宽度</param>
+        public static void SaveMapFrame(string fk_mapdata, string eleType, string ctrlID, float x, float y, float h, float w)
+        {
+            MapFrame en = new MapFrame();
+            en.MyPK = ctrlID;
+            int i = en.RetrieveFromDBSources();
+            en.EleType = eleType;
+            en.FK_MapData = fk_mapdata;
+            en.FrmID = ctrlID;
+
+            en.X = x;
+            en.Y = y;
+            en.W = w;
+            en.H = h;
+
+            if (i == 0)
+                en.Insert();
+            else
+                en.Update();
+        }
+
         /// <summary>
         /// 保存一个rb
         /// </summary>

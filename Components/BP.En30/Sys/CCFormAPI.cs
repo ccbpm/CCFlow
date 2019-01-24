@@ -83,7 +83,7 @@ namespace BP.Sys
                     mapFrame.H = 600;
                     mapFrame.Insert();
                     break;
-                    //@袁丽娜
+                  
                 case "HandSiganture"://签字版
                     //检查是否可以创建字段? 
                     MapData md = new MapData(fk_mapdata);
@@ -768,7 +768,18 @@ namespace BP.Sys
             foreach (FrmEle item in feles)
                 eleIDs += item.EleID + "@";
             eleIDs += "@";
+
+                //框架
+		    string frameIDs = "@";
+		    MapFrames frames = new MapFrames();
+		    frames.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
+		    foreach (MapFrame item in frames)
+		    {
+			    frameIDs += item.MyPK + "@";
+		    }
+		    frameIDs += "@";
             #endregion 求PKs.
+
 
             // 保存线.
             JsonData form_Lines = formData["m"]["connectors"];
@@ -791,6 +802,7 @@ namespace BP.Sys
                 delSqls += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "@DELETE FROM Sys_FrmEle WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "@DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_MapFrame WHERE FK_MapData='" + fk_mapdata + "'";
 
                 BP.DA.DBAccess.RunSQLs(delSqls);
                 return;
@@ -905,7 +917,6 @@ namespace BP.Sys
 
                 //存储到FrmEle 类的控件，都可以使用该方法保存.
                 if (shape == "Fieldset"
-                    || shape == FrmEle.iFrame
                     || shape == FrmEle.Fieldset
                     )
                 {
@@ -914,6 +925,15 @@ namespace BP.Sys
                     eleIDs = eleIDs.Replace(ctrlID + "@", "@");
                     continue;
                 }
+
+                if (shape == "iFrame")
+                {
+                    //记录已经存在的ID， 需要当时保存.
+                    BP.Sys.CCFormParse.SaveMapFrame(fk_mapdata, shape, ctrlID, x, y, height, width);
+                    frameIDs = frameIDs.Replace(ctrlID + "@", "@");
+                    continue;
+                }
+
 
                 if (shape == "RadioButton")
                 {

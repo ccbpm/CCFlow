@@ -33,10 +33,13 @@
 
         //执行导入.
         function Imp() {
-
+            
             //获取URL参数
             var queryString = document.location.search.substr(1);
-            var URL = Handler + "?DoType=DtlImpByExcel_Imp";
+
+            var doMethod = "DtlImpByExcel_Imp";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
+            var URL = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
             if (queryString.length > 0)
                 URL = URL + "&" + queryString;
 

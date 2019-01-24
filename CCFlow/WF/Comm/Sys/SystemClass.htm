@@ -39,8 +39,6 @@
             html += "<th>名称</th>";
             html += "<th>表</th>";
             html += "<th>操作</th>";
-            //            html += "<th>操作2</th>";
-            //            html += "<th>操作3</th>";
             html += "</tr>";
             var typeJson = {
                 "Port": "组织结构表:Port_*",
@@ -61,8 +59,8 @@
                 }
 
                 var isTr = false;
-                
-                if (key != "Sys") {
+
+                if ((key != "Sys") && (key != "qt")) {
                     for (var i = 0; i < data.length; i++) {
                         var en = data[i];
                         if (en.PTable.indexOf(key) == 0) {

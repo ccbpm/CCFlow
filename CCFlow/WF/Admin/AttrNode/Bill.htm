@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8" />
-    <title>驰骋工作流</title>
+    <title>单据打印样本</title>
     <!-- 于庆海 -->
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -26,7 +26,7 @@
 
             //设定枚举值下拉框.
             GenerBindEnumKey("DDL_BillFileType", "BillFileType", 0);
-            GenerBindEnumKey("DDL_BillOpenModel", "BillOpenModel", 0);
+          //  GenerBindEnumKey("DDL_BillOpenModel", "BillOpenModel", 0);
 
             var nodeID = GetQueryString("FK_Node");
             var ens = new Entities("BP.WF.Template.BillTemplates");
@@ -92,7 +92,6 @@
             }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddUrlData();
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             handler.AddFormData();
             var data = handler.DoMethodReturnString("Bill_Save");
             if (data.indexOf('err@') >= 0) {
@@ -101,14 +100,12 @@
             }
             window.location.href = window.location.href;
             return;
-
         }
 
         function Btn_New_Click() {
 
             document.getElementById("TB_No").value = "";
             document.getElementById("TB_Name").value = "";
-
         }
     </script>
 </head>
@@ -134,7 +131,7 @@
             </tr>
             <tr>
                 <td>
-                    生成模版类型
+                    生成的文件类型
                 </td>
                 <td>
                     <select id="DDL_BillFileType" name="DDL_BillFileType" style="width: 60%;" />
@@ -143,7 +140,12 @@
                     打开方式
                 </td>
                 <td>
-                    <select id="DDL_BillOpenModel" name="DDL_BillOpenModel" />
+
+                 <select id="DDL_BillOpenModel" name="DDL_BillOpenModel" style="width: 60%;">
+                        <option value="0">下载到本地 </option>
+                        <option value="1">在线打开</option>
+                    </select>
+                     
                 </td>
             </tr>
             <tr>
@@ -157,13 +159,23 @@
                     </select>
                 </td>
                 <td>
-                    模版文件:<br>
-                    符合规范的rtf格式文件.
+                    模版文件:                    
                 </td>
-                <td>
-                    <input id="bill" type="file" name="bill" style="width: 60%;" />
-                </td>
+                <td> <input id="bill" type="file" name="bill" style="width: 60%;" /></td>
             </tr>
+
+            <tr>
+             <td>模版文件格式</td>
+             <td> 
+                <select id="DDL_TemplateFileModel" name="DDL_TemplateFileModel" style="width: 60%;">
+                        <option value="0">rtf格式的模版 </option>
+                        <option value="1">vsto格式word模版</option>
+                        <option value="2">vsto格式Excel模版</option>
+                    </select>
+             </td>
+             <td colspan="2">  </td>
+            </tr>
+
             <tr>
                 <td>
                 </td>

@@ -60,9 +60,12 @@
             
             //获取发送请求时的参数
             var queryString = document.location.search.substr(1);
-            
-           	//URL 路径
-           	var URL = Handler + "?DoType=javaScriptImp_Done";
+
+            //URL 路径
+            var doMethod = "javaScriptImp_Done";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Comm_Sys";
+            var URL = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
+//           	var URL = Handler + "?DoType=javaScriptImp_Done";
            	
            	if(queryString!=null&&queryString.length>0)		
            		URL += URL+"&"+queryString;

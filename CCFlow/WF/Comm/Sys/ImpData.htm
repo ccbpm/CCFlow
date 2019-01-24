@@ -55,14 +55,17 @@
             $("input[name='RB_ImpType']").attr("disabled", "disabled");
 
             //URL 路径
-            var URL = Handler + "?DoType=javaScriptImp_Done";
+
+            var doMethod = "ImpData_Done";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Comm_Sys";
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&ImpWay=" + impWay + "&EnsName=" + ensName;
 
 
             //提交数据
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',
-                url: Handler + "?DoType=ImpData_Done&ImpWay=" + impWay + "&EnsName=" + ensName,
+                url: url,
                 onSubmit: function (param) {
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
                 },
@@ -131,7 +134,7 @@
  </li>
 </ul>
 <div style=" text-align:center; padding:5px;">
-<input type=button id="Button1"  value="执行导入" onclick="Imp_Done();" />
+<input type="button" id="Button1"  value="执行导入" onclick="Imp_Done();" />
  </div>
 </fieldset>
 <fieldset>

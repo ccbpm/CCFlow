@@ -152,13 +152,14 @@
                     for (var v in data[i]) {
 
                         if (v == "NO" || v == "No" || v == "Name" || v == "NAME") { //此处No列不显示 why? 
-                            // continue;   //此处被zhoupeng注释掉.
+                            continue;   //此处被zhoupeng注释掉. 如果name 有 #特殊字符就不行了，目前通过底部传值了.
                         }
 
                         //判断参数值里边是否包含特殊字符，包含则替换
                         var val = data[i][v];
                         if (val == null || val ==undefined)
                             continue;
+
                         val = val + "";
                         if (val.indexOf("#") != -1) {
                             val = val.replace(/\#/g, "%23");

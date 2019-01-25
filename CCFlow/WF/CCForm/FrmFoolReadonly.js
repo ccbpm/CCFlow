@@ -916,11 +916,15 @@ function figure_Template_Dtl(frmDtl) {
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.EditModel == "0") {
-        if (pageData.IsReadonly) {
 
-            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + Math.random();
+        var dtlUrl = "Dtl2017";
+        if (frmDtl.DtlVer == 1)
+            dtlUrl = "Dtl2019";
+
+        if (pageData.IsReadonly) {
+            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + Math.random();
         } else {
-            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + Math.random();
+            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + Math.random();
         }
     }
     else if (frmDtl.EditModel == "1") {

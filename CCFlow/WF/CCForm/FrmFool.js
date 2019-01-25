@@ -894,8 +894,12 @@ function Ele_Dtl(frmDtl) {
     else
         isReadonly = "1";
 
+    var dtlUrl = "Dtl2017";
+    if (frmDtl.DtlVer == 1)
+        dtlUrl = "Dtl2019";
+
     if (frmDtl.ListShowModel == "0") {
-        src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&FK_MapData=" + frmDtl.FK_MapData + "&" + urlParam + "&Version=1";
+        src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&FK_MapData=" + frmDtl.FK_MapData + "&" + urlParam + "&Version=1";
     }
     else if (frmDtl.ListShowModel == "1") {
         src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&FK_MapData=" + frmDtl.FK_MapData + "&" + urlParam + "&Version=1";

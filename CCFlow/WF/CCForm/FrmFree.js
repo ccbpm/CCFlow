@@ -369,10 +369,15 @@ function figure_Template_Dtl(frmDtl, ext) {
     //alert(pageData.IsReadonly);
 
     if (frmDtl.ListShowModel == "0") {
+
+        var dtlUrl = "Dtl2017";
+        if (frmDtl.DtlVer == 1)
+            dtlUrl = "Dtl2019";
+
         if (pageData.IsReadonly=="1") {
-            src = "./Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID+"&FK_MapData="+frmDtl.FK_MapData + "&IsReadonly=1" + strs+"&m="+Math.random();
+            src = "./" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs + "&m=" + Math.random();
         } else {
-            src = "./Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs+"&m="+ Math.random();
+            src = "./" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs + "&m=" + Math.random();
         }
     } else if (frmDtl.ListShowModel == "1") {
         if (pageData.IsReadonly =="1") {

@@ -362,7 +362,7 @@ namespace BP.WF
         private string DoUnSendIt()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            if (gwf.WFState != WFState.Complete)
+            if (gwf.WFState == WFState.Complete)
                 return "err@该流程已经完成，您不能撤销。";
 
 
@@ -496,7 +496,7 @@ namespace BP.WF
                 }
 
                 if (cancelToNodeID == 0)
-                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送,没有找到可以撤销的节点.");
+                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送,当前节点不可以执行撤销.");
             }
 
             if (nd.HisCancelRole == CancelRole.OnlyNextStep)

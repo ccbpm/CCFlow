@@ -4531,9 +4531,6 @@ namespace BP.WF
             if (workID == 0)
                 return true;
 
-            if (userNo == "admin")
-                return true;
-
             GenerWorkFlow mygwf = new GenerWorkFlow(workID);
             {
                 if (mygwf.TodoEmps.IndexOf(userNo + ",") >= 0)

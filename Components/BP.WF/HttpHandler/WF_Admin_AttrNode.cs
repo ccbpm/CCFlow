@@ -124,9 +124,10 @@ namespace BP.WF.HttpHandler
 
             if (fileName.Contains(".rtf"))
                 bt.TemplateFileModel = TemplateFileModel.RTF;
-           
 
             bt.Save();
+
+            bt.SaveFileToDB("DBFile", filepath); //把文件保存到数据库里. 
 
             return "保存成功.";
         }

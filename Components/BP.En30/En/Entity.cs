@@ -2310,16 +2310,17 @@ namespace BP.En
 				throw new Exception("@保存文件期间出现错误，有可能该字段没有被自动创建，现在已经执行创建修复数据表，请重新执行一次." + ex.Message);
 			}
 		}
-		/// <summary>
-		/// 保存文件到数据库
-		/// </summary>
-		/// <param name="saveToField">要保存的字段</param>
-		/// <param name="filefullName">文件路径</param>
-		public void SaveFileToDB(string saveToField, string filefullName)
+	
+        /// <summary>
+        /// 保存文件到数据库
+        /// </summary>
+        /// <param name="saveToField">要保存的字段</param>
+        /// <param name="fileFullName">文件路径</param>
+		public void SaveFileToDB(string saveToField, string fileFullName)
 		{
 			try
 			{
-				BP.DA.DBAccess.SaveFileToDB(filefullName, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
+                BP.DA.DBAccess.SaveFileToDB(fileFullName, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
 			}
 			catch (Exception ex)
 			{

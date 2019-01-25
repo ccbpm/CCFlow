@@ -362,9 +362,16 @@ namespace BP.WF
         private string DoUnSendIt()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.WFState != WFState.Complete)
+                return "err@该流程已经完成，您不能撤销。";
+
 
             // 如果停留的节点是分合流。
             Node nd = new Node(gwf.FK_Node);
+
+            /*该节点不允许退回.*/
+            if (nd.HisCancelRole == CancelRole.None)
+                throw new Exception("当前节点，不允许撤销。");
 
             //如果启用了对方已读，就不能撤销.
             if (nd.CancelDisWhenRead == true)
@@ -375,7 +382,7 @@ namespace BP.WF
             }
 
 
-            #region 如果是越轨流程状态 @fanleiwei.s
+            #region 如果是越轨流程状态 @fanleiwei.
             string sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE WorkID="+this.WorkID+" AND IsPass=80";
             if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
             {
@@ -415,6 +422,7 @@ namespace BP.WF
 
                 if (gwl.IsHuiQian == true)
                 {
+
                 }
 
                 //如果是会签人，就让其显示待办.
@@ -460,19 +468,13 @@ namespace BP.WF
                  */
                 return DoUnSendInFeiLiuHeiliu(gwf);
             }
-         
-            if (nd.HisCancelRole == CancelRole.None)
-            {
-                /*该节点不允许退回.*/
-                throw new Exception("当前节点，不允许撤销。");
-            }
-
-
+          
             switch (nd.HisNodeWorkType)
             {
                 case NodeWorkType.WorkFHL:
                     //throw new Exception("@分合流点不允许撤消。");
                     return this.DoUnSendFeiLiu(gwf);
+
                 case NodeWorkType.WorkFL:
                 case NodeWorkType.StartWorkFL:
                     //return this.DoUnSendFeiLiu(gwf);
@@ -502,7 +504,6 @@ namespace BP.WF
 
             #region 求的撤销的节点.
             int cancelToNodeID = 0;
-
             if (nd.HisCancelRole == CancelRole.SpecNodes)
             {
                 /*指定的节点可以撤销,首先判断当前人员是否有权限.*/
@@ -515,7 +516,7 @@ namespace BP.WF
                 sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + wn.HisWork.OID + " ORDER BY RDT DESC ";
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
-                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送.");
+                    throw new Exception("err@撤销流程错误,您没有权限执行撤销发送.");
 
                 // 找到将要撤销到的NodeID.
                 foreach (DataRow dr in dt.Rows)
@@ -546,12 +547,12 @@ namespace BP.WF
                 int num = wl.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No,
                     GenerWorkerListAttr.FK_Node, wnPri.HisNode.NodeID);
                 if (num == 0)
-                    throw new Exception("@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
+                    throw new Exception("err@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
                 cancelToNodeID = wnPri.HisNode.NodeID;
             }
 
             if (cancelToNodeID == 0)
-                throw new Exception("@没有求出要撤销到的节点.");
+                throw new Exception("err@没有求出要撤销到的节点.");
             #endregion 求的撤销的节点.
 
             /********** 开始执行撤销. **********************/
@@ -565,10 +566,10 @@ namespace BP.WF
             {
                 /* 检查一下是否还有没有完成的子线程，如果有就抛出不允许撤销的异常。 */
                   sql = "SELECT COUNT(*) as NUM FROM WF_GenerWorkerList WHERE FID="+this.WorkID+" AND IsPass=0";
-                  int num = BP.DA.DBAccess.RunSQLReturnValInt(sql);
-
-                  if (num != 0)
+                  if (BP.DA.DBAccess.RunSQLReturnValInt(sql) != 0)
                       return "err@不允许撤销，因为有未完成的子线程.";
+
+                //  return this.DoUnSendHeiLiu_Main(gwf);
             }
             #endregion 如果撤销到的节点是普通的节点，并且当前的节点是分流节点，并且分流节点已经发送下去了.
 

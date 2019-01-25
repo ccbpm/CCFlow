@@ -7494,15 +7494,14 @@ namespace BP.WF
                     }
                     else
                     {
-                        gwf.WFState = wfState;
-                        gwf.DirectUpdate();
+                        if (gwf.WFState != WFState.ReturnSta)
+                        {
+                            gwf.WFState = wfState;
+                            gwf.DirectUpdate();
+                        }
                     }
-                    
                 }
                 #endregion 为开始工作创建待办
-
-
-
 
                 return "保存成功.";
             }

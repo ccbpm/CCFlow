@@ -22,6 +22,47 @@ namespace CCFlow.WF.CCForm
     // [System.Web.Script.Services.ScriptService]
     public class CCFormAPI : System.Web.Services.WebService
     {
+        #region 与单据相关的接口代码.
+        /// <summary>
+        /// 获得单据模版信息
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <param name="sid"></param>
+        /// <param name="workID"></param>
+        /// <param name="billTemplateNo"></param>
+        /// <param name="ds"></param>
+        /// <param name="bytes"></param>
+        /// <param name="?"></param>
+        [WebMethod]
+        public void GenerBillTemplate(string userNo, string sid,  Int64 workID, string billTemplateNo,
+            ref DataSet ds, ref byte[] bytes)
+        {
+
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                userNo = BP.Web.WebUser.No;
+
+            BP.WF.Dev2Interface.Port_Login(userNo);
+
+            BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workID);
+      
+
+            bool b = BP.WF.Dev2Interface.Flow_IsCanViewTruck(gwf.FK_Flow, gwf.WorkID, gwf.FID);
+            if (b == false)
+                throw new Exception("err@无权查看该流程.");
+
+
+            string frmID = "ND" + int.Parse(gwf.FK_Flow) + "Rpt";
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt("ND" + int.Parse(gwf.FK_Flow) + "Rpt", workID);
+            DataTable dt = rpt.ToDataTableField();
+            dt.TableName = "Main";
+            ds.Tables.Add(dt);
+
+            //生成模版的文件流.
+            BillTemplate template = new BillTemplate(billTemplateNo);
+            template.GenerTemplateFile(ref bytes);
+        }
+        #endregion
+
         #region 与公文相关的接口.
         /// <summary>
         /// 获得Word文件 - 未开发完成.

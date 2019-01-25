@@ -12,7 +12,7 @@
 
         $(function () {
 
-            $("#Msg").html("正在加载请稍候....");
+            $("#Msg").html("<h3>正在加载请稍候....</h3>");
 
             var fk_bill = GetQueryString("FK_Bill");
             var nodeID = GetQueryString("FK_Node");
@@ -43,36 +43,60 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
-                html += "<li><a href='javascript:void(0);' onclick=WinOpen('" + "?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "')>" + en.Name + "</li>";
-               
+                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeID + "," + workID + ") >" + en.Name + "</li>";
             }
+
             html += "</ul>";
 
             $("#Msg").html(html);
 
         });
 
+        //打印.
+        function PrintIt(billNo, flowNo, nodeID, workID) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Bill", billNo);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("WorkID", workID);
+
+            var data = handler.DoMethodReturnString("PrintDoc_Done");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //如果是一个url.
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+
+                WinOpen(url);
+                //window.location.href = url;
+                //$("#Msg").html("");
+                return;
+            }
+
+            alert(data);
+        }
+
 
         //取消退回
         function Close() {
-        
+
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("取消");
             }
         }
       
     </script>
- 
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
- 
-
- <div id="Msg"></div>
-
- <center>
- <input type="button" value='关闭'onclick="window.close();"   /> 
- </center>
-
+    <div id="Msg">
+    </div>
+    <center>
+        <input type="button" value='关闭' onclick="window.close();" />
+    </center>
 </body>
 </html>

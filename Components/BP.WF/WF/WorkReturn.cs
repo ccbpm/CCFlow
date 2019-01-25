@@ -361,7 +361,7 @@ namespace BP.WF
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = gwl.FK_Emp; //退回给。
             rw.BeiZhu = Msg;
-             
+
             // 去掉了 else .
             rw.IsBackTracking = this.IsBackTrack;
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
@@ -388,9 +388,9 @@ namespace BP.WF
         /// <returns>返回退回信息</returns>
         public string DoIt()
         {
-            
+
             // 增加要退回到父流程上去. by zhoupeng.
-            if (this.ReturnToNode.FK_Flow.Equals(this.HisNode.FK_Flow)==false)
+            if (this.ReturnToNode.FK_Flow.Equals(this.HisNode.FK_Flow) == false)
             {
                 /*子流程要退回到父流程的情况.*/
                 return ReturnToParentFlow();
@@ -790,35 +790,36 @@ namespace BP.WF
             //    throw new Exception("@没有处理的模式。");
 
             //求出来退回到的 时间点。
-            GenerWorkerList toWL=new GenerWorkerList();
-            toWL.Retrieve(GenerWorkerListAttr.WorkID,this.WorkID,GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+            GenerWorkerList toWL = new GenerWorkerList();
+            toWL.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
+                GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
 
-            //删除子线程节点数据。
-            GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
-
-            foreach (GenerWorkerList item in gwls)
+            //如果是仅仅退回，就删除子线程数据。
+            if (this.IsBackTrack == false)
             {
-                if (item.RDT.CompareTo(toWL.RDT) == -1)
-                    continue;
+                //删除子线程节点数据。
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                gwls.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
 
-                /* 删除 子线程数据 */
-                DBAccess.RunSQL("DELETE FROM ND" + item.FK_Node + " WHERE OID=" + item.WorkID);
-                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID +" AND FK_Node="+item.FK_Node);
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.RDT.CompareTo(toWL.RDT) == -1)
+                        continue;
 
+                    /* 删除 子线程数据 */
+                    if (DBAccess.IsExitsObject("ND" + item.FK_Node) == true)
+                        DBAccess.RunSQL("DELETE FROM ND" + item.FK_Node + " WHERE OID=" + item.WorkID);
+
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + item.FK_Node);
+                }
+
+                //删除流程控制数据。
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FID=" + this.WorkID);
             }
-
-            //删除流程控制数据。
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FID=" + this.WorkID);
-           // DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID);
 
             return ExeReturn1_1();
         }
-        /// <summary>
-        /// 是否原路返回?
-        /// </summary>
-        public bool IsBackTracking = false;
         /// <summary>
         /// 普通节点到普通节点的退回
         /// </summary>
@@ -886,7 +887,7 @@ namespace BP.WF
             gwf.NodeName = this.ReturnToNode.Name;
             gwf.SDTOfNode = sdt;
 
-            gwf.Sender = WebUser.No+","+WebUser.Name;
+            gwf.Sender = WebUser.No + "," + WebUser.Name;
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.HuiQianZhuChiRen = "";
             gwf.HuiQianZhuChiRenName = "";

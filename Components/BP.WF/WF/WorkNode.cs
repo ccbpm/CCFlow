@@ -865,7 +865,25 @@ namespace BP.WF
                     at = ActionType.ForwardHL;
                     break;
                 case NodeWorkType.SubThreadWork:
-                    at = ActionType.SubThreadForward;
+
+                    switch (this.HisNode.HisNodeWorkType)
+                    {
+                        case NodeWorkType.StartWorkFL:
+                        case NodeWorkType.WorkFL:
+                        case NodeWorkType.WorkFHL:
+                            at = ActionType.ForwardFL;
+                            break;
+                        case NodeWorkType.WorkHL:
+                            throw new Exception("err@流程设计错误，当前节点是合流节点，而到达的节点是子线程。");
+                            break;
+                        case NodeWorkType.Work:
+                            throw new Exception("err@流程设计错误，当前节点是普通节点，而到达的节点是子线程。");
+                            break;
+                        default:
+                            at = ActionType.Forward;
+                            break;
+                    }
+
                     break;
                 default:
                     break;
@@ -5968,6 +5986,14 @@ namespace BP.WF
                 }
             }
 
+            //如果当前节点是子线程，如果合流节点是退回状态，就要冻结子线程的发送动作。
+            if (this.HisNode.HisNodeWorkType == NodeWorkType.SubThreadWork)
+            {
+                GenerWorkFlow gwfMain = new GenerWorkFlow(this.HisGenerWorkFlow.FID);
+                if (gwfMain.WFState == WFState.ReturnSta)
+                    throw new Exception("err@发送错误:当前流程已经被退回，您不能执行发送操作。技术信息:当前工作节点是子线程状态，主线程是退回状态。");
+            }
+
             // 启动事务, 这里没有实现.
             DBAccess.DoTransactionBegin();
             try
@@ -6180,115 +6206,114 @@ namespace BP.WF
                     string billInfo = "";
                     foreach (BillTemplate func in reffunc)
                     {
-                        if (func.HisBillFileType != BillFileType.RuiLang)
+                        if (func.TemplateFileModel != TemplateFileModel.RTF)
+                            continue;
+
+                        string file = year + "_" + this.ExecerDeptNo + "_" + func.No + "_" + workid + ".doc";
+                        BP.Pub.RTFEngine rtf = new BP.Pub.RTFEngine();
+
+                        Works works;
+                        string[] paths;
+                        string path;
+                        try
                         {
-                            string file = year + "_" + this.ExecerDeptNo + "_" + func.No + "_" + workid + ".doc";
-                            BP.Pub.RTFEngine rtf = new BP.Pub.RTFEngine();
+                            #region 把数据放入 单据引擎。
+                            rtf.HisEns.Clear(); //主表数据。
+                            rtf.EnsDataDtls.Clear(); // 明细表数据.
 
-                            Works works;
-                            string[] paths;
-                            string path;
-                            try
+                            // 找到主表数据.
+                            rtf.HisGEEntity = new GEEntity(this.rptGe.ClassID);
+                            rtf.HisGEEntity.Row = rptGe.Row;
+
+                            // 把每个节点上的工作加入到报表引擎。
+                            rtf.AddEn(this.HisWork);
+                            rtf.ensStrs += ".ND" + this.HisNode.NodeID;
+
+                            //把当前work的Dtl 数据放进去了。
+                            System.Collections.Generic.List<Entities> al = this.HisWork.GetDtlsDatasOfList();
+
+                            foreach (Entities ens in al)
+                                rtf.AddDtlEns(ens);
+                            #endregion 把数据放入 单据引擎。
+
+                            #region 生成单据
+
+                            paths = file.Split('_');
+                            path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
+                            string billUrl = VirPath + "DataUser/Bill/" + path + file;
+                            if (func.HisBillFileType == BillFileType.PDF)
                             {
-                                #region 把数据放入 单据引擎。
-                                rtf.HisEns.Clear(); //主表数据。
-                                rtf.EnsDataDtls.Clear(); // 明细表数据.
+                                billUrl = billUrl.Replace(".doc", ".pdf");
+                                billInfo += "<img src='./Img/FileType/PDF.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
+                            }
+                            else
+                            {
+                                billInfo += "<img src='./Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
+                            }
 
-                                // 找到主表数据.
-                                rtf.HisGEEntity = new GEEntity(this.rptGe.ClassID);
-                                rtf.HisGEEntity.Row = rptGe.Row;
+                            path = BP.WF.Glo.FlowFileBill + year + "\\" + this.ExecerDeptNo + "\\" + func.No + "\\";
+                            // path = AppDomain.CurrentDomain.BaseDirectory + path;
+                            if (System.IO.Directory.Exists(path) == false)
+                                System.IO.Directory.CreateDirectory(path);
 
-                                // 把每个节点上的工作加入到报表引擎。
-                                rtf.AddEn(this.HisWork);
-                                rtf.ensStrs += ".ND" + this.HisNode.NodeID;
+                            rtf.MakeDoc(func.TempFilePath + ".rtf", path, file, false);
+                            #endregion
 
-                                //把当前work的Dtl 数据放进去了。
-                                System.Collections.Generic.List<Entities> al = this.HisWork.GetDtlsDatasOfList();
-
-                                foreach (Entities ens in al)
-                                    rtf.AddDtlEns(ens);
-                                #endregion 把数据放入 单据引擎。
-
-                                #region 生成单据
-
-                                paths = file.Split('_');
-                                path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
-                                string billUrl = VirPath + "DataUser/Bill/" + path + file;
-                                if (func.HisBillFileType == BillFileType.PDF)
-                                {
-                                    billUrl = billUrl.Replace(".doc", ".pdf");
-                                    billInfo += "<img src='./Img/FileType/PDF.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
-                                }
-                                else
-                                {
-                                    billInfo += "<img src='./Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
-                                }
-
-                                path = BP.WF.Glo.FlowFileBill + year + "\\" + this.ExecerDeptNo + "\\" + func.No + "\\";
-                                // path = AppDomain.CurrentDomain.BaseDirectory + path;
-                                if (System.IO.Directory.Exists(path) == false)
-                                    System.IO.Directory.CreateDirectory(path);
-
-                                rtf.MakeDoc(func.TempFilePath + ".rtf", path, file, false);
-                                #endregion
-
-                                #region 转化成pdf.
-                                if (func.HisBillFileType == BillFileType.PDF)
-                                {
-                                    string rtfPath = path + file;
-                                    string pdfPath = rtfPath.Replace(".doc", ".pdf");
-                                    try
-                                    {
-                                        Glo.Rtf2PDF(rtfPath, pdfPath);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        this.addMsg("RptError", "产生报表数据错误:" + ex.Message);
-                                    }
-                                }
-                                #endregion
-
-                                #region 保存单据
-                                Bill bill = new Bill();
-                                bill.MyPK = this.HisWork.FID + "_" + this.HisWork.OID + "_" + this.HisNode.NodeID + "_" + func.No;
-                                bill.FID = this.HisWork.FID;
-                                bill.WorkID = this.HisWork.OID;
-                                bill.FK_Node = this.HisNode.NodeID;
-                                bill.FK_Dept = this.ExecerDeptNo;
-                                bill.FK_Emp = this.Execer;
-                                bill.Url = billUrl;
-                                bill.RDT = DataType.CurrentDataTime;
-                                bill.FullPath = path + file;
-                                bill.FK_NY = DataType.CurrentYearMonth;
-                                bill.FK_Flow = this.HisNode.FK_Flow;
-                              //  bill.FK_BillType = func.FK_BillType;
-                                bill.FK_Flow = this.HisNode.FK_Flow;
-                                bill.Emps = this.rptGe.GetValStrByKey("Emps");
-                                bill.FK_Starter = this.rptGe.GetValStrByKey("Rec");
-                                bill.StartDT = this.rptGe.GetValStrByKey("RDT");
-                                bill.Title = this.rptGe.GetValStrByKey("Title");
-                                bill.FK_Dept = this.rptGe.GetValStrByKey("FK_Dept");
+                            #region 转化成pdf.
+                            if (func.HisBillFileType == BillFileType.PDF)
+                            {
+                                string rtfPath = path + file;
+                                string pdfPath = rtfPath.Replace(".doc", ".pdf");
                                 try
                                 {
-                                    bill.Save();
+                                    Glo.Rtf2PDF(rtfPath, pdfPath);
                                 }
-                                catch
+                                catch (Exception ex)
                                 {
-                                    bill.Update();
+                                    this.addMsg("RptError", "产生报表数据错误:" + ex.Message);
                                 }
-                                #endregion
                             }
-                            catch (Exception ex)
-                            {
-                                BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
-                                dir.Do();
-                                path = BP.WF.Glo.FlowFileBill + year + "\\" + this.ExecerDeptNo + "\\" + func.No + "\\";
-                                string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
-                                billInfo += "@<font color=red>" + msgErr + "</font>@<hr>@系统已经做了可能性的修复，请您在发送一次，如果问题仍然存在请联系管理员。";
-                                throw new Exception(msgErr + "@其它信息:" + ex.Message);
-                            }
-                        }
+                            #endregion
 
+                            #region 保存单据
+                            Bill bill = new Bill();
+                            bill.MyPK = this.HisWork.FID + "_" + this.HisWork.OID + "_" + this.HisNode.NodeID + "_" + func.No;
+                            bill.FID = this.HisWork.FID;
+                            bill.WorkID = this.HisWork.OID;
+                            bill.FK_Node = this.HisNode.NodeID;
+                            bill.FK_Dept = this.ExecerDeptNo;
+                            bill.FK_Emp = this.Execer;
+                            bill.Url = billUrl;
+                            bill.RDT = DataType.CurrentDataTime;
+                            bill.FullPath = path + file;
+                            bill.FK_NY = DataType.CurrentYearMonth;
+                            bill.FK_Flow = this.HisNode.FK_Flow;
+                            //  bill.FK_BillType = func.FK_BillType;
+                            bill.FK_Flow = this.HisNode.FK_Flow;
+                            bill.Emps = this.rptGe.GetValStrByKey("Emps");
+                            bill.FK_Starter = this.rptGe.GetValStrByKey("Rec");
+                            bill.StartDT = this.rptGe.GetValStrByKey("RDT");
+                            bill.Title = this.rptGe.GetValStrByKey("Title");
+                            bill.FK_Dept = this.rptGe.GetValStrByKey("FK_Dept");
+                            try
+                            {
+                                bill.Save();
+                            }
+                            catch
+                            {
+                                bill.Update();
+                            }
+                            #endregion
+                        }
+                        catch (Exception ex)
+                        {
+                            BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
+                            dir.Do();
+                            path = BP.WF.Glo.FlowFileBill + year + "\\" + this.ExecerDeptNo + "\\" + func.No + "\\";
+                            string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
+                            billInfo += "@<font color=red>" + msgErr + "</font>@<hr>@系统已经做了可能性的修复，请您在发送一次，如果问题仍然存在请联系管理员。";
+                            throw new Exception(msgErr + "@其它信息:" + ex.Message);
+                        }
                     } // end 生成循环单据。
 
                     if (billInfo != "")

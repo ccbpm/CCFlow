@@ -88,11 +88,11 @@ namespace BP.WF.HttpHandler
 
             //如果不是 BillTemplateExcel 打印
             if (func.TemplateFileModel == TemplateFileModel.VSTOForExcel)
-                return "url@excelform://-fromccflow,App=BillTemplateExcel,WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID + ",WSUrl=http://localhost:2207/WF/CCForm/CCFormAPI.asmx";
+                return "url@excelform://-fromccflow,App=BillTemplateExcel,TemplateNo="+func.No+",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID + ",WSUrl=http://localhost:2207/WF/CCForm/CCFormAPI.asmx";
 
             //如果不是 BillTemplateWord 打印
             if (func.TemplateFileModel == TemplateFileModel.VSTOForWord)
-                return "url@excelform://-fromccflow,App=BillTemplateWord,WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID + ",WSUrl=http://localhost:2207/WF/CCForm/CCFormAPI.asmx";
+                return "url@excelform://-fromccflow,App=BillTemplateWord,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID + ",WSUrl=http://localhost:2207/WF/CCForm/CCFormAPI.asmx";
              
 
             string billInfo = "";

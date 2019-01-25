@@ -242,6 +242,30 @@ namespace BP.WF.Template
         public BillTemplate(string no):base(no.Replace( "\n","" ).Trim() ) 
         {
         }
+        /// <summary>
+        /// 获得Excel文件流
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public void  GenerTemplateFile(ref byte[] bytes)
+        {
+            string saveTo = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.No + ".doc";
+            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, saveTo);
+            if (by != null)
+            {
+                bytes = by;
+                return;
+            }
+            else //说明当前excel文件没有生成.
+            {
+                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\" + this.No + ".docx";
+                if (System.IO.File.Exists(tempExcel) == false)
+                    tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\NDxxxRpt.docx";
+
+                bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+                return;
+            }
+        }
 		/// <summary>
 		/// 重写基类方法
 		/// </summary>

@@ -8179,8 +8179,14 @@ namespace BP.WF
             string sql = "";
             int nodeid = 0;
             string truckTable = "ND" + int.Parse(this.HisNode.FK_Flow) + "Track";
-            sql = "SELECT NDFrom,Tag FROM " + truckTable + " WHERE WorkID=" + this.WorkID + " AND NDTo='" + this.HisNode.NodeID + "' AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC";
-            //首先获取实际发送节点，不存在时再使用from节点
+            sql = "SELECT NDFrom,Tag FROM " + truckTable + " WHERE WorkID=" + this.WorkID + " AND NDTo='" + this.HisNode.NodeID + "' AND ";
+            sql += " (ActionType=1 OR ActionType=" + (int)ActionType.Skip + "  OR ActionType=" + (int)ActionType.ForwardFL + ")";
+            sql += "  OR  ActionType=" + (int)ActionType.ForwardHL + " "; //合流.
+            sql += "  OR  ActionType=" + (int)ActionType.ForwardAskfor + " "; //会签.
+            sql += "   )";
+            sql += " ORDER BY RDT DESC";
+
+            //首先获取实际发送节点，不存在时再使用from节点.
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -8223,11 +8229,11 @@ namespace BP.WF
                     case RunModel.SubThread:
                         sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
                                                                                        + " AND NDTo=" + this.HisNode.NodeID + " "
-                                                                                       + " AND ActionType=" + (int)ActionType.SubThreadForward + " ORDER BY RDT DESC";
+                                                                                       + " AND ( ActionType=" + (int)ActionType.SubThreadForward + " OR  ActionType=" + (int)ActionType.ForwardFL + ")  ORDER BY RDT DESC";
                         if (DBAccess.RunSQLReturnCOUNT(sql) == 0)
-                            sql = "SELECT NDFrom FROM " + truckTable + " WHERE FID=" + this.HisWork.FID
+                            sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.HisWork.FID
                                                                                       + " AND NDTo=" + this.HisNode.NodeID + " "
-                                                                                      + " AND ActionType=" + (int)ActionType.SubThreadForward + " ORDER BY RDT DESC";
+                                                                                      + " AND (ActionType=" + (int)ActionType.SubThreadForward + " OR  ActionType=" + (int)ActionType.ForwardFL + ") ORDER BY RDT DESC";
 
                         break;
                     default:

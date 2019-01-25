@@ -17,7 +17,7 @@
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
         //设置文本框只读.
-        if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0) {
+        if (mapAttr.UIVisible != 0 &&(mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0)) {
             var tb = $('#TB_' + mapAttr.KeyOfEn);
             $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
@@ -76,7 +76,14 @@
         //枚举下拉框.
         if (mapAttr.UIContralType == 1) {
 
-            // InitDDLOperation(flowData, mapAttr, val);
+            // 判断下拉框是否有对应option, 若没有则追加
+            if ($("option[value='" + val + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+                var mainTable = frmData.MainTable[0];
+                var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                if (selectText == null || selectText == undefined || selectText == "")
+                    selectText = mainTable[mapAttr.KeyOfEn + "T"];
+                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + val + "'>" + selectText + "</option>");
+            }
             $('#DDL_' + mapAttr.KeyOfEn).val(val);
 
         }

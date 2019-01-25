@@ -451,50 +451,11 @@ namespace BP.WF
             {
                 //执行子线程的撤销.
                 return DoThreadUnSend();
-                ///*
-                // * 说明该流程是一个子线程，如果子线程的撤销，就需要删除该子线程。
-                // */
-                //BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FlowNo, this.WorkID, "撤销方式删除");
-                //return "@子线程已经被删除.";
             }
 
-            if (this.UnSendToNode != 0 && gwf.FK_Node != this.UnSendToNode)
-            {
-                /* 要撤销的节点是分流节点，并且当前节点不在分流节点而是在合流节点的情况， for:华夏银行.
-                 * 1, 分流节点发送给n个人.
-                 * 2, 其中一个人发送到合流节点，另外一个人退回给分流节点。
-                 * 3，现在分流节点的人接收到一个待办，并且需要撤销整个分流节点的发送.
-                 * 4, UnSendToNode 这个时间没有值，并且当前干流节点的停留的节点与要撤销到的节点不一致。
-                 */
-                return DoUnSendInFeiLiuHeiliu(gwf);
-            }
+         
           
-            switch (nd.HisNodeWorkType)
-            {
-                case NodeWorkType.WorkFHL:
-                    //throw new Exception("@分合流点不允许撤消。");
-                    return this.DoUnSendFeiLiu(gwf);
-
-                case NodeWorkType.WorkFL:
-                case NodeWorkType.StartWorkFL:
-                    //return this.DoUnSendFeiLiu(gwf);
-                    break;
-                case NodeWorkType.WorkHL:
-                    if (this.IsMainFlow)
-                    {
-                        /* 首先找到与他最近的一个分流点，并且判断当前的操作员是不是分流点上的工作人员。*/
-                        return this.DoUnSendHeiLiu_Main(gwf);
-                    }
-                    else
-                    {
-                        return this.DoUnSendSubFlow(gwf); //是子流程时.
-                    }
-                    break;
-                case NodeWorkType.SubThreadWork:
-                    break;
-                default:
-                    break;
-            }
+           
 
             if (nd.IsStartNode)
                 throw new Exception("当前节点是开始节点，所以您不能撤销。");
@@ -554,6 +515,43 @@ namespace BP.WF
             if (cancelToNodeID == 0)
                 throw new Exception("err@没有求出要撤销到的节点.");
             #endregion 求的撤销的节点.
+
+            if (this.UnSendToNode != 0 && gwf.FK_Node != this.UnSendToNode)
+            {
+                /* 要撤销的节点是分流节点，并且当前节点不在分流节点而是在合流节点的情况， for:华夏银行.
+                 * 1, 分流节点发送给n个人.
+                 * 2, 其中一个人发送到合流节点，另外一个人退回给分流节点。
+                 * 3，现在分流节点的人接收到一个待办，并且需要撤销整个分流节点的发送.
+                 * 4, UnSendToNode 这个时间没有值，并且当前干流节点的停留的节点与要撤销到的节点不一致。
+                 */
+                return DoUnSendInFeiLiuHeiliu(gwf);
+            }
+
+            #region 判断当前节点的模式.
+            switch (nd.HisNodeWorkType)
+            {
+                case NodeWorkType.WorkFHL:
+                    return this.DoUnSendFeiLiu(gwf);
+                case NodeWorkType.WorkFL:
+                case NodeWorkType.StartWorkFL:
+                    break;
+                case NodeWorkType.WorkHL:
+                    if (this.IsMainFlow)
+                    {
+                        /* 首先找到与他最近的一个分流点，并且判断当前的操作员是不是分流点上的工作人员。*/
+                        return this.DoUnSendHeiLiu_Main(gwf);
+                    }
+                    else
+                    {
+                        return this.DoUnSendSubFlow(gwf); //是子流程时.
+                    }
+                    break;
+                case NodeWorkType.SubThreadWork:
+                    break;
+                default:
+                    break;
+            }
+            #endregion 判断当前节点的模式.
 
             /********** 开始执行撤销. **********************/
             Node cancelToNode = new Node(cancelToNodeID);
@@ -922,7 +920,7 @@ namespace BP.WF
             Node priFLNode = currNode.HisPriFLNode;
             GenerWorkerList wl = new GenerWorkerList();
 
-            //判断改操作人员是否是分流节点上的人员
+            //判断改操作人员是否是分流节点上的人员.
             int i = wl.Retrieve(GenerWorkerListAttr.FK_Node, priFLNode.NodeID, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
             if (i == 0)
                 return "@不是您把工作发送到当前节点上，所以您不能撤消。";
@@ -969,9 +967,7 @@ namespace BP.WF
                 if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
                     wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
             }
-
-
-
+ 
             ShiftWorks fws = new ShiftWorks();
             fws.Delete(ShiftWorkAttr.FK_Node, wn.HisNode.NodeID.ToString(),
                 ShiftWorkAttr.WorkID, this.WorkID.ToString());

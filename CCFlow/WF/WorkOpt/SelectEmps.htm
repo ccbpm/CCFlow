@@ -157,26 +157,29 @@
 
             $('#OrgJSTree').jstree({
                 'core': {
-                
                     'data': function (node, cb) {
+                        var doMethod = "SelectEmps_Init";
+                        var httpHandlerName = "BP.WF.HttpHandler.CCMobile_WorkOpt";
+                        url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
 
                         //初始化根节点
                         if (node.id == "#") {
-
-                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-                           if (pageData.FK_Dept != undefined) 
-                                handler.AddPara("FK_Dept", pageData.FK_Dept);                          
-                            var data = handler.DoMethodReturnString("SelectEmps_Init");
-                             if (data.indexOf('err@') == 0) {
+                            $.ajax({
+                                type: 'post',
+                                async: true,
+                                url: url,
+                                data: {},
+                                dataType: 'html',
+                                success: function (data) {
+                                    if (data.indexOf('err@') == 0) {
                                         alert(data);
                                         return;
                                     }
 
                                     var fk_dept2 = pageData.FK_Dept;
                                     cb(initNodeData(data, fk_dept2));
-
-                           
+                                }
+                            });
                         }
                         else {
                             if (node.data != undefined && node.data.childrenData != undefined && node.data.childrenData.length > 0) {
@@ -184,20 +187,28 @@
                                 cb(node.data.childrenData, fk_dept2);
                             }
                             else {
+                                var doMethod = "SelectEmps_Init";
+                                var httpHandlerName = "BP.WF.HttpHandler.CCMobile_WorkOpt";
                                 pageData.FK_Dept = node.id;
+                                url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_Dept=" + node.id + "&m=" + Math.random();
+                                $.ajax({
+                                    type: 'post',
+                                    async: true,
+                                    url: url,
+                                    data: {},
+                                    dataType: 'html',
+                                    success: function (data) {
 
-                                var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                                handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-                                handler.AddPara("FK_Dept", node.id);
-                                var data = handler.DoMethodReturnString("SelectEmps_Init");
+                                        if (data.indexOf('err@') == 0) {
+                                            alert(data);
+                                            return;
+                                        }
 
-                                if (data.indexOf('err@') == 0) {
-                                    alert(data);
-                                    return;
-                                }
 
-                                var fk_dept2 = node.id;
-                                cb(initNodeData(data, fk_dept2));
+                                        var fk_dept2 = node.id;
+                                        cb(initNodeData(data, fk_dept2));
+                                    }
+                                });
                             }
                         }
                     }

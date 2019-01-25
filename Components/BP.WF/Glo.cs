@@ -2426,9 +2426,8 @@ namespace BP.WF
         /// <param name="FK_Flow"></param>
         /// <param name="FK_Node"></param>
         /// <param name="sKey">选中的No</param>
-        public static void StartGuidEnties(long WorkID, string FK_Flow, int FK_Node, string sKey)
+        public static DataTable StartGuidEnties(long WorkID, string FK_Flow, int FK_Node, string sKey)
         {
-
             Flow fl = new Flow(FK_Flow);
             switch (fl.StartGuideWay)
             {
@@ -2456,10 +2455,8 @@ namespace BP.WF
                     sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-
                     if (dt.Rows.Count == 0)
                         throw new Exception("err@没有找到那一行数据." + sql);
-
 
                     Hashtable ht = new Hashtable();
                     //转换成ht表
@@ -2484,17 +2481,18 @@ namespace BP.WF
                                 ht.Add(row.Table.Columns[i].ColumnName, row[i]);
                                 break;
                         }
-
                     }
                     //保存
                     BP.WF.Dev2Interface.Node_SaveWork(FK_Flow, FK_Node, WorkID, ht);
-                    break;
+                    return dt; 
                 case StartGuideWay.SubFlowGuideEntity:
                 case StartGuideWay.BySystemUrlOneEntity:
                     break;
                 default:
                     break;
             }
+
+            return null;
 
         }
         /// <summary>

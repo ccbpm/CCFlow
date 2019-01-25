@@ -19,6 +19,10 @@ namespace BP.Sys
         /// </summary>
         public const string Model = "Model";
         /// <summary>
+        /// 使用的版本
+        /// </summary>
+        public const string DtlVer = "DtlVer";
+        /// <summary>
         /// 主表
         /// </summary>
         public const string FK_MapData = "FK_MapData";
@@ -1275,7 +1279,13 @@ namespace BP.Sys
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,
                  MapDtlAttr.Model, "@0=普通@1=固定行");
 
+                map.AddTBInt(MapDtlAttr.DtlVer, 0, "使用版本", false, false);
+               // map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版@1=2019EasyUI版本");
+
+
                 map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", false, false);
+
+
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);
 

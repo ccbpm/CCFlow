@@ -312,6 +312,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+            //第一次加载.
             if (this.WorkID == 0 && this.currND.IsStartNode && this.GetRequestVal("IsCheckGuide") == null)
             {
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
@@ -361,30 +362,33 @@ namespace BP.WF.HttpHandler
             if (this.WorkID != 0 && this.GetRequestVal("IsCheckGuide") != null)
             {
                 string key = this.GetRequestVal("KeyNo");
-                BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, key);
+                DataTable dt = BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, key);
+
+                /*如果父流程编号，就要设置父子关系。*/
+                if (dt != null && dt.Rows.Count > 0 && dt.Rows.Contains("PFlowNo") == true)
+                {
+                    string pFlowNo = dt.Rows[0]["PFlowNo"].ToString();
+                    int pNodeID = int.Parse(dt.Rows[0]["PNodeID"].ToString());
+                    Int64 pWorkID = Int64.Parse(dt.Rows[0]["PWorkID"].ToString());
+                    string pEmp = dt.Rows[0]["PEmp"].ToString();
+                    if (DataType.IsNullOrEmpty(pEmp))
+                        pEmp = WebUser.No;
+
+                    //设置父子关系.
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, pFlowNo,
+                        pWorkID, pNodeID, pEmp);
+                }
             }
             #endregion
-
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
                  || this.currND.HisFormType == NodeFormType.SheetAutoTree)
             {
-                /*如果是多表单流程, 表单树*/
-                string pFlowNo = this.GetRequestVal("PFlowNo");
-                string pWorkID = this.GetRequestVal("PWorkID");
-                string pNodeID = this.GetRequestVal("PNodeID");
-                string pEmp = this.GetRequestVal("PEmp");
-                if (DataType.IsNullOrEmpty(pEmp))
-                    pEmp = WebUser.No;
 
                 if (this.WorkID == 0)
                 {
-                    if (DataType.IsNullOrEmpty(pFlowNo) == true)
-                        this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null);
-                    else
-                        this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null, Int64.Parse(pWorkID), 0, pFlowNo, int.Parse(pNodeID));
-
+                    this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null);
                     currWK = currND.HisWork;
                     currWK.OID = this.WorkID;
                     currWK.Retrieve();
@@ -394,8 +398,6 @@ namespace BP.WF.HttpHandler
                 {
                     gwf.WorkID = this.WorkID;
                     gwf.RetrieveFromDBSources();
-                    //pFlowNo = gwf.PFlowNo;
-                    //pWorkID = gwf.PWorkID.ToString();
                 }
 
                 if (this.currND.IsStartNode)
@@ -407,8 +409,9 @@ namespace BP.WF.HttpHandler
                         string msg = BP.WF.Glo.DealExp(this.currFlow.StartLimitAlert, currWK, null);
                         return "err@" + msg;
                     }
-
                 }
+
+
 
                 #region 开始组合url.
                 string toUrl = "";
@@ -416,16 +419,16 @@ namespace BP.WF.HttpHandler
                 if (this.IsMobile == true)
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PWorkID=" + gwf.PWorkID;
                 }
                 else
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PWorkID=" + gwf.PWorkID;
                 }
 
                 string[] strs = this.RequestParas.Split('&');
@@ -1644,7 +1647,7 @@ namespace BP.WF.HttpHandler
                     {
                         /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
                         return "SelectNodeUrl@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
-                       
+
                     }
 
                     //if (this.currND.CondModel != CondModel.SendButtonSileSelect)

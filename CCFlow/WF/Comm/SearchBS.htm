@@ -747,7 +747,7 @@
             var currUrls = currUrl.split("&");
             currUrl="";
             $.earch(currUrls,function(i,param){
-                if(param.indexOf("EnsName") !=-1 && param.indexOf("PKVal")!=-1)
+                if(param.indexOf("EnsName") ==-1 && param.indexOf("PKVal")==-1)
                   currUrl += "&"+param;  
             });
 

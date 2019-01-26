@@ -3938,7 +3938,13 @@ namespace BP.WF
             int parentNodeID, string parentEmpNo)
         {
             if (parentWorkID == 0)
-                throw new Exception("@设置的父流程的流程编号为 0 ，这是非法的。");
+                throw new Exception("@设置的父流程的流程WorkID为 0 ，这是非法的。");
+
+            if (parentFlowNo==null)
+                throw new Exception("@设置的父流程的流程编号为 null ，这是非法的。");
+
+            if (parentNodeID == 0)
+                throw new Exception("@设置的父流程的流程编号为 0 ，这是非法的。"); //@李国文.
 
             if (DataType.IsNullOrEmpty(parentEmpNo))
                 parentEmpNo = WebUser.No;

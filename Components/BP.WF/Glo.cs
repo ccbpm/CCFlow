@@ -151,7 +151,7 @@ namespace BP.WF
              * 1, 执行一次Sender发送人的升级，原来由GenerWorkerList 转入WF_GenerWorkFlow.
              * 0, 静默升级启用日期.2014-12
              */
-          
+
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
@@ -173,7 +173,7 @@ namespace BP.WF
             BP.WF.Template.FrmSubFlow sb = new FrmSubFlow();
             sb.CheckPhysicsTable();
 
-            
+
             BP.WF.Template.PushMsg pm = new PushMsg();
             pm.CheckPhysicsTable();
 
@@ -187,7 +187,7 @@ namespace BP.WF
             //判断数据库的版本.
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
             int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
-            if (currDBVer != null && currDBVer != 0 && currDBVer >=  Ver)
+            if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
                 return null; //不需要升级.
 
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
@@ -220,7 +220,7 @@ namespace BP.WF
                 #region 修复丢失的发起人.
                 Flows fls = new Flows();
                 fls.RetrieveAll();
-                foreach (Flow  item in fls)
+                foreach (Flow item in fls)
                 {
                     if (DBAccess.IsExitsObject(item.PTable) == false)
                         continue;
@@ -230,7 +230,7 @@ namespace BP.WF
                     }
                     catch (Exception ex)
                     {
-                     //   GERpt rpt=new GERpt(
+                        //   GERpt rpt=new GERpt(
                     }
                 }
                 #endregion 修复丢失的发起人.
@@ -241,18 +241,18 @@ namespace BP.WF
                     if (DBAccess.IsExitsTableCol("CN_City", "PinYin") == true)
                     {
                         /*为cn_city 设置拼音.*/
-                          sql = "SELECT No,Names FROM CN_City ";
-                          DataTable dtCity = DBAccess.RunSQLReturnTable(sql);
+                        sql = "SELECT No,Names FROM CN_City ";
+                        DataTable dtCity = DBAccess.RunSQLReturnTable(sql);
 
-                          foreach (DataRow dr in dtCity.Rows)
-                          {
-                              string no = dr["No"].ToString();
-                              string name = dr["Names"].ToString();
-                              string pinyin1 = DataType.ParseStringToPinyin(name);
-                              string pinyin2 = DataType.ParseStringToPinyinJianXie(name);
-                              string pinyin = "," + pinyin1 + "," + pinyin2 + ",";
-                              DBAccess.RunSQL("UPDATE CN_City SET PinYin='" + pinyin + "' WHERE NO='" + no + "'");
-                          }
+                        foreach (DataRow dr in dtCity.Rows)
+                        {
+                            string no = dr["No"].ToString();
+                            string name = dr["Names"].ToString();
+                            string pinyin1 = DataType.ParseStringToPinyin(name);
+                            string pinyin2 = DataType.ParseStringToPinyinJianXie(name);
+                            string pinyin = "," + pinyin1 + "," + pinyin2 + ",";
+                            DBAccess.RunSQL("UPDATE CN_City SET PinYin='" + pinyin + "' WHERE NO='" + no + "'");
+                        }
                     }
                 }
                 #endregion 给city 设置拼音.
@@ -281,7 +281,7 @@ namespace BP.WF
                 //2017.5.19 打印模板字段修复
                 BP.WF.Template.BillTemplate bt = new BillTemplate();
                 bt.CheckPhysicsTable();
-                if ( DBAccess.IsExitsTableCol("WF_BillTemplate","url")==true)
+                if (DBAccess.IsExitsTableCol("WF_BillTemplate", "url") == true)
                     DBAccess.RunSQL("UPDATE WF_BillTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
 
                 //规范升级根目录.
@@ -473,7 +473,7 @@ namespace BP.WF
                 CCList cc = new CCList();
                 cc.CheckPhysicsTable();
                 #endregion 其他.
-                
+
 
                 #region 升级sys_sftable
                 //升级
@@ -490,7 +490,7 @@ namespace BP.WF
 
                 BP.WF.Template.NodeSheet nodeSheet = new BP.WF.Template.NodeSheet();
                 nodeSheet.CheckPhysicsTable();
-                
+
                 #endregion 基础数据更新.
 
                 #region 把节点的toolbarExcel, word 信息放入mapdata
@@ -544,7 +544,7 @@ namespace BP.WF
                 #region 执行sql．
                 BP.DA.DBAccess.RunSQL("delete  from Sys_Enum WHERE EnumKey in ('BillFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType')");
                 DBAccess.RunSQL("UPDATE Sys_FrmSln SET FK_Flow =(SELECT FK_FLOW FROM WF_Node WHERE NODEID=Sys_FrmSln.FK_Node) WHERE FK_Flow IS NULL");
-               
+
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm+'_'+convert(varchar,FK_Node )+'_'+FK_Flow");
 
@@ -638,7 +638,7 @@ namespace BP.WF
                 MapDatas mds = new MapDatas();
                 mds.RetrieveAll();
 
-              //  foreach (MapData md in mds)
+                //  foreach (MapData md in mds)
                 //    md.ResetMaxMinXY(); //更新边界.
                 #endregion 更新表单的边界.
 
@@ -832,7 +832,7 @@ namespace BP.WF
                     }
                 }
                 #endregion
-                 
+
                 // 最后更新版本号，然后返回.
                 sql = "UPDATE Sys_Serial SET IntVal=" + Ver + " WHERE CfgKey='Ver'";
                 if (DBAccess.RunSQL(sql) == 0)
@@ -841,7 +841,7 @@ namespace BP.WF
                     DBAccess.RunSQL(sql);
                 }
                 // 返回版本号.
-                return "旧版本:("+currDBVer+")新版本:("+Ver+")"; // +"\t\n解决问题:" + updataNote;
+                return "旧版本:(" + currDBVer + ")新版本:(" + Ver + ")"; // +"\t\n解决问题:" + updataNote;
             }
             catch (Exception ex)
             {
@@ -857,13 +857,13 @@ namespace BP.WF
         public static void UpdataCCFlowVerSQLScript()
         {
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='UpdataCCFlowVer'";
-            string currDBVer =  DBAccess.RunSQLReturnStringIsNull(sql, "");
+            string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
 
             string sqlScript = SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql";
             System.IO.FileInfo fi = new System.IO.FileInfo(sqlScript);
             string myVer = fi.LastWriteTime.ToString("MMddHHmmss");
 
-            if (currDBVer == "" ||  int.Parse(currDBVer) < int.Parse(myVer) )
+            if (currDBVer == "" || int.Parse(currDBVer) < int.Parse(myVer))
             {
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
                 sql = "UPDATE Sys_Serial SET IntVal=" + myVer + " WHERE CfgKey='UpdataCCFlowVer'";
@@ -996,12 +996,12 @@ namespace BP.WF
 
             MapAttr attr = new MapAttr();
             attr.CheckPhysicsTable();
-           
+
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.CheckPhysicsTable();
 
             BP.WF.Data.CH ch = new CH();
-            ch.CheckPhysicsTable();             
+            ch.CheckPhysicsTable();
             #endregion 先创建表，否则列的顺序就会变化.
 
 
@@ -1030,9 +1030,9 @@ namespace BP.WF
                 //不安装CCIM的表.
                 if (clsName.Contains("BP.CCIM"))
                     continue;
-                 
+
                 //抽象的类不允许创建表.
-                switch(clsName)
+                switch (clsName)
                 {
                     case "BP.WF.StartWork":
                     case "BP.WF.Work":
@@ -1103,7 +1103,7 @@ namespace BP.WF
             }
             #endregion 注册枚举类型
 
-          
+
 
             #region 4, 创建视图与数据.
             //执行必须的sql.
@@ -1146,7 +1146,7 @@ namespace BP.WF
             #endregion 初始化数据
 
             #region 6, 生成临时的 wf_emp 数据。
-            if (isInstallFlowDemo==true)
+            if (isInstallFlowDemo == true)
             {
                 BP.Port.Emps emps = new BP.Port.Emps();
                 emps.RetrieveAllFromDBSource();
@@ -1215,14 +1215,14 @@ namespace BP.WF
                 BP.Web.WebUser.SignInOfGener(emp);
                 BP.Sys.Glo.WriteLineInfo("开始装载模板...");
                 string msg = "";
-               
-                    //装载数据模版.
-                    BP.WF.DTS.LoadTemplete l = new BP.WF.DTS.LoadTemplete();
-                    msg = l.Do() as string;
-               
+
+                //装载数据模版.
+                BP.WF.DTS.LoadTemplete l = new BP.WF.DTS.LoadTemplete();
+                msg = l.Do() as string;
+
 
                 BP.Sys.Glo.WriteLineInfo("装载模板完成。开始修复视图...");
-             
+
 
                 BP.Sys.Glo.WriteLineInfo("视图修复完成。");
             }
@@ -1302,7 +1302,7 @@ namespace BP.WF
             }
             #endregion 如果是第一次运行，就执行检查。
 
-             
+
 
         }
         /// <summary>
@@ -1935,7 +1935,7 @@ namespace BP.WF
             }
         }
 
-        
+
 
         #region 与流程事件实体相关.
         private static Hashtable Htable_FlowFEE = null;
@@ -1985,7 +1985,7 @@ namespace BP.WF
         /// <returns>null, 或者流程实体.</returns>
         public static FlowEventBase GetFlowEventEntityByFlowMark(string flowMark)
         {
-                
+
             if (Htable_FlowFEE == null || Htable_FlowFEE.Count == 0)
             {
                 Htable_FlowFEE = new Hashtable();
@@ -2001,8 +2001,8 @@ namespace BP.WF
             {
                 FlowEventBase fee = Htable_FlowFEE[key] as FlowEventBase;
 
-                string mark = ","+fee.FlowMark+",";
-                if (mark.Contains(","+flowMark+",")==true)
+                string mark = "," + fee.FlowMark + ",";
+                if (mark.Contains("," + flowMark + ",") == true)
                     return fee;
             }
             return null;
@@ -2017,7 +2017,7 @@ namespace BP.WF
         public static void DealBuinessAfterSendWork(string fk_flow, Int64 workid,
             string doFunc, string WorkIDs)
         {
-            
+
 
             if (doFunc == "SetParentFlow")
             {
@@ -2087,9 +2087,9 @@ namespace BP.WF
         {
             get
             {
-               
-                    return "Port_DeptEmpStation";
-                
+
+                return "Port_DeptEmpStation";
+
             }
         }
         /// <summary>
@@ -2358,7 +2358,7 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-            
+
             string[] strs = exp.Split(' ');
             bool isPass = false;
 
@@ -2435,7 +2435,7 @@ namespace BP.WF
                 case StartGuideWay.BySQLOne:
                     string sql = "";
                     sql = fl.StartGuidePara3.Clone() as string;  //@李国文.
-                    if (DataType.IsNullOrEmpty(sql)==false)
+                    if (DataType.IsNullOrEmpty(sql) == false)
                     {
                         sql = sql.Replace("@Key", sKey);
                         sql = sql.Replace("@key", sKey);
@@ -2477,14 +2477,17 @@ namespace BP.WF
                             case "title":
                             case "pworkid":
                                 break;
-                            default:
-                                ht.Add(row.Table.Columns[i].ColumnName, row[i]);
+                            default:  
+                                if (ht.ContainsKey(row.Table.Columns[i].ColumnName) == true)
+                                    ht[row.Table.Columns[i].ColumnName] = row[i];  //@李国文.
+                                else
+                                    ht.Add(row.Table.Columns[i].ColumnName, row[i]);
                                 break;
                         }
                     }
                     //保存
                     BP.WF.Dev2Interface.Node_SaveWork(FK_Flow, FK_Node, WorkID, ht);
-                    return dt; 
+                    return dt;
                 case StartGuideWay.SubFlowGuideEntity:
                 case StartGuideWay.BySystemUrlOneEntity:
                     break;
@@ -2503,7 +2506,7 @@ namespace BP.WF
         /// <param name="mattrs"></param>
         /// <param name="dtls"></param>
         /// <returns></returns>
-        public static Entity DealPageLoadFull(Entity en, MapExt item, MapAttrs mattrs, MapDtls dtls, bool isSelf=false,int nodeID=0,long workID=0)
+        public static Entity DealPageLoadFull(Entity en, MapExt item, MapAttrs mattrs, MapDtls dtls, bool isSelf = false, int nodeID = 0, long workID = 0)
         {
             if (item == null)
                 return en;
@@ -2577,7 +2580,7 @@ namespace BP.WF
                     if (isSelf == true)
                     {
                         MapDtl mdtlSln = new MapDtl();
-                        mdtlSln.No = dtl.No+"_" +nodeID;
+                        mdtlSln.No = dtl.No + "_" + nodeID;
                         int result = mdtlSln.RetrieveFromDBSources();
                         if (result != 0)
                         {
@@ -2586,8 +2589,8 @@ namespace BP.WF
                         }
                     }
 
-                   
-                   
+
+
                     GEDtls gedtls = null;
 
                     try
@@ -2604,7 +2607,7 @@ namespace BP.WF
                                 continue;
                         }
 
-                        
+
                         //gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
                     }
                     catch (Exception ex)
@@ -2798,7 +2801,7 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-          //  exp = exp.Replace("@WorkID", "0");
+            //  exp = exp.Replace("@WorkID", "0");
 
             if (exp.Contains("@") == false)
             {
@@ -2811,7 +2814,7 @@ namespace BP.WF
             {
                 Row row = en.Row;
                 //特殊判断.
-                if (row.ContainsKey("OID")==true)
+                if (row.ContainsKey("OID") == true)
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
 
                 if (exp.Contains("@") == false)
@@ -3700,7 +3703,7 @@ namespace BP.WF
             switch (BP.WF.Glo.UserInfoShowModel)
             {
                 case UserInfoShowModel.UserIDOnly:
-                    foreach(string e in es)
+                    foreach (string e in es)
                     {
                         ess = e.Split(',');
 
@@ -3715,7 +3718,7 @@ namespace BP.WF
 
                     return haveKH ? (newEmps + ")") : newEmps;
                 case UserInfoShowModel.UserNameOnly:
-                    foreach(string e in es)
+                    foreach (string e in es)
                     {
                         ess = e.Split(',');
 
@@ -3777,8 +3780,8 @@ namespace BP.WF
                 var model = BP.Sys.SystemConfig.GetValByKeyInt("OSModel", -1);
                 return OSModel.OneMore;
 
-               // OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 0);
-               // return os;
+                // OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 0);
+                // return os;
             }
         }
         /// <summary>
@@ -4060,7 +4063,7 @@ namespace BP.WF
         public static DateTime AddMinutes(string sysdt, int minutes)
         {
             DateTime dt = DataType.ParseSysDate2DateTime(sysdt);
-            return AddMinutes(dt,0, minutes);
+            return AddMinutes(dt, 0, minutes);
         }
         /// <summary>
         /// 在指定的日期上增加n天n小时，并考虑节假日
@@ -4071,8 +4074,8 @@ namespace BP.WF
         /// <returns>返回计算后的日期</returns>
         public static DateTime AddDayHoursSpan(string specDT, int day, int hh, int minutes, TWay tway)
         {
-            DateTime mydt = BP.DA.DataType.AddDays(specDT, day,   tway);
-            return Glo.AddMinutes(mydt,hh,  minutes);
+            DateTime mydt = BP.DA.DataType.AddDays(specDT, day, tway);
+            return Glo.AddMinutes(mydt, hh, minutes);
         }
         /// <summary>
         /// 在指定的日期上增加n天n小时，并考虑节假日
@@ -4100,9 +4103,9 @@ namespace BP.WF
         /// <param name="workid"></param>
         /// <param name="fid"></param>
         /// <param name="title"></param>
-        public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title,GenerWorkerList gwl=null)
+        public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title, GenerWorkerList gwl = null)
         {
-            InitCH2017(fl, nd, workid, fid, title, null, null, DateTime.Now,gwl);
+            InitCH2017(fl, nd, workid, fid, title, null, null, DateTime.Now, gwl);
         }
         /// <summary>
         /// 执行考核
@@ -4118,12 +4121,12 @@ namespace BP.WF
         private static void InitCH2017(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt,
             DateTime dtNow, GenerWorkerList gwl)
         {
-           // 开始节点不考核.
+            // 开始节点不考核.
             if (nd.IsStartNode || nd.HisCHWay == CHWay.None)
                 return;
 
             //如果设置为0,则不考核.
-            if (nd.TimeLimit == 0 && nd.TimeLimitHH==0 && nd.TimeLimitMM==0)
+            if (nd.TimeLimit == 0 && nd.TimeLimitHH == 0 && nd.TimeLimitMM == 0)
                 return;
 
             if (dtNow == null)
@@ -4133,11 +4136,11 @@ namespace BP.WF
             //参与人员.
             string todoEmps = "";
             string dbstr = SystemConfig.AppCenterDBVarStr;
-            if (nd.IsEndNode == true && gwl==null)
+            if (nd.IsEndNode == true && gwl == null)
             {
                 /* 如果是最后一个节点，可以使用这样的方式来求人员信息 , */
 
-                #region 求应完成日期，与参与的人集合. 
+                #region 求应完成日期，与参与的人集合.
                 Paras ps = new Paras();
                 switch (SystemConfig.AppCenterDBType)
                 {
@@ -4162,7 +4165,7 @@ namespace BP.WF
                 #endregion 求应完成日期，与参与的人集合.
 
                 #region 求上一个节点的日期.
-                dt = Dev2Interface.Flow_GetPreviousNodeTrack(workid,nd.NodeID);
+                dt = Dev2Interface.Flow_GetPreviousNodeTrack(workid, nd.NodeID);
                 if (dt.Rows.Count == 0)
                     return;
                 //上一个节点的活动日期.
@@ -4190,7 +4193,7 @@ namespace BP.WF
             #region 求 preSender上一个发送人，preSenderText 发送人姓名
             string preSender = "";
             string preSenderText = "";
-            DataTable dt_Sender = Dev2Interface.Flow_GetPreviousNodeTrack(workid, nd.NodeID);            
+            DataTable dt_Sender = Dev2Interface.Flow_GetPreviousNodeTrack(workid, nd.NodeID);
             if (dt_Sender.Rows.Count > 0)
             {
                 preSender = dt_Sender.Rows[0]["EmpFrom"].ToString();
@@ -4214,7 +4217,7 @@ namespace BP.WF
 
             ch.SDT = sdt; //应该完成时间.
 
-            ch.FK_Flow =  nd.FK_Flow; //流程信息.
+            ch.FK_Flow = nd.FK_Flow; //流程信息.
             ch.FK_FlowT = nd.FlowName;
 
             ch.FK_Node = nd.NodeID; //节点.
@@ -4236,7 +4239,7 @@ namespace BP.WF
 
             //求参与人员数量.
             string[] strs = todoEmps.Split(';');
-            ch.GroupEmpsNum = strs.Length-1; //个数.
+            ch.GroupEmpsNum = strs.Length - 1; //个数.
 
             //求参与人的ids.
             string empids = ",";
@@ -4263,7 +4266,7 @@ namespace BP.WF
             // UseDays . 求出实际使用天数.
             DateTime dtFrom = DataType.ParseSysDate2DateTime(ch.DTFrom);
             DateTime dtTo = DataType.ParseSysDate2DateTime(ch.DTTo);
-            
+
             TimeSpan ts = dtTo - dtFrom;
             ch.UseDays = ts.Days;//用时，天数
             ch.UseMinutes = ts.Minutes;//用时，分钟
@@ -4310,7 +4313,7 @@ namespace BP.WF
             }
         }
 
-         
+
         /// <summary>
         /// 中午时间从
         /// </summary>
@@ -4415,7 +4418,7 @@ namespace BP.WF
         #endregion 与考核相关.
 
         #region 其他方法。
-      
+
         /// <summary>
         /// 删除临时文件
         /// </summary>
@@ -4445,8 +4448,8 @@ namespace BP.WF
 
             }
         }
-        public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment, 
-            Int64 workid=0, Int64 fid=0, Int64 pworkid=0,bool isContantSelf=true)
+        public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment,
+            Int64 workid = 0, Int64 fid = 0, Int64 pworkid = 0, bool isContantSelf = true)
         {
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
@@ -4475,7 +4478,7 @@ namespace BP.WF
                 return dbs;
             }
 
-            if (athDesc.HisCtrlWay == AthCtrlWay.WorkID )
+            if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
@@ -4485,7 +4488,7 @@ namespace BP.WF
                 if (isContantSelf == false)
                 {
                     qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.Rec,"!=", WebUser.No);
+                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
                 }
                 qo.addOrderBy("RDT");
                 qo.DoQuery();
@@ -4519,7 +4522,7 @@ namespace BP.WF
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
-                   
+
                     qo.DoQuery();
                 }
                 else
@@ -4689,7 +4692,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT LIKE '" + DataType.CurrentData + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if ( DataType.IsNullOrEmpty(flow.StartLimitPara))
+                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                         return true;
 
                     //判断时间是否在设置的发起范围内. 配置的格式为 @11:00-12:00@15:00-13:45
@@ -4719,7 +4722,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT >= '" + DataType.WeekOfMonday(dtNow) + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if ( DataType.IsNullOrEmpty(flow.StartLimitPara))
+                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                         return true; /*如果没有时间的限制.*/
 
                     //判断时间是否在设置的发起范围内. 
@@ -4780,7 +4783,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentAPOfJD + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if ( DataType.IsNullOrEmpty( flow.StartLimitPara ))
+                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                         return true;
 
                     //判断时间是否在设置的发起范围内.
@@ -4806,7 +4809,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY LIKE '" + DataType.CurrentYear + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if ( DataType.IsNullOrEmpty(flow.StartLimitPara ))
+                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                         return true;
 
                     //判断时间是否在设置的发起范围内.
@@ -4859,7 +4862,7 @@ namespace BP.WF
 
             return true;
         }
-        
+
         /// <summary>
         /// 当要发送是检查流程是否可以允许发起.
         /// </summary>
@@ -5085,7 +5088,7 @@ namespace BP.WF
                 if (KeyWord.IndexOf(key) >= 0)
                 {
                     //替换掉特殊字符
-                    KeyWord = KeyWord.Replace(key,"");
+                    KeyWord = KeyWord.Replace(key, "");
                 }
             }
             return KeyWord;

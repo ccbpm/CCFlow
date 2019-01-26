@@ -247,24 +247,19 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="oid"></param>
         /// <returns></returns>
-        public void  GenerTemplateFile(ref byte[] bytes)
+        public void GenerTemplateFile(ref byte[] bytes)
         {
-            string saveTo = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.No + ".doc";
-            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, saveTo);
-            if (by != null)
-            {
-                bytes = by;
+            bytes = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, "DBFile");
+            if (bytes != null)
                 return;
-            }
-            else //说明当前excel文件没有生成.
-            {
-                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\" + this.No + ".docx";
-                if (System.IO.File.Exists(tempExcel) == false)
-                    tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\NDxxxRpt.docx";
 
-                bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
-                return;
-            }
+            //如果没有找到，就看看默认的文件是否有.
+            string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\" + this.No + ".rtf";
+            if (System.IO.File.Exists(tempExcel) == false)
+                tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\Word单据模版定义演示.docx";
+
+            bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+            return;
         }
 		/// <summary>
 		/// 重写基类方法

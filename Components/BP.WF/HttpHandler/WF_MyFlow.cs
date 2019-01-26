@@ -307,8 +307,8 @@ namespace BP.WF.HttpHandler
             {
                 if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
                 {
-                    /*是否可以发起流程？*/
-                    return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.@技术信息:OSModel=" + BP.WF.Glo.OSModel.ToString();
+                    /*是否可以发起流程？ @李国文. */
+                    return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.";
                 }
             }
 
@@ -365,7 +365,7 @@ namespace BP.WF.HttpHandler
                 DataTable dt = BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, key);
 
                 /*如果父流程编号，就要设置父子关系。*/
-                if (dt != null && dt.Rows.Count > 0 && dt.Rows.Contains("PFlowNo") == true)
+                if (dt != null && dt.Rows.Count > 0 && dt.Columns.Contains("PFlowNo") == true)
                 {
                     string pFlowNo = dt.Rows[0]["PFlowNo"].ToString();
                     int pNodeID = int.Parse(dt.Rows[0]["PNodeID"].ToString());

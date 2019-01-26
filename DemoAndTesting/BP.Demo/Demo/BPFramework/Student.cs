@@ -425,7 +425,7 @@ namespace BP.Demo.BPFramework
             string billFileName = this.No+"StuTest.doc";
 
             //要生成的数据.
-            en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\StudentDemo.rtf", saveTo, billFileName, null, false);
+            en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\StudentDemo.rtf", saveTo, billFileName, false);
 
             string url = "/DataUser/Temp/" + billFileName;
 

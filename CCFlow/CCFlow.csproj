@@ -6808,7 +6808,6 @@
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
-    <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
@@ -6818,7 +6817,6 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
     <Content Include="WF\CCForm\Handler.ashx" />
-    <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.eot" />
     <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.ttf" />
@@ -7029,7 +7027,6 @@
     <None Include="WF\Style\skin\layui\font\iconfont.svg" />
     <None Include="WF\Style\skin\layui\font\iconfont.ttf" />
     <None Include="WF\Style\skin\layui\font\iconfont.woff" />
-    <Content Include="WF\WorkOpt\Handler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
@@ -7383,13 +7380,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
@@ -7426,9 +7417,6 @@
     </Compile>
     <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

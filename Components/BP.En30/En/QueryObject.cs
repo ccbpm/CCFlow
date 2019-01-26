@@ -276,7 +276,7 @@ namespace BP.En
                 return;
             }
 
-            if (exp.ToLower().Contains(" in"))
+            if (exp.ToLower().Contains("in"))
             {
                 this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
                 return;
@@ -363,7 +363,7 @@ namespace BP.En
                 return;
             }
 
-            if (exp.ToLower().Contains(" in"))
+            if (exp.ToLower().Contains("in"))
             {
                 this.SQL = "( " + attr + " " + exp + "  " + val + " )";
                 return;
@@ -380,7 +380,7 @@ namespace BP.En
                 return;
             }
 
-            if (exp.ToLower().Contains(" in"))
+            if (exp.ToLower().Contains("in"))
             {
                 this.SQL = "( " + attr + " " + exp + "  " + val + " )";
                 return;

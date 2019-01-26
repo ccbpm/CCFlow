@@ -69,17 +69,22 @@
 
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
 
-                WinOpen(url);
-                //window.location.href = url;
-                //$("#Msg").html("");
+                data = data.replace('url@', '');
+
+                if (plant == 'CCFlow') {
+                    data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                }
+                else {
+                    alert('还没有翻译.');
+                    return;
+                }
+
+                WinOpen(data);
                 return;
             }
-
             alert(data);
         }
-
 
         //取消退回
         function Close() {

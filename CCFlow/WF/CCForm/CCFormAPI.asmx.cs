@@ -26,15 +26,14 @@ namespace CCFlow.WF.CCForm
         /// <summary>
         /// 获得单据模版信息
         /// </summary>
-        /// <param name="userNo"></param>
-        /// <param name="sid"></param>
-        /// <param name="workID"></param>
-        /// <param name="billTemplateNo"></param>
-        /// <param name="ds"></param>
-        /// <param name="bytes"></param>
-        /// <param name="?"></param>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sid">SID</param>
+        /// <param name="workID">工作ID</param>
+        /// <param name="billTemplateNo">单据模版编号</param>
+        /// <param name="ds">返回的数据源</param>
+        /// <param name="bytes">返回的字节</param>
         [WebMethod]
-        public void GenerBillTemplate(string userNo, string sid,  Int64 workID, string billTemplateNo,
+        public void GenerBillTemplate(string userNo, string sid, Int64 workID, string billTemplateNo,
             ref DataSet ds, ref byte[] bytes)
         {
 
@@ -42,14 +41,12 @@ namespace CCFlow.WF.CCForm
                 userNo = BP.Web.WebUser.No;
 
             BP.WF.Dev2Interface.Port_Login(userNo);
-
             BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workID);
-      
 
+            //是否可以查看该工作.
             bool b = BP.WF.Dev2Interface.Flow_IsCanViewTruck(gwf.FK_Flow, gwf.WorkID, gwf.FID);
             if (b == false)
                 throw new Exception("err@无权查看该流程.");
-
 
             string frmID = "ND" + int.Parse(gwf.FK_Flow) + "Rpt";
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt("ND" + int.Parse(gwf.FK_Flow) + "Rpt", workID);
@@ -128,7 +125,7 @@ namespace CCFlow.WF.CCForm
             string frmID = "ND" + flowNo + "Rpt";
 
             //执行保存文件.
-            MapData md  = new MapData(frmID);
+            MapData md = new MapData(frmID);
 
             //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
             MapFrmExcel mfe = new MapFrmExcel(md.No);

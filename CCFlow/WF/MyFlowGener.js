@@ -1851,7 +1851,7 @@ function OpenOffice() {
     var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
 
     var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
-    var url = "excelform://-fromccflow,App=FrmExcel," + paras + "WSUrl=" + urlWS;
+    var url = "httpCCWord://-fromccflow,App=FrmExcel," + paras + "WSUrl=" + urlWS;
     alert(url);
     window.open(url);
 }

@@ -524,7 +524,7 @@ namespace BP.WF.HttpHandler
             paras = paras.Replace("&", ",");
 
             string urlWS = "http://" + context.Request.Url.Authority + "/WF/CCForm/CCFormAPI.asmx";
-            string url = "httpCCWord://-fromccflow,App=FrmExcel" + paras + ",WSUrl=" + urlWS;
+            string url = "excelform://-fromccflow,App=FrmExcel" + paras + ",WSUrl=" + urlWS;
 
 
             //string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";

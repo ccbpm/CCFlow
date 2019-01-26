@@ -159,30 +159,13 @@ namespace BP.WF.HttpHandler
          
         #region 功能界面 .
         /// <summary>
-        /// 转化拼音
+        /// 转化拼音 @李国文.
         /// </summary>
         /// <returns>返回转换后的拼音</returns>
         public string FrmTextBox_ParseStringToPinyin()
         {
             string name = GetRequestVal("name");
-            switch (name)
-            {
-                case "电话":
-                    return "Tel";
-                case "地址":
-                    return "Addr";
-                case "年龄":
-                    return "Age";
-                case "邮件":
-                    return "Email";
-                case "单价":
-                    return "DanJia";
-                case "金额":
-                    return "JinE";
-                default:
-                    break;
-            }
-
+         
             string flag = this.GetRequestVal("flag");
             flag = DataType.IsNullOrEmpty(flag) == true ? "true" : flag.ToLower();
 

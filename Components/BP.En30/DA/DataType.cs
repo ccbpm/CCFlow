@@ -1126,6 +1126,28 @@ namespace BP.DA
         /// <returns></returns>
         public static string ParseStringToPinyin(string exp)
         {
+            #region 特殊字符处理.
+            switch (exp)
+            {
+                case "电话":
+                    return "Tel";
+                case "地址":
+                    return "Addr";
+                case "年龄":
+                    return "Age";
+                case "邮件":
+                    return "Email";
+                case "单价":
+                    return "DanJia";
+                case "金额":
+                    return "JinE";
+                case "单据编号":
+                    return "BillNo";
+                default:
+                    break;
+            }
+            #endregion 特殊字符处理.
+
             exp = exp.Trim();
             string pinYin = "", str = null;
             char[] chars = exp.ToCharArray();

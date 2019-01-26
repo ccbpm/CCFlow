@@ -83,7 +83,7 @@ namespace BP.Sys
                     mapFrame.H = 600;
                     mapFrame.Insert();
                     break;
-                  
+
                 case "HandSiganture"://签字版
                     //检查是否可以创建字段? 
                     MapData md = new MapData(fk_mapdata);
@@ -166,8 +166,8 @@ namespace BP.Sys
 
             if (i == 0)
             {
-                if(!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
-                //ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
+                if (!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
+                    //ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
                     ath.SaveTo = "\\DataUser\\UploadFile\\" + fk_mapdata + "\\";
                 if (fk_mapdata.Contains("ND") == true)
                     ath.HisCtrlWay = AthCtrlWay.WorkID;
@@ -229,7 +229,7 @@ namespace BP.Sys
             //检查是否可以创建字段? 
             MapData md = new MapData();
             md.No = fk_mapdata;
-            if(md.RetrieveFromDBSources() == 1)
+            if (md.RetrieveFromDBSources() == 1)
                 md.CheckPTableSaveModel(fieldName);
 
             //外键字段表.
@@ -250,7 +250,7 @@ namespace BP.Sys
 
             attr.UIContralType = BP.En.UIContralType.DDL;
             attr.UIBindKey = fk_SFTable; //绑定信息.
-         //   attr.LGType = FieldTypeS.FK;
+            //   attr.LGType = FieldTypeS.FK;
             attr.X = x;
             attr.Y = y;
 
@@ -355,8 +355,8 @@ namespace BP.Sys
 
             ma.Save();
         }
- 
-        public static void NewImage(string frmID, string keyOfEn, string name,  float x, float y)
+
+        public static void NewImage(string frmID, string keyOfEn, string name, float x, float y)
         {
             //BP.Sys.CCFormParse.SaveImage(frmID, control, properties, imgPKs, ctrlID);
             //imgPKs = imgPKs.Replace(ctrlID + "@", "@");
@@ -556,8 +556,8 @@ namespace BP.Sys
             GroupField gf = new GroupField();
             gf.Lab = groupName;
             gf.FrmID = frmID;
-            int i=gf.Retrieve(GroupFieldAttr.Lab, groupName, GroupFieldAttr.FrmID, frmID);
-            if (i ==0)
+            int i = gf.Retrieve(GroupFieldAttr.Lab, groupName, GroupFieldAttr.FrmID, frmID);
+            if (i == 0)
                 gf.Insert();
 
             MapAttr attr = new MapAttr();
@@ -570,7 +570,7 @@ namespace BP.Sys
             attr.UIIsLine = true;
             attr.MaxLen = 4000;
             attr.SetValByKey(MapAttrAttr.ColSpan, 4);
-           // attr.ColSpan = 4;
+            // attr.ColSpan = 4;
             attr.GroupID = gf.OID;
             attr.UIHeight = 23 * 3;
             attr.Idx = 1;
@@ -650,7 +650,7 @@ namespace BP.Sys
                 attr.HisEditType = BP.En.EditType.Readonly;
                 attr.Insert();
             }
-            
+
         }
         /// <summary>
         /// 执行保存
@@ -671,7 +671,7 @@ namespace BP.Sys
             MapData mapData = new MapData(fk_mapdata);
             mapData.FrmW = float.Parse(form_MapData["width"].ToJson());
             mapData.FrmH = float.Parse(form_MapData["height"].ToJson());
-         //   mapData.DesignerTool = "Html5";
+            //   mapData.DesignerTool = "Html5";
             mapData.Update();
 
             //执行保存.
@@ -769,15 +769,15 @@ namespace BP.Sys
                 eleIDs += item.EleID + "@";
             eleIDs += "@";
 
-                //框架
-		    string frameIDs = "@";
-		    MapFrames frames = new MapFrames();
-		    frames.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
-		    foreach (MapFrame item in frames)
-		    {
-			    frameIDs += item.MyPK + "@";
-		    }
-		    frameIDs += "@";
+            //框架
+            string frameIDs = "@";
+            MapFrames frames = new MapFrames();
+            frames.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
+            foreach (MapFrame item in frames)
+            {
+                frameIDs += item.MyPK + "@";
+            }
+            frameIDs += "@";
             #endregion 求PKs.
 
 
@@ -1082,7 +1082,7 @@ namespace BP.Sys
             }
 
             //更新组件. @zhoupeng.
-            DBAccess.RunSQL("UPDATE Sys_MapData SET FlowCtrls='"+flowCtrls+"' WHERE No='"+fk_mapdata+"'");
+            DBAccess.RunSQL("UPDATE Sys_MapData SET FlowCtrls='" + flowCtrls + "' WHERE No='" + fk_mapdata + "'");
             #endregion 处理节点表单。
 
             #region 删除没有替换下来的 PKs, 说明这些都已经被删除了.
@@ -1189,7 +1189,7 @@ namespace BP.Sys
             MapData mymd = new MapData();
             mymd.No = copyFrmID;
             if (mymd.RetrieveFromDBSources() == 1)
-                throw new Exception("@目标表单ID:"+copyFrmID+"已经存在，位于:"+mymd.FK_FormTreeText+"目录下.");
+                throw new Exception("@目标表单ID:" + copyFrmID + "已经存在，位于:" + mymd.FK_FormTreeText + "目录下.");
 
             //获得源文件信息.
             DataSet ds = GenerHisDataSet(srcFrmID);
@@ -1226,7 +1226,7 @@ namespace BP.Sys
             md.FK_FrmSort = fk_frmTree;
             md.Name = copyFrmName;
             md.Update();
-           
+
             return "表单复制成功,您需要重新登录，或者刷新才能看到。";
         }
         /// <summary>
@@ -1244,7 +1244,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="frmID">表单</param>
         /// <returns></returns>
-        public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName=null)
+        public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null)
         {
             DataSet ds = new DataSet();
 
@@ -1257,11 +1257,11 @@ namespace BP.Sys
             //加入主表信息.
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
             ds.Tables.Add(Sys_MapData);
-             
+
             //加入分组表.
             DataTable Sys_GroupField = md.GroupFields.ToDataTableField("Sys_GroupField");
             ds.Tables.Add(Sys_GroupField);
-             
+
             //加入明细表.
             DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
             ds.Tables.Add(Sys_MapDtl);
@@ -1334,7 +1334,7 @@ namespace BP.Sys
             MapDtls mdtls = new MapDtls(md.No);
             foreach (MapDtl item in mdtls)
                 frmIDs += ",'" + item.No + "'";
-            
+
             DataSet ds = new DataSet();
 
             //加入主表信息.
@@ -1359,7 +1359,7 @@ namespace BP.Sys
 
             //加入字段属性.
             MapAttrs attrs = new MapAttrs();
-            attrs.RetrieveIn(MapAttrAttr.FK_MapData,   frmIDs);
+            attrs.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
             DataTable Sys_MapAttr = attrs.ToDataTableField("Sys_MapAttr");
             ds.Tables.Add(Sys_MapAttr);
 
@@ -1694,13 +1694,17 @@ namespace BP.Sys
             if (removeSpecialSymbols)
                 name = DataType.ParseStringForName(name, maxLen);
 
+         
+
+
+
+
             try
             {
                 if (isQuanPin == true)
                     s = BP.DA.DataType.ParseStringToPinyin(name);
                 else
                     s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
-
 
                 //如果全拼长度超过maxLen，则取前maxLen长度的字符
                 if (maxLen > 0 && s.Length > maxLen)

@@ -532,11 +532,15 @@ namespace BP.WF.HttpHandler
             ///  string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
             string urlOfFree = "Frm.htm?IsFreeFrm=1" + this.RequestParas;
 
+            string enName=this.FK_MapData;
+            if (DataType.IsNullOrEmpty(enName))
+                enName=this.EnName;
+
             if (urlOfFree.Contains("FK_MapData") == false)
-                urlOfFree += "&FK_MapData=" + this.FK_MapData;
+                urlOfFree += "&FK_MapData=" + enName;
 
             if (urlOfFree.Contains("EnName") == false)
-                urlOfFree += "&EnName=" + this.FK_MapData;
+                urlOfFree += "&EnName=" + enName;
 
 
             Hashtable ht = new Hashtable();

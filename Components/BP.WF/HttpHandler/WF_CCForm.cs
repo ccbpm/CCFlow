@@ -530,17 +530,17 @@ namespace BP.WF.HttpHandler
             //string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
             //string url = "excelform://-fromccflow,App=FrmExcel,UserNo=" + userNo + ",SID=" + sid + ",FK_Flow=" + flowNo + ",FK_Node=" + nodeID + ",FrmID=" + frmID + ",WorkID="+workID+",WSUrl="+urlWS;
             ///  string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
-            string urlOfFree = "Frm.htm?IsFreeFrm=1" + this.RequestParas;
+            string urlOfFree = "Frm.htm?IsFreeFrm=1" + this.RequestParasOfAll;
 
-            string enName=this.FK_MapData;
-            if (DataType.IsNullOrEmpty(enName))
-                enName=this.EnName;
+            //string enName=this.FK_MapData;
+            //if (DataType.IsNullOrEmpty(enName))
+            //    enName=this.EnName;
 
-            if (urlOfFree.Contains("FK_MapData") == false)
-                urlOfFree += "&FK_MapData=" + enName;
+            //if (urlOfFree.Contains("FK_MapData") == false)
+            //    urlOfFree += "&FK_MapData=" + enName;
 
-            if (urlOfFree.Contains("EnName") == false)
-                urlOfFree += "&EnName=" + enName;
+            //if (urlOfFree.Contains("EnName") == false)
+            //    urlOfFree += "&EnName=" + enName;
 
 
             Hashtable ht = new Hashtable();
@@ -648,7 +648,8 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.VSTOForExcel && this.GetRequestVal("IsFreeFrm") == null)
             {
-                string url = "FrmVSTO.htm?1=1&" + this.RequestParas;
+                string url = "FrmVSTO.htm?1=1" + this.RequestParas;
+                url = url.Replace("&&", "&");
                 return "url@" + url;
             }
 

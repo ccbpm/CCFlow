@@ -532,6 +532,13 @@ namespace BP.WF.HttpHandler
             ///  string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
             string urlOfFree = "Frm.htm?IsFreeFrm=1" + this.RequestParas;
 
+            if (urlOfFree.Contains("FK_MapData") == false)
+                urlOfFree += "&FK_MapData=" + this.FK_MapData;
+
+            if (urlOfFree.Contains("EnName") == false)
+                urlOfFree += "&EnName=" + this.FK_MapData;
+
+
             Hashtable ht = new Hashtable();
             ht.Add("UrlOfVSTO", url);
             ht.Add("UrlOfFrm", urlOfFree);
@@ -717,7 +724,6 @@ namespace BP.WF.HttpHandler
                 }
             }
             #endregion 非流程的独立运行的表单.
-
 
             #region 非流程的独立运行的表单.
 

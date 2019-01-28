@@ -42,7 +42,9 @@ namespace BP.WF
             StringBuilder sb = new System.Text.StringBuilder();
 
             //字段集合.
-            MapAttrs attrs = new MapAttrs(frmID);
+            MapAttrs mapAttrs = new MapAttrs(frmID);
+
+            Attrs attrs = en.EnMap.Attrs;
 
             string appPath = "";
             float wtX = MapData.GenerSpanWeiYi(mapData, 1200);
@@ -203,7 +205,7 @@ namespace BP.WF
                 string url = link.URL;
                 if (url.Contains("@"))
                 {
-                    foreach (MapAttr attr in attrs)
+                    foreach (MapAttr attr in mapAttrs)
                     {
                         if (url.Contains("@") == false)
                             break;
@@ -323,7 +325,7 @@ namespace BP.WF
                                 if (sealType == "2" && !DataType.IsNullOrEmpty(sealField))
                                 {
                                     //判断字段是否存在
-                                    foreach (MapAttr attr in attrs)
+                                    foreach (MapAttr attr in mapAttrs)
                                     {
                                         if (attr.KeyOfEn == sealField)
                                         {
@@ -456,7 +458,7 @@ namespace BP.WF
 
             #region 输出数据控件.
             int fSize = 0;
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mapAttrs)
             {
                 //处理隐藏字段，如果是不可见并且是启用的就隐藏.
                 if (attr.UIVisible == false && attr.UIIsEnable)
@@ -494,10 +496,11 @@ namespace BP.WF
                         text = en.GetValStrByKey(attr.KeyOfEn);
                         if (attr.MyDataType == 1 && (int)attr.UIContralType == DataType.AppString)
                         {
-                            if (en.GetValRefTextByKey(attr.KeyOfEn) == null)
-                                text = en.GetValStrByKey(attr.KeyOfEn + "T");
-                            else
+                            if (attrs.Contains(attr.KeyOfEn + "Text") == true)
                                 text = en.GetValRefTextByKey(attr.KeyOfEn);
+                            if (DataType.IsNullOrEmpty(text))
+                                if (attrs.Contains(attr.KeyOfEn + "T") == true)
+                                    text = en.GetValStrByKey(attr.KeyOfEn + "T");
                         }
                         break;
                     case FieldTypeS.Enum:
@@ -835,7 +838,8 @@ namespace BP.WF
             StringBuilder sb = new System.Text.StringBuilder();
 
             //字段集合.
-            MapAttrs attrs = new MapAttrs(frmID);
+            MapAttrs mapAttrs = new MapAttrs(frmID);
+            Attrs attrs = en.EnMap.Attrs;
 
             string appPath = "";
             float wtX = MapData.GenerSpanWeiYi(mapData, 1200);
@@ -890,7 +894,7 @@ namespace BP.WF
                 {
                     var isDropTR = true;
                     string html = "";
-                    foreach (MapAttr attr in attrs)
+                    foreach (MapAttr attr in mapAttrs)
                     {
                         //处理隐藏字段，如果是不可见并且是启用的就隐藏.
                         if (attr.UIVisible == false)
@@ -908,10 +912,12 @@ namespace BP.WF
                                 text = en.GetValStrByKey(attr.KeyOfEn);
                                 if (attr.MyDataType== 1 && (int)attr.UIContralType == DataType.AppString)
                                 {
-                                    if (en.GetValRefTextByKey(attr.KeyOfEn) == null)
-                                        text = en.GetValStrByKey(attr.KeyOfEn + "T");
-                                    else
+                                    if (attrs.Contains(attr.KeyOfEn + "Text") == true)
                                         text = en.GetValRefTextByKey(attr.KeyOfEn);
+                                    if (DataType.IsNullOrEmpty(text))
+                                        if (attrs.Contains(attr.KeyOfEn + "T") == true)
+                                            text = en.GetValStrByKey(attr.KeyOfEn + "T");
+                                   
                                 }
                                 break;
                             case FieldTypeS.Enum:

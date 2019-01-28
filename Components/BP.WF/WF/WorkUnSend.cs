@@ -164,36 +164,68 @@ namespace BP.WF
 
             if (nd.HisCancelRole == CancelRole.SpecNodes)
             {
-                /*指定的节点可以撤销,首先判断当前人员是否有权限.*/
+                /*1.指定的节点可以撤销，首先判断是否设置指定的节点.*/
+
+                //
                 NodeCancels ncs = new NodeCancels();
                 ncs.Retrieve(NodeCancelAttr.FK_Node, wn.HisNode.NodeID);
                 if (ncs.Count == 0)
                     throw new Exception("@流程设计错误, 您设置了当前节点(" + wn.HisNode.Name + ")可以让指定的节点人员撤销，但是您没有设置指定的节点.");
 
-                /* 查询出来. */
-                string sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + wn.HisWork.OID + " ORDER BY RDT DESC ";
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0)
-                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送.");
+                //获取Track表
+                 string truckTable = "ND" + int.Parse(wn.HisNode.FK_Flow) + "Track";
 
-                // 找到将要撤销到的NodeID.
-                foreach (DataRow dr in dt.Rows)
-                {
-                    foreach (NodeCancel nc in ncs)
-                    {
-                        if (nc.CancelTo == int.Parse(dr[0].ToString()))
-                        {
-                            cancelToNodeID = nc.CancelTo;
-                            break;
-                        }
-                    }
+                //获取到当前节点走过的节点 与 设定可撤销节点的交集
+                string sql="SELECT NDFrom FROM "+truckTable+" WHERE (ActionType=" + (int)BP.WF.ActionType.ForwardFL +" OR ActionType="+(int)BP.WF.ActionType.SubThreadForward+")";
+                sql +=" AND NDFROM IN(SELECT CancelTO FROM WF_NodeCancel WHERE FK_Node="+wn.HisNode.NodeID+") AND EmpFrom='"+WebUser.No+"' ORDER BY RDT DESC";
 
-                    if (cancelToNodeID != 0)
-                        break;
-                }
+                string nds = DBAccess.RunSQLReturnString(sql);
+                if(DataType.IsNullOrEmpty(nds))
+                    throw new Exception("@您不能执行撤消发送，两种原因：1，你不具备撤销该节点的功能；2.流程设计错误，你指定的可以撤销的节点不在流程运转中走过的节点.");
 
-                if (cancelToNodeID == 0)
-                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送,没有找到可以撤销的节点.");
+                //获取可以删除到的节点
+                cancelToNodeID = int.Parse(nds.Split(',')[0]);
+
+                ////获取当前节点的情况 判断是分流节点还是子线程
+                //Node cancelToNode = new Node(cancelToNodeID);
+
+
+                ////2.获取上一个节点
+                //WorkNode wnPri = wn.GetPreviousWorkNode();
+               
+                ////判断是否具有处理的权限
+                //GenerWorkerList wl = new GenerWorkerList();
+                //int num = wl.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No,
+                //    GenerWorkerListAttr.FK_Node, wnPri.HisNode.NodeID);
+                //if (num == 0)
+                //    throw new Exception("@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
+
+
+
+                ///* 查询出来. */
+                //string sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + wn.HisWork.OID + " ORDER BY RDT DESC ";
+                //DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                //if (dt.Rows.Count == 0)
+                //    throw new Exception("@撤销流程错误,您没有权限执行撤销发送.");
+
+                //// 找到将要撤销到的NodeID.
+                //foreach (DataRow dr in dt.Rows)
+                //{
+                //    foreach (NodeCancel nc in ncs)
+                //    {
+                //        if (nc.CancelTo == int.Parse(dr[0].ToString()))
+                //        {
+                //            cancelToNodeID = nc.CancelTo;
+                //            break;
+                //        }
+                //    }
+
+                //    if (cancelToNodeID != 0)
+                //        break;
+                //}
+
+                //if (cancelToNodeID == 0)
+                //    throw new Exception("@撤销流程错误,您没有权限执行撤销发送,没有找到可以撤销的节点.");
             }
 
             if (nd.HisCancelRole == CancelRole.OnlyNextStep)
@@ -207,6 +239,7 @@ namespace BP.WF
                 if (num == 0)
                     throw new Exception("@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
                 cancelToNodeID = wnPri.HisNode.NodeID;
+                  
             }
 
             if (cancelToNodeID == 0)
@@ -215,6 +248,28 @@ namespace BP.WF
 
             /********** 开始执行撤销. **********************/
             Node cancelToNode = new Node(cancelToNodeID);
+
+            switch(cancelToNode.HisNodeWorkType)
+            {
+                case NodeWorkType.StartWorkFL:
+                case NodeWorkType.WorkFHL:
+                case NodeWorkType.WorkFL:
+
+                    // 调用撤消发送前事件。
+                   nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wn.HisWork, null);
+
+                    BP.WF.Dev2Interface.Node_FHL_KillSubFlow(cancelToNode.FK_Flow, this.FID, this.WorkID); //杀掉子线程.
+
+                    // 调用撤消发送前事件。
+                      nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
+                      return "KillSubThared@子线程撤销成功.";
+                default:
+                    break;
+
+            }
+          //  if (cancelToNode.HisNodeWorkType == NodeWorkType.StartWorkFL)
+
+
             WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
 
             // 调用撤消发送前事件。

@@ -71,6 +71,24 @@ namespace BP.WF.HttpHandler
 
             me.ExtType = MapExtXmlList.AutoFullDtlField;
 
+            me.Tag1= this.GetValFromFrmByKey("TB_Tag1");
+            me.Tag2 = this.GetValFromFrmByKey("TB_Tag2");
+            string Tag = "0";
+            try
+            {
+                Tag = this.GetValFromFrmByKey("CB_Tag");
+                if (Tag == "on")
+                    Tag = "1";
+            }
+            catch (Exception e)
+            {
+                Tag = "0";
+            }
+
+
+            me.Tag = Tag;
+
+
             //执行保存.
             me.MyPK = MapExtXmlList.AutoFullDtlField + "_" + me.FK_MapData + "_" + me.AttrOfOper;
             if (me.Update() == 0)

@@ -2444,15 +2444,7 @@ namespace BP.WF
 
             /*分别启动每个节点的信息.*/
             string msg = "";
-
-            #region 查询出来当前流程节点数据，为子线程的节点copy数据所用。
-            //查询出来上一个节点的附件信息来。
-            FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID, this.WorkID.ToString());
-
-            //查询出来上一个Ele信息来。
-            FrmEleDBs eleDBs = new FrmEleDBs("ND" + this.HisNode.NodeID, this.WorkID.ToString());
-            #endregion
-
+             
             //定义系统变量.
             string workIDs = "";
             string empIDs = "";
@@ -2481,44 +2473,7 @@ namespace BP.WF
                     wk.Delete();
                     continue;
                 }
-
-                #region 执行数据copy.
-                if (athDBs.Count > 0)
-                {
-                    //插入之前先删除.
-                    FrmAttachmentDB mydb = new FrmAttachmentDB();
-                    mydb.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + nd.NodeID, FrmAttachmentDBAttr.RefPKVal, wk.OID);
-
-                    /*说明当前节点有附件数据*/
-                    int idx = 0;
-                    foreach (FrmAttachmentDB athDB in athDBs)
-                    {
-                        idx++;
-                        FrmAttachmentDB athDB_N = new FrmAttachmentDB();
-                        athDB_N.Copy(athDB);
-                        athDB_N.FK_MapData = "ND" + nd.NodeID;
-                        athDB_N.MyPK = BP.DA.DBAccess.GenerGUID();
-                        athDB_N.FK_FrmAttachment = athDB_N.FK_FrmAttachment.Replace("ND" + this.HisNode.NodeID, "ND" + nd.NodeID);
-                        athDB_N.RefPKVal = wk.OID.ToString();
-                        athDB_N.Insert();
-                    }
-                }
-
-                if (eleDBs.Count > 0)
-                {
-                    /*说明当前节点有附件数据*/
-                    int idx = 0;
-                    foreach (FrmEleDB eleDB in eleDBs)
-                    {
-                        idx++;
-                        FrmEleDB eleDB_N = new FrmEleDB();
-                        eleDB_N.Copy(eleDB);
-                        eleDB_N.FK_MapData = "ND" + nd.NodeID;
-                        eleDB_N.Insert();
-                    }
-                }
-                #endregion 执行数据copy.
-
+                 
                 foreach (GenerWorkerList wl in current_gwls)
                 {
                     msg += wl.FK_Emp + "，" + wl.FK_EmpText + "、";
@@ -2574,6 +2529,17 @@ namespace BP.WF
                     wk.Emps = "@" + wl.FK_Emp;
                     //wk.RDT = DataType.CurrentDataTimess;
                     wk.DirectUpdate();
+
+                    //为子线程产生分流节点的发送副本。
+                    wl.FID = this.WorkID;
+                    wl.FK_Emp = WebUser.No;
+                    wl.FK_EmpText = WebUser.Name;
+                    wl.IsPassInt = 1;
+                    wl.IsRead = true;
+                    wl.FK_Node = this.HisNode.NodeID;
+                    wl.FK_NodeText = this.HisNode.Name;
+                    if (wl.IsExits==false)
+                       wl.Insert();
                 }
             }
 
@@ -3327,47 +3293,59 @@ namespace BP.WF
             ps.Add("FID", this.HisWork.FID);
             DBAccess.RunSQL(ps);
 
-            /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
-            string mysql = "";
+
+            //合流节点上的工作处理者。
+            GenerWorkerLists gwls = new GenerWorkerLists(this.HisWork.FID, toNode.NodeID);
+            current_gwls = gwls;
+            int pass = 3;
+            if (gwls.Count > 0)
+                pass = gwls[0].GetValIntByKey("IsPass");
+
+            if (pass != 0)
+            {
+                
+                /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
+                string mysql = "";
 
 #warning 对于多个分合流点可能会有问题。
-            mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsEnable=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
-            decimal numAll = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+                mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsEnable=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
+                decimal numAll = (decimal)DBAccess.RunSQLReturnValInt(mysql);
 
-            GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
-            //记录子线程到达合流节点数
-            int count = gwf.GetParaInt("ThreadCount");
-            gwf.SetPara("ThreadCount", count + 1);
-            gwf.Update();
-
-            //mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
-            //decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
-            decimal numPassed = gwf.GetParaInt("ThreadCount");
-
-            decimal passRate = numPassed / numAll * 100;
-            if (toNode.PassRate <= passRate)
-            {
-                /* 这时已经通过,可以让主线程看到待办. */
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
-                ps.Add("FK_Node", toNode.NodeID);
-                ps.Add("WorkID", this.HisWork.FID);
-                int num = DBAccess.RunSQL(ps);
-                if (num == 0)
-                    throw new Exception("@不应该更新不到它.");
-                gwf.SetPara("ThreadCount", 0);
+                GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
+                //记录子线程到达合流节点数
+                int count = gwf.GetParaInt("ThreadCount");
+                gwf.SetPara("ThreadCount", count + 1);
                 gwf.Update();
-            }
-            else
-            {
+
+                //mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
+                //decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+                decimal numPassed = gwf.GetParaInt("ThreadCount");
+
+                decimal passRate = numPassed / numAll * 100;
+                if (toNode.PassRate <= passRate)
+                {
+                    /* 这时已经通过,可以让主线程看到待办. */
+                    ps = new Paras();
+                    ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+                    ps.Add("FK_Node", toNode.NodeID);
+                    ps.Add("WorkID", this.HisWork.FID);
+                    int num = DBAccess.RunSQL(ps);
+                    if (num == 0)
+                        throw new Exception("@不应该更新不到它.");
+                    gwf.SetPara("ThreadCount", 0);
+                    gwf.Update();
+                }
+                else
+                {
 #warning 为了不让其显示在途的工作需要， =3 不是正常的处理模式。
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
-                ps.Add("FK_Node", toNode.NodeID);
-                ps.Add("WorkID", this.HisWork.FID);
-                int num = DBAccess.RunSQL(ps);
-                if (num == 0)
-                    throw new Exception("@不应该更新不到它.");
+                    ps = new Paras();
+                    ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+                    ps.Add("FK_Node", toNode.NodeID);
+                    ps.Add("WorkID", this.HisWork.FID);
+                    int num = DBAccess.RunSQL(ps);
+                    if (num == 0)
+                        throw new Exception("@不应该更新不到它.");
+                }
             }
 
             this.HisGenerWorkFlow.FK_Node = toNode.NodeID;
@@ -7679,10 +7657,6 @@ namespace BP.WF
             this.rptGe.Copy(this.HisWork);
             this.rptGe.DirectUpdate();
             #endregion 复制主表数据.
-
-            // 产生合流汇总明细表数据.
-            //this.GenerHieLiuHuiZhongDtlData_2013(nd);
-
             #endregion 处理合流节点表单数据
 
             //设置当前子线程已经通过.
@@ -7691,53 +7665,57 @@ namespace BP.WF
             ps.Add("WorkID", this.WorkID);
             ps.Add("FID", this.HisWork.FID);
             DBAccess.RunSQL(ps);
+            
+            int pass = 3;
+            if (gwls.Count > 0)
+                pass = gwls[0].GetValIntByKey("IsPass");
 
-            /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
             string info = "";
-            string sql1 = "";
-#warning 对于多个分合流点可能会有问题。
-            ps = new Paras();
-            ps.SQL = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE  FID=" + dbStr + "FID AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
-            ps.Add("FID", this.HisWork.FID);
-            decimal numAll1 = (decimal)DBAccess.RunSQLReturnValInt(ps);
-
-            //string truckTable = "ND" + int.Parse(this.HisNode.FK_Flow) + "Track";
-           // string mysql = "SELECT COUNT(distinct WorkID) AS Num FROM " + truckTable + " WHERE  FID=" + this.HisWork.FID + " AND ActionType=7" + " AND NDTo=" + nd.NodeID;
-
-            //string mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
-            decimal numPassed = gwf.GetParaInt("ThreadCount");
-
-            decimal passRate1 = numPassed / numAll1 * 100;
-            if (nd.PassRate <= passRate1)
+            if (pass != 0)
             {
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,FID=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
-                ps.Add("FK_Node", nd.NodeID);
-                ps.Add("WorkID", this.HisWork.FID);
-                DBAccess.RunSQL(ps);
 
+                /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
+                string sql1 = "";
+                 #warning 对于多个分合流点可能会有问题。
                 ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
-                ps.Add("FK_Node", nd.NodeID);
-                ps.Add("NodeName", nd.Name);
-                ps.Add("WorkID", this.HisWork.FID);
-                DBAccess.RunSQL(ps);
+                ps.SQL = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE  FID=" + dbStr + "FID AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
+                ps.Add("FID", this.HisWork.FID);
+                decimal numAll1 = (decimal)DBAccess.RunSQLReturnValInt(ps);
 
-                gwf.SetPara("ThreadCount", 0);
-                gwf.Update();
-                info = "@下一步合流点(" + nd.Name + ")已经启动。";
-            }
-            else
-            {
+                //string mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + this.SpanSubTheadNodes(nd) + ")";
+                decimal numPassed = gwf.GetParaInt("ThreadCount");
+
+                decimal passRate1 = numPassed / numAll1 * 100;
+                if (nd.PassRate <= passRate1)
+                {
+                    ps = new Paras();
+                    ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,FID=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("WorkID", this.HisWork.FID);
+                    DBAccess.RunSQL(ps);
+
+                    ps = new Paras();
+                    ps.SQL = "UPDATE WF_GenerWorkFlow SET FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("NodeName", nd.Name);
+                    ps.Add("WorkID", this.HisWork.FID);
+                    DBAccess.RunSQL(ps);
+
+                    gwf.SetPara("ThreadCount", 0);
+                    gwf.Update();
+                    info = "@下一步合流点(" + nd.Name + ")已经启动。";
+                }
+                else
+                {
 #warning 为了不让其显示在途的工作需要， =3 不是正常的处理模式。
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3,FID=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
-                ps.Add("FK_Node", nd.NodeID);
-                ps.Add("WorkID", this.HisWork.FID);
-                DBAccess.RunSQL(ps);
+                    ps = new Paras();
+                    ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3,FID=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("WorkID", this.HisWork.FID);
+                    DBAccess.RunSQL(ps);
 
+                }
             }
-
             this.HisGenerWorkFlow.FK_Node = nd.NodeID;
             this.HisGenerWorkFlow.NodeName = nd.Name;
 
@@ -8180,7 +8158,7 @@ namespace BP.WF
             int nodeid = 0;
             string truckTable = "ND" + int.Parse(this.HisNode.FK_Flow) + "Track";
             sql = "SELECT NDFrom,Tag FROM " + truckTable + " WHERE WorkID=" + this.WorkID + " AND NDTo='" + this.HisNode.NodeID + "' AND ";
-            sql += " (ActionType=1 OR ActionType=" + (int)ActionType.Skip + "  OR ActionType=" + (int)ActionType.ForwardFL + ")";
+            sql += " (ActionType=1 OR ActionType=" + (int)ActionType.Skip + "  OR ActionType=" + (int)ActionType.ForwardFL + " ";
             sql += "  OR  ActionType=" + (int)ActionType.ForwardHL + " "; //合流.
             sql += "  OR  ActionType=" + (int)ActionType.ForwardAskfor + " "; //会签.
             sql += "   )";

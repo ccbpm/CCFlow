@@ -261,7 +261,7 @@ namespace BP.WF
                     BP.WF.Dev2Interface.Node_FHL_KillSubFlow(cancelToNode.FK_Flow, this.FID, this.WorkID); //杀掉子线程.
 
                     // 调用撤消发送前事件。
-                      nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
+                    nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
                       return "KillSubThared@子线程撤销成功.";
                 default:
                     break;
@@ -428,6 +428,41 @@ namespace BP.WF
             if (nd.HisCancelRole == CancelRole.None)
                 throw new Exception("当前节点，不允许撤销。");
 
+
+            if (nd.IsStartNode && nd.HisNodeWorkType != NodeWorkType.StartWorkFL)
+                throw new Exception("当前节点是开始节点，所以您不能撤销。");
+
+            //如果当前节点是分流、分合流节点则可以撤销
+            if (nd.HisNodeWorkType == NodeWorkType.StartWorkFL
+                || nd.HisNodeWorkType == NodeWorkType.WorkFL
+                || nd.HisNodeWorkType == NodeWorkType.WorkFHL)
+            {
+                //获取当前节点的子线程
+                string truckTable = "ND" + int.Parse(nd.FK_Flow) + "Track";
+                string threadSQL = "SELECT FK_Node,WorkID FROM WF_GenerWorkFlow  WHERE FID=" + this.WorkID + " AND FK_Node"
+                        + " IN(SELECT DISTINCT(NDTo) FROM " + truckTable + "  WHERE ActionType=" + (int)ActionType.ForwardFL + " AND WorkID=" + this.WorkID + " AND NDFrom='" + nd.NodeID + "'"
+                        + "  ) ";
+                DataTable dt = DBAccess.RunSQLReturnTable(threadSQL);
+                if(dt == null || dt.Rows.Count == 0 )
+                    throw new Exception("err@流程运行错误：当不存在子线程时改过程应该处于待办状态");
+              
+
+                foreach (DataRow  dr in dt.Rows)
+                {
+                    Node threadnd = new Node(dr["FK_Node"].ToString());
+                    // 调用撤消发送前事件。
+                    nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, nd.HisWork, null);
+
+                    BP.WF.Dev2Interface.Node_FHL_KillSubFlow(threadnd.FK_Flow, this.WorkID, long.Parse(dr["WorkID"].ToString())); //杀掉子线程.
+
+                    // 调用撤消发送前事件。
+                    nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, nd.HisWork, null);
+                }
+
+                return "撤销成功";
+
+            }
+
             //如果启用了对方已读，就不能撤销.
             if (nd.CancelDisWhenRead == true)
             {
@@ -507,13 +542,6 @@ namespace BP.WF
                 //执行子线程的撤销.
                 return DoThreadUnSend();
             }
-
-         
-          
-           
-
-            if (nd.IsStartNode)
-                throw new Exception("当前节点是开始节点，所以您不能撤销。");
 
             //定义当前的节点.
             WorkNode wn = this.GetCurrentWorkNode();
@@ -626,7 +654,7 @@ namespace BP.WF
             }
             #endregion 如果撤销到的节点是普通的节点，并且当前的节点是分流节点，并且分流节点已经发送下去了.
 
-
+           
             #region 如果当前是协作组长模式,就要考虑当前是否是会签节点，如果是会签节点，就要处理。
             if (cancelToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                 || cancelToNode.TodolistModel == TodolistModel.Teamup)

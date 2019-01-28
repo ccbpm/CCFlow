@@ -220,15 +220,15 @@
             var urlParam = DearUrlParas();
             //初始化表格.
 
-//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-//            handler.AddUrlData(urlParam);
-//            var data = handler.DoMethodReturnString("Dtl_Init");
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData(urlParam);
+            var data = handler.DoMethodReturnString("Dtl_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -387,8 +387,8 @@
                     $("#dtlTable").datagrid("clearSelections");
                     $("#dtlTable").datagrid("clearChecked");
                     InitToolBars(data);
-                }
-            });
+//                }
+//            });
         }
 
         //指定列求和
@@ -793,6 +793,7 @@
     <script type="text/javascript">
         //插入行.
         function AddRow(EditModel) {
+            SaveDtl();
             if (endEditing()) {
                 $('#dtlTable').datagrid('appendRow', {});
                 editIndex = $('#dtlTable').datagrid('getRows').length - 1;
@@ -815,6 +816,42 @@
             var ed = $(this).datagrid('getEditor', { index: index, field: field });
             var ooo = $(ed.target);
 
+        }
+        function SaveDtl() {
+            if (editIndex == undefined)
+                return;
+
+           // $('#dtlTable').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+
+            var rowData = $('#dtlTable').datagrid('getSelected');
+            if (rowData == null)
+                return;
+
+            var athNum;
+            if (rowData.AthNum != undefined) {
+                athNum = rowData["AthNum"];
+                delete rowData["AthNum"]; //删除附件数量属性
+            }
+            rowData.DoType = "Dtl_SaveRow";
+            rowData.FK_MapDtl = GetQueryString("EnsName");
+            rowData.RefPKVal = GetQueryString("RefPKVal");
+            rowData.FK_Node = GetQueryString("FK_Node");
+            rowData.FK_MapData = GetQueryString("FK_MapData");
+            rowData.FID = GetQueryString("FID");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
+            handler.AddPara("RefPKVal", rowData.RefPKVal);
+            handler.AddPara("FK_Node", rowData.FK_Node);
+            handler.AddPara("FK_MapData", rowData.FK_MapData);
+            handler.AddPara("FID", rowData.FID);
+
+            var data = handler.DoMethodReturnString("Dtl_SaveRow");
+//            AjaxServiceGener(rowData, function (data) {
+                //rowData["AthNum"] = athNum;
+                loadDtlTable();
+//            }, this);
         }
         //保存行数据
         function SaveRow() {
@@ -844,17 +881,17 @@
                 rowData.FK_MapData = GetQueryString("FK_MapData");
                 rowData.FID = GetQueryString("FID");
 
-//                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-//                handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
-//                handler.AddPara("RefPKVal", rowData.RefPKVal);
-//                handler.AddPara("FK_Node", rowData.FK_Node);
-//                handler.AddPara("FK_MapData", rowData.FK_MapData);
-//                handler.AddPara("FID", rowData.FID);
-//                var data = handler.DoMethodReturnString("Dtl_SaveRow");
-                AjaxServiceGener(rowData, function (data) {
+                var handler = new httphandler("bp.wf.httphandler.wf_ccform");
+                handler.addpara("fk_mapdtl", rowdata.fk_mapdtl);
+                handler.addpara("refpkval", rowdata.refpkval);
+                handler.addpara("fk_node", rowdata.fk_node);
+                handler.addpara("fk_mapdata", rowdata.fk_mapdata);
+                handler.addpara("fid", rowdata.fid);
+                var data = handler.domethodreturnstring("dtl_saverow");
+//                AjaxServiceGener(rowData, function (data) {
                     //rowData["AthNum"] = athNum;
                     loadDtlTable();
-                }, this);
+//                }, this);
             } else {
                 alert("第" + (selectedIndex + 1) + "行数据验证无效。请重新填写");
             }
@@ -879,15 +916,15 @@
                             rowData.FK_MapDtl = GetQueryString("EnsName");
                             rowData.RefPKVal = GetQueryString("RefPKVal");
 
-//                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-//                            handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
-//                            handler.AddPara("RefPKVal", rowData.RefPKVal);
-//                            var data = handler.DoMethodReturnString("Dtl_DeleteRow");
-                            AjaxServiceGener(rowData, function (data) {
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                            handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
+                            handler.AddPara("RefPKVal", rowData.RefPKVal);
+                            var data = handler.DoMethodReturnString("Dtl_DeleteRow");
+//                            AjaxServiceGener(rowData, function (data) {
                                 //$('#dtlTable').datagrid('deleteRow', $('#dtlTable').datagrid('getRowIndex', checkedRows[0]));
                                 loadDtlTable();
 
-                            }, this);
+//                            }, this);
                         }
                     }
                 });

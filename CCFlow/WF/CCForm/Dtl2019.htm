@@ -217,12 +217,15 @@
             //调用Gener.js 的方法，处理当前页面传来的参数, 并把参数传入到dtl.htm里面去。
             var urlParam = DearUrlParas();
             //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData(urlParam);
+            var data = handler.DoMethodReturnString("Dtl_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -381,8 +384,8 @@
                     $("#dtlTable").datagrid("clearSelections");
                     $("#dtlTable").datagrid("clearChecked");
                     InitToolBars(data);
-                }
-            });
+//                }
+//            });
         }
 
         //指定列求和

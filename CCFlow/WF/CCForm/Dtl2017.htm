@@ -405,12 +405,15 @@
 
 
             //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData(urlParam);
+            var data = handler.DoMethodReturnString("Dtl_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
 
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
@@ -738,8 +741,8 @@
                     var IsShowTitle = sys_MapDtl.IsShowTitle == 1 ? true : false; //是否显示标题
                     var IsView = sys_MapDtl.IsView == 1 ? true : false; //是否可见
                     var titles = IsShowTitle ? sys_MapDtl.Name : '';
-                }
-            });
+//                }
+//            });
         }
 
         function triggerStatistics() {

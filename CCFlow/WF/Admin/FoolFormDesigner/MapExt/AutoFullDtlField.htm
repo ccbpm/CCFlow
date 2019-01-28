@@ -58,8 +58,12 @@
             //设置计算方式.
             SetDDLVal("DDL_JSFS", jsfs);
 
-            //调用公共类库的方法:执行批量主表赋值.
-            // GenerFullAllCtrlsVal(mapExt);
+            var tag1 = mapExt.Tag;
+            if (tag1 == "1")
+                $("#CB_Tag").attr("checked", 'true');
+
+            $("#TB_Tag1").val(mapExt.Tag1);
+            $("#TB_Tag2").val(mapExt.Tag2);
 
             $("#Msg").html("");
             return;
@@ -70,6 +74,13 @@
         function Save() {
 
             $("#Msg").html("正在保存,请稍后......");
+
+            if ($("#CB_Tag").attr("checked") == "checked") {
+                if ($("#TB_Tag1").val == "" || $("#TB_Tag2").val == "") {
+                    alert("函数名和备注不能为空");
+                    return false;
+                }
+            }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
@@ -125,6 +136,30 @@
                 </select>
             </td>
         </tr>
+        <tr>
+		    <td colspan="3" >
+		    
+		   <input type="checkbox" id="CB_Tag" name="CB_Tag" />
+		       <label>是否启用对其他值的计算 </label>
+		    </td>
+		 </tr>
+         <tr> 
+		    <td>函数名称 </td>
+		    <td> 
+		    <input type="text" id="TB_Tag1" name="TB_Tag1" style="width:99%" />
+		     </td>
+		    <td>比如: MyFunc() </td>
+		 </tr>
+		
+		    
+		 <tr >
+		    <td>备注 </td>
+		    <td> 
+		    <input type="text" id="TB_Tag2" name="TB_Tag2"  style="width:99%"/>
+		     </td>
+		    <td>对该函数的说明</td>
+    	</tr>
+
         <tr>
             <td colspan="3">
                 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />

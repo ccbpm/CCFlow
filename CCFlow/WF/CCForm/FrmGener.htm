@@ -19,15 +19,6 @@
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
     <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
 
-    <!--<script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>-->
- <!--   <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
-        type="text/css" />-->
-
-    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>-->
-    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>-->
-    <!--<script type="text/javascript" src="../Scripts/Cookie.js"></script>-->
-    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/jquery.nav.js"></script>-->
-
     <!-- 重要的表单3文件. -->
     <script type="text/javascript" src="FrmGener.js"></script>
     <script type="text/javascript" src="FrmFool.js"></script>
@@ -243,15 +234,6 @@
                         background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
                     }
 
-        ::-webkit-scrollbar-thumb {
-            background-color: #fff;
-            border: none;
-        }
-
-        ::-webkit-scrollbar {
-            width: 0px;
-            height: 0px;
-        }
 
         .input-group .input-group-addon {
             border: none;
@@ -305,19 +287,28 @@
             vertical-align: middle;
             margin-bottom: 2px;
         }
+        
+        #topContentDiv {
+            background: #fff;
+            border-radius: 5px;
+            padding: 8px 0px 0px 0px;
+            margin: 8px 15px 15px 15px;
+            border: #EFEFEF 1px solid;
+            overflow:hidden;
+        }
     </style>
     <!--JS 加载-->
     <script type="text/javascript">
 
         function setContentHeight() {
-            $("body").css("overflow", "hidden");
-            $("#divCurrentForm").css("overflow", "hidden");
-            $("#topContentDiv").css("overflow", "hidden");
-            $("#contentDiv").css("overflow", "hidden");
-            $("#divCCForm").css("overflow", "auto");
-            $("#CCForm").css("overflow", "hidden");
-            $("#CCForm").css("overflow-y", "hidden");
-            $("#CCForm").css("height", "auto");
+//            $("body").css("overflow", "hidden");
+//            $("#divCurrentForm").css("overflow", "hidden");
+//            $("#topContentDiv").css("overflow", "hidden");
+//            $("#contentDiv").css("overflow", "hidden");
+//            $("#divCCForm").css("overflow", "auto");
+//            $("#CCForm").css("overflow", "hidden");
+//            $("#CCForm").css("overflow-y", "hidden");
+//            $("#CCForm").css("height", "auto");
             var bodyHeight = $("body").height();
             var bottomHeight = $("#bottomToolBar").height(); // save button
             if (($("#Btn").css("display") || "") != "block") {
@@ -331,13 +322,13 @@
             $("#divCCForm").height(height - 50);
         }
         $(function () {
-            $("body").css("overflow", "hidden");
-            $("#divCurrentForm").css("overflow", "hidden");
-            $("#topContentDiv").css("overflow", "hidden");
-            $("#contentDiv").css("overflow", "hidden");
-            $("#divCCForm").css("overflow", "auto");
-            $("#CCForm").css("overflow", "hidden");
-            $("#CCForm").css("overflow-y", "hidden");
+//            $("body").css("overflow", "hidden");
+//            $("#divCurrentForm").css("overflow", "hidden");
+//            $("#topContentDiv").css("overflow", "hidden");
+//            $("#contentDiv").css("overflow", "hidden");
+//            $("#divCCForm").css("overflow", "auto");
+//            $("#CCForm").css("overflow", "hidden");
+//            $("#CCForm").css("overflow-y", "hidden");
             $("#CCForm").css("height", "auto");
             $(window).bind("resize", function () {
                 setTimeout(setContentHeight, 100);

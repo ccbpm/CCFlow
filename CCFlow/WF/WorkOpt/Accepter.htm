@@ -155,9 +155,9 @@
                 var url = data.replace('url@', '');
 
                 if (url.indexOf('ToNode=') > 0)
-                    window.location.href = url;
+                    window.location.href = url + "&IsSend=" + GetQueryString("IsSend");
                 else
-                    window.location.href = url + "&ToNode=" + GetQueryString("ToNode");
+                    window.location.href = url + "&ToNode=" + GetQueryString("ToNode") + "&IsSend=" + GetQueryString("IsSend");
 
                 return;
             }

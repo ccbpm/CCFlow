@@ -340,6 +340,8 @@ function GenerFrm() {
                     if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
                         var mainTable = frmData.MainTable[0];
                         var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                        if (selectText == null || selectText == undefined || selectText == "")
+                            selectText = mainTable[mapAttr.KeyOfEn + "T"];
                         $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
                     }
 

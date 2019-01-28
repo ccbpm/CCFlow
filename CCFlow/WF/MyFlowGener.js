@@ -1803,23 +1803,12 @@ function InitToolBar() {
         $('[name=Delete]').attr('onclick', '');
         $('[name=Delete]').unbind('click');
         $('[name=Delete]').bind('click', function () {
-            // initModal("Delete");
-            // $('#Delete').modal().show();
+           
             DeleteFlow();
         });
     }
 
 
-    //            if ($('[name=Delete]').length > 0) {
-    //                var onclickFun = $('[name=Delete]').attr('onclick');
-    //                if (onclickFun != undefined) {
-    //                    if (plant == 'CCFlow') {
-    //                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
-    //                    } else {
-    //                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.jsp'));
-    //                    }
-    //                }
-    //            }
 }
 
 /* ss */

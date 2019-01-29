@@ -2391,20 +2391,8 @@ namespace BP.WF
             this.HisGenerWorkFlow.FK_Node = toND.NodeID;
             this.HisGenerWorkFlow.NodeName = toND.Name;
 
-            //ps = new Paras();
-            //ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + (int)WFState.Runing + ", FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
-            //ps.Add("FK_Node", toND.NodeID);
-            //ps.Add("NodeName", toND.Name);
-            //ps.Add("WorkID", this.HisWork.OID);
-            //DBAccess.RunSQL(ps);
 
-            if (this.HisNode.HisFormType == NodeFormType.SDKForm || this.HisNode.HisFormType == NodeFormType.SelfForm)
-            {
-            }
-            else
-            {
-                //this.addMsg(SendReturnMsgFlag.WorkRpt, null, "@<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + toND.FK_Flow + "' target='_self' >工作轨迹</a>。");
-            }
+          
             this.addMsg(SendReturnMsgFlag.WorkStartNode, "@下一步[" + toND.Name + "]工作成功启动.", "@下一步<font color=blue>[" + toND.Name + "]</font>工作成功启动.");
             #endregion
 
@@ -5648,7 +5636,7 @@ namespace BP.WF
                 this.IsStopFlow = ap.GetValBoolenByKey("IsStopFlow", false);
 
                 string toEmps = ap.GetValStrByKey("ToEmps");
-                if (DataType.IsNullOrEmpty(toEmps) == true)
+                if (DataType.IsNullOrEmpty(toEmps) == false)
                     jumpToEmp = toEmps;
 
                 //处理str信息.
@@ -5679,6 +5667,8 @@ namespace BP.WF
                 }
 
                 //把发送sendWhen 消息提示给用户.
+                if (sendWhen.Equals("null") == true)
+                    sendWhen = "";
                 this.addMsg("SendWhen", sendWhen, sendWhen, SendReturnMsgType.Info);
             }
             #endregion 安全性检查.

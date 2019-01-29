@@ -1189,7 +1189,7 @@ namespace BP.WF.Template
                 #endregion
 
                 //本节点接收人不允许包含上一步发送人 。
-                if (this.town.HisNode.IsExpSender == true && re_dt.Columns.Count <= 2)
+                if (this.town.HisNode.IsExpSender == true && re_dt.Rows.Count >= 2)
                 {
                     /*
                      * 排除了接受人分组的情况, 因为如果有了分组，就破坏了分组的结构了.

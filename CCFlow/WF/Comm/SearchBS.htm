@@ -746,7 +746,7 @@
             //去除URL中的参数 EnsName、 PKVal
             var currUrls = currUrl.split("&");
             currUrl="";
-            $.earch(currUrls,function(i,param){
+            $.each(currUrls,function(i,param){
                 if(param.indexOf("EnsName") ==-1 && param.indexOf("PKVal")==-1)
                   currUrl += "&"+param;  
             });

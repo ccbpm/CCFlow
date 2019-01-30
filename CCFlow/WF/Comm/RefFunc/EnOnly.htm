@@ -59,8 +59,7 @@
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             var enName = GetQueryString("EnName");
             var type = GetQueryString("type");
-            httpHandler.AddPara("EnName", enName);
-
+            httpHandler.AddUrlData();
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);
             }

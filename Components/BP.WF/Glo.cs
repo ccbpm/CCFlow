@@ -2785,10 +2785,11 @@ namespace BP.WF
         /// <returns></returns>
         public static string DealExp(string exp, Entity en, string errInfo)
         {
+            //替换字符
+            exp = exp.Replace("~", "'");
+
             if (exp.Contains("@") == false)
                 return exp;
-
-            exp = exp.Replace("~", "'");
 
             //首先替换加; 的。
             exp = exp.Replace("@WebUser.No;", WebUser.No);
@@ -2801,14 +2802,10 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-            //  exp = exp.Replace("@WorkID", "0");
 
             if (exp.Contains("@") == false)
-            {
-                exp = exp.Replace("~", "'");
                 return exp;
-            }
-
+           
             //增加对新规则的支持. @MyField; 格式.
             if (en != null)
             {
@@ -2822,11 +2819,18 @@ namespace BP.WF
 
                 foreach (string key in row.Keys)
                 {
+                    //值为空或者null不替换
+                    if (row[key] == null || row[key].Equals("") == true)
+                        continue;
+
                     if (exp.Contains("@" + key + ";"))
                         exp = exp.Replace("@" + key + ";", row[key].ToString());
+
+                    //不包含@则返回SQL语句
+                    if (exp.Contains("@") == false)
+                        return exp;
                 }
-                if (exp.Contains("@") == false)
-                    return exp;
+
 
                 #region 解决排序问题.
                 Attrs attrs = en.EnMap.Attrs;
@@ -2861,24 +2865,17 @@ namespace BP.WF
                     string key = dr[0].ToString();
                     bool isStr = key.Contains(",");
                     if (isStr == true)
-                    {
                         key = key.Replace(",", "");
-                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
-                    }
-                    else
-                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+
+                    if(DataType.IsNullOrEmpty(en.GetValStrByKey(key)))
+                        continue;
+
+                    exp = exp.Replace("@" + key, en.GetValStrByKey(key));
                 }
                 #endregion
 
                 if (exp.Contains("@") == false)
                     return exp;
-
-                //替换全部的变量.
-                foreach (string key in row.Keys)
-                {
-                    if (exp.Contains("@" + key))
-                        exp = exp.Replace("@" + key, row[key].ToString());
-                }
             }
 
             // 处理Para的替换.
@@ -2891,19 +2888,23 @@ namespace BP.WF
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
-                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.Keys)
+                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
                 {
                     if (string.IsNullOrEmpty(key))
                         continue;
                     exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
                 }
+                /*如果是bs*/
+                foreach (string key in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                {
+                    if (string.IsNullOrEmpty(key))
+                        continue;
+                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
+                }
+                
             }
 
             exp = exp.Replace("~", "'");
-            //exp = exp.Replace("''", "'");
-            //exp = exp.Replace("''", "'");
-            //exp = exp.Replace("=' ", "=''");
-            //exp = exp.Replace("= ' ", "=''");
             return exp;
         }
         /// <summary>

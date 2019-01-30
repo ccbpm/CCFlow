@@ -449,22 +449,22 @@
         }
 
         //更新.
-        function Save() { 
- 
+        function Save() {
+            //点击保存后按钮不可编辑
+            $("#Btn_Save").attr("disabled", true);
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             handler.AddUrlData();  //增加参数属性.
             handler.AddFormData();
             handler.AddPara("NewRowCount", newRowCount);
             var data = handler.DoMethodReturnString("Dtl_Save");
-            console.log(handler.getParams());
             if (data.indexOf("err@")==0)
-            {    
-              alert(data);
+            {
+                alert(data);
+                $("#Btn_Save").attr("disabled", false);
               return;
             }
-
-           // var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval;
-            window.location.href = window.location.href; //刷新.
+          alert(data);
+          window.location.href = window.location.href;
         }
 
         function Delete(pkval) {

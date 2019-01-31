@@ -2560,6 +2560,9 @@ namespace BP.WF
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
 
+            //获取用户当前所在的节点
+            string currNode = "(SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC)";
+
             //授权模式.
             if (WebUser.IsAuthorize ==true)
             {
@@ -2568,13 +2571,13 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.*,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        ps.SQL = "SELECT DISTINCT a.*,"+currNode+" AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
                         ps.Add("Starter", userNo);
                         ps.Add("FK_Emp", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.*,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        ps.SQL = "SELECT DISTINCT a.*," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -2595,21 +2598,23 @@ namespace BP.WF
                     }
                 }
             }
+
             
             //非授权模式，
             if (WebUser.IsAuthorize ==false)
             {
+                
                 if (DataType.IsNullOrEmpty(fk_flow))
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.*,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
+                        ps.SQL = "SELECT DISTINCT a.*," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* ,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) ";
+                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) ";
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -2617,14 +2622,14 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* ,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter ";
+                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* ,B.FK_Node AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
+                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                     }

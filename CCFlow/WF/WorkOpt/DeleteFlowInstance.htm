@@ -9,6 +9,7 @@
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -22,26 +23,22 @@
         });
 
         function Init() {
-            var param = {
-                DoType: "DeleteFlowInstance_Init",
-                FK_Flow: fk_flow,
-                FK_Node: fk_node,
-                WorkID: workid
-            };
 
-            Handler_AjaxQueryData(param, function (data) {
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_Node", fk_node);
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("DeleteFlowInstance_Init");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
 
-                if (data.length == 0 || data == "4") {
-                    return;
-                }
+            if (data.length == 0 || data == "4") {
+                return;
+            }
 
-                $('input[name="deleteWay"][value="' + data + '"]').attr("checked", true);
-               
-            }, this);
+            $('input[name="deleteWay"][value="' + data + '"]').attr("checked", true);
         }
 
         function OK() {

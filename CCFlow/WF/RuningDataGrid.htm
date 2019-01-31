@@ -135,7 +135,7 @@
 			}
 
 			// 撤销。
-			function UnSend(fk_flow, workid, fid) {
+			function UnSend(fk_flow, workid, fid, unSendToNode) {
 
 				if(window.confirm('您确定要撤销本次发送吗？') == false)
 				    return;
@@ -144,6 +144,7 @@
 				handler.AddPara("FK_Flow", fk_flow);
 				handler.AddPara("WorkID", workid);
 				handler.AddPara("FID", fid);
+				handler.AddPara("UnSendToNode", unSendToNode);
 				var data = handler.DoMethodReturnString("Runing_UnSend");
                  
 				if(data.indexOf('err@') == 0) {
@@ -387,6 +388,7 @@
 			        var workID = work.WorkID;
 			        var fid = work.FID;
 			        var nodeID = work.FK_Node;
+			        var currNodeId = work.CurrNode;
 
 			        //但前节点所处的位置
 			        var nowNode = new Entity("BP.WF.Node", nodeID);
@@ -394,7 +396,7 @@
 			        //如果是树形表单，则显示当前人所处节点的数据
 			        if (nowNode.FormType == 5) {
 			            //获取人员所处的流程节点
-			            var currNodeId = work.CurrNode;
+			           
 			            var currNode = new Entity("BP.WF.Node", currNodeId);
 			            if (currNode.HisToNDs.indexOf(nodeID) == -1) {
 			                if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
@@ -430,7 +432,7 @@
 
 			        listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
 			        listbox += "<td>";
-			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + nodeID + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\">撤销</a>";
+			        listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + nodeID + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
 			        listbox += "</td>";
 			        listbox += "</tr>";
 			    }

@@ -634,21 +634,11 @@ namespace BP.WF
                 {
 
                     GERpt rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
-                    DataTable dt = rpt.ToDataTableField("MainTable");
-                    DataTable wkdt = wk.ToDataTableField(md.No);
-                    //把当前节点的数据 覆盖rpt表中的数据
-                    foreach (DataColumn column in wkdt.Columns)
-                    {
-                         foreach (DataColumn column1 in dt.Columns){
-                             if(column.ColumnName.Equals(column1.ColumnName)){
-                                 dt.Rows[0][column1.ColumnName]=  wkdt.Rows[0][column.ColumnName];
-                                 break;
-                             }
-                         }
-                    }
-                    
-                    myds.Tables.Add(dt);
-                    // myds.WriteXml("C:\\XX.xml");
+                    rpt.Copy(wk);
+
+                    DataTable rptdt = rpt.ToDataTableField("MainTable");
+
+                    myds.Tables.Add(rptdt);
                 }
                 else
                 {

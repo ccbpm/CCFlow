@@ -8379,8 +8379,21 @@ namespace BP.WF
         }
         public int GenerByWorkID(Flow flow, Int64 oid)
         {
+            /*退回 ,需要判断跳转的情况，如果是跳转的需要退回到他开始执行的节点
+		    * 跳转的节点在WF_GenerWorkerlist中不存在该信息
+		    */
             string table = "ND" + int.Parse(flow.No) + "Track";
-            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid + " AND (ActionType=" + (int)ActionType.Start + " OR ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubThreadForward + " ) ORDER BY RDT";
+
+            string actionSQL = "SELECT EmpFrom,EmpFromT,RDT,NDFrom FROM " + table + " WHERE WorkID=" + oid
+                          + " AND (ActionType=" + (int)ActionType.Start
+                          + " OR ActionType=" + (int)ActionType.Forward
+                          + " OR ActionType=" + (int)ActionType.ForwardFL
+                          + " OR ActionType=" + (int)ActionType.ForwardHL
+                          + " OR ActionType=" + (int)ActionType.SubThreadForward
+                          + " OR ActionType=" + (int)ActionType.Skip
+                          + " )"
+                          + " AND NDFrom IN(SELECT FK_Node FROM WF_Generworkerlist WHERE WorkID=" + oid + ")"
+                          + " ORDER BY RDT";
             DataTable dt = DBAccess.RunSQLReturnTable(actionSQL);
 
             string nds = "";

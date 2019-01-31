@@ -2204,6 +2204,12 @@ namespace BP.WF
 
                 //获得gerpt字段.
                 GERpt rpt = this.HisGERpt;
+
+                foreach (Attr attr in rpt.EnMap.Attrs)
+                {
+                    rpt.SetValByKey(attr.Key, "0");
+                }
+                 
                 foreach (Node nd in nds)
                 {
                     if (nd.FocusField.Trim() == "")
@@ -3240,7 +3246,7 @@ namespace BP.WF
             }
 
             //所有节点表单字段的合集.
-            sql = "SELECT MyPK, KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
+            sql = "SELECT MyPK, KeyOfEn,DefVal FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //求已经存在的字段集合。

@@ -2561,7 +2561,20 @@ namespace BP.WF
             Paras ps = new Paras();
 
             //获取用户当前所在的节点
-            string currNode = "(SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC)";
+            String currNode = "";
+            switch (DBAccess.AppCenterDBType)
+            {
+                case DBType.Oracle:
+                    currNode = "(SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1)";
+                    break;
+                case DBType.MySQL:
+                    currNode = "(SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1)";
+                    break;
+                case DBType.MSSQL:
+                    currNode = "(SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC)";
+                    break;
+                default: break;
+            }
 
             //授权模式.
             if (WebUser.IsAuthorize ==true)

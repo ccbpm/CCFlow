@@ -96,8 +96,10 @@
                 DoType: "Dot2DotStationModel_GetStructureTreeRoot",
                 parentrootid: "0"
             };
-
-            Handler_AjaxQueryData(param, function (data, scope) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
+            handler.AddPara("parentrootid", 0);
+            var data = handler.DoMethodReturnString("Dot2DotStationModel_GetStructureTreeRoot");
+//            Handler_AjaxQueryData(param, function (data, scope) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     return;
@@ -114,8 +116,13 @@
 						ttype: cnode.attributes.TType,
 						stype: isUnitModel ? "UNIT" : "ST"
 					};
-
-					Handler_AjaxQueryData(param, function (data, scope) {
+		            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
+		            handler.AddPara("parentid", cnode.attributes.No);
+		            handler.AddPara("nodeid", nodeid);
+		            handler.AddPara("ttype", cnode.attributes.TType);
+		            handler.AddPara("stype", isUnitModel ? "UNIT" : "ST");
+		            var data = handler.DoMethodReturnString("Dot2DotStationModel_GetSubUnits");
+//					Handler_AjaxQueryData(param, function (data, scope) {
 						if (data.indexOf("err@") != -1) {
 							alert(data);
 							return;
@@ -124,7 +131,7 @@
 						var redata = eval('(' + data + ')');
 
 						$("#treeUnits").tree("loadData", redata);
-					}, this);
+//					}, this);
 				})(treeData.InnerData[0]);
 
                 //$("#treeUnits").tree("loadData", treeData.InnerData);	// for bug 591 at 20171205
@@ -133,7 +140,7 @@
 
                 //获取当前节点绑定的岗位
                 GetNodeStations(PAGESIZE, 1);
-            }, this);
+//            }, this);
         }
 
         function GetSubUnits(cnode) {
@@ -149,8 +156,13 @@
             if (children[0].text != "loading...") {
                 return;
             }
-
-            Handler_AjaxQueryData(param, function (data, scope) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
+            handler.AddPara("parentid", cnode.attributes.No);
+            handler.AddPara("nodeid", nodeid);
+            handler.AddPara("ttype", cnode.attributes.TType);
+            handler.AddPara("stype", isUnitModel ? "UNIT" : "ST");
+            var data = handler.DoMethodReturnString("Dot2DotStationModel_GetSubUnits");
+//            Handler_AjaxQueryData(param, function (data, scope) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     return;
@@ -160,7 +172,7 @@
 
                 $("#treeUnits").tree("remove", children[0].target);
                 $("#treeUnits").tree("append", { parent: cnode.target, data: redata });
-            }, this);
+//            }, this);
         }
 
         function GetNodeStations(pagesize, pageidx) {
@@ -174,7 +186,13 @@
 
             $("#save").linkbutton("disable");
 
-            Handler_AjaxQueryData(param, function (data, scope) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
+            handler.AddPara("pagesize", pagesize);
+            handler.AddPara("pageidx", pageidx);
+            handler.AddPara("nodeid", nodeid);
+            handler.AddPara("stype", isUnitModel ? "UNIT" : "ST");
+            var data = handler.DoMethodReturnString("Dot2DotStationModel_GetNodeStations");
+//            Handler_AjaxQueryData(param, function (data, scope) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     return;
@@ -187,7 +205,7 @@
                     nodestations = redata.InnerData;
                 $("#save").linkbutton("enable");
                 ShowSelectedStations();
-            }, this);
+//            }, this);
         }
 
         function ShowSelectedStations() {
@@ -349,7 +367,10 @@
             else {
                 param.data = savedatas.shift();
 
-                Handler_AjaxQueryData(param, function (data, scope) {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
+                handler.AddJson(param);
+                var data = handler.DoMethodReturnString("Dot2DotStationModel_SaveNodeStations");
+//                Handler_AjaxQueryData(param, function (data, scope) {
                     $("#save").linkbutton("enable");
 
                     if (data.indexOf("err@") != -1) {
@@ -366,7 +387,7 @@
                     });
 
                     ShowSelectedStations();
-                }, this);
+//                }, this);
                 return;
             }
 

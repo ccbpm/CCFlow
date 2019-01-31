@@ -107,9 +107,13 @@ UNION
 SELECT A.FK_Flow, a.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 
 UNION   
-SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C, Port_Emp D,  Port_DeptEmpStation E
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND A.NodeID=C.FK_Node AND B.FK_Dept=D.FK_Dept
-  AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
+SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
+ WHERE a.NodePosType=0 
+ AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
+ AND  A.NodeID=B.FK_Node 
+ AND A.NodeID=C.FK_Node 
+ AND B.FK_Dept=E.FK_Dept 
+ AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
  
 
 

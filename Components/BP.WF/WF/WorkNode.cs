@@ -3230,8 +3230,12 @@ namespace BP.WF
             // 先查询一下是否有人员，在合流节点上，如果没有就让其初始化人员. 
             current_gwls = new GenerWorkerLists();
             current_gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisWork.FID, GenerWorkerListAttr.FK_Node, toNode.NodeID);
+            bool isFirstHL = false;
             if (current_gwls.Count == 0)
+            {
+                isFirstHL = true;
                 current_gwls = this.Func_GenerWorkerLists(this.town);// 初试化他们的工作人员．
+            }
 
             string FK_Emp = "";
             string toEmpsStr = "";
@@ -3289,7 +3293,7 @@ namespace BP.WF
             if (gwls.Count > 0)
                 pass = gwls[0].GetValIntByKey("IsPass");
 
-            if (pass != 0)
+            if (isFirstHL == true || pass != 0)
             {
                 
                 /* 合流点需要等待各个分流点全部处理完后才能看到它。*/
@@ -7593,8 +7597,10 @@ namespace BP.WF
             int count = gwf.GetParaInt("ThreadCount");
             gwf.SetPara("ThreadCount", count + 1);
             gwf.Update();
+            bool isFirstHL = false;
             if (gwls.Count == 0)
             {
+                isFirstHL = true;
                 // 说明第一次到达河流节点。
                 current_gwls = this.Func_GenerWorkerLists(this.town);
                 gwls = current_gwls;
@@ -7610,6 +7616,7 @@ namespace BP.WF
 
                 gwf.TodoEmps = todoEmps;
                 gwf.WFState = WFState.Runing;
+                //第一次到达设计Gen
                 gwf.Update();
             }
 
@@ -7661,7 +7668,7 @@ namespace BP.WF
                 pass = gwls[0].GetValIntByKey("IsPass");
 
             string info = "";
-            if (pass != 0)
+            if (isFirstHL == true || pass != 0)
             {
 
                 /* 合流点需要等待各个分流点全部处理完后才能看到它。*/

@@ -507,8 +507,11 @@ namespace BP.DA
         /// <returns></returns>
         public static string PraseAtToInSql(string strs, bool isNumber)
         {
+            if (DataType.IsNullOrEmpty(strs) == true)
+                return "''";
             strs = strs.Replace("@", "','");
             strs = strs + "'";
+            if(strs.Length>2)
             strs = strs.Substring(2);
             if (isNumber)
                 strs = strs.Replace("'", "");

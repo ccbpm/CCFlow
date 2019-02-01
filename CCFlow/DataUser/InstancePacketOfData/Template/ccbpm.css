@@ -4,7 +4,7 @@ body {
   font-family: "Open Sans", sans-serif;
   padding: 0px !important;
   margin: 0px !important;
-  font-size: 18px;
+  font-size: 14px;
   direction: ltr;
 }
 
@@ -110,11 +110,31 @@ td
     padding: 4px;
     text-align: left;
     color: #333333;
-    font-size: 22px;
+    font-size: 14px;
     border-width: 1px;
     border-color: #C2D5E3;
 }
 
+
+
+.DtlTh{
+	border: 1px solid #D0D0D0;
+    padding: 1px;
+    background-color: #F9F9F9;
+    font-weight: normal;
+    font-style: normal;
+}
+.DtlTd{
+	border-right-style: none;
+    border-left-style: none;
+    border-style: solid;
+    padding: 4px;
+    text-align: left;
+    color: #333333;
+    font-size: 14px;
+    border-width: 1px;
+    border-color: #D0D0D0;
+}
 
 td a
 {

@@ -71,78 +71,7 @@ namespace BP.WF
 
                             break;
                         case FrmEle.iFrame: //输出框架.
-                        //    string paras = this.RequestParas;
-                        //    if (paras.Contains("FID=") == false && this.HisEn.Row.ContainsKey("FID"))
-                        //    {
-                        //        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-                        //    }
-
-                        //    if (paras.Contains("WorkID=") == false && this.HisEn.Row.ContainsKey("OID"))
-                        //    {
-                        //        paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
-                        //    }
-
-                        //    string src = ele.Tag1.Clone() as string; // url 
-                        //    if (src.Contains("?"))
-                        //        src += "&r=q" + paras;
-                        //    else
-                        //        src += "?r=q" + paras;
-
-                        //    if (src.Contains("UserNo") == false)
-                        //        src += "&UserNo=" + WebUser.No;
-                        //    if (src.Contains("SID") == false)
-                        //        src += "&SID=" + WebUser.SID;
-                        //    if (src.Contains("@"))
-                        //    {
-                        //        foreach (Attr m in ge.EnMap.Attrs)
-                        //        {
-                        //            if (src.Contains("@") == false)
-                        //                break;
-                        //            src = src.Replace("@" + m.Key, en.GetValStrByKey(m.Key));
-                        //        }
-                        //    }
-
-                        //    if (this.IsReadonly == true)
-                        //    {
-                        //        sb.Append("<iframe ID='F" + ele.EleID + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + ele.W + "' height='" + ele.H + "' scrolling=auto /></iframe>");
-                        //    }
-                        //    else
-                        //    {
-                        //        AddLoadFunction(ele.EleID, "blur", "SaveDtl");
-                        //        sb.Append("<iframe ID='F" + ele.EleID + "' onload= '" + ele.EleID + "load();'  src='" + src + "' frameborder=0  style='position:absolute;width:" + ele.W + "px; height:" + ele.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-                        //    }
-                        //    break;
-                        //case FrmEle.EleSiganture:
-                        //    sb.Append("未处理");
-                        //    break;
-                        //case FrmEle.SubThread: //子线程.
-                        //    paras = this.RequestParas;
-                        //    if (paras.Contains("FID=") == false && this.HisEn.Row.ContainsKey("FID"))
-                        //    {
-                        //        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-                        //    }
-
-                        //    if (paras.Contains("WorkID=") == false && this.HisEn.Row.ContainsKey("OID"))
-                        //    {
-                        //        paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
-                        //    }
-
-                        //    src = "/WF/WorkOpt/ThreadDtl.aspx?1=2" + paras;
-                        //    if (src.Contains("UserNo") == false)
-                        //        src += "&UserNo=" + WebUser.No;
-                        //    if (src.Contains("SID") == false)
-                        //        src += "&SID=" + WebUser.SID;
-                        //    if (src.Contains("@"))
-                        //    {
-                        //        foreach (Attr m in en.EnMap.Attrs)
-                        //        {
-                        //            if (src.Contains("@") == false)
-                        //                break;
-                        //            src = src.Replace("@" + m.Key, en.GetValStrByKey(m.Key));
-                        //        }
-                        //    }
-                        //    sb.Append("<iframe ID='F" + ele.EleID + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + ele.W + "' height='" + ele.H + "' scrolling=auto /></iframe>");
-                        //    break;
+                       
                         default:
                             break;
                     }
@@ -474,7 +403,7 @@ namespace BP.WF
                 if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
                     sb.Append("<DIV id='F" + attr.KeyOfEn + "' style='position:absolute; left:" + x + "px; top:" + attr.Y + "px;  height:16px;text-align: left;word-break: keep-all;' >");
                 else
-                    sb.Append("<DIV id='F" + attr.KeyOfEn + "' style='position:absolute; left:" + x + "px; top:" + attr.Y + "px; width:auto" + attr.UIWidth + "px; height:16px;text-align: left;word-break: keep-all;' >");
+                    sb.Append("<DIV id='F" + attr.KeyOfEn + "' style='position:absolute; left:" + x + "px; top:" + attr.Y + "px; width:" + attr.UIWidth + "px; height:16px;text-align: left;word-break: keep-all;' >");
 
                 sb.Append("<span>");
 
@@ -582,26 +511,67 @@ namespace BP.WF
                 sb.Append("<DIV id='Fd" + dtl.No + "' style='position:absolute; left:" + x + "px; top:" + y + "px; width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;' >");
                 sb.Append("<span>");
 
-                //string paras = this.RequestParas;
-                //string strs = "";
-                //foreach (string str in Glo.Request.QueryString.Keys)
+                MapAttrs attrsOfDtls = new MapAttrs(dtl.No);
+           
+            sb.Append("<table style='wdith:100%' >");
+            sb.Append("<tr>");
+            foreach (MapAttr item in attrsOfDtls)
+            {
+                if (item.KeyOfEn == "OID")
+                    continue;
+                if (item.UIVisible == false)
+                    continue;
+
+                sb.Append("<th class='DtlTh'>" + item.Name + "</th>");
+            }
+            sb.Append("</tr>");
+            //#endregion 输出标题.
+
+
+            //#region 输出数据.
+            GEDtls gedtls = new GEDtls(dtl.No);
+            gedtls.Retrieve(GEDtlAttr.RefPK, workid);
+            foreach (GEDtl gedtl in gedtls)
+            {
+                sb.Append("<tr>");
+
+                foreach (MapAttr item in attrsOfDtls)
+                {
+                    if (item.KeyOfEn.Equals("OID") || item.UIVisible == false)
+                        continue;
+
+                    if (item.UIContralType == UIContralType.DDL)
+                    {
+                        sb.Append("<td class='DtlTd'>" + gedtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
+                        continue;
+                    }
+
+                    if (item.IsNum)
+                    {
+                        sb.Append("<td class='DtlTd' style='text-align:right' >" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                        continue;
+                    }
+
+                    sb.Append("<td class='DtlTd'>" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                }
+                sb.Append("</tr>");
+            }
+            //#endregion 输出数据.
+
+
+            sb.Append("</table>");
+
+                //string src = "";
+                //if (dtl.HisEditModel == EditModel.TableModel)
                 //{
-                //    if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
-                //        continue;
-                //    strs += "&" + str + "=" + this.Request.QueryString[str];
+                //    src = SystemConfig.CCFlowWebPath + "WF/CCForm/Dtl.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
+                //}
+                //else
+                //{
+                //    src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
                 //}
 
-                string src = "";
-                if (dtl.HisEditModel == EditModel.TableModel)
-                {
-                    src = SystemConfig.CCFlowWebPath + "WF/CCForm/Dtl.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
-                }
-                else
-                {
-                    src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
-                }
-
-                sb.Append("<iframe ID='F" + dtl.No + "' onload= 'F" + dtl.No + "load();'  src='" + src + "' frameborder=0  style='position:absolute;width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+                //sb.Append("<iframe ID='F" + dtl.No + "' onload= 'F" + dtl.No + "load();'  src='" + src + "' frameborder=0  style='position:absolute;width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 
                 sb.Append("</span>");
                 sb.Append("</DIV>");
@@ -690,11 +660,7 @@ namespace BP.WF
 
                     string src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
                     string fwcOnload = "";
-                    //string paras = this.RequestParas;
-                    //if (paras.Contains("FID=") == false && en.EnMap.Attrs.Contains("FID") == true)
-                    //    paras += "&FID=" + en.GetValStrByKey("FID");
-                    //if (paras.Contains("OID=") == false)
-                    //    paras += "&OID=" + en.GetValStrByKey("OID");
+                    
                     if (subFlow.HisFrmSubFlowSta == FrmSubFlowSta.Readonly)
                     {
                         src += "&DoType=View";
@@ -730,20 +696,7 @@ namespace BP.WF
 
                     sb.Append("附件没有转化:" + athDB.FileName);
 
-                    //string node = this.Request.QueryString["FK_Node"];
-                    //if (DataType.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
-                    //{
-                    //    node = en.GetValStrByKey("FK_Node");
-                    //    if (node == "0" || node == "")
-                    //        node = ((Work)en).NodeID.ToString();
-                    //}
-                    //if (athDB != null)
-                    //{
-                    //    if (ath.IsWoEnableWF)
-                    //        lab.Text = "<a  href=\"javascript:OpenOfiice('" + athDB.FK_FrmAttachment + "','" + this.HisEn.GetValStrByKey("OID") + "','" + athDB.MyPK + "','" + this.FK_MapData + "','" + ath.NoOfObj + "','" + node + "','" + athDB.FileExts + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName + "</a>";
-                    //    else
-                    //        lab.Text = "<img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName;
-                    //}
+                    
                     sb.Append("</DIV>");
                     sb.Append("</DIV>");
                 }
@@ -758,6 +711,8 @@ namespace BP.WF
                     //判断是否有这个目录.
                     if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
                         System.IO.Directory.CreateDirectory(path + "\\pdf\\");
+
+                    athDBs = BP.WF.Glo.GenerFrmAttachmentDBs(ath, workid.ToString(), ath.MyPK);
 
                     foreach (FrmAttachmentDB item in athDBs)
                     {

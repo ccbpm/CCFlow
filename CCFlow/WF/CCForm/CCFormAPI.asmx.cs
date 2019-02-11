@@ -36,7 +36,6 @@ namespace CCFlow.WF.CCForm
         public void GenerBillTemplate(string userNo, string sid, Int64 workID, string billTemplateNo,
             ref DataSet ds, ref byte[] bytes)
         {
-
             if (DataType.IsNullOrEmpty(userNo) == true)
                 userNo = BP.Web.WebUser.No;
 
@@ -53,6 +52,17 @@ namespace CCFlow.WF.CCForm
             DataTable dt = rpt.ToDataTableField();
             dt.TableName = "Main";
             ds.Tables.Add(dt);
+
+            //把从表数据加入里面去.
+            MapDtls dtls = new MapDtls("ND" + gwf.FK_Node);
+            foreach (MapDtl item in dtls)
+            {
+                GEDtls dtlEns = new GEDtls(item.No);
+                dtlEns.Retrieve(GEDtlAttr.RefPK, workID);
+
+                DataTable dtDtl = dtlEns.ToDataTableField(item.No);
+                ds.Tables.Add(dtDtl);
+            }
 
             //生成模版的文件流.
             BillTemplate template = new BillTemplate(billTemplateNo);

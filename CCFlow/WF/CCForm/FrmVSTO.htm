@@ -22,6 +22,43 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
+            //http://localhost:12999/WF/CCForm/FrmVSTO.htm?1=1&DoType=Frm_Init&FK_MapData=
+            //CY_6502&IsEdit=1&IsPrint=0&WorkID=4647&FK_Flow=002&FK_Node=201&NodeID=null
+            //&UserNo=anjian&FID=0&SID=onocvxh1y2xw4o4jm5pfhwhi&PWorkID=4630&PFlowNo=001
+            //&IsLoadData=null&IsReadonly=0&Frms=CY_6502&T=0.8691371113689897&Paras=1&LastTruckID=690795602&e1m=0.23865691578947568
+
+            var url = "excelform://-fromccflow,App=FrmExcel";
+            url += ",FK_MapData=" + GetQueryString("FK_MapData");
+            url += ",IsEdit=" + GetQueryString("IsEdit");
+            url += ",IsPrint=" + GetQueryString("IsPrint");
+            url += ",WorkID=" + GetQueryString("WorkID");
+            url += ",FK_Flow=" + GetQueryString("FK_Flow");
+            url += ",FK_Node=" + GetQueryString("FK_Node");
+            url += ",UserNo=" + GetQueryString("UserNo");
+            url += ",SID=" + GetQueryString("SID");
+            url += ",FID=" + GetQueryString("FID");
+            url += ",PFlowNo=" + GetQueryString("PFlowNo");
+            url += ",IsLoadData=" + GetQueryString("IsLoadData");
+            url += ",IsReadonly=" + GetQueryString("IsReadonly");
+            url += ",Frms=" + GetQueryString("Frms");
+            url += ",LastTruckID=" + GetQueryString("LastTruckID");
+            url += ",PFlowNo=" + GetQueryString("PFlowNo");
+            url += ",PNodeID=" + GetQueryString("PNodeID");
+            url += ",PWorkID=" + GetQueryString("PWorkID");
+            url += ",PEmpNo=" + GetQueryString("PEmpNo");
+
+            var wsUrl = "http://" + location.hostname + ":" + location.port + "/WF/CCForm/CCFormAPI.asmx";
+            url += ",WSUrl=" + wsUrl;
+
+            WinOpen(url);
+            //window.location.href = url;
+            return;
+
+            //WinOpen(url);
+            //   excelform: //-fromccflow,App=FrmExcel,DoType=HttpHandler,DoMethod=FrmVSTO_Init,HttpHandlerName=BP.WF.HttpHandler
+            //.WF_CCForm,t=0.19633340549996892,SID=onocvxh1y2xw4o4jm5pfhwhi,UserNo=admin,IsAutoTesting=0,
+            //  WSUrl=http://localhost:12999/WF/CCForm/CCFormAPI.asmx
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData();
             var data = handler.DoMethodReturnJSON("FrmVSTO_Init");
@@ -41,13 +78,13 @@
 
   <br />
         <br />
-        <fieldset>
+       <!-- <fieldset>
             <legend>处理表单</legend>
             <ul>
                 <li><div id="UrlOfVSTO" > </div></li>
                 <li><div id="UrlOfFrm" > </div></li>
             </ul>
-        </fieldset>
+        </fieldset>-->
         <fieldset>
             <legend>插件安装说明</legend>
             <ul>

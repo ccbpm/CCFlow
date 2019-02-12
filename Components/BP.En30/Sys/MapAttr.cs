@@ -48,7 +48,11 @@ namespace BP.Sys
         /// <summary>
         /// 广东CA
         /// </summary>
-        GDCA
+        GDCA,
+        /// <summary>
+        /// 图片盖章
+        /// </summary>
+        GZCA
     }
 
     public enum PicType

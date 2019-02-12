@@ -912,7 +912,9 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID);
+                //获取撤销到的节点
+                int unSendToNode = this.GetRequestValInt("UnSendToNode");
+                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, unSendToNode);
             }
             catch(Exception ex)
             {

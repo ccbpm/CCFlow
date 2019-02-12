@@ -14,6 +14,7 @@ using BP.WF.Template;
 using BP.WF.Port;
 using BP.Web;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace BP.WF.HttpHandler
 {
@@ -253,11 +254,18 @@ namespace BP.WF.HttpHandler
             string no = GetRequestVal("No");
             if (string.IsNullOrWhiteSpace(no))
                 return "";
-            string path = "../DataUser/Siganture/" + no + ".jpg";
-            if (System.IO.Directory.Exists(this.context.Server.MapPath(path)))
+            string path = "/DataUser/Siganture/" + no + ".jpg";
+            //如果文件存在
+            if (File.Exists(this.context.Server.MapPath(path)))
+            {
+                path = "/DataUser/Siganture/" + no + ".JPG";
+                if (File.Exists(this.context.Server.MapPath(path)))
+                    return "";
                 return "";
+            }
             else
             {
+                //如果不存在，就返回名称
                 BP.Port.Emp emp = new BP.Port.Emp(no);
                 return emp.Name;
             }

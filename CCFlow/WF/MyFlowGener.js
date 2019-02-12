@@ -44,9 +44,6 @@ $(function () {
             window.parent.close();
     });
 
-//    setAttachDisabled();
-//    setToobarDisiable();
-//    setFormEleDisabled();
 
     $('#btnMsgModalOK1').bind('click', function () {
         window.close();
@@ -236,9 +233,6 @@ function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
     var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
 
     var url = 'WebOffice/AttachOffice.htm?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
-    //var url = 'WebOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal;
-    // var str = window.showModalDialog(url, '', 'dialogHeight: 1250px; dialogWidth:900px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
-    //var str = window.open(url, '', 'dialogHeight: 1200px; dialogWidth:1110px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
     window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
 }
 
@@ -933,7 +927,11 @@ function execSend(toNodeID) {
     if (flowData) {
         var node = flowData.WF_Node[0];
         if (node && node.FormType == 5) {
-            OnTabChange("btnsave");
+            var sendFlag = OnTabChange("btnsave");
+            if (sendFlag == false) {
+                setToobarEnable();
+                return;
+            }
         }
     }
 

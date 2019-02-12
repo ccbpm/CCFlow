@@ -443,15 +443,14 @@ function Save(scope) {
 
     //必填项和正则表达式检查
     var formCheckResult = true;
-    if (!CheckBlanks()) {
-        formCheckResult = false;
+    if (CheckBlanks() == false) {
+        alert("检查必填项出现错误，边框变红颜色的是否填写完整？");
+        return false;
+      
     }
-    if (!CheckReg()) {
-        formCheckResult = false;
-    }
-    if (!formCheckResult) {
-        //alert("请检查表单必填项和正则表达式");
-        return;
+    if (CheckReg() == false) {
+        alert("发送错误:请检查字段边框变红颜色的是否填写完整？");
+        return false;
     }
 
     // setToobarDisiable();
@@ -460,26 +459,18 @@ function Save(scope) {
     handler.AddPara("OID", pageData.OID);
     handler.AddFormData();
     var data = handler.DoMethodReturnString("FrmGener_Save");
-//    $.ajax({
-//        type: 'post',
-//        async: false,
-//        data: getFormData(true, true),
-//        url: Handler + "?DoType=FrmGener_Save&OID=" + pageData.OID,
-//        dataType: 'html',
-//        success: function (data) {
 
-            if (data.indexOf('err@') == 0) {
-                $('#Message').html(data.substring(4, data.length));
-                $('.Message').show();
-                return false;
-            }
+    if (data.indexOf('err@') == 0) {
+        $('#Message').html(data.substring(4, data.length));
+        $('.Message').show();
+        return false;
+    }
 
-            if (scope != "btnsave")
-                window.location.href = window.location.href;
-            return true;
+    if (scope != "btnsave")
+        window.location.href = window.location.href;
+    return true;
 
-//        }
-//    });
+
 }
 
 
@@ -1101,36 +1092,40 @@ function CheckBlanks() {
         if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
             var keyofen = $(obj).data().keyofen
             var ele = $('[id$=_' + keyofen + ']');
-            if (ele.length == 1) {
-                switch (ele[0].tagName.toUpperCase()) {
+            if (ele.length == 0)
+                return;
+
+            $.each(ele, function (i, obj) {
+                var eleM = $(obj);
+                switch (eleM[0].tagName.toUpperCase()) {
                     case "INPUT":
-                        if (ele.attr('type') == "text") {
-                            if (ele.val() == "") {
+                        if (eleM.attr('type') == "text") {
+                            if (eleM.val() == "") {
                                 checkBlankResult = false;
-                                ele.addClass('errorInput');
+                                eleM.addClass('errorInput');
                             } else {
-                                ele.removeClass('errorInput');
+                                eleM.removeClass('errorInput');
                             }
                         }
                         break;
                     case "SELECT":
-                        if (ele.val() == "" || ele.children('option:checked').text() == "*请选择") {
+                        if (eleM.val() == "" || eleM.children('option:checked').text() == "*请选择") {
                             checkBlankResult = false;
-                            ele.addClass('errorInput');
+                            eleM.addClass('errorInput');
                         } else {
-                            ele.removeClass('errorInput');
+                            eleM.removeClass('errorInput');
                         }
                         break;
                     case "TEXTAREA":
-                        if (ele.val() == "") {
+                        if (eleM.val() == "") {
                             checkBlankResult = false;
-                            ele.addClass('errorInput');
+                            eleM.addClass('errorInput');
                         } else {
-                            ele.removeClass('errorInput');
+                            eleM.removeClass('errorInput');
                         }
                         break;
                 }
-            }
+            });
         }
     });
 
@@ -1285,9 +1280,9 @@ function To(url) {
 
 function SaveDtlData(scope) {
     if (IsChange == false)
-        return;
+        return true;
 
-    Save(scope);
+    return Save(scope);
 }
 
 function Change(id) {

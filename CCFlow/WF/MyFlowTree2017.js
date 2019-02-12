@@ -335,6 +335,7 @@ function OnTabChange(scope) {
     }
     var lastChar = tabText.substring(tabText.length - 1, tabText.length);
     //参数是保存时，保存当前选择的tab标签
+    var IsSaveTrue = true;
     if (scope == "btnsave") {
     	 //保存tab标签中带有*的标签页
         var tabs = $('#tabs').tabs().tabs('tabs');
@@ -348,9 +349,8 @@ function OnTabChange(scope) {
                 var contentWidow = currScope.contentWindow;
                 if(contentWidow.SaveDtlData!= undefined && typeof(contentWidow.SaveDtlData) == "function"){
                     contentWidow.IsChange = true;
-                    var IsSave = contentWidow.SaveDtlData("btnsave");
-                    if(IsSave == false)
-                      return false;
+                    IsSaveTrue = contentWidow.SaveDtlData("btnsave");
+                   
                  }
                 if (lastChar == "*")
                 	$(selectSpan).text(tabText.substring(0, tabText.length - 1));
@@ -360,7 +360,7 @@ function OnTabChange(scope) {
            
         });
          $('#tabs').tabs('select', index);
-        return true;
+        return IsSaveTrue;
     }
     
     if(scope == "saveOther"){

@@ -441,41 +441,64 @@ function figure_Template_Dtl(frmDtl, ext) {
 //初始化框架
 function figure_Template_IFrame(fram) {
 
-    var eleHtml = $("<DIV id='Fd" + fram.MyPK + "' style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
-    
-    var url = fram.URL;
-    if (url.indexOf('?') == -1)
-        url += "?1=2";
+     var eleHtml = $("<DIV id='Fd" + fram.MyPK + "' style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
 
-    //处理URL需要的参数
-    //1.拼接参数
-    var paras = this.pageData;
-    var strs = "";
-    for (var str in paras) {
-        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
-            continue
-        else
-            strs += "&" + str + "=" + paras[str];
-    }
+	    var url = fram.URL;
+	    if (url.indexOf('?') == -1)
+	        url += "?1=2";
+	    
+	    if(url.indexOf("@basePath")==0)
+	    	url = url.replace("@basePath",basePath);
 
-    //2.替换@参数
-    var pageParams = getQueryString();
-    $.each(pageParams, function (i, pageParam) {
-        var pageParamArr = pageParam.split('=');
-        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
-    });
+	    //1.处理URL需要的参数
+	    var pageParams = getQueryString();
+	    $.each(pageParams, function (i, pageParam) {
+	        var pageParamArr = pageParam.split('=');
+	        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+	    });
+	    
+	    var src = url.replace(new RegExp(/(：)/g), ':');
+	    if (src.indexOf("?") > 0) {
+	        var params = getQueryStringFromUrl(src);
+	        if (params != null && params.length > 0) {
+	        	 $.each(params, function (i, param) {
+	        		 if (param.indexOf('@') !=-1) {//是需要替换的参数
+	                     paramArr = param.split('=');
+	                     if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+	                    	 if (paramArr[1].indexOf('@WebUser.') == 0)
+	                    		 url = url.replace(paramArr[1],frmData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
+	                         else
+	                        	 url = url.replace(paramArr[1],frmData.MainTable[0][paramArr[1].substr(1)]);
+	                     }
+	        		 }
+	        	 });
+	        }
+	    }
+	    
+	    
+	    //1.拼接参数
+	    var paras = this.pageData;
+	    var strs = "";
+	    for (var str in paras) {
+	        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+	            continue
+	        else
+	            strs += "&" + str + "=" + paras[str];
+	    }
+	    
 
-    url = url + strs + "&IsReadonly=0";
+	   
 
-    var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +
-                 "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
-                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+	    url = url + strs + "&IsReadonly=0";
 
-    eleHtml.append(eleIframe);
+	    var eleIframe = '<iframe></iframe>';
+	    eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +
+	                 "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
+	                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 
-    return eleHtml;
-}
+	    eleHtml.append(eleIframe);
+
+	    return eleHtml;
 
 function figure_MapAttr_Template(mapAttr) {
 
@@ -760,7 +783,15 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     // 金额类型. AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        eleHtml += "<input class='form-control ' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var defVal = mapAttr.DefVal;
+        var bit;
+        if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+            bit = defVal.substring(defVal.indexOf(".") + 1).length;
+        else
+            bit = 2;
+
+        eleHtml += "<input class='form-control ' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 

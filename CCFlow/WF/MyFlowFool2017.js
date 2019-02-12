@@ -223,6 +223,12 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             continue;
         }
     }
+
+    if (isDropTR == false) {
+        html += "<td class='FDesc' ColSpan='2'></td>";
+        html += "</tr>";
+    }
+
     return html;
 }
 
@@ -429,7 +435,14 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
     //AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var attrdefVal = mapAttr.DefVal;
+        var bit;
+        if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+            bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+        else
+            bit = 2;
+        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');;limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");
@@ -768,7 +781,7 @@ function Ele_SubFlow(wf_node) {
 //初始化 框架
 function Ele_Frame(flowData, gf) {
     var frame = new Entity("BP.Sys.MapFrame", gf.CtrlID);
-  
+
     if (frame == null)
         return "没有找到框架的定义，请与管理员联系。";
 
@@ -777,6 +790,35 @@ function Ele_Frame(flowData, gf) {
     var url = frame.URL;
     if (url.indexOf('?') == -1)
         url += "?1=2";
+
+    if (url.indexOf("@basePath") == 0)
+        url = url.replace("@basePath", basePath);
+
+    //2.替换@参数
+    var pageParams = getQueryString();
+    $.each(pageParams, function (i, pageParam) {
+        var pageParamArr = pageParam.split('=');
+        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+    });
+
+    var src = url.replace(new RegExp(/(：)/g), ':');
+    if (src.indexOf("?") > 0) {
+        var params = getQueryStringFromUrl(src);
+        if (params != null && params.length > 0) {
+            $.each(params, function (i, param) {
+                if (param.indexOf('@') != -1) {//是需要替换的参数
+                    paramArr = param.split('=');
+                    if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                        if (paramArr[1].indexOf('@WebUser.') == 0)
+                            url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
+                        else
+                            url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr(1)]);
+                    }
+                }
+            });
+        }
+    }
+
 
     //处理URL需要的参数
     //1.拼接参数
@@ -788,13 +830,7 @@ function Ele_Frame(flowData, gf) {
         else
             strs += "&" + str + "=" + paras[str];
     }
-   
-    //2.替换@参数
-    var pageParams = getQueryString();
-    $.each(pageParams, function (i, pageParam) {
-        var pageParamArr = pageParam.split('=');
-        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
-    });
+
 
     url = url + strs + "&IsReadonly=0";
 

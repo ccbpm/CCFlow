@@ -283,6 +283,12 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
             continue;
         }
     }
+    if (isDropTR == false) {
+        html += "<td class='FDesc' ColSpan='2'></td>";
+     
+        html += "</tr>";
+    }
+
     return html;
 }
 
@@ -533,7 +539,16 @@ function InitMapAttrOfCtrl(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var defVal = mapAttr.DefVal;
+        var bit;
+        if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+            bit = defVal.substring(defVal.indexOf(".") + 1).length;
+        else 
+            bit = 2;
+
+        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");
@@ -777,8 +792,36 @@ function Ele_Frame(frmData, gf) {
     if (url.indexOf('?') == -1)
         url += "?1=2";
 
+    if (url.indexOf("@basePath") == 0)
+        url = url.replace("@basePath", basePath);
+
     //处理URL需要的参数
-    //1.拼接参数
+    //1.替换@参数
+    var pageParams = getQueryString();
+    $.each(pageParams, function (i, pageParam) {
+        var pageParamArr = pageParam.split('=');
+        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+    });
+
+    var src = url.replace(new RegExp(/(：)/g), ':');
+    if (src.indexOf("?") > 0) {
+        var params = getQueryStringFromUrl(src);
+        if (params != null && params.length > 0) {
+            $.each(params, function (i, param) {
+                if (param.indexOf('@') != -1) {//是需要替换的参数
+                    paramArr = param.split('=');
+                    if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                        if (paramArr[1].indexOf('@WebUser.') == 0)
+                            url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
+                        else
+                            url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr(1)]);
+                    }
+                }
+            });
+        }
+    }
+
+    //2.拼接参数
     var paras = this.pageData;
     var strs = "";
     for (var str in paras) {
@@ -787,13 +830,7 @@ function Ele_Frame(frmData, gf) {
         else
             strs += "&" + str + "=" + paras[str];
     }
-   
-    //2.替换@参数
-    var pageParams = getQueryString();
-    $.each(pageParams, function (i, pageParam) {
-        var pageParamArr = pageParam.split('=');
-        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
-    });
+
 
     url = url + strs + "&IsReadonly=0";
 

@@ -165,28 +165,8 @@
 
         //初始化图片
         function InitImgAth() {
-//            //获取已上传数据
-//            Handler_AjaxQueryData({ DoType: "FrmImgAthDB_Init", FK_MapData: FK_MapData, RefPKVal: RefPKVal, CtrlID: CtrlID }, function (data) {
-//                if (data.indexOf('err@') == 0) {
-//                    alert(data);
-//                    return;
-//                }
-//                var dataObj = eval("(" + data + ")"); //转换为json对象 
-//                if (dataObj.length > 0) {
-//                    var fileFullName = basePath + dataObj[0].FileFullName;
-//                    var fileName = dataObj[0].FileName;
-//                    var fileExts = dataObj[0].FileExts;
-//                    fileName = basePath + "/DataUser/ImgAth/Upload/" + fileName + "." + fileExts;
 
-//                    $("#myImage").attr("src", fileName);
-//                    $('#myImage').Jcrop();
-//                    $("#imgCut").attr("src", fileFullName);
-//                    $("#HD_ImgAthSrc").val(fileFullName);
-//                    $("#HD_SImgAthSrc").val(fileName);
-//                    AddImgLisenerEvent();
-//                }
-            //            }, this);
-
+            
             var fileFullName = "";
             var fileName = "";
             if (FK_MapData.indexOf("ND") != -1) {
@@ -197,16 +177,22 @@
                 fileName = basePath + "/DataUser/ImgAth/Upload/" + FK_MapData + "_" + CtrlID + "_" + RefPKVal + ".png";
             }
 
-            document.getElementById("myImage").setAttribute("src", fileName + "?M=" + Math.random());
+
+            var img = new Image();
+            img.onload = function () {
+                document.getElementById("myImage").setAttribute("src", fileName + "?M=" + Math.random());
+                document.getElementById("imgCut").setAttribute("src", fileFullName + "?M=" + Math.random());
+            }
+            img.onerror = function () {
+              
+            }
+
             $('#myImage').Jcrop();
-            document.getElementById("imgCut").setAttribute("src", fileFullName + "?M=" + Math.random());
             $("#HD_ImgAthSrc").val(fileFullName);
             $("#HD_SImgAthSrc").val(fileName);
             AddImgLisenerEvent();
-            
-             
 
-            
+          
         }
         
         //图片事件
@@ -293,13 +279,13 @@
         <tr>
             <td rowspan="2">
                 <div id="biankuang">
-                    <img id="myImage" src="/DataUser/ImgAth/Data/ND101ImgAth1_0.png" alt="" />
+                    <img id="myImage" src="" alt="" />
                 </div>
             </td>
             <td class="tdCutImg">
                <fieldset id="imgCutPanel">
                 <legend>预览</legend>
-                <img id="imgCut" src="/DataUser/ImgAth/Data/ND101ImgAth1_0.png" alt="" />
+                <img id="imgCut" src="" alt="" />
                </fieldset>
             </td>
         </tr>

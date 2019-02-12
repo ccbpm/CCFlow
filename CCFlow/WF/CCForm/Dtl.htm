@@ -8,6 +8,7 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
+
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
     <link href="../Scripts/easyUI145/demo/demo.css" rel="stylesheet" />
@@ -16,23 +17,24 @@
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script type="text/javascript" src="MapExt2016.js"></script>
     <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
-    <!--<script src="../Comm/JS/DtlUIControl.js"></script>-->
+    <script src="../Comm/JS/DtlUIControl.js"></script>
     <script language="javascript" type="text/javascript">
         //页面启动函数.
         $(function () {
             //加载JS文件
             try {
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.src = "../../DataUser/JSLibData/" + ensName + ".js";
-                var tmp = document.getElementsByTagName('script')[0];
-                tmp.parentNode.insertBefore(s, tmp);
+                //var s = document.createElement('script');
+                //s.type = 'text/javascript';
+                //s.src = "../../DataUser/JSLibData/" + ensName + ".js";
+                //var tmp = document.getElementsByTagName('script')[0];
+                //tmp.parentNode.insertBefore(s, tmp);
             }
             catch (err) {
             }
@@ -59,60 +61,37 @@
         var sys_MapDtlObj;
         function onDblClickRow(index) {
             if (sys_MapDtlObj.IsUpdate == "1") {
-                var selectedRow = $('#dtlTable').datagrid('getSelected');
-                if (selectedRow == null) {
-                    alert("没有选中要保存的数据行");
-                    return;
-                }
+                //var selectedRow = $('#dtlTable').datagrid('getSelected');
+                //if (selectedRow == null) {
+                //    alert("没有选中要保存的数据行");
+                //    return;
+                //}
 
-                var EditModel = sys_MapDtlObj.EditModel;
-                if (EditModel != 0 && window.parent) {
-                    var ensName = GetQueryString("EnsName");
-                    var refPKVal = GetQueryString("RefPKVal");
-                    var FK_MapData = GetQueryString("FK_MapData");
-                    var fid = GetQueryString("FID");
-                    if (fid == "" || fid == undefined)
-                        fid = 0
-                    var FK_Node = GetQueryString("FK_Node");
-                    window.parent.DtlFrm(ensName, refPKVal, selectedRow.OID, EditModel, loadDtlTable, FK_MapData, FK_Node, fid, true);
-                } else {
-                    if (editIndex != index) {
-                        if (endEditing()) {
-                            $('#dtlTable').datagrid('selectRow', index).datagrid('beginEdit', index);
-                            editIndex = index;
-                        } else {
-                            $('#dtlTable').datagrid('selectRow', editIndex).datagrid('beginEdit', editIndex);
+                //var EditModel = sys_MapDtlObj.EditModel;
 
-                            alert("注意必填项");
-                        }
+                //if (window.parent) {
+                //    var ensName = GetQueryString("EnsName");
+                //    var refPKVal = GetQueryString("RefPKVal");
+                //    var FK_MapData = GetQueryString("FK_MapData");
+                //    var fid = GetQueryString("FID");
+                //    if (fid == "" || fid == undefined)
+                //        fid = 0
+                //    var FK_Node = GetQueryString("FK_Node");
+                //    window.parent.DtlFrm(ensName, refPKVal, selectedRow.OID, EditModel, loadDtlTable, FK_MapData, FK_Node, fid, true);
+                //}
+
+
+                if (editIndex != index) {
+                    if (endEditing()) {
+                        $('#dtlTable').datagrid('selectRow', index).datagrid('beginEdit', index);
+                        editIndex = index;
+                    } else {
+                        $('#dtlTable').datagrid('selectRow', editIndex).datagrid('beginEdit', editIndex);
+
+                        alert("注意必填项");
                     }
                 }
             }
-            return;
-            //alert(sys_MapDtl.IsUpdate);
-            if (sys_MapDtl.IsUpdate == "1") {
-                //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
-                if (EditModel != 0 && window.parent) {
-                    var ensName = GetQueryString("EnsName");
-                    var refPKVal = GetQueryString("RefPKVal");
-                    var FK_MapData = GetQueryString("FK_MapData");
-                    var FID = GetQueryString("FID");
-                    var FK_Node = GetQueryString("FK_Node");
-                    window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, loadDtlTable, FK_MapData, FK_Node, FID, false);
-                    return;
-                }
-            }
-
-            //if (editIndex != index) {
-            //    if (endEditing()) {
-            //        $('#dtlTable').datagrid('selectRow', index).datagrid('beginEdit', index);
-            //        editIndex = index;
-            //    } else {
-            //        $('#dtlTable').datagrid('selectRow', editIndex).datagrid('beginEdit', editIndex);
-
-            //        alert("注意必填项");
-            //    }
-            //}
         }
 
         var mapExts;  //mapExts扩展
@@ -177,7 +156,6 @@
 
 
         function unitformatter(value, row, index) {
-
             try {
                 if (this.field == "AthNum") {
                     return '<a id="btn" href="javascript:OpAth(' + (row.RefPK == undefined ? 0 : row.RefPK) + ',' + (row.OID == undefined ? 0 : row.OID) + ');" class="easyui-linkbutton" data-options="iconCls:\'icon-search\'">' + (value == undefined ? 0 : value) + '</a>';
@@ -215,6 +193,7 @@
             }
             return value;
         }
+
         function loadDtlTable() {
             //调用Gener.js 的方法，处理当前页面传来的参数, 并把参数传入到dtl.htm里面去。
             var urlParam = DearUrlParas();
@@ -277,7 +256,7 @@
                             item.width = mapAttrObj.UIWidth;
                             item.align = 'center';
 
-                            var eriterObj = figure_MapAttr_Template(mapAttrObj);
+                            var eriterObj = figure_MapAttr_Template(mapAttrObj, sys_mapExtDtl);
                             item.editor = eriterObj;
                             item.formatter = unitformatter;
 
@@ -302,7 +281,7 @@
                                 athNumitem.width = mapAttrObj.UIWidth;
                                 athNumitem.align = 'center';
 
-                                var eriterObj = figure_MapAttr_Template(mapAttrObj);
+                                var eriterObj = figure_MapAttr_Template(mapAttrObj, sys_mapExtDtl);
                                 athNumitem.editor = eriterObj;
                                 athNumitem.formatter = unitformatter;
                                 //titleArr.push(athNumitem);
@@ -367,6 +346,25 @@
                                 });
                             }
                         }
+                        //,
+                        //onClickCell: function (index, field, value) {
+                        //    //targetChangeEvent
+                        //    if (editIndex != index) {
+                        //        if (endEditing()) {
+                        //            $('#dtlTable').datagrid('selectRow', index)
+                        //                    .datagrid('beginEdit', index);
+                        //            var ed = $('#dtlTable').datagrid('getEditor', { index: index, field: field });
+                        //            if (ed) {
+                        //                ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                        //            }
+                        //            editIndex = index;
+                        //        } else {
+                        //            setTimeout(function () {
+                        //                $('#dtlTable').datagrid('selectRow', editIndex);
+                        //            }, 0);
+                        //        }
+                        //    }
+                        //}
                     });
                     //var pp = $('#dtlTable').datagrid('getPager');
                     //$('#pp').pagination({
@@ -404,12 +402,12 @@
             var sys_MapDtl = obj["Sys_MapDtl"][0]; //从表描述.
             var toolbar = new Array();
             var barItem;
+            var EditModel = sys_MapDtl.EditModel;
 
             //是否可以插行
             if (sys_MapDtl.IsInsert == "1") {
                 //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
                 // ==1,==2 是打开父窗口出现卡片.
-                var EditModel = sys_MapDtl.EditModel;
                 window.EditModel = EditModel;
 
                 barItem = new Object();
@@ -434,18 +432,18 @@
             }
 
             //是否可以更新行
-            //if (sys_MapDtl.IsUpdate == "1") {
-            //    barItem = new Object();
+            if (sys_MapDtl.IsUpdate == "1" && EditModel == 0) {
+                barItem = new Object();
 
-            //    barItem.id = 'IsUpdate';
-            //    barItem.text = '保存';
-            //    barItem.iconCls = 'icon-save';
-            //    barItem.handler = function () {
-            //        SaveRow();
-            //    };
+                barItem.id = 'IsUpdate';
+                barItem.text = '保存';
+                barItem.iconCls = 'icon-save';
+                barItem.handler = function () {
+                    SaveRow();
+                };
 
-            //    toolbar.push(barItem);
-            //}
+                toolbar.push(barItem);
+            }
 
             //明细表导入模式
             var impModel = sys_MapDtl.ImpModel;
@@ -518,7 +516,6 @@
                     });
                 }
 
-                alert(ddlData);
                 return ddlData;
             } else {
                 var enums = workNodeData.Sys_Enum;
@@ -535,7 +532,7 @@
         }
 
         //升级表单元素 初始化文本框、日期、时间
-        function figure_MapAttr_Template(mapAttr) {
+        function figure_MapAttr_Template(mapAttr, sys_mapExtDtl) {
             var editorAttr = new Object();
             editorAttr.options = {};
 
@@ -565,10 +562,50 @@
                     //外键类型
                     if (mapAttr.LGType == 2) {
                         editorAttr.type = 'combobox';
-                        //editorAttr.options.required = true;
+                        editorAttr.options.id = mapAttr.KeyOfEn;
                         editorAttr.options.valueField = mapAttr.KeyOfEn;
                         editorAttr.options.textField = 'Name';
                         editorAttr.options.data = InitDDLOperation(workNodeData, mapAttr, defValue);
+                        editorAttr.options.onChange = function (n,o) {
+                            var sys_mapExtDtl = workNodeData["Sys_MapExt"];
+                            for (var i = 0; i < sys_mapExtDtl.length; i++) {
+                                var mapExt = sys_mapExtDtl[i];
+
+                                if (mapAttr.KeyOfEn != mapExt.AttrOfOper) {
+                                    continue;
+                                }
+                                switch (mapExt.ExtType) {
+                                    case "ActiveDDL":
+                                        /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
+                                        var dbSrc = mapExt.Doc;
+                                        var dataObj = GenerDB(dbSrc, n, mapExt.DBType); //获得数据源.
+                                        var selectedRow = $('#dtlTable').datagrid('getSelected');
+                                        var selectedRowIndex = $('#dtlTable').datagrid('getRowIndex', selectedRow);
+
+                                        var ed = $('#dtlTable').datagrid('getEditor', { index: selectedRowIndex, field: mapExt.AttrsOfActive });
+                                        $(ed.target).combobox('clear');
+                                        $(ed.target).combobox('reload', dataObj);
+                                        break;
+                                }
+                            }
+                        };
+                        //editorAttr.options.onChange = ({"ssss": this, "ddddd": mapAttr.KeyOfEn },"21212","21212121", targetChangeEvent);
+                        //$("#DDL_" + mapAttr.KeyOfEn).data().combobox.options.onChange = ({ "mapAttr": mapAttr, "sys_mapExtDtl": sys_mapExtDtl }, targetChangeEvent);
+                        //$('#dtlTable').datagrid('beginEdit', 0);
+                        //var ed = $('#dtlTable').datagrid('getEditors', 0);
+                        //$(ed.target).combobox({
+                        //    onChange: function () {
+                        //        alert(212);
+                        //    }
+                        //});
+
+
+
+                        //addMapAttrExt(mapAttr, sys_mapExtDtl, editorAttr);
+                        //var dbSrc = mapExt.Doc;
+
+
+                        //var dataObj = GenerDB(dbSrc, value, mapExt.DBType); //获得数据源.
                         //editorAttr.options.editable = false;
 
                         return editorAttr;
@@ -651,12 +688,10 @@
                         if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
                             editorAttr.type = 'numberbox';
 
-                            editorAttr.options.value = 777;
+                            editorAttr.options.value = 0;
                             //alert(editorAttr.options.value);
                             return editorAttr;
                         }
-
-
                         //AppMoney  AppRate
                         if (mapAttr.MyDataType == 8) {
 
@@ -687,7 +722,32 @@
                 alert("待处理");
             }
         }
+        function targetChangeEvent(n, o) {
+            //处理扩展属性
+            var sys_mapExtDtl = workNodeData["Sys_MapExt"];
+            for (var i = 0; i < sys_mapExtDtl.length; i++) {
+                var mapExt = sys_mapExtDtl[i];
 
+                //if (curField != mapExt.AttrOfOper) {
+                //    continue;
+                //}
+                switch (mapExt.ExtType) {
+                    case "ActiveDDL":
+                        /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
+                        var dbSrc = mapExt.Doc;
+                        var dataObj = GenerDB(dbSrc, n, mapExt.DBType); //获得数据源.
+                        var selectedRow = $('#dtlTable').datagrid('getSelected');
+                        var selectedRowIndex = $('#dtlTable').datagrid('getRowIndex', selectedRow);
+
+                        var ed = $('#dtlTable').datagrid('getEditor', { index: selectedRowIndex, field: mapExt.AttrsOfActive });
+                        $(ed.target).combobox('reload', dataObj);
+                        var gg = ed.id;
+                        break;
+                }
+            }
+
+
+        }
         //选项 导入导出功能.
         function Option(impModel) {
 
@@ -771,28 +831,27 @@
 </head>
 <body>
     <form>
-    <input type="hidden" id="formExt" />
-    <div id="Msg" style="text-align: center; display: none;">
-        <img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
-    <div id="ContentDtlDiv">
-        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px;
-            margin: 0px;">
-            <div class="portlet-body " id="">
-                <div class="tab-content" style="margin: 1px 0px;">
-                    <div class="tab-pane active portlet_tab flowLists" style="overflow-x: auto; overflow-y: hidden;"
-                        id="dtlDiv">
-                        <table class="easyui-datagrid" id="dtlTable">
-                        </table>
-                        
+        <input type="hidden" id="formExt" />
+        <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
+        <div id="ContentDtlDiv">
+            <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
+                <div class="portlet-body " id="">
+                    <div class="tab-content" style="margin: 1px 0px;">
+                        <div class="tab-pane active portlet_tab flowLists" style="overflow-x: auto; overflow-y: hidden;" id="dtlDiv">
+                            <table class="easyui-datagrid" id="dtlTable"></table>
+                            <!--<div id="pp" style="background:#efefef;border:1px solid #ccc;"></div>-->
+                            <!--<div class="loadDate" style="text-align: center;">
+                                <img src="../Scripts/bootstrap/fonts/loading.gif" />加载中...
+                            </div>-->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </form>
     <script type="text/javascript">
         //插入行.
-        function AddRow(EditModel) {
+        function AddRow() {
             SaveDtl();
             if (endEditing()) {
                 $('#dtlTable').datagrid('appendRow', {});
@@ -881,17 +940,17 @@
                 rowData.FK_MapData = GetQueryString("FK_MapData");
                 rowData.FID = GetQueryString("FID");
 
-                var handler = new httphandler("bp.wf.httphandler.wf_ccform");
-                handler.addpara("fk_mapdtl", rowdata.fk_mapdtl);
-                handler.addpara("refpkval", rowdata.refpkval);
-                handler.addpara("fk_node", rowdata.fk_node);
-                handler.addpara("fk_mapdata", rowdata.fk_mapdata);
-                handler.addpara("fid", rowdata.fid);
-                var data = handler.domethodreturnstring("dtl_saverow");
-//                AjaxServiceGener(rowData, function (data) {
-                    //rowData["AthNum"] = athNum;
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
+                handler.AddPara("RefPKVal", rowData.RefPKVal);
+                handler.AddPara("FK_Node", rowData.FK_Node);
+                handler.AddPara("FK_MapData", rowData.FK_MapData);
+                handler.AddPara("FID", rowData.FID);
+                //var data = handler.DoMethodReturnString("Dtl_SaveRow");
+                AjaxServiceGener(rowData, function (data) {
+                    rowData["AthNum"] = athNum;
                     loadDtlTable();
-//                }, this);
+                }, this);
             } else {
                 alert("第" + (selectedIndex + 1) + "行数据验证无效。请重新填写");
             }
@@ -931,12 +990,11 @@
             }
         }
         function insertRow(EditModel) {
-
             //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
             // ==1,==2 是打开父窗口出现卡片.
             //var EditModel = sys_MapDtl.EditModel;
             //window.EditModel = EditModel;
-
+            //alert(EditModel);
             //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
             if (EditModel != 0 && window.parent) {
                 var ensName = GetQueryString("EnsName");
@@ -947,10 +1005,11 @@
                 window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, loadDtlTable, FK_MapData, FK_Node, FID, false);
                 return;
             } else {
-                AddRow(EditModel); 
+                AddRow();
             }
         }
     </script>
+
     <script type="text/javascript">
         function ShowPopValOnParentForm(ctrl, fk_mapExt, refEnPK, width, height, title) {
             isChange = false;
@@ -998,15 +1057,13 @@
             if (myDataType == 8)
                 if (!/\./.test(result))
                     result += '.00';
-        return result = unescape(result);
-    }
+            return result = unescape(result);
+        }
 
-    var workNodeData = {};
+        var workNodeData = {};
 
     </script>
     <!--DIVINFO-->
-    <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none;
-        cursor: pointer; text-align: left; border-color: Black'>
-    </div>
+    <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; text-align: left; border-color:Black'></div>
 </body>
 </html>

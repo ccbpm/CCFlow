@@ -153,9 +153,14 @@ function figure_MapAttr_Template(mapAttr) {
     if (mapAttr.MyDataType == 7)
         if (W < 160) W = 160;
 
+    if (mapAttr.IsSigan == "4") {
+        eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
+        eleHtml.css('z-index', '999');
+        return eleHtml;
+    }
     if (mapAttr.MyDataType != 4) {
-        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px").css('display', 'inline');  
-     }
+        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
+    }
     
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
 
@@ -243,30 +248,73 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             if (mapAttr.IsSigan == "1" && mapAttr.UIIsEnable == 1) {
                 //查找默认值
                 var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + GetQueryString("UserNo") + "' type=hidden />";
                 //是否签过
                 var sealData = new Entities("BP.Tools.WFSealDatas");
                 sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
 
                 if (sealData.length > 0) {
-                    eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+
+                    //先判断是否存在签名图片
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                    handler.AddPara('no', GetQueryString("UserNo"));
+                    data = handler.DoMethodReturnString("HasSealPic");
+
+                    if (data.length > 0) {
+                        eleHtml += data + html;
+                    }
+                    else {
+                        eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/Templete.JPG'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                    }
                     isSigantureChecked = true;
                 }
                 else {
-                    eleHtml += "<img src='../DataUser/Siganture/siganture.jpg' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\" ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
-                } 
+                    eleHtml += "<img src='../DataUser/Siganture/siganture.jpg' onerror=\"this.src='../DataUser/Siganture/Templete.JPG'\" ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + GetQueryString("UserNo") + "\",\"0\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                }
+                return eleHtml;
+            }
+            if (mapAttr.IsSigan == "4" && mapAttr.UIIsEnable == 1) {
+                //查找默认值
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.DefVal + "' type=hidden />";
+                //是否签过
+                var sealData = new Entities("BP.Tools.WFSealDatas");
+                sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", mapAttr.DefVal);
+
+                if (sealData.length > 0) {
+                    eleHtml += "<img src='../DataUser/Siganture/" + mapAttr.DefVal + ".jpg' style='border:0px;'  id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                    isSigantureChecked = true;
+                }
+                else {
+                    eleHtml += "<img src='../DataUser/Siganture/siganture.jpg'  ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.DefVal + "\",\"1\")' style='border:0px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                }
+                //eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 return eleHtml;
             }
             //如果不可编辑，并且是图片名称
             if (mapAttr.IsSigan == "1") {
                 var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
-                eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                handler.AddPara('no', val);
+                data = handler.DoMethodReturnString("HasSealPic");
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+                if (data.length > 0) {
+                    eleHtml += data + html;
+                }
+                else {
+                    eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/Templete.JPG'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+
+                }
+                return eleHtml;
+            }
+            if (mapAttr.IsSigan == "4") {
+                //var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.DefVal + "' type=hidden />";
+                eleHtml += "<img src='../DataUser/Siganture/" + mapAttr.DefVal + ".jpg' onerror=\"this.src='../DataUser/Siganture/Templete.JPG'\"  style='border:0px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                //eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 return eleHtml;
             }
 
-
-            eleHtml += "<input class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+            eleHtml += "<input class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
 
             return eleHtml;
         }

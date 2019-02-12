@@ -163,11 +163,24 @@ function CloseOKBtn() {
 }
 
 //双击签名
-function figure_Template_Siganture(SigantureID, val) {
-    if (val == "")
-        val = new WebUser().No;
-    var src = '../DataUser/Siganture/' + val + '.jpg'   //新图片地址
-    document.getElementById("Img" + SigantureID).src = src;
+function figure_Template_Siganture(SigantureID, val, type) {
+
+    //先判断，是否存在签名图片
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+    handler.AddPara('no', val);
+    data = handler.DoMethodReturnString("HasSealPic");
+
+    //如果不存在，就显示当前人的姓名
+    if (data.length > 0 && type == 0) {
+        $("#TB_" + SigantureID).before(data);
+        var obj = document.getElementById("Img" + SigantureID);
+        var impParent = obj.parentNode; //获取img的父对象
+        impParent.removeChild(obj);
+    }
+    else {
+        var src = '../DataUser/Siganture/' + val + '.JPG';    //新图片地址
+        document.getElementById("Img" + SigantureID).src = src;
+    }
     isSigantureChecked = true;
 
     var sealData = new Entities("BP.Tools.WFSealDatas");

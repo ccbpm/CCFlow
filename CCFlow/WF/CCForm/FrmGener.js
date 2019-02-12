@@ -455,7 +455,7 @@ function Save(scope) {
 
     // setToobarDisiable();
 
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddPara("OID", pageData.OID);
     handler.AddFormData();
     var data = handler.DoMethodReturnString("FrmGener_Save");

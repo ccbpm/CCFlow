@@ -142,7 +142,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
-                    MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA");
+                    MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章");
 
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
                 #endregion 傻瓜表单

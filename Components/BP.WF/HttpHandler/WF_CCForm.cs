@@ -1306,10 +1306,9 @@ namespace BP.WF.HttpHandler
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
+               
                 if (this.FK_Node != 0 && this.FK_Node != 999999 && (fn.IsEnableFWC == true || nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
                 {
-
-
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
                     {
@@ -1342,13 +1341,103 @@ namespace BP.WF.HttpHandler
                         fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValFloatByKey(FTCAttr.FTC_W));
                         fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
                         fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
-                    }
+                        if (md.HisFrmType == FrmType.FoolForm)
+                        {
+                            //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
+                            DataTable gf = ds.Tables["Sys_GroupField"];
+                            bool isHave = false;
+                            foreach (DataRow dr in gf.Rows)
+                            {
+                                string cType = dr["CtrlType"] as string;
+                                if (cType == null)
+                                    continue;
 
+                                if (cType.Equals("FWC") == true)
+                                    isHave = true;
+                            }
+
+                            if (isHave == false)
+                            {
+                                DataRow dr = gf.NewRow();
+
+                                nd.WorkID = this.WorkID; //为获取表单ID提供参数.
+                                dr[GroupFieldAttr.OID] = 100;
+                                dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
+                                dr[GroupFieldAttr.CtrlType] = "FWC";
+                                dr[GroupFieldAttr.CtrlID] = "FWCND" + nd.NodeID;
+                                dr[GroupFieldAttr.Idx] = 100;
+                                dr[GroupFieldAttr.Lab] = "审核信息";
+                                gf.Rows.Add(dr);
+
+                                ds.Tables.Remove("Sys_GroupField");
+                                ds.Tables.Add(gf);
+
+                                //执行更新,就自动生成那个丢失的字段分组.
+                                refFnc.Update();
+
+                            }
+                        }
+                    }
+                   
+               
+
+                     #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
+                    if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
+                    {
+                        //   Work wk1 = nd.HisWork;
+
+                        if (md.HisFrmType == FrmType.FoolForm)
+                        {
+                            //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
+                            DataTable gf = ds.Tables["Sys_GroupField"];
+                            bool isHave = false;
+                            foreach (DataRow dr in gf.Rows)
+                            {
+                                string cType = dr["CtrlType"] as string;
+                                if (cType == null)
+                                    continue;
+
+                                if (cType.Equals("FWC") == true)
+                                    isHave = true;
+                            }
+
+                            if (isHave == false)
+                            {
+                                DataRow dr = gf.NewRow();
+
+                                nd.WorkID = this.WorkID; //为获取表单ID提供参数.
+                                dr[GroupFieldAttr.OID] = 100;
+                                dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
+                                dr[GroupFieldAttr.CtrlType] = "FWC";
+                                dr[GroupFieldAttr.CtrlID] = "FWCND" + nd.NodeID;
+                                dr[GroupFieldAttr.Idx] = 100;
+                                dr[GroupFieldAttr.Lab] = "审核信息";
+                                gf.Rows.Add(dr);
+
+                                ds.Tables.Remove("Sys_GroupField");
+                                ds.Tables.Add(gf);
+
+                                //更新,为了让其表单上自动增加审核分组.
+                                BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(nd.NodeID);
+                                FrmWorkCheck fwc = new FrmWorkCheck(nd.NodeID);
+                                if (fn.FrmSln == FrmSln.Self || fn.FrmSln == FrmSln.Default)
+                                    fwc.HisFrmWorkCheckSta = FrmWorkCheckSta.Enable;
+                                else
+                                    fwc.HisFrmWorkCheckSta = FrmWorkCheckSta.Readonly;
+                          
+                                refFnc.Update();
+
+                            }
+                        }
+                    }
+                    #endregion 没有审核组件分组就增加上审核组件分组.
                     ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
                 }
-
                 if (this.FK_Node != 0 && this.FK_Node != 999999)
                     ds.Tables.Add(nd.ToDataTableField("WF_Node"));
+
+                if (this.FK_Node != 0 && this.FK_Node != 999999)
+                    ds.Tables.Add(fn.ToDataTableField("WF_FrmNode"));
 
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
@@ -1387,8 +1476,8 @@ namespace BP.WF.HttpHandler
 
                                 dr[MapAttrAttr.UIIsEnable] = ff.UIIsEnable;//是否只读?
                                 dr[MapAttrAttr.UIVisible] = ff.UIVisible; //是否可见?
-                                if (DataType.IsNullOrEmpty(ff.DefVal) == true)
-                                    continue;
+                                dr[MapAttrAttr.UIIsInput] = ff.IsNotNull; //是否必填?
+                               
 
                                 dr[MapAttrAttr.DefVal] = ff.DefVal; //默认值.
 

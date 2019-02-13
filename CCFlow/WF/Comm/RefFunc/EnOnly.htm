@@ -342,7 +342,7 @@
                 //输出帮助连接.
                 var name = null;
                 var helpUrl = GetPara(attr.AtPara, "HelpUrl");
-                if (helpUrl == null || helpUrl == "") {
+                if (helpUrl == null || helpUrl == "" || helpUrl == "null") {
                     name = attr.Name;
                 }
                 else {

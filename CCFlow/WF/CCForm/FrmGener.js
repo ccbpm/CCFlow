@@ -458,6 +458,7 @@ function Save(scope) {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddPara("OID", pageData.OID);
     handler.AddFormData();
+    handler.AddPara("FK_MapData", pageData.FK_MapData);
     var data = handler.DoMethodReturnString("FrmGener_Save");
 
     if (data.indexOf('err@') == 0) {

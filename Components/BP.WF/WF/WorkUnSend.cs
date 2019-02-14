@@ -103,10 +103,11 @@ namespace BP.WF
         /// <summary>
         /// 撤销发送
         /// </summary>
-        public WorkUnSend(string flowNo, Int64 workID, int unSendToNode = 0)
+        public WorkUnSend(string flowNo, Int64 workID, int unSendToNode = 0,Int64 fid = 0)
         {
             this.FlowNo = flowNo;
             this.WorkID = workID;
+            this.FID = fid;
             this.UnSendToNode = UnSendToNode; //撤销到节点.
         }
         public int UnSendToNode = 0;
@@ -433,9 +434,17 @@ namespace BP.WF
             //如果启用了对方已读，就不能撤销.
             if (nd.CancelDisWhenRead == true)
             {
+                //撤销到的节点是干流程节点/子线程撤销到子线程
                 int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node ,0);
                 if (i >= 1)
-                    return "err@当前待办已经有["+i+"]个工作人员打开了该工作,您不能执行撤销.";
+                    return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
+                else
+                {
+                    //干流节点撤销到子线程
+                    i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
+                    if(i>=1)
+                        return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
+                }
             }
 
 

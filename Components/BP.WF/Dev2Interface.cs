@@ -2627,7 +2627,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) ";
+                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)";
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -4176,10 +4176,10 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workID">工作ID</param>
         /// <returns>返回成功执行信息</returns>
-        public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode = 0)
+        public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode = 0,Int64 fid=0)
         {
 
-            WorkUnSend unSend = new WorkUnSend(flowNo, workID, unSendToNode);
+            WorkUnSend unSend = new WorkUnSend(flowNo, workID, unSendToNode,fid);
             unSend.UnSendToNode = unSendToNode;
 
             return unSend.DoUnSend();

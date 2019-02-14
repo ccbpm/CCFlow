@@ -1961,10 +1961,13 @@ namespace BP.WF
                             }
                             else
                             {
-                                if (DataType.IsNumStr(nd.DeliveryParas) == false)
-                                {
-                                    msg += "@错误:您没有设置指定岗位的节点编号，目前设置的为{" + nd.DeliveryParas + "}";
-                                }
+                                String[] deliveryParas = nd.DeliveryParas.Split(',');
+						        foreach(String str in deliveryParas){
+							        if (DataType.IsNumStr(str) == false) {
+                                        msg += "@错误:您设置指定岗位的节点编号格式不正确，目前设置的为{" + nd.DeliveryParas + "}";
+							        }
+						        }
+                                
                             }
                             break;
                         case DeliveryWay.ByDeptAndStation: /*按部门与岗位的交集计算.*/

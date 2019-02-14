@@ -344,6 +344,30 @@ namespace BP.WF
             }
             #endregion
 
+            #region 计算完成率。
+            bool isSetEnable = false; //是否关闭合流节点待办.
+            if (nd.PassRate == 100)
+            {
+                isSetEnable = true;
+            }
+            else
+            {
+                string mysql = "SELECT COUNT(DISTINCT WorkID) FROM WF_GenerWorkerlist WHERE FID=" + this.FID + " AND IsPass=1 AND FK_Node IN (SELECT FK_Node FROM WF_Direction WHERE ToNode=" + gwf.FK_Node + ")";
+                decimal numOfPassed = DBAccess.RunSQLReturnValDecimal(mysql, 0, 1);
+
+                mysql = "SELECT COUNT(DISTINCT WorkID) FROM WF_GenerWorkFlow WHERE FID=" + this.FID;
+                decimal numOfAll = DBAccess.RunSQLReturnValDecimal(mysql, 0, 1);
+
+                decimal rate = numOfPassed / numOfAll * 100;
+                if (nd.PassRate > rate)
+                    isSetEnable = true;
+            }
+
+            //是否关闭合流节点待办.
+            if (isSetEnable == true)
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=2 WHERE WorkID="+this.FID+" AND  FK_Node="+gwf.FK_Node);
+            #endregion
+
             //调用撤消发送后事件。
             msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
 

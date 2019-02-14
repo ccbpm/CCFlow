@@ -2077,7 +2077,10 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValDecimalByKey(NodeAttr.PassRate);
+                var val= this.GetValDecimalByKey(NodeAttr.PassRate);
+                if (val == 0)
+                    return 100;
+                return val;
             }
         }
         /// <summary>

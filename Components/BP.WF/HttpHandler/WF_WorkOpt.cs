@@ -40,7 +40,6 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
             return "删除成功";
         }
-
         #region 打印 rtf
         /// <summary>
         /// 初始化
@@ -88,12 +87,11 @@ namespace BP.WF.HttpHandler
 
             //如果不是 BillTemplateExcel 打印
             if (func.TemplateFileModel == TemplateFileModel.VSTOForExcel)
-                return "url@httpCCWord://-fromccflow,App=BillTemplateExcel,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID ;
+                return "url@httpccword://-fromccflow,App=BillTemplateExcel,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID ;
 
             //如果不是 BillTemplateWord 打印
             if (func.TemplateFileModel == TemplateFileModel.VSTOForWord)
-                return "url@httpCCWord://-fromccflow,App=BillTemplateWord,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID;
-             
+                return "url@httpccword://-fromccflow,App=BillTemplateWord,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID;
 
             string billInfo = "";
             Node nd = new Node(this.FK_Node);

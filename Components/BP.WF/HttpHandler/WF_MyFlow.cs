@@ -370,7 +370,7 @@ namespace BP.WF.HttpHandler
                     string pFlowNo = dt.Rows[0]["PFlowNo"].ToString();
                     int pNodeID = int.Parse(dt.Rows[0]["PNodeID"].ToString());
                     Int64 pWorkID = Int64.Parse(dt.Rows[0]["PWorkID"].ToString());
-                    string pEmp = dt.Rows[0]["PEmp"].ToString();
+                    string pEmp = ""; // dt.Rows[0]["PEmp"].ToString();
                     if (DataType.IsNullOrEmpty(pEmp))
                         pEmp = WebUser.No;
 

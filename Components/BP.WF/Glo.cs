@@ -236,7 +236,7 @@ namespace BP.WF
                 #endregion 修复丢失的发起人.
 
                 #region 给city 设置拼音.
-                if (DBAccess.IsExitsObject("CN_City") == true)
+                if (DBAccess.IsExitsObject("CN_City") == true && 1==2 )
                 {
                     if (DBAccess.IsExitsTableCol("CN_City", "PinYin") == true)
                     {

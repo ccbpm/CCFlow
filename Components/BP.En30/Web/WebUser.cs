@@ -132,15 +132,16 @@ namespace BP.Web
                 if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
                 {
                     string sql = "";
-                    if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-                        sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
-                    else
-                        sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
+                   
+                      sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
 
                     string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
                     if (DataType.IsNullOrEmpty(deptNo) == true)
                     {
-                        throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
+                        sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
+                        deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                        if (DataType.IsNullOrEmpty(deptNo) == true)
+                            throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
                     }
                     else
                     {

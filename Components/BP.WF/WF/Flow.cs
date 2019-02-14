@@ -2053,9 +2053,9 @@ namespace BP.WF
                             break;
                         case DeliveryWay.ByPreviousNodeFormEmpsField:
                             //去rpt表中，查询是否有这个字段
-                            string str = nd.NodeID.ToString().Substring(0, nd.NodeID.ToString().Length - 2);
+                            string str1 = nd.NodeID.ToString().Substring(0, nd.NodeID.ToString().Length - 2);
                             MapAttrs rptAttrs = new BP.Sys.MapAttrs();
-                            rptAttrs.Retrieve(MapAttrAttr.FK_MapData, "ND" + str + "Rpt", MapAttrAttr.KeyOfEn);
+                            rptAttrs.Retrieve(MapAttrAttr.FK_MapData, "ND" + str1 + "Rpt", MapAttrAttr.KeyOfEn);
 
                             if (rptAttrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, nd.DeliveryParas) == false)
                             {

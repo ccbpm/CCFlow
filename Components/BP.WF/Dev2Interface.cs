@@ -2524,25 +2524,6 @@ namespace BP.WF
                 throw new Exception("@没有计算出来要退回的节点，请管理员确认节点退回规则是否合理？当前节点名称:" + nd.Name + ",退回规则:" + nd.HisReturnRole.ToString());
             return dt;
         }
-        /// <summary>
-        /// 获得指定节点的可以选择的接受人
-        /// </summary>
-        /// <param name="fk_node">节点编号</param>
-        /// <returns>返回No,Name,FK_Dept两个列.</returns>
-        public static DataTable DB_SelectAccepter(int fk_node)
-        {
-            Selector en = new Selector(fk_node);
-
-            switch (en.SelectorModel)
-            {
-                case SelectorModel.Dept:
-                    break;
-                default:
-                    break;
-            }
-
-            return null;
-        }
         #endregion 工作部件的数据源获取
 
         #region 获取当前操作员的在途工作

@@ -1560,6 +1560,13 @@ namespace BP.WF.HttpHandler
                 SendReturnObjs objs = null;
                 string msg = "";
 
+                //判断当前流程工作的GenerWorkFlow是否存在
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = this.WorkID;
+                int i = gwf.RetrieveFromDBSources();
+                if (i==0)
+                    return "该流程的工作已删除,请联系管理员";
+
                 objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null);
                 msg = objs.ToMsgOfHtml();
                 BP.WF.Glo.SessionMsg = msg;

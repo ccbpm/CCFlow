@@ -73,6 +73,7 @@ namespace BP.WF.HttpHandler
 
             me.Tag1= this.GetValFromFrmByKey("TB_Tag1");
             me.Tag2 = this.GetValFromFrmByKey("TB_Tag2");
+
             string Tag = "0";
             try
             {
@@ -88,6 +89,20 @@ namespace BP.WF.HttpHandler
 
             me.Tag = Tag;
 
+            string Tag3 = "0";
+            try
+            {
+                Tag3 = this.GetValFromFrmByKey("CB_Tag3");
+                if (Tag3 == "on")
+                    Tag3 = "1";
+            }
+            catch (Exception e)
+            {
+                Tag3 = "0";
+            }
+            me.Tag3 = Tag3;
+
+            me.Tag4 = this.GetValFromFrmByKey("DDL_Fileds");
 
             //执行保存.
             me.MyPK = MapExtXmlList.AutoFullDtlField + "_" + me.FK_MapData + "_" + me.AttrOfOper;
@@ -146,6 +161,15 @@ namespace BP.WF.HttpHandler
                 mydt.TableName = dtl.No;
                 ds.Tables.Add(mydt);
             }
+
+            //把主表的字段放入
+             string mainsql = "SELECT KeyOfEn as \"No\",Name as \"Name\" FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND MyDataType=1 AND UIIsEnable = 0 ";
+             mainsql += " AND KeyOfEn !='OID' AND KeyOfEn!='FID' AND KeyOfEn!='WorkID' AND KeyOfEn!='NodeID' AND KeyOfEn!='RefPK'  AND KeyOfEn!='RDT' AND KeyOfEn!='Rec' ";
+
+            //把从表增加里面去.
+             DataTable maindt = DBAccess.RunSQLReturnTable(mainsql);
+             maindt.TableName = "main_Attr";
+             ds.Tables.Add(maindt);
 
             return BP.Tools.Json.ToJson(ds);
         }

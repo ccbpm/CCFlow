@@ -13,7 +13,7 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");
+            $("#Msg").html("");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
@@ -139,8 +139,8 @@
         <tr>
 		    <td colspan="3" >
 		    
-		   <input type="checkbox" id="CB_Tag" name="CB_Tag" />
-		       <label>是否启用对其他值的计算 </label>
+		  <label> <input type="checkbox" id="CB_Tag" name="CB_Tag" />
+		       计算后要触发的脚本函数(比如:求和以后要激活的function) </label>
 		    </td>
 		 </tr>
          <tr> 
@@ -159,6 +159,17 @@
 		     </td>
 		    <td>对该函数的说明</td>
     	</tr>
+
+
+           <tr>
+		    <td colspan="1" >
+                 <label> <input type="checkbox" id="Checkbox2" name="CB_Tag1" />
+		       对其他string字段进行大写转换 </label>
+
+		    </td>
+            <td colspan="2" > 要转化大写的字段名:<select  id="DDL_1"  /> </td>
+		 </tr>
+
 
         <tr>
             <td colspan="3">

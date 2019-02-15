@@ -29,6 +29,7 @@
 
             var dtls = data["Dtls"];
             var mapExt = data['Sys_MapExt'];
+            var mianAttrs = data["main_Attr"];
             var mapExt = mapExt[0];
 
             // 根据这个格式对下拉框设置默认值.  "ND101Dtl1.JinE.Sum";
@@ -45,6 +46,8 @@
 
             GenerBindDDL("DDL_Dtl", dtls, "No", "Name", selectID);
 
+            GenerBindDDL("DDL_Fileds", mianAttrs, "No", "Name", mapExt.Tag4);
+
             $("#DDL_Dtl").on("change", function () {
                 GenerBindDDL("DDL_Field", data[$(this).val()], "No", "Name");
             });
@@ -58,9 +61,13 @@
             //设置计算方式.
             SetDDLVal("DDL_JSFS", jsfs);
 
-            var tag1 = mapExt.Tag;
-            if (tag1 == "1")
+            var tag = mapExt.Tag;
+            if (tag == "1")
                 $("#CB_Tag").attr("checked", 'true');
+
+            var tag3 = mapExt.Tag3;
+            if (tag3 == "1")
+                $("#CB_Tag3").attr("checked", 'true');
 
             $("#TB_Tag1").val(mapExt.Tag1);
             $("#TB_Tag2").val(mapExt.Tag2);
@@ -107,8 +114,6 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return false;
 
-            // var en = new Entity("BP.Sys.MapExt");
-            // en.Delete(
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
             handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
@@ -163,11 +168,11 @@
 
            <tr>
 		    <td colspan="1" >
-                 <label> <input type="checkbox" id="Checkbox2" name="CB_Tag1" />
+                 <label> <input type="checkbox" id="CB_Tag3" name="CB_Tag3" />
 		       对其他string字段进行大写转换 </label>
 
 		    </td>
-            <td colspan="2" > 要转化大写的字段名:<select  id="DDL_1"  /> </td>
+            <td colspan="2" > 要转化大写的字段名:<select  id="DDL_Fileds" name="DDL_Fileds" /> </td>
 		 </tr>
 
 

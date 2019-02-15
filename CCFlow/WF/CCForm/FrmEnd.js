@@ -447,11 +447,19 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "AutoFullDtlField": //主表扩展(统计从表)
                 var docs = mapExt.Doc.split("\.");
+
+                //判断是否显示大写
+                var tag3 = mapExt.Tag3;
+                var DaXieAttrOfOper = "";
+                if (tag3 == 1)
+                    DaXieAttrOfOper = mapExt.Tag4;
+
                 if (docs.length == 3) {
                     var ext = {
                         "DtlNo": docs[0],
                         "FK_MapData": mapExt.FK_MapData,
                         "AttrOfOper": mapExt.AttrOfOper,
+                        "DaXieAttrOfOper": DaXieAttrOfOper,
                         "Doc": mapExt.Doc,
                         "DtlColumn": docs[1],
                         "exp": docs[2]

@@ -9,6 +9,10 @@ function GenerFoolFrm(mapData, frmData) {
     if (node != undefined)
         node = node[0];
 
+    var frmNode = frmData.WF_FrmNode;
+    if (frmNode != undefined)
+        frmNode = frmNode[0];
+
     var tableWidth = 800; //  w - 40;
     var html = "<table style='width:" + tableWidth + "px;' >";
     var frmName = mapData.Name;
@@ -90,22 +94,21 @@ function GenerFoolFrm(mapData, frmData) {
 
         //审核组件,有节点信息,并且当前节点状态不是禁用的,就可以显示.
         if (gf.CtrlType == 'FWC' && node && node.FWCSta != 0) {
+            if (node.FormType != 5 ||( node.FormType == 5 && frmNode && frmNode.IsEnableFWC == 1)) {
+                html += "<tr>";
+                html += "  <th colspan=4>" + gf.Lab + "</th>";
+                html += "</tr>";
 
-            html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
-            html += "</tr>";
+                html += "<tr>";
+                html += "  <td colspan='4' >";
 
-            html += "<tr>";
-            html += "  <td colspan='4' >";
+                html += Ele_FrmCheck(node);
 
-            html += Ele_FrmCheck(node);
+                html += "  </td>";
+                html += "</tr>";
 
-            // html += figure_Template_FigureFrmCheck(node);
-
-            html += "  </td>";
-            html += "</tr>";
-
-            continue;
+                continue;
+            }
         }
 
         //字段类的控件.
@@ -201,8 +204,7 @@ function Ele_FrmCheck(wf_node) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.OID;
-    paras += "&IsReadonly=" + isReadonly;
-    //alert(paras);
+  
 
     src += "&r=q" + paras;
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";

@@ -122,7 +122,7 @@ function GenerFreeFrm(mapData, frmData) {
         if (wf_FrmNodeComponent != null) {
 
             $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent, mapData));
-            $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent, mapData));
+            $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent, mapData,frmData));
             $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent, mapData));
             $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent, mapData));
         }
@@ -157,12 +157,25 @@ function figure_Template_FigureFlowChart(wf_node, mapData) {
 }
 
 //审核组件
-function figure_Template_FigureFrmCheck(wf_node, mapData) {
+function figure_Template_FigureFrmCheck(wf_node, mapData,frmData) {
 
-    //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
+   
 
     var sta = wf_node.FWCSta;
     if (sta == 0 || sta == undefined)
+        return $('');
+
+    var node = frmData.WF_Node;
+    if (node != undefined)
+        node = node[0];
+
+    var frmNode = frmData.WF_FrmNode;
+    if (frmNode != undefined)
+        frmNode = frmNode[0];
+
+    if (node == null || frmNode == null)
+        return $('');
+    if (node.FormType == 5 && frmNode.IsEnableFWC != 1)
         return $('');
 
     var pos = PreaseFlowCtrls(mapData.FlowCtrls, "FrmCheck");
@@ -208,8 +221,7 @@ function figure_Template_FigureFrmCheck(wf_node, mapData) {
     paras += "&WorkID=" + pageData["OID"];
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += "&IsReadonly=" + isReadonly;
-
+ 
     //  paras += '&WorkID=' + pageData.WorkID;
     if (sta == 2)//只读
     {

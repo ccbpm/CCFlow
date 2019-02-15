@@ -28,6 +28,7 @@
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Data/JSLibData/CovertMoneyToDaXie.js" type="text/javascript"></script>
 
     <script language="javascript" type="text/javascript">
 
@@ -927,7 +928,7 @@
                     var columnsName = getColumnElementsName(extObj.DtlColumn);
                     $(":input[name=" + columnsName + "]").each(function (i, e) {
                         $(e).bind("change", function (o) {
-                            doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document));
+                            doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document), $("#TB_" + extObj.DaXieAttrOfOper, parent.document));
                         });
                         if (i == 0) {
                             $(e).trigger("change");
@@ -942,7 +943,7 @@
         * @param name 待统计列元素name
         * @param template 统计单元格jquery对象
         */
-        function doStatistics(exp, name, template) {
+        function doStatistics(exp, name, template, DXTemplate) {
             if (exp == "Sum") {	// 和
                 var sum = 0;
                 //判断值是否含有小数
@@ -992,6 +993,9 @@
                 });
                 template.val(min);
             }
+
+            if (extObj.DaXieAttrOfOper != "")
+                DXTemplate.val(Rmb2DaXie(template.val()));
         }
 
         function getColumnElementsName(KeyOfEn) {

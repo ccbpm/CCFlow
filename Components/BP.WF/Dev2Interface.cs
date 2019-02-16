@@ -3039,10 +3039,18 @@ namespace BP.WF
             emp.No = userNo;
             emp.RetrieveFromDBSources();
 
+
+            emp.SID = DBAccess.GenerGUID();
+            if (DBAccess.IsView(emp.EnMap.PhysicsTable) == false)
+                emp.DirectUpdate();
+
             WebUser.SignInOfGener(emp);
             WebUser.IsWap = false;
             WebUser.Auth = ""; //设置授权人为空.
-            return Port_GetSID(userNo);
+
+            return emp.SID;
+
+            //  return Port_GetSID(userNo);
         }
         /// <summary>
         /// 注销当前登录

@@ -734,6 +734,34 @@ namespace BP.En
 		#endregion
 
 		#region 排序操作
+        protected void DoOrderUp(string idxAttr)
+        {
+            //  string pkval = this.PKVal as string;
+            string pkval = this.PKVal.ToString();
+            string pk = this.PK;
+            string table = this.EnMap.PhysicsTable;
+
+            string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + "  ORDER BY " + idxAttr;
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            int idx = 0;
+            string beforeNo = "";
+            string myNo = "";
+            bool isMeet = false;
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                idx++;
+                myNo = dr[pk].ToString();
+                if (myNo == pkval)
+                    isMeet = true;
+
+                if (isMeet == false)
+                    beforeNo = myNo;
+                DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'");
+            }
+            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'");
+            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'");
+        }
 		protected void DoOrderUp(string groupKeyAttr, string groupKeyVal, string idxAttr)
 		{
 			//  string pkval = this.PKVal as string;
@@ -790,6 +818,42 @@ namespace BP.En
 			DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'  AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKey2 + "='" + gVal2 + "')");
 			DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'  AND   (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKey2 + "='" + gVal2 + "')");
 		}
+
+        protected void DoOrderDown(string idxAttr)
+        {
+            string pkval = this.PKVal.ToString();
+            string pk = this.PK;
+            string table = this.EnMap.PhysicsTable;
+
+            string sql = "SELECT " + pk + " ," + idxAttr + " FROM " + table + "  order by " + idxAttr;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            int idx = 0;
+            string nextNo = "";
+            string myNo = "";
+            bool isMeet = false;
+
+            string sqls = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                myNo = dr[pk].ToString();
+                if (isMeet == true)
+                {
+                    nextNo = myNo;
+                    isMeet = false;
+                }
+                idx++;
+
+                if (myNo == pkval)
+                    isMeet = true;
+
+                sqls += "@ UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'";
+            }
+
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'";
+
+            BP.DA.DBAccess.RunSQLs(sqls);
+        }
 		protected void DoOrderDown(string groupKeyAttr, string groupKeyVal, string idxAttr)
 		{
 			string pkval = this.PKVal.ToString();

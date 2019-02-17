@@ -2,32 +2,23 @@
 function InitBar(optionKey) {
 
     var html = "表单方案:";
+
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value=null  disabled='disabled'>+内置表单</option>";
-    html += "<option value=" + StartGuideWay.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>";
-    html += "<option value=" + StartGuideWay.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
-    html += "<option value=" + StartGuideWay.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>";
-    html += "<option value=" + StartGuideWay.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
+    html += "<option value=" + StartGuideWay.None + ">无，不设置(默认)。</option>";
+    html += "<option value=" + StartGuideWay.BySQLOne + "> 按设置的SQL-单条模式  </option>";
+    html += "<option value=" + StartGuideWay.FoolForm + ">从历史发起的流程Copy数据(查询历史记录)</option>";
+    html += "<option value=" + StartGuideWay.BySelfUrl + "> 按自定义的Url </option>";
+    html += "<option value=" + StartGuideWay.ByParentFlowModel + "> 父子流程模式  </option>";
 
-    html += "<option value=null  disabled='disabled'>+自定义表单</option>";
-    html += "<option value=" + StartGuideWay.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
-    html += "<option value=" + StartGuideWay.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>";
-
-    html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
-    html += "<option value=" + StartGuideWay.RefOneFrmTree + " >&nbsp;&nbsp;绑定表单库的表单</option>";
-    html += "<option value=" + StartGuideWay.SheetTree + " >&nbsp;&nbsp;绑定多表单(表单树)</option>";
-
+    html += "<option value=" + StartGuideWay.FoolForm + " disabled='disabled'>  按设置的SQL-多条模式(用于批量发起)</option>";
+    html += "<option value=" + StartGuideWay.FoolForm + " disabled='disabled'>   子流程实例列表模式-多条 </option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
-
-    //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
-
     html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
     html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
-
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
@@ -35,9 +26,9 @@ function InitBar(optionKey) {
 
 function OldVer() {
 
-    var nodeID = GetQueryString("FK_Node");
+    var nodeID = GetQueryString("FK_Flow");
     var flowNo = GetQueryString("FK_Flow");
-    var url = '../NodeFromWorkModel.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
+    var url = '../NodeFromWorkModel.htm?FK_Flow=' + flowNo + '&FK_Flow=' + nodeID;
     window.location.href = url;
 }
 
@@ -45,19 +36,17 @@ function OldVer() {
 //打开傻瓜表单设计器.
 function DFoolFrm() {
 
-    var nodeID = GetQueryString("FK_Node");
-    var node = new Entity("BP.WF.Node", nodeID);
-    var url = '../../FoolFormDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
+    var nodeID = GetQueryString("FK_Flow");
+    var node = new Entity("BP.WF.Flow", nodeID);
+    var url = '../../FoolFormDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Flow=' + nodeID + "&FK_MapData=ND" + nodeID;
     window.open(url);
-
-    //OpenEasyUiDialogExt(url, '傻瓜表单设计器', 800, 500, false);
 }
 
 //打开自由表单设计器.
 function DFreeFrm() {
-    var nodeID = GetQueryString("FK_Node");
-    var node = new Entity("BP.WF.Node", nodeID);
-    var url = '../../CCFormDesigner/FormDesigner.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
+    var nodeID = GetQueryString("FK_Flow");
+    var node = new Entity("BP.WF.Flow", nodeID);
+    var url = '../../CCFormDesigner/FormDesigner.htm?FK_Flow=' + node.FK_Flow + '&FK_Flow=' + nodeID + "&FK_MapData=ND" + nodeID;
     OpenEasyUiDialogExt(url, '傻瓜表单设计器', 1100, 600, false);
 }
 
@@ -70,7 +59,7 @@ function Help() {
 
     var url = window.location.href;
 
-    var nodeID = GetQueryString("FK_Node");
+    var nodeID = GetQueryString("FK_Flow");
     var obj = document.getElementById("changBar");
     var sele = obj.options;
     var index = obj.selectedIndex;
@@ -78,14 +67,14 @@ function Help() {
 
     var roleName = "";
     switch (parseInt(optionKey)) {
-        case StartGuideWay.FoolForm:
-            url = "0.FoolForm.htm";
+        case StartGuideWay.None:
+            url = "0.None.htm";
             break;
-        case StartGuideWay.FreeForm:
-            url = "1.FreeForm.htm";
+        case StartGuideWay.BySQLOne:
+            url = "1.BySQLOne.htm";
             break;
-        case StartGuideWay.SelfForm:
-            url = "2.SelfForm.htm";
+        case StartGuideWay.BySelfUrl:
+            url = "7.BySelfUrl.htm";
             break;
         case StartGuideWay.SDKForm:
             url = "3.SDKForm.htm";
@@ -123,20 +112,16 @@ function Help() {
             url = "0.FoolForm.htm";
             break;
     }
-
-    //if (url.indexOf
-    //var url = "http://ccbpm.mydoc.io";
-    //window.open(url);
 }
 
-
 function changeOption() {
-    var nodeID = GetQueryString("FK_Node");
+
+    var nodeID = GetQueryString("FK_Flow");
     var obj = document.getElementById("changBar");
     var sele = obj.options;
     var index = obj.selectedIndex;
     var optionKey = optionKey = sele[index].value;
-
+    
     var roleName = "";
     switch (parseInt(optionKey)) {
         case StartGuideWay.FoolForm:
@@ -182,13 +167,14 @@ function changeOption() {
             url = "0.FoolForm.htm";
             break;
     }
-    window.location.href = url + "?FK_Node=" + nodeID;
+    window.location.href = url + "?FK_Flow=" + nodeID;
 }
 
 
-function CheckFlow(flowNo) {
-    var flow = new Entity('BP.WF.Flow', flowNo);
-    flow.DoMethodReturnString("DoCheck"); //重置密码:不带参数的方法. 
+function CheckFlow(flowNo)
+{
+	  var flow=new Entity('BP.WF.Flow', flowNo);
+	  flow.DoMethodReturnString("DoCheck"); //重置密码:不带参数的方法. 
 }
 
 function SaveAndClose() {

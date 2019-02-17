@@ -85,6 +85,50 @@ if (typeof DeliveryWay == "undefined") {
 
 }
 
+
+//前置导航
+if (typeof StartGuideWay == "undefined") {
+    var StartGuideWay = {}
+    //傻瓜表单
+    StartGuideWay.None = 0,
+    /// <summary>
+    /// SQL单条模式.
+    /// </summary>
+     StartGuideWay.BySQLOne = 1,
+    /// <summary>
+    /// 按系统的URL-(子父流程)多条模式.
+    /// </summary>
+     StartGuideWay.SubFlowGuide = 2,
+    /// <summary>
+    /// 按系统的URL-(实体记录)单条模式
+    /// </summary>
+     StartGuideWay.BySystemUrlOneEntity = 3,
+    /// <summary>
+    /// 按系统的URL-(实体记录)多条模式
+    /// </summary>
+     StartGuideWay.SubFlowGuideEntity = 4,
+    /// <summary>
+    /// 历史数据
+    /// </summary>
+     StartGuideWay.ByHistoryUrl = 5,
+    /// <summary>
+    /// SQL多条模式
+    /// </summary>
+     StartGuideWay.BySQLMulti = 6,
+    /// <summary>
+    /// 按自定义的Url
+    /// </summary>
+     StartGuideWay.BySelfUrl = 7,
+    /// <summary>
+    /// 按照用户选择的表单
+    /// </summary>
+     StartGuideWay.ByFrms = 8,
+    /// <summary>
+    /// 父子流程模式
+    /// </summary>
+     StartGuideWay.ByParentFlowModel = 9
+}
+
 //表单模式
 if (typeof FormType == "undefined") {
     var FormType = {}

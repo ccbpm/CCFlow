@@ -76,8 +76,31 @@
             $("#TB_GuideLab").val(data.StartGuideLab);
 
 
-            //alert(data.StartGuideWay);
+            //查询出来数据.
+            var parts = new Entities("BP.WF.Template.Parts");
+            parts.Retrieve("PartType", "ParentSubFlowGuide", "FK_Flow", fk_flow);
 
+            var strs = "<table>";
+            strs += "<tr>";
+            strs += "<th>流程编号</th>";
+            strs += "<th>名称</th>";
+            strs += "<th>操作</th>";
+            strs += "</tr>";
+
+            for (var i = 0; i < parts.length; i++) {
+                var part = parts[i];
+
+                strs += "<tr>";
+                strs += "<td>" + part.Tag0 + "</td>";
+                strs += "<td>" + part.Tag1 + "</td>";
+                strs += "<td><a href=\"javascript:Part('"+part.MyPK+"');\" >编辑</a></td>";
+                strs += "</tr>";
+            }
+            strs += "</table>";
+
+            $("#parts").val(strs);
+
+            //alert(data.StartGuideWay);
 
             //console.info(data.StartGuidePara1)
             switch (data.StartGuideWay) {
@@ -108,10 +131,18 @@
                     $("#TB_SubFlow1").val(data.StartGuidePara1);
                     $("#TB_SubFlow2").val(data.StartGuidePara2);
                     break;
+                case '11':
+//                    var ens = new Entities("");
+//                    $("#parts").val(data.StartGuidePara2);
+                    break;
                 default:
                     break;
             }
             return;
+        }
+
+        function NewPart() {
+
         }
 
         function SaveEn() {
@@ -210,6 +241,8 @@
                         <br />
                     </div>
                 </fieldset>
+
+                <!--自定义url模式  -->
                 <fieldset>
                     <legend>
                         <input id="RB_StartGuideWay_10" type="radio" name="RB_StartGuideWay" value="10" /><label
@@ -219,7 +252,7 @@
                         <ul>
                             <li>请设置URL在下面的文本框里。</li>
                             <li>该URL是一个列表，在每一行的数据里有一个连接链接到工作处理器上（/WF/MyFlow.htm）</li>
-                            <li>连接到工作处理器（ WF/MyFlow.aspx）必须有2个参数FK_Flow=xxx&IsCheckGuide=1</li>
+                            <li>连接到工作处理器（ WF/MyFlow.htm）必须有2个参数FK_Flow=xxx&IsCheckGuide=1</li>
                             <li>您可以打开Demo: /SDKFlowDemo/TestCase/StartGuideSelfUrl.htm 详细的说明了该功能如何开发。</li>
                         </ul>
                     </div>
@@ -228,6 +261,25 @@
                         <textarea id="TB_SelfURL" name="TB_SelfURL" runat="server" style="width: 98%; height: 24px"></textarea><br />
                     </div>
                 </fieldset>
+
+                <!--父子流程模式  -->
+                <fieldset>
+                    <legend>
+                        <input id="RB_StartGuideWay_12" type="radio" name="RB_StartGuideWay" value="12" /><label
+                            for="RB_StartGuideWay_12">父子流程模式</label>   - <a href="javascript:NewPart();" >新建</a> - <a href="javascript:ShowHidden('ByFPlow')">帮助</a>
+                    </legend>
+                    <div id="ByFPlow" style="display: none; color: gray">
+                        <ul>
+                            <li>请设置URL在下面的文本框里。</li>
+                            <li>该URL是一个列表，在每一行的数据里有一个连接链接到工作处理器上（/WF/MyFlow.htm）</li>
+                            <li>连接到工作处理器（ WF/MyFlow.htm）必须有2个参数FK_Flow=xxx&IsCheckGuide=1</li>
+                            <li>您可以打开Demo: /SDKFlowDemo/TestCase/StartGuideSelfUrl.htm 详细的说明了该功能如何开发。</li>
+                        </ul>
+                    </div>
+                    <div id="parts" >无设置，请点击新建。</div>
+                </fieldset>
+
+                <!--按设置的SQL-单条模式  -->
                 <fieldset>
                     <legend>
                         <input id="RB_StartGuideWay_1" type="radio" name="RB_StartGuideWay" value="1" /><label

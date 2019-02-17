@@ -202,191 +202,192 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData(urlParam);
             var data = handler.DoMethodReturnString("Dtl_Init");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
-                    // 检查是否有错误.
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
+            //            $.ajax({
+            //                type: 'post',
+            //                async: true,
+            //                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
+            //                dataType: 'html',
+            //                success: function (data) {
+            // 检查是否有错误.
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //解析.
+            data = JSON.parse(data);
+
+            //主表数据，用于变量替换.
+            var mainTable = data["MainTable"]; //主表数据.
+
+            //从表信息.
+            var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
+            var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
+            var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
+            mapExts = sys_mapExtDtl;
+            workNodeData = data;
+
+            var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
+
+            //默认为空,全部显示,如果配置了就按照配置的计算,格式为:field1,field2
+            if (sys_MapDtl.ShowCols) {
+                var ShowCols = sys_MapDtl.ShowCols.split(",");
+                $.each(sys_mapAttr, function (i, o) {
+                    if (ShowCols.indexOf(o.KeyOfEn) == -1) {
+                        o.UIVisible = 0;
                     }
+                });
+            }
 
-                    //解析.
-                    data = JSON.parse(data);
+            var titleArr = new Array();
+            var item = new Object();
+            var athNumitem = new Object();
+            item.field = 'OID';
+            item.checkbox = true;
+            titleArr.push(item);
 
-                    //主表数据，用于变量替换.
-                    var mainTable = data["MainTable"]; //主表数据.
+            var sumClos = new Array();
+            $.each(sys_mapAttr, function (i, mapAttrObj) {
+                if (mapAttrObj.UIVisible == 1) {
+                    item = new Object();
 
-                    //从表信息.
-                    var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
-                    var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
-                    var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
-                    mapExts = sys_mapExtDtl;
-                    workNodeData = data;
+                    item.field = mapAttrObj.KeyOfEn;
+                    item.title = mapAttrObj.Name;
+                    item.width = mapAttrObj.UIWidth;
+                    item.align = 'center';
 
-                    var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
+                    var eriterObj = figure_MapAttr_Template(mapAttrObj, sys_mapExtDtl);
+                    item.editor = eriterObj;
+                    item.formatter = unitformatter;
 
-                    //默认为空,全部显示,如果配置了就按照配置的计算,格式为:field1,field2
-                    if (sys_MapDtl.ShowCols) {
-                        var ShowCols = sys_MapDtl.ShowCols.split(",");
-                        $.each(sys_mapAttr, function (i, o) {
-                            if (ShowCols.indexOf(o.KeyOfEn) == -1) {
-                                o.UIVisible = 0;
-                            }
-                        });
-                    }
-
-                    var titleArr = new Array();
-                    var item = new Object();
-                    var athNumitem = new Object();
-                    item.field = 'OID';
-                    item.checkbox = true;
                     titleArr.push(item);
 
-                    var sumClos = new Array();
-                    $.each(sys_mapAttr, function (i, mapAttrObj) {
-                        if (mapAttrObj.UIVisible == 1) {
-                            item = new Object();
+                    if (mapAttrObj.ExtIsSum == 1) {
+                        var sumClo = new Object();
 
-                            item.field = mapAttrObj.KeyOfEn;
-                            item.title = mapAttrObj.Name;
-                            item.width = mapAttrObj.UIWidth;
-                            item.align = 'center';
+                        sumClo.No = mapAttrObj.KeyOfEn;
+                        sumClo.Name = mapAttrObj.Name;
+                        sumClo.Val =
 
-                            var eriterObj = figure_MapAttr_Template(mapAttrObj, sys_mapExtDtl);
-                            item.editor = eriterObj;
-                            item.formatter = unitformatter;
-
-                            titleArr.push(item);
-
-                            if (mapAttrObj.ExtIsSum == 1) {
-                                var sumClo = new Object();
-
-                                sumClo.No = mapAttrObj.KeyOfEn;
-                                sumClo.Name = mapAttrObj.Name;
-                                sumClo.Val =
-
-                                sumClos.push(sumClo);
-                            }
-
-                        }
-
-                        if (mapAttrObj.KeyOfEn == "AthNum")
-                            if (sys_MapDtl.IsEnableAthM == 1) {
-                                athNumitem.field = mapAttrObj.KeyOfEn;
-                                athNumitem.title = "附件"; //mapAttrObj.Name;
-                                athNumitem.width = mapAttrObj.UIWidth;
-                                athNumitem.align = 'center';
-
-                                var eriterObj = figure_MapAttr_Template(mapAttrObj, sys_mapExtDtl);
-                                athNumitem.editor = eriterObj;
-                                athNumitem.formatter = unitformatter;
-                                //titleArr.push(athNumitem);
-                            }
-
-                        if (mapAttrObj.KeyOfEn == "RefPK") {
-                            item = new Object();
-
-                            item.field = mapAttrObj.KeyOfEn;
-                            item.title = mapAttrObj.Name;
-                            item.width = mapAttrObj.UIWidth;
-                            item.align = 'center';
-                            item.hidden = true;
-
-                            titleArr.push(item);
-                        }
-                    });
-
-                    if (athNumitem.field != undefined) {
-                        titleArr.push(athNumitem);
+                        sumClos.push(sumClo);
                     }
 
-                    //从表数据.
-                    var dbDtl = data["DBDtl"];
-                    var dgData = new Object();
-                    dgData.total = dbDtl.length;
-                    dgData.rows = new Array();
+                }
+
+                if (mapAttrObj.KeyOfEn == "AthNum")
+                    if (sys_MapDtl.IsEnableAthM == 1) {
+                        athNumitem.field = mapAttrObj.KeyOfEn;
+                        athNumitem.title = "附件"; //mapAttrObj.Name;
+                        athNumitem.width = mapAttrObj.UIWidth;
+                        athNumitem.align = 'center';
+
+                        var eriterObj = figure_MapAttr_Template(mapAttrObj, sys_mapExtDtl);
+                        athNumitem.editor = eriterObj;
+                        athNumitem.formatter = unitformatter;
+                        //titleArr.push(athNumitem);
+                    }
+
+                if (mapAttrObj.KeyOfEn == "RefPK") {
+                    item = new Object();
+
+                    item.field = mapAttrObj.KeyOfEn;
+                    item.title = mapAttrObj.Name;
+                    item.width = mapAttrObj.UIWidth;
+                    item.align = 'center';
+                    item.hidden = true;
+
+                    titleArr.push(item);
+                }
+            });
+
+            if (athNumitem.field != undefined) {
+                titleArr.push(athNumitem);
+            }
+
+            //从表数据.
+            var dbDtl = data["DBDtl"];
+            var dgData = new Object();
+            dgData.total = dbDtl.length;
+            dgData.rows = new Array();
 
 
-                    $.each(dbDtl, function (t, dtlData) {
-                        var o = new Object();
-                        $.each(titleArr, function (i, titleItem) {
-                            o[titleItem.field] = dtlData[titleItem.field];
+            $.each(dbDtl, function (t, dtlData) {
+                var o = new Object();
+                $.each(titleArr, function (i, titleItem) {
+                    o[titleItem.field] = dtlData[titleItem.field];
+                });
+
+                o.OID = dtlData.OID;
+                dgData.rows.push(o);
+            });
+
+            $('#dtlTable').datagrid({
+                columns: [titleArr],
+                showFooter: true,
+                selectOnCheck: false,
+                checkOnSelect: false,
+                singleSelect: true,
+                idField: "OID",
+                data: dgData,
+                width: 'auto',
+                height: '290',
+                striped: true,
+                rownumbers: true,
+                remoteSort: false,
+                fitColumns: false,
+                onDblClickRow: onDblClickRow,
+                onLoadSuccess: function (data) {
+                    sys_MapDtlObj = sys_MapDtl;
+                    if (sumClos.length != 0) {
+                        dgData.footer = new Array();
+                        dgData.footer.push({});
+                        $.each(sumClos, function (t, sumCol) {
+                            dgData.footer[0][sumCol.No] = "合计:<span style=\"color:blue;\">" + compute(sumCol.No) + "</span>";
+                            //dgData.footer[0][sumCol.No] = "<span style=\"color:blue;\">[" + sumCol.Name + "]</span>合计:" + compute(sumCol.No);
                         });
-
-                        o.OID = dtlData.OID;
-                        dgData.rows.push(o);
-                    });
-
-                    $('#dtlTable').datagrid({
-                        columns: [titleArr],
-                        showFooter: true,
-                        selectOnCheck: false,
-                        checkOnSelect: false,
-                        singleSelect: true,
-                        idField: "OID",
-                        data: dgData,
-                        width: 'auto',
-                        height: '290',
-                        striped: true,
-                        rownumbers: true,
-                        remoteSort: false,
-                        fitColumns: false,
-                        onDblClickRow: onDblClickRow,
-                        onLoadSuccess: function (data) {
-                            sys_MapDtlObj = sys_MapDtl;
-                            if (sumClos.length != 0) {
-                                dgData.footer = new Array();
-                                dgData.footer.push({});
-                                $.each(sumClos, function (t, sumCol) {
-                                    dgData.footer[0][sumCol.No] = "<span style=\"color:blue;\">[" + sumCol.Name + "]</span>合计:" + compute(sumCol.No);
-                                });
-                            }
-                        }
-                        //,
-                        //onClickCell: function (index, field, value) {
-                        //    //targetChangeEvent
-                        //    if (editIndex != index) {
-                        //        if (endEditing()) {
-                        //            $('#dtlTable').datagrid('selectRow', index)
-                        //                    .datagrid('beginEdit', index);
-                        //            var ed = $('#dtlTable').datagrid('getEditor', { index: index, field: field });
-                        //            if (ed) {
-                        //                ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
-                        //            }
-                        //            editIndex = index;
-                        //        } else {
-                        //            setTimeout(function () {
-                        //                $('#dtlTable').datagrid('selectRow', editIndex);
-                        //            }, 0);
-                        //        }
-                        //    }
-                        //}
-                    });
-                    //var pp = $('#dtlTable').datagrid('getPager');
-                    //$('#pp').pagination({
-                    //    //pagination: true,
-                    //    pageList: [1, 2, 15, 20],
-                    //    pageNumber: pageNumber,
-                    //    pageSize: pageSize,
-                    //    onSelectPage: function (pageNumber, pageSize) {
-                    //        loadDtlTable(pageNumber, pageSize);
-                    //    },
-                    //    onRefresh: function (pageNumber, pageSize) {
-                    //        alert(pageNumber);
-                    //        loadDtlTable(pageNumber, pageSize);
-                    //    }
-                    //});
+                    }
+                }
+                //,
+                //onClickCell: function (index, field, value) {
+                //    //targetChangeEvent
+                //    if (editIndex != index) {
+                //        if (endEditing()) {
+                //            $('#dtlTable').datagrid('selectRow', index)
+                //                    .datagrid('beginEdit', index);
+                //            var ed = $('#dtlTable').datagrid('getEditor', { index: index, field: field });
+                //            if (ed) {
+                //                ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                //            }
+                //            editIndex = index;
+                //        } else {
+                //            setTimeout(function () {
+                //                $('#dtlTable').datagrid('selectRow', editIndex);
+                //            }, 0);
+                //        }
+                //    }
+                //}
+            });
+            //var pp = $('#dtlTable').datagrid('getPager');
+            //$('#pp').pagination({
+            //    //pagination: true,
+            //    pageList: [1, 2, 15, 20],
+            //    pageNumber: pageNumber,
+            //    pageSize: pageSize,
+            //    onSelectPage: function (pageNumber, pageSize) {
+            //        loadDtlTable(pageNumber, pageSize);
+            //    },
+            //    onRefresh: function (pageNumber, pageSize) {
+            //        alert(pageNumber);
+            //        loadDtlTable(pageNumber, pageSize);
+            //    }
+            //});
 
 
-                    $("#dtlTable").datagrid("clearSelections");
-                    $("#dtlTable").datagrid("clearChecked");
-                    InitToolBars(data);
-//                }
-//            });
+            $("#dtlTable").datagrid("clearSelections");
+            $("#dtlTable").datagrid("clearChecked");
+            InitToolBars(data);
+            //                }
+            //            });
         }
 
         //指定列求和
@@ -566,29 +567,29 @@
                         editorAttr.options.valueField = mapAttr.KeyOfEn;
                         editorAttr.options.textField = 'Name';
                         editorAttr.options.data = InitDDLOperation(workNodeData, mapAttr, defValue);
-                        editorAttr.options.onChange = function (n,o) {
-                            var sys_mapExtDtl = workNodeData["Sys_MapExt"];
-                            for (var i = 0; i < sys_mapExtDtl.length; i++) {
-                                var mapExt = sys_mapExtDtl[i];
+                        //editorAttr.options.onChange = function (n, o) {
+                        //    var sys_mapExtDtl = workNodeData["Sys_MapExt"];
+                        //    for (var i = 0; i < sys_mapExtDtl.length; i++) {
+                        //        var mapExt = sys_mapExtDtl[i];
 
-                                if (mapAttr.KeyOfEn != mapExt.AttrOfOper) {
-                                    continue;
-                                }
-                                switch (mapExt.ExtType) {
-                                    case "ActiveDDL":
-                                        /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
-                                        var dbSrc = mapExt.Doc;
-                                        var dataObj = GenerDB(dbSrc, n, mapExt.DBType); //获得数据源.
-                                        var selectedRow = $('#dtlTable').datagrid('getSelected');
-                                        var selectedRowIndex = $('#dtlTable').datagrid('getRowIndex', selectedRow);
+                        //        if (mapAttr.KeyOfEn != mapExt.AttrOfOper) {
+                        //            continue;
+                        //        }
+                        //        switch (mapExt.ExtType) {
+                        //            case "ActiveDDL":
+                        //                /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
+                        //                var dbSrc = mapExt.Doc;
+                        //                var dataObj = GenerDB(dbSrc, n, mapExt.DBType); //获得数据源.
+                        //                var selectedRow = $('#dtlTable').datagrid('getSelected');
+                        //                var selectedRowIndex = $('#dtlTable').datagrid('getRowIndex', selectedRow);
 
-                                        var ed = $('#dtlTable').datagrid('getEditor', { index: selectedRowIndex, field: mapExt.AttrsOfActive });
-                                        $(ed.target).combobox('clear');
-                                        $(ed.target).combobox('reload', dataObj);
-                                        break;
-                                }
-                            }
-                        };
+                        //                var ed = $('#dtlTable').datagrid('getEditor', { index: selectedRowIndex, field: mapExt.AttrsOfActive });
+                        //                $(ed.target).combobox('clear');
+                        //                $(ed.target).combobox('reload', dataObj);
+                        //                break;
+                        //        }
+                        //    }
+                        //};
                         //editorAttr.options.onChange = ({"ssss": this, "ddddd": mapAttr.KeyOfEn },"21212","21212121", targetChangeEvent);
                         //$("#DDL_" + mapAttr.KeyOfEn).data().combobox.options.onChange = ({ "mapAttr": mapAttr, "sys_mapExtDtl": sys_mapExtDtl }, targetChangeEvent);
                         //$('#dtlTable').datagrid('beginEdit', 0);
@@ -636,9 +637,29 @@
                                 }
                                 else {
                                     //text
+                                    editorAttr.options.id = "XiangMu";
                                     editorAttr.type = 'textbox';
                                     editorAttr.options.multiline = false;
 
+                                    //编辑器事件
+                                    editorAttr.options.onChange = function (n, o) {
+                                        //var selectedRow = $('#dtlTable').datagrid('getSelected');
+                                        //var selectedRowIndex = $('#dtlTable').datagrid('getRowIndex', selectedRow);
+
+                                        ////alert(323);
+                                        //var ed = $('#dtlTable').datagrid('getEditor', { index: selectedRowIndex, field: "RangRen" });
+                                        //$(ed.target).numberbox('clear');
+                                        //$(ed.target).numberbox('setValue', "33333");
+
+                                        //$('#dtlTable').datagrid('updateRow', {
+                                        //    index: selectedRowIndex
+                                        //    //row: {
+                                        //    //    RangRen: '33'
+                                        //    //}
+                                        //});
+                                    };
+
+                                    //
                                     return editorAttr;
                                 }
                             }
@@ -880,7 +901,7 @@
             if (editIndex == undefined)
                 return;
 
-           // $('#dtlTable').datagrid('endEdit', editIndex);
+            // $('#dtlTable').datagrid('endEdit', editIndex);
             editIndex = undefined;
 
             var rowData = $('#dtlTable').datagrid('getSelected');
@@ -907,10 +928,10 @@
             handler.AddPara("FID", rowData.FID);
 
             var data = handler.DoMethodReturnString("Dtl_SaveRow");
-//            AjaxServiceGener(rowData, function (data) {
-                //rowData["AthNum"] = athNum;
-                loadDtlTable();
-//            }, this);
+            //            AjaxServiceGener(rowData, function (data) {
+            //rowData["AthNum"] = athNum;
+            loadDtlTable();
+            //            }, this);
         }
         //保存行数据
         function SaveRow() {
@@ -979,11 +1000,11 @@
                             handler.AddPara("FK_MapDtl", rowData.FK_MapDtl);
                             handler.AddPara("RefPKVal", rowData.RefPKVal);
                             var data = handler.DoMethodReturnString("Dtl_DeleteRow");
-//                            AjaxServiceGener(rowData, function (data) {
-                                //$('#dtlTable').datagrid('deleteRow', $('#dtlTable').datagrid('getRowIndex', checkedRows[0]));
-                                loadDtlTable();
+                            //                            AjaxServiceGener(rowData, function (data) {
+                            //$('#dtlTable').datagrid('deleteRow', $('#dtlTable').datagrid('getRowIndex', checkedRows[0]));
+                            loadDtlTable();
 
-//                            }, this);
+                            //                            }, this);
                         }
                     }
                 });

@@ -463,6 +463,13 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "发起前置导航(实验中)";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/StartGuide.png";
+                rm.ClassMethodName = this.ToString() + ".DoStartGuideV2019()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "流程事件&消息"; // "调用事件接口";
@@ -1550,6 +1557,14 @@ namespace BP.WF.Template
         public string DoStartGuide()
         {
             return "../../Admin/AttrFlow/StartGuide.htm?FK_Flow=" + this.No + "&Lang=CH";
+        }
+        /// <summary>
+        /// 设置发起前置导航
+        /// </summary>
+        /// <returns></returns>
+        public string DoStartGuideV2019()
+        {
+            return "../../Admin/AttrFlow/StartGuide/Default.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 执行数据同步

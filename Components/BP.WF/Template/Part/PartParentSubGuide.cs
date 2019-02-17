@@ -9,66 +9,6 @@ using BP.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 配件属性
-    /// </summary>
-    public class PartParentSubGuideAttr:BP.En.EntityMyPKAttr
-    {
-        #region 基本属性
-        /// <summary>
-        /// 流程编号
-        /// </summary>
-        public const string FK_Flow = "FK_Flow";
-        /// <summary>
-        /// 节点ID
-        /// </summary>
-        public const string FK_Node = "FK_Node";
-        /// <summary>
-        /// 前置导航的父子流程关系
-        /// </summary>
-        public const string PartParentSubGuideType = "PartParentSubGuideType";
-        /// <summary>
-        /// 字段存储0
-        /// </summary>
-        public const string Tag0 = "Tag0";
-        /// <summary>
-        /// 字段存储1
-        /// </summary>
-        public const string Tag1 = "Tag1";
-        /// <summary>
-        /// 字段存储2
-        /// </summary>
-        public const string Tag2 = "Tag2";
-        /// <summary>
-        /// 字段存储3
-        /// </summary>
-        public const string Tag3 = "Tag3";
-        /// <summary>
-        /// 字段存储4
-        /// </summary>
-        public const string Tag4 = "Tag4";
-        /// <summary>
-        /// 字段存储5
-        /// </summary>
-        public const string Tag5 = "Tag5";
-        /// <summary>
-        /// 字段存储6
-        /// </summary>
-        public const string Tag6 = "Tag6";
-        /// <summary>
-        /// 字段存储7
-        /// </summary>
-        public const string Tag7 = "Tag7";
-        /// <summary>
-        /// 字段存储8
-        /// </summary>
-        public const string Tag8 = "Tag8";
-        /// <summary>
-        /// 字段存储9
-        /// </summary>
-        public const string Tag9 = "Tag9";
-        #endregion
-    }
-    /// <summary>
     /// 配件.	 
     /// </summary>
     public class PartParentSubGuide : EntityMyPK
@@ -83,6 +23,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 uac.IsUpdate = true;
+                uac.IsDelete = true;
                 return uac;
             }
         }
@@ -93,25 +34,25 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.FK_Flow);
+                return this.GetValStringByKey(PartAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.FK_Flow, value);
+                SetValByKey(PartAttr.FK_Flow, value);
             }
         }
         /// <summary>
         /// 类型
         /// </summary>
-        public string PartParentSubGuideType
+        public string PartType
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.PartParentSubGuideType);
+                return this.GetValStringByKey(PartAttr.PartType);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.PartParentSubGuideType, value);
+                SetValByKey(PartAttr.PartType, value);
             }
         }
         /// <summary>
@@ -121,11 +62,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValIntByKey(PartParentSubGuideAttr.FK_Node);
+                return this.GetValIntByKey(PartAttr.FK_Node);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.FK_Node, value);
+                SetValByKey(PartAttr.FK_Node, value);
             }
         }
         /// <summary>
@@ -135,11 +76,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag0);
+                return this.GetValStringByKey(PartAttr.Tag0);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag0, value);
+                SetValByKey(PartAttr.Tag0, value);
             }
         }
         /// <summary>
@@ -149,11 +90,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag1);
+                return this.GetValStringByKey(PartAttr.Tag1);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag1, value);
+                SetValByKey(PartAttr.Tag1, value);
             }
         }
         /// <summary>
@@ -163,11 +104,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag2);
+                return this.GetValStringByKey(PartAttr.Tag2);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag2, value);
+                SetValByKey(PartAttr.Tag2, value);
             }
         }
         /// <summary>
@@ -177,11 +118,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag3);
+                return this.GetValStringByKey(PartAttr.Tag3);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag3, value);
+                SetValByKey(PartAttr.Tag3, value);
             }
         }
         /// <summary>
@@ -191,11 +132,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag4);
+                return this.GetValStringByKey(PartAttr.Tag4);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag4, value);
+                SetValByKey(PartAttr.Tag4, value);
             }
         }
         /// <summary>
@@ -205,11 +146,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag5);
+                return this.GetValStringByKey(PartAttr.Tag5);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag5, value);
+                SetValByKey(PartAttr.Tag5, value);
             }
         }
         /// <summary>
@@ -219,11 +160,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag6);
+                return this.GetValStringByKey(PartAttr.Tag6);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag6, value);
+                SetValByKey(PartAttr.Tag6, value);
             }
         }
         /// <summary>
@@ -233,11 +174,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag7);
+                return this.GetValStringByKey(PartAttr.Tag7);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag7, value);
+                SetValByKey(PartAttr.Tag7, value);
             }
         }
         /// <summary>
@@ -247,11 +188,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag8);
+                return this.GetValStringByKey(PartAttr.Tag8);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag8, value);
+                SetValByKey(PartAttr.Tag8, value);
             }
         }
         /// <summary>
@@ -261,11 +202,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(PartParentSubGuideAttr.Tag9);
+                return this.GetValStringByKey(PartAttr.Tag9);
             }
             set
             {
-                SetValByKey(PartParentSubGuideAttr.Tag9, value);
+                SetValByKey(PartAttr.Tag9, value);
             }
         }
         #endregion
@@ -298,23 +239,33 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBString(PartParentSubGuideAttr.FK_Flow, null, "流程编号", true, true, 0, 100, 10);
-                map.AddTBString(PartParentSubGuideAttr.PartParentSubGuideType, null, "类型", false, true, 0, 100, 10);
+                map.AddTBString(PartAttr.FK_Flow, null, "流程编号", true, true, 0, 100, 10);
+                map.AddTBString(PartAttr.PartType, null, "类型", false, true, 0, 100, 10);
 
-                map.AddTBString(PartParentSubGuideAttr.Tag0, null, "流程编号", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag1, null, "流程名称", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag2, null, "隐藏查询条件", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag3, null, "显示的列", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag4, null, "Tag4", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag5, null, "Tag5", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag6, null, "Tag6", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag7, null, "Tag7", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag8, null, "Tag8", false, true, 0, 2000, 10);
-                map.AddTBString(PartParentSubGuideAttr.Tag9, null, "Tag9", false, true, 0, 2000, 10);
+                map.AddTBString(PartAttr.Tag0, null, "流程编号", true, true, 0, 2000, 10);
+                map.AddTBString(PartAttr.Tag1, null, "流程名称", true, true, 0, 2000, 10);
+
+                map.AddTBString(PartAttr.Tag2, null, "隐藏查询条件", true, false, 0, 2000, 10,true);
+                map.SetHelperAlert(PartAttr.Tag2, "格式为: WFState=3 AND FlowStarter=＠WebUser.No  这些列都在NDxxRpt表里可以通过SELECT * FROM Sys_MapAttr WHERE FK_MapData=NDxxxRpt 找到. ");
+
+                map.AddTBString(PartAttr.Tag3, null, "显示的列", true, false, 0, 2000, 10, true);
+                map.SetHelperAlert(PartAttr.Tag3, "格式为: ＠Title,标题＠Tel,电话＠Email,邮件  这些列都在NDxxRpt表里可以通过SELECT * FROM Sys_MapAttr WHERE FK_MapData=NDxxxRpt 找到.");
+
+                //map.AddTBString(PartAttr.Tag4, null, "Tag4", false, true, 0, 2000, 10);
+                //map.AddTBString(PartAttr.Tag5, null, "Tag5", false, true, 0, 2000, 10);
+                //map.AddTBString(PartAttr.Tag6, null, "Tag6", false, true, 0, 2000, 10);
+                //map.AddTBString(PartAttr.Tag7, null, "Tag7", false, true, 0, 2000, 10);
+                //map.AddTBString(PartAttr.Tag8, null, "Tag8", false, true, 0, 2000, 10);
+                //map.AddTBString(PartAttr.Tag9, null, "Tag9", false, true, 0, 2000, 10);
 
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.PartType = BP.WF.Template.PartType.ParentSubFlowGuide;
+            return base.beforeUpdateInsertAction();
         }
         #endregion
     }
@@ -349,7 +300,7 @@ namespace BP.WF.Template
         /// <param name="FlowNo"></param>
         public PartParentSubGuides(string fk_flow)
         {
-            this.Retrieve(PartParentSubGuideAttr.FK_Flow, fk_flow);
+            this.Retrieve(PartAttr.FK_Flow, fk_flow);
         }
         #endregion
 

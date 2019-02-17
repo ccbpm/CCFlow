@@ -5,25 +5,26 @@ function InitBar(optionKey) {
     html += "<select id='changBar' onchange='changeOption()'>";
 
     html += "<option value=null  disabled='disabled'>+内置表单</option>";
-    html += "<option value=" + StartGuideWay.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>";
-    html += "<option value=" + StartGuideWay.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
-    html += "<option value=" + StartGuideWay.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>";
-    html += "<option value=" + StartGuideWay.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
+    html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>";
+    html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
+    html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>";
+    html += "<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
 
     html += "<option value=null  disabled='disabled'>+自定义表单</option>";
-    html += "<option value=" + StartGuideWay.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
-    html += "<option value=" + StartGuideWay.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>";
+    html += "<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
+    html += "<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>";
+
 
     html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
-    html += "<option value=" + StartGuideWay.RefOneFrmTree + " >&nbsp;&nbsp;绑定表单库的表单</option>";
-    html += "<option value=" + StartGuideWay.SheetTree + " >&nbsp;&nbsp;绑定多表单(表单树)</option>";
-
+    html += "<option value=" + FormType.RefOneFrmTree + " >&nbsp;&nbsp;绑定表单库的表单</option>";
+    html += "<option value=" + FormType.SheetTree + " >&nbsp;&nbsp;绑定多表单(表单树)</option>";
+   
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
 
-    //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
+  //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
 
     html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
     html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
@@ -78,45 +79,45 @@ function Help() {
 
     var roleName = "";
     switch (parseInt(optionKey)) {
-        case StartGuideWay.FoolForm:
+        case FormType.FoolForm:
             url = "0.FoolForm.htm";
             break;
-        case StartGuideWay.FreeForm:
+        case FormType.FreeForm:
             url = "1.FreeForm.htm";
             break;
-        case StartGuideWay.SelfForm:
+        case FormType.SelfForm:
             url = "2.SelfForm.htm";
             break;
-        case StartGuideWay.SDKForm:
+        case FormType.SDKForm:
             url = "3.SDKForm.htm";
             break;
-        case StartGuideWay.SLForm:
+        case FormType.SLForm:
             url = "4.SLForm.htm";
             break;
-        case StartGuideWay.SheetTree:
+        case FormType.SheetTree:
             url = "5.SheetTree.htm";
             break;
-        case StartGuideWay.SheetAutoTree:
+        case FormType.SheetAutoTree:
             url = "6.SheetAutoTree.htm";
             break;
-        case StartGuideWay.WebOffice:
+        case FormType.WebOffice:
             url = "7.WebOffice.htm";
             break;
-        case StartGuideWay.ExcelForm:
+        case FormType.ExcelForm:
             url = "8.ExcelForm.htm";
             break;
-        case StartGuideWay.WordForm:
+        case FormType.WordForm:
             url = "9.WordForm.htm";
             break;
-        case StartGuideWay.FoolTruck:
+        case FormType.FoolTruck:
             url = "10.FoolTruck.htm";
             break;
-        case StartGuideWay.RefOneFrmTree:
+        case FormType.RefOneFrmTree:
             alert('该视频尚未提供');
             return;
             //  url = "11.RefOneFrmTree.htm";
             break;
-        case StartGuideWay.DisableIt:
+        case FormType.DisableIt:
             url = "100.DisableIt.htm";
             break;
         default:
@@ -136,46 +137,46 @@ function changeOption() {
     var sele = obj.options;
     var index = obj.selectedIndex;
     var optionKey = optionKey = sele[index].value;
-
+    
     var roleName = "";
     switch (parseInt(optionKey)) {
-        case StartGuideWay.FoolForm:
+        case FormType.FoolForm:
             url = "0.FoolForm.htm";
             break;
-        case StartGuideWay.FreeForm:
+        case FormType.FreeForm:
             url = "1.FreeForm.htm";
             break;
-        case StartGuideWay.SelfForm:
+        case FormType.SelfForm:
             url = "2.SelfForm.htm";
             break;
-        case StartGuideWay.SDKForm:
+        case FormType.SDKForm:
             url = "3.SDKForm.htm";
             break;
-        case StartGuideWay.SLForm:
+        case FormType.SLForm:
             url = "4.SLForm.htm";
             break;
-        case StartGuideWay.SheetTree:
+        case FormType.SheetTree:
             url = "5.SheetTree.htm";
             break;
-        case StartGuideWay.SheetAutoTree:
+        case FormType.SheetAutoTree:
             url = "6.SheetAutoTree.htm";
             break;
-        case StartGuideWay.WebOffice:
+        case FormType.WebOffice:
             url = "7.WebOffice.htm";
             break;
-        case StartGuideWay.ExcelForm:
+        case FormType.ExcelForm:
             url = "8.ExcelForm.htm";
             break;
-        case StartGuideWay.WordForm:
+        case FormType.WordForm:
             url = "9.WordForm.htm";
             break;
-        case StartGuideWay.FoolTruck:
+        case FormType.FoolTruck:
             url = "10.FoolTruck.htm";
             break;
-        case StartGuideWay.RefOneFrmTree:
+        case FormType.RefOneFrmTree:
             url = "11.RefOneFrmTree.htm";
             break;
-        case StartGuideWay.DisableIt:
+        case FormType.DisableIt:
             url = "100.DisableIt.htm";
             break;
         default:
@@ -186,9 +187,10 @@ function changeOption() {
 }
 
 
-function CheckFlow(flowNo) {
-    var flow = new Entity('BP.WF.Flow', flowNo);
-    flow.DoMethodReturnString("DoCheck"); //重置密码:不带参数的方法. 
+function CheckFlow(flowNo)
+{
+	  var flow=new Entity('BP.WF.Flow', flowNo);
+	  flow.DoMethodReturnString("DoCheck"); //重置密码:不带参数的方法. 
 }
 
 function SaveAndClose() {

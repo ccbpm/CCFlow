@@ -20,7 +20,10 @@
     <script  type="text/javascript">
 
         $(function () {
-            InitBar(FormType.FreeForm);
+
+            InitBar(StartGuideWay.BySelfUrl);
+
+         //   InitBar(FormType.FreeForm);
             //获取节点属性
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);

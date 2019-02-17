@@ -11,7 +11,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 标签属性
     /// </summary>
-    public class LabNoteAttr:BP.En.EntityOIDNameAttr
+    public class LabNoteAttr:BP.En.EntityMyPKAttr
     {
         #region 基本属性
         /// <summary>

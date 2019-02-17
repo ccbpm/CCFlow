@@ -170,7 +170,6 @@ namespace BP.WF.Template
                 map.AddDDLSQL(NodeYGFlowAttr.ReturnToNode, "0", "要退回的节点",
                     "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node; )",true);
 
-
                 this._enMap = map;
                 return this._enMap;
             }
@@ -221,7 +220,6 @@ namespace BP.WF.Template
         {
             return (System.Collections.Generic.IList<NodeYGFlow>)this;
         }
-
         /// <summary>
         /// 转化成list
         /// </summary>

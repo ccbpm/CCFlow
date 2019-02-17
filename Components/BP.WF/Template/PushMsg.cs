@@ -653,7 +653,6 @@ namespace BP.WF.Template
         /// </summary>
         /// <returns></returns>
         private string generAlertMessage=null;
-       
         /// <summary>
         /// 执行消息发送
         /// </summary>

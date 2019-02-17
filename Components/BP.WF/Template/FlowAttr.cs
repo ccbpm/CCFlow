@@ -427,7 +427,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 按照用户选择的表单.
         /// </summary>
-        ByFrms
+        ByFrms=11,
+        /// <summary>
+        /// 父子流程模式
+        /// </summary>
+        ByParentFlowModel=12
     }
     /// <summary>
     /// 数据同步方案

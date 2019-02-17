@@ -288,7 +288,6 @@ namespace BP.WF.HttpHandler
             ht.Add("Ver", BP.WF.Glo.Ver); //版本号.
 
             return BP.Tools.Json.ToJson(ht);
-
         }
         public string DBInstall_Submit()
         {
@@ -310,8 +309,6 @@ namespace BP.WF.HttpHandler
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
         }
         #endregion
-        
-        
 
 
         public string ReLoginSubmit()

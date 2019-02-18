@@ -6,9 +6,10 @@ function InitBar(optionKey) {
     html += "<select id='changBar' onchange='changeOption()'>";
 
     html += "<option value=0 >无,不设置(默认).</option>";
-    html += "<option value=1 >表格查询模式导入</option>";
+    html += "<option value=1 >表格查询模式（高级）</option>";
     html += "<option value=2 >Excel文件模式</option>";
     html += "<option value=3 >单据模式</option>";
+    html += "<option value=4 >表格查询模式（简洁）</option>";
 
     html += "</select >";
 
@@ -55,6 +56,9 @@ function GetUrl(optionKey) {
             break;
         case 3:
             url = "3.BillModel.htm";
+            break;
+        case 4:
+            url = "4.TableSimple.htm";
             break;
         default:
             url = "0.None.htm";

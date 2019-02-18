@@ -14,7 +14,7 @@
     <script type="text/javascript">
         $(function () {
 
-            InitBar(3); //excel 文件模式.
+            InitBar(4);
             var html = "";
 
         });
@@ -24,63 +24,19 @@
             //更新.
             var fk_mapDtl = GetQueryString("FK_MapDtl");
             var en = new Entity("BP.Sys.MapDtl", fk_mapDtl);
-            en.ImpModel = 3;
+            en.ImpModel = 4;
             en.Update();
             window.location.href = window.location.href;
         }
     </script>
-    <style type="text/css">
-        .style1
-        {
-            height: 21px;
-        }
-    </style>
 </head>
 <body>
     <div id="bar">
     </div>
-
-    <table style="width:99%;">
-    <tr>
-    <th colspan=2>单据主表配置</th>
-    </tr>
-    <tr>
-    <td >初始化SQL</td>
-    <td >  </td>
-    </tr>
-
-     <tr>
-    <td>查询SQL </td>
-    <td>  </td>
-    </tr>
-
-       <tr>
-    <td>对照列 </td>
-    <td>  </td>
-    </tr>
-
-    <!-- 从表配置 -->
-     <tr>
-    <th colspan=2>从表配置</th>
-    </tr>
-     
-    <tr>
-    <td>查询SQL </td>
-    <td>  </td>
-    </tr>
-
-
-    <tr>
-    <td>装载SQL </td>
-    <td>  </td>
-    </tr>
-
-    <tr>
-    <td>对照列 </td>
-    <td>  </td>
-    </tr>
-
-    </table>
-     
+    
+    <fieldset>
+        <legend>帮助.</legend>
+        不设置任何前置导航，发起流程直接进入开始节点表单。  sdsds
+    </fieldset>
 </body>
 </html>

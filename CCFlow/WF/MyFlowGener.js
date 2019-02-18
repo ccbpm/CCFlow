@@ -927,11 +927,7 @@ function execSend(toNodeID) {
     if (flowData) {
         var node = flowData.WF_Node[0];
         if (node && node.FormType == 5) {
-            var sendFlag = OnTabChange("btnsave");
-            if (sendFlag == false) {
-                setToobarEnable();
-                return;
-            }
+            OnTabChange("btnsave");
         }
     }
 

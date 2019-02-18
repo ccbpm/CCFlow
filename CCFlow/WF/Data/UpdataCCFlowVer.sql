@@ -43,10 +43,10 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.Name','登陆人员�
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_Dept','登陆人员部门编号','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_DeptName','登陆人员部门名称','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_DeptFullName','登陆人员部门全称','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年MM月dd日','当前日期(yyyy年MM月dd日)','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年MM月dd日HH时mm分','当前日期(yyyy年MM月dd日HH时mm分)','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日','当前日期(yy年MM月dd日)','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日HH时mm分','当前日期(yy年MM月dd日HH时mm分)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年mm月dd日','当前日期(yyyy年MM月dd日)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年mm月dd日HH时mm分','当前日期(yyyy年MM月dd日HH时mm分)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年mm月dd日','当前日期(yy年MM月dd日)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年mm月dd日HH时mm分','当前日期(yy年MM月dd日HH时mm分)','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');

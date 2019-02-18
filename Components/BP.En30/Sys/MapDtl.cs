@@ -6,6 +6,28 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
+    /// 导入模式
+    /// </summary>
+    public enum ImpModel
+    {
+        /// <summary>
+        /// 不执行导入
+        /// </summary>
+        None=0,
+        /// <summary>
+        /// 表格模式
+        /// </summary>
+        Table=1,
+        /// <summary>
+        /// 按照Excel文件模式
+        /// </summary>
+        ExcelFile=2,
+        /// <summary>
+        /// 单据模式
+        /// </summary>
+        BillModel=3
+    }
+    /// <summary>
     /// 明细
     /// </summary>
     public class MapDtlAttr : EntityNoNameAttr
@@ -1307,8 +1329,6 @@ namespace BP.Sys
 
                 map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
-
-
 
 
                 // 超出行数

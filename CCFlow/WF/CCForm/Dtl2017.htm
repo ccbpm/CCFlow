@@ -17,11 +17,6 @@
 
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-    <!--<link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>-->
-
     <script type="text/javascript" src="../Scripts/commonYangYH.js?ver=1.0"></script>
     <script type="text/javascript" src="MapExt2016.js"></script>
     <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
@@ -41,12 +36,6 @@
         var pageData = {
             DBDtl: [{ OID: 0, RowData: {} }],
             updateRowIndex: -1, //正在更新的列索引
-            /*
-            count：需要保存的行数
-            overCount：已经保存完的行数
-            saveAll:是否保存所有行
-            rowIndex 只有当 saveAll=false 时，设置保存行的序号  从0开始
-            */
             saveRowCurrent: { count: 0, overCount: 0, saveAll: false, rowIndex: 0 },
             currentRowIndex: -1//如果该值有改变，就表明需要存盘，入库  -1 表示还未做操作  光标所在行
         };
@@ -218,9 +207,6 @@
                 var content = parent.document.getElementById("Fd" + dtlName).contentWindow;
                 content.$("#Ath_" + rowCurrentIndex).html(AthNum);
                 content.$("#TB_AthNum_" + rowCurrentIndex).val(AthNum);
-                //修改$("#Ath_" + rowCurrentIndex)返回值
-
-                //currentWin.$("#Ath_" + rowCurrentIndex).html(AthNum);
                 alert($("#Ath_0").text());
                
             }, function () {
@@ -409,341 +395,330 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData(urlParam);
             var data = handler.DoMethodReturnString("Dtl_Init");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
 
-                    // 检查是否有错误.
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
+            // 检查是否有错误.
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //解析.
+            data = JSON.parse(data);
+
+            //主表数据，用于变量替换.
+            var mainTable = data["MainTable"]; //主表数据.
+
+            //从表信息.
+            var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
+            var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
+            var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
+            mapExts = sys_mapExtDtl;
+            var dbDtl = data["DBDtl"]; //从表数据.
+
+            //清空表格数据
+            $('#tableBody tbody').html('');
+
+            if (sys_MapDtl.ShowCols) {
+                var ShowCols = sys_MapDtl.ShowCols.split(",");
+                $.each(sys_mapAttr, function (i, o) {
+                    if (o.UIVisible == 1 && ShowCols.indexOf(o.KeyOfEn) == -1) {
+                        o.UIVisible = 0;
                     }
+                });
+            }
 
-                    //解析.
-                    data = JSON.parse(data);
+            // 表头start --------------------
+            if ($('#tableHead thead tr').length == 0) {
+                var threadTr = $('<tr data-data="true"></tr>');
+                //制造表头
+                //添加序号列
+                workNodeData = data;
 
-                    //主表数据，用于变量替换.
-                    var mainTable = data["MainTable"]; //主表数据.
+                //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
+                // ==1,==2 是打开父窗口出现卡片.
+                var EditModel = sys_MapDtl.EditModel;
+                window.EditModel = EditModel;
 
-                    //从表信息.
-                    var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
-                    var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
-                    var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
-                    mapExts = sys_mapExtDtl;
-                    var dbDtl = data["DBDtl"]; //从表数据.
+                var snTh = $('<th data-coltype="SN" style=\'width:20px;\' ><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow(' + EditModel + ')" /></th>');
 
-                    //清空表格数据
-                    $('#tableBody tbody').html('');
+                threadTr.append(snTh);
+                $.each(sys_mapAttr, function (i, mapAttrObj) {
+                    var th = $('<th></th>');
+                    if (mapAttrObj.MyDataType == 8)
+                        th = $('<th data-coltype="Money"></th>');
 
-                    if (sys_MapDtl.ShowCols) {
-                        var ShowCols = sys_MapDtl.ShowCols.split(",");
-                        $.each(sys_mapAttr, function (i, o) {
-                            if (o.UIVisible == 1 && ShowCols.indexOf(o.KeyOfEn) == -1) {
-                                o.UIVisible = 0;
+                    th.text(mapAttrObj.Name);
+                    th.data(mapAttrObj);
+                    th.css('width', mapAttrObj.UIWidth);
+                    th.data().colname = mapAttrObj.KeyOfEn;
+                    if (mapAttrObj.UIVisible == 1) {
+                        threadTr.append(th);
+                    }
+                });
+
+                //增加附件.
+                var athTh = $('<th style="width:30px;">附件</th>');
+                var athThData;
+                athThData = {
+                    custom: true,
+                    customcontent: 1,
+                    customcontent1: "a@href='javaScript:void(0);' onclick='Ath(this)' titile=附件 @附件",
+                    coltype: 'Operation1'
+
+                };
+
+                if (sys_MapDtl.IsEnableAthM == 1) {
+                    athTh.data(athThData);
+                    threadTr.append(athTh);
+
+                }
+
+
+                //添加删除,保存列
+                var delTh = "";
+                var impModel = sys_MapDtl.ImpModel;
+                if (impModel != 0)
+                    delTh = $('<th style="width:60px;"><img title="选项" style="width: 30px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /></th>');
+                else
+                    delTh = $('<th style="width:60px;"></th>');
+
+                //var delTh = $("<th style="width:20px;" onclick= ></th>");
+
+                var delThData;
+
+                if (sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") { //有新增或者有删除，就有删除权限
+                    delThData = {
+                        custom: true,
+                        customcontent: 1,
+                        customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
+                        coltype: 'Operation1'
+                    };
+                    if (sys_MapDtl.EditModel != 0) {
+                        delThData.customcontent = 2;
+                        delThData.customcontent2 = delThData.customcontent1;
+                        delThData.customcontent1 = 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.EditModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@';
+                    }
+                }
+
+
+                //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
+                //如果能删除，就有删除按钮
+                if (sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
+                    delTh.data(delThData);
+                }
+
+
+                //可删除或者可新增时，有操作列
+                if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
+                    threadTr.append(delTh);
+                }
+
+                //添加删除列
+                //var delTh = $('<th></th>');
+                //添加保存列
+                delTh = $('<th style=""></th>');
+                delTh.text("操作");
+                var delThData = {
+                    custom: true,
+                    customcontent: 1,
+                    customcontent1: 'img@src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                    coltype: 'Operation1'
+                };
+                delTh.attr('title', "title");
+                delTh.data(delThData);
+                //threadTr.append(delTh);
+
+                $('#tableHead thead').append(threadTr);
+            }
+            // 表头over --------------------
+
+            //如果不能新增，就把新增按钮去掉.
+            if (sys_MapDtl.IsInsert == "0" || sys_MapDtl.IsReadonly == "1" || isReadonly == "1") {
+                document.getElementById('insertBtn').style.display = 'none';
+            }
+
+            //初始化表数据
+            var dbDtlTmp = { DTObjs: dbDtl };
+
+
+            //为PageData.DBDtl 赋值
+            $.each(dbDtl, function (i, objRow) {
+                pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
+            });
+
+            var dtlDataOption = {
+                IsShowAll: true,
+                PageSize: 10,
+                PageIndex: 1,
+                DivId: 'dtlDiv',
+                IsUseLocalData: true,
+                LocalData: JSON.stringify(dbDtlTmp),
+                RenderOverFun: function () {
+                    //循环TBODY
+                    var tbodyTrs = $('#tableBody tbody tr');
+                    $.each(tbodyTrs, function (m, tbodyTrObj) {
+                        var threadTh = $('#tableHead thead tr th');
+                        $.each(threadTh, function (k, threadThObj) {
+                            $(tbodyTrObj).children('td')[k].width = threadThObj.clientWidth;
+                            if ($(threadThObj).data().colname != undefined) {
+                                var o = $(threadThObj);
+                                var tmplate = figure_MapAttr_Template(o.data());
+                                // 1=自由表单模式 2=傻瓜表单模式
+                                if (sys_MapDtl.EditModel != 0) {
+                                    tmplate.attr("disabled", "disabled");
+                                }
+                                tmplate.data({ KeyOfEn: o.data().KeyOfEn });
+
+                                //ID 设置为  id+'_1'
+                                var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
+                                //先写出 NAME   单选扭会出问题
+                                tmplate.attr('id', tmplate.attr('name') + '_' + rowIndex);
+
+                                //处理复选框  设置表格中数据的值
+                                var textVal = $($(tbodyTrObj).children('td')[k]).text();
+
+                                var ckEle = tmplate.find('[name=CB_' + o.data().KeyOfEn + ']');
+                                if (ckEle.length == 1) {
+                                    var ckId = 'CB_' + o.data().KeyOfEn + '_' + rowIndex;
+                                    ckEle.attr('id', ckId);
+                                    tmplate.find('label').attr('for', ckId);
+                                    if (textVal == "1") {
+                                        ckEle[0].checked = true;
+                                    } else {
+                                        ckEle[0].checked = false;
+                                    }
+                                }
+                                else {
+                                    // 判断下拉框是否有对应option, 若没有则追加
+                                    if (o.data().LGType == 2 || o.data().UIContralType == "1") {
+                                        if ($("option[value='" + textVal + "']", tmplate).length == 0) {
+                                            try {
+                                                var c = workNodeData.DBDtl[k];
+                                                if (c) {
+                                                    tmplate.append("<option value='" + textVal + "'>" + c[o.data().KeyOfEn + "Text"] + "</option>");
+                                                }
+                                            } catch (e) {
+                                            }
+                                        }
+
+                                    }
+                                    //
+                                    tmplate.val(textVal);
+                                }
+                                //处理单选按钮。。。 还没做
+                                $($(tbodyTrObj).children('td')[k]).text('');
+                                $($(tbodyTrObj).children('td')[k]).append(tmplate);
+
+                                if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('TB_') == 0) {
+                                    $(tmplate).bind('blur', function (obj) {
+                                        $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
+                                    });
+                                } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
+                                    //对于只读的下拉框做如下处理  为只读的下拉框赋值.
+                                    if (o.data().UIIsEnable == "0") {
+                                        var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
+                                        var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
+                                        var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
+                                        $(tmplate).children().remove();
+                                        $(tmplate).append(option);
+                                    } else {
+                                        $(tmplate).bind('change', function (obj) {
+                                            $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
+                                        });
+                                    }
+                                } else if (tmplate.attr('name') == undefined && tmplate.find('[name^=CB_]').length == 1) {
+                                    $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
+                                        $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] = $(tmplate).find('[name^=CB_]')[0].checked == true ? 1 : 0;
+                                    });
+                                }
                             }
+                        });
+
+                    })
+
+                    //如果是只读的，全部设置成只读
+                    if (workNodeData.Sys_MapDtl[0].IsReadonly == "1" || isReadonly == "1") {
+                        $('#tableBody tbody tr input[type=text]').attr('disabled', 'disabled');
+                        $('#tableBody tbody tr textarea').attr('disabled', 'disabled');
+                        $('#tableBody tbody tr select').attr('disabled', 'disabled');
+                        $('#tableBody tbody tr input[type=checkbox]').attr('disabled', 'disabled');
+                    } else if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") && sys_MapDtl.EditModel != 0) {
+                        tbodyTrs.on("dblclick", function () {
+                            updateRow($(this).data().data.OID, lsys_MapDtl.EditModel);
                         });
                     }
 
-                    // 表头start --------------------
-                    if ($('#tableHead thead tr').length == 0) {
-                        var threadTr = $('<tr data-data="true"></tr>');
-                        //制造表头
-                        //添加序号列
-                        workNodeData = data;
-
-                        //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
-                        // ==1,==2 是打开父窗口出现卡片.
-                        var EditModel = sys_MapDtl.EditModel;
-                        window.EditModel = EditModel;
-
-                        var snTh = $('<th data-coltype="SN" style=\'width:20px;\' ><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow(' + EditModel + ')" /></th>');
-
-                        threadTr.append(snTh);
-                        $.each(sys_mapAttr, function (i, mapAttrObj) {
-                            var th = $('<th></th>');
-                            if (mapAttrObj.MyDataType == 8)
-                                th = $('<th data-coltype="Money"></th>');
-
-                            th.text(mapAttrObj.Name);
-                            th.data(mapAttrObj);
-                            th.css('width', mapAttrObj.UIWidth);
-                            th.data().colname = mapAttrObj.KeyOfEn;
-                            if (mapAttrObj.UIVisible == 1) {
-                                threadTr.append(th);
-                            }
-                        });
-
-                        //增加附件.
-                        var athTh = $('<th style="width:30px;">附件</th>');
-                        var athThData;
-                        athThData = {
-                            custom: true,
-                            customcontent: 1,
-                            customcontent1: "a@href='javaScript:void(0);' onclick='Ath(this)' titile=附件 @附件",
-                            coltype: 'Operation1'
-
-                        };
-
-                        if (sys_MapDtl.IsEnableAthM == 1) {
-                            athTh.data(athThData);
-                            threadTr.append(athTh);
-
-                        }
-
-
-                        //添加删除,保存列
-                        var delTh = "";
-                        var impModel = sys_MapDtl.ImpModel;
-                        if (impModel != 0)
-                            delTh = $('<th style="width:60px;"><img title="选项" style="width: 30px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /></th>');
-                        else
-                            delTh = $('<th style="width:60px;"></th>');
-
-                        //var delTh = $("<th style="width:20px;" onclick= ></th>");
-
-                        var delThData;
-
-                        if (sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") { //有新增或者有删除，就有删除权限
-                            delThData = {
-                                custom: true,
-                                customcontent: 1,
-                                customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
-                                coltype: 'Operation1'
-                            };
-                            if (sys_MapDtl.EditModel != 0) {
-                                delThData.customcontent = 2;
-                                delThData.customcontent2 = delThData.customcontent1;
-                                delThData.customcontent1 = 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.EditModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@';
-                            }
-                        }
-
-
-                        //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
-                        //如果能删除，就有删除按钮
-                        if (sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
-                            delTh.data(delThData);
-                        }
-
-
-                        //可删除或者可新增时，有操作列
-                        if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
-                            threadTr.append(delTh);
-                        }
-
-                        //添加删除列
-                        //var delTh = $('<th></th>');
-                        //添加保存列
-                        delTh = $('<th style=""></th>');
-                        delTh.text("操作");
-                        var delThData = {
-                            custom: true,
-                            customcontent: 1,
-                            customcontent1: 'img@src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
-                            coltype: 'Operation1'
-                        };
-                        delTh.attr('title', "title");
-                        delTh.data(delThData);
-                        //threadTr.append(delTh);
-
-                        $('#tableHead thead').append(threadTr);
-                    }
-                    // 表头over --------------------
-
-                    //如果不能新增，就把新增按钮去掉.
-                    if (sys_MapDtl.IsInsert == "0" || sys_MapDtl.IsReadonly == "1" || isReadonly == "1") {
-                        document.getElementById('insertBtn').style.display = 'none';
-                    }
-
-                    //初始化表数据
-                    var dbDtlTmp = { DTObjs: dbDtl };
-
-
-                    //为PageData.DBDtl 赋值
-                    $.each(dbDtl, function (i, objRow) {
-                        pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
+                    //循环TBODY 初始化 SYS_MAPEXT
+                    var tbodyTrs1 = $('#dtlDiv div table tbody tr');
+                    $.each(tbodyTrs1, function (m, tbodyTrObj) {
+                        AfterBindEn_DealMapExt(tbodyTrObj, m);
                     });
 
-                    var dtlDataOption = {
-                        IsShowAll: true,
-                        PageSize: 10,
-                        PageIndex: 1,
-                        DivId: 'dtlDiv',
-                        IsUseLocalData: true,
-                        LocalData: JSON.stringify(dbDtlTmp),
-                        RenderOverFun: function () {
-                            //循环TBODY
-                            var tbodyTrs = $('#tableBody tbody tr');
-                            $.each(tbodyTrs, function (m, tbodyTrObj) {
-                                var threadTh = $('#tableHead thead tr th');
-                                $.each(threadTh, function (k, threadThObj) {
-                                    $(tbodyTrObj).children('td')[k].width = threadThObj.clientWidth;
-                                    if ($(threadThObj).data().colname != undefined) {
-                                        var o = $(threadThObj);
-                                        var tmplate = figure_MapAttr_Template(o.data());
-                                        // 1=自由表单模式 2=傻瓜表单模式
-                                        if (sys_MapDtl.EditModel != 0) {
-                                            tmplate.attr("disabled", "disabled");
-                                        }
-                                        tmplate.data({ KeyOfEn: o.data().KeyOfEn });
+                    //mouseleave  鼠标离开行
+                    regMouseLeaveTr();
+                }
+            };
 
-                                        //ID 设置为  id+'_1'
-                                        var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
-                                        //先写出 NAME   单选扭会出问题
-                                        tmplate.attr('id', tmplate.attr('name') + '_' + rowIndex);
+            if (dtlDataOption) {
+                $('#tableBody tbody tr').remove();
+                Common.CustomPagePlug(dtlDataOption); //绑定表格
+            }
 
-                                        //处理复选框  设置表格中数据的值
-                                        var textVal = $($(tbodyTrObj).children('td')[k]).text();
-
-                                        var ckEle = tmplate.find('[name=CB_' + o.data().KeyOfEn + ']');
-                                        if (ckEle.length == 1) {
-                                            var ckId = 'CB_' + o.data().KeyOfEn + '_' + rowIndex;
-                                            ckEle.attr('id', ckId);
-                                            tmplate.find('label').attr('for', ckId);
-                                            if (textVal == "1") {
-                                                ckEle[0].checked = true;
-                                            } else {
-                                                ckEle[0].checked = false;
-                                            }
-                                        }
-                                        else {
-                                            // 判断下拉框是否有对应option, 若没有则追加
-                                            if (o.data().LGType == 2 || o.data().UIContralType == "1") {
-                                                if ($("option[value='" + textVal + "']", tmplate).length == 0) {
-                                                    try {
-                                                        var c = workNodeData.DBDtl[k];
-                                                        if (c) {
-                                                            tmplate.append("<option value='" + textVal + "'>" + c[o.data().KeyOfEn + "Text"] + "</option>");
-                                                        }
-                                                    } catch (e) {
-                                                    }
-                                                }
-
-                                            }
-                                            //
-                                            tmplate.val(textVal);
-                                        }
-                                        //处理单选按钮。。。 还没做
-                                        $($(tbodyTrObj).children('td')[k]).text('');
-                                        $($(tbodyTrObj).children('td')[k]).append(tmplate);
-
-                                        if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('TB_') == 0) {
-                                            $(tmplate).bind('blur', function (obj) {
-                                                $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
-                                            });
-                                        } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
-                                            //对于只读的下拉框做如下处理  为只读的下拉框赋值.
-                                            if (o.data().UIIsEnable == "0") {
-                                                var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
-                                                var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
-                                                var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
-                                                $(tmplate).children().remove();
-                                                $(tmplate).append(option);
-                                            } else {
-                                                $(tmplate).bind('change', function (obj) {
-                                                    $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
-                                                });
-                                            }
-                                        } else if (tmplate.attr('name') == undefined && tmplate.find('[name^=CB_]').length == 1) {
-                                            $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
-                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] = $(tmplate).find('[name^=CB_]')[0].checked == true ? 1 : 0;
-                                            });
-                                        }
-                                    }
-                                });
-
-                            })
-
-                            //如果是只读的，全部设置成只读
-                            if (workNodeData.Sys_MapDtl[0].IsReadonly == "1" || isReadonly == "1") {
-                                $('#tableBody tbody tr input[type=text]').attr('disabled', 'disabled');
-                                $('#tableBody tbody tr textarea').attr('disabled', 'disabled');
-                                $('#tableBody tbody tr select').attr('disabled', 'disabled');
-                                $('#tableBody tbody tr input[type=checkbox]').attr('disabled', 'disabled');
-                            } else if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") && sys_MapDtl.EditModel != 0) {
-                                tbodyTrs.on("dblclick", function () {
-                                    updateRow($(this).data().data.OID, lsys_MapDtl.EditModel);
-                                });
-                            }
-
-                            //循环TBODY 初始化 SYS_MAPEXT
-                            var tbodyTrs1 = $('#dtlDiv div table tbody tr');
-                            $.each(tbodyTrs1, function (m, tbodyTrObj) {
-                                AfterBindEn_DealMapExt(tbodyTrObj, m);
-                            });
-
-                            //mouseleave  鼠标离开行
-                            regMouseLeaveTr();
-                        }
-                    };
-
-                    if (dtlDataOption) {
-                        $('#tableBody tbody tr').remove();
-                        Common.CustomPagePlug(dtlDataOption); //绑定表格
-                    }
-
-                    if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
-                        window.columnExp = [];
-                        // 解析统计规则字符串
-                        $.each(sys_MapDtl.ColAutoExp.split("@"), function (i, e) {
-                            if (e.indexOf(":") != -1) {
-                                var sp = e.split(":");
-                                columnExp.push({
-                                    "KeyOfEn": sp[0], // 字段
-                                    "exp": sp[1]		// 表达式
-                                });
-                            }
+            if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
+                window.columnExp = [];
+                // 解析统计规则字符串
+                $.each(sys_MapDtl.ColAutoExp.split("@"), function (i, e) {
+                    if (e.indexOf(":") != -1) {
+                        var sp = e.split(":");
+                        columnExp.push({
+                            "KeyOfEn": sp[0], // 字段
+                            "exp": sp[1]		// 表达式
                         });
                     }
-                    if ($.isArray(dbDtl) && dbDtl.length > 0) {
+                });
+            }
+            if ($.isArray(dbDtl) && dbDtl.length > 0) {
 
-                        /**
-                        * 统计行
-                        * "ColAutoExp":"@ShuLiang:Sum@DanJia:Sum@XiaoJi:Sum"
-                        */
-                        if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
-                            addStatisticsRow();
-                            bindStatistics();
-                        }
+                /**
+                * 统计行
+                * "ColAutoExp":"@ShuLiang:Sum@DanJia:Sum@XiaoJi:Sum"
+                */
+                if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
+                    addStatisticsRow();
+                    bindStatistics();
+                }
 
-                        var formExt = $("#formExt").val();
-                        var extObj = null;
-                        try {
-                            if (formExt && formExt != "") {
-                                extObj = JSON.parse(formExt);
-                            }
-                        } catch (e) {
-                        }
-                        if (extObj) {
-                            parentStatistics(extObj);
-                        }
-                        doAlignColumns();
-
-                        //setTimeout(doAlignColumns, 500);
+                var formExt = $("#formExt").val();
+                var extObj = null;
+                try {
+                    if (formExt && formExt != "") {
+                        extObj = JSON.parse(formExt);
                     }
-                    // 统计行over
+                } catch (e) {
+                }
+                if (extObj) {
+                    parentStatistics(extObj);
+                }
+            }
+            // 统计行over
 
-                    $('#Msg').hide();
-                    return;
+            $('#Msg').hide();
+            return;
 
-                    /********解析数据组装datagrid表*****/
-                    /*0 否 1 是*/
-                    var IsShowSum = sys_MapDtl.IsShowSum == 1 ? true : false; //是否显示合计
-                    var IsShowIdx = sys_MapDtl.IsShowIdx == 1 ? true : false; //是否显示idx
-                    var IsReadonly = sys_MapDtl.IsReadonly == 1 ? true : false; //是否只读
-                    var IsDelete = sys_MapDtl.IsDelete == 1 ? true : false; //是否可以删除
-                    var IsInsert = sys_MapDtl.IsInsert == 1 ? true : false; //是否可以插入
-                    var IsUpdate = sys_MapDtl.IsUpdate == 1 ? true : false; //是否可以更新
-                    var IsEnablePass = sys_MapDtl.IsEnablePass == 1 ? true : false; //是否启用通过
-                    var IsHLDtl = sys_MapDtl.IsHLDtl == 1 ? true : false; //是否是合流汇总数据
-                    var IsFLDtl = sys_MapDtl.IsFLDtl == 1 ? true : false; //是否是分流
-                    var IsShowTitle = sys_MapDtl.IsShowTitle == 1 ? true : false; //是否显示标题
-                    var IsView = sys_MapDtl.IsView == 1 ? true : false; //是否可见
-                    var titles = IsShowTitle ? sys_MapDtl.Name : '';
-//                }
-//            });
+            /********解析数据组装datagrid表*****/
+            /*0 否 1 是*/
+            var IsShowSum = sys_MapDtl.IsShowSum == 1 ? true : false; //是否显示合计
+            var IsShowIdx = sys_MapDtl.IsShowIdx == 1 ? true : false; //是否显示idx
+            var IsReadonly = sys_MapDtl.IsReadonly == 1 ? true : false; //是否只读
+            var IsDelete = sys_MapDtl.IsDelete == 1 ? true : false; //是否可以删除
+            var IsInsert = sys_MapDtl.IsInsert == 1 ? true : false; //是否可以插入
+            var IsUpdate = sys_MapDtl.IsUpdate == 1 ? true : false; //是否可以更新
+            var IsEnablePass = sys_MapDtl.IsEnablePass == 1 ? true : false; //是否启用通过
+            var IsHLDtl = sys_MapDtl.IsHLDtl == 1 ? true : false; //是否是合流汇总数据
+            var IsFLDtl = sys_MapDtl.IsFLDtl == 1 ? true : false; //是否是分流
+            var IsShowTitle = sys_MapDtl.IsShowTitle == 1 ? true : false; //是否显示标题
+            var IsView = sys_MapDtl.IsView == 1 ? true : false; //是否可见
+            var titles = IsShowTitle ? sys_MapDtl.Name : '';
         }
 
         function triggerStatistics() {
@@ -871,60 +846,7 @@
             });
         }
 
-        function doAlignColumns() {
-
-            return;
-            // 对齐列单元格
-            var theadtr = $("#tableHead thead tr th");
-            //获取div的第一行
-            var tbodytr = $("#tableBody tbody tr")[0];
-            $(tbodytr).find("td").each(function (hi, th) {
-                var realWidth = $(this).outerWidth(true);
-                realWidth = this.getBoundingClientRect().width;
-
-                var tpaddWidth = realWidth - $(this).width();
-                var definedWidth = $(this).data().UIWidth;
-                var width;
-                if (typeof realWidth != "undefined" && realWidth > 0) {
-                    width = realWidth;
-                } else if (typeof definedWidth != "undefined") {
-                    width = definedWidth;
-                } else if (hi == 0) {
-                    width = 40;
-                } else if (hi + 1 == headerCount) {
-                    width = 40;
-                } else {
-                    width = 100;
-                }
-                if (hi != 0) {
-                    $(theadtr[hi]).width(parseFloat(realWidth - 2.67));
-                }
-
-                //		        (function (hi, headerCount, width) {
-                //		            $("#dtlDiv div table thead tr ").each(function (di, td) {
-                //		                var td = $(this).children().eq(hi);
-                //		                var children = td.children();
-                //		                var paddWidth = children.outerWidth() - children.width();
-                //		                if (children.first().is("img")) {
-
-                //		                } else {
-                //		                    children.first().width(width - 5);
-                //		                }
-                //		                if (hi == 0) {
-                //		                    td.width(width);
-                //		                    //children.width(20.34);
-                //		                } else if (hi + 1 == headerCount) {
-                //		                    // 最后一列
-                //		                    td.width(40);
-                //		                } else {
-                //		                    td.width(width);
-                //		                    //children.width();
-                //		                }
-                //		            });
-                //		        })(hi, headerCount, width);
-            });
-
-        }
+       
         function parentStatistics(extArr) {
             if ($.isArray(extArr)) {
                 $.each(extArr, function (i, extObj) {
@@ -1033,11 +955,7 @@
             if (impModel == 2) {
                 var url = window.location.href;
                 url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
-                //  url = url.replace('Dtl.htm', 'DtlOpt.htm');
             }
-
-            //  alert(impModel);
-
 
             //SQL\JSON导入方式
             if (impModel == 3) {
@@ -1500,7 +1418,7 @@
                                     <thead></thead>
                                 </table>
                             </div>
-                            <div style="overflow-y: scroll">
+                            <div>
                                 <table id="tableBody" class="table wupop" data-data="true" style="width:100%;">
                                     <tbody></tbody>
                                 </table>

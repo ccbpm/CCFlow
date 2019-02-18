@@ -178,14 +178,16 @@
             }
 
 
-            var img = new Image();
-            img.onload = function () {
-                document.getElementById("myImage").setAttribute("src", fileName + "?M=" + Math.random());
-                document.getElementById("imgCut").setAttribute("src", fileFullName + "?M=" + Math.random());
-            }
-            img.onerror = function () {
-              
-            }
+//            var img = new Image();
+//            img.onload = function () {
+//                document.getElementById("myImage").setAttribute("src", fileName + "?M=" + Math.random());
+//                document.getElementById("imgCut").setAttribute("src", fileFullName + "?M=" + Math.random());
+//            }
+//            img.onerror = function () {
+
+//            }
+            document.getElementById("myImage").setAttribute("src", fileName + "?M=" + Math.random());
+            document.getElementById("imgCut").setAttribute("src", fileFullName + "?M=" + Math.random());
 
             $('#myImage').Jcrop();
             $("#HD_ImgAthSrc").val(fileFullName);

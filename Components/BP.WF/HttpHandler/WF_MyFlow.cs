@@ -349,6 +349,8 @@ namespace BP.WF.HttpHandler
                         return "url@" + this.currFlow.StartGuidePara1 + this.RequestParasOfAll + "&WorkID=" + workid;
                     case StartGuideWay.ByFrms: //选择表单.
                         return "url@./WorkOpt/StartGuideFrms.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                    case StartGuideWay.ByParentFlowModel: //选择父流程 @yuanlina.
+                        return "url@./WorkOpt/StartGuideParentFlowModel.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     default:
                         break;
                 }

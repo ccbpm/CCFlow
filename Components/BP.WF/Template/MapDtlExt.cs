@@ -74,7 +74,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(MapDtlAttr.ImpSQLFullOneRow).Replace("~","'");
+                return this.GetValStringByKey(MapDtlAttr.ImpSQLFullOneRow).Replace("~", "'");
             }
             set
             {
@@ -112,7 +112,7 @@ namespace BP.WF.Template
                 this.SetPara(MapDtlAttr.IsRowLock, value);
             }
         }
-        #endregion 基本设置 
+        #endregion 基本设置
 
         #region 参数属性
         /// <summary>
@@ -150,7 +150,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(MapDtlAttr.IsEnableLink,false);
+                return this.GetValBooleanByKey(MapDtlAttr.IsEnableLink, false);
             }
             set
             {
@@ -162,7 +162,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string s= this.GetValStrByKey(MapDtlAttr.LinkLabel);
+                string s = this.GetValStrByKey(MapDtlAttr.LinkLabel);
                 if (DataType.IsNullOrEmpty(s))
                     return "详细";
                 return s;
@@ -692,7 +692,7 @@ namespace BP.WF.Template
                 this.SetValByKey(MapDtlAttr.IsEnablePass, value);
             }
         }
-      
+
         /// <summary>
         /// 是否copy数据？
         /// </summary>
@@ -793,7 +793,7 @@ namespace BP.WF.Template
                 this.SetValByKey(MapDtlAttr.FEBD, value);
             }
         }
-        
+
         /// <summary>
         /// 数量
         /// </summary>
@@ -852,16 +852,16 @@ namespace BP.WF.Template
         {
             get
             {
-                string s= this.GetValStrByKey(MapDtlAttr.MTR);
-                s = s.Replace("《","<");
-                s = s.Replace( "》",">");
-                s = s.Replace("‘","'");
+                string s = this.GetValStrByKey(MapDtlAttr.MTR);
+                s = s.Replace("《", "<");
+                s = s.Replace("》", ">");
+                s = s.Replace("‘", "'");
                 return s;
             }
             set
             {
                 string s = value;
-                s = s.Replace("<","《");
+                s = s.Replace("<", "《");
                 s = s.Replace(">", "》");
                 s = s.Replace("'", "‘");
                 this.SetValByKey(MapDtlAttr.MTR, value);
@@ -908,7 +908,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(MapDtlAttr.FEBD, null, "事件类实体类", true, true, 0, 100, 20, false);
 
-                map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,MapDtlAttr.Model, "@0=普通@1=固定行");
+                map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true, MapDtlAttr.Model, "@0=普通@1=固定行");
                 map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版@1=2019EasyUI版本");
 
 
@@ -931,10 +931,10 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行？", true, true);
                 map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", true, true);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", true, true);
-                map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
+                map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true, MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 // 为浙商银行设置从表打开.翻译.
-                map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true,MapDtlAttr.ListShowModel, "@0=表格@1=卡片");
+                map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true, MapDtlAttr.ListShowModel, "@0=表格@1=卡片");
 
                 map.AddDDLSysEnum(MapDtlAttr.EditModel, 0, "编辑数据方式", true, true, MapDtlAttr.EditModel, "@0=表格模式@1=傻瓜表单@2=自由表单");
                 map.SetHelperAlert(MapDtlAttr.EditModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
@@ -946,17 +946,17 @@ namespace BP.WF.Template
                 map.AddTBFloat(MapDtlAttr.H, 350, "高度", true, false);
                 map.SetHelperAlert(MapDtlAttr.H, "对傻瓜表单有效");
 
-              //  map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
+                //  map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
 
                 //map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
                 //map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
 
                 //对显示的结果要做一定的限制.
-                map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤数据SQL表达式", true, false, 0, 200, 20,true);
+                map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤数据SQL表达式", true, false, 0, 200, 20, true);
                 map.SetHelperAlert(MapDtlAttr.FilterSQLExp, "格式为:WFState=1 过滤WFState=1的数据");
 
                 //列自动计算表达式.
-               //map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
+                //map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
                 //map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
 
                 //要显示的列.
@@ -978,8 +978,8 @@ namespace BP.WF.Template
                 map.SetHelperAlert(MapDtlAttr.ImpModel, strs);
 
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
-                map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
-                map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false,true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false, true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false, true);
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", true, false, 0, 900, 20, true);
                 #endregion 导入导出填充.
 
@@ -1007,7 +1007,7 @@ namespace BP.WF.Template
                 #endregion 工作流相关.
 
                 #region 相关方法.
-                RefMethod  rm = new RefMethod();
+                RefMethod rm = new RefMethod();
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".HidAttr";
@@ -1090,6 +1090,17 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.GroupName = "实验中的功能";
+                rm.Title = "数据导入v2019"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DtlImpV2019";
+                rm.Icon = "../Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.GroupName = "实验中的功能";
                 rm.Title = "事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
                 rm.Icon = "../Img/Setting.png";
@@ -1112,7 +1123,7 @@ namespace BP.WF.Template
             MapDtl dtl = new MapDtl();
             dtl.No = dtlId;
             if (dtl.RetrieveFromDBSources() == 0)
-                return "err@"+dtlId+"输入错误.";
+                return "err@" + dtlId + "输入错误.";
 
 
             MapDtl dtlOfThis = new MapDtl(this.No);
@@ -1163,13 +1174,25 @@ namespace BP.WF.Template
             // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             return url;
         }
+
         /// <summary>
-        /// 列自动计算
+        /// 导入
         /// </summary>
         /// <returns></returns>
         public string DtlImp()
         {
             string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+           // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp/Default.htm?FK_MapDtl=" + this.No + "&FromDtl=1";
+            return url;
+        }
+        /// <summary>
+        /// 导入V2019
+        /// </summary>
+        /// <returns></returns>
+        public string DtlImpV2019()
+        {
+            //string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp/Default.htm?FK_MapDtl=" + this.No + "&FromDtl=1";
             return url;
         }
         /// <summary>
@@ -1178,7 +1201,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string ColAutoExp()
         {
-            string url = "../../Admin/FoolFormDesigner/DtlSetting/ColAutoExp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/DtlSetting/ColAutoExp.htm?FK_MapData=" + this.No;
             return url;
         }
         /// <summary>
@@ -1188,11 +1211,10 @@ namespace BP.WF.Template
         public string ImpFields()
         {
 
-      //  http://localhost:18272/WF/Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=CCFrm_CZBankBXDtl1&reset=true
+            //  http://localhost:18272/WF/Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=CCFrm_CZBankBXDtl1&reset=true
             string url = "../../Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             return url;
         }
-          
         /// <summary>
         /// 设计傻瓜表单
         /// </summary>
@@ -1302,7 +1324,7 @@ namespace BP.WF.Template
             }
             return strs;
         }
-        
+
         /// <summary>
         /// 高级设置
         /// </summary>
@@ -1368,10 +1390,10 @@ namespace BP.WF.Template
         /// <returns>返回执行结果</returns>
         public string InitAttrsOfSelf()
         {
-            if (this.FK_Node==0)
+            if (this.FK_Node == 0)
                 return "err@该从表属性不是自定义属性.";
 
-            if (this.No.Contains("_"+this.FK_Node)==false)
+            if (this.No.Contains("_" + this.FK_Node) == false)
                 return "err@该从表属性不是自定义属性.";
 
             //求从表ID.
@@ -1425,7 +1447,7 @@ namespace BP.WF.Template
                     athDesc.DirectInsert();
                 }
 
-               //判断是否有隐藏的AthNum 字段
+                //判断是否有隐藏的AthNum 字段
                 MapAttr attr = new MapAttr();
                 attr.MyPK = this.No + "_AthNum";
                 int count = attr.RetrieveFromDBSources();
@@ -1495,7 +1517,7 @@ namespace BP.WF.Template
 
             //更新分组标签.  @fanleiwei. 代码有变化.
             BP.Sys.GroupField gf = new GroupField();
-            int i=gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
+            int i = gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
             if (i == 0)
             {
                 gf.CtrlID = this.No;
@@ -1580,7 +1602,7 @@ namespace BP.WF.Template
                 return new MapDtlExt();
             }
         }
-                
+
         #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

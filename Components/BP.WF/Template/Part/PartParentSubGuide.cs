@@ -242,7 +242,7 @@ namespace BP.WF.Template
                 map.AddTBString(PartAttr.FK_Flow, null, "流程编号", true, true, 0, 100, 10);
                 map.AddTBString(PartAttr.PartType, null, "类型", false, true, 0, 100, 10);
 
-                map.AddTBString(PartAttr.Tag0, null, "流程编号", true, true, 0, 2000, 10);
+                map.AddTBString(PartAttr.Tag0, null, "父流程编号", true, true, 0, 2000, 10);
                 map.AddTBString(PartAttr.Tag1, null, "流程名称", true, true, 0, 2000, 10);
 
                 map.AddTBString(PartAttr.Tag2, null, "隐藏查询条件", true, false, 0, 2000, 10,true);

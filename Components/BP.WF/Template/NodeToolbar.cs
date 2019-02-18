@@ -105,7 +105,8 @@ namespace BP.WF.Template
             get
             {
                 string s= this.GetValStringByKey(NodeToolbarAttr.Url);
-                if (s.Contains("?") == false && this.Target.ToLower() != "javascript")
+
+                if (this.ExcType !=1 && s.Contains("?") == false && this.Target.ToLower() != "javascript")
                     s = s+"?1=2";
                 return s;
             }

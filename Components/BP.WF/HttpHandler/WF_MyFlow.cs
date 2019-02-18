@@ -1110,7 +1110,7 @@ namespace BP.WF.HttpHandler
 
                     if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
                     {
-                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"" + bar.Url + "\" />";
+                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick='" + bar.Url + "' />";
                     }
                     else
                     {

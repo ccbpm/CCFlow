@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>从表导入</title>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar(0);
+            var html = "";
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var fk_mapDtl = GetQueryString("FK_MapDtl");
+            var en = new Entity("BP.Sys.MapDtl", fk_mapDtl);
+            en.ImpModel = 0;
+            en.Update();
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend>帮助.</legend>不设置任何前置导航，发起流程直接进入开始节点表单。
+    </fieldset>
+</body>
+</html>

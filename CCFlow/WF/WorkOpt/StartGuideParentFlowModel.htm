@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>父子流程前置导航</title>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript"   src="../Scripts/config.js" ></script>
+    <script type="text/javascript" language="javascript" >
+        function Load() {
+
+            return;
+
+            var url = window.location.href;
+            if (plant == "CCFlow") {
+                url = url.replace('.htm', '.aspx');
+                window.location.href = url;
+                return;
+            } else {
+                url = url.replace('.htm', '.jsp');
+                window.location.href = url;
+                return;
+            }
+        }
+    </script>
+</head>
+<body  onload="Load()" >
+
+<form id="cc">
+
+    
+<br />
+<center> 我们在2018年6月取消了对该功能的支持,如果您想启用此功能请参考就版本的代码进行重构. </center>
+
+</form>
+
+</body>
+</html>

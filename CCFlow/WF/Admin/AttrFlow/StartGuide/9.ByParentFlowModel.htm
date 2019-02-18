@@ -28,11 +28,10 @@
 
             $("#Msg").html("正在加载请稍后....");
 
-
             var parts = new Entities("BP.WF.Template.Parts");
             parts.Retrieve("PartType", "ParentSubFlowGuide", "FK_Flow", flowNo);
 
-            var strs = "<table style='width:60%;'>";
+            var strs = "<table style='width:100%;'>";
             strs += "<caption>父流程列表 - <a href='javascript:New();'>新建</a> </caption>";
             strs += "<tr>";
             strs += "<th>流程编号</th>";
@@ -108,7 +107,6 @@
             OpenEasyUiDialogExt(url, '设置父流程', 800, 500, true);
         }
 
-
         function Save() {
 
             //更新节点表单类型.
@@ -125,7 +123,38 @@
 <body>
     <div id="bar">
     </div>
+
+    <table style="width:100%;">
+    <tr>
+    <td  valign=top  style="width:50%;"> 
     <div id="Msg">
     </div>
+     </td>
+
+    <td  valign="top"   style="width:50%;">
+    
+    <fieldset>
+    <legend> 父子流程前置导航 - 帮助</legend>
+    <ul>
+    <li>发起该流程之前，需要选择一个已经发起的流程实例作为父流程。</li>
+    <li>启动该流程的时候，需要启动 /WF/WorkOpt/StartGuideParentFlowModel.htm 的页面，让用户选择一个父流程。</li>
+    </ul>
+    </fieldset>
+
+    <fieldset>
+    <legend> 应用场景</legend>
+    <ul>
+    <li>在执行财务报销的时候，要选择一个出差申请父流程，并把申请信息带入到报销单里面。</li>
+    <li>在执行采购入库的时候，要选择一个采购申请单作为父流程。</li>
+    </ul>
+    </fieldset>
+
+     </td>
+    </tr>
+    </table>
+
+
+
+    
 </body>
 </html>

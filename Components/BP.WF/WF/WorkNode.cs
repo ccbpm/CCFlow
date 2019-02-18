@@ -4488,10 +4488,51 @@ namespace BP.WF
         {
             //if (this.HisNode.HisFormType != NodeFormType.SheetTree)
             //    return true;
-
-
-            //增加节点表单的必填项判断.
+            //判断绑定的树形表单
+             //增加节点表单的必填项判断.
             string err = "";
+		    if(this.HisNode.HisFormType == NodeFormType.SheetTree){
+			    //获取绑定的表单
+			     FrmNodes nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
+			     foreach(FrmNode item in nds){
+				    MapData md = new MapData();
+				    md.No = item.FK_Frm;
+				    md.Retrieve();
+				     MapAttrs mapAttrs = md.MapAttrs;
+				      Row row = this.HisWork.Row;
+				     if (item.FrmSln == FrmSln.Self) {
+					    // 查询出来自定义的数据.
+					    FrmFields ffs1 = new FrmFields();
+					    ffs1.Retrieve(FrmFieldAttr.FK_Node, this.HisNode.NodeID, FrmFieldAttr.FK_MapData, md.No);
+					    //获取整合后的mapAttrs
+					    foreach(FrmField frmField in ffs1){
+						    foreach (MapAttr mapAttr in mapAttrs) {
+							    if(frmField.KeyOfEn.Equals(mapAttr.KeyOfEn)){
+								    mapAttr.UIIsInput = frmField.IsNotNull;
+								    break;
+							    }
+						    }
+					    }
+				     }
+                foreach (MapAttr mapAttr in mapAttrs)
+                {
+                    if (mapAttr.UIIsInput == false)
+                        continue;
+                    string str = row[mapAttr.KeyOfEn] == null ? string.Empty : row[mapAttr.KeyOfEn].ToString();
+                    /*如果是检查不能为空 */
+                    if (str == null || DataType.IsNullOrEmpty(str) == true || str.Trim() == "")
+                        err += "@表单{" + item.FK_Frm + "; 字段" + mapAttr.KeyOfEn + " ; " + mapAttr.Name + "}，不能为空。";
+                }	
+			 }
+			 
+			 if (!err.Equals(""))
+                 throw new Exception("@在提交前检查到如下必输字段填写不完整:" + err);
+			 
+			 return true;
+			
+		}
+
+           
             if (this.HisNode.HisFormType == NodeFormType.FreeForm || this.HisNode.HisFormType == NodeFormType.FoolForm)
             {
                 MapAttrs attrs = this.HisNode.MapData.MapAttrs;

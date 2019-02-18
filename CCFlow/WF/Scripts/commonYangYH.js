@@ -346,7 +346,7 @@ Common.CustomPagePlug1 = function (operation) {
                             }
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "SN") {//序号  序号的类型是SN colname列名称为空
-                            html += "<td>" + (parseInt(k) + 1 + parseInt(PageData.InitData.PageSize) * (parseInt(PageData.InitData.PageIndex) - 1)) + "</td>";
+                            html += "<td><div style='width:20px'>" + (parseInt(k) + 1 + parseInt(PageData.InitData.PageSize) * (parseInt(PageData.InitData.PageIndex) - 1)) + "</div></td>";
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Operation") {//序号  序号的类型是SN colname列名称为空){
                             html += ('<td><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
@@ -739,7 +739,7 @@ Common.CustomPagePlug = function (operation) {
                             }
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "SN") {//序号  序号的类型是SN colname列名称为空
-                            html += "<td>" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</td>";
+                            html += "<td><div style='width:24px'>" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</div></td>";
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Operation") {//序号  序号的类型是SN colname列名称为空){
                             html += ('<td><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');

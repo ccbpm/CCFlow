@@ -1,0 +1,75 @@
+﻿
+function InitBar(optionKey) {
+
+    var html = "<b>数据填充</b>:";
+
+    html += "<select id='changBar' onchange='changeOption()'>";
+
+    html += "<option value='Main' >填充主表</option>";
+    html += "<option value='Dtls' >填充从表</option>";
+    html += "<option value='DDLs' >填充下拉框</option>";
+    html += "</select >";
+
+    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+
+    document.getElementById("bar").innerHTML = html;
+    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+}
+
+
+function HelpOnline() {
+    var url = "http://ccform.mydoc.io";
+    window.open(url);
+}
+
+function changeOption() {
+
+    var refPK = GetQueryString("RefPK");
+    var fk_mapData = GetQueryString("FK_MapData");
+
+
+    var obj = document.getElementById("changBar");
+    var sele = obj.options;
+    var index = obj.selectedIndex;
+    var optionKey = optionKey = sele[index].value;
+
+    var url = GetUrl(optionKey);
+
+    window.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + fk_mapData;
+}
+
+function GetUrl(popModel) {
+
+    switch (popModel) {
+        case "DDLs":
+            url = "DDLs.htm";
+            break;
+        case "Dtls":
+            url = "Dtls.htm";
+            break;
+        case "Main":
+            url = "Main.htm";
+            break;
+        default:
+            url = "Main.htm";
+            break;
+    }
+    return url;
+}
+
+function SaveAndClose() {
+
+    Save();
+    window.close();
+}
+
+//打开窗体.
+function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+        if (isReload == true) {
+            window.location.href = window.location.href;
+        }
+    });
+}

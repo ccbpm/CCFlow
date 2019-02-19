@@ -57,9 +57,12 @@
 <body>
     <form id="cc">
     <table id="Table1" style="width: 99%;">
-        <caption>从表导入查询</caption>
+        <caption>
+            从表导入查询</caption>
         <tr>
-            <th colspan="2">基本信息</th>
+            <th colspan="2">
+                基本信息
+            </th>
         </tr>
         <tr>
             <td>
@@ -70,7 +73,9 @@
             </td>
         </tr>
         <tr>
-            <td>弹窗属性</td>
+            <td>
+                弹窗属性
+            </td>
             <td>
                 高度:<input type="text" id="TB_H" name="TB_H" value="300" style="width: 80px; text-align: right" />
                 宽度:<input type="text" id="TB_W" name="TB_W" value="700" style="width: 80px; text-align: right" />
@@ -85,7 +90,9 @@
             </td>
         </tr>
         <tr>
-            <td>高级设置</td>
+            <td>
+                高级设置
+            </td>
             <td>
                 数据源类型
                 <select id="DDL_DBType" name="DDL_DBType">
@@ -95,9 +102,11 @@
                 </select>
                 选择类型:
                 <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
-                <label for="RBPara_SelectType_0">平铺模式</label>
+                <label for="RBPara_SelectType_0">
+                    平铺模式</label>
                 <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
-                <label for="RBPara_SelectType_1">下拉框模式</label>
+                <label for="RBPara_SelectType_1">
+                    下拉框模式</label>
             </td>
         </tr>
         <tr>
@@ -139,11 +148,9 @@
                             总条数: SELECT COUNT(no) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%')
                             AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
                         <li>比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
-                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
-                        </li>
+                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
                         <li>比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
-                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
-                        </li>
+                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
                     </ul>
                 </div>
             </th>
@@ -160,14 +167,11 @@
                 <div id="TablePage_Count" style="color: Gray; display: none">
                     <ul>
                         <li>比如For SQLServer: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR
-                            No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
-                        </li>
+                            No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
                         <li>比如For Oracle: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No
-                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
-                        </li>
+                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
                         <li>比如For MySQL: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No
-                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
-                        </li>
+                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
                     </ul>
                 </div>
             </th>
@@ -195,7 +199,6 @@
                 <input id="TB_Tag" name="TB_Tag" style="width: 100%;" />
             </td>
         </tr>
-
         <tr>
             <th colspan="2">
                 <a href="javascript:ShowHidden('SetKey')">设定导入数据列表的主键</a>
@@ -212,7 +215,6 @@
                 <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
             </td>
         </tr>
-       
         <tr>
             <td colspan="2">
                 <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save()" />

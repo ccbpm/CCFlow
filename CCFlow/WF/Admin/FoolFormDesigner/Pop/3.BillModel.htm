@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>从表导入</title>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar(3); //excel 文件模式.
+            var html = "";
+
+        });
+
+        function Save() {
+
+            //更新.
+            var fk_mapDtl = GetQueryString("FK_MapDtl");
+            var en = new Entity("BP.Sys.MapDtl", fk_mapDtl);
+            en.ImpModel = 3;
+            en.Update();
+            window.location.href = window.location.href;
+        }
+    </script>
+    <style type="text/css">
+        .style1
+        {
+            height: 21px;
+        }
+    </style>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <table style="width: 99%;">
+        <tr>
+            <th colspan="2">
+                基本信息
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')">标题</a>
+            </td>
+            <td>
+                <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                弹窗属性
+            </td>
+            <td>
+                高度:<input type="text" id="TB_H" name="TB_H" value="300" style="width: 80px; text-align: right" />
+                宽度:<input type="text" id="TB_W" name="TB_W" value="600" style="width: 80px; text-align: right" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="javascript:alert('显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.')">搜索提示</a>
+            </td>
+            <td>
+                <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 90%;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                数据源类型
+            </td>
+            <td>
+                <select id="DDL_DBType" name="DDL_DBType">
+                    <option value="0">执行SQL</option>
+                    <option value="1">执行url返回JSON</option>
+                    <option value="2">执行CCFromRef.js返回JSON</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                单据主表配置
+            </th>
+        </tr>
+        <tr>
+            <td>
+                初始化SQL
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                查询SQL
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                对照列
+            </td>
+            <td>
+            </td>
+        </tr>
+        <!-- 从表配置 -->
+        <tr>
+            <th colspan="2">
+                从表配置
+            </th>
+        </tr>
+        <tr>
+            <td>
+                查询SQL
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                装载SQL
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                对照列
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

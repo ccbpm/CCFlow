@@ -44,7 +44,7 @@ function HelpOnline() {
 function changeOption() {
 
     var fk_MapData = GetQueryString("FK_MapData");
-    var KeyOfEn = GetQueryString("KeyOfEn");
+    var KeyOfEn = GetQueryString("RefP");
 
     var obj = document.getElementById("changBar");
     var sele = obj.options;

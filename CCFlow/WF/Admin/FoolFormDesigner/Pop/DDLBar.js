@@ -6,10 +6,14 @@ function InitBar(optionKey) {
     html += "<select id='changBar' onchange='changeOption()'>";
 
     html += "<option value='None' >无,不设置(默认).</option>";
-    html += "<option value='Branches' >树干叶子模式</option>";
-    html += "<option value=2 >Excel文件模式</option>";
-    html += "<option value=3 >单据模式</option>";
-    html += "<option value=4 >表格查询模式（简洁）</option>";
+    html += "<option value='PopBranchesAndLeaf' >树干叶子模式</option>";
+    html += "<option value='PopBranchesAndLeafLazyLoad' >树干叶子模式-懒加载</option>";
+    html += "<option value='PopBranches' >树干模式(简单)</option>";
+    html += "<option value='PopBranchesLazyLoad' >树干模式(简单)-懒加载</option>";
+    html += "<option value='PopGroupList' >分组列表平铺</option>";
+    html += "<option value='PopTableList' >单实体平铺</option>";
+    html += "<option value='PopTableSearch' >表格条件查询</option>";
+    html += "<option value='PopSelfUrl' >自定义URL</option>"; 
 
     html += "</select >";
 
@@ -47,17 +51,29 @@ function GetUrl(popModel) {
         case "None":
             url = "0.None.htm";
             break;
-        case "Branches":
-            url = "1.Branches.htm";
+        case "PopBranchesAndLeaf":
+            url = "1.BranchesAndLeaf.htm";
             break;
-        case 2:
-            url = "2.ExcelFile.htm";
+        case "PopBranchesAndLeafLazyLoad":
+            url = "2.BranchesAndLeafLazyLoad.htm";
             break;
-        case 3:
-            url = "3.BillModel.htm";
+        case "PopBranches":
+            url = "3.Branches.htm";
             break;
-        case 4:
-            url = "4.TableSimple.htm";
+        case "PopBranchesLazyLoad":
+            url = "4.BranchesLazyLoad.htm";
+            break;
+        case "PopGroupList":
+            url = "5.GroupList.htm";
+            break;
+        case "PopTableList":
+            url = "6.TableList.htm";
+            break;
+        case "PopTableSearch":
+            url = "7.TableSearch.htm";
+            break;
+        case "PopSelfUrl":
+            url = "8.SelfUrl.htm";
             break;
         default:
             url = "0.None.htm";

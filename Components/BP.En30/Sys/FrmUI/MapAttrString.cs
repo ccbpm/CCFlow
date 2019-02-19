@@ -200,6 +200,13 @@ namespace BP.Sys.FrmUI
                 rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "Pop返回值v2019";
+                rm.ClassMethodName = this.ToString() + ".DoPop2019()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 #endregion 基本功能.
 
                 #region 输入多选.
@@ -390,6 +397,14 @@ namespace BP.Sys.FrmUI
         public string DoFastEnter()
         {
             return "../../Admin/FoolFormDesigner/MapExt/FastInput.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 快速录入
+        /// </summary>
+        /// <returns></returns>
+        public string DoPop2019()
+        {
+            return "../../Admin/FoolFormDesigner/Pop/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 全局默认值

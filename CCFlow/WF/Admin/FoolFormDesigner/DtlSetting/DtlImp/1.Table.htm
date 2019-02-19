@@ -16,7 +16,21 @@
 
             InitBar(1);
             var html = "";
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_Table";
+            var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+            if (mapExt.GetPara("SelectType") == "")
+                mapExt.SetPara("SelectType", "1");
+
+            //批量为复制.
+            GenerFullAllCtrlsVal(mapExt);
+
+            //设置按钮是否可以用?
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
         });
 
         function Save() {
@@ -28,15 +42,207 @@
             en.Update();
             window.location.href = window.location.href;
         }
+        function Delete() {
+            if (confirm('您确定要删除吗？') == false)
+                return;
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_Table";
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            mapExt.Delete();
+            window.location.href = window.location.href;
+        }
+
+        function Save1() {
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_Table";
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            mapExt.CopyURL();  //从url里面copy数据.
+            mapExt.FK_MapData = GetQueryString("FK_MapDtl");
+            mapExt.CopyForm(); //从from里面copy数据.
+            mapExt.ExtType = "DtlImp";
+            mapExt.AttrOfOper = "Table";//后台有默认设置，要使主键区分开，所以设置此值 
+            var val = mapExt.Save();
+            window.location.href = window.location.href;
+        }
+
     </script>
+    <style type="text/css">
+        .style1
+        {
+            height: 21px;
+        }
+    </style>
 </head>
 <body>
     <div id="bar">
     </div>
-    
-    <fieldset>
-        <legend>帮助.</legend>
-        不设置任何前置导航，发起流程直接进入开始节点表单。  sdsds
-    </fieldset>
+    <form id="cc">
+    <table id="Table1" style="width: 99%;">
+        <!--<caption>从表导入查询</caption>-->
+        <tr>
+            <th colspan="2">基本信息</th>
+        </tr>
+        <tr>
+            <td>
+                <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')">标题</a>
+            </td>
+            <td>
+                <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+            </td>
+        </tr>
+        <tr>
+            <td>弹窗属性</td>
+            <td>
+                高度:<input type="text" id="TB_H" name="TB_H" value="300" style="width: 80px; text-align: right" />
+                宽度:<input type="text" id="TB_W" name="TB_W" value="700" style="width: 80px; text-align: right" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="javascript:alert('显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.')">搜索提示</a>
+            </td>
+            <td>
+                <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 90%;" />
+            </td>
+        </tr>
+        <tr>
+            <td>高级设置</td>
+            <td>
+                数据源类型
+                <select id="DDL_DBType" name="DDL_DBType">
+                    <option value="0">执行SQL</option>
+                    <option value="1">执行url返回JSON</option>
+                    <option value="2">执行CCFromRef.js返回JSON</option>
+                </select>
+                选择类型:
+                <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
+                <label for="RBPara_SelectType_0">平铺模式</label>
+                <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
+                <label for="RBPara_SelectType_1">下拉框模式</label>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('PopValSearchCond')">查询条件设置</a>
+                <div id="PopValSearchCond" style="color: Gray; display: none">
+                    <ul>
+                        <li>该设置对table查询有效,(可以为空)：日期的默认值是JS函数表达式.</li>
+                        <li>SQL格式为:</li>
+                        <li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
+                        <li>$Para=XB#Label=性别#EnumKey=XB</li>
+                        <li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
+                        <li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
+                        <li>URL格式为:</li>
+                        <li>$Para=Dept#Label=所在班级#ListURL=/DataUser/Handler.ashx?xxx=sss </li>
+                        <li>执行CCFromRef.js返回JSON格式为:</li>
+                        <li>$Para=Dept#Label=所在班级#ListFuncName=MyFunc </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag1" name="TB_Tag1" style="width: 99%; height: 60px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('TablePage')">数据源</a>
+                <div id="TablePage" style="color: Gray; display: none">
+                    <ul>
+                        <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+                        <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+                        <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
+                        <li>比如For SQLServer: SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by
+                            t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student WHERE Name LIKE '%@Key%'
+                            ) A WHERE rownumber > @PageCount
+                            <br />
+                            总条数: SELECT COUNT(no) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%')
+                            AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
+                        <li>比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
+                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                        <li>比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
+                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag2" name="TB_Tag2" style="width: 99%; height: 23px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('TablePage_Count')">总条数</a>
+                <br />
+                <div id="TablePage_Count" style="color: Gray; display: none">
+                    <ul>
+                        <li>比如For SQLServer: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR
+                            No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                        <li>比如For Oracle: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No
+                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                        <li>比如For MySQL: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No
+                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag3" name="TB_Tag3" style="width: 99%; height: 23px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('divTag')">数据列名与中文意思对照</a>
+                <div id="divTag" style="color: Gray; display: none">
+                    <ul>
+                        <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头..</li>
+                        <li>不为空时，设置几个字段则列表里面显示几个字段</li>
+                        <li>格式为:</li>
+                        <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input id="TB_Tag" name="TB_Tag" style="width: 100%;" />
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('SetKey')">设定导入数据列表的主键</a>
+                <div id="SetKey" style="color: Gray; display: none">
+                    <ul>
+                        <li>主键不为空，SQL查询的列表设置主键时，不会重复导入该数据</li>
+                        <li>主键为空时，则为选择的全部导入，不过滤已经导入的数据</li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+            </td>
+        </tr>
+       
+        <tr>
+            <td colspan="2">
+                <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save1()" />
+                <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
+            </td>
+        </tr>
+    </table>
+    </form>
 </body>
 </html>

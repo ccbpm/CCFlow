@@ -16,7 +16,21 @@
 
             InitBar(3); //excel 文件模式.
             var html = "";
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_BillModel";
+            var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+            if (mapExt.GetPara("SelectType") == "")
+                mapExt.SetPara("SelectType", "1");
+
+            //批量为复制.
+            GenerFullAllCtrlsVal(mapExt);
+
+            //设置按钮是否可以用?
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
         });
 
         function Save() {
@@ -26,6 +40,30 @@
             var en = new Entity("BP.Sys.MapDtl", fk_mapDtl);
             en.ImpModel = 3;
             en.Update();
+            window.location.href = window.location.href;
+        }
+        function Delete() {
+            if (confirm('您确定要删除吗？') == false)
+                return;
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_BillModel";
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            mapExt.Delete();
+            window.location.href = window.location.href;
+        }
+
+        function Save1() {
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_BillModel";
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            mapExt.CopyURL();  //从url里面copy数据.
+            mapExt.FK_MapData = GetQueryString("FK_MapDtl");
+            mapExt.CopyForm(); //从from里面copy数据.
+            mapExt.ExtType = "DtlImp";
+            mapExt.AttrOfOper = "BillModel"; //后台有默认设置，要使主键区分开，所以设置此值 
+            var val = mapExt.Save();
             window.location.href = window.location.href;
         }
     </script>
@@ -87,26 +125,33 @@
                 单据主表配置
             </th>
         </tr>
+
         <tr>
             <td>
                 初始化SQL
             </td>
-            <td>
+                
+            <td colspan="2">
+                <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 60px;"></textarea>
             </td>
+      
         </tr>
         <tr>
             <td>
                 查询SQL
             </td>
-            <td>
+            <td colspan="2">
+                <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 60px;"></textarea>
             </td>
         </tr>
         <tr>
             <td>
                 对照列
             </td>
-            <td>
+            <td colspan="2">
+                <input type="text" id="TB_Tag3" name="TB_Tag3" style="width: 99%;" />
             </td>
+            
         </tr>
         <!-- 从表配置 -->
         <tr>
@@ -118,21 +163,30 @@
             <td>
                 查询SQL
             </td>
-            <td>
+            <td colspan="2">
+                <textarea id="TB_Tag" name="TB_Tag" style="width: 98%; height: 60px;"></textarea>
             </td>
         </tr>
         <tr>
             <td>
                 装载SQL
             </td>
-            <td>
+             <td colspan="2">
+                <textarea id="TB_Tag4" name="TB_Tag4" style="width: 98%; height: 60px;"></textarea>
             </td>
         </tr>
         <tr>
             <td>
                 对照列
             </td>
-            <td>
+            <td colspan="2">
+                <input type="text" id="TB_Tag5" name="TB_Tag5" style="width: 99%;" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save1()" />
+                <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
             </td>
         </tr>
     </table>

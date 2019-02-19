@@ -534,7 +534,7 @@ function figure_MapAttr_Template(mapAttr) {
         return eleHtml;
     }
     if (mapAttr.MyDataType != 4) {
-        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
+        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 6px");
     }
 
 
@@ -700,7 +700,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 return eleHtml;
             }
 
-            eleHtml += "<input class='form-control' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+            eleHtml += "<input style='display:inline' class='form-control' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
 
             return eleHtml;
         }

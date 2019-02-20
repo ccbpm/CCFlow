@@ -285,6 +285,8 @@ namespace BP.Sys
         /// 2=每个类别下不能为空.
         /// </summary>
         public const string UploadFileNumCheck = "UploadFileNumCheck";
+
+        public const string NumOfUpload = "NumOfUpload";
         /// <summary>
         /// 是否可见？
         /// </summary>
@@ -418,6 +420,22 @@ namespace BP.Sys
                 this.SetPara(FrmAttachmentAttr.UploadCtrl, value);
             }
         }
+
+        /// <summary>
+        /// 节点编号
+        /// </summary>
+        public int NumOfUpload
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentAttr.NumOfUpload);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.NumOfUpload, value);
+            }
+        }
+
         /// <summary>
         /// 上传校验
         /// 0=不校验.
@@ -428,7 +446,7 @@ namespace BP.Sys
         {
             get
             {
-                return (UploadFileNumCheck)this.GetParaInt(FrmAttachmentAttr.UploadFileNumCheck);
+                return (UploadFileNumCheck)this.GetValIntByKey(FrmAttachmentAttr.UploadFileNumCheck);
             }
             set
             {
@@ -1221,7 +1239,7 @@ namespace BP.Sys
 
                 map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 50, 20);
-                map.AddTBInt("NumOfUpload", 0, "最低上传数量", true, false);
+                map.AddTBInt(FrmAttachmentAttr.NumOfUpload, 0, "最低上传数量", true, false);
 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20);

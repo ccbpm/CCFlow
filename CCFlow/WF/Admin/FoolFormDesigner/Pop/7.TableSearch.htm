@@ -105,47 +105,6 @@
             window.location.href = window.location.href;
         }
 
-//        function Save1() {
-
-//            var mapExt = new Entity("BP.Sys.MapExt");
-//            mapExt.MyPK = "PopTableSearch_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-//            mapExt.RetrieveFromDBSources(); //从数据库来查询.
-
-//            mapExt.CopyURL();  //从url里面copy数据.
-//            mapExt.CopyForm(); //从from里面copy数据.
-
-//            //mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
-//            //mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
-
-//            //var val= $("#DDL_SelectType").val();
-//            //alert(val);
-//            //mapExt.SetPara("SelectType", val); //选择类型.
-
-//            mapExt.ExtType = "PopTableSearch";
-//            mapExt.AttrOfOper = GetQueryString("KeyOfEn");
-
-
-//            var err = "";
-
-//            if (mapExt.GetPara("Title") == "")
-//                err += '\t\n必填字段[标题]不能为空';
-
-//            if (mapExt.Tag1 == "")
-//                err += '\t\n必填字段[搜索数据源]不能为空';
-
-//            if (mapExt.Tag2 == "")
-//                err += '\t\n必填字段[左侧树列表数据源]不能为空';
-
-//            if (mapExt.Tag == "")
-//                err += '\t\n必填字段[数据列名与中文意思对照]不能为空';
-
-//            if (mapExt.DBType == "")
-//                err += '\t\n必填字段[数据源类型]不能为空';
-
-//            var val = mapExt.Save();
-//            // alert(val);
-//            window.location.href = window.location.href;
-//        }
     </script>
     <style type="text/css">
             .style1
@@ -320,12 +279,6 @@
                 <input id="TB_Tag" name="TB_Tag" style="width: 100%;" />
             </td>
         </tr>
-        <!--<tr>
-            <td colspan="2">
-                <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save1()" />
-                <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
-            </td>
-        </tr>-->
     </table>
     </form>
 </body>

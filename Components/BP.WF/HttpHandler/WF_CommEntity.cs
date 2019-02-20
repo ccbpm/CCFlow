@@ -241,6 +241,11 @@ namespace BP.WF.HttpHandler
                 {
                     /*是一个sql*/
                     string sqlBindKey = attr.UIBindKey.Clone() as string;
+
+                    // 判断是否存在.
+                    if (ds.Tables.Contains(sqlBindKey) == true)
+                        continue;
+
                     sqlBindKey = BP.WF.Glo.DealExp(sqlBindKey, null, null);
 
                     DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);

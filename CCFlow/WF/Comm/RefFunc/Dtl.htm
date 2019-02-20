@@ -350,6 +350,17 @@
         function InitDDLOperation(flowData, mapAttr, defVal) {
 
             var operations = '';
+
+            var data = flowData[mapAttr.KeyOfEn];
+            if (data == undefined)
+                data = flowData[mapAttr.UIBindKey];
+            if (data != undefined) {
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+                return operations;
+            }
+
             //外键类型.
             if (mapAttr.LGType == 2) {
 
@@ -406,6 +417,7 @@
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
                     //alert('没有获得约定的数据源.');
                 }
+                
             }
             return operations;
         }

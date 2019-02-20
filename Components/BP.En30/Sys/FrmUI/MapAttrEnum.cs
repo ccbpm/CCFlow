@@ -244,7 +244,7 @@ namespace BP.Sys.FrmUI
         }
          public string DoDDLFullCtrl2019()
         {
-            return "../../Admin/FoolFormDesigner/DDLSetting/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
 
         /// <summary>

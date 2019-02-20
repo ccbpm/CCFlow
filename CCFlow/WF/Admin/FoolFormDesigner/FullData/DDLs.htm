@@ -16,27 +16,90 @@
 
             InitBar("DDLs");
             var html = "";
-
-        });
-
-        function Save() {
-
+            //查询出来数据.
             //更新节点表单类型.
             var frmID = GetQueryString("FK_MapData");
-            var keyOfEn = GetQueryString("KeyOfEn");
+            var refPK = GetQueryString("RefPK");
+            var keyOfEn = refPK.split("_")[2];
+            var thisPK = refPK + "_FullData";
 
-            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
-            en.SetPara("PopModel", "Branches");
-            en.Update();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("KeyOfEn", keyOfEn);
+            handler.AddPara("MyPK", thisPK);
+            var data = handler.DoMethodReturnString("TBFullCtrlDDL_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+            mapdtls = data;
+
+            if (data.length == 0) {
+
+                $("#doc").html("<h3>没有要填充的下拉框字段.</h3>");
+                return;
+            }
+
+            var html = "<table style='width:99%;'>";
+            for (var i = 0; i < data.length; i++) {
+                var mapAttr = data[i];
+                html += "<tr>";
+                html += "<th>下拉框:" + mapAttr.KeyOfEn + " - " + mapAttr.Name;
+                html += "</tr>";
+
+                html += "<tr>";
+                html += "<td>";
+                html += '<textarea rows=4 name=TB_' + mapAttr.KeyOfEn + '  name=TB_' + mapAttr.KeyOfEn + ' style="width:95%;" > ' + mapAttr.DefVal + '</textarea>';
+                html += "</td>";
+                html += "</tr>";
+
+            }
+
+            $("#doc").html(html);
+            return;
+        });
+        function Save() {
+
+            var str = "";
+            var frmID = GetQueryString("FK_MapData");
+            var refPK = GetQueryString("RefPK");
+
+            var thisPK = refPK + "_FullData";
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("Tag", str);
+            handler.AddPara("MyPK", thisPK);
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("TBFullCtrlDDL_Save");
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
+
+            alert(data);
+
             window.location.href = window.location.href;
+            return;
         }
+
     </script>
 </head>
 <body>
+    <form id="cc">
     <div id="bar">
     </div>
+    
+    <div id="doc">
+    </div>
     <fieldset>
-        <legend>帮助.</legend>sdafsdfasdfasd
+        <legend>帮助.</legend>
+             <ul>
+                <li>填充下拉框的SQL, </li>
+                <li>必须返回一行数据.</li>
+            </ul>
     </fieldset>
 </body>
 </html>

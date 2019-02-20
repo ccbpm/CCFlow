@@ -11,6 +11,7 @@ function InitBar(optionKey) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<input type='button' value='返回' onclick='Back()' id='Btn_Back' title='' />"
     html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
 
     document.getElementById("bar").innerHTML = html;
@@ -21,6 +22,16 @@ function InitBar(optionKey) {
 function HelpOnline() {
     var url = "http://ccform.mydoc.io";
     window.open(url);
+}
+
+function Back() {
+    var myPK = GetQueryString('MyPK');
+    var refPK = GetQueryString("RefPK");
+    var keyOfEn = refPK.split("_")[2];
+    url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + keyOfEn;
+
+    window.location.href = url;
+    return;
 }
 
 function changeOption() {

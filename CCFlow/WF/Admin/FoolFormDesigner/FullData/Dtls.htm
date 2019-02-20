@@ -27,10 +27,11 @@
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = refPK + "_FullData";
             en.SetPKVal(en.MyPK);
-            var i = en.RetrieveFromDBSources();
+            var n = en.RetrieveFromDBSources();
 
             var tag1 = en.Tag1;
-            alert(tag1);
+
+            //            alert(tag1);
 
             //获得从表.
             var mapDtls = new Entities("BP.Sys.MapDtls");
@@ -43,15 +44,19 @@
 
             var html = "<table style='width:99%;'>";
             for (var i = 0; i < mapDtls.length; i++) {
+                var sql = "";
+                if (tag1 != "" && tag1 != null ) {
+                    sql = tag1.split("#")[i + 1].split("$")[1]; //分割字符串，获取sql语句
+                } 
 
                 var dtl = mapDtls[i];
                 html += "<tr>";
-                html += "<th>"+dtl.No+" - "+dtl.Name ;
+                html += "<th>" + dtl.No + " - " + dtl.Name;
                 html += "</tr>";
 
                 html += "<tr>";
                 html += "<td>";
-                html += "<textarea id='" + dtl.No + "' style='width:99%;' >" + tag1 + "</textarea>";
+                html += "<textarea id='" + dtl.No + "' style='width:99%;' >" + sql + "</textarea>";
                 html += "</td>";
                 html += "</tr>";
 
@@ -72,7 +77,7 @@
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = refPK + "_FullData";
             en.SetPKVal(en.MyPK);
-            var i = en.RetrieveFromDBSources();
+            var n = en.RetrieveFromDBSources();
             en.FK_MapData = frmID;
             en.ExtType = "FullData";
 
@@ -94,11 +99,7 @@
             }
             en.Tag1 = tag1;
 
-            alert(tag1);
-
-
-
-            if (i == 0)
+            if (n == 0)
                 en.Insert();
             else
                 en.Update();
@@ -116,7 +117,7 @@
     <fieldset>
         <legend>帮助.</legend>
         <ul>
-            <li>填充主表的SQL, </li>
+            <li>填充从表的SQL, </li>
             <li>必须返回一行数据.</li>
         </ul>
     </fieldset>

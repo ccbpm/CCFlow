@@ -426,31 +426,30 @@ function Save() {
     }
 
     var json = getFormData(true, true);
-    //alert(json);
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    handler.AddUrlData(json);
+    $.each(params.split("&"), function (i, o) {
+        var param = o.split("=");
+        if (param.length == 2 && validate(param[1])) {
+            handler.AddPara(param[0], decodeURIComponent(param[1], true));
+        } else {
+            handler.AddPara(param[0], "");
+        }
+    });
     var data = handler.DoMethodReturnString("Save"); //执行保存方法.
-//    $.ajax({
-//        type: 'post',
-//        async: true,
-//        data: json,
-//        url: MyFlow + "?DoType=Save",
-//        dataType: 'html',
-//        success: function (data) {
-            setToobarEnable();
-            //刷新 从表的IFRAME
-            var dtls = $('.Fdtl');
-            $.each(dtls, function (i, dtl) {
-                $(dtl).attr('src', $(dtl).attr('src'));
-            });
 
-            if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-                $('#Message').html(data.substring(4, data.length));
-                $('#MessageDiv').modal().show();
-            }
-//        }
-//    });
+    setToobarEnable();
+    //刷新 从表的IFRAME
+    var dtls = $('.Fdtl');
+    $.each(dtls, function (i, dtl) {
+        $(dtl).attr('src', $(dtl).attr('src'));
+    });
+
+    if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
+        $('#Message').html(data.substring(4, data.length));
+        $('#MessageDiv').modal().show();
+    }
+
     
 }
 

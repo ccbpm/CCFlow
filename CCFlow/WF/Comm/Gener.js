@@ -2301,3 +2301,14 @@ function SFTaleHandler(url) {
 
     return jsonString;
 }
+
+function validate(s) {
+    if (s == null || typeof s === "undefined") {
+        return false;
+    }
+    s = s.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+    if (s == "" || s == "null" || s == "undefined") {
+        return false;
+    }
+    return true;
+}

@@ -453,11 +453,17 @@ function Save(scope) {
         return false;
     }
 
-    // setToobarDisiable();
-
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddPara("OID", pageData.OID);
-    handler.AddFormData();
+    var params = getFormData(true, true);
+    $.each(params.split("&"), function (i, o) {
+        var param = o.split("=");
+        if (param.length == 2 && validate(param[1])) {
+            handler.AddPara(param[0], decodeURIComponent(param[1], true));
+        } else {
+            handler.AddPara(param[0], "");
+        }
+    });
     handler.AddPara("FK_MapData", pageData.FK_MapData);
     var data = handler.DoMethodReturnString("FrmGener_Save");
 

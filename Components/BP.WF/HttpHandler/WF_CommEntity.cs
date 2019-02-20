@@ -226,6 +226,37 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
             }
 
+            foreach (Attr attr in dtl.EnMap.Attrs)
+            {
+                if (attr.IsRefAttr == true)
+                    continue;
+
+                if (DataType.IsNullOrEmpty(attr.UIBindKey) || attr.UIBindKey.Length <= 10)
+                    continue;
+
+                if (attr.UIIsReadonly == true)
+                    continue;
+
+                if (attr.UIBindKey.Contains("SELECT") == true || attr.UIBindKey.Contains("select") == true)
+                {
+                    /*是一个sql*/
+                    string sqlBindKey = attr.UIBindKey.Clone() as string;
+                    sqlBindKey = BP.WF.Glo.DealExp(sqlBindKey, null, null);
+
+                    DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);
+                    dt.TableName = attr.Key;
+
+                    //@杜. 翻译当前部分.
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    {
+                        dt.Columns["NO"].ColumnName = "No";
+                        dt.Columns["NAME"].ColumnName = "Name";
+                    }
+
+                    ds.Tables.Add(dt);
+                }
+            }
+
             string enumKeys = "";
             foreach (Attr attr in dtl.EnMap.Attrs)
             {

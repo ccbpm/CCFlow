@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>为下拉框设置联动填充其他控件</title>
+    <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        var mapExt;
+        $(function () {
+
+
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var frmID = GetQueryString("FK_MapData");
+
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+
+            var isEnable = en.GetPara("IsFullData");
+
+            if (isEnable == "" || isEnable == 0)
+                isEnable = false;
+            else
+                isEnable = true;
+
+            //设置那个单选按钮可以被选择。
+
+            return;
+
+            //            $("#Msg").html("");
+        });
+  
+    </script>
+</head>
+<body>
+    <form id="cc">
+
+<table style="width:99%;">
+<caption> 设置下拉框在值变化后，填充其他控件与从表 </caption>
+<tr>
+<td>
+
+  <fieldset>
+        <legend>[]不启用</legend>ssss
+    </fieldset>
+
+    <fieldset>
+        <legend>[]启用</legend>
+        <ul>
+            <li>xxxxxx</li>
+            <li>xxxxxx</li>
+            <li>xxxxxx</li>
+        </ul>
+    </fieldset>
+</td>
+</tr>
+
+<tr>
+<td>
+
+
+    <input type="button" value="保存" onclick="Save();" />
+    <input type="button" value="设置填充" onclick="Set();" />
+
+</td>
+</tr>
+</table>
+  
+
+
+    <div id="Msg">
+    </div>
+    <script type="text/javascript">
+
+
+        function Save() {
+
+            $("#Msg").html("正在保存,请稍后......");
+
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var frmID = GetQueryString("FK_MapData");
+
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+
+            var isEnable = false;
+
+            if (isEnable == true)
+                en.SetPara("IsFullData", 1);
+            else
+                en.SetPara("IsFullData", 0);
+
+            en.Update();
+            window.location.href = "../FullData/Main.htm?RefPK=DDLFullCtrl_" + en.MyPK + "&KeyOfEn=" + en.AttrOfOper + "&FK_MapData=" + en.FK_MapData;
+            return;
+        }
+    </script>
+    </form>
+</body>
+</html>

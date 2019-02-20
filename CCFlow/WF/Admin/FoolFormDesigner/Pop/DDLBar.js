@@ -14,7 +14,6 @@ function InitBar(optionKey) {
     html += "<option value='PopTableList' >单实体平铺</option>";
     html += "<option value='PopTableSearch' >表格条件查询</option>";
     html += "<option value='PopSelfUrl' >自定义URL</option>"; 
-
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";

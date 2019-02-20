@@ -940,15 +940,14 @@
 
         //选项 导入导出功能.
         function Option(impModel) {
-
+            // 0 不导入   1 表格查询模式导入（高级） 2 Excel文件导入 3单据模式 4 表格查询模式导入（简洁）
             if (impModel == 0) {
                 alert("请配置导入方式。");
             }
 
-            //SQL\JSON导入方式
+            //表格查询模式导入
             if (impModel == 1) {
                 var url = window.location.href;
-                //url = url.replace('Dtl.htm', 'DtlOpt.htm');
                 url = url.replace('Dtl.htm', 'DtlImp.htm');
             }
 
@@ -958,13 +957,12 @@
                 url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
             }
 
-            //SQL\JSON导入方式
+            //单据模式
             if (impModel == 3) {
                 var url = window.location.href;
-                //url = url.replace('Dtl.htm', 'DtlOpt.htm');
-                url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
-                url = url.replace('Dtl2017.htm', 'DtlImpByExcel.htm');
-                url = url.replace('Dtl2018.htm', 'DtlImpByExcel.htm');
+                url = url.replace('Dtl.htm', 'DtlImpByBill.htm');
+                url = url.replace('Dtl2017.htm', 'DtlImpByBill.htm');
+                url = url.replace('Dtl2018.htm', 'DtlImpByBill.htm');
             }
 
 
@@ -1043,8 +1041,6 @@
             var tr = $($('#tableBody tbody tr')[rowIndex]);
             var tdArr = tr.children();
             var trData = tr.data().data;
-            //input text
-            //select
             //循环  td
             $.each(tdArr, function (i, tdObj) {
                 tdObj = $(tdObj);
@@ -1373,13 +1369,7 @@
                 InitPage();
             }
         }
-        //        $(function () {
-        //            var bodyHeight = $(document).height();
-        //            var headHeight = $("#dtlDiv div table thead").height();
-        //            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
-        //            $("#dtlDiv").height(bodyHeight - 35);
-
-        //        });
+      
 
 
     </script>

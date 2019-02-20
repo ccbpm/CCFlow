@@ -156,6 +156,12 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "填充其他控件v2019";
+                rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl2019()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "编辑枚举值";
                 rm.ClassMethodName = this.ToString() + ".DoSysEnum()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -236,6 +242,11 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
+         public string DoDDLFullCtrl2019()
+        {
+            return "../../Admin/FoolFormDesigner/DDLSetting/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+
         /// <summary>
         /// 设置自动填充
         /// </summary>
@@ -258,8 +269,9 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
+           return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
+       
         #endregion 方法执行.
     }
     /// <summary>

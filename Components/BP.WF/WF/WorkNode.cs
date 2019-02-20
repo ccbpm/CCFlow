@@ -4499,7 +4499,11 @@ namespace BP.WF
 				    md.No = item.FK_Frm;
 				    md.Retrieve();
 				     MapAttrs mapAttrs = md.MapAttrs;
-				      Row row = this.HisWork.Row;
+                     //主表实体.
+                     GEEntity en = new GEEntity(item.FK_Frm);
+                     en.OID=this.WorkID;
+                     en.RetrieveFromDBSources();
+                     Row row = en.Row;
 				     if (item.FrmSln == FrmSln.Self) {
 					    // 查询出来自定义的数据.
 					    FrmFields ffs1 = new FrmFields();
@@ -4620,8 +4624,11 @@ namespace BP.WF
                         ps.Add("FK_MapData", "ND" + this.HisNode.NodeID);
                         ps.Add("FK_FrmAttachment", ath.MyPK);
                         ps.Add("RefPKVal", this.WorkID);
-                        if (DBAccess.RunSQLReturnValInt(ps) == 0)
+                        int count = DBAccess.RunSQLReturnValInt(ps);
+                        if (count == 0)
                             err += "@您没有上传附件:" + ath.Name;
+                        if(ath.NumOfUpload >count)
+                            err += "@您上传的附件数量小于最低上传数量要求";
                     }
 
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.EverySortNoteEmpty)
@@ -5106,11 +5113,12 @@ namespace BP.WF
                         }
                     }
 
+                    /*只有一个待办,说明自己就是最后的一个人.*/
                     if (num == 1)
                     {
                         this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                         this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
-                        return false; /*只有一个待办,说明自己就是最后的一个人.*/
+                        return false; 
                     }
 
                     if (SystemConfig.CustomerNo == "LIMS")
@@ -5972,8 +5980,7 @@ namespace BP.WF
                             JumpToEmp = this.HisGenerWorkFlow.HuiQianSendToEmps;
                         }
                     }
-                    //this.HisGenerWorkFlow.SendToEmps = jumpToEmp;
-                    //this.HisGenerWorkFlow.Update();
+
                 }
             }
 

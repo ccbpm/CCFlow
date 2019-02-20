@@ -536,7 +536,8 @@ namespace BP.WF
                 strs = Glo.DealExp(strs, rpt, "err");
                 if (strs.Contains("@") == true)
                 {
-                    msg = "@错误:焦点字段（" + nd.FocusField + "）在节点(step:" + nd.Step + " 名称:" + nd.Name + ")属性里的设置已无效，表单里不存在该字段.";
+                    //@shilianyu. 
+                    msg = "@警告:焦点字段（" + nd.FocusField + "）在节点(step:" + nd.Step + " 名称:" + nd.Name + ")属性里的设置已无效，表单里不存在该字段.";
                     this.AddMsgError(msg, nd);
                 }
 

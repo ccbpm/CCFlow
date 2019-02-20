@@ -10,6 +10,10 @@ namespace BP.Sys
     public class MapExtXmlList
     {
         /// <summary>
+        /// 转载数据
+        /// </summary>
+        public const string FullData = "FullData";
+        /// <summary>
         /// 求和
         /// </summary>
         public const string AutoFull = "AutoFull";

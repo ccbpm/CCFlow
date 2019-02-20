@@ -336,7 +336,7 @@ namespace BP.WF
 
                 string sql = "";
                 int num = 0;
-                for (int i = 2; i < 7; i++)
+                for (int i = 2; i < 9; i++)
                 {
                     if (billNo.Contains("{LSH" + i + "}") == false)
                         continue;
@@ -357,7 +357,7 @@ namespace BP.WF
                 string lsh; //流水号设置码
                 int lshIdx = -1;    //流水号设置码所在位置
 
-                for (int i = 2; i < 7; i++)
+                for (int i = 2; i < 9; i++)
                 {
                     lsh = "{LSH" + i + "}";
 

@@ -852,6 +852,8 @@ namespace BP.Sys
         {
             switch (this.ExtType)
             {
+                case MapExtXmlList.FullData:
+                    break;
                 case MapExtXmlList.ActiveDDL:
                     this.MyPK = MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;

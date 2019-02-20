@@ -17,6 +17,7 @@ function InitBar(optionKey) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<input type='button' value='删除' id='Btn_Delete' name='Btn_Delete' onclick='return Delete()' />"
     html += "<input  id='Btn_FullData' type=button onclick='FullData()' value='填充设置' />";
     html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
 

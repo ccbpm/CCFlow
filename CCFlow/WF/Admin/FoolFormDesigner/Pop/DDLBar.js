@@ -26,11 +26,11 @@ function InitBar(optionKey) {
 }
 
 function FullData() {
-
-    var myPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+    var optionKey = $("#changBar").val();
+    var myPK = optionKey+"_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
     var url = "../FullData/Default.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK;
 
-    window.open(url);
+    window.location.href = url;
 
 }
 
@@ -43,7 +43,7 @@ function HelpOnline() {
 function changeOption() {
 
     var fk_MapData = GetQueryString("FK_MapData");
-    var KeyOfEn = GetQueryString("RefP");
+    var KeyOfEn = GetQueryString("KeyOfEn");
 
     var obj = document.getElementById("changBar");
     var sele = obj.options;

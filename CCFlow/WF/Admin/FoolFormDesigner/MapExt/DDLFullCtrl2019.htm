@@ -23,16 +23,18 @@
 
             var isEnable = en.GetPara("IsFullData");
 
-            if (isEnable == "" || isEnable == 0)
-                isEnable = false;
-            else
-                isEnable = true;
+            if (isEnable == "" || isEnable == 0) {
+                $("#Btn_FullData").attr("disabled", true);
+                $("#RB_IsEnableJS_0").attr("checked", true);
+            } else {
 
+                $("#Btn_FullData").removeAttr("disabled");
+                $("#RB_IsEnableJS_1").attr("checked", true);
+            }
             //设置那个单选按钮可以被选择。
 
             return;
 
-            //            $("#Msg").html("");
         });
   
     </script>
@@ -46,11 +48,15 @@
 <td>
 
   <fieldset>
-        <legend>[]不启用</legend>ssss
+        <legend><input type="radio" value="0" id="RB_IsEnableJS_0"  name="RB_IsEnableJS"  checked="checked"/>
+        <label for="RB_IsEnableJS_0">不启用</label>
+        </legend>ssss
     </fieldset>
 
     <fieldset>
-        <legend>[]启用</legend>
+        <legend><input type="radio" value="1" id="RB_IsEnableJS_1"  name="RB_IsEnableJS" />
+        <label for="RB_IsEnableJS_1">启用 </label>
+        </legend>
         <ul>
             <li>xxxxxx</li>
             <li>xxxxxx</li>
@@ -65,7 +71,7 @@
 
 
     <input type="button" value="保存" onclick="Save();" />
-    <input type="button" value="设置填充" onclick="Set();" />
+    <input type="button" value="设置填充" id="Btn_FullData"  onclick="Set();" />
 
 </td>
 </tr>
@@ -80,21 +86,31 @@
 
         function Save() {
 
-            $("#Msg").html("正在保存,请稍后......");
-
             var keyOfEn = GetQueryString("KeyOfEn");
             var frmID = GetQueryString("FK_MapData");
 
             var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
 
-            var isEnable = false;
-
-            if (isEnable == true)
+            var isEnable = $("input[name='RB_IsEnableJS']:checked").val();
+            if (isEnable == "1") {
                 en.SetPara("IsFullData", 1);
-            else
+                $("#Btn_FullData").removeAttr("disabled");
+            } else {
                 en.SetPara("IsFullData", 0);
-
+                $("#Btn_FullData").attr("disabled", true);
+            }
             en.Update();
+            window.location.href = window.location.href;
+            return;
+        }
+
+        function Set() {
+
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var frmID = GetQueryString("FK_MapData");
+
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+            
             window.location.href = "../FullData/Main.htm?RefPK=DDLFullCtrl_" + en.MyPK + "&KeyOfEn=" + en.AttrOfOper + "&FK_MapData=" + en.FK_MapData;
             return;
         }

@@ -25,10 +25,10 @@ function HelpOnline() {
 }
 
 function Back() {
-    var myPK = GetQueryString('MyPK');
-    var refPK = GetQueryString("RefPK");
-    var keyOfEn = refPK.split("_")[2];
-    url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + keyOfEn;
+//    var myPK = GetQueryString('MyPK');
+//    var refPK = GetQueryString("RefPK");
+//    var keyOfEn = refPK.split("_")[2];
+    url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn");
 
     window.location.href = url;
     return;
@@ -47,7 +47,7 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + fk_mapData;
+    window.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + GetQueryString('KeyOfEn');
 }
 
 function GetUrl(popModel) {

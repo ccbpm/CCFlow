@@ -13,14 +13,14 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-
+            var keyOfEn = GetQueryString("KeyOfEn");
             var refPK = GetQueryString("RefPK");
             var frmID = GetQueryString("FK_MapData");
             if (frmID == null)
                 frmID = "ND101";
 
             var url = "Main.htm";
-            document.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + frmID;
+            document.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + frmID + "&KeyOfEn=" + keyOfEn;
 
         });
 

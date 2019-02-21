@@ -4498,11 +4498,15 @@ namespace BP.WF
 				    MapData md = new MapData();
 				    md.No = item.FK_Frm;
 				    md.Retrieve();
+                    if (md.HisFrmType != FrmType.FoolForm && md.HisFrmType != FrmType.FreeFrm)
+                        continue;
+
 				     MapAttrs mapAttrs = md.MapAttrs;
                      //主表实体.
                      GEEntity en = new GEEntity(item.FK_Frm);
                      en.OID=this.WorkID;
                      en.RetrieveFromDBSources();
+
                      Row row = en.Row;
 				     if (item.FrmSln == FrmSln.Self) {
 					    // 查询出来自定义的数据.

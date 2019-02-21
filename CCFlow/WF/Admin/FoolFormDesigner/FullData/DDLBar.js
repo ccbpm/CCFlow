@@ -27,9 +27,15 @@ function HelpOnline() {
 function Back() {
 //    var myPK = GetQueryString('MyPK');
 //    var refPK = GetQueryString("RefPK");
-//    var keyOfEn = refPK.split("_")[2];
-    url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+    //    var keyOfEn = refPK.split("_")[2];
+    var extType = GetQueryString("ExtType");
+    if (extType == "AutoFull") {
+        var url = '../MapExt/DDLFullCtrl2019.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&ExtType=" + extType;
+    } else {
+        var url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn");
 
+    }
+  
     window.location.href = url;
     return;
 }

@@ -64,9 +64,9 @@ namespace CCFlow.WF.CCForm
                     {
                         string val = dr[item.Key].ToString();
                         if (val == "1")
-                            dr[item.Key + "Text"] = "[V]";
+                            dr[item.Key + "Text"] = "[√]";
                         else
-                            dr[item.Key + "Text"] = "[X]";
+                            dr[item.Key + "Text"] = "[×]";
                     }
                 }
             }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Web;
+using System.Data;
 using System.Web.Services;
 
 namespace ccbpm
@@ -14,11 +15,7 @@ namespace ccbpm
     [System.ComponentModel.ToolboxItem(false)]
     public class IndustrialAutomationWorkflowWSAPI : System.Web.Services.WebService
     {
-        [WebMethod]
-        public string HelloWorld()
-        {
-            return "Hello World";
-        }
+        #region 流程引擎操作相关.
         /// <summary>
         /// 创建WorkID
         /// </summary>
@@ -60,7 +57,9 @@ namespace ccbpm
             BP.WF.SendReturnObjs objs= BP.WF.Dev2Interface.Node_SendWork(flowNo,workid,ap.HisHT,null,toNodeID,toEmps);
             return objs.ToMsgOfSpecText(); //输出特殊的格式，让接受者解析.
         }
+        #endregion 流程引擎操作相关.
 
+        #region Port门户处理.
         /// <summary>
         /// 让用户登录
         /// </summary>
@@ -75,5 +74,33 @@ namespace ccbpm
                 return null;
             return BP.WF.Dev2Interface.Port_Login(userNo);
         }
+        /// <summary>
+        /// 退出
+        /// </summary>
+        [WebMethod]
+        public void Port_LoginOut()
+        {
+           BP.WF.Dev2Interface.Port_SigOut(); 
+        }
+        #endregion Port门户处理.
+
+
+        #region 主要的菜单列表.
+        /// <summary>
+        /// 获得待办
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sid">sid</param>
+        /// <returns>待办列表JSON</returns>
+        public string Node_Todolist(string userNo, string sid)
+        {
+            //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
+            if (BP.Web.WebUser.No != userNo)
+                BP.WF.Dev2Interface.Port_Login(userNo, sid);
+
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
     }
 }

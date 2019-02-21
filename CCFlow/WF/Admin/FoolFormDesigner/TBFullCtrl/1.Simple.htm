@@ -16,12 +16,27 @@
             InitBar("1");
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") ;
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
 
+            //去掉 ' 号。
+            var tag = mapExt.Doc;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
+
+            //按照文本计算.
+            $("#TB_Doc").val(tag);
+
+            //设置按钮是否可以用?
+            if (i == 0) {
+                $("#Btn_FullData").attr("disabled", true);
+            } else {
+                $("#Btn_FullData").removeAttr("disabled");
+            }
         });
 
         function Save() {
@@ -36,35 +51,18 @@
 
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            var n = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据.
 
             mapExt.ExtType = "TBFullCtrl";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
-
-
-            var err = "";
-
-            if (mapExt.GetPara("Title") == "")
-                err += '\t\n必填字段[标题]不能为空';
-
-            if (mapExt.Tag1 == "")
-                err += '\t\n必填字段[搜索数据源]不能为空';
-
-            if (mapExt.Tag2 == "")
-                err += '\t\n必填字段[左侧树列表数据源]不能为空';
-
-            if (mapExt.Tag == "")
-                err += '\t\n必填字段[数据列名与中文意思对照]不能为空';
-
-            if (mapExt.DBType == "")
-                err += '\t\n必填字段[数据源类型]不能为空';
-
-            var val = mapExt.Save();
-
-            // alert(val);
+            mapExt.FK_MapData = GetQueryString("FK_MapData");
+            var sql = $("#TB_Doc").val();
+            mapExt.Doc = sql; //设置主表的SQL.
+            if (mapExt.Update() == 0)
+                mapExt.Insert();
             window.location.href = window.location.href;
         }
        
@@ -97,13 +95,13 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
-                数据源
-            </td>
+            <th colspan="2">
+                数据源   <a href="javascript:ShowHidden('sqlexp')">帮助: </a>
+            </th>
         </tr>
         <tr>
             <td colspan="2">
-                执行数据源 <a href="javascript:ShowHidden('sqlexp')">帮助: </a>
+                
                 <div id='sqlexp' style='color: Gray; display: none'>
                     <ul>
                         <li>填充SQL帮助:</li>
@@ -111,16 +109,7 @@
                         <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
                         <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
                         <li>4. 比如:SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%' </li>
-                        <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
-                        <li>
-                            <img alt="" src="../Img/TBCtrlFull.png" /></li>
-                    </ul>
-                    <ul>
-                        <li>填充URL帮助:</li>
-                        <li>/DataUser/Handler.ashx?xxx=sss </li>
-                        <li>方法的格式为:</li>
-                        <li>MyFunName</li>
-                    </ul>
+                        
                 </div>
             </td>
         </tr>

@@ -17,30 +17,26 @@
 
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopBranchesAndLeafLazyLoad_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
-            // alert(mapExt.Tag);
-            //alert(mapExt.MyPK);
-
-            if (mapExt.GetPara("SelectType") == "")
-                mapExt.SetPara("SelectType", "1");
-
-            //alert(i);
+            
 
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
 
-            //基本属性.
-            // $("#TB_Title").val(mapExt.GetPara("Title"));
-            //p").val(mapExt.GetPara("SearchTip"));
-            // $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
-
+            //去掉 ' 号。
+            var Tag1 = mapExt.Tag1;
+            while (Tag1.indexOf('~') > 1) {
+                Tag1 = Tag1.replace("~", "'");
+            }
+            var Tag3 = mapExt.Tag3;
+            //按照文本计算.
+            $("#TB_Doc").val(Tag1);
+            $("#TB_Tag3").val(Tag3);
             //设置按钮是否可以用?
             if (i == 0) {
-                $("#Btn_Delete").attr("disabled", true);
                 $("#Btn_FullData").attr("disabled", true);
             } else {
-                $("#Btn_Delete").removeAttr("disabled");
                 $("#Btn_FullData").removeAttr("disabled");
             }
         });
@@ -55,42 +51,21 @@
             en.Update();
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") ;
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据.
 
-            //mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
-            //mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
-
-            //var val= $("#DDL_SelectType").val();
-            //alert(val);
-            //mapExt.SetPara("SelectType", val); //选择类型.
 
             mapExt.ExtType = "TBFullCtrl";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
-
-
-            var err = "";
-
-            if (mapExt.GetPara("Title") == "")
-                err += '\t\n必填字段[标题]不能为空';
-
-            if (mapExt.Tag1 == "")
-                err += '\t\n必填字段[搜索数据源]不能为空';
-
-            if (mapExt.Tag2 == "")
-                err += '\t\n必填字段[左侧树列表数据源]不能为空';
-
-            if (mapExt.Tag == "")
-                err += '\t\n必填字段[数据列名与中文意思对照]不能为空';
-
-            if (mapExt.DBType == "")
-                err += '\t\n必填字段[数据源类型]不能为空';
-
+            mapExt.FK_MapData = GetQueryString("FK_MapData");
+            var sql = $("#TB_Doc").val();
+            mapExt.Tag1 = sql; //设置主表的SQL.
+            if (mapExt.Update() == 0)
+                mapExt.Insert();
             var val = mapExt.Save();
-            // alert(val);
             window.location.href = window.location.href;
         }
        
@@ -137,15 +112,7 @@
                         <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
                         <li>4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM
                             WF_Emp WHERE No LIKE '@Key%' </li>
-                        <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
-                        <li>
-                            <img alt="" src="../Img/TBCtrlFull.png" /></li>
-                    </ul>
-                    <ul>
-                        <li>填充URL帮助:</li>
-                        <li>/DataUser/Handler.ashx?xxx=sss </li>
-                        <li>方法的格式为:</li>
-                        <li>MyFunName</li>
+                       
                     </ul>
                 </div>
             </td>

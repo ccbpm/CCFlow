@@ -6,7 +6,7 @@ function InitBar(optionKey) {
     html += "<select id='changBar' onchange='changeOption()'>";
 
     html += "<option value='0' >无,不设置(默认).</option>";
-    html += "<option value='1' >简介模式</option>";
+    html += "<option value='1' >简洁模式</option>";
     html += "<option value='2' >表格模式</option>";
     html += "</select >";
 
@@ -61,6 +61,7 @@ function GetUrl(popModel) {
             break;
         case "2":
             url = "2.Table.htm";
+            break;
         default:
             url = "0.None.htm";
             break;

@@ -163,6 +163,13 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "文本框自动完成2019";
+                rm.ClassMethodName = this.ToString() + ".DoTBFullCtrl2019()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "脚本验证";
                 rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -561,7 +568,10 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
         }
-
+        public string DoTBFullCtrl2019()
+        {
+            return "../../Admin/FoolFormDesigner/TBFullCtrl/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+        }
 
         /// <summary>
         /// 设置级联

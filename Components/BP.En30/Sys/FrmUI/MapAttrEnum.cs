@@ -21,7 +21,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return this.GetValStringByKey(MapAttrAttr.FK_MapData); 
+                return this.GetValStringByKey(MapAttrAttr.FK_MapData);
             }
             set
             {
@@ -57,7 +57,7 @@ namespace BP.Sys.FrmUI
             }
         }
         #endregion
-        
+
         #region 构造方法
         /// <summary>
         /// 控制权限
@@ -105,7 +105,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",
                     "SELECT  IntKey as No, Lab as Name FROM Sys_Enum where EnumKey='@UIBindKey'", true);
 
-              //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
+                //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
                  "@1=下拉框@3=单选按钮");
@@ -242,11 +242,10 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
-         public string DoDDLFullCtrl2019()
+        public string DoDDLFullCtrl2019()
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
-
         /// <summary>
         /// 设置自动填充
         /// </summary>
@@ -269,9 +268,9 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-           return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
-       
+
         #endregion 方法执行.
     }
     /// <summary>

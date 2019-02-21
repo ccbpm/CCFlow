@@ -27,9 +27,10 @@ function InitBar(optionKey) {
 }
 
 function FullData() {
+    var keyOfEn = GetQueryString("KeyOfEn");
     var optionKey = $("#changBar").val();
     var myPK = optionKey+"_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-    var url = "../FullData/Default.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK;
+    var url = "../FullData/Default.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn;
 
     window.location.href = url;
 

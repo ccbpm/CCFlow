@@ -53,6 +53,25 @@ namespace CCFlow.WF.CCForm
             dt.TableName = "Main";
             ds.Tables.Add(dt);
 
+            #region 处理bool类型.
+            foreach (Attr item in rpt.EnMap.Attrs)
+            {
+                if (item.MyDataType == DataType.AppBoolean)
+                {
+                    dt.Columns.Add(item.Key + "Text", typeof(string));
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string val = dr[item.Key].ToString();
+                        if (val == "1")
+                            dr[item.Key + "Text"] = "[V]";
+                        else
+                            dr[item.Key + "Text"] = "[X]";
+                    }
+                }
+            }
+            #endregion 处理bool类型.
+
             //把从表数据加入里面去.
             MapDtls dtls = new MapDtls("ND" + gwf.FK_Node);
             foreach (MapDtl item in dtls)

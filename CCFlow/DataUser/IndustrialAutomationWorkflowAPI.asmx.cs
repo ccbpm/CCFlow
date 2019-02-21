@@ -92,7 +92,7 @@ namespace ccbpm
         /// <param name="userNo">用户编号</param>
         /// <param name="sid">sid</param>
         /// <returns>待办列表JSON</returns>
-        public string Node_Todolist(string userNo, string sid)
+        public string DB_Todolist(string userNo, string sid)
         {
             //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
             if (BP.Web.WebUser.No != userNo)

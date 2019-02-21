@@ -147,6 +147,13 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "填充其他控件v2019";
+                rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl2019()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "外键表属性";
                 rm.ClassMethodName = this.ToString() + ".DoSFTable()";
@@ -192,6 +199,10 @@ namespace BP.Sys.FrmUI
         public string DoDDLFullCtrl()
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=DDLFullCtrl_" + this.FK_MapData + "_" + this.KeyOfEn;
+        }
+        public string DoDDLFullCtrl2019()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 设置下拉框显示过滤

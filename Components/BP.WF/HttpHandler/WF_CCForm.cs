@@ -229,6 +229,7 @@ namespace BP.WF.HttpHandler
                 case BP.Sys.MapExtXmlList.AutoFullDLL://填充下拉框
                 case BP.Sys.MapExtXmlList.TBFullCtrl: // 自动完成。
                 case BP.Sys.MapExtXmlList.DDLFullCtrl: // 级连ddl.
+                case BP.Sys.MapExtXmlList.FullData: // 填充其他控件.
                     switch (this.GetRequestVal("DoTypeExt"))
                     {
                         case "ReqCtrl":

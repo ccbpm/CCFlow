@@ -86,6 +86,22 @@ if (typeof DeliveryWay == "undefined") {
 }
 
 
+//投递方式
+if (typeof SelectorModel == "undefined") {
+    var SelectorModel = {}
+    SelectorModel.Station = 0,
+    SelectorModel.Dept = 1,
+    SelectorModel.Emp = 2,
+    SelectorModel.SQL = 3,
+    SelectorModel.SQLTemplate = 4,
+    SelectorModel.GenerUserSelecter = 5,
+    SelectorModel.DeptAndStation = 6,
+    SelectorModel.Url = 7,
+    SelectorModel.AccepterOfDeptStationEmp = 8,
+    SelectorModel.AccepterOfDeptStationOfCurrentOper = 9 
+}
+
+
 //前置导航
 if (typeof StartGuideWay == "undefined") {
     var StartGuideWay = {}

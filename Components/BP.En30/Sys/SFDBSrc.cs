@@ -666,6 +666,7 @@ namespace BP.Sys
             switch (dbType)
             {
                 case DBType.MSSQL:
+                case DBType.PostgreSQL:
                     return string.Format("SELECT (CASE s.xtype WHEN 'U' THEN 'TABLE' WHEN 'V' THEN 'VIEW' WHEN 'P' THEN 'PROCEDURE' ELSE 'OTHER' END) OTYPE FROM sysobjects s WHERE s.name = '{0}'", objName);
                 case DBType.Oracle:
                     return string.Format("SELECT uo.OBJECT_TYPE OTYPE FROM user_objects uo WHERE uo.OBJECT_NAME = '{0}'", objName.ToUpper());
@@ -673,8 +674,6 @@ namespace BP.Sys
                     return string.Format("SELECT (CASE t.TABLE_TYPE WHEN 'BASE TABLE' THEN 'TABLE' ELSE 'VIEW' END) OTYPE FROM information_schema.tables t WHERE t.TABLE_SCHEMA = '{1}' AND t.TABLE_NAME = '{0}'", objName, dbName);
                 case DBType.Informix:
                     return string.Format("SELECT (CASE s.tabtype WHEN 'T' THEN 'TABLE' WHEN 'V' THEN 'VIEW' ELSE 'OTHER' END) OTYPE FROM systables s WHERE s.tabname = '{0}'", objName);
-                case DBType.Sybase:
-                    return string.Format("");
                 case DBType.DB2:
                     return string.Format("");
                 case DBType.Access:

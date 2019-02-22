@@ -1416,6 +1416,8 @@ namespace BP.Sys
                         return BP.DA.DBType.Oracle;
                     case "MySQL":
                         return BP.DA.DBType.MySQL;
+                    case "PostgreSQL":
+                        return BP.DA.DBType.PostgreSQL;
                     case "Access":
                         return BP.DA.DBType.Access;
                     case "Informix":

@@ -50,9 +50,9 @@ namespace BP.DA
         /// </summary>
         Access,
         /// <summary>
-        /// Sybase
+        /// PostgreSQL 
         /// </summary>
-        Sybase,
+        PostgreSQL,
         /// <summary>
         /// DB2
         /// </summary>

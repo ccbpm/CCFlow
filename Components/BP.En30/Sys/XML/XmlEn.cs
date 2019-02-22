@@ -799,29 +799,4 @@ namespace BP.Sys.XML
             return dt;
         }
 	}
-
-	
-	public class DTSXml:BP.DTS.DataIOEn
-	{
-		public DTSXml()
-		{
-			this.Title="把xml数据调度到物理表中";
-			//this.HisDoType =BP.DTS.DoType.
-			//this.d
-		}
-		public override void Do()
-		{
-			ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.XML.XmlEns");
-			foreach(object obj in al)
-			{
-			    XmlEns en= (XmlEns)obj;
-				if (en.RefEns==null)
-					continue;
-
-				en.FillXmlDataIntoEntities( en.RefEns );
-			}
-			
-		}
-
-	}
 }

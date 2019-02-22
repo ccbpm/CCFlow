@@ -32,11 +32,5 @@ namespace BP.Port
             //Session.Add(key, Value);
         }
 	}
-	/// <summary>
-	/// Class1 的摘要说明。
-	/// </summary>
-	public class TaxCurrent
-	{
-
-	}
+ 
 }

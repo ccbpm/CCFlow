@@ -541,27 +541,7 @@ namespace BP.En
         }
         #endregion
 
-        #region 获取 GetDataIOEn
-        private static Hashtable Htable_DataIOEn;
-        /// <summary>
-        /// 得到一个实体
-        /// </summary>
-        /// <param name="className">类名称</param>
-        /// <returns>En</returns>
-        public static BP.DTS.DataIOEn GetDataIOEn(string className)
-        {
-            if (Htable_DataIOEn == null)
-            {
-                Htable_DataIOEn = new Hashtable();
-                string cl = "BP.DTS.DataIOEn";
-                ArrayList al = ClassFactory.GetObjects(cl);
-                foreach (BP.DTS.DataIOEn en in al)
-                    Htable_DataIOEn.Add(en.ToString(), en);
-            }
-            object tmp = Htable_DataIOEn[className];
-            return (tmp as BP.DTS.DataIOEn);
-        }
-        #endregion
+       
 
         #region 获取 GetMethod
         private static Hashtable Htable_Method;
@@ -715,18 +695,18 @@ namespace BP.En
         /// </summary>
         /// <param name="rpt2Base">类名称</param>
         /// <returns>BP.Rpt.Rpt2Base</returns>
-        public static BP.Rpt.Rpt2Base GetRpt2Base(string rpt2Base)
+        public static BP.Pub.Rpt2Base GetRpt2Base(string rpt2Base)
         {
             if (Htable_Rpt2Base == null)
             {
                 Htable_Rpt2Base = new Hashtable();
                 string cl = "BP.Rpt.Rpt2Base";
                 ArrayList al = ClassFactory.GetObjects(cl);
-                foreach (BP.Rpt.Rpt2Base en in al)
+                foreach (BP.Pub.Rpt2Base en in al)
                     Htable_Rpt2Base.Add(en.ToString(), en);
             }
             object tmp = Htable_Rpt2Base[rpt2Base];
-            return (tmp as BP.Rpt.Rpt2Base);
+            return (tmp as BP.Pub.Rpt2Base);
         }
         #endregion
 

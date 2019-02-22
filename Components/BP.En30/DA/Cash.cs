@@ -68,8 +68,6 @@ namespace BP.DA
                 val = null;
 
 
-
-
             if (val == null)
             {
                 string file = null;
@@ -78,11 +76,6 @@ namespace BP.DA
                 else
                     file = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + cfile;
 
-
-                if (SystemConfig.IsDebug)
-                {
-                    BP.Pub.RepBill.RepairBill(file);
-                }
                 try
                 {
                     StreamReader read = new StreamReader(file, System.Text.Encoding.ASCII); // 文件流.

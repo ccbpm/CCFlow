@@ -7,7 +7,7 @@ using BP.Web.Controls;
 using BP.Web;
 using BP.Sys;
 
-namespace BP.Rpt
+namespace BP.Pub
 {
     /// <summary>
     /// 显示类型.

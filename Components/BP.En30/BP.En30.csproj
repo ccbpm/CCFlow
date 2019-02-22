@@ -230,15 +230,23 @@
     <Compile Include="Controls30\Glo.cs" />
     <Compile Include="Controls30\NamesOfCheckBtn.cs" />
     <Compile Include="DA\AtPara.cs" />
-    <Compile Include="DA\DBAccessOfMSSQL1.cs" />
-    <Compile Include="DA\DBAccessOfOracle2.cs" />
+    <Compile Include="DA\DBAccessOfMSSQL1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DA\DBAccessOfMSSQL2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DA\DBAccessOfOracle1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DA\DBAccessOfOracle2.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DA\EncodingBP.cs" />
     <Compile Include="DA\DTTemp.cs" />
-    <Compile Include="DA\DBAccessOfOracle1.cs" />
-    <Compile Include="DA\DBAccessOfMSSQL2.cs" />
     <Compile Include="DA\JiaMi\ConfigInformation.cs" />
     <Compile Include="DA\JiaMi\decode.cs" />
     <Compile Include="DA\JiaMi\DecryptAndEncryptionHelper.cs" />
@@ -249,18 +257,17 @@
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Pub\ConfigEns.cs" />
     <Compile Include="Pub\Day.cs" />
-    <Compile Include="References\LitJSON\IJsonWrapper.cs" />
-    <Compile Include="References\LitJSON\JsonData.cs" />
-    <Compile Include="References\LitJSON\JsonException.cs" />
-    <Compile Include="References\LitJSON\JsonMapper.cs" />
-    <Compile Include="References\LitJSON\JsonMockWrapper.cs" />
-    <Compile Include="References\LitJSON\JsonReader.cs" />
-    <Compile Include="References\LitJSON\JsonWriter.cs" />
-    <Compile Include="References\LitJSON\Lexer.cs" />
-    <Compile Include="References\LitJSON\ParserToken.cs" />
-    <Compile Include="Rpt\Rpt2Base.cs" />
+    <Compile Include="References\IJsonWrapper.cs" />
+    <Compile Include="References\JsonData.cs" />
+    <Compile Include="References\JsonException.cs" />
+    <Compile Include="References\JsonMapper.cs" />
+    <Compile Include="References\JsonMockWrapper.cs" />
+    <Compile Include="References\JsonReader.cs" />
+    <Compile Include="References\JsonWriter.cs" />
+    <Compile Include="References\Lexer.cs" />
+    <Compile Include="References\ParserToken.cs" />
+    <Compile Include="Pub\Rpt2Base.cs" />
     <Compile Include="Service References\ccportal\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -376,7 +383,6 @@
     </Compile>
     <Compile Include="Tools\JSON.cs" />
     <Compile Include="DA\Log.cs" />
-    <Compile Include="DTS\DataToCash.cs" />
     <Compile Include="DA\Para.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -385,9 +391,6 @@
     </Compile>
     <Compile Include="Tools\SecurityDES.cs" />
     <Compile Include="Tools\StringExpressionCalculate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DTS\DataIOEn.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DTS\Enum.cs">

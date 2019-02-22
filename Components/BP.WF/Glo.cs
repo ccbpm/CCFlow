@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20180616;
+        public static int Ver = 20190222;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -194,6 +194,11 @@ namespace BP.WF
             //MapData md = new MapData();
             //md.FormJson = "";
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
+
+            #region 升级 填充数据.
+
+            #endregion 升级 填充数据.
+
 
             string msg = "";
             try

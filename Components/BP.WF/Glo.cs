@@ -197,7 +197,9 @@ namespace BP.WF
 
             #region 升级填充数据.
             MapExts exts = new MapExts();
-            exts.Retrieve(MapExtAttr.ExtType, " LIKE ", "Pop%");
+            QueryObject qo = new QueryObject(exts);
+            qo.AddWhere(MapExtAttr.ExtType, " LIKE ", "Pop%");
+            qo.DoQuery();
             foreach (MapExt ext in exts)
             {
                 string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
@@ -362,7 +364,7 @@ namespace BP.WF
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    sql = "UPDATE WF_GenerWorkFlow SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE WorkID=" + dr[0].ToString();
+                    sql = "UPDATE WF_GenerWorkFlow SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString().Replace("+"," ")) + " WHERE WorkID=" + dr[0].ToString();
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 

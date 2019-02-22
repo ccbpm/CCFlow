@@ -384,9 +384,11 @@ namespace BP.WF.HttpHandler
 
         public string TBFullCtrlDDL_Init()
         {
-            MapExt myme = new MapExt(this.MyPK);
+            MapExt myme = new MapExt();
+            myme.MyPK = this.MyPK;
+            myme.RetrieveFromDBSources();
             MapAttrs attrs = new MapAttrs(myme.FK_MapData);
-            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData,
                 MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
 
             string[] strs = myme.Tag.Split('$');

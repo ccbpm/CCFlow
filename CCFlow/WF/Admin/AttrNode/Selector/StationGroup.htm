@@ -1,0 +1,47 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script  type="text/javascript">
+        //初始化页面
+        $(function () {
+
+            var ens = new Entities("BP.WF.Template.NodeStations");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            //获得岗位集合.
+            var stas = new Entities("BP.Port.Depts");
+            stas.RetrieveAll();
+
+
+
+        });
+    
+        //保存
+       function Save() {
+           var nodeID = GetQueryString("FK_Node");
+           var node = new Entity("BP.WF.Node", nodeID);
+           node.DeliveryWay = DeliveryWay.ByStation;
+           node.Update();
+           alert("保存成功.");
+       }
+    </script>
+</head>
+<body >
+ 
+ <div id="info"> </div>
+
+
+</body>
+</html>

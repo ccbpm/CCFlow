@@ -28,15 +28,29 @@
             var nodeID = GetQueryString("FK_Node");
             url += '&NodeID=' + nodeID;
             OpenEasyUiDialogExt(url, '选择器', 950, 500, false);
+        }
+
+        //弹出新窗体
+        function OpenDialog2019() {
+
+            var url = "../Selector/Default.htm";
+            var nodeID = GetQueryString("FK_Node");
+            url += '?NodeID=' + nodeID;
+            OpenEasyUiDialogExt(url, '选择器', 950, 500, true);
 
         }
-        
+
 
        function Save() {
            var nodeID = GetQueryString("FK_Node");
            var node = new Entity("BP.WF.Node", nodeID);
            node.DeliveryWay = DeliveryWay.BySelected;
            node.Update();
+
+           var node = new Entity("BP.WF.Template.Selector", nodeID);
+           node.CopyForm();  //按照规则把数据放入到entity.
+           node.Update();
+
            alert("保存成功.");
        }
     </script>
@@ -45,8 +59,36 @@
 
 <div id="bar"> </div>
 
+<form id="cc" name="cc">
+
 <fieldset>
     <legend>设置</legend>
+    <ul>
+
+    <li>
+      <label> <input type="checkbox" id="CB_IsAutoLoadEmps" name="CB_IsAutoLoadEmps" /> 是否自动加载上一次选择的人员？</label>
+    </li>
+       <li>
+      <label> <input type="checkbox" id="CB_IsSimpleSelector" name="CB_IsSimpleSelector" /> 是否单项选择(只能选择一个人)？</label>
+    </li>
+
+       <li>
+      <label> <input type="checkbox" id="CB_IsEnableDeptRange" name="CB_IsEnableDeptRange" /> 是否启用部门搜索范围限定(对使用通用人员选择器有效)？</label>
+    </li>
+
+      <li>
+      <label> <input type="checkbox" id="CB_IsEnableStaRange" name="CB_IsEnableStaRange" />是否启用岗位搜索范围限定(对使用通用人员选择器有效)？</label>
+    </li>
+
+        <li>
+        
+            <a href="javascript:OpenDialog2019()">设置处理人可以选择的范围</a> 
+        </li>
+    </ul>
+</fieldset>
+
+<fieldset>
+    <legend>设置（旧版本）</legend>
     <ul>
         <li>
             <a href="javascript:OpenDialog()">设置处理人可以选择的范围</a> 
@@ -62,5 +104,7 @@
         <li >特别说名:<font color=red> 如果当前节点为开始节点，所有的人员都可以发起。</font></li>
     </ul>
 </fieldset>
+
+</form>
 </body>
 </html>

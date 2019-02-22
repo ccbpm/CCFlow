@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var node = new Entity("BP.WF.Node");
+            node.NodeID = GetQueryString("FK_Node");
+            node.Retrieve();
+
+            var url = '';
+            switch (parseInt(node.DeliveryWay)) {
+                case DeliveryWay.ByStation:
+                    //Bind_1_ByStation();
+                    url = "0.ByStation.htm";
+                    break;
+                case DeliveryWay.ByDept:
+                    //Bind_1_ByStation();
+                    url = "1.ByDept.htm";
+                    break;
+                case DeliveryWay.BySQL:
+                    //Bind_1_ByStation();
+                    url = "2.BySQL.htm";
+                    break;
+                case DeliveryWay.ByBindEmp:
+                    url = "3.ByBindEmp.htm";
+                    break;
+                case DeliveryWay.BySelected:
+                    url = "4.BySelected.htm";
+                    break;
+                case DeliveryWay.ByPreviousNodeFormEmpsField:
+                    url = "5.ByPreviousNodeFormEmpsField.htm";
+                    break;
+                case DeliveryWay.ByPreviousNodeEmp:
+                    url = "6.ByPreviousNodeEmp.htm";
+                    break;
+                case DeliveryWay.ByStarter:
+                    url = "7.ByStarter.htm";
+                    break;
+                case DeliveryWay.BySpecNodeEmp:
+                    url = "8.BySpecNodeEmp.htm";
+                    break;
+                case DeliveryWay.ByDeptAndStation:
+                    url = "9.ByDeptAndStation.htm";
+                    break;
+                case DeliveryWay.ByStationAndEmpDept:
+                    url = "10.ByStationAndEmpDept.htm";
+                    break;
+                case DeliveryWay.BySpecNodeEmpStation:
+                    url = "11.BySpecNodeEmpStation.htm";
+                    break;
+                case DeliveryWay.BySQLAsSubThreadEmpsAndData:
+                    url = "12.BySQLAsSubThreadEmpsAndData.htm";
+                    break;
+                case DeliveryWay.ByDtlAsSubThreadEmps:
+                    url = "13.ByDtlAsSubThreadEmps.htm";
+                    break;
+                case DeliveryWay.ByStationOnly:
+                    url = "14.ByStationOnly.htm";
+                    break;
+                case DeliveryWay.ByFEE:
+                    url = "15.ByFEEp.htm";
+                    break;
+                case DeliveryWay.BySetDeptAsSubthread:
+                    url = "16.BySetDeptAsSubthread.htm";
+                    break;
+                case DeliveryWay.BySQLTemplate:
+                    url = "17.BySQLTemplate.htm";
+                    break;
+                case DeliveryWay.ByFromEmpToEmp:
+                    url = "18.ByFromEmpToEmp.htm";
+                    break;
+                case DeliveryWay.ByStationForPrj:
+                    url = "20.ByStationForPrj.htm";
+                    break;
+                case DeliveryWay.BySelectedForPrj:
+                    url = "21.BySelectedForPrj.htm";
+                    break;
+                case DeliveryWay.ByCCFlowBPM:
+                    url = "100.ByCCFlowBPM.htm";
+                    break;
+                case DeliveryWay.ByCCFlowBPM:
+                    url = "100.ByCCFlowBPM.htm";
+                    break;
+                default:
+                    url = "0.ByStation.htm";
+                    break;
+            }
+
+            document.location.href = url + "?FK_Node=" + node.NodeID;
+        });
+
+        function Bind_1_ByStation() {
+
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

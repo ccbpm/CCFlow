@@ -425,7 +425,7 @@ function Save() {
         }
     }
 
-    var json = getFormData(true, true);
+    var params = getFormData(true, true);
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     $.each(params.split("&"), function (i, o) {

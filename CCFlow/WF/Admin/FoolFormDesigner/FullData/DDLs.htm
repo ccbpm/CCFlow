@@ -26,7 +26,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", frmID);
             handler.AddPara("KeyOfEn", keyOfEn);
-            handler.AddPara("MyPK", refPK);
+            handler.AddPara("MyPK", thisPK);
             var data = handler.DoMethodReturnString("TBFullCtrlDDL_Init");
 
             if (data.indexOf('err@') == 0) {

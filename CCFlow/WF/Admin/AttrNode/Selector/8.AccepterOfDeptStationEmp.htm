@@ -18,7 +18,7 @@
     <script  type="text/javascript">
 
         $(function () {
-            InitBar(DeliveryWay.BySpecNodeEmp);
+            InitBar(SelectorModel.AccepterOfDeptStationEmp);
             var html = "";
             var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
             var nodes = new Entities("BP.WF.Nodes");
@@ -42,7 +42,7 @@
                 var nodeID = mynd.NodeID;
                 var nodeName = mynd.Name;
                 //判定是否是改选择方式
-                if (nd.DeliveryWay == DeliveryWay.BySpecNodeEmp) {
+                if (nd.SelectorModel == SelectorModel.BySpecNodeEmp) {
                     for (var j = 0; j < strList.length; j++) {
                         if (nodeID == strList[j]) {
                             checkFlag = true;
@@ -80,7 +80,7 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.BySpecNodeEmp;
+            node.SelectorModel = SelectorModel.BySpecNodeEmp;
             var object = document.getElementsByName("RB_NodeNo");
             var DeliveryParas = "";
             for (var i = 0; i < object.length; i++) {

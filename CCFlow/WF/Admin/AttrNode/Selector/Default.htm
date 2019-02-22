@@ -14,85 +14,85 @@
         $(function () {
 
             var node = new Entity("BP.WF.Node");
-            node.NodeID = GetQueryString("FK_Node");
+            node.NodeID = GetQueryString("NodeID");
             node.Retrieve();
 
             var url = '';
-            switch (parseInt(node.DeliveryWay)) {
-                case DeliveryWay.ByStation:
+            switch (parseInt(node.SelectorModel)) {
+                case SelectorModel.Station:
                     //Bind_1_ByStation();
-                    url = "0.ByStation.htm";
+                    url = "0.Station.htm";
                     break;
-                case DeliveryWay.ByDept:
+                case SelectorModel.Dept:
                     //Bind_1_ByStation();
-                    url = "1.ByDept.htm";
+                    url = "1.Dept.htm";
                     break;
-                case DeliveryWay.BySQL:
+                case SelectorModel.SQL:
                     //Bind_1_ByStation();
-                    url = "2.BySQL.htm";
+                    url = "2.SQL.htm";
                     break;
-                case DeliveryWay.ByBindEmp:
-                    url = "3.ByBindEmp.htm";
+                case SelectorModel.Emp:
+                    url = "3.Emp.htm";
                     break;
-                case DeliveryWay.BySelected:
+                case SelectorModel.BySelected:
                     url = "4.BySelected.htm";
                     break;
-                case DeliveryWay.ByPreviousNodeFormEmpsField:
+                case SelectorModel.ByPreviousNodeFormEmpsField:
                     url = "5.ByPreviousNodeFormEmpsField.htm";
                     break;
-                case DeliveryWay.ByPreviousNodeEmp:
+                case SelectorModel.ByPreviousNodeEmp:
                     url = "6.ByPreviousNodeEmp.htm";
                     break;
-                case DeliveryWay.ByStarter:
+                case SelectorModel.ByStarter:
                     url = "7.ByStarter.htm";
                     break;
-                case DeliveryWay.BySpecNodeEmp:
+                case SelectorModel.BySpecNodeEmp:
                     url = "8.BySpecNodeEmp.htm";
                     break;
-                case DeliveryWay.ByDeptAndStation:
-                    url = "9.ByDeptAndStation.htm";
+                case SelectorModel.DeptAndStation:
+                    url = "9.DeptAndStation.htm";
                     break;
-                case DeliveryWay.ByStationAndEmpDept:
-                    url = "10.ByStationAndEmpDept.htm";
+                case SelectorModel.StationAndEmpDept:
+                    url = "10.StationAndEmpDept.htm";
                     break;
-                case DeliveryWay.BySpecNodeEmpStation:
+                case SelectorModel.BySpecNodeEmpStation:
                     url = "11.BySpecNodeEmpStation.htm";
                     break;
-                case DeliveryWay.BySQLAsSubThreadEmpsAndData:
-                    url = "12.BySQLAsSubThreadEmpsAndData.htm";
+                case SelectorModel.SQLAsSubThreadEmpsAndData:
+                    url = "12.SQLAsSubThreadEmpsAndData.htm";
                     break;
-                case DeliveryWay.ByDtlAsSubThreadEmps:
+                case SelectorModel.ByDtlAsSubThreadEmps:
                     url = "13.ByDtlAsSubThreadEmps.htm";
                     break;
-                case DeliveryWay.ByStationOnly:
-                    url = "14.ByStationOnly.htm";
+                case SelectorModel.StationOnly:
+                    url = "14.StationOnly.htm";
                     break;
-                case DeliveryWay.ByFEE:
+                case SelectorModel.ByFEE:
                     url = "15.ByFEEp.htm";
                     break;
-                case DeliveryWay.BySetDeptAsSubthread:
+                case SelectorModel.BySetDeptAsSubthread:
                     url = "16.BySetDeptAsSubthread.htm";
                     break;
-                case DeliveryWay.BySQLTemplate:
-                    url = "17.BySQLTemplate.htm";
+                case SelectorModel.SQLTemplate:
+                    url = "17.SQLTemplate.htm";
                     break;
-                case DeliveryWay.ByFromEmpToEmp:
+                case SelectorModel.ByFromEmpToEmp:
                     url = "18.ByFromEmpToEmp.htm";
                     break;
-                case DeliveryWay.ByStationForPrj:
-                    url = "20.ByStationForPrj.htm";
+                case SelectorModel.StationForPrj:
+                    url = "20.StationForPrj.htm";
                     break;
-                case DeliveryWay.BySelectedForPrj:
+                case SelectorModel.BySelectedForPrj:
                     url = "21.BySelectedForPrj.htm";
                     break;
-                case DeliveryWay.ByCCFlowBPM:
+                case SelectorModel.ByCCFlowBPM:
                     url = "100.ByCCFlowBPM.htm";
                     break;
-                case DeliveryWay.ByCCFlowBPM:
+                case SelectorModel.ByCCFlowBPM:
                     url = "100.ByCCFlowBPM.htm";
                     break;
                 default:
-                    url = "0.ByStation.htm";
+                    url = "0.Station.htm";
                     break;
             }
 

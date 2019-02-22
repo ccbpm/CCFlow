@@ -18,11 +18,11 @@
     <script  type="text/javascript">
         //页面初始化
         $(function () {
-            InitBar(DeliveryWay.BySQL);
+            InitBar(SelectorModel.SQL);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
 
-            if (node.DeliveryWay == DeliveryWay.BySQL) {
+            if (node.SelectorModel == SelectorModel.SQL) {
                 document.getElementById("RB_BySQL").value = node.DeliveryParas;
             }
         });
@@ -37,7 +37,7 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.BySQL;
+            node.SelectorModel = SelectorModel.SQL;
             var DeliveryParas = document.getElementById("RB_BySQL").value;
             node.DeliveryParas = DeliveryParas;
             node.Update();

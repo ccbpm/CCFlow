@@ -86,8 +86,8 @@ if (typeof DeliveryWay == "undefined") {
 }
 
 
-//投递方式
-if (typeof SelectorModel == "undefined") {
+//选择人接受范围限定规则.
+if (typeof SelectorModel == "undefined") { 
     var SelectorModel = {}
     SelectorModel.Station = 0,
     SelectorModel.Dept = 1,
@@ -100,7 +100,6 @@ if (typeof SelectorModel == "undefined") {
     SelectorModel.AccepterOfDeptStationEmp = 8,
     SelectorModel.AccepterOfDeptStationOfCurrentOper = 9 
 }
-
 
 //前置导航
 if (typeof StartGuideWay == "undefined") {

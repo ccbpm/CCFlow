@@ -17,12 +17,12 @@
 
     <script  type="text/javascript">
         $(function () {
-            InitBar(DeliveryWay.ByStarter);
+            InitBar(SelectorModel.Url);
         });
        function Save() {
            var nodeID = GetQueryString("FK_Node");
            var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.ByStarter;
+           node.SelectorModel = SelectorModel.ByStarter;
            node.Update();
            alert("保存成功.");
        }

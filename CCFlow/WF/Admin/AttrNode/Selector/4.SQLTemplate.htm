@@ -19,7 +19,7 @@
 
         $(function () {
 
-            InitBar(DeliveryWay.BySQLTemplate);
+            InitBar(SelectorModel.SQLTemplate);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             var paras = node.DeliveryParas;
@@ -31,7 +31,7 @@
             document.getElementById("sqlTemSelect").innerHTML = str; //设置基础信息.
 
             //初始话下拉列表值
-            if (node.DeliveryWay == DeliveryWay.BySQLTemplate) {
+            if (node.SelectorModel == SelectorModel.SQLTemplate) {
                 if (paras != null && paras != "")
                     $("#RB_BySQLTemplate").val(paras);
             }
@@ -65,7 +65,7 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.BySQLTemplate;
+            node.SelectorModel = SelectorModel.SQLTemplate;
             var DeliveryParas = $("#RB_BySQLTemplate ").val();
             node.DeliveryParas = DeliveryParas;
             node.Update();

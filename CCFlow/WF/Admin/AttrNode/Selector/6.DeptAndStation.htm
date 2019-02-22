@@ -1,0 +1,141 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
+    <script  type="text/javascript">
+
+        $(function () {
+            InitBar(SelectorModel.DeptAndStation);
+
+            //获取节点岗位
+            var ens = new Entities("BP.WF.Template.NodeStations");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                console.log(en);
+                html += "&nbsp;&nbsp;&nbsp;" + en.FK_StationText;
+            }
+            document.getElementById("stas").innerHTML = html;
+
+            //获取节点部门
+            ens = new Entities("BP.WF.Template.NodeDepts");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                console.log(en);
+                html += "&nbsp;&nbsp;&nbsp;" + en.FK_DeptText;
+            }
+            document.getElementById("dept").innerHTML = html;
+        });
+
+        function OpenStation11() {
+            var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+        }
+
+        function OpenStation() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+        }
+
+
+
+        function OpenNew() {
+            var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
+        }
+        function OpenOld() {
+            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
+        }
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.SelectorModel = SelectorModel.DeptAndStation;
+            node.Update();
+            alert("保存成功.");
+        }
+    </script>
+</head>
+<body >
+
+<div id="bar"> </div>
+
+<table  style="width:100%;">
+
+<tr>
+<td style="width:50%;"  valign=top > 
+    <h5>设置岗位</h5>
+    <ul>
+        <li> <a href="javascript:OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
+        <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
+    </ul>
+</td>
+
+<td  style="width:50%;" valign=top> 
+    <h5>设置部门</h5>
+    <ul>
+        <li> <a href="javascript:OpenNew()">设置/更改部门</a> </li>
+        <!--<li>  <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a> </li>-->
+    </ul>
+</td>
+</tr>
+
+
+
+
+<tr>
+<td valign=top> 
+
+    <h5>已经设置的岗位</h5>
+    <div id="stas"> </div>
+
+</td>
+
+<td valign=top>
+
+    <h5>已经设置的部门</h5>
+    <div id="dept"> </div>
+
+ </td>
+
+</tr>
+</table>
+
+
+<fieldset>
+    <legend>说明</legend>
+    <ul>
+        <li>ccBPM会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受人员。</li>
+    </ul>
+</fieldset>
+
+
+</body>
+</html>

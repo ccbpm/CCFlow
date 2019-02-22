@@ -17,7 +17,7 @@
     <script  type="text/javascript">
         //初始化页面
         $(function () {
-            InitBar(DeliveryWay.ByBindEmp);
+            InitBar(SelectorModel.Emp);
             var ens = new Entities("BP.WF.Template.NodeEmps");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
@@ -59,7 +59,7 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByBindEmp;
+            node.SelectorModel = SelectorModel.Emp;
             node.Update();
 
             alert("保存成功.");

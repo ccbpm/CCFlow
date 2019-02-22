@@ -19,7 +19,7 @@
         //初始化页面
         $(function () {
 
-            InitBar(DeliveryWay.ByStation);
+            InitBar(SelectorModel.Station);
 
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
@@ -91,7 +91,7 @@
        function Save() {
            var nodeID = GetQueryString("FK_Node");
            var node = new Entity("BP.WF.Node", nodeID);            
-           node.DeliveryWay = DeliveryWay.ByStation;
+           node.SelectorModel = SelectorModel.Station;
            node.Update();
            alert("保存成功.");
        }

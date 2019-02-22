@@ -17,21 +17,18 @@ function InitBar(key) {
 
     html += "<option value=null  disabled='disabled'>+按组织结构限定范围</option>";
 
-    html += "<option value=" + SelectorModel.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位</option>";
-    html += "<option value=" + SelectorModel.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按部门计算</option>";
-    html += "<option value=" + SelectorModel.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按人员计算</option>";
-    html += "<option value=" + SelectorModel.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按岗位与部门交集计算</option>";
-    html += "<option value=" + SelectorModel.BySpecNodeEmpStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按指定节点的人员岗位计算</option>";
-    html += "<option value=" + SelectorModel.ByStationOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;仅按绑定的岗位计算</option>";
-    html += "<option value=" + SelectorModel.BySetDeptAsSubthread + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定部门计算，该部门一人处理标识该工作结束(子线程)</option>";
-
-    html += "<option value=" + SelectorModel.FindSpecDeptEmps + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门范围内的岗位集合里面的人员.</option>";
+    html += "<option value=" + SelectorModel.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位</option>";
+    html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;按部门计算</option>";
+    html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;按人员计算</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;部门与岗位的交集.</option>";
 
     html += "<option value=null disabled='disabled' >+按自定义SQL查询</option>";
     html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;按设置的SQL获取接受人计算</option>";
     html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;按设置的SQLTempate获取接受人计算</option>";
 
     html += "<option value=null disabled='disabled' >+其他方式</option>";
+    html += "<option value=" + SelectorModel.Url + " >&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
+
 //    html += "<option value=" + SelectorModel + " >&nbsp;&nbsp;&nbsp;&nbsp;所有的人员都可以发起.</option>";
 
 
@@ -61,10 +58,10 @@ function Help() {
 
     var url = "";
     switch (optionKey) {
-        case SelectorModel.ByStation:
+        case SelectorModel.Station:
             url = 'http://bbs.ccflow.org/showtopic-131376.aspx';
             break;
-        case SelectorModel.ByDept:
+        case SelectorModel.Dept:
             url = 'http://bbs.ccflow.org/showtopic-131376.aspx';
             break;
         default:
@@ -99,50 +96,50 @@ function changeOption() {
     }
     var roleName = "";
     switch (parseInt(optionKey)) {
-        case SelectorModel.ByStation:
-            roleName = "0.ByStation.htm";
+        case SelectorModel.Station:
+            roleName = "0.Station.htm";
             break;
-        case SelectorModel.ByDept:
-            roleName = "1.ByDept.htm";
+        case SelectorModel.Dept:
+            roleName = "1.Dept.htm";
             break;
-        case SelectorModel.BySQL:
-            roleName = "2.BySQL.htm";
+        case SelectorModel.SQL:
+            roleName = "2.SQL.htm";
             break;
-        case SelectorModel.ByBindEmp:
-            roleName = "3.ByBindEmp.htm";
+        case SelectorModel.Emp:
+            roleName = "3.Emp.htm";
             break;
-        case SelectorModel.BySelected:
-            roleName = "4.BySelected.htm";
+        case SelectorModel.SQLTemplate:
+            roleName = "4.SQLTemplate.htm";
             break;
-        case SelectorModel.ByPreviousNodeFormEmpsField:
-            roleName = "5.ByPreviousNodeFormEmpsField.htm";
+        case SelectorModel.GenerUserSelecter:
+            roleName = "5.GenerUserSelecter.htm";
             break;
-        case SelectorModel.ByPreviousNodeEmp:
-            roleName = "6.ByPreviousNodeEmp.htm";
+        case SelectorModel.DeptAndStation:
+            roleName = "6.DeptAndStation.htm";
             break;
-        case SelectorModel.ByStarter:
-            roleName = "7.ByStarter.htm";
+        case SelectorModel.Url:
+            roleName = "7.Url.htm";
             break;
         case SelectorModel.BySpecNodeEmp:
             roleName = "8.BySpecNodeEmp.htm";
             break;
-        case SelectorModel.ByDeptAndStation:
-            roleName = "9.ByDeptAndStation.htm";
+        case SelectorModel.DeptAndStation:
+            roleName = "9.DeptAndStation.htm";
             break;
-        case SelectorModel.ByStationAndEmpDept:
-            roleName = "10.ByStationAndEmpDept.htm";
+        case SelectorModel.StationAndEmpDept:
+            roleName = "10.StationAndEmpDept.htm";
             break;
         case SelectorModel.BySpecNodeEmpStation:
             roleName = "11.BySpecNodeEmpStation.htm";
             break;
-        case SelectorModel.BySQLAsSubThreadEmpsAndData:
-            roleName = "12.BySQLAsSubThreadEmpsAndData.htm";
+        case SelectorModel.SQLAsSubThreadEmpsAndData:
+            roleName = "12.SQLAsSubThreadEmpsAndData.htm";
             break;
         case SelectorModel.ByDtlAsSubThreadEmps:
             roleName = "13.ByDtlAsSubThreadEmps.htm";
             break;
-        case SelectorModel.ByStationOnly:
-            roleName = "14.ByStationOnly.htm";
+        case SelectorModel.StationOnly:
+            roleName = "14.StationOnly.htm";
             break;
         case SelectorModel.ByFEE:
             roleName = "15.ByFEEp.htm";
@@ -150,14 +147,14 @@ function changeOption() {
         case SelectorModel.BySetDeptAsSubthread:
             roleName = "16.BySetDeptAsSubthread.htm";
             break;
-        case SelectorModel.BySQLTemplate:
-            roleName = "17.BySQLTemplate.htm";
+        case SelectorModel.SQLTemplate:
+            roleName = "17.SQLTemplate.htm";
             break;
         case SelectorModel.ByFromEmpToEmp:
             roleName = "18.ByFromEmpToEmp.htm";
             break;
-        case SelectorModel.ByStationForPrj:
-            roleName = "20.ByStationForPrj.htm";
+        case SelectorModel.StationForPrj:
+            roleName = "20.StationForPrj.htm";
             break;
         case SelectorModel.BySelectedForPrj:
             roleName = "21.BySelectedForPrj.htm";
@@ -166,7 +163,7 @@ function changeOption() {
             roleName = "100.ByCCFlowBPM.htm";
             break;
         default:
-            roleName = "0.ByStation.htm";
+            roleName = "0.Station.htm";
             break;
     }
 

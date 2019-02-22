@@ -195,8 +195,39 @@ namespace BP.WF
             //md.FormJson = "";
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
-            #region 升级 填充数据.
+            #region 升级填充数据.
+            MapExts exts = new MapExts();
+            exts.Retrieve(MapExtAttr.ExtType, " LIKE ", "Pop%");
+            foreach (MapExt ext in exts)
+            {
+                string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
+                MapAttr ma = new MapAttr();
+                ma.MyPK = mypk;
+                if (ma.RetrieveFromDBSources() == 0)
+                {
+                    ext.Delete();
+                    continue;
+                }
 
+                if (ma.GetParaString("PopModel") == ext.ExtType)
+                    continue; //已经修复了，或者配置了.
+
+                ma.SetPara("PopModel", ext.ExtType);
+                ma.Update();
+
+                if (DataType.IsNullOrEmpty(ext.Tag4) == true)
+                    continue;
+
+                MapExt extP = new MapExt();
+                extP.MyPK =  ext.MyPK + "_FullData";
+                int i = extP.RetrieveFromDBSources();
+                if (i == 1)
+                    continue;
+
+                extP.ExtType = "FullData";
+                extP.Doc = ext.Tag4;
+                extP.Insert(); //执行插入.
+            }
             #endregion 升级 填充数据.
 
 

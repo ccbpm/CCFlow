@@ -20,13 +20,13 @@
             //更新节点表单类型.
             var frmID = GetQueryString("FK_MapData");
             var refPK = GetQueryString("RefPK");
-            var keyOfEn = refPK.split("_")[2];
+            var keyOfEn = GetQueryString("KeyOfEn");
             var thisPK = refPK + "_FullData";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", frmID);
             handler.AddPara("KeyOfEn", keyOfEn);
-            handler.AddPara("MyPK", thisPK);
+            handler.AddPara("MyPK", refPK);
             var data = handler.DoMethodReturnString("TBFullCtrlDDL_Init");
 
             if (data.indexOf('err@') == 0) {

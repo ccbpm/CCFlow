@@ -23,7 +23,7 @@
 
             var isEnable = en.GetPara("IsFullData");
 
-            if (isEnable == "" || isEnable == 0) {
+            if (isEnable == "" || isEnable == 0 || isEnable == undefined) {
                 $("#Btn_FullData").attr("disabled", true);
                 $("#RB_IsEnableJS_0").attr("checked", true);
             } else {

@@ -25,16 +25,22 @@ function HelpOnline() {
 }
 
 function Back() {
+
 //    var myPK = GetQueryString('MyPK');
-//    var refPK = GetQueryString("RefPK");
+    var refPK = GetQueryString("RefPK");
     //    var keyOfEn = refPK.split("_")[2];
     var extType = GetQueryString("ExtType");
-    if (extType == "AutoFull") {
+
+
+    if (refPK.indexOf('TBFullCtrl') == 0)
+        var url = '../TBFullCtrl/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+
+    if (refPK.indexOf('DDLFullCtrl') == 0)
         var url = '../MapExt/DDLFullCtrl2019.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&ExtType=" + extType;
-    } else {
+
+    if (refPK.indexOf('Pop') == 0)
         var url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn");
 
-    }
   
     window.location.href = url;
     return;

@@ -783,7 +783,7 @@ var Entity = (function () {
 
             if (typeof self[n] !== "function" && (self[n] != o || true)) {
 
-                if (self[n].indexOf('<script') != -1)
+                if (self[n].toString().indexOf('<script') != -1)
                     params.push(n + "=aa");
                 else
                     params.push(n + "=" + self[n]);

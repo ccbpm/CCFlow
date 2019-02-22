@@ -46,9 +46,6 @@
             en.SetPKVal(en.MyPK);
             var i = en.RetrieveFromDBSources();
 
-            //            en.MyPK = refPK + "_FullData";
-            //            en.SetPKVal(refPK + "_FullData");
-
             en.FK_MapData = frmID;
             en.ExtType = "FullData";
             en.DBType = $("#DDL_DBType").val(); //获得选择的值.
@@ -57,7 +54,7 @@
             en.Doc = sql; //设置主表的SQL.
             var tag2 = $("#TB_Tag2").val();
             en.Tag2 = tag2; //设置主表的SQL.
-
+            en.AttrOfOper = GetQueryString("KeyOfEn");
             if (i == 0)
                 en.Insert();
             else

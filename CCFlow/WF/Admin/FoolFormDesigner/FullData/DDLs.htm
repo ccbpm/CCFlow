@@ -72,6 +72,7 @@
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
             handler.AddPara("Tag", str);
             handler.AddPara("MyPK", thisPK);
+            handler.AddPara("AttrOfOper",GetQueryString("KeyOfEn"));
             handler.AddFormData();
             var data = handler.DoMethodReturnString("TBFullCtrlDDL_Save");
             if (data.indexOf('err@') != -1) {
@@ -79,10 +80,7 @@
                 return;
             }
 
-            alert(data);
-
             window.location.href = window.location.href;
-            return;
         }
 
     </script>

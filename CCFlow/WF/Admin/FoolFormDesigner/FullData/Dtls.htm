@@ -98,6 +98,7 @@
                 tag1 += "$" + dtl.No + ":" + sql;
             }
             en.Tag1 = tag1;
+            en.AttrOfOper = GetQueryString("KeyOfEn");
 
             if (n == 0)
                 en.Insert();

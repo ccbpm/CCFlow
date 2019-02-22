@@ -5,9 +5,9 @@ function InitBar(optionKey) {
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value='0' >无,不设置(默认).</option>";
-    html += "<option value='1' >简洁模式</option>";
-    html += "<option value='2' >表格模式</option>";
+    html += "<option value='None' >无,不设置(默认).</option>";
+    html += "<option value='Simple' >简洁模式</option>";
+    html += "<option value='Table' >表格模式</option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
@@ -53,13 +53,13 @@ function GetUrl(popModel) {
 
 
     switch (popModel) {
-        case "0":
+        case "None":
             url = "0.None.htm";
             break;
-        case "1":
+        case "Simple":
             url = "1.Simple.htm";
             break;
-        case "2":
+        case "Table":
             url = "2.Table.htm";
             break;
         default:

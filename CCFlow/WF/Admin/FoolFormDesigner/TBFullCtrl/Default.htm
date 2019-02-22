@@ -13,14 +13,14 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-
+            debugger
             var keyOfEn = GetQueryString("KeyOfEn");
             
             var frmID = GetQueryString("FK_MapData");
 
             var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
 
-            var url = GetUrl(en.GetPara("PopModel"));
+            var url = GetUrl(en.GetPara("TBFullCtrl"));
 
             document.location.href = url + "?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
         });

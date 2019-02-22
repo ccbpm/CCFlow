@@ -66,7 +66,7 @@
         
             url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
 
-            OpenEasyUiDialogExt(url, "绑定部门", 800, 600, true);
+            OpenEasyUiDialogExt(url, "绑定部门", 800, 500, true);
         }
         function OpenOld() {
             var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
@@ -96,7 +96,7 @@
         function Save() {
  
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.Selector", nodeID);            
             node.SelectorModel = SelectorModel.Dept;
             node.Update();
             alert("保存成功.");

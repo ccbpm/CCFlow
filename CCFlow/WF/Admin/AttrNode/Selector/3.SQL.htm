@@ -20,11 +20,10 @@
         $(function () {
             InitBar(SelectorModel.SQL);
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
 
-            if (node.SelectorModel == SelectorModel.SQL) {
-                document.getElementById("RB_BySQL").value = node.DeliveryParas;
-            }
+            GenerFullAllCtrlsVal(node);
+
         });
 
         //装载模版.
@@ -36,11 +35,11 @@
 
         function Save() {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.Selector", nodeID);            
             node.SelectorModel = SelectorModel.SQL;
-            var DeliveryParas = document.getElementById("RB_BySQL").value;
-            node.DeliveryParas = DeliveryParas;
+            node.CopyForm();
             node.Update();
+             
             alert("保存成功.");
         }
     </script>
@@ -48,12 +47,30 @@
 <body >
 
 <div id="bar"> </div>
-
+<form id="cc">
 <fieldset>
-    <legend>请在文本框里输入SQL.</legend>
-    <textarea id="RB_BySQL" rows="" cols="" style="width:95%;height:50px"></textarea>
+    <legend>分组SQL.</legend>
+    <textarea id="TB_SelectorP1" name="TB_SelectorP1" rows="" cols="" style="width:95%;height:50px"></textarea>
 </fieldset>
 
+<fieldset>
+    <legend>人员SQL.</legend>
+    <textarea id="TB_SelectorP2" name="TB_SelectorP2" rows="" cols="" style="width:95%;height:50px"></textarea>
+</fieldset>
+
+
+<fieldset>
+    <legend>默认选择SQL.</legend>
+    <textarea id="TB_SelectorP3" name="TB_SelectorP3" rows="" cols="" style="width:95%;height:50px"></textarea>
+</fieldset>
+
+
+<fieldset>
+    <legend>强制选择的数据源.</legend>
+    <textarea id="TB_SelectorP4" name="TB_SelectorP4" rows="" cols="" style="width:95%;height:50px"></textarea>
+</fieldset>
+
+</form>
 <fieldset>
     <legend>说明</legend>
     <ul>

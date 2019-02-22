@@ -90,7 +90,7 @@
         //保存
        function Save() {
            var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);            
+           var node = new Entity("BP.WF.Template.Selector", nodeID);            
            node.SelectorModel = SelectorModel.Station;
            node.Update();
            alert("保存成功.");

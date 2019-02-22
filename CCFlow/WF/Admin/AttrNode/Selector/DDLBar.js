@@ -20,17 +20,15 @@ function InitBar(key) {
     html += "<option value=" + SelectorModel.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位</option>";
     html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;按部门计算</option>";
     html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;按人员计算</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;部门与岗位的交集.</option>";
+    html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL计算</option>";
+    html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL模板计算</option>";
+    html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;使用通用人员选择器</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按部门与岗位的交集</option>";
 
-    html += "<option value=null disabled='disabled' >+按自定义SQL查询</option>";
-    html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;按设置的SQL获取接受人计算</option>";
-    html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;按设置的SQLTempate获取接受人计算</option>";
-
-    html += "<option value=null disabled='disabled' >+其他方式</option>";
-    html += "<option value=" + SelectorModel.Url + " >&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
-
-//    html += "<option value=" + SelectorModel + " >&nbsp;&nbsp;&nbsp;&nbsp;所有的人员都可以发起.</option>";
-
+    html += "<option value=null  disabled='disabled'>+其他</option>";
+    html += "<option value=" + SelectorModel.Url + ">&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
+    html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;使用通用部门岗位人员选择器（开发中）</option>";
+    html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算(操作员所在部门)（开发中）</option>";
 
     html += "</select >";
 
@@ -94,6 +92,7 @@ function changeOption() {
     if (index > 1) {
         optionKey = sele[index].value
     }
+
     var roleName = "";
     switch (parseInt(optionKey)) {
         case SelectorModel.Station:
@@ -102,11 +101,11 @@ function changeOption() {
         case SelectorModel.Dept:
             roleName = "1.Dept.htm";
             break;
-        case SelectorModel.SQL:
-            roleName = "2.SQL.htm";
-            break;
         case SelectorModel.Emp:
-            roleName = "3.Emp.htm";
+            roleName = "2.Emp.htm";
+            break;
+        case SelectorModel.SQL:
+            roleName = "3.SQL.htm";
             break;
         case SelectorModel.SQLTemplate:
             roleName = "4.SQLTemplate.htm";
@@ -121,53 +120,16 @@ function changeOption() {
             roleName = "7.Url.htm";
             break;
         case SelectorModel.BySpecNodeEmp:
-            roleName = "8.BySpecNodeEmp.htm";
+            roleName = "8.AccepterOfDeptStationEmp.htm";
             break;
         case SelectorModel.DeptAndStation:
-            roleName = "9.DeptAndStation.htm";
-            break;
-        case SelectorModel.StationAndEmpDept:
-            roleName = "10.StationAndEmpDept.htm";
-            break;
-        case SelectorModel.BySpecNodeEmpStation:
-            roleName = "11.BySpecNodeEmpStation.htm";
-            break;
-        case SelectorModel.SQLAsSubThreadEmpsAndData:
-            roleName = "12.SQLAsSubThreadEmpsAndData.htm";
-            break;
-        case SelectorModel.ByDtlAsSubThreadEmps:
-            roleName = "13.ByDtlAsSubThreadEmps.htm";
-            break;
-        case SelectorModel.StationOnly:
-            roleName = "14.StationOnly.htm";
-            break;
-        case SelectorModel.ByFEE:
-            roleName = "15.ByFEEp.htm";
-            break;
-        case SelectorModel.BySetDeptAsSubthread:
-            roleName = "16.BySetDeptAsSubthread.htm";
-            break;
-        case SelectorModel.SQLTemplate:
-            roleName = "17.SQLTemplate.htm";
-            break;
-        case SelectorModel.ByFromEmpToEmp:
-            roleName = "18.ByFromEmpToEmp.htm";
-            break;
-        case SelectorModel.StationForPrj:
-            roleName = "20.StationForPrj.htm";
-            break;
-        case SelectorModel.BySelectedForPrj:
-            roleName = "21.BySelectedForPrj.htm";
-            break;
-        case SelectorModel.ByCCFlowBPM:
-            roleName = "100.ByCCFlowBPM.htm";
+            roleName = "9.AccepterOfDeptStationOfCurrentOper.htm";
             break;
         default:
+
             roleName = "0.Station.htm";
             break;
     }
-
-    // alert(roleName);
 
     window.location.href = roleName + "?FK_Node=" + nodeID;
 }

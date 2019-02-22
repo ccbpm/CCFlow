@@ -431,6 +431,7 @@ namespace BP.WF.HttpHandler
                 str += "$" + attr.KeyOfEn + ":" + sql;
             }
             me.Tag = str;
+            me.AttrOfOper = GetRequestVal("AttrOfOper");
             me.Update();
 
             return "保存成功.";

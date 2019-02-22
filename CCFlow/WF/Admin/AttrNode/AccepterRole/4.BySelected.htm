@@ -19,6 +19,20 @@
         //初始化
         $(function () {
             InitBar(DeliveryWay.BySelected);
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
+            if(node.IsAutoLoadEmps==1){
+                $("#CB_IsAutoLoadEmps").attr("checked", 'checked');
+            }
+            if (node.IsSimpleSelector == 1) {
+                $("#CB_IsSimpleSelector").attr("checked", 'checked');
+            }
+            if (node.IsEnableDeptRange == 1) {
+                $("#CB_IsEnableDeptRange").attr("checked", 'checked');
+            }
+            if (node.IsEnableStaRange == 1) {
+                $("#CB_IsEnableStaRange").attr("checked", 'checked');
+            }
         });
 
         //弹出新窗体

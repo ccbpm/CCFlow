@@ -20,9 +20,9 @@ function InitBar(optionKey) {
 }
 
 function FullData() {
-    var optionKey = $("#changBar").val();
-    var myPK = optionKey+"_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-    var url = "../FullData/Default.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK;
+ 
+    var myPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+    var url = "../FullData/Main.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK + "&KeyOfEn=" + GetQueryString("KeyOfEn");
 
     window.location.href = url;
 

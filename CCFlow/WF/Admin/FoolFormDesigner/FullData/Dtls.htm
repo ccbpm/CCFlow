@@ -46,7 +46,7 @@
             for (var i = 0; i < mapDtls.length; i++) {
                 var sql = "";
                 if (tag1 != "" && tag1 != null ) {
-                    sql = tag1.split("#")[i + 1].split("$")[1]; //分割字符串，获取sql语句
+                    sql = tag1.split("$")[i + 1].split(":")[1]; //分割字符串，获取sql语句
                 } 
 
                 var dtl = mapDtls[i];
@@ -95,7 +95,7 @@
                 var dtl = mapDtls[i];
 
                 var sql = $("#" + dtl.No).val();
-                tag1 += "#" + dtl.No + "$" + sql;
+                tag1 += "$" + dtl.No + ":" + sql;
             }
             en.Tag1 = tag1;
 

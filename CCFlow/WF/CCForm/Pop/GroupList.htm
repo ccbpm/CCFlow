@@ -194,7 +194,7 @@
             var selectType = mapExt.GetPara("SelectType");
             if (selectType == "0") {  //单选.
                 selectVals.push($("input[name='RB']:checked").val());
-                selectValTexts.push($("input[name='RB']:checked").siblings().text());
+                selectValTexts.push({ No:$("input[name='RB']:checked").val(),Name: $("input[name='RB']:checked").siblings().text() });
             } else {
 
                 var cbs = $("input[type='checkbox']:checked");
@@ -204,7 +204,7 @@
                         return true;
                     selectVals.push(this.value);
 
-                    selectValTexts.push($(this).siblings().text());
+                    selectValTexts.push({ No: this.value, Name: $(this).siblings().text() });
                 });
             }
 
@@ -233,17 +233,7 @@
                 frmEleDB.Delete();
             });
 
-            //loadEntities();
-
-            //parent.CloseBootstrapDialog();
             return selectValTexts;
-
-            //插入新选择的数据.
-            //获得已经选择的集合.
-            // var eleDBs = new Entities("BP.Sys.FrmEleDBs");
-            // eleDBs.Retrieve("FK_MapData", mapExt.FK_MapExt, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
-            //组成返回的字符串.
-            //执行返回,并关闭窗口.
         }
 
         // 新增

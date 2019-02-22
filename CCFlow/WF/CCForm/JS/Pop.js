@@ -31,10 +31,8 @@ function SelfUrl_Done(mapExt) {
              var iframe = document.getElementById("eudlgframe");
              if (iframe) {
                  var val = iframe.contentWindow.Btn_OK();
-                 //
-
-                 $("#TB_" + mapExt.AttrOfOper).val(val);
-
+                 $("#TB _" + mapExt.AttrOfOper).val(val);
+                 FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
              }
 
          }, null, function () {
@@ -42,8 +40,7 @@ function SelfUrl_Done(mapExt) {
          });
       
 }
-
-//树干叶子模式.
+//***************************************树干叶子模式*****************************************************************
 function PopBranchesAndLeaf(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
@@ -66,7 +63,7 @@ function PopBranchesAndLeaf(mapExt, val) {
 
     var width = mapExt.W;
     var height = mapExt.H;
-    var iframeId = mapExt.MyPK + mapExt.FK_MapData;
+    var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
     var oid = GetPKVal();
 
@@ -99,7 +96,7 @@ function PopBranchesAndLeaf(mapExt, val) {
                         $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
                         // 单选复制当前表单
                         if (selectType == "0" && selectedRows.length == 1) {
-                            ValSetter(mapExt.Tag4, selectedRows[0].No);
+                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
                         }
                         var No = "";
                         if (selectedRows != null && $.isArray(selectedRows))
@@ -110,6 +107,7 @@ function PopBranchesAndLeaf(mapExt, val) {
                         var backFunc = mapExt.Tag5;
                         if (backFunc != null && backFunc != "" && backFunc != undefined)
                             DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                       
                     }
                 }
             }, null, function () {
@@ -117,63 +115,13 @@ function PopBranchesAndLeaf(mapExt, val) {
             }, "div_" + iframeId);
             return;
         }
-        //OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
-        //	var iframe = document.getElementById(iframeId);
-        //	if (iframe) {
-        //		var selectedRows = iframe.contentWindow.selectedRows;
-        //		if ($.isArray(selectedRows)) {
-        //			var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
-        //			mtags.mtags("loadData", selectedRows);
-        //			$("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
-        //		}
-        //	}
-        //	return true;
-        //});
+
     });
 
     return;
-    var tb = $("#" + mapExt.AttrOfOper);
-
-    //设置文本框只读.
-    tb.attr('readonly', 'true');
-    tb.attr('disabled', 'true');
-    tb.attr("onclick", "alert('ssssssssssssss');");
-    return;
-
-    //  alert(tb);
-    // 把文本框的内容，按照逗号分开, 并且块状显示. 右上角出现删除叉叉.
-
-    // 文本框尾部出现选择的图标.
-    icon = "glyphicon glyphicon-tree-deciduous";
-    var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html()
-    eleHtml += '<span class="input-group-addon" onclick="PopBranchesAndLeaf_Deal(this,' + "'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
-    tb.parent().html(eleHtml);
-
-
-    // tb.parent().html(eleHtml);
-    // alert(eleHtml);
-
-    //在文本框双击，绑定弹出. DeptEmpModelAdv.htm的窗口.
-    tb.attr("onclick", "alert('ssssssssssssss');");
-
-    //    tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-    //窗口返回值的时候，重新计算文本块.
 }
 
-function PopBranchesAndLeaf_Deal() {
-
-}
-
-function ValSetter(tag4, key) {
-    if (!tag4 || !key) {
-        return;
-    }
-    tag4 = tag4.replace(/@Key/g, key).replace(/~/g, "'");
-    var dt = DBAccess.RunDBSrc(tag4);
-    GenerFullAllCtrlsVal(dt);
-}
-
-//树干模式.
+//***************************************树干模式.*****************************************************************
 function PopBranches(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     target.hide();
@@ -196,7 +144,7 @@ function PopBranches(mapExt, val) {
 
     var width = mapExt.W;
     var height = mapExt.H;
-    var iframeId = mapExt.MyPK + mapExt.FK_MapData;
+    var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
     var oid = GetPKVal();
     //初始加载
@@ -224,10 +172,19 @@ function PopBranches(mapExt, val) {
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
                             ValSetter(mapExt.Tag4, nodes[0].No);
+                            FullIt(nodes[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
                         }
 
                         //执行JS方法
-
+                        var No = "";
+                        if (nodes != null && $.isArray(nodes))
+                            $.each(nodes, function (i, nodes) {
+                                No += nodes.No + ",";
+                            });
+                        //执行JS
+                        var backFunc = mapExt.Tag5;
+                        if (backFunc != null && backFunc != "" && backFunc != undefined)
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
                     }
                 }
             }, null, function () {
@@ -236,6 +193,182 @@ function PopBranches(mapExt, val) {
             return;
         }
     });
+}
+
+/******************************************  表格查询 **********************************/
+function PopTableSearch(mapExt) {
+    var target = $("#TB_" + mapExt.AttrOfOper);
+    target.hide();
+
+    var width = target.outerWidth();
+    var height = target.height();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    container.height(height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
+
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
+
+        }
+    });
+
+    var width = mapExt.W;
+    var height = mapExt.H;
+    var iframeId = mapExt.MyPK;
+    var title = mapExt.GetPara("Title");
+    var oid = GetPKVal();
+
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+
+    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+
+    //解项羽 这里需要相对路径.
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
+
+    container.on("dblclick", function () {
+        if (window.parent && window.parent.OpenBootStrapModal) {
+            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+                var selectType = mapExt.GetPara("SelectType");
+                var iframe = document.getElementById(iframeId);
+                if (iframe) {
+                    var selectedRows = iframe.contentWindow.selectedRows;
+                    if ($.isArray(selectedRows)) {
+                        mtags.mtags("loadData", selectedRows);
+                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        // 单选复制当前表单
+                        if (selectType == "0" && selectedRows.length == 1) {
+                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                        }
+                        //执行JS方法
+                        var No = "";
+                        if (selectedRows != null && $.isArray(selectedRows))
+                            $.each(selectedRows, function (i, selectedRows) {
+                                No += selectedRows.No + ",";
+                            });
+                        //执行JS
+                        var backFunc = mapExt.Tag5;
+                        if (backFunc != null && backFunc != "" && backFunc != undefined)
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                    }
+                }
+
+            }, null, function () {
+
+            }, "div_" + iframeId);
+            return;
+        }
+    });
+}
+
+/******************************************  分组平铺列表 **********************************/
+
+function PopGroupList(mapExt) {
+
+    var target = $("#TB_" + mapExt.AttrOfOper);
+    target.hide();
+
+    var width = target.outerWidth();
+    var height = target.height();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    container.height(height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
+
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
+
+        }
+    });
+
+    var width = mapExt.W;
+    var height = mapExt.H;
+    var iframeId = mapExt.MyPK;
+    var title = mapExt.GetPara("Title");
+    var oid = GetPKVal();
+
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+
+    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+
+    //解项羽 这里需要相对路径.
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/GroupList.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+
+    container.on("dblclick", function () {
+        if (window.parent && window.parent.OpenBootStrapModal) {
+            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+                var selectType = mapExt.GetPara("SelectType");
+
+                var iframe = document.getElementById(iframeId);
+                if (iframe) {
+                    var selectedRows = iframe.contentWindow.Save();
+                    if ($.isArray(selectedRows)) {
+                        mtags.mtags("loadData", selectedRows);
+                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        // 单选复制当前表单
+                        if (selectType == "0" && selectedRows.length == 1) {
+                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                        }
+
+                        //执行JS方法
+                        var No = "";
+                        if (selectedRows != null && $.isArray(selectedRows))
+                            $.each(selectedRows, function (i, selectedRows) {
+                                No += selectedRows.No + ",";
+                            });
+                        //执行JS
+                        var backFunc = mapExt.Tag5;
+                        if (backFunc != null && backFunc != "" && backFunc != undefined)
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                    }
+                }
+
+            }, null, function () {
+
+            }, "div_" + iframeId);
+            return;
+        }
+    });
+
+}
+
+function ValSetter(tag4, key) {
+    if (!tag4 || !key) {
+        return;
+    }
+    tag4 = tag4.replace(/@Key/g, key).replace(/~/g, "'");
+    var dt = DBAccess.RunDBSrc(tag4);
+    GenerFullAllCtrlsVal(dt);
 }
 
 //删除数据.
@@ -287,139 +420,7 @@ function Refresh_Mtags(FK_MapData, AttrOfOper, oid, val) {
     $("#TB_" + AttrOfOper).val(mtags.mtags("getText"));
 }
 
-/******************************************  表格查询 **********************************/
-function PopTableSearch(mapExt) {
-    var target = $("#TB_" + mapExt.AttrOfOper);
-    target.hide();
 
-    var width = target.outerWidth();
-    var height = target.height();
-    var container = $("<div></div>");
-    target.after(container);
-    container.width(width);
-    container.height(height);
-    container.attr("id", mapExt.AttrOfOper + "_mtags");
-
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
-        "fit": true,
-        "onUnselect": function (record) {
-            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
-            console.log("unselect: " + JSON.stringify(record));
-        }
-    });
-
-    var width = mapExt.W;
-    var height = mapExt.H;
-    var iframeId = mapExt.MyPK + mapExt.FK_MapData;
-    var title = mapExt.GetPara("Title");
-    var oid = GetPKVal();
-
-    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
-
-    var initJsonData = [];
-    $.each(frmEleDBs, function (i, o) {
-        initJsonData.push({
-            "No": o.Tag1,
-            "Name": o.Tag2
-        });
-    });
-
-    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
-    mtags.mtags("loadData", initJsonData);
-    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
-
-    //解项羽 这里需要相对路径.
-    var localHref = GetLocalWFPreHref();
-    var url = localHref + "/WF/CCForm/Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
-
-    container.on("dblclick", function () {
-        if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
-                var selectType = mapExt.GetPara("SelectType");
-
-                var iframe = document.getElementById(iframeId);
-                if (iframe) {
-                    var selectedRows = iframe.contentWindow.selectedRows;
-                    if ($.isArray(selectedRows)) {
-                        mtags.mtags("loadData", selectedRows);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
-                        // 单选复制当前表单
-                        if (selectType == "0" && selectedRows.length == 1) {
-                            ValSetter(mapExt.Tag4, selectedRows[0].No);
-                        }
-                    }
-                }
-
-            }, null, function () {
-
-            }, "div_" + iframeId);
-            return;
-        }
-    });
-}
-
-/******************************************  分组列表 **********************************/
-
-function PopGroupList(mapExt) {
-
-    var tb = $("#TB_" + mapExt.AttrOfOper);
-    if (tb.length == 0)
-        return; //有可能字段被删除了.
-
-    //设置文本框只读.
-    tb.attr('readonly', 'true');
-    // tb.attr('disabled', 'true');
-
-    //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
-    tb.bind("click", function () { PopGroupList_Done(mapExt) });
-}
-
-function PopGroupList_Done(mapExt) {
-
-    //获得主键.
-    var pkval = GetPKVal();
-
-
-
-    //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
-    var local = window.location.href;
-    var url = "";
-    if (local.indexOf('MyFlow') == -1)
-        url = 'Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
-    else
-        url = 'CCForm/Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
-
-    if (window.parent && window.parent.OpenBootStrapModal) {
-        OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", true, function () {
-            var iframe = document.getElementById("eudlgframe");
-            if (iframe) {
-                var savefn = iframe.contentWindow.Save;
-                if (typeof savefn === "function") {
-                    var selectVals = savefn();
-                    $("#TB_" + mapExt.AttrOfOper).val(selectVals);
-                }
-                // 单选复制当前表单
-                var selectType = mapExt.GetPara("SelectType");
-                if (selectType == "0" && selectVals.length == 1) {
-                    ValSetter(mapExt.Tag4, selectVals[0]);
-                }
-                var No = "";
-                if (selectVals != null && $.isArray(selectVals))
-                    $.each(selectVals, function (i, selectVal) {
-                        No += selectVal + ",";
-                    });
-                //执行JS
-                var backFunc = mapExt.Tag5;
-                if (backFunc != null && backFunc != "" && backFunc != undefined)
-                    DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
-            }
-        }, null, function () {
-
-        }, "eudlgframeDiv");
-        return;
-    }
-}
 
 //获取WF之前路径
 function GetLocalWFPreHref() {

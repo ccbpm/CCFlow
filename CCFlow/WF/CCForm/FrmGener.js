@@ -337,15 +337,15 @@ function GenerFrm() {
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
                     // 判断下拉框是否有对应option, 若没有则追加
-                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+                    if (defValue!="" && $("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
                         var mainTable = frmData.MainTable[0];
                         var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
                         if (selectText == null || selectText == undefined || selectText == "")
                             selectText = mainTable[mapAttr.KeyOfEn + "T"];
                         $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
                     }
-
-                    $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+                    if(defValue!="")
+                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
                 if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {

@@ -226,6 +226,7 @@ function delFile(frmSln, fileId, KeyOfEn) {
 
 }
 
+
 //处理 MapExt 的扩展. 工作处理器，独立表单都要调用他.
 function AfterBindEn_DealMapExt(frmData) {
 
@@ -250,95 +251,14 @@ function AfterBindEn_DealMapExt(frmData) {
             }
         }
 
-        //debugger;
+        mapAttr = new Entity("BP.Sys.MapAttr", mapAttr);
+
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":
                 MultipleChoiceSmall(mapExt, mapAttr); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "MultipleChoiceSearch":
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
-                break;
-            case "PopBranchesAndLeaf": //树干叶子模式.
-                var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                PopBranchesAndLeaf(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
-                break;
-            case "PopBranches": //树干简单模式.
-                var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                PopBranches(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
-                break;
-            case "PopGroupList": //分组模式.
-                PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
-                break;
-            case "PopSelfUrl": //自定义url.
-                SelfUrl(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
-                break;
-            case "PopTableSearch": //表格查询.
-                PopTableSearch(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
-                break;
-            case "PopVal": //PopVal窗返回值.
-                var tb = $('[name$=' + mapExt.AttrOfOper + ']');
-                tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-                tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
-
-                tb.attr('readonly', 'true');
-                var icon = '';
-                var popWorkModelStr = '';
-                var popWorkModelIndex = mapExt.AtPara != undefined ? mapExt.AtPara.indexOf('@PopValWorkModel=') : -1;
-                if (popWorkModelIndex >= 0) {
-                    popWorkModelIndex = popWorkModelIndex + '@PopValWorkModel='.length;
-                    popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
-                }
-                switch (popWorkModelStr) {
-                    /// <summary>         
-                    /// 自定义URL         
-                    /// </summary>         
-                    //SelfUrl =1,         
-                    case "1":
-                        icon = "glyphicon glyphicon-th";
-                        break;
-                    /// <summary>         
-                    /// 表格模式         
-                    /// </summary>         
-                    // TableOnly,         
-                    case "2":
-                        icon = "glyphicon glyphicon-list";
-                        break;
-                    /// <summary>         
-                    /// 表格分页模式         
-                    /// </summary>         
-                    //TablePage,         
-                    case "3":
-                        icon = "glyphicon glyphicon-list-alt";
-                        break;
-                    /// <summary>         
-                    /// 分组模式         
-                    /// </summary>         
-                    // Group,         
-                    case "4":
-                        icon = "glyphicon glyphicon-list-alt";
-                        break;
-                    /// <summary>         
-                    /// 树展现模式         
-                    /// </summary>         
-                    // Tree,         
-                    case "5":
-                        icon = "glyphicon glyphicon-tree-deciduous";
-                        break;
-                    /// <summary>         
-                    /// 双实体树         
-                    /// </summary>         
-                    // TreeDouble         
-                    case "6":
-                        icon = "glyphicon glyphicon-tree-deciduous";
-                        break;
-                    default:
-                        break;
-                }
-                tb.width(tb.width() - 40);
-                tb.height('auto');
-                var eleHtml = ' <div class="input-group form_tree" style="width:' + tb.width() + 'px;height:' + tb.height() + 'px">' + tb.parent().html() +
-                '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
-                tb.parent().html(eleHtml);
                 break;
             case "BindFunction": //控件绑定函数
 
@@ -542,7 +462,94 @@ function AfterBindEn_DealMapExt(frmData) {
                     });
                 }
                 break;
+            default:
+                if (mapExt.ExtType == mapAttr.GetPara("PopModel")) {
+                    switch (mapAttr.GetPara("PopModel")) {
+                        case "PopBranchesAndLeaf": //树干叶子模式.
+                            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                            PopBranchesAndLeaf(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                            break;
+                        case "PopBranches": //树干简单模式.
+                            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                            PopBranches(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                            break;
+                        case "PopGroupList": //分组模式.
+                            PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                            break;
+                        case "PopSelfUrl": //自定义url.
+                            SelfUrl(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                            break;
+                        case "PopTableSearch": //表格查询.
+                            PopTableSearch(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                            break;
+                        case "PopVal": //PopVal窗返回值.
+                            var tb = $('[name$=' + mapExt.AttrOfOper + ']');
+                            tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
+                            tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
 
+                            tb.attr('readonly', 'true');
+                            var icon = '';
+                            var popWorkModelStr = '';
+                            var popWorkModelIndex = mapExt.AtPara != undefined ? mapExt.AtPara.indexOf('@PopValWorkModel=') : -1;
+                            if (popWorkModelIndex >= 0) {
+                                popWorkModelIndex = popWorkModelIndex + '@PopValWorkModel='.length;
+                                popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
+                            }
+                            switch (popWorkModelStr) {
+                                /// <summary>           
+                                /// 自定义URL           
+                                /// </summary>           
+                                //SelfUrl =1,           
+                                case "1":
+                                    icon = "glyphicon glyphicon-th";
+                                    break;
+                                /// <summary>           
+                                /// 表格模式           
+                                /// </summary>           
+                                // TableOnly,           
+                                case "2":
+                                    icon = "glyphicon glyphicon-list";
+                                    break;
+                                /// <summary>           
+                                /// 表格分页模式           
+                                /// </summary>           
+                                //TablePage,           
+                                case "3":
+                                    icon = "glyphicon glyphicon-list-alt";
+                                    break;
+                                /// <summary>           
+                                /// 分组模式           
+                                /// </summary>           
+                                // Group,           
+                                case "4":
+                                    icon = "glyphicon glyphicon-list-alt";
+                                    break;
+                                /// <summary>           
+                                /// 树展现模式           
+                                /// </summary>           
+                                // Tree,           
+                                case "5":
+                                    icon = "glyphicon glyphicon-tree-deciduous";
+                                    break;
+                                /// <summary>           
+                                /// 双实体树           
+                                /// </summary>           
+                                // TreeDouble           
+                                case "6":
+                                    icon = "glyphicon glyphicon-tree-deciduous";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            tb.width(tb.width() - 40);
+                            tb.height('auto');
+                            var eleHtml = ' <div class="input-group form_tree" style="width:' + tb.width() + 'px;height:' + tb.height() + 'px">' + tb.parent().html() +
+                        '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
+                            tb.parent().html(eleHtml);
+                            break;
+                        default: break;
+                    }
+                }
         }
     }
 }

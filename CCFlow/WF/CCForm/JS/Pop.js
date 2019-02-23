@@ -322,7 +322,7 @@ function PopGroupList(mapExt) {
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
-    var url = localHref + "/WF/CCForm/Pop/GroupList.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+    var url = localHref + "/WF/CCForm/Pop/GroupList.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + oid + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
 
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {

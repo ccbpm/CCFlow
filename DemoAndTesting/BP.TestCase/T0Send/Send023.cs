@@ -100,7 +100,6 @@ namespace BP.CT.T0Send
             //创建空白工作, 发起开始节点.
             workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow);
 
-
             #region 检查创建工作是否符合预期.
             //检查开始节点写入的数据是否正确？
             sql = "SELECT * FROM ND2301 WHERE OID=" + workID;

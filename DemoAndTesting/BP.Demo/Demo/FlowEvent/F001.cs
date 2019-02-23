@@ -16,7 +16,7 @@ namespace BP.Demo.FlowEvent
     /// 报销流程001
     /// 此类库必须放入到 BP.*.dll 才能被解析发射出来。
     /// </summary>
-    public class F001: BP.WF.FlowEventBase
+    public class F001 : BP.WF.FlowEventBase
     {
         #region 属性.
         /// <summary>
@@ -24,7 +24,7 @@ namespace BP.Demo.FlowEvent
         /// </summary>
         public override string FlowMark
         {
-            get { return "001,002,";   }
+            get { return "001,002,"; }
         }
         #endregion 属性.
 
@@ -45,7 +45,7 @@ namespace BP.Demo.FlowEvent
         public override string SendWhen()
         {
 
-          ///  throw new Exception("err@不符合流程发送条件。");
+            ///  throw new Exception("err@不符合流程发送条件。");
             if (SystemConfig.CustomerNo != "CCFlow")
                 return null;
 
@@ -54,6 +54,8 @@ namespace BP.Demo.FlowEvent
             int nodeID = this.HisNode.NodeID;    // int类型的ID.
             string nodeName = this.HisNode.Name; // 当前节点名称.
 
+           
+
             switch (nodeID)
             {
                 case 101:  //当是第1个节点的时候....
@@ -61,10 +63,10 @@ namespace BP.Demo.FlowEvent
                     //this.JumpToEmps = "zhangsan,lisi";
                     //this.JumpToNode = new Node(102);
 
-                  //  this.JumpToNodeID = 103;
-                   // this.JumpToEmps = "zhoupeng,liping";
-                   // this.ND01_SaveAfter();
-                    
+                    //  this.JumpToNodeID = 103;
+                    // this.JumpToEmps = "zhoupeng,liping";
+                    // this.ND01_SaveAfter();
+
                     //this.JumpToNodeID = 103;
                     //this.JumpToEmps = "zhoupeng";
 
@@ -85,6 +87,16 @@ namespace BP.Demo.FlowEvent
             //throw new Exception("sssssssssssssss");
             return "执行成功.";
             //return base.FrmLoadBefore();
+        }
+
+        public override string FlowOverAfter()
+        {
+            //把数据写入到接口.
+            //this.WorkID;
+
+            //this.WorkID;
+
+            return base.FlowOverAfter();
         }
         /// <summary>
         /// 保存后执行的事件
@@ -118,13 +130,13 @@ namespace BP.Demo.FlowEvent
             if (DBAccess.IsExitsObject("ND101") == false)
                 return;
 
-          //  string val=this.getva
+            //  string val=this.getva
 
             //求出明细表的合计.
             float hj = BP.DA.DBAccess.RunSQLReturnValFloat("SELECT SUM(XiaoJi) as Num FROM ND101Dtl1 WHERE RefPK=" + this.OID, 0);
 
             //更新合计小写 , 把合计转化成大写.
-            string sql = "UPDATE ND101 SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "',HeJi="+hj+"  WHERE OID=" + this.OID;
+            string sql = "UPDATE ND101 SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "',HeJi=" + hj + "  WHERE OID=" + this.OID;
             BP.DA.DBAccess.RunSQL(sql);
 
             sql = "UPDATE ND1Rpt SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "',HeJi=" + hj + "  WHERE OID=" + this.OID;
@@ -165,11 +177,20 @@ namespace BP.Demo.FlowEvent
                 //返回.
                 return base.SendSuccess();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("向其他系统写入待办失败，详细信息："+ex.Message);
+                return base.SendSuccess();
+                //  throw new Exception("向其他系统写入待办失败，详细信息："+ex.Message);
             }
         }
-         
+
+        /// <summary>
+        /// 发送失败的时候
+        /// </summary>
+        /// <returns></returns>
+        public override string SendError()
+        {
+            return base.SendError();
+        }
     }
 }

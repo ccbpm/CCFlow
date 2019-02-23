@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using BP.Sys;
-using BP.Rpt;
+using BP.Pub;
 using BP.En;
 
 namespace BP.Demo
@@ -11,7 +11,7 @@ namespace BP.Demo
     /// <summary>
     /// 属性
     /// </summary>
-    public class RptStudent : BP.Rpt.Rpt2Base
+    public class RptStudent : BP.Pub.Rpt2Base
     {
         /// <summary>
         /// 标题.
@@ -29,12 +29,12 @@ namespace BP.Demo
             get { return 0; }
         }
 
-        public override BP.Rpt.Rpt2Attrs AttrsOfGroup
+        public override BP.Pub.Rpt2Attrs AttrsOfGroup
         {
             get {
 
                 //定义要返回的集合.
-                BP.Rpt.Rpt2Attrs rpts =new Rpt2Attrs();
+                BP.Pub.Rpt2Attrs rpts = new Rpt2Attrs();
 
                 //定义一个报表.
                 Rpt2Attr rpt = new Rpt2Attr();

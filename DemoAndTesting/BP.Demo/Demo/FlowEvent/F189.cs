@@ -116,7 +116,9 @@ namespace BP.Demo.FlowEvent
             }
             catch(Exception ex)
             {
-                throw new Exception("向其他系统写入待办失败，详细信息："+ex.Message);
+                return base.SendSuccess();
+
+               // throw new Exception("向其他系统写入待办失败，详细信息："+ex.Message);
             }
         }
          

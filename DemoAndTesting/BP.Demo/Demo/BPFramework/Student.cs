@@ -277,19 +277,20 @@ namespace BP.Demo.BPFramework
                     return this._enMap;
 
                 Map map = new Map("Demo_Student", "学生");
+
                 //基础信息.
                 map.IsAllowRepeatName = true; //是否允许名称重复.
                 map.IsAutoGenerNo = true; //是否自动生成编号.
                 map.Java_SetCodeStruct("4"); // 4位数的编号，从 0001 开始，到 9999.
 
-                //普通字段.
-                map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 4); // 如果设置自动编号字段必须是只读的.
+                #region 字段映射 - 普通字段.
+                map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 90); // 如果设置自动编号字段必须是只读的.
                 map.AddTBString(StudentAttr.Name, null, "名称", true, false, 0, 200, 70);
-                map.AddTBString(StudentAttr.PWD, null, "登录密码", true, false, 0, 200, 70);
+                map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 70);
                 //map.AddTBString("shuoming", null, "说明", true, false, 0, 200, 70);
 
                 map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, false);
-                map.AddTBInt(StudentAttr.Age, 0, "年龄", true, false);
+                map.AddTBInt("Age", 0, "年龄", true, false);
                 map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
                 map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
                 map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
@@ -305,6 +306,7 @@ namespace BP.Demo.BPFramework
 
                 //枚举字段
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
+
                 //外键字段.
                 map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
 
@@ -315,9 +317,11 @@ namespace BP.Demo.BPFramework
                 map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
 
                 //枚举字段 - 整治面貌.
-                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM, "@0=少先队员@1=团员@2=党员");
+                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
+                    "@0=少先队员@1=团员@2=党员");
+                #endregion 字段映射 - 普通字段.
 
-               //map.AddHidden("XB", " = ", "0");
+                //map.AddHidden("XB", " = ", "0");
 
                 map.AddMyFile("简历");
 
@@ -327,7 +331,6 @@ namespace BP.Demo.BPFramework
                 map.AddSearchAttr(StudentAttr.XB);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
                 map.AddSearchAttr(StudentAttr.ZZMM);
-
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
@@ -343,7 +346,7 @@ namespace BP.Demo.BPFramework
                 rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
                 rm.GroupName = "功能执行测试";
-                rm.IsCanBatch = false; //是否可以批处理？
+              //  rm.IsCanBatch = false; //是否可以批处理？
                 map.AddRefMethod(rm);
 
                 //不带有参数的方法.
@@ -410,7 +413,6 @@ namespace BP.Demo.BPFramework
 
             BP.Pub.RTFEngine en = new Pub.RTFEngine();
 
-
             Student stu = new Student(this.No);
 
             en.HisGEEntity = stu; //当前的实体.
@@ -419,7 +421,6 @@ namespace BP.Demo.BPFramework
             BP.Demo.Resumes dtls=new Resumes();
             dtls.Retrieve(ResumeAttr.RefPK,stu.No);
             en.AddDtlEns(dtls);
-
 
             string saveTo=BP.Sys.SystemConfig.PathOfTemp; // \\DataUser\\Temp\\
             string billFileName = this.No+"StuTest.doc";
@@ -435,7 +436,6 @@ namespace BP.Demo.BPFramework
         public string DoStartFlow()
         {
             return "/WF/MyFlow.htm?FK_Flow=001&FK_Studept="+this.No+"&StuName="+this.Name;
-
         }
         /// <summary>
         /// 带有参数的方法:缴纳班费
@@ -444,7 +444,6 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoJiaoNaBanFei(decimal jine, string note)
         {
-
             return "学号:"+this.No+",姓名:"+this.Name+",缴纳了:"+jine+"元,说明:"+note;
         }
         /// <summary>

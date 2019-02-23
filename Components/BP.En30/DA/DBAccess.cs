@@ -34,7 +34,7 @@ using IBM.Data;
 using IBM.Data.Informix;
 using IBM.Data.Utilities;
 using BP.Sys;
-using Npgsql;
+//using Npgsql;
 
 namespace BP.DA
 {
@@ -1785,47 +1785,48 @@ namespace BP.DA
         /// <returns>执行的结果</returns>
         private static int RunSQL_201902_SQL(string sql, Paras paras)
         {
-            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
-            if (conn.State != System.Data.ConnectionState.Open)
-            {
-                conn.ConnectionString = SystemConfig.AppCenterDSN;
-                conn.Open();
-            }
-            Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(sql, conn);
-            cmd.CommandType = CommandType.Text;
+            return 0;
+            //Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            //if (conn.State != System.Data.ConnectionState.Open)
+            //{
+            //    conn.ConnectionString = SystemConfig.AppCenterDSN;
+            //    conn.Open();
+            //}
+            //Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(sql, conn);
+            //cmd.CommandType = CommandType.Text;
 
-            try
-            {
-                foreach (Para para in paras)
-                {
-                    Npgsql.NpgsqlParameter oraP = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
-                    cmd.Parameters.Add(oraP);
-                }
-                int i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                conn.Close();
-                return i;
-            }
-            catch (System.Exception ex)
-            {
-                cmd.Dispose();
-                conn.Close();
+            //try
+            //{
+            //    foreach (Para para in paras)
+            //    {
+            //        Npgsql.NpgsqlParameter oraP = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
+            //        cmd.Parameters.Add(oraP);
+            //    }
+            //    int i = cmd.ExecuteNonQuery();
+            //    cmd.Dispose();
+            //    conn.Close();
+            //    return i;
+            //}
+            //catch (System.Exception ex)
+            //{
+            //    cmd.Dispose();
+            //    conn.Close();
 
-                paras.SQL = sql;
-                string msg = "";
-                if (paras.Count == 0)
-                    msg = "SQL=" + sql + ",异常信息:" + ex.Message;
-                else
-                    msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
+            //    paras.SQL = sql;
+            //    string msg = "";
+            //    if (paras.Count == 0)
+            //        msg = "SQL=" + sql + ",异常信息:" + ex.Message;
+            //    else
+            //        msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
 
-                Log.DefaultLogWriteLineInfo(msg);
-                throw new Exception(msg);
-            }
-            finally
-            {
-                cmd.Dispose();
-                conn.Close();
-            }
+            //    Log.DefaultLogWriteLineInfo(msg);
+            //    throw new Exception(msg);
+            //}
+            //finally
+            //{
+            //    cmd.Dispose();
+            //    conn.Close();
+            //}
         }
         /// <summary>
         /// 运行sql返回结果
@@ -2459,38 +2460,40 @@ namespace BP.DA
         /// <returns>返回的数据.</returns>
         private static DataTable RunSQLReturnTable_201902_PSQL(string sql, Paras paras)
         {
-            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
-            if (conn.State != ConnectionState.Open)
-                conn.Open();
+            return null; 
 
-            Npgsql.NpgsqlDataAdapter ada = new Npgsql.NpgsqlDataAdapter(sql, conn);
-            ada.SelectCommand.CommandType = CommandType.Text;
+            //Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            //if (conn.State != ConnectionState.Open)
+            //    conn.Open();
 
-            // 加入参数
-            if (paras != null)//qin 解决为null时的异常
-            {
-                foreach (Para para in paras)
-                {
-                    Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
-                    myParameter.Size = para.Size;
-                    ada.SelectCommand.Parameters.Add(myParameter);
-                }
-            }
+            //Npgsql.NpgsqlDataAdapter ada = new Npgsql.NpgsqlDataAdapter(sql, conn);
+            //ada.SelectCommand.CommandType = CommandType.Text;
 
-            try
-            {
-                DataTable oratb = new DataTable("otb");
-                ada.Fill(oratb);
-                ada.Dispose();
-                conn.Close();
-                return oratb;
-            }
-            catch (Exception ex)
-            {
-                ada.Dispose();
-                conn.Close();
-                throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
-            }
+            //// 加入参数
+            //if (paras != null)//qin 解决为null时的异常
+            //{
+            //    foreach (Para para in paras)
+            //    {
+            //        Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
+            //        myParameter.Size = para.Size;
+            //        ada.SelectCommand.Parameters.Add(myParameter);
+            //    }
+            //}
+
+            //try
+            //{
+            //    DataTable oratb = new DataTable("otb");
+            //    ada.Fill(oratb);
+            //    ada.Dispose();
+            //    conn.Close();
+            //    return oratb;
+            //}
+            //catch (Exception ex)
+            //{
+            //    ada.Dispose();
+            //    conn.Close();
+            //    throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            //}
         }
         private static string DealInformixSQL(string sql)
         {

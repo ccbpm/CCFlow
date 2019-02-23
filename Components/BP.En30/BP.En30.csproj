@@ -129,9 +129,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\..\RefDLL\Npgsql.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>

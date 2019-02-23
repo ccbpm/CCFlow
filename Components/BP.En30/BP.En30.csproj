@@ -129,6 +129,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\..\RefDLL\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -250,6 +253,15 @@
     <Compile Include="DA\JiaMi\ConfigInformation.cs" />
     <Compile Include="DA\JiaMi\decode.cs" />
     <Compile Include="DA\JiaMi\DecryptAndEncryptionHelper.cs" />
+    <Compile Include="DTS\DataIOEn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DTS\DataToCash.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DTS\Engine.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DTS\Sys\TableFieldAddComment.cs" />
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
@@ -442,9 +454,6 @@
     <Compile Include="GPM\Emp.cs" />
     <Compile Include="GPM\Station.cs" />
     <Compile Include="GPM\StationType.cs" />
-    <Compile Include="Pub\Engine.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Web\GuestUser.cs">
       <SubType>Code</SubType>
     </Compile>

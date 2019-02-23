@@ -34,6 +34,7 @@ using IBM.Data;
 using IBM.Data.Informix;
 using IBM.Data.Utilities;
 using BP.Sys;
+using Npgsql;
 
 namespace BP.DA
 {
@@ -1738,6 +1739,9 @@ namespace BP.DA
                     case DBType.MySQL:
                         result = RunSQL_200705_MySQL(sql, paras);
                         break;
+                    case DBType.PostgreSQL:
+                        result = RunSQL_200705_SQL(sql, paras);
+                        break;
                     case DBType.Informix:
                         result = RunSQL_201205_Informix(sql, paras);
                         break;
@@ -1773,7 +1777,56 @@ namespace BP.DA
                 throw new Exception("执行sql错误:" + ex.Message + " Paras(" + paras.Count + ")=" + msg + "<hr>" + mysql);
             }
         }
+        /// <summary>
+        /// 运行sql返回结果
+        /// </summary>
+        /// <param name="sql">sql</param>
+        /// <param name="paras">参数</param>
+        /// <returns>执行的结果</returns>
+        private static int RunSQL_201902_SQL(string sql, Paras paras)
+        {
+            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.ConnectionString = SystemConfig.AppCenterDSN;
+                conn.Open();
+            }
+            Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(sql, conn);
+            cmd.CommandType = CommandType.Text;
 
+            try
+            {
+                foreach (Para para in paras)
+                {
+                    Npgsql.NpgsqlParameter oraP = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
+                    cmd.Parameters.Add(oraP);
+                }
+                int i = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                conn.Close();
+                return i;
+            }
+            catch (System.Exception ex)
+            {
+                cmd.Dispose();
+                conn.Close();
+
+                paras.SQL = sql;
+                string msg = "";
+                if (paras.Count == 0)
+                    msg = "SQL=" + sql + ",异常信息:" + ex.Message;
+                else
+                    msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
+
+                Log.DefaultLogWriteLineInfo(msg);
+                throw new Exception(msg);
+            }
+            finally
+            {
+                cmd.Dispose();
+                conn.Close();
+            }
+        }
         /// <summary>
         /// 运行sql返回结果
         /// </summary>
@@ -1793,39 +1846,11 @@ namespace BP.DA
 
             try
             {
-                //if (SystemConfig.IsEnableNull )
-                //{
-                //    /*如果数值类型的允许为null, 就要特殊的判断. */
-                //    foreach (Para para in paras)
-                //    {
-                //        switch (para.DAType)
-                //        {
-                //            case DbType.Int32:
-                //            case DbType.Decimal: 
-                //            case DbType.Double:
-                //                if (para.val ==)
-                //                {
-                //                    SqlParameter oraP1 = new SqlParameter(para.ParaName, DBNull.Value);
-                //                    cmd.Parameters.Add(oraP1);
-                //                    continue;
-                //                }
-                //                break;
-                //            default:
-                //                break;
-                //        }
-                //        SqlParameter op = new SqlParameter(para.ParaName, para.val);
-                //        cmd.Parameters.Add(op);
-                //    }
-                //}
-                //else
-                //{
                 foreach (Para para in paras)
                 {
                     SqlParameter oraP = new SqlParameter(para.ParaName, para.val);
                     cmd.Parameters.Add(oraP);
                 }
-                // }
-
                 int i = cmd.ExecuteNonQuery();
                 cmd.Dispose();
                 conn.Close();
@@ -2406,6 +2431,47 @@ namespace BP.DA
                 foreach (Para para in paras)
                 {
                     SqlParameter myParameter = new SqlParameter(para.ParaName, para.val);
+                    myParameter.Size = para.Size;
+                    ada.SelectCommand.Parameters.Add(myParameter);
+                }
+            }
+
+            try
+            {
+                DataTable oratb = new DataTable("otb");
+                ada.Fill(oratb);
+                ada.Dispose();
+                conn.Close();
+                return oratb;
+            }
+            catch (Exception ex)
+            {
+                ada.Dispose();
+                conn.Close();
+                throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            }
+        }
+        /// <summary>
+        /// 运行sql返回datatable
+        /// </summary>
+        /// <param name="sql">要运行的SQL</param>
+        /// <param name="paras">参数</param>
+        /// <returns>返回的数据.</returns>
+        private static DataTable RunSQLReturnTable_201902_PSQL(string sql, Paras paras)
+        {
+            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
+
+            Npgsql.NpgsqlDataAdapter ada = new Npgsql.NpgsqlDataAdapter(sql, conn);
+            ada.SelectCommand.CommandType = CommandType.Text;
+
+            // 加入参数
+            if (paras != null)//qin 解决为null时的异常
+            {
+                foreach (Para para in paras)
+                {
+                    Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
                     myParameter.Size = para.Size;
                     ada.SelectCommand.Parameters.Add(myParameter);
                 }
@@ -3260,6 +3326,9 @@ namespace BP.DA
                     break;
                 case DBType.MSSQL:
                     dt = DBAccess.RunSQLReturnTable_200705_SQL(sql, new Paras());
+                    break;
+                case DBType.PostgreSQL:
+                    dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, new Paras());
                     break;
                 case DBType.Informix:
                     dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, new Paras());

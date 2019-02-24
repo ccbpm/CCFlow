@@ -286,23 +286,21 @@ namespace BP.Demo.BPFramework
                 #region 字段映射 - 普通字段.
                 map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 90); // 如果设置自动编号字段必须是只读的.
                 map.AddTBString(StudentAttr.Name, null, "名称", true, false, 0, 200, 70);
-                map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 70);
-                //map.AddTBString("shuoming", null, "说明", true, false, 0, 200, 70);
+                map.AddTBStringDoc(StudentAttr.PWD, null, "密码", true, false);
+                //map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 70);
 
-                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, false);
-                map.AddTBInt("Age", 0, "年龄", true, false);
+
+                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
+                map.AddTBInt(StudentAttr.Age, 18, "年龄", true, false);
+
                 map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
                 map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
                 map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
 
-                map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
-                map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
-                map.AddDDLEntities(StudentAttr.FK_City, null, "城市",new BP.CN.Citys(),true);
+                //map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
+                //map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
+                //map.AddDDLEntities(StudentAttr.FK_City, null, "城市",new BP.CN.Citys(),true);
 
-                //map.AddTBString(StudentAttr.FK_SF, null, "地址", true, false, 0, 200, 100, true);
-                //map.AddTBString(StudentAttr, null, "地址", true, false, 0, 200, 100, true);
-                //map.AddTBString("LXR", null, "联系人", true, false, 0, 200, 100, true);
-                //map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
 
                 //枚举字段
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
@@ -311,8 +309,8 @@ namespace BP.Demo.BPFramework
                 map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
 
                 //增加checkbox属性.
-                map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true);
-                map.AddBoolean(StudentAttr.IsJiBing, false, "是否有重大疾病？", true, true);
+                map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true,true);
+                map.AddBoolean(StudentAttr.IsJiBing, false, "是否有重大疾病？", true, true, true);
                 map.AddBoolean(StudentAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
                 map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
 
@@ -444,6 +442,8 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoJiaoNaBanFei(decimal jine, string note)
         {
+
+
             return "学号:"+this.No+",姓名:"+this.Name+",缴纳了:"+jine+"元,说明:"+note;
         }
         /// <summary>
@@ -453,6 +453,7 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoZhuXiao()
         {
+
             return "学号:" + this.No + ",姓名:" + this.Name + ",已经注销.";
         }
         /// <summary>
@@ -465,6 +466,12 @@ namespace BP.Demo.BPFramework
             return this.PWD.Equals(pass);
         }
         #endregion
+
+        protected override bool beforeDelete()
+        {
+
+            return base.beforeDelete();
+        }
 
     }
     /// <summary>

@@ -47,7 +47,7 @@ namespace BP.Sys
         /// <summary>
         /// 关联的键
         /// </summary>
-        public const string RefKey = "RefKey";
+        public const string SortKey = "SortKey";
         /// <summary>
         /// 模块
         /// </summary>
@@ -56,27 +56,31 @@ namespace BP.Sys
         /// 值
         /// </summary>
         public const string Val = "Val";
+        /// <summary>
+        /// 模块键值 FrmID, Or FlowNo
+        /// </summary>
+        public const string ModelKey = "ModelKey";
     }
     /// <summary>
     /// 语言
     /// </summary>
-	public class Langue : EntityMyPK
-	{
-		#region 基本属性
+    public class Langue : EntityMyPK
+    {
+        #region 基本属性
         /// <summary>
         /// 模块：比如 ccform.
         /// </summary>
-		public string Model
-		{
-			get
-			{
-				return this.GetValStringByKey(LangueAttr.Model);
-			}
-			set
-			{
-				this.SetValByKey(LangueAttr.Model,value);
-			}
-		}
+        public string Model
+        {
+            get
+            {
+                return this.GetValStringByKey(LangueAttr.Model);
+            }
+            set
+            {
+                this.SetValByKey(LangueAttr.Model, value);
+            }
+        }
         /// <summary>
         /// 类别：比如Label,Field
         /// </summary>
@@ -94,15 +98,15 @@ namespace BP.Sys
         /// <summary>
         /// 关联的主键: 比如:LabelID, KeyOfEn
         /// </summary>
-        public string RefKey
+        public string SortKey
         {
             get
             {
-                return this.GetValStringByKey(LangueAttr.RefKey);
+                return this.GetValStringByKey(LangueAttr.SortKey);
             }
             set
             {
-                this.SetValByKey(LangueAttr.RefKey, value);
+                this.SetValByKey(LangueAttr.SortKey, value);
             }
         }
         /// <summary>
@@ -123,17 +127,28 @@ namespace BP.Sys
         /// 值
         /// </summary>
         public string Val
-		{
-			get
-			{
+        {
+            get
+            {
                 return this.GetValStringByKey(LangueAttr.Val);
-			}
-			set
-			{
+            }
+            set
+            {
                 this.SetValByKey(LangueAttr.Val, value);
-			}
-		}
-		#endregion 
+            }
+        }
+        public string ModelKey
+        {
+            get
+            {
+                return this.GetValStringByKey(LangueAttr.ModelKey);
+            }
+            set
+            {
+                this.SetValByKey(LangueAttr.ModelKey, value);
+            }
+        }
+        #endregion
 
 
         #region 构造方法
@@ -144,44 +159,54 @@ namespace BP.Sys
             : base(pk)
         {
         }
-		public override Map EnMap
-		{
+        public override Map EnMap
+        {
             get
             {
                 if (this._enMap != null)
                     return this._enMap;
 
                 Map map = new Map("Sys_Langue", "语言定义");
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.AddMyPK();
 
-                map.AddTBString(LangueAttr.Model, null, "模块", true, true, 0, 20, 20);
-                map.AddTBString(LangueAttr.Sort, null, "类别", true, true, 0, 20, 20);
-                map.AddTBString(LangueAttr.RefKey, null, "关联PK", true, true, 0, 100, 20);
                 map.AddTBString(LangueAttr.Langue, null, "语言ID", true, true, 0, 20, 20);
+
+                map.AddTBString(LangueAttr.Model, null, "模块", true, true, 0, 20, 20);
+                map.AddTBString(LangueAttr.ModelKey, null, "模块实例", true, true, 0, 200, 20);
+
+                map.AddTBString(LangueAttr.Sort, null, "类别", true, true, 0, 20, 20);
+                map.AddTBString(LangueAttr.SortKey, null, "类别PK", true, true, 0, 100, 20);
+
                 map.AddTBString(LangueAttr.Val, null, "语言值", true, true, 0, 3999, 20);
 
                 this._enMap = map;
                 return this._enMap;
             }
-		}		 
-		#endregion 
-	}
-	/// <summary>
-	/// 语言 
-	/// </summary>
-	public class Langues :EntitiesMyPK
-	{
-		/// <summary>
-		/// 得到它的 Entity
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new Langue();
-			}
-		}
+        }
+        #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.MyPK = this.Lang + "_" + this.Model + "_" + this.ModelKey + "_" + this.Sort + "_" + this.SortKey;
+            return base.beforeUpdateInsertAction();
+        }
+    }
+    /// <summary>
+    /// 语言 
+    /// </summary>
+    public class Langues : EntitiesMyPK
+    {
+        /// <summary>
+        /// 得到它的 Entity
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new Langue();
+            }
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -206,5 +231,5 @@ namespace BP.Sys
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

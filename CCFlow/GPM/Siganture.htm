@@ -67,15 +67,16 @@
 
             }
 
-            Handler = "../WF/Setting/Handler.ashx";
-            if (plant != "CCFlow")
+//            Handler = "../WF/Setting/Handler.ashx";
+            if (plant != "CCFlow") {
                 Handler = "../WF/Setting/ProcessRequest.do";
-            var url = Handler + "?DoType=Siganture_Save&EmpNo=" + empNo;
+                var url = Handler + "?DoType=Siganture_Save&EmpNo=" + empNo;
+            } else {
+                var doMethod = "Siganture_Save";
+                var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
+                var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
+            }
             //提交数据
-            var doMethod = "Siganture_Save";
-            var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
-            var url = ".."+dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
-           
 //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
 //            handler.AddPara("EmpNo", empNo);
 //            var data = handler.DoMethodReturnString("Siganture_Save");

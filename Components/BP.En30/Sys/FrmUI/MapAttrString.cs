@@ -158,12 +158,6 @@ namespace BP.Sys.FrmUI
 
                 rm = new RefMethod();
                 rm.Title = "文本框自动完成";
-                rm.ClassMethodName = this.ToString() + ".DoTBFullCtrl()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "文本框自动完成2019";
                 rm.ClassMethodName = this.ToString() + ".DoTBFullCtrl2019()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -209,7 +203,7 @@ namespace BP.Sys.FrmUI
 
 
                 rm = new RefMethod();
-                rm.Title = "Pop返回值v2019";
+                rm.Title = "Pop返回值";
                 rm.ClassMethodName = this.ToString() + ".DoPop2019()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -247,74 +241,6 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
                 #endregion Pop 自动填充.
-
-                #region Pop返回值.
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "枝干叶子模式";
-                rm.ClassMethodName = this.ToString() + ".DoBranchesAndLeaf()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "枝干叶子模式-懒加载";
-                rm.ClassMethodName = this.ToString() + ".DoBranchesAndLeafLazyLoad()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "枝干模式(简单)";
-                rm.ClassMethodName = this.ToString() + ".DoBranches()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "枝干模式(简单)-懒加载";
-                rm.ClassMethodName = this.ToString() + ".DoBranchesLazyLoad()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "分组列表平铺";
-                rm.ClassMethodName = this.ToString() + ".DoGroupList()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "单实体平铺";
-                rm.ClassMethodName = this.ToString() + ".DoTableList()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "表格条件查询";
-                rm.ClassMethodName = this.ToString() + ".DoTableSearch()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.GroupName = "Pop返回值2018";
-                rm.Title = "自定义URL";
-                rm.ClassMethodName = this.ToString() + ".DoSelfUrl()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                //  设置开窗返回值-正则表达式-文本框自动完成-脚本验证-扩展控件
-                //rm = new RefMethod();
-                //rm.GroupName = "Pop返回值2018";
-                //rm.Title = "设置开窗返回值(旧版本)";
-                //rm.ClassMethodName = this.ToString() + ".DoPopVal()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-                #endregion
 
                 #region 高级设置.
                 rm = new RefMethod();
@@ -442,73 +368,6 @@ namespace BP.Sys.FrmUI
         }
         #endregion 方法执行 Pop填充自动完成.
 
-        #region 方法执行 pop返回值
-        /// <summary>
-        /// 自定义Url.
-        /// </summary>
-        /// <returns></returns>
-        public string DoSelfUrl()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/SelfUrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-        /// <summary>
-        /// 实体列表模式
-        /// </summary>
-        /// <returns>返回url</returns>
-        public string DoTableList()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/TableList.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-        /// <summary>
-        /// 枝干叶子模式
-        /// </summary>
-        /// <returns>返回url</returns>
-        public string DoBranchesAndLeaf()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/BranchesAndLeaf.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-        /// <summary>
-        /// 枝干叶子懒加载
-        /// </summary>
-        /// <returns></returns>
-        public string DoBranchesAndLeafLazyLoad()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/BranchesAndLeafLazyLoad.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&IsLazyLoad=1";
-        }
-        /// <summary>
-        /// 枝干模式
-        /// </summary>
-        /// <returns>返回url</returns>
-        public string DoBranches()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/Branches.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-        /// <summary>
-        /// 枝干模式懒加载
-        /// </summary>
-        /// <returns>返回url</returns>
-        public string DoBranchesLazyLoad()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/Branches.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-        /// <summary>
-        /// 分组模式
-        /// </summary>
-        /// <returns></returns>
-        public string DoGroupList()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/GroupList.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-        /// <summary>
-        /// 实体查询模式
-        /// </summary>
-        /// <returns></returns>
-        public string DoTableSearch()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/TableSearch.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-        #endregion
-
         #region 方法执行.
         /// <summary>
         /// 批处理
@@ -560,14 +419,11 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
         }
+      
         /// <summary>
         /// 文本框自动完成
         /// </summary>
         /// <returns></returns>
-        public string DoTBFullCtrl()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
-        }
         public string DoTBFullCtrl2019()
         {
             return "../../Admin/FoolFormDesigner/TBFullCtrl/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);

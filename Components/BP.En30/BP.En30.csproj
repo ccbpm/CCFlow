@@ -366,6 +366,7 @@
     <Compile Include="Sys\XML\XmlMenu.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sys\Langue.cs" />
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="DA\EnumDA.cs" />
     <Compile Include="DA\Cash.cs">

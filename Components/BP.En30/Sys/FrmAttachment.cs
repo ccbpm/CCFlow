@@ -1257,7 +1257,6 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
 
 
-
                 
                 //hzm新增列
                 map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);

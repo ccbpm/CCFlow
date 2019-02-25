@@ -141,15 +141,9 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
                 rm = new RefMethod();
                 rm.Title = "填充其他控件";
-                rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "填充其他控件v2019";
                 rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl2019()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);

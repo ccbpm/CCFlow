@@ -1035,61 +1035,7 @@ namespace BP.WF.HttpHandler
 
 
         }
-        public string CondStation_Save()
-        {
-            int FK_MainNode = this.GetRequestValInt("FK_MainNode");
-            int ToNodeID = this.GetRequestValInt("ToNodeID");
-            CondType HisCondType = CondType.Dir;
-
-            Cond cond = new Cond();
-            cond.Delete(CondAttr.NodeID, FK_MainNode,
-              CondAttr.ToNodeID, ToNodeID,
-              CondAttr.CondType, (int)HisCondType);
-
-            string mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + ConnDataFrom.Stas.ToString();
-
-            // 删除岗位条件.
-            cond.MyPK = mypk;
-            if (cond.RetrieveFromDBSources() == 0)
-            {
-                cond.HisDataFrom = ConnDataFrom.Stas;
-                cond.NodeID = FK_MainNode;
-                cond.FK_Flow = this.FK_Flow;
-                cond.ToNodeID = ToNodeID;
-                cond.Insert();
-            }
-
-            string val = "";
-            Stations sts = new Stations();
-            sts.RetrieveAllFromDBSource();
-            foreach (Station st in sts)
-            {
-                if (this.GetRequestVal("CB_" + st.No) != "1")
-                    continue;
-                val += "@" + st.No;
-            }
-
-            val += "@";
-            cond.OperatorValue = val;
-            cond.HisDataFrom = ConnDataFrom.Stas;
-            cond.FK_Flow = this.FK_Flow;
-            cond.HisCondType = CondType.Dir;
-            cond.FK_Node = FK_MainNode;
-
-            #region //获取“指定的操作员”设置，added by liuxc,2015-10-7
-            cond.SpecOperWay = (SpecOperWay)this.GetRequestValInt("DDL_" + CondAttr.SpecOperWay);
-
-            if (cond.SpecOperWay != SpecOperWay.CurrOper)
-                cond.SpecOperPara = this.GetRequestVal("TB_" + CondAttr.SpecOperPara);
-            else
-                cond.SpecOperPara = string.Empty;
-            #endregion
-
-            cond.ToNodeID = ToNodeID;
-            cond.Update();
-
-            return "保存成功..";
-        }
+        
         #endregion 按照岗位的方向条件.
 
     }

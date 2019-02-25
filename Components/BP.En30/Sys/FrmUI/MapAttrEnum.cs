@@ -151,12 +151,6 @@ namespace BP.Sys.FrmUI
 
                 rm = new RefMethod();
                 rm.Title = "填充其他控件";
-                rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "填充其他控件v2019";
                 rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl2019()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -234,14 +228,7 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
         }
-        /// <summary>
-        /// 设置自动填充
-        /// </summary>
-        /// <returns></returns>
-        public string DoDDLFullCtrl()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
-        }
+        
         public string DoDDLFullCtrl2019()
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);

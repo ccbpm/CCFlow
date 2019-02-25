@@ -89,25 +89,28 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
+                if (en.UIVisible == 0)
+                    continue;
+
                 html += "<tr>";
                 html += "<td>" + i + "</td>";
                 html += "<td>" + en.KeyOfEn + "</td>";
                 html += "<td>" + en.Name + "</td>";
-                html += "<td><input type='textbox' id=" + en.KeyOfEn + " /></td>";
+                html += "<td><input type='text' id='" + en.KeyOfEn + "' name='" + en.KeyOfEn + "' /></td>";
                 html += "</tr>";
             }
             html += "</table>";
+            $("#Doc").html(html);
 
             //查询出来以前的配置.
             var langs = new Entities("BP.Sys.Langues");
             langs.Retrieve("Model", "CCForm", "Sort", sort, "Langue", selectLangue);
             for (var i = 0; i < langs.length; i++) {
+
                 var lan = langs[i];
-                $("#" + lan.RefKey).val(lan.Val);
+                $("#" + lan.SortKey).val(lan.Val);
             }
 
-
-            $("#Doc").html(html);
         }
 
         //绑定label.
@@ -132,20 +135,20 @@
                 html += "<td>" + i + "</td>";
                 html += "<td>" + en.MyPK + "</td>";
                 html += "<td>" + en.Text + "</td>";
-                html += "<td><input type='textbox' id=" + en.KeyOfEn + " /></td>";
+                html += "<td><input type='textbox' id='" + en.MyPK + "' name='" + en.MyPK + "' /></td>";
                 html += "</tr>";
             }
             html += "</table>";
+            $("#Doc").html(html);
 
             //查询出来以前的配置.
             var langs = new Entities("BP.Sys.Langues");
             langs.Retrieve("Model", "CCForm", "Sort", sort, "Langue", selectLangue);
             for (var i = 0; i < langs.length; i++) {
                 var lan = langs[i];
-                $("#" + lan.RefKey).val(lan.Val);
+                $("#" + lan.SortKey).val(lan.Val);
             }
 
-            $("#Doc").html(html);
         }
 
 
@@ -164,7 +167,7 @@
 
             //删除以前的配置.
             var langs = new Entities("BP.Sys.Langues");
-            langs.Delete("Model", "CCForm", "Sort", sort, "Langue", selectLangue); //组合条件删除。
+            langs.Delete("Model", "CCForm", "ModelKey", frmID, "Sort", sort, "Langue", selectLangue); //组合条件删除。
 
 
             //字段列表.
@@ -180,12 +183,14 @@
                 if (val == null || val == "")
                     continue;
 
-                en.Model = "CCForm";
-                en.Sort = sort; //类别.
-                en.RefKey = en.KeyOfEn;
-                en.Langue = selectLangue;
-                en.Val = val;
-                en.Insert(); //插入数据.
+                lang.Model = "CCForm";
+                lang.ModelKey = frmID;
+
+                lang.Sort = sort; //类别.
+                lang.SortKey = en.KeyOfEn;
+                lang.Langue = selectLangue;
+                lang.Val = val;
+                lang.Insert(); //插入数据.
             }
             window.location.href = window.location.href;
         }
@@ -195,10 +200,7 @@
 
             //删除以前的配置.
             var langs = new Entities("BP.Sys.Langues");
-            langs.Delete("Model", "CCForm", "Sort", sort, "Langue", selectLangue); //组合条件删除。
-
-            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Multilingual");
-            //            var ht = handler.DoMethodReturnJSON("GetLangue");
+            langs.Delete("Model", "CCForm", "ModelKey", frmID, "Sort", sort, "Langue", selectLangue); //组合条件删除。
 
 
             //字段列表.
@@ -210,16 +212,19 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
-                var val = $("#" + en.KeyOfEn).val();
+                var val = $("#" + en.MyPK).val();
                 if (val == null || val == "")
                     continue;
 
-                en.Model = "CCForm";
-                en.Sort = sort; //类别.
-                en.RefKey = en.KeyOfEn;
-                en.Langue = selectLangue;
-                en.Val = val;
-                en.Insert(); //插入数据.
+                lang.Model = "CCForm";
+                lang.ModelKey = frmID;
+
+                lang.Sort = sort; //类别.
+                lang.SortKey = en.MyPK;
+
+                lang.Langue = selectLangue;
+                lang.Val = val;
+                lang.Insert(); //插入数据.
             }
             window.location.href = window.location.href;
 

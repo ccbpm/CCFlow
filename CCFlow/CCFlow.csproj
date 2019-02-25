@@ -1332,6 +1332,7 @@
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\Frm.png" />
     <Content Include="WF\Admin\Img\PK.png" />
+    <Content Include="WF\Admin\Multilingual\CCForm.htm" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
     <Content Include="WF\Admin\RptDfine\Default.htm" />
@@ -1457,7 +1458,6 @@
     <Content Include="WF\Comm\Charts\css\prettify.css" />
     <Content Include="WF\Comm\Charts\css\Style.css" />
     <Content Include="WF\Comm\Charts\css\style_3.css" />
-    <Content Include="WF\Comm\Charts\FCExport.aspx" />
     <Content Include="WF\Comm\Charts\imgs\bg.png" />
     <Content Include="WF\Comm\Charts\imgs\bg_2.png" />
     <Content Include="WF\Comm\Charts\imgs\image_1.png" />
@@ -7453,13 +7453,6 @@
     <Compile Include="WF\CCForm\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Charts\FCExport.aspx.cs">
-      <DependentUpon>FCExport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Charts\FCExport.aspx.designer.cs">
-      <DependentUpon>FCExport.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>

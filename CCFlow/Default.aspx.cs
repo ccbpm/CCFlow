@@ -24,7 +24,6 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  end ------------------ ");
 

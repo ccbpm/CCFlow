@@ -8,18 +8,28 @@
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script type="text/javascript">
-        
+
         var keyofen = GetQueryString('KeyOfEn');
         //从url参数中截取出流程编号
         var fk_mapdata = GetQueryString('FK_MapData');
-        var fk_flow = fk_mapdata.substring(2, 5);
+        var fk_flow = fk_mapdata.substring(2);
+
+        fk_flow = fk_flow.substring(0, fk_flow.length - 2);
+
+        if (fk_flow.length == 1)
+            fk_flow = '00' + fk_flow;
+
+        if (fk_flow.length == 2)
+            fk_flow = '0' + fk_flow;
+
+
         //声明一个行对象数组,用于初始化表格数据
         var enArr = new Array();
 
@@ -30,9 +40,13 @@
         3.根据批量操作的不同(copy\update\delete),拿生成的数组与Sys_MapAttr表中对应项进行比较,过滤掉数组中相应的元素,求的不同的操作对应的不同数组;
         */
         function getEns(para) {
-            
+
             //获取流程对应的所有节点
             var nodes = new Entities("BP.WF.Nodes", "FK_Flow", fk_flow);
+            nodes.Retrieve("FK_Flow", fk_flow);
+
+            alert(nodes.length);
+
 
             if (nodes.length == 0) {
                 return "";
@@ -41,8 +55,8 @@
                 //组装查询MapData的No
                 var mapdataon = ("ND" + nodes[j].NodeID);
                 //获取MapData对象,(目的是从中取出节点名称和编号等)
-               // if (mapdataon == fk_mapdata) //去掉当前节点,因为当前节点为操作的原数据.不应该出现在列表中.
-                 //   continue;
+                // if (mapdataon == fk_mapdata) //去掉当前节点,因为当前节点为操作的原数据.不应该出现在列表中.
+                //   continue;
                 var en = new Entity('BP.Sys.MapData', mapdataon);
                 if (en != null) {
                     var rowObj = {};
@@ -52,9 +66,8 @@
                 }
             }
 
-            var mapattrs = new Entities("BP.Sys.MapAttrs", "KeyOfEn", keyofen);            
-            switch(para)
-            {
+            var mapattrs = new Entities("BP.Sys.MapAttrs", "KeyOfEn", keyofen);
+            switch (para) {
                 case "copy":
 
                     for (var i = 0; i < mapattrs.length; i++) {
@@ -140,7 +153,7 @@
             enArr = [];
             //修改按钮id属性和名称
             var bName = document.getElementById(para).innerText;
-            $('input[name="batch"]').attr('id', para).attr('value',"执行[" + bName + "]操作");
+            $('input[name="batch"]').attr('id', para).attr('value', "执行[" + bName + "]操作");
 
         }
         /*
@@ -238,7 +251,7 @@
             </table>
             <br />
             <br />
-            <input type="button" id="temp" name="batch" value="批量执行"  onclick="runBatch(this.id)"/>            
+            <input type="button" id="temp" name="batch" value="批量执行" onclick="runBatch(this.id)" />
         </div>
         <div id="tip" data-options="region:'center'">
             <div style='width: 100%'>

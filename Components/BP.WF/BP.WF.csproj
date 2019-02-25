@@ -240,6 +240,7 @@
     <Compile Include="HttpHandler\WF_Admin_Cond.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />
     <Compile Include="HttpHandler\GPMPage.cs" />
+    <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\AdminEmp.cs" />

@@ -1306,7 +1306,7 @@
             $.each(trs, function (i, obj) {
 
                 var sn = $($(obj).children()[0]).text();
-                if (isNaN(sn)) {
+                if (sn==null || sn =="" || isNaN(sn)) {
                     return;
                 }
 

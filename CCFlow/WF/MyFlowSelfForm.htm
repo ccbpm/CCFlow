@@ -259,7 +259,7 @@
         //使用随机数作为版本号，保证每次加载的config.js 都是最新的，其余的通过公共函数加载，带入版本号，更新版本号即更新文件
         $.getScript("Scripts/config.js?Version=" + Math.random(), function () {
             load.LoadJs("Scripts/commonYangYH.js", undefined, function () {
-                load.LoadJs('CCForm/MapExt2016.js', undefined, function () {
+                load.LoadJs('CCForm/MapExt2019.js', undefined, function () {
                     load.LoadJs('Comm/Gener.js', undefined, function () {
                         load.LoadJs('MyFlowSelfForm.js', undefined, function () {
                             

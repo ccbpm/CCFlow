@@ -2,7 +2,7 @@
 var oldValue = "";
 var oid;
 var highlightindex = -1;
-function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
+function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt,TBModel) {
     openDiv(sender, tbid);
 
     var myEvent = window.event || arguments[0];
@@ -56,7 +56,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
             oldValue = strs[0];
 
             // 填充.
-            FullIt(oldValue, tbid, fk_mapExt);
+            FullIt(oldValue, mapExt.MyPK, tbid);
             highlightindex = -1;
         }
     }
@@ -71,10 +71,8 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
                 return;
             }
 
-            var columns = mapExt.Tag3;
-           
-            //普通No、Name展示
-            if (columns == null || columns == "") {
+            //简洁模式
+            if (TBModel == "Simple"){
                 $.each(dataObj, function (idx, item) {
 
                     var no = item.No;
@@ -89,21 +87,21 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, dbSrc, dbType) {
                     $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
                 });
 
-            //datagrid 展示
-
-            } else {
-               
-                showDataGrid(sender, tbid, dataObj, columns, mapExt); 
-
             }
-            
+
+            //表格模式
+            if(TBModel=="Table")
+                showDataGrid(sender, tbid, dataObj, mapExt); 
+
             oldValue = selectVal;
 
         }
     }
 }
 
-function showDataGrid(sender, tbid, dataObj, columns,mapExt) {
+//文本自动填充 表格模式
+function showDataGrid(sender, tbid, dataObj,mapExt) {
+    var columns = mapExt.Tag3;
     $("#divinfo").append(" <table id='viewGrid'></table>");
     //取消DIV的宽度
     document.getElementById("divinfo").style.width="";
@@ -158,27 +156,9 @@ function showDataGrid(sender, tbid, dataObj, columns,mapExt) {
             $("#divinfo").css("display", "none");
             highlightindex = -1;
             $("#" + tbid).val(row.No);
-          
-            var dataObj = [row];
-            var dbSrc = mapExt.Tag4;
-            if (dbSrc == null || dbSrc == "")
-                dbSrc = mapExt.Doc;
-            if (dbSrc != null && dbSrc != "") {
-                //包含有填充其他数据控件的数据源时
-                dataObj = GenerDB(dbSrc, JSON.stringify(row), mapExt.DBType);
-            }
-            //填充主表数据源
-            TableFullCtrl(dataObj)
 
-            //填充其他数据源
-            //执行个性化填充下拉框，比如填充ddl下拉框的范围.
-            if(mapExt.Tag!=null && mapExt.Tag!="")
-            FullCtrlDDL(row.No, tbid, mapExt);
-
-            //执行填充从表.
-            if (mapExt.Tag1 != null && mapExt.Tag1 != "")
-            FullDtl(row.No, mapExt.MyPK, mapExt);
-
+            FullIt(row.No, mapExt.MyPK,tbid);
+           
         };
         $('#viewGrid').bootstrapTable(options);
         $('#viewGrid').bootstrapTable("load", dataObj);
@@ -449,7 +429,7 @@ function ReturnValTBFullCtrl(ctrl, fk_mapExt) {
 /* 自动填充 */
 function DDLFullCtrl(selectVal, ddlChild, fk_mapExt) {
 
-    FullIt(selectVal, ddlChild, fk_mapExt);
+    FullIt(selectVal, fk_mapExt,ddlChild);
 }
 
 /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
@@ -572,12 +552,6 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
 }
 
 
-
-
-
-
-
-
 //隐藏自动填充的DIV
 function hiddenDiv() {
     $("#divinfo").empty();
@@ -595,7 +569,7 @@ function ItemClick(sender, val, tbid, fk_mapExt) {
     $("#" + tbid).val(oldValue);
 
     // 填充.
-    FullIt(oldValue, tbid, fk_mapExt);
+    FullIt(oldValue,fk_mapExt,tbid);
 }
 
 function MyOver(sender) {
@@ -791,10 +765,14 @@ function FullIt(selectVal, refPK, elementId) {
         oid = 0;
         return;
     }
+    var mypk ="";
+    if (refPK.indexOf("FullData") != -1)
+        mypk = refPK;
+    else
+        mypk = refPK + "_FullData";
 
-    var mypk = refPK + "_FullData";
     //获得对象.
-    var mapExt = new Entity("BP.Sys.MapExt", mypk);
+    var mapExt = new Entity("BP.Sys.MapExt");
     mapExt.SetPKVal(mypk);
     var i = mapExt.RetrieveFromDBSources();
 

@@ -2295,6 +2295,7 @@ namespace BP.WF
                     }
                 }
             }
+
             #endregion 保存目标节点数据.
 
             //@加入消息集合里。
@@ -3298,6 +3299,7 @@ namespace BP.WF
             //记录子线程到达合流节点数
             int count = gwf.GetParaInt("ThreadCount");
             gwf.SetPara("ThreadCount", count + 1);
+            gwf.Emps = this.HisGenerWorkFlow.Emps;
             gwf.Update();
 
             //mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
@@ -3336,9 +3338,10 @@ namespace BP.WF
 
             //改变当前流程的当前节点.
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + (int)WFState.Runing + ",  FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + (int)WFState.Runing + ",  FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName,Emps=" + dbStr + "Emps WHERE WorkID=" + dbStr + "WorkID";
             ps.Add("FK_Node", toNode.NodeID);
             ps.Add("NodeName", toNode.Name);
+            ps.Add("Emps",emps);
             ps.Add("WorkID", this.HisWork.FID);
             DBAccess.RunSQL(ps);
 
@@ -4491,54 +4494,60 @@ namespace BP.WF
             //判断绑定的树形表单
              //增加节点表单的必填项判断.
             string err = "";
-		    if(this.HisNode.HisFormType == NodeFormType.SheetTree){
-			    //获取绑定的表单
-			     FrmNodes nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
-			     foreach(FrmNode item in nds){
-				    MapData md = new MapData();
-				    md.No = item.FK_Frm;
-				    md.Retrieve();
+            if (this.HisNode.HisFormType == NodeFormType.SheetTree)
+            {
+                //获取绑定的表单
+                FrmNodes nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
+                foreach (FrmNode item in nds)
+                {
+                    MapData md = new MapData();
+                    md.No = item.FK_Frm;
+                    md.Retrieve();
                     if (md.HisFrmType != FrmType.FoolForm && md.HisFrmType != FrmType.FreeFrm)
                         continue;
 
-				     MapAttrs mapAttrs = md.MapAttrs;
-                     //主表实体.
-                     GEEntity en = new GEEntity(item.FK_Frm);
-                     en.OID=this.WorkID;
-                     en.RetrieveFromDBSources();
+                    MapAttrs mapAttrs = md.MapAttrs;
+                    //主表实体.
+                    GEEntity en = new GEEntity(item.FK_Frm);
+                    en.OID = this.WorkID;
+                    en.RetrieveFromDBSources();
 
-                     Row row = en.Row;
-				     if (item.FrmSln == FrmSln.Self) {
-					    // 查询出来自定义的数据.
-					    FrmFields ffs1 = new FrmFields();
-					    ffs1.Retrieve(FrmFieldAttr.FK_Node, this.HisNode.NodeID, FrmFieldAttr.FK_MapData, md.No);
-					    //获取整合后的mapAttrs
-					    foreach(FrmField frmField in ffs1){
-						    foreach (MapAttr mapAttr in mapAttrs) {
-							    if(frmField.KeyOfEn.Equals(mapAttr.KeyOfEn)){
-								    mapAttr.UIIsInput = frmField.IsNotNull;
-								    break;
-							    }
-						    }
-					    }
-				     }
-                foreach (MapAttr mapAttr in mapAttrs)
-                {
-                    if (mapAttr.UIIsInput == false)
-                        continue;
-                    string str = row[mapAttr.KeyOfEn] == null ? string.Empty : row[mapAttr.KeyOfEn].ToString();
-                    /*如果是检查不能为空 */
-                    if (str == null || DataType.IsNullOrEmpty(str) == true || str.Trim() == "")
-                        err += "@表单{" + item.FK_Frm + "; 字段" + mapAttr.KeyOfEn + " ; " + mapAttr.Name + "}，不能为空。";
-                }	
-			 }
-			 
-			 if (!err.Equals(""))
-                 throw new Exception("@在提交前检查到如下必输字段填写不完整:" + err);
-			 
-			 return true;
-			
-		}
+                    Row row = en.Row;
+                    if (item.FrmSln == FrmSln.Self)
+                    {
+                        // 查询出来自定义的数据.
+                        FrmFields ffs1 = new FrmFields();
+                        ffs1.Retrieve(FrmFieldAttr.FK_Node, this.HisNode.NodeID, FrmFieldAttr.FK_MapData, md.No);
+                        //获取整合后的mapAttrs
+                        foreach (FrmField frmField in ffs1)
+                        {
+                            foreach (MapAttr mapAttr in mapAttrs)
+                            {
+                                if (frmField.KeyOfEn.Equals(mapAttr.KeyOfEn))
+                                {
+                                    mapAttr.UIIsInput = frmField.IsNotNull;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    foreach (MapAttr mapAttr in mapAttrs)
+                    {
+                        if (mapAttr.UIIsInput == false)
+                            continue;
+                        string str = row[mapAttr.KeyOfEn] == null ? string.Empty : row[mapAttr.KeyOfEn].ToString();
+                        /*如果是检查不能为空 */
+                        if (str == null || DataType.IsNullOrEmpty(str) == true || str.Trim() == "")
+                            err += "@表单{" + item.FK_Frm + "; 字段" + mapAttr.KeyOfEn + " ; " + mapAttr.Name + "}，不能为空。";
+                    }
+                }
+
+                if (!err.Equals(""))
+                    throw new Exception("@在提交前检查到如下必输字段填写不完整:" + err);
+
+                return true;
+
+            }
 
            
             if (this.HisNode.HisFormType == NodeFormType.FreeForm || this.HisNode.HisFormType == NodeFormType.FoolForm)
@@ -7639,6 +7648,7 @@ namespace BP.WF
             //记录子线程到达合流节点数
             int count = gwf.GetParaInt("ThreadCount");
             gwf.SetPara("ThreadCount", count + 1);
+            gwf.Emps = this.HisGenerWorkFlow.Emps;
             gwf.Update();
              if (gwls.Count == 0)
             {

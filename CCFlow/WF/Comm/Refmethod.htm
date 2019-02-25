@@ -96,23 +96,6 @@
             GenerFoolFrm(data);
         }
 
-        function GenerFoolFrmSimple(json) {
-
-
-            $('#CCForm').html('');
-            var html = "<table style='width:100%' >";
-
-            html += "<tr>";
-            html += "<td colspan=4 >ssss</td>";
-            //  html += "<td colspan=2 ></td>";
-            html += "</tr>";
-
-            //html += InitMapAttr(attrs, json);
-
-            html += "</table>";
-
-            $('#CCForm').html(html);
-        }
 
         var warning = "";
 
@@ -121,93 +104,22 @@
             var attrs = json["Sys_MapAttrs"];
 
             $('#CCForm').html('');
-            var html = "<table style='width:100%' >";
+            var pkval = GetQueryString("PKVal");
+            var pks = [];
+            if (pkval != null && pkval != "")
+                pks = pkval.split(',');
+            //循环显示数据
 
-            html += "<tr>";
-            html += "<td colspan=4 ></td>";
-            //  html += "<td colspan=2 ></td>";
-            html += "</tr>";
+            var html = "<table style='width:100%' >";
 
             html += InitMapAttr(attrs, json);
 
             html += "</table>";
+            html += "<br/>";
+
 
             $('#CCForm').html(html);
 
-            //为控件赋值.
-            for (var i = 0; i < attrs.length; i++) {
-
-                var mapAttr = attrs[i];
-                $('#TB_' + mapAttr.KeyOfEn).attr("name", "TB_" + mapAttr.KeyOfEn);
-                $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
-                $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
-
-                var val = ConvertDefVal(json, mapAttr.DefVal, mapAttr.KeyOfEn);
-
-                $('#TB_' + mapAttr.KeyOfEn).val(val);
-
-                //文本框.
-                if (mapAttr.UIContralType == 0) {
-                    if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
-                        $('#editor').val(val);
-                    } else {
-                        $('#TB_' + mapAttr.KeyOfEn).val(val);
-                    }
-                }
-
-                //枚举下拉框.
-                if (mapAttr.UIContralType == 1) {
-
-                    // InitDDLOperation(flowData, mapAttr, val);
-                    $('#DDL_' + mapAttr.KeyOfEn).val(val);
-
-                }
-                //checkbox.
-                if (mapAttr.UIContralType == 2) {
-                    if (val == "1")
-                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", "true");
-                }
-            }
-        }
-
-        //填充默认数据
-        function ConvertDefVal(data, defVal, keyOfEn) {
-            //计算URL传过来的表单参数@TXB_Title=事件测试
-
-            var pageParams = getQueryString();
-            var pageParamObj = {};
-            $.each(pageParams, function (i, pageParam) {
-                if (pageParam.indexOf('@') == 0) {
-                    var pageParamArr = pageParam.split('=');
-                    pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
-                }
-            });
-
-
-            var result = defVal;
-
-            var mainTable = data.MainTable[0];
-
-
-            //通过MAINTABLE返回的参数
-            for (var ele in mainTable) {
-                if (keyOfEn == ele && mainTable != '') {
-                    //console.info(ele + "==" + flowData.MainTable[0][ele]);
-                    result = mainTable[ele];
-                    break;
-                }
-            }
-
-            if (result != undefined && typeof (result) == 'string') {
-                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
-            }
-            //console.info(defVal+"=="+keyOfEn+"=="+result);
-            var result = unescape(result);
-
-            if (result == "null")
-                result = "";
-
-            return result;
         }
 
         //解析表单字段 MapAttr.
@@ -223,10 +135,8 @@
                 var defval = attr.DefVal;
 
                 var lab = "";
-                if (attr.UIContralType == 0)
-                    lab = "<label for='TB_" + attr.KeyOfEn + "' >" + attr.Name + "</label>";
 
-                if (attr.UIContralType == 1)
+                if (attr.UIContralType == 0 || attr.UIContralType == 1)
                     lab = "<label for='DDL_" + attr.KeyOfEn + "' >" + attr.Name + "</label>";
 
                 if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {

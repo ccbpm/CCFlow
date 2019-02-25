@@ -2460,40 +2460,38 @@ namespace BP.DA
         /// <returns>返回的数据.</returns>
         private static DataTable RunSQLReturnTable_201902_PSQL(string sql, Paras paras)
         {
-            return null; 
+            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
 
-            //Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
-            //if (conn.State != ConnectionState.Open)
-            //    conn.Open();
+            Npgsql.NpgsqlDataAdapter ada = new Npgsql.NpgsqlDataAdapter(sql, conn);
+            ada.SelectCommand.CommandType = CommandType.Text;
 
-            //Npgsql.NpgsqlDataAdapter ada = new Npgsql.NpgsqlDataAdapter(sql, conn);
-            //ada.SelectCommand.CommandType = CommandType.Text;
+            // 加入参数
+            if (paras != null)//qin 解决为null时的异常
+            {
+                foreach (Para para in paras)
+                {
+                    Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
+                    myParameter.Size = para.Size;
+                    ada.SelectCommand.Parameters.Add(myParameter);
+                }
+            }
 
-            //// 加入参数
-            //if (paras != null)//qin 解决为null时的异常
-            //{
-            //    foreach (Para para in paras)
-            //    {
-            //        Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
-            //        myParameter.Size = para.Size;
-            //        ada.SelectCommand.Parameters.Add(myParameter);
-            //    }
-            //}
-
-            //try
-            //{
-            //    DataTable oratb = new DataTable("otb");
-            //    ada.Fill(oratb);
-            //    ada.Dispose();
-            //    conn.Close();
-            //    return oratb;
-            //}
-            //catch (Exception ex)
-            //{
-            //    ada.Dispose();
-            //    conn.Close();
-            //    throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
-            //}
+            try
+            {
+                DataTable oratb = new DataTable("otb");
+                ada.Fill(oratb);
+                ada.Dispose();
+                conn.Close();
+                return oratb;
+            }
+            catch (Exception ex)
+            {
+                ada.Dispose();
+                conn.Close();
+                throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            }
         }
         private static string DealInformixSQL(string sql)
         {
@@ -2919,6 +2917,9 @@ namespace BP.DA
                         break;
                     case DBType.Informix:
                         dt = RunSQLReturnTable_201205_Informix(sql, paras);
+                        break;
+                    case DBType.PostgreSQL:
+                        dt = RunSQLReturnTable_201902_PSQL(sql, paras);
                         break;
                     case DBType.MySQL:
                         dt = RunSQLReturnTable_200705_MySQL(sql, paras);

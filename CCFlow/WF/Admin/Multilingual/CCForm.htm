@@ -2,26 +2,257 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>表单多语言设置</title>
-     <script type="text/javascript" src="../../Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
-    <link href="../../../DataUser/Style/Table0.css" rel="stylesheet" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
+
         //页面启动函数.
         var initData = {};
         var pageData = {};
 
+        var frmID = "";
+        var sort = "";
+        var selectLangue = "";
+
         $(function () {
 
-            window.location.href = '../../Comm/En.htm?EnName=BP.WF.Rpt.RptDfine&No=' + GetQueryString("FK_Flow");
+            frmID = GetQueryString("FrmID");
+            if (frmID == null || frmID == "")
+                frmID = "ND101";
+
+            sort = GetQueryString("Sort");
+            if (sort == null || sort == "")
+                sort = "Field";
+            selectLangue = GetQueryString("SelectLangue");
+            if (selectLangue == null || selectLangue == "")
+                selectLangue = "CN";
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Multilingual");
+            var ht = handler.DoMethodReturnJSON("GetLangue");
+
+            //输入语言列表.
+            var title = "<ul>";
+            var strs = ht.Langue.split(',');
+            for (var i = 0; i < strs.length; i++) {
+                var lan = strs[i];
+                if (lan == 'CN')
+                    title += "<li style='float:left;margin:0 10px' >" + lan + "</li>";
+                else
+                    title += "<li style='float:left;margin:0 10px' ><a href='?FrmID=" + frmID + "&Sort=" + sort + "&SelectLangue=" + lan + "'>" + lan + "</a></li>";
+            }
+            title += "</ul>";
+
+            $("#Title").html(title);
+
+            //绑定左边的类别.
+            var left = "<ul>";
+            left += "<li><a href='?FrmID=" + frmID + "&Sort=Field&SelectLangue=" + selectLangue + "'>字段</a></li>";
+            left += "<li><a href='?FrmID=" + frmID + "&Sort=Label&SelectLangue=" + selectLangue + "'>标签</a></li>";
+            left += "</ul>";
+            $("#Left").html(left);
+
+
+            //绑定内容.
+            if (selectLangue == "CN") {
+                $("#Doc").html("请选择要设置的语言。");
+                return;
+            }
+
+            if (sort == "Field")
+                BindField();
+
+            if (sort == "Label")
+                BindLabel();
+
+            //window.location.href = '../../Comm/En.htm?EnName=BP.WF.Rpt.RptDfine&No=' + GetQueryString("FK_Flow");
             return;
         });
-         
+
+        //绑定字段.
+        function BindField() {
+
+            var html = "<table style='width:100%;'>";
+            html += "<tr>";
+            html += "<td><b>#</b></td>";
+            html += "<td><b>字段</b></td>";
+            html += "<td><b>中文名</b></td>";
+            html += "<td><b>" + selectLangue + "</b></td>";
+            html += "</tr>";
+
+            //字段列表.
+            var ens = new Entities("BP.Sys.MapAttrs");
+            ens.Retrieve("FK_MapData", frmID);
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td>" + en.KeyOfEn + "</td>";
+                html += "<td>" + en.Name + "</td>";
+                html += "<td><input type='textbox' id=" + en.KeyOfEn + " /></td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            //查询出来以前的配置.
+            var langs = new Entities("BP.Sys.Langues");
+            langs.Retrieve("Model", "CCForm", "Sort", sort, "Langue", selectLangue);
+            for (var i = 0; i < langs.length; i++) {
+                var lan = langs[i];
+                $("#" + lan.RefKey).val(lan.Val);
+            }
+
+
+            $("#Doc").html(html);
+        }
+
+        //绑定label.
+        function BindLabel() {
+
+            var html = "<table style='width:100%;'>";
+            html += "<tr>";
+            html += "<td><b>#</b></td>";
+            html += "<td><b>字段</b></td>";
+            html += "<td><b>中文名</b></td>";
+            html += "<td><b>" + selectLangue + "</b></td>";
+            html += "</tr>";
+
+            //字段列表.
+            var ens = new Entities("BP.Sys.FrmLabs");
+            ens.Retrieve("FK_MapData", frmID);
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td>" + en.MyPK + "</td>";
+                html += "<td>" + en.Text + "</td>";
+                html += "<td><input type='textbox' id=" + en.KeyOfEn + " /></td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            //查询出来以前的配置.
+            var langs = new Entities("BP.Sys.Langues");
+            langs.Retrieve("Model", "CCForm", "Sort", sort, "Langue", selectLangue);
+            for (var i = 0; i < langs.length; i++) {
+                var lan = langs[i];
+                $("#" + lan.RefKey).val(lan.Val);
+            }
+
+            $("#Doc").html(html);
+        }
+
+
+        //保存按钮.
+        function Save() {
+
+            if (sort == "Field")
+                SaveField();
+
+            if (sort == "Label")
+                SaveLabel();
+        }
+
+        //保存字段.
+        function SaveField() {
+
+            //删除以前的配置.
+            var langs = new Entities("BP.Sys.Langues");
+            langs.Delete("Model", "CCForm", "Sort", sort, "Langue", selectLangue); //组合条件删除。
+
+
+            //字段列表.
+            var ens = new Entities("BP.Sys.MapAttrs");
+            ens.Retrieve("FK_MapData", frmID);
+
+            var lang = new Entity("BP.Sys.Langue");
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                var val = $("#" + en.KeyOfEn).val();
+                if (val == null || val == "")
+                    continue;
+
+                en.Model = "CCForm";
+                en.Sort = sort; //类别.
+                en.RefKey = en.KeyOfEn;
+                en.Langue = selectLangue;
+                en.Val = val;
+                en.Insert(); //插入数据.
+            }
+            window.location.href = window.location.href;
+        }
+
+        //保存标签.
+        function SaveLabel() {
+
+            //删除以前的配置.
+            var langs = new Entities("BP.Sys.Langues");
+            langs.Delete("Model", "CCForm", "Sort", sort, "Langue", selectLangue); //组合条件删除。
+
+            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Multilingual");
+            //            var ht = handler.DoMethodReturnJSON("GetLangue");
+
+
+            //字段列表.
+            var ens = new Entities("BP.Sys.FrmLabs");
+            ens.Retrieve("FK_MapData", frmID);
+
+            var lang = new Entity("BP.Sys.Langue");
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                var val = $("#" + en.KeyOfEn).val();
+                if (val == null || val == "")
+                    continue;
+
+                en.Model = "CCForm";
+                en.Sort = sort; //类别.
+                en.RefKey = en.KeyOfEn;
+                en.Langue = selectLangue;
+                en.Val = val;
+                en.Insert(); //插入数据.
+            }
+            window.location.href = window.location.href;
+
+        }
     </script>
 </head>
 <body>
-
-
+    <table style="width: 100%; height: 100%;">
+        <caption>
+            表单多语言设置
+        </caption>
+        <tr>
+            <th>
+                语言-类型
+            </th>
+            <th>
+                <div id="Title">
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th valign="top">
+                <div id="Left">
+                </div>
+            </th>
+            <td valign="top" style="width: 90%;">
+                <div id="Doc" name="Doc">
+                </div>
+            </td>
+        </tr>
+    </table>
+    <center>
+        <input type="button" value="保存" id="Save" onclick="Save();" style="align: right" />
+    </center>
 </body>
 </html>

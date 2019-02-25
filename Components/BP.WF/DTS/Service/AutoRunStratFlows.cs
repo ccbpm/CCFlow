@@ -125,6 +125,9 @@ namespace BP.WF.DTS
                     case BP.WF.FlowRunWay.DataModel: //按数据集合驱动的模式执行。
                         this.DTS_Flow(fl);
                         continue;
+                    case BP.WF.FlowRunWay.InsertModel: //按数据集合驱动的模式执行。
+                        this.InsertModel(fl);
+                        continue;
                     default:
                         break;
                 }
@@ -137,6 +140,13 @@ namespace BP.WF.DTS
             #endregion 发送消息
 
             return "调度完成..";
+        }
+        /// <summary>
+        /// 触发模式
+        /// </summary>
+        /// <param name="fl"></param>
+        public void InsertModel(BP.WF.Flow fl)
+        {
         }
 
         public void DTS_Flow(BP.WF.Flow fl)

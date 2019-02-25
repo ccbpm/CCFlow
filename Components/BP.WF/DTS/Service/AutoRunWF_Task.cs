@@ -74,6 +74,15 @@ namespace BP.WF.DTS
                 string starter = dr["Starter"].ToString();
                 string fk_flow = dr["FK_Flow"].ToString();
 
+                //获得到达的节点，与接受人。
+                string toEmps = dr["ToEmps"].ToString();
+                if (DataType.IsNullOrEmpty(toEmps))
+                    toEmps = null;
+                string toNodeStr = dr["ToNode"].ToString();
+                int toNodeID = 0;
+                if (DataType.IsNullOrEmpty(toNodeStr) == false)
+                    toNodeID = int.Parse(toNodeStr);
+
                 string startDT = dr[TaskAttr.StartDT].ToString();
                 if (string.IsNullOrEmpty(startDT) == false)
                 {
@@ -125,8 +134,17 @@ namespace BP.WF.DTS
                     wk.Update();
 
                     WorkNode wn = new WorkNode(wk, fl.HisStartNode);
-                    string msg = wn.NodeSend().ToMsgOfText();
+
+                    string msg = "";
+
+                    if (toNodeID == 0)
+                        msg = wn.NodeSend(null, toEmps).ToMsgOfText();
+                    else
+                        msg = wn.NodeSend(new Node(toNodeID), toEmps).ToMsgOfText();
+
+
                     msg = msg.Replace("'", "~");
+
                     DBAccess.RunSQL("UPDATE WF_Task SET TaskSta=1,Msg='" + msg + "' WHERE MyPK='" + mypk + "'");
                 }
                 catch (Exception ex)

@@ -41,6 +41,15 @@ namespace BP.WF.Template
         /// 插入日期
         /// </summary>
         public const string RDT = "RDT";
+
+        /// <summary>
+        /// 到达节点（可以为0）
+        /// </summary>
+        public const string ToNode = "ToNode";
+        /// <summary>
+        /// 到达人员（可以为空）
+        /// </summary>
+        public const string ToEmps = "ToEmps";
         #endregion
     }
 	/// <summary>
@@ -75,6 +84,34 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(TaskAttr.Starter, value);
+            }
+        }
+        /// <summary>
+        /// 到达的人员
+        /// </summary>
+        public string ToEmps
+        {
+            get
+            {
+                return this.GetValStringByKey(TaskAttr.ToEmps);
+            }
+            set
+            {
+                this.SetValByKey(TaskAttr.ToEmps, value);
+            }
+        }
+        /// <summary>
+        /// 到达节点（可以为0）
+        /// </summary>
+        public int ToNode
+        {
+            get
+            {
+                return this.GetValIntByKey(TaskAttr.ToNode);
+            }
+            set
+            {
+                this.SetValByKey(TaskAttr.ToNode, value);
             }
         }
         /// <summary>
@@ -129,6 +166,11 @@ namespace BP.WF.Template
                 map.AddMyPK(); //唯一的主键.
                 map.AddTBString(TaskAttr.FK_Flow, null, "流程编号", true, false, 0, 200, 10);
                 map.AddTBString(TaskAttr.Starter, null, "发起人", true, false, 0, 200, 10);
+
+                //为上海同事科技增加两个字段. 可以为空.
+                map.AddTBInt(TaskAttr.ToNode, 0, "到达的节点", true, false);
+                map.AddTBString(TaskAttr.ToEmps, null, "到达人员", true, false, 0, 200, 10);
+
                 map.AddTBString(TaskAttr.Paras, null, "参数", true, false, 0, 4000, 10);
 
                 // TaskSta 0=未发起，1=成功发起，2=发起失败.

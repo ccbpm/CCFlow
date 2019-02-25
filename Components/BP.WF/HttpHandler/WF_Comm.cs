@@ -2153,7 +2153,7 @@ namespace BP.WF.HttpHandler
             {
                 Entities ens = ClassFactory.GetEns(this.EnsName);
                 if (this.Paras == null)
-                    return "0";
+                    return "err@删除实体，参数不能为空";
 
                 string[] myparas = this.Paras.Split('@');
 
@@ -2182,7 +2182,7 @@ namespace BP.WF.HttpHandler
                     ens.Delete(paras[0][0], paras[0][1], paras[1][0], paras[1][1], paras[2][0], paras[2][1], paras[3][0], paras[3][1]);
 
                 if (paras.Count > 4)
-                    return "实体类的删除，条件不能大于4个";
+                    return "err@实体类的删除，条件不能大于4个";
 
                 return "删除成功";
             }
@@ -2190,7 +2190,7 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
-            return "err@该方法没有完成，请使用Entiy_Delete. 可以按照条件删除.";
+           
         }
         /// <summary>
         /// 初始化

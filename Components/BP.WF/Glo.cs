@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190222;
+        public static int Ver = 20190225;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -196,6 +196,7 @@ namespace BP.WF
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
             #region 升级填充数据.
+            //pop自动填充
             MapExts exts = new MapExts();
             QueryObject qo = new QueryObject(exts);
             qo.AddWhere(MapExtAttr.ExtType, " LIKE ", "Pop%");
@@ -227,8 +228,104 @@ namespace BP.WF
                     continue;
 
                 extP.ExtType = "FullData";
+                extP.FK_MapData = ext.FK_MapData;
+                extP.AttrOfOper = ext.AttrOfOper;
+                extP.DBType = ext.DBType;
                 extP.Doc = ext.Tag4;
                 extP.Insert(); //执行插入.
+            }
+
+
+            //文本自动填充
+            exts = new MapExts();
+            exts.Retrieve(MapExtAttr.ExtType,MapExtXmlList.TBFullCtrl);
+            foreach (MapExt ext in exts)
+            {
+                string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
+                MapAttr ma = new MapAttr();
+                ma.MyPK = mypk;
+                if (ma.RetrieveFromDBSources() == 0)
+                {
+                    ext.Delete();
+                    continue;
+                }
+                string modal = ma.GetParaString("TBFullCtrl");
+                if (DataType.IsNullOrEmpty(modal) == false)
+                    continue; //已经修复了，或者配置了.
+
+                if (DataType.IsNullOrEmpty(ext.Tag3) == false)
+                    ma.SetPara("TBFullCtrl","Simple");
+                else
+                    ma.SetPara("TBFullCtrl","Table");
+
+                ma.Update();
+
+                if (DataType.IsNullOrEmpty(ext.Tag4) == true)
+                    continue;
+
+                MapExt extP = new MapExt();
+                extP.MyPK = ext.MyPK + "_FullData";
+                int i = extP.RetrieveFromDBSources();
+                if (i == 1)
+                    continue;
+
+                extP.ExtType = "FullData";
+                extP.FK_MapData = ext.FK_MapData;
+                extP.AttrOfOper = ext.AttrOfOper;
+                extP.DBType = ext.DBType;
+                extP.Doc = ext.Tag4;
+
+                //填充从表
+                extP.Tag1 = ext.Tag1;
+                //填充下拉框
+                 extP.Tag = ext.Tag;
+
+                extP.Insert(); //执行插入.
+            }
+
+            //下拉框填充其他控件
+            //文本自动填充
+            exts = new MapExts();
+            exts.Retrieve(MapExtAttr.ExtType, MapExtXmlList.DDLFullCtrl);
+            foreach (MapExt ext in exts)
+            {
+                string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
+                MapAttr ma = new MapAttr();
+                ma.MyPK = mypk;
+                if (ma.RetrieveFromDBSources() == 0)
+                {
+                    ext.Delete();
+                    continue;
+                }
+                string modal = ma.GetParaString("IsFullData");
+                if (DataType.IsNullOrEmpty(modal) == false)
+                    continue; //已经修复了，或者配置了.
+
+                //启用填充其他控件
+                ma.SetPara("IsFullData", 1);
+                ma.Update();
+
+               
+                MapExt extP = new MapExt();
+                extP.MyPK = ext.MyPK + "_FullData";
+                int i = extP.RetrieveFromDBSources();
+                if (i == 1)
+                    continue;
+
+                extP.ExtType = "FullData";
+                extP.FK_MapData = ext.FK_MapData;
+                extP.AttrOfOper = ext.AttrOfOper;
+                extP.DBType = ext.DBType;
+                extP.Doc = ext.Doc;
+
+
+                //填充从表
+                extP.Tag1 = ext.Tag1;
+                //填充下拉框
+                extP.Tag = ext.Tag;
+
+                extP.Insert(); //执行插入.
+                
             }
             #endregion 升级 填充数据.
 

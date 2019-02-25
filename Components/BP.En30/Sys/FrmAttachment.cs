@@ -1240,6 +1240,10 @@ namespace BP.Sys
                 map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.NumOfUpload, 0, "最低上传数量", true, false);
+                map.AddTBInt(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, false);
+
+                //map.AddDDLSysEnum(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, true, FrmAttachmentAttr.UploadFileNumCheck,
+                //  "@0=不用校验@1=不能为空@2=每个类别下不能为空");
 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20);
@@ -1250,6 +1254,10 @@ namespace BP.Sys
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "H", false, false);
 
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
+                map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
+
+
+
                 
                 //hzm新增列
                 map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);

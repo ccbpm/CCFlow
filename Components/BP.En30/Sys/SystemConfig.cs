@@ -826,36 +826,10 @@ namespace BP.Sys
             {
                 if (AppSettings["IsMultiSys"] == "1")
                     return true;
-                else
-                    return false;
+                return false;
             }
         }
-        /// <summary>
-        /// 是不是多线程工作。
-        /// </summary>
-        public static bool IsMultiThread_del
-        {
-            get
-            {
-                if (AppSettings["IsMultiThread"] == "1")
-                    return true;
-                else
-                    return false;
-            }
-        }
-        /// <summary>
-        /// 是不是多语言版本
-        /// </summary>
-        public static bool IsMultiLanguageSys
-        {
-            get
-            {
-                if (AppSettings["IsMultiLanguageSys"] == "1")
-                    return true;
-                else
-                    return false;
-            }
-        }
+       
         /// <summary>
         /// 是否启用密码加密
         /// </summary>
@@ -869,7 +843,34 @@ namespace BP.Sys
                 return true;
             }
         }
+        /// <summary>
+        /// 是否多语言？
+        /// </summary>
+        public static bool IsMultilingual
+        {
+            get
+            {
+                if (AppSettings["IsMultilingual"] == "1")
+                    return true;
+                return false;
+            }
+        }
+        /// <summary>
+        /// 使用的语言
+        /// </summary>
+        public static string Langue
+        {
+            get
+            {
+                string str = AppSettings["Langue"];
+                if (DataType.IsNullOrEmpty(str))
+                    return "CN";
+                return str;
+            }
+        }
         #endregion
+
+
 
         #region 处理临时缓存
         /// <summary>

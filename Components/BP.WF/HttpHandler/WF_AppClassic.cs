@@ -172,17 +172,16 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.StackTrace;
             }
         }
+        /// <summary>
+        /// 执行登录
+        /// </summary>
+        /// <returns></returns>
         public string Login_Init()
         {
-            //  修复字段.
-            BP.Sys.GroupField gf = new BP.Sys.GroupField();
-            gf.CheckPhysicsTable();
-
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);
             ht.Add("CustomerName", SystemConfig.CustomerName);
-
             if (WebUser.NoOfRel == null)
             {
                 ht.Add("UserNo", "");

@@ -2149,6 +2149,47 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Entities_Delete()
         {
+            try
+            {
+                Entities ens = ClassFactory.GetEns(this.EnsName);
+                if (this.Paras == null)
+                    return "0";
+
+                string[] myparas = this.Paras.Split('@');
+
+                List<string[]> paras = new List<string[]>();
+                int idx = 0;
+                for (int i = 0; i < myparas.Length; i++)
+                {
+                    string para = myparas[i];
+                    if (DataType.IsNullOrEmpty(para) || para.Contains("=") == false)
+                        continue;
+
+                    string[] strs = para.Split('=');
+                    paras.Add(strs);
+                }
+
+                if (paras.Count == 1)
+                    ens.Delete(paras[0][0], paras[0][1]);
+
+                if (paras.Count == 2)
+                    ens.Delete(paras[0][0], paras[0][1], paras[1][0], paras[1][1]);
+                
+                if (paras.Count == 3)
+                    ens.Delete(paras[0][0], paras[0][1], paras[1][0], paras[1][1], paras[2][0], paras[2][1]);
+                
+                if (paras.Count == 4)
+                    ens.Delete(paras[0][0], paras[0][1], paras[1][0], paras[1][1], paras[2][0], paras[2][1], paras[3][0], paras[3][1]);
+
+                if (paras.Count > 4)
+                    return "实体类的删除，条件不能大于4个";
+
+                return "删除成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
             return "err@该方法没有完成，请使用Entiy_Delete. 可以按照条件删除.";
         }
         /// <summary>

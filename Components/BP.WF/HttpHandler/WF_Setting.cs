@@ -131,7 +131,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T" + empNo + ".jpg";
+                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + empNo + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -144,7 +144,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
 
-            f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
+            //f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
            // f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
 
             //f.PostedFile.InputStream.Close();

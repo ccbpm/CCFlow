@@ -188,7 +188,7 @@ namespace BP.Sys
                     case Sys.DBSrcType.Informix:
                         return DBType.Informix;
                     default:
-                        throw new Exception("@没有判断的数据库类型.");
+                        throw new Exception("err@HisDBType没有判断的数据库类型.");
                 }
             }
         }
@@ -740,80 +740,6 @@ namespace BP.Sys
         #endregion
 
         #region 方法.
-        /// <summary>
-        /// 是表还是视图？
-        /// </summary>
-        /// <param name="tabelOrViewName"></param>
-        /// <returns></returns>
-        public bool IsView(string tabelOrViewName)
-        {
-            string sql = "";
-            switch (this.HisDBType)
-            {
-                case DBType.Oracle:
-                    sql = "SELECT TABTYPE  FROM TAB WHERE UPPER(TNAME)=:v";
-                    DataTable oradt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
-                    if (oradt.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
-                    if (oradt.Rows[0][0].ToString().ToUpper().Trim() == "V".ToString())
-                        return true;
-                    else
-                        return false;
-                    break;
-                case DBType.Access:
-                    sql = "select   Type   from   msysobjects   WHERE   UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
-                    DataTable dtw = DBAccess.RunSQLReturnTable(sql);
-                    if (dtw.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
-                    if (dtw.Rows[0][0].ToString().Trim() == "5")
-                        return true;
-                    else
-                        return false;
-                case DBType.MSSQL:
-                    sql = "select xtype from sysobjects WHERE name =" + SystemConfig.AppCenterDBVarStr + "v";
-                    DataTable dt1 = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName);
-                    if (dt1.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
-
-                    if (dt1.Rows[0][0].ToString().ToUpper().Trim() == "V".ToString())
-                        return true;
-                    else
-                        return false;
-                case DBType.Informix:
-                    sql = "select tabtype from systables where tabname = '" + tabelOrViewName.ToLower() + "'";
-                    DataTable dtaa = DBAccess.RunSQLReturnTable(sql);
-                    if (dtaa.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
-
-                    if (dtaa.Rows[0][0].ToString().ToUpper().Trim() == "V")
-                        return true;
-                    else
-                        return false;
-                case DBType.MySQL:
-                    sql = "SELECT Table_Type FROM information_schema.TABLES WHERE table_name='" + tabelOrViewName + "' and table_schema='" + SystemConfig.AppCenterDBDatabase + "'";
-                    DataTable dt2 = DBAccess.RunSQLReturnTable(sql);
-                    if (dt2.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
-
-                    if (dt2.Rows[0][0].ToString().ToUpper().Trim() == "VIEW")
-                        return true;
-                    else
-                        return false;
-                default:
-                    throw new Exception("@没有做的判断。");
-            }
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
-            if (dt.Rows.Count == 0)
-                throw new Exception("@表不存在[" + tabelOrViewName + "]");
-
-            if (dt.Rows[0][0].ToString() == "VIEW")
-                return true;
-            else
-                return false;
-            return true;
-        }
-
         /// <summary>
         /// 连接字符串.
         /// </summary>

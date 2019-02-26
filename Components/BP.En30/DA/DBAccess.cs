@@ -423,7 +423,7 @@ namespace BP.DA
             }
 
             //最后仍然没有找到.
-            throw new Exception("@没有判断的数据库类型.");
+            throw new Exception("@获取文件，从数据库里面，没有判断的数据库类型.");
         }
 
         #endregion 文件存储数据库处理.
@@ -3459,7 +3459,7 @@ namespace BP.DA
                     ps.Add("Tab", table.ToLower());
                     break;
                 default:
-                    throw new Exception("@没有判断的数据库类型.");
+                    throw new Exception("@GetTablePKName没有判断的数据库类型.");
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql, ps);
@@ -3484,40 +3484,47 @@ namespace BP.DA
         /// </summary>
         /// <param name="tabelOrViewName"></param>
         /// <returns></returns>
-        public static bool IsView(string tabelOrViewName)
+        public static bool IsView(string tabelOrViewName,DBType dbType)
         {
+            if (dbType == null)
+                dbType = SystemConfig.AppCenterDBType;
+
             string sql = "";
-            switch (SystemConfig.AppCenterDBType)
+            switch (dbType)
             {
                 case DBType.Oracle:
                     sql = "SELECT TABTYPE  FROM TAB WHERE UPPER(TNAME)=:v";
                     DataTable oradt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
                     if (oradt.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
+                        return false;
+
+                    //    throw new Exception("@表不存在[" + tabelOrViewName + "]");
                     if (oradt.Rows[0][0].ToString().ToUpper().Trim() == "V".ToString())
                         return true;
                     else
                         return false;
-                //break;
-                case DBType.Access:
-                    sql = "select   Type   from   msysobjects   WHERE   UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
-                    DataTable dtw = DBAccess.RunSQLReturnTable(sql);
-                    if (dtw.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
-                    if (dtw.Rows[0][0].ToString().Trim() == "5")
-                        return true;
-                    else
-                        return false;
+
                 case DBType.MSSQL:
                     sql = "select xtype from sysobjects WHERE name =" + SystemConfig.AppCenterDBVarStr + "v";
                     DataTable dt1 = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName);
                     if (dt1.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
+                        return false;
 
                     if (dt1.Rows[0][0].ToString().ToUpper().Trim() == "V".ToString())
                         return true;
                     else
                         return false;
+                case DBType.PostgreSQL:
+                    sql = "select relkind from pg_class WHERE relname ='" + tabelOrViewName + "'";
+                    DataTable dt3 = DBAccess.RunSQLReturnTable(sql);
+                    if (dt3.Rows.Count == 0)
+                        return false;
+
+                    //如果是个表.
+                    if (dt3.Rows[0][0].ToString().ToLower().Trim().Equals("r") == true)
+                        return false;
+                    else
+                        return true;
                 case DBType.Informix:
                     sql = "select tabtype from systables where tabname = '" + tabelOrViewName.ToLower() + "'";
                     DataTable dtaa = DBAccess.RunSQLReturnTable(sql);
@@ -3532,9 +3539,19 @@ namespace BP.DA
                     sql = "SELECT Table_Type FROM information_schema.TABLES WHERE table_name='" + tabelOrViewName + "' and table_schema='" + SystemConfig.AppCenterDBDatabase + "'";
                     DataTable dt2 = DBAccess.RunSQLReturnTable(sql);
                     if (dt2.Rows.Count == 0)
-                        throw new Exception("@表不存在[" + tabelOrViewName + "]");
+                        return false;
 
                     if (dt2.Rows[0][0].ToString().ToUpper().Trim() == "VIEW")
+                        return true;
+                    else
+                        return false;
+                case DBType.Access:
+                    sql = "select   Type   from   msysobjects   WHERE   UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
+                    DataTable dtw = DBAccess.RunSQLReturnTable(sql);
+                    if (dtw.Rows.Count == 0)
+                        return false;
+
+                    if (dtw.Rows[0][0].ToString().Trim() == "5")
                         return true;
                     else
                         return false;
@@ -3638,9 +3655,6 @@ namespace BP.DA
             int i = 0;
             switch (DBAccess.AppCenterDBType)
             {
-                case DBType.Access:
-                    return false;
-                    break;
                 case DBType.MSSQL:
                     i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM information_schema.COLUMNS  WHERE TABLE_NAME='" + table + "' AND COLUMN_NAME='" + col + "'", 0);
                     break;
@@ -3656,8 +3670,11 @@ namespace BP.DA
                 case DBType.Informix:
                     i = DBAccess.RunSQLReturnValInt("select count(*) from syscolumns c where tabid in (select tabid	from systables	where tabname = lower('" + table + "')) and c.colname = lower('" + col + "')", 0);
                     break;
+                case DBType.Access:
+                    return false;
+                    break;
                 default:
-                    throw new Exception("err@没有判断的数据库类型.");
+                    throw new Exception("err@IsExitsTableCol没有判断的数据库类型.");
             }
 
             if (i == 1)

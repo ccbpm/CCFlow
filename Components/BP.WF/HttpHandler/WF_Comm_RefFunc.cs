@@ -634,7 +634,7 @@ namespace BP.WF.HttpHandler
         {
             if (DBAccess.IsExitsTableCol("Port_StationType", "Idx") == false)
             {
-                if (DBAccess.IsView("Port_StationType") == false)
+                if (DBAccess.IsView("Port_StationType", SystemConfig.AppCenterDBType) == false)
                 {
                     BP.GPM.StationType st = new GPM.StationType();
                     st.CheckPhysicsTable();

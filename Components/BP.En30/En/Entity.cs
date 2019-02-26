@@ -1141,7 +1141,7 @@ namespace BP.En
                 {
                     this.CheckPhysicsTable();
 
-                    if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable) == false)
+                    if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
                         return Retrieve(); //让其在查询一遍.
                 }
                 throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);

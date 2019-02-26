@@ -1415,86 +1415,14 @@ namespace BP.En
 			}
 		}
 		private string _PhysicsTable = null;
-
+        /// <summary>
+        /// 是否是视图
+        /// </summary>
 		public bool IsView
 		{
 			get
 			{
-				string sql = "";
-				switch (this.EnDBUrl.DBType)
-				{
-					case DBType.Oracle:
-						sql = "SELECT TABTYPE  FROM TAB WHERE UPPER(TNAME)=:v";
-						DataTable oradt = DBAccess.RunSQLReturnTable(sql, "v", this.PhysicsTableExt.ToUpper());
-						if (oradt.Rows.Count == 0)
-							throw new Exception("@表不存在[" + this.PhysicsTableExt + "]");
-						if (oradt.Rows[0][0].ToString().ToUpper().Trim() == "V".ToString())
-							return true;
-						else
-							return false;
-						break;
-					case DBType.Access:
-						sql = "select   Type   from   msysobjects   WHERE   UCASE(name)='" + this.PhysicsTableExt.ToUpper() + "'";
-						DataTable dtw = DBAccess.RunSQLReturnTable(sql);
-						if (dtw.Rows.Count == 0)
-							throw new Exception("@表不存在[" + this.PhysicsTableExt + "]");
-						if (dtw.Rows[0][0].ToString().Trim() == "5")
-							return true;
-						else
-							return false;
-					case DBType.MSSQL:
-						sql = "select xtype from sysobjects WHERE name =" + SystemConfig.AppCenterDBVarStr + "v";
-						DataTable dt1 = DBAccess.RunSQLReturnTable(sql, "v", this.PhysicsTableExt);
-						if (dt1.Rows.Count == 0)
-							throw new Exception("@表不存在[" + this.PhysicsTableExt + "]");
-
-						if (dt1.Rows[0][0].ToString().ToUpper().Trim() == "V".ToString())
-							return true;
-						else
-							return false;
-					case DBType.Informix:
-						sql = "select tabtype from systables where tabname = '" + this.PhysicsTableExt.ToLower() + "'";
-						DataTable dtaa = DBAccess.RunSQLReturnTable(sql);
-						if (dtaa.Rows.Count == 0)
-							throw new Exception("@表不存在[" + this.PhysicsTableExt + "]");
-
-						if (dtaa.Rows[0][0].ToString().ToUpper().Trim() == "V")
-							return true;
-						else
-							return false;
-					case DBType.MySQL:
-						sql = "SELECT Table_Type FROM information_schema.TABLES WHERE table_name='" + this.PhysicsTableExt + "' and table_schema='" + SystemConfig.AppCenterDBDatabase + "'";
-						DataTable dt2 = DBAccess.RunSQLReturnTable(sql);
-						if (dt2.Rows.Count == 0)
-							throw new Exception("@表不存在[" + this.PhysicsTableExt + "]");
-
-						if (dt2.Rows[0][0].ToString().ToUpper().Trim() == "VIEW")
-							return true;
-						else
-							return false;
-                    case DBType.PostgreSQL:
-                        sql = "select relkind from pg_class WHERE relname ='" + this.PhysicsTableExt.ToLower()+"'" ;
-                        DataTable dt3 = DBAccess.RunSQLReturnTable(sql);
-                        if (dt3.Rows.Count == 0)
-                            throw new Exception("@表/视图不存在[" + this.PhysicsTableExt + "]"+sql);
-
-                        //如果是个表.
-                        if (dt3.Rows[0][0].ToString().ToLower().Trim().Equals("r")==true)
-                            return false;
-                        else
-                            return true;
-					default:
-						throw new Exception("@没有做的判断。");
-				}
-
-				DataTable dt = DBAccess.RunSQLReturnTable(sql, "v", this.PhysicsTableExt.ToUpper());
-				if (dt.Rows.Count == 0)
-					throw new Exception("@表不存在[" + this.PhysicsTableExt + "]");
-
-				if (dt.Rows[0][0].ToString() == "VIEW")
-					return true;
-				else
-					return false;
+                return DBAccess.IsView(this.PhysicsTableExt,this.EnDBUrl.DBType);
 			}
 		}
 

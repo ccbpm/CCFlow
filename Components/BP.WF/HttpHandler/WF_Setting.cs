@@ -243,7 +243,7 @@ namespace BP.WF.HttpHandler
         #region 修改密码.
         public string ChangePassword_Init()
         {
-            if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+            if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                 return "err@当前是组织结构集成模式，您不能修改密码，请在被集成的系统修改密码。";
 
             return "";

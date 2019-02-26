@@ -3041,7 +3041,7 @@ namespace BP.WF
 
 
             emp.SID = DBAccess.GenerGUID();
-            if (DBAccess.IsView(emp.EnMap.PhysicsTable) == false)
+            if (DBAccess.IsView(emp.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
                 emp.DirectUpdate();
 
             WebUser.SignInOfGener(emp);
@@ -3127,7 +3127,7 @@ namespace BP.WF
                         if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
                         {
                             //判断是否视图，如果为视图则不进行修改 需要翻译
-                            if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                            if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                             {
                                 return sid;
                             }
@@ -3190,7 +3190,7 @@ namespace BP.WF
             if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
             {
                 //判断是否视图，如果为视图则不进行修改 需要翻译
-                if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                 {
                     return false;
                 }
@@ -3210,7 +3210,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                     throw new Exception("@执行更新SID失败,您在组织结构集成的时候需要配置一个更新SID的SQL, 比如: update MyUserTable SET SID=@SID WHERE BH='@No'");
                 throw ex;
             }

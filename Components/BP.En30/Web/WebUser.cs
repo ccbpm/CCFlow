@@ -182,7 +182,7 @@ namespace BP.Web
             if (IsRecSID)
             {
                 //判断是否视图，如果为视图则不进行修改 
-                if (BP.DA.DBAccess.IsView("Port_Emp") == false)
+                if (BP.DA.DBAccess.IsView("Port_Emp",SystemConfig.AppCenterDBType) == false)
                 {
                     /*如果记录sid*/
                     string sid1 = DateTime.Now.ToString("MMddHHmmss");
@@ -860,7 +860,7 @@ namespace BP.Web
         public static void SetSID(string sid)
         {
             //判断是否视图，如果为视图则不进行修改
-            if (BP.DA.DBAccess.IsView("Port_Emp") == false)
+            if (BP.DA.DBAccess.IsView("Port_Emp",SystemConfig.AppCenterDBType) == false)
             {
                 Paras ps = new Paras();
                 ps.SQL = "UPDATE Port_Emp SET SID=" + SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";

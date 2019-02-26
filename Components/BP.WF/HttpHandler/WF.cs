@@ -1287,6 +1287,266 @@ namespace BP.WF.HttpHandler
             BP.Web.WebUser.SignInOfGener(emp1, "CH", false, false, BP.Web.WebUser.No, BP.Web.WebUser.Name);
             return "success@授权登录成功！";
         }
+
+        /// <summary>
+        /// 批处理审批
+        /// </summary>
+        /// <returns></returns>
+        public string Batch_Init()
+        {
+            string fk_node = GetRequestVal("FK_Node");
+
+            //没有传FK_Node
+            if (DataType.IsNullOrEmpty(fk_node))
+            {
+                string sql = "SELECT a.NodeID, a.Name,a.FlowName, COUNT(WorkID) AS NUM  FROM WF_Node a, WF_EmpWorks b WHERE A.NodeID=b.FK_Node AND B.FK_Emp='" + WebUser.No + "' AND b.WFState NOT IN (7) AND a.BatchRole!=0 GROUP BY A.NodeID, a.Name,a.FlowName ";
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                return BP.Tools.Json.ToJson(dt);
+            }
+
+
+            return "";
+        }
+
+        public string BatchList_Init()
+        {
+            DataSet ds = new DataSet();
+
+            string FK_Node = GetRequestVal("FK_Node");
+
+            //获取节点信息
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            Flow fl = nd.HisFlow;
+            ds.Tables.Add(nd.ToDataTableField("WF_Node"));
+            
+            string sql = "";
+
+            if (nd.HisRunModel == RunModel.SubThread)
+            {
+                sql = "SELECT a.*, b.Starter,b.ADT,b.WorkID FROM " + fl.PTable
+                          + " a , WF_EmpWorks b WHERE a.OID=B.FID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
+                          + " AND b.FK_Emp='" + WebUser.No + "'";
+            }
+            else
+            {
+                sql = "SELECT a.*, b.Starter,b.ADT,b.WorkID FROM " + fl.PTable
+                        + " a , WF_EmpWorks b WHERE a.OID=B.WorkID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
+                        + " AND b.FK_Emp='" + WebUser.No + "'";
+            }
+
+            //获取待审批的流程信息集合
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Batch_List";
+            ds.Tables.Add(dt);
+
+            //获取按钮权限
+            BtnLab btnLab = new BtnLab(this.FK_Node);
+
+            ds.Tables.Add(btnLab.ToDataTableField("Sys_BtnLab"));
+
+            //获取报表数据
+            string inSQL = "SELECT WorkID FROM WF_EmpWorks WHERE FK_Emp='" + WebUser.No + "' AND WFState!=7 AND FK_Node=" + this.FK_Node;
+            Works wks = nd.HisWorks;
+            wks.RetrieveInSQL(inSQL);
+
+            ds.Tables.Add(wks.ToDataTableField("WF_Work"));
+
+            //获取字段属性
+            MapAttrs attrs = new MapAttrs("ND"+this.FK_Node);
+
+            //获取实际中需要展示的列
+            string batchParas = nd.BatchParas;
+            MapAttrs realAttr = new MapAttrs();
+            if (DataType.IsNullOrEmpty(batchParas) == false)
+            {
+                string[] strs = batchParas.Split(',');
+                foreach (string str in strs)
+                {
+                    if (string.IsNullOrEmpty(str)
+                        || str.Contains("@PFlowNo") == true)
+                        continue;
+
+                    foreach (MapAttr attr in attrs)
+                    {
+                        if (str != attr.KeyOfEn)
+                            continue;
+                        realAttr.AddEntity(attr);
+                    }
+                }
+            }
+
+            ds.Tables.Add(realAttr.ToDataTableField("Sys_MapAttr"));
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        /// <summary>
+        /// 批量发送
+        /// </summary>
+        /// <returns></returns>
+        public string Batch_Send()
+        {
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            string[] strs = nd.BatchParas.Split(',');
+
+            MapAttrs attrs = new MapAttrs("ND"+this.FK_Node);
+
+            //获取数据
+            string sql = string.Format("SELECT Title,RDT,ADT,SDT,FID,WorkID,Starter FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.FK_Node);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            int idx = -1;
+            string msg = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                idx++;
+                if (idx == nd.BatchListCount)
+                    break;
+                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
+                string cb = this.GetValFromFrmByKey("CB_" + workid, "0");
+                if (cb == "on")
+                    cb = "1";
+                else cb = "0";
+                if (cb == "0") //没有选中
+                    continue;
+                #region 给字段赋值
+                Hashtable ht = new Hashtable();
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str))
+                        continue;
+                    foreach (MapAttr attr in attrs)
+                    {
+                        if (str != attr.KeyOfEn)
+                            continue;
+                       
+
+                        if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+                        {
+
+                            string val = this.GetValFromFrmByKey("TB_" + workid + "_" + attr.KeyOfEn, null);
+                            ht.Add(str, val);
+                            continue;
+                        }
+
+
+                        if (attr.UIContralType == BP.En.UIContralType.TB && attr.UIIsEnable == true)
+                        {
+                            string val = this.GetValFromFrmByKey("TB_" + workid + "_" + attr.KeyOfEn, null);
+                            ht.Add(str, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == BP.En.UIContralType.DDL && attr.UIIsEnable == true)
+                        {
+                            string val = this.GetValFromFrmByKey("DDL_" + workid + "_" + attr.KeyOfEn);
+                            ht.Add(str, val);
+                            continue;
+                        }
+
+                        if (attr.UIContralType == BP.En.UIContralType.CheckBok && attr.UIIsEnable == true)
+                        {
+                            string val = this.GetValFromFrmByKey("CB_" + +workid + "_" + attr.KeyOfEn, "-1");
+                            if (val == "-1")
+                                ht.Add(str, 0);
+                            else
+                                ht.Add(str, 1);
+                            continue;
+                        }
+                    }
+                }
+                #endregion 给字段赋值
+
+                
+                msg += "@对工作(" + dr["Title"] + ")处理情况如下";
+                BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(nd.FK_Flow, workid, ht);
+                msg += objs.ToMsgOfHtml();
+                msg += "<br/>";
+            }
+
+            if (msg == "")
+                msg = "没有选择需要处理的工作";
+            return msg;
+        }
+
+        /// <summary>
+        /// 批量退回 待定
+        /// </summary>
+        /// <returns></returns>
+        public string Batch_Return()
+        {
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            string[] strs = nd.BatchParas.Split(',');
+
+            MapAttrs attrs = new MapAttrs("ND" + this.FK_Node);
+
+            //获取数据
+            string sql = string.Format("SELECT Title,RDT,ADT,SDT,FID,WorkID,Starter FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.FK_Node);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            int idx = -1;
+            string msg = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                idx++;
+                if (idx == nd.BatchListCount)
+                    break;
+                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
+                string cb = this.GetValFromFrmByKey("CB_" + workid, "0");
+                if (cb == "0") //没有选中
+                    continue;
+
+                msg += "@对工作(" + dr["Title"] + ")处理情况如下。<br>";
+                BP.WF.SendReturnObjs objs = null;// BP.WF.Dev2Interface.Node_ReturnWork(nd.FK_Flow, workid,fid,this.FK_Node,"批量退回");
+                msg += objs.ToMsgOfHtml();
+                msg += "<hr>";
+
+            }
+            return "工作在完善中";
+        }
+
+
+
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <returns></returns>
+        public string Batch_Delete()
+        {
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            string[] strs = nd.BatchParas.Split(',');
+
+            MapAttrs attrs = new MapAttrs("ND" + this.FK_Node);
+
+            //获取数据
+            string sql = string.Format("SELECT Title,RDT,ADT,SDT,FID,WorkID,Starter FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.FK_Node);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            int idx = -1;
+            string msg = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                idx++;
+                if (idx == nd.BatchListCount)
+                    break;
+                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
+                string cb = this.GetValFromFrmByKey("CB_" + workid, "0");
+                if (cb == "0") //没有选中
+                    continue;
+
+                msg += "@对工作(" + dr["Title"] + ")处理情况如下。<br>";
+                string mes = BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(nd.FK_Flow, workid, "批量退回", true);
+                msg += mes;
+                msg += "<hr>";
+
+            }
+            if (msg == "")
+                msg = "没有选择需要处理的工作";
+
+            return "批量删除成功" + msg;
+        }
+
+
         /// <summary>
         /// 退出登录
         /// </summary>

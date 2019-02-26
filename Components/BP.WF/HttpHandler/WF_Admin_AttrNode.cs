@@ -1501,9 +1501,9 @@ namespace BP.WF.HttpHandler
             nd.BatchListCount = int.Parse(this.GetRequestVal("TB_BatchListCount"));
             //批处理的参数 
             string sbatchparas = "";
-            if (this.GetRequestVal("CB_Node") != null)
+            if (this.GetRequestVal("CheckBoxIDs") != null)
             {
-                sbatchparas = this.GetRequestVal("CB_Node");
+                sbatchparas = this.GetRequestVal("CheckBoxIDs");
             }
             nd.BatchParas = sbatchparas;
             nd.Update();

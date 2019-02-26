@@ -99,48 +99,48 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
             handler.AddPara("parentrootid", 0);
             var data = handler.DoMethodReturnString("Dot2DotStationModel_GetStructureTreeRoot");
-//            Handler_AjaxQueryData(param, function (data, scope) {
+            //            Handler_AjaxQueryData(param, function (data, scope) {
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            var treeData = eval('(' + data + ')');
+
+            // for bug 591 at 20171205
+            (function (cnode) {
+                var param = {
+                    DoType: "Dot2DotStationModel_GetSubUnits",
+                    parentid: cnode.attributes.No,
+                    nodeid: nodeid,
+                    ttype: cnode.attributes.TType,
+                    stype: isUnitModel ? "UNIT" : "ST"
+                };
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
+                handler.AddPara("parentid", cnode.attributes.No);
+                handler.AddPara("nodeid", nodeid);
+                handler.AddPara("ttype", cnode.attributes.TType);
+                handler.AddPara("stype", isUnitModel ? "UNIT" : "ST");
+                var data = handler.DoMethodReturnString("Dot2DotStationModel_GetSubUnits");
+                //					Handler_AjaxQueryData(param, function (data, scope) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     return;
                 }
 
-                var treeData = eval('(' + data + ')');
+                var redata = eval('(' + data + ')');
 
-				// for bug 591 at 20171205
-				(function (cnode) {
-					var param = {
-						DoType: "Dot2DotStationModel_GetSubUnits",
-						parentid: cnode.attributes.No,
-						nodeid: nodeid,
-						ttype: cnode.attributes.TType,
-						stype: isUnitModel ? "UNIT" : "ST"
-					};
-		            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
-		            handler.AddPara("parentid", cnode.attributes.No);
-		            handler.AddPara("nodeid", nodeid);
-		            handler.AddPara("ttype", cnode.attributes.TType);
-		            handler.AddPara("stype", isUnitModel ? "UNIT" : "ST");
-		            var data = handler.DoMethodReturnString("Dot2DotStationModel_GetSubUnits");
-//					Handler_AjaxQueryData(param, function (data, scope) {
-						if (data.indexOf("err@") != -1) {
-							alert(data);
-							return;
-						}
+                $("#treeUnits").tree("loadData", redata);
+                //					}, this);
+            })(treeData.InnerData[0]);
 
-						var redata = eval('(' + data + ')');
+            //$("#treeUnits").tree("loadData", treeData.InnerData);	// for bug 591 at 20171205
 
-						$("#treeUnits").tree("loadData", redata);
-//					}, this);
-				})(treeData.InnerData[0]);
+            isUnitModel = treeData.Msg == "true";
 
-                //$("#treeUnits").tree("loadData", treeData.InnerData);	// for bug 591 at 20171205
-
-                isUnitModel = treeData.Msg == "true";
-
-                //获取当前节点绑定的岗位
-                GetNodeStations(PAGESIZE, 1);
-//            }, this);
+            //获取当前节点绑定的岗位
+            GetNodeStations(PAGESIZE, 1);
+            //            }, this);
         }
 
         function GetSubUnits(cnode) {
@@ -151,7 +151,7 @@
                 ttype: cnode.attributes.TType,
                 stype: isUnitModel ? "UNIT" : "ST"
             };
-            
+
             var children = $("#treeUnits").tree("getChildren", cnode.target);
             if (children[0].text != "loading...") {
                 return;
@@ -162,17 +162,17 @@
             handler.AddPara("ttype", cnode.attributes.TType);
             handler.AddPara("stype", isUnitModel ? "UNIT" : "ST");
             var data = handler.DoMethodReturnString("Dot2DotStationModel_GetSubUnits");
-//            Handler_AjaxQueryData(param, function (data, scope) {
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
+            //            Handler_AjaxQueryData(param, function (data, scope) {
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
 
-                var redata = eval('(' + data + ')');
+            var redata = eval('(' + data + ')');
 
-                $("#treeUnits").tree("remove", children[0].target);
-                $("#treeUnits").tree("append", { parent: cnode.target, data: redata });
-//            }, this);
+            $("#treeUnits").tree("remove", children[0].target);
+            $("#treeUnits").tree("append", { parent: cnode.target, data: redata });
+            //            }, this);
         }
 
         function GetNodeStations(pagesize, pageidx) {
@@ -192,20 +192,20 @@
             handler.AddPara("nodeid", nodeid);
             handler.AddPara("stype", isUnitModel ? "UNIT" : "ST");
             var data = handler.DoMethodReturnString("Dot2DotStationModel_GetNodeStations");
-//            Handler_AjaxQueryData(param, function (data, scope) {
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
+            //            Handler_AjaxQueryData(param, function (data, scope) {
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
 
-                var redata = eval('(' + data + ')');
-                nodestations = redata.InnerData;
-                if (nodestations == undefined || nodestations == 'undefined')
-                    redata = eval('(' + redata + ')');
-                    nodestations = redata.InnerData;
-                $("#save").linkbutton("enable");
-                ShowSelectedStations();
-//            }, this);
+            var redata = eval('(' + data + ')');
+            nodestations = redata.InnerData;
+            if (nodestations == undefined || nodestations == 'undefined')
+                redata = eval('(' + redata + ')');
+            nodestations = redata.InnerData;
+            $("#save").linkbutton("enable");
+            ShowSelectedStations();
+            //            }, this);
         }
 
         function ShowSelectedStations() {
@@ -370,24 +370,24 @@
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
                 handler.AddJson(param);
                 var data = handler.DoMethodReturnString("Dot2DotStationModel_SaveNodeStations");
-//                Handler_AjaxQueryData(param, function (data, scope) {
-                    $("#save").linkbutton("enable");
+                //                Handler_AjaxQueryData(param, function (data, scope) {
+                $("#save").linkbutton("enable");
 
-                    if (data.indexOf("err@") != -1) {
-                        alert(data);
-                        return;
-                    }
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
 
-                    var redata = eval('(' + data + ')');
+                var redata = eval('(' + data + ')');
 
-                    $.messager.show({
-                        title: " ",
-                        msg: redata.Msg,
-                        timeout: 1000
-                    });
+                $.messager.show({
+                    title: " ",
+                    msg: redata.Msg,
+                    timeout: 1000
+                });
 
-                    ShowSelectedStations();
-//                }, this);
+                ShowSelectedStations();
+                //                }, this);
                 return;
             }
 
@@ -487,9 +487,9 @@
         &nbsp; <a href="javascript:void(0)" onclick="ShowSelectedStations()" class="easyui-linkbutton"
             data-options="iconCls:'icon-table'">显示已选岗位</a> &nbsp;
         <input id="kw" class="easyui-textbox" onkeyup="" style="width: 80px" />
-        <a href="javascript:void(0)" onclick="FilterStations($('#kw').textbox('getValue'))" class="easyui-linkbutton"
-            data-options="iconCls:'icon-search'">检索</a> &nbsp;<a href="javascript:void(0)" onclick="DeleteSelectedStations(false)"
-                class="easyui-linkbutton" data-options="iconCls:'icon-delete'">删除</a>
+        <a href="javascript:void(0)" onclick="FilterStations($('#kw').textbox('getValue'))"
+            class="easyui-linkbutton" data-options="iconCls:'icon-search'">检索</a> &nbsp;<a href="javascript:void(0)"
+                onclick="DeleteSelectedStations(false)" class="easyui-linkbutton" data-options="iconCls:'icon-delete'">删除</a>
     </div>
 </body>
 </html>

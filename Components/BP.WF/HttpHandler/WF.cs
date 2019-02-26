@@ -1457,7 +1457,12 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 给字段赋值
 
-                
+                //获取审核意见的值
+
+                string checkNote = this.GetValFromFrmByKey("TB_" + workid + "_WorkCheck_Doc", null);
+                if (DataType.IsNullOrEmpty(checkNote) == false)
+                    BP.WF.Dev2Interface.WriteTrackWorkCheck(nd.FK_Flow, nd.NodeID, workid, Int64.Parse(dr["FID"].ToString()), checkNote, WebUser.Name);
+               
                 msg += "@对工作(" + dr["Title"] + ")处理情况如下";
                 BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(nd.FK_Flow, workid, ht);
                 msg += objs.ToMsgOfHtml();

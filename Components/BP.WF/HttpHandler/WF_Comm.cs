@@ -1141,16 +1141,7 @@ namespace BP.WF.HttpHandler
                 {
                     //获取SQl
                     string sql = item.HisAttr.UIBindKey;
-                    sql = sql.Replace("~", "'");
-                    if (sql.Contains("@WebUser.No"))
-                        sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-                    if (sql.Contains("@WebUser.Name"))
-                        sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-
-                    if (sql.Contains("@WebUser.FK_Dept"))
-                        sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-
+                    sql = BP.WF.Glo.DealExp(sql,null,null);
                     DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataColumn col in dtSQl.Columns)
                     {

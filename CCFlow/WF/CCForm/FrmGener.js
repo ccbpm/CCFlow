@@ -342,6 +342,8 @@ function GenerFrm() {
                         var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
                         if (selectText == null || selectText == undefined || selectText == "")
                             selectText = mainTable[mapAttr.KeyOfEn + "T"];
+
+                        if (selectText != null && selectText != undefined && selectText != "")
                         $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
                     }
                     if(defValue!="")

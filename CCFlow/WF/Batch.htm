@@ -4,31 +4,72 @@
     <title>驰骋工作流</title>
      <meta charset="UTF-8"/>
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="./Scripts/config.js"></script>
-    <script type="text/javascript" language="javascript" >
-        function Load() {
+   <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+   <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet"/>
+   <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+   <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+   <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+   <script language="JavaScript" src="Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="Comm/Gener.js" type="text/javascript"></script>
 
-            return;
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
+
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+            InitPage();
+        });
+
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+
+            //URL参数FK_Node 不为空时
+            if(fk_node!=null && fk_node !=undefined && fk_node!=""){
+              var node = new Entity("BP.WF.Node",fk_node);
+              if(node.BatchRole == 0){ // 改节点不能批量审批
+                 $("#cc").append("<center>节点(" + node.Name + ")不能执行批量处理操作 </center>");
+                 return ;
+              }
+              window.location.href = "BatchList.htm?FK_Node="+fk_node+"&Type=1"; //跳转到批量审批处理列表
+
+              return ;
+            }
+
+            //获取当前用户批处理的流程及对应的节点
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("Batch_Init");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
                 return;
             }
 
-            url = url.replace('.htm', '.jsp');
-            window.location.href = url;
-            return;
+            data = eval('(' + data + ')');
+            if (data.length == 0) {
+                $("#cc").append("<center>当前没有批处理的工作。 </center>");
+                return;
+            }
+
+            var listbox = "<ul>";
+            //循环显示批处理的流程节点数量
+            for (var idx = 0; idx < data.length; idx++) {
+             listbox +="<li style='list-style-type:square; color:#959595;'><a href='BatchList.htm?FK_Node=" + data[idx].NodeID
+                    + "&Type=0'  style=\"text-decoration:none; font-size:14px; font-weight:normal;\">" + data[idx].FlowName + " --> " +data[idx].Name + "(" +data[idx].NUM + ")" + "</a></li><br/>";
+            }
+            listbox+='</ul>';
+            $("#lists").append(listbox);
+            
         }
+       
     </script>
 </head>
-<body  onload="Load()" >
-
-<form id="cc">
-
-<br />
-<center> 我们在2018年6月份对该功能进行重构，敬请期待，如果您需要该功能，请在以前版本中恢复该文件。 </center>
-</form>
-
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row c" id="lists"></div>
+</div>
 </body>
 </html>

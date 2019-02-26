@@ -1963,7 +1963,7 @@ var HttpHandler = (function () {
             if (url == null || url == undefined || url == "")
                 queryString = document.location.search.substr(1);
 
-            // queryString = encodeURI(encodeURI(queryString));
+            queryString = decodeURI(queryString);
             var self = this;
             $.each(queryString.split("&"), function (i, o) {
                 var param = o.split("=");

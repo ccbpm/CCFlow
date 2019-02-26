@@ -443,7 +443,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp + SystemConfig.AppSettings["DataDirPath"] + "\\Data\\";
+                return PathOfWebApp +    "\\WF\\Data\\";
             }
         }
         public static string PathOfDataUser
@@ -474,14 +474,14 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp + SystemConfig.AppSettings["DataDirPath"] + "\\Data\\XML\\";
+                return PathOfWebApp  + "\\WF\\Data\\XML\\";
             }
         }
         public static string PathOfAppUpdate
         {
             get
             {
-                return PathOfWebApp + SystemConfig.AppSettings["DataDirPath"] + "\\Data\\AppUpdate\\";
+                return PathOfWebApp +  "\\WF\\Data\\AppUpdate\\";
             }
         }
         public static string PathOfCyclostyleFile

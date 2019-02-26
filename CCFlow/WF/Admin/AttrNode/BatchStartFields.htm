@@ -52,38 +52,34 @@
                 newRow += "</tr>";
                 $("#table1 tr:last").after(newRow);
             }
+            $("#DDL_BRole").val(node.BatchRole);
+
             return;
         }
 
 
         //ajax 提交
         function Btn_Save_Click() {
-            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-//            var frmData = $("#cc").serialize();
-
+            var checkBoxIDs = "";
+            var cb = $("input[name='CB_Node']:checked").each(function (j) {
+                checkBoxIDs += $(this).val()+","; //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            }); ;
+            
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             handler.AddPara("CheckBoxIDs", checkBoxIDs);
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddFormData();
             var data = handler.DoMethodReturnString("BatchStartFields_Save");
-//            alert(frmData);
-//            $.ajax({
-//                data: frmData,
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=BatchStartFields_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href;
-                    return;
-//                }
-//            });
+
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            window.location.href = window.location.href;
+            return;
+
         }
     </script>
 </head>

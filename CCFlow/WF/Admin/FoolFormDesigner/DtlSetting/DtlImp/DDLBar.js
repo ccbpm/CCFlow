@@ -13,8 +13,9 @@ function InitBar(optionKey) {
 
     html += "</select >";
 
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+    html += "<input  id='Btn_Save' type='button' onclick='Save()' value='保存' />";
+    html += "<input  id='Btn_Delete' type='button' name='Btn_Delete' onclick='Delete()' value='删除' />";
+    html += "<input  id='Btn_Help' type='button' onclick='HelpOnline()' value='在线帮助' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");

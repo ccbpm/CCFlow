@@ -698,15 +698,14 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
             var ctrlID = ele.split('=')[0];
 
-            var item = $("select[name='" + ctrlID + "'] option[selected]").text();
+            var item =$("#"+ctrlID).children('option:checked').text();
 
             var mystr = '';
 
-            //mystr = ctrlID.substring(4) + 'T=' + item;
-            mystr = ctrlID + 'T=' + item;
+         
+            mystr = ctrlID.replace("DDL_","TB_")+ 'T=' + item;
 
-            //var mystr = ctrlID + 'T=' + item;
-
+           
             formArrResult.push(mystr);
         }
 

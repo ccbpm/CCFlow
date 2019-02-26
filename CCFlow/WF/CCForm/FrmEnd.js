@@ -61,8 +61,9 @@
                 }
             }
         }
+
        
-        $('#TB_' + mapAttr.KeyOfEn).val(val);
+            $('#TB_' + mapAttr.KeyOfEn).val(val);
 
         //文本框.
         if (mapAttr.UIContralType == 0) {
@@ -82,6 +83,7 @@
                 var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
                 if (selectText == null || selectText == undefined || selectText == "")
                     selectText = mainTable[mapAttr.KeyOfEn + "T"];
+                if(selectText != null && selectText != undefined && selectText != "")
                 $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + val + "'>" + selectText + "</option>");
             }
             $('#DDL_' + mapAttr.KeyOfEn).val(val);

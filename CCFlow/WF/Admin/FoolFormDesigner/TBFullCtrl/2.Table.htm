@@ -31,7 +31,7 @@
             }
             var Tag3 = mapExt.Tag3;
             //按照文本计算.
-            $("#TB_Doc").val(Tag1);
+            $("#TB_Tag1").val(Tag1);
             $("#TB_Tag3").val(Tag3);
             //设置按钮是否可以用?
             if (i == 0) {
@@ -61,8 +61,8 @@
             mapExt.ExtType = "TBFullCtrl";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             mapExt.FK_MapData = GetQueryString("FK_MapData");
-            var sql = $("#TB_Doc").val();
-            mapExt.Tag1 = sql; //设置主表的SQL.
+//            var sql = $("#TB_Doc").val();
+//            mapExt.Tag1 = sql; //设置主表的SQL.
             if (mapExt.Update() == 0)
                 mapExt.Insert();
             var val = mapExt.Save();
@@ -119,7 +119,7 @@
         </tr>
         <tr>
             <td colspan="2" style="width: 100%;">
-                <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 95%;"> </textarea>
+                <textarea rows="4" name="TB_Tag1" id="TB_Tag1" style="width: 98%;"> </textarea>
             </td>
         </tr>
         
@@ -137,7 +137,7 @@
         </tr>
         <tr>
             <td colspan="4">
-                <input id="TB_Tag3" name="TB_Tag3" style="width: 100%;" />
+                <input type="text" id="TB_Tag3" name="TB_Tag3" style="width: 99%;" />
             </td>
         </tr>
     </table>

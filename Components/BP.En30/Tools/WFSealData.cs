@@ -131,6 +131,7 @@ namespace BP.Tools
                  //   DBAccess.RunSQL(SqlBuilder.GenerCreateTableSQLOfInfoMix(this));
                     break;
                 case DBType.MSSQL:
+                case DBType.PostgreSQL:
                     sql = string.Format("alter table {0} alter column {1}  {2}", "Sys_WFSealData", WFSealDataAttr.SealData, "text");
                     break;
                 case DBType.MySQL:

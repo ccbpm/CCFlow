@@ -1140,7 +1140,6 @@ namespace BP.WF
             #endregion 先创建表，否则列的顺序就会变化.
 
 
-
             #region 1, 创建or修复表
             foreach (Object obj in al)
             {
@@ -1256,6 +1255,9 @@ namespace BP.WF
                     break;
                 case DBType.MySQL:
                     sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_MySQL.sql";
+                    break;
+                case DBType.PostgreSQL:
+                    sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_PostgreSQL.sql";
                     break;
                 default:
                     break;

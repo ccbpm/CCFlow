@@ -3573,7 +3573,6 @@ namespace BP.WF
                 //如果没有更新到，就写入.
                 WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null);
             }
-
         }
 
         public static void WriteTrackWorkCheckForTangRenYiYao(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)

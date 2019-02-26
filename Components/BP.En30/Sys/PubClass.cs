@@ -616,7 +616,7 @@ namespace BP.Sys
                         }
                         try
                         {
-                            DBAccessOfOracle1.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra_OK(myen));
+                            DBAccessOfOracle1.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(myen));
                         }
                         catch
                         {

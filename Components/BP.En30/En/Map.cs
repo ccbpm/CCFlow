@@ -1472,6 +1472,17 @@ namespace BP.En
 							return true;
 						else
 							return false;
+                    case DBType.PostgreSQL:
+                        sql = "select relkind from pg_class WHERE relname ='" + this.PhysicsTableExt.ToLower()+"'" ;
+                        DataTable dt3 = DBAccess.RunSQLReturnTable(sql);
+                        if (dt3.Rows.Count == 0)
+                            throw new Exception("@表/视图不存在[" + this.PhysicsTableExt + "]"+sql);
+
+                        //如果是个表.
+                        if (dt3.Rows[0][0].ToString().ToLower().Trim().Equals("r")==true)
+                            return false;
+                        else
+                            return true;
 					default:
 						throw new Exception("@没有做的判断。");
 				}

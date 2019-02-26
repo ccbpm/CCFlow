@@ -280,7 +280,10 @@ namespace BP.Web
                     switch (en.EnMap.EnDBUrl.DBType)
                     {
                         case DBType.Oracle:
-                            sql += SqlBuilder.GenerCreateTableSQLOfOra_OK(en) + " \n GO \n";
+                            sql += SqlBuilder.GenerCreateTableSQLOfOra(en) + " \n GO \n";
+                            break;
+                        case DBType.PostgreSQL:
+                            sql += SqlBuilder.GenerCreateTableSQLOfPostgreSQL(en) + " \n GO \n";
                             break;
                         case DBType.Informix:
                             sql += SqlBuilder.GenerCreateTableSQLOfInfoMix(en) + " \n GO \n";

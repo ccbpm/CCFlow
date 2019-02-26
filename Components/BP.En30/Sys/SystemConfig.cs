@@ -508,7 +508,7 @@ namespace BP.Sys
         {
             get
             {
-                if (!DataType.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"]))
+                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"])==false)
                 {
                     return PathOfWebApp + SystemConfig.AppSettings["DataUserDirPath"];
                 }
@@ -1484,6 +1484,7 @@ namespace BP.Sys
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case BP.DA.DBType.Oracle:
+                    case BP.DA.DBType.PostgreSQL:
                         return ":";
                     case BP.DA.DBType.MySQL:
                     case BP.DA.DBType.Informix:

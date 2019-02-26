@@ -35,6 +35,7 @@
                 return;
             }
             data = eval('(' + data + ')');
+            var node = data.WF_Node[0];
 
             var thead = ""; // 标题字段
             var tbody = ""; //内容显示
@@ -54,8 +55,14 @@
                 }
             }
 
+            //判断该节点是否启用审核组件
+            var FWCSta = node.FWCSta;
+            if (FWCSta == 1) {//启用审核组件并且可编辑
+                thead += "<th>审核意见</th>"; 
+            }
+
+
             //处理要显示数据
-            var node = data.WF_Node[0];
             var batchListCount = node.BatchListCount;
             var works = data.WF_Work;
             var batchs = data.Batch_List;
@@ -78,6 +85,11 @@
                     for (var idx = 0; idx < mapAttrs.length; idx++) {
                         tbody += "<td>" + InitMapAttrOfCtrl(mapAttrs[idx], works[i], works[i].OID) + "</td>";
                     }
+                }
+
+                if (FWCSta == 1) {//启用审核组件并且可编辑
+                    tbody += "<td><textarea class='form-control'  style='height:50px;width:240px;' name='TB_" + works[i].OID + "_WorkCheck_Doc' id='TB_" + works[i].OID + "_WorkCheck_Doc' type='text'   ></textarea></td>";
+                    
                 }
                 tbody += "</tr>";
             }

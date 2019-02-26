@@ -2115,14 +2115,6 @@
     <Content Include="WF\Img\ReName.png" />
     <Content Include="WF\Img\repeatimage.jpg" />
     <Content Include="WF\Img\Reset.png" />
-    <Content Include="WF\Img\RptDfine\Batch.htm" />
-    <Content Include="WF\Img\RptDfine\Contrast.htm" />
-    <Content Include="WF\Img\RptDfine\ContrastDtl.htm" />
-    <Content Include="WF\Img\RptDfine\Default.htm" />
-    <Content Include="WF\Img\RptDfine\Flowlist.htm" />
-    <Content Include="WF\Img\RptDfine\Group.htm" />
-    <Content Include="WF\Img\RptDfine\Img\BJ.png" />
-    <Content Include="WF\Img\RptDfine\Search.htm" />
     <Content Include="WF\Img\Runing.gif" />
     <Content Include="WF\Img\Runing.png" />
     <Content Include="WF\Img\Script.png" />

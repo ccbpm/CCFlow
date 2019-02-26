@@ -36,7 +36,7 @@
 
             var url = "";
             if (plant == "CCFlow")
-                url = '/DataUser/Siganture/' + data.No + '.jpg';
+                url = '/DataUser/Siganture/' + empNo + '.jpg';
             else
                 url = basePath + '/DataUser/Siganture/' + empNo + '.jpg';
             img.src = url;
@@ -74,7 +74,7 @@
             } else {
                 var doMethod = "Siganture_Save";
                 var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
-                var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
+                var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&EmpNo=" + empNo;
             }
             //提交数据
 //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");

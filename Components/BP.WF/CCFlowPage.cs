@@ -49,7 +49,7 @@ namespace BP.WF
         /// <summary>
         /// _HisEns
         /// </summary>
-        public Entities _HisEns = null;
+        private Entities _HisEns = null;
         /// <summary>
         /// 他的相关功能
         /// </summary>

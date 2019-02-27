@@ -794,7 +794,7 @@ namespace BP.WF.Template
                 this.SetValByKey(MapDataAttr.EnPK, value);
             }
         }
-        public Entities _HisEns = null;
+        private Entities _HisEns = null;
         public new Entities HisEns
         {
             get

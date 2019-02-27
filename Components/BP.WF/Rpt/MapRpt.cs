@@ -451,7 +451,7 @@ namespace BP.WF.Rpt
                 this.SetValByKey(MapRptAttr.Note, value);
             }
         }
-        public Entities _HisEns = null;
+        private Entities _HisEns = null;
         public new Entities HisEns
         {
             get

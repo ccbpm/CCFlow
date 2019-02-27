@@ -4303,7 +4303,7 @@ namespace BP.WF
         /// <summary>
         /// 节点
         /// </summary>
-        public Nodes _HisNodes = null;
+        private Nodes _HisNodes = null;
         /// <summary>
         /// 他的节点集合.
         /// </summary>

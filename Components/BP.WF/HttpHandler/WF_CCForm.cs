@@ -2409,7 +2409,7 @@ namespace BP.WF.HttpHandler
                 {
                     entityDt.Columns["NO"].ColumnName = "No";
                     entityDt.Columns["NAME"].ColumnName = "Name";
-                    // entityDt.Columns["PARENTNO"].ColumnName = "ParentNo";
+
                 }
 
             }
@@ -3618,6 +3618,12 @@ namespace BP.WF.HttpHandler
         #endregion 从表的选项.
 
         #region SQL从表导入.
+        public string DtlImpBySQL_Delete()
+        {
+            MapDtl dtl = new MapDtl(this.EnsName);
+            BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.RefPKVal + "'");
+            return "";
+        }
         /// <summary>
         /// SQL从表导入
         /// </summary>

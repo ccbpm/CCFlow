@@ -106,13 +106,34 @@
             dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
 
             //处理SQL 替换URL中的参数
-            dbSrc = dbSrc.replace('@Key',this.GetQueryString("RefPK"));
-            data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+            var refPK = this.GetQueryString("RefPK");
+            if(refPK =="" || refPK == undefined){
+                alert('没有获取到相关联的外键，不能查询数据');
+                return;
+            }
 
             $("#jsonDataTable").html("");
-            InitTableByData(data);
+            if (refPK.indexOf(',') == -1) {
+                dbSrc = dbSrc.replace('@Key', refPK);
+                var data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+                InitTableByData(data);
+                return;
+            }
 
-          
+            refPK = refPK.split(',');
+            var data = [];
+
+            for (var i = 0; i < refPK.length; i++) {
+                if (refPK[i] == "")
+                    continue;
+                dbSrc = dbSrc.replace('@Key', refPK[i]);
+                var pkdata = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+               $.each(pkdata,function(i,obj){
+                    data.push(obj);
+               });
+                
+            }
+            InitTableByData(data);
         }
 
         //数据返回Table
@@ -228,7 +249,7 @@
         }
 
 
-        function DalogModelOK() {
+        function DalogModelOK(ImpType) {
             //实体参数.
             var EnsName = GetQueryString("EnsName");
             var refPKVal = GetQueryString("RefPKVal");
@@ -251,6 +272,18 @@
             }
             //插入明细表数据
             var pks = mapExt.Tag4;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddPara("EnsName", EnsName);
+            handler.AddPara("RefPKVal", refPKVal);
+            handler.AddPara("PWorkID", PWorkID);
+            handler.AddPara("FK_Node", FK_Node);
+            handler.AddPara("FID", FID);
+            //清空数据
+            if (ImpType == 0) {
+                handler.DoMethodReturnString("DtlImpBySQL_Delete");
+            }
+
             //默认导入从表附件方法
             //获取从表附件的属性 是否为自定义
             var frmAth = new Entity("BP.Sys.FrmUI.FrmAttachmentExt");
@@ -260,7 +293,7 @@
                 frmAth.SetPKVal(EnsName + "_AthMDtl");
                 frmAth.RetrieveFromDBSources();
             }
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+           
 
             $.each(paraDatas, function (i, data) {
                 //循环导入数据
@@ -312,7 +345,8 @@
             <td style="float:right;">
                 <div style="margin-top:10px; margin-right:10px;">
                     <input type="button" class="btn" onclick="DalogModelCose()" value="取消" />
-                    <input type="button" class="btn btn-danger" onclick="DalogModelOK()" value="确定" />
+                    <input type="button" class="btn btn-danger" onclick="DalogModelOK(0)" value="清空导入" />
+                    <input type="button" class="btn btn-danger" onclick="DalogModelOK(1)" value="追加导入" />
                 </div>
             </td>
         </tr>

@@ -13,7 +13,7 @@
         type="text/css" />
     <script src="../Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js"
         type="text/javascript"></script>
-
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/DatePicker/bootstrap-datepicker.min.js" type="text/javascript"></script>
@@ -168,6 +168,7 @@
         }
 
         //数据返回Table
+         var refpk ="";
         function InitTableByData(dataTable) {
             //获取数据列名
             var columns = [];
@@ -175,7 +176,7 @@
 
             var texts = [];
             var heads = [];
-            var refpk ="";
+           
             if (mapExt.Tag3.length > 0) {
                 texts = mapExt.Tag3.split(',');
             }
@@ -215,70 +216,31 @@
                 });
             }
 
+            //单选还是多选
+            var selectType = mapExt.GetPara("SelectType");
+            var checkbox = selectType == "0" ? true : false;
+
             $('#jsonDataTable').bootstrapTable({
                 data: dataTable,
                 columns: [heads],
                 cache:false,
                 striped: true,
                 clickToSelect:true,
-                singleSelect: true,
+                singleSelect: checkbox,
                 sidePagination: "server",
                 pageNumber: 1,
                 strictSearch: true,
                 onDblClickRow: function (row, $element) {
-                  BootStrapDialog(row[refpk]);
+                    if(checkbox == true)
+                        BootStrapDialog(row[refpk]);
                 },
                 onCheck:function (row) {
-                  BootStrapDialog(row[refpk]);
+                   if(checkbox == true)
+                        BootStrapDialog(row[refpk]);
                 }
 
-            });  
-
-//            //表头
-//            var thread = $('<thead></thead>');
-//            var threadTr = $('<tr></tr>');
-//            //只能选择一个单据信息
-//            var thFirst = $("<th style='width:35px;'></th>");
-//            threadTr.append(thFirst);
-//            $.each(heads, function (i, head) {
-//                var th = $("<th></th>");
-//                th.text(head.Name);
-//                th.data(head);
-//                threadTr.append(th);
-//            });
-//            thread.append(threadTr);
-//            $("#jsonDataTable").append(thread);
-
-//            //生成表格体
-//            var tbody = $('<tbody></tbody>');
-//            $.each(dataTable, function (i, dataObj) {
-//                var tbodyTr = $('<tr onclick="SelectTr(this)"></tr>');
-//                var tdFirst = $("<td></td>");
-//                //第一列为主键
-//                var refPK = heads[0].No;
-//                var no = dataObj[refPK];
-
-//                var ckBox = $("<input type='checkbox' onclick='changeSta(this)'/>");
-//                ckBox.attr("id", "CB_" + no);
-//                ckBox.data(dataObj);
-//                tdFirst.append(ckBox);
-
-//                tbodyTr.append(tdFirst);
-//                //字段列
-//                $.each(heads, function (i, head) {
-//                    var td = $("<td></td>");
-//                    var text = "";
-
-//                    if (head.No && head.No != "") {
-//                        text = dataObj[head.No];
-//                    }
-//                    td.text(text);
-//                    tbodyTr.append(td);
-//                });
-//                tbody.append(tbodyTr);
-//            });
-//            $("#jsonDataTable").append(tbody);
-        }
+            });
+          }  
 
         //重置标签
         function ResetHtml() {
@@ -292,17 +254,6 @@
              
         }
 
-        function changeSta(obj) {
-            if (obj.checked == true){
-                    $.each($(":checkbox"), function () {
-                        this.checked = false;
-                    });
-                    obj.checked = true;
-
-                    var refPK =  obj.id.replace("CB_", "");
-                    BootStrapDialog(refPK);
-                } 
-        }
         //选中行或者选中复选框时弹出从表页面
         function BootStrapDialog(refPK) {
             var url = window.location.href;
@@ -310,11 +261,29 @@
             if (url.indexOf("#") != -1)
                 url = url.replace("#", "");
             url = url + "&RefPK=" + refPK;
-            $('#iframeDtl').attr('src', url);
-            $('#msgModal').modal().show();
+            //$('#iframeDtl').attr('src', url);
+            //$('#msgModal').modal().show();
+            var digWidth = document.body.clientWidth-80;;
+            var digHeight = document.body.clientHeight-120;
+             OpenBootStrapModal(url, "dtlIFrame", "明细表查询", digWidth, digHeight, "icon-edit", false, function () { }, null, function () {
+                location = location;
+            },"msgModal");
         }
 
-       
+       function BtnOK(){
+        //获取选择的主表
+         var data = $("#jsonDataTable").bootstrapTable('getSelections');
+         if(data.length == 0){
+            alert('没有选择任何行数据');
+            return;
+         }
+
+         var pkVals = "";
+         $.each(data,function(i,obj){
+            pkVals += obj[refpk]+",";
+         });
+        BootStrapDialog(pkVals);
+       }
         //取消，关闭弹出层
         function DalogModelCose() {
             if (window.parent && window.parent.CloseBootstrapDialog) {
@@ -331,6 +300,7 @@
                 <div id="searchDiv" style='text-align: left;'>
                     <input type="text" id="TB_Key" value="" class="keyWordInput" style="width: 30%;display:inline" placeholder="请输入关键字进行搜索"/>
                     <a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>
+                    <a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="A1" onclick="BtnOK()">确定</a>
                     <input id="hiddenText" type="text" style="display:none" />
                 </div>
             </td>

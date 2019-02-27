@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>发起前置导航</title>
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
@@ -17,15 +20,14 @@
             //初始化下拉框.
             InitBar(StartGuideWay.BySelfUrl);
 
-
             //获取节点属性.
             var flowNo = GetQueryString("FK_Flow");
 
-            $("#Msg").html("正在加载请稍后....");
-
             var flow = new Entity("BP.WF.Flow", flowNo);
-
-            $("#Msg").html(strs);
+            //批量为复制.
+            if (flow.StartGuideWay == StartGuideWay.BySelfUrl) {
+                GenerFullAllCtrlsVal(flow);
+            }
 
         });
 
@@ -34,8 +36,11 @@
             //更新节点表单类型.
             var flowNo = GetQueryString("FK_Flow");
             var flow = new Entity("BP.WF.Flow", flowNo);
-            flow.StartGuideWay = StartGuideWay.None;
-            flow.Update();
+            flow.StartGuideWay = StartGuideWay.BySelfUrl;
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
 
             window.location.href = window.location.href;
         }
@@ -44,17 +49,35 @@
 <body>
     <div id="bar">
     </div>
-
-    <fieldset>
-    <legend>请设置URL</legend>
-    <textarea rows=3 id="TB_Url" name="TB_Url" ></textarea>
-    </fieldset>
-
-
     
     <fieldset>
-        <legend>帮助.</legend>
-        不设置任何前置导航，发起流程直接进入开始节点表单。
+        <form id="cc">
+            <table id="table" style="width: 100%;">
+             <tr>
+                <th colspan="2">
+                    <a href="javascript:ShowHidden('ByUrl')">请设置URL:</a>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                
+                <div id="ByUrl" style="display: none; color: gray">
+                    <ul>
+                        <li>请设置URL在下面的文本框里。</li>
+                        <li>该URL是一个列表，在每一行的数据里有一个连接链接到工作处理器上（/WF/MyFlow.htm）</li>
+                        <li>连接到工作处理器（ WF/MyFlow.htm）必须有2个参数FK_Flow=xxx&IsCheckGuide=1</li>
+                        <li>您可以打开Demo: /SDKFlowDemo/TestCase/StartGuideSelfUrl.htm 详细的说明了该功能如何开发。</li>
+                    </ul>
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%;">
+                    <textarea id="TB_StartGuidePara1" name="TB_StartGuidePara1" rows="3" runat="server" style="width: 98%;height: 51px"></textarea>
+                </td>
+            </tr>
+         </table>
+        </form>
     </fieldset>
 </body>
 </html>

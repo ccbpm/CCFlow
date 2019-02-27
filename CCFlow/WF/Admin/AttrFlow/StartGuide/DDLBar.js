@@ -7,7 +7,7 @@ function InitBar(optionKey) {
 
     html += "<option value=" + StartGuideWay.None + ">无,不设置(默认).</option>";
     html += "<option value=" + StartGuideWay.BySQLOne + ">按设置的SQL-单条模式  </option>";
-    html += "<option value=" + StartGuideWay.FoolForm + ">从历史发起的流程Copy数据(查询历史记录)</option>";
+    html += "<option value=" + StartGuideWay.SubFlowGuide + ">从历史发起的流程Copy数据(查询历史记录)</option>";
     html += "<option value=" + StartGuideWay.BySelfUrl + ">按自定义的Url </option>";
     html += "<option value=" + StartGuideWay.ByParentFlowModel + ">父子流程模式</option>";
 

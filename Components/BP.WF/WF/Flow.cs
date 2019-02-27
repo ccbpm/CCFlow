@@ -181,21 +181,6 @@ namespace BP.WF
         #endregion 业务数据表同步属性.
 
         #region 基础属性.
-
-        /// <summary>
-        /// 设计类型
-        /// </summary>
-        public CCBPM_DType DType
-        {
-            get
-            {
-                return (CCBPM_DType)this.GetValIntByKey(FlowAttr.DType);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.DType, (int)value);
-            }
-        }
         /// <summary>
         /// 流程事件实体
         /// </summary>
@@ -1962,12 +1947,14 @@ namespace BP.WF
                             else
                             {
                                 String[] deliveryParas = nd.DeliveryParas.Split(',');
-						        foreach(String str in deliveryParas){
-							        if (DataType.IsNumStr(str) == false) {
+                                foreach (String str in deliveryParas)
+                                {
+                                    if (DataType.IsNumStr(str) == false)
+                                    {
                                         msg += "@错误:您设置指定岗位的节点编号格式不正确，目前设置的为{" + nd.DeliveryParas + "}";
-							        }
-						        }
-                                
+                                    }
+                                }
+
                             }
                             break;
                         case DeliveryWay.ByDeptAndStation: /*按部门与岗位的交集计算.*/
@@ -2212,7 +2199,7 @@ namespace BP.WF
                 {
                     rpt.SetValByKey(attr.Key, "0");
                 }
-                 
+
                 foreach (Node nd in nds)
                 {
                     if (nd.FocusField.Trim() == "")
@@ -3805,7 +3792,7 @@ namespace BP.WF
                     flowGF.Idx = -1;
                     flowGF.Insert();
                 }
-                sql = "UPDATE Sys_MapAttr SET GroupID=" + flowGF.OID + " WHERE  FK_MapData='" + fk_mapData + "'  AND KeyOfEn IN('" + GERptAttr.PFlowNo + "','" + GERptAttr.PWorkID + "','" + GERptAttr.MyNum + "','" + GERptAttr.FK_Dept + "','" + GERptAttr.FK_NY + "','" + GERptAttr.FlowDaySpan + "','" + GERptAttr.FlowEmps + "','" + GERptAttr.FlowEnder + "','" + GERptAttr.FlowEnderRDT + "','" + GERptAttr.FlowEndNode + "','" + GERptAttr.FlowStarter + "','" + GERptAttr.FlowStartRDT + "','" + GERptAttr.WFState + "')";
+                sql = "UPDATE Sys_MapAttr SET GroupID='" + flowGF.OID + "' WHERE  FK_MapData='" + fk_mapData + "'  AND KeyOfEn IN('" + GERptAttr.PFlowNo + "','" + GERptAttr.PWorkID + "','" + GERptAttr.MyNum + "','" + GERptAttr.FK_Dept + "','" + GERptAttr.FK_NY + "','" + GERptAttr.FlowDaySpan + "','" + GERptAttr.FlowEmps + "','" + GERptAttr.FlowEnder + "','" + GERptAttr.FlowEnderRDT + "','" + GERptAttr.FlowEndNode + "','" + GERptAttr.FlowStarter + "','" + GERptAttr.FlowStartRDT + "','" + GERptAttr.WFState + "')";
                 DBAccess.RunSQL(sql);
             }
             catch (Exception ex)
@@ -3818,7 +3805,8 @@ namespace BP.WF
             GERpt gerpt = this.HisGERpt;
             gerpt.CheckPhysicsTable();  //让报表重新生成.
 
-            DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
+                DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
+
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='活动时间' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='CDT'");
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='参与者' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='Emps'");
             #endregion 尾后处理.
@@ -4524,9 +4512,7 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "(当前节点为子流程时)是否检查所有子流程完成后父流程自动发送", true, true);
 
                 map.AddTBString(FlowAttr.Ver, null, "版本号", true, true, 0, 20, 10);
-
                 //设计类型 .
-                map.AddTBInt(FlowAttr.DType, 0, "设计类型0=ccbpm,1=bpmn", true, false);
                 map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
 
                 //参数.
@@ -5515,30 +5501,30 @@ namespace BP.WF
                         }
                         break;
                     case "WF_Selector":
-                         foreach (DataRow dr in dt.Rows)
+                        foreach (DataRow dr in dt.Rows)
                         {
-						    Selector selector = new Selector();
-						    foreach (DataColumn dc in dt.Columns)
+                            Selector selector = new Selector();
+                            foreach (DataColumn dc in dt.Columns)
                             {
 
-                                 string val = dr[dc.ColumnName] as string;
-                                 if (val == null)
-                                     continue;
+                                string val = dr[dc.ColumnName] as string;
+                                if (val == null)
+                                    continue;
 
-                                 if (dc.ColumnName.ToLower().Equals("nodeid"))
-                                 {
-                                     if (val.Length < iOldFlowLength)
-                                     {
-									    // 节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
-									    throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_Node下FK_Node值错误:" + val);
-								    }
-                                     val = flowID + val.Substring(iOldFlowLength);
-						         }
-					       
-							    selector.SetValByKey(dc.ColumnName, val);
-						    }
-						    selector.DirectUpdate();
-					    }
+                                if (dc.ColumnName.ToLower().Equals("nodeid"))
+                                {
+                                    if (val.Length < iOldFlowLength)
+                                    {
+                                        // 节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                        throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_Node下FK_Node值错误:" + val);
+                                    }
+                                    val = flowID + val.Substring(iOldFlowLength);
+                                }
+
+                                selector.SetValByKey(dc.ColumnName, val);
+                            }
+                            selector.DirectUpdate();
+                        }
                         break;
                     case "WF_NodeStation": //FAppSets.xml。
                         DBAccess.RunSQL("DELETE FROM WF_NodeStation WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + fl.No + "')");
@@ -5906,7 +5892,7 @@ namespace BP.WF
                                 gf.SetValByKey(dc.ColumnName, val);
                             }
                             int oid = DBAccess.GenerOID();
-                            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + oid + " WHERE FK_MapData='" + gf.FrmID + "' AND GroupID=" + gf.OID);
+                            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID='" + oid + "' WHERE FK_MapData='" + gf.FrmID + "' AND GroupID='" + gf.OID + "'");
                             gf.InsertAsOID(oid);
                         }
                         break;
@@ -6168,7 +6154,7 @@ namespace BP.WF
                 nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
                 nd.Insert();
                 nd.CreateMap();
-                
+
                 //为开始节点增加一个删除按钮. @李国文.
                 string sql = "UPDATE WF_Node SET DelEnable=1 WHERE NodeID=" + nd.NodeID;
                 BP.DA.DBAccess.RunSQL(sql);

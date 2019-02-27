@@ -368,7 +368,7 @@ namespace BP.WF.HttpHandler
 
             string add = "+";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 add = "||";
              
             if (templateType == "DDLFullCtrl")

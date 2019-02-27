@@ -1043,7 +1043,7 @@ namespace BP.DA
                         return new IfxConnection(connstr);
                     case DBType.Access:
                     default:
-                        throw new Exception("发现未知的数据库连接类型！");
+                        throw new Exception("err@GetAppCenterDBConn发现未知的数据库连接类型！");
                 }
             }
         }
@@ -1060,11 +1060,13 @@ namespace BP.DA
                         return new OracleDataAdapter();
                     case DBType.MySQL:
                         return new MySqlDataAdapter();
+                    case DBType.PostgreSQL:
+                        return new NpgsqlDataAdapter();
                     case DBType.Informix:
                         return new IfxDataAdapter();
                     case DBType.Access:
                     default:
-                        throw new Exception("发现未知的数据库连接类型！");
+                        throw new Exception("err@GetAppCenterDBAdapter发现未知的数据库连接类型！");
                 }
             }
         }
@@ -1080,11 +1082,13 @@ namespace BP.DA
                         return new OracleCommand();
                     case DBType.MySQL:
                         return new MySqlCommand();
+                    case DBType.PostgreSQL:
+                        return new NpgsqlCommand();
                     case DBType.Informix:
                         return new IfxCommand();
                     case DBType.Access:
                     default:
-                        throw new Exception("发现未知的数据库连接类型！");
+                        throw new Exception("err@GetAppCenterDBCommand发现未知的数据库连接类型！");
                 }
             }
         }
@@ -1096,63 +1100,23 @@ namespace BP.DA
         /// edited by qin 16.6.30 oracle数据库执行多条sql语句异常的修复
         /// </summary>
         /// <param name="sqls"></param>
-        /// <returns></returns>
+        /// <returns></returns>1
         public static DataSet RunSQLReturnDataSet(string sqls)
         {
-            IDbConnection conn = GetAppCenterDBConn;
-            IDbDataAdapter ada = GetAppCenterDBAdapter;
-            try
+            DataSet ds = new DataSet();
+            string[] sqlArray = sqls.Split(';');
+            DataTable dt = null;
+            for (int i = 0; i < sqlArray.Length; i++)
             {
-                IDbCommand cmd = GetAppCenterDBCommand;
-                cmd.CommandText = sqls;
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = conn;
-                if (ada != null)
-                {
-                    ada.SelectCommand = cmd;
-                }
+                if (string.IsNullOrWhiteSpace(sqlArray[i]))
+                    continue;
 
-                DataSet oratb = new DataSet();
-
-                switch (AppCenterDBType)
-                {
-                    case DBType.MSSQL:
-                    case DBType.MySQL:
-                        ada.Fill(oratb);
-                        break;
-                    case DBType.Oracle:
-                        string[] sqlArray = sqls.Split(';');
-                        DataTable dt = null;
-                        for (int i = 0; i < sqlArray.Length; i++)
-                        {
-                            if (string.IsNullOrWhiteSpace(sqlArray[i]))
-                                continue;
-
-                            dt = DBAccess.RunSQLReturnTable(sqlArray[i]);
-                            dt.TableName = "dt_" + i.ToString();
-                            oratb.Tables.Add(dt);
-                        }
-                        break;
-                    default:
-                        throw new Exception("@发现未知的数据库连接类型！");
-                }
-
-                if (conn.State != ConnectionState.Open)
-                    conn.Open();
-
-                return oratb;
+                dt = DBAccess.RunSQLReturnTable(sqlArray[i]);
+                dt.TableName = "dt_" + i.ToString();
+                ds.Tables.Add(dt);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("SQLs=" + sqls + " Exception=" + ex.Message);
-            }
-            finally
-            {
-                (ada as System.Data.Common.DbDataAdapter).Dispose();
-                conn.Close();
-            }
+            return ds;
         }
-
         #region 运行 SQL
 
         #region 在指定的Connection上执行 SQL 语句，返回受影响的行数
@@ -1418,11 +1382,14 @@ namespace BP.DA
                 case DBType.MSSQL:
                     sql = "ALTER TABLE " + table + " DROP CONSTRAINT " + pkName;
                     break;
+                case DBType.PostgreSQL:
+                    sql = "ALTER TABLE " + table.ToLower() + " DROP CONSTRAINT " + pkName.ToLower();
+                    break;
                 case DBType.MySQL:
                     sql = "ALTER TABLE " + table + " DROP primary key";
                     break;
                 default:
-                    throw new Exception("@不支持的数据库类型." + SystemConfig.AppCenterDBType);
+                    throw new Exception("err@DropTablePK不支持的数据库类型." + SystemConfig.AppCenterDBType);
                     break;
             }
             BP.DA.DBAccess.RunSQL(sql);
@@ -1789,7 +1756,7 @@ namespace BP.DA
                         result = RunSQL_200705_OLE(sql, paras);
                         break;
                     default:
-                        throw new Exception("发现未知的数据库连接类型！");
+                        throw new Exception("err@RunSQL发现未知的数据库连接类型！");
                 }
                 lockRunSQL = false;
                 return result;
@@ -2967,7 +2934,7 @@ namespace BP.DA
                         dt = RunSQLReturnTable_200705_OLE(sql, paras);
                         break;
                     default:
-                        throw new Exception("@发现未知的数据库连接类型！");
+                        throw new Exception("err@RunSQLReturnTable发现未知的数据库连接类型！");
                 }
                 return dt;
             }
@@ -3661,6 +3628,10 @@ namespace BP.DA
                 case DBType.MySQL:
                     string sql = "select count(*) FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + table + "' and column_Name='" + col + "'";
                     i = DBAccess.RunSQLReturnValInt(sql);
+                    break;
+                case DBType.PostgreSQL:
+                    string sql1 = "select count(*) from information_schema.columns where table_schema='table_schema' and table_name ='" + table.ToLower() + "' and  column_name='" + col.ToLower() + "'";
+                    i = DBAccess.RunSQLReturnValInt(sql1);
                     break;
                 case DBType.Oracle:
                     if (table.IndexOf(".") != -1)

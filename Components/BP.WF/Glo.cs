@@ -498,6 +498,7 @@ namespace BP.WF
                                 break;
                             case DBType.Oracle:
                             case DBType.Informix:
+                            case DBType.PostgreSQL:
                                 DBAccess.RunSQL("ALTER TABLE WF_Node ADD FWCIsShowReturnMsg INTEGER NULL");
                                 break;
                             case DBType.MySQL:
@@ -529,6 +530,9 @@ namespace BP.WF
                             case DBType.Oracle:
                                 DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara NVARCHAR2(1000) NULL");
                                 break;
+                            case DBType.PostgreSQL:
+                                DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara VARCHAR2(1000) NULL");
+                                break;
                             case DBType.MySQL:
                             case DBType.Informix:
                                 DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara TEXT NULL");
@@ -555,14 +559,16 @@ namespace BP.WF
                 {
                     string sqls = "";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         sqls += "UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.PopVal + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.DDLFullCtrl + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrsOfActive WHERE ExtType='" + MapExtXmlList.ActiveDDL + "'";
                     }
-                    else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    
+                    
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         sqls += "UPDATE Sys_MapExt SET MyPK=CONCAT(ExtType,'_',FK_Mapdata,'_',AttrOfOper) WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK=CONCAT(ExtType,'_',FK_Mapdata,'_',AttrOfOper) WHERE ExtType='" + MapExtXmlList.PopVal + "'";
@@ -683,7 +689,7 @@ namespace BP.WF
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm+'_'+convert(varchar,FK_Node )+'_'+FK_Flow");
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm||'_'||FK_Node||'_'||FK_Flow");
 
                 if (SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -753,14 +759,17 @@ namespace BP.WF
                 switch (BP.Sys.SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
-                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_Ora.sql";
+                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\Install\\SQLScript\\InitView_Ora.sql";
                         break;
                     case DBType.MSSQL:
                     case DBType.Informix:
-                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_SQL.sql";
+                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\Install\\SQLScript\\InitView_SQL.sql";
                         break;
                     case DBType.MySQL:
-                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_MySQL.sql";
+                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\Install\\SQLScript\\InitView_MySQL.sql";
+                        break;
+                    case DBType.PostgreSQL:
+                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_PostgreSQL.sql";
                         break;
                     default:
                         break;
@@ -1000,7 +1009,7 @@ namespace BP.WF
 
             if (currDBVer == "" || int.Parse(currDBVer) < int.Parse(myVer))
             {
-                BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
+                BP.DA.DBAccess.RunSQLScript(sqlScript);
                 sql = "UPDATE Sys_Serial SET IntVal=" + myVer + " WHERE CfgKey='UpdataCCFlowVer'";
 
                 if (DBAccess.RunSQL(sql) == 0)
@@ -4291,9 +4300,13 @@ namespace BP.WF
                     case DBType.MySQL:
                         ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  ";
                         break;
-                    default:
+                    case DBType.PostgreSQL:
+                        ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  ";
                         break;
+                    default:
+                        throw new Exception("err@没有判断的数据库类型.");
                 }
+
                 ps.Add("WorkID", workid);
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count == 0)
@@ -4438,7 +4451,7 @@ namespace BP.WF
             }
             catch
             {
-                if (ch.IsExits)
+                if (ch.IsExits==true)
                 {
                     ch.Update();
                 }
@@ -4450,8 +4463,6 @@ namespace BP.WF
                 }
             }
         }
-
-
         /// <summary>
         /// 中午时间从
         /// </summary>

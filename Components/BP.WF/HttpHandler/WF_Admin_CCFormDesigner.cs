@@ -420,7 +420,7 @@ namespace BP.WF.HttpHandler
 
                     dt.TableName = "FigureCom";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         //  figureComCols = "Name,No,Sta,X,Y,H,W";
                         dt.Columns[0].ColumnName = "Name";

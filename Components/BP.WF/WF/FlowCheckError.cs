@@ -133,10 +133,10 @@ namespace BP.WF
 
                 //检查数据合并模式.
                 CheckMode_SpecTable();
- 
+
                 //节点表单字段数据类型检查 
                 CheckModel_FormFields();
-                 
+
                 //检查越轨流程,子流程发起.
                 CheckMode_NodeYGFlows();
 
@@ -153,7 +153,7 @@ namespace BP.WF
                 CheckMode_HeliuAccpterRole();
 
                 Node.CheckFlow(this.flow);
-                 
+
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.flow.No);
 
@@ -1295,7 +1295,7 @@ namespace BP.WF
                     flowGF.Idx = -1;
                     flowGF.Insert();
                 }
-                sql = "UPDATE Sys_MapAttr SET GroupID=" + flowGF.OID + " WHERE  FK_MapData='" + fk_mapData + "'  AND KeyOfEn IN('" + GERptAttr.PFlowNo + "','" + GERptAttr.PWorkID + "','" + GERptAttr.MyNum + "','" + GERptAttr.FK_Dept + "','" + GERptAttr.FK_NY + "','" + GERptAttr.FlowDaySpan + "','" + GERptAttr.FlowEmps + "','" + GERptAttr.FlowEnder + "','" + GERptAttr.FlowEnderRDT + "','" + GERptAttr.FlowEndNode + "','" + GERptAttr.FlowStarter + "','" + GERptAttr.FlowStartRDT + "','" + GERptAttr.WFState + "')";
+                sql = "UPDATE Sys_MapAttr SET GroupID='" + flowGF.OID + "' WHERE  FK_MapData='" + fk_mapData + "'  AND KeyOfEn IN('" + GERptAttr.PFlowNo + "','" + GERptAttr.PWorkID + "','" + GERptAttr.MyNum + "','" + GERptAttr.FK_Dept + "','" + GERptAttr.FK_NY + "','" + GERptAttr.FlowDaySpan + "','" + GERptAttr.FlowEmps + "','" + GERptAttr.FlowEnder + "','" + GERptAttr.FlowEnderRDT + "','" + GERptAttr.FlowEndNode + "','" + GERptAttr.FlowStarter + "','" + GERptAttr.FlowStartRDT + "','" + GERptAttr.WFState + "')";
                 DBAccess.RunSQL(sql);
             }
             catch (Exception ex)
@@ -1309,6 +1309,7 @@ namespace BP.WF
             gerpt.CheckPhysicsTable();  //让报表重新生成.
 
             DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
+
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='活动时间' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='CDT'");
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='参与者' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='Emps'");
             #endregion 尾后处理.

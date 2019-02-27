@@ -114,6 +114,7 @@ namespace BP.DA
                 switch (this.DBType)
                 {
                     case DBType.Oracle:
+                    case DBType.PostgreSQL:
                         return ":";
                     case DBType.MySQL:
                     case DBType.MSSQL:

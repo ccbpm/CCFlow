@@ -362,22 +362,22 @@ namespace BP.WF.Template
                     break;
             }
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 foreach (DataTable dt in ds.Tables)
                 {
                     for (int i = 0; i < dt.Columns.Count; i++)
                     {
-                        if (dt.Columns[i].ColumnName == "NO")
+                        if (dt.Columns[i].ColumnName.ToUpper() == "NO")
                             dt.Columns[i].ColumnName = "No";
 
-                        if (dt.Columns[i].ColumnName == "NAME")
+                        if (dt.Columns[i].ColumnName.ToUpper() == "NAME")
                             dt.Columns[i].ColumnName = "Name";
 
-                        if (dt.Columns[i].ColumnName == "PARENTNO")
+                        if (dt.Columns[i].ColumnName.ToUpper() == "PARENTNO")
                             dt.Columns[i].ColumnName = "ParentNo";
 
-                        if (dt.Columns[i].ColumnName == "FK_DEPT")
+                        if (dt.Columns[i].ColumnName.ToUpper() == "FK_DEPT")
                             dt.Columns[i].ColumnName = "FK_Dept";
                     }
                 }
@@ -673,8 +673,7 @@ namespace BP.WF.Template
                 ds.Tables.Add(dt);
 
                 //人员.
-                //人员.
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 {
                     if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                         sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c, WF_PrjEmp d  WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station And a.No=d.FK_Emp And C.FK_Emp=d.FK_Emp AND b.FK_Node=" + nodeID + " AND D.FK_Prj='" + en.GetValStrByKey("PrjNo") + "') ORDER BY FK_Dept,Idx,No";
@@ -700,7 +699,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //人员.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                     sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";

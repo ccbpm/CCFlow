@@ -238,11 +238,11 @@ namespace BP.Sys
                 map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20,true);
                 map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
 
-                map.AddTBFloat(FrmEleAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmEleAttr.Y, 5, "Y", false, false);
+                map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
+                map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
 
-                map.AddTBFloat(FrmEleAttr.H, 20, "H", true, false);
-                map.AddTBFloat(FrmEleAttr.W, 20, "W", false, false);
+                map.AddTBString(FrmEleAttr.W, null, "宽度", true, false, 0, 20, 20);
+                map.AddTBString(FrmEleAttr.H, null, "高度", true, false, 0, 20, 20);
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
 

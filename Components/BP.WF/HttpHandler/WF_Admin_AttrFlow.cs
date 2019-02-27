@@ -344,7 +344,7 @@ namespace BP.WF.HttpHandler
             DataTable dtColms = src.GetColumns(this.GetRequestVal("TableName"));
             dtColms.TableName = "Cols";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtColms.Columns["NO"].ColumnName = "No";
                 dtColms.Columns["NAME"].ColumnName = "Name";

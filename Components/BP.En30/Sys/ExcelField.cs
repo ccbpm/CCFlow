@@ -110,9 +110,7 @@ namespace BP.Sys
         /// 同步到字段
         /// </summary>
         public const string SyncToField = "SyncToField";
-
     }
-
     /// <summary>
     /// Excel字段
     /// </summary>
@@ -482,7 +480,6 @@ namespace BP.Sys
 
         #endregion 重写事件
     }
-
     /// <summary>
     /// Excel字段集合
     /// </summary>

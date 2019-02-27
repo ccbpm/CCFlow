@@ -264,10 +264,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string Ver = "Ver";
         /// <summary>
-        /// 设计类型
-        /// </summary>
-        public const string DType = "DType";
-        /// <summary>
         /// 删除规则
         /// </summary>
         public const string FlowDeleteRole = "FlowDeleteRole";

@@ -2386,7 +2386,19 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 如果是移动应用就考虑多表单的问题.
 
+                if (WebUser.SysLang.Equals("CN") == true)
+                    return BP.Tools.Json.ToJson(ds);
+
+                #region 处理多语言.
+                Langues langs = new Langues();
+                langs.Retrieve(LangueAttr.Model, LangueModel.CCForm, 
+                    LangueAttr.Sort,"Fields", LangueAttr.Langue, WebUser.SysLang); //查询语言.
+
+                #endregion 处理多语言.
+
                 return BP.Tools.Json.ToJson(ds);
+
+
             }
             catch (Exception ex)
             {

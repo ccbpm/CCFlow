@@ -984,6 +984,9 @@ namespace BP.WF.HttpHandler
         public string FieldTypeSelect_Create()
         {
             string no = this.GetRequestVal("KeyOfEn");
+            if (no == "No")
+                no = "No1";
+
             string name = this.GetRequestVal("name");
             string newNo = DataType.ParseStringForNo(no, 20);
             string newName = DataType.ParseStringForName(name, 20);

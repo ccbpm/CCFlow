@@ -2381,7 +2381,7 @@ namespace BP.WF.HttpHandler
             dt.TableName = "DTObjs";
 
             //判断是否是oracle.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -2405,7 +2405,7 @@ namespace BP.WF.HttpHandler
 
 
                 //判断是否是oracle.
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 {
                     entityDt.Columns["NO"].ColumnName = "No";
                     entityDt.Columns["NAME"].ColumnName = "Name";

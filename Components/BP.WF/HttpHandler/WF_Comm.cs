@@ -2117,7 +2117,7 @@ namespace BP.WF.HttpHandler
 
                 dtEnum.TableName = "Sys_Enum";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 {
                     dtEnum.Columns["MYPK"].ColumnName = "MyPK";
                     dtEnum.Columns["LAB"].ColumnName = "Lab";
@@ -2708,7 +2708,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //暂定
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 //获取SQL的字段
                 //获取 from 的位置

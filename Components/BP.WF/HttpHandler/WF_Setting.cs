@@ -168,7 +168,7 @@ namespace BP.WF.HttpHandler
             ps.Add("FK_Emp",BP.Web.WebUser.No );
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";

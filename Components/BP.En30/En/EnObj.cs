@@ -1450,10 +1450,10 @@ namespace BP.En
                 {
                     switch (attr.Key)
                     {
-                        case "No":
-                            return "No";
                         case "OID":
                             return "OID";
+                        case "No":
+                            return "No";
                         case "MyPK":
                             return "MyPK";
                         default:
@@ -1478,9 +1478,9 @@ namespace BP.En
                 {
                     switch (attr.Key)
                     {
-                        case "No":
-                            return attr.Field;
                         case "OID":
+                            return attr.Field;
+                        case "No":
                             return attr.Field;
                         case "MyPK":
                             return attr.Field;

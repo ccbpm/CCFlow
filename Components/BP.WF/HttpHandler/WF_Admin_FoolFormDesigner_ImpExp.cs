@@ -52,7 +52,7 @@ namespace BP.WF.HttpHandler
                 
                 dt.TableName = "WF_Node";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 {
                     dt.Columns["NODEID"].ColumnName = "NodeID";
                     dt.Columns["NAME"].ColumnName = "Name";
@@ -69,7 +69,7 @@ namespace BP.WF.HttpHandler
 
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -82,7 +82,7 @@ namespace BP.WF.HttpHandler
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -95,7 +95,7 @@ namespace BP.WF.HttpHandler
 
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_FlowSort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -108,7 +108,7 @@ namespace BP.WF.HttpHandler
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Flow";
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";

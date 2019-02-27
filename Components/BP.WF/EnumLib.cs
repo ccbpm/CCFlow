@@ -147,26 +147,6 @@ namespace BP.WF
         /// 按岗位智能计算(操作员所在部门)
         /// </summary>
         AccepterOfDeptStationOfCurrentOper
-
-
-    }
-    /// <summary>
-    /// 设计器类型
-    /// </summary>
-    public enum CCBPM_DType
-    {
-        /// <summary>
-        /// siverlight 模式
-        /// </summary>
-        CCFlow = 0,
-        /// <summary>
-        /// V1.0
-        /// </summary>
-        CCBPM = 1,
-        /// <summary>
-        /// V2.0
-        /// </summary>
-        BPMN = 2
     }
     /// <summary>
     /// 流程删除规则

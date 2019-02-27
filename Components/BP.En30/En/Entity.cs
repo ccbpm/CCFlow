@@ -606,6 +606,9 @@ namespace BP.En
                     case DBType.MSSQL:
                         sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + this._enMap.PhysicsTable;
                         break;
+                    case DBType.PostgreSQL:
+                        sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + this._enMap.PhysicsTable;
+                        break;
                     case DBType.Oracle:
                         sql = "SELECT MAX(" + field + ") +1 AS No FROM " + this._enMap.PhysicsTable;
                         break;
@@ -1468,45 +1471,17 @@ namespace BP.En
         /// <param name="val"></param>
         public int Delete(string attr, object val)
         {
-            try
-            {
-                Paras ps = new Paras();
-                ps.Add(attr, val);
-                switch (this.EnMap.EnDBUrl.DBType)
-                {
-                    case DBType.Oracle:
-                    case DBType.MSSQL:
-                    case DBType.Informix:
-                    case DBType.MySQL:
-                        return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
-                    case DBType.Access:
-                        return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
-                    default:
-                        throw new Exception("没有涉及到的类型。");
-                }
-            }
-            catch (Exception ex)
-            {
-                this.CheckPhysicsTable();
-                throw ex;
-            }
+            Paras ps = new Paras();
+            ps.Add(attr, val);
+            return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
         }
         public int Delete(string attr1, object val1, string attr2, object val2)
         {
             Paras ps = new Paras();
             ps.Add(attr1, val1);
             ps.Add(attr2, val2);
-            switch (this.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.Oracle:
-                case DBType.MSSQL:
-                case DBType.Informix:
-                case DBType.Access:
-                case DBType.MySQL:
-                    return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2, ps);
-                default:
-                    throw new Exception("没有涉及到的类型。");
-            }
+
+            return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2, ps);
         }
         public int Delete(string attr1, object val1, string attr2, object val2, string attr3, object val3)
         {
@@ -1515,16 +1490,7 @@ namespace BP.En
             ps.Add(attr2, val2);
             ps.Add(attr3, val3);
 
-            switch (this.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.Oracle:
-                case DBType.MSSQL:
-                case DBType.Access:
-                case DBType.MySQL:
-                    return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2 + " AND " + this.EnMap.GetAttrByKey(attr3).Field + " =" + this.HisDBVarStr + attr3, ps);
-                default:
-                    throw new Exception("没有涉及到的类型。");
-            }
+            return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2 + " AND " + this.EnMap.GetAttrByKey(attr3).Field + " =" + this.HisDBVarStr + attr3, ps);
         }
         public int Delete(string attr1, object val1, string attr2, object val2, string attr3, object val3, string attr4, object val4)
         {
@@ -1534,16 +1500,7 @@ namespace BP.En
             ps.Add(attr3, val3);
             ps.Add(attr4, val4);
 
-            switch (this.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.Oracle:
-                case DBType.MSSQL:
-                case DBType.Access:
-                case DBType.MySQL:
-                    return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2 + " AND " + this.EnMap.GetAttrByKey(attr3).Field + " =" + this.HisDBVarStr + attr3 + " AND " + this.EnMap.GetAttrByKey(attr4).Field + " =" + this.HisDBVarStr + attr4, ps);
-                default:
-                    throw new Exception("没有涉及到的类型。");
-            }
+            return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2 + " AND " + this.EnMap.GetAttrByKey(attr3).Field + " =" + this.HisDBVarStr + attr3 + " AND " + this.EnMap.GetAttrByKey(attr4).Field + " =" + this.HisDBVarStr + attr4, ps);
         }
         protected virtual void afterDelete()
         {
@@ -2073,7 +2030,7 @@ namespace BP.En
             return this.Update(null);
         }
         /// <summary>
-        /// 仅仅更新一个属性
+        /// 仅仅更新一个属性 @shilianyu.
         /// </summary>
         /// <param name="key1">key1</param>
         /// <param name="val1">val1</param>
@@ -2081,7 +2038,18 @@ namespace BP.En
         public int Update(string key1, object val1)
         {
             this.SetValByKey(key1, val1);
-            return this.Update(key1.Split(','));
+
+            string sql = "";
+
+            if (val1.GetType() == typeof(int)
+                || val1.GetType() == typeof(float) 
+                || val1.GetType() == typeof(Int64) 
+                || val1.GetType() == typeof(decimal))
+                sql = "UPDATE " + this.EnMap.PhysicsTable + " SET " + key1 + " =" + val1 + " WHERE " + this.PK + "='" + this.PKVal + "'";
+            if (val1.GetType() == typeof(string))
+                sql = "UPDATE " + this.EnMap.PhysicsTable + " SET " + key1 + " ='" + val1 + "' WHERE " + this.PK + "='" + this.PKVal + "'";
+
+            return this.RunSQL(sql);
         }
         public int Update(string key1, object val1, string key2, object val2)
         {

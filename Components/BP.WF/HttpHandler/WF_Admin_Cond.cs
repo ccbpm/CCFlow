@@ -222,7 +222,7 @@ namespace BP.WF.HttpHandler
 
             //增加字段集合.
             string sql = "";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
                 sql += " AND KeyOfEn Not IN ("+noteIn+") ";

@@ -663,7 +663,7 @@ namespace BP.En
                         else
                         {
                             if (attr.MaxLength >= 4000)
-                                sql += attr.Field + " VARCHAR ("+attr.MaxLength+") NULL,";
+                                sql += attr.Field + " VARCHAR (" + attr.MaxLength + ") NULL,";
                             else
                                 sql += attr.Field + " VARCHAR (" + attr.MaxLength + ") NULL,";
                         }
@@ -1562,7 +1562,7 @@ namespace BP.En
                         }
                         else
                         {
-                            val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') " + attr.Key;
+                            val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
@@ -1582,7 +1582,7 @@ namespace BP.En
                         if (attr.IsNull)
                             val = val + "," + mainTable + attr.Field + " " + attr.Key + "";
                         else
-                            val = val + ",COALESCE(" + mainTable + attr.Field + "," + attr.DefaultVal + ")   " + attr.Key + "";
+                            val = val + ",COALESCE(" + mainTable + attr.Field + "," + attr.DefaultVal + ")  AS " + attr.Key + "";
 
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
@@ -1613,9 +1613,9 @@ namespace BP.En
                         break;
                     case DataType.AppBoolean:
                         if (attr.DefaultVal.ToString() == "0")
-                            val = val + ", COALESCE( " + mainTable + attr.Field + ",0) " + attr.Key;
+                            val = val + ", COALESCE( " + mainTable + attr.Field + ",0) AS " + attr.Key;
                         else
-                            val = val + ", COALESCE(" + mainTable + attr.Field + ",1) " + attr.Key;
+                            val = val + ", COALESCE(" + mainTable + attr.Field + ",1) AS " + attr.Key;
                         break;
                     case DataType.AppDate:
                     case DataType.AppDateTime:
@@ -1624,7 +1624,7 @@ namespace BP.En
                         else
                         {
                             val = val + ",COALESCE(" + mainTable + attr.Field + ",'" +
-                                                         attr.DefaultVal.ToString() + "') " + attr.Key;
+                                                         attr.DefaultVal.ToString() + "') AS " + attr.Key;
                         }
                         break;
                     default:
@@ -2854,6 +2854,8 @@ namespace BP.En
                     return " NVL(" + expression + "," + isNullBack + ")";
                 case DBType.MySQL:
                     return " IFNULL(" + expression + "," + isNullBack + ")";
+                case DBType.PostgreSQL:
+                    return " COALESCE(" + expression + "," + isNullBack + ")";
                 default:
                     throw new Exception("GetIsNullInSQL未涉及的数据库类型");
             }

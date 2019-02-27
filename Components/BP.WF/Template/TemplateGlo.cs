@@ -5,21 +5,24 @@ using System.Text;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 
+    /// 流程模版的操作
     /// </summary>
     public class TemplateGlo
     {
         /// <summary>
-        /// 创建一个流程.
+        /// 创建一个流程模版
         /// </summary>
         /// <param name="flowSort">流程类别</param>
-        /// <returns>string</returns>
+        /// <param name="flowName">名称</param>
+        /// <param name="dsm">存储方式</param>
+        /// <param name="ptable">物理量</param>
+        /// <param name="flowMark">标记</param>
+        /// <param name="flowVer">版本</param>
+        /// <returns>创建的流程编号</returns>
         public static string NewFlow(string flowSort, string flowName, BP.WF.Template.DataStoreModel dsm, string ptable, string flowMark, string flowVer)
         {
             //执行保存.
             BP.WF.Flow fl = new BP.WF.Flow();
-
-            fl.DType = CCBPM_DType.CCBPM;
 
             string flowNo = fl.DoNewFlow(flowSort, flowName, dsm, ptable, flowMark);
             fl.No = flowNo;
@@ -28,7 +31,6 @@ namespace BP.WF.Template
             //如果为CCFlow模式则不进行写入Json串
             if (flowVer == "0")
                 return flowNo;
-
 
             //创建连线
             Direction drToNode = new Direction();
@@ -45,10 +47,10 @@ namespace BP.WF.Template
         /// <summary>
         /// 创建一个节点
         /// </summary>
-        /// <param name="flowNo"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="x">位置x</param>
+        /// <param name="y">位置y</param>
+        /// <returns>新的节点ID</returns>
         public static int NewNode(string flowNo, int x, int y)
         {
             BP.WF.Flow fl = new WF.Flow(flowNo);

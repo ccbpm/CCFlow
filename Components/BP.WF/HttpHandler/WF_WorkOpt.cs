@@ -384,11 +384,19 @@ namespace BP.WF.HttpHandler
                 }
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                 {
-                    ps.SQL = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + SystemConfig.AppCenterDBVarStr + "NDFrom AND A.NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom ORDER BY WorkID  DESC limit 1,1 ";
+                    ps.SQL = "SELECT Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + SystemConfig.AppCenterDBVarStr + "NDFrom AND A.NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom ORDER BY WorkID  DESC limit 1,1 ";
                     ps.Add("NDFrom", this.FK_Node);
                     ps.Add("NDTo", toNodeID);
                     ps.Add("EmpFrom", WebUser.No);
                 }
+                else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    ps.SQL = "SELECT Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=:NDFrom AND A.NDTo=:NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=:EmpFrom ORDER BY WorkID  DESC limit 1 ";
+                    ps.Add("NDFrom", this.FK_Node);
+                    ps.Add("NDTo", toNodeID);
+                    ps.Add("EmpFrom", WebUser.No);
+                }
+
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count != 0)
                 {
@@ -570,7 +578,7 @@ namespace BP.WF.HttpHandler
                             sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND B.No ";
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                             sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 ";
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                             sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') LIMIT 12";
                     }
                 }
@@ -609,7 +617,7 @@ namespace BP.WF.HttpHandler
                             sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and ( a.PinYin LIKE '%," + emp.ToLower() + "%')";
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                             sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 ";
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                             sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%' ) LIMIT 12";
                     }
                 }
@@ -620,7 +628,7 @@ namespace BP.WF.HttpHandler
                     sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12 ";
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
             }
 
@@ -628,7 +636,7 @@ namespace BP.WF.HttpHandler
 
             //  BP.DA.Log.DebugWriteError(sql);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns[0].ColumnName = "No";
                 dt.Columns[1].ColumnName = "Name";
@@ -1754,7 +1762,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //如果是oracle,就转成小写.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NODEID"].ColumnName = "NodeID";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -2218,7 +2226,7 @@ namespace BP.WF.HttpHandler
             dtDept.TableName = "Depts";
             ds.Tables.Add(dtDept);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtDept.Columns[0].ColumnName = "No";
                 dtDept.Columns[1].ColumnName = "Name";
@@ -2254,7 +2262,7 @@ namespace BP.WF.HttpHandler
             DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmps.TableName = "Emps";
             ds.Tables.Add(dtEmps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtEmps.Columns[0].ColumnName = "No";
                 dtEmps.Columns[1].ColumnName = "Name";
@@ -2346,6 +2354,8 @@ namespace BP.WF.HttpHandler
                     sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1 ";
+                else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1 ";
 
                 DataTable mydt = DBAccess.RunSQLReturnTable(sql);
                 string emps = "";
@@ -2536,7 +2546,7 @@ namespace BP.WF.HttpHandler
             ps.Add("Starter", WebUser.No);
             DataTable dtTemplate = DBAccess.RunSQLReturnTable(ps);
             dtTemplate.TableName = "DBTemplate";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtTemplate.Columns[0].ColumnName = "WorkID";
                 dtTemplate.Columns[1].ColumnName = "Title";
@@ -2566,7 +2576,7 @@ namespace BP.WF.HttpHandler
                 ps.Add("FK_Flow", this.FK_Flow);
                 ps.Add("Starter", WebUser.No);
             }
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 ps.SQL = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow AND WFState=3 AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND ATPARA NOT LIKE '%@DBTemplate=1%' ORDER BY RDT LIMIT 30";
                 ps.Add("FK_Flow", this.FK_Flow);
@@ -2574,7 +2584,7 @@ namespace BP.WF.HttpHandler
             }
             DataTable dtHistroy = DBAccess.RunSQLReturnTable(ps);
             dtHistroy.TableName = "History";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtHistroy.Columns[0].ColumnName = "WorkID";
                 dtHistroy.Columns[1].ColumnName = "Title";

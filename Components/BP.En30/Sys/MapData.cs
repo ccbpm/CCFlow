@@ -2336,7 +2336,7 @@ namespace BP.Sys
                             int beforeID = en.OID;
                             en.OID = 0;
                             en.DirectInsert();
-                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + fk_mapdata + "' AND GroupID=" + beforeID;
+                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + fk_mapdata + "' AND GroupID='" + beforeID+"'";
                         }
                         break;
                     case "Sys_Enum":

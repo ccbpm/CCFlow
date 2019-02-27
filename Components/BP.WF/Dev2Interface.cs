@@ -656,7 +656,7 @@ namespace BP.WF
             }
 
             //把列名转化成区分大小写.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["MYPK"].ColumnName = "MyPK";
                 dt.Columns["ACTIONTYPE"].ColumnName = "ActionType";
@@ -769,7 +769,7 @@ namespace BP.WF
                 ps.Add("FK_Emp", FK_Emp);
             }
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["MYPK"].ColumnName = "MyPK";
                 dt.Columns["TITLE"].ColumnName = "Title";
@@ -783,6 +783,7 @@ namespace BP.WF
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["FID"].ColumnName = "FID";
             }
+          
             return dt;
         }
         public static DataTable DB_CCList(string FK_Emp, CCSta sta)
@@ -813,6 +814,20 @@ namespace BP.WF
                 dt.Columns["REC"].ColumnName = "REC";
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["FID"].ColumnName = "FID";
+            }
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["mypk"].ColumnName = "MyPK";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["doc"].ColumnName = "DOC";
+                dt.Columns["rec"].ColumnName = "REC";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["fid"].ColumnName = "FID";
             }
             return dt;
         }
@@ -940,6 +955,15 @@ namespace BP.WF
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
                 dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
                 dt.Columns["ISSTARTINMOBILE"].ColumnName = "IsStartInMobile";
+            }
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["isbatchstart"].ColumnName = "IsBatchStart";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt.Columns["fk_flowsorttext"].ColumnName = "FK_FlowSortText";
+                dt.Columns["isstartinmobile"].ColumnName = "IsStartInMobile";
             }
 
             return dt;
@@ -1074,6 +1098,16 @@ namespace BP.WF
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
             }
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["atpara"].ColumnName = "AtPara";
+            }
             return dt;
         }
         #endregion 流程草稿
@@ -1148,6 +1182,52 @@ namespace BP.WF
                 // dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
                 // dt.Columns["CWORKID"].ColumnName = "CWorkID";
             }
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["wfsta"].ColumnName = "WFSta";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["billno"].ColumnName = "BillNo";
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["wfstate"].ColumnName = "WFState";
+                dt.Columns["fk_ny"].ColumnName = "FK_NY";
+                dt.Columns["mynum"].ColumnName = "MyNum";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["pri"].ColumnName = "PRI";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["sdtofflow"].ColumnName = "SDTOfFlow";
+                dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt.Columns["pworkid"].ColumnName = "PWorkID";
+                dt.Columns["pnodeid"].ColumnName = "PNodeID";
+                dt.Columns["pfid"].ColumnName = "PFID";
+                dt.Columns["pemp"].ColumnName = "PEmp";
+                dt.Columns["guestno"].ColumnName = "GuestNo";
+                dt.Columns["guestname"].ColumnName = "GuestName";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt.Columns["tasksta"].ColumnName = "TaskSta";
+                dt.Columns["atpara"].ColumnName = "AtPara";
+                dt.Columns["emps"].ColumnName = "Emps";
+                dt.Columns["guid"].ColumnName = "GUID";
+                dt.Columns["weeknum"].ColumnName = "WeekNum";
+                dt.Columns["tspan"].ColumnName = "TSpan";
+                dt.Columns["todosta"].ColumnName = "TodoSta";
+                dt.Columns["systype"].ColumnName = "SysType";
+
+                // dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
+                // dt.Columns["CWORKID"].ColumnName = "CWorkID";
+            }
             return dt;
         }
         #endregion 我关注的流程
@@ -1190,11 +1270,6 @@ namespace BP.WF
                 dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
-                //   dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
-                //dt.Columns["RDT"].ColumnName = "RDT";
-                //dt.Columns["ADT"].ColumnName = "ADT";
-                //  dt.Columns["SDT"].ColumnName = "SDT";
-                // dt.Columns["FK_EMP"].ColumnName = "FK_Emp";
                 dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
                 dt.Columns["SYSTYPE"].ColumnName = "SysType";
@@ -1207,10 +1282,42 @@ namespace BP.WF
                 dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
                 dt.Columns["TODOSTA"].ColumnName = "TodoSta";
                 dt.Columns["TASKSTA"].ColumnName = "TaskSta";
-                //  dt.Columns["LISTTYPE"].ColumnName = "ListType";
                 dt.Columns["SENDER"].ColumnName = "Sender";
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
                 dt.Columns["MYNUM"].ColumnName = "MyNum";
+            }
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["pri"].ColumnName = "PRI";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["title"].ColumnName = "Title";
+                // dt.Columns["ISREAD"].ColumnName = "IsRead";
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["wfstate"].ColumnName = "WFState";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["pworkid"].ColumnName = "PWorkID";
+                dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt.Columns["systype"].ColumnName = "SysType";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["guestno"].ColumnName = "GuestNo";
+                dt.Columns["guestname"].ColumnName = "GuestName";
+                dt.Columns["billno"].ColumnName = "BillNo";
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt.Columns["todosta"].ColumnName = "TodoSta";
+                dt.Columns["tasksta"].ColumnName = "TaskSta";
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["atpara"].ColumnName = "AtPara";
+                dt.Columns["mynum"].ColumnName = "MyNum";
             }
 
             return dt;
@@ -1315,6 +1422,47 @@ namespace BP.WF
                     dt.Columns["ATPARA"].ColumnName = "AtPara";
                     dt.Columns["MYNUM"].ColumnName = "MyNum";
                 }
+
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    dt.Columns["pri"].ColumnName = "PRI";
+                    dt.Columns["workid"].ColumnName = "WorkID";
+                    dt.Columns["isread"].ColumnName = "IsRead";
+                    dt.Columns["starter"].ColumnName = "Starter";
+                    dt.Columns["startername"].ColumnName = "StarterName";
+                    dt.Columns["wfstate"].ColumnName = "WFState";
+                    dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                    dt.Columns["deptname"].ColumnName = "DeptName";
+                    dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                    dt.Columns["flowname"].ColumnName = "FlowName";
+                    dt.Columns["pworkid"].ColumnName = "PWorkID";
+                    dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                    dt.Columns["fk_node"].ColumnName = "FK_Node";
+                    dt.Columns["nodename"].ColumnName = "NodeName";
+                    dt.Columns["workerdept"].ColumnName = "WorkerDept";
+                    dt.Columns["title"].ColumnName = "Title";
+                    dt.Columns["rdt"].ColumnName = "RDT";
+                    dt.Columns["adt"].ColumnName = "ADT";
+                    dt.Columns["sdt"].ColumnName = "SDT";
+                    dt.Columns["fk_emp"].ColumnName = "FK_Emp";
+                    dt.Columns["fid"].ColumnName = "FID";
+                    dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                    dt.Columns["systype"].ColumnName = "SysType";
+                    dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                    dt.Columns["presstimes"].ColumnName = "PressTimes";
+                    dt.Columns["guestno"].ColumnName = "GuestNo";
+                    dt.Columns["guestname"].ColumnName = "GuestName";
+                    dt.Columns["billno"].ColumnName = "BillNo";
+                    dt.Columns["flownote"].ColumnName = "FlowNote";
+                    dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                    dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                    dt.Columns["todosta"].ColumnName = "TodoSta";
+                    dt.Columns["tasksta"].ColumnName = "TaskSta";
+                    dt.Columns["listtype"].ColumnName = "ListType";
+                    dt.Columns["sender"].ColumnName = "Sender";
+                    dt.Columns["atpara"].ColumnName = "AtPara";
+                    dt.Columns["mynum"].ColumnName = "MyNum";
+                }
                 return dt;
             }
 
@@ -1410,6 +1558,47 @@ namespace BP.WF
                 dt2.Columns["SENDER"].ColumnName = "Sender";
                 dt2.Columns["ATPARA"].ColumnName = "AtPara";
                 dt2.Columns["MYNUM"].ColumnName = "MyNum";
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt2.Columns["pri"].ColumnName = "PRI";
+                dt2.Columns["workid"].ColumnName = "WorkID";
+                dt2.Columns["isread"].ColumnName = "IsRead";
+                dt2.Columns["starter"].ColumnName = "Starter";
+                dt2.Columns["startername"].ColumnName = "StarterName";
+                dt2.Columns["wfstate"].ColumnName = "WFState";
+                dt2.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt2.Columns["deptname"].ColumnName = "DeptName";
+                dt2.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt2.Columns["flowname"].ColumnName = "FlowName";
+                dt2.Columns["pworkid"].ColumnName = "PWorkID";
+                dt2.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt2.Columns["fk_node"].ColumnName = "FK_Node";
+                dt2.Columns["nodename"].ColumnName = "NodeName";
+                dt2.Columns["workerdept"].ColumnName = "WorkerDept";
+                dt2.Columns["title"].ColumnName = "Title";
+                dt2.Columns["rdt"].ColumnName = "RDT";
+                dt2.Columns["adt"].ColumnName = "ADT";
+                dt2.Columns["sdt"].ColumnName = "SDT";
+                dt2.Columns["fk_emp"].ColumnName = "FK_Emp";
+                dt2.Columns["fid"].ColumnName = "FID";
+                dt2.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt2.Columns["systype"].ColumnName = "SysType";
+                dt2.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt2.Columns["presstimes"].ColumnName = "PressTimes";
+                dt2.Columns["guestno"].ColumnName = "GuestNo";
+                dt2.Columns["guestname"].ColumnName = "GuestName";
+                dt2.Columns["billno"].ColumnName = "BillNo";
+                dt2.Columns["flownote"].ColumnName = "FlowNote";
+                dt2.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt2.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt2.Columns["todosta"].ColumnName = "TodoSta";
+                dt2.Columns["tasksta"].ColumnName = "TaskSta";
+                dt2.Columns["listtype"].ColumnName = "ListType";
+                dt2.Columns["sender"].ColumnName = "Sender";
+                dt2.Columns["atpara"].ColumnName = "AtPara";
+                dt2.Columns["mynum"].ColumnName = "MyNum";
             }
             return dt2;
         }
@@ -1820,13 +2009,18 @@ namespace BP.WF
             ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
             dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
-
-
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
                 dt.Columns["NUM"].ColumnName = "Num";
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["num"].ColumnName = "Num";
             }
 
             return dt;
@@ -2020,7 +2214,6 @@ namespace BP.WF
             DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["ISREAD"].ColumnName = "IsRead";
                 dt.Columns["STARTER"].ColumnName = "Starter";
@@ -2055,6 +2248,44 @@ namespace BP.WF
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
                 dt.Columns["MYNUM"].ColumnName = "MyNum";
             }
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["isread"].ColumnName = "IsRead";
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["wfstate"].ColumnName = "WFState";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["pworkid"].ColumnName = "PWorkID";
+
+                dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["workerdept"].ColumnName = "WorkerDept";
+                dt.Columns["fk_emp"].ColumnName = "FK_Emp";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+
+                dt.Columns["systype"].ColumnName = "SysType";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["guestno"].ColumnName = "GuestNo";
+                dt.Columns["guestname"].ColumnName = "GuestName";
+                dt.Columns["billno"].ColumnName = "BillNo";
+
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt.Columns["todosta"].ColumnName = "TodoSta";
+                dt.Columns["tasksta"].ColumnName = "TaskSta";
+
+                dt.Columns["listtype"].ColumnName = "ListType";
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["atpara"].ColumnName = "AtPara";
+                dt.Columns["mynum"].ColumnName = "MyNum";
+            }
+
 
             return dt;
         }
@@ -2107,7 +2338,6 @@ namespace BP.WF
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["ISREAD"].ColumnName = "IsRead";
                 dt.Columns["STARTER"].ColumnName = "Starter";
@@ -2141,6 +2371,43 @@ namespace BP.WF
                 dt.Columns["SENDER"].ColumnName = "Sender";
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
                 dt.Columns["MYNUM"].ColumnName = "MyNum";
+            }
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["isread"].ColumnName = "IsRead";
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["wfstate"].ColumnName = "WFState";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["pworkid"].ColumnName = "PWorkID";
+
+                dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["workerdept"].ColumnName = "WorkerDept";
+                dt.Columns["fk_emp"].ColumnName = "FK_Emp";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+
+                dt.Columns["systype"].ColumnName = "SysType";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["guestno"].ColumnName = "GuestNo";
+                dt.Columns["guestname"].ColumnName = "GuestName";
+                dt.Columns["billno"].ColumnName = "BillNo";
+
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt.Columns["todosta"].ColumnName = "TodoSta";
+                dt.Columns["tasksta"].ColumnName = "TaskSta";
+
+                dt.Columns["listtype"].ColumnName = "ListType";
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["atpara"].ColumnName = "AtPara";
+                dt.Columns["mynum"].ColumnName = "MyNum";
             }
 
             return dt;
@@ -2359,6 +2626,15 @@ namespace BP.WF
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
                         }
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        {
+                            dt.Columns["no"].ColumnName = "No";
+                            dt.Columns["name"].ColumnName = "Name";
+                            dt.Columns["rec"].ColumnName = "Rec";
+                            dt.Columns["recname"].ColumnName = "RecName";
+                            dt.Columns["isbacktracking"].ColumnName = "IsBackTracking";
+                        }
+
                         return dt;
                     }
 
@@ -2381,6 +2657,15 @@ namespace BP.WF
                         dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
                         dt.Columns["ATPARA"].ColumnName = "AtPara"; //参数.
                     }
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        dt.Columns["no"].ColumnName = "No";
+                        dt.Columns["name"].ColumnName = "Name";
+                        dt.Columns["rec"].ColumnName = "Rec";
+                        dt.Columns["recname"].ColumnName = "RecName";
+                        dt.Columns["isbacktracking"].ColumnName = "IsBackTracking";
+                        dt.Columns["atpara"].ColumnName = "AtPara"; //参数.
+                    }
                     return dt;
                 case ReturnRole.ReturnPreviousNode:
                     WorkNode mywnP = wn.GetPreviousWorkNode();
@@ -2390,7 +2675,7 @@ namespace BP.WF
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
                         sql = "SELECT a.FK_Node AS No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass=1 ORDER BY RDT DESC ";
                         dt = DBAccess.RunSQLReturnTable(sql);
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                         {
                             dt.Columns["NO"].ColumnName = "No";
                             dt.Columns["NAME"].ColumnName = "Name";
@@ -2406,14 +2691,13 @@ namespace BP.WF
                     {
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking,a.AtPara FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + ") OR (a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
                         dt = DBAccess.RunSQLReturnTable(sql);
-
                     }
                     else
                     {
                         sql = "SELECT a.FK_Node as \"No\",a.FK_NodeText as \"Name\", a.FK_Emp as \"Rec\", a.FK_EmpText as \"RecName\", b.IsBackTracking as \"IsBackTracking\", a.AtPara as \"AtPara\"  FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + "  AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC ";
                         DataTable mydt = DBAccess.RunSQLReturnTable(sql);
 
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                         {
                             dt.Columns["NO"].ColumnName = "No";
                             dt.Columns["NAME"].ColumnName = "Name";
@@ -2433,12 +2717,14 @@ namespace BP.WF
                             sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking,a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND rownum =1  ORDER BY a.CDT DESC ";
                         else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                             sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking,a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 ORDER BY a.CDT DESC LIMIT 1";
+                        else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking,a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 ORDER BY a.CDT DESC LIMIT 1";
                         else
                             throw new Exception("获取上一步节点，未涉及的数据库类型");
 
                         dt = DBAccess.RunSQLReturnTable(sql);
 
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                         {
                             dt.Columns["NO"].ColumnName = "No";
                             dt.Columns["NAME"].ColumnName = "Name";
@@ -2510,7 +2796,7 @@ namespace BP.WF
                     throw new Exception("@没有判断的退回类型。");
             }
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -2631,7 +2917,7 @@ namespace BP.WF
             }
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["STARTERNAME"].ColumnName = "StarterName";
@@ -2701,7 +2987,7 @@ namespace BP.WF
             }
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";

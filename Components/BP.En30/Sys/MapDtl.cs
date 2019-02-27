@@ -569,22 +569,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 分组字段
-        /// </summary>
-        public GroupFields GroupFields_del
-        {
-            get
-            {
-                GroupFields obj = this.GetRefObject("GroupFields") as GroupFields;
-                if (obj == null)
-                {
-                    obj = new GroupFields(this.No);
-                    this.SetRefObject("GroupFields", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
         /// 逻辑扩展
         /// </summary>
         public MapExts MapExts

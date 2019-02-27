@@ -44,7 +44,7 @@ namespace BP.WF.Template
                     enDir.Node = ap.GetValIntByKey(DirectionAttr.Node);
                     enDir.ToNode = ap.GetValIntByKey(DirectionAttr.ToNode);
                     enDir.IsCanBack = ap.GetValBoolenByKey(DirectionAttr.IsCanBack);
-                   // enDir.DirType = ap.GetValIntByKey(DirectionAttr.DirType);
+                    // enDir.DirType = ap.GetValIntByKey(DirectionAttr.DirType);
                     enDir.FK_Flow = fk_flow;
                     enDir.Dots = dots;
                     try
@@ -108,7 +108,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="flowNo"></param>
         /// <param name="saveToPath"></param>
-        public static void ExpWorkFlowTemplete(string flowNo,string saveToPath)
+        public static void ExpWorkFlowTemplete(string flowNo, string saveToPath)
         {
         }
         /// <summary>

@@ -387,63 +387,6 @@ namespace BP.Sys
         {
             //暂停对ccim消息提醒的支持.
             return;
-
-            if (fromEmpNo == null)
-                fromEmpNo = "";
-
-            if (sendToEmpNo == null || sendToEmpNo == "")
-                return;
-
-            // throw new Exception("@接受人不能为空");
-
-            string dbStr = SystemConfig.AppCenterDBVarStr;
-            //保存系统通知消息
-            StringBuilder strHql1 = new StringBuilder();
-            //加密处理
-            msg = BP.Tools.SecurityDES.Encrypt(msg);
-
-            Paras ps = new Paras();
-            string sql = "INSERT INTO CCIM_RecordMsg (OID,SendID,MsgDateTime,MsgContent,ImageInfo,FontName,FontSize,FontBold,FontColor,InfoClass,GroupID,SendUserID) VALUES (";
-            sql += dbStr + "OID,";
-            sql += "'SYSTEM',";
-            sql += dbStr + "MsgDateTime,";
-            sql += dbStr + "MsgContent,";
-            sql += dbStr + "ImageInfo,";
-            sql += dbStr + "FontName,";
-            sql += dbStr + "FontSize,";
-            sql += dbStr + "FontBold,";
-            sql += dbStr + "FontColor,";
-            sql += dbStr + "InfoClass,";
-            sql += dbStr + "GroupID,";
-            sql += dbStr + "SendUserID)";
-            ps.SQL = sql;
-
-            Int64 messgeID = BP.DA.DBAccess.GenerOID("RecordMsgUser");
-
-            ps.Add("OID", messgeID);
-            ps.Add("MsgDateTime", now);
-            ps.Add("MsgContent", msg);
-            ps.Add("ImageInfo", "");
-            ps.Add("FontName", "宋体");
-            ps.Add("FontSize", 10);
-            ps.Add("FontBold", 0);
-            ps.Add("FontColor", -16777216);
-            ps.Add("InfoClass", 15);
-            ps.Add("GroupID", -1);
-            ps.Add("SendUserID", fromEmpNo);
-            BP.DA.DBAccess.RunSQL(ps);
-
-            //保存消息发送对象,这个是消息的接收人表.
-            ps = new Paras();
-            ps.SQL = "INSERT INTO CCIM_RecordMsgUser (OID,MsgId,ReceiveID) VALUES ( ";
-            ps.SQL += dbStr + "OID,";
-            ps.SQL += dbStr + "MsgId,";
-            ps.SQL += dbStr + "ReceiveID)";
-
-            ps.Add("OID", messgeID);
-            ps.Add("MsgId", messgeID);
-            ps.Add("ReceiveID", sendToEmpNo);
-            BP.DA.DBAccess.RunSQL(ps);
         }
         /// <summary>
         /// 处理生成提示信息,不友好的提示.

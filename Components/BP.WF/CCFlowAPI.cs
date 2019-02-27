@@ -299,6 +299,12 @@ namespace BP.WF
                         myFrmIDs = myFrmIDs.Replace("'", "");
                         sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "', FrmID ), Idx";
                     }
+                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        myFrmIDs = myFrmIDs.Replace("'", "");
+                        sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "', FrmID ), Idx";
+                    }
+
                     DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);
 
                     //创建容器,把排序的分组放入这个容器.
@@ -517,6 +523,8 @@ namespace BP.WF
                                 mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                                 mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
+                            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
 
                             //获得上一次发送到的节点.
                             defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);

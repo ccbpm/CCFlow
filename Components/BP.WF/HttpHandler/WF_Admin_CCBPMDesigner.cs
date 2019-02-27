@@ -176,20 +176,20 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("NAME", typeof(string));
             dt.Columns.Add("TTYPE", typeof(string));
 
-           
-                BP.GPM.Emp emp = null;
-                BP.GPM.Emps emps = new BP.GPM.Emps();
-                emps.RetrieveAll();
 
-                BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
-                dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, deptid, BP.GPM.DeptEmpStationAttr.FK_Station, stid);
+            BP.GPM.Emp emp = null;
+            BP.GPM.Emps emps = new BP.GPM.Emps();
+            emps.RetrieveAll();
 
-                foreach (BP.GPM.DeptEmpStation des in dess)
-                {
-                    emp = emps.GetEntityByKey(des.FK_Emp) as BP.GPM.Emp;
+            BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
+            dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, deptid, BP.GPM.DeptEmpStationAttr.FK_Station, stid);
 
-                    dt.Rows.Add(emp.No, deptid + "|" + stid, emp.Name, "EMP");
-                }
+            foreach (BP.GPM.DeptEmpStation des in dess)
+            {
+                emp = emps.GetEntityByKey(des.FK_Emp) as BP.GPM.Emp;
+
+                dt.Rows.Add(emp.No, deptid + "|" + stid, emp.Name, "EMP");
+            }
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -439,8 +439,8 @@ namespace BP.WF.HttpHandler
                 return "url@../DBInstall.htm";
 
             //是否需要自动登录
-            string userNo=this.GetRequestVal("UserNo");
-            string sid=this.GetRequestVal("SID");
+            string userNo = this.GetRequestVal("UserNo");
+            string sid = this.GetRequestVal("SID");
 
             if (sid != null && userNo != null)
             {
@@ -539,16 +539,19 @@ namespace BP.WF.HttpHandler
             flow.No = this.FK_Flow;
             flow.RetrieveFromDBSources();
 
-            //获取所有节点
-            string sqls = "SELECT NODEID,NAME,X,Y,RUNMODEL FROM WF_NODE WHERE FK_FLOW='" + this.FK_Flow + "';" + Environment.NewLine
-                        + "SELECT NODE,TONODE FROM WF_DIRECTION WHERE FK_FLOW='" + this.FK_Flow + "';" + Environment.NewLine
-                        + "SELECT MYPK,NAME,X,Y FROM WF_LABNOTE WHERE FK_FLOW='" + this.FK_Flow + "';";
+            DataSet ds = new DataSet();
+            DataTable dtNodes = DBAccess.RunSQLReturnTable("SELECT NODEID,NAME,X,Y,RUNMODEL FROM WF_NODE WHERE FK_FLOW='" + this.FK_Flow + "'");
+            dtNodes.TableName = "Nodes";
+            ds.Tables.Add(dtNodes);
 
-            DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
+            DataTable dtDirection = DBAccess.RunSQLReturnTable("SELECT NODE,TONODE FROM WF_DIRECTION WHERE FK_FLOW='" + this.FK_Flow + "'");
+            dtDirection.TableName = "Direction";
+            ds.Tables.Add(dtDirection);
 
-            ds.Tables[0].TableName = "Nodes";
-            ds.Tables[1].TableName = "Direction";
-            ds.Tables[2].TableName = "LabNote";
+            DataTable dtLabNote = DBAccess.RunSQLReturnTable("SELECT MYPK,NAME,X,Y FROM WF_LABNOTE WHERE FK_FLOW='" + this.FK_Flow + "'");
+            dtLabNote.TableName = "LabNote";
+            ds.Tables.Add(dtLabNote);
+
 
             // return BP.Tools.Json.DataSetToJson(ds, false);
             return BP.Tools.Json.ToJson(ds);
@@ -755,17 +758,19 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果Json,流程树</returns>
         public string GetFlowTreeTable()
         {
-            string sql = @"SELECT * FROM (SELECT 'F'+No NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+            string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
-                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
 
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
-                sql = @"SELECT * FROM (SELECT 'F'||No NO,'F'||ParentNo PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+                sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                         union 
-                        SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+                        SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
             }
-            else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = @"SELECT * FROM (SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
@@ -773,6 +778,18 @@ namespace BP.WF.HttpHandler
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["no"].ColumnName = "NO";
+                dt.Columns["name"].ColumnName = "NAME";
+                dt.Columns["parentno"].ColumnName = "PARENTNO";
+                dt.Columns["idx"].ColumnName = "IDX";
+
+                dt.Columns["ttype"].ColumnName = "TTYPE";
+                dt.Columns["dtype"].ColumnName = "DTYPE";
+            }
 
             //判断是否为空，如果为空，则创建一个流程根结点，added by liuxc,2016-01-24
             if (dt.Rows.Count == 0)
@@ -813,7 +830,8 @@ namespace BP.WF.HttpHandler
                 dt = newDt;
             }
 
-            return BP.Tools.Json.ToJson(dt);
+            string str = BP.Tools.Json.ToJson(dt);
+            return str;
         }
 
         public void GenerChildRows(DataTable dt, DataTable newDt, DataRow parentRow)
@@ -856,8 +874,8 @@ namespace BP.WF.HttpHandler
         public string GetFormTreeTable()
         {
             #region 检查数据是否符合规范.
-            string rootNo =DBAccess.RunSQLReturnStringIsNull("SELECT No FROM Sys_FormTree WHERE ParentNo='' OR ParentNo IS NULL", null);
-            if (DataType.IsNullOrEmpty(rootNo)==false)
+            string rootNo = DBAccess.RunSQLReturnStringIsNull("SELECT No FROM Sys_FormTree WHERE ParentNo='' OR ParentNo IS NULL", null);
+            if (DataType.IsNullOrEmpty(rootNo) == false)
             {
                 //删除垃圾数据.
                 DBAccess.RunSQL(string.Format("DELETE FROM Sys_FormTree WHERE No='{0}'", rootNo));
@@ -894,13 +912,21 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
-            //FrmTrees fts = new FrmTrees();
-            //fts.RetrieveAll();
-
+           
 
             //获得表单数据.
             DataTable dtSort = ds.Tables[0]; //类别表.
             DataTable dtForm = ds.Tables[1].Clone(); //表单表,这个是最终返回的数据.
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dtForm.Columns["no"].ColumnName = "No";
+                dtForm.Columns["name"].ColumnName = "Name";
+                dtForm.Columns["parentno"].ColumnName = "ParentNo";
+                dtForm.Columns["idx"].ColumnName = "Idx";
+                dtForm.Columns["isparent"].ColumnName = "IsParent";
+                dtForm.Columns["ttype"].ColumnName = "TType";
+            }
 
             //增加顶级目录.
             DataRow[] rowsOfSort = dtSort.Select("ParentNo='0'");
@@ -931,7 +957,7 @@ namespace BP.WF.HttpHandler
                 dtForm.Rows.Add(row.ItemArray);
             }
 
-            if (WebUser.No.Equals("admin")==false)
+            if (WebUser.No.Equals("admin") == false)
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
@@ -954,12 +980,9 @@ namespace BP.WF.HttpHandler
             }
 
             String str = BP.Tools.Json.ToJson(dtForm);
-         //   BP.DA.DataType.WriteFile("C:\\TreeCCFlow.txt", str);
             return str;
-
-            //return BP.Tools.Json.ToJson(dtForm);
         }
-        
+
 
         public string GetStructureTreeTable()
         {
@@ -969,50 +992,50 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("NAME", typeof(string));
             dt.Columns.Add("TTYPE", typeof(string));
 
-            
-                BP.GPM.Depts depts = new BP.GPM.Depts();
-                depts.RetrieveAll();
-                BP.GPM.Stations sts = new BP.GPM.Stations();
-                sts.RetrieveAll();
-                BP.GPM.Emps emps = new BP.GPM.Emps();
-                emps.RetrieveAll(BP.WF.Port.EmpAttr.Name);
-                BP.GPM.DeptStations dss = new BP.GPM.DeptStations();
-                dss.RetrieveAll();
-                BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
-                dess.RetrieveAll();
-                BP.GPM.Station stt = null;
-                BP.GPM.Emp empt = null;
 
-                foreach (BP.GPM.Dept dept in depts)
+            BP.GPM.Depts depts = new BP.GPM.Depts();
+            depts.RetrieveAll();
+            BP.GPM.Stations sts = new BP.GPM.Stations();
+            sts.RetrieveAll();
+            BP.GPM.Emps emps = new BP.GPM.Emps();
+            emps.RetrieveAll(BP.WF.Port.EmpAttr.Name);
+            BP.GPM.DeptStations dss = new BP.GPM.DeptStations();
+            dss.RetrieveAll();
+            BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
+            dess.RetrieveAll();
+            BP.GPM.Station stt = null;
+            BP.GPM.Emp empt = null;
+
+            foreach (BP.GPM.Dept dept in depts)
+            {
+                //增加部门
+                dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+
+                //增加部门岗位
+                dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, dept.No);
+                foreach (BP.GPM.DeptStation ds in dss)
                 {
-                    //增加部门
-                    dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+                    stt = sts.GetEntityByKey(ds.FK_Station) as BP.GPM.Station;
 
-                    //增加部门岗位
-                    dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, dept.No);
-                    foreach (BP.GPM.DeptStation ds in dss)
+                    if (stt == null) continue;
+
+                    dt.Rows.Add(dept.No + "|" + ds.FK_Station, dept.No, stt.Name, "STATION");
+
+                    //增加部门岗位人员
+                    dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, dept.No, BP.GPM.DeptEmpStationAttr.FK_Station,
+                                  ds.FK_Station);
+
+                    foreach (BP.GPM.DeptEmpStation des in dess)
                     {
-                        stt = sts.GetEntityByKey(ds.FK_Station) as BP.GPM.Station;
+                        empt = emps.GetEntityByKey(des.FK_Emp) as BP.GPM.Emp;
 
-                        if (stt == null) continue;
+                        if (empt == null) continue;
 
-                        dt.Rows.Add(dept.No + "|" + ds.FK_Station, dept.No, stt.Name, "STATION");
-
-                        //增加部门岗位人员
-                        dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, dept.No, BP.GPM.DeptEmpStationAttr.FK_Station,
-                                      ds.FK_Station);
-
-                        foreach (BP.GPM.DeptEmpStation des in dess)
-                        {
-                            empt = emps.GetEntityByKey(des.FK_Emp) as BP.GPM.Emp;
-
-                            if (empt == null) continue;
-
-                            dt.Rows.Add(dept.No + "|" + ds.FK_Station + "|" + des.FK_Emp, dept.No + "|" + ds.FK_Station,
-                                        empt.Name, "EMP");
-                        }
+                        dt.Rows.Add(dept.No + "|" + ds.FK_Station + "|" + des.FK_Emp, dept.No + "|" + ds.FK_Station,
+                                    empt.Name, "EMP");
                     }
                 }
+            }
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -1164,14 +1187,6 @@ namespace BP.WF.HttpHandler
             }
             return treeJson;
         }
-        /// <summary>
-        /// 删除流程
-        /// </summary>
-        /// <returns></returns>
-        public string DelFlow()
-        {
-            return WorkflowDefintionManager.DeleteFlowTemplete(this.FK_Flow);
-        }
         public string NewFlow()
         {
             try
@@ -1207,7 +1222,6 @@ namespace BP.WF.HttpHandler
             flow.DoUp();
             return flow.No;
         }
-
         /// <summary>
         /// 下移流程
         /// </summary>
@@ -1217,16 +1231,6 @@ namespace BP.WF.HttpHandler
             Flow flow = new Flow(this.FK_Flow);
             flow.DoDown();
             return flow.No;
-        }
-
-        public string GetFlowSorts()
-        {
-            FlowSorts flowSorts = new FlowSorts();
-            flowSorts.RetrieveAll(FlowSortAttr.Idx);
-            BP.WF.Port.AdminEmp emp = new Port.AdminEmp(BP.Web.WebUser.No);
-
-            string strs = BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, emp.RootOfFlow);
-            return strs;
         }
         /// <summary>
         /// 删除流程类别.
@@ -1238,10 +1242,10 @@ namespace BP.WF.HttpHandler
 
             FlowSort fs = new FlowSort();
             fs.No = fk_flowSort;
-            
-            //检查是否有子流程？
+
+            //检查是否有流程？
             Paras ps = new Paras();
-            ps.SQL = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort=" +SystemConfig.AppCenterDBVarStr +"fk_flowSort";
+            ps.SQL = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort=" + SystemConfig.AppCenterDBVarStr + "fk_flowSort";
             ps.Add("fk_flowSort", fk_flowSort);
             //string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)
@@ -1293,7 +1297,6 @@ namespace BP.WF.HttpHandler
             subFlowSort.Update();
             return "F" + subFlowSort.No;
         }
-
         /// <summary>
         /// 上移流程类别
         /// </summary>
@@ -1305,7 +1308,6 @@ namespace BP.WF.HttpHandler
             fsSub.DoUp();
             return "F" + fsSub.No;
         }
-
         /// <summary>
         /// 下移流程类别
         /// </summary>
@@ -1317,7 +1319,6 @@ namespace BP.WF.HttpHandler
             fsSub.DoDown();
             return "F" + fsSub.No;
         }
-
         /// <summary>
         /// 表单树 - 创建表单同级类别
         /// </summary>
@@ -1331,7 +1332,6 @@ namespace BP.WF.HttpHandler
             sameLevelFormTree.Update();
             return sameLevelFormTree.No;
         }
-
         /// <summary>
         /// 表单树 - 创建表单子类别
         /// </summary>
@@ -1367,7 +1367,7 @@ namespace BP.WF.HttpHandler
             //检查是否有子类别？
             Paras ps = new Paras();
             ps.SQL = "SELECT COUNT(*) FROM Sys_FormTree WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo";
-            ps.Add("ParentNo",this.No);
+            ps.Add("ParentNo", this.No);
             //string sql = "SELECT COUNT(*) FROM Sys_FormTree WHERE ParentNo='" + this.No + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)
                 return "err@该目录下有子类别，您不能删除。";
@@ -1383,7 +1383,6 @@ namespace BP.WF.HttpHandler
             formTree.Delete();
             return "删除成功";
         }
-
         /// <summary>
         /// 表单树-上移表单类别
         /// </summary>

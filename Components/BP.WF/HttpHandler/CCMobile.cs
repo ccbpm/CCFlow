@@ -171,7 +171,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns[0].ColumnName = "TSpan";
                 dt.Columns[1].ColumnName = "Num";
@@ -368,7 +368,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%"+BP.Web.WebUser.No+",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtFlows.Columns[0].ColumnName = "No";
                 dtFlows.Columns[1].ColumnName = "Name";
@@ -401,10 +401,11 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM (select * from WF_GenerWorkFlow where " + sqlWhere + ") where rownum <= 50";
             else if(SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP 50 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
-            else if(SystemConfig.AppCenterDBType == DBType.MySQL)
+            else if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere +" LIMIT 10";
+
             DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 mydt.Columns[0].ColumnName = "WorkID";
                 mydt.Columns[1].ColumnName = "FID";
@@ -424,46 +425,7 @@ namespace BP.WF.HttpHandler
 
             }
             mydt.TableName = "WF_GenerWorkFlow";
-
-           /* BP.En.QueryObject qo = new QueryObject(gwfs);
-
-            qo.addLeftBracket();
-            qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
-            qo.addOr();
-            qo.AddWhere(GenerWorkFlowAttr.TodoEmps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
-            qo.addOr();
-            qo.AddWhere(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
-            qo.addRightBracket();
-
-            if (tSpan != "-1")
-            {
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.TSpan, tSpan);
-            }
-
-            if (this.FK_Flow != null)
-            {
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.FK_Flow);
-            }
-
-            qo.addAnd();
-            qo.AddWhere(GenerWorkFlowAttr.WFState, " > ", 1);
-
-            qo.addOrderByDesc("RDT");
-            //qo.Top = 50;
-
-            DataTable mydt = null;
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                qo.DoQuery();
-                mydt = gwfs.ToDataTableField("WF_GenerWorkFlow");
-            }
-            else
-            {
-                mydt = qo.DoQueryToTable();
-                mydt.TableName = "WF_GenerWorkFlow";
-            }*/
+             
            
             if (mydt != null)
             {
@@ -542,7 +504,7 @@ namespace BP.WF.HttpHandler
             }
             qo.Top = 50;
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 qo.DoQuery();
                 DataTable dt = gwfs.ToDataTableField("Ens");

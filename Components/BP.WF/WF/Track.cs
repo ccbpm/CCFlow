@@ -594,20 +594,21 @@ namespace BP.WF
                 case DBType.MSSQL:
                     sqlRename = "EXEC SP_RENAME WF_Track, " + ptable;
                     break;
-
                 case DBType.Informix:
                     sqlRename = "RENAME TABLE WF_Track TO " + ptable;
                     break;
-
                 case DBType.Oracle:
-                    sqlRename = "ALTER TABLE WF_Track rename to " + ptable;
+                    sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
                     break;
-
+                case DBType.PostgreSQL:
+                    sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
+                    break;
                 case DBType.MySQL:
-                    sqlRename = "ALTER TABLE WF_Track rename to " + ptable;
+                    sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
                     break;
                 default:
-                    throw new Exception("@未涉及到此类型.");
+                    sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
+                    break;
             }
 
             //重命名.

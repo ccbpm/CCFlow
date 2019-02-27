@@ -628,7 +628,7 @@ namespace BP.WF.HttpHandler
 
             DataTable dtSort = qo.DoQueryToTable();
             dtSort.TableName = "Sort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtSort.Columns["NO"].ColumnName = "No";
                 dtSort.Columns["NAME"].ColumnName = "Name";
@@ -760,7 +760,7 @@ namespace BP.WF.HttpHandler
 
             DataTable dtSort = qo.DoQueryToTable();
             dtSort.TableName = "Sort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtSort.Columns["NO"].ColumnName = "No";
                 dtSort.Columns["NAME"].ColumnName = "Name";
@@ -870,7 +870,7 @@ namespace BP.WF.HttpHandler
             DataTable dtStart = DBAccess.RunSQLReturnTable("SELECT No,Name, FK_FlowSort FROM WF_Flow ORDER BY FK_FlowSort,Idx");
             dtStart.TableName = "Start";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtStart.Columns["NO"].ColumnName = "No";
                 dtStart.Columns["NAME"].ColumnName = "Name";
@@ -1105,7 +1105,7 @@ namespace BP.WF.HttpHandler
             ps.SQL = sql;
             ps.AddFK_Emp();
             DataTable dt=DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["TITLE"].ColumnName = "Title";
@@ -1587,7 +1587,7 @@ namespace BP.WF.HttpHandler
             ps.Add("AUTHOR", BP.Web.WebUser.No);
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "NO";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -1703,8 +1703,9 @@ namespace BP.WF.HttpHandler
         public string Port_Init()
         {
             #region 安全性校验.
-            if (this.UserNo == null )
-                return "err@必要的参数没有传入，请参考接口规则。UserNo";
+            //if (this.UserNo == null )
+            //    return "err@必要的参数没有传入，请参考接口规则。UserNo";
+
             if (this.SID == null )
                 return "err@必要的参数没有传入，请参考接口规则。SID";
             if (this.DoWhat == null)

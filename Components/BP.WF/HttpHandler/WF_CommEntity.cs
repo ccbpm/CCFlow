@@ -252,7 +252,7 @@ namespace BP.WF.HttpHandler
                     dt.TableName = attr.Key;
 
                     //@杜. 翻译当前部分.
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         dt.Columns["NO"].ColumnName = "No";
                         dt.Columns["NAME"].ColumnName = "Name";
@@ -279,7 +279,7 @@ namespace BP.WF.HttpHandler
                 DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                 dtEnum.TableName = "Sys_Enum";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 {
                     dtEnum.Columns["MYPK"].ColumnName = "MyPK";
                     dtEnum.Columns["LAB"].ColumnName = "Lab";
@@ -559,7 +559,7 @@ namespace BP.WF.HttpHandler
                         dt.TableName = attr.Key;
 
                         //@杜. 翻译当前部分.
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                         {
                             dt.Columns["NO"].ColumnName = "No";
                             dt.Columns["NAME"].ColumnName = "Name";
@@ -587,7 +587,7 @@ namespace BP.WF.HttpHandler
                     DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                     dtEnum.TableName = "Sys_Enum";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         dtEnum.Columns["MYPK"].ColumnName = "MyPK";
                         dtEnum.Columns["LAB"].ColumnName = "Lab";

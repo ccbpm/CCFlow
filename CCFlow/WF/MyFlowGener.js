@@ -675,6 +675,14 @@ function ConvertDefVal(flowData, defVal, keyOfEn) {
     return result;
 }
 
+function isExistArray(arrys, no) {
+    for (var i = 0; i < arrys.length;i++){
+        if (arrys[i].indexOf(no) != -1)
+            return i;
+    }
+    return -1;
+}
+
 //获取表单数据
 function getFormData(isCotainTextArea, isCotainUrlParam) {
 
@@ -683,33 +691,37 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     var formArr = formss.split('&');
     var formArrResult = [];
 
-    //获取CHECKBOX的值
     $.each(formArr, function (i, ele) {
-
         if (ele.split('=')[0].indexOf('CB_') == 0) {
             if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
                 ele = ele.split('=')[0] + '=1';
             } else {
                 ele = ele.split('=')[0] + '=0';
             }
-        }
 
-        if (ele.split('=')[0].indexOf('DDL_') == 0) {
+            formArrResult.push(ele);
+        }
+         if (ele.split('=')[0].indexOf('DDL_') == 0) {
 
             var ctrlID = ele.split('=')[0];
 
-            var item =$("#"+ctrlID).children('option:checked').text();
+            var item = $("#" + ctrlID).children('option:checked').text();
 
             var mystr = '';
-
-         
-            mystr = ctrlID.replace("DDL_","TB_")+ 'T=' + item;
-
-           
+            mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
             formArrResult.push(mystr);
+            formArrResult.push(ele);
         }
+        
+    });
+   
 
-        formArrResult.push(ele);
+    $.each(formArr, function (i, ele) {
+        if (ele.split('=')[0].indexOf('TB_') == 0) {
+            var index = isExistArray(formArrResult, ele.split('=')[0]);
+            if (index == -1)
+                formArrResult.push(ele);
+        }
     });
 
 

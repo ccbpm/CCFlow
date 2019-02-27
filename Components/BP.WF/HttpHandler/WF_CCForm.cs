@@ -600,7 +600,7 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.VSTOForExcel && this.GetRequestVal("IsFreeFrm") == null)
             {
-                string url = "FrmVSTO.htm?1=1" + this.RequestParas;
+                string url = "FrmVSTO.htm?1=1" + this.RequestParasOfAll;
                 url = url.Replace("&&", "&");
                 return "url@" + url;
             }
@@ -610,8 +610,8 @@ namespace BP.WF.HttpHandler
                 string no = this.GetRequestVal("NO");
                 string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID + "&FK_MapData=" + this.FK_MapData + "&OIDPKVal=" + this.OID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
                 /*如果是URL.*/
-                string requestParas = this.RequestParas;
-                string[] parasArrary = this.RequestParas.Split('&');
+                string requestParas = this.RequestParasOfAll;
+                string[] parasArrary = this.RequestParasOfAll.Split('&');
                 foreach (string str in parasArrary)
                 {
                     if (DataType.IsNullOrEmpty(str) || str.Contains("=") == false)
@@ -628,12 +628,12 @@ namespace BP.WF.HttpHandler
             }
 
             if (md.HisFrmType == FrmType.ExcelFrm)
-                return "url@FrmExcel.aspx?1=2" + this.RequestParas;
+                return "url@FrmExcel.aspx?1=2" + this.RequestParasOfAll;
 
             #endregion 判断是否是返回的URL.
 
             //处理参数.
-            string paras = this.RequestParas;
+            string paras = this.RequestParasOfAll;
             paras = paras.Replace("&DoType=Frm_Init", "");
 
             #region 流程的独立运行的表单.

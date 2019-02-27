@@ -463,10 +463,10 @@ namespace BP.WF
 
                 if (attr.MyDataType == DataType.AppBoolean)
                 {
-                    if (text == "0")
-                        text = "[&#10005]";
+                    if (DataType.IsNullOrEmpty(text)|| text == "0")
+                        text = "[&#10005]"+attr.Name;
                     else
-                        text = "[&#10004]";
+                        text = "[&#10004]" + attr.Name;
                 }
 
                 sb.Append(text);
@@ -902,18 +902,11 @@ namespace BP.WF
 
                         if (attr.MyDataType == DataType.AppBoolean)
                         {
-                            if (text == "0")
-                                text = "[&#10005]";
+                            if (DataType.IsNullOrEmpty(text) || text == "0")
+                                text = "[&#10005]" + attr.Name;
                             else
-                                text = "[&#10004]";
+                                text = "[&#10004]" + attr.Name;
                         }
-
-                        // text = text.Replace("font-family: 楷体", "font-family: 宋体");
-                        // text = text.Replace("font-family: 隶书", "font-family: 宋体");
-                        //text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
-                        // text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.GetEncoding("gb2312"));
-                        //  System.Text.UTF8Encoding utf = new System.Text.UTF8Encoding();
-                        // utf.GetChars(
 
                         //线性展示并且colspan=3
                         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeightInt < 30))

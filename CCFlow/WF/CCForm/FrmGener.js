@@ -61,8 +61,8 @@ $(function () {
         $('.Message').hide();
     });
 
-    setAttachDisabled();
-    setFormEleDisabled();
+//    setAttachDisabled();
+//    setFormEleDisabled();
 
     SetHegiht();
     //打开表单检查正则表达式

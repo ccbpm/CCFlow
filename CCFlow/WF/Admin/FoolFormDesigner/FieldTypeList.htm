@@ -112,6 +112,9 @@
             if ( no.toUpperCase() == "BILLNO")
                 no = "BillNo";
 
+            //特殊判断系统字段.
+            if (no.toUpperCase() == "NO")
+                no = "MyNo";
 
             handler.AddPara("name", name);
             handler.AddPara("FType", fType);

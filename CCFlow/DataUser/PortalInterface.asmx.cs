@@ -7,7 +7,10 @@ using System.Web.Services;
 using BP.DA;
 
 namespace ccbpm
+
 {
+
+
     /// <summary>
     /// OverrideInterface 的摘要说明
     /// </summary>
@@ -31,6 +34,8 @@ namespace ccbpm
         [WebMethod(EnableSession = true)]
         public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo,string tag)
         {
+            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sendToEmpNo);
+          
             string json = "{";
             json += " \"Name\": 'xxxx',";
             json += " \"XB\": 'xxxx',";
@@ -165,7 +170,7 @@ namespace ccbpm
                     return false;
 
 
-                if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                if (BP.DA.DBAccess.IsView("Port_Emp", BP.Sys.SystemConfig.AppCenterDBType) == true)
                 {
                     return false;
                 }

@@ -754,7 +754,12 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             //下拉框       
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                formArrResult.push(name + 'T=' + $(disabledEle).children('option:checked').text());
+                var tbID = name.replace("DDL_", "TB_") + 'T';
+                if($("#"+tbID).length  == 1){
+                    var index = isExistArray(formArrResult, tbID);
+                    if (index == -1)
+                        formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
+                 }
                 break;
 
             //文本区域               

@@ -423,9 +423,9 @@ namespace BP.WF.HttpHandler
             {
 
                 string sql = this.GetRequestVal("TB_" + attr.KeyOfEn);
-                sql = sql.Trim();
                 if (sql == "" || sql == null)
                     continue;
+                sql = sql.Trim();
 
                 if (sql.Contains("@Key") == false)
                     return "err@在配置从表:" + attr.KeyOfEn + " sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";

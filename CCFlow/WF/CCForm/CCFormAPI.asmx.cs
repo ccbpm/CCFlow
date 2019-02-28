@@ -84,8 +84,9 @@ namespace CCFlow.WF.CCForm
             }
 
             //生成模版的文件流.
-            BillTemplate template = new BillTemplate(billTemplateNo);
-            template.GenerTemplateFile(ref bytes);
+            BP.WF.Template.BillTemplate template = new BP.WF.Template.BillTemplate(billTemplateNo);
+            bytes = template.GenerTemplateFile();
+            return;
         }
         #endregion
 

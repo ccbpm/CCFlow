@@ -145,7 +145,7 @@
             node.SetPKVal(nodeID);
             node.Retrieve();
 
-            node.TodolistModel = $("#RB_TodolistModel").val();
+            node.TodolistModel = $('input:radio[name="RB_TodolistModel"]:checked').val();
             node.TeamLeaderConfirmRole = $("#DDL_TeamLeaderConfirmRole").val();
             node.TeamLeaderConfirmDoc = $("#TB_TeamLeaderConfirmDoc").val();
             node.Update();

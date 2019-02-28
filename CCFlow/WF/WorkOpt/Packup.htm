@@ -17,10 +17,15 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
-
+            handler.AddPara("BasePath", basePath);
             var data = handler.DoMethodReturnString("Packup_Init");
 
             if (data.indexOf('err@') == 0) {
+                document.getElementById("Msg").innerHTML = data;
+                return;
+            }
+
+            if (data.indexOf('info@') == 0) {
                 document.getElementById("Msg").innerHTML = data;
                 return;
             }
@@ -34,7 +39,7 @@
                 if (fileTypes.indexOf(url.No) < 0)
                     continue;
 
-                if (url.No == "htm" || url.No == "html") {
+                if (url.No == "htm" || url.No == "html" || url.No.indexOf("htm_") == 0) {
                     html += "<fieldset>";
                     html += "<legend>html在线预览打印</legend>";
                     html += "<ul>";
@@ -96,8 +101,8 @@
         function downloadFile(url) {
 
             window.open(url);
-         //   window.parent.close();
-           // window.close();
+            //   window.parent.close();
+            // window.close();
             return;
         }
 

@@ -39,7 +39,7 @@
             handler.AddPara("FK_Node", nodeID);
             handler.AddPara("WorkID", workid);
             handler.AddPara("FK_Flow", flowNo);
-
+            handler.AddPara("BasePath", basePath);
             var data = handler.DoMethodReturnString("PrintDocQRGuide_Init");
             //alert(data);
 

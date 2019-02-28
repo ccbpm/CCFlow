@@ -34,7 +34,7 @@
 
         //页面数据
         var pageData = {
-            DBDtl: [{ OID: 0, RowData: {} }],
+            DBDtl: [{ OID: 0, RowData: {}}],
             updateRowIndex: -1, //正在更新的列索引
             saveRowCurrent: { count: 0, overCount: 0, saveAll: false, rowIndex: 0 },
             currentRowIndex: -1//如果该值有改变，就表明需要存盘，入库  -1 表示还未做操作  光标所在行
@@ -72,11 +72,16 @@
             if (param.DoType != "Dtl_DeleteRow" && (window.EditModel == 1 || window.EditModel == 2)) {
                 return;
             }
+            //DoType换为DoMethod
+            param.DoMethod = param.DoType;
+            delete param["DoType"];
+            var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
+
             $.ajax({
                 type: "GET", //使用GET或POST方法访问后台
                 dataType: "text", //返回json格式的数据
                 contentType: "application/json; charset=utf-8",
-                url: Handler, //要访问的后台地址
+                url: dynamicHandler + "?DoType=HttpHandler&HttpHandlerName=" + httpHandlerName, //要访问的后台地址
                 data: param, //要发送的数据
                 async: false,
                 cache: false,
@@ -201,29 +206,29 @@
                 url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&FFK_MapData=" + FFK_MapData + "&IsReadonly=" + IsReadonly;
                 WinOpen(url);
             } else {
-            parent.OpenEasyUiDialog(url, 'DtlAthIFrame', '附件上传', 800, 500, "icon-property", false, null, null, null,  function () {
-                //关闭窗口事件
-                var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-                var content = parent.document.getElementById("Fd" + dtlName).contentWindow;
-                content.$("#Ath_" + rowCurrentIndex).html(AthNum);
-                content.$("#TB_AthNum_" + rowCurrentIndex).val(AthNum);
-                alert($("#Ath_0").text());
-               
-            }, function () {
-                //获取DtlAthIFrame的numOfAths值
-                AthNum = parent.document.getElementById("DtlAthIFrame").contentWindow.numOfAths;
+                parent.OpenEasyUiDialog(url, 'DtlAthIFrame', '附件上传', 800, 500, "icon-property", false, null, null, null, function () {
+                    //关闭窗口事件
+                    var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
+                    var content = parent.document.getElementById("Fd" + dtlName).contentWindow;
+                    content.$("#Ath_" + rowCurrentIndex).html(AthNum);
+                    content.$("#TB_AthNum_" + rowCurrentIndex).val(AthNum);
+                    alert($("#Ath_0").text());
 
-            });
+                }, function () {
+                    //获取DtlAthIFrame的numOfAths值
+                    AthNum = parent.document.getElementById("DtlAthIFrame").contentWindow.numOfAths;
 
-            if(IsCloseDialog){
-               
+                });
+
+                if (IsCloseDialog) {
+
+                }
             }
-          }
-         
-    }
+
+        }
         function ChangeAthNum(index) {
-            
-            
+
+
         }
 
         //插入行.
@@ -236,7 +241,7 @@
                 var FK_MapData = GetQueryString("FK_MapData");
                 var FID = GetQueryString("FID");
                 var FK_Node = GetQueryString("FK_Node");
-                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitPage,FK_MapData,FK_Node,FID,false);
+                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitPage, FK_MapData, FK_Node, FID, false);
                 return;
             }
 
@@ -803,7 +808,7 @@
         }
 
         function doAlignColumns() {
-                return;
+            return;
             // 对齐列单元格
             var headerCount = $("#tableHead thead tr th").length;
             $("#tableHead thead tr th").each(function (hi, th) {
@@ -847,14 +852,14 @@
             });
         }
 
-       
+
         function parentStatistics(extArr) {
             if ($.isArray(extArr)) {
                 $.each(extArr, function (i, extObj) {
                     var columnsName = getColumnElementsName(extObj.DtlColumn);
                     $(":input[name=" + columnsName + "]").each(function (i, e) {
                         $(e).bind("change", function (o) {
-                            doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document) ,$("#TB_" + extObj.DaXieAttrOfOper, parent.document));
+                            doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document), $("#TB_" + extObj.DaXieAttrOfOper, parent.document));
                         });
                         if (i == 0) {
                             $(e).trigger("change");
@@ -869,7 +874,7 @@
         * @param name 待统计列元素name
         * @param template 统计单元格jquery对象
         */
-        function doStatistics(exp, name, template,DXTemplate) {
+        function doStatistics(exp, name, template, DXTemplate) {
             if (exp == "Sum") {	// 和
                 var sum = 0;
                 //判断值是否含有小数
@@ -920,7 +925,7 @@
                 template.val(min);
             }
             if (DXTemplate.length == 1)
-            DXTemplate.val(Rmb2DaXie(template.val()));
+                DXTemplate.val(Rmb2DaXie(template.val()));
         }
 
         function getColumnElementsName(KeyOfEn) {
@@ -1306,7 +1311,7 @@
             $.each(trs, function (i, obj) {
 
                 var sn = $($(obj).children()[0]).text();
-                if (sn==null || sn =="" || isNaN(sn)) {
+                if (sn == null || sn == "" || isNaN(sn)) {
                     return;
                 }
 
@@ -1559,45 +1564,45 @@
                             popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                         }
                         switch (popWorkModelStr) {
-                            /// <summary>
-                            /// 自定义URL
-                            /// </summary>
-                            //SelfUrl =1,
+                            /// <summary> 
+                            /// 自定义URL 
+                            /// </summary> 
+                            //SelfUrl =1, 
                             case "1":
                                 icon = "glyphicon glyphicon-th";
                                 break;
-                                /// <summary>
-                                /// 表格模式
-                                /// </summary>
-                                // TableOnly,
+                            /// <summary> 
+                            /// 表格模式 
+                            /// </summary> 
+                            // TableOnly, 
                             case "2":
                                 icon = "glyphicon glyphicon-list";
                                 break;
-                                /// <summary>
-                                /// 表格分页模式
-                                /// </summary>
-                                //TablePage,
+                            /// <summary> 
+                            /// 表格分页模式 
+                            /// </summary> 
+                            //TablePage, 
                             case "3":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                                /// <summary>
-                                /// 分组模式
-                                /// </summary>
-                                // Group,
+                            /// <summary> 
+                            /// 分组模式 
+                            /// </summary> 
+                            // Group, 
                             case "4":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                                /// <summary>
-                                /// 树展现模式
-                                /// </summary>
-                                // Tree,
+                            /// <summary> 
+                            /// 树展现模式 
+                            /// </summary> 
+                            // Tree, 
                             case "5":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
-                                /// <summary>
-                                /// 双实体树
-                                /// </summary>
-                                // TreeDouble
+                            /// <summary> 
+                            /// 双实体树 
+                            /// </summary> 
+                            // TreeDouble 
                             case "6":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;

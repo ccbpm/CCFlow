@@ -24,8 +24,6 @@
 
             str = str.replace('&DoType=MyFlow_Init', '');
             str = str.replace('&DoType=View', '');
-            alert(str);
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData(str);
             var data = handler.DoMethodReturnString("Frm_Init");

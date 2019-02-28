@@ -399,44 +399,6 @@ namespace BP.En
                     throw new Exception("还没有实现。");
             }
         }
-        /// <summary>
-        /// 产生Ora 的where.
-        /// </summary>
-        /// <param name="en"></param>
-        /// <returns></returns>
-        public static string GenerFormWhereOfOra_For9i(Entity en)
-        {
-            string from = " FROM " + en.EnMap.PhysicsTable;
-            //	string where="  ";
-            string table = "";
-            string tableAttr = "";
-            string enTable = en.EnMap.PhysicsTable;
-            foreach (Attr attr in en.EnMap.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.Normal || attr.MyFieldType == FieldType.PK || attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
-                {
-                    Entity en1 = attr.HisFKEn; ;
-                    table = en1.EnMap.PhysicsTable;
-                    tableAttr = "" + en1.EnMap.PhysicsTable + "_" + attr.Key + "";
-                    from = from + " LEFT OUTER JOIN " + table + "   " + tableAttr + " ON " + enTable + "." + attr.Field + "=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
-                    //where=where+" AND "+" ("+en.EnMap.PhysicsTable+"."+attr.Field+"="+en1.EnMap.PhysicsTable+"_"+attr.Key+"."+en1.EnMap.Attrs.GetFieldByKey(attr.UIRefKeyValue )+" ) "  ;
-                    continue;
-                }
-                if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
-                {
-                    //from= from+ " LEFT OUTER JOIN "+table+" AS "+tableAttr+ " ON "+enTable+"."+attr.Field+"="+tableAttr+"."+en1.EnMap.Attrs.GetFieldByKey( attr.UIRefKeyValue );
-                    tableAttr = "Enum_" + attr.Key;
-                    from = from + " LEFT OUTER JOIN ( SELECT Lab, IntKey FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ON " + enTable + "." + attr.Field + "=" + tableAttr + ".IntKey ";
-                    //	where=where+" AND  ( "+en.EnMap.PhysicsTable+"."+attr.Field+"= Enum_"+attr.Key+".IntKey ) ";
-                }
-            }
-            //from=from+", "+en.EnMap.PhysicsTable;
-            //where="("+where+")";			
-            return from + "  WHERE (1=1) ";
-        }
         public static string GenerFormOfOra(Entity en)
         {
             string from = " FROM " + en.EnMap.PhysicsTable;
@@ -1020,8 +982,9 @@ namespace BP.En
                 string fktable = attr.HisFKEn.EnMap.PhysicsTable;
                 Attr refAttr = attr.HisFKEn.EnMap.GetAttrByKey(attr.UIRefKeyValue);
                 //added by liuxc,2017-9-11，此处增加是否存在实体表，因新增的字典表类型“动态SQL查询”，此类型没有具体的实体表，完全由SQL动态生成的数据集合，此处不判断会使生成的SQL报错
-                if (DBAccess.IsExitsObject(fktable))
-                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
+                //if (DBAccess.IsExitsObject(fktable))
+
+                from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
             }
             return from + " WHERE (1=1) ";
         }
@@ -1732,41 +1695,7 @@ namespace BP.En
 
             return " SELECT   " + val.Substring(1) + SqlBuilder.GenerFormWhereOfMS(en);
         }
-        /// <summary>
-        /// 建立selectSQL 
-        /// </summary>
-        /// <param name="en">要执行的en</param>
-        /// <param name="topNum">最高查询个数</param>
-        /// <returns>返回查询sql</returns>
-        public static string SelectSQLOfMS_bak(Entity en, int topNum)
-        {
-            // 判断内存里面是否有 此sql.
-            string sql = "";
-            if (en.EnMap.DepositaryOfMap == Depositary.None)
-            {
-                /*如果 */
-                sql = SelectSQLOfMS(en.EnMap);
-            }
-            else
-            {
-                sql = DA.Cash.GetObj(en.ToString() + "SQL", en.EnMap.DepositaryOfMap) as string;
-
-                if (sql == null)
-                {
-                    sql = SelectSQLOfMS(en.EnMap);
-                    // 把来之不易的sql 放入内存
-                    DA.Cash.AddObj(en.ToString() + "SQL", Depositary.Application, sql);
-                }
-            }
-
-            // 替换他
-            if (topNum == -1)
-                topNum = 99999;
-
-            sql = sql.Replace("@TopNum", topNum.ToString());
-            return sql + SqlBuilder.GenerFormWhereOfMS(en, en.EnMap);
-        }
-
+        
         /// <summary>
         /// 建立selectSQL 
         /// </summary>
@@ -1872,7 +1801,6 @@ namespace BP.En
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
                             Entity en1 = attr.HisFKEn;
-                            //Entity en1 = ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
                             val = val + "," + en1.EnMap.PhysicsTable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
                         }
                         break;

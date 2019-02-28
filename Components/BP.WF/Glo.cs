@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190225;
+        public static int Ver = 20190226;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -759,14 +759,14 @@ namespace BP.WF
                 switch (BP.Sys.SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
-                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\Install\\SQLScript\\InitView_Ora.sql";
+                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_Ora.sql";
                         break;
                     case DBType.MSSQL:
                     case DBType.Informix:
-                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\Install\\SQLScript\\InitView_SQL.sql";
+                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_SQL.sql";
                         break;
                     case DBType.MySQL:
-                        sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\Install\\SQLScript\\InitView_MySQL.sql";
+                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_MySQL.sql";
                         break;
                     case DBType.PostgreSQL:
                         sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_PostgreSQL.sql";

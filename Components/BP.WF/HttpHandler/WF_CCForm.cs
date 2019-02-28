@@ -1851,6 +1851,11 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果数据</returns>
         public string Dtl_Init()
         {
+            DataSet ds = Dtl_Init_Dataset();
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        private DataSet Dtl_Init_Dataset()
+        {
             #region 组织参数.
             MapDtl mdtl = new MapDtl(this.EnsName);
             mdtl.No = this.EnsName;
@@ -1913,8 +1918,7 @@ namespace BP.WF.HttpHandler
 
             //获得他的描述,与数据.
             DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs, this.FID);
-
-            return BP.Tools.Json.DataSetToJson(ds, false);
+            return ds;
         }
         /// <summary>
         /// 执行从表的保存.
@@ -1942,6 +1946,16 @@ namespace BP.WF.HttpHandler
             #endregion 保存的业务逻辑.
 
             return "保存成功";
+        }
+        /// <summary>
+        /// 导出excel与附件信息,并且压缩一个压缩包.
+        /// </summary>
+        /// <returns>返回下载路径</returns>
+        public string Dtl_ExpZipFiles()
+        {
+            DataSet ds = Dtl_Init_Dataset();
+
+            return "err@尚未wancheng.";
         }
         /// <summary>
         /// 保存单行数据

@@ -1443,28 +1443,35 @@ namespace BP.WF
                 fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
                 string pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
                 string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
-                try
+                if (System.IO.File.Exists(pdfFileExe) == false)
                 {
-                    Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                    if (urlIsHostUrl == false)
-                        ht.Add("pdf", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
-                    else
-                        ht.Add("pdf", SystemConfig.HostURL + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                    ht.Add("pdf", "err@生成pdf错误,缺少文件，请打开: \\DataUser\\ThirdpartySoftware\\readme.txt 文件解决. ");
                 }
-                catch (Exception ex)
+                else
                 {
-                    /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
-                    fileNameFormat = DBAccess.GenerGUID();
-                    pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
-
                     try
                     {
                         Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                        ht.Add("pdf", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                        if (urlIsHostUrl == false)
+                            ht.Add("pdf", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                        else
+                            ht.Add("pdf", SystemConfig.HostURL + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        ht.Add("pdf", "err@生成pdf错误:" + ex.Message + "@路径变量: pdfFileExe=" + pdfFileExe + " pdf " + pdfFile + " ,  html url:" + billUrl);
+                        /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
+                        fileNameFormat = DBAccess.GenerGUID();
+                        pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
+
+                        try
+                        {
+                            Html2Pdf(pdfFileExe, billUrl, pdfFile);
+                            ht.Add("pdf", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                        }
+                        catch
+                        {
+                            ht.Add("pdf", "err@生成pdf错误:" + ex.Message + "@路径变量: pdfFileExe=" + pdfFileExe + " pdf " + pdfFile + " ,  html url:" + billUrl);
+                        }
                     }
                 }
 

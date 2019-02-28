@@ -194,23 +194,6 @@
         function loadViewGrid(gridUrl) {
             var global = window;
 
-            /*
-            $('#viewGrid').bootstrapTable("showColumn", "_checkbox");
-            var searchTableColumns = [{
-            field: "_checkbox",
-            checkbox: true,
-            formatter: function (value, row, index) {
-            if (row.checked) {
-            return {
-            "checked": true,
-            "disabled": row.disabled
-            }
-            }
-            }
-            }];*/
-
-            // alert(gridUrl);
-
             var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
             if ($.isArray(json)) {
                 var selectedRows = window.selectedRows;
@@ -348,7 +331,14 @@
                         select.attr("id", condtion.FieldKey);
                         select.attr("name", condtion.FieldKey);
                         searchPanel.append(select);
-                        var ifcData = DBAccess.RunDBSrc(condtion.Val);
+
+                       var  dbSrc = condtion.Val.replace(/~/g, "'");
+                        var reg = new RegExp("@Key", "g");
+                        dbSrc = dbSrc.replace(reg, keyWord);
+                        dbSrc = DealExp(dbSrc);
+
+                        var ifcData = DBAccess.RunDBSrc(dbSrc);
+
                         if (ifcData && ifcData.length > 0) {
                             var oKeys = [];
                             for (var key in ifcData[0]) {

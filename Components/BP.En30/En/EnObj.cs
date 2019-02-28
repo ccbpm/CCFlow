@@ -408,7 +408,13 @@ namespace BP.En
                             //执行SQL获取默认值
                             string sql = gloVar.Val;
                             sql = DealExp(sql, null, null);
-                            this.SetValByKey(attr.Key, DBAccess.RunSQLReturnString(sql));
+                            try{
+                                string val = DBAccess.RunSQLReturnString(sql);
+                                this.SetValByKey(attr.Key, val);
+                            }catch(Exception ex){
+                                this.SetValByKey(attr.Key, ex.Message+sql);
+                            }
+                            
                         }
                         continue;
                 }

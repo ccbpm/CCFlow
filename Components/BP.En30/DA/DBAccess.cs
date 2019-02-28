@@ -3447,6 +3447,15 @@ namespace BP.DA
                 return true;
         }
         /// <summary>
+        /// 是否是view @shilianyu.
+        /// </summary>
+        /// <param name="tabelOrViewName"></param>
+        /// <returns></returns>
+        public static bool IsView(string tabelOrViewName)
+        {
+            return IsView(tabelOrViewName, SystemConfig.AppCenterDBType);
+        }
+        /// <summary>
         /// 是否是view
         /// </summary>
         /// <param name="tabelOrViewName"></param>

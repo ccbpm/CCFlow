@@ -243,15 +243,15 @@ namespace BP.WF.Template
         {
         }
         /// <summary>
-        /// 获得Excel文件流
+        /// 获得单据文件流
         /// </summary>
         /// <param name="oid"></param>
         /// <returns></returns>
-        public void GenerTemplateFile(ref byte[] bytes)
+        public byte[] GenerTemplateFile()
         {
-            bytes = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, "DBFile");
+            byte[] bytes = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, "DBFile");
             if (bytes != null)
-                return;
+                return null;
 
             //如果没有找到，就看看默认的文件是否有.
             string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\" + this.No + ".rtf";
@@ -259,7 +259,7 @@ namespace BP.WF.Template
                 tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\Word单据模版定义演示.docx";
 
             bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
-            return;
+            return bytes;
         }
 		/// <summary>
 		/// 重写基类方法

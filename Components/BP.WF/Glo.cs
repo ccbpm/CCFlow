@@ -2163,8 +2163,6 @@ namespace BP.WF
         public static void DealBuinessAfterSendWork(string fk_flow, Int64 workid,
             string doFunc, string WorkIDs)
         {
-
-
             if (doFunc == "SetParentFlow")
             {
                 /* 如果需要设置子父流程信息.

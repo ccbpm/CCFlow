@@ -73,10 +73,6 @@ namespace BP.GPM
     public class MenuAttr : EntityTreeAttr
     {
         /// <summary>
-        /// 系统类型
-        /// </summary>
-        public const string MenuType = "MenuType";
-        /// <summary>
         /// 控制方法
         /// </summary>
         public const string MenuCtrlWay = "MenuCtrlWay";

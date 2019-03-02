@@ -13,7 +13,7 @@ function afterDtlImp(FK_MapData, frmAth, newOID, FK_Node, oldOID,oldFK_MapData) 
 }
 
 //阿拉伯数字转换为简写汉字
-function Arabia_To_SimplifiedChinese(Num) {
+function Number_To_Chinese(Num) {
     for (i = Num.length - 1; i >= 0; i--) {
         Num = Num.replace(",", "")//替换Num中的“,”
         Num = Num.replace(" ", "")//替换Num中的空格

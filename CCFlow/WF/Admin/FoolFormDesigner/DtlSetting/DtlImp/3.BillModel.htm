@@ -63,20 +63,6 @@
             window.location.href = window.location.href;
         }
 
-//        function Save() {
-
-//            var mapExt = new Entity("BP.Sys.MapExt");
-//            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_BillModel";
-//            mapExt.RetrieveFromDBSources(); //从数据库来查询.
-
-//            mapExt.CopyURL();  //从url里面copy数据.
-//            mapExt.FK_MapData = GetQueryString("FK_MapDtl");
-//            mapExt.CopyForm(); //从from里面copy数据.
-//            mapExt.ExtType = "DtlImp";
-//            mapExt.AttrOfOper = "BillModel"; //后台有默认设置，要使主键区分开，所以设置此值 
-//            var val = mapExt.Save();
-//            window.location.href = window.location.href;
-//        }
     </script>
     <style type="text/css">
         .style1
@@ -90,7 +76,7 @@
     </div>
     <table style="width: 99%;">
         <tr>
-            <th colspan="2">
+            <th colspan="4">
                 基本信息
             </th>
         </tr>
@@ -98,7 +84,7 @@
             <td>
                 <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')">标题</a>
             </td>
-            <td>
+            <td colspan="3">
                 <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
             </td>
         </tr>
@@ -106,7 +92,7 @@
             <td>
                 弹窗属性
             </td>
-            <td>
+            <td colspan="3">
                 高度:<input type="text" id="TB_H" name="TB_H" value="300" style="width: 80px; text-align: right" />
                 宽度:<input type="text" id="TB_W" name="TB_W" value="600" style="width: 80px; text-align: right" />
             </td>
@@ -115,7 +101,7 @@
             <td>
                 <a href="javascript:alert('显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.')">搜索提示</a>
             </td>
-            <td>
+            <td colspan="3">
                 <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
             </td>
         </tr>
@@ -130,9 +116,19 @@
                     <option value="2">执行CCFromRef.js返回JSON</option>
                 </select>
             </td>
+            <td>选择类型</td>
+            <td>
+                <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0"  checked/>
+                <label for="RBPara_SelectType_0">
+                    单选</label>
+                <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
+                <label for="RBPara_SelectType_1">
+                    多选</label>
+            </td>
         </tr>
+
         <tr>
-            <th colspan="2">
+            <th colspan="4">
                 单据主表配置
             </th>
         </tr>
@@ -142,7 +138,7 @@
                 初始化SQL
             </td>
                 
-            <td colspan="2">
+            <td colspan="4">
                 <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 60px;"></textarea>
             </td>
       
@@ -151,7 +147,7 @@
             <td>
                 查询SQL
             </td>
-            <td colspan="2">
+            <td colspan="4">
                 <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 60px;"></textarea>
             </td>
         </tr>
@@ -159,14 +155,14 @@
             <td>
                 对照列
             </td>
-            <td colspan="2">
+            <td colspan="4">
                 <input type="text" id="TB_Tag3" name="TB_Tag3" style="width: 99%;" />
             </td>
             
         </tr>
         <!-- 从表配置 -->
         <tr>
-            <th colspan="2">
+            <th colspan="4">
                 从表配置
             </th>
         </tr>
@@ -174,32 +170,26 @@
             <td>
                 查询SQL
             </td>
-            <td colspan="2">
+            <td colspan="4">
                 <textarea id="TB_Tag" name="TB_Tag" style="width: 98%; height: 60px;"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                装载SQL
-            </td>
-             <td colspan="2">
-                <textarea id="TB_Tag4" name="TB_Tag4" style="width: 98%; height: 60px;"></textarea>
             </td>
         </tr>
         <tr>
             <td>
                 对照列
             </td>
-            <td colspan="2">
+            <td colspan="4">
                 <input type="text" id="TB_Tag5" name="TB_Tag5" style="width: 99%;" />
             </td>
         </tr>
-        <!--<tr>
-            <td colspan="2">
-                <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save1()" />
-                <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
+       <tr>
+            <td>
+               设定导入表的主键（防止重复导入） 
             </td>
-        </tr>-->
+             <td colspan="4">
+                <textarea id="TB_Tag4" name="TB_Tag4" style="width: 98%; height: 60px;"></textarea>
+            </td>
+        </tr>
     </table>
 </body>
 </html>

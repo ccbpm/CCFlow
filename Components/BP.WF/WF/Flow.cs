@@ -4311,8 +4311,7 @@ namespace BP.WF
         {
             get
             {
-                if (this._HisNodes == null)
-                    _HisNodes = new Nodes(this.No);
+                _HisNodes = new Nodes(this.No);
                 return _HisNodes;
             }
             set

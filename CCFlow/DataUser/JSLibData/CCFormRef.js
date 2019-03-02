@@ -47,13 +47,13 @@ function Number_To_Chinese(Num) {
         }
         switch (part[0].length - i - 1) {
             case 0: tmpnewchar = tmpnewchar; break;
-            case 1: if (perchar != 0) tmpnewchar = tmpnewchar + "十"; break;
-            case 2: if (perchar != 0) tmpnewchar = tmpnewchar + "百"; break;
-            case 3: if (perchar != 0) tmpnewchar = tmpnewchar + "千"; break;
+            case 1: if (perchar != 0) tmpnewchar = tmpnewchar + "拾"; break;
+            case 2: if (perchar != 0) tmpnewchar = tmpnewchar + "佰"; break;
+            case 3: if (perchar != 0) tmpnewchar = tmpnewchar + "仟"; break;
             case 4: tmpnewchar = tmpnewchar + "万"; break;
-            case 5: if (perchar != 0) tmpnewchar = tmpnewchar + "十"; break;
-            case 6: if (perchar != 0) tmpnewchar = tmpnewchar + "百"; break;
-            case 7: if (perchar != 0) tmpnewchar = tmpnewchar + "千"; break;
+            case 5: if (perchar != 0) tmpnewchar = tmpnewchar + "拾"; break;
+            case 6: if (perchar != 0) tmpnewchar = tmpnewchar + "佰"; break;
+            case 7: if (perchar != 0) tmpnewchar = tmpnewchar + "仟"; break;
             case 8: tmpnewchar = tmpnewchar + "亿"; break;
             case 9: tmpnewchar = tmpnewchar + "十"; break;
         }

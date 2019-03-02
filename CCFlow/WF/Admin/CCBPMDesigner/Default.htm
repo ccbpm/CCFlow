@@ -1218,7 +1218,16 @@
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
             OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
         }
-
+        //单据属性
+        function CCForm_Bill() {
+            var node = $('#formTree').tree('getSelected');
+            if (!node) {
+                alert('请选择一个表单.');
+                return;
+            }
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmBill&PKVal=' + node.id;
+            OpenEasyUiDialog(url, "CCForm_Attr", '单据属性', 900, 560, "icon-window");
+        }
         //设计自由表单
         function designFreeFrm() {
             var node = $('#formTree').tree('getSelected');
@@ -1494,6 +1503,8 @@
                 WebUser.SID = jdata.SID;
             }, this);
         }
+
+
 
         function GenerStructureTree(parentrootid, pnodeid, treeid) {
 
@@ -1828,6 +1839,8 @@
     <div id="mForm" class="easyui-menu" style="width: 120px;">
         <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
             表单属性</div>
+             <div onclick="CCForm_Bill()" data-options="iconCls:'icon-property'">
+            单据属性</div>
         <div class="menu-sep">
         </div>
         <div onclick="designFoolFrm()" data-options="iconCls:'icon-sheet'">

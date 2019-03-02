@@ -758,9 +758,9 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果Json,流程树</returns>
         public string GetFlowTreeTable()
         {
-            string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+            string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort
                            union 
-                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, DTYPE FROM WF_Flow) A  ORDER BY IDX";
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {

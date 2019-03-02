@@ -4,27 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>流程发起列表</title>
-    <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
- 	<link href="./Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="./Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
 </head>
-<body  class="gray-bg">
-
-	<div class="wrapper wrapper-content animated fadeInRight">
-		<div class="row c" id="lists">
-            
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row c" id="lists">
         </div>
-
-</div>
-<script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
- <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
- <script type="text/javascript" src="Style/skin/js/mp.mansory.min.js"></script>   
-    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
-
-    <script src="Scripts/config.js" type="text/javascript"></script>
-    <script src="Comm/Gener.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript" >
+    </div>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Style/skin/js/mp.mansory.min.js"></script>
+    <script src="../Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
     function GroupBarClick(groupName) {
 
 				var alt = document.getElementById('Img' + groupName).alert;
@@ -58,8 +54,9 @@
 				}
 			}
         //发起时打开窗口
-        function WinOpenStartFlow(flowNo,title) {
-        	var url = "MyFlow.htm?FK_Flow=" + flowNo;
+        function LanchFrm(frmID,title) {
+
+        	var url = "Bill.htm?FrmID=" + frmID;
 
             window.open(url);
             return;
@@ -76,7 +73,7 @@
          //查询
         function WinOpenSearch(flowNo,title) {
         	var intFlowNo = flowNo;
-            var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;       
+            var url = "../RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;       
             window.open(url);
             return;
 
@@ -107,7 +104,7 @@
         function WinOpenStart(flowNo,title) {
 
             var intFlowNo = flowNo;
-            var url = "./RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
+            var url = "../RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
             //window.open(url);
            // return;
 
@@ -123,7 +120,7 @@
         //我发起的流程.
         function WinOpenJoin(flowNo,title) {
             var intFlowNo = flowNo;
-            var url = "./RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
+            var url = "../RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
             layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 
@@ -174,12 +171,10 @@
         //初始化数据.
         function InitPage() {
 
+             $('#lists').html("正在加载发起流程列表,请稍后...");
 
-             $('#lists').html("正在加载发起流程列表，请稍后。。。");
-
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            var data = handler.DoMethodReturnString("Start_Init");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Bill");
+            var data = handler.DoMethodReturnString("List_Init");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -205,7 +200,7 @@
                 for (var idx = 0; idx < dtStart.length; idx++) {
 
                     var flow = dtStart[idx];
-                    if (sortNo == flow.FK_FlowSort) {
+                    if (sortNo == flow.FK_FormTree) {
                         isHaveFlow = true;
                         break;
                     }
@@ -224,19 +219,14 @@
                 for (var idx = 0; idx < dtStart.length; idx++) {
 
                     var flow = dtStart[idx];
-                    var flowSort = flow.FK_FlowSort;
+                    var flowSort = flow.FK_FormTree;
                     if (sortNo != flowSort)
                         continue;
 
-					listbox+="<tr><td><a href=\"javascript:WinOpenStartFlow('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" > &sdot; " + flow.Name + "</a></td><td class='chooser'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><i class='icon iconfont icon-gongju1'></i></a><ul class='dropdown-menu dropdown-user'>"
+					listbox+="<tr><td><a href=\"javascript:LanchFrm('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" > &sdot; " + flow.Name + "</a></td><td class='chooser'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><i class='icon iconfont icon-gongju1'></i></a><ul class='dropdown-menu dropdown-user'>"
 					
-					
-					 if (flow.IsBatchStart == "1")
-					listbox+="<li><a href=\"javascript:WinOpenBatch('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >批量发起</a></li>";
-
-
-					listbox+="<li><a href=\"javascript:WinOpenStart('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >我发起的流程</a></li>";
-					listbox+="<li><a href=\"javascript:WinOpenJoin('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >我审批的流程</a></li>";
+					listbox+="<li><a href=\"javascript:WinOpenStart('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >新建</a></li>";
+					listbox+="<li><a href=\"javascript:WinOpenJoin('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >查询</a></li>";
 					listbox+="<li><a href=\"javascript:WinOpenMyFlow('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" ><font color=red>*</font>我的流程</a></a></li>";
 					listbox+="<li><a href=\"javascript:WinOpenSearch('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >查询主页</a></li></ul></td></tr>";
 
@@ -251,6 +241,5 @@
             window.location.href = 'Start.htm?IsRef=1';
         }
     </script>
-
 </body>
 </html>

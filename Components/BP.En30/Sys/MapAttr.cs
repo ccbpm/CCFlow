@@ -751,13 +751,13 @@ namespace BP.Sys
                             return DataType.CurrentData;
                         else
                             return DataType.CurrentDataTime;
-                    case "@yyyy年mm月dd日":
+                    case "@yyyy年MM月dd日":
                         return DataType.CurrentDataCNOfLong;
-                    case "@yyyy年mm月dd日hh时mm分":
+                    case "@yyyy年MM月dd日hh时mm分":
                         return DateTime.Now.ToString("yyyy年MM月dd日HH时mm分");
-                    case "@yy年mm月dd日":
+                    case "@yy年MM月dd日":
                         return DataType.CurrentDataCNOfShort;
-                    case "@yy年mm月dd日hh时mm分":
+                    case "@yy年MM月dd日hh时mm分":
                         return DateTime.Now.ToString("yy年MM月dd日HH时mm分");
                     default:
                         return s;

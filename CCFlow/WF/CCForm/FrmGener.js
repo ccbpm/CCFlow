@@ -42,17 +42,17 @@ $(function () {
             $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
         });
     }
-    else {
-        //新加
-        //计算高度，展示滚动条
-        var height = $(window).height() - 150;
-        $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
-        $('#topContentDiv').height(height);
+//    else {
+//        //新加
+//        //计算高度，展示滚动条
+//        var height = $(window).height() - 150;
+//        $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
+//        $('#topContentDiv').height(height);
 
-        $(window).resize(function () {
-            $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
-        });
-    }
+//        $(window).resize(function () {
+//            $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+//        });
+//    }
     function movetb() {
         var move;
         $("#nav").css("top", top);

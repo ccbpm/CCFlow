@@ -66,7 +66,7 @@ namespace BP.WF.Template
             get
             {
                 string str = this.GetValStringByKey(FlowAttr.FlowMark);
-                if (str == "")
+                if (DataType.IsNullOrEmpty(str) ==true)
                     return this.No;
                 return str;
             }

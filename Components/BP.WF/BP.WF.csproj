@@ -241,6 +241,7 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
+    <Compile Include="HttpHandler\WF_Bill.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\AdminEmp.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Template\TestCase.cs" />
     <Compile Include="Template\Part\Part.cs" />
     <Compile Include="Template\Part\PartParentSubGuide.cs" />
+    <Compile Include="MyBill\FrmBill.cs" />
     <Compile Include="UnitTesting\Etc\AboutTitle.cs" />
     <Compile Include="UnitTesting\AttrFlow\CreateStartWork.cs" />
     <Compile Include="UnitTesting\AttrFlow\GenerBillNo.cs" />

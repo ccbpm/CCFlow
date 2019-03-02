@@ -25,7 +25,7 @@
   <Group No="Org" Name="组织结构" />
   <Item No="504" GroupNo="Org" Name="组织结构" For="admin" Url="../../../GPM/Organization.htm"  />
   <Item No="501" GroupNo="Org" Name="独立组织" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Incs"  />
-
+  <Item No="504" GroupNo="Org" Name="权限组" For="admin" Url="../../Comm/Search.htm?EnsName=BP.En.Groups"  />
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationTypes"  />
   <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Stations"  />
   <Item No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Depts"  />

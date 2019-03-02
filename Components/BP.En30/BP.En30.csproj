@@ -267,6 +267,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DTS\Sys\TableFieldAddComment.cs" />
+    <Compile Include="En\EnObj.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
     <Compile Include="OverrideFile.cs" />
@@ -418,9 +421,6 @@
     </Compile>
     <Compile Include="En\EntityOIDName.cs" />
     <Compile Include="En\EnDtl.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EnObj.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\Entity.cs">

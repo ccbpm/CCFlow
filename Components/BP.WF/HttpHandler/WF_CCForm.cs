@@ -1583,10 +1583,10 @@ namespace BP.WF.HttpHandler
                                             }
                                         }
                                         continue;
-                                    case "@yyyy年mm月dd日":
-                                    case "@yyyy年mm月dd日HH时mm分":
-                                    case "@yy年mm月dd日":
-                                    case "@yy年mm月dd日HH时mm分":
+                                    case "@yyyy年MM月dd日":
+                                    case "@yyyy年MM月dd日HH时mm分":
+                                    case "@yy年MM月dd日":
+                                    case "@yy年MM月dd日HH时mm分":
                                         if (attr.UIIsReadonly == true)
                                         {
                                             en.SetValByKey(attr.Key, DateTime.Now.ToString(v.Replace("@", "")));

@@ -2,15 +2,22 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.GPM;
 
-namespace BP.GPM
+namespace BP.En
 {
     /// <summary>
     /// 权限组
     /// </summary>
     public class GroupAttr : EntityTreeAttr
     {
+        /// <summary>
+        /// 序号
+        /// </summary>
+        public const string Idx = "Idx";
+
         public const string ByEmpAttr = "ByEmpAttr";
+        
     }
     /// <summary>
     /// 权限组
@@ -74,13 +81,6 @@ namespace BP.GPM
                 map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.GPM.Stations(),
                   GroupStationAttr.FK_Group,
                   GroupStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
-
-
-                //节点绑定部门. 节点绑定部门.
-                map.AttrsOfOneVSM.AddBranches(new GroupMenus(), new BP.GPM.Menus(),
-                   BP.GPM.GroupMenuAttr.FK_Group,
-                   BP.GPM.GroupMenuAttr.FK_Menu, "绑定菜单", EmpAttr.Name, EmpAttr.No, "0");
-
 
                 this._enMap = map;
                 return this._enMap;

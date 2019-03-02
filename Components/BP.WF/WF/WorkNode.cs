@@ -2523,7 +2523,7 @@ namespace BP.WF
                     wl.FID = this.WorkID;
                     wl.FK_Emp = WebUser.No;
                     wl.FK_EmpText = WebUser.Name;
-                    wl.IsPassInt = 1;
+                    wl.IsPassInt = -2;
                     wl.IsRead = true;
                     wl.FK_Node = this.HisNode.NodeID;
                     wl.FK_NodeText = this.HisNode.Name;
@@ -3234,6 +3234,13 @@ namespace BP.WF
 
             if (current_gwls.Count == 0)
                 current_gwls = this.Func_GenerWorkerLists(this.town);// 初试化他们的工作人员．
+            else
+            {
+				//	新增加轨迹
+                GenerWorkerList  gwl = new GenerWorkerList(this.HisWork.FID,toNode.NodeID,WebUser.No);
+                ActionType at = ActionType.SubThreadForward;
+                this.AddToTrack(at, gwl, "子线程", this.town.HisWork.OID);
+            }
 
             string FK_Emp = "";
             string toEmpsStr = "";
@@ -3299,11 +3306,10 @@ namespace BP.WF
             //记录子线程到达合流节点数
             int count = gwf.GetParaInt("ThreadCount");
             gwf.SetPara("ThreadCount", count + 1);
-            gwf.Emps = this.HisGenerWorkFlow.Emps;
+            
             gwf.Update();
 
-            //mysql = "SELECT COUNT(distinct WorkID) AS Num FROM WF_GenerWorkerList WHERE IsPass=1 AND FID=" + this.HisWork.FID + " AND FK_Node IN (" + spanNodes + ")";
-            //decimal numPassed = (decimal)DBAccess.RunSQLReturnValInt(mysql);
+            
             decimal numPassed = gwf.GetParaInt("ThreadCount");
 
             decimal passRate = numPassed / numAll * 100;
@@ -3338,10 +3344,9 @@ namespace BP.WF
 
             //改变当前流程的当前节点.
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + (int)WFState.Runing + ",  FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName,Emps=" + dbStr + "Emps WHERE WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + (int)WFState.Runing + ",  FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
             ps.Add("FK_Node", toNode.NodeID);
             ps.Add("NodeName", toNode.Name);
-            ps.Add("Emps",emps);
             ps.Add("WorkID", this.HisWork.FID);
             DBAccess.RunSQL(ps);
 
@@ -7268,7 +7273,7 @@ namespace BP.WF
 
             try
             {
-                // t.MyPK = t.WorkID + "_" + t.FID + "_"  + t.NDFrom + "_" + t.NDTo +"_"+t.EmpFrom+"_"+t.EmpTo+"_"+ DateTime.Now.ToString("yyMMddHHmmss");
+                
                 t.Insert();
             }
             catch
@@ -7305,6 +7310,8 @@ namespace BP.WF
             t.FID = this.HisWork.FID;
 
             t.RDT = DataType.CurrentDataTimess;
+            
+
             t.HisActionType = at;
 
             t.NDFrom = ndFrom.NodeID;
@@ -7391,6 +7398,20 @@ namespace BP.WF
             {
                 this.HisGenerWorkFlow.Paras_LastSendTruckID = t.MyPK;
             }
+            this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
+            this.HisGenerWorkFlow.Update();
+
+            GenerWorkerList gwl = new GenerWorkerList();
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
+                GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.FK_Emp,WebUser.No);
+            if (i != 0)
+            {
+                gwl.CDT = DataType.CurrentDataTime;
+                gwl.Update();
+            }
+     
+              
+
         }
         /// <summary>
         /// 向他们发送消息
@@ -7475,6 +7496,7 @@ namespace BP.WF
             }
             // 给他们赋值.
             this.rptGe.FlowEmps = flowEmps;
+
             this.HisGenerWorkFlow.Emps = emps;
         }
         /// <summary>
@@ -7648,19 +7670,19 @@ namespace BP.WF
             //记录子线程到达合流节点数
             int count = gwf.GetParaInt("ThreadCount");
             gwf.SetPara("ThreadCount", count + 1);
-            gwf.Emps = this.HisGenerWorkFlow.Emps;
+            //gwf.Emps = gwf.Emps+this.HisGenerWorkFlow.Emps;
             gwf.Update();
-             if (gwls.Count == 0)
+            if (gwls.Count == 0)
             {
 
                 // 说明第一次到达河流节点。
                 current_gwls = this.Func_GenerWorkerLists(this.town);
                 gwls = current_gwls;
-               
+
                 gwf.FK_Node = nd.NodeID;
                 gwf.NodeName = nd.Name;
                 gwf.TodoEmpsNum = gwls.Count;
-                
+
 
                 string todoEmps = "";
                 foreach (GenerWorkerList item in gwls)
@@ -7670,6 +7692,12 @@ namespace BP.WF
                 gwf.WFState = WFState.Runing;
                 //第一次到达设计Gen
                 gwf.Update();
+            }
+            else
+            {
+                GenerWorkerList gwl = new GenerWorkerList(this.HisWork.FID, nd.NodeID, WebUser.No);
+                ActionType at = ActionType.SubThreadForward;
+                this.AddToTrack(at, gwl, "子线程", this.town.HisWork.OID);
             }
 
             string FK_Emp = "";

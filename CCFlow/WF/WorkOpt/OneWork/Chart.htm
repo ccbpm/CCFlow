@@ -106,6 +106,9 @@
             DrawStart(jdata); //执行绘制信息.
         });
 
+
+     
+
         ///开始绘制.
         function DrawStart(datas) {
 
@@ -211,21 +214,29 @@
 
                 var borderColor = nodeBorderColor;
                 var TextColor = STYLE_NODE_COLOR_FORE;
+                //根据当前节点获取上一节点信息
+                var beforTrack = null;
 
-                if (rNode.currTrack != null)
-                    if (this.ID == currNode && rNode.currTrack.track.ActionType != 8) {
+                if (rNode.currTrack != null) {
+                    beforTrack = getBeforeNodeTrack(datas.Track, this.ID, rNode.currTrack.track);
+                    //流程处于当前节点的情况 1.干流程、子线程到子线程 2.分流/分合流运行到子线程，但是当前节点位置仍为干流程的节点
+                    //1.主干到主干
+                    var currTrack = rNode.currTrack.track;
+                    if (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode) {
+                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                    } else if (this.ID != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
                         borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
                         TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                     } else {
                         TextColor = STYLE_NODE_COLOR_FORE_TRACK;
                         borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
                     }
-
+                }
                 //在节点右侧绘制流程轨迹中当前节点的处理人/处理时间
                 if (rNode.isTrackNode) {
-                    //判断此节点是否是多人处理
-                    if (rNode.currTrack.track.EmpToT.indexOf('多人接受') > -1) {
-                        //alert(rNode.currTrack.track.EMPTOT);
+                    //判断此节点是否是多人处理 //是根据他上一节点的track来决定的
+                    if (beforTrack != null && beforTrack.EmpToT.indexOf('多人接受') > -1) {
                         this.ICON = DATA_MULTI_USER_ICON_DEFAULT;
                         rNode.rIcon.attr("src", this.ICON);
                     }
@@ -275,6 +286,8 @@
 
                                 var gwl = generWorkerLists[i];
                                 if (gwl.FK_Node != node.id)
+                                    continue;
+                                if (gwl.IsPass == -2)
                                     continue;
 
                                 var rdt = gwl.RDT;
@@ -370,24 +383,55 @@
                                 continue;
                             if (track.ActionType == ActionType.WorkCheck)
                                 continue;
+                            if (track.ActionType == ActionType.ForwardFL && track.EmpToT.indexOf("多人接受") == -1)
+                                continue;
+
                             var nodeId = node.id;
+
+                            if (track.NDTo == nodeId && track.FID != 0)
+                                continue;
+                            if (track.NDTo == nodeId && track.EmpToT.indexOf("多人接受") != -1)
+                                continue;
+
                             if (track.NDFrom == nodeId || track.NDTo == nodeId) {
+
                                 NDTo = track.NDTo;
                                 //node的最后两位判断是否为开始节点
                                 var lastTwoBit = nodeId.toString().substring(nodeId.toString().length - 2);
 
-                                tablehtml = "<table style='width:300px;'>";
+                                var trackhtml = "<table style='width:300px;'>";
                                 if (track.NDFrom == nodeId)
-                                    tablehtml += "<caption> " + track.EmpFromT + " </capiton>";
+                                    trackhtml += "<caption> " + track.EmpFromT + " </capiton>";
                                 if (track.NDTo == nodeId && track.NDFrom != nodeId)
-                                    tablehtml += "<caption> " + track.EmpToT + " </capiton>";
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
+                                    trackhtml += "<caption> " + track.EmpToT + " </capiton>";
+                                trackhtml += "<tr style='background-color:InfoBackground' >";
                                 if (lastTwoBit == "01")
-                                    tablehtml += "<td>任务启动日期</td>";
+                                    trackhtml += "<td>任务启动日期</td>";
                                 else
-                                    tablehtml += "<td>任务下达日期</td>";
-                                tablehtml += "<td>" + track.RDT + "</td>";
-                                tablehtml += "</tr>";
+                                    trackhtml += "<td>任务下达日期</td>";
+                                var dtto = "";
+                                //最后流程
+                                if (lastTwoBit == "01") {
+                                    dtto = track.RDT;
+                                } else {
+
+                                    for (var k = 0; k < Tracks.length; k++) {
+                                        var track1 = Tracks[k];
+                                        if (track1.NDTo == node.id && track1.RDT <= track.RDT) {
+                                            dtto = track1.RDT;
+                                            break;
+                                        }
+                                    }
+
+                                }
+
+
+
+                                trackhtml += "<td>" + dtto + "</td>";
+                                trackhtml += "</tr>";
+
+                                dtto = dtto.replace(/\-/g, "/");
+                                dtto = new Date(dtto);
 
                                 //判断是否有考核时间
                                 var mypk = node.id + "_" + uh["WorkID"] + "_" + track.FID + "_" + track.EmpFrom;
@@ -397,11 +441,11 @@
                                 var SDT = "无";
                                 if (count == 1 && lastTwoBit != "01")
                                     SDT = chext.SDT;
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td>应完成日期</td>";
-                                tablehtml += "<td>" + SDT + "</td>";
+                                trackhtml += "<tr style='background-color:InfoBackground' >";
+                                trackhtml += "<td>应完成日期</td>";
+                                trackhtml += "<td>" + SDT + "</td>";
 
-                                tablehtml += "</tr>";
+                                trackhtml += "</tr>";
 
 
                                 var rdt = track.RDT.replace(/\-/g, "/");
@@ -409,40 +453,27 @@
 
 
 
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td>实际完成</td>";
-                                var dtto = "";
-                                // if (count == 1) {
-                                //    dtto = chext.DTTo;
-                                //最后流程
-                                if (track.NDFrom == track.NDTo) {
-                                    dtto = track.RDT;
-                                } else {
+                                trackhtml += "<tr style='background-color:InfoBackground' >";
+                                trackhtml += "<td>实际完成</td>";
 
-                                    for (var k = 0; k < Tracks.length; k++) {
-                                        var track1 = Tracks[k];
-                                        if (track1.NDFrom == track.NDTo && track1.RDT >= track.RDT) {
-                                            dtto = track1.RDT;
-                                            break;
-                                        }
-                                    }
+                                if (track.NDFrom == node.id)
+                                    trackhtml += "<td id='cdt'> " + track.RDT + "</td>";
+                                else
+                                    continue;
 
-                                }
-                                tablehtml += "<td id='cdt'> " + dtto + "</td>";
-                                tablehtml += "</tr>";
+                                trackhtml += "</tr>";
 
-                                dtto = dtto.replace(/\-/g, "/");
-                                dtto = new Date(dtto);
 
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td>用时</td>";
-                                tablehtml += "<td> " + GetSpanTime(rdt, dtto) + "</td>";
 
-                                tablehtml += "</tr>";
-                                tablehtml += "<tr style='background-color:InfoBackground' >";
-                                tablehtml += "<td>发送人</td>";
+                                trackhtml += "<tr style='background-color:InfoBackground' >";
+                                trackhtml += "<td>用时</td>";
+                                trackhtml += "<td> " + GetSpanTime(dtto, rdt) + "</td>";
+
+                                trackhtml += "</tr>";
+                                trackhtml += "<tr style='background-color:InfoBackground' >";
+                                trackhtml += "<td>发送人</td>";
                                 if (lastTwoBit == "01")
-                                    tablehtml += "<td></td>"
+                                    trackhtml += "<td></td>"
                                 else {
                                     for (var k = 0; k < Tracks.length; k++) {
                                         var track1 = Tracks[k];
@@ -451,12 +482,13 @@
                                         if (track1.ActionType == ActionType.WorkCheck)
                                             continue;
                                         if (track1.NDTo == node.id) {
-                                            tablehtml += "<td>" + track1.EmpFrom + "," + track1.EmpFromT + "</td>";
+                                            trackhtml += "<td>" + track1.EmpFrom + "," + track1.EmpFromT + "</td>";
                                             break;
                                         }
                                     }
                                 }
-                                tablehtml += "</tr>";
+                                trackhtml += "</tr></table>";
+                                tablehtml += trackhtml;
                             }
 
                         }
@@ -590,14 +622,21 @@
                     if (node != null) {
                         var borderColor = nodeBorderColor;
                         var TextColor = STYLE_NODE_COLOR_FORE;
-                        if (node.currTrack != null)
-                            if (node.id == currNode && node.currTrack.track.ActionType != 8) {
+                        if (node.currTrack != null) {
+                            var currTrack = node.currTrack.track;
+                            if (node.id == currNode  && currTrack.ActionType != 8 && currTrack.NDTo == currNode) {
+                                borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                            } else if (node.id != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
                                 borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
                                 TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                             } else {
                                 TextColor = STYLE_NODE_COLOR_FORE_TRACK;
                                 borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
                             }
+                        }
+
+
 
                         node.rBorder.attr({ "stroke": borderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
                         node.rText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor) });
@@ -957,6 +996,20 @@
                 }
             });
 
+            return ts;
+        }
+
+
+        //已知节点获取发送给他的节点
+        function getBeforeNodeTrack(tracks,nodeId,currentTrack) {
+            var ts = null;
+            for (var k = 0; k < tracks.length; k++) {
+                var track = tracks[k];
+                if (track.NDTo == nodeId&& track.RDT <= currentTrack.RDT) {
+                    ts = track;
+                    break;
+                }
+            }
             return ts;
         }
 

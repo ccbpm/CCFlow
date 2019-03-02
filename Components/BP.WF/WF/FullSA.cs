@@ -28,7 +28,7 @@ namespace BP.WF
         {
             //如果当前不需要计算未来处理人.
             if (currWorkNode.HisFlow.IsFullSA == false
-                && currWorkNode.IsSkip==false)
+                && currWorkNode.IsSkip == false)
                 return;
 
             //如果到达最后一个节点，就不处理了。
@@ -51,7 +51,7 @@ namespace BP.WF
             sa.Delete(SelectAccperAttr.WorkID, workid);
 
             //求出已经路过的节点.
-            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID="+BP.Sys.SystemConfig.AppCenterDBVarStr+"WorkID", "WorkID", workid);
+            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);
             string passedNodeIDs = "";
             foreach (DataRow item in dt.Rows)
             {
@@ -154,7 +154,7 @@ namespace BP.WF
                 {
                     string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                     string sql = string.Empty;
-                   
+
                     //added by liuxc,2015.6.30.
                     //区别集成与BPM模式
                     if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
@@ -229,50 +229,29 @@ namespace BP.WF
                     Paras ps = new Paras();
                     /* 如果执行节点 与 接受节点岗位集合不一致 */
                     /* 没有查询到的情况下, 先按照本部门计算。*/
-                    if (this.HisCurrWorkNode.HisFlow.FlowAppType == FlowAppType.Normal)
-                    {
-                        switch (BP.Sys.SystemConfig.AppCenterDBType)
-                        {
-                            case DBType.MySQL:
-                            case DBType.MSSQL:
-                                if (Glo.OSModel == Sys.OSModel.OneOne)
-                                {
-                                    sql = "select x.No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
-                                    sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_Emp z on";
-                                    sql += " x.No=z.No where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
-                                }
-                                else
-                                {
-                                    sql = "select x.No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
-                                    sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_DeptEmp z on";
-                                    sql += " x.No=z.FK_Emp where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
-                                }
-                                break;
-                            default:
-                                if (Glo.OSModel == Sys.OSModel.OneOne)
-                                {
-                                    sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                                  + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
-                                  + " AND  NO IN "
-                                  + "(SELECT No as FK_Emp  FROM Port_Emp WHERE FK_Dept =" + dbStr + "FK_Dept)";
-                                    sql += " ORDER BY No ";
-                                }
-                                else
-                                {
-                                    sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                                + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
-                                + " AND  NO IN "
-                                + "(SELECT  FK_Emp  FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
-                                    sql += " ORDER BY No ";
-                                }
-                                break;
-                        }
 
-                        ps = new Paras();
-                        ps.SQL = sql;
-                        ps.Add("FK_Node", item.NodeID);
-                        ps.Add("FK_Dept", WebUser.FK_Dept);
+                    switch (BP.Sys.SystemConfig.AppCenterDBType)
+                    {
+                        case DBType.MySQL:
+                        case DBType.MSSQL:
+                            sql = "select x.No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
+                            sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_DeptEmp z on";
+                            sql += " x.No=z.FK_Emp where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
+                            break;
+                        default:
+                            sql = "SELECT No FROM Port_Emp WHERE NO IN "
+                        + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
+                        + " AND  NO IN "
+                        + "(SELECT  FK_Emp  FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
+                            sql += " ORDER BY No ";
+                            break;
                     }
+
+                    ps = new Paras();
+                    ps.SQL = sql;
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.Add("FK_Dept", WebUser.FK_Dept);
+
 
                     dt = DBAccess.RunSQLReturnTable(ps);
                     foreach (DataRow dr in dt.Rows)
@@ -310,11 +289,11 @@ namespace BP.WF
             //计算上一个时间的发送点.
             if (this.LastTimeDot == null)
             {
-                Paras ps=new Paras();
-                ps.SQL="SELECT SDT FROM WF_GenerWorkerlist WHERE WorkID="+ps.DBStr+"WorkID AND FK_Node="+ps.DBStr+"FK_Node";
+                Paras ps = new Paras();
+                ps.SQL = "SELECT SDT FROM WF_GenerWorkerlist WHERE WorkID=" + ps.DBStr + "WorkID AND FK_Node=" + ps.DBStr + "FK_Node";
                 ps.Add("WorkID", this.HisCurrWorkNode.WorkID);
                 ps.Add("FK_Node", nd.NodeID);
-                DataTable dt=DBAccess.RunSQLReturnTable(ps);
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -327,9 +306,9 @@ namespace BP.WF
             sa.PlanADT = this.LastTimeDot;
 
             //计算当前节点的应该完成日期。
-            DateTime dtOfShould = Glo.AddDayHoursSpan(this.LastTimeDot, nd.TimeLimit, nd.TimeLimitHH, 
+            DateTime dtOfShould = Glo.AddDayHoursSpan(this.LastTimeDot, nd.TimeLimit, nd.TimeLimitHH,
                 nd.TimeLimitMM, nd.TWay);
-            sa.PlanSDT = dtOfShould.ToString( DataType.SysDatatimeFormatCN );
+            sa.PlanSDT = dtOfShould.ToString(DataType.SysDatatimeFormatCN);
 
             //给最后的时间点复制.
             this.LastTimeDot = sa.PlanSDT;

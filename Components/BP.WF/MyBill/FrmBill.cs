@@ -4,10 +4,11 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using BP.WF;
+using BP.WF.Template;
 using BP.Sys;
 using System.Collections.Generic;
 
-namespace BP.WF.Template
+namespace BP.WF.MyBill
 {
     /// <summary>
     /// 单据属性 - Attr
@@ -27,6 +28,57 @@ namespace BP.WF.Template
         /// 关联的流程号
         /// </summary>
         public const string RefFlowNo = "RefFlowNo";
+        #endregion
+
+        #region 按钮信息.
+        /// <summary>
+        /// 按钮New标签
+        /// </summary>
+        public const string BtnNewLable = "BtnNewLable";
+        /// <summary>
+        /// 按钮New启用规则
+        /// </summary>
+        public const string BtnNewEnable = "BtnNewEnable";
+        /// <summary>
+        /// 按钮Save标签
+        /// </summary>
+        public const string BtnSaveLable = "BtnSaveLable";
+        /// <summary>
+        /// 按钮save启用规则
+        /// </summary>
+        public const string BtnSaveEnable = "BtnSaveEnable";
+        /// <summary>
+        /// 按钮del标签
+        /// </summary>
+        public const string BtnDelLable = "BtnDelLable";
+        /// <summary>
+        /// 按钮del启用规则
+        /// </summary>
+        public const string BtnDelEnable = "BtnDelEnable";
+        /// <summary>
+        /// 按钮del标签
+        /// </summary>
+        public const string BtnStartFlowLable = "BtnStartFlowLable";
+        /// <summary>
+        /// 按钮del启用规则
+        /// </summary>
+        public const string BtnStartFlowEnable = "BtnStartFlowEnable";
+        /// <summary>
+        /// 查询
+        /// </summary>
+        public const string BtnSearchLabel = "BtnSearchLabel";
+        /// <summary>
+        /// 查询
+        /// </summary>
+        public const string BtnSearchEnable = "BtnSearchEnable";
+        /// <summary>
+        /// 分析
+        /// </summary>
+        public const string BtnGroupLabel = "BtnGroupLabel";
+        /// <summary>
+        /// 分析
+        /// </summary>
+        public const string BtnGroupEnable = "BtnGroupEnable";
         #endregion
     }
     /// <summary>
@@ -102,17 +154,41 @@ namespace BP.WF.Template
 
                 #region 基本属性.
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
-                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
+                map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
+                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20,true);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20,true);
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 #endregion 基本属性.
 
                 #region 单据属性.
-                map.AddDDLSysEnum(FrmBillAttr.FrmBillWorkModel, 0, "工作模式", true, true, FrmBillAttr.FrmBillWorkModel,"@0=独立表单@1=单据工作模式@2=流程工作模式");
+                map.AddDDLSysEnum(FrmBillAttr.FrmBillWorkModel, 0, "工作模式", true, true, FrmBillAttr.FrmBillWorkModel,
+                    "@0=独立表单@1=单据工作模式@2=流程工作模式");
+
+               // map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "", "@0=独立表单@1=单据工作模式@2=流程工作模式");
                 
-                map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20,true);
+                map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20,false);
                 map.AddTBString(FrmBillAttr.RefFlowNo, null, "关联流程号", true, false, 0, 100, 20);
                 #endregion 单据属性.
+
+                #region 按钮权限.
+                map.AddTBString(FrmBillAttr.BtnNewLable, null, "新建", true, false, 0, 100, 20);
+                map.AddBoolean(FrmBillAttr.BtnNewEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnSaveLable, null, "保存", true, false, 0, 100, 20);
+                map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnStartFlowLable, null, "启动流程", true, false, 0, 100, 20);
+                map.AddBoolean(FrmBillAttr.BtnStartFlowEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnDelLable, null, "删除", true, false, 0, 100, 20);
+                map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnSearchLabel, null, "查询", true, false, 0, 100, 20);
+                map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnGroupLabel, null, "分析", true, false, 0, 100, 20);
+                map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
+                #endregion 按钮权限.
 
 
                 #region 设计者信息.

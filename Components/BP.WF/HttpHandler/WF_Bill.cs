@@ -12,6 +12,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using BP.WF.Data;
+using BP.WF.MyBill;
 
 namespace BP.WF.HttpHandler
 {
@@ -35,7 +36,6 @@ namespace BP.WF.HttpHandler
         public WF_Bill()
         {
         }
-
         /// <summary>
         /// 列表初始化.
         /// </summary>

@@ -6,7 +6,6 @@
     <title>ccform正在加载请稍候...</title>
     <!-- 目前不可以去掉. -->
     <script src="../Comm/JScript.js" type="text/javascript"></script>
-
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
@@ -30,6 +29,7 @@
     <script src="../CCForm/FrmEnd.js" type="text/javascript"></script>
     <!-- 引入用户要重写的公共js -->
     <script src="../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
+    <script src="MyBill.js" type="text/javascript"></script>
 
     <!-- 表单组件 -->
     <script src="../CCForm/JS/MultipleChoiceSearch.js" type="text/javascript"></script>
@@ -325,23 +325,39 @@
             $("#divCCForm").height(height - 50);
         }
         $(function () {
-//            $("body").css("overflow", "hidden");
-//            $("#divCurrentForm").css("overflow", "hidden");
-//            $("#topContentDiv").css("overflow", "hidden");
-//            $("#contentDiv").css("overflow", "hidden");
-//            $("#divCCForm").css("overflow", "auto");
-//            $("#CCForm").css("overflow", "hidden");
-//            $("#CCForm").css("overflow-y", "hidden");
+            //            $("body").css("overflow", "hidden");
+            //            $("#divCurrentForm").css("overflow", "hidden");
+            //            $("#topContentDiv").css("overflow", "hidden");
+            //            $("#contentDiv").css("overflow", "hidden");
+            //            $("#divCCForm").css("overflow", "auto");
+            //            $("#CCForm").css("overflow", "hidden");
+            //            $("#CCForm").css("overflow-y", "hidden");
             $("#CCForm").css("height", "auto");
             $(window).bind("resize", function () {
                 setTimeout(setContentHeight, 100);
             });
+
+            
         });
     </script>
 </head>
 <body onclick="hiddenDiv()">
 
+ <div id="toolbar" style="margin-left:190px;">
+    <input type='button' value="新建" id="Btn_New" onclick="New();" />
+    <input type='button' value="保存" id="Btn_Save" onclick="Save();" />
+    <input type='button' value="启动流程" id="Btn_StartFlow"  onclick="StartFlow();" />
+    <input type='button' value="关联单据" id="Btn_RefBill"  onclick="RefBill();" />
+    <input type='button' value="删除" id="Btn_Del"  onclick="DeleteIt();" />
+    <input type='button' value="查询" id="Btn_Sarch" onclick="Search();" />
+    <input type='button' value="分析"  id="Btn_Group" onclick="Group();" />
+    <input type='button' value="上一条"  id="Button1" onclick="Pri();" />
+    <input type='button' value="下一条"  id="Button2" onclick="Next();" />
+    </div>
+
+
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
+   
         <!--上半部分表单-->
         <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
             <i class="topContentDiv-i" style="display: none;"></i>
@@ -363,10 +379,6 @@
     </div>
      
     
-    <!-- /.modal -->
-    <div id="Btn" style="display:none">
-        <input type="button" value="Save" id="Btn_Save" onclick="Save()" />
-    </div>
 
     <!--图片附件显示大图-->
     <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">

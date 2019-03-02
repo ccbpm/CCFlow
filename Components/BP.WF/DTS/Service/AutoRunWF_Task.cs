@@ -1,14 +1,14 @@
-﻿using System;
-using System.Data;
-using System.Collections;
-using BP.DA;
-using BP.Web.Controls;
-using System.Reflection;
-using BP.Port;
+﻿using BP.DA;
 using BP.En;
+using BP.Port;
 using BP.Sys;
+using BP.Web.Controls;
 using BP.WF.Data;
 using BP.WF.Template;
+using System;
+using System.Collections;
+using System.Data;
+using System.Reflection;
 
 namespace BP.WF.DTS
 {
@@ -63,7 +63,9 @@ namespace BP.WF.DTS
             }
 
             if (dt.Rows.Count == 0)
+            {
                 return "无任务";
+            }
 
             #region 自动启动流程
             foreach (DataRow dr in dt.Rows)
@@ -77,18 +79,25 @@ namespace BP.WF.DTS
                 //获得到达的节点，与接受人。
                 string toEmps = dr["ToEmps"].ToString();
                 if (DataType.IsNullOrEmpty(toEmps))
+                {
                     toEmps = null;
+                }
+
                 string toNodeStr = dr["ToNode"].ToString();
                 int toNodeID = 0;
                 if (DataType.IsNullOrEmpty(toNodeStr) == false)
+                {
                     toNodeID = int.Parse(toNodeStr);
+                }
 
                 string startDT = dr[TaskAttr.StartDT].ToString();
                 if (string.IsNullOrEmpty(startDT) == false)
                 {
                     /*如果设置了发起时间,就检查当前时间是否与现在的时间匹配.*/
-                    if (DateTime.Now.ToString("yyyy-MM-dd HH:mm").Contains(startDT) == false)
+                    if (DateTime.Now < DateTime.Parse(startDT))
+                    {
                         continue;
+                    }
                 }
 
                 Flow fl = new Flow(fk_flow);
@@ -101,7 +110,9 @@ namespace BP.WF.DTS
                     try
                     {
                         if (DBAccess.RunSQLReturnTable(sql).Rows.Count != 0)
+                        {
                             continue;
+                        }
                     }
                     catch
                     {
@@ -121,10 +132,14 @@ namespace BP.WF.DTS
                     foreach (string str in strs)
                     {
                         if (string.IsNullOrEmpty(str))
+                        {
                             continue;
+                        }
 
                         if (str.Contains("=") == false)
+                        {
                             continue;
+                        }
 
                         string[] kv = str.Split('=');
                         wk.SetValByKey(kv[0], kv[1]);
@@ -138,10 +153,13 @@ namespace BP.WF.DTS
                     string msg = "";
 
                     if (toNodeID == 0)
+                    {
                         msg = wn.NodeSend(null, toEmps).ToMsgOfText();
+                    }
                     else
+                    {
                         msg = wn.NodeSend(new Node(toNodeID), toEmps).ToMsgOfText();
-
+                    }
 
                     msg = msg.Replace("'", "~");
 

@@ -434,6 +434,10 @@ namespace BP.WF
             {
                 return this.GetValStringByKey(GenerWorkerListAttr.CDT);
             }
+            set
+            {
+                this.SetValByKey(GenerWorkerListAttr.CDT, value);
+            }
         }
         /// <summary>
         /// 应该完成日期

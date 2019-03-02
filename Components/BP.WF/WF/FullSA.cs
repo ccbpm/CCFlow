@@ -232,7 +232,7 @@ namespace BP.WF
 
                     switch (BP.Sys.SystemConfig.AppCenterDBType)
                     {
-                        case DBType.MySQL:
+                        case DBType.MySQL: 
                         case DBType.MSSQL:
                             sql = "select x.No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
                             sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_DeptEmp z on";

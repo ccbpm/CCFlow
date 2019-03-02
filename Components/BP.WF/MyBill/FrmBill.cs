@@ -228,6 +228,7 @@ namespace BP.WF.MyBill
         }
         #endregion
 
+        #region 方法操作.
         /// <summary>
         /// 打开单据
         /// </summary>
@@ -242,6 +243,7 @@ namespace BP.WF.MyBill
             return "../../Admin/FoolFormDesigner/Bill/API.htm?FrmID=" +
               this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
         }
+        #endregion 方法操作.
     }
     /// <summary>
     /// 单据属性s

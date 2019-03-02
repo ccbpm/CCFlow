@@ -105,8 +105,8 @@ namespace BP.WF.DTS
                 {
                     string fTable = "ND" + int.Parse(fl.No + "01").ToString();
                     MapData md = new MapData(fTable);
-                    sql = "";
-                    //   sql = "SELECT * FROM " + md.PTable + " WHERE MainPK='" + mypk + "' AND WFState=1";
+                    //sql = "";
+                    sql = "SELECT * FROM " + md.PTable + " WHERE MainPK='" + mypk + "' AND WFState=1";
                     try
                     {
                         if (DBAccess.RunSQLReturnTable(sql).Rows.Count != 0)

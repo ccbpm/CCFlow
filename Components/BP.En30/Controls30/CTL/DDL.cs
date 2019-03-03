@@ -319,7 +319,7 @@ namespace BP.Web.Controls
             bool isHave = false;
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr[val].ToString() == selectVal)
+                if (isHave==false && dr[val].ToString() == selectVal)
                 {
                     ListItem li = new ListItem(dr[text].ToString(), dr[val].ToString());
                     li.Selected = true;

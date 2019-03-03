@@ -1030,6 +1030,16 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 
+        /// </summary>
+        public static bool IsEnableHuiQianList
+        {
+            get
+            {
+                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableHuiQianList", false);
+            }
+        }
+        /// <summary>
         /// 检查是否可以安装系统
         /// </summary>
         /// <returns></returns>

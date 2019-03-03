@@ -425,14 +425,11 @@ namespace BP.WF.HttpHandler
 
             }
             mydt.TableName = "WF_GenerWorkFlow";
-             
-           
             if (mydt != null)
             {
                  mydt.Columns.Add("TDTime");
                  foreach (DataRow dr in mydt.Rows)
                  {
-
                      dr["TDTime"] = GetTraceNewTime(dr["FK_Flow"].ToString(), int.Parse(dr["WorkID"].ToString()), int.Parse(dr["FID"].ToString()));
                  }
             }

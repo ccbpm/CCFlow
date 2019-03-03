@@ -900,9 +900,15 @@ namespace BP.WF.HttpHandler
             foreach (GenerWorkerList item in gwfs)
                 empsOfHuiQian += item.FK_Emp + "," + item.FK_EmpText + ";";
 
-            //设置当前操作人员的状态.
-            string sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
-            DBAccess.RunSQL(sql);
+            string sql = "";
+
+            //是否启用会签待办列表, 如果启用了，主持人会签后就转到了HuiQianList.htm里面了.
+            if (BP.WF.Glo.IsEnableHuiQianList == true)
+            {
+                //设置当前操作人员的状态.
+                sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
+                DBAccess.RunSQL(sql);
+            }
 
             //恢复他的状态.
             sql = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND IsPass=-1";

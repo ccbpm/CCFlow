@@ -252,7 +252,6 @@ namespace BP.WF
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("FK_Dept", WebUser.FK_Dept);
 
-
                     dt = DBAccess.RunSQLReturnTable(ps);
                     foreach (DataRow dr in dt.Rows)
                     {

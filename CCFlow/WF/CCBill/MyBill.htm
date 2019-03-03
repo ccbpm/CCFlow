@@ -74,7 +74,7 @@
                 var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
                 handler.AddUrlData();
                 var workID = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
-                var url = window.location.href + "&WorkID=" + workID+"&OID="+workID;
+                var url = window.location.href + "&WorkID=" + workID + "&OID=" + workID;
                 window.location.href = url;
                 return;
             }
@@ -86,23 +86,67 @@
             var frmBill = new Entity("BP.WF.CCBill.FrmBill", frmID);
             var generBill = new Entity("BP.WF.CCBill.GenerBill", workID);
 
-            toolBar += "<input type=button value='保存' onclick='Save();' />";
+
+            if (generBill.BillState == 2) {
+                toolBar += "<input type=button value='新建' onclick='New();' />";
+            }
+
+            toolBar += "<input type=button value='保存' onclick='SaveIt();' />";
+            toolBar += "<input type=button value='保存&关闭' onclick='SaveItAndClose();' />";
+
             //是初始化状态.
             if (generBill.BillState == 0) {
-                toolBar += "<input type=button value='保存为草稿' onclick='SaveAsDefaut();' />";
+                toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
             }
 
             //如果是编辑中.
             if (generBill.BillState == 1) {
-                toolBar += "<input type=button value='删除' onclick='DeleteIt();' />";
+                toolBar += "<input type=button value='删除草稿' onclick='DeleteIt();' />";
+            }
+            if (generBill.BillState == 2) {
+                toolBar += "<input type=button value='删除单据' onclick='DeleteIt();' />";
             }
 
             toolBar += "<input type='button' value='查询' id='Btn_Sarch' onclick='Search();' />";
             toolBar += "<input type='button' value='分析' id='Btn_Group' onclick='Group();' />";
             toolBar += "<input type='button' value='关联单据' id='Btn_RefBill' onclick='RefBill();' />";
+            toolBar += "<input type='button' value='草稿箱' id='Btn_RefBill' onclick='DraftBox();' />";
+
             $("#toolbar").html(toolBar);
+        }
+        //保存为草稿.
+        function SaveAsDraft() {
+
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyBill_SaveAsDraft");
+
+            var url = "Draft.htm?FrmID=" + GetQueryString("FrmID");
+            window.location.href = url;
+        }
+        function SaveIt() {
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyBill_SaveIt");
+            window.location.href = window.location.href;
+        }
+
+        function DeleteIt() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyBill_Delete");
+            window.close();
 
         }
+        
+        function SaveItAndClose() {
+
+            SaveIt();
+            window.close();
+        }
+
     </script>
     <style type="text/css">
         h1
@@ -167,7 +211,7 @@
         }
 
         li.scrollNav.active a {
-            background: url(Scripts/bootstrap/css/img/back.png) no-repeat;
+            background: url(../Scripts/bootstrap/css/img/back.png) no-repeat;
         }
 
         #nav li {
@@ -261,20 +305,20 @@
                 display: block;
                 width: 64px;
                 height: 30px;
-                background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px 4px;
+                background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat -75px 4px;
                 margin: 0px auto;
             }
 
                 .navbars i:hover {
-                    background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px 4px;
+                    background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat 0px 4px;
                 }
 
                 .navbars i.bottom, .navbars i.bottom_disabled {
-                    background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px -42px;
+                    background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat -75px -42px;
                 }
 
                     .navbars i.bottom:hover, .navbars i.bottom_disabled:hover {
-                        background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
+                        background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
                     }
 
 
@@ -384,7 +428,7 @@
 </head>
 <body onclick="hiddenDiv()">
     <div id="toolbar" style="margin-left: 190px;">
-       <!-- <input type='button' value="新建" id="Btn_New" onclick="New();" />
+        <!-- <input type='button' value="新建" id="Btn_New" onclick="New();" />
         <input type='button' value="保存" id="Btn_Save" onclick="Save();" />
         <input type='button' value="启动流程" id="Btn_StartFlow" onclick="StartFlow();" />
         <input type='button' value="关联单据" id="Btn_RefBill" onclick="RefBill();" />

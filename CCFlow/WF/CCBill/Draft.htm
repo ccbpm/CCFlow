@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>草稿</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <table class="table  table-striped">
+                <caption>
+                    草稿箱- <a href="javascript:New();">+新建</a></caption>
+                <thead>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        单据编号
+                    </th>
+                    <th>
+                        标题
+                    </th>
+                    <th>
+                        表单
+                    </th>
+                    <th>
+                        保存日期
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                    </tr>
+                </thead>
+                <tbody id="Table1">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        function WinOpenIt(url) {
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                title: '我的草稿',
+                area: ['96%', '90%'],
+                content: url
+            });
+        }
+
+        function New() {
+            var frmID = GetQueryString("FrmID");
+            window.location.href = 'MyBill.htm?FrmID=' + frmID + "&FK_MapData=" + frmID;
+        }
+
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Draft_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            var timeKey = Math.random();
+            data = JSON.parse(data);
+            var listbox = '';
+            //增加处理.
+            var idx = 0;
+            for (var i = 0; i < data.length; i++) {
+
+                idx++;
+
+                var en = data[i];
+
+                var title = en.Title;
+                var frmID = en.FrmID;
+                var flowName = en.FrmName;
+                var rdt = en.RDT;
+                var workID = en.WorkID;
+                var paras = en.AtPara; //参数.
+                if (paras != '' && paras != null) {
+                    paras = paras.replace("'", "\\'");
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = "1" + paras;
+                }
+
+                listbox = "<tr ><td class=Idx >" + idx + "</td>";
+                if (en.BillNo == "")
+                    listbox += "<td >" + en.WorkID + "</td>";
+                else
+                    listbox += "<td >" + en.BillNo + "</td>";
+
+                listbox += "<td>" + "<a href=\"javascript:ToMyBill('" + frmID + "','" + workID + "');\" ><img src='../Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
+                listbox += "<td>" + flowName + "</td>";
+                listbox += "<td>" + rdt + "</td>";
+                listbox += "<td>";
+                listbox += "<a href=\"javascript:Delete('" + frmID + "','" + workID + "')\">删除</a>";
+                listbox += "</td>";
+                listbox += "</tr>";
+
+                $('#Table1').append(listbox);
+            }
+
+        });
+
+        function ToMyBill(frmID, workID) {
+
+            var url = "MyBill.htm?FrmID=" + frmID + "&FK_MapData=" + frmID + "&WorkID=" + workID + "&OID=" + workID;
+            window.location.href = url;
+        }
+
+        //删除流程.
+        function Delete(frmID, workid) {
+
+            if (window.confirm('您确定要删除草稿吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            handler.AddPara("FrmID", frmID);
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("MyBill_Delete");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</body>
+</html>

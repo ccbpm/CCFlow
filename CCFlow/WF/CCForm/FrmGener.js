@@ -26,7 +26,11 @@ $(function () {
             Change(frmData);
         });
     }
+
     initPageParam(); //初始化参数.
+
+    if (pageData.OID == 0 || pageData.OID == undefined)
+        return;
 
     //构造表单.
     GenerFrm(); //表单数据.
@@ -42,17 +46,17 @@ $(function () {
             $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
         });
     }
-//    else {
-//        //新加
-//        //计算高度，展示滚动条
-//        var height = $(window).height() - 150;
-//        $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
-//        $('#topContentDiv').height(height);
+    //    else {
+    //        //新加
+    //        //计算高度，展示滚动条
+    //        var height = $(window).height() - 150;
+    //        $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
+    //        $('#topContentDiv').height(height);
 
-//        $(window).resize(function () {
-//            $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
-//        });
-//    }
+    //        $(window).resize(function () {
+    //            $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+    //        });
+    //    }
     function movetb() {
         var move;
         $("#nav").css("top", top);
@@ -61,8 +65,8 @@ $(function () {
         $('.Message').hide();
     });
 
-//    setAttachDisabled();
-//    setFormEleDisabled();
+    //    setAttachDisabled();
+    //    setFormEleDisabled();
 
     SetHegiht();
     //打开表单检查正则表达式

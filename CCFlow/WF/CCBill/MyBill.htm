@@ -86,7 +86,6 @@
             var frmBill = new Entity("BP.WF.CCBill.FrmBill", frmID);
             var generBill = new Entity("BP.WF.CCBill.GenerBill", workID);
 
-
             if (generBill.BillState == 2) {
                 toolBar += "<input type=button value='新建' onclick='New();' />";
             }
@@ -99,10 +98,10 @@
                 toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
             }
 
-            //如果是编辑中.
             if (generBill.BillState == 1) {
                 toolBar += "<input type=button value='删除草稿' onclick='DeleteIt();' />";
             }
+
             if (generBill.BillState == 2) {
                 toolBar += "<input type=button value='删除单据' onclick='DeleteIt();' />";
             }

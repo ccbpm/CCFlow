@@ -24,6 +24,8 @@
                         </div>
                         <button class="btn btn-success" type="button" onclick="javascript:SearchKey();">
                             <i class="fa fa-search"></i>查询</button>
+                        <button class="btn btn-success" type="button" onclick="javascript:New();">
+                            <i class="fa fa-new"></i>新建</button>
                     </div>
                 </div>
             </div>
@@ -46,16 +48,10 @@
                             发起人
                         </th>
                         <th>
-                            发起日期
+                            制单日期
                         </th>
                         <th>
-                            停留节点
-                        </th>
-                        <th>
-                            审批人
-                        </th>
-                        <th width='90'>
-                            应完成日期
+                            编辑日期
                         </th>
                         <th width='60'>
                             状态
@@ -109,13 +105,14 @@
             if (_frmID == "" && _tspan == "")
                 _tspan = "-1";
 
-            var handler = new HttpHandler("BP.WF.CCBill.WF_Bill");
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddPara("FrmID", _frmID);
             handler.AddPara("TSpan", _tspan);
             handler.AddPara("BillState", _billState);
             var data = handler.DoMethodReturnString("Search_Init");
-
             if (data.indexOf('err@') == 0) {
+                alert(data);
+
                 $("#Msg").html(data);
                 return;
             }
@@ -149,15 +146,12 @@
                 html = "<button onclick=\"Flows('');\"  class=\"btn btn-default \" >全部</button> ";
 
             for (var i = 0; i < flows.length; i++) {
+
                 var en = flows[i];
 
-                if (_frmID == en.No)
-                    html += "<button onclick=\"Flows('" + en.No + "');\"  class=\"btn btn-info\"  >" + en.Name + "（" + en.Num + "）</button> ";
-                else
-                    html += "<button class=\"btn btn-default \"  onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</button> ";
+                html += "<button class=\"btn btn-default \"  onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</button> ";
             }
             $("#Flows").html(html);
-
 
             // 流程实例列表.
             var ens = data['WF_CCBill'];
@@ -172,46 +166,20 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
-                if (en.FID != 0)
-                    continue;
-
                 realIndex++;
 
-                var FrmID = en.FrmID,
-                            fk_node = en.FK_Node,
-                            workid = en.WorkID,
-                            fid = en.FID,
-                            isRead = en.IsRead,
-                            paras = en.AtPara;
+                var FrmID = en.FrmID;
+                workid = en.WorkID;
 
-                if (paras == null || paras == "") {
-                    paras = "";
-                }
-                else {
-                    if (paras.indexOf("IsCC=1") > -1) {
-                        paras = "IsCC=1";
-                    } else {
-                        paras = "";
-                    }
-                }
+                var isCanDo = true;
 
-                todoEmpsName = en.TodoEmps;
-
-                if (todoEmpsName != null)
-                    todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
-
-                //是否可以执行当前工作?
-                var isCanDo = false;
-                if (en.TodoEmps != null) {
-                    if (en.TodoEmps.indexOf(webUser.No) != -1)
-                        isCanDo = true;
-                }
 
                 //获得icon.
                 var icon = GenerICON(isCanDo, en.BillState);
 
                 // 获得颜色.
                 var color = GenerColor(en.BillState, isCanDo);
+
 
                 htmlbox += "<tr >";
                 htmlbox += "<td class=Idx>" + realIndex + "</td>";
@@ -222,22 +190,17 @@
 
                 htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
 
-                htmlbox += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
-
-                htmlbox += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
-
-                if (en.SDTOfNode == null)
-                    htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
-                else
-                    htmlbox += "<td><font color='" + color + "'>" + en.SDTOfNode.substring(5) + "</font></td>";
+                htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
 
                 htmlbox += "<td><font color='" + color + "'>" + GetBillState(en.BillState, isCanDo) + "</font></td>";
 
                 htmlbox += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.BillState, en.FrmID, en.FK_Node, en.FID, isCanDo) + "</font></td>";
+                htmlbox += "<td><font color='" + color + "'><a href=\"javascript:Delete('" + workid + "')\">删除</a></font></td>";
 
                 htmlbox += "</tr>";
 
             }
+
             $("#Table1").html(htmlbox);
             $("#List").append(_Html);
             $("#Msg").html("");
@@ -266,31 +229,46 @@
             return "<a href=\"javascript:WinOpen('" + url + "');\" >轨迹</a>";
         }
 
-        function UnSend(frmID, nodeID, workid, fid) {
+        function New(workid) {
+
+            var frmID = GetQueryString("FrmID");
+            var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
+            window.location.href = url;
+        }
+
+        function Delete(workid) {
 
             if (confirm("您确定要撤销吗？") == false)
                 return;
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddPara("FK_Node", nodeID);
-            handler.AddPara("FrmID", frmID);
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkID", workid);
-            handler.AddPara("FID", fid);
-            var data = handler.DoMethodReturnString("OP_UnSend");
-            alert(data);
+            var data = handler.DoMethodReturnString("MyBill_Delete");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
             window.location.href = window.location.href;
         }
         function GenerColor(BillState, isCanDo) {
+
+            if (BillState == 100) {
+                return "green";
+            }
+
+            if (BillState == 1) {
+                return "yellow";
+            }
+
+            return "";
 
             if (isCanDo == true && BillState != 3)
                 return "red";
 
             if (BillState == 5) {
                 return "yellow";
-            }
-
-            if (BillState == 3) {
-                return "green";
             }
 
             if (BillState == 2)
@@ -300,6 +278,20 @@
         }
 
         function GetBillState(BillState, isCanDo) {
+            if (BillState == 1) {
+                return "草稿";
+            }
+
+            if (BillState == 2) {
+                return "编辑中";
+            }
+
+            if (BillState == 100) {
+                return "归档";
+            }
+
+
+            return "其他";
 
             if (isCanDo == true && BillState != 3)
                 return "待办";
@@ -337,14 +329,11 @@
         function OpenIt(BillState, workid, frmID, nodeID, emps, userNo) {
 
             var url = "";
-
-            if (BillState != 3 && emps.indexOf(userNo) >= 0) {
-                url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_Node=" + nodeID;
-            } else {
-                url = "WFRpt.htm?WorkID=" + workid + "&FrmID=" + frmID;
-            }
+            url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
             //window.location.href = url;
-            // WinOpen(url);
+            WinOpen(url);
+            return;
+
             layer.open({
                 skin: 'layer-class',
                 type: 2,
@@ -361,7 +350,7 @@
                 if (tspan == '')
                     window.location.href = '?1=1' + "&FrmID=" + GetQueryString("FrmID");
                 else
-                    window.location.href = '?TSpan=' + tspan+"&FrmID="+GetQueryString("FrmID");
+                    window.location.href = '?TSpan=' + tspan + "&FrmID=" + GetQueryString("FrmID");
             }
             else {
                 if (tspan == '')
@@ -371,21 +360,20 @@
             }
         }
 
-        function Flows(frmID) {
+        function Flows(billState) {
+
             var tspan = GetQueryString("TSpan");
+            var frmID = GetQueryString("FrmID");
 
             if (tspan == null) {
-                if (frmID == "")
-                    window.location.href = '?1=1' + "&FrmID=" + GetQueryString("FrmID");
-                else
-                    window.location.href = '?FrmID=' + frmID;
+                window.location.href = '?FrmID=' + frmID + "&BillState=" + billState;
             }
             else {
 
                 if (frmID == "")
-                    window.location.href = '?TSpan=' + GetQueryString("TSpan") + "&FrmID=" + GetQueryString("FrmID");
+                    window.location.href = '?TSpan=' + tspan + "&FrmID=" + frmID + "&BillState=" + billState;
                 else
-                    window.location.href = '?FrmID=' + frmID + '&TSpan=' + GetQueryString("TSpan");
+                    window.location.href = '?FrmID=' + frmID + '&TSpan=' + tspan + "&BillState=" + billState;
             }
         }
 

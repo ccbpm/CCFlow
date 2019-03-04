@@ -937,6 +937,12 @@ function Ele_Dtl(frmDtl) {
     if (frmDtl.DtlVer == 1)
         dtlUrl = "Dtl2019";
 
+    var local = window.location.href;
+    if (local.indexOf('CCBill') != -1) {
+        dtlUrl = '../CCForm/' + dtlUrl;
+    }
+     
+
     if (frmDtl.ListShowModel == "0") {
         src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&FK_MapData=" + frmDtl.FK_MapData + "&" + urlParam + "&Version=1";
     }

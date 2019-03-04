@@ -56,8 +56,9 @@
         //发起时打开窗口
         function LanchFrm(frmID,title) {
 
-        	var url = "MyBill.htm?FrmID=" + frmID+"&FK_MapData="+frmID;
-            window.open(url);
+        	var url = "Search.htm?FrmID=" + frmID+"&FK_MapData="+frmID;
+            window.location.href=url;
+            //window.open(url);
             return;
 
 			layer.open({

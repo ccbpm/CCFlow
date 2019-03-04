@@ -386,11 +386,19 @@ function figure_Template_Dtl(frmDtl, ext) {
         if (frmDtl.DtlVer == 1)
             dtlUrl = "Dtl2019";
 
-        if (pageData.IsReadonly=="1") {
-            src = "./" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs + "&m=" + Math.random();
-        } else {
-            src = "./" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs + "&m=" + Math.random();
+        var local = window.location.href;
+        if (local.indexOf('CCBill') != -1) {
+            dtlUrl = '../CCForm/' + dtlUrl;
         }
+
+       
+
+        if (pageData.IsReadonly == "1") {
+            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs + "&m=" + Math.random();
+        } else {
+            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs + "&m=" + Math.random();
+        }
+
     } else if (frmDtl.ListShowModel == "1") {
         if (pageData.IsReadonly =="1") {
             src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs+"&m="+Math.random();

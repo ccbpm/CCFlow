@@ -3,10 +3,8 @@ $(function () {
 
     //webUser = new WebUser();
 
-
 });
 
- 
 
 function Search() {
     var url = "Search.htm?FrmID=" + GetQueryString("FrmID");

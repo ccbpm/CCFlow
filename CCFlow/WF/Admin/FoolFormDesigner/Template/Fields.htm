@@ -3,16 +3,13 @@
 <head>
     <title>字段模版</title>
     <link rel="stylesheet" type="text/css" href="../../../Scripts/easyUI/themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../../../Scripts/easyUI/themes/icon.css" />
-	<script type="text/javascript" src="../../../Scripts/jquery/jquery.min.js"></script>
-	<script type="text/javascript" src="../../../Scripts/jquery/jquery.easyui.min.js"></script>
-    <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../Scripts/easyUI/themes/icon.css" />
+    <script type="text/javascript" src="../../../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/jquery/jquery.easyui.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
-	<script src="../../../Comm/Gener.js" type="text/javascript"></script>
-     <script language="javascript" type="text/javascript">
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
 
         var fk_mapdata = GetQueryString("FK_MapData");
         var groupID = GetQueryString("GroupField");
@@ -44,32 +41,28 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
-
-
                 var list = "<ul>";
                 var mapExts = new Entities("BP.Sys.MapExts");
                 mapExts.Retrieve("FK_MapData", en.No);
                 for (var idx = 0; idx < mapExts.length; idx++) {
                     var mapExt = mapExts[idx];
-                    list += "<li><a href=\"javascript:AddMapExt('" + mapExt.MyPK + "','" + mapExt.AttrOfOper + "','"+mapExt.FK_MapData+"')\" >" + mapExt.AttrOfOper + " - " + mapExt.Tag1 + " - " + mapExt.ExtType + "</a></li>";
+                    list += "<li><a href=\"javascript:AddMapExt('" + mapExt.MyPK + "','" + mapExt.AttrOfOper + "','" + mapExt.FK_MapData + "')\" >" + mapExt.AttrOfOper + " - " + mapExt.Tag1 + " - " + mapExt.ExtType + "</a></li>";
                 }
                 list += "</ul>";
 
                 var edit = "<a href='../Designer.htm?FK_MapData=" + en.No + "' target=_blank>编辑模版</a>";
 
                 html += "<li>" + en.Name + "(" + mapExts.length + ")  - " + edit + list + "</li>";
-
             }
             html += "</ul>";
 
             $("#info").html(html);
 
-
         });
 
 
         //把这个字段增加到里面去.
-        function AddMapExt(mypk,keyOfEn,fk_mapdata) {
+        function AddMapExt(mypk, keyOfEn, fk_mapdata) {
 
             //首先判断该字段是否存在？如果存在就让其修改名称.
             var mypkOfMapAttr = fk_mapdata + "_" + keyOfEn;
@@ -136,7 +129,6 @@
             window.location.href = url;
         }
 
-
         //字段分组.
         function Group() {
 
@@ -150,15 +142,14 @@
             window.location.href = url;
 
         }
-     </script>
+    </script>
     <!--<base target="_self" /> -->
-    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<h3>  <a href="javascript:Fields();">字段模版</a> -字段群模版</h3>
-
-<div id="info"> </div>
-
-
+    <h3>
+        <a href="javascript:Fields();">字段模版</a> -字段群模版</h3>
+    <div id="info">
+    </div>
 </body>
 </html>

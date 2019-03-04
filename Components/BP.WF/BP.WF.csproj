@@ -158,7 +158,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CCBill\GenerBill.cs" />
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />
@@ -242,9 +241,7 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
-    <Compile Include="CCBill\WF_CCBill.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
-    <Compile Include="CCBill\Dev2Interface.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\AdminEmp.cs" />
     <Compile Include="Port\Dept.cs" />
@@ -306,7 +303,6 @@
     <Compile Include="Template\TestCase.cs" />
     <Compile Include="Template\Part\Part.cs" />
     <Compile Include="Template\Part\PartParentSubGuide.cs" />
-    <Compile Include="CCBill\FrmBill.cs" />
     <Compile Include="UnitTesting\Etc\AboutTitle.cs" />
     <Compile Include="UnitTesting\AttrFlow\CreateStartWork.cs" />
     <Compile Include="UnitTesting\AttrFlow\GenerBillNo.cs" />

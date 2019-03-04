@@ -158,6 +158,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CCBill\Track.cs" />
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />

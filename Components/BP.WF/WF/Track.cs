@@ -8,7 +8,7 @@ using BP.WF.Template;
 namespace BP.WF
 {
     /// <summary>
-    ///  属性
+    ///  轨迹-属性
     /// </summary>
     public class TrackAttr : EntityMyPKAttr
     {
@@ -105,12 +105,12 @@ namespace BP.WF
         /// </summary>
         public const string FrmDB = "FrmDB";
     }
-
     /// <summary>
     /// 轨迹
     /// </summary>
     public class Track : BP.En.Entity
     {
+        #region 基本属性.
         /// <summary>
         /// 表单数据
         /// </summary>
@@ -144,9 +144,10 @@ namespace BP.WF
                 return "MyPK";
             }
         }
+        public string FK_Flow = null;
+        #endregion 基本属性.
 
-        #region attrs
-
+        #region 字段属性.
         /// <summary>
         /// 节点从
         /// </summary>
@@ -161,7 +162,6 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.NDFrom, value);
             }
         }
-
         /// <summary>
         /// 节点到
         /// </summary>
@@ -190,20 +190,6 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.EmpFrom, value);
             }
         }
-        ///// <summary>
-        ///// 内部的PK.
-        ///// </summary>
-        //public string InnerKey_del
-        //{
-        //    get
-        //    {
-        //        return this.GetValStringByKey(TrackAttr.InnerKey);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(TrackAttr.InnerKey, value);
-        //    }
-        //}
         /// <summary>
         /// 到人员
         /// </summary>
@@ -246,7 +232,6 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.RDT, value);
             }
         }
-
         /// <summary>
         /// fid
         /// </summary>
@@ -303,7 +288,6 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.ActionType, (int)value);
             }
         }
-
         /// <summary>
         /// 获取动作文本
         /// </summary>
@@ -358,7 +342,7 @@ namespace BP.WF
                 case ActionType.AskforHelp:
                     return "加签";
                 case ActionType.Skip:
-                    return "跳转";              
+                    return "跳转";
                 case ActionType.HuiQian:
                     return "主持人执行会签";
                 case ActionType.DeleteFlowByFlag:
@@ -373,7 +357,9 @@ namespace BP.WF
                     return "信息" + at.ToString();
             }
         }
-
+        /// <summary>
+        /// 活动名称
+        /// </summary>
         public string ActionTypeText
         {
             get
@@ -385,7 +371,6 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.ActionTypeText, value);
             }
         }
-
         /// <summary>
         /// 节点数据
         /// </summary>
@@ -428,7 +413,9 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.Msg, value);
             }
         }
-
+        /// <summary>
+        /// 消息
+        /// </summary>
         public string MsgHtml
         {
             get
@@ -436,7 +423,9 @@ namespace BP.WF
                 return this.GetValHtmlStringByKey(TrackAttr.Msg);
             }
         }
-
+        /// <summary>
+        /// 人员到
+        /// </summary>
         public string EmpToT
         {
             get
@@ -448,7 +437,9 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.EmpToT, value);
             }
         }
-
+        /// <summary>
+        /// 人员从
+        /// </summary>
         public string EmpFromT
         {
             get
@@ -460,7 +451,9 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.EmpFromT, value);
             }
         }
-
+        /// <summary>
+        /// 节点从
+        /// </summary>
         public string NDFromT
         {
             get
@@ -472,7 +465,9 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.NDFromT, value);
             }
         }
-
+        /// <summary>
+        /// 节点到
+        /// </summary>
         public string NDToT
         {
             get
@@ -484,13 +479,10 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.NDToT, value);
             }
         }
-
         #endregion attrs
 
-        #region 属性
-
+        #region 构造.
         public string RptName = null;
-
         public override Map EnMap
         {
             get
@@ -535,16 +527,12 @@ namespace BP.WF
                 return this._enMap;
             }
         }
-
-        public string FK_Flow = null;
-
         /// <summary>
         /// 轨迹
         /// </summary>
         public Track()
         {
         }
-
         /// <summary>
         /// 轨迹
         /// </summary>
@@ -731,7 +719,6 @@ namespace BP.WF
 
             #endregion 执行保存
 
-
             //解决流程的开始日期计算错误的问题.
             if (this.HisActionType == ActionType.Start || this.HisActionType == ActionType.StartChildenFlow)
             {
@@ -748,7 +735,6 @@ namespace BP.WF
                 DBAccess.RunSQL(ps);
             }
         }
-
         /// <summary>
         /// 增加授权人
         /// </summary>
@@ -774,12 +760,10 @@ namespace BP.WF
             this.DoInsert(0);
             return false;
         }
-
-        #endregion 属性
+        #endregion 构造.
     }
-
     /// <summary>
-    /// 轨迹集合
+    /// 轨迹集合s
     /// </summary>
     public class Tracks : BP.En.Entities
     {
@@ -790,7 +774,6 @@ namespace BP.WF
         public Tracks()
         {
         }
-
         public override Entity GetNewEntity
         {
             get
@@ -823,7 +806,6 @@ namespace BP.WF
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-
 
     }
 }

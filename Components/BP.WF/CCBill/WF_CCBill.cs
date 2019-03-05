@@ -49,6 +49,14 @@ namespace BP.WF.CCBill
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
         /// <summary>
+        /// 产生一个WorkID.
+        /// </summary>
+        /// <returns></returns>
+        public string Start_GenerWorkID()
+        {
+            return BP.WF.CCBill.Dev2Interface.CreateBlankWork(this.FrmID, WebUser.No, null).ToString();
+        }
+        /// <summary>
         /// 草稿列表
         /// </summary>
         /// <returns></returns>
@@ -108,72 +116,10 @@ namespace BP.WF.CCBill
             DataSet ds = new DataSet();
             string sql = "";
 
-            string tSpan = this.GetRequestVal("TSpan");
-            if (tSpan == "")
-                tSpan = null;
-
-            #region 1、获取时间段枚举/总数.
-            SysEnums ses = new SysEnums("TSpan");
-            DataTable dtTSpan = ses.ToDataTableField();
-            dtTSpan.TableName = "TSpan";
-            ds.Tables.Add(dtTSpan);
-
-            GenerBill gb = new GenerBill();
-            gb.CheckPhysicsTable();
-
-
-            sql = "SELECT TSpan as No, COUNT(WorkID) as Num FROM WF_CCBill WHERE FrmID='" + this.FrmID + "'  AND Starter='" + WebUser.No + "' AND BillState >= 1 GROUP BY TSpan";
-
-            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            foreach (DataRow drEnum in dtTSpan.Rows)
-            {
-                string no = drEnum["IntKey"].ToString();
-                foreach (DataRow dr in dtTSpanNum.Rows)
-                {
-                    if (dr["No"].ToString() == no)
-                    {
-                        drEnum["Lab"] = drEnum["Lab"].ToString() + "(" + dr["Num"] + ")";
-                        break;
-                    }
-                }
-            }
-            #endregion
-
-            #region 2、处理流程类别列表.
-            sql = " SELECT a.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM WF_CCBill A, Sys_Enum B ";
-            sql += " WHERE A.BillState=B.IntKey AND B.EnumKey='BillState' AND  a.Starter='" + WebUser.No + "' AND BillState >=1";
-            if (tSpan.Equals("-1") == false)
-                sql += "  AND a.TSpan=" + tSpan;
-
-            sql += "  GROUP BY a.BillState, B.Lab  ";
-
-            DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-            {
-                dtFlows.Columns[0].ColumnName = "No";
-                dtFlows.Columns[1].ColumnName = "Name";
-                dtFlows.Columns[2].ColumnName = "Num";
-            }
-            dtFlows.TableName = "Flows";
-            ds.Tables.Add(dtFlows);
-            #endregion
-
             #region 3、处理流程实例列表.
             string sqlWhere = "";
             sqlWhere = "(1 = 1)AND Starter = '" + WebUser.No + "' AND BillState >= 1";
-            if (tSpan.Equals("-1") == false)
-            {
-                sqlWhere += "AND (TSpan = '" + tSpan + "') ";
-            }
-
-            if (this.FK_Flow != null)
-            {
-                sqlWhere += "AND (FrmID = '" + this.FrmID + "')  ";
-            }
-            else
-            {
-                // sqlWhere += ")";
-            }
+            sqlWhere += "AND (FrmID = '" + this.FrmID + "')  ";
             sqlWhere += "ORDER BY RDT DESC";
 
             string fields = " WorkID,BillNo,FrmID,FrmName,Title,BillState,Starter,StarterName,Sender,RDT ";
@@ -199,16 +145,7 @@ namespace BP.WF.CCBill
                 mydt.Columns[8].ColumnName = "Sender";
                 mydt.Columns[9].ColumnName = "RDT";
             }
-
             mydt.TableName = "WF_CCBill";
-            if (mydt != null)
-            {
-                mydt.Columns.Add("TDTime");
-                foreach (DataRow dr in mydt.Rows)
-                {
-                    //   dr["TDTime"] =  GetTraceNewTime(dr["FK_Flow"].ToString(), int.Parse(dr["WorkID"].ToString()), int.Parse(dr["FID"].ToString()));
-                }
-            }
             #endregion
 
             ds.Tables.Add(mydt);
@@ -258,7 +195,7 @@ namespace BP.WF.CCBill
             #region 2、处理流程类别列表.
             sql = " SELECT  a.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM WF_CCBill A, Sys_Enum B ";
             sql += " WHERE A.BillState=B.IntKey AND B.EnumKey='BillState' AND  a.Starter='" + WebUser.No + "' AND BillState >=1";
-            if (tSpan.Equals("-1")==false)
+            if (tSpan.Equals("-1") == false)
                 sql += "  AND a.TSpan=" + tSpan;
 
             sql += "  GROUP BY a.BillState, B.Lab  ";
@@ -277,7 +214,7 @@ namespace BP.WF.CCBill
             #region 3、处理流程实例列表.
             string sqlWhere = "";
             sqlWhere = "(1 = 1)AND Starter = '" + WebUser.No + "' AND BillState >= 1";
-            if (tSpan.Equals("-1")==false)
+            if (tSpan.Equals("-1") == false)
             {
                 sqlWhere += "AND (TSpan = '" + tSpan + "') ";
             }
@@ -288,7 +225,7 @@ namespace BP.WF.CCBill
             }
             else
             {
-               // sqlWhere += ")";
+                // sqlWhere += ")";
             }
             sqlWhere += "ORDER BY RDT DESC";
 

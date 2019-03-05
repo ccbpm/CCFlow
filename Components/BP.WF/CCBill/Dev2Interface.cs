@@ -69,6 +69,16 @@ namespace BP.WF.CCBill
             GenerBill gb = new GenerBill(workID);
 
             gb.BillState = BillState.Editing;
+
+            if (DataType.IsNullOrEmpty(gb.BillNo) == true)
+            {
+                FrmBill fb = new FrmBill(frmID);
+                gb.BillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(fb.BillNoFormat, workID, null, fb.PTable);
+
+                //更新单据里面的billNo字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "BillNo") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET BillNo='" + gb.BillNo + "' WHERE OID=" + workID);
+            }
             gb.Update();
 
             return "保存成功...";

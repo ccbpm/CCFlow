@@ -133,6 +133,23 @@ namespace BP.WF.CCBill
                 this.SetValByKey(MapDataAttr.FK_FormTree, value);
             }
         }
+        /// <summary>
+        /// 单据格式
+        /// </summary>
+        public string BillNoFormat
+        {
+            get
+            {
+                string str= this.GetValStrByKey(FrmBillAttr.BillNoFormat);
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = "ccbpm-{YYYY}-{MM}-{LSH4}";
+                return str;
+            }
+            set
+            {
+                this.SetValByKey(FrmBillAttr.BillNoFormat, value);
+            }
+        }
         #endregion
 
         #region 构造方法

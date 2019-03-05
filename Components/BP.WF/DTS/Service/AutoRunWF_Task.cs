@@ -95,13 +95,10 @@ namespace BP.WF.DTS
                 {
                     /*如果设置了发起时间,就检查当前时间是否与现在的时间匹配.*/
                     if (DateTime.Now < DateTime.Parse(startDT))
-                    {
                         continue;
-                    }
                 }
 
                 Flow fl = new Flow(fk_flow);
-
                 if (fl.HisFlowAppType == FlowAppType.PRJ)
                 {
                     if (paras.Contains("PrjNo=") == false || paras.Contains("PrjName=") == false)

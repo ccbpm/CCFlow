@@ -113,7 +113,6 @@ namespace BP.UnitTesting.AttrFlow
                 if (subFlowBillNo != billFormat + "-000" + i)
                     throw new Exception("@应当是:" + billFormat + "-000" + i + " , 现在是:" + subFlowBillNo);
             }
-
         }
     }
 }

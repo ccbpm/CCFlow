@@ -986,16 +986,26 @@ namespace BP.WF.Template
             //递归出来子部门下有该岗位的人员
             DataTable mydt = Func_GenerWorkerList_DiGui_ByDepts(subDepts, empNo);
             if (mydt == null && this.town.HisNode.HisWhenNoWorker == false)
-                throw new Exception("@按岗位智能计算没有找到(" + town.HisNode.Name + ")接受人 @当前工作人员:" + WebUser.No + ",名称:" + WebUser.Name + " , 部门编号:" + WebUser.FK_Dept + " 部门名称：" + WebUser.FK_DeptName);
-
-            //add by zhoupeng  考虑到自动跳转，在没有接受人的情况下.
-            if (mydt == null)
             {
-                mydt = new DataTable();
-                mydt.Columns.Add(new DataColumn("No", typeof(string)));
-                mydt.Columns.Add(new DataColumn("Name", typeof(string)));
-            }
+                  //如果递归没有找到人,就全局搜索岗位
+			     sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                 ps = new Paras();
+                 ps.Add("FK_Node", town.HisNode.NodeID);
+                 ps.SQL = sql;
+                 dt = DBAccess.RunSQLReturnTable(ps);
+                 if (dt.Rows.Count > 0)
+                     return dt;
+                 if (this.town.HisNode.HisWhenNoWorker == false)
+            	    throw new Exception("@按岗位智能计算没有找到(" + town.HisNode.Name + ")接受人 @当前工作人员:" + WebUser.No + ",名称:" + WebUser.Name + " , 部门编号:" + WebUser.FK_Dept + " 部门名称：" + WebUser.FK_DeptName);
+             
+                 if (dt.Rows.Count == 0){
+	                mydt = new DataTable();
+                    mydt.Columns.Add(new DataColumn("No", typeof(string)));
+                    mydt.Columns.Add(new DataColumn("Name", typeof(string)));
+                 }
 
+            }
+                
             return mydt;
             #endregion  按照岗位来执行。
         }

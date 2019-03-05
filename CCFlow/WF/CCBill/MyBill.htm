@@ -86,31 +86,40 @@
             var frmBill = new Entity("BP.WF.CCBill.FrmBill", frmID);
             var generBill = new Entity("BP.WF.CCBill.GenerBill", workID);
 
-            if (generBill.BillState == 2) {
-                toolBar += "<input type=button value='新建' onclick='New();' />";
-            }
+            var html = "<table style='width:100%;padding:15px;'>";
+            html += "<tr>";
+            html += "<td><img src='../../DataUser/ICON/LogBig.png' style='width:150px;' /></td>";
+            html += "<td>" + frmBill.Name + "</td>";
+            html += "</tr>";
+            html += "</table>";
+            //$("#Title").html(html);
 
+
+            //当前是归档状态.
+            if (generBill.BillState == 2)
+                toolBar += "<input type=button value='新建' onclick='New();' />";
+            
             toolBar += "<input type=button value='保存' onclick='SaveIt();' />";
-            toolBar += "<input type=button value='保存&关闭' onclick='SaveItAndClose();' />";
+           // toolBar += "<input type=button value='保存&关闭' onclick='SaveItAndClose();' />";
 
             //是初始化状态.
-            if (generBill.BillState == 0) {
+            if (generBill.BillState == 0)
                 toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
-            }
 
-            if (generBill.BillState == 1) {
+            if (generBill.BillState == 1) 
                 toolBar += "<input type=button value='删除草稿' onclick='DeleteIt();' />";
-            }
 
             if (generBill.BillState == 2) {
                 toolBar += "<input type=button value='删除单据' onclick='DeleteIt();' />";
             }
 
-            toolBar += "<input type='button' value='查询' id='Btn_Sarch' onclick='Search();' />";
-            toolBar += "<input type='button' value='分析' id='Btn_Group' onclick='Group();' />";
+            toolBar += "<input type='button' value='列表' id='Btn_Sarch' onclick='Search();' />";
+         //   toolBar += "<input type='button' value='分析' id='Btn_Group' onclick='Group();' />";
             toolBar += "<input type='button' value='关联单据' id='Btn_RefBill' onclick='RefBill();' />";
             toolBar += "<input type='button' value='草稿箱' id='Btn_RefBill' onclick='DraftBox();' />";
-
+            toolBar += "<input type='button' value='打印Html' id='Btn_PrintHtml' onclick='PrintHtml();' />";
+            toolBar += "<input type='button' value='打印pdf' id='Btn_PrintPdf' onclick='PrintPdf();' />";
+            toolBar += "<input type='button' value='打印word' id='Btn_Printwd' onclick='PrintWord();' />";
             $("#toolbar").html(toolBar);
         }
         //保存为草稿.
@@ -136,10 +145,13 @@
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_Delete");
-            window.close();
+            alert(data);
+
+            window.location.href = 'Search.htm?FrmID=' + GetQueryString("FrmID");
+            //window.close();
 
         }
-        
+
         function SaveItAndClose() {
 
             SaveIt();
@@ -153,7 +165,6 @@
             font-family: "微软雅黑";
             font-weight: normal;
         }
-        
         td
         {
             border-right-style: none;
@@ -439,7 +450,9 @@
     </div>
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
+        <div id="topContentDiv" class="row" style="padding: 5px 2px; margin: 0px auto;">
+    <div id="Title">  </div>
+
             <i class="topContentDiv-i" style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">

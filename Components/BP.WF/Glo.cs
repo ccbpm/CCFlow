@@ -28,6 +28,34 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+        /// <summary>
+        /// 处理多语言
+        /// </summary>
+        /// <param name="clsName"></param>
+        /// <param name="mark"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="p3"></param>
+        /// <param name="p4"></param>
+        /// <returns></returns>
+        public static string Multilingual(string clsName, string mark, string p1 = null, string p2 = null, string p3 = null, string p4 = null)
+        {
+            string docs = BP.DA.DataType.ReadTextFile(BP.Sys.SystemConfig.PathOfData + "\\Multilingual\\" + clsName + "." + BP.Web.WebUser.SysLang + ".txt");
+
+            string[] strs = docs.Split('#');
+
+            foreach (string str in strs)
+            {
+                string[] kvs = str.Split('=');
+                if (kvs[0] == mark)
+                {
+                    string val = kvs[1];
+                    return string.Format(val,  p1,p2,p3,p4);
+                }
+            }
+            return null;
+        }
+
         #region 公共属性.
         /// <summary>
         /// 打印文件

@@ -101,6 +101,17 @@ namespace BP.WF.DTS
                 }
 
                 Flow fl = new Flow(fk_flow);
+
+                if (fl.HisFlowAppType == FlowAppType.PRJ)
+                {
+                    if (paras.Contains("PrjNo=") == false || paras.Contains("PrjName=") == false)
+                    {
+                        info += "err@工程类的流程，没有PrjNo，PrjName参数:"+fl.Name;
+                        continue;
+                    }
+                }
+
+                Int64 workID = 0;
                 try
                 {
                     string fTable = "ND" + int.Parse(fl.No + "01").ToString();
@@ -128,18 +139,15 @@ namespace BP.WF.DTS
                     }
 
                     Work wk = fl.NewWork();
+                    workID = wk.OID;
                     string[] strs = paras.Split('@');
                     foreach (string str in strs)
                     {
                         if (string.IsNullOrEmpty(str))
-                        {
                             continue;
-                        }
 
                         if (str.Contains("=") == false)
-                        {
                             continue;
-                        }
 
                         string[] kv = str.Split('=');
                         wk.SetValByKey(kv[0], kv[1]);
@@ -147,6 +155,16 @@ namespace BP.WF.DTS
 
                     wk.SetValByKey("MainPK", mypk);
                     wk.Update();
+
+                    if (fl.HisFlowAppType == FlowAppType.PRJ)
+                    {
+                        string prjNo = wk.GetValStrByKey("PrjNo");
+                        if (DataType.IsNullOrEmpty(prjNo) == true)
+                        {
+                            info += "err@没有找到工程编号：MainPK" + mypk;
+                            continue;
+                        }
+                    }
 
                     WorkNode wn = new WorkNode(wk, fl.HisStartNode);
 
@@ -167,6 +185,10 @@ namespace BP.WF.DTS
                 }
                 catch (Exception ex)
                 {
+                    //删除流程数据
+                    if (workID != 0)
+                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workID);
+
                     //如果发送错误。
                     info += ex.Message;
                     string msg = ex.Message;

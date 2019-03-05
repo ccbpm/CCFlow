@@ -254,7 +254,7 @@ namespace BP.WF.CCBill
         /// <returns></returns>
         public string DoOpenBill()
         {
-            return "../../Bill/Search.htm?FrmID=" +
+            return "../../CCBill/Search.htm?FrmID=" +
               this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
         }
         public string DoAPI()

@@ -158,7 +158,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CCBill\Dev2Interface.cs" />
+    <Compile Include="CCBill\FrmBill.cs" />
+    <Compile Include="CCBill\GenerBill.cs" />
     <Compile Include="CCBill\Track.cs" />
+    <Compile Include="CCBill\WF_CCBill.cs" />
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />

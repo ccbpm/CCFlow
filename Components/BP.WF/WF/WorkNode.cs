@@ -2307,6 +2307,9 @@ namespace BP.WF
 
                 string textInfo = string.Format("@发送给如下{0}位处理人,{1}.", this.HisRememberMe.NumOfObjs.ToString(), this.HisGenerWorkFlow.GuestName);
 
+                //@发送给如下{0}位处理人,{1}.
+                //textInfo = Glo.Multilingual("WorkNode","zp100",this.HisRememberMe.NumOfObjs.ToString(), this.HisGenerWorkFlow.GuestName);
+
                 this.addMsg(SendReturnMsgFlag.ToEmps, textInfo, htmlInfo);
             }
             else
@@ -2377,7 +2380,7 @@ namespace BP.WF
             }
 
             //if (WebUser.IsWap == false)
-            //    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href=\"javascript:WinOpen('" + VirPath + "WF/Msg/SMS.aspx?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "');\" ><img src='" + VirPath + "WF/Img/SMS.gif' border=0 />发手机短信提醒他(们)</a>", SendReturnMsgType.Info);
+            // this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href=\"javascript:WinOpen('" + VirPath + "WF/Msg/SMS.aspx?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "');\" ><img src='" + VirPath + "WF/Img/SMS.gif' border=0 />发手机短信提醒他(们)</a>", SendReturnMsgType.Info);
 
 
             if (this.HisNode.HisFormType != NodeFormType.SDKForm || 1 == 1)
@@ -2391,10 +2394,11 @@ namespace BP.WF
 
             this.HisGenerWorkFlow.FK_Node = toND.NodeID;
             this.HisGenerWorkFlow.NodeName = toND.Name;
-
-
           
-            this.addMsg(SendReturnMsgFlag.WorkStartNode, "@下一步[" + toND.Name + "]工作成功启动.", "@下一步<font color=blue>[" + toND.Name + "]</font>工作成功启动.");
+           this.addMsg(SendReturnMsgFlag.WorkStartNode, "@下一步[" + toND.Name + "]工作成功启动.","WorkStartNode1");
+
+            //this.addMsg(SendReturnMsgFlag.WorkStartNode, Glo.Multilingual("WorkNode","WorkStartNode",toND.Name), "WorkStartNode1");
+
             #endregion
 
             #region  初始化发起的工作节点。

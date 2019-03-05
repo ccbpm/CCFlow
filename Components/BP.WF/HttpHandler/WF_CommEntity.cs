@@ -10,6 +10,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace BP.WF.HttpHandler
 {
@@ -305,9 +306,35 @@ namespace BP.WF.HttpHandler
                 refPKVal = refPKVal.Replace("/", "_");
             string filename = refPKVal + "_" + en.ToString() +"_"+DataType.CurrentData+ "_" + name  +".xls";
             string filePath = ExportDGToExcel(dtls.ToDataTableField(), en, name,null,filename);
-           
 
-            return filePath;
+            filePath = BP.Sys.SystemConfig.PathOfTemp + filename;
+
+            string tempPath = BP.Sys.SystemConfig.PathOfTemp + refPKVal+"\\";
+            if (System.IO.Directory.Exists(tempPath) == false)
+                System.IO.Directory.CreateDirectory(tempPath);
+
+            string myFilePath = BP.Sys.SystemConfig.PathOfDataUser + this.EnsName.Substring(0, this.EnsName.Length - 1);
+
+            foreach (Entity dt in dtls)
+            {
+                string pkval = dt.PKVal.ToString();
+                string ext = dt.GetValByKey("MyFileExt").ToString();
+                if (DataType.IsNullOrEmpty(ext) == true)
+                    continue;
+                myFilePath = myFilePath + "\\" + pkval + "." + ext;
+                if(System.IO.File.Exists(myFilePath) == true)
+                    System.IO.File.Copy(myFilePath, tempPath + pkval + "." + ext, true);
+            }
+            System.IO.File.Copy(filePath, tempPath + filename, true);
+
+            //生成压缩文件
+            string zipFile = BP.Sys.SystemConfig.PathOfTemp + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentData + "_" + name + ".zip";
+
+            System.IO.FileInfo finfo = new System.IO.FileInfo(zipFile);
+
+            (new FastZip()).CreateZip(finfo.FullName, tempPath, true, "");
+
+            return "/DataUser/Temp/" + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentData + "_" + name + ".zip";
         }
         #endregion 从表.
 

@@ -1251,7 +1251,7 @@ namespace BP.Sys
             //创建实体对象.
             MapData md = new MapData(frmID);
 
-            if (frmName != null)
+            if (DataType.IsNullOrEmpty(md.Name) == true)
                 md.Name = frmName;
 
             //加入主表信息.

@@ -161,23 +161,57 @@
 
                     html += "<td>" + InitMapAttrOfCtrl(mapAttr,dtl, pkval) + "</td>";
                 }
+
                 html += "<td ><a href=\"javascript:OpenEn('" + pkval + "')\">详细</a></td>";          
                 if (mapData.GetPara("IsDelete")=="1")
                  html += "<td><a href=\"javascript:Delete('"+pkval+"')\"><img src='../../Img/Btn/Delete.png' /></a></td>";
                 else
                   html += "<td></td>";
 
+              
+
                 html += "</tr>";
             }
             html += "</table>";
 
+            
             var html = $(html);
             $('#mytable').html("").append(html);
             $('#mytable').append(hidden);
+
+            for (var i = 0; i < dtls.length; i++) {
+
+                var dtl = dtls[i];
+                //dtl = new Entity("BP.Sys.GEDtl", dtl);
+                var pkval = dtl.OID;
+                if (pkval == undefined)
+                    pkval = dtl.MyPK;
+                if (pkval == undefined)
+                    pkval = dtl.No;
+                if (pkval == dtl.NodeID)
+                    pkval = dtl.NodeID;
+                if (pkval == dtl.WorkID)
+                    pkval = dtl.WorkID;
+                for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
+                    var mapAttr = mapAttrs[attrIdx];
+                    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+                        if ($("#TB_"+pkval+"_" + mapAttr.KeyOfEn + "Text").length == 1) {
+                            if (defValue == "")
+                                $("#TB_" + pkval + "_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + pkval + "_" + mapAttr.KeyOfEn + " option:first").text());
+                            else
+                                $("#TB_" + pkval + "_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + pkval + "_" + mapAttr.KeyOfEn).find("option:selected").text());
+                        }
+                    }
+                }
+            }
             
           
         }
-         
+
+        function ChangeKeyOfEnText(obj, KeyOfEn,pkval) {
+            if ($("#TB_" + pkval+"_" + KeyOfEn + "Text").length == 1)
+                $("#TB_" + pkval + "_" + KeyOfEn + "Text").val($(obj).find("option:selected").text());
+        }
 
         function InitMapAttrOfCtrl(mapAttr,dtl, pkval) {
 
@@ -186,6 +220,12 @@
             var isInOneRow = false; //是否占一整行
             var islabelIsInEle = false; //
             var eleHtml = '';
+
+            //加入隐藏控件.
+            if (mapAttr.UIVisible == 0) {
+               
+                html += "<input type='hidden' id='TB_" + pkval+"_" + mapAttr.KeyOfEn + "' name='TB_" +pkval+"_"+ mapAttr.KeyOfEn + "' value='" + defValue + "' />";
+            }
 
             //外部数据源类型.
             if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
@@ -196,7 +236,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select style='width:"+mapAttr.UIWidth*2+"px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='ChangeKeyOfEnText(this,\"" + mapAttr.KeyOfEn + "\",\""+pkval+"\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -236,7 +276,7 @@
                     if (mapAttr.UIIsEnable == 0)
                         enableAttr = "disabled='disabled'";
 
-                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:23px;' type='text'  " + enableAttr + " />";
+                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:34px;' type='text'  " + enableAttr + " />";
                 }
 
                 //普通的大块文本.
@@ -341,7 +381,6 @@
             }
 
             if (result != undefined && typeof (result) == 'string') {
-                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
             }
             return result = unescape(result);
         }

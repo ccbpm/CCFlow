@@ -29,8 +29,6 @@ $(function () {
 
     initPageParam(); //初始化参数.
 
-    if (pageData.OID == 0 || pageData.OID == undefined)
-        return;
 
     //构造表单.
     GenerFrm(); //表单数据.

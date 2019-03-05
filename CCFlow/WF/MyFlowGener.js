@@ -39,14 +39,36 @@ $(function () {
                 //window.opener.location.href = window.opener.location.href;
             }
         }
-        window.close();
-        if (window.parent != null && window.parent != undefined)
+
+        //提示消息有错误，页面不跳转
+        var msg = $("#msgModalContent").html();
+        if (msg.indexOf("err@") == -1)
+            window.close();
+        else {
+            setToobarEnable();
+            $("#msgModal").modal("hidden");
+
+        }
+
+        if (window.parent != null && window.parent != undefined) {
+           
             window.parent.close();
+        }
     });
 
 
     $('#btnMsgModalOK1').bind('click', function () {
-        window.close();
+
+        //提示消息有错误，页面不跳转
+        var msg = $("#msgModalContent").html();
+        if (msg.indexOf("err@") == -1)
+            window.close();
+        else {
+            setToobarEnable();
+            $("#msgModal").modal("hidden");
+
+        }
+
         if (window.parent != null && window.parent != undefined)
             window.parent.close();
         opener.window.focus();
@@ -886,12 +908,12 @@ function Send(isHuiQian) {
     //必填项和正则表达式检查.
     if (checkBlanks() == false) {
         alert("检查必填项出现错误，边框变红颜色的是否填写完整？");
-        return;
+       // return;
     }
 
     if (checkReg() == false) {
         alert("发送错误:请检查字段边框变红颜色的是否填写完整？");
-        return;
+        //return;
     }
 
     window.hasClickSend = true; //标志用来刷新待办.

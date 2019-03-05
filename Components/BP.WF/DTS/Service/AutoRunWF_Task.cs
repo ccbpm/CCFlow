@@ -107,6 +107,7 @@ namespace BP.WF.DTS
                     if (paras.Contains("PrjNo=") == false || paras.Contains("PrjName=") == false)
                     {
                         info += "err@工程类的流程，没有PrjNo，PrjName参数:"+fl.Name;
+                        DBAccess.RunSQL("UPDATE WF_Task SET TaskSta=2,Msg='" + info + "' WHERE MyPK='" + mypk + "'");
                         continue;
                     }
                 }
@@ -127,7 +128,7 @@ namespace BP.WF.DTS
                     }
                     catch
                     {
-                        info += "开始节点表单表:" + fTable + "没有设置的默认字段MainPK. " + sql; ;
+                        info += "开始节点表单表:" + fTable + "没有设置的默认字段MainPK. " + sql;
                         continue;
                     }
 
@@ -162,6 +163,7 @@ namespace BP.WF.DTS
                         if (DataType.IsNullOrEmpty(prjNo) == true)
                         {
                             info += "err@没有找到工程编号：MainPK" + mypk;
+                            DBAccess.RunSQL("UPDATE WF_Task SET TaskSta=2,Msg='" + info + "' WHERE MyPK='" + mypk + "'");
                             continue;
                         }
                     }

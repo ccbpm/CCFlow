@@ -3,32 +3,62 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>单据</title>
+    <title>单据查询</title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
     <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="gray-bg">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox-content">
-            <div class="row search-padding" style=" float:left">
-            <input type='text' placeholder="请输入关键词" id='TB_Key'  />
-            <input type="button" id="Btn_Search" onclick="javascript:SearchKey();" value="查询" />
-            <input type="button" id="Btn_New" onclick="javascript:New();" value="新建" />
+            <div class="row search-padding">
+                <div class="col-md-8 col-sm-8">
+                    <div id="TSpan">
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4 pull-right">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type='text' placeholder="请输入关键词" id='TB_Key' class="form-control" />
+                        </div>
+                        <button class="btn btn-success" type="button" onclick="javascript:SearchKey();">
+                            <i class="fa fa-search"></i>查询</button>
+                        <button class="btn btn-success" type="button" onclick="javascript:New();">
+                            <i class="fa fa-new"></i>新建</button>
+                    </div>
+                </div>
             </div>
-           
+            <div class="row search-padding">
+                <div class="col-md-12 col-sm-12">
+                    <div id="Flows">
+                    </div>
+                </div>
+            </div>
             <table class="table table-striped">
                 <thead id="Table2">
                     <tr>
-                        <th>#</th>
-                        <th>单号</th>
-                        <th>标题</th>
-                        <th width='60'> 发起人 </th>
-                        <th>制单日期</th>
-                        <th>编辑日期</th>
-                        <th width='60'>状态</th>
-                        <th width='60'>操作</th>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            标题
+                        </th>
+                        <th width='60'>
+                            发起人
+                        </th>
+                        <th>
+                            制单日期
+                        </th>
+                        <th>
+                            编辑日期
+                        </th>
+                        <th width='60'>
+                            状态
+                        </th>
+                        <th width='60'>
+                            操作
+                        </th>
                     </tr>
                 </thead>
                 <tbody id="Table1">
@@ -56,6 +86,7 @@
                 return;
 
             var url = "";
+
             var _billState = GetQueryString("BillState");
             if (_billState == undefined || _billState == null || _billState == "" || _billState == "null") {
                 _billState = 0;
@@ -78,7 +109,7 @@
             handler.AddPara("FrmID", _frmID);
             handler.AddPara("TSpan", _tspan);
             handler.AddPara("BillState", _billState);
-            var data = handler.DoMethodReturnString("Search_Init");
+            var data = handler.DoMethodReturnString("SearchData_Init");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 $("#Msg").html(data);
@@ -87,7 +118,6 @@
 
             var data = JSON.parse(data);
 
-            /*
             //时间段列表. 
             var tSpans = data['TSpan'];
             if (_tspan == "-1")
@@ -120,9 +150,7 @@
 
                 html += "<button class=\"btn btn-default \"  onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</button> ";
             }
-            $("#Flows").html(html); 
-            */
-
+            $("#Flows").html(html);
 
             // 流程实例列表.
             var ens = data['WF_CCBill'];
@@ -151,10 +179,9 @@
                 // 获得颜色.
                 var color = GenerColor(en.BillState, isCanDo);
 
+
                 htmlbox += "<tr >";
                 htmlbox += "<td class=Idx>" + realIndex + "</td>";
-
-                htmlbox += "<td><font color='" + color + "'>" + en.BillNo + "</font></td>";
 
                 htmlbox += "<td><a href=\"javascript:OpenIt('" + en.BillState + "','" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\">" + en.Title + "</td>";
 
@@ -365,7 +392,7 @@
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddPara("TB_KWds", val);
 
-            var data = handler.DoMethodReturnString("Search_Init");
+            var data = handler.DoMethodReturnString("SearchData_Init");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -428,8 +455,13 @@
                 else
                     htmlboxs += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
 
+
                 htmlboxs += "<td><font color='" + color + "'>" + GetBillState(en.BillState, isCanDo) + "</font></td>";
+
                 htmlboxs += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.BillState, en.FrmID, en.FK_Node, en.FID, isCanDo) + "</font></td>";
+
+                //  html += "<td><font color='" + color + "'>" + en.Emps + "</font></td>";
+
                 htmlboxs += "</tr>";
 
             });

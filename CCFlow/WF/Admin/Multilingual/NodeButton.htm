@@ -51,7 +51,6 @@
             var left = "<ul>";
             left += "<li><a href='?FrmID=" + frmID + "&Sort=Field&SelectLangue=" + selectLangue + "'>字段</a></li>";
             left += "<li><a href='?FrmID=" + frmID + "&Sort=Label&SelectLangue=" + selectLangue + "'>标签</a></li>";
-            left += "<li><a href='?FrmID=" + frmID + "&Sort=Group&SelectLangue=" + selectLangue + "'>分组</a></li>";
             left += "</ul>";
             $("#Left").html(left);
 
@@ -111,6 +110,7 @@
                 var lan = langs[i];
                 $("#" + lan.SortKey).val(lan.Val);
             }
+
         }
 
         //绑定label.

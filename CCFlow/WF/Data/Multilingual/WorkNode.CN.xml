@@ -1,0 +1,10 @@
+﻿<!--
+ //this.addMsg(SendReturnMsgFlag.WorkStartNode, Glo.Multilingual("WorkNode","WorkStartNode",toND.Name), "WorkStartNode1");
+-->
+<table>
+<item Key="WorkStartNode"  Val="WorkStartNode=@下一步{0}工作成功启动." Desc="" />
+<item Key="zp100"  Val="@发送给如下{0}位处理人,{1}." Desc="" />
+</table>
+
+
+

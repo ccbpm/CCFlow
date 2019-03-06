@@ -193,11 +193,7 @@ namespace BP.Sys.FrmUI
         /// 设置填充其他下拉框
         /// </summary>
         /// <returns></returns>
-        public string DoDDLFullCtrl()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=DDLFullCtrl_" + this.FK_MapData + "_" + this.KeyOfEn;
-        }
-
+        
         public string DoDDLFullCtrl2019()
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);

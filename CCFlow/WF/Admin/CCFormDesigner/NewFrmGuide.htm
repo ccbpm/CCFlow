@@ -24,7 +24,7 @@
             //创建数据源.
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
 
-            //  var sort = GetQueryString("FK_FrmSort");
+            // var sort = GetQueryString("FK_FrmSort");
             // $("#HD_FK_FormTree").val(sort);
 
             //创建表单树.
@@ -43,32 +43,6 @@
 
             var tables = data["Tables"];
             GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
-            return;
-
-            //            $.ajax({
-            //                type: 'post',
-            //                async: true,
-            //                url: Handler + "?DoType=NewFrmGuide_Init&m=" + Math.random(),
-            //                dataType: 'html',
-            //                success: function (data) {
-
-            //                    $("#Msg").html("");
-
-            //                    if (data.indexOf('err@') >= 0) {
-            //                        $("#Msg").html("<font color=red>" + data + "</font>");
-            //                        return;
-            //                    }
-
-            //                    data = JSON.parse(data);
-
-            //                    var tables = data["Tables"];
-            //                    GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
-            //                    return;
-            //                }
-            //            });
-
-
-            $("#Msg").html("");
             return;
 
         });
@@ -119,15 +93,23 @@
 <body>
     <form id="cc">
     <table style="width: 95%;">
-        <caption>
-            创建独立表单</caption>
-        <tr>
-            <td class="Idx">
-                1
+        <caption> 创建独立表单</caption>
+
+          <tr>
+            <td class="Idx"> 0 </td>
+            <td> 表单工作模式</td>
+            <td>
+                <select name="DDL_FrmBillWorkModel" id="DDL_FrmBillWorkModel" onchange="FrmTypeChange()" />
             </td>
             <td>
-                创建的表单类型
+                .
             </td>
+        </tr>
+
+
+        <tr>
+            <td class="Idx"> 1 </td>
+            <td> 创建的表单类型</td>
             <td>
                 <select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()" />
             </td>

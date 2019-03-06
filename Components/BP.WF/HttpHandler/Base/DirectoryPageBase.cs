@@ -1096,6 +1096,9 @@ namespace BP.WF.HttpHandler
                         if (attr.Key == "MyNum")
                             continue;
 
+                        if (attr.Key == "WorlID")
+                            continue;
+
                         if (attr.MyDataType == DataType.AppBoolean)
                         {
                             strLine = strLine + (dr[attr.Key].Equals(1) ? "是" : "否") + Convert.ToChar(9);

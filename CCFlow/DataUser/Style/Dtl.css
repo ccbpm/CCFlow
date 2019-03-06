@@ -13,10 +13,14 @@ table
 table th
 {
     border: 1px solid #D0D0D0;
-    padding: 1px 3px;
+    padding: 1px 4.9px;
     background-color: #F9F9F9;
     font-weight: normal;
     font-style: normal;
+}
+.thStyle
+{
+   padding: 1px 3.9px;  
 }
 table td
 {

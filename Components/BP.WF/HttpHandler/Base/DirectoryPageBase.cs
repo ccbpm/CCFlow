@@ -1059,6 +1059,9 @@ namespace BP.WF.HttpHandler
                     if(attr.Key.Equals("OID"))
                         continue;
 
+                    if (attr.Key.Equals("WorlID"))
+                        continue;
+
                     if (attr.Key.Equals("MyNum"))
                         continue;
 

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitBar(FormType.FoolForm);
+
+            var html = "";
+
+            //获取节点属性.
+            var frmSort = GetQueryString("FK_FrmSort");
+
+        });
+
+        function SetDDLEnable(ctrl, val) {
+            if (val == "enable")
+                $("#" + ctrl).attr("disabled", "disabled");
+            else
+                $("#" + ctrl).removeAttr("disabled");
+        }
+
+        function Save() {
+
+            //更新节点表单类型.
+            var frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+            node.FormType = FormType.FoolForm;
+            var frmValue = $("input[name='RefFrm']:checked").val();
+
+            if (frmValue == "0") {
+                node.NodeFrmID = "";
+            }
+            if (frmValue == "1") {
+                node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
+            }
+
+            //上一个节点表单.
+            if (frmValue == "2") {
+                node.NodeFrmID = "Pri";
+            }
+
+            node.Update();
+
+            //更新表单类型.
+            var frmID = "ND" + frmSort;
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+            mapData.FrmType = FormType.FoolForm;
+            mapData.Update();
+
+            alert("保存成功.");
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+
+    <fieldset>
+        <legend>说明</legend>
+        <ul>
+            <li>该表单有4个列,设计简单方便.</li>
+            <li>
+                <img src='../../Img/Col4Frm.JPG' style="width: 70%;" />
+            </li>
+        </ul>
+    </fieldset>
+</body>
+</html>

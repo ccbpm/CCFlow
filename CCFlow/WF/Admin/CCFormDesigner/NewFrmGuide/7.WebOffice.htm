@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
+    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script  type="text/javascript">
+        var frmSort = 0;
+        var fk_flow = "";
+        $(function () {
+            InitBar(FormType.WebOffice);
+            //获取节点属性
+            frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+            fk_flow = node.FK_Flow;
+
+            var btnLab = new Entity("BP.WF.Template.BtnLab", frmSort);
+            var btnOffice = new Entity("BP.WF.Template.BtnLabExtWebOffice", frmSort);
+
+            //使用公文表单..
+            if (node.FormType == FormType.WebOffice) {
+                document.getElementById("RB_WebOffice_FrmFirst").checked = true;
+
+                var FrmFirst = 2;
+                if (btnOffice.WebOfficeEnable == WebOfficeWorkModel.FrmFirst)
+                    document.getElementById("RB_WebOffice_FrmFirst").checked = true;
+                else
+                    document.getElementById("RB_WebOffice_WordFirst").checked = true;
+
+                //表单工作模式.
+                if (btnOffice.WebOfficeFrmModel == FormType.FreeForm)
+                    document.getElementById("RB_WebOffice_FreeFrm").checked = true;
+                else
+                    document.getElementById("RB_WebOffice_FoolForm").checked = true;
+
+            }
+
+        });
+
+        //设置表单字段控件权限
+        function BindAttrs() {
+            var url = "../../Sln/BindFrms.htm?FK_FrmSort=" + frmSort + "&FK_Flow=" + fk_flow;
+            OpenEasyUiDialogExt(url, '绑定列表', 800, 500, false);
+        }
+
+        function BindAttrsBtn() {
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.BtnLabExtWebOffice&PKVal=" + frmSort + "&FK_Flow=" + fk_flow;
+            OpenEasyUiDialogExt(url, '公共属性控件', 800, 600, false);
+        }
+
+        function Save() {
+            //节点
+            frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+            node.FormType = FormType.WebOffice;
+            node.Update();
+
+            //按钮
+            var btnLab = new Entity("BP.WF.Template.BtnLabExtWebOffice", frmSort);
+            var WebOfficeStyle = $("input[name='WebOfficeStyle']:checked").val();
+            if (WebOfficeStyle == "0")
+                    btnLab.WebOfficeEnable = WebOfficeWorkModel.FrmFirst;
+                else
+                    btnLab.WebOfficeEnable = WebOfficeWorkModel.WordFirst;
+
+            var WebOfficeFrmType = $("input[name='WebOfficeFrmType']:checked").val(); 
+            if (WebOfficeFrmType == "0")
+                    btnLab.WebOfficeFrmModel = FormType.FoolForm;
+                else
+                    btnLab.WebOfficeFrmModel = FormType.FreeForm;
+             btnLab.Update();
+
+            //更新表单类型.
+            var frmID = "ND" + frmSort;
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+            mapData.FrmType = FormType.WebOffice;
+            mapData.Update();
+
+            alert("保存成功.");
+        }
+
+    </script>
+</head>
+<body >
+
+<div id="bar"> </div>
+
+<fieldset>
+    <legend>设置</legend>
+    <div style="margin-top:10px;margin-bottom:10px">
+         <b>呈现风格：</b>
+         <input type="radio"  value="0" id="RB_WebOffice_FrmFirst" checked=true  name="WebOfficeStyle" /><label  for="RB_WebOffice_FrmFirst" >表单在前面 </label>
+         <input type="radio"  value="1" id="RB_WebOffice_WordFirst" name="WebOfficeStyle" /><label  for="RB_WebOffice_WordFirst" >公文在前面 </label>
+
+         <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;表单工作模式：</b>
+         <input type="radio"  value="1" id="RB_WebOffice_FreeFrm" checked=true  name="WebOfficeFrmType" /> <label  for="RB_WebOffice_FreeFrm" >自由表单显示 </label>
+         <input type="radio"  value="0" id="RB_WebOffice_FoolForm"  name="WebOfficeFrmType" /> <label  for="RB_WebOffice_FoolForm" >傻瓜表单显示 </label>
+     </div>
+</fieldset>
+<fieldset>
+    <legend>说明</legend>
+    <ul>
+        <li> <a href="javascript:BindAttrs()">设置附件权限</a> - <a href="javascript:BindAttrsBtn()" >设置公文按钮权限</a> </li>
+        <font color="gray">
+             <li>我们把一个节点需要绑定多个表单的节点称为多表单节点，它有两种展现方式，标签页与表单树。</li>
+             <li>对应的流程demo:\\流程树\\表单解决方案\\树形表单与多表单 </li>
+             Doc.png
+         </font>
+     </ul>
+</fieldset>
+</body>
+</html>

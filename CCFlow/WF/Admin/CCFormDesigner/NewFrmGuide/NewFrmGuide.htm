@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>创建表单</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var frmWorkModel = GetQueryString("FrmWorkModel");
+
+        });
+
+        function NewBill() {
+            var url = "0.FoolForm.htm?FK_FrmSort=" + GetQueryString("FK_FrmSort") + "&FormWorkMode=1";
+            window.location.href = url;
+        }
+        function NewFrm() {
+            var url = "0.FoolForm.htm?FK_FrmSort=" + GetQueryString("FK_FrmSort") + "&FormWorkMode=0";
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+    <table style="width: 99%;">
+        <caption>
+            请选择表单工作模式</caption>
+        <tr>
+            <th colspan=2>
+              流程表单挂接模式
+            </th>
+        </tr>
+        <tr>
+            <td valign="top">
+                <ul>
+                    <li>该模式用于绑定到流程的节点上，与ccbpm的流程结合.</li>
+                    <li>多用于一个节点有多个表单，或者分合流节点上。</li>
+                    <li>独立表单支持，ccbpm内置的傻瓜表单、自由表单、嵌入（定义）式表单、VSTO表单等类型</li>
+                    <li>右图就是表单树绑定的流程独立表单。</li>
+                    <li><a href="javascript:NewFrm()"><img src='../../../Img/Btn/New.gif' />创建独立表单</a></li>
+                </ul>
+            </td>
+
+            <td>
+            <img src="../../AttrNode/Img/Tree.png" width="400px" alt="" />
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">单据模式</th>
+        </tr>
+        <tr>
+            <td valign="top">
+                <ul>
+                    <li>单据模式，就是当前的表单以单据的方式出现的。</li>
+                    <li>创建一个表单对应一个表，对该表进行增、删、改、查、打印、统计分析操作。</li>
+                    <li>比如：客户台账、采购单、入库单、联系人、固定资产台账等等...</li>
+                    <li>单据模式支持简易的流程审批操作。</li>
+                    <li>该模式下的表单仍然可以被流程树所绑定。</li>
+                    <li>单据模式仅仅支持ccbpm内置的傻瓜表单、自由表单两种类型</li>
+                    <li><a href="javascript:NewBill()"><img src='../../../Img/Btn/New.gif' />创建单据</a></li>
+
+                </ul>
+            </td>
+
+              <td>
+              <a href="javascript:WinOpen('../../AttrNode/Img/Bill.png');">
+             <img src="../../AttrNode/Img/Bill.png" width="400px" alt=""/></a>
+            </td>
+        </tr>
+    </table>
+
+    <input  type="button" value="下一步" />
+    </form>
+</body>
+</html>

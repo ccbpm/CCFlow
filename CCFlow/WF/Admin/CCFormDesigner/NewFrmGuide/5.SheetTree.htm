@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
+    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script  type="text/javascript">
+        var frmSort = 0;
+        var fk_flow = "";
+        $(function () {
+
+            InitBar(FormType.SheetTree);
+            var html = "";
+            //获取节点属性
+            frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+            fk_flow = node.FK_Flow;
+            //表单树.
+            if (node.FormType == FormType.SheetTree) {
+                document.getElementById("RB_tree").checked = true;
+            }
+
+            if (node.FormType == FormType.DisableIt) {
+                document.getElementById("RB_tab").checked = true;
+            }
+
+            var ens = new Entities("BP.WF.Template.FrmNodes");
+            ens.Retrieve("FK_FrmSort", frmSort);
+
+            var num = ens.length - 1;
+            if (num == -1)
+                num = 0;
+
+
+            var html = "共有：<font color=red><b>" + num + "</b></font>个表单被绑定.";
+
+            $("#InfoBind").html(html);
+
+        });
+
+        //绑定/取消绑定
+        function BindFrms() {
+            var url = "../../Sln/BindFrmsDtl.htm?FK_FrmSort=" + frmSort + "&FK_Flow=" + fk_flow + "&DoType=SelectedFrm";
+            //获取屏幕的长宽
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 80;
+            OpenEasyUiDialogExt(url, '绑定表单树', W, H, false, true);
+        }
+
+        function Ref() {
+            window.location.href = window.location.href;
+        }
+
+        //设置表单字段控件权限
+        function BindAttrs() {
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 20;
+            var url = "../../Sln/BindFrms.htm?FK_FrmSort=" + frmSort + "&FK_Flow=" + fk_flow;
+            OpenEasyUiDialogExt(url, '绑定列表', W, H, false, true);
+        }
+
+        function Save() {
+            frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+            var fromKey = $("input[name='SheetTreeModel']:checked").val();
+            if (fromKey == "0") {
+                node.FormType = FormType.SheetTree;
+            } else {
+                node.FormType = FormType.DisableIt;
+            }
+
+            node.Update();
+
+            //更新表单类型.
+            //            var frmID = "ND" + frmSort;
+            //            var mapData = new Entity("BP.Sys.MapData", frmID);
+            //            mapData.FrmType = node.FormType;
+            //            mapData.Update();
+
+            alert("保存成功.");
+        }
+
+
+        ///设置该流程的所有节点都是用该方案。
+        function SetAllNodeFrmUseThisSln() {
+
+            if (confirm('您确定要设置吗？') == false)
+                return;
+
+            var frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+
+            var flowNo = node.FK_Flow;
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo);
+
+            for (var i = 0; i < nds.length; i++) {
+
+                var jsNode = nds[i];
+
+                var node = new Entity("BP.WF.Node", jsNode);
+
+                node.FormType = FormType.SheetTree;
+                node.NodeFrmID = "ND" + node.frmSort;
+                node.Update();
+
+                //更新表单类型.
+                var frmID = "ND" + node.frmSort;
+                var mapData = new Entity("BP.Sys.MapData", frmID);
+                mapData.FrmType = FormType.FoolForm;
+                mapData.Update();
+            }
+            alert('设置成功.');
+            window.location.href = window.location.href;
+        }
+     
+    </script>
+</head>
+<body >
+
+<div id="bar"> </div>
+
+
+<table style="width:100%;">
+<tr>
+
+
+
+<td valign=top> 
+<fieldset>
+    <legend>绑定表单</legend>
+    <ul>
+    <li>  <a href="javascript:BindFrms()" >绑定/取消绑定表单</a> </li>
+        <li>设置该节点上需要绑定那些表单。</li>
+    <li>这些表单在从表单库里选择。</li>
+    <li><div id="InfoBind"></div></li>
+
+    </ul>
+     
+
+</fieldset>
+</td>
+
+
+<td valign=top> 
+<fieldset>
+    <legend>设定每个表单的权限</legend>
+    <ul>
+    <li>  <a href="javascript:BindAttrs()" >设置表单字段控件权限</a></li>
+    <li>设置表单权限。</li>
+    <li>可以控制那些表单可以显示，那些表单主键类型。</li>
+    </ul>
+</fieldset>
+
+</td>
+
+
+
+<td valign=top> 
+<fieldset>
+    <legend>呈现风格</legend>
+
+    <ul>
+    <li>
+    <input type="radio"  value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label  for="RB_tree" >表单树 </label></li>
+
+    <li>
+    <input type="radio"  value="1" id="RB_tab"  name="SheetTreeModel" /> <label  for="RB_tab" >Tab标签页 </label>
+    </li>
+
+    <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
+
+    <li> <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
+
+    </ul>
+</fieldset>
+</td>
+
+
+</tr>
+</table>
+
+
+
+
+
+<fieldset>
+    <legend>说明</legend>
+    <font color="gray">
+        <ul>
+             <li>我们把一个节点需要绑定多个表单的节点称为多表单节点，它有两种展现方式，标签页与表单树。</li>
+             <li>对应的流程demo:\\流程树\\表单解决方案\\树形表单与多表单 </li>
+             <li><img src='../Img/Tree.png' border="0px" style="width:70%;"  /> </li>
+
+        </ul>
+    </font>
+</fieldset>
+</body>
+</html>

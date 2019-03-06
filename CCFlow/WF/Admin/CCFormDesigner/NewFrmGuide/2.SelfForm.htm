@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
+    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script  type="text/javascript">
+        var frmSort = 0;
+        $(function () {
+            InitBar(FormType.SelfForm);
+            //获取节点属性
+            frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+            if (node.FormType == FormType.SelfForm) {
+                document.getElementById("TB_CustomURL").value = node.FormUrl;
+            }
+
+        });
+
+        //节点表单组件属性.
+        function ShowFWCAttr() {
+            var frmSort = GetQueryString("FK_FrmSort");
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + frmSort;
+            OpenEasyUiDialogExt(url, '节点表单组件', 1000, 600, false);
+        }
+
+
+        function Save() {
+
+            //更新节点表单类型.
+            var frmSort = GetQueryString("FK_FrmSort");
+            var node = new Entity("BP.WF.Node", frmSort);
+            node.FormType = FormType.SelfForm;
+            node.FormUrl = document.getElementById("TB_CustomURL").value;
+            node.Update();
+
+            //更新表单类型.
+            var frmID = "ND" + frmSort;
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+            mapData.FrmType = FormType.SelfForm;
+            mapData.Update();
+
+            alert("保存成功.");
+
+        }
+    </script>
+</head>
+<body >
+
+<div id="bar"> </div>
+
+<fieldset>
+    <legend>设置</legend>
+    请输入嵌入式表单的URL:<br />
+    <input type="text" value=""  id="TB_CustomURL" name="TB_CustomURL" style=" width:90%;Height:20px;" />
+</fieldset>
+
+<fieldset>
+<legend>说明</legend>
+<ul>
+  <li>该表单必须有javascript 的 Save保存方法，该Save方法里如果需要执行存盘，并验证。</li>
+  <li>您输入的Url可以有参数，但是系统会把所有的参数附件到该url后面。</li>
+  <li>例如:/SDKFlowDemo/QingJia/SDKQianRuFangShiForm.htm</li>
+  <li>比如:您配置的url为 http://xxxx:222:/abc.htm 系统实际的Url为 http://xxxx:222:/abc.htm?FK_Flow=xxx&FK_FrmSort=xxx&WorkID=xxx&UserNo=xxx&SID=xxx</li>
+  <li>如果使用绝对路径可以使用ccbpm的全局变量@SDKFromServHost ，比如: @SDKFromServHost/MyFile.aspx </li>
+  <li>ccbpm团队为您提供了一个嵌入式表单的 demo ，位于:\\流程树\\表单解决方案\\嵌入式表单. </li>
+  <li><a href="javascript:ShowFWCAttr()">组件属性</a></li>
+</ul>
+</fieldset>
+
+    <img src="SelfFrm.png" />
+
+</body>
+</html>

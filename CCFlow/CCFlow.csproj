@@ -637,6 +637,7 @@
     <Content Include="WF\Admin\AttrNode\FrmSln\Default.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\SDKFrm.png" />
     <Content Include="WF\Admin\AttrNode\FrmSln\SelfFrm.png" />
+    <Content Include="WF\Admin\AttrNode\Img\Bill.png" />
     <Content Include="WF\Admin\AttrNode\Img\CC.png" />
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
     <Content Include="WF\Admin\AttrNode\Img\Cond.png" />
@@ -1151,6 +1152,7 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\text.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide0.htm" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
@@ -1234,6 +1236,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\AttachmentFix.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\AttachmentSortSetting.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Bill\API.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\CreateSFGuide.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\DefVal.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.htm" />
@@ -1297,6 +1300,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\FastInput.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\FastInput.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Img\AutoFullDtlField.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\Img\DDLFullCtrl2019.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Link.htm" />
@@ -1361,6 +1365,9 @@
     <Content Include="WF\Admin\Img\Frm.png" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Multilingual\CCForm.htm" />
+    <Content Include="WF\Admin\Multilingual\FlowName.htm" />
+    <Content Include="WF\Admin\Multilingual\FlowSort.htm" />
+    <Content Include="WF\Admin\Multilingual\NodeButton.htm" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
     <Content Include="WF\Admin\RptDfine\Default.htm" />
@@ -1408,8 +1415,17 @@
     <Content Include="WF\AppClassic\Welcome.htm" />
     <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.htm" />
+    <Content Include="WF\BatchList.htm" />
     <Content Include="WF\BatchStart.htm" />
     <Content Include="WF\CC.htm" />
+    <Content Include="WF\CCBill\Draft.htm" />
+    <Content Include="WF\CCBill\Group.htm" />
+    <Content Include="WF\CCBill\MyBill.htm" />
+    <Content Include="WF\CCBill\MyBill.js" />
+    <Content Include="WF\CCBill\Opt\RefBill.htm" />
+    <Content Include="WF\CCBill\Search.htm" />
+    <Content Include="WF\CCBill\SearchData.htm" />
+    <Content Include="WF\CCBill\Start.htm" />
     <Content Include="WF\ccbpmAPI.js" />
     <Content Include="WF\CCForm\2018Dtl.htm" />
     <Content Include="WF\CCForm\Ath.htm" />
@@ -1738,9 +1754,12 @@
     <Content Include="WF\Data\Install\SQLScript\InitPublicData.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitView_Ora.sql" />
+    <Content Include="WF\Data\Install\SQLScript\InitView_PostgreSQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitView_SQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
     <Content Include="WF\Data\JSLibData\CovertMoneyToDaXie.js" />
+    <Content Include="WF\Data\Multilingual\WorkNode.CN.xml" />
+    <Content Include="WF\Data\Multilingual\WorkNode.EN.txt" />
     <Content Include="WF\Data\SysFields.txt" />
     <Content Include="WF\Data\Sys\FieldKeys.txt" />
     <Content Include="WF\Data\Templete\SysFields.txt" />

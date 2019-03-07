@@ -843,7 +843,7 @@
             return;
         }
 
-        ///保存方法》
+        ///保存方法
         function SaveFlow(_canvas) {
 
             //获取所有节点信息.
@@ -871,7 +871,7 @@
                         if (myID != nodeIDStr)
                             continue;
 
-                        nodePos += "@" + node + "," + nodeJSON.left + "," + nodeJSON.top;
+                        nodePos += "@" + node.NodeID + "," + nodeJSON.left + "," + nodeJSON.top;
                         break;
                     }
                 }

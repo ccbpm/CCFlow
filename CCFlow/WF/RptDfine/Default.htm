@@ -21,7 +21,7 @@
 
         //初始化页面函数.....
         $(function () {
-
+            var fk_flow = GetQueryString("FK_Flow");
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Default_Init");

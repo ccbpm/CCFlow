@@ -109,6 +109,8 @@ namespace BP.WF.HttpHandler
                 string[] nodes = this.GetRequestVal("Nodes").Split('@');
                 foreach (string item in nodes)
                 {
+                    if (item == ""||item == null)
+                        continue;
                     string[] strs = item.Split(',');
                     sql = "UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0];
                     DBAccess.RunSQL(sql);
@@ -118,8 +120,12 @@ namespace BP.WF.HttpHandler
                 string[] dirs = this.GetRequestVal("Dirs").Split('@');
                 foreach (string item in dirs)
                 {
+                    if (item == "" || item == null)
+                        continue;
                     string[] strs = item.Split(',');
-                    sql = "insert into WF_Direction(MyPK,FK_Flow,Node,ToNode,IsCanBack) values(" + strs[0] + "," + strs[1] + "," + strs[2] + "," + strs[3] + ","+"0)";
+                    String sql1 = "delete from WF_Direction where MyPK='" + strs[0] + "'";
+                    DBAccess.RunSQL(sql1);
+                    sql = "insert into WF_Direction(MyPK,FK_Flow,Node,ToNode,IsCanBack) values('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0)";
                     DBAccess.RunSQL(sql);
                 }
 
@@ -127,6 +133,8 @@ namespace BP.WF.HttpHandler
                 string[] labs = this.GetRequestVal("Labs").Split('@');
                 foreach (string item in labs)
                 {
+                    if (item == "" || item == null)
+                        continue;
                     string[] strs = item.Split(',');
                     sql = "UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0];
                     DBAccess.RunSQL(sql);

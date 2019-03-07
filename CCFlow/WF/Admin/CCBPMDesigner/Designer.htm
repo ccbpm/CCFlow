@@ -722,17 +722,14 @@
             });
 
         });
-        function SaveFlow(_canvas) {
 
+        function SaveFlow2018(_canvas) {
 
             //获取所有节点信息.
             try {
 
-
-
                 var nodes = new Entities("BP.WF.Template.NodeSimples");
                 nodes.Retrieve("FK_Flow", flowNo);
-
 
                 // 保存x,y位置.
                 var processInfo = _canvas.getProcessInfo(); //连接信息.
@@ -833,6 +830,117 @@
                 // 清除流程缓存，并修复数据.
                 var flow = new Entity("BP.WF.Flow", flowNo);
                 flow.DoMethodReturnString("DoCheck");
+
+            }
+            catch (e) {
+                alert(e);
+            }
+
+            //alert('保存成功!');
+
+            $("#Btn_Save").attr("disabled", false);
+            $("#Btn_Save").html("保存");
+            return;
+        }
+
+        ///保存方法》
+        function SaveFlow(_canvas) {
+
+            //获取所有节点信息.
+            try {
+
+                var nodes = new Entities("BP.WF.Template.NodeSimples");
+                nodes.Retrieve("FK_Flow", flowNo);
+
+                // 保存x,y位置.
+                var processInfo = _canvas.getProcessInfo(); //连接信息.
+                processInfo = JSON.parse(processInfo);
+
+                //定义要生成的字符串.
+                var nodePos = "";
+                for (var nodeID in processInfo) {
+
+                    var nodeIDStr = JSON.stringify(nodeID);
+
+                    var nodeJSON = processInfo[nodeID];
+
+                    for (var idx = 0; idx < nodes.length; idx++) {
+
+                        var node = nodes[idx];
+                        var myID = "\"" + node.NodeID + "\"";
+                        if (myID != nodeIDStr)
+                            continue;
+
+                        nodePos += "@" + node + "," + nodeJSON.left + "," + nodeJSON.top;
+                        break;
+                    }
+                }
+
+                //方向的字符串.
+                var myDirs = "";
+
+                //保存方向.
+                for (var nodeID in processInfo) {
+
+                    //获得toNode.
+                    var nodeJSON = processInfo[nodeID];
+                    var strs = JSON.stringify(nodeJSON);
+
+                    //获得toNode.
+                    var toNodes = nodeJSON.process_to;
+                    if (toNodes == "")
+                        continue;
+
+                    if (nodeID == undefined
+                            || nodeID == null
+                            || nodeID == "undefined"
+                            || nodeID == 'undefined') {
+                        continue;
+                    }
+
+                    for (var i = 0; i < toNodes.length; i++) {
+
+                        var toNodeID = toNodes[i];
+
+                        if (toNodeID == undefined
+                            || toNodeID == null
+                            || toNodeID == "undefined"
+                            || toNodeID == 'undefined') {
+
+                            var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
+                            alert('保存出错: \t\n\t\n1.节点[' + fromNode.Name + ']到达节点没有把线连接正确.\t\n2.请您关闭当前流程，重新打开然后连接，执行保存。 \t\n3.其余的方向条件保存成功.');
+                            $("#Btn_Save").attr("disabled", false);
+                            $("#Btn_Save").html("保存");
+                            continue;
+                        }
+                        var MyPK = flowNo + "_" + nodeID + "_" + toNodeID;
+                        myDirs += "@" + MyPK + "," + flowNo + "," + nodeID + "," + toNodeID;
+                    }
+                }
+
+
+                var labs = "";
+                //标签.
+                var labNoteInfo = _canvas.getLabNoteInfo(); //标签信息.
+                labNoteInfo = JSON.parse(labNoteInfo);
+                for (var lab in labNoteInfo) {
+
+                    var labJSON = labNoteInfo[lab];
+
+                    labs += "@" + lab + "," + labJSON.left + "," + labJSON.top;
+                }
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+                handler.AddPara("Nodes", nodePos);
+                handler.AddPara("Dirs", myDirs);
+                handler.AddPara("Labs", labs);
+                handler.AddPara("FK_Flow", flowNo);
+                var data = handler.DoMethodReturnString("Designer_Save");
+
+                if (data.indexOf('err@') != 0) {
+                    alert(data);
+                }
+
 
             }
             catch (e) {

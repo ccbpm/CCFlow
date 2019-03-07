@@ -1209,6 +1209,8 @@ namespace BP.WF.Template
                         gwl.IsPass = false;
                         currWl = gwl;
                     }
+                    else
+                        gwl.IsPass = true;
 
                     gwl.FK_Emp = EmpFrom;
                     gwl.FK_EmpText = EmpFromT;
@@ -1220,7 +1222,7 @@ namespace BP.WF.Template
 
                     gwl.SDT = dr["RDT"].ToString();
                     gwl.DTOfWarning = gwf.SDTOfNode;
-                   // gwl.WarningHour = nd.WarningHour;
+                   
                     gwl.IsEnable = true;
                     gwl.WhoExeIt = nd.WhoExeIt;
                     gwl.Insert();

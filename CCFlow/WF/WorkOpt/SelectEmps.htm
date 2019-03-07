@@ -206,7 +206,8 @@
             }).on('changed.jstree', function (node, cb) {
                 GetSelectedEmpsReturnVal();
             }).bind("loaded.jstree", function (event, data) {
-                data.instance.open_all();
+                data.instance.open_node();
+               
             });
         }
         //弹出树

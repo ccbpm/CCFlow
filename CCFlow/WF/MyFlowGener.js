@@ -101,7 +101,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
 
     if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
-        ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", true, function () { }, null, function () {
+        ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", false, function () { }, null, function () {
             if (typeof InitPage === "function") {
                 InitPage.call();
             } else {

@@ -252,6 +252,8 @@ namespace BP.WF.HttpHandler
 
                                 string[] ss = str.Split(':');
                                 string fk_dtl = ss[0];
+                                if (ss[1] == "" || ss[1] == null)
+                                    continue;
                                 string dtlKey = System.Web.HttpContext.Current.Session["DtlKey"] as string;
                                 if (dtlKey == null)
                                     dtlKey = key;

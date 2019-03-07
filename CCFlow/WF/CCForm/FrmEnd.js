@@ -730,9 +730,12 @@ function ReqCBObj(cbID) {
 }
 // 设置值.
 function SetCtrlVal(ctrlID, val) {
-    document.getElementById('TB_' + ctrlID).value = val;
-    document.getElementById('DDL_' + ctrlID).value = val;
-    document.getElementById('CB_' + ctrlID).value = val;
+    if ($("#TB_" + ctrlID).length != 1)
+        $("#TB_" + ctrlID).val(val);
+    if ($("#DDL_" + ctrlID).length != 1)
+        $("#DDL_" + ctrlID).val(val);
+    if ($("#CB_" + ctrlID).length != 1)
+        $("#CB_" + ctrlID).val(val);
 }
 
 //显示大图

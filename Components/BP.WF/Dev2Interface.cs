@@ -4483,6 +4483,9 @@ namespace BP.WF
                 case DBType.MySQL:
                     pas.SQL = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC limit 0,1 ";
                     break;
+                case DBType.PostgreSQL:
+                    pas.SQL = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC limit 1 ";
+                    break;
                 default:
                     break;
             }
@@ -9330,6 +9333,9 @@ namespace BP.WF
                     break;
                 case DBType.Informix:
                     sql = "SELECT first 1 NDTo FROM ND" + int.Parse(flowNo) + "Track WHERE EmpFrom='" + BP.Web.WebUser.No + "' AND NDFrom=" + nodeID + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.SubThreadForward + ")  ORDER BY RDT DESC";
+                    break;
+                case DBType.PostgreSQL:
+                    sql = "SELECT NDTo FROM ND" + int.Parse(flowNo) + "Track WHERE EmpFrom='" + BP.Web.WebUser.No + "' AND NDFrom=" + nodeID + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.SubThreadForward + ") ORDER BY RDT DESC limit 1";
                     break;
                 default:
                     throw new Exception("@没有实现该类型的数据库支持.");

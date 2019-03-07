@@ -96,6 +96,52 @@ namespace BP.WF.HttpHandler
         public WF_Admin_CCBPMDesigner()
         {
         }
+        /// <summary>
+        /// 执行流程设计图的保存.
+        /// </summary>
+        /// <returns></returns>
+        public string Designer_Save()
+        {
+            string sql = "";
+            try
+            {
+                //保存节点位置. @101,2,30@102,3,1
+                string[] nodes = this.GetRequestVal("Nodes").Split('@');
+                foreach (string item in nodes)
+                {
+                    string[] strs = item.Split(',');
+                    sql = "UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0];
+                    DBAccess.RunSQL(sql);
+                }
+
+                //保存方向.
+                string[] dirs = this.GetRequestVal("Dirs").Split('@');
+                foreach (string item in dirs)
+                {
+                    string[] strs = item.Split(',');
+                    sql = "insert into WF_Direction(MyPK,FK_Flow,Node,ToNode,IsCanBack) values(" + strs[0] + "," + strs[1] + "," + strs[2] + "," + strs[3] + ","+"0)";
+                    DBAccess.RunSQL(sql);
+                }
+
+                //保存label位置.
+                string[] labs = this.GetRequestVal("Labs").Split('@');
+                foreach (string item in labs)
+                {
+                    string[] strs = item.Split(',');
+                    sql = "UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0];
+                    DBAccess.RunSQL(sql);
+                }
+
+                Flow fl = new Flow(this.FK_Flow);
+                fl.DoCheck();
+
+                return "保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
 
         /// <summary>
         /// 下载流程模版

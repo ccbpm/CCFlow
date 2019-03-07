@@ -257,7 +257,7 @@ function AfterBindEn_DealMapExt(frmData) {
         }
 
         //判断MapAttr属性是否可编辑不可以编辑返回
-        if (mapAttr.UIIsEnable == 0 || mapAttr.UIVisible == 0)
+        if (mapAttr.UIVisible == 0)
             continue;
 
         //处理Pop弹出框

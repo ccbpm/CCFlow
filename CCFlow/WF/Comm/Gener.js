@@ -783,7 +783,7 @@ var Entity = (function () {
 
             if (typeof self[n] !== "function" && (self[n] != o || true)) {
 
-                if (self[n].toString().indexOf('<script') != -1)
+                if (self[n] !=undefined && self[n].toString().indexOf('<script') != -1)
                     params.push(n + "=aa");
                 else
                     params.push(n + "=" + self[n]);
@@ -1607,6 +1607,7 @@ var Entities = (function () {
                 args.push(o);
             });
             this.Paras = getParameters(args);
+
             this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {

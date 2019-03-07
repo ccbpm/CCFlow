@@ -175,7 +175,7 @@ namespace BP.WF.HttpHandler
             //根节点
             BP.WF.Template.FlowFormTree root = new BP.WF.Template.FlowFormTree();
             root.Name = "表单库";
-            int i = root.Retrieve(FlowFormTreeAttr.ParentNo, 0);
+            int i = root.Retrieve(FlowFormTreeAttr.ParentNo, "0");
             if (i != 0)
             {
                 root.Name = "表单库";

@@ -597,8 +597,8 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-08-06. 节点时限.
-                map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.CHEnable, false, "是否启用", true, true);
+                //map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
+                //map.AddBoolean(BtnAttr.CHEnable, false, "是否启用", true, true);
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);

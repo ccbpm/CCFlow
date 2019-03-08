@@ -1111,8 +1111,6 @@ namespace BP.En
                             toIdx = top + pageSize;
                             if (this._sql == "" || this._sql == null)
                             {
-
-
                                 if (top == 0)
                                     sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " " + this._orderBy + "   ) WHERE ROWNUM <=" + pageSize;
                                 else
@@ -1175,6 +1173,39 @@ namespace BP.En
                             this.Top = pageSize;
                             return this.doEntitiesQuery();
                         case DBType.MySQL:
+                            toIdx = top + pageSize;
+                            if (this._sql == "" || this._sql == null)
+                            {
+                                if (top == 0)
+                                    sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy + " LIMIT " + pageSize;
+                                else
+                                    sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
+                            }
+                            else
+                            {
+                                string mysql = this.SQL;
+                                mysql = mysql.Substring(mysql.IndexOf("FROM "));
+
+                                if (top == 0)
+                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql + " LIMIT " + pageSize;
+                                else
+                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql;
+                            }
+
+                            sql = sql.Replace("AND ( ( 1=1 ) )", " ");
+
+                            pks = this.GenerPKsByTableWithPara(pk, sql, top, toIdx);
+                            this.clear();
+                            this.MyParas = this.MyParasR;
+
+                            if (pks == null)
+                                this.AddHD_Not();
+                            else
+                                this.AddWhereIn(pk, "(" + pks + ")");
+
+                            this.Top = pageSize;
+                            return this.doEntitiesQuery();
+                        case DBType.PostgreSQL:
                             toIdx = top + pageSize;
                             if (this._sql == "" || this._sql == null)
                             {

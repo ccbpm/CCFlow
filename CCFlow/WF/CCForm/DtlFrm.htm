@@ -42,7 +42,7 @@
 	<script src="JS/mselector.js" type="text/javascript"></script>
     <script src="JS/mtags.js" type="text/javascript"></script>
 
-    <script type="text/javascript" src="MapExt2016.js"></script>
+    <script type="text/javascript" src="MapExt2019.js"></script>
 
 
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
@@ -389,7 +389,7 @@
         //使用随机数作为版本号，保证每次加载的config.js 都是最新的，其余的通过公共函数加载，带入版本号，更新版本号即更新文件
         $.getScript("../Scripts/config.js?Version=" + Math.random(), function () {
             load.LoadJs("../Scripts/commonYangYH.js", undefined, function () {
-                load.LoadJs('MapExt2016.js', undefined, function () {
+                load.LoadJs('MapExt2019.js', undefined, function () {
                     load.LoadJs('../Comm/Gener.js', undefined, function () {
                         //                        load.LoadJs('FrmFoolReadonly.js', undefined, function () {
                         //                        })

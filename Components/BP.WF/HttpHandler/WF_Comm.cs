@@ -1971,6 +1971,42 @@ namespace BP.WF.HttpHandler
                 }
 
             }
+
+            //加入sql模式的外键.
+            foreach (Attr attr in rm.HisAttrs)
+            {
+                if (attr.IsRefAttr == true)
+                    continue;
+
+                if (DataType.IsNullOrEmpty(attr.UIBindKey) || attr.UIBindKey.Length <= 10)
+                    continue;
+
+                if (attr.UIIsReadonly == true)
+                    continue;
+
+                if (attr.UIBindKey.Contains("SELECT") == true || attr.UIBindKey.Contains("select") == true)
+                {
+                    /*是一个sql*/
+                    string sqlBindKey = attr.UIBindKey.Clone() as string;
+                    sqlBindKey = BP.WF.Glo.DealExp(sqlBindKey, en, null);
+
+                    DataTable dt1 = DBAccess.RunSQLReturnTable(sqlBindKey);
+                    dt1.TableName = attr.Key;
+
+                    //@杜. 翻译当前部分.
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        dt1.Columns["NO"].ColumnName = "No";
+                        dt1.Columns["NAME"].ColumnName = "Name";
+                    }
+                    if (ds.Tables.Contains(attr.Key) == false)
+                    {
+                        ds.Tables.Add(dt1);
+                    }
+                   
+                }
+            }
+
             #endregion 加入该方法的外键.
 
             #region 加入该方法的枚举.

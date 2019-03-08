@@ -2,18 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>创建本机数据表</title>
-     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../../Scripts/PinYin.js" type="text/javascript" > </script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript"> </script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="SFTable.js" type="text/javascript"></script>
     <base target="_self" />
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
 
         //页面启动函数.
         $(function () {
@@ -31,27 +31,24 @@
                     return;
                 }
 
-                if (val == "ziduanquanpin") {
-                      ParsePinYin(tb, true, "TB_No");
-//                    ParseStringToPinYin(tb, true, "");
-                }
-                  else {
-                      ParsePinYin(tb, false, "TB_No");
-//                    ParseStringToPinYin(tb, false, "");
-                }
+                var isQuanPin = false;
+                if (val == "ziduanquanpin")
+                    isQuanPin = true;
+
+                ParseStringToPinYin(tb, isQuanPin, "Table");
 
             });
 
             //点击全拼
             $('input[id=RB_QP]').change(function () {
-                var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, true, "Table");
+                var tb = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(tb, true, "Table");
             });
 
             //点击简拼
             $('input[id=RB_JP]').change(function () {
-                var TB_Name = document.getElementById("TB_Name").value;
-                ParseStringToPinYin(TB_Name, false, "Table");
+                var tb = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(tb, false, "Table");
             });
 
 
@@ -78,66 +75,79 @@
     </script>
 </head>
 <body>
-<table style="width:95%; margin:5px; padding:5px;">
-<caption><a href="./Default.htm">返回</a> - 本机数据表  </caption>
-
-<tr>
-<th> 说明 </th>
-<th > 输入 </th>
-<th> 备注 </th>
-</tr>
-
-<tr>
-<td> 中文名称 </td>
-<td > <input type="text" id="TB_Name" name="TB_Name" /> </td>
-<td>.</td>
-</tr>
-
-<tr>
-<td style="width:30%;"> 英文名称 </td>
-<td > <input type="text" id="TB_No" name="TB_No" /> </td>
-<td> <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked"  value="ziduanquanpin" /> <label for="RB_QP">全拼</label>   
-   <input type="radio" name="RB_QPJP" id="RB_JP"  value="ziduanjianpin" />  <label for="RB_JP">简拼</label>   </td>
-</tr>
-
-<!--
+    <table style="width: 95%; margin: 5px; padding: 5px;">
+        <caption>
+            <a href="./Default.htm">返回</a> - 本机数据表
+        </caption>
+        <tr>
+            <th>说明</th>
+            <th>  输入  </th>
+            <th>  备注 </th>
+        </tr>
+        <tr>
+            <td>
+                中文名称
+            </td>
+            <td>
+                <input type="text" id="TB_Name" name="TB_Name" />
+            </td>
+            <td>
+                .
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 30%;">
+                英文名称
+            </td>
+            <td>
+                <input type="text" id="TB_No" name="TB_No" />
+            </td>
+            <td>
+                <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
+                <label for="RB_QP">
+                    全拼</label>
+                <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
+                <label for="RB_JP">
+                    简拼</label>
+            </td>
+        </tr>
+        <!--
 <tr>
 <td> 数据源 </td>
 <td > <select id="DDL_FK_DBSrc" /> </td>
 <td> 从那个数据源来查找数据 </td>
 </tr>
 -->
-
-<tr>
-<td> 数据格式 </td>
-<td > <select id="DDL_CodeStruct" >
-<option value="0"> 编码表格式，具有No,Name两个列. </option>
-<option value="1"> 树形格式，具有No,Name,ParentNo三个列. </option>
-</select> </td>
-<td>  </td>
-</tr>
-
-<tr>
-<td colspan=3>  
-<input type="button" onclick="Save()" value="Save" />
- </td>
-</tr>
-</table>
-
-<font color=gray>
-<fieldset>
-<legend>帮助</legend>
-<ul>
-<li>系统会自动根据英文名称创建一个数据表在当前的数据库里.</li>
-<li>英文名称必须符合创建表的要求.</li>
-<li>不能包含特殊字符，以下划线或者英文字母开头.</li>
-<li>普通的编码结构是数据表里有编号No, 名称Name列.</li>
-<li>树形结构是具有No,Name,ParentNo 三个列.</li>
-</ul>
-</fieldset>
-</font>
-
- 
-
+        <tr>
+            <td>
+                数据格式
+            </td>
+            <td>
+                <select id="DDL_CodeStruct">
+                    <option value="0">编码表格式，具有No,Name两个列. </option>
+                    <option value="1">树形格式，具有No,Name,ParentNo三个列. </option>
+                </select>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="Save()" value="Save" />
+            </td>
+        </tr>
+    </table>
+    <font color="gray">
+        <fieldset>
+            <legend>帮助</legend>
+            <ul>
+                <li>系统会自动根据英文名称创建一个数据表在当前的数据库里.</li>
+                <li>英文名称必须符合创建表的要求.</li>
+                <li>不能包含特殊字符，以下划线或者英文字母开头.</li>
+                <li>普通的编码结构是数据表里有编号No, 名称Name列.</li>
+                <li>树形结构是具有No,Name,ParentNo 三个列.</li>
+            </ul>
+        </fieldset>
+    </font>
 </body>
 </html>

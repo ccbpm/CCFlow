@@ -134,7 +134,13 @@
         function SaveIt() {
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddUrlData();
+            handler.AddFormData();
             var data = handler.DoMethodReturnString("MyBill_SaveIt");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
             window.location.href = window.location.href;
         }
 

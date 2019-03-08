@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>单据</title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
@@ -278,52 +277,53 @@
 
             });
 
-
             $("#Table2").html(tableHtml);
             $("#Table1").html(htmlboxs);
         }
+
+        ///导入.
+        function Imp() {
+            var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID");
+            window.location.href = url;
+        }
     </script>
-
     <style>
-    
-/* 按钮风格 */
-input[type="button"], input[type="submit"], input[type="file"]
-{
-    border: 0; /*background: #4D77A7;*/
-    background: #fff;
-    color: #545454;
-    font-size: 12px;
-    padding: 4px 15px;
-    margin: 5px 3px 5px 3px;
-    border-radius: 3px;
-    border:1px solid #1d7dd4;
-}
-input:hover[type="button"]
-{
-    border: 0; /*background: #4D77A7;*/
-    background: #1d7dd4;
-    color: #fff;
-    font-size: 12px;
-    padding: 4px 15px;
-    margin: 5px 3px 5px 3px;
-    border-radius: 3px;
-     border:1px solid #1d7dd4;
-}
-
-
+        /* 按钮风格 */
+        input[type="button"], input[type="submit"], input[type="file"]
+        {
+            border: 0; /*background: #4D77A7;*/
+            background: #fff;
+            color: #545454;
+            font-size: 12px;
+            padding: 4px 15px;
+            margin: 5px 3px 5px 3px;
+            border-radius: 3px;
+            border: 1px solid #1d7dd4;
+        }
+        input:hover[type="button"]
+        {
+            border: 0; /*background: #4D77A7;*/
+            background: #1d7dd4;
+            color: #fff;
+            font-size: 12px;
+            padding: 4px 15px;
+            margin: 5px 3px 5px 3px;
+            border-radius: 3px;
+            border: 1px solid #1d7dd4;
+        }
     </style>
 </head>
 <body class="gray-bg">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox-content">
             <div class="row search-padding" style="float: left">
-            <!--<div id="SearchLab" style=" float:left"></div>&nbsp;&nbsp;-->
+                <!--<div id="SearchLab" style=" float:left"></div>&nbsp;&nbsp;-->
                 <input type='text' placeholder="请输入关键字..." id='TB_Key' />
                 <input type="button" id="Btn_Search" onclick="javascript:SearchKey();" value="查询" />
                 <input type="button" id="Btn_New" onclick="javascript:New();" value="新建" />
                 <input type="button" id="Btn_Del" onclick="javascript:Delete();" value="删除" />
                 <input type="button" id="Btn_Imp" onclick="javascript:Imp();" value="导入" />
-                <input type="button" id="Button1" onclick="javascript:Imp();" value="分析" />
+                <input type="button" id="Button1" onclick="javascript:Group();" value="分析" />
             </div>
             <table class="table table-striped">
                 <thead id="Table2">

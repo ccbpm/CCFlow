@@ -12,7 +12,7 @@ FrmType_CH_6	VSTO模式Excel表单	FrmType	6	CH
 FrmType_CH_7	实体类组件	FrmType	7	CH
     */
 
-    var html = "选择类型:";
+    var html = "选择要创建表单类型:";
     html += "<select id='changBar' onchange='changeOption()'>";
 
     var frmWorkModel = GetQueryString("FormWorkMode");
@@ -23,6 +23,14 @@ FrmType_CH_7	实体类组件	FrmType	7	CH
         html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;自由表单</option>";
         //html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>";
         //html += "<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
+
+        html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+        html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
+
+        html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
+        html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+
+
         document.getElementById("bar").innerHTML = html;
         $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
         return;

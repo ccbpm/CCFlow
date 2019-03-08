@@ -7,6 +7,7 @@ using BP.WF;
 using BP.En;
 using BP.DA;
 using BP.Web;
+using BP.En;
 using BP.WF.Template;
 
 namespace BP.WF.CCBill
@@ -67,9 +68,11 @@ namespace BP.WF.CCBill
         public static string SaveWork(string frmID, Int64 workID)
         {
             GenerBill gb = new GenerBill(workID);
-
             gb.BillState = BillState.Editing;
 
+            BP.WF.Data.GERpt rpt = new Data.GERpt(gb.FrmID, workID);
+
+            //单据编号.
             if (DataType.IsNullOrEmpty(gb.BillNo) == true)
             {
                 FrmBill fb = new FrmBill(frmID);
@@ -79,6 +82,18 @@ namespace BP.WF.CCBill
                 if (DBAccess.IsExitsTableCol(fb.PTable, "BillNo") == true)
                     DBAccess.RunSQL("UPDATE " + fb.PTable + " SET BillNo='" + gb.BillNo + "' WHERE OID=" + workID);
             }
+
+            //标题.
+            if (DataType.IsNullOrEmpty(gb.Title) == true)
+            {
+                FrmBill fb = new FrmBill(frmID);
+                gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+
+                //更新单据里面的 Title 字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "Title") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET Title='" + gb.Title + "' WHERE OID=" + workID);
+            }
+
             gb.Update();
 
             return "保存成功...";
@@ -183,6 +198,64 @@ namespace BP.WF.CCBill
             return bills.ToDataTableField();
         }
 
+        public static string GenerTitle(string titleRole, Entity wk)
+        {
+            if (DataType.IsNullOrEmpty(titleRole))
+            {
+                // 为了保持与ccflow4.5的兼容,从开始节点属性里获取.
+                Attr myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
+                if (myattr == null)
+                    myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
+
+                if (myattr != null)
+                    titleRole = myattr.DefaultVal.ToString();
+
+                if (DataType.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
+                    titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
+            }
+
+            if (titleRole == "@OutPara" || DataType.IsNullOrEmpty(titleRole) == true)
+                titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
+
+
+            titleRole = titleRole.Replace("@WebUser.No", WebUser.No);
+            titleRole = titleRole.Replace("@WebUser.Name", WebUser.Name);
+            titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+            titleRole = titleRole.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+            titleRole = titleRole.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            titleRole = titleRole.Replace("@RDT", DateTime.Now.ToString("yy年MM月dd日HH时mm分"));
+            if (titleRole.Contains("@"))
+            {
+                Attrs attrs = wk.EnMap.Attrs;
+
+                // 优先考虑外键的替换,因为外键文本的字段的长度相对较长。
+                foreach (Attr attr in attrs)
+                {
+                    if (titleRole.Contains("@") == false)
+                        break;
+                    if (attr.IsRefAttr == false)
+                        continue;
+                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                }
+
+                //在考虑其它的字段替换.
+                foreach (Attr attr in attrs)
+                {
+                    if (titleRole.Contains("@") == false)
+                        break;
+
+                    if (attr.IsRefAttr == true)
+                        continue;
+                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                }
+            }
+            titleRole = titleRole.Replace('~', '-');
+            titleRole = titleRole.Replace("'", "”");
+
+            // 为当前的工作设置title.
+            wk.SetValByKey("Title", titleRole);
+            return titleRole;
+        }
 
     }
 }

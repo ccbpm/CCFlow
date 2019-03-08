@@ -96,6 +96,12 @@ namespace BP.WF.CCBill
         /// <returns></returns>
         public string MyBill_SaveIt()
         {
+            //执行保存.
+            GERpt rpt = new GERpt(this.FrmID, this.WorkID);
+            rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GERpt;
+            rpt.OID = this.WorkID;
+            rpt.Update();
+           
             string str = BP.WF.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
         }

@@ -1804,7 +1804,7 @@ var DBAccess = (function () {
     DBAccess.RunFunctionReturnStr = function (funcName) {
 
         try {
-
+            funcName = funcName.replace(/~/g, "'");
             if (funcName.indexOf('(') == -1)
                 return eval(funcName + "()");
             else

@@ -301,7 +301,24 @@ function AfterBindEn_DealMapExt(frmData) {
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "BindFunction": //控件绑定函数
+                if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
+                    if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
+                        $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
+                        var dateFmt = 'yyyy-MM-dd';
+                        if (mapAttr.MyDataType == 7)
+                            dateFmt = 'yyyy-MM-dd HH:mm';
 
+                        $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                            WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
+                                $(this).blur(); //失去焦点 
+                                DBAccess.RunFunctionReturnStr(mapExt.Doc);
+                            }
+                            });
+                        });
+
+                    }
+                    break;
+                }
                 if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
                     $('#TB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "TB_"));
                     break;

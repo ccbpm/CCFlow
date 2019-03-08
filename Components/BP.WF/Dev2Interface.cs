@@ -2835,12 +2835,14 @@ namespace BP.WF
                     currNode = "(SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1)";
                     break;
                 case DBType.MySQL:
+                case DBType.PostgreSQL:
                     currNode = "(SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1)";
                     break;
                 case DBType.MSSQL:
                     currNode = "(SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC)";
                     break;
-                default: break;
+                default:
+                    break;
             }
 
             //授权模式.
@@ -2878,7 +2880,6 @@ namespace BP.WF
                     }
                 }
             }
-
             
             //非授权模式，
             if (WebUser.IsAuthorize ==false)

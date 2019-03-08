@@ -249,12 +249,38 @@ namespace BP.WF.CCBill
                 rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "绑定到菜单目录"; // "设计表单";
+                rm.HisAttrs.AddDDLSQL("xxxx", null, "选择菜单目录", "SELECT No,Name FROM GPM_Menu WHERE MenuType=3");
+                rm.ClassMethodName = this.ToString() + ".DoBindMenu";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Target = "_blank";
+                //rm.GroupName = "开发接口";
+                map.AddRefMethod(rm);
                  
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 绑定菜单树
+        /// </summary>
+        /// <returns>返回执行结果.</returns>
+        public string DoBindMenu(string menumNo)
+        {
+            string sql = "SELECT FK_App FROM GPM_Menu WHERE No='" + menumNo + "'";
+            string app = DBAccess.RunSQLReturnString(sql);
+
+            string guid=DBAccess.GenerGUID();
+
+            sql = "INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, Url, OpenWay,Icon,MenuCtrlWay) VALUES ('" + guid + "', '" + this.Name + "', '" + menumNo + "', 1, 4, '" + app + "', '',  0,'',1)";
+            DBAccess.RunSQL(sql);
+            return "加入成功,如何<a href='En.htm?EnName=BP.GPM.Menu&No=" + guid + "'>控制权限请转GPM.</a>";
+        }
 
         #region 业务逻辑.
         public string CreateBlankWorkID()

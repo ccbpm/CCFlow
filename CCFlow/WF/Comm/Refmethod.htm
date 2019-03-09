@@ -127,9 +127,13 @@
 
             var html = "";
             var isDropTR = true;
+            
             for (var i = 0; i < Sys_MapAttrs.length; i++) {
 
                 var attr = Sys_MapAttrs[i];
+
+                if ( attr.UIVisible == 0)
+                    continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
                 var defval = attr.DefVal;
@@ -320,29 +324,72 @@
         function InitDDLOperation(frmData, mapAttr, defVal) {
 
             var operations = '';
+            var data = frmData[mapAttr.KeyOfEn];
+            if (data == undefined)
+                data = frmData[mapAttr.UIBindKey];
+
             //外键类型
             if (mapAttr.LGType == 2) {
-                if (frmData[mapAttr.KeyOfEn] != undefined) {
-                    $.each(frmData[mapAttr.KeyOfEn], function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
+                if (data == undefined) {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    return;
                 }
-                else if (frmData[mapAttr.UIBindKey] != undefined) {
-                    $.each(frmData[mapAttr.UIBindKey], function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
-                }
-            } else {
+                var key = "No";
+                var keyText = "Name";
+                if (mapAttr.UIRefKey != "")
+                    key = mapAttr.UIRefKey;
+                if (mapAttr.UIRefKeyText != "")
+                    keyText = mapAttr.UIRefKeyText;
+                $.each(data, function (i, obj) {
+
+                    operations += "<option " + (obj[key] == defVal ? " selected='selected' " : "") + " value='" + obj[key] + "'>" + obj[keyText] + "</option>";
+                });
+
+
+            }
+            if (mapAttr.LGType == 0 && data != undefined) {
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+                return operations;
+            }
+
+
+            //枚举类型.
+            if (mapAttr.LGType == 1) {
+
                 var enums = frmData.Sys_Enum;
                 enums = $.grep(enums, function (value) {
                     return value.EnumKey == mapAttr.UIBindKey;
                 });
 
-
                 $.each(enums, function (i, obj) {
                     operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
                 });
+            }
 
+
+            //外部数据源类型 MyFlowGener.js.InitDDLOperation
+            if (mapAttr.LGType == 0) {
+                var fn;
+                try {
+                    if (mapAttr.UIBindKey) {
+                        fn = eval(mapAttr.UIBindKey);
+                    }
+                } catch (e) {
+                }
+                if (typeof fn == "function") {
+                    $.each(fn.call(), function (i, obj) {
+                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                    });
+                } else if (typeof CommonHandler == "function") {
+                    CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+                        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+                    })
+                } else {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    //alert('没有获得约定的数据源.');
+                }
             }
             return operations;
         }

@@ -131,60 +131,13 @@
 
 
             var gwls = JSON.parse(data);
-//            BindTable(gwls);
 
         });
 
-//        function BindTable(gwls) {
 
-//            for (var i = 0; i < gwls.length; i++) {
-
-//                var gwl = gwls[i];
-
-//                var row = "";
-//                row += "<tr>";
-//                // row += "<td>" + i + "</td>";
-//                row += "<td>" + gwl.FK_EmpText + "</td>";
-//                row += "<td  title='" + gwl.FK_DeptT + "' >" + gwl.FK_DeptT + "</td>";
-
-//                if (gwl.IsPass == -1) {
-//                    row += "<td>新增</td>";
-//                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
-//                }
-
-//                if (gwl.IsPass == 0) {
-//                    row += "<td>未审批</td>";
-//                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
-//                }
-
-//                //当前是主持人
-//                if (gwl.IsPass == 100) {
-//                    row += "<td>主持人/未审批</td>";
-//                    row += "<td></td>";
-//                }
-
-//                //当前自己
-//                if (gwl.IsPass == 99) {
-//                    row += "<td>您自己</td>";
-//                    row += "<td></td>";
-//                }
-
-//                if (gwl.IsPass == 1) {
-//                    row += "<td>已审批</td>";
-//                    row += "<td></td>";
-//                }
-
-//                row += "</tr>";
-
-//                //$("#Table1 tr:last").after(row);
-//                $("#Table1 tbody").append(row);
-//            }
-//        }
 
         function DeleteIt(empNo, row) {
 
-            //            if (window.confirm('您确定要移除[' + empNo + ']') == false)
-            //                return;
 
             //执行数据初始化工作.
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
@@ -207,46 +160,27 @@
         }
 
 
-        //确定  执行加签操作
-//        function DoHuiQian(emps) {
-
-//            //执行数据初始化工作.
-//            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-//            hand.AddUrlData();
-//            hand.AddPara("AddEmps", emps);
-//            var data = hand.DoMethodReturnString("HuiQian_AddEmps");
-
-//            if (data.indexOf('err@') == 0) {
-//                alert(data);
-//                return;
-//            }
-
-//            if (data.indexOf('info@') == 0) {
-//                $(".Msg").show();
-//                $(".Msg").html(data);
-//                return;
-//            }
-
-//            window.location.href = window.location.href;
-
-//            //            var gwls = JSON.parse(data);
-//            //            BindTable(gwls);
-//            //            return;
-//            //            $(".foot").hide();
-//        }
 
         //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
         function SaveAndClose() {
 
             var toEmp = $("#TB_No").val();
+            if (toEmp == null || toEmp == "") {
+                alert("加签人不能为空");
+                return;
+            }
             var note = $("#TB_Tag2").val();
+            if (note == null || note == "") {
+                alert("加签原因不能为空");
+                return;
+            }
+            
             var model = $("input[name='RB']:checked").val();
             var toNode = GetQueryString("ToNode");
             if (toNode == undefined || toNode == "undefined")
                 toNode = "0";
 
             $("#Btn_HuiQian").attr("disabled", "disabled");
-            $("#Btn_HuiQian").val("执行中...");
             $("#Btn_SelectEmps").attr("disabled", "disabled");
 
 
@@ -256,7 +190,6 @@
             handler.AddPara("ToEmp", toEmp);
             handler.AddPara("Note", note);
             handler.AddPara("Model", model);
-//            handler.AddPara("IsMobile", 1);
             var data = handler.DoMethodReturnString("Askfor");
 
             if (data.indexOf('url@') == 0) {
@@ -303,86 +236,10 @@
 
             alert(data);
             window.close();
-            $("#Btn_HuiQian").val("提交");
+          
             return;
         }
 
-        //执行发送.
-//        function SendIt() {
-
-//            //执行数据初始化工作.
-//            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-//            hand.AddUrlData();
-//            var data = hand.DoMethodReturnString("AccepterOfGener_Send");
-
-//            if (data.indexOf('err@') == 0) {
-//                $(".Msg").show();
-//                $(".Msg").html(data);
-//                return;
-//            }
-
-//            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
-//            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-//            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-
-//            data = data.replace("'WFRpt", "'../WFRpt");
-//            data = data.replace("'WFRpt", "'../WFRpt");
-
-//            data = data.replace("'./Img", "'../Img");
-//            data = data.replace("'./Img", "'../Img");
-//            data = data.replace("'./Img", "'../Img");
-//            data = data.replace("'./Img", "'../Img");
-//            data = data.replace("'./Img", "'../Img");
-
-//            data = data.replace("'./WorkOpt/", "");
-//            data = data.replace("'./WorkOpt/", "");
-//            data = data.replace("'./WorkOpt/", "");
-//            data = data.replace("'./WorkOpt/", "");
-
-
-//            data = data.replace('@', '<br/>@');
-//            data = data.replace(/@/g, '<br/>&nbsp;@');
-
-//            data = data.replace('@', '<br/>@');
-//            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
-
-//            $("#btns").attr("display", "block");
-
-//            $(".Msg").show();
-//            $(".Msg").html(data);
-
-//            $("#labInfo").empty();
-//            $("#next").empty();
-
-//            //  display
-
-//            //隐藏table.
-//            document.getElementById("Table1").style.display = "none";
-//            document.getElementById("TB_Emps").style.display = "none";
-//            document.getElementById("Btn_SelectEmps").style.display = "none";
-
-//            //document.getElementById("Btn_AddEmps").style.display = "none";
-
-//            var ctrl = document.getElementById("Btn_Send");
-//            if (ctrl != null)
-//                ctrl.style.display = "none";
-
-//            ctrl = document.getElementById("labInfo");
-//            if (ctrl != null)
-//                ctrl.style.display = "none";
-
-//            ctrl = document.getElementById("Btn_Close");
-//            if (ctrl != null)
-//                ctrl.style.display = "none";
-//        }
-
-        //取消移交
-//        function CloseAll() {
-//            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-//                window.parent.close();
-//            }
-//            window.close();
-//        }
 
         //设置选中的人员
         function selectEmpsWindowClose(data) {
@@ -421,7 +278,6 @@
                 //$("#SelectEmp").hide().html("");
                 var html = "";
                 for (var i = 0; i < data.length; i++) {
-                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
                     html = html + "<div class='item' onclick='getCon(\"" + data[i].Name+"/"+data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
                 }
                 $("#SelectEmp").show().html(html);
@@ -429,9 +285,6 @@
             });
         });
 
-//        function selectAdd(No) {
-//            DoHuiQian(No);
-//        }
 
         //鼠标事件
         function getFocus(obj) {
@@ -489,11 +342,11 @@
                 <tr>
                 <tr>
                     <td colspan="2">
-                     <input type="radio" value="1" id="RB_1"  name="RB" checked="checked"/><label for="RB_1" >对方加签后，直接发送到下一步</label>
+                     <input type="radio" value="0" id="RB_0"  name="RB" checked="checked"/><label for="RB_0" >对方加签后，直接发送到下一步</label>
                
                     </td>
                     <td colspan="2">
-                         <input type="radio" value="2" id="RB_2"  name="RB" /><label for="RB_2" >对方加签后转发给我，由我发送到下一步</label> 
+                         <input type="radio" value="1" id="RB_1"  name="RB" /><label for="RB_1" >对方加签后转发给我，由我发送到下一步</label> 
                     </td>
                 </tr>
             </div>

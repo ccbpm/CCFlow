@@ -192,6 +192,13 @@
             handler.AddPara("Model", model);
             var data = handler.DoMethodReturnString("Askfor");
 
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                $("#Btn_HuiQian").attr("disabled", "");
+                $("#Btn_SelectEmps").attr("disabled", "");
+                return;
+            }
+
             if (data.indexOf('url@') == 0) {
                 data = data.replace('url@', '');
                 window.location.href = data;

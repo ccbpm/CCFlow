@@ -466,29 +466,26 @@
                 }
             });
 
-            var param = {
-                DoType: "FlowSearch_Done",
-                SearchType: GetQueryString("SearchType"),
-                FK_Flow: fk_flow,
-                key: key,
-                dtFrom: dtFrom,
-                dtTo: dtTo,
-                mvals: mvals,
-                vals: vals,
-                pageSize: pageSize,
-                pageIdx: pageIdx
-            };
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
+            handler.AddPara("SearchType", GetQueryString("SearchType"));
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("key", key);
+            handler.AddPara("dtFrom", dtFrom);
+            handler.AddPara("dtTo", dtTo);
+            handler.AddPara("mvals", mvals);
+            handler.AddPara("vals", vals);
+            handler.AddPara("pageSize", pageSize);
+            handler.AddPara("pageIdx", pageIdx);
+            var data = handler.DoMethodReturnString("FlowSearch_Done");
+            if (data.indexOf("err@") != -1) {
+                $.messager.alert("错误", data, "icon-error");
+                return;
+            }
 
-            Handler_AjaxQueryData(param, function (data) {
-                if (data.indexOf("err@") != -1) {
-                    $.messager.alert("错误", data, "icon-error");
-                    return;
-                }
+            var d = eval("(" + data + ")");
 
-                var d = eval("(" + data + ")");
+            LoadData(d.MainData, d.Sys_MapData[0].T_total, pageSize, pageIdx);
 
-                LoadData(d.MainData, d.Sys_MapData[0].T_total, pageSize, pageIdx);
-            }, this);
         }
 
         function LoadData(data, total, pageSize, pageIdx) {

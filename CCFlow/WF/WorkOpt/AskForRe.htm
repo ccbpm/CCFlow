@@ -1,36 +1,280 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>驰骋工作流</title>
-    <!-- 引用通用的js文件. -->
-    <script type="text/javascript"   src="../Scripts/config.js" ></script>
-    <script type="text/javascript" language="javascript" >
-        function Load() {
+    <title>加签</title>
+    <!--
+    1, 退回界面。
+    2，需要 FK_Flow, FK_Node,WorkID, FID.
+    3, 调用方法 HuiQian.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
 
-            return;
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <link href="../../DataUser/Style/Table0.css" rel="Stylesheet" />
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
 
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+    <style type="text/css">
+        body
+        {
+            background: transparent;
+        }
+        body div
+        {
+            text-align: left;
+        }
+        #Message
+        {
+            width: 100%;
+        }
+        
+        #SelectEmp
+        {
+            position: relative;
+            width: 400px;
+            border-top: 0;
+            display: none;
+            margin-top: -7px; /*border: solid 2px #3175af;*/
+        }
+        
+        .item
+        {
+            padding: 3px 5px;
+            cursor: pointer;
+            float: left;
+            width: 190px;
+            line-height: 20px;
+            display: inline-block;
+            background-color: #F7F7F7;
+        }
+        
+        #next
+        {
+            float: left;
+            position: relative;
+            width: 600px;
+        }
+        
+        .addbg
+        {
+            background: #CFCFCF;
+        }
+    </style>
+    <script type="text/javascript">
+        var param = {};
+        $(function () {
+
+            Help();
+
+            //初始化页面移交页面
+            param = {
+                FK_Node: GetQueryString('FK_Node'),
+                WorkID: GetQueryString('WorkID'),
+                FID: GetQueryString('FID'),
+                Message: GetQueryString('Info'),
+                FK_Flow: GetQueryString("FK_Flow")
+            };
+
+            $('#Msg').val(param.Message);
+
+            //初始化人员选择窗口
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
+               '<div class="modal-dialog">'
+                   + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                      + '<div class="modal-header">'
+                          + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                           + '<h4 class="modal-title">选择加签人</h4>'
+                       + '</div>'
+                       + '<div class="modal-body">'
+                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                       + '</div>'
+                   + '</div><!-- /.modal-content -->'
+               + '</div><!-- /.modal-dialog -->'
+           + '</div>';
+
+            $('body').append($(selectEmpModalHtml));
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+            if (dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
+            //  url = url.replace('101', '10102');
+            url = url.replace('=101&', '=10102&');
+
+            $('#iframeSelectEmpsForm').attr('src', url);
+            $('#Btn_SelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            //$("section").show();
+            $(".Msg").hide();
+
+
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("HuiQian_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
                 return;
             }
+
+
+            var gwls = JSON.parse(data);
+            //            BindTable(gwls);
+
+        });
+
+       
+        function DeleteIt(empNo, row) {
+
+            //            if (window.confirm('您确定要移除[' + empNo + ']') == false)
+            //                return;
+
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            hand.AddPara("FK_Emp", empNo);
+            var data = hand.DoMethodReturnString("HuiQian_Delete");
+
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //delRow(row); //清空单个table tbody
+            ClearTable();
+
+            // 把返回的结果，重新绑定.
+            var sas = JSON.parse(data);
+            BindTable(sas);
+            return;
+        }
+
+
+        
+
+        //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
+        function SaveAndClose() {
+
+            var note = $("#TB_Tag2").val();
+
+            $("#Btn_HuiQian").attr("disabled", "disabled");
+            $("#Btn_HuiQian").val("执行中...");
+            $("#Btn_SelectEmps").attr("disabled", "disabled");
+
+
+            //执行数据初始化工作.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("Note", note);
+            //            handler.AddPara("IsMobile", 1);
+            var data = handler.DoMethodReturnString("AskForRe");
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                window.location.href = data;
+                return;
+            }
+
+            //如果需要发送,就执行发送.
+            if (data.indexOf('Send@') == 0) {
+                SendIt();
+                return;
+            }
+
+            //提示信息后关闭窗口.
+            if (data.indexOf('close@') == 0) {
+
+                alert(data.replace('close@', ''));
+
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose("");
+                    window.parent.close();
+
+                } else {
+
+                    $('body').append($('<div>' + "已取消操作" + '</div>'));
+
+                    window.close();
+                }
+                return;
+            }
+
+            //提示信息.
+            if (data.indexOf('info@') == 0) {
+
+                alert(data.replace('info@', ''));
+
+                $("#Btn_HuiQian").attr("disabled", false);
+                $("#Btn_HuiQian").val("执行会签");
+                $("#Btn_SelectEmps").attr("disabled", false);
+
+                return;
+            }
+
+            alert(data);
+            window.close();
+            $("#Btn_HuiQian").val("提交");
+            return;
+        }
+
+       
+
+        
+
+        
+        
+        function Help() {
+            $("#HelpInfo").toggle();
         }
     </script>
 </head>
-<body  onload="Load()" >
-
-<form id="cc">
-
-    
-<br />
-<center> 我们在2018年6月取消了对该功能的支持,如果您想启用此功能请参考就版本的代码进行重构. </center>
-
-</form>
-
+<body >
+    <div style="width: 98%;margin-left:20px">
+    <br />
+    <div>
+        <div id="labInfo">
+          <!--  选择加签人:
+            <input type="hidden" id="TB_No" />
+            <input type="text" id="TB_Emps"  title="查张三,您可输入: zs或zhangs或zhangsan"
+                placeholder="查张三,您可输入:zs或zhangs或zhangsan"  name="TB_Emps" value='' style="width: 300px;" />
+            <input type="button" id="Btn_SelectEmps" value='选择加签人' /><a href="javascript:Help()">帮助</a>
+            <div id="SelectEmp">
+            </div>
+            <br />-->
+            <div id="Div1">
+                <th colspan="2">
+                    加签回复:
+                </th>
+                <tr>
+                <td colspan="2">
+                    <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; " rows="4">
+                    </textarea>
+                
+                </td>
+                </tr>
+            </div>
+           
+            <div id="next">
+                <input type="button" id="Btn_HuiQian" value="提交" onclick="SaveAndClose();" />
+            </div>
+            
+        </div>
+        <div class="Msg" style="float: left;">
+            <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
+    </div>
+    <br />
+    </div>
 </body>
 </html>

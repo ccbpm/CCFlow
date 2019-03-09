@@ -1388,7 +1388,7 @@ namespace BP.En
             attr.Field = key + "Text";
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppString;
-            attr.MyFieldType = FieldType.Normal;
+            attr.MyFieldType = FieldType.RefText;
             attr.MaxLength = 200; //最大长度 @李国文
             attr.Desc = desc;
             attr.UIContralType = UIContralType.TB;

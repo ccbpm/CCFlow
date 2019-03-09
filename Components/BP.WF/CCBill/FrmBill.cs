@@ -771,10 +771,7 @@ namespace BP.WF.CCBill
                 attr.Insert();
             }
             #endregion 补充上流程字段。
-             
-
         }
-
         /// <summary>
         /// 绑定菜单树
         /// </summary>

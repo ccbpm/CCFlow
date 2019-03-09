@@ -8251,8 +8251,27 @@ namespace BP.WF
             gwf.Paras_AskForReply = replyNote;
             gwf.Update();
 
-            //执行发送, 在发送的方法里面已经做了判断了,并且把 回复的信息写入了日志.
-            string info = BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, workid).ToMsgOfHtml();
+            Node nd = new Node(gwf.FK_Node);
+            string info = "";
+            try
+            {
+                //执行发送, 在发送的方法里面已经做了判断了,并且把 回复的信息写入了日志.
+                 info = BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, workid).ToMsgOfHtml();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("请选择下一步骤工作") == true || ex.Message.Contains("用户没有选择发送到的节点") == true)
+                {
+                    if (nd.CondModel == CondModel.ByUserSelected)
+                    {
+                        /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
+                        return "SelectNodeUrl@./WorkOpt/ToNodes.htm?FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "&WorkID=" + gwf.WorkID + "&FID=" + gwf.FID;
+
+                    }
+                    return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。" + ex.Message;
+                }
+                return ex.Message;
+            }
 
             Node node = new Node(gwf.FK_Node);
             Work wk = node.HisWork;

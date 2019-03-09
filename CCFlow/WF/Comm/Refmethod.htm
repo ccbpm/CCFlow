@@ -1,18 +1,17 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>功能执行</title>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script type="text/javascript" src="Gener.js"></script>
-    
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-     <base target="_self" /> 
-    <script language="javascript" type="text/javascript" >
+    <base target="_self" />
+    <script language="javascript" type="text/javascript">
         //页面启动函数.
         $(function () {
 
@@ -33,6 +32,9 @@
             handler.AddPara("EnsName", GetQueryString("EnsName"));
 
             var data = handler.DoMethodReturnString("Refmethod_Init");
+
+
+
 
 
             //如果错误,就提示.
@@ -93,13 +95,12 @@
             document.getElementById("Btn_Done").value = rm.Title;
 
             // GenerFoolFrm(data);
-            GenerFoolFrm(data);
+            GenerFoolFrm(data, rm);
         }
-
 
         var warning = "";
 
-        function GenerFoolFrm(json) {
+        function GenerFoolFrm(json, rm) {
 
             var attrs = json["Sys_MapAttrs"];
 
@@ -108,15 +109,15 @@
             var pks = [];
             if (pkval != null && pkval != "")
                 pks = pkval.split(',');
+
             //循环显示数据
 
             var html = "<table style='width:100%' >";
+            html += "<caption>" + rm.Title + "</caption>";
 
             html += InitMapAttr(attrs, json);
 
             html += "</table>";
-            html += "<br/>";
-
 
             $('#CCForm').html(html);
 
@@ -203,12 +204,12 @@
 
             var html = "";
             var isDropTR = true;
-            
+
             for (var i = 0; i < Sys_MapAttrs.length; i++) {
 
                 var attr = Sys_MapAttrs[i];
 
-                if ( attr.UIVisible == 0)
+                if (attr.UIVisible == 0)
                     continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
@@ -471,95 +472,88 @@
         }
 
     </script>
-
 </head>
 <body>
+    <form id="cc">
+    <div id="CCForm">
+    </div>
+    <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" />
+    <div id="Msg">
+    </div>
+    </form>
+    <script type="text/javascript">
 
-<form id="cc">
+        function Done() {
 
-<div id="CCForm">
-</div>
- 
-<input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()"  /> 
+            if (warning != "" && warning != null) {
+                if (confirm(warning) == false)
+                    return;
+            }
 
-<div id="Msg"></div>
+            $("#Btn_Done").attr("disabled", "disabled");
+            $("#Btn_Done").val("正在执行....");
 
-</form>
 
-<script type="text/javascript">
+            var frmData = $("#cc").serialize();
+            frmData = frmData.replace('=on', '=1');
 
-    function Done() {
+            var pk = GetQueryString("No");
 
-        if (warning != "" && warning != null) {
-            if (confirm(warning) == false)
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("MyPK");
+
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("OID");
+
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("PK");
+
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("WorkID");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddUrlData();
+            handler.AddFormData();
+
+            var data = handler.DoMethodReturnString("Refmethod_Done");
+
+            //如果错误,就提示.
+            if (data.indexOf('err@') == 0) {
+
+                $("#Msg").html(data);
+                //alert(data);
                 return;
-        }
+            }
 
-        $("#Btn_Done").attr("disabled", "disabled");
-        $("#Btn_Done").val("正在执行....");
+            //转到Url..
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                window.location.href = data;
+                return;
+            }
 
+            //关闭.
+            if (data == "close@info") {
+                window.close();
+                return;
+            }
 
-        var frmData = $("#cc").serialize();
-        frmData = frmData.replace('=on', '=1');
+            //提示信息.
+            if (data == "info@") {
+                data = data.replace('info@', '');
 
-        var pk = GetQueryString("No");
-
-        if (pk == null || pk == undefined)
-            pk = GetQueryString("MyPK");
-
-        if (pk == null || pk == undefined)
-            pk = GetQueryString("OID");
-
-        if (pk == null || pk == undefined)
-            pk = GetQueryString("PK");
-
-        if (pk == null || pk == undefined)
-            pk = GetQueryString("WorkID");
-
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-        handler.AddUrlData();
-        handler.AddFormData();
-
-        var data = handler.DoMethodReturnString("Refmethod_Done");
-
-        //如果错误,就提示.
-        if (data.indexOf('err@') == 0) {
+                $("#Msg").html(data);
+                //alert(data);
+                return;
+            }
 
             $("#Msg").html(data);
-            //alert(data);
-            return;
+            document.getElementByIdx("Btn_Done").disabled = true;
         }
 
-        //转到Url..
-        if (data.indexOf('url@') == 0) {
-            data = data.replace('url@', '');
-            window.location.href = data;
-            return;
+        function reload() {
+            window.location.href = window.location.href;
         }
-
-        //关闭.
-        if (data == "close@info") {
-            window.close();
-            return;
-        }
-
-        //提示信息.
-        if (data == "info@") {
-            data = data.replace('info@', '');
-
-            $("#Msg").html(data);
-            //alert(data);
-            return;
-        }
-
-        $("#Msg").html(data);
-        document.getElementByIdx("Btn_Done").disabled = true;
-    }
-
-    function reload() {
-        window.location.href = window.location.href;
-    }
-</script>
-
+    </script>
 </body>
 </html>

@@ -168,7 +168,7 @@ function GenerCheckIDs() {
 }
 
 //填充下拉框.
-function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
+function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, filterVal1) {
 
     if (noCol == null)
         noCol = "No";
@@ -201,6 +201,11 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
     }
 
     for (var i = 0; i < json.length; i++) {
+
+        if (filterKey1 != undefined) {
+            if (json[i][filterKey1] != filterVal1)
+                continue;
+        }
 
         if (json[i][noCol] == undefined)
             $("#" + ddlCtrlID).append("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");

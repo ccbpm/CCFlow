@@ -1219,7 +1219,7 @@
             OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
         }
         //单据属性
-        function CCForm_Bill() {
+        function Bill_CCForm() {
             var node = $('#formTree').tree('getSelected');
             if (!node) {
                 alert('请选择一个表单.');
@@ -1227,6 +1227,16 @@
             }
             var url = '../../Comm/En.htm?EnName=BP.WF.CCBill.FrmBill&PKVal=' + node.id;
             OpenEasyUiDialog(url, "CCForm_Attr", '单据属性', 900, 560, "icon-window");
+        }
+        //打开单据
+        function Bill_Open() {
+            var node = $('#formTree').tree('getSelected');
+            if (!node) {
+                alert('请选择一个表单.');
+                return;
+            }
+            var url = '../../CCBill/Search.htm?FrmID=' + node.id;
+            OpenEasyUiDialog(url, "CCForm_Attr", '我的单据', 900, 560, "icon-window");
         }
         //设计自由表单
         function designFreeFrm() {
@@ -1434,41 +1444,7 @@
             addTab("NewDept", "新建同级部门", "../../Comm/En.htm?EnName=BP.GPM.Dept&ParentNo=" + node.id, "icon-new");
         }
 
-        function newSubDept() {
 
-        }
-
-        function editDept() {
-
-        }
-
-        function deleteDept() {
-
-        }
-
-        function newStation() {
-
-        }
-
-        function editStation() {
-
-        }
-
-        function deleteStation() {
-
-        }
-
-        function newEmp() {
-
-        }
-
-        function editEmp() {
-
-        }
-
-        function deleteEmp() {
-
-        }
         /*组织结构树操作结束*/
 
         //打开窗体
@@ -1665,7 +1641,7 @@
             WebUser.FK_Dept = jdata.FK_Dept;
             WebUser.SID = jdata.SID;
 
-           // SetTreeRoot(jdata);
+            // SetTreeRoot(jdata);
 
             treesObj = new FuncTrees("menuTab");
             treesObj.loadTrees();
@@ -1673,11 +1649,11 @@
 
         });
 
-//        function SetTreeRoot(data) {
-//            //functrees[0].Nodes[0].RootParentId = data.RootOfFlow;
-//            //functrees[1].Nodes[0].RootParentId = data.RootOfForm;
-//            functrees[2].Nodes[0].MethodParams[0].value = data.RootOfDept;
-//        }
+        //        function SetTreeRoot(data) {
+        //            //functrees[0].Nodes[0].RootParentId = data.RootOfFlow;
+        //            //functrees[1].Nodes[0].RootParentId = data.RootOfForm;
+        //            functrees[2].Nodes[0].MethodParams[0].value = data.RootOfDept;
+        //        }
 
         //通过标题删除标签
         function TabCloseByTitle(TabTitle) {
@@ -1837,12 +1813,14 @@
             刷新</div>
     </div>
     <div id="mForm" class="easyui-menu" style="width: 120px;">
-        <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
-            表单属性</div>
-             <div onclick="CCForm_Bill()" data-options="iconCls:'icon-property'">
+        <div onclick="Bill_CCForm()" data-options="iconCls:'icon-property'">
             单据属性</div>
+        <div onclick="Bill_Open()" data-options="iconCls:'icon-property'">
+            打开单据</div>
         <div class="menu-sep">
         </div>
+        <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
+            表单属性</div>
         <div onclick="designFoolFrm()" data-options="iconCls:'icon-sheet'">
             设计傻瓜表单</div>
         <div onclick="designFreeFrm()" data-options="iconCls:'icon-library'">

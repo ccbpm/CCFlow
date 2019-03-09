@@ -1889,58 +1889,54 @@ namespace BP.WF.HttpHandler
             DataTable mapAttrs = attrs.ToDataTableField("Sys_MapAttrs");
             ds.Tables.Add(mapAttrs);
 
-            foreach (string mypk in pks)
+            #region 该方法的默认值.
+            DataTable dtMain = new DataTable();
+            dtMain.TableName = "MainTable";
+            foreach (MapAttr attr in attrs)
             {
-                if (DataType.IsNullOrEmpty(mypk) == true)
-                    continue;
-                en.PKVal = mypk;
-                en.Retrieve();
-                #region 该方法的默认值.
-                DataTable dtMain = new DataTable();
-                dtMain.TableName = "MainTable_"+mypk;
-                foreach (MapAttr attr in attrs)
-                {
-                    dtMain.Columns.Add(attr.KeyOfEn, typeof(string));
-                }
+                dtMain.Columns.Add(attr.KeyOfEn, typeof(string));
+            }
 
-                DataRow mydrMain = dtMain.NewRow();
-                foreach (MapAttr item in attrs)
+            DataRow mydrMain = dtMain.NewRow();
+            foreach (MapAttr item in attrs)
+            {
+                string v = item.DefValReal;
+                if (v.IndexOf('@') == -1)
+                    mydrMain[item.KeyOfEn] = item.DefValReal;
+                //替换默认值的@的
+                else
                 {
-                    string v = item.DefValReal;
-                    if (v.IndexOf('@') == -1)
-                        mydrMain[item.KeyOfEn] = item.DefValReal;
-                    //替换默认值的@的
+                    if (v.Equals("@WebUser.No"))
+                        mydrMain[item.KeyOfEn] = Web.WebUser.No;
+                    else if (v.Equals("@WebUser.Name"))
+                        mydrMain[item.KeyOfEn] = Web.WebUser.Name;
+                    else if (v.Equals("@WebUser.FK_Dept"))
+                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_Dept;
+                    else if (v.Equals("@WebUser.FK_DeptName"))
+                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptName;
+                    else if (v.Equals("@WebUser.FK_DeptNameOfFull") || v.Equals("@WebUser.FK_DeptFullName"))
+                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptNameOfFull;
+                    else if (v.Equals("@RDT"))
+                    {
+                        if (item.MyDataType == DataType.AppDate)
+                            mydrMain[item.KeyOfEn] = DataType.CurrentData;
+                        if (item.MyDataType == DataType.AppDateTime)
+                            mydrMain[item.KeyOfEn] = DataType.CurrentDataTime;
+                    }
                     else
                     {
-                        if (v.Equals("@WebUser.No"))
-                            mydrMain[item.KeyOfEn] = Web.WebUser.No;
-                        else if (v.Equals("@WebUser.Name"))
-                            mydrMain[item.KeyOfEn] = Web.WebUser.Name;
-                        else if (v.Equals("@WebUser.FK_Dept"))
-                            mydrMain[item.KeyOfEn] = Web.WebUser.FK_Dept;
-                        else if (v.Equals("@WebUser.FK_DeptName"))
-                            mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptName;
-                        else if (v.Equals("@WebUser.FK_DeptNameOfFull") || v.Equals("@WebUser.FK_DeptFullName"))
-                            mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptNameOfFull;
-                        else if (v.Equals("@RDT"))
-                        {
-                            if (item.MyDataType == DataType.AppDate)
-                                mydrMain[item.KeyOfEn] = DataType.CurrentData;
-                            if (item.MyDataType == DataType.AppDateTime)
-                                mydrMain[item.KeyOfEn] = DataType.CurrentDataTime;
-                        }
-                        else
-                        {
-                            //如果是EnsName中字段
-                            if (en.GetValByKey(v.Replace("@", "")) != null)
-                                mydrMain[item.KeyOfEn] = en.GetValByKey(v.Replace("@", "")).ToString();
-                        }
+                        //如果是EnsName中字段
+                        if (en.GetValByKey(v.Replace("@", "")) != null)
+                            mydrMain[item.KeyOfEn] = en.GetValByKey(v.Replace("@", "")).ToString();
+
                     }
 
+
                 }
-                dtMain.Rows.Add(mydrMain);
-                ds.Tables.Add(dtMain);
+
             }
+            dtMain.Rows.Add(mydrMain);
+            ds.Tables.Add(dtMain);
             #endregion 该方法的默认值.
 
             #region 加入该方法的外键.

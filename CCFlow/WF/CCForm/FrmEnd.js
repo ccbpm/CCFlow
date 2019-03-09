@@ -17,7 +17,7 @@
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
         //设置文本框只读.
-        if (mapAttr.UIVisible != 0 &&(mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0)){
+        if (mapAttr.UIVisible != 0 && (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0)) {
             var tb = $('#TB_' + mapAttr.KeyOfEn);
             $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
@@ -43,7 +43,7 @@
                 sfTable.SetPKVal(uiBindKey);
                 var count = sfTable.RetrieveFromDBSources();
 
-                if (count!=0 &&sfTable.CodeStruct == "1") {
+                if (count != 0 && sfTable.CodeStruct == "1") {
                     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
                     handler.AddPara("EnsName", uiBindKey);  //增加参数.
                     //获得map基本信息.
@@ -54,7 +54,7 @@
                     }
                     pushData = ToJson(pushData);
                     $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
-                    if(mapAttr.UIIsEnable == 0)
+                    if (mapAttr.UIIsEnable == 0)
                         $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
                     $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', val);
@@ -62,8 +62,8 @@
             }
         }
 
-       
-            $('#TB_' + mapAttr.KeyOfEn).val(val);
+
+        $('#TB_' + mapAttr.KeyOfEn).val(val);
 
         //文本框.
         if (mapAttr.UIContralType == 0) {
@@ -83,8 +83,8 @@
                 var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
                 if (selectText == null || selectText == undefined || selectText == "")
                     selectText = mainTable[mapAttr.KeyOfEn + "T"];
-                if(selectText != null && selectText != undefined && selectText != "")
-                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + val + "'>" + selectText + "</option>");
+                if (selectText != null && selectText != undefined && selectText != "")
+                    $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + val + "'>" + selectText + "</option>");
             }
             $('#DDL_' + mapAttr.KeyOfEn).val(val);
 
@@ -245,7 +245,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
         //一起转成entity.
         var mapExt = new Entity("BP.Sys.MapExt", mapExt);
-       
+
         var mapAttr = new Entity("BP.Sys.MapAttr");
         mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
         var count = mapAttr.RetrieveFromDBSources();
@@ -263,26 +263,42 @@ function AfterBindEn_DealMapExt(frmData) {
         //处理Pop弹出框
         var PopModel = mapAttr.GetPara("PopModel");
 
-        if (PopModel!="" && (mapExt.ExtType == mapAttr.GetPara("PopModel"))) {
+        if (PopModel != "" && (mapExt.ExtType == mapAttr.GetPara("PopModel"))) {
             PopMapExt(mapAttr, mapExt, frmData);
             continue;
         }
 
         //处理文本自动填充
         var TBModel = mapAttr.GetPara("TBFullCtrl");
-        if (TBModel != "" && TBModel!="None" && (mapExt.ExtType == "TBFullCtrl")) {
+        if (TBModel != "" && TBModel != "None" && (mapExt.ExtType == "TBFullCtrl")) {
             var tbAuto = $("#TB_" + mapExt.AttrOfOper);
             if (tbAuto == null)
                 continue;
 
-            tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'TB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\',\'"+TBModel+"\');");
+            tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'TB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\',\'" + TBModel + "\');");
             tbAuto.attr("AUTOCOMPLETE", "OFF");
             continue;
         }
 
         //下拉框填充其他控件
         var DDLFull = mapAttr.GetPara("IsFullData");
-        if (DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl")!=-1)) {
+        if (DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl") != -1)) {
+            //枚举类型
+            if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
+                var ddlOper = $('input:radio[name="RB_' + mapExt.AttrOfOper + '"]');
+                if (ddlOper.length == 0)
+                    continue;
+                var enName = frmData.Sys_MapData[0].No;
+
+                ddlOper.attr("onchange", "Change('" + enName + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
+
+                //初始化填充数据
+                var val = $('input:radio[name="RB_' + mapExt.AttrOfOper + '"]:checked').val();
+                DDLFullCtrl(val, "DDL_" + mapExt.AttrOfOper, mapExt.MyPK);
+                continue;
+            }
+
+            //外键类型
             var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
             if (ddlOper.length == 0)
                 continue;
@@ -290,6 +306,10 @@ function AfterBindEn_DealMapExt(frmData) {
             var enName = frmData.Sys_MapData[0].No;
 
             ddlOper.attr("onchange", "Change('" + enName + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
+            //初始化填充数据
+            var val = ddlOper.val();
+            if (val != "" && val != undefined)
+                DDLFullCtrl(val, "DDL_" + mapExt.AttrOfOper, mapExt.MyPK);
             continue;
         }
 
@@ -340,14 +360,14 @@ function AfterBindEn_DealMapExt(frmData) {
 
 
                 var tb = $('#TB_' + mapExt.AttrOfOper);
-                
+
                 if (tb.attr('class') != undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {
                     break;
                 } else {
                     tb.addClass("CheckRegInput");
                     tb.data(mapExt)
                     tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
-                  
+
                 }
                 break;
             case "InputCheck": //输入检查
@@ -360,13 +380,13 @@ function AfterBindEn_DealMapExt(frmData) {
                 var left = tbFastInput.parent().css('left') == "auto" ? 0 : parseInt(tbFastInput.parent().css('left').replace("px", ""));
                 var width = tbFastInput.width() + left;
                 width = tbFastInput.parent().css('left') == "auto" ? width - 70 : width - 180;
-               
+
                 var content = $("<span style='margin-left:" + width + "px;top: -15px;position: relative;'></span><br/>");
                 tbFastInput.after(content);
                 content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper + "\")'>清空<a>");
 
                 break;
-            
+
             case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
                 var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
                 var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
@@ -445,7 +465,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 }
                 break;
             default:
-               
+
         }
     }
 }
@@ -484,45 +504,45 @@ function PopMapExt(mapAttr, mapExt, frmData) {
                 popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
             }
             switch (popWorkModelStr) {
-                /// <summary>             
-                /// 自定义URL             
-                /// </summary>             
-                //SelfUrl =1,             
+                /// <summary>              
+                /// 自定义URL              
+                /// </summary>              
+                //SelfUrl =1,              
                 case "1":
                     icon = "glyphicon glyphicon-th";
                     break;
-                /// <summary>             
-                /// 表格模式             
-                /// </summary>             
-                // TableOnly,             
+                /// <summary>              
+                /// 表格模式              
+                /// </summary>              
+                // TableOnly,              
                 case "2":
                     icon = "glyphicon glyphicon-list";
                     break;
-                /// <summary>             
-                /// 表格分页模式             
-                /// </summary>             
-                //TablePage,             
+                /// <summary>              
+                /// 表格分页模式              
+                /// </summary>              
+                //TablePage,              
                 case "3":
                     icon = "glyphicon glyphicon-list-alt";
                     break;
-                /// <summary>             
-                /// 分组模式             
-                /// </summary>             
-                // Group,             
+                /// <summary>              
+                /// 分组模式              
+                /// </summary>              
+                // Group,              
                 case "4":
                     icon = "glyphicon glyphicon-list-alt";
                     break;
-                /// <summary>             
-                /// 树展现模式             
-                /// </summary>             
-                // Tree,             
+                /// <summary>              
+                /// 树展现模式              
+                /// </summary>              
+                // Tree,              
                 case "5":
                     icon = "glyphicon glyphicon-tree-deciduous";
                     break;
-                /// <summary>             
-                /// 双实体树             
-                /// </summary>             
-                // TreeDouble             
+                /// <summary>              
+                /// 双实体树              
+                /// </summary>              
+                // TreeDouble              
                 case "6":
                     icon = "glyphicon glyphicon-tree-deciduous";
                     break;
@@ -545,14 +565,14 @@ function TBHelp(ObjId, MyPK) {
     var W = document.body.clientWidth - 500;
     var H = document.body.clientHeight - 140;
     //var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);
-    OpenBootStrapModal(url,"TBHelpIFram","词汇选择", W, H);
+    OpenBootStrapModal(url, "TBHelpIFram", "词汇选择", W, H);
 }
 function changeFastInt(ctrl, value) {
     $("#TB_" + ctrl).val(value);
-    if($('#eudlg').length>0)
+    if ($('#eudlg').length > 0)
         $('#eudlg').window('close');
-    if($('#bootStrapdlg').length>0)
-    $('#bootStrapdlg').modal('hide');
+    if ($('#bootStrapdlg').length > 0)
+        $('#bootStrapdlg').modal('hide');
 }
 function clearContent(ctrl) {
     $("#" + ctrl).val("");
@@ -753,6 +773,7 @@ function SetCtrlVal(ctrlID, val) {
         $("#DDL_" + ctrlID).val(val);
     if ($("#CB_" + ctrlID).length != 1)
         $("#CB_" + ctrlID).val(val);
+
 }
 
 //显示大图

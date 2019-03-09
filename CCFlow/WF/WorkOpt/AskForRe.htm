@@ -182,7 +182,7 @@
             var data = handler.DoMethodReturnString("AskForRe");
 
             if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
+                data = data.replace('url@./WorkOpt/', './');
                 window.location.href = data;
                 return;
             }

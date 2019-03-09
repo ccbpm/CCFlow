@@ -2196,8 +2196,8 @@ namespace BP.WF.HttpHandler
             string model = this.GetRequestVal("Model"); //模式.
 
             BP.WF.AskforHelpSta sta = BP.WF.AskforHelpSta.AfterDealSend;
-            if (model == "0")
-                sta = BP.WF.AskforHelpSta.AfterDealSend;
+            if (model == "1")
+                sta = BP.WF.AskforHelpSta.AfterDealSendByWorker;
 
             return BP.WF.Dev2Interface.Node_Askfor(workID, sta, toEmp, note);
         }

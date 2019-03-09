@@ -2529,7 +2529,7 @@ namespace BP.WF.HttpHandler
                     case UIContralType.DDL:
                         try
                         {
-                            if (attr.MyFieldType == FieldType.FK)
+                            if (attr.MyDataType == DataType.AppString)
                             {
                                 string str = this.GetValFromFrmByKey(attr.Key);
                                 objs[idx] = str;

@@ -783,7 +783,9 @@ namespace BP.WF.CCBill
 
             string guid=DBAccess.GenerGUID();
 
-            sql = "INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, Url, OpenWay,Icon,MenuCtrlWay) VALUES ('" + guid + "', '" + this.Name + "', '" + menumNo + "', 1, 4, '" + app + "', '',  0,'',1)";
+            string url = "../WF/CCBill/Search.htm?FrmID="+this.No;
+
+            sql = "INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, Url, OpenWay,Icon,MenuCtrlWay) VALUES ('" + guid + "', '" + this.Name + "', '" + menumNo + "', 1, 4, '" + app + "', '"+url+"',  0,'',1)";
             DBAccess.RunSQL(sql);
             return "加入成功,如何<a href='En.htm?EnName=BP.GPM.Menu&No=" + guid + "'>控制权限请转GPM.</a>";
         }

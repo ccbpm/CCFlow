@@ -42,7 +42,6 @@ namespace BP.WF.CCBill
         public const string ShowCols = "ShowCols";
         #endregion 隐藏属性
 
-
         #region 按钮信息.
         /// <summary>
         /// 按钮New标签
@@ -93,6 +92,24 @@ namespace BP.WF.CCBill
         /// </summary>
         public const string BtnGroupEnable = "BtnGroupEnable";
         #endregion
+
+        #region 打印
+        public const string BtnPrintHtml = "BtnPrintHtml";
+        public const string BtnPrintHtmlEnable = "BtnPrintHtmlEnable";
+
+        public const string BtnPrintPDF = "BtnPrintPDF";
+        public const string BtnPrintPDFEnable = "BtnPrintPDFEnable";
+
+        public const string BtnPrintRTF = "BtnPrintRTF";
+        public const string BtnPrintRTFEnable = "BtnPrintRTFEnable";
+
+        public const string BtnPrintCCWord = "BtnPrintCCWord";
+        public const string BtnPrintCCWordEnable = "BtnPrintCCWordEnable";
+
+
+        #endregion
+
+
     }
     /// <summary>
     /// 单据属性
@@ -149,7 +166,23 @@ namespace BP.WF.CCBill
                 this.SetValByKey(FrmBillAttr.FrmBillWorkModel, value);
             }
         }
-        
+        /// <summary>
+        /// 表单类型
+        /// </summary>
+        public FrmType FrmType
+        {
+            get
+            {
+                return (FrmType)this.GetValIntByKey(MapDataAttr.FrmType);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.FrmType, (int)value);
+            }
+        }
+        /// <summary>
+        /// 表单树
+        /// </summary>
         public string FK_FormTree
         {
             get
@@ -170,7 +203,7 @@ namespace BP.WF.CCBill
             {
                 string str= this.GetValStrByKey(FrmBillAttr.BillNoFormat);
                 if (DataType.IsNullOrEmpty(str) == true)
-                    str = "ccbpm-{YYYY}-{MM}-{LSH4}";
+                    str = "ccbpm-{YYYY}-{LSH4}";
                 return str;
             }
             set
@@ -246,23 +279,35 @@ namespace BP.WF.CCBill
                 #endregion 单据属性.
 
                 #region 按钮权限.
-                map.AddTBString(FrmBillAttr.BtnNewLable, null, "新建", true, false, 0, 100, 20);
+                map.AddTBString(FrmBillAttr.BtnNewLable, null, "新建", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnNewEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSaveLable, null, "保存", true, false, 0, 100, 20);
+                map.AddTBString(FrmBillAttr.BtnSaveLable, null, "保存", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnStartFlowLable, null, "启动流程", true, false, 0, 100, 20);
+                map.AddTBString(FrmBillAttr.BtnStartFlowLable, null, "启动流程", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnStartFlowEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnDelLable, null, "删除", true, false, 0, 100, 20);
+                map.AddTBString(FrmBillAttr.BtnDelLable, null, "删除", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSearchLabel, null, "查询", true, false, 0, 100, 20);
+                map.AddTBString(FrmBillAttr.BtnSearchLabel, null, "查询", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnGroupLabel, null, "分析", true, false, 0, 100, 20);
+                map.AddTBString(FrmBillAttr.BtnGroupLabel, null, "分析", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnPrintHtml, null, "打印Html", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnPrintHtmlEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnPrintPDF, null, "打印PDF", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnPrintPDFEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnPrintRTF, null, "打印RTF", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnPrintRTFEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnPrintCCWord, null, "打印CCWord", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnPrintCCWordEnable, true, "是否可用？", true, true);
                 #endregion 按钮权限.
 
                 #region 设计者信息.
@@ -272,12 +317,21 @@ namespace BP.WF.CCBill
                 //map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20,false);
                 //map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
                 //map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false,true);
-
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
+
+                rm = new RefMethod();
+                rm.Title = "设计表单"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoDesigner";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                //rm.GroupName = "开发接口";
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "单据url的API"; // "设计表单";
@@ -297,9 +351,11 @@ namespace BP.WF.CCBill
                 //rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
 
+
                 rm = new RefMethod();
                 rm.Title = "绑定到菜单目录"; // "设计表单";
-                rm.HisAttrs.AddDDLSQL("xxxx", null, "选择菜单目录", "SELECT No,Name FROM GPM_Menu WHERE MenuType=3");
+                rm.HisAttrs.AddDDLSQL("MENUNo", null, "选择菜单目录", "SELECT No,Name FROM GPM_Menu WHERE MenuType=3");
+                rm.HisAttrs.AddTBString("Name", "@Name", "菜单名称", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoBindMenu";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.Func;
@@ -367,7 +423,21 @@ namespace BP.WF.CCBill
         }
         #endregion 报表定义.
 
+        /// <summary>
+        /// 设计表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoDesigner()
+        {
+            if (this.FrmType == Sys.FrmType.FreeFrm)
+                return "";
+            return "";
+        }
 
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeUpdate()
         {
             //如果是单据,就要检查一下单据状态.
@@ -377,6 +447,9 @@ namespace BP.WF.CCBill
             }
             return base.beforeUpdate();
         }
+        /// <summary>
+        /// 检查单据.
+        /// </summary>
         public void CheckBill()
         {
             //取出来全部的属性.
@@ -776,16 +849,15 @@ namespace BP.WF.CCBill
         /// 绑定菜单树
         /// </summary>
         /// <returns>返回执行结果.</returns>
-        public string DoBindMenu(string menumNo)
+        public string DoBindMenu(string menumDirNo, string menuName)
         {
-            string sql = "SELECT FK_App FROM GPM_Menu WHERE No='" + menumNo + "'";
+            string sql = "SELECT FK_App FROM GPM_Menu WHERE No='" + menumDirNo + "'";
             string app = DBAccess.RunSQLReturnString(sql);
 
             string guid=DBAccess.GenerGUID();
 
             string url = "../WF/CCBill/Search.htm?FrmID="+this.No;
-
-            sql = "INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, Url, OpenWay,Icon,MenuCtrlWay) VALUES ('" + guid + "', '" + this.Name + "', '" + menumNo + "', 1, 4, '" + app + "', '"+url+"',  0,'',1)";
+            sql = "INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, Url, OpenWay,Icon,MenuCtrlWay) VALUES ('" + guid + "', '" + menuName + "', '" + menumDirNo + "', 1, 4, '" + app + "', '" + url + "',  0,'',1)";
             DBAccess.RunSQL(sql);
             return "加入成功,如何<a href='En.htm?EnName=BP.GPM.Menu&No=" + guid + "'>控制权限请转GPM.</a>";
         }

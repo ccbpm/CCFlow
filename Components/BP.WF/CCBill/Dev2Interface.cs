@@ -47,6 +47,29 @@ namespace BP.WF.CCBill
             gb.NDStepName = "启动";
             gb.DirectInsert();
 
+
+            //单据编号.
+            if (DataType.IsNullOrEmpty(gb.BillNo) == true)
+            {
+                gb.BillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, fb.PTable);
+
+                //更新单据里面的billNo字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "BillNo") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET BillNo='" + gb.BillNo + "' WHERE OID=" + gb.WorkID);
+            }
+
+            //标题.
+            if (DataType.IsNullOrEmpty(gb.Title) == true)
+            {
+
+                //gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+
+                //更新单据里面的 Title 字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "Title") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET Title='" + gb.Title + "' WHERE OID=" + gb.WorkID);
+            }
+
+
             return gb.WorkID;
         }
         /// <summary>

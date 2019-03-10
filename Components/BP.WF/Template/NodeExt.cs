@@ -612,6 +612,14 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
 
+                // add 2019.3.10 增加List.
+                map.AddTBString(BtnAttr.ListLab, "列表", "列表按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ListEnable, true, "是否启用", true, true);
+
+                // 批量审核
+                map.AddTBString(BtnAttr.BatchLab, "批量审核", "批量审核标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
+
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
 

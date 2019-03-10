@@ -1201,6 +1201,10 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
 
+                // add 2019.3.10 增加List.
+                map.AddTBString(BtnAttr.ListLab, "列表", "列表按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ListEnable, true, "是否启用", true, true);
+
 
                 #region 公文按钮
                 map.AddTBString(BtnAttr.OfficeOpenLab, "打开本地", "打开本地标签", true, false, 0, 50, 10);

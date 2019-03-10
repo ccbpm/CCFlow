@@ -406,6 +406,7 @@ namespace BP.GPM
                 //map.AttrsOfOneVSM.Add(new ByEmps(), new Emps(), ByStationAttr.RefObj, ByEmpAttr.FK_Emp,
                 //    EmpAttr.Name, EmpAttr.No, "可访问的人员");
 
+                #region 基本功能.
                 //可以访问的权限组.
                 map.AttrsOfOneVSM.Add(new GroupMenus(), new Groups(),
                     GroupMenuAttr.FK_Menu, GroupMenuAttr.FK_Group, EmpAttr.Name, EmpAttr.No, "绑定到权限组");
@@ -424,7 +425,6 @@ namespace BP.GPM
                    EmpMenuAttr.FK_Menu,
                    EmpMenuAttr.FK_Emp, "绑定人员-树结构", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
-
                 //不带有参数的方法.
                 RefMethod rm = new RefMethod();
                 rm.Title = "增加(增删改查)功能权限";
@@ -434,12 +434,71 @@ namespace BP.GPM
                 rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
 
+                #endregion 基本功能.
+
+
+                #region 创建菜单.
+                rm = new RefMethod();
+                rm.GroupName = "创建菜单(对目录有效)";
+                rm.Title = "创建单据";
+                rm.Warning = "您确定要创建吗？";
+
+                rm.HisAttrs.AddTBString("No", null, "单据编号", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("Name", null, "单据名称", true, false, 0, 100, 400);
+                rm.HisAttrs.AddTBString("PTable", null, "存储表(为空则为编号相同)", true, false, 0, 100, 100);
+                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "单据模式", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
+                rm.HisAttrs.AddDDLSQL("Sys_FormTree", null, "选择表单树", "SELECT No,Name FROM Sys_FormTree WHERE ParentNo='1'");
+
+                rm.ClassMethodName = this.ToString() + ".DoAddCCBill";
+                map.AddRefMethod(rm);
+                #endregion 创建菜单.
+
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
 
+        /// <summary>
+        /// 增加单据
+        /// </summary>
+        /// <param name="no">编号</param>
+        /// <param name="name">名称</param>
+        /// <param name="ptable">物理表</param>
+        /// <param name="frmType">表单类型</param>
+        /// <returns></returns>
+        public string DoAddCCBill(string no, string name, string ptable, int frmType, string formTree)
+        {
+            if (this.MenuType != GPM.MenuType.Dir)
+                return "err@菜单树的节点必须为目录才能创建.";
+
+            try
+            {
+                //创建表单.
+                if (frmType == 0)
+                    BP.Sys.CCFormAPI.CreateFrm(no, name, formTree, Sys.FrmType.FoolForm);
+                else
+                    BP.Sys.CCFormAPI.CreateFrm(no, name, formTree, Sys.FrmType.FreeFrm);
+
+                //更改单据属性.
+                BP.WF.CCBill.FrmBill fb = new WF.CCBill.FrmBill(no);
+                fb.No = no;
+                fb.Name = name;
+                fb.PTable = ptable;
+                fb.FrmBillWorkModel = 1;
+                fb.Update();
+
+                //执行绑定.
+                fb.DoBindMenu(this.No,name);
+
+                return "<a href='../Comm/En.htm?EnName=BP.WF.CCBill.FrmBill&No=" + no + "' target=_blank>打开单据属性</a>.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 增加增删改查功能权限
         /// </summary>
@@ -472,7 +531,9 @@ namespace BP.GPM
 
             return "增加成功,请刷新节点.";
         }
-
+        /// <summary>
+        /// 路径
+        /// </summary>
         public string WebPath
         {
             get
@@ -484,12 +545,15 @@ namespace BP.GPM
                 this.SetValByKey(EntityNoMyFileAttr.WebPath, value);
             }
         }
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
             this.WebPath = this.WebPath.Replace("//", "/");
             return base.beforeUpdateInsertAction();
         }
-
         /// <summary>
         /// 创建下级节点.
         /// </summary>
@@ -502,7 +566,6 @@ namespace BP.GPM
 
             return en.ToJson();
         }
-
         /// <summary>
         /// 创建同级节点.
         /// </summary>

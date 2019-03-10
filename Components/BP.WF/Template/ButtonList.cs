@@ -263,6 +263,8 @@ namespace BP.WF.Template
         /// </summary>
         public const string SelectAccepterEnable = "SelectAccepterEnable";
 
+       
+
 
         #region 公文2019
         /// <summary>
@@ -284,6 +286,15 @@ namespace BP.WF.Template
         /// </summary>
         public const string WebOfficeFrmModel = "WebOfficeFrmModel";
         #endregion 公文属性
+
+        /// <summary>
+        /// 列表
+        /// </summary>
+        public const string ListLab = "ListLab";
+        /// <summary>
+        /// 是否启用-列表
+        /// </summary>
+        public const string ListEnable = "ListEnable";
     }
     /// <summary>
     /// 按钮列表

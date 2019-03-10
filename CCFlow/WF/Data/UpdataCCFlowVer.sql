@@ -100,10 +100,15 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeSheet','@NodeID
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowSheet';                 
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowSheet','@No=基本配置@FlowRunWay=启动方式,配置工作流程如何自动发起，该选项要与流程服务一起工作才有效.@StartLimitRole=启动限制规则@StartGuideWay=发起前置导航@CFlowWay=延续流程@DTSWay=流程数据与业务数据同步@PStarter=轨迹查看权限');
 
-
-
 --2016.07 升级数据源;
 UPDATE Sys_SFTable SET FK_SFDBSrc='local' WHERE FK_SFDBSrc IS NULL OR FK_SFDBSrc='';
 UPDATE Sys_SFTable SET  SrcType=0 WHERE SrcType IS NULL ;
 UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3;
+
+-- 2019.03.10 ; 
+DELETE FROM Sys_EnCfg WHERE No='BP.WF.CCBill.FrmBill';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.CCBill.FrmBill','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
+
+
+
 

@@ -47,11 +47,9 @@ $(function () {
         else {
             setToobarEnable();
             $("#msgModal").modal("hidden");
-
         }
 
         if (window.parent != null && window.parent != undefined) {
-           
             window.parent.close();
         }
     });
@@ -61,12 +59,12 @@ $(function () {
 
         //提示消息有错误，页面不跳转
         var msg = $("#msgModalContent").html();
-        if (msg.indexOf("err@") == -1)
+        if (msg.indexOf("err@") == -1) {
             window.close();
+        }
         else {
             setToobarEnable();
             $("#msgModal").modal("hidden");
-
         }
 
         if (window.parent != null && window.parent != undefined)
@@ -288,7 +286,7 @@ function ConfirmBtn(btn, workid) {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddPara("WorkID", workid);
     var data = handler.DoMethodReturnString("Confirm"); //执行保存方法.
-     
+
 }
 
 //然浏览器最大化.
@@ -472,7 +470,7 @@ function Save() {
         $('#MessageDiv').modal().show();
     }
 
-    
+
 }
 
 //调用后，就关闭刷新按钮.
@@ -651,8 +649,6 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
             operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
             return operations;
         }
-
-
     }
 }
 
@@ -698,7 +694,7 @@ function ConvertDefVal(flowData, defVal, keyOfEn) {
 }
 
 function isExistArray(arrys, no) {
-    for (var i = 0; i < arrys.length;i++){
+    for (var i = 0; i < arrys.length; i++) {
         if (arrys[i].indexOf(no) != -1)
             return i;
     }
@@ -723,7 +719,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
             formArrResult.push(ele);
         }
-         if (ele.split('=')[0].indexOf('DDL_') == 0) {
+        if (ele.split('=')[0].indexOf('DDL_') == 0) {
 
             var ctrlID = ele.split('=')[0];
 
@@ -734,9 +730,9 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             formArrResult.push(mystr);
             formArrResult.push(ele);
         }
-        
+
     });
-   
+
 
     $.each(formArr, function (i, ele) {
         if (ele.split('=')[0].indexOf('TB_') == 0) {
@@ -773,18 +769,18 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框       
+            //下拉框        
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 var tbID = name.replace("DDL_", "TB_") + 'T';
-                if($("#"+tbID).length  == 1){
+                if ($("#" + tbID).length == 1) {
                     var index = isExistArray(formArrResult, tbID);
                     if (index == -1)
                         formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
-                 }
+                }
                 break;
 
-            //文本区域               
+            //文本区域                
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -908,7 +904,7 @@ function Send(isHuiQian) {
     //必填项和正则表达式检查.
     if (checkBlanks() == false) {
         alert("检查必填项出现错误，边框变红颜色的是否填写完整？");
-       // return;
+        // return;
     }
 
     if (checkReg() == false) {
@@ -1847,7 +1843,7 @@ function InitToolBar() {
         $('[name=Delete]').attr('onclick', '');
         $('[name=Delete]').unbind('click');
         $('[name=Delete]').bind('click', function () {
-           
+
             DeleteFlow();
         });
     }
@@ -1871,8 +1867,6 @@ function OpenOffice() {
     //                        
     //			paras = paras.Replace("&", ",");
 
-
-
     var paras = "WorkID=" + GetQueryString("WorkID") + ",";
     paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
     paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
@@ -1894,7 +1888,7 @@ function OpenOffice() {
 function initModal(modalType, toNode) {
 
     //初始化退回窗口的SRC.
-    var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
+    var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
        '<div class="modal-dialog">'
            + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
               + '<div class="modal-header">'
@@ -1908,7 +1902,8 @@ function initModal(modalType, toNode) {
        + '</div><!-- /.modal-dialog -->'
    + '</div>';
 
-    $('body').append($(returnWorkModalHtml));
+    $('body').append($(html));
+
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();
     });
@@ -1967,9 +1962,8 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人           
+            //发送选择接收节点和接收人            
             case "sendAccepter":
-
                 $('#modalHeader').text("发送到节点");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
@@ -2048,7 +2042,7 @@ function DoDelSubFlow(fk_flow, workid) {
     var data = handler.DoMethodReturnString("DelSubFlow"); //删除子流程..
     alert(data);
     window.location.href = window.location.href;
-     
+
 }
 
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.

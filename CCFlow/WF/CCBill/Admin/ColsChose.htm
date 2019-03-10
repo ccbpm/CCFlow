@@ -16,13 +16,41 @@
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID, "Idx");
 
+            //先输出 BillNo,Title 
+            var topFields = ",BillNo,Title,";
             for (var i = 0; i < mapAttrs.length; i++) {
 
                 var mapAttr = mapAttrs[i];
-                if (mapAttr.KeyOfEn == 'OID') {
+                if (topFields.indexOf(mapAttr.KeyOfEn + ",") == -1)
                     continue;
-                }
 
+                var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
+                var html = "";
+                html += "<tr>";
+                html += "<td>#</td>";
+                html += "<td>" + mapAttr.KeyOfEn + "</td>";
+
+                html += "<td> <input value='" + mapAttr.Name + "' type=text style='width:100%;'  id='TB_" + mapAttr.KeyOfEn + "' /></td>";
+                html += "<td> <input value='" + mapAttr.UIWidth + "' type=text style='width:40px;'  id='TBW_" + mapAttr.KeyOfEn + "' /></td>";
+
+                if (mapAttrEn.GetPara("SearchVisable") != "1")
+                    mapAttrEn.Update();
+
+                html += "<td>显示</td>";
+
+                html += "<td>#</td>";
+                html += "</tr>";
+
+                $("#Table1 tr:last").after(html);
+            }
+
+            //不显示的字段.
+            var cutAttrs = "OID,AtPara,RDT,Title,BillNo,";
+            for (var i = 0; i < mapAttrs.length; i++) {
+
+                var mapAttr = mapAttrs[i];
+                if (cutAttrs.indexOf(mapAttr.KeyOfEn + ",") != -1)
+                    continue;
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
 
                 var html = "";
@@ -69,7 +97,6 @@
         function Down(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.DoMethodReturnString("DoDownTabIdx");
-
             window.location.href = window.location.href;
         }
 
@@ -125,6 +152,7 @@
                 顺序
             </th>
         </tr>
+
     </table>
     <input type="button" value="保存" onclick="Save()" />
     <input type="button" value="设置查询条件" onclick="SaveAndSetSearchCond()" />

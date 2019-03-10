@@ -35,8 +35,6 @@
             frmBill = new Entity("BP.WF.CCBill.FrmBill", frmID);
 
             document.title = frmBill.Name;
-            //$("#SearchLab").html(frmBill.Name);
-
 
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
@@ -49,7 +47,6 @@
             var data = JSON.parse(data);
             // 流程实例列表.
             var ens = data['WF_CCBill'];
-
 
             _Html = "";
 
@@ -286,6 +283,10 @@
             var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID");
             window.location.href = url;
         }
+        function Group() {
+            var url = "Group.htm?FrmID=" + GetQueryString("FrmID");
+            window.location.href = url;
+        }
     </script>
     <style>
         /* 按钮风格 */
@@ -319,6 +320,11 @@
             <div class="row search-padding" style="float: left">
                 <!--<div id="SearchLab" style=" float:left"></div>&nbsp;&nbsp;-->
                 <input type='text' placeholder="请输入关键字..." id='TB_Key' />
+                日期从:
+                <input type='text' placeholder="yyyy-MM-dd" id='Text1' />
+                到:
+                <input type='text' placeholder="yyyy-MM-dd" id='Text2' />
+
                 <input type="button" id="Btn_Search" onclick="javascript:SearchKey();" value="查询" />
                 <input type="button" id="Btn_New" onclick="javascript:New();" value="新建" />
                 <input type="button" id="Btn_Del" onclick="javascript:Delete();" value="删除" />

@@ -562,7 +562,7 @@
 
             // OpenFrm(rowData.OID,0, fk_flow);
             //  var url = '../WorkOpt/OneWork/OneWork.htm?currTab=Truck&WorkID=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + (rowData.FID ? rowData.FID : 0) + '&t=' + Math.random();
-            var url = '../WorkOpt/OneWork/OneWork.htm?currTab=Frm&WorkID=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + (rowData.FID ? rowData.FID : 0) + '&t=' + Math.random();
+            var url = '../WorkOpt/OneWork/OneWork.htm?currTab=Frm&WorkID=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FK_Node=' + rowData.FlowEndNode + '&FID=' + (rowData.FID ? rowData.FID : 0) + '&t=' + Math.random();
             // OpenEasyUiDialog(url, 'eudlgframe', '流程轨迹', 1000, 618);
             WinOpen(url);
         }

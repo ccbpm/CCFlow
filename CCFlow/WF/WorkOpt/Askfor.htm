@@ -136,31 +136,6 @@
 
 
 
-        function DeleteIt(empNo, row) {
-
-
-            //执行数据初始化工作.
-            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            hand.AddUrlData();
-            hand.AddPara("FK_Emp", empNo);
-            var data = hand.DoMethodReturnString("HuiQian_Delete");
-
-            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
-                alert(data);
-                return;
-            }
-
-            //delRow(row); //清空单个table tbody
-            ClearTable();
-
-            // 把返回的结果，重新绑定.
-            var sas = JSON.parse(data);
-            BindTable(sas);
-            return;
-        }
-
-
-
         //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
         function SaveAndClose() {
 
@@ -169,7 +144,7 @@
                 alert("加签人不能为空");
                 return;
             }
-            var note = $("#TB_Tag2").val();
+            var note = $("#TB_Tag2").val().trim();
             if (note == null || note == "") {
                 alert("加签原因不能为空");
                 return;
@@ -180,7 +155,7 @@
             if (toNode == undefined || toNode == "undefined")
                 toNode = "0";
 
-            $("#Btn_HuiQian").attr("disabled", "disabled");
+            $("#Btn_JiaQian").attr("disabled", "disabled");
             $("#Btn_SelectEmps").attr("disabled", "disabled");
 
 
@@ -194,7 +169,7 @@
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
-                $("#Btn_HuiQian").attr("disabled", "");
+                $("#Btn_JiaQian").attr("disabled", "");
                 $("#Btn_SelectEmps").attr("disabled", "");
                 return;
             }
@@ -205,44 +180,9 @@
                 return;
             }
 
-            //如果需要发送,就执行发送.
-            if (data.indexOf('Send@') == 0) {
-                SendIt();
-                return;
-            }
-
-            //提示信息后关闭窗口.
-            if (data.indexOf('close@') == 0) {
-
-                alert(data.replace('close@', ''));
-
-                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                    window.parent.returnWorkWindowClose("");
-                    window.parent.close();
-
-                } else {
-
-                    $('body').append($('<div>' + "已取消操作" + '</div>'));
-
-                    window.close();
-                }
-                return;
-            }
-
-            //提示信息.
-            if (data.indexOf('info@') == 0) {
-
-                alert(data.replace('info@', ''));
-
-                $("#Btn_HuiQian").attr("disabled", false);
-                $("#Btn_HuiQian").val("执行会签");
-                $("#Btn_SelectEmps").attr("disabled", false);
-
-                return;
-            }
 
             alert(data);
-            window.close();
+            window.parent.close();
           
             return;
         }
@@ -306,8 +246,6 @@
             $("#TB_No").val(name[2]);
             $("#TB_Emps").val(name[0]);
 
-//            DoHuiQian(no);
-
             $("#SelectEmp").hide().html("");
         }
 
@@ -359,16 +297,11 @@
             </div>
            
             <div id="next">
-                <input type="button" id="Btn_HuiQian" value="提交" onclick="SaveAndClose();" />
+                <input type="button" id="Btn_JiaQian" value="提交" onclick="SaveAndClose();" />
                 <!--<img src="../Img/Multiplayer.png"  onclick="SaveAndClose();"  style="width:27px;"/>-->
                 <div id="HelpInfo" style="">
                     <ul>
-                        1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。
-                        <br />2、点击“保存会签人列表并关闭”按钮后，可将工作发送至列表中除主持人以外的所有会签人的待办，在所有会签人都处理完成后，主持人才可向下一步发送工作。
-                        <br />3、若会签人长时间未处理该工作，或会签主持人不再需要该人提供处理意见，在会签人列表中状态为“未审批”的情况下，可以由会签主持人移除。 
-                        <br />4、可以使用人员名称拼音，支持全拼和简拼。
-                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua 
-                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx 
+                         
                     </ul>
                 </div>
             </div>

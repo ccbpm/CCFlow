@@ -1,12 +1,8 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>加签</title>
-    <!--
-    1, 退回界面。
-    2，需要 FK_Flow, FK_Node,WorkID, FID.
-    3, 调用方法 HuiQian.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
-    -->
+    <title>加签回复</title>
+   
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
@@ -169,8 +165,7 @@
 
             var note = $("#TB_Tag2").val();
 
-            $("#Btn_HuiQian").attr("disabled", "disabled");
-            $("#Btn_HuiQian").val("执行中...");
+            $("#Btn_JiaQianRe").attr("disabled", "disabled");
             $("#Btn_SelectEmps").attr("disabled", "disabled");
 
 
@@ -216,16 +211,42 @@
 
                 alert(data.replace('info@', ''));
 
-                $("#Btn_HuiQian").attr("disabled", false);
-                $("#Btn_HuiQian").val("执行会签");
+                $("#Btn_JiaQianRe").attr("disabled", false);
+                $("#Btn_JiaQianRe").val("执行会签");
                 $("#Btn_SelectEmps").attr("disabled", false);
 
                 return;
             }
+            $(".Msg").css("color", "");
+            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
 
-            alert(data);
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
+
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+
+
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>&nbsp;@');
+
+
+            data = data.replace('@', '<br/>@');
+            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+            $(".Msg").show();
+            $(".Msg").html(data);
             window.close();
-            $("#Btn_HuiQian").val("提交");
+            $("#Btn_JiaQianRe").val("提交");
             return;
         }
 
@@ -245,14 +266,7 @@
     <br />
     <div>
         <div id="labInfo">
-          <!--  选择加签人:
-            <input type="hidden" id="TB_No" />
-            <input type="text" id="TB_Emps"  title="查张三,您可输入: zs或zhangs或zhangsan"
-                placeholder="查张三,您可输入:zs或zhangs或zhangsan"  name="TB_Emps" value='' style="width: 300px;" />
-            <input type="button" id="Btn_SelectEmps" value='选择加签人' /><a href="javascript:Help()">帮助</a>
-            <div id="SelectEmp">
-            </div>
-            <br />-->
+          <div class="Msg" style="text-align: left; display:none;"> <img src='../Img/loading.gif' alt="" /></div>
             <div id="Div1">
                 <th colspan="2">
                     加签回复:
@@ -267,13 +281,13 @@
             </div>
            
             <div id="next">
-                <input type="button" id="Btn_HuiQian" value="提交" onclick="SaveAndClose();" />
+                <input type="button" id="Btn_JiaQianRe" value="提交" onclick="SaveAndClose();" />
             </div>
             
         </div>
-        <div class="Msg" style="float: left;">
+        <!--<div class="Msg" style="float: left;">
             <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
-    </div>
+    </div>-->
     <br />
     </div>
 </body>

@@ -327,11 +327,12 @@ function AfterBindEn_DealMapExt(frmData) {
                         var dateFmt = 'yyyy-MM-dd';
                         if (mapAttr.MyDataType == 7)
                             dateFmt = 'yyyy-MM-dd HH:mm';
-
+                        var mapextDoc = mapExt.Doc;
+                      
                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
                             WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
                                 $(this).blur(); //失去焦点 
-                                DBAccess.RunFunctionReturnStr(mapExt.Doc);
+                                DBAccess.RunFunctionReturnStr(mapextDoc);
                             }
                             });
                         });

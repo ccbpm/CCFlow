@@ -1968,7 +1968,7 @@ var HttpHandler = (function () {
             var queryString = url;
             if (url == null || url == undefined || url == "")
                 queryString = document.location.search.substr(1);
-
+			queryString = queryString.replace(/%/g, '%25');
             queryString = decodeURI(queryString);
             var self = this;
             $.each(queryString.split("&"), function (i, o) {

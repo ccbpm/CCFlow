@@ -1420,14 +1420,22 @@ function GenerWorkNode() {
 
     //循环之前的提示信息.
     var info = "";
+    var title = ""
     for (var i = 0; i < flowData.AlertMsg.length; i++) {
         var alertMsg = flowData.AlertMsg[i];
         var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
-        $('#Message').append(alertMsgEle);
-        $('#Message').append($('<hr/>'));
+        title  = alertMsg.Title;
+        if (title.indexOf("请求加签") > 0) {
+            $('#flowInfo').append(alertMsgEle);
+            
+        } else {
+            $('#Message').append(alertMsgEle);
+            $('#Message').append($('<hr/>'));
+        }
+        
     }
 
-    if (flowData.AlertMsg.length != 0) {
+    if (flowData.AlertMsg.length != 0 && title.indexOf("请求加签") < 0) {
         $('#MessageDiv').modal().show();
     }
 
@@ -2212,4 +2220,14 @@ function SetCtrlVal(ctrlID, val) {
     if (ctrl) {
         ctrl.value = val;
     }
+}
+//加签回复
+function AskForRe(fk_flow, fk_node, workID, fid) {
+    var url = "WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workID + "&FID=" + fid;
+    var iframeId = "askForRe";
+    var dlgTitle = "加签回复";
+    var dlgWidth = "800";
+    var dlgHeight = "400";
+    var showCloseBtn = true;
+    OpenBootStrapModal(url, iframeId, dlgTitle, dlgWidth, dlgHeight, showCloseBtn);
 }

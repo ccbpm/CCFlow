@@ -293,10 +293,8 @@ namespace BP.GPM
                 map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 100);
                 map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel, "@0=BS系统@1=CS系统");
                 map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 150, true);
-
                 map.AddDDLEntities(AppAttr.FK_AppSort, null, "类别", new AppSorts(), true);
                 map.AddBoolean(AppAttr.IsEnable, true, "是否启用", true, true);
-
 
                 map.AddTBString(AppAttr.Url, null, "默认连接", true, false, 0, 3900, 100, true);
                 map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 100, true);

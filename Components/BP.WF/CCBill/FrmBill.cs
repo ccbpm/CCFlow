@@ -105,9 +105,36 @@ namespace BP.WF.CCBill
 
         public const string BtnPrintCCWord = "BtnPrintCCWord";
         public const string BtnPrintCCWordEnable = "BtnPrintCCWordEnable";
-
-
         #endregion
+
+        /// <summary>
+        /// 导出zip文件
+        /// </summary>
+        public const string BtnExpZip = "BtnExpZip";
+        /// <summary>
+        /// 是否可以启用?
+        /// </summary>
+        public const string BtnExpZipEnable = "BtnExpZipEnable";
+
+        #region 集合的操作.
+        /// <summary>
+        /// 导入Excel
+        /// </summary>
+        public const string BtnImpExcel = "BtnImpExcel";
+        /// <summary>
+        /// 是否启用导入
+        /// </summary>
+        public const string BtnImpExcelEnable = "BtnImpExcelEnable";
+
+        /// <summary>
+        /// 导出Excel
+        /// </summary>
+        public const string BtnExpExcel = "BtnExpExcel";
+        /// <summary>
+        /// 导出excel
+        /// </summary>
+        public const string BtnExpExcelEnable = "BtnExpExcelEnable";
+        #endregion 集合的操作.
 
 
     }
@@ -279,44 +306,55 @@ namespace BP.WF.CCBill
                 #endregion 单据属性.
 
                 #region 按钮权限.
-                map.AddTBString(FrmBillAttr.BtnNewLable, null, "新建", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnNewEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSaveLable, null, "保存", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnStartFlowLable, null, "启动流程", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnStartFlowLable, "启动流程", "启动流程", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnStartFlowEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnDelLable, null, "删除", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSearchLabel, null, "查询", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnSearchLabel, "查询", "查询", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnGroupLabel, null, "分析", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintHtml, null, "打印Html", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnPrintHtml, "打印Html", "打印Html", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnPrintHtmlEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintPDF, null, "打印PDF", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnPrintPDF, "打印PDF", "打印PDF", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnPrintPDFEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintRTF, null, "打印RTF", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnPrintRTF, "打印RTF", "打印RTF", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnPrintRTFEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintCCWord, null, "打印CCWord", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnPrintCCWord, "打印CCWord", "打印CCWord", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnPrintCCWordEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnExpZip, "导出zip文件", "导出zip文件", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnExpZipEnable, true, "是否可用？", true, true);
                 #endregion 按钮权限.
 
+                #region 查询按钮权限.
+                map.AddTBString(FrmBillAttr.BtnImpExcel, "导入Excel文件", "导入Excel文件", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnExpExcel, "导出Excel文件", "导出Excel文件", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
+                #endregion 查询按钮权限.
+
                 #region 设计者信息.
-                //map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
-                //map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
-                //map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20,true);
-                //map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20,false);
-                //map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
-                //map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false,true);
+                map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
+                map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
+                map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
+                map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
+                map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
+                map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 

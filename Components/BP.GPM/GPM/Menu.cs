@@ -367,7 +367,7 @@ namespace BP.GPM
                 #endregion 与树有关的必备属性.
                 // 类的字段属性. 
                 map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType,
-                    "@0=系统根目录@1=系统类别@2=系统@3=目录@4=功能@5=功能控制点");
+                    "@0=系统根目录@1=系统类别@2=系统@3=目录@4=功能/界面@5=功能控制点");
 
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);

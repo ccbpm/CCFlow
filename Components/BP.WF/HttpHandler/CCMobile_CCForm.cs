@@ -60,6 +60,115 @@ namespace BP.WF.HttpHandler
             return ccform.Dtl_Init();
         }
 
+        //保存从表数据
+        public string Dtl_SaveRow()
+        {
+            #region  查询出来从表数据.
+            GEDtls dtls = new GEDtls(this.EnsName);
+            GEDtl dtl = dtls.GetNewEntity as GEDtl;
+            dtls.Retrieve("RefPK", this.GetRequestVal("RefPKVal"));
+            Map map = dtl.EnMap;
+            foreach (Entity item in dtls)
+            {
+                string pkval = item.GetValStringByKey(dtl.PK);
+                foreach (Attr attr in map.Attrs)
+                {
+                    if (attr.IsRefAttr == true)
+                        continue;
+
+                    if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+                    {
+                        if (attr.UIIsReadonly == true)
+                            continue;
+
+                        string val = this.GetValFromFrmByKey("TB_" + attr.Key + "_" + pkval, null);
+                        item.SetValByKey(attr.Key, val);
+                        continue;
+                    }
+
+
+                    if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                    {
+                        string val = this.GetValFromFrmByKey("TB_" + attr.Key + "_" + pkval, null);
+                        item.SetValByKey(attr.Key, val);
+                        continue;
+                    }
+
+                    if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                    {
+                        string val = this.GetValFromFrmByKey("DDL_" + attr.Key + "_" + pkval);
+                        item.SetValByKey(attr.Key, val);
+                        continue;
+                    }
+
+                    if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+                    {
+                        string val = this.GetValFromFrmByKey("CB_" + attr.Key + "_" + pkval, "-1");
+                        if (val == "-1")
+                            item.SetValByKey(attr.Key, 0);
+                        else
+                            item.SetValByKey(attr.Key, 1);
+                        continue;
+                    }
+                }
+
+                item.Update(); //执行更新.
+            }
+            #endregion  查询出来从表数据.
+
+            #region 保存新加行.
+          
+            string keyVal = "";
+            foreach (Attr attr in map.Attrs)
+            {
+
+                if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+                {
+                    if (attr.UIIsReadonly == true)
+                        continue;
+
+                    keyVal = this.GetValFromFrmByKey("TB_" + attr.Key + "_0", null);
+                    dtl.SetValByKey(attr.Key, keyVal);
+                    continue;
+                }
+
+
+                if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                {
+                    keyVal = this.GetValFromFrmByKey("TB_" + attr.Key + "_0");
+                    if (attr.IsNum && keyVal == "")
+                        keyVal = "0";
+                    dtl.SetValByKey(attr.Key, keyVal);
+                    continue;
+                }
+
+                if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                {
+                    keyVal = this.GetValFromFrmByKey("DDL_" + attr.Key + "_0");
+                    dtl.SetValByKey(attr.Key, keyVal);
+                    continue;
+                }
+
+                if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+                {
+                    keyVal = this.GetValFromFrmByKey("CB_" + attr.Key + "_0", "-1");
+                    if (keyVal == "-1")
+                        dtl.SetValByKey(attr.Key, 0);
+                    else
+                        dtl.SetValByKey(attr.Key, 1);
+                    continue;
+                }
+            }
+
+            dtl.SetValByKey("RefPK", this.GetRequestVal("RefPKVal"));
+            dtl.PKVal = "0";
+            dtl.Insert();
+            
+            #endregion 保存新加行.
+
+            return "保存成功.";
+        }
+
         //多附件上传方法
         public void MoreAttach()
         {

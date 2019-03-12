@@ -379,7 +379,7 @@ namespace BP.WF
             DBAccess.RunSQL("UPDATE WF_Node SET ReturnRole=0 WHERE NodePosType=0 AND ReturnRole !=0");
 
             //删除垃圾,非法数据.
-            string sqls = "DELETE FROM Sys_FrmSln WHERE fk_mapdata not in (select no from sys_mapdata)";
+            string sqls = "DELETE FROM Sys_FrmSln WHERE FK_MapData NOT IN (SELECT No from Sys_MapData)";
             sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";
             DBAccess.RunSQLs(sqls);
 

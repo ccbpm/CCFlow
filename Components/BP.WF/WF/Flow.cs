@@ -1828,7 +1828,7 @@ namespace BP.WF
                 #endregion 对流程的设置做必要的检查.
 
                 //删除垃圾,非法数据.
-                string sqls = "DELETE FROM Sys_FrmSln WHERE fk_mapdata not in (select no from sys_mapdata)";
+                string sqls = "DELETE FROM Sys_FrmSln WHERE FK_MapData not in (select No from Sys_MapData)";
                 sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";
                 DBAccess.RunSQLs(sqls);
 
@@ -2324,9 +2324,9 @@ namespace BP.WF
                     fk_mapdatas += ",'ND" + nd.NodeID + "'";
                 }
 
-                //筛选出类型不同的字段
+                //筛选出类型不同的字段.
                 string checkSQL = "SELECT   AA.KEYOFEN, COUNT(*) AS MYNUM FROM ("
-                                    + "  SELECT A.KEYOFEN,  MYDATATYPE,  COUNT(*) AS MYNUM"
+                                    + "  SELECT A.KEYOFEN,  MYDATATYPE,  COUNT(*) AS MYNUM "
                                     + "  FROM SYS_MAPATTR A WHERE FK_MAPDATA IN (" + fk_mapdatas + ") GROUP BY KEYOFEN, MYDATATYPE"
                                     + ")  AA GROUP BY  AA.KEYOFEN HAVING COUNT(*) > 1";
                 DataTable dt_Fields = DBAccess.RunSQLReturnTable(checkSQL);

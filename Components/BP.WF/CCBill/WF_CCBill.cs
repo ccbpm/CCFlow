@@ -199,12 +199,12 @@ namespace BP.WF.CCBill
             #endregion
 
             #region 2、处理流程类别列表.
-            sql = " SELECT  a.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM WF_CCBill A, Sys_Enum B ";
-            sql += " WHERE A.BillState=B.IntKey AND B.EnumKey='BillState' AND  a.Starter='" + WebUser.No + "' AND BillState >=1";
+            sql = " SELECT  A.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM WF_CCBill A, Sys_Enum B ";
+            sql += " WHERE A.BillState=B.IntKey AND B.EnumKey='BillState' AND  A.Starter='" + WebUser.No + "' AND BillState >=1";
             if (tSpan.Equals("-1") == false)
-                sql += "  AND a.TSpan=" + tSpan;
+                sql += "  AND A.TSpan=" + tSpan;
 
-            sql += "  GROUP BY a.BillState, B.Lab  ";
+            sql += "  GROUP BY A.BillState, B.Lab  ";
 
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)

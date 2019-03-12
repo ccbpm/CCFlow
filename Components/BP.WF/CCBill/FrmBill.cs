@@ -360,7 +360,6 @@ namespace BP.WF.CCBill
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
-
                 rm = new RefMethod();
                 rm.Title = "设计表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDesigner";
@@ -369,7 +368,6 @@ namespace BP.WF.CCBill
                 rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "单据url的API"; // "设计表单";
@@ -400,6 +398,36 @@ namespace BP.WF.CCBill
                 rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "装载填充"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
+                rm.Icon = "../../WF/Img/FullData.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "表单事件"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoEvent";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "执行方法"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoMethod";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
                 #endregion 基本功能.
 
                 #region 报表定义.
@@ -460,6 +488,24 @@ namespace BP.WF.CCBill
             return "../../CCBill/Admin/SearchCond.htm?FrmID=" + this.No;
         }
         #endregion 报表定义.
+
+        public string DoMethod()
+        {
+            return "../../CCBill/Admin/Method.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
+        public string DoPageLoadFull()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
+        /// <summary>
+        /// 表单事件
+        /// </summary>
+        /// <returns></returns>
+        public string DoEvent()
+        {
+            return "../../Admin/CCFormDesigner/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
+        }
+    
 
         /// <summary>
         /// 设计表单

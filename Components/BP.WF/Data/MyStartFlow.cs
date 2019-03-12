@@ -839,7 +839,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public static DataTable QuByFlowAndEmp(string flowNo, int empId)
         {
-            string sql = "SELECT a.WorkID FROM WF_MyStartFlow a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='" + empId.ToString() + "' AND a.FK_Flow='" + flowNo + "'";
+            string sql = "SELECT A.WorkID FROM WF_MyStartFlow a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='" + empId.ToString() + "' AND a.FK_Flow='" + flowNo + "'";
             return DBAccess.RunSQLReturnTable(sql);
         }
 

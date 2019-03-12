@@ -779,8 +779,8 @@ namespace BP.WF
                 if (DBAccess.IsExitsObject("V_TOTALCHYF") == true)
                     BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
 
-                if (DBAccess.IsExitsObject("V_TOTALCHWeek") == true)
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCHWeek");
+                if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
 
                 string sqlscript = "";
                 //执行必须的sql.

@@ -26,11 +26,7 @@ namespace BP.En
         /// <summary>
         /// 右侧窗口打开
         /// </summary>
-        RightFrameOpen,
-        /// <summary>
-        /// 实体的功能
-        /// </summary>
-        FuncBacthEntities
+        RightFrameOpen
     }
     /// <summary>
     /// RefMethod 的摘要说明。

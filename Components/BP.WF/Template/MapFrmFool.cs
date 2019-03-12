@@ -213,7 +213,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
               //  map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";

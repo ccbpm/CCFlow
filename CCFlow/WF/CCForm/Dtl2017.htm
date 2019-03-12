@@ -2,30 +2,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>从表</title>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <base target="_self" />
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
+	<link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
     <script type="text/javascript" src="../Scripts/easyUI145/jquery.min.js"></script>
-    <script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
 
-    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/commonYangYH.js?ver=1.0"></script>
+
+    <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script type="text/javascript" src="MapExt2016.js"></script>
-    <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
+    <script src="../Comm/JS/TBHelpDiv.js"  type="text/javascript" ></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Data/JSLibData/CovertMoneyToDaXie.js" type="text/javascript"></script>
 
-    <script language="javascript" type="text/javascript">
+    <script language="javascript" type="text/javascript" >
 
         var hjl = new Array(); //合计列名称集合
         var mapExts;  //mapExts扩展
@@ -43,8 +48,8 @@
 
         //页面启动函数.
         $(function () {
-            //加载JS文件
             try {
+                //加载JS文件
                 var s = document.createElement('script');
                 s.type = 'text/javascript';
                 s.src = "../../DataUser/JSLibData/" + ensName + ".js";
@@ -53,17 +58,14 @@
             }
             catch (err) {
             }
-            //初始化页面
+
             InitPage();
 
-            //设定tableBody的高度
             var bodyHeight = $(document).height();
-            var headHeight = $("#tableHead").height();
-            $("#tableBody").parent().height(bodyHeight - headHeight - 75);
+            var headHeight = $("#dtlDiv div table thead").height();
+            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
             $("#dtlDiv").height(bodyHeight - 35);
 
-            var bodyWidth = $(document).width();
-            $("#ContentDtlDiv").width(bodyWidth - 55);
         });
 
         //公共方法
@@ -129,7 +131,7 @@
             pageData.saveRowCurrent.rowIndex = index;
             //让界面的值=DAT 的值
             setTrDataByData(index);
-            var trData = $($('#tableBody tbody tr')[index]).data().data;
+            var trData = $($('table tbody tr')[index]).data().data;
             var rowData = trData;
             rowData.DoType = "Dtl_SaveRow";
             rowData.FK_MapDtl = GetQueryString("EnsName");
@@ -159,7 +161,7 @@
 
             var returnRowData = JSON.parse(data);
             //更新表格的DATA
-            var updateTr = $($('#tableBody tbody tr')[pageData.saveRowCurrent.rowIndex]);
+            var updateTr = $($('table tbody tr')[pageData.saveRowCurrent.rowIndex]);
             //更新 pageData.DBDTL
             var updateData = $.grep(pageData.DBDtl, function (val) { return val.OID == returnRowData.OID });
             if (updateData.length == 0) { //新增的  直接PUSH
@@ -226,10 +228,6 @@
             }
 
         }
-        function ChangeAthNum(index) {
-
-
-        }
 
         //插入行.
         function insertRow(EditModel) {
@@ -245,16 +243,16 @@
                 return;
             }
 
-            if ($('#tableBody tbody tr').length == 1) {
-                var firstTr = $('#tableBody tbody tr')[0];
+            if ($('#dtlDiv div table tbody tr').length == 1) {
+                var firstTr = $('#dtlDiv div table tbody tr')[0];
                 if ($(firstTr).data().data == undefined) {
-                    $('#tableBody tbody').html('')//无数据时，新增的时候先删除 无记录行
+                    $('#dtlDiv div table tbody').html('')//无数据时，新增的时候先删除 无记录行
                     statisticsFlag = false; // 清空无记录行(统计行) 则需要重新生成统计行
                 }
             }
             var insertTr = $('<tr></tr>');
-            var threadTh = $('#tableHead thead tr th');
-            var newRowIndex = $('#tableBody tbody tr').length;
+            var threadTh = $('#dtlDiv div table thead tr th');
+            var newRowIndex = $('#dtlDiv div table tbody tr').length;
             if (statisticsFlag && newRowIndex > 0) {	// 统计行不计
                 newRowIndex--;
             }
@@ -314,20 +312,20 @@
                         tmplate.val(textVal);
                     }
 
-                    var td = $('<td style="width:' + threadThObj.clientWidth + 'px;"></td>');
+                    var td = $('<td></td>')
                     td.append(tmplate);
                     insertTr.append(td);
 
                 } else if ($(threadThObj).data().coltype == 'SN') {
-                    insertTr.append($('<td style="width:' + threadThObj.clientWidth + 'px;">' + (newRowIndex + 1) + '</td>'));
-                    //insertTr.append($('<td>' + (newRowIndex + 1) + '</td>'));
+
+                    insertTr.append($('<td>' + (newRowIndex + 1) + '</td>'));
 
                 } else {
-                    insertTr.append($('<td style="width:' + threadThObj.clientWidth + 'px;"><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" title="移除"/></td>'));
+
                 }
             });
 
-            //insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" title="移除"/></td>'));
+            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" title="移除"/></td>'));
 
             var trData = { data: {} };
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {
@@ -351,12 +349,12 @@
             }
             if (statisticsFlag) {
                 // 将数据行插入到统计行前
-                var statisticsRow = $("#tableBody tbody").find("tr").last();
+                var statisticsRow = $("#dtlDiv div table tbody").find("tr").last();
                 insertTr.insertBefore(statisticsRow);
                 //
                 bindStatistics();
             } else {
-                $('#tableBody tbody').append(insertTr);
+                $('#dtlDiv div table tbody').append(insertTr);
             }
 
             AfterBindEn_DealMapExt(insertTr, newRowIndex);
@@ -420,8 +418,7 @@
             mapExts = sys_mapExtDtl;
             var dbDtl = data["DBDtl"]; //从表数据.
 
-            //清空表格数据
-            $('#tableBody tbody').html('');
+            $('#dtlDiv div table tbody').html(''); //清空表格数据
 
             if (sys_MapDtl.ShowCols) {
                 var ShowCols = sys_MapDtl.ShowCols.split(",");
@@ -433,7 +430,7 @@
             }
 
             // 表头start --------------------
-            if ($('#tableHead thead tr').length == 0) {
+            if ($('#dtlDiv div table thead tr').length == 0) {
                 var threadTr = $('<tr data-data="true"></tr>');
                 //制造表头
                 //添加序号列
@@ -448,7 +445,7 @@
 
                 threadTr.append(snTh);
                 $.each(sys_mapAttr, function (i, mapAttrObj) {
-                    var th = $('<th></th>');
+                    var th = $('<th class="thStyle"></th>');
                     if (mapAttrObj.MyDataType == 8)
                         th = $('<th data-coltype="Money"></th>');
 
@@ -533,7 +530,7 @@
                 delTh.data(delThData);
                 //threadTr.append(delTh);
 
-                $('#tableHead thead').append(threadTr);
+                $('#dtlDiv div table thead').append(threadTr);
             }
             // 表头over --------------------
 
@@ -560,11 +557,10 @@
                 LocalData: JSON.stringify(dbDtlTmp),
                 RenderOverFun: function () {
                     //循环TBODY
-                    var tbodyTrs = $('#tableBody tbody tr');
+                    var tbodyTrs = $('#dtlDiv div table tbody tr');
                     $.each(tbodyTrs, function (m, tbodyTrObj) {
-                        var threadTh = $('#tableHead thead tr th');
+                        var threadTh = $('#dtlDiv div table thead tr th');
                         $.each(threadTh, function (k, threadThObj) {
-                            $(tbodyTrObj).children('td')[k].width = threadThObj.clientWidth;
                             if ($(threadThObj).data().colname != undefined) {
                                 var o = $(threadThObj);
                                 var tmplate = figure_MapAttr_Template(o.data());
@@ -643,10 +639,10 @@
 
                     //如果是只读的，全部设置成只读
                     if (workNodeData.Sys_MapDtl[0].IsReadonly == "1" || isReadonly == "1") {
-                        $('#tableBody tbody tr input[type=text]').attr('disabled', 'disabled');
-                        $('#tableBody tbody tr textarea').attr('disabled', 'disabled');
-                        $('#tableBody tbody tr select').attr('disabled', 'disabled');
-                        $('#tableBody tbody tr input[type=checkbox]').attr('disabled', 'disabled');
+                        $('#dtlDiv div table tbody tr input[type=text]').attr('disabled', 'disabled');
+                        $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
+                        $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
+                        $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
                     } else if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") && sys_MapDtl.EditModel != 0) {
                         tbodyTrs.on("dblclick", function () {
                             updateRow($(this).data().data.OID, lsys_MapDtl.EditModel);
@@ -664,10 +660,8 @@
                 }
             };
 
-            if (dtlDataOption) {
-                $('#tableBody tbody tr').remove();
-                Common.CustomPagePlug(dtlDataOption); //绑定表格
-            }
+            $('#dtlDiv div table tbody tr').remove();
+            Common.CustomPagePlug(dtlDataOption); //绑定表格
 
             if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
                 window.columnExp = [];
@@ -704,6 +698,10 @@
                 if (extObj) {
                     parentStatistics(extObj);
                 }
+                doAlignColumns();
+
+
+                //setTimeout(doAlignColumns, 500);
             }
             // 统计行over
 
@@ -724,10 +722,12 @@
             var IsShowTitle = sys_MapDtl.IsShowTitle == 1 ? true : false; //是否显示标题
             var IsView = sys_MapDtl.IsView == 1 ? true : false; //是否可见
             var titles = IsShowTitle ? sys_MapDtl.Name : '';
+
+
         }
 
         function triggerStatistics() {
-            $.each($("#tableHead thead tr th"), function (i, th) {
+            $.each($("#dtlDiv div table thead tr th"), function (i, th) {
                 var matchesColumn = [];
                 if (window.columnExp) {
                     matchesColumn = $.grep(window.columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
@@ -748,7 +748,7 @@
         }
 
         function bindStatistics() {
-            $.each($("#tableHead thead tr th"), function (i, th) {
+            $.each($("#dtlDiv div table thead tr th"), function (i, th) {
                 var matchesColumn = $.grep(window.columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
                     return val.KeyOfEn == $(th).data().colname;
                 });
@@ -779,7 +779,7 @@
             var statisticsRow = $("<tr></tr>");
             statisticsRow.data().customRowType = "statistics";
             // 遍历表头
-            $.each($("#tableHead thead tr th"), function (i, th) {
+            $.each($("#dtlDiv div table thead tr th"), function (i, th) {
                 var coltype = $(th).data().coltype;
                 if (typeof coltype != "undefined" && coltype == "SN") {	// 统计行行号列
                     //statisticsRow.append("<td>" + ($("#dtlDiv div table tbody tr").length + 1) + "</td>");
@@ -804,14 +804,13 @@
                 }
             });
             // 新增统计行
-            $("#tableBody tbody").append(statisticsRow);
+            $("#dtlDiv div table tbody").append(statisticsRow);
         }
 
         function doAlignColumns() {
-            return;
             // 对齐列单元格
-            var headerCount = $("#tableHead thead tr th").length;
-            $("#tableHead thead tr th").each(function (hi, th) {
+            var headerCount = $("#dtlDiv div table thead tr th").length;
+            $("#dtlDiv div table thead tr th").each(function (hi, th) {
                 var realWidth = $(this).outerWidth(true);
                 var tpaddWidth = realWidth - $(this).width();
                 var definedWidth = $(this).data().UIWidth;
@@ -828,7 +827,7 @@
                     width = 100;
                 }
                 (function (hi, headerCount, width) {
-                    $("#tableBody tbody tr").each(function (di, td) {
+                    $("#dtlDiv div table tbody tr").each(function (di, td) {
                         var td = $(this).children().eq(hi);
                         var children = td.children();
                         var paddWidth = children.outerWidth() - children.width();
@@ -838,14 +837,14 @@
                             children.first().width(width - 5);
                         }
                         if (hi == 0) {
-                            td.width(width);
-                            children.width(20.34);
+                            td.width(width - 2);
+                            //children.width(20.34);
                         } else if (hi + 1 == headerCount) {
                             // 最后一列
                             td.width(40);
                         } else {
-                            td.width(width);
-                            children.width(width - paddWidth - 2);
+                            td.width(width - 3);
+                            children.width(width - paddWidth - 5);
                         }
                     });
                 })(hi, headerCount, width);
@@ -931,7 +930,7 @@
         function getColumnElementsName(KeyOfEn) {
             var name = undefined;
             if (KeyOfEn) {
-                $.each($("#tableHead thead tr th"), function (i, th) {
+                $.each($("#dtlDiv div table thead tr th"), function (i, th) {
                     var data = $(th).data();
                     if (data.colname === KeyOfEn) {
                         var template = figure_MapAttr_Template(data);
@@ -1004,12 +1003,12 @@
 
         //根据表格中编辑过的值，设置表格TR 的 data
         function setTrDataByData(rowIndex) {
-            var tr = $($('#tableBody tbody tr')[rowIndex]);
+            var tr = $($('table tbody tr')[rowIndex]);
             var tdArr = tr.children();
             var trData = tr.data().data;
             //input text
             //select
-            //循环  td
+            //循环  td  
             $.each(tdArr, function (i, tdObj) {
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
@@ -1047,10 +1046,12 @@
 
         //根据表格的DATA 更新 编辑的值
         function setTdDataByTrData(rowIndex) {
-            var tr = $($('#tableBody tbody tr')[rowIndex]);
+            var tr = $($('table tbody tr')[rowIndex]);
             var tdArr = tr.children();
             var trData = tr.data().data;
-            //循环  td
+            //input text
+            //select
+            //循环  td  
             $.each(tdArr, function (i, tdObj) {
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
@@ -1115,7 +1116,7 @@
                         eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                     } else {
                         //添加文本框 ，日期控件等
-                        //AppString
+                        //AppString   
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + (workNodeData, mapAttr, defValue) + "</select>";
@@ -1163,7 +1164,7 @@
                             }
                         }
 
-                        // AppDouble  AppFloat
+                        // AppDouble  AppFloat 
                         if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
@@ -1323,7 +1324,7 @@
                 //让界面的值=DAT 的值
                 setTrDataByData(i);
                 var index = i;
-                var trData = $($('#tableBody tbody tr')[index]).data().data;
+                var trData = $($('table tbody tr')[index]).data().data;
                 var rowData = trData;
                 if ($($('table tbody tr')[index]).data().customRowType == "statistics") {
                     needSaveCount--;
@@ -1366,7 +1367,7 @@
                     alerdaySaveCount++;
                     return;
                 }
-            });    //循环表格
+            });  //循环表格
 
             if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
                 $('#Msg').hide();
@@ -1378,35 +1379,40 @@
                 InitPage();
             }
         }
-      
+        $(function () {
+            var bodyHeight = $(document).height();
+            var headHeight = $("#dtlDiv div table thead").height();
+            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
+            $("#dtlDiv").height(bodyHeight - 35);
+
+        });
 
 
-    </script>
-    <style type="text/css">
-        .table thead {
-            display: block;
-        }
-
-        .table tbody {
-            display: block;
-            overflow-x: hidden;
-            overflow-y: hidden;
-        }
-
-        .table thead, .tbody tr {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-        }
-
-        .table thead {
-            width: calc(100% - 1em);
-        }
-    </style>
+     </script>
+	<style type="text/css">
+		.table thead {
+			display:block;
+		}
+		.table tbody {
+			display: block;
+			overflow-x: hidden;
+			overflow-y: scroll;
+			margin-right:-5px;
+		}
+		.table thead, .tbody tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+			width: calc( 100% - 1em );
+		}
+		.table thead {
+			width: calc(100% - 1em)
+		}
+	</style>
 </head>
-<body onblur="SaveAll(this)">
+<body onblur="SaveAll(this)" >
     <form>
-        <input type="hidden" id="formExt" />
+		<input type="hidden" id="formExt">
         <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
         <div id="ContentDtlDiv">
             <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
@@ -1414,12 +1420,8 @@
                     <div class="tab-content" style="margin: 4px 0px;">
                         <div class="tab-pane active portlet_tab flowLists" style="overflow-x: auto; overflow-y: hidden;" id="dtlDiv">
                             <div>
-                                <table id="tableHead" class="table" data-data="true" style="width:100%;">
+                                <table class="table wupop" data-data="true">
                                     <thead></thead>
-                                </table>
-                            </div>
-                            <div>
-                                <table id="tableBody" class="table wupop" data-data="true" style="width:100%;">
                                     <tbody></tbody>
                                 </table>
                             </div>
@@ -1481,7 +1483,7 @@
                 //
                 //InitPage();//刷新页面
                 //删除数据
-                var tr = $('#tableBody tbody tr')[pageData.currentRowIndex];
+                var tr = $('table tbody tr')[pageData.currentRowIndex];
                 var delOid = $(tr).data().data.OID;
                 var delRow = $.grep(pageData.DBDtl, function (val) { return val.OID == delOid });
                 if (delRow.length == 1) {
@@ -1491,7 +1493,7 @@
 
 
                 updateTableSn(tr);
-                tr = $('#tableBody tbody tr')[pageData.currentRowIndex];
+                tr = $('table tbody tr')[pageData.currentRowIndex];
                 $(tr).remove();
                 pageData.currentRowIndex = -1;
                 triggerStatistics(); // 重新计算
@@ -1511,9 +1513,9 @@
                 tr = $(tr).next();
             }
         }
-    </script>
+	</script>
 
-    <script type="text/javascript">
+    <script type="text/javascript" >
         //将获取过来的URL参数转成URL中的参数形式  &
         function pageParamToUrl() {
             var paramUrlStr = '';
@@ -1564,45 +1566,45 @@
                             popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                         }
                         switch (popWorkModelStr) {
-                            /// <summary> 
-                            /// 自定义URL 
-                            /// </summary> 
-                            //SelfUrl =1, 
+                            /// <summary>    
+                            /// 自定义URL    
+                            /// </summary>    
+                            //SelfUrl =1,    
                             case "1":
                                 icon = "glyphicon glyphicon-th";
                                 break;
-                            /// <summary> 
-                            /// 表格模式 
-                            /// </summary> 
-                            // TableOnly, 
+                            /// <summary>    
+                            /// 表格模式    
+                            /// </summary>    
+                            // TableOnly,    
                             case "2":
                                 icon = "glyphicon glyphicon-list";
                                 break;
-                            /// <summary> 
-                            /// 表格分页模式 
-                            /// </summary> 
-                            //TablePage, 
+                            /// <summary>    
+                            /// 表格分页模式    
+                            /// </summary>    
+                            //TablePage,    
                             case "3":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary> 
-                            /// 分组模式 
-                            /// </summary> 
-                            // Group, 
+                            /// <summary>    
+                            /// 分组模式    
+                            /// </summary>    
+                            // Group,    
                             case "4":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary> 
-                            /// 树展现模式 
-                            /// </summary> 
-                            // Tree, 
+                            /// <summary>    
+                            /// 树展现模式    
+                            /// </summary>    
+                            // Tree,    
                             case "5":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
-                            /// <summary> 
-                            /// 双实体树 
-                            /// </summary> 
-                            // TreeDouble 
+                            /// <summary>    
+                            /// 双实体树    
+                            /// </summary>    
+                            // TreeDouble    
                             case "6":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
@@ -1769,7 +1771,7 @@
                                         if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
                                             $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
                                             $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
-                                                //替换
+                                                //替换 
                                                 var mapExt = $(obj.target).data().mapExt;
                                                 var mapExtDoc = mapExt.Doc;
                                                 var evelStr = mapExt.Doc;
@@ -1815,7 +1817,7 @@
                                                 *   当input触发onblur事件后, body的onblur事件就被触发, 并调用SaveAll()方法
                                                 *   SaveAll()方法又调用AjaxServiceGener()方法
                                                 *   AjaxServiceGener()方法提交到后台返回后再次调用了InitPage()方法, 形成死循环
-                                                *
+                                                * 
                                                 * 暂时将SaveAll()禁用
                                                 * 或将blur事件改为onchange事件
                                                 */
@@ -2080,8 +2082,8 @@
                 return $(tr).find("[name=DDL_" + ctrlID + ']').val(val);
             }
         }
-    </script>
-    <!--DIVINFO-->
+</script>
+   <!--DIVINFO-->
     <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; text-align: left; border-color:Black'></div>
 </body>
 </html>

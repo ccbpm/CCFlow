@@ -150,7 +150,7 @@ namespace BP.DA
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 
-                NpgsqlParameter spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Varchar);
+                NpgsqlParameter spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Integer);
                 spPK.Value = pkVal;
                 cm.Parameters.Add(spPK);
 

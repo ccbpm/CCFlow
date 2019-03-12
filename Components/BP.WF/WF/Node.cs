@@ -2661,8 +2661,19 @@ namespace BP.WF
         /// <returns></returns>
         protected override bool beforeDelete()
         {
+            int num = 0;
+            //如果是结束节点，则自动结束流程
+            if (this.NodePosType == NodePosType.End)
+            {
+                GenerWorkFlows gwfs = new GenerWorkFlows();
+                gwfs.Retrieve("FK_Flow", this.FK_Flow);
+                foreach (GenerWorkFlow gwf in gwfs)
+                {
+                    BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, gwf.WorkID, "流程成功结束");
+                }
+            }
             //判断是否可以被删除. 
-            int num = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=" + this.NodeID);
+             num = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=" + this.NodeID);
             if (num != 0)
                 throw new Exception("@该节点[" + this.NodeID + "," + this.Name + "]有待办工作存在，您不能删除它.");
 

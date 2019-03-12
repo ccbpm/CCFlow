@@ -127,38 +127,10 @@
 
 
             var gwls = JSON.parse(data);
-            //            BindTable(gwls);
 
         });
 
        
-        function DeleteIt(empNo, row) {
-
-            //            if (window.confirm('您确定要移除[' + empNo + ']') == false)
-            //                return;
-
-            //执行数据初始化工作.
-            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            hand.AddUrlData();
-            hand.AddPara("FK_Emp", empNo);
-            var data = hand.DoMethodReturnString("HuiQian_Delete");
-
-            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
-                alert(data);
-                return;
-            }
-
-            //delRow(row); //清空单个table tbody
-            ClearTable();
-
-            // 把返回的结果，重新绑定.
-            var sas = JSON.parse(data);
-            BindTable(sas);
-            return;
-        }
-
-
-        
 
         //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
         function SaveAndClose() {
@@ -173,89 +145,25 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             handler.AddPara("Note", note);
-            //            handler.AddPara("IsMobile", 1);
             var data = handler.DoMethodReturnString("AskForRe");
-
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                $("#Btn_JiaQianRe").attr("disabled", "");
+                return;
+            }
             if (data.indexOf('url@') == 0) {
                 data = data.replace('url@./WorkOpt/', './');
                 window.location.href = data;
                 return;
             }
 
-            //如果需要发送,就执行发送.
-            if (data.indexOf('Send@') == 0) {
-                SendIt();
-                return;
-            }
+            alert(data);
+            window.parent.close();
 
-            //提示信息后关闭窗口.
-            if (data.indexOf('close@') == 0) {
-
-                alert(data.replace('close@', ''));
-
-                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                    window.parent.returnWorkWindowClose("");
-                    window.parent.close();
-
-                } else {
-
-                    $('body').append($('<div>' + "已取消操作" + '</div>'));
-
-                    window.close();
-                }
-                return;
-            }
-
-            //提示信息.
-            if (data.indexOf('info@') == 0) {
-
-                alert(data.replace('info@', ''));
-
-                $("#Btn_JiaQianRe").attr("disabled", false);
-                $("#Btn_JiaQianRe").val("执行会签");
-                $("#Btn_SelectEmps").attr("disabled", false);
-
-                return;
-            }
-            $(".Msg").css("color", "");
-            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
-            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-
-            data = data.replace("'WFRpt", "'../WFRpt");
-            data = data.replace("'WFRpt", "'../WFRpt");
-
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-
-            data = data.replace("'./WorkOpt/", "");
-            data = data.replace("'./WorkOpt/", "");
-            data = data.replace("'./WorkOpt/", "");
-            data = data.replace("'./WorkOpt/", "");
-
-
-            data = data.replace('@', '<br/>@');
-            data = data.replace(/@/g, '<br/>&nbsp;@');
-
-
-            data = data.replace('@', '<br/>@');
-            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
-            $(".Msg").show();
-            $(".Msg").html(data);
-            window.close();
-            $("#Btn_JiaQianRe").val("提交");
             return;
         }
 
        
-
-        
-
-        
-        
         function Help() {
             $("#HelpInfo").toggle();
         }

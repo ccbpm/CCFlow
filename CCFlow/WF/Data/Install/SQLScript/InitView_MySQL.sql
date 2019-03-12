@@ -33,23 +33,23 @@ A.GuestNo,A.GuestName,A.BillNo,A.FlowNote,A.TodoEmps,A.TodoEmpsNum,0 as TodoSta,
 CREATE VIEW V_FlowStarter
 (FK_Flow,FlowName,FK_Emp)
 AS
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
-AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND  ( A.DeliveryWay=0 OR A.DeliveryWay=14 )
+SELECT A.FK_Flow, A.FlowName, C.FK_Emp FROM WF_Node A, WF_NodeStation B, Port_DeptEmpStation C 
+ WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
+AND  A.NodeID=B.FK_Node AND B.FK_Station=C.FK_Station   AND  ( A.DeliveryWay=0 OR A.DeliveryWay=14 )
 UNION  
-SELECT A.FK_Flow, a.FlowName, c.No FROM WF_Node a, WF_NodeDept b, Port_Emp c 
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
-AND  a.NodeID=b.FK_Node AND B.FK_Dept=c.FK_Dept   AND A.DeliveryWay=1 
+SELECT A.FK_Flow, A.FlowName, C.No FROM WF_Node A, WF_NodeDept B, Port_Emp C 
+ WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
+AND  A.NodeID=B.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 
 UNION  
-SELECT A.FK_Flow, a.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
+SELECT A.FK_Flow, A.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
 AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3
 UNION 
-SELECT A.FK_Flow, a.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
+SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 
  UNION   
-SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C, Port_Emp D,  Port_DeptEmpStation E
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND A.NodeID=C.FK_Node AND B.FK_Dept=D.FK_Dept
+SELECT A.FK_Flow, A.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C, Port_Emp D,  Port_DeptEmpStation E
+ WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND A.NodeID=C.FK_Node AND B.FK_Dept=D.FK_Dept
   AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
 
 /****** 对象:  View V_FlowStarterBPM    脚本日期:  2015-04-10 ******/;
@@ -57,30 +57,28 @@ SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeSta
 CREATE VIEW V_FlowStarterBPM
 (FK_Flow,FlowName,FK_Emp)
 AS
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
-AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND  ( A.DeliveryWay=0 OR A.DeliveryWay=14 )
+SELECT A.FK_Flow, A.FlowName, C.FK_Emp FROM WF_Node A, WF_NodeStation B, Port_DeptEmpStation C 
+ WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
+AND  A.NodeID=B.FK_Node AND B.FK_Station=C.FK_Station   AND  ( A.DeliveryWay=0 OR A.DeliveryWay=14 )
 UNION  
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c 
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
-AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 
+SELECT A.FK_Flow, A.FlowName, C.FK_Emp FROM WF_Node A, WF_NodeDept B, Port_DeptEmp C 
+ WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
+AND  A.NodeID=B.FK_Node AND B.FK_Dept=C.FK_Dept AND A.DeliveryWay=1 
 UNION  
-SELECT A.FK_Flow, a.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
+SELECT A.FK_Flow, A.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
 AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3
 UNION 
-SELECT A.FK_Flow, a.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
+SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 
  UNION  
-SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
- WHERE a.NodePosType=0 
- AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
+SELECT A.FK_Flow, A.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
+ WHERE A.NodePosType=0 
+ AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
  AND  A.NodeID=B.FK_Node 
  AND A.NodeID=C.FK_Node 
  AND B.FK_Dept=E.FK_Dept 
- AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
-
-
+ AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ; 
 
 /****** 考核:  View V_TOTALCH    脚本日期:  2015-09-10 ******/;
 /*  V_TOTALCH */;

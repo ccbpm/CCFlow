@@ -50,10 +50,33 @@ namespace BP.WF
                 if (kvs[0] == mark)
                 {
                     string val = kvs[1];
-                    return string.Format(val,  p1,p2,p3,p4);
+                    return string.Format(val, p1, p2, p3, p4);
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// 获取多语言
+        /// </summary>
+        /// <param name="lang"></param>
+        /// <param name="key"></param>
+        /// <param name="paramList"></param>
+        /// <returns></returns>
+        public static string lang(string key, string[] paramList)
+        {
+            DataSet ds = BP.DA.DataType.CXmlFileToDataSet(BP.Sys.SystemConfig.PathOfData + "\\lang\\" + BP.Sys.SystemConfig.SysLanguage + ".xml");
+            DataTable dt = ds.Tables[0];
+            string val = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                if ((string)dr.ItemArray[0] == key)
+                {
+                    val = (string)dr.ItemArray[1];
+                    break;
+                }
+            }
+            return String.Format(val, paramList);
         }
 
         #region 公共属性.
@@ -250,7 +273,7 @@ namespace BP.WF
                     continue;
 
                 MapExt extP = new MapExt();
-                extP.MyPK =  ext.MyPK + "_FullData";
+                extP.MyPK = ext.MyPK + "_FullData";
                 int i = extP.RetrieveFromDBSources();
                 if (i == 1)
                     continue;
@@ -266,7 +289,7 @@ namespace BP.WF
 
             //文本自动填充
             exts = new MapExts();
-            exts.Retrieve(MapExtAttr.ExtType,MapExtXmlList.TBFullCtrl);
+            exts.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl);
             foreach (MapExt ext in exts)
             {
                 string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
@@ -282,9 +305,9 @@ namespace BP.WF
                     continue; //已经修复了，或者配置了.
 
                 if (DataType.IsNullOrEmpty(ext.Tag3) == false)
-                    ma.SetPara("TBFullCtrl","Simple");
+                    ma.SetPara("TBFullCtrl", "Simple");
                 else
-                    ma.SetPara("TBFullCtrl","Table");
+                    ma.SetPara("TBFullCtrl", "Table");
 
                 ma.Update();
 
@@ -306,7 +329,7 @@ namespace BP.WF
                 //填充从表
                 extP.Tag1 = ext.Tag1;
                 //填充下拉框
-                 extP.Tag = ext.Tag;
+                extP.Tag = ext.Tag;
 
                 extP.Insert(); //执行插入.
             }
@@ -333,7 +356,7 @@ namespace BP.WF
                 ma.SetPara("IsFullData", 1);
                 ma.Update();
 
-               
+
                 MapExt extP = new MapExt();
                 extP.MyPK = ext.MyPK + "_FullData";
                 int i = extP.RetrieveFromDBSources();
@@ -353,7 +376,7 @@ namespace BP.WF
                 extP.Tag = ext.Tag;
 
                 extP.Insert(); //执行插入.
-                
+
             }
             #endregion 升级 填充数据.
 
@@ -399,7 +422,7 @@ namespace BP.WF
                 #endregion 修复丢失的发起人.
 
                 #region 给city 设置拼音.
-                if (DBAccess.IsExitsObject("CN_City") == true && 1==2 )
+                if (DBAccess.IsExitsObject("CN_City") == true && 1 == 2)
                 {
                     if (DBAccess.IsExitsTableCol("CN_City", "PinYin") == true)
                     {
@@ -489,7 +512,7 @@ namespace BP.WF
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    sql = "UPDATE WF_GenerWorkFlow SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString().Replace("+"," ")) + " WHERE WorkID=" + dr[0].ToString();
+                    sql = "UPDATE WF_GenerWorkFlow SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString().Replace("+", " ")) + " WHERE WorkID=" + dr[0].ToString();
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
@@ -594,8 +617,8 @@ namespace BP.WF
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.DDLFullCtrl + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrsOfActive WHERE ExtType='" + MapExtXmlList.ActiveDDL + "'";
                     }
-                    
-                    
+
+
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         sqls += "UPDATE Sys_MapExt SET MyPK=CONCAT(ExtType,'_',FK_Mapdata,'_',AttrOfOper) WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
@@ -2659,7 +2682,7 @@ namespace BP.WF
                             case "title":
                             case "pworkid":
                                 break;
-                            default:  
+                            default:
                                 if (ht.ContainsKey(row.Table.Columns[i].ColumnName) == true)
                                     ht[row.Table.Columns[i].ColumnName] = row[i];  //@李国文.
                                 else
@@ -2987,7 +3010,7 @@ namespace BP.WF
 
             if (exp.Contains("@") == false)
                 return exp;
-           
+
             //增加对新规则的支持. @MyField; 格式.
             if (en != null)
             {
@@ -3049,7 +3072,7 @@ namespace BP.WF
                     if (isStr == true)
                         key = key.Replace(",", "");
 
-                    if(DataType.IsNullOrEmpty(en.GetValStrByKey(key)))
+                    if (DataType.IsNullOrEmpty(en.GetValStrByKey(key)))
                         continue;
 
                     exp = exp.Replace("@" + key, en.GetValStrByKey(key));
@@ -3083,7 +3106,7 @@ namespace BP.WF
                         continue;
                     exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
                 }
-                
+
             }
 
             exp = exp.Replace("~", "'");
@@ -4487,7 +4510,7 @@ namespace BP.WF
             }
             catch
             {
-                if (ch.IsExits==true)
+                if (ch.IsExits == true)
                 {
                     ch.Update();
                 }

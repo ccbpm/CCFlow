@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
                 string[] nodes = this.GetRequestVal("Nodes").Split('@');
                 foreach (string item in nodes)
                 {
-                    if (item == ""||item == null)
+                    if (item == "" || item == null)
                         continue;
                     string[] strs = item.Split(',');
                     sql = "UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0];
@@ -550,10 +550,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Submit()
         {
+            string[] para = new string[0];
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = this.GetRequestVal("TB_No").Trim();
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
+            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
 
             if (emp.No != "admin")
             {
@@ -562,17 +564,21 @@ namespace BP.WF.HttpHandler
                 adminEmp.No = emp.No;
                 if (adminEmp.RetrieveFromDBSources() == 0)
                     return "err@您非管理员用户，不能登录.";
+                //return BP.WF.Glo.lang("no_permission_login_1", para);
 
                 if (adminEmp.IsAdmin == false)
-                    return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
+                    //return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
+                    return BP.WF.Glo.lang("no_permission_login_2", para);
 
                 if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
                     return "err@二级管理员用户没有设置流程树的权限..";
+                //return BP.WF.Glo.lang("secondary_user_no_permission_wf_tree", para);
             }
 
             string pass = this.GetRequestVal("TB_PW").Trim();
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
+            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
 
             //让其登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);
@@ -966,7 +972,7 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
-           
+
 
             //获得表单数据.
             DataTable dtSort = ds.Tables[0]; //类别表.

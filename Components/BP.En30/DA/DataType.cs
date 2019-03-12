@@ -9,6 +9,8 @@ using System.IO;
 using BP.Sys;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.Xml;
+
 
 namespace BP.DA
 {
@@ -186,7 +188,7 @@ namespace BP.DA
             StringBuilder jsonString = new StringBuilder();
             jsonString.Append("[");
             DataRowCollection drc = dt.Rows;
-            if (drc.Count >0)
+            if (drc.Count > 0)
             {
                 for (int i = 0; i < drc.Count; i++)
                 {
@@ -477,7 +479,7 @@ namespace BP.DA
 
             fileNameFormat = rBuilder.ToString();
 
-            fileNameFormat = fileNameFormat.Replace("__","_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
             fileNameFormat = fileNameFormat.Replace("__", "_");
             fileNameFormat = fileNameFormat.Replace("__", "_");
             fileNameFormat = fileNameFormat.Replace("__", "_");
@@ -511,8 +513,8 @@ namespace BP.DA
                 return "''";
             strs = strs.Replace("@", "','");
             strs = strs + "'";
-            if(strs.Length>2)
-            strs = strs.Substring(2);
+            if (strs.Length > 2)
+                strs = strs.Substring(2);
             if (isNumber)
                 strs = strs.Replace("'", "");
             return strs;
@@ -560,8 +562,8 @@ namespace BP.DA
                 fs.Close();
             }
         }
-      
-        
+
+
 
         /// <summary>
         /// 写文件
@@ -595,10 +597,10 @@ namespace BP.DA
         public static string WriteFile(string filePathName, byte[] objData)
         {
             string folder = System.IO.Path.GetDirectoryName(filePathName);
-            if (System.IO.Directory.Exists(folder)==false)
+            if (System.IO.Directory.Exists(folder) == false)
                 System.IO.Directory.CreateDirectory(folder);
 
-            if (System.IO.File.Exists(filePathName)==true)
+            if (System.IO.File.Exists(filePathName) == true)
                 System.IO.File.Delete(filePathName);
 
             System.IO.FileStream fs = new System.IO.FileStream(filePathName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
@@ -715,6 +717,58 @@ namespace BP.DA
             string doc = read.ReadToEnd();  //读取完毕。
             read.Close(); // 关闭。
             return doc;
+        }
+
+        /// <summary>
+        /// 读取Xml文件信息,并转换成DataSet对象
+        /// </summary>
+        /// <remarks>
+        /// DataSet ds = new DataSet();
+        /// ds = CXmlFileToDataSet("/XML/upload.xml");
+        /// </remarks>
+        /// <param name="xmlFilePath">Xml文件地址</param>
+        /// <returns>DataSet对象</returns>
+        public static DataSet CXmlFileToDataSet(string xmlFilePath)
+        {
+            if (!string.IsNullOrEmpty(xmlFilePath))
+            {
+                //string path = HttpContext.Current.Server.MapPath(xmlFilePath);
+                StringReader StrStream = null;
+                XmlTextReader Xmlrdr = null;
+                try
+                {
+                    XmlDocument xmldoc = new XmlDocument();
+                    //根据地址加载Xml文件
+                    xmldoc.Load(xmlFilePath);
+
+                    DataSet ds = new DataSet();
+                    //读取文件中的字符流
+                    StrStream = new StringReader(xmldoc.InnerXml);
+                    //获取StrStream中的数据
+                    Xmlrdr = new XmlTextReader(StrStream);
+                    //ds获取Xmlrdr中的数据
+                    ds.ReadXml(Xmlrdr);
+                    return ds;
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    //释放资源
+                    if (Xmlrdr != null)
+                    {
+                        Xmlrdr.Close();
+                        StrStream.Close();
+                        StrStream.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
         public static bool SaveAsFile(string filePath, string doc)
         {
@@ -1803,14 +1857,14 @@ namespace BP.DA
             DateTime dtto = DataType.ParseSysDate2DateTime(dtofto);
 
             TimeSpan ts = dtto - dtfrom;
-            return  (float)Math.Round(ts.TotalDays, 2);
+            return (float)Math.Round(ts.TotalDays, 2);
         }
         /// <summary>
         /// 获得两个时间的参数
         /// </summary>
         /// <param name="dtoffrom">时间从</param>
         /// <returns></returns>
-        public static float GeTimeLimits(string dtoffrom )
+        public static float GeTimeLimits(string dtoffrom)
         {
             return GeTimeLimits(dtoffrom, DataType.CurrentDataTime);
         }
@@ -2087,7 +2141,7 @@ namespace BP.DA
         public static string GenerABC(int idx)
         {
             string strs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            char[] mystrs=strs.ToCharArray();
+            char[] mystrs = strs.ToCharArray();
             return mystrs[idx].ToString();
         }
         public static string GenerBR(int spaceNum)
@@ -2208,9 +2262,9 @@ namespace BP.DA
             else
                 throw new Exception("@要转换的[" + str + "]不是bool 类型");
 
-            
 
-             
+
+
         }
         #endregion 其他方法.
 
@@ -2240,7 +2294,7 @@ namespace BP.DA
             basicBinding.Security.Mode = BasicHttpSecurityMode.None;
 
             //url.
-            string url =  DataType.BPMHost + "/DataUser/PortalInterface.asmx";
+            string url = DataType.BPMHost + "/DataUser/PortalInterface.asmx";
 
             var endPoint = new EndpointAddress(url);
             var ctor =

@@ -1,0 +1,1022 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程设计器</title>
+     <!--JL.plus-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="author" content="leipi.org" />
+
+     <!--引入CSS样式-->
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/admin/skins/_all-skins.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/admin/designer.css" rel="stylesheet" type="text/css" />
+
+      <!--引入通用JS-->
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript" ></script>
+    <script src="../../Scripts/config.js" type="text/javascript" ></script>
+    <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
+
+   
+    <script src="Public/Designer2019.js" type="text/javascript"></script>
+   
+    <!--本功能CSS-->
+    <link href="Public/css/bootstrap/css/bootstrap.css?2025" rel="stylesheet" type="text/css" />
+    <link href="Public/css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="Public/css/site.css?2025" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="Public/js/flowdesign/flowdesign.css" />
+     <link rel="stylesheet" type="text/css" href="Public/js/jquery.multiselect2side/css/jquery.multiselect2side.css" />
+
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="Public/css/bootstrap/css/bootstrap-ie6.css?2025">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="Public/css/bootstrap/css/ie.css?2025">
+    <![endif]-->
+   
+    <!--select 2-->
+    <link rel="stylesheet" type="text/css" href="Public/js/jquery.multiselect2side/css/jquery.multiselect2side.css" />
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <!--JL.plus-->
+
+    <style type="text/css">
+        li {
+            list-style: none;
+        }
+
+        #processMenu3 {
+            z-index: 1;
+        }
+
+        #processMenu3 li {
+            padding: 1px 0px 5px 5px;
+        }
+
+        #processMenu3 li:hover {
+            background-color: rgb(90,99,119);
+            cursor: pointer;
+        }
+        /****给弹出框URL写的样式*/
+        .ui-icon-closethick {
+            background-position: 0;
+        }
+
+        .ui-widget-header .ui-icon {
+            top: 30% !important;
+        }
+
+        .ui-dialog .ui-dialog-titlebar-close {
+            background-image: url(Public/css/images/ui-icons_444444_256x240.png);
+            background-repeat: no-repeat;
+            background-position: 1px;
+        }
+    </style>
+
+    <style type="text/css">
+        #mainul {
+            padding:1px 0px !important;
+        }
+
+            #mainul li {
+                padding: 1px 2px !important;
+            }
+    </style>
+
+</head>
+<body class="ccflow_body_bg">
+    <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: none;
+        width: 320px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
+        font-weight: bold;">
+        <img alt="" src="./Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
+        正在保存与检查流程,请稍后....
+    </div>
+    <div class="window-mask mymask" style="width: 100%; height: 100%; display: none;
+        z-index: 21006;">
+    </div>
+    <div id="Msg"></div>
+    <!-- fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+         <div class="navbar-inner" style="background:#efefef; padding:5px 0px; border-bottom:1px solid #ccc;">
+            <div class="container">
+                <div class="pull-left">
+                     <button class="btn btn-success" type="button" id="Btn_Save">
+                        <i class="ace-icon fa fa-save  icon-on-right"></i>保存
+                    </button>
+                    <a class="btn btn-info menuItem"  data-id="Btn_FlowAttr" data-href="#" onclick="FlowProperty(this)">
+						<i class="ace-icon fa fa-pencil"></i>
+						流程属性
+					</a>
+                    <a class="btn btn-primary menuItem " data-id="Btn_Imp" data-href="#"  onclick="FlowRpt(this)">
+                        <i class="ace-icon fa fa-newspaper-o"></i>
+                        定义报表
+                    </a>
+                   
+                    <a class="btn btn-warning menuItem" data-id="Btn_Check" data-href="#" onclick="FlowCheck()">
+                       <i class="ace-icon fa fa-tasks  icon-on-right"></i>
+                        检查流程
+                    </a>
+                    <a class="btn btn-danger menuItem" data-id="Btn_Run" data-href="#" onclick="FlowRun(this)">
+                        <i class="ace-icon fa fa-line-chart  icon-on-right"></i>
+                        运行测试
+                    </a>
+                    <a class="btn btn-inverse menuItem" data-id="Btn_RunIt" data-href="#" onclick="FlowRunAdmin()">
+                        <i class="ace-icon fa fa-sliders  icon-on-right"></i>
+                        运行
+                    </a>
+
+                    <a class="btn btn-refresh menuItem" data-id="Btn_Reload" data-href="#" onclick="Reload()">
+                       <i class="ace-icon fa fa-refresh  icon-on-right"></i>
+                        刷新
+                    </a>
+                    <a class="btn btn-help menuItem" data-id="Btn_Help" data-href="#" onclick="Help()">
+                        <i class="ace-icon fa fa-question-circle  icon-on-right"></i>
+                        帮助
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                消息提示
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                我知道了
+            </button>
+        </div>
+    </div>
+    <!-- 修改节点名称 -->
+    <div id="alertModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                修改节点名称
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
+                保存
+            </button>
+        </div>
+    </div>
+    <!-- 修改标签名称 -->
+    <div id="alertModal3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                修改标签名称
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
+                保存
+            </button>
+        </div>
+    </div>
+    <!-- 点击线的提示 -->
+    <div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                修改方向
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal" id="lineDel" aria-hidden="true">
+                删除
+            </button>
+            <button class="btn btn-primary savetext" data-dismiss="modal_fx" id="lineSet" aria-hidden="true">
+                设置方向条件
+            </button>
+        </div>
+    </div>
+    <!-- attributeModal -->
+    <div id="attributeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" style="width: 800px; margin-left: -350px">
+        <div class="modal-body" style="max-height: 500px;">
+            <!-- body -->
+        </div>
+        <div class="modal-footer" style="padding: 5px;">
+            <!--a href="#" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><i class="icon-remove icon-white"></i></a-->
+        </div>
+    </div>
+    <!--contextmenu div-->
+    <div id="processMenu" style="display: none;">
+        <ul id="mainul">
+            <li id="pmAttribute"><i class="icon-cog"></i>&nbsp;<span class="_label">节点属性</span></li>
+            <li id="pmFrmSln"><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>
+            <li id="pmFrmD"><i class="icon-th"></i>&nbsp;<span class="_label">设计节点表单</span></li>
+            <li id="pmfun"><i class="icon-th"></i>&nbsp;<span class="_label">节点类型</span><i class="icon-chevron-right"></i></li>
+            <li id="pmNodeAccepterRole"><i class="icon-wrench"></i>&nbsp;<span class="_label">接收人规则</span></li>
+            <li id="pmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除节点</span></li>
+            <li id="Li1"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
+        </ul>
+    </div>
+    <div id="processMenu3" style=" padding: 0px; position: absolute; background: #fff;
+        display: none;">
+        <ul style="margin: 0px 0px;">
+            <li id="Node_Ordinary"><i class="icon-th"></i>&nbsp;<span class="_label">普通</span></li>
+            <li id="Node_FL"><i class="icon-th"></i>&nbsp;<span class="_label">分流</span></li>
+            <li id="Node_HL"><i class="icon-th"></i>&nbsp;<span class="_label">合流</span></li>
+            <li id="Node_FHL"><i class="icon-wrench"></i>&nbsp;<span class="_label">分合流</span></li>
+            <li id="Node_SubThread0"><i class="icon-th"></i>&nbsp;<span class="_label">同表单子线程</span></li>
+            <li id="Node_SubThread1"><i class="icon-th"></i>&nbsp;<span class="_label">异表单子线程</span></li>
+        </ul>
+    </div>
+    <div id="canvasMenu" style="display: none;">
+        <ul>
+            <li id="cmNewNode"><i class="icon-plus"></i>&nbsp;<span class="_label">新建节点</span></li>
+            <li id="cmNewLabel"><i class="icon-plus"></i>&nbsp;<span class="_label">添加标签</span></li>
+            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
+            <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
+        </ul>
+    </div>
+    <div id="canvasLabMenu" style="display: none;">
+        <ul>
+            <li id="clmNewName"><i class="icon-wrench"></i>&nbsp;<span class="_label">修改标签</span></li>
+            <li id="clmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除标签</span></li>
+        </ul>
+    </div>
+    <!--end div-->
+    <div class="container mini-layout" id="flowdesign_canvas">
+    </div>
+    <script type="text/javascript" src="Public/js/jquery-1.7.2.min.js?2025"></script>
+    <script type="text/javascript" src="Public/css/bootstrap/js/bootstrap.min.js?2025"></script>
+    <script type="text/javascript" src="Public/js/jquery-ui/jquery-ui-1.9.2-min.js?2025"></script>
+    <script type="text/javascript" src="Public/js/jsPlumb/jquery.jsPlumb-1.3.16-all-min.js?2025"></script>
+    <script type="text/javascript" src="Public/js/jquery.contextmenu.r2.js?2025"></script>
+    <!--select 2-->
+    <script type="text/javascript" src="Public/js/jquery.multiselect2side/js/jquery.multiselect2side.js?2025"></script>
+    <!--flowdesign-->
+    <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
+    
+    <script type="text/javascript">
+//        $('.menuItem').on('click', function () {
+//            var dataId = $.trim($(this).attr('data-id'));
+//            var dataHref = $.trim($(this).attr('data-href'));
+//            var menuName = $.trim($(this).text());
+//            parent.window.document.getElementById("ifback").innerHTML = menuName + '|' + dataId + '|' + dataHref;
+//            parent.ifnum();
+//        });
+
+        $("#pmfun,#processMenu3").hover(function () {
+            var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+            var mTop = $("#jqContextMenu").css("top").replace('px', '');
+            $("#processMenu3").css({ "left": parseInt(mLeft) + 148 + "px", "top": parseInt(mTop) + 62 + "px" });
+            $("#processMenu3").show();
+        }, function () {
+            $("#processMenu3").hide();
+        });
+
+        //节点类型--普通
+        $('#Node_Ordinary').on('click', function () {
+
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 0);
+
+        });
+        //节点类型--分流
+        $('#Node_FL').on('click', function () {
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 2);
+        });
+        //节点类型--合流
+        $('#Node_HL').on('click', function () {
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 1);
+        });
+        //节点类型--分合流
+        $('#Node_FHL').on('click', function () {
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 3);
+        });
+        //节点类型--同表单的子线程
+        $('#Node_SubThread0').on('click', function () {
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 4, 0);
+        });
+
+        //节点类型--异表单子线程
+        $('#Node_SubThread1').on('click', function () {
+            var nodeID = document.getElementById("leipi_active_id");
+            SetNodeRunModel(nodeID.value, 4, 1);
+        });
+
+        //设置节点类型。
+        function SetNodeRunModel(nodeID, runModel, subThreadType) {
+            //获得nodeID.
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.RunModel = runModel;
+
+            //判断是否是同表单的,还是异表单的.
+            if (runModel == 4) {
+                node.SubThreadType = subThreadType;
+            }
+
+            node.Update();
+            alert("修改成功！");
+        }
+
+        //改变节点风格.
+        function ChangeNodeIcon(nodeID, runModel) {
+
+        }
+
+    </script>
+    <script type="text/javascript">
+        var the_flow_id = '4';
+
+      
+        function callbackSuperDialog(selectValue) {
+            var aResult = selectValue.split('@leipi@');
+            $('#' + window._viewField).val(aResult[0]);
+            $('#' + window._hidField).val(aResult[1]);
+           
+        }
+        /**
+        * 弹出窗选择用户部门角色
+        * showModalDialog 方式选择用户
+        * URL 选择器地址
+        * viewField 用来显示数据的ID
+        * hidField 隐藏域数据ID
+        * isOnly 是否只能选一条数据
+        * dialogWidth * dialogHeight 弹出的窗口大小
+        */
+        function superDialog(URL, viewField, hidField, isOnly, dialogWidth, dialogHeight) {
+            dialogWidth || (dialogWidth = 620)
+            , dialogHeight || (dialogHeight = 520)
+            , loc_x = 500
+            , loc_y = 40
+            , window._viewField = viewField
+            , window._hidField = hidField;
+          
+            if (window.ActiveXObject) { //IE
+                var selectValue = window.showModalDialog(URL, self, "edge:raised;scroll:1;status:0;help:0;resizable:1;dialogWidth:" + dialogWidth + "px;dialogHeight:" + dialogHeight + "px;dialogTop:" + loc_y + "px;dialogLeft:" + loc_x + "px");
+                if (selectValue) {
+                    callbackSuperDialog(selectValue);
+                }
+            } else {  //非IE
+                var selectValue = window.open(URL, 'newwindow', 'height=' + dialogHeight + ',width=' + dialogWidth + ',top=' + loc_y + ',left=' + loc_x + ',toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+            }
+        }
+
+        var flowNo = null;
+        $(function () {
+            flowNo = GetQueryString("FK_Flow");
+            if (flowNo == undefined || flowNo == null)
+                flowNo = "002";
+
+            var alertModal = $('#alertModal'), attributeModal = $("#attributeModal");
+            var alertModal1 = $('#alertModal1'), attributeModal = $("#attributeModal");
+            var alertModal3 = $('#alertModal3'), attributeModal = $("#attributeModal");
+            //消息提示
+            mAlert = function (messages, s) {
+                if (!messages) messages = "";
+                if (!s) s = 2000;
+                alertModal.find(".modal-body").html(messages);
+                alertModal.modal('toggle');
+                setTimeout(function () { alertModal.modal("hide") }, s);
+            }
+            //消息弹出（节点）
+            cAlert = function (messages, s) {
+                if (!messages) messages = "";
+                if (!s) s = 200000;
+                alertModal1.find(".modal-body").html(messages);
+                alertModal1.modal('toggle');
+                setTimeout(function () { alertModal1.modal("hide") }, s);
+            }
+            //消息弹出（标签）
+            labAlert = function (messages, s) {
+                if (!messages) messages = "";
+                if (!s) s = 200000;
+                alertModal3.find(".modal-body").html(messages);
+                alertModal3.modal('toggle');
+                setTimeout(function () { alertModal3.modal("hide") }, s);
+            }
+            //消息弹出（线）
+            fAlert = function (messages, s) {
+                if (!messages) messages = "请选择您要执行的操作";
+                if (!s) s = 200000;
+                $("#alertModal2").find(".modal-body").html(messages);
+                $("#alertModal2").modal('toggle');
+                setTimeout(function () { alertModal1.modal("hide") }, s);
+            }
+            //属性设置
+            attributeModal.on("hidden", function () {
+                $(this).removeData("modal"); //移除数据，防止缓存
+            });
+
+            ajaxModal = function (url, fn) {
+
+                url += url.indexOf('?') ? '&' : '?';
+                url += '_t=' + new Date().getTime();
+                attributeModal.find(".modal-body").html('<img src="Public/images/loading.gif"/>');
+                attributeModal.modal({
+                    remote: url
+                });
+
+                //加载完成执行
+                if (fn) {
+                    attributeModal.on('shown', fn);
+                }
+            }
+
+            /*步骤数据*/
+            var processData = GenerDrowFlowData();
+            //标签数据
+            var labNoteData = GetLabNoteData();
+            console.log(processData);
+            /*创建流程设计器*/
+            var _canvas = $("#flowdesign_canvas").Flowdesign({
+                "processData": processData,
+                "labNoteData": labNoteData
+                              , mtAfterDrop: function (params) {
+                                  //alert("连接：" + params.sourceId + " -> " + params.targetId);
+                              }
+                /*画面右键*/
+                              , canvasMenus: {
+                                  "cmNewNode": function (t) {
+
+                                      //获取坐标
+                                      var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+                                      var mTop = $("#jqContextMenu").css("top").replace('px', '');
+
+
+                                      //创建一个节点
+                                      var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                                      hander.AddPara("X", mLeft);
+                                      hander.AddPara("Y", mTop);
+                                      hander.AddPara("FK_Flow", flowNo);
+
+                                      var data = hander.DoMethodReturnString("CreateNode");
+                                      if (data.indexOf('err@') == 0) {
+                                          alert(data);
+                                          return;
+                                      }
+
+                                      //添加节点样式与坐标
+                                      data = JSON.parse(data);
+                                      var strs = "";
+                                      strs += "{'id':'" + data.NodeID + "',";
+                                      strs += "'flow_id':'" + flowNo + "',";
+                                      strs += "'process_name':'" + data.Name + "',";
+                                      strs += "'process_to':0,";
+                                      strs += "'icon':'icon-ok',";
+                                      strs += "'style':'width:auto;height:41px;line-height:41px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
+                                      strs += "}";
+                                      strs = eval("(" + strs + ")");
+
+                                      if (_canvas.addProcess(strs) == false) //添加
+                                      {
+                                          alert("添加失败");
+                                          return;
+                                      }
+
+                                  },
+                                  "cmSave": function (t) {
+                                      var processInfo = _canvas.getProcessInfo(); //连接信息
+
+                                      /*重要提示 start*/
+                                      alert("这里使用ajax提交，请参考官网示例，可使用Fiddler软件抓包获取返回格式cc");
+                                      /*重要提示 end */
+
+                                      //                                      var url = "/index.php?s=/Flowdesign/save_canvas.html";
+                                      //                                      $.post(url, { "flow_id": the_flow_id, "process_info": processInfo }, function (data) {
+                                      //                                          mAlert(data.msg);
+                                      //                                      }, 'json');
+                                  },
+                                  //刷新
+                                  //添加标签
+                                  "cmNewLabel": function (t) {
+                                      var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+                                      var mTop = $("#jqContextMenu").css("top").replace('px', '');
+
+                                      //创建一个标签
+                                      var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                                      hander.AddPara("X", mLeft);
+                                      hander.AddPara("Y", mTop);
+                                      hander.AddPara("FK_Flow", flowNo);
+                                      hander.AddPara("LabName", "请输入标签");
+
+                                      var data = hander.DoMethodReturnString("CreatLabNote");
+                                      if (data.indexOf('err@') == 0) {
+                                          alert(data);
+                                          return;
+                                      }
+
+                                      //添加标签样式与坐标
+                                      data = JSON.parse(data);
+                                      var strs = "";
+                                      strs += "{'id':'" + data.MyPK + "',";
+                                      strs += "'flow_id':'" + data.FK_Flow + "',";
+                                      strs += "'process_name':'请输入标签',";
+                                      strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
+                                      strs += "}";
+                                      strs = eval("(" + strs + ")");
+
+                                      if (_canvas.addLabProcess(strs) == false) //添加
+                                      {
+                                          alert("添加失败");
+                                          return;
+                                      }
+                                  },
+                                  "cmPaste": function (t) {
+                                      var pasteId = _canvas.paste(); //右键当前的ID
+                                      if (pasteId <= 0) {
+                                          alert("你未复制任何步骤");
+                                          return;
+                                      }
+                                      alert("粘贴:" + pasteId);
+                                  },
+                                  "cmHelp": function (t) {
+
+                                      Help();
+                                  }
+                              }
+                /*步骤右键*/
+                              , processMenus: {
+
+                                  "pmBegin": function (t) {
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      alert("设为第一步:" + activeId);
+                                  },
+                                  "pmAddson": function (t)//添加子步骤
+                                  {
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                  },
+                                  "pmCopy": function (t) {
+                                      //var activeId = _canvas.getActiveId();//右键当前的ID
+                                      _canvas.copy(); //右键当前的ID
+                                      alert("复制成功");
+                                  },
+                                  "pmDelete": function (t) {
+
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID.
+                                      var str = activeId.substring(activeId.length - 2);
+                                      if (str == "01") {
+                                          /*如果是开始节点. */
+                                          alert('开始节点不允许删除.');
+                                          return;
+                                      }
+
+                                      if (confirm("你确定删除节点吗？如果当前节点有待办或者有数据，系统将拒绝删除。") == false)
+                                          return;
+
+                                      //节点.
+                                      var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                                      hander.AddPara("FK_Node", activeId);
+                                      var data = hander.DoMethodReturnString("DeleteNode");
+                                      if (data.indexOf('err@') == 0) {
+                                          alert(data); //删除失败的情况.
+                                          return;
+                                      }
+                                      _canvas.delProcess(activeId);
+
+                                  },
+                                  "pmAttribute": function (t) {
+                                      //节点属性.
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeAttr(activeId);
+                                  },
+                                  "pmAttributeOld": function (t) {
+                                      //节点属性.
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeAttrOld(activeId);
+                                  },
+                                  "pmFrmSln": function (t) {
+                                      //表单方案.
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeFrmSln(activeId); //表单方案.
+                                  },
+                                  "pmFrmD": function (t) {
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeFrmD(activeId);
+                                  },
+                                  "pmFrmFool": function (t) {
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeFrmFool(activeId);
+                                  },
+                                  "pmFrmFree": function (t) {
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeFrmFree(activeId); cAlert
+                                  },
+                                  "pmNodeAccepterRole": function (t) {
+
+                                      var activeId = _canvas.getActiveId(); //右键当前的ID
+                                      NodeAccepterRole(activeId);
+
+                                  }
+                              },
+                canvasLabMenu: {
+                    "clmDelete": function (t) {
+                        var activeId = _canvas.getActiveId(); //右键当前的ID.
+                        if (confirm("你确定删除该标签吗？") == false)
+                            return;
+
+                        //删除标签.
+                        var lb = new Entity("BP.WF.Template.LabNote", activeId);
+                        lb.Delete();
+                        _canvas.delLabNote(activeId);
+
+                    },
+                    "clmNewName": function (t) {
+                        //修改标签名称.
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        var windowtext = $("#lab" + activeId).text();
+
+                        windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, ""); //去掉左右空格.
+
+                        alert(windowtext);
+
+
+                        var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                        var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
+                        var xiuNodename = '修改名称:<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
+                        var spanaa = $("#lab" + activeId + " span").html();
+
+                        labAlert(xiuNodename);
+                    }
+                }
+                              , fnRepeat: function () {
+                                  //alert("步骤连接重复1");//可使用 jquery ui 或其它方式提示
+                                  mAlert("步骤连接重复了，请重新连接");
+
+                              }
+                              , fnClick: function () {
+                                  //点击修改名称方法
+                                  var activeId = _canvas.getActiveId(); //右键当前的ID
+                                  var windowtext = $("#window" + activeId).text();
+                                  var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                                  var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(\"" + activeId + "\")");
+
+                                  windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
+
+
+                                  var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
+                                  var spanaa = $("#window" + activeId + " span").html();
+
+                                  cAlert(xiuNodename);
+
+                              }
+                              , fnDbClick: function () {
+                                  //和 pmAttribute 一样
+                                  var activeId = _canvas.getActiveId(); //右键当前的ID
+                                  NodeAttr(activeId);
+
+                              }
+            });
+
+            /*保存*/
+            $("#Btn_Save").bind('click', function () {
+                $("#Btn_Save").attr("disabled", true);
+                $("#Btn_Save").html("保存中...");
+
+                SaveFlow(_canvas);
+
+
+            });
+            /*清除连接线，用不到.*/
+            $("#leipi_clear").bind('click', function () {
+                return;
+                if (_canvas.clear()) {
+                    //alert("清空连接成功");
+                    mAlert("清空连接成功，你可以重新连接");
+                } else {
+                    //alert("清空连接失败");
+                    mAlert("清空连接失败");
+                }
+            });
+
+        });
+        function SaveFlow(_canvas) {
+
+
+            //获取所有节点信息.
+            try {
+
+
+
+                var nodes = new Entities("BP.WF.Template.NodeSimples");
+                nodes.Retrieve("FK_Flow", flowNo);
+
+
+                // 保存x,y位置.
+                var processInfo = _canvas.getProcessInfo(); //连接信息.
+                processInfo = JSON.parse(processInfo);
+
+                for (var nodeID in processInfo) {
+
+                    var nodeIDStr = JSON.stringify(nodeID);
+
+                    var nodeJSON = processInfo[nodeID];
+
+                    for (var idx = 0; idx < nodes.length; idx++) {
+
+                        var node = nodes[idx];
+                        var myID = "\"" + node.NodeID + "\"";
+                        if (myID != nodeIDStr)
+                            continue;
+
+                        node = new Entity("BP.WF.Template.NodeSimple", node);
+                        node.Y = nodeJSON.top;
+                        node.X = nodeJSON.left;
+                        node.Update();
+                        break;
+                    }
+                }
+
+                //删除原来的连接线.
+                DBAccess.RunSQL("DELETE FROM WF_Direction WHERE FK_Flow='" + flowNo + "' ");
+
+                //创建一个实体.
+                var dir = new Entity("BP.WF.Template.Direction");
+
+                //保存方向.
+                for (var nodeID in processInfo) {
+
+                    //获得toNode.
+                    var nodeJSON = processInfo[nodeID];
+                    var strs = JSON.stringify(nodeJSON);
+
+                    //获得toNode.
+                    var toNodes = nodeJSON.process_to;
+                    if (toNodes == "")
+                        continue;
+
+                    if (nodeID == undefined
+                            || nodeID == null
+                            || nodeID == "undefined"
+                            || nodeID == 'undefined') {
+                        continue;
+                    }
+
+                    for (var i = 0; i < toNodes.length; i++) {
+
+                        var toNodeID = toNodes[i];
+
+                        if (toNodeID == undefined
+                            || toNodeID == null
+                            || toNodeID == "undefined"
+                            || toNodeID == 'undefined') {
+
+                            var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
+                            alert('保存出错: \t\n\t\n1.节点[' + fromNode.Name + ']到达节点没有把线连接正确.\t\n2.请您关闭当前流程，重新打开然后连接，执行保存。 \t\n3.其余的方向条件保存成功.');
+                            $("#Btn_Save").attr("disabled", false);
+                            $("#Btn_Save").html("保存");
+                            continue;
+                        }
+
+                        dir.FK_Flow = flowNo;
+                        dir.Node = nodeID;
+                        dir.ToNode = toNodeID;
+                        dir.MyPK = dir.FK_Flow + "_" + dir.Node + "_" + dir.ToNode;
+                        dir.DirType = 2;
+
+                        try {
+                            dir.Insert();
+                        } catch (e) {
+                        }
+
+                    }
+
+                }
+
+                //标签
+                var labNoteInfo = _canvas.getLabNoteInfo(); //标签信息.
+                labNoteInfo = JSON.parse(labNoteInfo);
+
+                for (var lab in labNoteInfo) {
+
+                    var labJSON = labNoteInfo[lab];
+
+                    var lb = new Entity("BP.WF.Template.LabNote", lab);
+                    lb.Y = labJSON.top;
+                    lb.X = labJSON.left;
+                    lb.Update();
+                }
+
+
+                // 清除流程缓存，并修复数据.
+                var flow = new Entity("BP.WF.Flow", flowNo);
+                flow.DoMethodReturnString("DoCheck");
+
+            }
+            catch (e) {
+                alert(e);
+            }
+
+            //alert('保存成功!');
+
+            $("#Btn_Save").attr("disabled", false);
+            $("#Btn_Save").html("保存");
+            return;
+        }
+
+        //修改节点名称
+        function saveNodeName(activeId) {
+            var text = document.getElementById("TB_" + activeId).value; //新修改的值.
+
+            //alert(text);
+
+            var node = new Entity("BP.WF.Node", activeId);
+            node.Name = text;
+            node.Update();
+
+
+            //修改表单名称.
+            var mapData = new Entity("BP.Sys.MapData", "ND" + activeId);
+            mapData.Name = text;
+            mapData.Update();
+
+            //修改分组名称.
+            var groups = new Entities("BP.Sys.GroupFields");
+            groups.Retrieve("FrmID", "ND" + activeId);
+
+            //  alert(groups.length);
+
+            if (groups.length == 1) {
+
+                var group = groups[0];
+
+                var groupEn = new Entity("BP.Sys.GroupField", group.OID);
+                groupEn.Lab = text;
+                groupEn.Update();
+            }
+
+
+            //更新节点名称与显示
+            $("#span_" + activeId).text(text);
+        }
+        //修改标签名称
+        function saveLabName(activeId) {
+            var lb = new Entity("BP.WF.Template.LabNote", activeId);
+            var text = document.getElementById("TB_LAB_" + activeId).value; //新修改的值.
+            lb.Name = text;
+            lb.Update();
+
+            //更新名称与显示
+            $("#lab_span_" + activeId).text(text);
+        }
+        //获得流程数据.
+        function GenerDrowFlowData() {
+
+            flowNo = GetQueryString("FK_Flow");
+            if (flowNo == null || flowNo == undefined)
+                flowNo = "002";
+
+            //节点. 取出来显示
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", flowNo);
+
+            //方向. 取出来显示
+            var dirs = new Entities("BP.WF.Template.Directions");
+            dirs.Retrieve("FK_Flow", flowNo);
+
+
+            var strs = "{ 'total':" + nodes.length + ", 'list':[";
+            //遍历节点个数，输入节点.
+            for (var i = 0; i < nodes.length; i++) {
+
+                var node = nodes[i];
+
+                //获得到达的节点.
+                var toNodes = "";
+                for (var idx = 0; idx < dirs.length; idx++) {
+                    var dir = dirs[idx];
+
+                    if (dir.Node == node.NodeID) {
+                        toNodes += "," + dir.ToNode;
+                    }
+                }
+
+                strs += "{'id':'" + node.NodeID + "',";
+                strs += "'flow_id':'" + flowNo + "',";
+                strs += "'process_name':'" + node.Name.replace(/(^\s*)|(\s*$)/g, "") + "',";
+                strs += "'process_to':'" + toNodes + "',";
+
+                //判断是否是开始节点?
+                var nodeID = "" + node.NodeID;
+                var str = nodeID.substring(nodeID.length - 2);
+
+                if (str == "01") {
+                    // strs += "'icon':'icon-ok',";
+                } else if (toNodes == "") {
+                    strs += "'icon':'icon-ok',";
+                } else {
+                    /* 如果是其他的情况,就要考虑分合流 */
+                }
+
+                strs += "'style':'width:auto;minWidth:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
+
+                if (i == nodes.length - 1)
+                    strs += "}";
+                else
+                    strs += "},";
+            }
+
+            strs += "] }";
+
+
+            return eval("(" + strs + ")");
+        }
+
+        function DealSpecStr(str) {
+
+            str = str.toString().replace(new RegExp('(["\"])', 'g'), "\\\"");
+            str = str.replace("\"", "\\\"").replace("\r\n", "<br/>").replace("\n", "<br/>").replace("\r", "<br/>");
+            str = str.replace("\"", "\'");
+
+            if (str.indexOf('开发要点说明') != -1) {
+                return "";
+            }
+
+            return str;
+        }
+
+        function GetLabNoteData() {
+            //标签. 取出来显示
+            var labs = new Entities("BP.WF.Template.LabNotes");
+            labs.Retrieve("FK_Flow", flowNo);
+
+            var strs = "{ 'total':" + labs.length + ", 'list':[";
+            //遍历标签个数
+            for (var i = 0; i < labs.length; i++) {
+
+                var lab = labs[i];
+
+                //console.log(lab.Name);
+
+                lab.Name = DealSpecStr(lab.Name);
+
+                //alert(lab.Name);
+
+                strs += "{'id':'" + lab.MyPK + "',";
+                strs += "'flow_id':'" + lab.FK_Flow + "',";
+                strs += "\"process_name\":\"" + lab.Name + "\",";
+                strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + lab.X + "px" + ";top:" + lab.Y + "px;'";
+
+                if (i == labs.length - 1)
+                    strs += "}";
+                else
+                    strs += "},";
+            }
+
+            strs += "] }";
+
+            try {
+                return eval("(" + strs + ")");
+            } catch (e) {
+                return "";
+            }
+        }
+
+        //刷新页面
+        function page_reload() {
+            location.reload();
+        }
+
+    </script>
+</body>
+</html>

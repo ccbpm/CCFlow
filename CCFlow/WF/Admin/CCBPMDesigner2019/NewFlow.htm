@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>新建流程</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <script src="./js/CCBPMDesignerData.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+
+    <script type="text/javascript" >
+
+        $(function () {
+
+            var Ele_FlowName = document.getElementById("TB_FlowName");
+            Ele_FlowName.focus();
+
+            var flowSort = GetQueryString("sort");
+            flowSort = flowSort.replace("F", "");
+            $("#HD_FlowSort").val(flowSort);
+
+            $("#DDL_DefFrmModel").append("<option value=null  disabled='disabled'>+内置表单</option>");
+            $("#DDL_DefFrmModel").append("<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>");
+            $("#DDL_DefFrmModel").append("<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>");
+            $("#DDL_DefFrmModel").append("<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>");
+            $("#DDL_DefFrmModel").append("<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>");
+
+            $("#DDL_DefFrmModel").append("<option value=null  disabled='disabled'>+自定义表单</option>");
+            $("#DDL_DefFrmModel").append("<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>");
+            $("#DDL_DefFrmModel").append("<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
+
+        });
+
+        function getNewFlowInfo() {
+            return {
+                flowName: $('#TB_FlowName').val(),
+                flowSort: $('#HD_FlowSort').val(),
+                dataStoreModel: 1,
+                pTable: $('#TB_PTable').val(),
+                flowCode: $('#TB_FlowCode').val(),
+                FlowVersion: 1
+            };
+        }
+    </script>
+    <base target=_blank />
+</head>
+<body>
+    <form id="from1" action="">
+    <table class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+   <caption><a href="http://ccflow.ke.qq.com/" ><img src='../../Img/FileType/rmvb.gif' />教您做一个小流程</a></caption>
+        <tr>
+            <td><font color=red><b>*</b></font>流程名称：</td>
+            <td>
+                <input id="TB_FlowName" class="easyui-textbox" style="width: 200px" />
+            </td>
+            <td> 不能为空，比如:请假流程.</td>
+        </tr>
+        <tr>
+            <td>流程数据表：</td>
+            <td>
+                <input id="TB_PTable" class="easyui-textbox" style="width: 200px" />
+            </td>
+            <td> <font  color="gray"><a href="http://ccbpm.mydoc.io/?v=5404&t=17897" target=_blank> <img src='../../Img/Help.png' />流程运行的数据表名称,可以为空,默认为NDxxxRpt,xxx是流程编号.</font></a></td>
+        </tr>
+
+        <tr>
+        <td>默认表单模式</td>
+        <td> 
+          <select id="DDL_DefFrmModel" style="width:200px;"></select>
+         </td>
+         <td>  <font  color="gray"> 可以在节点属性-表单方案里修改. </font> </td>
+        </tr>
+
+        <tr>
+            <td nowarp="true"  width="20%;" >
+                流程标记：
+            </td>
+            <td>
+                <input id="TB_FlowCode" class="easyui-textbox" style="width: 200px" />
+            </td>
+            <td> <a href="http://ccbpm.mydoc.io/?v=5404&t=16847" ><img src='../../Img/Help.png' />唯一来确定此流程的标记、也叫流程别名、比如:BaoXiao,QingJia (可以为空)</a></td>
+        </tr> 
+    </table>
+    
+
+    <input type="hidden" id="HD_FlowSort" name="HD_FlowSort" />
+    </form>
+</body>
+</html>

@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>驰骋流程&表单设计器 </title>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="../../Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+     
+        //初始化页面函数.....
+        $(function () {
+
+            $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录/自动升级做准备.</font>");
+            
+            var doType = GetQueryString("DoType");
+            if (doType == null)
+                doType = "Login_Init";
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            var data = handler.DoMethodReturnJSON("Login_InitInfo");
+            document.title = data.SysName;
+
+            //执行更新检查..
+            handler.AddUrlData();
+            data = handler.DoMethodReturnString(doType);
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + ". 也许是: java/.net/phtyon 运行环境没有准备好导致的. 请确认运行环境</font>");
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+  
+            $("#Msg").html("<font color=green>" + data + "</font>");
+            
+            var webUser=new WebUser();            
+            if (webUser.No !='admin')
+             {
+                 alert('非法的登录用户.');
+                  return;           
+            }
+            
+            var url='Default.htm?UseNo='+webUser.No+'&D='+webUser.FK_Dept;
+            window.location.href=url;
+                       
+        }); 
+    </script>
+
+       <script type="text/javascript" language="javascript">    
+       </script>
+
+</head>
+
+<body class="login-bg">
+
+        <form id="cc" >
+          <br/>
+          <br/><br/><br/><br/><br/><br/>
+          <center>
+          <div id="Msg"></div>
+          </center>
+         
+           
+           </form>
+
+
+</body>
+</html>

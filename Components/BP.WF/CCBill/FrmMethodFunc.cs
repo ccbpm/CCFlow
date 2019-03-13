@@ -117,7 +117,7 @@ namespace BP.WF.CCBill
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_FrmMethod", "连接方法");
+                Map map = new Map("WF_FrmMethod", "功能方法");
                 map.AddMyPK();
 
                 map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
@@ -162,6 +162,7 @@ namespace BP.WF.CCBill
             }
         }
         #endregion
+
         /// <summary>
         /// 方法参数
         /// </summary>

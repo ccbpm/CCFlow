@@ -230,7 +230,7 @@ namespace BP.WF.CCBill
             {
                 string str= this.GetValStrByKey(FrmBillAttr.BillNoFormat);
                 if (DataType.IsNullOrEmpty(str) == true)
-                    str = "ccbpm-{YYYY}-{LSH4}";
+                    str = "{LSH4}";
                 return str;
             }
             set

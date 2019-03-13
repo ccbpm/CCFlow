@@ -6115,6 +6115,16 @@ namespace BP.WF
             //#endregion 复制独立表单数据.
         }
         /// <summary>
+        /// 创建一个空白的WorkID
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="userNo">用户编号</param>
+        /// <returns>执行结果</returns>
+        public static Int64 Node_CreateBlankWork(string flowNo, string userNo)
+        {
+            return Node_CreateBlankWork(flowNo, null, null, userNo);
+        }
+        /// <summary>
         /// 创建WorkID
         /// </summary>
         /// <param name="flowNo">流程编号</param>

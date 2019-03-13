@@ -893,8 +893,14 @@ namespace BP.Sys
                     _IsReadonly = 0;
                     return false;
                 }
-                _IsReadonly = 1;
-                return true;
+                _IsReadonly = this.GetValIntByKey(MapDtlAttr.IsReadonly);
+
+                return this.GetValBooleanByKey(MapDtlAttr.IsReadonly);
+               
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.IsReadonly, value);
             }
         }
         /// <summary>

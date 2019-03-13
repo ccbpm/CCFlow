@@ -1891,6 +1891,7 @@ namespace BP.WF.HttpHandler
                         mdtl.IsInsert = false;
                         mdtl.IsDelete = false;
                         mdtl.IsUpdate = false;
+                        mdtl.IsReadonly = true;
                     }
 
                     ///自定义权限.

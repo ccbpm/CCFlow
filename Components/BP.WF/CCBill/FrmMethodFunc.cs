@@ -123,14 +123,33 @@ namespace BP.WF.CCBill
                 map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
                 map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
                 map.AddTBString(FrmMethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
+                map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
+                  "@0=按钮@1=超链接");
+
                 map.AddDDLSysEnum(FrmMethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, true, "MethodDocTypeOfFunc",
-                  "@0=SQL@1=URL@2=JavaScript@3=业务单元");
+               "@0=SQL@1=URL@2=JavaScript@3=业务单元");
 
                 map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "执行内容", true, false);
+
+                #region 工具栏.
+                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true,true);
+                map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
+                map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
+                #endregion 工具栏.
+
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "方法参数"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoParas";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                //rm.GroupName = "开发接口";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "方法内容"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoDocs";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -143,12 +162,22 @@ namespace BP.WF.CCBill
             }
         }
         #endregion
-
+        /// <summary>
+        /// 方法参数
+        /// </summary>
+        /// <returns></returns>
         public string DoParas()
         {
-            return "../../CCBill/Admin/MethodParas.htm?MyPK="+this.MyPK;
+            return "../../CCBill/Admin/MethodParas.htm?MyPK=" + this.MyPK;
         }
-
+        /// <summary>
+        /// 方法内容
+        /// </summary>
+        /// <returns></returns>
+        public string DoDocs()
+        {
+            return "../../CCBill/Admin/MethodDoc.htm?MyPK=" + this.MyPK;
+        }
     }
 	/// <summary>
 	/// 功能连接

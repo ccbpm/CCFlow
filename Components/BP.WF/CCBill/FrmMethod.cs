@@ -32,6 +32,10 @@ namespace BP.WF.CCBill
         /// </summary>
         public const string RefMethodType = "RefMethodType";
         /// <summary>
+        /// 显示方式.
+        /// </summary>
+        public const string ShowModel = "ShowModel";
+        /// <summary>
         /// 处理内容
         /// </summary>
         public const string MethodDoc = "MethodDoc";
@@ -43,6 +47,21 @@ namespace BP.WF.CCBill
         /// 处理内容 tag.
         /// </summary>
         public const string Idx = "Idx";
+
+        #region 显示位置
+        /// <summary>
+        /// 是否显示myToolBar工具栏上.
+        /// </summary>
+        public const string IsMyBillToolBar = "IsMyBillToolBar";
+        /// <summary>
+        /// 显示在工具栏更多按钮里.
+        /// </summary>
+        public const string IsMyBillToolExt = "IsMyBillToolExt";
+        /// <summary>
+        /// 显示在查询列表工具栏目上，用于执行批处理.
+        /// </summary>
+        public const string IsSearchBar = "IsSearchBar";
+        #endregion 显示位置
     }
 	/// <summary>
 	/// 表单方法

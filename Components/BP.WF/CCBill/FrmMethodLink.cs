@@ -127,9 +127,17 @@ namespace BP.WF.CCBill
                 map.AddDDLSysEnum(FrmMethodAttr.RefMethodType, 0, "方法类型", true, true, "RefMethodTypeLink",
                   "@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开");
 
-                map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
+                map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
+                 "@0=按钮@1=超链接");
 
+                map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
                 map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "连接URL", true, false);
+
+                #region 工具栏.
+                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
+                map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
+                map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
+                #endregion 工具栏.
 
                 this._enMap = map;
                 return this._enMap;

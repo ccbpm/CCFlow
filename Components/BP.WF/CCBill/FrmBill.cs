@@ -286,7 +286,7 @@ namespace BP.WF.CCBill
                 map.Java_SetCodeStruct("4");
 
                 #region 基本属性.
-                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
+                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
                 map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20,true);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20,true);
@@ -587,7 +587,7 @@ namespace BP.WF.CCBill
                 attr.UIIsLine = true;
                 attr.MinLen = 0;
                 attr.MaxLen = 400;
-                attr.Idx = -100;
+                attr.Idx = -101;
                 attr.Insert();
             }
 
@@ -643,43 +643,60 @@ namespace BP.WF.CCBill
                 attr.UIIsLine = false;
                 attr.MinLen = 0;
                 attr.MaxLen = 4000;
-                attr.Idx = -100;
+                attr.Idx = -99;
                 attr.Insert();
             }
 
-            return;
 
-            if (attrs.Contains(this.No + "_" + GERptAttr.FlowEmps) == false)
+
+            if (attrs.Contains(this.No + "_BillState") == false)
             {
                 /* 参与人 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowEmps; // "FlowEmps";
-                attr.Name = "参与人"; //  
-                attr.MyDataType = DataType.AppString;
+                attr.KeyOfEn = "BillState"; // "FlowEmps";
+                attr.Name = "单据状态"; //  
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = true;
                 attr.UIIsEnable = false;
                 attr.UIIsLine = true;
                 attr.MinLen = 0;
-                attr.MaxLen = 1000;
-                attr.Idx = -100;
+                attr.MaxLen = 10;
+                attr.Idx = -98;
                 attr.Insert();
             }
 
-            if (attrs.Contains(this.No + "_" + GERptAttr.FlowStarter) == false)
+            if (attrs.Contains(this.No + "_Starter" ) == false)
             {
                 /* 发起人 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowStarter;
-                attr.Name = "发起人"; //  
+                attr.KeyOfEn = "Starter";
+                attr.Name = "创建人"; //  
                 attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
 
-                //attr.UIBindKey = "BP.Port.Emps";
+                attr.UIVisible = true;
+                attr.UIIsEnable = false;
+                attr.MinLen = 0;
+                attr.MaxLen = 32;
+                attr.Idx = -1;
+                attr.Insert();
+            }
+            if (attrs.Contains(this.No + "_StarterName") == false)
+            {
+                /* 发起人 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "StarterName";
+                attr.Name = "创建人"; //  
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
 
@@ -691,23 +708,25 @@ namespace BP.WF.CCBill
                 attr.Insert();
             }
 
-            if (attrs.Contains(this.No + "_" + GERptAttr.FlowStartRDT) == false)
+            if (attrs.Contains(this.No + "_RDT") == false)
             {
                 /* MyNum */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowStartRDT; // "FlowStartRDT";
-                attr.Name = "发起时间";
+                attr.KeyOfEn = "RDT"; // "FlowStartRDT";
+                attr.Name = "创建时间";
                 attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = true;
                 attr.UIIsEnable = false;
                 attr.UIIsLine = false;
-                attr.Idx = -101;
+                attr.Idx = -97;
                 attr.Insert();
             }
+
+            return;
 
             if (attrs.Contains(this.No + "_" + GERptAttr.FlowEnder) == false)
             {

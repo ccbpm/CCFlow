@@ -47,7 +47,6 @@ namespace BP.WF.CCBill
             gb.NDStepName = "启动";
             gb.DirectInsert();
 
-
             //单据编号.
             if (DataType.IsNullOrEmpty(gb.BillNo) == true)
             {
@@ -69,6 +68,16 @@ namespace BP.WF.CCBill
                     DBAccess.RunSQL("UPDATE " + fb.PTable + " SET Title='" + gb.Title + "' WHERE OID=" + gb.WorkID);
             }
 
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
+            rpt.SetValByKey("BillState", (int)gb.BillState);
+            rpt.SetValByKey("Starter", gb.Starter);
+            rpt.SetValByKey("StarterName", gb.StarterName);
+            rpt.SetValByKey("RDT", gb.RDT);
+            rpt.SetValByKey("Title", gb.Title);
+            rpt.SetValByKey("BillNo", gb.BillNo);
+            rpt.OID = gb.WorkID;
+            rpt.DirectInsert();
+           
 
             return gb.WorkID;
         }

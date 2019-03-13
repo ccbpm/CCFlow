@@ -149,6 +149,9 @@ namespace BP.WF.HttpHandler
 
             string sql = this.GetRequestVal("TB_Docs");
 
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Url);
+
             Cond cond = new Cond();
             cond.Delete(CondAttr.NodeID, fk_mainNode,
               CondAttr.ToNodeID, toNodeID,
@@ -284,7 +287,7 @@ namespace BP.WF.HttpHandler
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
             //把其他的条件都删除掉.
-            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ( NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
 
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.NodeForm;
@@ -424,7 +427,7 @@ namespace BP.WF.HttpHandler
             CondType condTypeEnum =  (CondType)this.GetRequestValInt("CondType");
 
             //把其他的条件都删除掉.
-            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ( NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
 
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.StandAloneFrm;
@@ -628,6 +631,9 @@ namespace BP.WF.HttpHandler
 
             string sql = this.GetRequestVal("TB_Docs");
 
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.SQLTemplate);
+
             Cond cond = new Cond();
             cond.Delete(CondAttr.NodeID, fk_mainNode,
               CondAttr.ToNodeID, toNodeID,
@@ -707,6 +713,9 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             string sql = this.GetRequestVal("TB_Docs");
+
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType="+(int)condTypeEnum+" AND NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.SQL);
 
             Cond cond = new Cond();
             cond.Delete(CondAttr.NodeID, fk_mainNode,
@@ -802,6 +811,9 @@ namespace BP.WF.HttpHandler
 
             string mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + ConnDataFrom.Stas.ToString();
 
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)HisCondType + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + ToNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Stas);
+
             // 删除岗位条件.
             cond.MyPK = mypk;
             if (cond.RetrieveFromDBSources() == 0)
@@ -868,10 +880,9 @@ namespace BP.WF.HttpHandler
             CondType condType = (CondType)this.GetRequestValInt("CondType");
 
             Cond cond = new Cond();
-            cond.Delete(CondAttr.NodeID, this.GetRequestValInt("FK_MainNode"),
-               CondAttr.ToNodeID, this.GetRequestValInt("ToNodeID"),
-               CondAttr.CondType, (int)condType);
-
+           
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condType + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + this.GetRequestValInt("ToNodeID") + ") AND DataFrom!=" + (int)ConnDataFrom.Depts);
 
             string mypk = this.GetRequestValInt("FK_MainNode") + "_" + this.GetRequestValInt("ToNodeID") + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
             cond.MyPK = mypk;
@@ -959,6 +970,10 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Paras.ToString();
 
             string sql = this.GetRequestVal("TB_Docs");
+
+
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND   NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Paras);
 
             Cond cond = new Cond();
             cond.Delete(CondAttr.NodeID, fk_mainNode,

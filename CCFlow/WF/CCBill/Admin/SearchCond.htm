@@ -45,16 +45,21 @@
             for (var i = 0; i < js.length; i++) {
                 if (js[i].indexOf("RptSearchKeys") != -1)
                     RptSearchKeys = js[i].replace("RptSearchKeys=", "")
-                if (js[i].indexOf("RptDTSearchWay") != -1)
-                    RptDTSearchWay = js[i].replace("RptDTSearchWay=", "")
-                if (js[i].indexOf("RptDTSearchKey") != -1)
-                    RptDTSearchKey = js[i].replace("RptDTSearchKey=", "")
+                if (js[i].indexOf("DTSearchWay") != -1)
+                    RptDTSearchWay = js[i].replace("DTSearchWay=", "")
+                if (js[i].indexOf("DTSearchKey") != -1)
+                    RptDTSearchKey = js[i].replace("DTSearchKey=", "")
             }
 
             //绑定外键字段.
+            var dateMapAttrs = [];
             for (var i = 0, length = mapAttrs.length; i < length; i++) {
                 var attr = mapAttrs[i],
                             flag = false;
+                if (attr.MyDataType == 6 || attr.MyDataType == 7) {
+                    dateMapAttrs.push(attr);
+                    continue;
+                }
 
                 if (attr.UIContralType != 1) {
                     continue;
@@ -69,8 +74,8 @@
             $("#DDL_DTSearchWay").val(RptDTSearchWay);
 
             //绑定日期下拉框.
-            if (mapAttrs != null) {
-                GenerBindDDL("DDL_DTSearchKey", mapAttrs, "KeyOfEn", "Name", RptDTSearchKey, "MyDataType", 7);
+            if (dateMapAttrs != null) {
+                GenerBindDDL("DDL_DTSearchKey", dateMapAttrs, "KeyOfEn", "Name", RptDTSearchKey);
             }
 
         }
@@ -84,6 +89,7 @@
 
             mapData.SetPara("DTSearchWay", document.getElementById("DDL_DTSearchWay").value);
             mapData.SetPara("DTSearchKey", document.getElementById("DDL_DTSearchKey").value);
+            mapData.SetPara("DTSearchLabel", $("#DDL_DTSearchKey").find("option:selected").text());
 
             var fields = "";
             var oChecks = document.getElementById("FKeys").getElementsByTagName("input");

@@ -305,7 +305,7 @@ namespace BP.WF.CCBill
                 map.AddTBString(FrmBillAttr.TitleRole, null, "标题生成规则", true, false, 0, 100, 20, true);
                 #endregion 单据属性.
 
-                #region 按钮权限.
+                #region MyBill - 按钮权限.
                 map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnNewEnable, true, "是否可用？", true, true);
 
@@ -313,7 +313,7 @@ namespace BP.WF.CCBill
                 map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnStartFlowLable, "启动流程", "启动流程", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnStartFlowEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnStartFlowEnable, false, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
@@ -322,22 +322,22 @@ namespace BP.WF.CCBill
                 map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnGroupEnable, false, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnPrintHtml, "打印Html", "打印Html", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintHtmlEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnPrintHtmlEnable, false, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnPrintPDF, "打印PDF", "打印PDF", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintPDFEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnPrintPDFEnable, false, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnPrintRTF, "打印RTF", "打印RTF", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintRTFEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnPrintRTFEnable, false, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnPrintCCWord, "打印CCWord", "打印CCWord", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintCCWordEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnPrintCCWordEnable, false, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnExpZip, "导出zip文件", "导出zip文件", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnExpZipEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnExpZipEnable, false, "是否可用？", true, true);
                 #endregion 按钮权限.
 
                 #region 查询按钮权限.
@@ -346,6 +346,10 @@ namespace BP.WF.CCBill
 
                 map.AddTBString(FrmBillAttr.BtnExpExcel, "导出Excel文件", "导出Excel文件", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
+
+                map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
+                map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
+
                 #endregion 查询按钮权限.
 
                 #region 设计者信息.
@@ -614,7 +618,7 @@ namespace BP.WF.CCBill
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.BillNo;
-                attr.Name = "单据编号"; //  单据编号
+                attr.Name = "编号"; //  单据编号
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -647,8 +651,6 @@ namespace BP.WF.CCBill
                 attr.Insert();
             }
 
-
-
             if (attrs.Contains(this.No + "_BillState") == false)
             {
                 /* 参与人 */
@@ -660,7 +662,7 @@ namespace BP.WF.CCBill
                 attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
+                attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.UIIsLine = true;
                 attr.MinLen = 0;
@@ -681,7 +683,7 @@ namespace BP.WF.CCBill
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
 
-                attr.UIVisible = true;
+                attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
                 attr.MaxLen = 32;
@@ -700,7 +702,7 @@ namespace BP.WF.CCBill
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
 
-                attr.UIVisible = true;
+                attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
                 attr.MaxLen = 32;
@@ -719,13 +721,12 @@ namespace BP.WF.CCBill
                 attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
+                attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.UIIsLine = false;
                 attr.Idx = -97;
                 attr.Insert();
             }
-
             return;
 
             if (attrs.Contains(this.No + "_" + GERptAttr.FlowEnder) == false)

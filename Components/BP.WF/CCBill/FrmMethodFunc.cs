@@ -9,8 +9,9 @@ using BP.Sys;
 
 namespace BP.WF.CCBill
 {
+     
 	/// <summary>
-	/// 功能连接
+	/// 功能执行
 	/// </summary>
     public class FrmMethodFunc : EntityMyPK
     {
@@ -72,6 +73,20 @@ namespace BP.WF.CCBill
             }
         }
         /// <summary>
+        /// 方法类型：@0=SQL@1=URL@2=JavaScript@3=业务单元
+        /// </summary>
+        public int MethodDocTypeOfFunc
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmMethodAttr.MethodDocTypeOfFunc);
+            }
+            set
+            {
+                this.SetValByKey(FrmMethodAttr.MethodDocTypeOfFunc, value);
+            }
+        }
+        /// <summary>
         /// 方法类型
         /// </summary>
         public RefMethodType RefMethodType
@@ -88,6 +103,9 @@ namespace BP.WF.CCBill
         #endregion
 
         #region 构造方法
+        /// <summary>
+        /// 权限控制
+        /// </summary>
         public override UAC HisUAC
         {
             get
@@ -102,10 +120,15 @@ namespace BP.WF.CCBill
             }
         }
         /// <summary>
-        /// 功能连接
+        /// 功能执行
         /// </summary>
         public FrmMethodFunc()
         {
+        }
+        public FrmMethodFunc(string mypk)
+        {
+            this.MyPK = mypk;
+            this.Retrieve();
         }
         /// <summary>
         /// 重写基类方法
@@ -123,6 +146,7 @@ namespace BP.WF.CCBill
                 map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
                 map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
                 map.AddTBString(FrmMethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
+                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
                 map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
                   "@0=按钮@1=超链接");
 
@@ -131,11 +155,11 @@ namespace BP.WF.CCBill
 
                 map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "执行内容", true, false);
 
-                #region 工具栏.
+                #region 显示位置控制.
                 map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true,true);
                 map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
                 map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
-                #endregion 工具栏.
+                #endregion 显示位置控制.
 
 
                 RefMethod rm = new RefMethod();
@@ -181,12 +205,12 @@ namespace BP.WF.CCBill
         }
     }
 	/// <summary>
-	/// 功能连接
+	/// 功能执行
 	/// </summary>
     public class FrmMethodFuncs : EntitiesMyPK
     {
         /// <summary>
-        /// 功能连接
+        /// 功能执行
         /// </summary>
         public FrmMethodFuncs() { }
         /// <summary>

@@ -29,7 +29,6 @@ namespace BP.WF.CCBill
         {
             this.context = mycontext;
         }
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -79,6 +78,32 @@ namespace BP.WF.CCBill
 
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        /// <summary>
+        /// 执行
+        /// </summary>
+        /// <returns>返回执行结果</returns>
+        public string DoMethod_Exe()
+        {
+            FrmMethodFunc func = new FrmMethodFunc(this.MyPK);
+            string doc = func.MethodDoc;
+
+            GEEntity en = new GEEntity(func.FrmID, this.WorkID);
+            doc = Glo.DealExp(doc, en, null); //替换里面的内容.
+
+            //执行的sql.
+            if (func.MethodDocTypeOfFunc == 0)
+            {
+                DBAccess.RunSQLs(doc);
+                return "执行成功.";
+            }
+
+            //执行的Script.
+            if (func.MethodDocTypeOfFunc == 1)
+            {
+            }
+
+            return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
         }
 
         #region 单据处理.

@@ -47,7 +47,10 @@ namespace BP.WF.CCBill
         /// 处理内容 tag.
         /// </summary>
         public const string Idx = "Idx";
-
+        /// <summary>
+        /// 执行警告信息-对功能方法有效
+        /// </summary>
+        public const string WarningMsg = "WarningMsg";
         #region 显示位置
         /// <summary>
         /// 是否显示myToolBar工具栏上.
@@ -165,9 +168,16 @@ namespace BP.WF.CCBill
                 map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, false, 0, 300, 10);
                 map.AddTBString(FrmMethodAttr.MethodID, null, "方法ID", true, false, 0, 300, 10);
                 map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10);
+                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
 
                 map.AddDDLSysEnum(FrmMethodAttr.RefMethodType, 0, "方法类型", true, false, FrmMethodAttr.RefMethodType,
                     "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开@4=实体集合的功能");
+
+                #region 显示位置控制.
+                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
+                map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
+                map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
+                #endregion 显示位置控制.
 
                 map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "方法内容", true, false);
                 map.AddTBInt(FrmMethodAttr.Idx, 0, "Idx", true, false);

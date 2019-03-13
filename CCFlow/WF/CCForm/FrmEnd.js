@@ -357,7 +357,7 @@ function AfterBindEn_DealMapExt(frmData) {
                         if (mapAttr.MyDataType == 7)
                             dateFmt = 'yyyy-MM-dd HH:mm';
                         var mapextDoc = mapExt.Doc;
-                      
+
                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
                             WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
                                 $(this).blur(); //失去焦点 
@@ -381,8 +381,8 @@ function AfterBindEn_DealMapExt(frmData) {
                     $('#CB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "CB_"));
                     break;
                 }
-                if ($('#RB_' + mapExt.AttrOfOper).length == 1) {
-                    $('#RB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "RB_"));
+                if ($('input[name="RB_' + mapExt.AttrOfOper + '"]').length > 0) {
+                    $('input[name="RB_' + mapExt.AttrOfOper + '"]').bind(DynamicBind(mapExt, "RB_"));
                     break;
                 }
                 break;
@@ -609,9 +609,17 @@ function clearContent(ctrl) {
 }
 function DynamicBind(mapExt, ctrlType) {
 
-    $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {
-        DBAccess.RunFunctionReturnStr(mapExt.Doc);
-    });
+    if (ctrlType == "RB_") {
+        $('input[name="' + ctrlType + mapExt.AttrOfOper + '"]').on(mapExt.Tag, function () {
+            DBAccess.RunFunctionReturnStr(mapExt.Doc);
+        });
+    } else {
+        $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {
+            DBAccess.RunFunctionReturnStr(mapExt.Doc);
+        });
+    }
+
+    
 }
 
 /**

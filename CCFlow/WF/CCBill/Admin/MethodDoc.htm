@@ -27,9 +27,12 @@
 
         });
 
-        function Demo() {
-
-            var url = "MethodDocDemo.htm?MyPK=" + GetQueryString("MyPK");
+        function DemoSQL() {
+            var url = "MethodDocDemoSQL.htm?MyPK=" + GetQueryString("MyPK");
+            WinOpen(url);
+        }
+        function DemoJS() {
+            var url = "MethodDocDemoJS.htm?MyPK=" + GetQueryString("MyPK");
             WinOpen(url);
         }
         function Save() {
@@ -53,7 +56,9 @@
           <label ><input type="radio" value="1"  name="MType" >javascript </label>  
           <label ><input type="radio" value="2"  name="MType"  >URL模式 </label>  
           <input type="button"  value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
-          <input type="button"  value="内容编辑Demo" onclick="Demo()" id="Button1" name="Btn_Save" />
+          <input type="button"  value="内容编辑Demo for Javascript" onclick="DemoJS()" id="Button1" name="Btn_D1" />
+          <input type="button"  value="内容编辑Demo for SQL" onclick="DemoSQL()" id="Button2" name="Btn_D2" />
+
           </th>
         </tr>
     </table>

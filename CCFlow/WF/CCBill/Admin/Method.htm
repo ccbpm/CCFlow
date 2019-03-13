@@ -57,12 +57,27 @@
                 newRow += "<td><a href=\"javascript:Open('" + en.MyPK + "','" + en.RefMethodType + "');\"' >" + en.MethodName + "</a></td>";
                 newRow += "<td>" + en.RefMethodTypeText + "</td>";
                 newRow += "<td><img src='../../Img/Btn/Up.gif' onclick=\"Up('" + en.MyPK + "')\" alt='上移' />&nbsp;-&nbsp;<img src='../../Img/Btn/Down.gif' onclick=\"Down('" + en.MyPK + "')\" alt='下移' /> </td>";
-                newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "<td>";
+
+                newRow += " <a href=\"javascript:Paras('" + en.MyPK + "')\">参数</a> - ";
+                newRow += " <a href=\"javascript:Docs('" + en.MyPK + "')\">执行内容</a> - ";
+
+                newRow += " <a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+
                 newRow += "</td>";
                 newRow += "</tr>";
                 $("#Table1 tr:last").after(newRow);
             }
         });
+
+        function Paras(mypk) {
+            url = "MethodParas.htm?MyPK=" + mypk;
+            WinOpenFull(url);
+        }
+        function Docs(mypk) {
+            url = "MethodDoc.htm?MyPK=" + mypk;
+            WinOpenFull(url);
+        }
 
         //打开.
         function Open(mypk, type) {

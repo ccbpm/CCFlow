@@ -1,7 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ï»¿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Êı¾İµ¼Èë</title>
+    <title>æ•°æ®å¯¼å…¥</title>
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
@@ -25,48 +25,47 @@
             mapData.RetrieveFromDBSources();
 
             if (mapData != null) {
-                $("#title").html(mapData.Name + "ĞÅÏ¢µ¼Èë");
+                $("#title").html(mapData.Name + "ä¿¡æ¯å¯¼å…¥");
             }
 
         });
 
-        //Êı¾İµ¼Èë.
+        //æ•°æ®å¯¼å…¥.
         function Imp_Done() {
 
             var impWay = GetRadioValue("RB_ImpType");
             var fileValue = $("#File_Upload").val();
-            //±ØĞëÒªÑ¡ÔñÎÄ¼ş
+            //å¿…é¡»è¦é€‰æ‹©æ–‡ä»¶
             if (fileValue == "") {
-                $.messager.alert("ÌáÊ¾", "Ã»ÓĞÑ¡ÔñÒªµ¼ÈëĞÅÏ¢µÄExecl±í¡£");
+                $.messager.alert("æç¤º", "æ²¡æœ‰é€‰æ‹©è¦å¯¼å…¥ä¿¡æ¯çš„Execlè¡¨ã€‚");
                 return;
             }
-            //À©Õ¹Ãû
+            //æ‰©å±•å
             var index = fileValue.lastIndexOf('.');
             var fileExt = fileValue.substring(index);
             if (fileExt.toLowerCase() != ".xls" && fileExt.toLowerCase() != ".xlsx") {
-                $.messager.alert("ÌáÊ¾", "ËùÑ¡²»ÊÇexcelÎÄ¼ş£¬ÇëÖØĞÂÑ¡Ôñ¡£");
+                $.messager.alert("æç¤º", "æ‰€é€‰ä¸æ˜¯excelæ–‡ä»¶ï¼Œè¯·é‡æ–°é€‰æ‹©ã€‚");
                 return;
             }
 
-            //Ò³Ãæ°´Å¥Ê§Ğ§
+            //é¡µé¢æŒ‰é’®å¤±æ•ˆ
             //$("#File_Upload").attr("disabled",true);
             $("#Button1").attr("disabled", true);
             $("input[name='RB_ImpType']").attr("disabled", "disabled");
 
-            //URL Â·¾¶
-
+            //URL è·¯å¾„
             var doMethod = "ImpData_Done";
             var httpHandlerName = "BP.WF.HttpHandler.WF_Comm_Sys";
             var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&ImpWay=" + impWay + "&FrmID=" + FrmID;
 
 
-            //Ìá½»Êı¾İ
+            //æäº¤æ•°æ®
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',
                 url: url,
                 onSubmit: function (param) {
-                    //return false; //ÕâÀï¿ÉÒÔ×ö±íµ¥µÄÑéÖ¤£¬Èç¹ûÑéÖ¤Ê§°Ü£¬¾Íreturn false À´ÖÕÖ¹±íµ¥Ìá½»  
+                    //return false; //è¿™é‡Œå¯ä»¥åšè¡¨å•çš„éªŒè¯ï¼Œå¦‚æœéªŒè¯å¤±è´¥ï¼Œå°±return false æ¥ç»ˆæ­¢è¡¨å•æäº¤  
                 },
                 success: function (data) {
                     $("#Button1").attr("disabled", false);
@@ -74,23 +73,23 @@
                     if (data.indexOf("err@") != -1 && data.indexOf("errInfo=") == -1) {
                         alert(data);
                         $("#result").html('');
-                        $("#result").append("<span style='color:red'>µ¼ÈëÊ§°Ü</span><br/>");
+                        $("#result").append("<span style='color:red'>å¯¼å…¥å¤±è´¥</span><br/>");
                         $("#result").append(data);
                         return;
                     }
                     $("#result").html('');
-                    $("#result").append("<span>µ¼Èë³É¹¦</span><br/>")
+                    $("#result").append("<span>å¯¼å…¥æˆåŠŸ</span><br/>")
                     var datas = data.split("@Split");
                     var waringInfo = datas[0].replace("errInfo=", "");
                     var count = datas[1].replace("count=", "");
                     var successInfo = datas[2].replace("successInfo=", "");
                     var changeCount = datas[3].replace("changeCount=", "");
-                    $("#result").append("³É¹¦µ¼ÈëÌõÊı&nbsp;&nbsp;&nbsp;" + count + "<br/>");
+                    $("#result").append("æˆåŠŸå¯¼å…¥æ¡æ•°&nbsp;&nbsp;&nbsp;" + count + "<br/>");
                     if (impWay != 0)
-                        $("#result").append("³É¹¦¸üĞÂÌõÊı&nbsp;&nbsp;&nbsp;" + changeCount + "<br/>");
-                    $("#result").append("³É¹¦µ¼ÈëÊı¾İ<br/>");
+                        $("#result").append("æˆåŠŸæ›´æ–°æ¡æ•°&nbsp;&nbsp;&nbsp;" + changeCount + "<br/>");
+                    $("#result").append("æˆåŠŸå¯¼å…¥æ•°æ®<br/>");
                     $("#result").append(successInfo);
-                    $("#result").append("<span style='color:red'>¾¯¸æ</span><br/>");
+                    $("#result").append("<span style='color:red'>è­¦å‘Š</span><br/>");
                     $("#result").append(waringInfo);
 
                 }
@@ -115,47 +114,47 @@
 <body>
 <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
 <table style=" width:100%">
-<caption id="title">Éè±¸ĞÅÏ¢µ¼Èë </caption>
+<caption id="title">è®¾å¤‡ä¿¡æ¯å¯¼å…¥ </caption>
 <tr>
 <td  valign="top">
 <fieldset>
-<legend> ´Ó±¾»úµ¼Èë  </legend>
+<legend> ä»æœ¬æœºå¯¼å…¥  </legend>
 <ul>
-<li>´Ó±¾»úµ¼Èë£ºÇëÄúÑ¡Ôñ±¾»úµÄÒ»¸öExcelÎÄ¼ş µã»÷µ¼Èë°´Å¥Íê³Éµ¼Èë¡£</li>
-<li> ÇëÑ¡ÔñÎÄ¼ş:  <input type="file" id="File_Upload" name="File_Upload"  /></li>
+<li>ä»æœ¬æœºå¯¼å…¥ï¼šè¯·æ‚¨é€‰æ‹©æœ¬æœºçš„ä¸€ä¸ªExcelæ–‡ä»¶ ç‚¹å‡»å¯¼å…¥æŒ‰é’®å®Œæˆå¯¼å…¥ã€‚</li>
+<li> è¯·é€‰æ‹©æ–‡ä»¶:  <input type="file" id="File_Upload" name="File_Upload"  /></li>
 
-<li>µ¼ÈëµÄ·½Ê½: 
+<li>å¯¼å…¥çš„æ–¹å¼: 
 <ul>
-<li><input id="Import_0" type="radio" name="RB_ImpType" value="0"  checked="true" /><label for="Import_0">Çå¿Õ·½Ê½µ¼Èë.</label></li>
-<li><input id="Import_1" type="radio" name="RB_ImpType" value="1"  /><label for="Import_1">¸üĞÂ·½Ê½µ¼Èë.</label></li>
-<li><input id="Import_2" type="radio" name="RB_ImpType" value="2"  /><label for="Import_2">×·¼Ó·½Ê½µ¼Èë.</label></li>
+<li><input id="Import_0" type="radio" name="RB_ImpType" value="0"  checked="true" /><label for="Import_0">æ¸…ç©ºæ–¹å¼å¯¼å…¥.</label></li>
+<li><input id="Import_1" type="radio" name="RB_ImpType" value="1"  /><label for="Import_1">æ›´æ–°æ–¹å¼å¯¼å…¥.</label></li>
+<li><input id="Import_2" type="radio" name="RB_ImpType" value="2"  /><label for="Import_2">è¿½åŠ æ–¹å¼å¯¼å…¥.</label></li>
 </ul>
 
 <br />
  </li>
 </ul>
 <div style=" text-align:center; padding:5px;">
-<input type="button" id="Button1"  value="Ö´ĞĞµ¼Èë" onclick="Imp_Done();" />
-<input type="button" id="Button2"  value="·µ»ØÁĞ±í" onclick="Back();" />
+<input type="button" id="Button1"  value="æ‰§è¡Œå¯¼å…¥" onclick="Imp_Done();" />
+<input type="button" id="Button2"  value="è¿”å›åˆ—è¡¨" onclick="Back();" />
 
  </div>
 </fieldset>
 <fieldset>
-<legend>ËµÃ÷</legend>
+<legend>è¯´æ˜</legend>
 
 <ul>
 <li>
 <a href="#"onclick="downloadFile()">
     <img style="width: 16px; height: 16px;" src="../../../WF/Img/redo.png" border="0"/>
-    ÏÂÔØµ¼ÈëÄ£°å
+    ä¸‹è½½å¯¼å…¥æ¨¡æ¿
  </a></li>
  
-<li>¸ÃÄ£°æ´æÔÚ:D:\ccflow\CCFlow\DataUser\TempleteOfImp\ÏÂÃæ.</li>
-<li>±ÈÈç: :D:\ccflow\CCFlow\DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls</li>
+<li>è¯¥æ¨¡ç‰ˆå­˜åœ¨:D:\ccflow\CCFlow\DataUser\TempleteOfImp\ä¸‹é¢.</li>
+<li>æ¯”å¦‚: :D:\ccflow\CCFlow\DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls</li>
 </ul>
 </fieldset>
 <fieldset>
-<legend>µ¼Èë½á¹û</legend>
+<legend>å¯¼å…¥ç»“æœ</legend>
 <div id="result"></div>
 </fieldset>
  </td>

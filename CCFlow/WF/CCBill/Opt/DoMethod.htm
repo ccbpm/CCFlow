@@ -1,2 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
 
+            var myPK = GetQueryString("MyPK");
+            var frmID = GetQueryString("FrmID");
+            var workID = GetQueryString("WorkID");
+            var func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
 
+            //要执行sql.
+            if (func.MethodDocTypeOfFunc == 0) {
+                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+                handler.AddUrlData();
+                var data = handler.DoMethodReturnString("DoMethod_Exe");
+                alert(data);
+                window.close();
+                return;
+            }
+
+            //要执行script.  wangyanyan完成.
+            if (func.MethodDocTypeOfFunc == 1) {
+                var script = func.MethodDoc;
+
+                //获得单据的数据.
+                var geEn = new Entity(func.FrmID, workID);
+
+                //替换script的变量.
+
+                //执行这个script.
+                try {
+                    eval(script);
+                } catch (e) {
+                    alert(e);
+                    window.close();
+                    return;
+                }
+
+                //提示信息。
+            }
+
+            //要执行url.  wangyanyan完成.
+            if (func.MethodDocTypeOfFunc == 2) {
+                alert('尚未解析');
+                return;
+            }
+
+        });
+
+        function DoScript(func) {
+
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

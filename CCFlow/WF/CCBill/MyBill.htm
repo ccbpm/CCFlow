@@ -133,12 +133,29 @@
             if (frmBill.BtnExpZipEnable == 1)
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
+            //获得当前的集合.
+            var fms = new Entities("BP.WF.CCBill.FrmMethods", "FrmID", frmID);
+            for (var i = 0; i < fms.length; i++) {
+                var fm = fms[i];
 
-            var fms = new Entities("BP.WF.CCBill.FrmMethods");
+                if (fm.IsMyBillToolBar != 1)
+                    continue;
 
-
-
+                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
+            }
             $("#toolbar").html(toolBar);
+        }
+
+        ///执行方法.
+        function Done(msg, funMyPK) {
+
+            if (msg != '' && msg.length > 2) {
+                if (window.confirm(msg) == false)
+                    return;
+            }
+
+            var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID");
+            WinOpen(url);
         }
         //保存为草稿.
         function SaveAsDraft() {
@@ -270,7 +287,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人               
+                    //发送选择接收节点和接收人                  
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

@@ -21,26 +21,44 @@
         $(function () {
 
             var myPK = GetQueryString("MyPK");
+
             var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
+
             var html = "";
-            html += "";
+            html += "<br><b>/* 执行SQL就是可以执行多个SQL脚本, */ </b>";
+            html += "<br><b>/* 1.多个SQL脚本可以以 ; 分割.  */ </b>";
+            html += "<br><b>/* 2.注释可以以 斜线* 我的注释内容表达 *斜线 体现.   */ </b>";
+            html += "<br><b>/* 3.内容支持ccbpm表达式,比如:全局变量的@WebUser.No, @WebUser.Name, @WebUser.FK_Dept .   */ </b>";
+            html += "<br><b>/* 4.如果要获取本表单主表的数据就可以使用 @字段名. 比如: UPDATE XXX SET AA='BB' WHERE OID=@OID  */ </b>";
+            html += "<br><b>/* 5.如果要执行存储过程，请使用 EXEC YouProName @Field1, @Field2  */ </b>";
+
+            html += "<br><b>/* 5.1  EXEC dbo.uspGetEmployeeManagers @BusinessEntityID = 50;   */ </b>";
+            html += "<br><b>/* 5.2  EXEC AdventureWorks2012.dbo.uspGetEmployeeManagers 50;   */ </b>";
+
+
+            html += "<br>";
+            html += "<br>UPATE " + en.FrmID + " SET StudentState=0  WHERE OID=@OID ;";
+            html += "<br>UPATE " + en.FrmID + " SET Title=@Title  WHERE OID=@OID ;";
+
+            html += "<br>";
+            html += "<br>";
+
+            $("#doc").html(html);
+
         });
     </script>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <table id="Table1" style="width: 100%">
         <caption>
-            方法内容编辑demo - 你可以把这些内容copy到编辑器里面去.
+            方法内容编辑 demo - 你可以把这些内容copy到编辑器里面去.
         </caption>
         <tr>
-        <th> 方法类型: <label ><input type="radio" value="0"  name="MType" >SQL</label>
-          <label ><input type="radio" value="1"  name="MType" >JavaScript </label>  
-          </th>
+            <td>
+                <div id="doc">
+                </div>
+            </td>
         </tr>
     </table>
-   
-   <div id="doc">
-   </div>  
-   
 </body>
 </html>

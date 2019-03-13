@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>方法内容编辑</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/PinYin.js" type="text/javascript"> </script>
+    <base target="_self" />
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+    </script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var myPK = GetQueryString("MyPK");
+
+            var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
+            var html = "";
+            html += "<b>// 创建当前表单的实例, 当前以注销学籍为例来说明该操作的方法.</b>";
+            html += "<br>&nbsp;&nbsp; var workID=GetQueryString('WorkID'); //获得传入的实体ID. ";
+            html += "<br>&nbsp;&nbsp; var frmID=GetQueryString('FrmID');  //获得传入的frmID ";
+            html += "<br>";
+            html += "<br>";
+
+            html += "<b>// 创建当前表单的实例, 当前以注销学籍为例来说明该操作的方法.</b>";
+            html += "<br>&nbsp;&nbsp; var en =new Entity('" + en.FrmID + "',workID);  //创建实例, 当前的en就是一个该实体的json.";
+            html += "<br>&nbsp;&nbsp; if (en.StudentState==0) { ";
+            html += "<br>&nbsp;&nbsp;   alert('当前学籍已经是注销状态,您不能在注销了.'); ";
+            html += "<br>&nbsp;&nbsp;   return; ";
+            html += "<br>&nbsp;&nbsp; } ";
+            html += "<br>";
+            html += "<br>";
+
+            html += "<b>// 执行状态的改变.</b>";
+            html += "<br>&nbsp;&nbsp; en.StudentState=0; //设置为注销状态. ";
+            html += "<br>&nbsp;&nbsp; en.Update(); //执行更新数据，该表状态标记. ";
+            html += "<br>&nbsp;&nbsp;   alert('该学生的学籍,已经注销.'); ";
+
+            html += "<br>";
+
+
+
+            html += "<br><b>//该实体的字段，编写需要区分大小写，为了您防止拼写错误请使用copy.</b>";
+
+            //实体集合.
+            var attrs = new Entities("BP.Sys.MapAttrs");
+            attrs.Retrieve("FK_MapData", en.FrmID);
+            var fields = "";
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+
+                fields += "<br>&nbsp;&nbsp;" + attr.KeyOfEn + "" + attr.Name;
+            }
+
+            html += fields;
+
+
+            $("#doc").html(html);
+
+        });
+    </script>
+</head>
+<body onkeypress="Esc();" style="font-size: smaller">
+    <table id="Table1" style="width: 100%">
+        <caption>
+            方法内容编辑 demo - 你可以把这些内容copy到编辑器里面去.
+        </caption>
+        <tr>
+            <td>
+                <div id="doc">
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

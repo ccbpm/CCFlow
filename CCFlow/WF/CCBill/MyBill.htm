@@ -100,6 +100,11 @@
             toolBar += "<input type=button value='保存' onclick='SaveIt();' />";
             // toolBar += "<input type=button value='保存&关闭' onclick='SaveItAndClose();' />";
 
+            if (frmBill.BtnSearchLabel == "")
+                frmBill.BtnSearchLabel = "查询";
+            if (frmBill.BtnGroupLabel == "")
+                frmBill.BtnGroupLabel = "分析";
+
             //是初始化状态.
             if (generBill.BillState == 0)
                 toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
@@ -127,6 +132,11 @@
 
             if (frmBill.BtnExpZipEnable == 1)
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
+
+
+            var fms = new Entities("BP.WF.CCBill.FrmMethods");
+
+
 
             $("#toolbar").html(toolBar);
         }
@@ -260,7 +270,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人              
+                    //发送选择接收节点和接收人               
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

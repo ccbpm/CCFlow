@@ -22,6 +22,8 @@
 
             var myPK = GetQueryString("MyPK");
             var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
+            $("#MType").val(en.MethodDocTypeOfFunc); //设置执行内容类型.
+            $("#tb_doc").val(en.MethodDoc); //设置执行内容.
 
         });
 
@@ -30,20 +32,28 @@
             var url = "MethodDocDemo.htm?MyPK=" + GetQueryString("MyPK");
             WinOpen(url);
         }
+        function Save() {
+
+            var myPK = GetQueryString("MyPK");
+            var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
+
+           en.MethodDocTypeOfFunc =  $("#MType").val(); //设置执行内容类型.
+           en.MethodDoc = $("#tb_doc").val(); //设置执行内容.
+           en.Update();
+
+        }
     </script>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <table id="Table1" style="width: 100%">
-        <caption>
-            方法执行内容编辑器
-        </caption>
+        <caption> 方法执行内容编辑器 </caption>
         <tr>
         <th> 方法类型: <label ><input type="radio" value="0"  name="MType" >SQL </label>
         
           <label ><input type="radio" value="1"  name="MType" >javascript </label>  
           <label ><input type="radio" value="2"  name="MType"  >URL模式 </label>  
-          <input type=button  value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
-          <input type=button  value="内容编辑Demo" onclick="Demo()" id="Button1" name="Btn_Save" />
+          <input type="button"  value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
+          <input type="button"  value="内容编辑Demo" onclick="Demo()" id="Button1" name="Btn_Save" />
           </th>
         </tr>
     </table>

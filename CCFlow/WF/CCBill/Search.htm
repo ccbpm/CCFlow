@@ -581,11 +581,15 @@
         }
 
         function New(workid) {
+
             var frmID = GetQueryString("FrmID");
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("Start_GenerWorkID");
             var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
+            window.location.href=url;
+            return;
+
             var loop = setInterval(function () {
 			    if (self.closed) {
 			        clearInterval(loop);

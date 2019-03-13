@@ -246,15 +246,26 @@ function AfterBindEn_DealMapExt(frmData) {
         //一起转成entity.
         var mapExt = new Entity("BP.Sys.MapExt", mapExt);
 
-        var mapAttr = new Entity("BP.Sys.MapAttr");
-        mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-        var count = mapAttr.RetrieveFromDBSources();
+        var mapAttr = null;
 
-        //MapAttr属性不存在删除他的扩张
-        if (count == 0) {
-            mapExt.Delete();
-            continue;
+        for (var j = 0; j < mapAttrs.length; j++) {
+            if (mapAttrs[j].FK_MapData == mapExt.FK_MapData && mapAttrs[j].KeyOfEn == mapExt.AttrOfOper) {
+                mapAttr = mapAttrs[j];
+                break;
+            }
         }
+
+        mapAttr = new Entity("BP.Sys.MapAttr", mapAttr);
+
+//        mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+
+//        var count = mapAttr.RetrieveFromDBSources();
+
+//        //MapAttr属性不存在删除他的扩张
+//        if (count == 0) {
+//            mapExt.Delete();
+//            continue;
+//        }
 
         //判断MapAttr属性是否可编辑不可以编辑返回
         if (mapAttr.UIVisible == 0)
@@ -315,9 +326,27 @@ function AfterBindEn_DealMapExt(frmData) {
 
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":
+                if (mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) {
+                    var oid = (pageData.WorkID || pageData.OID || "");
+                    var ens = new Entities("BP.Sys.FrmEleDBs");
+                    ens.Retrieve("FK_MapData", mapAttr.FK_MapData, "EleID", mapAttr.KeyOfEn, "RefPKVal", oid);
+                    var val = "";
+                    var defaultVal = $("#TB_" + mapAttr.KeyOfEn).val();
+                    for (var k = 0; k < ens.length; k++) {
+                        if (defaultVal.indexOf(ens[k].Tag1) == -1)
+                            continue;
+                        val += ens[k].Tag2 + ",";
+                    }
+                    $("#TB_" + mapAttr.KeyOfEn).val(val);
+                    break;
+                } 
                 MultipleChoiceSmall(mapExt, mapAttr); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "MultipleChoiceSearch":
+                if (mapAttr.UIIsEnable == 0) 
+                    break;
+
+
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "BindFunction": //控件绑定函数

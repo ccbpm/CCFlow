@@ -69,11 +69,14 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
             "multiple": true,
             "onSelect": function (p) {
                 $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
-                (function sel(n, KeyOfEn, FK_MapData) {
-                    //保存选择的值.
-                    SaveVal(FK_MapData, KeyOfEn, n);
+                //保存选择的值.
+                SaveVal(FK_MapData, AttrOfOper, p.No, p.Name);
 
-                })(p[valueField], AttrOfOper, FK_MapData);
+//                (function sel(n, KeyOfEn, FK_MapData) {
+//                    //保存选择的值.
+//                    SaveVal(FK_MapData, KeyOfEn, n);
+
+//                })(p[valueField], AttrOfOper, FK_MapData);
             },
             "onUnselect": function (p) {
                 $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
@@ -180,7 +183,7 @@ function Delete(keyOfEn, val) {
 }
 
 //设置值.
-function SaveVal(fk_mapdata, keyOfEn, val) {
+function SaveVal(fk_mapdata, keyOfEn, val,name) {
 
     var oid = (pageData.WorkID || pageData.OID || "");
 
@@ -191,6 +194,7 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
     frmEleDB.EleID = keyOfEn;
     frmEleDB.RefPKVal = oid;
     frmEleDB.Tag1 = val;
+    frmEleDB.Tag2 = name;
     if (frmEleDB.Update() == 0) {
         frmEleDB.Insert();
     }

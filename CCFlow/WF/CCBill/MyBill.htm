@@ -149,7 +149,25 @@
         ///执行方法.
         function Done(msg, funMyPK) {
 
-            if (msg != '' && msg.length > 2) {
+            var isHaveAttr = false;
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                isHaveAttr = true;
+            }
+
+            if (isHaveAttr == true) {
+                var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID");
+                WinOpen(url);
+                return;
+            }
+
+//            alert(attrs.length);
+//            if (attrs.length == 0) {
+//                alert('无参数');
+//            }
+
+            if (msg != '' && msg.length > 5 ) {
                 if (window.confirm(msg) == false)
                     return;
             }

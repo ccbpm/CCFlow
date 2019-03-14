@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>有参数的方法</title>
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -21,47 +21,13 @@
             var workID = GetQueryString("WorkID");
             var func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
 
-            //要执行sql.
-            if (func.MethodDocTypeOfFunc == 0 && 1==2) {
-                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
-                handler.AddUrlData();
-                var data = handler.DoMethodReturnString("DoMethod_Exe");
-                alert(data);
-                window.close();
-                // return;
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
+            for (var i = 0; i < attrs.length; i++) {
+
+                var attr = attrs[i];
             }
 
-            //要执行script.  wangyanyan完成.
-            if (func.MethodDocTypeOfFunc == 1 || 1 == 1) {
-                var script = func.MethodDoc;
-
-                //获得单据的数据.
-                var geEn = new Entity(func.FrmID, workID);
-
-                //替换script的变量.
-
-                //执行这个script.
-                try {
-
-                    eval(script);
-
-                } catch (e) {
-                    alert(e);
-                    window.close();
-                    return;
-                }
-
-                //提示信息。
-
-                return;
-            }
-
-            //要执行url.  wangyanyan完成.
-            if (func.MethodDocTypeOfFunc == 2) {
-                alert('尚未解析');
-                return;
-            }
-
+             
         });
 
         function DoScript(func) {

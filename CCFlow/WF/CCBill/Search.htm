@@ -242,6 +242,22 @@
             if (fb.BtnGroupEnable==1)
             html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Group" onclick="Group()">'+fb.BtnGroupLabel+'</a>';
 
+
+            //增加方法.
+               //获得当前的集合.
+            var fms = new Entities("BP.WF.CCBill.FrmMethods", "FrmID", frmID);
+            for (var i = 0; i < fms.length; i++) {
+                var fm = fms[i];
+
+             //   alert( fm.IsSearchBar);
+
+                if (fm.IsSearchBar != 1 )
+                    continue;
+
+                html += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
+            }
+
+
             html += "</td></tr>";
 
             html += "</table>";
@@ -637,6 +653,9 @@
         }
 
         function GetBillState(BillState, isCanDo) {
+         if (BillState == 0)
+                return "空白";
+
             if (BillState == 1)
                 return "草稿";
 
@@ -646,7 +665,7 @@
             if (BillState == 100)
                 return "归档";
 
-            return "其他";
+            return BillState;
         }
         function GenerICON(isCanDo, BillState) {
 

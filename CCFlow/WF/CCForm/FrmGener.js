@@ -734,16 +734,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
 //填充默认数据
 function ConvertDefVal(frmData, defVal, keyOfEn) {
     //计算URL传过来的表单参数@TXB_Title=事件测试
-
-    var pageParams = getQueryString();
-    var pageParamObj = {};
-    $.each(pageParams, function (i, pageParam) {
-        if (pageParam.indexOf('@') == 0) {
-            var pageParamArr = pageParam.split('=');
-            pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
-        }
-    });
-
+    
     var result = defVal;
 
     //通过MAINTABLE返回的参数
@@ -754,13 +745,6 @@ function ConvertDefVal(frmData, defVal, keyOfEn) {
         }
     }
 
-    //通过URL参数传过来的参数 后台处理到MainTable 里面
-    //for (var pageParam in pageParamObj) {
-    //    if (pageParam == keyOfEn) {
-    //        result = pageParamObj[pageParam];
-    //        break;
-    //    }
-    //}
 
     if (result != undefined && typeof (result) == 'string') {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");

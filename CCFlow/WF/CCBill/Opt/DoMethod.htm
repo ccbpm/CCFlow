@@ -22,17 +22,17 @@
             var func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
 
             //要执行sql.
-            if (func.MethodDocTypeOfFunc == 0 && 1==2) {
+            if (func.MethodDocTypeOfFunc == 0) {
                 var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
                 handler.AddUrlData();
-                var data = handler.DoMethodReturnString("DoMethod_Exe");
+                var data = handler.DoMethodReturnString("DoMethod_ExeSQL"); //执行SQLs
                 alert(data);
                 window.close();
-                // return;
+                return;
             }
 
             //要执行script.  wangyanyan完成.
-            if (func.MethodDocTypeOfFunc == 1 || 1 == 1) {
+            if (func.MethodDocTypeOfFunc == 1) {
                 var script = func.MethodDoc;
 
                 //获得单据的数据.
@@ -52,14 +52,56 @@
                 }
 
                 //提示信息。
-
                 return;
             }
 
             //要执行url.  wangyanyan完成.
             if (func.MethodDocTypeOfFunc == 2) {
-                alert('尚未解析');
-                return;
+
+                var url = func.MethodDoc;
+                if (url.indexOf('?') == -1)
+                    url += "?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                else
+                    url += "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+
+                //增加上表单的参数.
+                for (var i = 0; i < attrs.length; i++) {
+                    var attr = attrs[i];
+
+                    if (attr.UIContralType == 0) {
+                        url += "&" + attr.KeyOfEn + "=" + $("#TB_" + attr.KeyOfEn).val();
+                        continue;
+                    }
+
+                    if (attr.UIContralType == 1) {
+                        url += "&" + attr.KeyOfEn + "=" + $("#DDL_" + attr.KeyOfEn).val();
+                        continue;
+                    }
+
+                    if (attr.UIContralType == 2) {
+                        url += "&" + attr.KeyOfEn + "=" + $("#CB_" + attr.KeyOfEn).val();
+                        continue;
+                    }
+                    if (attr.UIContralType == 3) {
+                        url += "&" + attr.KeyOfEn + "=" + $("#RB_" + attr.KeyOfEn).val();
+                        continue;
+                    }
+                }
+
+                //执行url返回数据.
+                var data = DBAccess.RunUrlReturnString(url);
+
+                if (func.MsgSuccess == "")
+                    func.MsgSuccess = "执行成功.";
+
+                if (func.MsgErr == "")
+                    func.MsgErr = "执行失败.";
+
+                if (data.indexOf('err@') == -1) {
+                    alert(func.MsgErr + "#" + data);
+                    return;
+                }
+                alert(data);
             }
 
         });

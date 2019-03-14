@@ -13,22 +13,169 @@
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DoMethodPara.js" type="text/javascript"></script>
     <script type="text/javascript">
+
+        var func = null;
+        var attrs = null;
+        var frmData = null;
         $(function () {
 
             var myPK = GetQueryString("MyPK");
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
-            var func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
+            func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
+            attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
+            frmData = new Entity(func.FrmID, workID);
 
-            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
+            document.title = func.MethodName;
+
+            var html = "<table>";
+            html += "<caption>" + func.MethodName + "</caption>";
+
+            html += InitMapAttr(attrs, frmData);
+            html += "</table>";
+            html += "<input type='button' value='执行' onclick=\"javascript:DoIt();\" />";
+            html += "<input type='button' value='关闭' onclick=\"javascript:window.close();\" />";
+
+            $("#docs").html(html);
+        });
+
+        //执行方法.
+        function DoIt() {
+
+            if (func.WarningMsg == "")
+                func.WarningMsg = "您确定要执行吗？";
+
+            if (confirm(func.WarningMsg) == false)
+                return;
+
+            var doc = func.MethodDoc;
+
+            //如果是执行的SQL . 
+            if (doc.MethodDocTypeOfFunc == 0) {
+                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+                handler.AddUrlData();
+                handler.AddFormData();
+                var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
+                alert(data);
+                window.close();
+                return;
+            }
+        }
+
+
+        //解析表单字段 MapAttr.
+        function InitMapAttr(attrs, frmData) {
+
+            var html = "";
+            var isDropTR = true;
             for (var i = 0; i < attrs.length; i++) {
 
                 var attr = attrs[i];
+
+                var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
+                var defval = ConvertDefVal(frmData, attr.DefVal, attr.KeyOfEn);
+
+                var lab = "";
+                if (attr.UIContralType == 0 || attr.UIContralType == 8)
+                    lab = "<label id=Lab_" + attr.KeyOfEn + "'  for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+
+                if (attr.UIContralType == 1)
+                    lab = "<label id=Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+
+                if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
+                    lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
+                }
+
+                if (attr.UIContralType == 3)
+                    lab = "<label id=Lab_" + attr.KeyOfEn + "' for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+
+                //线性展示并且colspan=3
+                if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
+                    isDropTR = true;
+                    html += "<tr>";
+                    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan=3>";
+                    html += InitMapAttrOfCtrl(attr, enable, defval);
+                    html += "</td>";
+                    html += "</tr>";
+                    continue;
+                }
+
+                //线性展示并且colspan=4
+                if (attr.ColSpan == 4) {
+                    isDropTR = true;
+                    html += "<tr>";
+                    html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan='4'>" + lab + "</br>";
+                    html += InitMapAttrOfCtrl(attr, enable, defval);
+                    html += "</td>";
+                    html += "</tr>";
+                    continue;
+                }
+
+                if (isDropTR == true) {
+                    html += "<tr>";
+                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
+                    html += InitMapAttrOfCtrl(attr, enable, defval);
+                    html += "</td>";
+                    isDropTR = !isDropTR;
+                    continue;
+                }
+
+                if (isDropTR == false) {
+                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'>";
+                    html += InitMapAttrOfCtrl(attr, enable, defval);
+                    html += "</td>";
+                    html += "</tr>";
+                    isDropTR = !isDropTR;
+                    continue;
+                }
+            }
+            if (isDropTR == false) {
+                html += "<td class='FDesc' ColSpan='2'></td>";
+
+                html += "</tr>";
             }
 
-             
-        });
+            return html;
+        }
+
+
+
+
+        //填充默认数据
+        function ConvertDefVal(frmData, defVal, keyOfEn) {
+
+            return defVal;
+
+
+            //计算URL传过来的表单参数@TXB_Title=事件测试
+            var result = defVal;
+
+            //            //通过MAINTABLE返回的参数
+            //            for (var ele in frmData.MainTable[0]) {
+            //                if (keyOfEn == ele && frmData[0] != '') {
+            //                    result = frmData[0][ele];
+            //                    break;
+            //                }
+            //            }
+
+            //通过URL参数传过来的参数 后台处理到MainTable 里面
+            //for (var pageParam in pageParamObj) {
+            //    if (pageParam == keyOfEn) {
+            //        result = pageParamObj[pageParam];
+            //        break;
+            //    }
+            //}
+
+            if (result != undefined && typeof (result) == 'string') {
+                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+            }
+            return result = unescape(result);
+        }
 
         function DoScript(func) {
 
@@ -36,5 +183,9 @@
     </script>
 </head>
 <body>
+    <form name="cc" id="cc">
+    <div id="docs">
+    </div>
+    </form>
 </body>
 </html>

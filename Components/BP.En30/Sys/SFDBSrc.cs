@@ -41,6 +41,7 @@ namespace BP.Sys
         /// Informix
         /// </summary>
         Informix = 4,
+        PostgreSQL=5,
         /// <summary>
         /// WebService数据源
         /// </summary>
@@ -759,6 +760,8 @@ namespace BP.Sys
                         return "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
                     case Sys.DBSrcType.Informix:
                         return "Host=" + this.IP + "; Service=; Server=; Database=" + this.DBName + "; User id=" + this.UserID + "; Password=" + this.Password + "; ";  //Service为监听客户端连接的服务名，Server为数据库实例名，这两项没提供
+                    case Sys.DBSrcType.PostgreSQL:
+                        return "Server=" + this.IP + ";Port=5432;Database=" + this.DBName + ";UserId=" + this.UserID + ";Password=" + this.Password + ";;Pooling=False;";
                     default:
                         throw new Exception("@没有判断的类型.");
                 }
@@ -911,6 +914,9 @@ namespace BP.Sys
                     case DBType.Informix:
                         dbType = Sys.DBSrcType.Informix;
                         break;
+                    case DBType.PostgreSQL:
+                        dbType = Sys.DBSrcType.PostgreSQL;
+                        break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
                 }
@@ -946,6 +952,17 @@ namespace BP.Sys
                     break;
                 case Sys.DBSrcType.Informix:
                     sql.AppendLine("");
+                    break;
+                case Sys.DBSrcType.PostgreSQL:
+                    sql.AppendLine("SELECT ");
+                    sql.AppendLine("    table_name No,");
+                    sql.AppendLine("    table_name Name");
+                    sql.AppendLine("FROM");
+                    sql.AppendLine("    information_schema.tables");
+                    sql.AppendLine("WHERE");
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
+                    sql.AppendLine("        AND table_type = 'BASE TABLE'");
+                    sql.AppendLine("ORDER BY table_name;");
                     break;
                 default:
                     break;
@@ -1002,6 +1019,9 @@ namespace BP.Sys
                         break;
                     case DBType.Informix:
                         dbType = Sys.DBSrcType.Informix;
+                        break;
+                    case DBType.PostgreSQL:
+                        dbType = Sys.DBSrcType.PostgreSQL;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
@@ -1078,6 +1098,33 @@ namespace BP.Sys
                     break;
                 case Sys.DBSrcType.Informix:
                     sql.AppendLine("");
+                    break;
+                case Sys.DBSrcType.PostgreSQL:
+                    sql.AppendLine("SELECT ");
+                    sql.AppendLine("    table_name AS No,");
+                    sql.AppendLine("    CONCAT('[',");
+                    sql.AppendLine("            CASE table_type");
+                    sql.AppendLine("                WHEN 'BASE TABLE' THEN '表'");
+                    sql.AppendLine("                ELSE '视图'");
+                    sql.AppendLine("            END,");
+                    sql.AppendLine("            '] ',");
+                    sql.AppendLine("            table_name) AS Name,");
+                    sql.AppendLine("    CASE table_type");
+                    sql.AppendLine("        WHEN 'BASE TABLE' THEN 'U'");
+                    sql.AppendLine("        ELSE 'V'");
+                    sql.AppendLine("    END AS xtype");
+                    sql.AppendLine("FROM");
+                    sql.AppendLine("    information_schema.tables");
+                    sql.AppendLine("WHERE");
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
+                    sql.AppendLine("        AND (table_type = 'BASE TABLE'");
+                    sql.AppendLine("        OR table_type = 'VIEW')");
+                    //   sql.AppendLine("       AND (table_name NOT LIKE 'ND%'");
+                    sql.AppendLine("        AND table_name NOT LIKE 'Demo_%'");
+                    sql.AppendLine("        AND table_name NOT LIKE 'Sys_%'");
+                    sql.AppendLine("        AND table_name NOT LIKE 'WF_%'");
+                    sql.AppendLine("        AND table_name NOT LIKE 'GPM_%'");
+                    sql.AppendLine("ORDER BY table_type , table_name;");
                     break;
                 default:
                     break;
@@ -1171,6 +1218,9 @@ namespace BP.Sys
                         break;
                     case DBType.Informix:
                         dbType = Sys.DBSrcType.Informix;
+                        break;
+                    case DBType.PostgreSQL:
+                        dbType = Sys.DBSrcType.PostgreSQL;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");

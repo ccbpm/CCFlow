@@ -1796,7 +1796,7 @@ var DBAccess = (function () {
         if (dbType == 2 || dbType == "2") {
 
             var str = DBAccess.RunFunctionReturnStr(dbSrc);
-            if (str == null || str == undefined)
+            if (str == null || str == undefined || str == "")
                 return null;
 
             return JSON.parse(str);

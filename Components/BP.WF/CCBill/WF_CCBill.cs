@@ -83,7 +83,7 @@ namespace BP.WF.CCBill
         /// 执行
         /// </summary>
         /// <returns>返回执行结果</returns>
-        public string DoMethod_Exe()
+        public string DoMethod_ExeSQL()
         {
             FrmMethodFunc func = new FrmMethodFunc(this.MyPK);
             string doc = func.MethodDoc;
@@ -91,9 +91,7 @@ namespace BP.WF.CCBill
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
             doc = Glo.DealExp(doc, en, null); //替换里面的内容.
 
-            //执行的sql.
-            if (func.MethodDocTypeOfFunc == 0)
-            {
+         
                 try
                 {
                     DBAccess.RunSQLs(doc);
@@ -107,15 +105,71 @@ namespace BP.WF.CCBill
                     if (func.MsgErr.Equals(""))
                         func.MsgErr = "执行失败.";
 
-                    return "err@"+func.MsgErr+" @ " + ex.Message;
+                    return "err@" + func.MsgErr + " @ " + ex.Message;
                 }
             }
+        }
+        /// <summary>
+        /// 执行SQL
+        /// </summary>
+        /// <returns></returns>
+        public string DoMethodPara_ExeSQL()
+        {
+            FrmMethodFunc func = new FrmMethodFunc(this.MyPK);
+            string doc = func.MethodDoc;
 
-            //执行的Script.
-            if (func.MethodDocTypeOfFunc == 1)
+            GEEntity en = new GEEntity(func.FrmID, this.WorkID);
+            doc = Glo.DealExp(doc, en, null); //替换里面的内容.
+
+            #region 替换参数变量.
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, this.MyPK);
+            foreach (MapAttr item in attrs)
             {
+                if (item.UIContralType == UIContralType.TB)
+                {
+                    doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("TB_" + item.KeyOfEn));
+                    continue;
+                }
 
+                if (item.UIContralType == UIContralType.DDL)
+                {
+                    doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("DDL_" + item.KeyOfEn));
+                    continue;
+                }
+
+
+                if (item.UIContralType == UIContralType.CheckBok)
+                {
+                    doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("CB_" + item.KeyOfEn));
+                    continue;
+                }
+
+                if (item.UIContralType == UIContralType.RadioBtn)
+                {
+                    doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("RB_" + item.KeyOfEn));
+                    continue;
+                }
             }
+            #endregion 替换参数变量.
+
+            #region 开始执行SQLs.
+            try
+            {
+                DBAccess.RunSQLs(doc);
+                if (func.MsgSuccess.Equals(""))
+                    func.MsgSuccess = "执行成功.";
+
+                return func.MsgSuccess;
+            }
+            catch (Exception ex)
+            {
+                if (func.MsgErr.Equals(""))
+                    func.MsgErr = "执行失败.";
+
+                return "err@" + func.MsgErr + " @ " + ex.Message;
+            }
+            #endregion 开始执行SQLs.
 
             return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
         }
@@ -139,9 +193,9 @@ namespace BP.WF.CCBill
             GERpt rpt = new GERpt(this.FrmID, this.WorkID);
             rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GERpt;
             rpt.OID = this.WorkID;
-            rpt.SetValByKey("BillState",(int)BillState.Editing);
+            rpt.SetValByKey("BillState", (int)BillState.Editing);
             rpt.Update();
-           
+
             string str = BP.WF.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
         }
@@ -245,20 +299,20 @@ namespace BP.WF.CCBill
                     }
                     dtSQl.TableName = attr.Key;
                     if (ds.Tables.Contains(attr.Key) == false)
-                    ds.Tables.Add(dtSQl);
+                        ds.Tables.Add(dtSQl);
 
                 }
-                
+
             }
 
             ds.Tables.Add(dt);
 
             return BP.Tools.Json.ToJson(ds);
-            
-        }
-        #endregion 查询条件
 
-       
+        }
+            #endregion 查询条件
+
+
         public string Search_Init()
         {
             DataSet ds = new DataSet();
@@ -305,11 +359,11 @@ namespace BP.WF.CCBill
             ur.RetrieveFromDBSources();
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
-            
+
             Attrs attrs = rpts.GetNewEntity.EnMap.Attrs;
 
             QueryObject qo = new QueryObject(rpts);
-           
+
             #region 关键字字段.
             string keyWord = ur.SearchKey;
 
@@ -334,7 +388,7 @@ namespace BP.WF.CCBill
                             enumKey = "," + attr.Key + "Text,";
                             break;
                         case FieldType.FK:
-                           
+
                             continue;
                         default:
                             break;
@@ -451,8 +505,8 @@ namespace BP.WF.CCBill
             mydt.TableName = "DT";
 
             ds.Tables.Add(mydt); //把数据加入里面.
-            
-            
+
+
 
             return BP.Tools.Json.ToJson(ds);
         }

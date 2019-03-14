@@ -154,10 +154,6 @@ function SetBottomTooBar() {
     var pageHeight = Math.max(windowHeight, document.getElementsByTagName("body")[0].scrollHeight);
     form = document.getElementById('divCCForm');
 
-    //        if (form) {
-    //            if (pageHeight > 20) pageHeight = pageHeight - 20;
-    //            form.style.height = pageHeight + "px";
-    //        }
     //设置toolbar
     var toolBar = document.getElementById("bottomToolBar");
     if (toolBar) {
@@ -1017,6 +1013,8 @@ function GenerWorkNode() {
     var url = wf_node.FormUrl;
     if (url == "")
         url = "../DataUser/DefaultSelfFormUrl.htm";
+    else
+        url = basePath + url;
 
     if (url.indexOf('?') == -1) {
         url = url + "?1=2";

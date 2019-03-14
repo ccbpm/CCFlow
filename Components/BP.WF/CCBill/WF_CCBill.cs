@@ -94,13 +94,27 @@ namespace BP.WF.CCBill
             //执行的sql.
             if (func.MethodDocTypeOfFunc == 0)
             {
-                DBAccess.RunSQLs(doc);
-                return "执行成功.";
+                try
+                {
+                    DBAccess.RunSQLs(doc);
+                    if (func.MsgSuccess.Equals(""))
+                        func.MsgSuccess = "执行成功.";
+
+                    return func.MsgSuccess;
+                }
+                catch (Exception ex)
+                {
+                    if (func.MsgErr.Equals(""))
+                        func.MsgErr = "执行失败.";
+
+                    return "err@"+func.MsgErr+" @ " + ex.Message;
+                }
             }
 
             //执行的Script.
             if (func.MethodDocTypeOfFunc == 1)
             {
+
             }
 
             return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
@@ -125,7 +139,7 @@ namespace BP.WF.CCBill
             GERpt rpt = new GERpt(this.FrmID, this.WorkID);
             rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GERpt;
             rpt.OID = this.WorkID;
-            rpt.SetValByKey("BillState",BillState.Editing);
+            rpt.SetValByKey("BillState",(int)BillState.Editing);
             rpt.Update();
            
             string str = BP.WF.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);

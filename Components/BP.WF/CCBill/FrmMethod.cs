@@ -51,6 +51,20 @@ namespace BP.WF.CCBill
         /// 执行警告信息-对功能方法有效
         /// </summary>
         public const string WarningMsg = "WarningMsg";
+        /// <summary>
+        /// 成功提示信息
+        /// </summary>
+        public const string MsgSuccess = "MsgSuccess";
+        /// <summary>
+        /// 失败提示信息
+        /// </summary>
+        public const string MsgErr = "MsgErr";
+        /// <summary>
+        /// 执行完毕后干啥？
+        /// </summary>
+        public const string WhatAreYouTodo = "WhatAreYouTodo";
+
+
         #region 显示位置
         /// <summary>
         /// 是否显示myToolBar工具栏上.
@@ -180,6 +194,13 @@ namespace BP.WF.CCBill
                 #endregion 显示位置控制.
 
                 map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "方法内容", true, false);
+
+                //对功能有效.
+                map.AddTBString(FrmMethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
+                map.AddTBString(FrmMethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
+                map.AddDDLSysEnum(FrmMethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, FrmMethodAttr.WhatAreYouTodo,
+                "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
+
                 map.AddTBInt(FrmMethodAttr.Idx, 0, "Idx", true, false);
                 this._enMap = map;
                 return this._enMap;

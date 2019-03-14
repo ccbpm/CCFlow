@@ -1908,7 +1908,7 @@ namespace BP.WF
                         dcs.AddEntity(dc);
                     }
 
-                    if (dcs.Count == 0)
+                    if (dcs.Count != 0)
                         return nd;
                 }
             }

@@ -91,22 +91,21 @@ namespace BP.WF.CCBill
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
             doc = Glo.DealExp(doc, en, null); //替换里面的内容.
 
-         
-                try
-                {
-                    DBAccess.RunSQLs(doc);
-                    if (func.MsgSuccess.Equals(""))
-                        func.MsgSuccess = "执行成功.";
 
-                    return func.MsgSuccess;
-                }
-                catch (Exception ex)
-                {
-                    if (func.MsgErr.Equals(""))
-                        func.MsgErr = "执行失败.";
+            try
+            {
+                DBAccess.RunSQLs(doc);
+                if (func.MsgSuccess.Equals(""))
+                    func.MsgSuccess = "执行成功.";
 
-                    return "err@" + func.MsgErr + " @ " + ex.Message;
-                }
+                return func.MsgSuccess;
+            }
+            catch (Exception ex)
+            {
+                if (func.MsgErr.Equals(""))
+                    func.MsgErr = "执行失败.";
+
+                return "err@" + func.MsgErr + " @ " + ex.Message;
             }
         }
         /// <summary>
@@ -199,6 +198,7 @@ namespace BP.WF.CCBill
             string str = BP.WF.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
         }
+
         public string MyBill_SaveAsDraft()
         {
             string str = BP.WF.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);

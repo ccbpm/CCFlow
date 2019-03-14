@@ -2860,7 +2860,7 @@ namespace BP.WF
         /// <param name="sqlExp"></param>
         /// <param name="ht"></param>
         /// <returns></returns>
-        public static bool CondExpSQL(string sqlExp, Hashtable ht)
+        public static bool CondExpSQL(string sqlExp, Hashtable ht, Int64 myWorkID)
         {
             string sql = sqlExp;
             sql = sql.Replace("~", "'");
@@ -2879,6 +2879,17 @@ namespace BP.WF
                 sql = sql.Replace("@" + key, ht[key].ToString());
             }
 
+            //从工作流参数里面替换 @yuanlina
+            if (sql.Contains("@") == true && myWorkID != 0)
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow(myWorkID);
+                AtPara ap = gwf.atPara;
+                foreach (string str in ap.HisHT.Keys)
+                {
+                    sql = sql.Replace("@" + str, ap.GetValStrByKey(str));
+                }
+            }
+
             int result = DBAccess.RunSQLReturnValInt(sql, -1);
             if (result <= 0)
                 return false;
@@ -2891,10 +2902,9 @@ namespace BP.WF
         /// <param name="exp">表达式</param>
         /// <param name="en">变量</param>
         /// <returns>是否成立</returns>
-        public static bool CondExpPara(string exp, Hashtable ht)
+        public static bool CondExpPara(string exp, Hashtable ht, Int64 myWorkID)
         {
             string[] strs = exp.Trim().Split(' ');
-
             string key = strs[0].Trim();
             string oper = strs[1].Trim();
             string val = strs[2].Trim();
@@ -2902,21 +2912,41 @@ namespace BP.WF
             val = val.Replace("%", "");
             val = val.Replace("~", "");
 
-
             string valPara = null;
             if (ht.ContainsKey(key) == false)
             {
-                try
+
+                bool isHave = false;
+                if (myWorkID != 0)
                 {
-                    /*如果不包含指定的关键的key, 就到公共变量里去找. */
-                    if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
-                        throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
-                    valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
+                    //把外部传来的参数传入到 rptGE 让其做方向条件的判断.
+                    GenerWorkFlow gwf = new GenerWorkFlow(myWorkID);
+                    AtPara at = gwf.atPara;
+                    foreach (string str in at.HisHT.Keys)
+                    {
+                        if (key.Equals(str) == false)
+                            continue;
+
+                        valPara = at.GetValStrByKey(key);
+                        isHave = true;
+                        break;
+                    }
                 }
-                catch
+
+                if (isHave == false)
                 {
-                    //有可能是常量. 
-                    valPara = key;
+                    try
+                    {
+                        /*如果不包含指定的关键的key, 就到公共变量里去找. */
+                        if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
+                            throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
+                        valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
+                    }
+                    catch
+                    {
+                        //有可能是常量. 
+                        valPara = key;
+                    }
                 }
             }
             else
@@ -2940,6 +2970,10 @@ namespace BP.WF
                 else
                     return false;
             }
+
+            //@yuanlina. 
+            if (DataType.IsNumStr(valPara) == false)
+                throw new Exception("err@表达式错误:["+exp+"]没有找到参数["+valPara+"]的值，导致无法计算。");
 
             if (oper == ">")
             {

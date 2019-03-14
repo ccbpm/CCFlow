@@ -7492,6 +7492,24 @@ namespace BP.WF
                 }
             }
         }
+      
+        /// <summary>
+        /// 保存参数，向工作流引擎传入的参数变量.
+        /// </summary>
+        /// <param name="workID">工作ID</param>
+        /// <param name="paras">参数</param>
+        /// <returns></returns>
+        public static bool Flow_SaveParas(Int64 workID, string paras)
+        {
+            AtPara ap = new AtPara(paras);
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            foreach (string key in ap.HisHT.Keys)
+            {
+                gwf.SetPara(key, ap.GetValStrByKey(key));
+            }
+            gwf.Update();
+            return true;
+        }
         /// <summary>
         /// 保存
         /// </summary>
@@ -7712,6 +7730,7 @@ namespace BP.WF
                     }
                     wk.Update();
                 }
+
                 #region 处理保存后事件
                 bool isHaveSaveAfter = false;
                 try
@@ -7735,7 +7754,6 @@ namespace BP.WF
                     return "err@在执行保存后的事件期间出现错误:" + ex.Message;
                 }
                 #endregion
-
 
                 #region 为开始工作创建待办.
                 if (nd.IsStartNode == true)

@@ -995,7 +995,7 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.Paras)
                 {
                     Hashtable ht = en.Row;
-                    return BP.WF.Glo.CondExpPara(this.OperatorValueStr, ht);
+                    return BP.WF.Glo.CondExpPara(this.OperatorValueStr, ht, en.OID);
                 }
 
                 //从节点表单里判断.

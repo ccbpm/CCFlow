@@ -968,7 +968,6 @@ namespace BP.WF
         }
         #endregion
 
-
         #region 条件
         private Conds _HisNodeCompleteConditions = null;
         /// <summary>
@@ -1110,10 +1109,10 @@ namespace BP.WF
                     bool isPass = false;
 
                     if (item.ExpType == ConnDataFrom.Paras)
-                        isPass = BP.WF.Glo.CondExpPara(item.CondExp, this.rptGe.Row);
+                        isPass = BP.WF.Glo.CondExpPara(item.CondExp, this.rptGe.Row,this.WorkID);
 
                     if (item.ExpType == ConnDataFrom.SQL)
-                        isPass = BP.WF.Glo.CondExpSQL(item.CondExp, this.rptGe.Row);
+                        isPass = BP.WF.Glo.CondExpSQL(item.CondExp, this.rptGe.Row,this.WorkID);
 
                     if (isPass == true)
                         return new Node(int.Parse(item.FK_Flow + "01"));
@@ -1845,7 +1844,6 @@ namespace BP.WF
             // 检查当前的状态是是否是退回，.
             if (this.SendNodeWFState == WFState.ReturnSta)
             {
-
             }
 
             Nodes nds = currNode.HisToNodes;
@@ -1975,8 +1973,6 @@ namespace BP.WF
             #endregion 如果使用户选择的.
 
 
-
-
             Nodes toNodes = this.HisNode.HisToNodes;
             // 如果只有一个转向节点, 就不用判断条件了,直接转向他.
             if (toNodes.Count == 1)
@@ -1988,6 +1984,9 @@ namespace BP.WF
             Nodes myNodes = new Nodes();
             int toNodeId = 0;
             int numOfWay = 0;
+
+            
+        
 
             foreach (Node nd in toNodes)
             {
@@ -2008,7 +2007,7 @@ namespace BP.WF
                     continue;
                 }
 
-                if (dcs.IsPass) // 如果多个转向条件中有一个成立.
+                if (dcs.IsPass) //如果多个转向条件中有一个成立.
                 {
                     myNodes.AddEntity(nd);
                     continue;

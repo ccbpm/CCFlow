@@ -742,6 +742,15 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 保存发送参数.
+        /// </summary>
+        /// <returns></returns>
+        public string SaveParas()
+        {
+            BP.WF.Dev2Interface.Flow_SaveParas(this.WorkID, this.GetRequestVal("Paras"));
+            return "保存成功";
+        }
+        /// <summary>
         /// 工具栏
         /// </summary>
         /// <returns></returns>
@@ -764,7 +773,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
 
-            string tKey = DateTime.Now.ToString("yyyy-MM-dd - hh:mm:ss");
+            string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
             BtnLab btnLab = new BtnLab(this.FK_Node);
             string toolbar = "";
             try
@@ -825,14 +834,14 @@ namespace BP.WF.HttpHandler
                         if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                         {
                             /*如果启用了发送按钮.*/
-                            toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if (SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
+                            toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if (SendSelfFrom()==false) return false; this.disabled=true;\" />";
                         }
                     }
                     else
                     {
                         if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                         {
-                            toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
+                            toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; this.disabled=true;\" />";
                         }
                     }
 

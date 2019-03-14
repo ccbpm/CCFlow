@@ -2394,8 +2394,8 @@ namespace BP.WF
 
             this.HisGenerWorkFlow.FK_Node = toND.NodeID;
             this.HisGenerWorkFlow.NodeName = toND.Name;
-          
-           this.addMsg(SendReturnMsgFlag.WorkStartNode, "@下一步[" + toND.Name + "]工作成功启动.","WorkStartNode1");
+
+            this.addMsg(SendReturnMsgFlag.WorkStartNode, "@下一步[" + toND.Name + "]工作成功启动.", "@下一步<font color=blue>[" + toND.Name + "]</font>工作成功启动.");
 
             //this.addMsg(SendReturnMsgFlag.WorkStartNode, Glo.Multilingual("WorkNode","WorkStartNode",toND.Name), "WorkStartNode1");
 

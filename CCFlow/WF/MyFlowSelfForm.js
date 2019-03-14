@@ -1,3 +1,4 @@
+
 $(function () {
     SetHegiht();
     //打开表单检查正则表达式
@@ -18,13 +19,21 @@ function SaveSelfFrom() {
 
     //执行保存.
     return frm.contentWindow.Save();
-
 }
 
 function SendSelfFrom() {
 
-    if (SaveSelfFrom() == false) {
+    var val = SaveSelfFrom();
+    if (val == false) {
         return false;
+    }
+
+    if (val != true) {
+        //就说明是传来的参数，这些参数需要存储到WF_GenerWorkFlow里面去，用于方向条件的判断。
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddPara("WorkID", GetQueryString("WorkID"));
+        handler.AddPara("Paras", val);
+        handler.DoMethodReturnString("SaveParas");
     }
 
     Send();
@@ -416,7 +425,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人      
+            //发送选择接收节点和接收人          
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
@@ -595,8 +604,8 @@ function InitDDLOperation(workNodeData, mapAttr, defVal) {
 //发送
 function Send() {
 
-    if (SaveSelfFrom() == false)
-        return;
+    //    if (SaveSelfFrom() == false)
+    //        return;
 
     var toNode = 0;
     window.hasClickSend = true; //标志用来刷新待办
@@ -604,8 +613,6 @@ function Send() {
     if ($('#DDL_ToNode').length > 0) {
         var selectToNode = $('#DDL_ToNode  option:selected').data();
         if (selectToNode.IsSelectEmps == "1") {//跳到选择接收人窗口
-
-
 
             initModal("sendAccepter", selectToNode);
 
@@ -618,168 +625,7 @@ function Send() {
 
     execSend(toNode);
 }
-
-function execSend(toNode) {
-    //先设置按钮等不可用
-    setToobarDisiable();
-    //组织数据.
-    var dataStrs = getFormData(true, true) + "&ToNode=" + toNodeID;
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    handler.AddUrlData(dataStrs);
-    var data = handler.DoMethodReturnString("Send"); //执行保存方法.
-//    $.ajax({
-//        type: 'post',
-//        async: true,
-//        data: getFormData(true, true) + "&ToNode=" + toNode,
-//        url: MyFlow + "?DoType=Send",
-//        dataType: 'html',
-//        success: function (data) {
-
-            if (data.indexOf('err@') == 0) {//发送时发生错误
-                $('#Message').html(data.substring(4, data.length));
-                $('#MessageDiv').modal().show();
-                setToobarEnable();
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) { //发送成功时转到指定的URL 
-                var url = data;
-                url = url.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            OptSuc(data);
-            //  $('#Message').html(data);
-            // $('#MessageDiv').modal().show();
-
-            if (opener != null && opener.window != null && opener.window.parent != null
-            && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
-                opener.window.parent.refSubSubFlowIframe();
-            }
-            //if (window.opener != null && window.opener != undefined && window.opener)
-            //    $('#Message').html(data);
-            //$('#MessageDiv').modal().show();
-            ////发送成功时
-            //setAttachDisabled();
-            //setToobarUnVisible();
-            //setFormEleDisabled();
-//        }
-//    });
-}
-
-//获取表单数据
-function getFormData(isCotainTextArea, isCotainUrlParam) {
-
-    var formss = $('#divCCForm').serialize();
-    var formArr = formss.split('&');
-    var formArrResult = [];
-    //获取CHECKBOX的值
-    $.each(formArr, function (i, ele) {
-        if (ele.split('=')[0].indexOf('CB_') == 0) {
-            if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
-                ele = ele.split('=')[0] + '=1';
-            } else {
-                ele = ele.split('=')[0] + '=0';
-            }
-        }
-        formArrResult.push(ele);
-    });
-
-    //获取表单中禁用的表单元素的值
-    var disabledEles = $('#divCCForm :disabled');
-    $.each(disabledEles, function (i, disabledEle) {
-        var name = $(disabledEle).attr('name');
-        switch (disabledEle.tagName.toUpperCase()) {
-            case "INPUT":
-                switch (disabledEle.type.toUpperCase()) {
-                    case "CHECKBOX": //复选框
-                        formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
-                        break;
-                    case "TEXT": //文本框
-                        formArrResult.push(name + '=' + $(disabledEle).val());
-                        break;
-                    case "RADIO": //单选钮
-                        var eleResult = name + '=' + $('[name="' + name + ':checked"]').val();
-                        if (!$.inArray(formArrResult, eleResult)) {
-                            formArrResult.push();
-                        }
-                        break;
-                }
-                break;
-            //下拉框    
-            case "SELECT":
-                formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());   
-            //对于复选下拉框获取值得方法   
-            //                if ($('[data-id=' + name + ']').length > 0) {   
-            //                    var val = $(disabledEle).val().join(',');   
-            //                    formArrResult.push(name + '=' + val);   
-            //                } else {   
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());   
-            //                }   
-            // break;   
-            //文本区域    
-            case "TEXTAREA":
-                formArrResult.push(name + '=' + $(disabledEle).val());
-                break;
-        }
-    });
-
-    //获取表单中隐藏的表单元素的值
-    var hiddens = $('input[type=hidden]');
-    $.each(hiddens, function (i, hidden) {
-        if ($(hidden).attr("name").indexOf('TB_') == 0) {
-            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-        }
-    });
-
-    if (!isCotainTextArea) {
-        formArrResult = $.grep(formArrResult, function (value) {
-            return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
-        });
-    }
-
-    formss = formArrResult.join('&');
-    var dataArr = [];
-    //加上URL中的参数
-    if (pageData != undefined && isCotainUrlParam) {
-        var pageDataArr = [];
-        for (var data in pageData) {
-            pageDataArr.push(data + '=' + pageData[data]);
-        }
-        dataArr.push(pageDataArr.join('&'));
-    }
-    if (formss != '')
-        dataArr.push(formss);
-    var formData = dataArr.join('&');
-
-
-    //为了复选框  合并一下值  复选框的值以  ，号分割
-    //用& 符号截取数据
-    var formDataArr = formData.split('&');
-    var formDataResultObj = {};
-    $.each(formDataArr, function (i, formDataObj) {
-        //计算出等号的INDEX
-        var indexOfEqual = formDataObj.indexOf('=');
-        var objectKey = formDataObj.substr(0, indexOfEqual);
-        var objectValue = formDataObj.substr(indexOfEqual + 1);
-        if (formDataResultObj[objectKey] == undefined) {
-            formDataResultObj[objectKey] = objectValue;
-        } else {
-            formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
-        }
-    });
-
-    var formdataResultStr = '';
-    for (var ele in formDataResultObj) {
-        formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
-    }
-    return formdataResultStr;
-}
-
+  
 $(function () {
 
     $('#btnMsgModalOK').bind('click', function () {
@@ -810,11 +656,82 @@ $(function () {
 
 })
 
+function execSend(toNodeID) {
+
+    //先设置按钮等不可用.
+    setToobarDisiable();
+    //树形表单保存
+    if (workNodeData) {
+        var node = workNodeData.WF_Node[0];
+        if (node && node.FormType == 5) {
+            OnTabChange("btnsave");
+        }
+    }
+
+    //组织数据.
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara('ToNode', toNodeID);
+
+    var data = handler.DoMethodReturnString("Send"); //执行保存方法.
+
+    if (data.indexOf('err@') == 0) { //发送时发生错误
+        $('#Message').html(data.substring(4, data.length));
+        $('#MessageDiv').modal().show();
+        setToobarEnable();
+        return;
+    }
+
+    if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL 
+        var url = data;
+        url = url.replace('TurnUrl@', '');
+        window.location.href = url;
+        return;
+    }
+
+    if (data.indexOf('SelectNodeUrl@') == 0) {
+        var url = data;
+        url = url.replace('SelectNodeUrl@', '');
+        window.location.href = url;
+        return;
+    }
+
+
+
+    if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
+
+        if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
+
+            //求出来 url里面的FK_Node=xxxx 
+            var params = data.split("&");
+
+            for (var i = 0; i < params.length; i++) {
+                if (params[i].indexOf("ToNode") == -1)
+                    continue;
+
+                toNodeID = params[i].split("=")[1];
+                break;
+            }
+
+            //   var toNode = new Entity("BP.WF.Node",toNodeID)
+            initModal("sendAccepter", toNodeID);
+            $('#returnWorkModal').modal().show();
+            return;
+        }
+
+        var url = data;
+        url = url.replace('url@', '');
+        window.location.href = url;
+        return;
+    }
+    OptSuc(data);
+}
 
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
+
     // window.location.href = "/WF/MyFlowInfo.aspx";
     // $('#MessageDiv').modal().hide();
+
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
     }
@@ -825,35 +742,47 @@ function OptSuc(msg) {
     var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
     trackA.remove();
     trackImg.remove();
+
     $("#msgModal").modal().show();
 }
-//移交
+
 //初始化发送节点下拉框
-function InitToNodeDDL(workNode) {
+function InitToNodeDDL(flowData) {
 
-    if (workNode.ToNodes != undefined && workNode.ToNodes.length > 0) {
-        // $('[value=发送]').
-        var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
-        $.each(workNode.ToNodes, function (i, toNode) {
-            //IsSelectEmps: "1"
-            //Name: "节点2"
-            //No: "702"
+    if (flowData.ToNodes == undefined)
+        return;
 
-            var opt = "";
-            if (toNode.IsSelected == "1") {
-                var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
-                opt.data(toNode);
-            } else {
-                var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
-                opt.data(toNode);
-            }
+    if (flowData.ToNodes.length == 0)
+        return;
 
-            toNodeDDL.append(opt);
-
-        });
-
-        $('[name=Send]').after(toNodeDDL);
+    //如果没有发送按钮，就让其刷新,说明加载不同步.
+    var btn = $('[name=Send]');
+    if (btn == null || btn == undefined) {
+        window.location.href = window.location.href;
+        return;
     }
+
+    // $('[value=发送]').
+    var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
+    $.each(flowData.ToNodes, function (i, toNode) {
+        //IsSelectEmps: "1"
+        //Name: "节点2"
+        //No: "702"
+
+        var opt = "";
+        if (toNode.IsSelected == "1") {
+            var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
+            opt.data(toNode);
+        } else {
+            var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
+            opt.data(toNode);
+        }
+
+        toNodeDDL.append(opt);
+
+    });
+
+    $('[name=Send]').after(toNodeDDL);
 }
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
@@ -1053,99 +982,92 @@ function GenerWorkNode() {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddUrlData(urlParam);
-    var data = handler.DoMethodReturnString("MyFlowSelfForm_Init"); 
-//    $.ajax({
-//        type: 'post',
-//        async: true,
-//        data: pageData,
-//        url: MyFlow + "?DoType=MyFlowSelfForm_Init&m=" + Math.random() + "&" + urlParam,
-//        dataType: 'html',
-//        success: function (data) {
+    var data = handler.DoMethodReturnString("MyFlowSelfForm_Init");
 
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
 
-            //console.info(data);
-            jsonStr = data;
-            var gengerWorkNode = {};
-            var flow_Data;
+    //console.info(data);
+    jsonStr = data;
+    var gengerWorkNode = {};
+    var flow_Data;
 
-            try {
+    try {
 
-                flow_Data = JSON.parse(data);
-                workNodeData = flow_Data;
+        flow_Data = JSON.parse(data);
+        workNodeData = flow_Data;
 
-            } catch (err) {
-                alert("GenerWorkNode转换JSON失败:" + jsonStr);
-                return;
-            }
+    } catch (err) {
+        alert("GenerWorkNode转换JSON失败:" + jsonStr);
+        return;
+    }
 
-            //设置标题.
-            document.title = flow_Data.WF_Node[0].Name;
+    //设置标题.
+    document.title = flow_Data.WF_Node[0].Name;
 
 
-            $('#CCForm').html('');
+    $('#CCForm').html('');
 
-            var mapData = workNodeData.Sys_MapData[0];
-            var wf_node = workNodeData.WF_Node[0];
-            var frmName = mapData.Name;
+    var mapData = workNodeData.Sys_MapData[0];
+    var wf_node = workNodeData.WF_Node[0];
+    var frmName = mapData.Name;
 
-            var url = wf_node.FormUrl;
-            if (url == "")
-                url = "../DataUser/DefaultSelfFormUrl.htm";
+    var url = wf_node.FormUrl;
+    if (url == "")
+        url = "../DataUser/DefaultSelfFormUrl.htm";
 
-            if (url.indexOf('?') == -1) {
-                url = url + "?1=2";
-            }
-            url += "&WorkID=" + GetPageParas("WorkID") + "&FK_Flow=" + GetPageParas("FK_Flow") + "&FK_Node=" + GetPageParas("FK_Node");
+    if (url.indexOf('?') == -1) {
+        url = url + "?1=2";
+    }
+    url += "&WorkID=" + GetPageParas("WorkID") + "&FK_Flow=" + GetPageParas("FK_Flow") + "&FK_Node=" + GetPageParas("FK_Node");
 
-            var html = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:" + mapData.FrmH + "px' leftMargin='0' topMargin='0' />";
+    var html = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:" + mapData.FrmH + "px' leftMargin='0' topMargin='0' />";
 
-            $('#CCForm').html("").append(html);
+    $('#CCForm').html("").append(html);
 
-            //循环之前的提示信息.
-            var info = "";
-            for (var i in flow_Data.AlertMsg) {
-                var alertMsg = flow_Data.AlertMsg[i];
-                var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
-                $('#Message').append(alertMsgEle);
-                $('#Message').append($('<hr/>'));
-            }
+    //循环之前的提示信息.
+    var info = "";
+    for (var i in flow_Data.AlertMsg) {
+        var alertMsg = flow_Data.AlertMsg[i];
+        var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
+        $('#Message').append(alertMsgEle);
+        $('#Message').append($('<hr/>'));
+    }
 
-            if (flow_Data.AlertMsg.length != 0) {
-                $('#MessageDiv').modal().show();
-            }
+    if (flow_Data.AlertMsg.length != 0) {
+        $('#MessageDiv').modal().show();
+    }
 
 
 
-            //初始化Sys_MapData
-            var h = flow_Data.Sys_MapData[0].FrmH;
-            var w = flow_Data.Sys_MapData[0].FrmW;
+    //初始化Sys_MapData
+    var h = flow_Data.Sys_MapData[0].FrmH;
+    var w = flow_Data.Sys_MapData[0].FrmW;
 
-            // $('#topContentDiv').height(h);
-            $('#topContentDiv').width(w);
-            $('.Bar').width(w + 15);
-            $('#lastOptMsg').width(w + 15);
+    // $('#topContentDiv').height(h);
+    $('#topContentDiv').width(w);
+    $('.Bar').width(w + 15);
+    $('#lastOptMsg').width(w + 15);
 
-            var marginLeft = $('#topContentDiv').css('margin-left');
-            marginLeft = marginLeft.replace('px', '');
+    var marginLeft = $('#topContentDiv').css('margin-left');
+    marginLeft = marginLeft.replace('px', '');
 
-            marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
-            $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
-            //原有的
+    marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
+    $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
+    //原有的
 
-            InitToNodeDDL(flow_Data);
+    InitToNodeDDL(flow_Data);
 
-            Common.MaxLengthError();
+    Common.MaxLengthError();
 
 
-            showNoticeInfo();
+    showNoticeInfo();
 
-            showTbNoticeInfo();
-//        }
-//    })
+    showTbNoticeInfo();
+    //        }
+    //    })
 }
 
 var workNodeData = {};

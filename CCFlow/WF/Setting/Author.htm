@@ -8,8 +8,48 @@
 		<link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
 		<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
 		<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        var webUser=null;
+        var emp = null;
+
+        $(function () {
+
+            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            //            var data = handler.DoMethodReturnString("ChangeDept_Init");
+            //            if (data.indexOf('err@') == 0) {
+            //                alert(data);
+            //                return;
+            //            }
+
+            var webUser = new WebUser();
+            var emp = new Entity("BP.WF.Port.WFEmp", webUser.No);
+
+            $("#TB_Author").val(emp.Author); //设置授权人.
+            $("#TB_DT").val(emp.AuthorDate); //授权到日期.
+            $("#DDL_AuthorWay").val(emp.AuthorWay); //授权方式.
+
+        });
+
+        //执行保存.
+        function Save() {
+
+            emp.Author = $("#TB_Author").val();
+            emp.AuthorDate = $("#TB_DT").val();
+            emp.AuthorWay = $("#DDL_AuthorWay").val();
+            emp.Update();
+
+        }
+    </script>
 </head>
 <body onkeypress="Esc()" class="gray-bg">
+<form id="cc" name="cc">
 		<div class="wrapper wrapper-content animated fadeInRight">
 			
 			<div class="ibox float-e-margins">
@@ -20,7 +60,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">授权给</label>
 										<div class="col-sm-4">
-										<input  type="text"  class="form-control"/>
+										<input  type="text"  id="TB_Author" name="TB_Author" class="form-control"/>
 									   </div>
 									   <div class="col-sm-4">
 										<input  type="button" value="选择授权人"  id="Btn_Auto" class="btn btn-default"/>
@@ -29,14 +69,14 @@
 									<div class="form-group">
                                         <label class="col-sm-3 control-label">收回授权日期</label>
 										<div class="col-sm-8">
-											<input name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$TB_DT" type="text" class="form-control" value="2017-10-13 12:20" maxlength="20" id="ContentPlaceHolder1_Tools1_ToolsWap1_TB_DT" class="TBcalendar" onfocus="WdatePicker({dateFmt:&#39;yyyy-MM-dd HH:mm&#39;});" />
+											<input name="TB_DT" type="text" class="form-control" value="2017-10-13 12:20" maxlength="20" id="TB_DT" class="TBcalendar" onfocus="WdatePicker({dateFmt:yyyy-MM-dd;});" />
 											</div>
                                     </div>
 									
 									<div class="form-group">
                                         <label class="col-sm-3 control-label">授权方式</label>
 										<div class="col-sm-8">
-											<select name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$DDL_AuthorWay"  class="form-control"  id="ContentPlaceHolder1_Tools1_ToolsWap1_DDL_AuthorWay">
+											<select name="DDL_AuthorWay"  class="form-control"  id="DDL_AuthorWay">
 										<option selected="selected" value="0">不授权</option>
 										<option value="1">全部流程授权</option>
 										<option value="2">指定流程授权</option>
@@ -48,7 +88,7 @@
                                         <label class="col-sm-3 control-label">
 											<a href="javascript:WinShowModalDialog('ToolsSet.htm?RefNo=AthFlows&d=2017/9/29 12:20:55')" >设置要授权的流程范围</a></label>
 										<div class="col-sm-8">
-											<input type="submit" name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$Btn_Save" value="保存" id="ContentPlaceHolder1_Tools1_ToolsWap1_Btn_Save" class="btn btn-info" /> <a class="btn btn-white"  href="Default.htm">返回</a></div>
+											<input type="submit" name="Btn_Save" value="保存" id="Btn_Save" class="btn btn-info" onclick="Save();" /> <a class="btn btn-white"  href="Default.htm">返回</a></div>
                                     </div>
 									
 									<div class="form-group">
@@ -60,5 +100,6 @@
 					
 				</div>
 			</div>
+            </form>
 </body>
 </html>

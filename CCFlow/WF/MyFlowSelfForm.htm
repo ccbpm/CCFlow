@@ -270,34 +270,6 @@
         });
     </script>
    
-     
-     <script type="text/javascript">
-
-         window.onunload = function () {
-             if (window.hasClickSend && opener.frameElement.contentWindow.location.href.toLowerCase().indexOf("todolist") != -1) {
-                 //刷新代办
-                 opener.frameElement.contentWindow.location.reload();
-             }
-         }
-
-         window.onbeforeunload = function close() {
-             temp = 0;
-             var n = window.event.screenX - window.screenLeft;
-             var b = n > document.documentElement.scrollWidth - 20;
-             if (b && window.event.clientY < 0 || window.event.altKey) {
-                 window.event.returnValue = "退出登录？"; //这里可以放置你想做的操作代码 
-                 temp = 1;
-             }
-         }
-        //让IE8 兼容 forEach
-         if (typeof Array.prototype.forEach != 'function') {
-             Array.prototype.forEach = function (callback) {
-                 for (var i = 0; i < this.length; i++) {
-                     callback.apply(this, [this[i], i, this]);
-                 }
-             };
-         }
-    </script>
 </head>
 <body  >
     <div id="divCurrentForm" style="position: relative;">

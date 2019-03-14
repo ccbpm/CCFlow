@@ -185,12 +185,15 @@
 
             html += "<tr>";
             var atPara = mapData[0].AtPara;
+             
             if (GetPara(atPara, "IsSearchKey") == "1") {
                 var keyLabel = "关键字";
                 
                 html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":</label></td>";
+
                 html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
             }
+
             if (GetPara(atPara, "DTSearchWay") != "0") {
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + GetPara(atPara, "DTSearchLabel") + ":</label></td>";
 
@@ -202,7 +205,6 @@
                     html += "<td align='right'><label>到&nbsp;&nbsp;</label></td><td align='left'><input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:160px;' class='form-control Wdate' /></td>";
                 }
             }
-
 
             //格式为: @WFSta=0@FK_Dept=02
              var json = AtParaToJson(ur.Vals); 

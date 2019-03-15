@@ -623,12 +623,8 @@ namespace BP.WF.Template
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
 
-
                 //节点工具栏,主从表映射.
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
-
-                ////延续子流程.
-                //map.AddDtl(new NodeYGFlows(), NodeToolbarAttr.FK_Node);
 
                 #region 基础功能.
                 RefMethod rm = null;
@@ -805,7 +801,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 父子流程.
 
-
                 #region 考核.
 
                 rm = new RefMethod();
@@ -826,6 +821,14 @@ namespace BP.WF.Template
                 #endregion 考核.
 
                 #region 实验中的功能
+                rm = new RefMethod();
+                rm.Title = "自定义参数";
+                rm.ClassMethodName = this.ToString() + ".DoSelfParas()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                rm.Visable = false;
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "设置节点类型";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
@@ -872,7 +875,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 #endregion 实验中的功能
-
 
                 this._enMap = map;
                 return this._enMap;
@@ -1010,6 +1012,14 @@ namespace BP.WF.Template
         #endregion 表单相关.
 
         #region 实验中的功能.
+        /// <summary>
+        /// 自定义参数
+        /// </summary>
+        /// <returns></returns>
+        public string DoSelfParas()
+        {
+            return "../../Admin/AttrNode/SelfParas.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+        }
         /// <summary>
         /// 设置节点类型
         /// </summary>

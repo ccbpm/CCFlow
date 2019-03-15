@@ -3328,8 +3328,15 @@ namespace BP.WF
 
 
             emp.SID = DBAccess.GenerGUID();
-            if (DBAccess.IsView(emp.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
-                emp.DirectUpdate();
+            try
+            {
+                if (DBAccess.IsView(emp.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
+                    emp.DirectUpdate();
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             WebUser.SignInOfGener(emp);
             WebUser.IsWap = false;

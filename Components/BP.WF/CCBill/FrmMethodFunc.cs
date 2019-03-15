@@ -79,20 +79,79 @@ namespace BP.WF.CCBill
                 this.SetValByKey(FrmMethodAttr.MsgSuccess, value);
             }
         }
-        public string MethodDoc
+        public string MethodDoc_Url
         {
             get
             {
-                string s = this.GetValStringByKey(FrmMethodAttr.MethodDoc);
+                string s = this.GetValStringByKey(FrmMethodAttr.MethodDoc_Url);
                 if (DataType.IsNullOrEmpty(s) == true)
-                    s = "";
+                    s = "http://192.168.0.100/MyPath/xxx.xx";
                 return s;
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodDoc, value);
+                this.SetValByKey(FrmMethodAttr.MethodDoc_Url, value);
             }
         }
+        /// <summary>
+        /// 获得或者设置sql脚本.
+        /// </summary>
+        public string MethodDoc_SQL
+        {
+            get
+            {
+                string strs = this.GetBigTextFromDB("SQLScript");
+                if (strs == null || strs.Equals("") == true)
+                    return this.MethodDoc_SQL_Demo; //返回默认信息.
+
+                return strs;
+            }
+            set
+            {
+                this.SaveBigTxtToDB("SQLScript", value);
+            }
+        }
+        /// <summary>
+        /// 获得该实体的demo.
+        /// </summary>
+        public string MethodDoc_JavaScript_Demo
+        {
+            get
+            {
+                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoJS.txt";
+                string doc = DataType.ReadTextFile(file); //读取文件.
+
+                return doc;
+            }
+        }
+        public string MethodDoc_SQL_Demo
+        {
+            get
+            {
+                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoSQL.txt";
+                string doc = DataType.ReadTextFile(file); //读取文件.
+
+                return doc;
+            }
+        }
+        /// <summary>
+        /// 获得或者设置js脚本.
+        /// </summary>
+        public string MethodDoc_JavaScript
+        {
+            get
+            {
+                string strs = this.GetBigTextFromDB("JSScript");
+                if (strs == null || strs.Equals("") == true)
+                    return this.MethodDoc_JavaScript_Demo;
+                return strs;
+            }
+            set
+            {
+                this.SaveBigTxtToDB("JSScript", value);
+            }
+        }
+       
         /// <summary>
         /// 方法类型：@0=SQL@1=URL@2=JavaScript@3=业务单元
         /// </summary>
@@ -174,7 +233,7 @@ namespace BP.WF.CCBill
                 map.AddDDLSysEnum(FrmMethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, true, "MethodDocTypeOfFunc",
                "@0=SQL@1=URL@2=JavaScript@3=业务单元");
 
-                map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "执行内容", true, false);
+                map.AddTBString(FrmMethodAttr.MethodDoc_Url, null, "URL执行内容", true, true, 0, 300, 10);
 
 
                 map.AddTBString(FrmMethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);

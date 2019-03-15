@@ -4466,7 +4466,6 @@ namespace BP.WF
                 // add 2013-01-01.
                 map.AddTBInt(FlowAttr.DataStoreModel, 0, "数据存储模式", true, false);
 
-
                 // add 2013-02-05.
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
 
@@ -4480,6 +4479,10 @@ namespace BP.WF
 
                 //部门权限控制类型,此属性在报表中控制的.
                 map.AddTBInt(FlowAttr.DRCtrlType, 0, "部门查询权限控制方式", true, false);
+
+                //运行主机. 这个流程运行在那个子系统的主机上.
+                map.AddTBString(FlowAttr.HostRun, null, "运行主机(IP+端口)", true, false, 0, 40, 10, true);
+
 
                 #region 流程启动限制
                 map.AddTBInt(FlowAttr.StartLimitRole, 0, "启动限制规则", true, false);

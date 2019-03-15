@@ -3515,6 +3515,10 @@ namespace BP.WF.HttpHandler
             return "false";
         }
 
+        public string FrmVSTO_Init()
+        {
+            return "";
+        }
         /// <summary>
         /// 表单处理加载
         /// </summary>

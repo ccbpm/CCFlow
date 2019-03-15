@@ -57,18 +57,18 @@ namespace BP.WF.CCBill
                 this.SetValByKey(FrmMethodAttr.MethodName, value);
             }
         }
-        public string MethodDoc
+        public string MethodDoc_Url
         {
             get
             {
-                string s = this.GetValStringByKey(FrmMethodAttr.MethodDoc);
+                string s = this.GetValStringByKey(FrmMethodAttr.MethodDoc_Url);
                 if (DataType.IsNullOrEmpty(s) == true)
-                    s = "";
+                    s = "http://192.168.0.100/MyPath/xxx.xx";
                 return s;
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodDoc, value);
+                this.SetValByKey(FrmMethodAttr.MethodDoc_Url, value);
             }
         }
         /// <summary>
@@ -131,7 +131,7 @@ namespace BP.WF.CCBill
                  "@0=按钮@1=超链接");
 
                 map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
-                map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "连接URL", true, false);
+                map.AddTBStringDoc(FrmMethodAttr.MethodDoc_Url, null, "连接URL", true, false);
 
                 #region 工具栏.
                 map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);

@@ -109,6 +109,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string ChartType = "ChartType";
         /// <summary>
+        /// 运行在的主机上
+        /// </summary>
+        public const string HostRun = "HostRun";
+        /// <summary>
         /// 时效性规则
         /// </summary>
         public const string TimelineRole = "TimelineRole";

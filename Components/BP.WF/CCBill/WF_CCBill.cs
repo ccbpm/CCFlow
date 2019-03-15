@@ -21,6 +21,7 @@ namespace BP.WF.CCBill
     /// </summary>
     public class WF_CCBill : DirectoryPageBase
     {
+        #region 构造方法.
         /// <summary>
         /// 页面功能实体
         /// </summary>
@@ -35,6 +36,8 @@ namespace BP.WF.CCBill
         public WF_CCBill()
         {
         }
+        #endregion 构造方法.
+
         /// <summary>
         /// 发起列表.
         /// </summary>
@@ -86,11 +89,10 @@ namespace BP.WF.CCBill
         public string DoMethod_ExeSQL()
         {
             FrmMethodFunc func = new FrmMethodFunc(this.MyPK);
-            string doc = func.MethodDoc;
+            string doc = func.MethodDoc_SQL;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
             doc = Glo.DealExp(doc, en, null); //替换里面的内容.
-
 
             try
             {
@@ -104,7 +106,6 @@ namespace BP.WF.CCBill
             {
                 if (func.MsgErr.Equals(""))
                     func.MsgErr = "执行失败.";
-
                 return "err@" + func.MsgErr + " @ " + ex.Message;
             }
         }
@@ -115,7 +116,7 @@ namespace BP.WF.CCBill
         public string DoMethodPara_ExeSQL()
         {
             FrmMethodFunc func = new FrmMethodFunc(this.MyPK);
-            string doc = func.MethodDoc;
+            string doc = func.MethodDoc_SQL;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
             doc = Glo.DealExp(doc, en, null); //替换里面的内容.
@@ -646,6 +647,20 @@ namespace BP.WF.CCBill
             throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
+
+
+        #region 获得demo信息.
+        public string MethodDocDemoJS_Init()
+        {
+            var func = new FrmMethodFunc(this.MyPK);
+            return func.MethodDoc_JavaScript_Demo;
+        }
+        public string MethodDocDemoSQL_Init()
+        {
+            var func = new FrmMethodFunc(this.MyPK);
+            return func.MethodDoc_SQL_Demo;
+        }
+        #endregion 获得demo信息.
 
     }
 }

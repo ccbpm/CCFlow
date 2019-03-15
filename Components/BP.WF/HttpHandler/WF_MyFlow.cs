@@ -326,31 +326,35 @@ namespace BP.WF.HttpHandler
                 }
                 */
 
+                string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
+                if (DataType.IsNullOrEmpty(hostRun) == false)
+                    hostRun += "/WF/";
+
                 switch (this.currFlow.StartGuideWay)
                 {
                     case StartGuideWay.None:
                         break;
                     case StartGuideWay.SubFlowGuide:
                     case StartGuideWay.SubFlowGuideEntity:
-                        return "url@StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@" + hostRun + "StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.ByHistoryUrl: // 历史数据.
                         if (this.currFlow.IsLoadPriData == true)
                         {
                             return "err@流程配置错误，您不能同时启用前置导航，自动装载上一笔数据两个功能。";
                         }
-                        return "url@StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@" + hostRun + "StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.BySystemUrlOneEntity:
-                        return "url@StartGuideEntities.htm?StartGuideWay=BySystemUrlOneEntity&WorkID=" + workid + "" + this.RequestParasOfAll;
+                        return "url@" + hostRun + "StartGuideEntities.htm?StartGuideWay=BySystemUrlOneEntity&WorkID=" + workid + "" + this.RequestParasOfAll;
                     case StartGuideWay.BySQLOne:
-                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLOne&WorkID=" + workid + "" + this.RequestParasOfAll;
+                        return "url@" + hostRun + "StartGuideEntities.htm?StartGuideWay=BySQLOne&WorkID=" + workid + "" + this.RequestParasOfAll;
                     case StartGuideWay.BySQLMulti:
-                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLMulti&WorkID=" + workid + "" + this.RequestParasOfAll;
+                        return "url@" + hostRun + "StartGuideEntities.htm?StartGuideWay=BySQLMulti&WorkID=" + workid + "" + this.RequestParasOfAll;
                     case StartGuideWay.BySelfUrl: //按照定义的url.
                         return "url@" + this.currFlow.StartGuidePara1 + this.RequestParasOfAll + "&WorkID=" + workid;
                     case StartGuideWay.ByFrms: //选择表单.
-                        return "url@./WorkOpt/StartGuideFrms.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@" + hostRun + "./WorkOpt/StartGuideFrms.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.ByParentFlowModel: //选择父流程 @yuanlina.
-                        return "url@./WorkOpt/StartGuideParentFlowModel.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@" + hostRun + "./WorkOpt/StartGuideParentFlowModel.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     default:
                         break;
                 }

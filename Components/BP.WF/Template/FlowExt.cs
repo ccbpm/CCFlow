@@ -66,7 +66,7 @@ namespace BP.WF.Template
             get
             {
                 string str = this.GetValStringByKey(FlowAttr.FlowMark);
-                if (DataType.IsNullOrEmpty(str) ==true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     return this.No;
                 return str;
             }
@@ -385,6 +385,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FlowAttr.ChartType, (int)FlowChartType.Icon, "节点图形类型", true, true,
                     "ChartType", "@0=几何图形@1=肖像图片");
 
+                map.AddTBString(FlowAttr.HostRun, null, "运行主机(IP+端口)", true, false, 0, 40, 10, true);
                 #endregion 基本属性。
 
                 #region 表单数据.
@@ -434,7 +435,7 @@ namespace BP.WF.Template
                 #region 基本功能.
                 //map.AddRefMethod(rm);
                 RefMethod rm = new RefMethod();
-             
+
                 rm = new RefMethod();
                 rm.Title = "设计报表"; // "报表运行";
                 rm.Icon = "../../WF/Img/Btn/Rpt.gif";
@@ -777,7 +778,7 @@ namespace BP.WF.Template
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
-            
+
                 #endregion 流程监控.
 
                 #region 实验中的功能
@@ -895,7 +896,7 @@ namespace BP.WF.Template
 
         #region 流程监控.
 
-         
+
         public string DoDataManger_Search()
         {
             return "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
@@ -905,7 +906,7 @@ namespace BP.WF.Template
             return "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
 
-       
+
         public string DoDataManger_DeleteLog()
         {
             return "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=" + this.No + "&WFSta=all";
@@ -935,7 +936,7 @@ namespace BP.WF.Template
                 return "非admin用户，不能删除。";
 
             string sql = "";
-            if (isDelCurrFlow=="1")
+            if (isDelCurrFlow == "1")
                 sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "'  AND FK_Flow='" + this.No + "' ";
             else
                 sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "' ";
@@ -990,14 +991,14 @@ namespace BP.WF.Template
             }
 
             result += "@ 执行Rpt结果如下. <br>";
-            MapDataExt rptMD = new MapDataExt("ND" + int.Parse(flow.No) + "Rpt");           
-                result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
+            MapDataExt rptMD = new MapDataExt("ND" + int.Parse(flow.No) + "Rpt");
+            result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
 
             result += "@ 执行MyRpt结果如下. <br>";
             rptMD = new MapDataExt("ND" + int.Parse(flow.No) + "MyRpt");
-         
-            if (rptMD.Retrieve() > 0)               
-                  result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
+
+            if (rptMD.Retrieve() > 0)
+                result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
 
             return result;
         }
@@ -1044,7 +1045,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Action.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
-       
+
         /// <summary>
         /// 节点标签
         /// </summary>
@@ -1061,7 +1062,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/DTSBTable.aspx?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
-       
+
         /// <summary>
         /// 批量修改节点属性
         /// </summary>
@@ -1222,7 +1223,7 @@ namespace BP.WF.Template
 
                     gwl.SDT = dr["RDT"].ToString();
                     gwl.DTOfWarning = gwf.SDTOfNode;
-                   
+
                     gwl.IsEnable = true;
                     gwl.WhoExeIt = nd.WhoExeIt;
                     gwl.Insert();
@@ -1339,7 +1340,7 @@ namespace BP.WF.Template
                 ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-               
+
             }
             Emp emp1 = new Emp("admin");
             BP.Web.WebUser.SignInOfGener(emp1);
@@ -1390,14 +1391,14 @@ namespace BP.WF.Template
 
                 ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
- 
+
             }
             Emp emp1 = new Emp("admin");
             BP.Web.WebUser.SignInOfGener(emp1);
 
             return "全部生成成功,影响数据(" + wks.Count + ")条";
         }
-        
+
         /// <summary>
         /// 绑定独立表单
         /// </summary>
@@ -1418,7 +1419,7 @@ namespace BP.WF.Template
             fl.RetrieveFromDBSources();
             return fl.DoAutoStartIt();
         }
-      
+
         /// <summary>
         /// 强制设置接受人
         /// </summary>
@@ -1430,27 +1431,27 @@ namespace BP.WF.Template
         {
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
-            if (gwf.RetrieveFromDBSources()==0)
-                return "workid="+workid+"不正确.";
+            if (gwf.RetrieveFromDBSources() == 0)
+                return "workid=" + workid + "不正确.";
 
             BP.Port.Emp emp = new Emp();
             emp.No = worker;
-            if (emp.RetrieveFromDBSources()==0)
+            if (emp.RetrieveFromDBSources() == 0)
                 return "人员编号不正确" + worker + ".";
 
             BP.WF.Node nd = new Node();
             nd.NodeID = nodeID;
             if (nd.RetrieveFromDBSources() == 0)
-                return "err@节点编号["+nodeID+"]不正确.";
+                return "err@节点编号[" + nodeID + "]不正确.";
 
             gwf.FK_Node = nodeID;
             gwf.NodeName = nd.Name;
-            gwf.TodoEmps = emp.No+emp.Name+";";
+            gwf.TodoEmps = emp.No + emp.Name + ";";
             gwf.TodoEmpsNum = 1;
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.Update();
 
-            DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=1 WHERE WorkID="+workid);
+            DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=1 WHERE WorkID=" + workid);
 
             GenerWorkerList gwl = new GenerWorkerList();
             gwl.FK_Node = nodeID;
@@ -1539,7 +1540,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-      
+
         public string DoCheck2018Url()
         {
             return "../../Admin/Testing/FlowCheckError.htm?FK_Flow=" + this.No + "&Lang=CH";
@@ -1584,7 +1585,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Imp.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-        
+
         /// <summary>
         /// 导出
         /// </summary>
@@ -1621,7 +1622,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoOpenRpt()
         {
-            return "../../Admin/RptDfine/Default.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +int.Parse(this.No) + "Rpt";
+            return "../../Admin/RptDfine/Default.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" + int.Parse(this.No) + "Rpt";
         }
         /// <summary>
         /// 更新之后的事情，也要更新缓存。
@@ -1635,7 +1636,7 @@ namespace BP.WF.Template
 
             if (BP.WF.Glo.OSModel == OSModel.OneMore)
             {
-               // DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
+                // DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
             }
         }
         protected override bool beforeUpdate()
@@ -1753,14 +1754,14 @@ namespace BP.WF.Template
 
             #region 为systype设置，当前所在节点的第2级别目录。
             FlowSort fs = new FlowSort(fl.FK_FlowSort);
-            if (fs.ParentNo == "99" || fs.ParentNo=="0")
+            if (fs.ParentNo == "99" || fs.ParentNo == "0")
             {
                 this.SysType = fl.FK_FlowSort;
             }
             else
             {
                 FlowSort fsP = new FlowSort(fs.ParentNo);
-                if (fsP.ParentNo == "99" || fsP.ParentNo=="0")
+                if (fsP.ParentNo == "99" || fsP.ParentNo == "0")
                 {
                     this.SysType = fsP.No;
                 }

@@ -1120,7 +1120,6 @@ namespace BP.WF
             }
             #endregion (最后)判断是否有延续流程.
 
-
             #region 计算到达的节点.
             this.ndFrom = this.HisNode;
             while (true)
@@ -1762,7 +1761,6 @@ namespace BP.WF
             }//结束循环。
 
             #endregion 计算到达的节点.
-
 
             throw new Exception("@找到下一步节点.");
         }

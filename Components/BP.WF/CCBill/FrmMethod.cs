@@ -38,7 +38,7 @@ namespace BP.WF.CCBill
         /// <summary>
         /// 处理内容
         /// </summary>
-        public const string MethodDoc = "MethodDoc";
+        public const string MethodDoc_Url = "MethodDoc_Url";
         /// <summary>
         /// 方法的内容类型
         /// </summary>
@@ -128,20 +128,7 @@ namespace BP.WF.CCBill
                 this.SetValByKey(FrmMethodAttr.MethodName, value);
             }
         }
-        public string MethodDoc
-        {
-            get
-            {
-                string s = this.GetValStringByKey(FrmMethodAttr.MethodDoc);
-                if (DataType.IsNullOrEmpty(s) == true)
-                    s = "";
-                return s;
-            }
-            set
-            {
-                this.SetValByKey(FrmMethodAttr.MethodDoc, value);
-            }
-        }
+        
         /// <summary>
         /// 方法类型
         /// </summary>
@@ -192,8 +179,6 @@ namespace BP.WF.CCBill
                 map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
                 map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
-
-                map.AddTBStringDoc(FrmMethodAttr.MethodDoc, null, "方法内容", true, false);
 
                 //对功能有效.
                 map.AddTBString(FrmMethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);

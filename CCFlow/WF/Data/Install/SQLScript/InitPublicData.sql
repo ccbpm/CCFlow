@@ -599,20 +599,4 @@ INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('2202','吉林省�
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('2203','吉林省四平市','四平','2','22','DB');
 
 
-DELETE FROM Demo_AnQuanItem;
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('01','生产设备的安全防护设施是否完好');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('02','局部通风机是否正常稳定运转');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('03','作业人员劳动防护用品是否佩戴正确、齐全');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('04','进出作业现场的安全通道是否畅通，安全防护设施是否到位');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('05','作业现场的CO浓度是否达标');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('06','作业面照明电压等级是否为36V，照明是否良好并且无漏电现象');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('07','作业面顶板及两帮毛石是否清理彻底');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('08','现场支护是否满足作业要求');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('09','是否按《规程》要求刷洗作业面');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('11','作业面是否无盲（残）炮或者盲（残）炮已处理');
-INSERT INTO Demo_AnQuanItem (No,Name) VALUES('12','其他标准');
-
-
-
-
 

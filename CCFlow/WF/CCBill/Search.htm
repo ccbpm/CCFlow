@@ -187,15 +187,19 @@
             var atPara = mapData[0].AtPara;
              
             if (GetPara(atPara, "IsSearchKey") == "1") {
-                var keyLabel = "关键字";
-                
-                html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":</label></td>";
 
-                html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+            var keyLabel= GetPara(atPara, "DTSearchLabel");
+                var keyLabel = "关键字";
+                html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' placeholder='请输入关键字...' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
             }
 
             if (GetPara(atPara, "DTSearchWay") != "0") {
-                html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + GetPara(atPara, "DTSearchLabel") + ":</label></td>";
+
+            var dtFrom= GetPara(atPara, "DTSearchLabel");
+            if (dtFrom==undefined)
+            dtFrom='日期从';
+
+                html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + dtFrom + ":</label></td>";
 
                 if (GetPara(atPara, "DTSearchWay") == "1") {
                     html += "<td align='left' style='width:120px'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' /></td>";
@@ -227,13 +231,19 @@
 
             //获得配置的按钮.
             var fb=new Entity("BP.WF.CCBill.FrmBill", frmID);
+
+            if (fb.BtnNewLable=="") fb.BtnNewLable="新建";
+            if (fb.BtnDelLable=="") fb.BtnDelLable="删除";
+            if (fb.BtnImpExcel=="") fb.BtnImpExcel="导入";
+            if (fb.BtnExpExcel=="") fb.BtnExpExcel="导出";
+            if (fb.BtnGroupLabel=="") fb.BtnGroupLabel="分析";
              
             //权限判断按钮.
             if (fb.BtnNewEnable==1)
             html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_New" onclick="New()">'+fb.BtnNewLable+'</a>';
 
             if (fb.BtnDelEnable==1)
-            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Del" onclick="Delete()">'+fb.BtnDelLable+'</a>';
+            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Del" onclick="javascript:Delete();">'+fb.BtnDelLable+'</a>';
 
             if (fb.BtnImpExcelEnable==1)
             html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Imp" onclick="Imp()">'+fb.BtnImpExcel+'</a> ';
@@ -444,7 +454,7 @@
                         fixed: false,
                         formatter: function (value, row, index) {
                             var icon = GenerICON(false, row.BillState);
-                            return "<a href=\"javascript:OpenIt('" + row.BillState + "','" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "')\"><img src=" + icon + " border=0 width='18px;' >" +value + "</a>";
+                            return "<a href=\"javascript:OpenIt('" + row.BillState + "','" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "')\"><img src=" + icon + " border=0 width='14px;' >" +value + "</a>";
                         }
                     });
                     continue;
@@ -672,16 +682,16 @@
         function GenerICON(isCanDo, BillState) {
 
             if (BillState == 3)
-                icon = "../Img/BillState/Complete.png";  //已经完成.
+                icon = "./Img/BillState/Complete.png";  //已经完成.
             else if (BillState == 2)
-                icon = "../Img/BillState/Runing.png"; //运行中. 
+                icon = "./Img/BillState/Runing.png"; //运行中. 
             else if (BillState == 5)
-                icon = "../Img/BillState/ReturnSta.png"; //退回.
+                icon = "./Img/BillState/ReturnSta.png"; //退回.
             else
-                icon = "../Img/BillState/Etc.png"; //其他.
+                icon = "./Img/BillState/Etc.png"; //其他.
 
             if (isCanDo == true && BillState != 3)
-                icon = "../Img/BillState/Todo.png"; //其他.
+                icon = "./Img/BillState/Todo.png"; //其他.
 
             return icon;
         }
@@ -767,7 +777,7 @@
                 htmlboxs += "<tr>";
                 htmlboxs += "<td class=Idx>" + (index + 1) + "</td>";
 
-                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.BillState + "','" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
+                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.BillSta + "','" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
                 htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
                 htmlboxs += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
                 htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";

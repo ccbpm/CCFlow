@@ -2,12 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>方法内容编辑</title>
+    <link rel="stylesheet" href="../../Scripts/codemirror/doc/docs.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/eclipse.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/elegant.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/erlang-dark.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/idea.css" />
+    <script src="../../Scripts/codemirror/lib/codemirror.js" type="text/javascript"></script>
+    <script src="../../Scripts/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
+    <script src="../../Scripts/codemirror/addon/selection/active-line.js" type="text/javascript"></script>
+    <script src="../../Scripts/codemirror/addon/edit/matchbrackets.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script src="../../Scripts/PinYin.js" type="text/javascript"> </script>
     <base target="_self" />
     <script type="text/javascript">
         function Esc() {
@@ -15,48 +24,48 @@
                 window.close();
             return true;
         }
-    </script>
-    <script type="text/javascript" language="javascript">
+
+        function selectTheme() {
+            var theme = input.options[input.selectedIndex].textContent;
+            editor.setOption("theme", theme);
+            location.hash = "#" + theme;
+        }
+
         //页面启动函数.
         $(function () {
 
-            var myPK = GetQueryString("MyPK");
+            var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {
+                lineNumbers: true,
+                styleActiveLine: true,
+                matchBrackets: true,
+                theme: "erlang-dark"
+            });
 
-            var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
+            var input = document.getElementById("select");
 
-            var html = "";
-            html += "<br><b>/* 执行SQL就是可以执行多个SQL脚本, */ </b>";
-            html += "<br><b>/* 1.多个SQL脚本可以以 ; 分割.  */ </b>";
-            html += "<br><b>/* 2.注释可以以 斜线* 我的注释内容表达 *斜线 体现.   */ </b>";
-            html += "<br><b>/* 3.内容支持ccbpm表达式,比如:全局变量的@WebUser.No, @WebUser.Name, @WebUser.FK_Dept .   */ </b>";
-            html += "<br><b>/* 4.如果要获取本表单主表的数据就可以使用 @字段名. 比如: UPDATE XXX SET AA='BB' WHERE OID=@OID  */ </b>";
-            html += "<br><b>/* 5.如果要执行存储过程，请使用 EXEC YouProName @Field1, @Field2  */ </b>";
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MethodDocDemoSQL_Init");
 
-            html += "<br><b>/* 5.1  EXEC dbo.uspGetEmployeeManagers @BusinessEntityID = 50;   */ </b>";
-            html += "<br><b>/* 5.2  EXEC AdventureWorks2012.dbo.uspGetEmployeeManagers 50;   */ </b>";
-
-
-            html += "<br>";
-            html += "<br>UPATE " + en.FrmID + " SET StudentState=0  WHERE OID=@OID ;";
-            html += "<br>UPATE " + en.FrmID + " SET Title=@Title  WHERE OID=@OID ;";
-
-            html += "<br>";
-            html += "<br>";
-
-            $("#doc").html(html);
+            editor.setValue(data);
 
         });
     </script>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
-    <table id="Table1" style="width: 100%">
+    <table id="Table1" style="width: 100%; height: 100%;">
         <caption>
-            方法内容编辑 demo - 你可以把这些内容copy到编辑器里面去.
+            方法内容编辑 demo - 你可以把这些内容copy到编辑器里面去. 更换主题：
+            <select onchange="selectTheme()" id="select">
+                <option selected="selected">eclipse</option>
+                <option>elegant</option>
+                <option>erlang-dark</option>
+                <option>idea</option>
+            </select>
         </caption>
         <tr>
-            <td>
-                <div id="doc">
-                </div>
+            <td valign="top">
+                <textarea id="tb_doc" style="width: 100%; height: 100%;" rows="60"></textarea>
             </td>
         </tr>
     </table>

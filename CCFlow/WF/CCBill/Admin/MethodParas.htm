@@ -242,12 +242,16 @@
             en.Delete();
             window.location.href = window.location.href;
         }
+        function ToMethodDoc() {
+            window.location.href = "MethodDoc.htm?MyPK=" + GetQueryString("MyPK");
+        }
     </script>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <table id="Table1" style="width: 100%">
         <caption>
-            执行方法的参数
+                       <a href="javascript:ToMethodDoc()">  定义方法执行内容</a> - 定义执行方法的参数
+
         </caption>
         <tr>
             <th>

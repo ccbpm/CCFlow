@@ -9,23 +9,14 @@
     <link rel="stylesheet" href="../../Scripts/codemirror/theme/erlang-dark.css" />
     <link rel="stylesheet" href="../../Scripts/codemirror/theme/idea.css" />
     <script src="../../Scripts/codemirror/lib/codemirror.js"></script>
-    <script src="../../Scripts/codemirror/mode/javascript/javascript.js"></script>
-    <script src="../../Scripts/codemirror/addon/selection/active-line.js"></script>
-    <script src="../../Scripts/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../Scripts/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
+    <script src="../../Scripts/codemirror/addon/selection/active-line.js" type="text/javascript"></script>
+    <script src="../../Scripts/codemirror/addon/edit/matchbrackets.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery.base64.zhCN.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script src="../../Scripts/PinYin.js" type="text/javascript"> </script>
-    <style>
-        .CodeMirror
-        {
-            border: 1px solid black;
-            font-size: 13px;
-        }
-    </style>
     <base target="_self" />
     <script type="text/javascript">
 
@@ -34,6 +25,20 @@
                 window.close();
             return true;
         }
+
+        window.addEventListener("keydown", function (e) {
+            //可以判断是不是mac，如果是mac,ctrl变为花键
+            //event.preventDefault() 方法阻止元素发生默认的行为。
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                e.preventDefault();
+                Save();
+
+                // Process event...
+                //document.getElementById("test").innerHTML = "ctrl+s成功";
+            }
+        }, false);
+
+
         //页面启动函数.
         var en = null;
         var docsLast = null; //最后的code内容，用于判断是否发生了变化？
@@ -52,6 +57,29 @@
 
             //设置内容.
             FullDoc();
+
+            //生成参数内容.
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
+            var html = "<font color=yellow ><b>//自定义方法名:" + en.MethodName + ",共有:" + attrs.length+"参数;&nbsp;";
+            
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                html += "" + attr.Name + "," + attr.KeyOfEn + ";&nbsp;";
+            }
+
+            html += "</b></font>";
+
+            html += "<br><font color=yellow ><b> function </b></font> <font color=red ><b>" + en.MethodID + "</b></font> <font color=yellow ><b>(</b></font>";
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                if (i == attrs.length - 1)
+                    html += "<font color=red><b>&nbsp;" + attr.KeyOfEn + "</b></font>";
+                else
+                    html += "<font color=red><b>&nbsp;" + attr.KeyOfEn + "</b></font><font color=yellow ><b>,</b></font>";
+            }
+
+            html += "<font color=yellow ><b>)</b></font>&nbsp;<font color=yellow font-size='12px'><b>{</b></font>";
+            $("#paras").html(html);
 
         });
 
@@ -72,17 +100,15 @@
             }
 
             //设置当前的状态.
-            currFuncType = funcType; 
+            currFuncType = funcType;
 
             //根据选择获取变化内容.
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill_Admin");
             handler.AddPara("TypeOfFunc", funcType);
             handler.AddPara("MyPK", en.MyPK);
             var data = handler.DoMethodReturnString("MethodDoc_GetScript");
-
             editor.setValue(data);
-
-            docsLast = data;
+            docsLast = data; //记录最后的值，用于判断是否更改.
         }
 
         function DemoSQL() {
@@ -107,9 +133,11 @@
 
             var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
 
-            docsLast = editor.getValue();
+            docsLast = editor.getValue(); //记录最后的值，用于判断是否更改.
             alert(data);
-
+        }
+        function ToMethodParas() {
+            window.location.href = "MethodParas.htm?MyPK=" + GetQueryString("MyPK");
         }
     </script>
 </head>
@@ -117,10 +145,10 @@
     <form id="cc">
     <table id="Table1" style="width: 100%">
         <caption>
-            方法执行内容编辑器
+             定义方法执行内容 - <a href="javascript:ToMethodParas()">定义执行方法的参数</a>
         </caption>
         <tr>
-            <th>
+            <td>
                 方法类型:
                 <label>
                     <input type="radio" value="0" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_0"
@@ -135,28 +163,46 @@
                         onclick="FullDoc();">URL模式
                 </label>
                 <input type="button" value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
-                <input type="button" value="内容编辑Demo for Javascript" onclick="DemoJS()" id="Button1"
+                <input type="button" value="内容编辑demo for javascript" onclick="DemoJS()" id="Button1"
                     name="Btn_D1" />
-                <input type="button" value="内容编辑Demo for SQL" onclick="DemoSQL()" id="Button2" name="Btn_D2" />
+                <input type="button" value="内容编辑demo for SQL" onclick="DemoSQL()" id="Button2" name="Btn_D2" />
                 更换主题：
                 <select onchange="selectTheme()" id="select">
-                    <option selected="selected">eclipse</option>
+                    <option>eclipse</option>
                     <option>elegant</option>
-                    <option>erlang-dark</option>
+                    <option selected="selected">erlang-dark</option>
                     <option>idea</option>
                 </select>
             </th>
         </tr>
+        <tr>
+            <td style="background-color: Background">
+                <div id="paras">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="margin: 0px;">
+                <textarea id="tb_doc" style="width: 100%; height: 100%;" rows="100"> </textarea>
+            </td>
+        </tr>
+        <tr style="background-color: Background">
+            <td style="margin: 0px;">
+                <font color="yellow" font-size='12px'><b>}</b></font> <font color=yellow ><b>//您需要把方法写入编辑器里.
+                你可以使用jQuery，使用Gener.js里面的实体类，进行数据的增删改查.
+                </b></font>
+            </td>
+        </tr>
     </table>
-    <textarea id="tb_doc" onkeypress="DocChange();" onkeydown="DocChange();"> </textarea>
     <script type="text/javascript">
 
         var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {
             lineNumbers: true,
             styleActiveLine: true,
             matchBrackets: true,
-            theme: "eclipse"
+            theme: "erlang-dark"
         });
+
 
         var input = document.getElementById("select");
         function selectTheme() {

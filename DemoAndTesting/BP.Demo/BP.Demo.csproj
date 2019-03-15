@@ -62,7 +62,6 @@
     <Compile Include="Demo\FlowEvent\FEETemplete.cs" />
     <Compile Include="Demo\FlowEvent\NE101.cs" />
     <Compile Include="Demo\Emp.cs" />
-    <Compile Include="Demo\AnQuanItem.cs" />
     <Compile Include="Demo\FlowEvent\F189.cs" />
     <Compile Include="Demo\FormEventDtl\Demo_TastCaseEventFrmDtl2.cs">
       <SubType>Code</SubType>

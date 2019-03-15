@@ -2,12 +2,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>方法内容编辑</title>
+
+    <link rel=stylesheet href="../../Scripts/codemirror/doc/docs.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/eclipse.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/elegant.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/erlang-dark.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/theme/idea.css" />
+    <script src="../../Scripts/codemirror/lib/codemirror.js"></script>
+    <script src="../../Scripts/codemirror/mode/javascript/javascript.js"></script>
+    <script src="../../Scripts/codemirror/addon/selection/active-line.js"></script>
+    <script src="../../Scripts/codemirror/addon/edit/matchbrackets.js"></script>
+
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery.base64.zhCN.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../../Scripts/PinYin.js" type="text/javascript"> </script>
+
+    <style>
+        .CodeMirror {
+            border: 1px solid black;
+            font-size: 13px;
+        }
+    </style>
     <base target="_self" />
     <script type="text/javascript">
         function Esc() {
@@ -15,15 +35,19 @@
                 window.close();
             return true;
         }
+
     </script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
+            $.base64.utf8encode = true;
+
             var myPK = GetQueryString("MyPK");
             var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
             $("#MType").val(en.MethodDocTypeOfFunc); //设置执行内容类型.
-            $("#tb_doc").val(en.MethodDoc); //设置执行内容.
+            console.info("en.MethodDoc:" + en.MethodDoc);
+            editor.setValue($.base64.decode(en.MethodDoc));
 
         });
 
@@ -35,14 +59,15 @@
             var url = "MethodDocDemoJS.htm?MyPK=" + GetQueryString("MyPK");
             WinOpen(url);
         }
+
         function Save() {
-
-            var myPK = GetQueryString("MyPK");
-            var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
-
-           en.MethodDocTypeOfFunc =  $("#MType").val(); //设置执行内容类型.
-           en.MethodDoc = $("#tb_doc").val(); //设置执行内容.
+           var myPK = GetQueryString("MyPK");
+           var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
+           en.MethodDocTypeOfFunc = $("#MType").val(); //设置执行内容类型.
+           en.MethodDoc = $.base64.encode(editor.getValue());
            en.Update();
+
+           alert("保存成功!");
 
         }
     </script>
@@ -58,16 +83,49 @@
           <input type="button"  value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
           <input type="button"  value="内容编辑Demo for Javascript" onclick="DemoJS()" id="Button1" name="Btn_D1" />
           <input type="button"  value="内容编辑Demo for SQL" onclick="DemoSQL()" id="Button2" name="Btn_D2" />
-
+            更换主题：
+            <select onchange="selectTheme()" id="select">
+                <option selected="selected">eclipse</option>
+                <option>elegant</option>
+                <option>erlang-dark</option>
+                <option>idea</option>
+            </select>
           </th>
         </tr>
     </table>
 
-    <textarea id="tb_doc" style=" width:100%; height:100%;"   rows="90" >
+    <textarea id="tb_doc">
     
     </textarea>
 
 
-   
+    <script>
+
+      var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+        theme:"eclipse"
+      });
+      var input = document.getElementById("select");
+      function selectTheme() {
+        var theme = input.options[input.selectedIndex].textContent;
+        editor.setOption("theme", theme);
+        location.hash = "#" + theme;
+      }
+
+        /*
+      var choice = (location.hash && location.hash.slice(1)) ||
+                   (document.location.search &&
+                    decodeURIComponent(document.location.search.slice(1)));
+      if (choice) {
+        input.value = choice;
+        editor.setOption("theme", choice);
+      }
+      CodeMirror.on(window, "hashchange", function() {
+        var theme = location.hash.slice(1);
+        if (theme) { input.value = theme; selectTheme(); }
+      });*/
+    </script>
 </body>
 </html>

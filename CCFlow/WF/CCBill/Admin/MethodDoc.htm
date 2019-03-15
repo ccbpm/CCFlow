@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>方法内容编辑</title>
-
-    <link rel=stylesheet href="../../Scripts/codemirror/doc/docs.css" />
+    <link rel="stylesheet" href="../../Scripts/codemirror/doc/docs.css" />
     <link rel="stylesheet" href="../../Scripts/codemirror/lib/codemirror.css" />
     <link rel="stylesheet" href="../../Scripts/codemirror/theme/eclipse.css" />
     <link rel="stylesheet" href="../../Scripts/codemirror/theme/elegant.css" />
@@ -13,7 +12,6 @@
     <script src="../../Scripts/codemirror/mode/javascript/javascript.js"></script>
     <script src="../../Scripts/codemirror/addon/selection/active-line.js"></script>
     <script src="../../Scripts/codemirror/addon/edit/matchbrackets.js"></script>
-
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -21,35 +19,71 @@
     <script type="text/javascript" src="../../Scripts/jquery.base64.zhCN.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../../Scripts/PinYin.js" type="text/javascript"> </script>
-
     <style>
-        .CodeMirror {
+        .CodeMirror
+        {
             border: 1px solid black;
             font-size: 13px;
         }
     </style>
     <base target="_self" />
     <script type="text/javascript">
+
         function Esc() {
             if (event.keyCode == 27)
                 window.close();
             return true;
         }
-
-    </script>
-    <script type="text/javascript" language="javascript">
         //页面启动函数.
+        var en = null;
+        var docsLast = null; //最后的code内容，用于判断是否发生了变化？
+        var currFuncType = 0;
         $(function () {
 
-            $.base64.utf8encode = true;
+            //$.base64.utf8encode = true;
 
             var myPK = GetQueryString("MyPK");
-            var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
-            $("#MType").val(en.MethodDocTypeOfFunc); //设置执行内容类型.
-            console.info("en.MethodDoc:" + en.MethodDoc);
-            editor.setValue($.base64.decode(en.MethodDoc));
+            en = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
+
+            //给控件赋值.
+            GenerFullAllCtrlsVal(en);
+
+            currFuncType = en.MethodDocTypeOfFunc;
+
+            //设置内容.
+            FullDoc();
 
         });
+
+        function FullDoc() {
+
+            var funcType = $('input[name="RB_MethodDocTypeOfFunc"]:checked').val();
+            en.MethodDocTypeOfFunc = funcType;
+
+            var txt = editor.getValue();
+            if (docsLast != null && docsLast != txt) {
+                if (window.confirm('您需要保存吗？') == true) {
+
+                    //返回上一次的设置.
+                    document.getElementById("RB_MethodDocTypeOfFunc_" + currFuncType).checked = true;
+                    Save(); //执行保存.
+                    document.getElementById("RB_MethodDocTypeOfFunc_" + funcType).checked = true;
+                }
+            }
+
+            //设置当前的状态.
+            currFuncType = funcType; 
+
+            //根据选择获取变化内容.
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill_Admin");
+            handler.AddPara("TypeOfFunc", funcType);
+            handler.AddPara("MyPK", en.MyPK);
+            var data = handler.DoMethodReturnString("MethodDoc_GetScript");
+
+            editor.setValue(data);
+
+            docsLast = data;
+        }
 
         function DemoSQL() {
             var url = "MethodDocDemoSQL.htm?MyPK=" + GetQueryString("MyPK");
@@ -61,71 +95,89 @@
         }
 
         function Save() {
-           var myPK = GetQueryString("MyPK");
-           var en = new Entity("BP.WF.CCBill.FrmMethod", myPK);
-           en.MethodDocTypeOfFunc = $("#MType").val(); //设置执行内容类型.
-           en.MethodDoc = $.base64.encode(editor.getValue());
-           en.Update();
 
-           alert("保存成功!");
+            //执行选择类型的保存.
+            var selectFuncType = $('input[name="RB_MethodDocTypeOfFunc"]:checked').val();
+
+            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill_Admin");
+            handler.AddUrlData();
+
+            handler.AddPara("doc", editor.getValue()); //不知道是否可以存储.
+            handler.AddPara("TypeOfFunc", selectFuncType);
+
+            var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
+
+            docsLast = editor.getValue();
+            alert(data);
 
         }
     </script>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
+    <form id="cc">
     <table id="Table1" style="width: 100%">
-        <caption> 方法执行内容编辑器 </caption>
+        <caption>
+            方法执行内容编辑器
+        </caption>
         <tr>
-        <th> 方法类型: <label ><input type="radio" value="0"  name="MType" >SQL </label>
-        
-          <label ><input type="radio" value="1"  name="MType" >javascript </label>  
-          <label ><input type="radio" value="2"  name="MType"  >URL模式 </label>  
-          <input type="button"  value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
-          <input type="button"  value="内容编辑Demo for Javascript" onclick="DemoJS()" id="Button1" name="Btn_D1" />
-          <input type="button"  value="内容编辑Demo for SQL" onclick="DemoSQL()" id="Button2" name="Btn_D2" />
-            更换主题：
-            <select onchange="selectTheme()" id="select">
-                <option selected="selected">eclipse</option>
-                <option>elegant</option>
-                <option>erlang-dark</option>
-                <option>idea</option>
-            </select>
-          </th>
+            <th>
+                方法类型:
+                <label>
+                    <input type="radio" value="0" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_0"
+                        onclick="FullDoc();">SQL
+                </label>
+                <label>
+                    <input type="radio" value="1" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_1"
+                        onclick="FullDoc();">javascript
+                </label>
+                <label>
+                    <input type="radio" value="2" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_2"
+                        onclick="FullDoc();">URL模式
+                </label>
+                <input type="button" value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
+                <input type="button" value="内容编辑Demo for Javascript" onclick="DemoJS()" id="Button1"
+                    name="Btn_D1" />
+                <input type="button" value="内容编辑Demo for SQL" onclick="DemoSQL()" id="Button2" name="Btn_D2" />
+                更换主题：
+                <select onchange="selectTheme()" id="select">
+                    <option selected="selected">eclipse</option>
+                    <option>elegant</option>
+                    <option>erlang-dark</option>
+                    <option>idea</option>
+                </select>
+            </th>
         </tr>
     </table>
+    <textarea id="tb_doc" onkeypress="DocChange();" onkeydown="DocChange();"> </textarea>
+    <script type="text/javascript">
 
-    <textarea id="tb_doc">
-    
-    </textarea>
+        var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {
+            lineNumbers: true,
+            styleActiveLine: true,
+            matchBrackets: true,
+            theme: "eclipse"
+        });
 
-
-    <script>
-
-      var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {
-        lineNumbers: true,
-        styleActiveLine: true,
-        matchBrackets: true,
-        theme:"eclipse"
-      });
-      var input = document.getElementById("select");
-      function selectTheme() {
-        var theme = input.options[input.selectedIndex].textContent;
-        editor.setOption("theme", theme);
-        location.hash = "#" + theme;
-      }
+        var input = document.getElementById("select");
+        function selectTheme() {
+            var theme = input.options[input.selectedIndex].textContent;
+            editor.setOption("theme", theme);
+            location.hash = "#" + theme;
+        }
 
         /*
-      var choice = (location.hash && location.hash.slice(1)) ||
-                   (document.location.search &&
-                    decodeURIComponent(document.location.search.slice(1)));
-      if (choice) {
+        var choice = (location.hash && location.hash.slice(1)) ||
+        (document.location.search &&
+        decodeURIComponent(document.location.search.slice(1)));
+        if (choice) {
         input.value = choice;
         editor.setOption("theme", choice);
-      }
-      CodeMirror.on(window, "hashchange", function() {
+        }
+        CodeMirror.on(window, "hashchange", function() {
         var theme = location.hash.slice(1);
         if (theme) { input.value = theme; selectTheme(); }
-      });*/
+        });*/
     </script>
+    </form>
 </body>
 </html>

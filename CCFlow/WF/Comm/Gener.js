@@ -788,7 +788,7 @@ var Entity = (function () {
 
             if (typeof self[n] !== "function" && (self[n] != o || true)) {
 
-                if (self[n] !=undefined && self[n].toString().indexOf('<script') != -1)
+                if (self[n] != undefined && self[n].toString().indexOf('<script') != -1)
                     params.push(n + "=aa");
                 else
                     params.push(n + "=" + self[n]);
@@ -1347,6 +1347,7 @@ var Entity = (function () {
                         // ?
                     }
                 } else if (name.match(/^RB_/)) {
+
                     if (target.is(":checked")) {
                         // 已选
                         self[key] = "1";

@@ -1534,12 +1534,6 @@ function GenerWorkNode() {
 
     Common.MaxLengthError();
 
-
-
-
-
-
-
     var marginLeft = $('#topContentDiv').css('margin-left');
     marginLeft = marginLeft.replace('px', '');
 

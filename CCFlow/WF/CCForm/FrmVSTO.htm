@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>数据字典表</title>
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../Scripts/config.js" type="text/javascript"></script>
-    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../Scripts/CreateControl.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <base target="_self" />
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript">
@@ -20,11 +17,6 @@
         $(function () {
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
-            //http://localhost:12999/WF/CCForm/FrmVSTO.htm?1=1&DoType=Frm_Init&FK_MapData=
-            //CY_6502&IsEdit=1&IsPrint=0&WorkID=4647&FK_Flow=002&FK_Node=201&NodeID=null
-            //&UserNo=anjian&FID=0&SID=onocvxh1y2xw4o4jm5pfhwhi&PWorkID=4630&PFlowNo=001
-            //&IsLoadData=null&IsReadonly=0&Frms=CY_6502&T=0.8691371113689897&Paras=1&LastTruckID=690795602&e1m=0.23865691578947568
 
             var url = "excelform://-fromccflow,App=FrmExcel";
             url += ",FK_MapData=" + GetQueryString("FK_MapData");
@@ -49,20 +41,15 @@
             var wsUrl = "http://" + location.hostname + ":" + location.port + "/WF/CCForm/CCFormAPI.asmx";
             url += ",WSUrl=" + wsUrl;
 
-            //            WinOpen(url);
-            //            //window.location.href = url;
-            //            return;
-
             //WinOpen(url);
             //   excelform: //-fromccflow,App=FrmExcel,DoType=HttpHandler,DoMethod=FrmVSTO_Init,HttpHandlerName=BP.WF.HttpHandler
             //.WF_CCForm,t=0.19633340549996892,SID=onocvxh1y2xw4o4jm5pfhwhi,UserNo=admin,IsAutoTesting=0,
             //  WSUrl=http://localhost:12999/WF/CCForm/CCFormAPI.asmx
+            // var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            // handler.AddUrlData();
+            // var data = handler.DoMethodReturnJSON("FrmVSTO_Init");
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnJSON("FrmVSTO_Init");
-
-            var html1 = "<a href='" + data.UrlOfVSTO + "'>打开VSTO版本excel模式的表单</a>";
+            var html1 = "<a href='" + url + "'>打开VSTO版本excel模式的表单</a>";
             $("#UrlOfVSTO").html(html1); //打开Excel表单.
 
             var html1 = "<a href='" + data.UrlOfFrm + "'>打开自由表单</a>";
@@ -82,10 +69,10 @@
                 <div id="UrlOfVSTO">
                 </div>
             </li>
-            <li>
+           <!-- <li>
                 <div id="UrlOfFrm">
                 </div>
-            </li>
+            </li>-->
         </ul>
     </fieldset>
     <fieldset>

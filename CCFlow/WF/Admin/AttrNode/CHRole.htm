@@ -42,15 +42,44 @@
                 $("#TBPara_TimeLimitMM").val(0);
 
         });
+
+        function Save() {
+
+            var nodeID = GetQueryString("FK_Node");
+
+            //执行查询.
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.CopyForm(); //复制表单数据.
+
+            //考核方式.
+            var chWay = 0;
+            if (document.getElementById("RB_CHWay_1").checked)
+                chWay = 1;
+            if (document.getElementById("RB_CHWay_2").checked)
+                chWay = 2;
+            node.CHWay = chWay;
+
+            //节假日计算方式.
+            node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
+
+            //是否是时效考核.
+            if (document.getElementById("CB_IsEval").checked == true)
+                node.IsEval = 1;
+            else
+                node.IsEval = 0;
+
+            node.Update();
+
+            window.location.href = window.location.href;
+            return;
+        }
     </script>
 </head>
 <body>
 
 <form id="cc">
-
 <table style="width:100%;">
  <caption>设置考核规则</caption>
-
 <tr>
 <td> 
 <fieldset>
@@ -78,10 +107,8 @@
 <td style=" color:Gray">天数</td>
 </tr>
 -->
-
 <tr>
 <td>节假日</td>
-
 <td> 
 <select name="DDL_TWay" id="DDL_TWay" > </select> 
     </td>
@@ -91,9 +118,6 @@
 
 </td>
 </tr>
-
-
-
 <tr>
 
 <td colspan="4"  >
@@ -141,41 +165,7 @@
  
 </tr>
 </table>
-
-<script type="text/javascript">
-
-    function Save() {
-
-        var nodeID = GetQueryString("FK_Node");
-
-        //执行查询.
-        var node = new Entity("BP.WF.Node", nodeID);
-        node.CopyForm(); //复制表单数据.
-
-        //考核方式.
-        var chWay = 0;
-        if (document.getElementById("RB_CHWay_1").checked)
-            chWay = 1;
-        if (document.getElementById("RB_CHWay_2").checked)
-            chWay = 2;
-        node.CHWay = chWay;
-
-        //节假日计算方式.
-        node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
-
-        //是否是时效考核.
-        if (document.getElementById("CB_IsEval").checked == true)
-            node.IsEval = 1;
-        else
-            node.IsEval = 0;
-
-        node.Update();
-
-        window.location.href = window.location.href;
-        return;
-    }
-</script>
-
+ 
 </form>
 
 </body>

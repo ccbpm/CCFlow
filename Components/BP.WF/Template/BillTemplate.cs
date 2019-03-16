@@ -251,7 +251,7 @@ namespace BP.WF.Template
         {
             byte[] bytes = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, "DBFile");
             if (bytes != null)
-                return null;
+                return bytes;
 
             //如果没有找到，就看看默认的文件是否有.
             string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\" + this.No + ".rtf";

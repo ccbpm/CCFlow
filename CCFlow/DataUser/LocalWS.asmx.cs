@@ -44,7 +44,18 @@ namespace CCFlow.DataUser
         public string SendWork(string flowNo, Int64 workid, Hashtable ht, int toNodeID, string toEmps)
         {
             BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ht, toNodeID, toEmps);
-            return objs.ToMsgOfText();
+
+            string msg = objs.ToMsgOfText();
+
+            Hashtable myht = new Hashtable();
+            myht.Add("Message", msg);
+            myht.Add("IsStopFlow", objs.IsStopFlow);
+            myht.Add("VarAcceptersID",objs.VarAcceptersID);
+            myht.Add("VarAcceptersName",objs.VarAcceptersName);
+            myht.Add("VarToNodeID", objs.VarToNodeID);
+            myht.Add("VarToNodeName",objs.VarToNodeName);
+
+            return BP.Tools.Json.ToJson(myht);
         }
         /// <summary>
         /// 保存参数
@@ -74,7 +85,7 @@ namespace CCFlow.DataUser
 
             //如果字段 DeliveryWay = 4 就表示到达的接点是由当前节点发送人选择接收人.
             //自定义参数的字段是 SelfParas, DeliveryWay 
-            //
+            // CondModel = 方向条件计算规则.
             return nd.ToJson();
         }
         /// <summary>
@@ -101,10 +112,45 @@ namespace CCFlow.DataUser
         [WebMethod]
         public string WillToNodes(int currNodeID)
         {
+            Node nd = new Node(currNodeID);
+            if (nd.CondModel != CondModel.SendButtonSileSelect)
+                return "err@";
+
             Directions dirs = new Directions();
             Nodes nds = dirs.GetHisToNodes(currNodeID, false);
             return nds.ToJson();
         }
+        /// <summary>
+        /// 获得当前节点信息.
+        /// </summary>
+        /// <param name="currNodeID">节点ID.</param>
+        /// <returns>当前节点信息</returns>
+        public string CurrNodeInfo(int currNodeID)
+        {
+            Node nd = new Node(currNodeID);
+            return nd.ToJson();
+        }
+        /// <summary>
+        /// 获得当前流程信息.
+        /// </summary>
+        /// <param name="flowNo">流程ID.</param>
+        /// <returns>当前节点信息</returns>
+        public string CurrFlowInfo(string flowNo)
+        {
+            Flow fl = new Flow(flowNo);
+            return fl.ToJson();
+        }
+        /// <summary>
+        /// 获得当前流程信息.
+        /// </summary>
+        /// <param name="flowNo">流程ID.</param>
+        /// <returns>当前节点信息</returns>
+        public string CurrGenerWorkFlowInfo(Int64 workID)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            return gwf.ToJson();
+        }
+
 
     }
 }

@@ -45,30 +45,18 @@ namespace BP.WF.CCBill
             gb.RDT = BP.DA.DataType.CurrentDataTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
-            gb.DirectInsert();
+            gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
 
-            //单据编号.
-            if (DataType.IsNullOrEmpty(gb.BillNo) == true)
-            {
-                gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null,  frmID);
-
-                //更新单据里面的billNo字段.
-                if (DBAccess.IsExitsTableCol(fb.PTable, "BillNo") == true)
-                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET BillNo='" + gb.BillNo + "' WHERE OID=" + gb.WorkID);
-            }
-
-            //标题.
-            if (DataType.IsNullOrEmpty(gb.Title) == true)
-            {
-
-                //gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
-
-                //更新单据里面的 Title 字段.
-                if (DBAccess.IsExitsTableCol(fb.PTable, "Title") == true)
-                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET Title='" + gb.Title + "' WHERE OID=" + gb.WorkID);
-            }
-
+            //创建rpt.
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
+
+            //设置标题.
+            gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+            gb.DirectInsert(); //执行插入.
+
+
+            //更新基础的数据到表单表.
+            // rpt = new BP.WF.Data.GERpt(frmID);
             rpt.SetValByKey("BillState", (int)gb.BillState);
             rpt.SetValByKey("Starter", gb.Starter);
             rpt.SetValByKey("StarterName", gb.StarterName);
@@ -76,8 +64,7 @@ namespace BP.WF.CCBill
             rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", gb.BillNo);
             rpt.OID = gb.WorkID;
-            rpt.DirectInsert();
-           
+            rpt.InsertAsOID(gb.WorkID);
 
             return gb.WorkID;
         }
@@ -99,17 +86,18 @@ namespace BP.WF.CCBill
         /// <returns>返回保存结果</returns>
         public static string SaveWork(string frmID, Int64 workID)
         {
+            FrmBill fb = new FrmBill(frmID);
+
             GenerBill gb = new GenerBill(workID);
             gb.BillState = BillState.Editing;
 
+            //创建rpt.
             BP.WF.Data.GERpt rpt = new Data.GERpt(gb.FrmID, workID);
 
             //单据编号.
             if (DataType.IsNullOrEmpty(gb.BillNo) == true)
             {
-                FrmBill fb = new FrmBill(frmID);
-                gb.BillNo =  BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, workID, null, fb.PTable);
-
+                gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, workID, null, fb.PTable);
                 //更新单据里面的billNo字段.
                 if (DBAccess.IsExitsTableCol(fb.PTable, "BillNo") == true)
                     DBAccess.RunSQL("UPDATE " + fb.PTable + " SET BillNo='" + gb.BillNo + "' WHERE OID=" + workID);
@@ -118,15 +106,18 @@ namespace BP.WF.CCBill
             //标题.
             if (DataType.IsNullOrEmpty(gb.Title) == true)
             {
-                FrmBill fb = new FrmBill(frmID);
                 gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
-
                 //更新单据里面的 Title 字段.
                 if (DBAccess.IsExitsTableCol(fb.PTable, "Title") == true)
                     DBAccess.RunSQL("UPDATE " + fb.PTable + " SET Title='" + gb.Title + "' WHERE OID=" + workID);
             }
 
             gb.Update();
+
+            //把通用的字段更新到数据库.
+            rpt.Title = gb.Title;
+            rpt.BillNo = gb.BillNo;
+            rpt.Update();
 
             return "保存成功...";
         }
@@ -360,7 +351,7 @@ namespace BP.WF.CCBill
             }
 
             //数据库中查找符合的单据号集合,NOTE:此处需要注意，在LIKE中带有左广方括号时，要使用一对广播号将其转义
-            sql = "SELECT BillNo FROM WF_CCBill WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]")+"'"
+            sql = "SELECT BillNo FROM WF_CCBill WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]") + "'"
                 + " AND WorkID <> " + workid
                 + " AND FrmID ='" + frmID + "' "
                 + " ORDER BY BillNo DESC ";

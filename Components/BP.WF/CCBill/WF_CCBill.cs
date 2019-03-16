@@ -50,14 +50,7 @@ namespace BP.WF.CCBill
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-        /// <summary>
-        /// 产生一个WorkID.
-        /// </summary>
-        /// <returns></returns>
-        public string Start_GenerWorkID()
-        {
-            return BP.WF.CCBill.Dev2Interface.CreateBlankWork(this.FrmID, WebUser.No, null).ToString();
-        }
+       
         /// <summary>
         /// 草稿列表
         /// </summary>

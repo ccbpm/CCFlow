@@ -268,30 +268,26 @@ namespace BP.WF.CCBill
                 map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
                 map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
                 map.AddTBString(FrmMethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
-                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10,true);
-                map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
-                  "@0=按钮@1=超链接");
-
-                map.AddDDLSysEnum(FrmMethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, true, "MethodDocTypeOfFunc",
-               "@0=SQL@1=URL@2=JavaScript@3=业务单元");
-
-                map.AddTBString(FrmMethodAttr.MethodDoc_Url, null, "URL执行内容", true, true, 0, 300, 10);
-
-
-                map.AddTBString(FrmMethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
-                map.AddTBString(FrmMethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
 
                 map.AddDDLSysEnum(FrmMethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, FrmMethodAttr.WhatAreYouTodo,
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
 
+                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10,true);
+                map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
+                  "@0=按钮@1=超链接");
 
+                map.AddDDLSysEnum(FrmMethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, false, "MethodDocTypeOfFunc",
+               "@0=SQL@1=URL@2=JavaScript@3=业务单元");
+
+                map.AddTBString(FrmMethodAttr.MethodDoc_Url, null, "URL执行内容", false, false, 0, 300, 10);
+                map.AddTBString(FrmMethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
+                map.AddTBString(FrmMethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
 
                 #region 显示位置控制.
                 map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true,true);
                 map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
                 map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
-
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "方法参数"; // "设计表单";

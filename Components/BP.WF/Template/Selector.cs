@@ -539,14 +539,6 @@ namespace BP.WF.Template
             // 定义数据容器.
             DataSet ds = new DataSet();
 
-            ////排序.
-            //string orderByDept = "";
-            //if (DBAccess.IsExitsTableCol("Port_Dept", "Idx"))
-            //    orderByDept = " ORDER BY Port_Dept.Idx";
-
-            //string orderByEmp = "";
-            //if (DBAccess.IsExitsTableCol("Port_Emp", "Idx"))
-            //    orderByEmp = " ORDER BY Port_Emp.Idx";
 
             //部门.
             string sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a, WF_NodeEmp b, Port_Emp c WHERE b.FK_Emp=c.No AND a.No=c.FK_Dept AND B.FK_Node=" + nodeID + " ";

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 
 namespace BP.WF
@@ -583,6 +584,42 @@ namespace BP.WF
             }
             msg.Replace("@@", "@");
             return msg;
+        }
+        public string ToJson()
+        {
+            if (this.OutMessageText != null)
+                return this.OutMessageText;
+
+            string msg = "";
+            foreach (SendReturnObj item in this)
+            {
+                if (item.HisSendReturnMsgType == SendReturnMsgType.SystemMsg)
+                    continue;
+
+                //特殊判断.
+                if (item.MsgFlag == SendReturnMsgFlag.IsStopFlow)
+                {
+                    msg += "@" + item.MsgOfHtml;
+                    continue;
+                }
+
+
+                if (item.MsgOfText != null)
+                {
+                    if (item.MsgOfText.Contains("<"))
+                    {
+#warning 不应该出现.
+                        //  BP.DA.Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
+                        continue;
+                    }
+                    msg += "@" + item.MsgOfText;
+                    continue;
+                }
+
+            }
+            msg.Replace("@@", "@");
+            return msg;
+             
         }
         /// <summary>
         /// 转化成html方式的消息，以方便html的信息输出.

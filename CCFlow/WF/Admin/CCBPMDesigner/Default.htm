@@ -620,9 +620,9 @@
             if (currSort && currSort.attributes["ISPARENT"] != 0) { //edit by qin 2016/2/16
                 currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
             }
+
             var dgId = "iframDg";
             var url = "NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
-
             OpenEasyUiDialog(url, dgId, '新建流程', 650, 350, 'icon-new', true, function () {
 
                 var win = document.getElementById(dgId).contentWindow;
@@ -796,7 +796,12 @@
                 currSortId = $('#flowTree').tree('getSelected').id;
             }
             var dgId = "iframDgView";
-            var url = "viewFlowShort.htm?sort=" + currSortId + "&s=" + Math.random();
+
+            currSortId = currSortId.replace(/'F'/, '');
+            currSortId = currSortId.replace("F", "");
+
+            //  var url = "viewFlowShort.htm?sort=" + currSortId + "&s=" + Math.random();
+            var url = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FlowSort&No=" + currSortId + "&s=" + Math.random();
             OpenEasyUiDialog(url, dgId, '流程树节点属性', 420, 300, 'icon-flow', false, function () {
 
                 var win = document.getElementById(dgId).contentWindow;
@@ -1758,7 +1763,7 @@
         <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">
             刷新</div>
         <div onclick="viewFlowSort()" data-options="iconCls:'icon-config'">
-            查看属性</div>
+            树节点属性</div>
     </div>
     <div id="mFlow" class="easyui-menu" style="width: 120px;">
         <div onclick="showFlow()" data-options="iconCls:'icon-design'">

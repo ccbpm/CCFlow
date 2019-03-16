@@ -270,8 +270,14 @@
             if (currSort && currSort.attributes["ISPARENT"] != 0) {
                 currSortId = $('#flowTree').tree('getSelected').id;
             }
+
+            currSortId = currSortId.replace(/'F'/, '');
+            currSortId = currSortId.replace("F", "");
+
             var dgId = "iframDgView";
-            var url = "viewFlowShort.htm?sort=" + currSortId + "&s=" + Math.random();
+          //  var url = "viewFlowShort.htm?sort=" + currSortId + "&s=" + Math.random();
+            var url = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FlowSort&No=" + currSortId + "&s=" + Math.random();
+
             OpenEasyUiDialog(url, dgId, '流程树节点属性', 420, 300, 'icon-flow', false, function () {
 
                 var win = document.getElementById(dgId).contentWindow;

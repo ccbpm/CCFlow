@@ -33,11 +33,10 @@
 
             //要执行script.  wangyanyan完成.
             if (func.MethodDocTypeOfFunc == 1) {
-                var script = func.MethodDoc;
+                var script = func.DoMethodReturnString("Gener_MethodDoc_JavaScript");
 
                 //获得单据的数据.
-                var geEn = new Entity(func.FrmID, workID);
-
+                // var geEn = new Entity(func.FrmID, workID);
                 //替换script的变量.
 
                 //执行这个script.
@@ -51,7 +50,7 @@
                     return;
                 }
 
-                //提示信息。
+                //提示信息.
                 return;
             }
 

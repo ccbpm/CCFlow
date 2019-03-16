@@ -53,7 +53,7 @@
             var doc = func.MethodDoc;
 
             //如果是执行的SQL . 
-            if (doc.MethodDocTypeOfFunc == 0) {
+            if (func.MethodDocTypeOfFunc == 0) {
                 var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
                 handler.AddUrlData();
                 handler.AddFormData();
@@ -62,6 +62,62 @@
                 window.close();
                 return;
             }
+
+            //执行Script.
+            if (func.MethodDocTypeOfFunc == 1) {
+
+
+                var scriptFunc = func.DoMethodReturnString("Gener_MethodDoc_JavaScript_function");
+
+                //生成参数.
+                var paras = "";
+                for (var i = 0; i < attrs.length; i++) {
+                    var attr = attrs[i];
+
+                    var val = "";
+                    if (attr.UIContralType == 0)
+                        val = $("#TB_" + attr.KeyOfEn).val();
+
+                    if (attr.UIContralType == 1)
+                        val = $("#DDL_" + attr.KeyOfEn).val();
+
+                    if (attr.UIContralType == 2)
+                        val = $("#CB_" + attr.KeyOfEn).val();
+
+                    if (i == attrs.length)
+                        paras += "'" + val + "'";
+                    else
+                        paras += "'" + val + "',";
+                }
+
+                //执行的方法.
+                var scriptDo = " " + func.MethodID + "(" + paras + ");";
+                alert(scriptDo);
+
+                //执行这个script.
+                try {
+
+                    eval(scriptFucn + scriptDo);
+
+                } catch (e) {
+                    alert(e);
+                    window.close();
+                    return;
+                }
+
+
+
+                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+                handler.AddUrlData();
+                handler.AddFormData();
+                var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
+                alert(data);
+                window.close();
+
+                return;
+            }
+
+
         }
 
 

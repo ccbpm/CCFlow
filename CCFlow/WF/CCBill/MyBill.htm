@@ -162,22 +162,17 @@
             }
 
             if (isHaveAttr == true) {
-                var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID");
+                var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
                 WinOpen(url);
                 return;
             }
-
-//            alert(attrs.length);
-//            if (attrs.length == 0) {
-//                alert('无参数');
-//            }
 
             if (msg != '' && msg.length > 5 ) {
                 if (window.confirm(msg) == false)
                     return;
             }
 
-            var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID");
+            var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
             WinOpen(url);
         }
         //保存为草稿.

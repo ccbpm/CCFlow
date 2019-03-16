@@ -17,6 +17,10 @@ namespace BP.WF.Template
         /// 组织编号
         /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 域/系统编号
+        /// </summary>
+        public const string Domain = "Domain";
     }
     /// <summary>
     ///  流程类别
@@ -40,7 +44,6 @@ namespace BP.WF.Template
         }
         #endregion 属性.
 
-
         #region 构造方法
         /// <summary>
         /// 流程类别
@@ -53,6 +56,17 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="_No"></param>
         public FlowSort(string _No) : base(_No) { }
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.IsDelete = false;
+                uac.IsInsert = false;
+                uac.IsUpdate = true;
+                return uac;
+            }
+        }
         #endregion
 
         /// <summary>
@@ -68,9 +82,11 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FlowSort", "流程类别");
 
                 map.AddTBStringPK(FlowSortAttr.No, null, "编号", true, true, 1, 100, 20);
-                map.AddTBString(FlowSortAttr.Name, null, "名称", true, false, 0, 100, 30);
-                map.AddTBString(FlowSortAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
-                map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", false, false, 0, 50, 30);
+                map.AddTBString(FlowSortAttr.ParentNo, null, "父节点No", true, true, 0, 100, 30);
+                map.AddTBString(FlowSortAttr.Name, null, "名称", true, false, 0, 200, 30,true);
+                map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", true, false, 0, 150, 30);
+                map.AddTBString(FlowSortAttr.Domain, null, "域/系统编号", true, false, 0, 100, 30);
+
                 map.AddTBInt(FlowSortAttr.Idx, 0, "Idx", false, false);
 
                 this._enMap = map;

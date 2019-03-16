@@ -2822,7 +2822,7 @@ namespace BP.WF
         /// <param name="fk_flow">流程编号</param>
         /// <param name="isMyStarter">是否仅仅查询我发起的在途流程</param>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false)
+        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false, string domain=null)
         {
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
@@ -3017,23 +3017,23 @@ namespace BP.WF
             }
             return BP.DA.DBAccess.RunSQLReturnTable(ps);
         }
-        public static DataTable DB_GenerRuning2(string userNo, string fk_flow, string title)
+        public static DataTable DB_GenerRuning2(string userNo, string fk_flow, string titleKey)
         {
             string sql;
             int state = (int)WFState.Runing;
             if (DataType.IsNullOrEmpty(fk_flow))
             {
-                if (DataType.IsNullOrEmpty(title))
+                if (DataType.IsNullOrEmpty(titleKey))
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) and A.FK_Flow!='010'";
                 else
-                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) and A.FK_Flow!='010' and A.Title Like '%" + title + "%'";
+                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) and A.FK_Flow!='010' and A.Title Like '%" + titleKey + "%'";
             }
             else
             {
-                if (DataType.IsNullOrEmpty(title))
+                if (DataType.IsNullOrEmpty(titleKey))
                     sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 )";
                 else
-                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) and A.Title Like '%" + title + "%' ";
+                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) and A.Title Like '%" + titleKey + "%' ";
             }
 
             return BP.DA.DBAccess.RunSQLReturnTable(sql);

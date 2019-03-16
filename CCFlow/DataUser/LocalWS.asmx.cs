@@ -21,6 +21,62 @@ namespace CCFlow.DataUser
     public class LocalWS : System.Web.Services.WebService
     {
         /// <summary>
+        /// 获得待办
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sysNo">系统编号,为空时返回平台所有数据。</param>
+        /// <returns>返回待办</returns>
+        public string DB_Todolist(string userNo, string sysNo = null)
+        {
+            string sql = "";
+            if (userNo == null)
+                sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp='" + userNo + "'";
+            else
+                sql = "SELECT * FROM WF_EmpWorks WHERE Domain='" + sysNo + "' AND FK_Emp='" + userNo + "'";
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 获得在途
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sysNo">系统编号，为空时返回平台所有数据。</param>
+        /// <returns></returns>
+        public string DB_Runing(string userNo, string sysNo = null)
+        {
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerRuning(userNo, null, false, sysNo);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 获得我可以发起的流程.
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sysNo">系统编号，为空时返回平台所有数据。</param>
+        /// <returns>返回我可以发起的流程列表.</returns>
+        public string DB_StarFlows(string userNo, string sysNo = null)
+        {
+            DataTable dt= BP.WF.Dev2Interface.DB_StarFlows(userNo);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 我发起的流程实例
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sysNo">子系统编号</param>
+        /// <returns>我发起的流程列表.</returns>
+        public string DB_MyStartFlowInstance(string userNo, string sysNo = null, int pageSize=0, int pageIdx=0)
+        {
+            string sql = "";
+            if (userNo == null)
+                sql = "SELECT * FROM WF_GenerWorkFlow WHERE Starter='" + userNo + "'";
+            else
+                sql = "SELECT * FROM WF_GenerWorkFlow WHERE Domain='" + sysNo + "' AND Starter='" + userNo + "'";
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
         /// 创建WorkID
         /// </summary>
         /// <param name="flowNo">流程编号</param>
@@ -50,10 +106,10 @@ namespace CCFlow.DataUser
             Hashtable myht = new Hashtable();
             myht.Add("Message", msg);
             myht.Add("IsStopFlow", objs.IsStopFlow);
-            myht.Add("VarAcceptersID",objs.VarAcceptersID);
-            myht.Add("VarAcceptersName",objs.VarAcceptersName);
+            myht.Add("VarAcceptersID", objs.VarAcceptersID);
+            myht.Add("VarAcceptersName", objs.VarAcceptersName);
             myht.Add("VarToNodeID", objs.VarToNodeID);
-            myht.Add("VarToNodeName",objs.VarToNodeName);
+            myht.Add("VarToNodeName", objs.VarToNodeName);
 
             return BP.Tools.Json.ToJson(myht);
         }

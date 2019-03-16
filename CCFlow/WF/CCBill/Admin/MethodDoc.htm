@@ -60,8 +60,8 @@
 
             //生成参数内容.
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
-            var html = "<font color=yellow ><b>//自定义方法名:" + en.MethodName + ",共有:" + attrs.length+"参数;&nbsp;";
-            
+            var html = "<font color=yellow ><b>//自定义方法名:" + en.MethodName + ",共有:" + attrs.length + "参数;&nbsp;";
+
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 html += "" + attr.Name + "," + attr.KeyOfEn + ";&nbsp;";
@@ -73,9 +73,9 @@
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 if (i == attrs.length - 1)
-                    html += "<font color=red><b>&nbsp;" + attr.KeyOfEn + "</b></font>";
+                    html += "<font color=PINK ><b>&nbsp;" + attr.KeyOfEn + "</b></font>";
                 else
-                    html += "<font color=red><b>&nbsp;" + attr.KeyOfEn + "</b></font><font color=yellow ><b>,</b></font>";
+                    html += "<font color=PINK ><b>&nbsp;" + attr.KeyOfEn + "</b></font><font color=yellow ><b>,</b></font>";
             }
 
             html += "<font color=yellow ><b>)</b></font>&nbsp;<font color=yellow font-size='12px'><b>{</b></font>";
@@ -145,7 +145,7 @@
     <form id="cc">
     <table id="Table1" style="width: 100%">
         <caption>
-             定义方法执行内容 - <a href="javascript:ToMethodParas()">定义执行方法的参数</a>
+            定义方法执行内容 - <a href="javascript:ToMethodParas()">定义执行方法的参数</a>
         </caption>
         <tr>
             <td>
@@ -188,9 +188,8 @@
         </tr>
         <tr style="background-color: Background">
             <td style="margin: 0px;">
-                <font color="yellow" font-size='12px'><b>}</b></font> <font color=yellow ><b>//您需要把方法写入编辑器里.
-                你可以使用jQuery，使用Gener.js里面的实体类，进行数据的增删改查.
-                </b></font>
+                <font color="yellow" font-size='12px'><b>}</b></font> <font color="yellow"><b>//您需要把方法写入编辑器里.
+                    你可以使用jQuery，使用Gener.js里面的实体类，进行数据的增删改查. </b></font>
             </td>
         </tr>
     </table>

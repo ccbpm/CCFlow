@@ -623,7 +623,8 @@
             var frmID = GetQueryString("FrmID");
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddUrlData();
-            var workID = handler.DoMethodReturnString("Start_GenerWorkID");
+            var workID = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
+
             var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
             window.location.href=url;
             return;

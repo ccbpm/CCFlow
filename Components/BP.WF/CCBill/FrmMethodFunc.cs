@@ -79,6 +79,8 @@ namespace BP.WF.CCBill
                 this.SetValByKey(FrmMethodAttr.MsgSuccess, value);
             }
         }
+       
+        
         public string MethodDoc_Url
         {
             get
@@ -130,9 +132,41 @@ namespace BP.WF.CCBill
             {
                 string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoSQL.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
-
                 return doc;
             }
+        }
+        /// <summary>
+        /// 获得JS脚本.
+        /// </summary>
+        /// <returns></returns>
+        public string Gener_MethodDoc_JavaScript()
+        {
+            return this.MethodDoc_JavaScript;
+        }
+
+        public string Gener_MethodDoc_JavaScript_function()
+        {
+            string paras = "";
+            MapAttrs attrs = new MapAttrs(this.MyPK);
+            foreach (MapAttr item in attrs)
+            {
+                paras+=item.KeyOfEn+",";
+            }
+            if (attrs.Count > 1)
+                paras = paras.Substring(0, paras.Length);
+
+            string strs = " function " + this.MethodID + "(" + paras + "){";
+            strs += this.MethodDoc_JavaScript;
+            strs += "}";
+            return strs;
+        }
+        /// <summary>
+        /// 获得SQL脚本
+        /// </summary>
+        /// <returns></returns>
+        public string Gener_MethodDoc_SQL()
+        {
+            return this.MethodDoc_SQL;
         }
         /// <summary>
         /// 获得或者设置js脚本.
@@ -149,6 +183,14 @@ namespace BP.WF.CCBill
             set
             {
                 this.SaveBigTxtToDB("JSScript", value);
+
+                //string path = SystemConfig.PathOfDataUser + "JSLibData\\Method\\";
+                //if (System.IO.Directory.Exists(path) == false)
+                //    System.IO.Directory.CreateDirectory(path);
+
+                ////写入文件.
+                //string file = path + this.MyPK + ".js";
+                //DataType.WriteFile(file, value);
             }
         }
        

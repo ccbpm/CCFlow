@@ -153,7 +153,7 @@ namespace BP.WF.CCBill
                 paras+=item.KeyOfEn+",";
             }
             if (attrs.Count > 1)
-                paras = paras.Substring(0, paras.Length);
+                paras = paras.Substring(0, paras.Length-1);
 
             string strs = " function " + this.MethodID + "(" + paras + "){";
             strs += this.MethodDoc_JavaScript;

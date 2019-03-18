@@ -16,6 +16,10 @@
             var en = new Entity("BP.WF.Template.CCList");
             var workID = GetQueryString("WorkID");
             var FK_Node = GetQueryString("FK_Node");
+            var CurrTab = GetQueryString("CurrTab");
+            if (CurrTab == null || CurrTab == undefined || CurrTab == "")
+                CurrTab = "Truck";
+
             var webUser = new WebUser();
             en.SetPKVal(workID + "_" + FK_Node + "_" + webUser.No);
             var count = en.RetrieveFromDBSources();
@@ -23,7 +27,9 @@
                 en.Sta = 1;
                 en.Update();
             }
-            var url = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + GetQueryString("FK_Flow");
+
+            var url = "./WorkOpt/OneWork/OneWork.htm?FK_Flow=" + GetQueryString("FK_Flow");
+            url += "&CurrTab=" + CurrTab;
             url += "&FK_Node=" + FK_Node;
             url += "&WorkID=" + workID;
             url += "&FID=" + GetQueryString("FID");

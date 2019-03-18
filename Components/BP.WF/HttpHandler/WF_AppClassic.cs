@@ -118,6 +118,23 @@ namespace BP.WF.HttpHandler
         }
 
         #region 登录界面.
+        public string Portal_Login()
+        {
+            string userNo = this.GetRequestVal("UserNo");
+
+            try
+            {
+                BP.Port.Emp emp = new Emp(userNo);
+
+                BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
+                return "登录成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@用户[" + userNo + "]登录失败." + ex.Message;
+            }
+
+        }
         /// <summary>
         /// 登录.
         /// </summary>

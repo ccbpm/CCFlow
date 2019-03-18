@@ -1100,50 +1100,45 @@ namespace BP.En
         /// <returns>查询出来的个数</returns>
         public virtual int Retrieve()
         {
-
             /*如果是没有放入缓存的实体.*/
             try
             {
-                if (EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this)) <= 0)
+                int num = EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this));
+                if (num >= 1)
+                    return num;
+
+                string msg = "";
+                switch (this.PK)
                 {
-                    string msg = "";
-                    switch (this.PK)
-                    {
-                        case "OID":
-                            msg += "[ 主键=OID 值=" + this.GetValStrByKey("OID") + " ]";
-                            break;
-                        case "No":
-                            msg += "[ 主键=No 值=" + this.GetValStrByKey("No") + " ]";
-                            break;
-                        case "MyPK":
-                            msg += "[ 主键=MyPK 值=" + this.GetValStrByKey("MyPK") + " ]";
-                            break;
-                        case "NodeID":
-                            msg += "[ 主键=NodeID 值=" + this.GetValStrByKey("NodeID") + " ]";
-                            break;
-                        case "WorkID":
-                            msg += "[ 主键=WorkID 值=" + this.GetValStrByKey("WorkID") + " ]";
-                            break;
-                        default:
-                            Hashtable ht = this.PKVals;
-                            foreach (string key in ht.Keys)
-                                msg += "[ 主键=" + key + " 值=" + ht[key] + " ]";
-                            break;
-                    }
-                    Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
-                    if (SystemConfig.IsDebug)
-                        throw new Exception("@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。" + msg);
-                    else
-                        throw new Exception("@没有找到记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "记录不存在,请与管理员联系, 或者确认输入错误.");
+                    case "OID":
+                        msg += "[ 主键=OID 值=" + this.GetValStrByKey("OID") + " ]";
+                        break;
+                    case "No":
+                        msg += "[ 主键=No 值=" + this.GetValStrByKey("No") + " ]";
+                        break;
+                    case "MyPK":
+                        msg += "[ 主键=MyPK 值=" + this.GetValStrByKey("MyPK") + " ]";
+                        break;
+                    case "NodeID":
+                        msg += "[ 主键=NodeID 值=" + this.GetValStrByKey("NodeID") + " ]";
+                        break;
+                    case "WorkID":
+                        msg += "[ 主键=WorkID 值=" + this.GetValStrByKey("WorkID") + " ]";
+                        break;
+                    default:
+                        Hashtable ht = this.PKVals;
+                        foreach (string key in ht.Keys)
+                            msg += "[ 主键=" + key + " 值=" + ht[key] + " ]";
+                        break;
                 }
-                return 1;
+                Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
+                throw new Exception("@没有找到记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "记录不存在,请与管理员联系, 或者确认输入错误.");
             }
             catch (Exception ex)
             {
                 if (ex.Message.Contains("无效") || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
-
                     if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
                         return Retrieve(); //让其在查询一遍.
                 }
@@ -2042,8 +2037,8 @@ namespace BP.En
             string sql = "";
 
             if (val1.GetType() == typeof(int)
-                || val1.GetType() == typeof(float) 
-                || val1.GetType() == typeof(Int64) 
+                || val1.GetType() == typeof(float)
+                || val1.GetType() == typeof(Int64)
                 || val1.GetType() == typeof(decimal))
                 sql = "UPDATE " + this.EnMap.PhysicsTable + " SET " + key1 + " =" + val1 + " WHERE " + this.PK + "='" + this.PKVal + "'";
             if (val1.GetType() == typeof(string))

@@ -2356,26 +2356,28 @@ namespace BP.WF
         public Node(int _oid)
         {
             this.NodeID = _oid;
-            if (SystemConfig.IsDebug)
-            {
-                if (this.RetrieveFromDBSources() <= 0)
-                    throw new Exception("Node Retrieve 错误没有ID=" + _oid);
-            }
-            else
-            {
-                // 去掉缓存.
-                int i = this.RetrieveFromDBSources();
-                if (i == 0)
-                {
-                    string err = "err@NodeID=" + this.NodeID + "不存在";
-                    err += "可能出现错误的原因如下:";
-                    err += "1.你在FEE中或者SDK模式中使用了节点跳转,跳转到的节点已经不存在.";
-                    throw new Exception(err);
-                }
+            this.Retrieve();
 
-                //if (this.Retrieve() <= 0)
-                //    throw new Exception("Node Retrieve 错误没有ID=" + _oid);
-            }
+            //if (SystemConfig.IsDebug)
+            //{
+            //    if (this.RetrieveFromDBSources() <= 0)
+            //        throw new Exception("Node Retrieve 错误没有ID=" + _oid);
+            //}
+            //else
+            //{
+            //    // 去掉缓存.
+            //    int i = this.RetrieveFromDBSources();
+            //    if (i == 0)
+            //    {
+            //        string err = "err@NodeID=" + this.NodeID + "不存在";
+            //        err += "可能出现错误的原因如下:";
+            //        err += "1.你在FEE中或者SDK模式中使用了节点跳转,跳转到的节点已经不存在.";
+            //        throw new Exception(err);
+            //    }
+
+            //    //if (this.Retrieve() <= 0)
+            //    //    throw new Exception("Node Retrieve 错误没有ID=" + _oid);
+            //}
         }
         public Node(string ndName)
         {
@@ -2458,7 +2460,7 @@ namespace BP.WF
 
                 Map map = new Map("WF_Node", "节点");
 
-                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
 
                 #region 基本属性.

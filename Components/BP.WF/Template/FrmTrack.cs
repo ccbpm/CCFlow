@@ -286,7 +286,7 @@ namespace BP.WF.Template
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 map.AddDDLSysEnum(FrmTrackAttr.FrmTrackSta, (int)FrmTrackSta.Disable, "组件状态",
-                   true, true, FrmTrackAttr.FrmTrackSta, "@0=禁用@1=标准风格@2=华东院风格@3=华夏银行风格");
+                   true, true, FrmTrackAttr.FrmTrackSta, "@0=禁用@1=显示轨迹图@2=显示轨迹表");
 
                 map.AddTBFloat(FrmTrackAttr.FrmTrack_X, 5, "位置X", false, false);
                 map.AddTBFloat(FrmTrackAttr.FrmTrack_Y, 5, "位置Y", false, false);

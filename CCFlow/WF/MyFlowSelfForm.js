@@ -1014,7 +1014,8 @@ function GenerWorkNode() {
     if (url == "")
         url = "../DataUser/DefaultSelfFormUrl.htm";
     else
-        url = basePath + url;
+      if(url.indexOf("http")==-1)
+         url = basePath + url;
 
     if (url.indexOf('?') == -1) {
         url = url + "?1=2";

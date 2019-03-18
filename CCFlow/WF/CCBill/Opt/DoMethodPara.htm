@@ -44,6 +44,9 @@
         //执行方法.
         function DoIt() {
 
+            var myPK = GetQueryString("MyPK");
+            func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
+
             if (func.WarningMsg == "")
                 func.WarningMsg = "您确定要执行吗？";
 
@@ -65,8 +68,7 @@
 
             //执行Script.
             if (func.MethodDocTypeOfFunc == 1) {
-
-
+                 
                 var scriptFunc = func.DoMethodReturnString("Gener_MethodDoc_JavaScript_function");
 
                 //生成参数.
@@ -92,9 +94,10 @@
 
                 //执行的方法.
                 var scriptDo = " " + func.MethodID + "(" + paras + ");";
-                alert(scriptDo);
 
-                //执行这个script.
+               // alert(scriptDo);
+
+                //执行这个 script.
                 try {
 
                     eval(scriptFucn + scriptDo);

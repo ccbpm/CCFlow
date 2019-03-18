@@ -39,6 +39,8 @@
                 en.SetPara("SearchUrlOpenType", "0"); //默认为打开En.htm
                 en.SetPara("OrderBy", "");
                 en.SetPara("IsDeSc", 1);
+                en.SetPara("IsEnableLazyload", 0); //是否启用懒加载,对树形解构有效.
+
                 en.Url = "";
                 en.Insert();
             }
@@ -207,13 +209,19 @@
 <td><a href="javascript:alert('填写格式为 @No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@DesignerNo=设计者,流程开发设计者信息');"  >卡片的Tab分组显示</a></td>
 <td colspan=3 ><input name="TB_GroupTitle" type="text" value="" id="TB_GroupTitle" style="width:100%;" /></td>
 </tr>
-<tr>
 
+<tr>
 <td>查询排序</td>
 <td ><input name="TBPara_OrderBy" type="text" value="" id="TBPara_OrderBy" style="width:100%;" /></td>
 <td>排序方式</td>
 <td><label ><input id="CBPara_IsDeSc" type="checkbox" name="CBPara_IsDeSc"  />是否降序</label></td>
 </tr>
+
+<tr>
+<td>对树形实体有效</td>
+<td colspan=3 ><label ><input id="CBPara_IsEnableLazyload" type="checkbox" name="CBPara_IsEnableLazyload"  />是否启用节点懒加载？</label></td>
+</tr>
+
 
 <tr  bgcolor='AliceBlue'>
 <th colspan="4">自定义按钮与标签,函数可以写入到\DataUser\JSLabData\SearchSelf.js里面.</th>

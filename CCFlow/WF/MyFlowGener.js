@@ -427,6 +427,11 @@ function Save() {
 
     setToobarDisiable();
 
+    //判断是否启用审核组件
+    var iframe = document.getElementById("FWC");
+    if (iframe)
+        iframe.contentWindow.SaveWorkCheck();
+
     //树形表单保存
     if (flowData) {
         var node = flowData.WF_Node[0];
@@ -769,7 +774,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框        
+            //下拉框         
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -780,7 +785,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 }
                 break;
 
-            //文本区域                
+            //文本区域                 
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -956,6 +961,12 @@ function execSend(toNodeID) {
 
     //先设置按钮等不可用.
     setToobarDisiable();
+
+    //判断是否启用审核组件
+    var iframe = document.getElementById("FWC");
+    if (iframe)
+        iframe.contentWindow.SaveWorkCheck();
+
     //树形表单保存
     if (flowData) {
         var node = flowData.WF_Node[0];
@@ -1424,15 +1435,15 @@ function GenerWorkNode() {
     for (var i = 0; i < flowData.AlertMsg.length; i++) {
         var alertMsg = flowData.AlertMsg[i];
         var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
-        title  = alertMsg.Title;
+        title = alertMsg.Title;
         if (title.indexOf("请求加签") > 0) {
             $('#flowInfo').append(alertMsgEle);
-            
+
         } else {
             $('#Message').append(alertMsgEle);
             $('#Message').append($('<hr/>'));
         }
-        
+
     }
 
     if (flowData.AlertMsg.length != 0 && title.indexOf("请求加签") < 0) {
@@ -1964,7 +1975,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人            
+            //发送选择接收节点和接收人             
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

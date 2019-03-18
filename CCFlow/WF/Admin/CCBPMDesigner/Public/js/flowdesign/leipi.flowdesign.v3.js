@@ -41,6 +41,7 @@
             backgroundColor: '#5a6377'
         },
         mtAfterDrop: function (params) {
+          
             //alert('连接成功后调用');
             //alert("连接："+params.sourceId +" -> "+ params.targetId);
         },
@@ -308,7 +309,15 @@
         //连接成功回调函数
         function mtAfterDrop(params) {
             //console.log(params)
-            defaults.mtAfterDrop({ sourceId: $("#" + params.sourceId).attr('process_id'), targetId: $("#" + params.targetId).attr('process_id') });
+            //创建一个实体. 保存连接线
+            var dir = new Entity("BP.WF.Template.Direction");
+            dir.FK_Flow = flowNo;
+            dir.Node = $('#' + params.sourceId).attr('process_id');
+            dir.ToNode = $('#' + params.targetId).attr('process_id');
+            dir.MyPK = dir.FK_Flow + "_" + dir.Node + "_" + dir.ToNode;
+            dir.DirType = 2;
+            dir.Save();
+            //defaults.mtAfterDrop({ sourceId: $("#" + params.sourceId).attr('process_id'), targetId: $("#" + params.targetId).attr('process_id') });
 
         }
 

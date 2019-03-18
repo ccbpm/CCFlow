@@ -107,6 +107,7 @@
             handler.AddPara("TypeOfFunc", funcType);
             handler.AddPara("MyPK", en.MyPK);
             var data = handler.DoMethodReturnString("MethodDoc_GetScript");
+            
             editor.setValue(data);
             docsLast = data; //记录最后的值，用于判断是否更改.
         }
@@ -127,8 +128,11 @@
 
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill_Admin");
             handler.AddUrlData();
+            var doc = editor.getValue();
+            doc = doc.replace(/-/g, "/$");
+            doc = doc.replace(/[+]/g, "/#");
 
-            handler.AddPara("doc", editor.getValue()); //不知道是否可以存储.
+            handler.AddPara("doc", doc); //不知道是否可以存储.
             handler.AddPara("TypeOfFunc", selectFuncType);
 
             var data = handler.DoMethodReturnString("MethodDoc_SaveScript");

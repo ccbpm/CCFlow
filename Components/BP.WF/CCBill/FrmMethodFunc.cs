@@ -105,7 +105,6 @@ namespace BP.WF.CCBill
                 string strs = this.GetBigTextFromDB("SQLScript");
                 if (strs == null || strs.Equals("") == true)
                     return this.MethodDoc_SQL_Demo; //返回默认信息.
-
                 return strs;
             }
             set
@@ -122,7 +121,8 @@ namespace BP.WF.CCBill
             {
                 string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoJS.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
-
+                doc = doc.Replace("/#", "+"); //为什么？
+                doc = doc.Replace("/$", "-"); //为什么？
                 return doc;
             }
         }
@@ -178,6 +178,9 @@ namespace BP.WF.CCBill
                 string strs = this.GetBigTextFromDB("JSScript");
                 if (strs == null || strs.Equals("") == true)
                     return this.MethodDoc_JavaScript_Demo;
+
+                strs = strs.Replace("/#", "+"); //为什么？
+                strs = strs.Replace("/$", "-"); //为什么？
                 return strs;
             }
             set

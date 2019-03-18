@@ -87,21 +87,31 @@
                         val = $("#CB_" + attr.KeyOfEn).val();
 
                     if (i == attrs.length)
-                        paras += "'" + val + "'";
+                        if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
+                            if (val == "" || val == undefined)
+                                val = 0;
+                            paras += val;
+                        }
+                        else
+                            paras += "'" + val + "'";
                     else
-                        paras += "'" + val + "',";
+                        if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
+                            if (val == "" || val == undefined)
+                                val = 0;
+                            paras += val+",";
+                        }
+                        else
+                            paras += "'" + val + "',";
+
+                  
                 }
-
-                //执行的方法.
-                var scriptDo = " " + func.MethodID + "(" + paras + ");";
-
-               // alert(scriptDo);
 
                 //执行这个 script.
                 try {
 
-                    eval(scriptFucn + scriptDo);
-
+                    addDynamicJS(scriptFunc);
+                    eval(func.MethodID + "(" + paras + ")");
+                    return;
                 } catch (e) {
                     alert(e);
                     window.close();
@@ -123,6 +133,20 @@
 
         }
 
+
+        function addDynamicJS(src, callback) {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+
+            script.charset = 'utf-8';
+            try {
+                script.appendChild(document.createTextNode(src));
+            } catch (ex) {
+                script.text = src;
+            }
+            document.body.appendChild(script);
+          
+        }
 
         //解析表单字段 MapAttr.
         function InitMapAttr(attrs, frmData) {

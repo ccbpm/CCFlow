@@ -514,40 +514,34 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("V_WF_Delay", "逾期流程");
-
-                //MyPK, WorkID, Starter, StarterName, WFState, FK_Dept, DeptName, FK_Flow, FlowName, FK_Node, NodeName,WorkerDept, Title, RDT, SDT, FK_Emp,
-                //FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, BillNo, FlowNote, TodoEmps,Sender
-
                 map.AddTBString(DelayAttr.MyPK, null, "MyPK", true, true, 0, 900, 5, true);
-                map.AddTBString(DelayAttr.WorkID, null, "工作ID", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.Starter, null, "Starter", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.StarterName, null, "StarterName", true, true, 0, 50, 5);
+                map.AddTBInt(DelayAttr.WorkID, 0, "工作ID", true, true);
+                map.AddTBString(DelayAttr.Starter, null, "Starter", false, true, 0, 50, 5);
+                map.AddTBString(DelayAttr.StarterName, null, "发起人", true, true, 0, 50, 30);
                 map.AddDDLSysEnum(DelayAttr.WFState, 0, "状态", true, true, DelayAttr.WFState, "@0=及时完成@1=按期完成@2=逾期完成@3=超期完成");
-                map.AddTBString(DelayAttr.FK_Dept, null, "部门", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.DeptName, null, "部门名称", true, true, 0, 50, 5);
-                map.AddDDLEntities(DelayAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddTBString(DelayAttr.FlowName, null, "流程名称", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.FK_Node, null, "节点", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.NodeName, null, "节点名称", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.WorkerDept, null, "工作人部门", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.Title, null, "标题", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.RDT, null, "RDT", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.SDT, null, "应完成日期", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.FK_Emp, null, "当事人", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.FID, null, "FID", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.FK_FlowSort, null, "FK_FlowSort", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.SysType, null, "SysType", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.SDTOfNode, null, "节点应完成日期", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.PressTimes, null, "PressTimes", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.BillNo, null, "BillNo", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.FlowNote, null, "FlowNote", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.TodoEmps, null, "TodoEmps", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.Sender, null, "Sender", true, true, 0, 50, 5);
-
+                map.AddTBString(DelayAttr.WFState, null, "状态", true, true, 0, 50, 30);
                 map.AddSearchAttr(DelayAttr.WFState);
+                map.AddTBInt(DelayAttr.FK_Dept, 0, "部门", false, true);
+                map.AddTBString(DelayAttr.DeptName, null, "部门名称", true, true, 0, 50, 40);
+                map.AddDDLEntities(DelayAttr.FK_Flow, null, "流程", new Flows(), false);
                 map.AddSearchAttr(DelayAttr.FK_Flow);
-
-
+                map.AddTBString(DelayAttr.FlowName, null, "流程名称", true, true, 0, 50, 40);
+                map.AddTBInt(DelayAttr.FK_Node, 0, "节点", false, true);
+                map.AddTBString(DelayAttr.NodeName, null, "节点名称", true, true, 0, 50, 40);
+                map.AddTBInt(DelayAttr.WorkerDept, 0, "工作人部门", false, true);
+                map.AddTBString(DelayAttr.Title, null, "标题", true, true, 0, 50, 100);
+                map.AddTBString(DelayAttr.RDT, null, "标题", true, true, 0, 50, 30);
+                map.AddTBString(DelayAttr.SDT, null, "应完成日期", true, true, 0, 50, 50);
+                map.AddTBString(DelayAttr.FK_Emp, null, "当事人", true, true, 0, 50, 40);
+                map.AddTBInt(DelayAttr.FID, 0, "FID", false, true);
+                map.AddTBInt(DelayAttr.FK_FlowSort, 0, "FK_FlowSort", false, true);
+                map.AddTBString(DelayAttr.SysType, null, "SysType", false, true, 0, 50, 5);
+                map.AddTBString(DelayAttr.SDTOfNode, null, "节点应完成日期", true, true, 0, 50, 70);
+                map.AddTBString(DelayAttr.PressTimes, null, "PressTimes", false, true, 0, 50, 5);
+                map.AddTBString(DelayAttr.BillNo, null, "BillNo", false, true, 0, 50, 5);
+                map.AddTBString(DelayAttr.FlowNote, null, "FlowNote", false, true, 0, 50, 5);
+                map.AddTBString(DelayAttr.TodoEmps, null, "TodoEmps", false, true, 0, 50, 5);
+                map.AddTBString(DelayAttr.Sender, null, "发送者", true, true, 0, 50, 50);
 
                 this._enMap = map;
                 return this._enMap;

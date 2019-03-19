@@ -14,10 +14,6 @@ namespace BP.WF.Data
     /// </summary>
     public class DelayAttr
     {
-        //select MyPK, WorkID, Starter, StarterName, WFState, FK_Dept, DeptName, FK_Flow, FlowName, FK_Node, NodeName,
-        //              WorkerDept, Title, RDT, SDT, FK_Emp, FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, BillNo, FlowNote, TodoEmps,
-        //              Sender from WF_Delay;
-
         #region 属性
         public const string MyPK = "MyPK";
         /// <summary>
@@ -118,14 +114,12 @@ namespace BP.WF.Data
         public const string Sender = "Sender";
         #endregion
     }
-
     /// <summary>
     /// 时效考核
     /// </summary> 
     public class Delay : EntityMyPK
     {
         #region 基本属性
-        //MyPK, WorkID, Starter, StarterName, WFState, FK_Dept, DeptName, FK_Flow, FlowName, FK_Node, NodeName,WorkerDept, Title, RDT, SDT, FK_Emp, FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, BillNo, FlowNote, TodoEmps,Sender
         /// <summary>
         /// 
         /// </summary>
@@ -421,7 +415,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 单据编号
         /// </summary>
         public string BillNo
         {
@@ -435,7 +429,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 备注
         /// </summary>
         public string FlowNote
         {
@@ -449,7 +443,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 待办处理人
         /// </summary>
         public string TodoEmps
         {
@@ -463,7 +457,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 发送人
         /// </summary>
         public string Sender
         {
@@ -529,11 +523,9 @@ namespace BP.WF.Data
                 map.AddTBString(DelayAttr.Starter, null, "Starter", true, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.StarterName, null, "StarterName", true, true, 0, 50, 5);
                 map.AddDDLSysEnum(DelayAttr.WFState, 0, "状态", true, true, DelayAttr.WFState, "@0=及时完成@1=按期完成@2=逾期完成@3=超期完成");
-                map.AddSearchAttr(DelayAttr.WFState);
                 map.AddTBString(DelayAttr.FK_Dept, null, "部门", true, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.DeptName, null, "部门名称", true, true, 0, 50, 5);
                 map.AddDDLEntities(DelayAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddSearchAttr(DelayAttr.FK_Flow);
                 map.AddTBString(DelayAttr.FlowName, null, "流程名称", true, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.FK_Node, null, "节点", true, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.NodeName, null, "节点名称", true, true, 0, 50, 5);
@@ -552,21 +544,22 @@ namespace BP.WF.Data
                 map.AddTBString(DelayAttr.TodoEmps, null, "TodoEmps", true, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.Sender, null, "Sender", true, true, 0, 50, 5);
 
+                map.AddSearchAttr(DelayAttr.WFState);
+                map.AddSearchAttr(DelayAttr.FK_Flow);
+
+
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-
-        //public string DoOpen()
-        //{
-        //    return "../../WFRpt.htm?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
-        //}
+    
     }
     /// <summary>
     /// 时效考核s
     /// </summary>
-    public class Delays : Entities
+    public class Delays : EntitiesMyPK
     {
         #region 构造方法属性
         /// <summary>

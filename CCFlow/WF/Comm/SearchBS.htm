@@ -128,7 +128,7 @@
             BindTable();
             $("#Msg").html("");
 
-              $("td").on("mouseover",function() {
+            $("td").on("mouseover",function() {
                 if (this.offsetWidth < this.scrollWidth) {
                     var that = this;
                     var text = $(this).text();
@@ -140,7 +140,7 @@
               });
               $("td").on("mouseout",function(){
                 layer.closeAll();
-              });
+              });   
             
             if(pageIdx==null || pageIdx==undefined || pageIdx == "")
                 pageIdx = 1;
@@ -277,7 +277,7 @@
         }
         
         function showBarTable(attrs,data){
-            var html = "";
+               var html = "";
           
               if (attrs.length==0)
                   html +="<table style='width:30%;' >";
@@ -443,6 +443,7 @@
             if(url.indexOf("PageIdx")!=-1)
              url = replaceParamVal(url, "PageIdx", 1);
            
+          
             window.location.href = url;
         }
 
@@ -478,6 +479,20 @@
 
              if (firstLoadTable){
                 $('#dg').bootstrapTable("load",data["DT"]);
+                
+                $("td").on("mouseover",function() {
+                    if (this.offsetWidth < this.scrollWidth) {
+                        var that = this;
+                        var text = $(this).text();
+                       layer.tips(text, that,{
+                            tips: 1,
+                            time: 0
+                       });
+                    }
+                  });
+                  $("td").on("mouseout",function(){
+                    layer.closeAll();
+                  });
                 return;
            }
             return data;

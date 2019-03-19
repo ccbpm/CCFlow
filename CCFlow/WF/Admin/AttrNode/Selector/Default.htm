@@ -13,87 +13,48 @@
         //页面启动函数.
         $(function () {
 
-            var node = new Entity("BP.WF.Node");
+            var node = new Entity("BP.WF.Template.Selector");
             node.NodeID = GetQueryString("NodeID");
             node.Retrieve();
 
             var url = '';
             switch (parseInt(node.SelectorModel)) {
-                case SelectorModel.Station:
-                    //Bind_1_ByStation();
+
+                 case SelectorModel.Station:
                     url = "0.Station.htm";
                     break;
+
                 case SelectorModel.Dept:
-                    //Bind_1_ByStation();
                     url = "1.Dept.htm";
                     break;
-                case SelectorModel.SQL:
-                    //Bind_1_ByStation();
-                    url = "2.SQL.htm";
-                    break;
                 case SelectorModel.Emp:
-                    url = "3.Emp.htm";
+                    url = "2.Emp.htm";
                     break;
-                case SelectorModel.BySelected:
-                    url = "4.BySelected.htm";
-                    break;
-                case SelectorModel.ByPreviousNodeFormEmpsField:
-                    url = "5.ByPreviousNodeFormEmpsField.htm";
-                    break;
-                case SelectorModel.ByPreviousNodeEmp:
-                    url = "6.ByPreviousNodeEmp.htm";
-                    break;
-                case SelectorModel.ByStarter:
-                    url = "7.ByStarter.htm";
-                    break;
-                case SelectorModel.BySpecNodeEmp:
-                    url = "8.BySpecNodeEmp.htm";
-                    break;
-                case SelectorModel.DeptAndStation:
-                    url = "9.DeptAndStation.htm";
-                    break;
-                case SelectorModel.StationAndEmpDept:
-                    url = "10.StationAndEmpDept.htm";
-                    break;
-                case SelectorModel.BySpecNodeEmpStation:
-                    url = "11.BySpecNodeEmpStation.htm";
-                    break;
-                case SelectorModel.SQLAsSubThreadEmpsAndData:
-                    url = "12.SQLAsSubThreadEmpsAndData.htm";
-                    break;
-                case SelectorModel.ByDtlAsSubThreadEmps:
-                    url = "13.ByDtlAsSubThreadEmps.htm";
-                    break;
-                case SelectorModel.StationOnly:
-                    url = "14.StationOnly.htm";
-                    break;
-                case SelectorModel.ByFEE:
-                    url = "15.ByFEEp.htm";
-                    break;
-                case SelectorModel.BySetDeptAsSubthread:
-                    url = "16.BySetDeptAsSubthread.htm";
+                case SelectorModel.SQL:
+                    url = "3.SQL.htm";
                     break;
                 case SelectorModel.SQLTemplate:
-                    url = "17.SQLTemplate.htm";
+                    url = "4.SQLTemplate.htm";
                     break;
-                case SelectorModel.ByFromEmpToEmp:
-                    url = "18.ByFromEmpToEmp.htm";
+                case SelectorModel.GenerUserSelecter:
+                    url = "5.GenerUserSelecter.htm";
                     break;
-                case SelectorModel.StationForPrj:
-                    url = "20.StationForPrj.htm";
+                case SelectorModel.DeptAndStation:
+                    url = "6.DeptAndStation.htm";
                     break;
-                case SelectorModel.BySelectedForPrj:
-                    url = "21.BySelectedForPrj.htm";
+                case SelectorModel.Url:
+                    url = "7.Url.htm";
                     break;
-                case SelectorModel.ByCCFlowBPM:
-                    url = "100.ByCCFlowBPM.htm";
+                case SelectorModel.BySpecNodeEmp:
+                    url = "8.AccepterOfDeptStationEmp.htm";
                     break;
-                case SelectorModel.ByCCFlowBPM:
-                    url = "100.ByCCFlowBPM.htm";
+                case SelectorModel.DeptAndStation:
+                    url = "9.AccepterOfDeptStationOfCurrentOper.htm";
                     break;
                 default:
-                    url = "0.Station.htm";
+                    url = "5.GenerUserSelecter.htm";
                     break;
+                
             }
 
             document.location.href = url + "?FK_Node=" + node.NodeID;

@@ -64,7 +64,7 @@
 
         function Save() {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
             node.SelectorModel = SelectorModel.SQLTemplate;
             var DeliveryParas = $("#RB_BySQLTemplate ").val();
             node.DeliveryParas = DeliveryParas;

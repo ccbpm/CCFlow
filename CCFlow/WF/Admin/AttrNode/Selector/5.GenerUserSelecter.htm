@@ -23,7 +23,14 @@
           
         });
 
-       
+        //保存
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
+            node.SelectorModel = SelectorModel.GenerUserSelecter;
+            node.Update();
+            alert("保存成功.");
+        }
     </script>
 </head>
 <body >

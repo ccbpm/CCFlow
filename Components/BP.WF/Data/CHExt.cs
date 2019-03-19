@@ -320,18 +320,19 @@ namespace BP.WF.Data
                 map.AddDDLEntities(CHAttr.FK_Emp, null, "当事人", new BP.Port.Emps(), false);
                 map.AddDDLEntities(CHAttr.FK_NY, null, "月份", new BP.Pub.NYs(), false);
 
-                map.AddTBIntMyNum();
                 map.AddTBInt(CHAttr.WorkID, 0, "工作ID", false, true);
                 map.AddTBInt(CHAttr.FID, 0, "FID", false, false);
 
                 map.AddTBStringPK(CHAttr.MyPK, null, "MyPK", false, false, 0, 50, 5);
                 //map.AddMyPK();
 
+                //查询条件.
                 map.AddSearchAttr(CHAttr.FK_Dept);
                 map.AddSearchAttr(CHAttr.FK_NY);
                 map.AddSearchAttr(CHAttr.CHSta);
                 map.AddSearchAttr(CHAttr.FK_Flow);
 
+                //方法.
                 RefMethod rm = new RefMethod();
                 rm.Title = "打开流程轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoOpen";
